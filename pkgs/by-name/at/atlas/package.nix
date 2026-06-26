@@ -9,19 +9,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlas";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ke7XT1ZRJbYnTMjMFEUcF3jOuvcTjYAX7H+nJxHrU5E=";
+    hash = "sha256-2wmmvNezi/AJ86r5m0rZOskqxfaT49870Pe615QycHg=";
   };
 
   modRoot = "cmd/atlas";
 
   proxyVendor = true;
-  vendorHash = "sha256-ksSvW+Sc1iQlMf9i6GWMjq4hISdAD3t/uAPlQ3x7wHU=";
+  vendorHash = "sha256-9yg8VkRtyaMQjCAAOHIG4A9QSV1VOFOLBK9cTrE83a4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

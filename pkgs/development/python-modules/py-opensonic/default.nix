@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "8.1.1";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-/P/7ytA0YHuJZEq7KQosPBQM2vo6VAss1G8pTIEswJA=";
+    hash = "sha256-xZHlI62QoKkR4sZf0GUEzUGMpG2urHooPs8GvVyqpIQ=";
   };
 
   build-system = [ setuptools ];

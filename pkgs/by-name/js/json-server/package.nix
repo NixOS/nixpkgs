@@ -24,6 +24,6 @@ buildNpmPackage (finalAttrs: {
     description = "Get a full fake REST API with zero coding in less than 30 seconds";
     homepage = "https://github.com/typicode/json-server";
     license = lib.licenses.fairsource09;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

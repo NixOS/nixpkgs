@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "6.0.1";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-+O6bIbIpEMRUhzGUOQtBlHB//DaXaaOTjqMBTFvYnLk=";
+    hash = "sha256-GN76dLk+Ju+Do/BymIuHD/9KAjYZ3sKvfz2cvNEnF5U=";
   };
 
   build-system = [

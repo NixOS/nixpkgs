@@ -3,7 +3,7 @@
   pkgs,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,22 +12,25 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
-    version = "17.8.1";
+    version = "17.11.1";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ma+2HusIdhQ2Xy9rKs9fzJYSZ2YKa0taqv7ZzitNEUo=";
+      hash = "sha256-BN6qgPYhZ+FuYnwmV0S3y2vOR4ZLC+VGWuEEPqfOqi4=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-MosT/2dmYomhRXtAeAZS2AMljiVDx+K3t5lLNii2a64=";
+      inherit pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-Yuxuqr1BiviSw+dGNHLs2jAy8ADlBvRks6Kmy7FmCMw=";
     };
 
     postPatch = ''

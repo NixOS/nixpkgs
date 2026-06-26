@@ -11,6 +11,8 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
   pyzmq,
   setproctitle,
   setuptools,
@@ -38,11 +40,14 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    influxdb = [ influxdb-client ];
     kubernetes = [ kubernetes ];
     mongodb = [ pymongo ];
     # opentsdb = [ opentsdb-py ];
     prometheus = [ prometheus-client ];
+  }
+  // lib.optionalAttrs (pythonOlder "3.14") {
+    # influxdb-client depends on reactivex, which is disabled on 3.14
+    influxdb = [ influxdb-client ];
   };
 
   nativeCheckInputs = [
@@ -55,7 +60,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "powerapi" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  # multiprocessing pickling fails: darwin sandbox + py3.14 weakref change
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin || pythonAtLeast "3.14") [
     "test_puller"
     "TestDispatcher"
     "TestK8sProcessor"

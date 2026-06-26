@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.22.0";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HRwtjke7kDq+mrTLwyWU0aEGxdgdbimcg42J1baDXhs=";
+    hash = "sha256-nmhmW+e/Mys/PVGA0V2NalFDQ/qkcvT0F80XrmIZYb4=";
   };
 
-  cargoHash = "sha256-UuSBd+RppydP0+cG1iNarikbhBtoZZbIUxiwgq3EZaU=";
+  cargoHash = "sha256-3ALVZJNpk0HiwmDGQigoSXuOdJR94nEKOWWiP5aggxo=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -28,6 +28,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
+  ];
+
+  checkFlags = [
+    # need network
+    "--skip=audit::known_vulnerable_actions::tests::test_first_patched_version_priority"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_symbolic_ref"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_action_with_subpath"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_checkout"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_actions_setup_node"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_multiple_vulnerable_actions"
+    "--skip=audit::known_vulnerable_actions::tests::test_fix_upgrade_third_party_action"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

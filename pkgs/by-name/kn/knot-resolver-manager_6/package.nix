@@ -41,9 +41,10 @@ python3Packages.buildPythonPackage {
     aiohttp
     jinja2
     pyyaml
-    prometheus-client
+    prometheus-client # optional, for prometheus metrics
     supervisor
     typing-extensions
+    watchdog # optional, watching changes in files (TLS certs, RPZs)
   ];
 
   # set up (additional) Lua dependencies
@@ -74,7 +75,7 @@ python3Packages.buildPythonPackage {
     echo -e 'quit()' | env -i ./kresd -a 127.0.0.1#53535 -c test-http.lua
   '';
 
-  doCheck = python3Packages.stdenv.isLinux; # maybe in future
+  doCheck = python3Packages.stdenv.hostPlatform.isLinux; # maybe in future
   nativeCheckInputs = with python3Packages; [
     augeas
     dnspython

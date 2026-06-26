@@ -125,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     knownVulnerabilities = [
       "CVE-2026-1144"
       "CVE-2026-1145"
+      "CVE-2026-3979"
     ];
   };
 })

@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator-gtk3,
   glib,
   gobject-introspection,
   librsvg,
@@ -54,6 +55,7 @@ let
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator-gtk3
         ];
 
       nativeBuildInputs = [
@@ -106,6 +108,7 @@ let
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
         license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [ a-peirogon ];
         platforms = lib.platforms.all;
       };
     };

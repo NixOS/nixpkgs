@@ -66,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       johnrtitor
-      ymarkus
     ];
     platforms = lib.platforms.all;
     mainProgram = "wofi-emoji";

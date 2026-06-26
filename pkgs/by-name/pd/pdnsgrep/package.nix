@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pdnsgrep";
-  version = "1.1.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "akquinet";
     repo = "pdnsgrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NFJkLYOHBUYRVehT0VBIFPagLiR8cVvVkAnqCwVUqYg=";
+    hash = "sha256-mSvkfb8aMx9fvdVrKqtzhYBEULph0Hs/8nlldSuZiX8=";
   };
 
-  vendorHash = "sha256-kbX3oTg2OGr4Gj9MEXa2Z7AlYIyv6LNIY4mR06F6OvQ=";
+  vendorHash = "sha256-Rx2TmYubU+EqvfyWjX5A3EC+7Pt/k68I6PmQdCwYlfE=";
   proxyVendor = true;
 
   ldflags = [

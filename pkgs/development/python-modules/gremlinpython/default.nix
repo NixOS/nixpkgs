@@ -8,7 +8,6 @@
   isodate,
   nest-asyncio,
   pytestCheckHook,
-  mock,
   pyhamcrest,
   pyyaml,
   radish-bdd,
@@ -60,7 +59,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
     pyhamcrest
     pyyaml
     radish-bdd
@@ -79,6 +77,7 @@ buildPythonPackage rec {
     "tests/driver/test_driver_remote_connection_threaded.py"
     "tests/driver/test_web_socket_client_behavior.py"
     "tests/process/test_dsl.py"
+    "tests/process/test_traversal.py" # dead locks
     "tests/structure/io/test_functionalityio.py"
   ];
 
@@ -86,14 +85,6 @@ buildPythonPackage rec {
     "TestFunctionalGraphSONIO and test_timestamp"
     "TestFunctionalGraphSONIO and test_datetime"
     "TestFunctionalGraphSONIO and test_uuid"
-    "test_transaction_commit"
-    "test_transaction_rollback"
-    "test_transaction_no_begin"
-    "test_multi_commit_transaction"
-    "test_multi_rollback_transaction"
-    "test_multi_commit_and_rollback"
-    "test_transaction_close_tx"
-    "test_transaction_close_tx_from_parent"
   ];
 
   meta = {

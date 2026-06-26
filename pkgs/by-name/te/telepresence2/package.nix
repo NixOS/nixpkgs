@@ -12,7 +12,7 @@
 }:
 
 let
-  fuseftpVersion = "0.6.9";
+  fuseftpVersion = "1.0.1";
   fuseftp = buildGoModule rec {
     pname = "go-fuseftp";
     version = fuseftpVersion;
@@ -20,11 +20,11 @@ let
     src = fetchFromGitHub {
       owner = "datawire";
       repo = "go-fuseftp";
-      rev = "v${version}";
-      hash = "sha256-iJTVcOsaDICQWqIsMTHWg/MDb++ZIfKnnAPrcumcRWk=";
+      tag = "v${version}";
+      hash = "sha256-ojue7mNu5pujM9Nnc/7bL7kWzQSwa8lnnUSWS2rWuHM=";
     };
 
-    vendorHash = "sha256-ZQUlgrC80gwIGTepNXI67Y9SYtarey3Y63eCqZAXXao=";
+    vendorHash = "sha256-C1E/ai82FTjWZmDXEeKN9GxCh+KtzIKPtx5BAWIuQr4=";
 
     buildInputs = [ fuse ];
 
@@ -44,13 +44,13 @@ let
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.26.0";
+  version = "2.27.3";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-/WFTOFThqnUDCTkTTTj9Y6x5iaucH1H5/10mZGcyvQM=";
+    hash = "sha256-cN3zuS4OEllGP6e0PqntLbE5OaVgmH7ccOfLq+WC6Wk=";
   };
 
   propagatedBuildInputs = [
@@ -72,7 +72,7 @@ buildGoModule rec {
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-t7gQhMcB2T/hL6m+nH7G2ePiAUPCTtpKScfjB44QQCQ=";
+  vendorHash = "sha256-wOadx4iUgh56FLB6BDSZdAUPV+G7Ld8K+CDGYnUsDG0=";
 
   # ldflags copied from Makefile
   # ref: https://github.com/telepresenceio/telepresence/blob/7a2b9f553fb51ef252df957916c7b831bd65c1ce/build-aux/main.mk#L250-L251

@@ -34,8 +34,8 @@ let
       cp baseq3/pak*.pk3 /tmp/baseq3
       nix-store --add-fixed sha256 --recursive /tmp/baseq3
 
-      Alternatively you can set services.quake3-server.baseq3 to a path and copy the baseq3 directory into
-      $services.quake3-server.baseq3/.q3a/
+      Alternatively you can set services.quake3-server.baseq3 to a path and
+      copy the baseq3 directory into the .q3a subdirectory of that path.
     '';
   };
 

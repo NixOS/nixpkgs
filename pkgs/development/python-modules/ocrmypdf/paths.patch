@@ -1,8 +1,8 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index eaa48117..30201d97 100644
+index 5afd6e17..0db47849 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
-@@ -31,7 +31,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
+@@ -36,7 +36,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
      ]
  )
  # Ghostscript executable - gswin32c is not supported
@@ -12,28 +12,19 @@ index eaa48117..30201d97 100644
  
  log = logging.getLogger(__name__)
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 1c6dd5fe..b689a091 100644
+index 9f107a07..469aed48 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
-@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -13,7 +13,7 @@ from ocrmypdf._exec._probe import ToolProbe
+ from ocrmypdf.exceptions import MissingDependencyError
+ from ocrmypdf.subprocess import run
+ 
+-_PROBE = ToolProbe(program='jbig2', version_regex=r'jbig2enc (\d+(\.\d+)*).*')
++_PROBE = ToolProbe(program='@jbig2@', version_regex=r'jbig2enc (\d+(\.\d+)*).*')
+ 
  
  def version() -> Version:
-     try:
--        version = get_version('jbig2', regex=r'jbig2enc (\d+(\.\d+)*).*')
-+        version = get_version('@jbig2@', regex=r'jbig2enc (\d+(\.\d+)*).*')
-     except CalledProcessError as e:
-         # TeX Live for Windows provides an incompatible jbig2.EXE which may
-         # be on the PATH.
-@@ -33,7 +33,7 @@ def available():
- 
- def convert_group(cwd, infiles, out_prefix, threshold):
-     args = [
--        'jbig2',
-+        '@jbig2@',
-         '-b',
-         out_prefix,
-         '--symbol-mode',  # symbol mode (lossy)
-@@ -50,7 +50,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
+@@ -34,7 +34,7 @@ def available() -> bool:
  
  
  def convert_single(cwd, infile, outfile, threshold):
@@ -43,19 +34,19 @@ index 1c6dd5fe..b689a091 100644
          proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
      proc.check_returncode()
 diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
-index 5b8600d0..fcad771b 100644
+index 94bcdbf0..c0ae0fa3 100644
 --- a/src/ocrmypdf/_exec/pngquant.py
 +++ b/src/ocrmypdf/_exec/pngquant.py
-@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -11,7 +11,7 @@ from subprocess import PIPE
+ from ocrmypdf._exec._probe import ToolProbe
+ from ocrmypdf.subprocess import run
  
+-PROBE = ToolProbe(program='pngquant', version_regex=r'(\d+(\.\d+)*).*')
++PROBE = ToolProbe(program='@pngquant@', version_regex=r'(\d+(\.\d+)*).*')
+ version = PROBE.version
+ available = PROBE.available
  
- def version() -> Version:
--    return Version(get_version('pngquant', regex=r'(\d+(\.\d+)*).*'))
-+    return Version(get_version('@pngquant@', regex=r'(\d+(\.\d+)*).*'))
- 
- 
- def available():
-@@ -37,7 +37,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
+@@ -27,7 +27,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
      """
      with open(input_file, 'rb') as input_stream:
          args = [
@@ -65,19 +56,19 @@ index 5b8600d0..fcad771b 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index 102bdab8..bfef4400 100644
+index 861f2d50..010ef6a6 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
-@@ -95,7 +95,7 @@ class TesseractVersion(Version):
+@@ -117,7 +117,7 @@ class TesseractVersion(Version):
  
  
- def version() -> Version:
--    return TesseractVersion(get_version('tesseract', regex=r'tesseract\s(.+)'))
-+    return TesseractVersion(get_version('@tesseract@', regex=r'tesseract\s(.+)'))
- 
- 
- def has_thresholding() -> bool:
-@@ -113,7 +113,7 @@ def get_languages() -> set[str]:
+ PROBE = ToolProbe(
+-    program='tesseract',
++    program='@tesseract@',
+     version_regex=r'tesseract\s(.+)',
+     version_cls=TesseractVersion,
+ )
+@@ -140,7 +140,7 @@ def get_languages() -> set[str]:
          msg += output
          return msg
  
@@ -86,7 +77,7 @@ index 102bdab8..bfef4400 100644
      try:
          proc = run(
              args_tess,
-@@ -135,7 +135,7 @@ def get_languages() -> set[str]:
+@@ -162,7 +162,7 @@ def get_languages() -> set[str]:
  
  
  def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
@@ -96,18 +87,18 @@ index 102bdab8..bfef4400 100644
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index a5a92f4c..6cf56eb3 100644
+index 54bf6a24..5d8ee18a 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
-@@ -48,7 +48,7 @@ class UnpaperImageTooLargeError(Exception):
+@@ -46,7 +46,7 @@ class UnpaperImageTooLargeError(Exception):
+         super().__init__(self.message)
  
  
- def version() -> Version:
--    return Version(get_version('unpaper', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
-+    return Version(get_version('@unpaper@', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
+-PROBE = ToolProbe(program='unpaper', version_regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)')
++PROBE = ToolProbe(program='@unpaper@', version_regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)')
+ version = PROBE.version
+ available = PROBE.available
  
- 
- @contextmanager
 @@ -70,7 +70,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
  def run_unpaper(
      input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]

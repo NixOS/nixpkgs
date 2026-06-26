@@ -27,8 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  FFLAGS = [ "-std=legacy" ];
-  FCFLAGS = [ "-std=legacy" ];
+  env = {
+    FFLAGS = toString [ "-std=legacy" ];
+    FCFLAGS = toString [ "-std=legacy" ];
+  };
 
   meta = {
     description = "Fortran API to manipulate netcdf files";

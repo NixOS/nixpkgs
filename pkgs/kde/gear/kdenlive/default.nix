@@ -16,7 +16,7 @@
   kio-extras,
   opentimelineio,
   frei0r,
-  shaderc,
+  qtimageformats,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -32,9 +32,6 @@ mkKdeDerivation {
     "-DFETCH_OTIO=0"
   ];
 
-  # Workaround until https://github.com/NixOS/nixpkgs/pull/480475 hits master
-  NIX_LDFLAGS = [ "-L${shaderc.lib}/lib -lshaderc_shared" ];
-
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
@@ -44,6 +41,7 @@ mkKdeDerivation {
     qtsvg
     qtmultimedia
     qtnetworkauth
+    qtimageformats # UI uses webp images
 
     kddockwidgets
     qqc2-desktop-style

@@ -24,8 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
-  OPENSSL_DIR = "${lib.getDev openssl}";
+  env = {
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_DIR = "${lib.getDev openssl}";
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl

@@ -11,11 +11,14 @@
   python,
   radicale,
   recurring-ical-events,
-  requests,
+  niquests,
   hatchling,
   hatch-vcs,
   proxy-py,
   pyfakefs,
+  pytest-asyncio,
+  python-dateutil,
+  pyyaml,
   toPythonModule,
   tzlocal,
   vobject,
@@ -25,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "2.2.1";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-FsIF4BcwAUyYw8J7o4j4CnSd8eIc1Yd5WtxErC6RZ7Y=";
+    hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
   };
 
   build-system = [
@@ -43,16 +46,19 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
     lxml
-    requests
+    niquests
     icalendar
     icalendar-searcher
     recurring-ical-events
+    python-dateutil
+    pyyaml
   ];
 
   nativeCheckInputs = [
     manuel
     proxy-py
     pyfakefs
+    pytest-asyncio
     pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
@@ -61,10 +67,7 @@ buildPythonPackage rec {
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
   ];
 
-  disabledTests = [
-    # test contacts CalDAV servers on the internet
-    "test_rfc8764_test_conf"
-  ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "caldav" ];
 

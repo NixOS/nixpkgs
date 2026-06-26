@@ -21,12 +21,12 @@
   eio_main,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "piaf";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
+    url = "https://github.com/anmonteiro/piaf/releases/download/${finalAttrs.version}/piaf-${finalAttrs.version}.tbz";
     hash = "sha256-B/qQCaUvrqrm2GEW51AH9SebGFx7x8laq5RV8hBzcPs=";
   };
 
@@ -58,6 +58,6 @@ buildDunePackage rec {
     description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    maintainers = [ ];
   };
-}
+})

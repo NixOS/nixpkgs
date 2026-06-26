@@ -6,6 +6,7 @@
 
   buildEnv,
   linkFarm,
+  writers,
 
   cmake,
   ninja,
@@ -15,6 +16,7 @@
   freexl,
   libarchive,
   librdata,
+  libsodium,
   qt6,
   R,
   readstat,
@@ -23,17 +25,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasp-desktop";
-  version = "0.95.4";
+  version = "0.97.1";
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-n7lXedICK+sAuSW6hODy+TngAZpDIObWDhTtOjiTXgc=";
+    hash = "sha256-4K6ReOJJF8Pt/RdNSp2ZVH/d64ZMCFlX1RIXDAWWWBE=";
   };
 
   patches = [
-    ./link-boost-dynamically.patch
+    ./boost.patch # link boost dynamically
     ./disable-module-install-logic.patch # don't try to install modules via cmake
     ./disable-renv-logic.patch
     ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
@@ -60,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     freexl
     libarchive
     librdata
+    libsodium
     readstat
 
     qt6.qtbase
@@ -80,17 +83,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     # symlink modules from the store
     ln -s ${finalAttrs.passthru.moduleLibs} $out/Modules/module_libs
+    ln -s ${finalAttrs.passthru.moduleManifests} $out/Modules/manifests
   '';
 
   passthru = {
     inherit
       (import ./modules.nix {
-        inherit fetchFromGitHub rPackages;
+        inherit lib fetchFromGitHub rPackages;
         jasp-src = finalAttrs.src;
         jasp-version = finalAttrs.version;
       })
-      jaspBase
-      modules
+      customRPackages
+      jaspModules
       ;
 
     # Merges ${R}/lib/R with all used R packages (even propagated ones)
@@ -99,17 +103,29 @@ stdenv.mkDerivation (finalAttrs: {
       paths = [
         "${R}/lib/R"
         rPackages.RInside
-        finalAttrs.passthru.jaspBase # Should already be propagated from modules, but include it again, just in case
+        finalAttrs.passthru.customRPackages.jaspBase # Should already be propagated from modules, but include it again, just in case
       ]
-      ++ lib.attrValues finalAttrs.passthru.modules;
+      ++ lib.attrValues finalAttrs.passthru.jaspModules;
     };
 
     moduleLibs = linkFarm "jasp-desktop-${finalAttrs.version}-module-libs" (
       lib.mapAttrsToList (name: drv: {
         name = name;
         path = "${drv}/library";
-      }) finalAttrs.passthru.modules
+      }) finalAttrs.passthru.jaspModules
     );
+
+    moduleManifests = linkFarm "jasp-desktop-${finalAttrs.version}-module-manifests" (
+      lib.mapAttrsToList (name: drv: {
+        name = "${name}_manifest.json";
+        path = writers.writeJSON "${name}_manifest.json" {
+          name = name;
+          version = drv.version;
+        };
+      }) finalAttrs.passthru.jaspModules
+    );
+
+    updateScript = ./update.sh;
   };
 
   meta = {

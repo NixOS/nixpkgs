@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-spice";
-  version = "0.23.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p0XKjQhw0c40+m6QevMnHLaknKYc8Qf6WhTKLkPORP0=";
+    hash = "sha256-ZwhbsSFnzKZv8iEgI9tO2tekmzT7mh7w0+PXDyucuLw=";
   };
 
-  vendorHash = "sha256-tlAex6SFTprJtpMexMjAUNanamqraHYJuwtABx52rWQ=";
+  vendorHash = "sha256-t7nfOTHncSLounY1zR4idAmDmqj9znR2IUQA2xt0Drs=";
 
   subPackages = [ "." ];
 

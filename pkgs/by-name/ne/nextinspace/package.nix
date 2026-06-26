@@ -6,28 +6,28 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nextinspace";
-  version = "2.0.5";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "not-stirred";
     repo = "nextinspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
+    hash = "sha256-oEvRxaxx1pIco2+jm/3HUN0a0nqdo2VosCisM0MWTjU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  pythonPath = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     requests
     tzlocal
     colorama
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytestCheckHook
     requests-mock
   ];

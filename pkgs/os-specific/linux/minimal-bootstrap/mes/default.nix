@@ -57,7 +57,7 @@ let
     }
     .${buildPlatform.system};
 
-  sources = (import ./sources.nix).${arch}.linux.mescc;
+  sources = (lib.importJSON ./sources.json).${arch}.linux.mescc;
 
   inherit (sources)
     libc_mini_SOURCES

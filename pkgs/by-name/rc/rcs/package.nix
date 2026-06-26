@@ -17,16 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
-  ac_cv_path_ED = "${ed}/bin/ed";
-  DIFF = "${diffutils}/bin/diff";
-  DIFF3 = "${diffutils}/bin/diff3";
-
   disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.diffutils
     buildPackages.ed
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-std=c99";
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=c99";
+    ac_cv_path_ED = "${ed}/bin/ed";
+    DIFF = "${diffutils}/bin/diff";
+    DIFF3 = "${diffutils}/bin/diff3";
+  };
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 

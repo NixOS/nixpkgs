@@ -67,12 +67,20 @@ let
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
-  hasPrefixInList = list: newPath: any (path: hasPrefix (toString path) (toString newPath)) list;
+  hasDirPrefix =
+    prefix: path:
+    let
+      normalizedDir = builtins.match "(.*[^/])/*" (toString prefix);
+      normalizedPrefix =
+        (if normalizedDir != null then builtins.head normalizedDir else toString prefix) + "/";
+    in
+    hasPrefix normalizedPrefix (toString path);
+  hasPrefixInList = list: newPath: any (path: hasDirPrefix path newPath) list;
   mergePaths = foldl' (
     merged: newPath:
     let
-      # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (toString newPath) (toString p)) merged;
+      # If the new path is a prefix to some existing path, we need to filter it out. We make sure the prefix is a directory.
+      filteredPaths = filter (p: !hasDirPrefix newPath p) merged;
       # If a prefix of the new path is already in the list, do not add it
       filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
     in
@@ -981,7 +989,6 @@ in
             "AF_INET6"
             "AF_UNIX"
           ];
-          TemporaryFileSystem = "/:ro";
         }
       ];
     };
@@ -1023,7 +1030,6 @@ in
             "AF_INET6"
             "AF_UNIX"
           ];
-          TemporaryFileSystem = "/:ro";
         }
       ];
       environment.RUST_LOG = "info";
@@ -1075,7 +1081,6 @@ in
         # Need access to home directories
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
-        TemporaryFileSystem = "/:ro";
         Restart = "on-failure";
       };
       environment.RUST_LOG = "info";

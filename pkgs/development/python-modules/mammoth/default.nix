@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mammoth";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-mammoth";
     tag = version;
-    hash = "sha256-x1wSudTD/C1uHnudaCCrhi9fyQInCej+Kd7CyBI2sus=";
+    hash = "sha256-8aqO5JPiyONu5rfR76qrutPHGE4nJn+716uPtYlZ+xA=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Convert Word documents (.docx files) to HTML";

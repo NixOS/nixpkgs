@@ -14,6 +14,7 @@
   pytest-lazy-fixture,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   requests-toolbelt,
   requests,
   responses,
@@ -98,6 +99,8 @@ buildPythonPackage rec {
     "test_naked_invocation"
     # Test is flaky
     "test_stdin_read_warning"
+    # flaky: daemon status check exceeds attempt limit
+    "test_daemon_runner"
     # httpbin compatibility issues
     "test_binary_suppresses_when_terminal"
     "test_binary_suppresses_when_not_terminal_but_pretty"
@@ -107,9 +110,16 @@ buildPythonPackage rec {
     "test_terminal_output_response_charset_detection"
     "test_terminal_output_request_charset_detection"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/httpie/cli/issues/1641
+    "test_lazy_choices_help"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Test is flaky
-    "test_daemon_runner"
+    # requires network: hit pie.dev (sandbox blocks external)
+    "remote_httpbin"
+    "chunked"
+    "test_saved_session_cookies_on_different_domain"
+    "test_saved_session_cookie_pool"
   ];
 
   meta = {
@@ -121,5 +131,6 @@ buildPythonPackage rec {
       antono
       relrod
     ];
+    mainProgram = "http";
   };
 }

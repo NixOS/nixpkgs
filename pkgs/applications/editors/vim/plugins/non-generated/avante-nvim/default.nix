@@ -12,12 +12,12 @@
   pkgs,
 }:
 let
-  version = "0.0.27-unstable-2026-02-03";
+  version = "0.0.27-unstable-2026-03-11";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "d80b7966c0505809e83e408353bbe8cb3394936d";
-    hash = "sha256-+IfICc7uBaMV27VJcHlUOxZ2TFQoIHFJPMtoIjjgnZ8=";
+    rev = "9a7793461549939f1d52b2b309a1aa44680170c8";
+    hash = "sha256-EEkAoufj29P46RIUrRNG0xJL9Wu4X7LZCS1fer4/nZQ=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -67,10 +67,14 @@ vimUtils.buildVimPlugin {
     in
     ''
       mkdir -p $out/build
-      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
+      cp ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
+      cp ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
+      cp ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
+      cp ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
+
+      # Fixes PKCE auth flows not finding libcrypto
+      substituteInPlace "$out/lua/avante/auth/pkce.lua" \
+        --replace-fail 'pcall(ffi.load, "crypto")' 'pcall(ffi.load, "${lib.getLib openssl}/lib/libcrypto${ext}")'
     '';
 
   passthru = {
@@ -88,7 +92,6 @@ vimUtils.buildVimPlugin {
     "avante.providers.azure"
     "avante.providers.copilot"
     "avante.providers.gemini"
-    "avante.providers.ollama"
     "avante.providers.vertex"
     "avante.providers.vertex_claude"
   ];

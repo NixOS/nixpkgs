@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "bumble";
-  version = "0.0.221";
+  version = "0.0.229";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bumble";
     tag = "v${version}";
-    hash = "sha256-GCcvbYLHChvrsQuhFjeYnncjrzFqOlmL+LlG7t2iAkE=";
+    hash = "sha256-sc4cUYfhHLc4sHGVfLkn1Zqmu0Tlpytkbit9ieQjNHE=";
   };
 
   build-system = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "libusb-package"
+    "tomli"
   ];
 
   dependencies = [
@@ -76,6 +77,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlags = [ "--asyncio-mode=auto" ];
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # tests require networking

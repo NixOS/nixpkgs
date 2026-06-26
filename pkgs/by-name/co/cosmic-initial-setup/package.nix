@@ -14,17 +14,19 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.6";
+  version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-6pa4ZSH1NzVqq65d5MQucCLNr4c4PURNE0mLvrfWlug=";
+    hash = "sha256-UABqbmbwW2ZBOO7mq16/h0s55VCWRF2yyf/1TaubC88=";
   };
 
-  cargoHash = "sha256-Kj+eaTMHMQQHN0X3prIuZm1wvfnaV7BUlUKem6JLtc8=";
+  cargoHash = "sha256-DESnl5NjakU4++Ep6CHxDZzHn+o0Gi0eREpXk5BN5iY=";
+
+  separateDebugInfo = true;
 
   buildFeatures = [ "nixos" ];
 
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Reported this issue upstream in:
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     libcosmicAppHook

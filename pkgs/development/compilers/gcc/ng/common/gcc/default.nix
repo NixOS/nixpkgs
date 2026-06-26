@@ -57,23 +57,28 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "find_a_program-separate-from-find_a_file.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-1-git@JohnEricson.me/raw";
-      hash = "sha256-0gaWaeFZq+a8q7Bcr3eILNjHh1LfzL/Lz4F+W+H6XIU=";
+      url = "https://github.com/gcc-mirror/gcc/commit/948eb02800777d0318ee2a38bf32076afee739f2.diff";
+      hash = "sha256-doXak3VfdWR/BP9XiJaU7uJz7rex78N1oaW6CqYwKaQ=";
     })
     (fetchpatch {
       name = "simplify-find_a_program-and-find_a_file.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-2-git@JohnEricson.me/raw";
-      hash = "sha256-ojdyszxLGL+njHK4eAaeBkxAhFTDI57j6lGuAf0A+N0=";
+      url = "https://github.com/gcc-mirror/gcc/commit/073b4656d07e40f83a1db7f4462ab2d68b1875a2.diff";
+      hash = "sha256-kW6ZHyMzsn7snUBuDx4XLriaFGWZ1fixNc9UH8O5els=";
+    })
+    (fetchpatch {
+      name = "for_each_path-fix-uninitialized-ret-PR121806.patch";
+      url = "https://github.com/gcc-mirror/gcc/commit/6b008944e7bc3a342a734c4fcf1001d63fd0a6f8.diff";
+      hash = "sha256-preG5DdRX+a0NIebsapAVnqiLYtPjsR4H5BkAXL/65g=";
     })
     (fetchpatch {
       name = "for_each_path-pass-machine-specific.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-3-git@JohnEricson.me/raw";
-      hash = "sha256-C5jUSyNchmZcE8RTXc2dHfCqNKuBHeiouLruK9UooSM=";
+      url = "https://github.com/gcc-mirror/gcc/commit/f62f68e7c4bde0385fbd2dba3e926586dd2f1281.diff";
+      hash = "sha256-NsgGnTMQTnz1c4urr6jeoGOzQ4xeJ/p+F53osNDYDCA=";
     })
     (fetchpatch {
       name = "find_a_program-search-with-machine-prefix.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-4-git@JohnEricson.me/raw";
-      hash = "sha256-MwcO4OXPlcdaSYivsh5ru+Cfq6qybeAtgCgTEPGYg40=";
+      url = "https://github.com/gcc-mirror/gcc/commit/a514707ffd7d58b140686036c2dece43ecb7d33c.diff";
+      hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
     })
 
     (getVersionFile "gcc/fix-collect2-paths.diff")

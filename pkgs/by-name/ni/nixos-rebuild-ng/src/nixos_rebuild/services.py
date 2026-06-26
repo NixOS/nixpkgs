@@ -35,11 +35,7 @@ def reexec(
         return
 
     drv = None
-    # Parsing the args here but ignore ask_sudo_password since it is not
-    # needed and we would end up asking sudo password twice
-    if flake := Flake.from_arg(
-        args.flake, Remote.from_arg(args.target_host, ask_sudo_password=None)
-    ):
+    if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host)):
         drv = nix.build_flake(
             NIXOS_REBUILD_ATTR,
             flake,
@@ -103,8 +99,7 @@ def _get_system_attr(
         case Action.BUILD_IMAGE if flake:
             variants = nix.get_build_image_variants_flake(
                 flake,
-                eval_flags=grouped_nix_args.flake_build_flags
-                | grouped_nix_args.flake_eval_flags,
+                eval_flags=grouped_nix_args.flake_eval_flags,
             )
             _validate_image_variant(args.image_variant, variants)
             attr = f"config.system.build.images.{args.image_variant}"
@@ -133,12 +128,12 @@ def _rollback_system(
 ) -> Path:
     match action:
         case Action.SWITCH | Action.BOOT:
-            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+            path_to_config = nix.rollback(profile, target_host, elevate=args.elevator)
         case Action.TEST | Action.BUILD:
             maybe_path_to_config = nix.rollback_temporary_profile(
                 profile,
                 target_host,
-                sudo=args.sudo,
+                elevate=args.elevator,
             )
             if maybe_path_to_config:
                 path_to_config = maybe_path_to_config
@@ -232,13 +227,13 @@ def _activate_system(
                 profile,
                 path_to_config,
                 target_host=target_host,
-                sudo=args.sudo,
+                elevate=args.elevator,
             )
             nix.switch_to_configuration(
                 path_to_config,
                 action,
                 target_host=target_host,
-                sudo=args.sudo,
+                elevate=args.elevator,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,
             )
@@ -248,7 +243,7 @@ def _activate_system(
                 path_to_config,
                 action,
                 target_host=target_host,
-                sudo=args.sudo,
+                elevate=args.elevator,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,
             )
@@ -264,8 +259,7 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
-                    eval_flags=grouped_nix_args.flake_build_flags
-                    | grouped_nix_args.flake_eval_flags,
+                    eval_flags=grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
@@ -304,6 +298,11 @@ def build_and_activate_system(
             copy_flags=grouped_nix_args.copy_flags,
         )
     elif args.rollback:
+        if target_host is not None:
+            # The elevated `nix-env --rollback` runs before path_to_config
+            # is known, so point the elevator at the profile to find a
+            # target-arch helper in the *current* generation's sw/bin.
+            args.elevator = args.elevator.for_target_config(profile.path)
         path_to_config = _rollback_system(
             action=action,
             args=args,
@@ -321,11 +320,16 @@ def build_and_activate_system(
             grouped_nix_args=grouped_nix_args,
         )
 
+    if target_host is not None and not args.rollback:
+        # Prefer the helper from the toplevel we just copied to the
+        # target (correct arch, independent of re-exec / nixpkgs pin).
+        args.elevator = args.elevator.for_target_config(path_to_config)
+
     current_config = Path("/run/current-system")
     if args.diff:
         if current_config.exists():
             nix.diff_closures(
-                current_config=current_config.readlink(),
+                current_config=current_config,
                 new_config=path_to_config,
                 target_host=target_host,
             )

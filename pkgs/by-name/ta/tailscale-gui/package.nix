@@ -5,15 +5,20 @@
   xar,
   cpio,
   pbzx,
+  writeShellApplication,
+  cacert,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailscale-gui";
-  version = "1.92.3";
+  version = "1.98.5";
 
   src = fetchurl {
     url = "https://pkgs.tailscale.com/stable/Tailscale-${finalAttrs.version}-macos.pkg";
-    hash = "sha256-K5tJHyFhqnxV4KHzr7YOHRoH33vk+dq+EVWyUo88nuI=";
+    hash = "sha256-r7e8aKNWaX1psI0a3sohTUv8xmUv8oebH/ndjeHLoVA=";
   };
 
   dontUnpack = true;
@@ -39,13 +44,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "tailscale-gui-update-script";
+    runtimeInputs = [
+      cacert
+      curl
+      jq
+      common-updater-scripts
+    ];
+    text = ''
+      version=$(curl --silent "https://pkgs.tailscale.com/stable/?mode=json&os=darwin" | jq -r '.MacZipsVersion')
+      update-source-version tailscale-gui "$version"
+    '';
+  });
+
   meta = {
     description = "Tailscale GUI client for macOS";
     homepage = "https://tailscale.com";
     changelog = "https://tailscale.com/changelog#client";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ anish ];
+    maintainers = with lib.maintainers; [
+      anish
+      Br1ght0ne
+    ];
     platforms = lib.platforms.darwin;
   };
 })

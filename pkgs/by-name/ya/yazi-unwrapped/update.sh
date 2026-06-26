@@ -41,12 +41,12 @@ echo "Updating cargoHash"
 sed -i -E 's/cargoHash = ".*?"/cargoHash = ""/' package.nix
 
 # Build and get new hash
-cargoHash=$( (nix-build "$NIXPKGS_DIR" -A yazi-unwrapped 2>&1 || true) | awk '/got/{print $2}')
+cargoHash=$( (nix-build "$NIXPKGS_DIR" -A yazi-unwrapped 2>&1 || true) | awk '/got:/{print $2}')
 
 if [ "$cargoHash" == "" ]; then
     echo "Failed to get cargoHash, please update it manually"
     exit 0
 fi
 
-sed -i -E 's/cargoHash = ".*?"/cargoHash = "'"$cargoHash"'"/' package.nix
+sed -i -E 's#cargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' package.nix
 popd

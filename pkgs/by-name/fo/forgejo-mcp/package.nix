@@ -8,21 +8,28 @@
 
 buildGoModule (finalAttrs: {
   pname = "forgejo-mcp";
-  version = "2.9.1";
+  version = "2.30.0";
 
   src = fetchFromCodeberg {
     owner = "goern";
     repo = "forgejo-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9++EewwF2zxdYCwDdNVX/7liiHZNR1rmM0Z7w5r4v5k=";
+    hash = "sha256-DV8lL6Q/0gD8mFn3q5UusHv8ahNtmk9t9vtbhpvpxBs=";
   };
 
-  vendorHash = "sha256-THdbGlinpH6ZtVveFEN/wy8ITG6pC+Zs6Leyx+2/hqI=";
+  vendorHash = "sha256-QDJRbF4mZzBv1vxvo1ZQJaUJayRHj1jMgjaRfAmLMik=";
 
   ldflags = [
     "-s"
     "-X main.Version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

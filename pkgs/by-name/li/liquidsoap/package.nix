@@ -11,13 +11,13 @@
   bubblewrap,
   curl,
   dune,
-  ffmpeg_6-full,
+  ffmpeg_8-full,
   yt-dlp,
   runtimePackages ? [
     awscli2
     bubblewrap
     curl
-    ffmpeg_6-full
+    ffmpeg_8-full
     yt-dlp
   ],
 }:
@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquidsoap";
-  version = "2.4.2";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ViJlG+AUncL37mltlFFXVho98Up11qZI3wwSnrd9C8g=";
+    hash = "sha256-aNsN65phkfFM7OD4oCMl0wP3quvUquHR325DDVIqs/M=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    dune build
+    dune build --release @install
 
     runHook postBuild
   '';
@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
 
     # Mandatory dependencies
+    ocamlPackages.domain_shims
     ocamlPackages.dtools
     ocamlPackages.duppy
     ocamlPackages.mm

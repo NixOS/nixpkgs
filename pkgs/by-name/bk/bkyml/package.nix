@@ -44,6 +44,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/joscha/bkyml";
     description = "CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ olebedev ];
+    maintainers = [ ];
   };
 })

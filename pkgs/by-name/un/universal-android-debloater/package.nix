@@ -1,11 +1,13 @@
 {
   android-tools,
   clang,
+  dbus,
   expat,
   fetchFromGitHub,
   fontconfig,
   freetype,
   lib,
+  stdenv,
   libglvnd,
   libxkbcommon,
   makeWrapper,
@@ -53,17 +55,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/uad-ng --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        fontconfig
-        freetype
-        libglvnd
-        libxkbcommon
-        wayland
-        libx11
-        libxcursor
-        libxi
-        libxrandr
-      ]
+      lib.makeLibraryPath (
+        [
+          dbus
+          fontconfig
+          freetype
+          libglvnd
+          libxkbcommon
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ]
+      )
     } --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
@@ -76,6 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "uad-ng";
     maintainers = with lib.maintainers; [ lavafroth ];
-    platforms = lib.platforms.linux;
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })

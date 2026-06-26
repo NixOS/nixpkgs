@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  pythonAtLeast,
   flit-core,
   marshmallow,
   pytestCheckHook,
@@ -16,25 +15,17 @@
   pyramid,
   falcon,
   aiohttp,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.7.0";
+  version = "8.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DGF97BntTx/2skfNc4VelJ2HBS1xkAk4tx8Mr9kvGRs=";
+    hash = "sha256-eZv5A5x2wj/Y3BlREHp1qeVhIDwV1q6PicHkbiNGNsE=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/marshmallow-code/webargs/commit/a6a5043ee34b0a22885b3625de6d4fdffc3b715b.patch";
-      hash = "sha256-EFe76SAklgmBjfM6K8PkB0vHMCSlZ9EKAW9AbnxKmPA=";
-    })
-  ];
 
   build-system = [ flit-core ];
 

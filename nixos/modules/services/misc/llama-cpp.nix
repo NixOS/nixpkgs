@@ -2,188 +2,173 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
-
 let
   cfg = config.services.llama-cpp;
-
-  modelsPresetFile =
-    if cfg.modelsPreset != null then
-      pkgs.writeText "llama-models.ini" (lib.generators.toINI { } cfg.modelsPreset)
-    else
-      null;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "host" ]
+      [ "services" "llama-cpp" "settings" "host" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "port" ]
+      [ "services" "llama-cpp" "settings" "port" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "model" ]
+      [ "services" "llama-cpp" "settings" "model" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "llama-cpp" "modelsDir" ]
+      [ "services" "llama-cpp" "settings" "models-dir" ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "llama-cpp" "modelsPreset" ] ''
+      Using a Nix attribute set for configuring model presets is no longer
+      supported. However, it's possible to use
+      `services.llama-cpp.settings.models-preset` to provide a path to an INI
+      file with desired options.
+    '')
+    (lib.mkRemovedOptionModule [
+      "services"
+      "llama-cpp"
+      "extraFlags"
+    ] "Use `services.llama-cpp.settings` instead")
+  ];
 
   options = {
-
     services.llama-cpp = {
-      enable = lib.mkEnableOption "LLaMA C++ server";
+      enable = lib.mkEnableOption "llama.cpp HTTP server";
 
       package = lib.mkPackageOption pkgs "llama-cpp" { };
 
-      model = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        example = "/models/mistral-instruct-7b/ggml-model-q4_0.gguf";
-        description = "Model path.";
-        default = null;
-      };
-
-      modelsDir = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        example = "/models/";
-        description = "Models directory.";
-        default = null;
-      };
-
-      modelsPreset = lib.mkOption {
-        type = lib.types.nullOr (lib.types.attrsOf lib.types.attrs);
-        default = null;
-        description = ''
-          Models preset configuration as a Nix attribute set.
-          This is converted to an INI file and passed to llama-server via --model-preset.
-          See llama-server documentation for available options.
-        '';
-        example = lib.literalExpression ''
-          {
-            "Qwen3-Coder-Next" = {
-              hf-repo = "unsloth/Qwen3-Coder-Next-GGUF";
-              hf-file = "Qwen3-Coder-Next-UD-Q4_K_XL.gguf";
-              alias = "unsloth/Qwen3-Coder-Next";
-              fit = "on";
-              seed = "3407";
-              temp = "1.0";
-              top-p = "0.95";
-              min-p = "0.01";
-              top-k = "40";
-              jinja = "on";
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = lib.types.attrs;
+          options = {
+            host = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1";
+              example = "0.0.0.0";
+              description = ''
+                IP address on which the server should listen on.
+              '';
             };
-          }
+
+            port = lib.mkOption {
+              type = lib.types.port;
+              default = 8080;
+              example = 1337;
+              description = ''
+                Port on which the server should listen on.
+              '';
+            };
+          };
+        };
+        default = { };
+        example = {
+          host = "0.0.0.0";
+          port = 1337;
+          model = "/mnt/llms/Foo3.6-27B-UD-Q4_K_XL.gguf";
+          ctx-size = 252144;
+          temp = 0.6;
+          top-k = 20;
+          top-p = 0.95;
+          batch-size = 512;
+          ubatch-size = 256;
+          spec-type = "draft-mtp";
+          spec-draft-n-max = 2;
+          flash-attn = "on";
+        };
+        description = ''
+          Command-line arguments for `llama-server`.
+
+          See <https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md>
+          for the full list of options.
         '';
-      };
-
-      extraFlags = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        description = "Extra flags passed to llama-cpp-server.";
-        example = [
-          "-c"
-          "4096"
-          "-ngl"
-          "32"
-          "--numa"
-          "numactl"
-        ];
-        default = [ ];
-      };
-
-      host = lib.mkOption {
-        type = lib.types.str;
-        default = "127.0.0.1";
-        example = "0.0.0.0";
-        description = "IP address the LLaMA C++ server listens on.";
-      };
-
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 8080;
-        description = "Listen port for LLaMA C++ server.";
       };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Open ports in the firewall for LLaMA C++ server.";
+        description = ''
+          Open ports in the firewall for the server.
+        '';
       };
     };
-
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.llama-cpp = {
-      description = "LLaMA C++ server";
+      description = "llama.cpp HTTP server";
+      wants = [ "network.target" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        Type = "idle";
-        KillSignal = "SIGINT";
+        ExecStart = toString [
+          (lib.getExe' cfg.package "llama-server")
+          (lib.cli.toCommandLine (optionName: {
+            option = if builtins.stringLength optionName > 1 then "--${optionName}" else "-${optionName}";
+            sep = " ";
+            explicitBool = false;
+            formatArg = lib.generators.mkValueStringDefault { };
+          }) cfg.settings)
+        ];
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID";
+        Restart = "on-failure";
+        RestartSec = 300;
+
+        DynamicUser = true;
         StateDirectory = "llama-cpp";
         CacheDirectory = "llama-cpp";
         WorkingDirectory = "/var/lib/llama-cpp";
         Environment = [ "LLAMA_CACHE=/var/cache/llama-cpp" ];
-        ExecStart =
-          let
-            args = [
-              "--host"
-              cfg.host
-              "--port"
-              (toString cfg.port)
-            ]
-            ++ lib.optionals (cfg.model != null) [
-              "-m"
-              cfg.model
-            ]
-            ++ lib.optionals (cfg.modelsDir != null) [
-              "--models-dir"
-              cfg.modelsDir
-            ]
-            ++ lib.optionals (cfg.modelsPreset != null) [
-              "--models-preset"
-              modelsPresetFile
-            ]
-            ++ cfg.extraFlags;
-          in
-          "${cfg.package}/bin/llama-server ${utils.escapeSystemdExecArgs args}";
-        Restart = "on-failure";
-        RestartSec = 300;
 
-        # for GPU acceleration
-        PrivateDevices = false;
-
-        # hardening
-        DynamicUser = true;
-        CapabilityBoundingSet = "";
+        AmbientCapabilities = [ "" ];
+        CapabilityBoundingSet = [ "" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = false; # Required for GPU support.
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
         ];
-        NoNewPrivileges = true;
-        PrivateMounts = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        MemoryDenyWriteExecute = true;
-        LockPersonality = true;
-        RemoveIPC = true;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
         ];
-        SystemCallErrorNumber = "EPERM";
-        ProtectProc = "invisible";
-        ProtectHostname = true;
-        ProcSubset = "pid";
       };
     };
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
-
+    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.settings.port;
   };
 
-  meta.maintainers = with lib.maintainers; [ newam ];
+  meta.maintainers = with lib.maintainers; [
+    azahi
+    newam
+  ];
 }

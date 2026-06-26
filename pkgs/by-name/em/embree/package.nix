@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "embree";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
+    hash = "sha256-ZJItp33XUmaTk5s4AbM/uzWGxSdGh5scdZAZDBYy28M=";
   };
 
   postPatch = ''
@@ -61,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with lib.maintainers; [
-      hodapp
-    ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

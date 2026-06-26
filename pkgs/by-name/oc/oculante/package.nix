@@ -21,7 +21,7 @@
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oculante";
   version = "0.9.2.1-unstable-2025-10-08";
 
@@ -67,17 +67,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=thumbnails::test_thumbs" # broken as of v0.9.2
   ];
 
-  patches = [
-    # The below patch is needed to fix this build, until the upstream dependency (libavif-rs) fixes the problem.
-    # The explicit `patchFlags` can also be removed when this patch becomes obsolete.
-    # <https://github.com/njaard/libavif-rs/issues/122>
-    ./libaom-sys-0.17.2+libaom.3.11.0-cmake-nasm-fix.patch
-  ];
-
-  patchFlags = [
-    "-p1"
-    "--directory=../${pname}-${version}-vendor"
-  ];
+  # The below patch is needed to fix this build, until the upstream dependency (libavif-rs) fixes the problem.
+  # <https://github.com/njaard/libavif-rs/issues/122>
+  postPatch = ''
+    patch -p1 -d "$cargoDepsCopy"/*/libaom-sys-0.17.2+libaom.3.11.0 -i ${./libaom-sys-0.17.2+libaom.3.11.0-cmake-nasm-fix.patch}
+  '';
 
   postInstall = ''
     install -Dm444 $src/res/icons/icon.png $out/share/icons/hicolor/128x128/apps/oculante.png
@@ -98,11 +92,10 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
-    changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/woelper/oculante/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "oculante";
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
   };
-}
+})

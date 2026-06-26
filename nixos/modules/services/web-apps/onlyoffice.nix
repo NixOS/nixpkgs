@@ -50,12 +50,18 @@ in
 
     package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
-    x2t = lib.mkPackageOption pkgs "x2t" { };
+    x2t = lib.mkPackageOption pkgs "onlyoffice-documentserver.passthru.x2t" { };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
       description = "Port the OnlyOffice document server should listen on.";
+    };
+
+    allowLocalConnections = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to allow the document server to download files from private IP addresses.";
     };
 
     examplePort = lib.mkOption {
@@ -308,6 +314,10 @@ in
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
             FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+            ${lib.optionalString cfg.allowLocalConnections ''
+              .services.CoAuthoring."request-filtering-agent".allowPrivateIPAddress = true |
+              .services.CoAuthoring."request-filtering-agent".allowMetaIPAddress = true |
+            ''}
               .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |

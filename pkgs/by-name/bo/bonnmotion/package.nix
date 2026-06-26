@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependency jars
     ];
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

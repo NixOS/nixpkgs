@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
   ];
   nativeBuildInputs = [ cmake ];
-  CXXFLAGS = [
+
+  env.CXXFLAGS = toString [
     "-fPIC"
     "-O2"
     "-w"

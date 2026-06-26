@@ -497,7 +497,26 @@ in
         internal = true;
         description = ''
           A list of attribute sets specifying drivers to be loaded by
-          the X11 server.
+          the X11 server. This module will create a Device section in
+          the Xorg config for every driver listed here, along with a
+          Screen section if the driver's {option}`display` attribute is
+          `true`. If such configuration sections should not be created,
+          use {options}`services.xserver.externallyConfiguredDrivers`
+          instead.
+
+          Users should not add drivers to this option but should instead
+          add drivers to {option}`services.xserver.videoDrivers`.
+        '';
+      };
+
+      externallyConfiguredDrivers = mkOption {
+        type = types.listOf types.str;
+        internal = true;
+        default = [ ];
+        description = ''
+          A list of externally configured drivers (by name). Modules that
+          manually configure their drivers should add said drivers to this
+          list to let this module know that the driver has been configured.
         '';
       };
 
@@ -865,7 +884,9 @@ in
       }
     ]
     ++ map (driver: {
-      assertion = builtins.elem driver (builtins.catAttrs "name" cfg.drivers);
+      assertion = builtins.elem driver (
+        (builtins.catAttrs "name" cfg.drivers) ++ cfg.externallyConfiguredDrivers
+      );
       message = "Unknown X11 driver ‘${driver}’ specified in `services.xserver.videoDrivers`.";
     }) cfg.videoDrivers;
 

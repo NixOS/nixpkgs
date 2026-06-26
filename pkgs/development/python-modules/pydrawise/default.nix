@@ -15,16 +15,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydrawise";
-  version = "2025.9.0";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";
-    tag = version;
-    hash = "sha256-eHy3pdzgN5CvKfsoa5ZdT9lor4AiZr8K1g/8qyzP3eo=";
+    tag = finalAttrs.version;
+    hash = "sha256-j1ovfQGi5DpDPWVwUA0mDIDztjVKkB7wFuK2HunXc3c=";
   };
 
   build-system = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with Hydrawise sprinkler controllers through the GraphQL API";
     homepage = "https://github.com/dknowles2/pydrawise";
-    changelog = "https://github.com/dknowles2/pydrawise/releases/tag/${src.tag}";
+    changelog = "https://github.com/dknowles2/pydrawise/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

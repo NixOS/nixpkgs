@@ -6,12 +6,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starry";
   version = "2.0.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/ZUmMLEqlpqu+Ja/3XjFJf+OFZJCz7rp5MrQBEjwsXs=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "starry";
   };
-}
+})

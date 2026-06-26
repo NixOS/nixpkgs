@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.9.5";
+  version = "0.9.6.1";
 
   outputs = [
     "out"
@@ -24,17 +24,8 @@ stdenv.mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
+    hash = "sha256-ea7vOxmc4S7KizbwYp21NryW3BGh+Jn0HOR4qsA1roE=";
   };
-
-  patches = [
-    # Qt 6.10 compat
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://github.com/quotient-im/libQuotient/commit/ea83157eed37ff97ab275a5d14c971f0a5a70595.diff";
-      hash = "sha256-JMdcywGgZ0Gev/Nce4oPiMJQxTBJYPoq+WoT3WLWWNQ=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 

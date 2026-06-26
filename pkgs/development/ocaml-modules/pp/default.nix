@@ -6,18 +6,18 @@
   version ? "2.0.0",
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "pp";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-dune/pp/releases/download/${version}/pp-${version}.tbz";
+    url = "https://github.com/ocaml-dune/pp/releases/download/${finalAttrs.version}/pp-${finalAttrs.version}.tbz";
     hash =
       {
         "2.0.0" = "sha256-hlE1FRiwkrSi3vTggXHCdhUvkvtqhKixm2uSnM20RBk=";
         "1.2.0" = "sha256-pegiVzxVr7Qtsp7FbqzR8qzY9lzy3yh44pHeN0zmkJw=";
       }
-      ."${version}";
+      ."${finalAttrs.version}";
   };
 
   minimalOCamlVersion = "4.08";
@@ -31,4 +31,4 @@ buildDunePackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

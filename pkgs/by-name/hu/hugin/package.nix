@@ -30,8 +30,8 @@
   sqlite,
   vigra,
   wrapGAppsHook3,
-  wxGTK32,
-  wxGTK' ? wxGTK32,
+  wxwidgets_3_2,
+  wxGTK' ? wxwidgets_3_2,
   zlib,
 }:
 

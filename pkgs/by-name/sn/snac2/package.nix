@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snac2";
-  version = "2.89";
+  version = "2.92";
 
   src = fetchFromCodeberg {
     owner = "grunfink";
     repo = "snac2";
     tag = finalAttrs.version;
-    hash = "sha256-MnDvEnwdrqrWm2qSTieaE4aB1GbrMtpps+rX/ff7EDQ=";
+    hash = "sha256-psZtNrw6EjN52Hpl3aePnPQ2F/WoPEc5JQbqFknUeQk=";
   };
 
   buildInputs = [

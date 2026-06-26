@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nwg-look";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
+    hash = "sha256-YAFZZIUd/nvDwa3dXBoBL+dmPOVgJKv/taOjLMP4owI=";
   };
 
-  vendorHash = "sha256-8ooWJTOC4fmuu+/Dy7JOaGSO5YlsMfKcf2lyv2ojJIw=";
+  vendorHash = "sha256-9jyR7RLpqdDvwgqlrvToKQlClRbk9ELxapbgb/OUB4I=";
 
   ldflags = [
     "-s"
@@ -47,15 +47,11 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 1;
 
   postInstall = ''
-    mkdir -p $out/share
     mkdir -p $out/share/nwg-look/langs
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/icons
     cp stuff/main.glade $out/share/nwg-look/
     cp langs/* $out/share/nwg-look/langs
-    cp stuff/nwg-look.desktop $out/share/applications
-    cp stuff/nwg-look.svg $out/share/pixmaps
+    install -D -m 644 stuff/nwg-look.desktop -t $out/share/applications
+    install -D -m 644 stuff/nwg-look.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preFixup = ''

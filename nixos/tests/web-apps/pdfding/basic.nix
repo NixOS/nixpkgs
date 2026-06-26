@@ -34,6 +34,10 @@
 
         # enable mailpit
         services.mailpit.instances.default = { };
+
+        # allows running nixos test on qemu without kvm, eg. github actions on aarch64-linux
+        systemd.settings.Manager.DefaultDeviceTimeoutSec = lib.mkForce 1800;
+        boot.initrd.kernelModules = [ "virtio_console" ];
       };
   };
 
@@ -56,6 +60,7 @@
 
       # create admin
       machine.wait_for_unit("multi-user.target")
+      machine.wait_for_open_port(${toString port})
       machine.succeed("DJANGO_SUPERUSER_PASSWORD=admin pdfding-manage createsuperuser --no-input --username admin --email admin@localhost")
 
       cookie_jar = "/tmp/cookies.txt"
@@ -139,7 +144,7 @@
   # Debug interactively with:
   # - nix run .#nixosTests.pdfding.basic.driverInteractive -L
   # - start_all() / run_tests()
-  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
+  interactive.sshBackdoor.enable = true;
   interactive.nodes.machine =
     { config, ... }:
     let

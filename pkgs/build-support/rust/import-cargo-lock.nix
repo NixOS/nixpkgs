@@ -120,9 +120,11 @@ let
       checksum =
         pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
     in
-    assert lib.assertMsg (checksum != null) ''
-      Package ${pkg.name} does not have a checksum.
-    '';
+    assert
+      checksum != null
+      || throw ''
+        Package ${pkg.name} does not have a checksum.
+      '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
       url = "${downloadUrl}/${pkg.name}/${pkg.version}/download";
@@ -130,7 +132,10 @@ let
     };
 
   registries = {
-    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
+    # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
+    # rate limit on the API servers, which currently returns intermittent 403s.
+    # See https://github.com/rust-lang/crates.io/issues/13482
+    "https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
   }
   // extraRegistries;
 
@@ -263,26 +268,32 @@ let
   vendorDir =
     runCommand "cargo-vendor-dir"
       (
-        if lockFile == null then
-          {
-            inherit lockFileContents;
-            passAsFile = [ "lockFileContents" ];
-          }
-        else
-          {
-            passthru = {
-              inherit lockFile;
-            };
-          }
+        {
+          __structuredAttrs = true;
+        }
+        // (
+          if lockFile == null then
+            {
+              inherit lockFileContents;
+            }
+          else
+            {
+              passthru = {
+                inherit lockFile;
+              };
+            }
+        )
       )
       ''
             mkdir -p $out/.cargo
 
             ${
-              if lockFile != null then
-                "ln -s ${lockFile} $out/Cargo.lock"
+              if lockFile == null then
+                ''
+                  printf "%s" "$lockFileContents" > "$out/Cargo.lock"
+                ''
               else
-                "cp $lockFileContentsPath $out/Cargo.lock"
+                "ln -s ${lockFile} $out/Cargo.lock"
             }
 
             cat > $out/.cargo/config.toml <<EOF

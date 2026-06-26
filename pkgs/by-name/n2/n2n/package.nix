@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   meta = {
     description = "Peer-to-peer VPN";

@@ -32,16 +32,17 @@
   cairo,
   openscad,
   runCommand,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openscad";
   version = "2021.01";
 
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
@@ -84,6 +85,9 @@ stdenv.mkDerivation rec {
         sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
       '';
     })
+    # unfortunately the archlinux patch does not apply cleanly
+    # source: https://gitlab.archlinux.org/archlinux/packaging/packages/openscad/-/raw/ecc27e16ae6fee51c6806690d76f9ba326af79c1/boost-1.89.patch
+    ./boost-1.89.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ref. https://github.com/openscad/openscad/pull/4013 merged upstream
@@ -116,12 +120,16 @@ stdenv.mkDerivation rec {
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
-  ];
+  ]
+  # versionCheckHook doesn't detect any output on darwin, even though the binary works.
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
 
   buildInputs = [
     eigen
     boost
-    glew
+    # OpenSCAD's GLX offscreen renderer needs GLEW's GLXEW symbols (`__GLXEW_SGIX_pbuffer`, `__GLXEW_SGIX_fbconfig`)
+    # which are not found in the default EGL-enabled glew and causes the build failure in https://github.com/NixOS/nixpkgs/issues/530529
+    (glew.override { enableEGL = false; })
     opencsg
     cgal_5
     mpfr
@@ -149,7 +157,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional spacenavSupport libspnav;
 
   qmakeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
     "LIB3MF_LIBPATH=${lib3mf}/lib"
   ]
@@ -164,6 +172,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     make objects/parser.cxx
   '';
+
+  doInstallCheck = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
@@ -201,9 +211,9 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     lib3mf_support =
-      runCommand "${pname}-lib3mf-support-test"
+      runCommand "${finalAttrs.pname}-lib3mf-support-test"
         {
-          nativeBuildInputs = [ openscad ];
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
         }
         ''
           echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
@@ -211,4 +221,4 @@ stdenv.mkDerivation rec {
           mv cube-import.3mf $out
         '';
   };
-}
+})

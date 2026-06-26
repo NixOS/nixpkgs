@@ -5,27 +5,29 @@
   unittestCheckHook,
   cython,
   setuptools,
-  wheel,
   numpy,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "daqp";
-  version = "0.7.2";
+  version = "0.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    tag = "v${version}";
-    hash = "sha256-I+ObnFAAhRoYtPEDXGP6BI+Zk9CH5yU27JJ+tWbcACQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UakuHHsz4LXDfI7+VT5TO+jg90gpgu3lTJL8RGhtODQ=";
   };
 
-  sourceRoot = "${src.name}/interfaces/daqp-python";
-
+  # Don't try to `rmtree` to "Cleanup C-source"
+  # TODO: to update on next release, master already has `if daqp_src_exists:`
   postPatch = ''
-    sed -i 's|../../../daqp|../..|' setup.py
-    sed -i 's|if src_path and os.path.exists(src_path):|if False:|' setup.py
+    substituteInPlace setup.py --replace-fail \
+      "if src_path.exists():" \
+      "if False:"
   '';
+
+  sourceRoot = "${finalAttrs.src.name}/interfaces/daqp-python";
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -37,13 +39,12 @@ buildPythonPackage rec {
     "-v"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 
@@ -53,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

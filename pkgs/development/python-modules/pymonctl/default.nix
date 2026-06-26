@@ -6,7 +6,7 @@
   setuptools,
 
   ewmhlib,
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     ewmhlib
-    xlib
+    python-xlib
     typing-extensions
   ];
 

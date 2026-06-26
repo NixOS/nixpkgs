@@ -29,6 +29,9 @@ lib.makeScope newScope (self: {
     # When updating this make sure to also update the `version` above
     rev = "20b1997b6451d9715dfdbeec86a9d274c7430ed8";
     hash = "sha256-96Ucq70eSy6pqh5ne9xoODWe/nPuriZnFAdx0OkLVCs=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   cli = self.callPackage ./cli.nix { };

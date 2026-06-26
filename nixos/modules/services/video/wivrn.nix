@@ -72,6 +72,11 @@ let
   );
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "wivrn" "defaultRuntime" ] ''
+      WiVRn now manages the active runtime itself, so this option has been removed.
+    '')
+  ];
   options = {
     services.wivrn = {
       enable = mkEnableOption "WiVRn, an OpenXR streaming application";
@@ -79,14 +84,6 @@ in
       package = mkPackageOption pkgs "wivrn" { };
 
       openFirewall = mkEnableOption "the default ports in the firewall for the WiVRn server";
-
-      defaultRuntime = mkEnableOption ''
-        WiVRn as the default OpenXR runtime on the system.
-        The config can be found at `/etc/xdg/openxr/1/active_runtime.json`.
-
-        Note that applications can bypass this option by setting an active
-        runtime in a writable XDG_CONFIG_DIRS location like `~/.config`
-      '';
 
       autoStart = mkEnableOption "starting the service by default";
 
@@ -106,6 +103,10 @@ in
       };
 
       steam = {
+        enable = lib.mkEnableOption "Steam support" // {
+          default = true;
+        };
+
         importOXRRuntimes = mkEnableOption ''
           Sets `PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES` system-wide to allow Steam to automatically discover the WiVRn server.
 
@@ -211,12 +212,12 @@ in
               }
           );
           # Needs Steam in the PATH to allow launching games from the headset
-          path = [ cfg.steam.package ];
+          path = mkIf cfg.steam.enable [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package
-            cfg.steam.package
-          ];
+          ]
+          ++ lib.optionals cfg.steam.enable [ cfg.steam.package ];
         };
       };
     };
@@ -247,9 +248,6 @@ in
         PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = "1";
       };
       pathsToLink = [ "/share/openxr" ];
-      etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
-        source = "${cfg.package}/share/openxr/1/openxr_wivrn.json";
-      };
     };
   };
   meta.maintainers = with maintainers; [ passivelemon ];

@@ -27,12 +27,12 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-vijpAKlBP0dS40YlKMRCPZsgu7T+FiPgLJAgpE39BHA=";
-      x86_64-darwin = "sha256-EQDLzLJwVQFWe+aez3PLS2uJXgYyocjH28R7v/n86sY=";
-      aarch64-linux = "sha256-Or1SLzmaqCwde71e9AfQkQDUV4tAA8cYFBk5iqi562M=";
-      aarch64-darwin = "sha256-j8gbLW+czhFkaPOmcJBTaeWm7cxAYtvebGihQ9tWVC8=";
-      armv7l-linux = "sha256-7L9Pu+roEietJlwNoh7uEIkr2q5Mi8Y1uorv3TkvE3M=";
-      loongarch64-linux = "sha256-/KEKLDaRPX2ZM3qn3T2nqV16aG5wtuzpDWs2EdLtzZU=";
+      x86_64-linux = "sha256-LJsGc11MH6zlcJNfSWjTWPn2Jp9dkjeBPQuCXH1woUM=";
+      x86_64-darwin = "sha256-bC7AfH2eKmmsWIOHifNGKD/kVQCYyuMfU3SUil0DXkM=";
+      aarch64-linux = "sha256-mT5dvw8GOZ0GnZaKRS/TAzQDEEYDOgcj6w6lNLy5kQ0=";
+      aarch64-darwin = "sha256-c8K17XKpRG1ji2mUfoyg2+cRF+qc1KVMYVkaQoUIz7Y=";
+      armv7l-linux = "sha256-91ZHhEUDVoDiRBLwMHVLhzKmb9gWcPBUsVRZVLhCA4M=";
+      loongarch64-linux = "sha256-7iUdsIyJkIi40Xn+/PWdCVgahQxbZtiMw0QLMisN+sg=";
     }
     .${system} or throwSystem;
 
@@ -43,7 +43,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.109.31074";
+  version = "1.121.03429";
+  vscodeVersion = "1.121.0";
   pname = "vscodium";
 
   executableName = "codium";
@@ -55,7 +56,7 @@ buildVscode rec {
     inherit hash;
   };
 
-  tests = nixosTests.vscodium;
+  tests = nixosTests.vscodium.xorg;
 
   updateScript = ./update-vscodium.sh;
 
@@ -78,10 +79,10 @@ buildVscode rec {
     '';
     homepage = "https://github.com/VSCodium/vscodium";
     downloadPage = "https://github.com/VSCodium/vscodium/releases";
+    changelog = "https://github.com/VSCodium/vscodium/releases/tag/${version}";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      synthetica
       bobby285271
     ];
     mainProgram = "codium";

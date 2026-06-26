@@ -3,19 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  llvmPackages,
+  llvm_20,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamrc";
-  version = "2.3.1";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     tag = "WAMR-${finalAttrs.version}";
-    hash = "sha256-Rhn26TRyjkR30+zyosfooOGjhvG+ztYtJVQlRfzWEFo=";
+    hash = "sha256-pNudBKnhdR/Ye0m2tVZB/wSfJZYK8+gdCpCp0rDp0o4=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    llvmPackages.llvm
+    llvm_20
   ];
 
   cmakeFlags =
@@ -32,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ [
       "-DWAMR_BUILD_WITH_CUSTOM_LLVM=ON"
-      "-DLLVM_DIR=${llvmPackages.llvm.dev}/lib/cmake/llvm"
+      "-DLLVM_DIR=${llvm_20.dev}/lib/cmake/llvm"
     ];
 
-  sourceRoot = "${finalAttrs.src.name}/wamr-compiler";
+  preConfigure = "cd wamr-compiler";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=WAMR-(.*)" ]; };
 

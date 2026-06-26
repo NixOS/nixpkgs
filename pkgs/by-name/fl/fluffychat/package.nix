@@ -6,14 +6,14 @@
   imagemagick,
   libgbm,
   libdrm,
-  flutter338,
+  flutter341,
   pulseaudio,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
 
   callPackage,
-  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter338; },
+  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter341; },
 
   targetFlutterPlatform ? "linux",
 }:
@@ -25,27 +25,26 @@ let
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   libwebrtc = fetchzip {
-    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.1.0/libwebrtc.zip";
-    sha256 = "sha256-lRfymTSfoNUtR5tSUiAptAvrrTwbB8p+SaYQeOevMzA=";
+    url = "https://github.com/flutter-webrtc/flutter-webrtc/releases/download/v1.4.0/libwebrtc.zip";
+    sha256 = "sha256-OvqUF6RuytDorJE+C58EnIxPHfcphs8iPiPjt7SDrU0=";
   };
 in
-flutter338.buildFlutterApplication (
+flutter341.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "2.4.1";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-8Q+A5IZW6RjmnE+ovI7HYPZCi0oOoj9SU7o0VUPXxsM=";
+      hash = "sha256-iAHJjpDd2RNYPtEqyotFNvW/nybW1ozNtvMTT+wQVVY=";
     };
 
     inherit pubspecLock;
 
     gitHashes = {
-      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-      flutter_secure_storage_linux = "sha256-cFNHW7dAaX8BV7arwbn68GgkkBeiAgPfhMOAFSJWlyY=";
+      webcrypto = "sha256-yPhL0LoSIaJ9e9wrLtdPuTBRvXft1DQM9KR7WdNcj68=";
     };
 
     inherit targetFlutterPlatform;
@@ -93,6 +92,7 @@ flutter338.buildFlutterApplication (
           "Network"
           "InstantMessaging"
         ];
+        startupWMClass = "fluffychat";
       })
     ];
 

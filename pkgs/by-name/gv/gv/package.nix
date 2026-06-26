@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   libxext,
-  Xaw3d,
+  libxaw3d,
   ghostscriptX,
   perl,
   pkg-config,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libxext
-    Xaw3d
+    libxaw3d
     ghostscriptX
     perl
   ]

@@ -17,6 +17,9 @@
 { lib }:
 
 let
+  inherit (import ../meta-types.nix { inherit lib; })
+    enum
+    ;
   inherit (lib)
     all
     any
@@ -24,10 +27,10 @@ let
     elem
     elemAt
     hasPrefix
+    head
     id
     length
     mapAttrs
-    mergeOneOption
     optionalString
     splitString
     versionAtLeast
@@ -45,24 +48,19 @@ let
     isCygwin
     ;
 
-  inherit (lib.types)
-    enum
-    float
-    isType
-    mkOptionType
-    number
-    setType
-    string
-    types
-    ;
-
   setTypes =
     type:
-    mapAttrs (
-      name: value:
-      assert type.check value;
-      setType type.name ({ inherit name; } // value)
-    );
+    if type ? verify then
+      let
+        inherit (type) verify;
+      in
+      mapAttrs (
+        name: value:
+        assert verify value;
+        { inherit name; } // value
+      )
+    else
+      mapAttrs (name: value: { inherit name; } // value);
 
   # gnu-config will ignore the portion of a triple matching the
   # regex `e?abi.*$` when determining the validity of a triple.  In
@@ -72,18 +70,16 @@ let
     let
       found = match "(.*)e?abi.*" x;
     in
-    if found == null then x else elemAt found 0;
+    if found == null then x else head found;
 
 in
 
 rec {
 
   ################################################################################
-
-  types.openSignificantByte = mkOptionType {
+  types.openSignificantByte = {
     name = "significant-byte";
     description = "Endianness";
-    merge = mergeOneOption;
   };
 
   types.significantByte = enum (attrValues significantBytes);
@@ -106,21 +102,24 @@ rec {
 
   ################################################################################
 
-  types.openCpuType = mkOptionType {
+  types.openCpuType = {
     name = "cpu-type";
     description = "instruction set architecture name and information";
-    merge = mergeOneOption;
-    check =
-      x:
-      types.bitWidth.check x.bits
-      && (if 8 < x.bits then types.significantByte.check x.significantByte else !(x ? significantByte));
+    verify =
+      let
+        verifyBitWidth = types.bitWidth.verify;
+        verifySignificantByte = types.significantByte.verify;
+      in
+      v:
+      verifyBitWidth v.bits
+      && (if 8 < v.bits then verifySignificantByte v.significantByte else !(v ? significantByte));
   };
 
   types.cpuType = enum (attrValues cpuTypes);
 
   cpuTypes =
     let
-      inherit (significantBytes) bigEndian littleEndian;
+      inherit (significantBytes) littleEndian bigEndian;
     in
     setTypes types.openCpuType {
       arm = {
@@ -288,6 +287,12 @@ rec {
         family = "m68k";
       };
 
+      sh4 = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "sh";
+      };
+
       powerpc = {
         bits = 32;
         significantByte = bigEndian;
@@ -386,6 +391,12 @@ rec {
         family = "or1k";
       };
 
+      arc = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "arc";
+      };
+
       loongarch64 = {
         bits = 64;
         significantByte = littleEndian;
@@ -409,10 +420,8 @@ rec {
   gnuNetBSDDefaultExecFormat =
     cpu:
     if
-      (cpu.family == "arm" && cpu.bits == 32)
-      || (cpu.family == "sparc" && cpu.bits == 32)
-      || (cpu.family == "m68k" && cpu.bits == 32)
-      || (cpu.family == "x86" && cpu.bits == 32)
+      cpu.bits == 32
+      && (cpu.family == "arm" || cpu.family == "sparc" || cpu.family == "m68k" || cpu.family == "x86")
     then
       execFormats.aout
     else
@@ -437,7 +446,8 @@ rec {
   isCompatible =
     with cpuTypes;
     a: b:
-    any id [
+    b == a
+    || any id [
       # x86
       (b == i386 && isCompatible a i486)
       (b == i486 && isCompatible a i586)
@@ -453,19 +463,17 @@ rec {
       (b == armv5tel && isCompatible a armv6l)
 
       # ARMv6
-      (b == armv6l && isCompatible a armv6m)
-      (b == armv6m && isCompatible a armv7l)
+      (b == armv6m && isCompatible a armv6l)
+      (b == armv6l && isCompatible a armv7l)
 
       # ARMv7
       (b == armv7l && isCompatible a armv7a)
       (b == armv7l && isCompatible a armv7r)
-      (b == armv7l && isCompatible a armv7m)
+      (b == armv7m && isCompatible a armv7a)
+      (b == armv7m && isCompatible a armv7r)
 
       # ARMv8
-      (b == aarch64 && a == armv8a)
       (b == armv8a && isCompatible a aarch64)
-      (b == armv8r && isCompatible a armv8a)
-      (b == armv8m && isCompatible a armv8a)
 
       # PowerPC
       (b == powerpc && isCompatible a powerpc64)
@@ -475,25 +483,15 @@ rec {
       (b == mips && isCompatible a mips64)
       (b == mipsel && isCompatible a mips64el)
 
-      # RISCV
-      (b == riscv32 && isCompatible a riscv64)
-
       # SPARC
       (b == sparc && isCompatible a sparc64)
-
-      # WASM
-      (b == wasm32 && isCompatible a wasm64)
-
-      # identity
-      (b == a)
     ];
 
   ################################################################################
 
-  types.openVendor = mkOptionType {
+  types.openVendor = {
     name = "vendor";
     description = "vendor for the platform";
-    merge = mergeOneOption;
   };
 
   types.vendor = enum (attrValues vendors);
@@ -502,23 +500,19 @@ rec {
     apple = { };
     pc = { };
     knuth = { };
-
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = { };
-
     none = { };
     unknown = { };
   };
 
   ################################################################################
 
-  types.openExecFormat = mkOptionType {
+  types.openExecFormat = {
     name = "exec-format";
     description = "executable container used by the kernel";
-    merge = mergeOneOption;
   };
-
   types.execFormat = enum (attrValues execFormats);
 
   execFormats = setTypes types.openExecFormat {
@@ -527,16 +521,14 @@ rec {
     macho = { };
     pe = { };
     wasm = { };
-
     unknown = { };
   };
 
   ################################################################################
 
-  types.openKernelFamily = mkOptionType {
+  types.openKernelFamily = {
     name = "exec-format";
     description = "executable container used by the kernel";
-    merge = mergeOneOption;
   };
 
   types.kernelFamily = enum (attrValues kernelFamilies);
@@ -548,12 +540,15 @@ rec {
 
   ################################################################################
 
-  types.openKernel = mkOptionType {
-    name = "kernel";
+  types.openKernel = {
+    name = "open-kernel";
     description = "kernel name and information";
-    merge = mergeOneOption;
-    check =
-      x: types.execFormat.check x.execFormat && all types.kernelFamily.check (attrValues x.families);
+    verify =
+      let
+        verifyExecFormat = types.execFormat.verify;
+        verifyKernelFamily = types.kernelFamily.verify;
+      in
+      v: verifyExecFormat v.execFormat && all verifyKernelFamily (attrValues v.families);
   };
 
   types.kernel = enum (attrValues kernels);
@@ -634,6 +629,10 @@ rec {
         execFormat = unknown;
         families = { };
       };
+      uefi = {
+        execFormat = pe;
+        families = { };
+      };
     }
     // {
       # aliases
@@ -646,10 +645,9 @@ rec {
 
   ################################################################################
 
-  types.openAbi = mkOptionType {
+  types.openAbi = {
     name = "abi";
     description = "binary interface for compiled code and syscalls";
-    merge = mergeOneOption;
   };
 
   types.abi = enum (attrValues abis);
@@ -759,123 +757,143 @@ rec {
 
   ################################################################################
 
-  types.parsedPlatform = mkOptionType {
+  types.parsedPlatform = {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
-    merge = mergeOneOption;
-    check =
+    verify =
+      let
+        verifyCpu = types.cpuType.verify;
+        verifyVendor = types.vendor.verify;
+        verifyKernel = types.kernel.verify;
+        verifyAbi = types.abi.verify;
+      in
       {
         cpu,
         vendor,
         kernel,
         abi,
       }:
-      types.cpuType.check cpu
-      && types.vendor.check vendor
-      && types.kernel.check kernel
-      && types.abi.check abi;
+      verifyCpu cpu && verifyVendor vendor && verifyKernel kernel && verifyAbi abi;
   };
 
-  isSystem = isType "system";
+  isSystem = v: v._type or null == "system";
 
   mkSystem =
+    let
+      inherit (types.parsedPlatform) verify;
+    in
     components:
-    assert types.parsedPlatform.check components;
-    setType "system" components;
+    assert verify components;
+    components
+    // {
+      _type = "system";
+    };
 
   mkSkeletonFromList =
+    let
+      linuxComponents = [
+        "eabi"
+        "eabihf"
+        "elf"
+        "gnu"
+      ];
+      appleComponents = [
+        "redox"
+        "mmixware"
+        "ghcjs"
+        "mingw32"
+        "uefi"
+      ];
+    in
     l:
     {
       "1" =
-        if elemAt l 0 == "avr" then
+        let
+          firstComponent = head l;
+        in
+        if firstComponent == "avr" then
           {
-            cpu = elemAt l 0;
+            cpu = firstComponent;
             kernel = "none";
             abi = "unknown";
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 1 component is ambiguous";
       "2" = # We only do 2-part hacks for things Nix already supports
-        if elemAt l 1 == "cygwin" then
+        let
+          secondComponent = elemAt l 1;
+        in
+        if secondComponent == "cygwin" then
           mkSkeletonFromList [
-            (elemAt l 0)
+            (head l)
             "pc"
-            "cygwin"
+            secondComponent
           ]
         # MSVC ought to be the default ABI so this case isn't needed. But then it
         # becomes difficult to handle the gnu* variants for Aarch32 correctly for
         # minGW. So it's easier to make gnu* the default for the MinGW, but
         # hack-in MSVC for the non-MinGW case right here.
-        else if elemAt l 1 == "windows" then
+        else if secondComponent == "windows" then
           {
-            cpu = elemAt l 0;
-            kernel = "windows";
+            cpu = head l;
+            kernel = secondComponent;
             abi = "msvc";
           }
-        else if (elemAt l 1) == "elf" then
+        else if secondComponent == "elf" then
           {
-            cpu = elemAt l 0;
+            cpu = head l;
             vendor = "unknown";
             kernel = "none";
-            abi = elemAt l 1;
+            abi = secondComponent;
           }
         else
           {
-            cpu = elemAt l 0;
-            kernel = elemAt l 1;
+            cpu = head l;
+            kernel = secondComponent;
           };
       "3" =
+        let
+          secondComponent = elemAt l 1;
+          thirdComponent = elemAt l 2;
+        in
         # cpu-kernel-environment
-        if
-          elemAt l 1 == "linux"
-          || elem (elemAt l 2) [
-            "eabi"
-            "eabihf"
-            "elf"
-            "gnu"
-          ]
-        then
+        if secondComponent == "linux" || elem thirdComponent linuxComponents then
           {
-            cpu = elemAt l 0;
-            kernel = elemAt l 1;
-            abi = elemAt l 2;
+            cpu = head l;
+            kernel = secondComponent;
+            abi = thirdComponent;
             vendor = "unknown";
           }
         # cpu-vendor-os
         else if
-          elemAt l 1 == "apple"
-          || elem (elemAt l 2) [
-            "redox"
-            "mmixware"
-            "ghcjs"
-            "mingw32"
-          ]
-          || hasPrefix "freebsd" (elemAt l 2)
-          || hasPrefix "netbsd" (elemAt l 2)
-          || hasPrefix "openbsd" (elemAt l 2)
-          || hasPrefix "genode" (elemAt l 2)
-          || hasPrefix "wasm32" (elemAt l 0)
+          secondComponent == "apple"
+          || elem thirdComponent appleComponents
+          || hasPrefix "freebsd" thirdComponent
+          || hasPrefix "netbsd" thirdComponent
+          || hasPrefix "openbsd" thirdComponent
+          || hasPrefix "genode" thirdComponent
+          || hasPrefix "wasm32" (head l)
         then
           {
-            cpu = elemAt l 0;
-            vendor = elemAt l 1;
+            cpu = head l;
+            vendor = secondComponent;
             kernel =
-              if elemAt l 2 == "mingw32" then
+              if thirdComponent == "mingw32" then
                 "windows" # autotools breaks on -gnu for window
               else
-                elemAt l 2;
+                thirdComponent;
           }
         # lots of tools expect a triplet for Cygwin, even though the vendor is just "pc"
-        else if elemAt l 2 == "cygwin" then
+        else if thirdComponent == "cygwin" then
           {
-            cpu = elemAt l 0;
-            vendor = elemAt l 1;
-            kernel = "cygwin";
+            cpu = head l;
+            vendor = secondComponent;
+            kernel = thirdComponent;
           }
         else
           throw "system string '${lib.concatStringsSep "-" l}' with 3 components is ambiguous";
       "4" = {
-        cpu = elemAt l 0;
+        cpu = head l;
         vendor = elemAt l 1;
         kernel = elemAt l 2;
         abi = elemAt l 3;
@@ -885,7 +903,17 @@ rec {
     or (throw "system string '${lib.concatStringsSep "-" l}' has invalid number of hyphen-separated components");
 
   # This should revert the job done by config.guess from the gcc compiler.
+  # Note: this does _not_ verify that the system is valid
+  # `mkSystemFromString` is recommended for external use
   mkSystemFromSkeleton =
+    let
+      getCpu = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
+      getVendor = name: vendors.${name} or (throw "Unknown vendor: ${name}");
+      getKernel = name: kernels.${name} or (throw "Unknown kernel: ${name}");
+      getAbi = name: abis.${name} or (throw "Unknown ABI: ${name}");
+      hasDarwinPrefix = hasPrefix "darwin";
+      hasBsdPrefix = hasPrefix "netbsd";
+    in
     {
       cpu,
       # Optional, but fallback too complex for here.
@@ -900,11 +928,6 @@ rec {
         null,
     }@args:
     let
-      getCpu = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
-      getVendor = name: vendors.${name} or (throw "Unknown vendor: ${name}");
-      getKernel = name: kernels.${name} or (throw "Unknown kernel: ${name}");
-      getAbi = name: abis.${name} or (throw "Unknown ABI: ${name}");
-
       parsed = {
         cpu = getCpu args.cpu;
         vendor =
@@ -917,10 +940,10 @@ rec {
           else
             vendors.unknown;
         kernel =
-          if hasPrefix "darwin" args.kernel then
-            getKernel "darwin"
-          else if hasPrefix "netbsd" args.kernel then
-            getKernel "netbsd"
+          if hasDarwinPrefix args.kernel then
+            kernels.darwin
+          else if hasBsdPrefix args.kernel then
+            kernels.netbsd
           else
             getKernel (removeAbiSuffix args.kernel);
         abi =
@@ -939,11 +962,12 @@ rec {
       };
 
     in
-    mkSystem parsed;
+    parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
+  mkSystemFromString = s: mkSystem (mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)));
 
-  kernelName = kernel: kernel.name + toString (kernel.version or "");
+  kernelName =
+    kernel: if kernel ? version then kernel.name + toString kernel.version else kernel.name;
 
   darwinArch = cpu: if cpu.name == "aarch64" then "arm64" else cpu.name;
 
@@ -973,6 +997,41 @@ rec {
       cpuName = if kernel.families ? darwin then darwinArch cpu else cpu.name;
     in
     "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+
+  # This is a function from parsed platforms (like stdenv.hostPlatform.parsed)
+  # to parsed platforms.
+  mkMuslSystem =
+    parsed:
+    # The following line guarantees that the output of this function
+    # is a well-formed platform with no missing fields.
+    (
+      x:
+      lib.trivial.pipe x [
+        (x: removeAttrs x [ "_type" ])
+        mkSystem
+      ]
+    )
+      (
+        parsed
+        // {
+          abi =
+            {
+              gnu = abis.musl;
+              gnueabi = abis.musleabi;
+              gnueabihf = abis.musleabihf;
+              gnuabin32 = abis.muslabin32;
+              gnuabi64 = abis.muslabi64;
+              gnuabielfv2 = abis.musl;
+              gnuabielfv1 = abis.musl;
+              # The following entries ensure that this function is idempotent.
+              musleabi = abis.musleabi;
+              musleabihf = abis.musleabihf;
+              muslabin32 = abis.muslabin32;
+              muslabi64 = abis.muslabi64;
+            }
+            .${parsed.abi.name} or abis.musl;
+        }
+      );
 
   ################################################################################
 

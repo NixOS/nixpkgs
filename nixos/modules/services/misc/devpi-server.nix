@@ -1,21 +1,25 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
   ...
 }:
+
 let
+
   cfg = config.services.devpi-server;
-
+  package = cfg.package.override { inherit (cfg) extraPackages; };
   secretsFileName = "devpi-secret-file";
-
   stateDirName = "devpi";
-
   runtimeDir = "/run/${stateDirName}";
   serverDir = "/var/lib/${stateDirName}";
+
 in
+
 {
+
   options.services.devpi-server = {
+
     enable = lib.mkEnableOption "Devpi Server";
 
     package = lib.mkPackageOption pkgs "devpi-server" { };
@@ -57,6 +61,20 @@ in
       description = "The port on which Devpi Server will listen.";
     };
 
+    extraPackages = lib.mkOption {
+      default = (ps: [ ]);
+      defaultText = lib.literalExpression "ps: [ ]";
+      example = lib.literalExpression ''
+        ps: with ps; [ devpi-web devpi-ldap ]
+      '';
+      type =
+        with lib.types;
+        coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+      description = ''
+        Plugins and extra Python packages to be available to devpi-server.
+      '';
+    };
+
     openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Devpi Server";
   };
 
@@ -80,7 +98,7 @@ in
           # already initialized the package index, exit gracefully
           exit 0
         fi
-        ${cfg.package}/bin/devpi-init --serverdir ${serverDir} ''
+        ${package}/bin/devpi-init --serverdir ${serverDir} ''
       + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
@@ -109,7 +127,7 @@ in
                 [ "--role=master" ]
             );
           in
-          "${cfg.package}/bin/devpi-server ${lib.concatStringsSep " " args}";
+          "${package}/bin/devpi-server ${lib.concatStringsSep " " args}";
         DynamicUser = true;
         StateDirectory = stateDirName;
         RuntimeDirectory = stateDirName;
@@ -125,5 +143,8 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.cafkafk ];
+  meta.maintainers = with lib.maintainers; [
+    cafkafk
+    confus
+  ];
 }

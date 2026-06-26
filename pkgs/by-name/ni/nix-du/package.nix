@@ -3,36 +3,34 @@
   fetchFromGitHub,
   rustPlatform,
   nixVersions,
-  nlohmann_json,
-  boost,
+  nix ? nixVersions.nix_2_34,
   graphviz,
   pkg-config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-du";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/Afp0InA/0xXdombAzylYJF9wcv5WwYizVsP+fHTDrM=";
+    hash = "sha256-pqsBWdCdLEdkubcVMuZzF425oU2zgsMSPeDElM+zYBE=";
   };
 
-  cargoHash = "sha256-Q/woxGh1I6FpgJ5D0x7KovSwuRXfZzqjzwljaoKj0/Y=";
+  cargoHash = "sha256-xotbDCuWUeahVsRoOiBdZDC3JpK2a9osbSyVtUyaBrg=";
 
   doCheck = true;
   nativeCheckInputs = [
-    nixVersions.nix_2_28
+    nix
     graphviz
   ];
 
   buildInputs = [
-    boost
-    nixVersions.nix_2_28
-    nlohmann_json
-  ];
+    nix
+  ]
+  ++ nix.buildInputs;
 
   nativeBuildInputs = [
     pkg-config

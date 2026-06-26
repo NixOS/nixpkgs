@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,11 +15,7 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm444 *.ttf -t $out/share/fonts/ttf
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://pedroreina.net/apostrophiclab/0049-Komikahuna/komikahuna.html";

@@ -5,27 +5,30 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";
-  version = "7.1.1";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "conventional-changelog";
     tag = "conventional-changelog-v${finalAttrs.version}";
-    hash = "sha256-Pgx5gM4SdSL6WCkStByA7AP2O96MjAjyeMOI+Lo2mt0=";
+    hash = "sha256-1unB4/naGc/V1Fjc7Arn4DjnGvyCdicNFOofdgpvRUI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-ZfG3F0J1hIhZlF2OadhVdbxhQrFcMYDG9gEXR04DgEI=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-khAAFQeWUkALdkEdjW3tvCi5KiF9lN202yhLcj8ey1o=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = [ ];
     mainProgram = "conventional-changelog";
   };
 })

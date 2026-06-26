@@ -42,7 +42,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-492-f957fa3";
+  version = "master-719-f440ad9";
 
   outputs = [
     "out"
@@ -52,8 +52,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "master-492-f957fa3";
-    hash = "sha256-qY21TfU5t5KdD59Q9LoMHxD1AGQKhH/fr5NLRdyeF7k=";
+    rev = "master-719-f440ad9";
+    hash = "sha256-GkaEqBz5PR5hk1vMAVEAM32dYroHlZ0Qg/fISkhA8qs=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +71,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (optionals cudaSupport (
       with cudaPackages;
       [
-        cuda_cccl
+        cccl
         cuda_cudart
         libcublas
       ]
@@ -121,7 +121,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
-      dit7ya
       adriangl
     ];
     platforms = lib.platforms.unix;

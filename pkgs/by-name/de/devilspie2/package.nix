@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   intltool,
   pkg-config,
   glib,
@@ -12,11 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "devilspie2";
-  version = "0.44";
+  version = "0.45";
 
-  src = fetchurl {
-    url = "mirror://savannah/devilspie2/devilspie2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
+  src = fetchFromGitHub {
+    owner = "dsalt";
+    repo = "devilspie2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3TLA4vvTY8nt2LupLH8btdGhz7mfWYHnwRf7lQKGq8A=";
   };
 
   nativeBuildInputs = [

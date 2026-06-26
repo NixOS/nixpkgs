@@ -4,20 +4,23 @@
   fetchPypi,
   azure-common,
   msrest,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-applicationinsights";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-qIRbgDZbfyALrR9xqA0NMfO+wB7f1GfftsE+or1xupY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     msrest
   ];
@@ -31,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

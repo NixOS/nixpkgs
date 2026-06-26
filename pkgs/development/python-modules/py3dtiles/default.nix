@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch2,
   fetchFromGitLab,
   addBinToPathHook,
 
@@ -37,31 +36,27 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py3dtiles";
-  version = "12.0.0";
+  version = "12.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "py3dtiles";
     repo = "py3dtiles";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m8c+g9XXbg9OSC+NNoQkw4RKXvNFRIPWkDjAs6oH3kc=";
+    hash = "sha256-5zKp32Rn+bwUKVPb1XJxenHzRz0V7cgNmRwjWDYyKnI=";
   };
-
-  patches = [
-    # Remove in the next version
-    # Patch to avoid using pythonRelaxDeps
-    (fetchpatch2 {
-      url = "https://gitlab.com/py3dtiles/py3dtiles/-/commit/0f60691434b9ad4afebec29b2eedfcbbe0b8420d.patch";
-      includes = [ "pyproject.toml" ];
-      hash = "sha256-TLoKeltI1xxSONX0uu56HKl2fXzAp1ufunsBPRr5Pus=";
-    })
-  ];
 
   build-system = [
     setuptools
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "mapbox_earcut"
+    "numba"
+    "numpy"
+    "pyzmq"
+  ];
   dependencies = [
     lz4
     mapbox-earcut

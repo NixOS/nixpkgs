@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "papeer";
-  version = "0.8.7";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "lapwat";
     repo = "papeer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Qe+3rHEV+Env5sr9acdDqEzAi3PeN8/7fLoDz/B6GWo=";
+    hash = "sha256-ICiw45pRKlsO2nPlyf/YkFXBzgclwm3cSc5d9BzyT6U=";
   };
 
-  vendorHash = "sha256-yGoRvPwlXA6FN67nQH/b0QpGQ2xXTCmXWNLInlcVk7k=";
+  vendorHash = "sha256-xlZWA87dRWU+dnmf4RqqkrIXVyI2Sg/odwPe7GQbgn8=";
 
   doCheck = false; # uses network
 

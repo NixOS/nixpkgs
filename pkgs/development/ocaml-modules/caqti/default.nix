@@ -19,13 +19,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "caqti";
-  version = "2.2.4";
+  version = "2.3.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${finalAttrs.version}/caqti-v${finalAttrs.version}.tbz";
-    hash = "sha256-uOpDKCAVTsCVEyxPeyRLBs2FU+CyA1GFuETZxPMK+Ls=";
+    hash = "sha256-A2OAoPGmfgnQAsxH8sscUuv098ybiepbcM7Ds4nOKY0=";
   };
 
   buildInputs = [ dune-site ];

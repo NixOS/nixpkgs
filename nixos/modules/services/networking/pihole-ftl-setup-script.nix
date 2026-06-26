@@ -19,6 +19,7 @@ let
 in
 ''
   # Can't use -u (unset) because api.sh uses API_URL before it is set
+  set +u
   set -eo pipefail
   pihole="${lib.getExe pihole}"
   jq="${lib.getExe pkgs.jq}"
@@ -29,21 +30,24 @@ in
   if [ ! -f '${cfg.settings.files.gravity}' ]; then
     $pihole -g
     # Send SIGRTMIN to FTL, which makes it reload the database, opening the newly created one
-    ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN $(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})
+    ${lib.getExe' pkgs.procps "kill"} -s SIGRTMIN "$(systemctl show --property MainPID --value ${config.systemd.services.pihole-ftl.name})"
   fi
 
+  # shellcheck disable=SC1091
   source ${pihole}/share/pihole/advanced/Scripts/api.sh
+  # shellcheck disable=SC1091
   source ${pihole}/share/pihole/advanced/Scripts/utils.sh
 
   any_failed=0
 
   addList() {
-    local payload="$1"
+    local payload="$1" result type error
 
     echo "Adding list: $payload"
-    local result=$(PostFTLData "lists" "$payload")
+    type=$($jq -r '.type' <<< "$payload")
+    result=$(PostFTLData "lists?type=$type" "$payload")
 
-    local error="$($jq '.error' <<< "$result")"
+    error="$($jq '.error' <<< "$result")"
     if [[ "$error" != "null" ]]; then
         echo "Error: $error"
         any_failed=1
@@ -61,7 +65,7 @@ in
     echo "Added list ID $id: $result"
   }
 
-  for i in 1 2 3; do
+  for _ in 1 2 3; do
     (TestAPIAvailability) && break
     echo "Retrying API shortly..."
     ${lib.getExe' pkgs.coreutils "sleep"} .5s

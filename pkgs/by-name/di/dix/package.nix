@@ -7,16 +7,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
-  version = "1.4.2";
+  version = "2.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "faukah";
+    owner = "manic-systems";
     repo = "dix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5mn79jtV9gct4LdU5tdz7Q7GHTM2v0Cb2cso0A0dZX0=";
+    hash = "sha256-KTlFgBEVKJIXymfN2UU8hvGM71PYRcNgJ1XWUmG2AI4=";
   };
 
-  cargoHash = "sha256-1DtxGaahPFGZcQMX8GHZ0jSpMqSRIGKE3pZSdCVoKnU=";
+  cargoHash = "sha256-pNkSdsxOpv0E/xXs7tMg2vtP0PBU7p8fh3H4IX/u5k4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -24,9 +26,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/faukah/dix";
+    homepage = "https://github.com/manic-systems/dix";
     description = "Blazingly fast tool to diff Nix related things";
+    changelog = "https://github.com/manic-systems/dix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       faukah
       NotAShelf

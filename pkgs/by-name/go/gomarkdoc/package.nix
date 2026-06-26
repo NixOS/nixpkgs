@@ -21,6 +21,11 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-gCuYqk9agH86wfGd7k6QwLUiG3Mv6TrEd9tdyj8AYPs=";
 
+  # Tests call gomarkdoc's main() directly, which reads GOFLAGS from the
+  # environment. nixpkgs sets GOFLAGS=-mod=vendor, but gomarkdoc's own flag
+  # parser only accepts -tags, so -mod triggers "flag provided but not defined".
+  doCheck = false;
+
   ldflags = [
     "-s"
     "-w"

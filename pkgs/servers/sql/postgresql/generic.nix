@@ -6,10 +6,8 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
-      fetchpatch2,
       lib,
       replaceVars,
-      writeShellScriptBin,
 
       # source specification
       hash,
@@ -45,9 +43,7 @@ let
       buildPackages,
       newScope,
       nixosTests,
-      postgresqlTestHook,
       self,
-      stdenvNoCC,
       testers,
 
       # Block size
@@ -379,7 +375,9 @@ let
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
         ++ lib.optionals nlsSupport [ "--enable-nls" ]
-        ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
+        ++ lib.optionals bonjourSupport [ "--with-bonjour" ]
+        # Configure needs a little help to find `nm` when cross-compiling.
+        ++ lib.optionals (atLeast "19") [ "NM=${stdenv'.cc}/bin/${stdenv'.cc.targetPrefix}nm" ];
 
       patches = [
         (
@@ -655,6 +653,14 @@ let
     f:
     let
       installedExtensions = f postgresql.pkgs;
+      recurse = postgresqlWithPackages {
+        inherit
+          buildEnv
+          lib
+          makeBinaryWrapper
+          postgresql
+          ;
+      };
       finalPackage = buildEnv {
         pname = "${postgresql.pname}-and-plugins";
         inherit (postgresql) version;
@@ -673,14 +679,17 @@ let
           "/share/postgresql/tsearch_data"
         ];
 
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        postBuild =
-          let
-            args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-          in
-          ''
-            wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-          '';
+        derivationArgs = {
+          strictDeps = true;
+          nativeBuildInputs = [ makeBinaryWrapper ];
+          postBuild =
+            let
+              args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+            in
+            ''
+              wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+            '';
+        };
 
         passthru = {
           inherit installedExtensions;
@@ -696,33 +705,10 @@ let
             };
           };
 
-          withJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: lib.remove postgresql.jit installedExtensions);
+          withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);
 
-          withPackages =
-            f':
-            postgresqlWithPackages {
-              inherit
-                buildEnv
-                lib
-                makeBinaryWrapper
-                postgresql
-                ;
-            } (ps: installedExtensions ++ f' ps);
+          withPackages = f': recurse (ps: installedExtensions ++ f' ps);
         };
       };
     in

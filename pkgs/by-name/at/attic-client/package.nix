@@ -16,18 +16,18 @@ let
   # Only the attic-client crate builds against the Nix C++ libs
   # This derivation is also used to build the server
   needNixInclude = lib.elem "attic-client" crates;
-  nix = nixVersions.nix_2_28;
+  nix = nixVersions.nix_2_34;
 in
 
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-09-24";
+  version = "0-unstable-2026-06-14";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "12cbeca141f46e1ade76728bce8adc447f2166c6";
-    hash = "sha256-0nZlCCDC5PfndsQJXXtcyrtrfW49I3KadGMDlutzaGU=";
+    rev = "6b22d76ca351c5a07a5e5a60b95bc23320f7e791";
+    hash = "sha256-sboz+gG8z0KX+q0kkvLloNcogXYLwiY5iw2xwN36rFo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optional needNixInclude nix ++ [ boost ];
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
-  cargoHash = "sha256-h041o0s+bciXnvSuk4j+/uCY/sRRQWDVf+WEb9GEYeY=";
+  cargoHash = "sha256-LqE4jOIasxIG4DAhgZJMlTSyt/a900QR06wBFtRNRO8=";
 
   env = {
     ATTIC_DISTRIBUTOR = "nixpkgs";

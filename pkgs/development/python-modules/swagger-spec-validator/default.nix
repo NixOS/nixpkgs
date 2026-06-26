@@ -2,27 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyyaml,
+  setuptools,
+  importlib-resources,
   jsonschema,
+  pyyaml,
   six,
   pytestCheckHook,
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swagger-spec-validator";
-  version = "2.7.4";
-  format = "setuptools";
+  version = "3.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "swagger_spec_validator";
-    rev = "v${version}";
-    hash = "sha256-7+kFmtzeze0QlGf6z/M4J4F7z771a5NWewB1S3+bxn4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8T0973g8JZKLCTpYqyScr/JAiFdBexEReUJoMQh4vO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
+    importlib-resources
     jsonschema
     six
   ];
@@ -40,4 +45,4 @@ buildPythonPackage rec {
     description = "Validation of Swagger specifications";
     maintainers = with lib.maintainers; [ vanschelven ];
   };
-}
+})

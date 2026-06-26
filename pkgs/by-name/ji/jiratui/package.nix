@@ -17,6 +17,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-b5bSMPnqHqpeFDl501gSun7G38OlhV/IMNMYXQT+j/4=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.2,<0.10.0" "uv_build>=0.9.2"
+  '';
+
   build-system = with python3Packages; [
     uv-build
   ];

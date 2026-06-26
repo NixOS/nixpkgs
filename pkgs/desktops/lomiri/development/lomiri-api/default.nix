@@ -17,46 +17,60 @@
   python3,
   qtbase,
   qtdeclarative,
+  withDocumentation ? true,
 }:
 
+# Juuuuust in case this ever changes
+assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qtbase.qtQmlPrefix)
+  "Assumption that qtbase.qtQmlPrefix (${qtbase.qtQmlPrefix} starts with 'lib/' no longer holds, SHELL_PLUGINDIR_SUFFIX in lomiri-api needs to be adjusted!";
+
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+
+  # TODO This is likely not supposed to be the regular Qt QML import prefix
+  # but otherwise i.e. lomiri-notifications cannot be found in lomiri
+  shellPlugindirSuffix = lib.strings.removePrefix "lib/" qtbase.qtQmlPrefix;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-n9TlmmRRB618cXCOmo5CYqeMog7I7VxURN9mlDhljWw=";
+    hash = "sha256-5w1cXKi8RZL2tbYMnqVFnlCK4BxcpCBg4jRwI7jB6AQ=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')
-
-    substituteInPlace data/liblomiri-api.pc.in \
-      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
-
-    # Variable is queried via pkg-config by reverse dependencies
-    # TODO This is likely not supposed to be the regular Qt QML import prefix
-    # but otherwise i.e. lomiri-notifications cannot be found in lomiri
+  ''
+  # Variable is queried via pkg-config by reverse dependencies
+  # Qt6 one is already correct as-is
+  + ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR_SUFFIX lomiri/qml' 'SHELL_PLUGINDIR_SUFFIX ${shellPlugindirSuffix}' \
+      --replace-fail 'string(APPEND SHELL_PLUGINDIR_SUFFIX "6")' '# string(APPEND SHELL_PLUGINDIR_SUFFIX "6")'
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    graphviz
     pkg-config
     qtdeclarative
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
   ];
 
   buildInputs = [
@@ -76,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
   ];
 
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
@@ -95,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    # https://gitlab.com/ubports/development/core/lomiri-api/-/issues/5
+    tests = lib.optionalAttrs (!withQt6) {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
@@ -113,10 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-api"
-      "lomiri-shell-api"
-      "lomiri-shell-application"
-      "lomiri-shell-launcher"
-      "lomiri-shell-notifications"
+      "lomiri-shell-api${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-application${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-launcher${lib.optionalString withQt6 "-qt6"}"
+      "lomiri-shell-notifications${lib.optionalString withQt6 "-qt6"}"
     ];
   };
 })

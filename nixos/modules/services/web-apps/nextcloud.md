@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud32` which is also the latest
+The current default by NixOS is `nextcloud33` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -67,6 +67,11 @@ invoked by using the `nextcloud-occ` wrapper that's globally available on a syst
 It requires elevated permissions to become the `nextcloud` user. Given the way the privilege
 escalation is implemented, parameters passed via the environment to Nextcloud are
 currently ignored, except for `OC_PASS` and `NC_PASS`.
+
+::: {.warning}
+When Polkit is enabled, the command being executed by `nextcloud-occ` might be logged
+into the system's journal. Be careful to not leak secrets that way!
+:::
 
 Custom service units that need to run `nextcloud-occ` either need elevated privileges
 or the systemd configuration from `nextcloud-setup.service` (recommended):

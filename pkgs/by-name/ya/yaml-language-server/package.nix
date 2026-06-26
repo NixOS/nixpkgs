@@ -5,16 +5,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "yaml-language-server";
-  version = "1.20.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-vfg+Ej2/uqlbkV+qQGjJE83yIeA34YLLsgD7gFeu4LU=";
+    hash = "sha256-I9sLqujD0aTxMrqLziLgjoCLflNyphp2cdvYcAuzZ7s=";
   };
 
-  npmDepsHash = "sha256-H1wJ37X6MGvXQVUjmrYklpPnUdmoEDR9nrlmghZ5jnU=";
+  npmDepsHash = "sha256-b9B6V17kNnKf3HHjEWzHGjKSeOJR17VEjp780Rq8BM0=";
 
   strictDeps = true;
 
@@ -24,6 +24,8 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/redhat-developer/yaml-language-server";
     license = lib.licenses.mit;
     mainProgram = "yaml-language-server";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

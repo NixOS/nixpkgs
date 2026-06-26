@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "inframap";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = "inframap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IdXP/gw81rQsaHz+uwEB9ThtHlbPYLXcYTYdwJynpVU=";
+    hash = "sha256-SH72GmEzHNF26TNCctBglSvtYXVFf6fIBmg8L74OiZg=";
   };
 
   ldflags = [

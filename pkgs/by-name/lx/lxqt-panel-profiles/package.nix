@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-panel-profiles";
-  version = "1.3";
+  version = "1.4.1";
 
   src = fetchFromCodeberg {
     owner = "MrReplikant";
     repo = "lxqt-panel-profiles";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mI/Rg3YeK64R3cCn+xz4+CHZldGteZ4Id4h/YUcreW4=";
+    hash = "sha256-JDDscKjRbqQXinEwlrwYNwzzuLm9aokNAu8sZY7hGQk=";
   };
 
   postPatch = ''

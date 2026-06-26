@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "codespelunker";
-  version = "2.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "cs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-knsEEpmBuFO5UkUenjVilSg8h+MMGnmbDX0DrAlg98s=";
+    hash = "sha256-cPaAuZJ/Flea4BZ2LTprE5BFtHqgVCuF+2VLShgkCrQ=";
   };
 
   vendorHash = null;

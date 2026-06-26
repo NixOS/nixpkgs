@@ -23,7 +23,8 @@ let
   searchPath = "${pythonEnv}/${matrix-synapse-unwrapped.python.sitePackages}";
 in
 stdenv.mkDerivation {
-  name = (lib.appendToName "wrapped" matrix-synapse-unwrapped).name;
+  pname = (lib.appendToName "wrapped" matrix-synapse-unwrapped).pname;
+  inherit (matrix-synapse-unwrapped) version;
 
   nativeBuildInputs = [
     makeWrapper

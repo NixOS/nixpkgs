@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
-  version = "26.1.31";
+  version = "26.6.16";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = finalAttrs.version;
-    hash = "sha256-Bx84e5/foF4XxRZJve0YhiikZJa3mqxOHuk9bsPxjag=";
+    hash = "sha256-HtmuFN7iNNwuQ0CXzqnEJN4PNh0D7weHniegtF4EuqQ=";
   };
 
-  cargoHash = "sha256-D4U58OssBiLnw8KIIaWzYLCS+VoeNk0CCFRFAIO6Ays=";
+  cargoHash = "sha256-PUfXwtxuaheoyZA2fAyoc9CyD/oBAjkUsVrP6U7qvA0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     mv $out/bin/lockbook-linux $out/bin/lockbook-desktop
-    install -D public_site/favicon.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
+    install -D docs/graphics/logo.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
   '';
 
   meta = {

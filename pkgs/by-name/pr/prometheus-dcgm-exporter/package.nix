@@ -19,7 +19,7 @@ buildGoModule rec {
     hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
   };
 
-  CGO_LDFLAGS = "-ldcgm";
+  env.CGO_LDFLAGS = "-ldcgm";
 
   buildInputs = [
     dcgm

@@ -69,7 +69,7 @@ buildRedist (
     ];
 
     # NOTE(@connorbaker): nsight-exporter and nsight-sys are deprecated scripts wrapping nsys, it's fine to remove them.
-    prePatch = ''
+    prePatch = lib.optionalString (lib.versionOlder finalAttrs.version "2025.5.2.26") ''
       if [[ -d bin ]]; then
         nixLog "Removing bin wrapper scripts"
         for knownWrapper in bin/{nsys{,-ui},nsight-{exporter,sys}}; do

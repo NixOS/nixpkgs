@@ -11,19 +11,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-serialization-json";
-  version = "1.9.8";
+  version = "1.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-json-v${version}";
-    hash = "sha256-05/I06p3zBc/Kb7H8dMEbUxFr0dOXSSBuIyEGZ4twhA=";
+    tag = "microsoft-kiota-serialization-json-v${finalAttrs.version}";
+    hash = "sha256-r0u+erTSKBWzLV7VfwWUYh7lyJS1hDh5A0Tzk3pFzo4=";
   };
 
-  sourceRoot = "${src.name}/packages/serialization/json/";
+  sourceRoot = "${finalAttrs.src.name}/packages/serialization/json/";
 
   build-system = [ poetry-core ];
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "JSON serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/json";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-json-${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-json-${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

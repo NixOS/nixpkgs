@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wambo";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3EwNC78DhSXbVFSg6q+66yge4S1m5icJ5nOhoy9qsRI=";
   };
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
       and so on.
     '';
     homepage = "https://github.com/phip1611/wambo";
-    changelog = "https://github.com/phip1611/wambo/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/phip1611/wambo/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ phip1611 ];
   };
-}
+})

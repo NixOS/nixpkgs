@@ -42,20 +42,26 @@ in
       };
     };
 
-  testScript = ''
-    # Create encrypted volume
-    machine.wait_for_unit("multi-user.target")
-    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
-    machine.succeed("cryptsetup luksOpen --key-file ${keyfile} /dev/vdb cryptroot")
-    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
+  testScript =
+    { nodes, ... }:
+    let
+      boot-luks = nodes.machine.specialisation.boot-luks.configuration.system.build.toplevel;
+    in
+    # python
+    ''
+      # Create encrypted volume
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
+      machine.succeed("cryptsetup luksOpen --key-file ${keyfile} /dev/vdb cryptroot")
+      machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
 
-    # Boot from the encrypted disk
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
-    machine.succeed("sync")
-    machine.crash()
+      # Boot from the encrypted disk
+      machine.succeed("${boot-luks}/bin/switch-to-configuration boot")
+      machine.succeed("sync")
+      machine.crash()
 
-    # Boot and decrypt the disk
-    machine.wait_for_unit("multi-user.target")
-    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
-  '';
+      # Boot and decrypt the disk
+      machine.wait_for_unit("multi-user.target")
+      assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
+    '';
 }

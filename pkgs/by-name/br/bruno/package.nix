@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "3.1.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-XoGD8lDc6QGka17KTvVX3gEj1fo+4NWpUM8mLA5F+i4=";
+    hash = "sha256-Vdd/z3xYuU8axfEfuDOKPTfV0xiZXJ15G5z16VoGYLQ=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,13 +36,13 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-XJsQFyi448yoRM8pUvaNpGDIZ41q0vpwYTgJufBBu1g=";
+  npmDepsHash = "sha256-4VsSXiHj/INCu4ryZ+JxPbfDpsgIb5eYvOUYz+gbKEE=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
@@ -84,7 +84,7 @@ buildNpmPackage rec {
     patchShebangs packages/*/node_modules
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
@@ -196,7 +196,6 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       gepbird
       kashw2
-      lucasew
       mattpolzin
       redyf
       water-sucks

@@ -62,10 +62,10 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-            buildInputs = [
+            nativeBuildInputs = [
               writableTmpDirAsHomeHook
             ]
-            ++ lib.optional (lib.versionAtLeast version "2.34pre") openssl;
+            ++ lib.optional (lib.versionAtLeast version "2.34pre") (lib.getBin openssl);
           }
           ''
             export _NIX_TEST_UNIT_DATA=${data + "/src/libstore-tests/data"}

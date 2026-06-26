@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.5.21";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}-ow.AppImage";
-    hash = "sha512-3bdPprN1C7hpz8fWfnVRsNqCwa7kA6WZnnYOsuyYimAO/yRiXdIjjOwVUiksVcVJzlo+BwzCWWVcQ5pfetX1wQ==";
+    hash = "sha512-+xC7hvpQfmXkZ+FndNAWIxgfWjodfdcCrHmPe5XqEC+3cBkT6KpOxvuw7o0qAebxo6VNN5tKuAPfibfZfeH+RQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,9 +24,9 @@ appimageTools.wrapType2 rec {
       wrapProgram $out/bin/lunarclient \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
-      install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
+      install -Dm444 ${contents}/lunarclient.png -t $out/share/icons
       substituteInPlace $out/share/applications/lunarclient.desktop \
-        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient' \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient'
     '';
 
   passthru.updateScript = ./update.sh;

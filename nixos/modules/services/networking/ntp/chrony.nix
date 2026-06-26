@@ -51,7 +51,7 @@ let
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
 
-  dispathcerScriptFile = pkgs.callPackage (
+  dispatcherScriptFile = pkgs.callPackage (
     {
       runCommand,
       srcOnly,
@@ -258,16 +258,11 @@ in
     networking.networkmanager.dispatcherScripts = lib.mkIf cfg.dispatcherScript [
       {
         type = "basic";
-        source = dispathcerScriptFile;
+        source = dispatcherScriptFile;
       }
     ];
 
     services.timesyncd.enable = lib.mkForce false;
-
-    # If chrony controls and tracks the RTC, writing it externally causes clock error.
-    systemd.services.save-hwclock = lib.mkIf cfg.enableRTCTrimming {
-      enable = lib.mkForce false;
-    };
 
     systemd.services.systemd-timedated.environment = {
       SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service";
@@ -276,7 +271,7 @@ in
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
-      "f ${keyFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 root chrony - -"
     ]
     ++ lib.optionals cfg.enableRTCTrimming [
       "f ${rtcFile} 0640 chrony chrony - -"

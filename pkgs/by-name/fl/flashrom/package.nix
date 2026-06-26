@@ -14,27 +14,20 @@
   pkg-config,
   sphinx,
   jlinkSupport ? false,
+  git,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
-    hash = "sha256-i52zmH35tfyB5wGJ0BeQXdX2vh4UEDR/Imh6ttTJRCM=";
+    hash = "sha256-Qyis6YM/fv58M0vdc0gs3oKGgZgmzAAUnoP7qWvzq08=";
   };
 
-  patches = [
-    # Release notes for 1.4.0 state that Promontory chipsets are unsupported, and that attempting to read flash on those systems may crash the system.
-    # The patch that removes this (broken) support only made it into the 1.3.0 release, seemingly by mistake, and the relevant code has been essentially untouched since.
-    # We cherry-pick the upstream patch from 1.3.0, though amended to reference the relevant bug in the error message, rather than requesting the user email upstream.
-    # https://ticket.coreboot.org/issues/370
-    # https://review.coreboot.org/c/flashrom/+/68824
-    ./0001-sb600spi.c-Drop-Promontory-support.patch
-  ];
-
   nativeBuildInputs = [
+    git
     meson
     ninja
     pkg-config

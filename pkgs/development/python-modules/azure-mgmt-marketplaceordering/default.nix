@@ -8,20 +8,25 @@
   azure-mgmt-nspkg,
   isPy3k,
   azure-mgmt-core,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-marketplaceordering";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "68b381f52a4df4435dacad5a97e1c59ac4c981f667dcca8f9d04453417d60ad8";
+    hash = "sha256-aLOB9SpN9ENdrK1al+HFmsTJgfZn3MqPnQRFNBfWCtg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
@@ -32,10 +37,12 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "azure.mgmt.marketplaceordering" ];
+
   meta = {
     description = "This is the Microsoft Azure Market Place Ordering Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

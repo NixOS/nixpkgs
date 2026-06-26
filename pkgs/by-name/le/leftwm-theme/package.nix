@@ -6,18 +6,18 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leftwm-theme";
-  version = "unstable-2024-03-05";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm-theme";
-    rev = "b394824ff874b269a90c29e2d45b0cacc4d209f5";
-    hash = "sha256-cV4tY1qKNluSSGf+WwKFK3iVE7cMevafl6qQvhy1flE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TPzmopH9RBM/BBrEL9/NWO3qjVa6SSWCp34tHxjLtBI=";
   };
 
-  cargoHash = "sha256-v3PHMaXJCEBiCd+78b/BXRooZC4Py82gDcvA/efNJ7w=";
+  cargoHash = "sha256-ZfNVpepTm6/JgJJB+qDVI2gVz36PRBpUL8/ba20xQhk=";
 
   checkFlags = [
     # direct writing /tmp
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ denperidge ];
   };
-}
+})

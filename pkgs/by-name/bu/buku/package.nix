@@ -8,9 +8,11 @@
 let
   serverRequire = with python3.pkgs; [
     requests
+    flasgger
     flask
     flask-admin
     flask-api
+    flask-babel
     flask-bootstrap
     flask-paginate
     flask-wtf
@@ -49,6 +51,10 @@ buildPythonApplication (finalAttrs: {
     flake8
     pytest-cov-stub
     pyyaml
+  ]
+  ++ lib.optionals withServer [
+    lxml
+    pytest-timeout
   ];
 
   propagatedBuildInputs = [

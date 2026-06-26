@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "goodwe";
-  version = "0.4.9";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelblijleven";
     repo = "goodwe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WHLvfAlwhcA0JFSWfwUPsJ9dWmadIjyonXEP3Bb6WKE=";
+    hash = "sha256-2wnfc+W1lhUgvWa1iwHxJu4WGZHaXvmxgtBAkTJHJ3E=";
   };
 
   build-system = [ setuptools ];

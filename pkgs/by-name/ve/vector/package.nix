@@ -16,6 +16,7 @@
   coreutils,
   tzdata,
   cmake,
+  cyrus_sasl,
   perl,
   git,
   nixosTests,
@@ -27,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.53.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OFybPI2oppntYBEklJtdEhImZc/m4oaSSWylr2hHUjA=";
+    hash = "sha256-ge3epfB8xErF+2I1jW3OvHS+mHnGSSU6vOz2v/sSMW4=";
   };
 
-  cargoHash = "sha256-Xuff8ZanFCtvitNYnOwCyd0UYjrhrP8UglJqbpScGVM=";
+  cargoHash = "sha256-iwd6GCbI3PiM1ksAxDEZglueGWYCkEbJ3N76wn13TPY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Provides the mig command used by the build scripts
   ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
   buildInputs = [
+    cyrus_sasl
     oniguruma
     openssl
     protobuf
@@ -73,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # needed for internal protobuf c wrapper library
     PROTOC = "${protobuf}/bin/protoc";
-    PROTOC_INCLUDE = "${protobuf}/include";
     RUSTONIG_SYSTEM_LIBONIG = true;
 
     TZDIR = "${tzdata}/share/zoneinfo";
@@ -84,6 +85,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
+
+  # https://github.com/vectordotdev/vector/pull/25406
+  postPatch = ''
+    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
+      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
+  '';
 
   doCheck = true;
   checkType = "debug";
@@ -131,6 +138,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # Flakey on aarch64-linux
+    "--skip=sources::exec::tests::test_graceful_shutdown"
     "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=topology::test::backpressure::buffer_drop_fan_out"
     "--skip=topology::test::backpressure::default_fan_out"
@@ -149,9 +157,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 

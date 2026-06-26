@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   desktop-file-utils,
   fetchFromGitLab,
   isocodes,
@@ -17,17 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
-  version = "0.3.15";
+  version = "0.3.17";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
     rev = finalAttrs.version;
-    hash = "sha256-KcHcTjPoQNA5TBXnKgudjBTV/0JbeVMJ09XVAL7SizI=";
+    hash = "sha256-VeiVuMEfMCVjSk52BGtlypapeW6CBW1VQsrtDS8aCoY=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     meson
     ninja

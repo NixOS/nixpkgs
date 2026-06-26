@@ -12,11 +12,18 @@
   libxext,
   libxscrnsaver,
   pam,
-  apacheHttpd,
-  pamtester,
-  xscreensaver,
   coreutils,
   makeWrapper,
+
+  # boolean flags
+  withXscreensaver ? true,
+  xscreensaver,
+  withDocs ? false,
+  pandoc,
+  withHtaccess ? false,
+  apacheHttpd,
+  withPamtester ? false,
+  pamtester,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     makeWrapper
-  ];
+  ]
+  ++ lib.optional withDocs pandoc;
 
   buildInputs = [
     libx11
@@ -45,12 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
     libxscrnsaver
     pam
-    apacheHttpd
-    pamtester
-  ];
+  ]
+  ++ lib.optional withHtaccess apacheHttpd
+  ++ lib.optional withPamtester pamtester;
 
   configureFlags = [
     "--with-pam-service-name=login"
+  ]
+  ++ lib.optionals withXscreensaver [
     "--with-xscreensaver=${xscreensaver}/libexec/xscreensaver"
   ];
 

@@ -10,17 +10,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "optype";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorenham";
     repo = "optype";
-    rev = "5f16def3546222caf81a3411a27b007a00819172";
-    hash = "sha256-52cY+u0wjhJFQDLsjND/h6cfln4rCTtcy+HqaoH/re0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tzbS+CeWGxMXK1LFN/LslI6kfbVQPjqYlDB7fX0ogfU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.16,<0.10.0" uv_build
+  '';
 
   build-system = [
     uv-build
@@ -54,4 +59,4 @@ buildPythonPackage {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})

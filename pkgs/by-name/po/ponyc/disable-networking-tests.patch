@@ -1,25 +1,23 @@
-From e49f97eb4b0fd27b26437638db7984fbcfd3a14f Mon Sep 17 00:00:00 2001
+From c1283b82daff94ebac21fc20cb8df0b05aa080f8 Mon Sep 17 00:00:00 2001
 From: Morgan Jones <me@numin.it>
-Date: Sun, 4 May 2025 15:46:07 -0700
-Subject: [PATCH] net: disable tests in the Nix sandbox
+Date: Fri, 22 May 2026 23:06:52 -0700
+Subject: [PATCH] net: disable networking tests
 
 ---
- packages/net/_test.pony | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+ packages/net/_test.pony | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
 diff --git a/packages/net/_test.pony b/packages/net/_test.pony
-index 05462eb2..c0c6cdfa 100644
+index 1d7b2d6f..69cbeea6 100644
 --- a/packages/net/_test.pony
 +++ b/packages/net/_test.pony
-@@ -15,25 +15,8 @@ actor \nodoc\ Main is TestList
-   new make() => None
- 
-   fun tag tests(test: PonyTest) =>
--    // Tests below function across all systems and are listed alphabetically
-+    // (@numinit): only this test works in the Nix sandbox:
+@@ -20,24 +20,6 @@ actor \nodoc\ Main is TestList
+     // Tests below function across all systems and are listed alphabetically
+     test(_TestOsIpString)
      test(_TestTCPConnectionFailed)
 -    test(_TestTCPExpect)
 -    test(_TestTCPExpectOverBufferSize)
+-    test(_TestTCPExpectSetToZero)
 -    test(_TestTCPMute)
 -    test(_TestTCPProxy)
 -    test(_TestTCPUnmute)
@@ -39,4 +37,5 @@ index 05462eb2..c0c6cdfa 100644
  class \nodoc\ _TestPing is UDPNotify
    let _h: TestHelper
 -- 
-2.47.0
+2.53.0
+

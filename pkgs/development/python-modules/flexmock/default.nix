@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "flexmock";
-  version = "0.12.2";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q1xmHDs1R3V165FQQooc/Xxiy5kqp4h1Z8M1euvJrKE=";
+    hash = "sha256-aCnXoNf3Rtswh9qP2mL5JOUt9+zkBRwvWa1YbPWteXc=";
   };
 
   build-system = [ poetry-core ];

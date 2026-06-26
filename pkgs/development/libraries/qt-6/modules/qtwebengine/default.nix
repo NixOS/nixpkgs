@@ -33,6 +33,7 @@
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -116,21 +117,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Backport crash fix
-    (fetchpatch2 {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ecf90f65ef738ae20b114691d02fb15c82e6babe.diff";
-      hash = "sha256-TW+EmCxasH5LdZ80y/0YHird3NsrVdlwciDJpgSD9x0=";
-    })
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
-    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
-    (fetchpatch2 {
-      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
-    })
   ];
 
   postPatch = ''
@@ -237,6 +223,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy

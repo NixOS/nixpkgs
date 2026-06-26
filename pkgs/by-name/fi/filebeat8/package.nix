@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "filebeat";
-  version = "8.19.10";
+  version = "8.19.16";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "beats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ky1oWqQXIjno14ZBfxR1FoXEkSn1kScdQQTyGDRvMTo=";
+    hash = "sha256-OBPaSbPAp7SvhEi2yycgT70yRfCtIEdkL4/GSR2YrO4=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
 
-  vendorHash = "sha256-b4W10tGAoxW1oAfmQqM8x0JOi0BD1WBYB2sUVl/hLHY=";
+  vendorHash = "sha256-aCoXzWnNsctxJmsfeUyVSLkUY59adtIn2JxxGKPBob8=";
 
   subPackages = [ "filebeat" ];
 
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tails and ships log files";
     homepage = "https://github.com/elastic/beats";
-    changelog = "https://www.elastic.co/guide/en/beats/libbeat/${finalAttrs.version}/release-notes-${finalAttrs.version}.html";
+    changelog = "https://www.elastic.co/guide/en/beats/libbeat/${lib.versions.majorMinor finalAttrs.version}/release-notes-${finalAttrs.version}.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ srhb ];
     mainProgram = "filebeat";

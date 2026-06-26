@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

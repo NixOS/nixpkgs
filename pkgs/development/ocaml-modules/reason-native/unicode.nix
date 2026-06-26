@@ -17,6 +17,7 @@ buildDunePackage {
 
   meta = {
     description = "Easy to use and well documented Unicode symbols";
+    homepage = "https://github.com/reasonml/reason-native";
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/unicode";
     license = lib.licenses.mit;
     maintainers = [ ];

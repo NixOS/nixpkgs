@@ -8,6 +8,7 @@
   bcrypt,
   freezegun,
   homeassistant,
+  paho-mqtt,
   pytest-asyncio,
   pytest-socket,
   requests-mock,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-homeassistant-custom-component";
-  version = "0.13.315";
+  version = "0.13.340";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "MatthewFlamm";
     repo = "pytest-homeassistant-custom-component";
     tag = version;
-    hash = "sha256-Ce+yUUgWqyY3ltcwwpkquD+EEiBmLmsZRcGqqDHZ+hI=";
+    hash = "sha256-08hshNdSbOJSu/uJVBeZSxksYaCSZo7KjwwyaooqNGo=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     bcrypt
     freezegun
     homeassistant
+    paho-mqtt
     pytest-asyncio
     pytest-socket
     requests-mock

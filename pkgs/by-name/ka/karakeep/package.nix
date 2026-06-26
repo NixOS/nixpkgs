@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.30.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "cli/v${finalAttrs.version}";
-    hash = "sha256-Ssr/KcQHRtEloz4YPAUfUmcbicMumkIQ+wOjxe9PTXM=";
+    hash = "sha256-P88DQi0T7tmBH7cjs8/Hz77bU0oG7u67XPoLsdePNhI=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 3;
-    hash = "sha256-ZCsG+Zjiy3hmROgBKnqxGlJjvIYqAeQMlfXUnNQIsiI=";
+    hash = "sha256-aT4JPx3iYw4kw8GHXKWMnelSVT0q2S3PK8DgSCQCyKQ=";
   };
   buildPhase = ''
     runHook preBuild
@@ -94,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    # provide a environment variable to override the cache directory
+    # https://github.com/vercel/next.js/discussions/58864
+    patch -p1 -i ${./patches/cache-from-env-not-nix-store.patch}
   '';
 
   installPhase = ''

@@ -6,7 +6,7 @@
 
 {
   name = "zigbee2mqtt";
-  nodes.machine = {
+  containers.machine = {
     systemd.services.dummy-serial = {
       wantedBy = [
         "multi-user.target"

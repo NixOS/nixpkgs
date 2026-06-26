@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
-  version = "1.4.335.0";
+  version = "1.4.341.0";
 
   src = fetchFromGitHub {
     owner = "zeux";
     repo = "volk";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-qAMMhaeJweHNeW7+5RUpFh65jUnuw0TsYwq3PrKvCkM=";
+    hash = "sha256-jAXUwejUJGc8H+2lDGLHIlrI0sdzQbnJ+ZNbZHYdFX8=";
   };
 
   nativeBuildInputs = [ cmake ];

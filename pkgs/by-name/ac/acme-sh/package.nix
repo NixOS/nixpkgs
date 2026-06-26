@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     inherit (coreutils.meta) platforms;
     mainProgram = "acme.sh";
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })

@@ -11,18 +11,22 @@
   libarchive,
   xz,
   zlib,
+  gcc14Stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  theStdenv = if stdenv.isDarwin then gcc14Stdenv else stdenv;
+in
+theStdenv.mkDerivation (finalAttrs: {
   pname = "reprepro";
-  version = "5.4.7";
+  version = "5.4.8";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "reprepro";
     tag = "reprepro-${finalAttrs.version}";
-    hash = "sha256-bGfVWOmcXvaE+t9jiZFrnaUTKVPJqGqbPFyThhKK8gQ=";
+    hash = "sha256-qHqRLWRbSwmpKkUQ8JenUo+CY91EY/h4yHHmq4TacMg=";
   };
 
   buildInputs = [

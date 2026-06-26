@@ -7,7 +7,7 @@
 
 buildEnv {
   pname = "flare";
-  version = "1.14";
+  version = "1.15";
 
   paths = [
     (callPackage ./engine.nix { })

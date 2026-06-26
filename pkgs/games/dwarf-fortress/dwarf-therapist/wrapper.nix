@@ -76,7 +76,7 @@ stdenv.mkDerivation {
         echo "It doesn't support DF $dfVersion out of the box, so we're doing it the hard way."
         export HOME="$(mktemp -dt dfhack.XXXXXX)"
         export XDG_DATA_HOME="$HOME/.local/share"
-        expect ${dfHackExpectScript}
+        expect ${dfHackExpectScript} | tr -d '\r'
         local ini="$XDG_DATA_HOME/df_linux/therapist.ini"
         if [ -f "$ini" ]; then
           if grep -q "$patched_md5" "$ini"; then

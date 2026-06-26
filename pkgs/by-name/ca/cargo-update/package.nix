@@ -14,16 +14,16 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-update";
-  version = "18.0.0";
+  version = "20.0.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-G2x5ZSNF/IqTThnM+iD7U5XHxS5zC5AfHt8wu2jQBLE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-wV1R95TBPLXzCmE9sjztxJdvwvWxedEQPI5TxZEGUqA=";
   };
 
-  cargoHash = "sha256-1hshZ6+JFVLSzgy/Hvch2Xu1o8OPGwShWuZ56YyXjZo=";
+  cargoHash = "sha256-LsqDwGboCPGrRmpFqy13anszrwE8+VoqRqfm5K3VgM8=";
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
-    changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
+    changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerschtli
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

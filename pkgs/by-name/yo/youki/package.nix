@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "youki";
-  version = "0.5.7";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "youki";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b2R9/ADoZfRSu1Qh7hImR1Y+ZX15Uhk7JFwD8ipec6o=";
+    hash = "sha256-O5tk/W2Bybq+6aY7FX/AcJtBKWEYI2Ywk7vYLqvuFos=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "youki"
   ];
 
-  cargoHash = "sha256-R/1wE7twjMwlSns7ZV5nr8PZ/OzghcslvU+0Ic/oamQ=";
+  cargoHash = "sha256-QOugjSoJVqeiRfpzyuD6nFsBUdlfJLvbXavXFyiHWSo=";
 
   meta = {
     description = "Container runtime written in Rust";
-    homepage = "https://containers.github.io/youki/";
-    changelog = "https://github.com/containers/youki/releases/tag/v${finalAttrs.version}";
+    homepage = "https://youki-dev.github.io/youki/";
+    changelog = "https://github.com/youki-dev/youki/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ builditluc ];
     platforms = lib.platforms.linux;

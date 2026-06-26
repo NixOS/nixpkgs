@@ -1,24 +1,26 @@
 {
-  lib,
   stdenv,
   fetchzip,
   firefox-bin,
-  suffix,
   revision,
   system,
   throwSystem,
 }:
 let
+  download =
+    (import ./browser-downloads.nix {
+      name = "firefox";
+      inherit revision;
+    }).${system} or throwSystem;
+
   firefox-linux = stdenv.mkDerivation {
     name = "playwright-firefox";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/firefox/${revision}/firefox-${
-        "ubuntu-22.04" + (lib.removePrefix "linux" suffix)
-      }.zip";
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-PGTFoSjU2FFRmH7qfWkJsgnGvg3AI+eGrNUwyxRU8PM=";
-          aarch64-linux = "sha256-P5aHwaNZ0KfAVgRVugvAl6FsQu2/7sphwulOVyXiTgg=";
+          x86_64-linux = "sha256-DXUCNHLzN8rdq/I7JRAHbSPtgK8pJy3sKNEx4xsbd0E=";
+          aarch64-linux = "sha256-Kl7Z9mE+1Vy6VEnnl0DOZY/jtYjhUTwjqfFe9UZu2UA=";
         }
         .${system} or throwSystem;
     };
@@ -37,12 +39,11 @@ let
     '';
   };
   firefox-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/firefox/${revision}/firefox-${suffix}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-MI4HfXLmVEwcoL2jlcrDkfiClEN5rI8YcJiMqzE1xYs=";
-        aarch64-darwin = "sha256-Il7bTQoP6ZlqizduV4iCTrVsymy33RbGQtVSnVXnhTc=";
+        x86_64-darwin = "sha256-eXS88URYKAbFP6/3pukb2qgrdqVBOR99VGyqKPFZ2Tw=";
+        aarch64-darwin = "sha256-lVNFp20v+zBC3Up9ElhWh8C8ptEUqCHEsfQiuPp3lVM=";
       }
       .${system} or throwSystem;
   };

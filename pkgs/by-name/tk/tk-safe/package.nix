@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tk-safe";
-  version = "25.12.0";
-  revision = "24";
+  version = "26.1.1";
+  revision = "27";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_${revision}.snap";
-    hash = "sha512-cAe982qjRgu3GJ1ttY+84ghAzorB1BREcEM+wY6pTW2kJvu5Czu881dPDUXpdSMil99lrtgZ7Mx3bPycDPXmMg==";
+    hash = "sha512-idCFUt0nzg5rM2HXvuMzPPzukmvHSMxCEX+PIM/23A8j8IT3IhUQCvZLaXLnUs6eb1hWNvsNEr+XlaM8cSTdWA==";
   };
 
   desktopItems = [
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     mv * $out/opt/tk-safe
     ln -s $out/opt/tk-safe/app/tk-safe $out/bin/tk-safe
 
-    mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/hicolor/1024x1024/apps/tk-safe.png
+    mkdir -p $out/share/icons
+    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/tk-safe.png
 
     runHook postInstall
   '';

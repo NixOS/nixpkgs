@@ -3,8 +3,8 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud31Packages,
   nextcloud32Packages,
+  nextcloud33Packages,
 }:
 
 let
@@ -52,16 +52,16 @@ let
     };
 in
 {
-  nextcloud31 = generic {
-    version = "31.0.14";
-    hash = "sha256-0JZessv2gQV0PLvm7vQEyJCSz5LEDa7iycuc9u32NhM=";
-    packages = nextcloud31Packages;
+  nextcloud32 = generic {
+    version = "32.0.12";
+    hash = "sha256-rxWPclccjhXim8E2wjqSEYjOHVZoVQAK2U+JuAqPGAw=";
+    packages = nextcloud32Packages;
   };
 
-  nextcloud32 = generic {
-    version = "32.0.6";
-    hash = "sha256-RLwz/A4xplC7UguxI8CqplGbf3uThhM9Vhred+U/cTA=";
-    packages = nextcloud32Packages;
+  nextcloud33 = generic {
+    version = "33.0.6";
+    hash = "sha256-eRghpVAplE3gQxnPyvysSujn71a0zR78JjG/MLedFt4=";
+    packages = nextcloud33Packages;
   };
 
   # tip: get the sha with:

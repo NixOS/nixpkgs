@@ -63,6 +63,15 @@
       }
     );
 
+  "Avalonia.BuildServices" =
+    package:
+    package.overrideAttrs (old: {
+      postPatch = ''
+        shopt -s extglob
+        rm -rf !(*.nuspec)
+      '';
+    });
+
   "SkiaSharp.NativeAssets.Linux" =
     package:
     package.overrideAttrs (

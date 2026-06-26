@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "qimgv";
-  version = "1.0.3-unstable-2024-10-11";
+  version = "1.0.3-unstable-2026-01-19";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = "qimgv";
-    rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
-    sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
+    rev = "3127a2d211b124ad4fcf853d01e6df9323bdfdc3";
+    sha256 = "sha256-avn02kdMyA5PZUSykxgIk1I78zHQ/WKd26tQO8lMOow=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DVIDEO_SUPPORT=ON"
     "-DUSE_QT5=OFF"
+    "-DKDE_SUPPORT=ON"
   ];
 
   buildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
     kdePackages.qtsvg
     kdePackages.qttools
     kdePackages.kimageformats
+    kdePackages.kwindowsystem
   ];
 
   postPatch = ''

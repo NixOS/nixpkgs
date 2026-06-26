@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-power";
-  version = "24.5.2";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-power";
     tag = finalAttrs.version;
-    hash = "sha256-A9Kbs+qH01rkuLt8GINdPI2vCu0bCO+/g4kZhDj8GsY=";
+    hash = "sha256-3Jw3MrKHiyGw511GucAtV790UP43EuAC89Q1TMfytyY=";
   };
 
   postPatch = ''

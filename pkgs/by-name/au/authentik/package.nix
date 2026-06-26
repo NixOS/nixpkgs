@@ -3,25 +3,40 @@
   stdenvNoCC,
   callPackages,
   cacert,
+  clangStdenv,
+  cmake,
   fetchFromGitHub,
   buildGoModule,
+  buildNpmPackage,
   bash,
   chromedriver,
   nodejs_24,
-  python3,
+  python314,
   makeWrapper,
+  openapi-generator-cli,
+  perl,
+  rustPlatform,
+  go,
+  typescript,
+  makeSetupHook,
+  writeShellScript,
 }:
 
 let
   nodejs = nodejs_24;
 
-  version = "2025.10.1";
+  version = "2026.5.3";
+
+  cargoPackageFlags = [
+    "--package"
+    "authentik"
+  ];
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-HowB6DTGCqz770fKYbnE+rQ11XRV0WSNkLD+HSWZwz8=";
+    hash = "sha256-nmAX8nwZpdDcFAPvC9hAEp0x43RnFtGLUTAm7NcvNZo=";
   };
 
   meta = {
@@ -39,32 +54,87 @@ let
     ];
   };
 
-  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
-  website-deps = stdenvNoCC.mkDerivation {
+  client-go = stdenvNoCC.mkDerivation {
+    pname = "authentik-client-go";
+    inherit version src meta;
+
+    sourceRoot = "${src.name}/packages/client-go";
+
+    nativeBuildInputs = [
+      openapi-generator-cli
+      go
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      openapi-generator-cli generate \
+        -i ${src}/schema.yml -o $out \
+        -g go \
+        -c ./config.yaml
+
+      gofmt -w $out
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cd $out
+      rm -rf test
+      rm -f go.mod go.sum
+      rm -f .travis.yml git_push.sh
+
+      runHook postInstall
+    '';
+  };
+
+  client-ts = stdenvNoCC.mkDerivation {
+    pname = "authentik-client-ts";
+    inherit version src meta;
+
+    postPatch = ''
+      substituteInPlace ./packages/client-ts/config.yaml \
+        --replace-fail '/local' "$(pwd)/packages/client-ts"
+    '';
+
+    nativeBuildInputs = [
+      nodejs
+      openapi-generator-cli
+      typescript
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      openapi-generator-cli generate \
+        -i ./schema.yml -o $out \
+        -g typescript-fetch \
+        -c ./packages/client-ts/config.yaml \
+        --additional-properties=npmVersion=${version} \
+        --git-repo-id authentik --git-user-id goauthentik
+
+      cd $out
+      npm run build
+
+      runHook postBuild
+    '';
+  };
+
+  website-deps = buildNpmPackage {
     pname = "authentik-website-deps";
     inherit src version meta;
 
     sourceRoot = "${src.name}/website";
 
-    outputHash =
-      {
-        "aarch64-linux" = "sha256-aXXlzTsZp5mOrsxy9oHNzcc+1cFSnbC9RmtawBohmLI=";
-        "x86_64-linux" = "sha256-Hi0HXzwTLuer0v4IKF3aim0tVe7AVLi67DiMimrIq5s=";
-      }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
-
-    outputHashMode = "recursive";
-
-    nativeBuildInputs = [
-      nodejs
-      cacert
-    ];
-
-    buildPhase = ''
-      npm ci --cache ./cache
-
-      rm -r ./cache node_modules/.package-lock.json
-    '';
+    inherit nodejs;
+    npmDepsHash = "sha256-SkIZF+wQPgoZOGJc0YR8Ot07KCsAdA1985SLQaoibfA=";
+    npmDepsFetcherVersion = 2;
+    makeCacheWritable = true;
+    npmInstallFlags = [ "--legacy-peer-deps" ];
+    npmRebuildFlags = [ "--ignore-scripts" ];
+    dontNpmBuild = true;
 
     # dependencies of workspace projects are installed into separate node_modules folders with
     # symlinks between them, so we have to copy all of them
@@ -119,8 +189,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-t/jyzG3ibTW3fu8Gl1tWkSjMG6Lek/7JDccDrZX6sD0=";
-        "x86_64-linux" = "sha256-8I1YAKvgWjM3p9O1mCetZvhZelrfB31w0ZwkZBUEoh4=";
+        "aarch64-linux" = "sha256-41xZEfLul92vJATZqyVnd7Pp++NzLL/u8NeJJPHpXrw=";
+        "x86_64-linux" = "sha256-FpfOl6wNCgXLg86+vbjnYkcOnpaOZBCNxJiFDRT5W3s=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -131,6 +201,7 @@ let
     ];
 
     buildPhase = ''
+      chmod -R +w . ../packages/client-ts
       npm ci --cache ./cache --ignore-scripts
 
       rm -r ./cache node_modules/.package-lock.json
@@ -172,6 +243,10 @@ let
       find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
       popd
 
+      chmod -R +w node_modules/@goauthentik
+      rm -R node_modules/@goauthentik/api
+      ln -sn ${client-ts} node_modules/@goauthentik/api
+
       pushd node_modules/.bin
       patchShebangs $(readlink rollup)
       patchShebangs $(readlink wireit)
@@ -202,11 +277,26 @@ let
     ];
   };
 
-  python = python3.override {
+  python = python314.override {
     self = python;
     packageOverrides = final: prev: {
       # https://github.com/goauthentik/authentik/pull/16324
       django = final.django_5;
+
+      ak-guardian = final.buildPythonPackage {
+        pname = "ak-guardian";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/ak-guardian";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs = with final; [
+          django
+          typing-extensions
+        ];
+      };
 
       django-channels-postgres = final.buildPythonPackage {
         pname = "django-channels-postgres";
@@ -268,76 +358,21 @@ let
         ];
       };
 
-      # Running authentik currently requires a custom version.
-      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
-      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
-      djangorestframework = final.buildPythonPackage {
-        pname = "djangorestframework";
-        version = "3.16.0";
-        format = "setuptools";
-
-        src = fetchFromGitHub {
-          owner = "authentik-community";
-          repo = "django-rest-framework";
-          rev = "896722bab969fabc74a08b827da59409cf9f1a4e";
-          hash = "sha256-YrEDEU3qtw/iyQM3CoB8wYx57zuPNXiJx6ZjrIwnCNU=";
-        };
-
-        propagatedBuildInputs = with final; [
-          django
-          pytz
-        ];
-
-        nativeCheckInputs = with final; [
-          pytest-django
-          pytest7CheckHook
-
-          # optional tests
-          coreapi
-          django-guardian
-          inflection
-          pyyaml
-          uritemplate
-        ];
-
-        disabledTests = [
-          "test_ignore_validation_for_unchanged_fields"
-          "test_invalid_inputs"
-          "test_shell_code_example_rendering"
-          "test_unique_together_condition"
-          "test_unique_together_with_source"
-        ];
-
-        pythonImportsCheck = [ "rest_framework" ];
-      };
-
-      # authentik is currently not compatible with v1.18 and fails with the following error:
-      # > AttributeError: 'Namespace' object has no attribute 'worker_fork_timeout'. Did you mean: 'worker_shutdown_timeout'?
-      dramatiq = prev.dramatiq.overrideAttrs (_: rec {
-        version = "1.17.1";
-
-        src = fetchFromGitHub {
-          owner = "Bogdanp";
-          repo = "dramatiq";
-          tag = "v${version}";
-          hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
-        };
-      });
-
       authentik-django = final.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
 
         postPatch = ''
-          rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
             --replace-fail 'Path(__file__).absolute().parent.parent.parent' "Path(\"$out\")"
           substituteInPlace authentik/lib/default.yml \
-            --replace-fail '/blueprints' "$out/blueprints" \
-            --replace-fail './media' '/var/lib/authentik/media'
+            --replace-fail '/blueprints' "$out/blueprints"
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
+          # allways allow file upload if the data directoy exists
+          substituteInPlace authentik/admin/files/backends/file.py \
+            --replace-fail "and (self._base_dir.is_mount() or (self._base_dir / self.usage.value).is_mount())" ""
         '';
 
         build-system = [
@@ -351,6 +386,7 @@ let
         dependencies =
           with final;
           [
+            ak-guardian
             argon2-cffi
             cachetools
             channels
@@ -364,7 +400,6 @@ let
             django-cte
             django-dramatiq-postgres
             django-filter
-            django-guardian
             django-model-utils
             django-pglock
             django-pgtrigger
@@ -375,7 +410,6 @@ let
             django-tenants
             djangoql
             djangorestframework
-            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular
@@ -440,6 +474,57 @@ let
 
   inherit (python.pkgs) authentik-django;
 
+  worker = (rustPlatform.buildRustPackage.override { stdenv = clangStdenv; }) {
+    pname = "authentik-worker";
+    inherit version src meta;
+
+    cargoHash = "sha256-KExlNyT9G3R5rnt99beT2pYrWxezMLhGw+Q9T1X2kj4=";
+
+    nativeBuildInputs = [
+      cmake
+      go
+      perl
+    ];
+
+    buildInputs = [ python ];
+
+    env = {
+      PYO3_PYTHON = lib.getExe python;
+      RUSTFLAGS = "--cfg tokio_unstable";
+    };
+
+    cargoBuildFlags = cargoPackageFlags;
+
+    # Upstream currently has no Rust tests in this package.
+    doCheck = false;
+  };
+
+  # Provide a setup-hook to configure the Go source tree with up-to-date API bindings.
+  # This is done to avoid the `vendorHash` depending on anything in the `client-go` build (e.g.
+  # openapi-generator-cli version updates changing the produced content) and invalidating the hash.
+  apiGoVendorHook =
+    makeSetupHook
+      {
+        name = "authentik-api-go-vendor-hook";
+      }
+      (
+        writeShellScript "authentik-api-go-vendor-hook" ''
+          authentikApiGoVendorHook() {
+            chmod -R +w packages/client-go
+            rm -rf packages/client-go
+            cp -r ${client-go} packages/client-go
+            chmod -R +w packages/client-go
+
+            echo "Finished authentikApiGoVendorHook"
+          }
+
+          # don't run for FOD, e.g. the `goModules` build
+          if [ -z ''${outputHash-} ]; then
+            postConfigureHooks+=(authentikApiGoVendorHook)
+          fi
+        ''
+      );
+
   proxy = buildGoModule {
     pname = "authentik-proxy";
     inherit version src meta;
@@ -453,12 +538,18 @@ let
         --replace-fail './web' "${authentik-django}/web"
     '';
 
+    nativeBuildInputs = [ apiGoVendorHook ];
+
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-m2shrCwoVdbtr8B83ZcAyG+J6dEys2xdjtlfFFF4CDo=";
+    # calculate the vendorHash without other dependencies, so it is only based on the `go.sum` file
+    overrideModAttrs.postPatch = "";
+
+    vendorHash = "sha256-EVDOZ4USaJoIBDB8mM4ZSBfsSc1d/NOm1Qv/hUJ+8f4=";
 
     postInstall = ''
-      mv $out/bin/server $out/bin/authentik
+      mv $out/bin/server $out/bin/authentik-server
+      ln -s authentik-server $out/bin/authentik
     '';
 
     subPackages = [ "cmd/server" ];
@@ -474,11 +565,6 @@ stdenvNoCC.mkDerivation {
   postPatch = ''
     rm Makefile
     patchShebangs lifecycle/ak
-
-    # This causes issues in systemd services
-    substituteInPlace lifecycle/ak \
-      --replace-fail 'printf' '>&2 printf' \
-      --replace-fail '>/dev/stderr' ""
   '';
 
   installPhase = ''
@@ -489,8 +575,9 @@ stdenvNoCC.mkDerivation {
     wrapProgram $out/bin/ak \
       --prefix PATH : ${
         lib.makeBinPath [
-          (python.withPackages (ps: [ ps.authentik-django ]))
+          worker
           proxy
+          (python.withPackages (ps: [ ps.authentik-django ]))
         ]
       } \
       --set TMPDIR /dev/shm \
@@ -500,9 +587,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru = {
-    inherit proxy;
+    inherit proxy worker apiGoVendorHook;
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
+      inherit apiGoVendorHook;
     };
   };
 

@@ -17,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tiny-rdm";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "tiny-craft";
     repo = "tiny-rdm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t/dAhcMUT7p7MTlrEm/TRdHLRA5IvK9eeSB2+cWtCoY=";
+    hash = "sha256-MyIMGgKzP6SnRzlOd4OQvMNiih7lsjfVFFckkPS2J+w=";
   };
 
   postPatch = ''
@@ -31,13 +31,13 @@ buildGoModule (finalAttrs: {
       --replace-fail "prefStore.autoCheckUpdate" "false"
   '';
 
-  vendorHash = "sha256-G1pnEMTxGM3YjHDtSosj5GB6Zhc9PZcbcrjGB1omQvg=";
+  vendorHash = "sha256-DaD/NM1ZNVt0X/CJuaGfHqeS9ySTWFd0y5bzog6Yn+E=";
 
   env = {
     CGO_ENABLED = 1;
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/frontend";
-      hash = "sha256-DaRuxIRNXkafqzIJaJuttVeGXDrjjjpF2FtB1yFWPZw=";
+      hash = "sha256-DUYUk4OK5UWDanSR5hSVDYloYX4fYD41omYThzi/700=";
     };
     npmRoot = "frontend";
   };

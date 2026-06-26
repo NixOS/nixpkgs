@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starkbank-ecdsa";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "starkbank";
     repo = "ecdsa-python";
-    tag = "v${version}";
-    hash = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5yF2tVCgHJX++NncWiYfLE0P98Sxy91VN3qgc8PSLOI=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -36,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python ECDSA library";
     homepage = "https://github.com/starkbank/ecdsa-python";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

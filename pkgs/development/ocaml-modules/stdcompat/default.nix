@@ -16,6 +16,8 @@ buildDunePackage rec {
     sha256 = "sha256-RSJ9AgUEmt23QZCk60ETIXmkJhG7knQe+s8wNxxIHm4=";
   };
 
+  patches = [ ./ocaml-4_14_3.patch ];
+
   # Otherwise ./configure script will run and create files conflicting with dune.
   dontConfigure = true;
 

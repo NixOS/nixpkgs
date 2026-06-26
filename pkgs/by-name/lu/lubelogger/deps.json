@@ -1,8 +1,8 @@
 [
   {
     "pname": "BouncyCastle.Cryptography",
-    "version": "2.6.1",
-    "hash": "sha256-0NNwK/UZlnIK4Nb7bs4ya0XfoVluKQPUVQvaR88UHKo="
+    "version": "2.6.2",
+    "hash": "sha256-Yjk2+x/RcVeccGOQOQcRKCiYzyx1mlFnhS5auCII+Ms="
   },
   {
     "pname": "CsvHelper",
@@ -16,42 +16,42 @@
   },
   {
     "pname": "MailKit",
-    "version": "4.14.1",
-    "hash": "sha256-YSEcfyYVskwJX6xa13wGW4JgHn0VpD04CtUiAGn3et0="
+    "version": "4.17.0",
+    "hash": "sha256-LGruedMrHrI0AXHcXOFxsYP2awwPbrC9Q41AeQk4+9U="
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.15.0",
-    "hash": "sha256-LKTvERNUTMCEF7xs377tCMwOMRki93OS4kh6Yv0uXJ4="
+    "version": "8.18.0",
+    "hash": "sha256-mkguJA4aXIVVQvSJ9Duq9mivbGXAIkLQp3a8PKy223A="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.15.0",
-    "hash": "sha256-LwzKiGjcnORvmQ9tim6lomXpfVlPpd/fE8FKTFWKlpM="
+    "version": "8.18.0",
+    "hash": "sha256-MdqY9CGRs+fTLb3HYYcSfuzqDFo4Dpho4McFWWferjA="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.15.0",
-    "hash": "sha256-mMXwsjGcrrmHR1mG7BLTKg/30mX+m93QVX17/ynOOd4="
+    "version": "8.18.0",
+    "hash": "sha256-09WyYskyL8gjjVDzoZBQAGXgsPmyagWftALSBCdt4gg="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.15.0",
-    "hash": "sha256-7Lo/TsvqgNCEMyFssO3Om233521Pqgb9K9lUeHc5HMk="
+    "version": "8.18.0",
+    "hash": "sha256-sFhonZW9G6H4ooQ6N/78fkZvADZ2Hf5WAS3FKd/ue1E="
   },
   {
     "pname": "MimeKit",
-    "version": "4.14.0",
-    "hash": "sha256-06dqA6w2V2D+miq387smCuJ/8fk1FVc0rvRjmglAWyM="
+    "version": "4.17.0",
+    "hash": "sha256-GpWv+8shoprshuPNB+H+C5saffiKQ6Pek3zhLUGklRo="
   },
   {
     "pname": "Npgsql",
-    "version": "9.0.4",
-    "hash": "sha256-YH2QYLe56dH6NNGgSwLIaHefjkKQLh0Sf4vMWoJciyU="
+    "version": "9.0.5",
+    "hash": "sha256-5AF0qiVQwfKUqCXSFb+oJhe3Q1wwK9F9+Q9/A4RTIdo="
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "8.0.1",
-    "hash": "sha256-KMNIkJ3yQ/5O6WIhPjyAIarsvIMhkp26A6aby5KkneU="
+    "version": "10.0.0",
+    "hash": "sha256-d3sLG+LZ3+N/h/6gdJcVKOgbBO6wYb66NfXalAEDqnE="
   }
 ]

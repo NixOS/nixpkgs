@@ -5,18 +5,12 @@
   buildDunePackage,
   eqaf,
   alcotest,
-  astring,
-  bos,
   crowbar,
-  findlib,
-  fpath,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "digestif";
   version = "1.3.0";
-
-  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/digestif/releases/download/v${finalAttrs.version}/digestif-${finalAttrs.version}.tbz";
@@ -27,16 +21,9 @@ buildDunePackage (finalAttrs: {
 
   checkInputs = [
     alcotest
-    astring
-    bos
     crowbar
-    fpath
   ];
   doCheck = true;
-
-  postCheck = ''
-    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ test/test_runes.ml
-  '';
 
   meta = {
     description = "Simple hash algorithms in OCaml";

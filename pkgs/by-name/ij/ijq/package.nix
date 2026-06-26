@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo126Module,
   fetchFromCodeberg,
   lib,
   jq,
@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "ijq";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PT7WnCZL4Cfo/+VW3ImOloDOI9d0GX4UTcC8Bf3OVAU=";
+    hash = "sha256-U4UKhWI/xd7+rLa350oIFlCqbiMSZe3ztPFR0uierOo=";
   };
 
-  vendorHash = "sha256-1R3rv3FraT53dqGECRr+ulhplmmByqRW+VJ+y6nFR+Y=";
+  vendorHash = "sha256-aU/0CIbI49OwgY6ioT50uPxld/rHAve3+KoILgPpWSQ=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -59,7 +59,7 @@
     lib.pipe nodes [
       builtins.attrNames
       (map (node: ''
-        ${node}.copy_from_vm(
+        ${node}.copy_from_machine(
             ${node}.succeed("readlink -f /etc/locale.conf").strip(),
             "${node}"
         )

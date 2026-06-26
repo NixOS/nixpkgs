@@ -1,14 +1,14 @@
 diff --git a/weasyprint/text/ffi.py b/weasyprint/text/ffi.py
-index b5a9cf2..9380a79 100644
+index f57da3c..c50e41d 100644
 --- a/weasyprint/text/ffi.py
 +++ b/weasyprint/text/ffi.py
-@@ -444,25 +444,12 @@ if hasattr(os, 'add_dll_directory') and not hasattr(sys, 'frozen'):  # pragma: n
+@@ -473,25 +473,12 @@ if hasattr(os, 'add_dll_directory') and not hasattr(sys, 'frozen'):  # pragma: n
          with suppress((OSError, FileNotFoundError)):
              os.add_dll_directory(dll_directory)
  
 -gobject = _dlopen(
 -    ffi, 'libgobject-2.0-0', 'gobject-2.0-0', 'gobject-2.0',
--    'libgobject-2.0.so.0', 'libgobject-2.0.dylib', 'libgobject-2.0-0.dll')
+-    'libgobject-2.0.so.0', 'libgobject-2.0.0.dylib', 'libgobject-2.0-0.dll')
 -pango = _dlopen(
 -    ffi, 'libpango-1.0-0', 'pango-1.0-0', 'pango-1.0', 'libpango-1.0.so.0',
 -    'libpango-1.0.dylib', 'libpango-1.0-0.dll')
@@ -25,12 +25,12 @@ index b5a9cf2..9380a79 100644
 -pangoft2 = _dlopen(
 -    ffi, 'libpangoft2-1.0-0', 'pangoft2-1.0-0', 'pangoft2-1.0',
 -    'libpangoft2-1.0.so.0', 'libpangoft2-1.0.dylib', 'libpangoft2-1.0-0.dll')
-+gobject = _dlopen(ffi, "@gobject@")
-+pango = _dlopen(ffi, "@pango@")
-+harfbuzz = _dlopen(ffi, "@harfbuzz@")
-+harfbuzz_subset = _dlopen(ffi, "@harfbuzz_subset@", allow_fail=True)
-+fontconfig = _dlopen(ffi, "@fontconfig@")
-+pangoft2 = _dlopen(ffi, "@pangoft2@")
++gobject = _dlopen(ffi, '@gobject@')
++pango = _dlopen(ffi, '@pango@')
++harfbuzz = _dlopen(ffi, '@harfbuzz@')
++harfbuzz_subset = _dlopen(ffi, '@harfbuzz_subset@', allow_fail=True)
++fontconfig = _dlopen(ffi, '@fontconfig@')
++pangoft2 = _dlopen(ffi, '@pangoft2@')
  
  gobject.g_type_init()
  

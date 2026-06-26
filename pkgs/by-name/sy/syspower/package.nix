@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation {
   pname = "syspower";
-  version = "0-unstable-2024-12-10";
+  version = "0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syspower";
-    rev = "323332b4d97a30360455682194ed35868fcbaf71";
-    hash = "sha256-obL9XUf8kONBWZoyrPvN1PWmEyQx8vMsl6KIneSjkGM=";
+    rev = "1a74a7895a02363dfcc23bb43cd3f7d7d8ad3320";
+    hash = "sha256-gLkjyhLA0QDG/89uTp32VEoOlTGaDjqZm1aLy+X36qw=";
   };
 
   buildInputs = [

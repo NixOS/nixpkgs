@@ -137,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
+    (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
   ];
 
   strictDeps = true;
@@ -204,6 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs examples/python
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ctest --output-on-failure -E "python_math_opt_.*"
+    runHook postCheck
   '';
 
   # This extra configure step prevents the installer from littering

@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch2,
+  fetchFromGitLab,
+  fetchpatch, # Added for applying patch
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   wayland-scanner,
@@ -20,12 +21,15 @@
   wayland,
   wayland-protocols,
   libxcb-cursor,
+  glslang,
 
   demoSupport ? true,
   jpegSupport ? true,
   libjpeg,
   lcmsSupport ? true,
   lcms2,
+  luaSupport ? true,
+  lua5_4_compat,
   pangoSupport ? true,
   pango,
   pipewireSupport ? true,
@@ -34,12 +38,15 @@
   freerdp,
   remotingSupport ? true,
   gst_all_1,
-  vaapiSupport ? true,
+  vaapiSupport ? false,
   libva,
   vncSupport ? true,
   aml,
   neatvnc,
   pam,
+  vulkanSupport ? true,
+  vulkan-headers,
+  vulkan-loader,
   webpSupport ? true,
   libwebp,
   xwaylandSupport ? true,
@@ -49,19 +56,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
-  version = "14.0.1";
+  version = "15.0.1";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${finalAttrs.version}/downloads/weston-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "wayland";
+    repo = "weston";
+    rev = finalAttrs.version;
+    hash = "sha256-c6h8GQt1S3t2+K+8A4ncxBtWLtaV61EABdYA55o9i4o=";
   };
 
   patches = [
-    (fetchpatch2 {
-      # vnc: Allow neatvnc in version 0.9.0
-      # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1649
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/b4386289d614f26e89e1c6eb17e048826e925ed1.patch";
-      hash = "sha256-mkIOup44C9Kp42tFMXz8Sis4URmPi4t605MQG672nJU=";
+    # backend-vnc, gitlab-ci: Update to Neat VNC 1.0.0, aml 1.0.0
+    # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/2064
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/8a1c91e771312d1e0d0cd92495ef717402784dae.patch";
+      hash = "sha256-9eBONM7OfzHhCuT8Wnq534KS51q2VtUyOOLjYHohEds=";
+      excludes = [ ".gitlab-ci.yml" ];
     })
   ];
 
@@ -72,7 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wayland-scanner
-  ];
+  ]
+  ++ lib.optional vulkanSupport glslang;
+
   buildInputs = [
     cairo
     libGL
@@ -88,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional jpegSupport libjpeg
   ++ lib.optional lcmsSupport lcms2
+  ++ lib.optional luaSupport lua5_4_compat
   ++ lib.optional pangoSupport pango
   ++ lib.optional pipewireSupport pipewire
   ++ lib.optional rdpSupport freerdp
@@ -101,6 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     neatvnc
     pam
   ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ]
   ++ lib.optional webpSupport libwebp
   ++ lib.optionals xwaylandSupport [
     libxcursor
@@ -109,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "deprecated-backend-drm-screencast-vaapi" vaapiSupport)
     (lib.mesonBool "backend-pipewire" pipewireSupport)
     (lib.mesonBool "backend-rdp" rdpSupport)
     (lib.mesonBool "backend-vnc" vncSupport)
@@ -119,7 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "image-webp" webpSupport)
     (lib.mesonBool "pipewire" pipewireSupport)
     (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonBool "renderer-vulkan" vulkanSupport)
     (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "shell-lua" luaSupport)
     (lib.mesonBool "test-junit-xml" false)
     (lib.mesonBool "xwayland" xwaylandSupport)
   ]
@@ -127,7 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
   ];
 
-  passthru.providedSessions = [ "weston" ];
+  passthru = {
+    providedSessions = [ "weston" ];
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Lightweight and functional Wayland compositor";

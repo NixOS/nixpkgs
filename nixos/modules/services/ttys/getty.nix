@@ -13,6 +13,8 @@ let
   baseArgs = [
     "--login-program"
     "${cfg.loginProgram}"
+    "--issue-file"
+    "/etc/issue:/etc/issue.d:/run/issue:/run/issue.d"
   ]
   ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
     "--autologin"
@@ -131,7 +133,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.console.enable {
+  config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
@@ -163,20 +165,15 @@ in
       ];
       environment.TTY = "%I";
       restartIfChanged = false;
+      # logind hardcodes spawning autovt@ttyN.service on VT switch. Upstream
+      # declares this alias via [Install] Alias=, which NixOS does not process.
+      aliases = [ "autovt@.service" ];
     };
 
     systemd.services."serial-getty@" = {
       serviceConfig.ExecStart = [
         "" # override upstream default with an empty ExecStart
         (gettyCmd "%I --keep-baud $TERM")
-      ];
-      restartIfChanged = false;
-    };
-
-    systemd.services."autovt@" = {
-      serviceConfig.ExecStart = [
-        "" # override upstream default with an empty ExecStart
-        (gettyCmd "--noclear %I $TERM")
       ];
       restartIfChanged = false;
     };

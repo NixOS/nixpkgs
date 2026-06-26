@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fetch “xdg-user-dirs” translations from correct localedir.
     substituteInPlace update.c --replace-fail \
       'bindtextdomain ("xdg-user-dirs", GLIBLOCALEDIR);' \
-      'bindtextdomain ("xdg-user-dirs", "${xdg-user-dirs}/share/locale");'
+      'bindtextdomain ("xdg-user-dirs", "${lib.getLib xdg-user-dirs}/share/locale");'
 
     patchShebangs meson_custom_install_desktop_file.sh
   '';

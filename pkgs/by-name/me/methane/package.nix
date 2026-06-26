@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Clone of Taito's Bubble Bobble arcade game released for Amiga in 1993 by Apache Software";
     mainProgram = "methane";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ nixinator ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

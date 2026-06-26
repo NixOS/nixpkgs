@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iceauth";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "iceauth";
     tag = "iceauth-${finalAttrs.version}";
-    hash = "sha256-XAk+hffmX02/0wJlXZVSY325I1AyiJ6AozJizsv39Mg=";
+    hash = "sha256-HuC5q5kFek2v+Rzp+TgSRnl6Dr4eKtSl7SuSwfFvOdM=";
   };
 
   strictDeps = true;

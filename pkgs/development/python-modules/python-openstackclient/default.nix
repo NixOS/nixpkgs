@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   ddt,
+  hacking,
+  installShellFiles,
   openstackdocstheme,
   osc-lib,
   osc-placement,
@@ -19,7 +21,6 @@
   python-mistralclient,
   python-neutronclient,
   python-octaviaclient,
-  python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
   python-zunclient,
@@ -28,20 +29,21 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
-  stestr,
-  testers,
+  stdenv,
+  stestrCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "8.3.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-CEz1v4e4NadSZ+qhotFtLB4y/KdhDZbDOohN8D9FB30=";
+    hash = "sha256-UczEgOtZz4roIFg1R6RDGg0tiiiT6lAgJCdgpmK0960=";
   };
 
   patches = [
@@ -69,19 +71,16 @@ buildPythonPackage (finalAttrs: {
   # to support proxy envs like ALL_PROXY in requests
   ++ requests.optional-dependencies.socks;
 
-  nativeCheckInputs = [
-    ddt
-    requests-mock
-    stestr
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
-  # test_module failures under python 3.14: https://bugs.launchpad.net/python-openstackclient/+bug/2137223
-  checkPhase = ''
-    runHook preCheck
-    stestr run -E \
-      "openstackclient.tests.unit.common.test_module.TestModuleList.(test_module_list_no_options|test_module_list_all)"
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    ddt
+    hacking
+    requests-mock
+    stestrCheckHook
+  ];
 
   pythonImportsCheck = [
     "openstackclient"
@@ -116,12 +115,15 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = python-openstackclient;
-      command = "openstack --version";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd openstack \
+      --bash <($out/bin/openstack complete)
+  '';
 
   meta = {
     description = "OpenStack Command-line Client";

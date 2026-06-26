@@ -54,6 +54,7 @@
   hasRunfiles ? (sha512 ? run),
   hasTlpkg ? false,
   hasCatalogue ? true,
+  hasJar ? false,
   catalogue ? pname,
   extraNativeBuildInputs ? [ ],
   ...
@@ -76,13 +77,25 @@ let
     # without any appreciable benefit (as the combined packages already
     # cause them all to be built and cached anyway).
     hydraPlatforms = [ ];
+    maintainers = with lib.maintainers; [ xworld21 ];
   }
   // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
   }
   // lib.optionalAttrs hasCatalogue {
     homepage = "https://ctan.org/pkg/${catalogue}";
+  }
+  // lib.optionalAttrs (mainProgram != null) {
+    inherit mainProgram;
+  }
+  // lib.optionalAttrs hasJar {
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
+
+  # if binfiles contains exactly one entry, use it as mainProgram, but allow overrides via args.mainProgram
+  mainProgram =
+    args.mainProgram
+      or (if builtins.length (args.binfiles or [ ]) == 1 then builtins.head args.binfiles else null);
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
   hasDocfiles = sha512 ? doc;
@@ -93,11 +106,8 @@ let
     lib.optional hasBinfiles "out"
     ++ lib.optional hasRunfiles "tex"
     ++ lib.optional hasDocfiles "texdoc"
-    ++
-      # omit building sources, since as far as we know, installing them is not common
-      # the sources will still be available under drv.texsource
-      # lib.optional hasSource "texsource" ++
-      lib.optional hasTlpkg "tlpkg"
+    ++ lib.optional hasSource "texsource"
+    ++ lib.optional hasTlpkg "tlpkg"
     ++ lib.optional hasManpages "man"
     ++ lib.optional hasInfo "info";
   outputDrvs = lib.getAttrs outputs containers;

@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   lib,
@@ -9,16 +8,21 @@
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.8.4";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
+    hash = "sha256-BntQCauAgnaiNn31nrVEsHFvQv7zK6D0z/rInbCVTr0=";
   };
 
-  vendorHash = "sha256-vP8OtjpYNMm1KkNfD3pmNrHh3HRy1GkzUbfLKWKhHbo=";
+  patches = [
+    # upstream left an untidied go.mod/go.sum in v1.10.0
+    ./pkg-errors.patch
+  ];
+
+  vendorHash = "sha256-pd7fTP0BAgpd4mD8ZG8Ak9fFF2sC0JGCDbPG8tAnWvw=";
 
   deleteVendor = true;
 

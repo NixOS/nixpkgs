@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "1.1.6";
+  version = "1.2.17";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7WNWbTs+r3L2O6ixK1yEElwdFfRPqx2yX+nPRy3nSEM=";
+    hash = "sha256-6Z+1LpgvdRpcy2PmgSFeKHuMLh3jeA03KhfS2j2AhKQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-mSnEga9JtS1ObMJpS0uo1RZs2ubpTwsErtmD8rMe5gg=";
+  vendorHash = "sha256-K2fqDAzex0EgrGPK5I4Bp5oqmIOnnuI1sztlySrX1Pc=";
 
   excludedPackages = [
     "internal/gen-jsonschema"
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   # skip tests on darwin due to some local networking failures
   # `__darwinAllowLocalNetworking = true;` wasn't sufficient for
   # aarch64 or x86_64
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     # some test data include SOURCE_DATE_EPOCH (which is different from our default)
     # and the default version info which we get by unsetting our ldflags
@@ -65,7 +65,8 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [
     # requires networking (apk.chainreg.biz and dl-cdn.alpinelinux.org)
-    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage|TestLock/apko-discover"
+    # TestSpecialModeBits fails because of sandbox setuid/setgid restrictions
+    "-skip=TestInitDB_ChainguardDiscovery|TestFetchPackage|TestLock/apko-discover|TestSpecialModeBits"
   ];
 
   postInstall =
@@ -96,7 +97,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       jk
       developer-guy
-      emilylange
     ];
   };
 })

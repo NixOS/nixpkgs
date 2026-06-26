@@ -4,7 +4,7 @@
   fetchFromGitHub,
   catch2,
   cmake,
-  unixODBC,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ unixODBC ];
+  buildInputs = [ unixodbc ];
 
   cmakeFlags =
     if (stdenv.hostPlatform.isStatic) then

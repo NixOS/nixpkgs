@@ -12,23 +12,13 @@ in
 let
   self = packages // (overrides self packages);
   packages = with self; {
-    zipper = builder {
-      name = "zipper";
-      version = "1.1.0";
-      src = fetchHex {
-        pkg = "zipper";
-        version = "1.1.0";
-        sha256 = "sha256-RkTIOug+88CYYMte1Zewx1n7vNZK1bAKYvUa5IrvdTU=";
-      };
-      beamDeps = [ ];
-    };
     katana_code = builder {
       name = "katana_code";
-      version = "2.4.1";
+      version = "2.4.3";
       src = fetchHex {
         pkg = "katana_code";
-        version = "2.4.1";
-        sha256 = "sha256-WO/GO12dq8giMMq1DN5/eyWSh6aQ7Wmfeaf6gPSbCzo=";
+        version = "2.4.3";
+        sha256 = "sha256-YUxjQ9uqRc7e8n0j6wkBo4PEa/61dwOaXmDK0XGGzO4=";
       };
       beamDeps = [ ];
     };
@@ -44,16 +34,13 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "4.2.1";
+      version = "5.0.4";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "4.2.1";
-        sha256 = "sha256-D3dLiR5kqMuZSf9PVUhclgjBFEFIEDqDOhAUk7l8J7I=";
+        version = "5.0.4";
+        sha256 = "sha256-fgzg0yNrG1afDvE5jrJzIf2GNnJy4LFPOJDQQTrMPpo=";
       };
-      beamDeps = [
-        katana_code
-        zipper
-      ];
+      beamDeps = [ katana_code ];
     };
   };
 in

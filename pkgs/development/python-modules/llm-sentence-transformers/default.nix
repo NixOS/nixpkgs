@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-sentence-transformers";
   version = "0.3.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-sentence-transformers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FDDMItKFEYEptiL3EHKgKVxClqRU9RaM3uD3xP0F4OM=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin for embeddings using sentence-transformers";
     homepage = "https://github.com/simonw/llm-sentence-transformers";
-    changelog = "https://github.com/simonw/llm-sentence-transformers/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-sentence-transformers/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

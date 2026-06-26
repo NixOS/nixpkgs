@@ -1,11 +1,13 @@
 {
   buildPythonPackage,
-  python-manilaclient,
-  stestr,
   ddt,
-  tempest,
-  mock,
+  fixtures,
+  python-manilaclient,
   python-openstackclient,
+  requests-mock,
+  stestr,
+  tempest,
+  testtools,
 }:
 
 buildPythonPackage {
@@ -17,12 +19,14 @@ buildPythonPackage {
   dontInstall = true;
 
   nativeCheckInputs = [
-    python-manilaclient
-    stestr
     ddt
-    tempest
-    mock
+    fixtures
+    python-manilaclient
     python-openstackclient
+    requests-mock
+    stestr
+    tempest
+    testtools
   ];
 
   checkPhase = ''

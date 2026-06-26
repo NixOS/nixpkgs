@@ -8,21 +8,42 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRxWq9gGfglfBixS7xOoj8r29rJRAfGj4ydcSFf/7P0=";
+    hash = "sha256-rdwUoTwN/fG4fsOY4mCcg0bzWMErFaxBe72RtmHohdA=";
   };
 
-  vendorHash = "sha256-ywID0txn7L6+QkYNvGvO5DTsDQBZLU+pGwNd3q7kLKI=";
+  vendorHash = "sha256-unwaA+WNyaJbNrOFvjXeMI2YbNTpGBrjwBGXhvOfj0M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
-  doCheck = false;
+  # required for TestHTTPHandlerReadWrite and other tests
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestExtract" # block cloning fails on ZFS
+        "TestExtractCommand/extract_while_regenerating_the_corrupted_seed" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_seed_directory" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed,_explicit_data_directory_and_unexpected_seed_options" # block cloning fails on ZFS
+        "TestExtractCommand/extract_with_single_seed_and_explicit_data_directory" # block cloning fails on ZFS
+        "TestExtractWithNonStaticSeeds" # block cloning fails on ZFS
+        "TestMountIndex" # FUSE does not work in sandbox
+        "TestSeed/extract_repetitive_file" # block cloning fails on ZFS
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # sendfile is not permitted in Darwin sandbox
+        "TestS3StoreGetChunk/fail"
+        "TestS3StoreGetChunk/recover"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd desync \
@@ -41,6 +62,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/folbricht/desync";
     changelog = "https://github.com/folbricht/desync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = with lib.maintainers; [ matshch ];
   };
 })

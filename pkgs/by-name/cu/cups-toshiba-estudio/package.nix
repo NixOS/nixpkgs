@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "7.89";
 
   src = fetchurl {
-    url = "http://business.toshiba.com/downloads/KB/f1Ulds/15178/TOSHIBA_ColorMFP_CUPS.tar";
+    url = "https://business.toshiba.com/downloads/KB/f1Ulds/15178/TOSHIBA_ColorMFP_CUPS.tar";
     sha256 = "0qz4r7q55i0adf4fv3aqnfqgi2pz3jb1jixkqm9x6nk4vanyjf4r";
   };
 

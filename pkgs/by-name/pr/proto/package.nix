@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proto";
-  version = "0.55.2";
+  version = "0.57.5";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fUotpknMclEjUGppkErBBK+P7sbkYuCv8FKhbvyiHWA=";
+    hash = "sha256-NvJbkngOrfEdjca10rFYGrQ7soYznfDwjPJ0J7XhfRo=";
   };
 
-  cargoHash = "sha256-Mk7HzT9GA8SfVKmiQaTsDvXqGUIuEi4cQnFZFTqC5V8=";
+  cargoHash = "sha256-+46HIpKDnRc99oEYARCzM+meL4MG8NA84cO2mA87y+M=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

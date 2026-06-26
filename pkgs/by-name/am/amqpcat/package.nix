@@ -9,19 +9,25 @@
 
 crystal.buildCrystalPackage rec {
   pname = "amqpcat";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "cloudamqp";
     repo = "amqpcat";
     tag = "v${version}";
-    hash = "sha256-fdDdMjeAlJ0H05LNVdRxwq6RK41d6rXLFQMw6RSlXZM=";
+    hash = "sha256-wUsDqatZVcfvtTlK4eOYvFFCyyO8nkrBksvN6Od4DG0=";
   };
 
   format = "shards";
   shardsFile = ./shards.nix;
 
   buildInputs = [ openssl ];
+
+  preConfigure = ''
+    substituteInPlace "./src/version.cr" --replace-fail \
+      'VERSION = {{ `git describe 2>/dev/null || shards version`.stringify.gsub(/(^v|\n)/, "") }}' \
+      'VERSION = "${version}"'
+  '';
 
   # Tests require network access
   doCheck = false;

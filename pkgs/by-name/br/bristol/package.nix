@@ -46,11 +46,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-jack-default-midi"
   ];
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
-  #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-implicit-int";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Workaround build failure on -fno-common toolchains like upstream
+    # gcc-10. Otherwise build fails as:
+    #  ld: brightonCLI.o:/build/bristol-0.60.11/brighton/brightonCLI.c:139: multiple definition of
+    #    `event'; brightonMixerMenu.o:/build/bristol-0.60.11/brighton/brightonMixerMenu.c:1182: first defined here
+    "-fcommon"
+    # gcc14
+    "-Wno-implicit-int"
+    # gcc15
+    "-std=gnu17"
+  ];
 
   preInstall = ''
     sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol

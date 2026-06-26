@@ -10,6 +10,10 @@
 stdenv.mkDerivation {
   pname = "gtk-nocsd";
   version = "4.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "MorsMortium";

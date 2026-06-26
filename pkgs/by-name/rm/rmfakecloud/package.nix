@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   enableWebui ? true,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -11,16 +11,16 @@
 }:
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.26";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
-    rev = "v${version}";
-    hash = "sha256-QV8RFg6gATyjIESwO3r5M3Yd9qWFsA6X6bYLmNpLek0=";
+    tag = "v${version}";
+    hash = "sha256-0eESaBe9FGqDrAumS8ANEEaB4FgbZsgWX1487J3Li4I=";
   };
 
-  vendorHash = "sha256-ColOCdKa/sKoLnF/3idBIEyFB2JWYM+1y5TdC/LZT4A=";
+  vendorHash = "sha256-A+y63w+sEleXFh4ZHgFo1IhsQ2KhqqKW4vRPi393atI=";
 
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
@@ -33,9 +33,9 @@ buildGoModule rec {
       ;
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-uywmHN9HWKi0CaqTg9uEio2XCu6ap9v2xtbodW/6b4Q=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-UQT6uYusDw7Hd+1URrSQkyorajih6oF0LSMpPZy9K1w=";
   };
   preBuild = lib.optionals enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -49,7 +49,7 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   # ... or don't embed it in the server
@@ -70,7 +70,6 @@ buildGoModule rec {
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      euxane
       martinetd
     ];
     mainProgram = "rmfakecloud";

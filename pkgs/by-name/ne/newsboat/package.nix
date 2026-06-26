@@ -21,18 +21,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
-  version = "2.42";
+  version = "2.44";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-ZBqYxAX2jPaRycdw7BbhySt2uviICadT/5Z5WZqsqJM=";
+    hash = "sha256-OV7WpM0NBfqOtFv9Co728UwHut4HhT2u5qgvamy/FAg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-T6zBr3LoOkPLVkBvfhUdqs7iF2I6fRTZo+uMsrnv+5g=";
+    hash = "sha256-HJZnbQ7TDJ9zg0Rav1PCMEymaYy/mSxnrr2gkv4pTX0=";
   };
 
   # allow other ncurses versions on Darwin
@@ -66,12 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
-  # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
-  # these for all platforms, since upstream's gettext crate behavior might
-  # change in the future.
-  GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
-  GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
-  GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
+  env = {
+    # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
+    # these for all platforms, since upstream's gettext crate behavior might
+    # change in the future.
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
+  };
 
   makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;

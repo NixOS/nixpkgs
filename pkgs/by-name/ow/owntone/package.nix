@@ -37,14 +37,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "29.0";
+  version = "29.2";
   pname = "owntone";
 
   src = fetchFromGitHub {
     owner = "owntone";
     repo = "owntone-server";
     tag = finalAttrs.version;
-    hash = "sha256-Z9u5clC6m5gDAKkvyvrQs9muNK/P0ipHgQUmTHLRumE=";
+    hash = "sha256-cCbCShIgopm3HhNVyvr6Q8fe8LkxwNE/51/0qkS27WE=";
   };
 
   nativeBuildInputs = [

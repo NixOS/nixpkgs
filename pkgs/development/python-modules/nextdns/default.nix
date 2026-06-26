@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -14,15 +15,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nextdns";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
     tag = finalAttrs.version;
-    hash = "sha256-jZ+ULAlqaOnVWEHDPzIxIFjx+4eC3jMlXyX0QhfZUYM=";
+    hash = "sha256-QCiosQHxuwDxztXMEkEosob8M2NMtnlGI33m5oAkaBw=";
   };
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ setuptools ];
 
@@ -32,6 +35,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-error-for-skips

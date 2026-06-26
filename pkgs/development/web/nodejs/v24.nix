@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -24,9 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.13.0";
-  sha256 = "320fe909cbb347dcf516201e4964ef177b8138df9a7f810d0d54950481b3158b";
+  version = "24.16.0";
+  sha256 = "2ff84a6de70b6165290111b0fc656ded1ad207a799816fe720cc7c31232df30f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -58,6 +56,13 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # Patch for nghttp2 1.69 support
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
@@ -68,10 +73,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # see: https://github.com/nodejs/node/issues/61025
-      ./sab-test-32bit.patch
     ];
 }

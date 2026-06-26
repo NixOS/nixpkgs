@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherape";
-  version = "0.9.21";
+  version = "0.9.22";
   src = fetchurl {
     url = "mirror://sourceforge/etherape/etherape-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-SckN87uIDTxg36xERMqPxdaLqPNrgg7V+Hc4HJoHF1w=";
+    sha256 = "sha256-6UxVArQKeyKMCsptMa/eyQELx/0QG6ZIpiacEBXnIGs=";
   };
 
   strictDeps = true;

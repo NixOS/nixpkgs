@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gradle-completion";
-  version = "9.3.1";
+  version = "9.5.0";
 
   src = fetchFromGitHub {
     owner = "gradle";
     repo = "gradle-completion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PeX8ygojftjXGqeRWvPOm/FLlCCH0kikF/MO3olKbKg=";
+    hash = "sha256-8UwIrMfomyyIgw5MCfrpqtX0KHrn5ELU8eG0mWCX28o=";
   };
 
   nativeBuildInputs = [

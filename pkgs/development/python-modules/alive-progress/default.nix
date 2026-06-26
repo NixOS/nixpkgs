@@ -32,9 +32,9 @@ buildPythonPackage rec {
     mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     about-time
     graphemeu
   ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
     homepage = "https://github.com/rsalmei/alive-progress";
-    changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rsalmei/alive-progress/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
   };

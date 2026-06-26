@@ -65,14 +65,14 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef";
-  version = "1.10.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     fetchSubmodules = true;
     tag = finalAttrs.version;
-    hash = "sha256-qa0ULmE15lV2vkyXPNW9kSISQZEANrjwJwykTiifk5Q=";
+    hash = "sha256-SAp6XAE3fKTR27xYrdkNHneYDGJW1+XJdX6eBI9+EY0=";
   };
 
   buildInputs = [

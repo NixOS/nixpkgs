@@ -36,5 +36,4 @@
     "CFLAGS_KERNEL=-I${clangLib}/lib/clang/${majorVer}/include"
   ]
 )
-++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
 ++ extraMakeFlags

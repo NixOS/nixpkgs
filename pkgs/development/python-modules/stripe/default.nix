@@ -3,21 +3,21 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  setuptools,
+  flit-core,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "12.5.1";
+  version = "15.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VAfQksNVwxOT52fS3LLVqMOYDKqaBzrLMtDMs8AbBLU=";
+    hash = "sha256-WCGoAqv3C+kA17G2u2CWl8wlyapSHrhkMOaLmU2sn3g=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     requests

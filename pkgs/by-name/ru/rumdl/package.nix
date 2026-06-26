@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
-  version = "0.1.22";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pOSsd/U/KdvhK/NTprFRzv0jROEeAjbboXr5ik1KFJA=";
+    hash = "sha256-cOoZWcioSv/iUMiKNqeMqHDj5BIOnunxXiJzrWlugc4=";
   };
 
-  cargoHash = "sha256-t/71aCc1lXIdYjP0g0nvjkMfHtoygAlpBEqfebLes7c=";
+  cargoHash = "sha256-imw1v9oRlw56Qp6zAgSNuh8NKTeEvDZ1R8I/E42Eb58=";
 
   cargoBuildFlags = [
     "--bin=rumdl"
@@ -34,15 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   useNextest = true;
 
   cargoTestFlags = [
-    "--bins"
-
-    # Building all tests takes too long, and filtering by profile does not solve it.
-    # It also causes flaky results on Darwin in Hydra.
-    "--test"
-    "cli_*"
+    "--lib"
 
     # Prefer the "smoke" profile over "ci" to exclude flaky tests: https://github.com/rvben/rumdl/pull/341
     "--profile"

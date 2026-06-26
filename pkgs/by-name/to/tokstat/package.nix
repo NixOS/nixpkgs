@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokstat";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = "tokstat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J144les0gxAFt34+r2hcikIyLKm+A1p8zNg+FljZ41o=";
+    hash = "sha256-JXjQiPhkkSJh4oWVqTq3lJdVYaknPDCnZ7L+K1vVb/4=";
   };
 
-  cargoHash = "sha256-llS2UrJ9B+JSNkBUYioEEbe36lGgIr3ifjBXgPhTRnE=";
+  cargoHash = "sha256-WtKyq09GRQvPvvw1bfGYCKxQpW6MRR2DOWJ/tC+QJuA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # For keyring support
-  PKG_CONFIG_PATH = lib.optionalString stdenv.hostPlatform.isLinux "${dbus.dev}/lib/pkgconfig";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    PKG_CONFIG_PATH = "${dbus.dev}/lib/pkgconfig";
+  };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Generate shell completions

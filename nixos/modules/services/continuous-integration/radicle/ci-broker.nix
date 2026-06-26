@@ -37,7 +37,7 @@ let
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.teams = [ lib.teams.radicle ];
 
   options.services.radicle.ci.broker = {
     enable = lib.mkEnableOption "radicle-ci-broker";
@@ -135,7 +135,7 @@ in
       };
       description = ''
         Configuration of radicle-ci-broker.
-        See <https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
+        See <https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
       '';
       default = { };
       example = lib.literalExpression ''
@@ -204,7 +204,12 @@ in
           RuntimeDirectory = "radicle-ci-broker";
           WorkingDirectory = "/run/radicle-ci-broker";
 
-          BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths;
+          ImportCredential = config.systemd.services.radicle-node.serviceConfig.ImportCredential or [ ];
+          LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
+
+          BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths ++ [
+            "/run/credentials/radicle-ci-broker.service/dev.radicle.node.secret:/var/lib/radicle/keys/radicle"
+          ];
           ReadWritePaths = [ RAD_HOME ];
 
           ExecStart = "${lib.getExe' cfg.package "cib"} --config ${configFile} process-events";

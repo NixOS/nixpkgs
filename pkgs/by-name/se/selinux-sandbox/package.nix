@@ -2,34 +2,37 @@
   lib,
   stdenv,
   fetchurl,
+  gettext,
   bash,
   coreutils,
   python3,
+  python3Packages,
   libcap_ng,
   policycoreutils,
   selinux-python,
   dbus,
   xorg-server,
+  xwayland,
   openbox,
   xmodmap,
   libselinux,
+  setools,
 }:
 
-# this is python3 only as it depends on selinux-python
-
-with python3.pkgs;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-sandbox";
-  version = "3.3";
+  version = "3.10";
   inherit (policycoreutils) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/selinux-sandbox-${version}.tar.gz";
-    sha256 = "0rw8pxfqhl6ww4w31fbf4hi3zilh1n3b1rfjm7ra76mm78wfyylj";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/selinux-sandbox-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4r0T4YT3IYFVoz6pQygdAvRBwpcQQBW+69/G2Npv9cM=";
   };
 
-  nativeBuildInputs = [ wrapPython ];
+  nativeBuildInputs = [
+    gettext
+    python3Packages.wrapPython
+  ];
   buildInputs = [
     bash
     coreutils
@@ -43,29 +46,36 @@ stdenv.mkDerivation rec {
     libselinux
   ];
   propagatedBuildInputs = [
-    pygobject3
+    python3Packages.pygobject3
     selinux-python
+  ];
+  pythonPath = [
+    python3Packages.libselinux
+    setools
   ];
 
   postPatch = ''
     # Fix setuid install
-    substituteInPlace Makefile --replace "-m 4755" "-m 755"
+    substituteInPlace Makefile --replace-fail "-m 4755" "-m 755"
+    substituteInPlace po/Makefile --replace-fail /usr/bin/install install
     substituteInPlace sandboxX.sh \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
-      --replace "/usr/bin/cut" "${coreutils}/bin/cut" \
-      --replace "/usr/bin/Xephyr" "${xorg-server}/bin/Xepyhr" \
-      --replace "secon" "${policycoreutils}/bin/secon"
+      --replace-fail "#!/bin/bash" "#!${bash}/bin/bash" \
+      --replace-fail "/usr/share/sandbox/start" "${placeholder "out"}/share/sandbox/start" \
+      --replace-fail "/usr/bin/cut" "${coreutils}/bin/cut" \
+      --replace-fail "/usr/bin/Xephyr" "${xorg-server}/bin/Xepyhr" \
+      --replace-fail "/usr/bin/Xwayland" "${xwayland}/bin/Xwayland" \
+      --replace-fail "secon" "${policycoreutils}/bin/secon"
     substituteInPlace sandbox \
-      --replace "/usr/sbin/seunshare" "$out/bin/seunshare" \
-      --replace "/usr/share/sandbox" "$out/share/sandbox" \
-      --replace "/usr/share/locale" "${policycoreutils}/share/locale" \
-      --replace "/usr/bin/openbox" "${openbox}/bin/openbox" \
-      --replace "#!/bin/sh" "#!${bash}/bin/sh" \
-      --replace "dbus-" "${dbus}/bin/dbus-" \
-      --replace "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
-      --replace "/usr/bin/shred" "${coreutils}/bin/shred" \
-      --replace "/usr/bin/test" "${coreutils}/bin/test" \
+      --replace-fail "/usr/sbin/seunshare" "$out/bin/seunshare" \
+      --replace-fail "/usr/share/sandbox" "$out/share/sandbox" \
+      --replace-fail "/usr/share/locale" "${policycoreutils}/share/locale" \
+      --replace-fail "/usr/bin/openbox" "${openbox}/bin/openbox" \
+      --replace-fail "#!/bin/sh" "#!${bash}/bin/sh" \
+      --replace-fail "dbus-" "${dbus}/bin/dbus-" \
+      --replace-fail "/usr/bin/xmodmap" "${xmodmap}/bin/xmodmap" \
+      --replace-fail "/usr/bin/shred" "${coreutils}/bin/shred" \
+      --replace-fail "/usr/bin/test" "${coreutils}/bin/test"
+    patchShebangs --host sandboxX.sh sandbox start sandbox.init
   '';
 
   makeFlags = [
@@ -77,11 +87,21 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    # "sandbox: Requires a SELinux enabled system" or help, which includes sandbox
+    { $out/bin/sandbox --help || true; } 2>&1 | grep -Fm1 'sandbox'
+    runHook postInstallCheck
+  '';
+
   meta = {
+    mainProgram = "sandbox";
     description = "SELinux sandbox utility";
     license = lib.licenses.gpl2Only;
     homepage = "https://selinuxproject.org";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    inherit (selinux-python.meta) maintainers;
   };
-}
+})

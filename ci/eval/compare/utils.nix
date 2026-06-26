@@ -151,6 +151,50 @@ rec {
     lib.genAttrs [ "linux" "darwin" ] filterKernel;
 
   /*
+    Group an attrdiff-style mapping by a derived key such as platform or kernel.
+
+    Turns
+      {
+        added = [ "new-tool.aarch64-linux" "new-tool.x86_64-darwin" ];
+        changed = [ "updated-tool.x86_64-darwin" "shared-tool.x86_64-darwin" ];
+        removed = [ "removed-tool.aarch64-darwin" "shared-tool.aarch64-darwin" ];
+      }
+    into
+      {
+        aarch64-darwin = {
+          added = [ ];
+          changed = [ ];
+          removed = [ "removed-tool" "shared-tool" ];
+        };
+        aarch64-linux = {
+          added = [ "new-tool" ];
+          changed = [ ];
+          removed = [ ];
+        };
+        x86_64-darwin = {
+          added = [ "new-tool" ];
+          changed = [ "shared-tool" "updated-tool" ];
+          removed = [ ];
+        };
+      }
+    when used with `groupByPlatform`.
+  */
+  groupAttrdiffBy =
+    grouper: attrdiff:
+    let
+      groupedByKind = lib.mapAttrs (
+        _: packagePlatformPaths:
+        grouper (convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths))
+      ) attrdiff;
+      groups = uniqueStrings (lib.flatten (map builtins.attrNames (lib.attrValues groupedByKind)));
+    in
+    lib.genAttrs groups (group: lib.mapAttrs (_: byGroup: byGroup.${group} or [ ]) groupedByKind);
+
+  groupAttrdiffByPlatform = groupAttrdiffBy groupByPlatform;
+
+  groupAttrdiffByKernel = groupAttrdiffBy groupByKernel;
+
+  /*
     Maps an attrs of `kernel - rebuild counts` mappings to an attrs of labels
 
     Turns

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypck";
-  version = "0.9.10";
+  version = "0.9.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = finalAttrs.version;
-    hash = "sha256-UTUYYnXY+Wak4cd0fH1V5rdkJ/Aet0DSCHfd+PL+SBo=";
+    hash = "sha256-b8uTY4UtyhKN7JDvu/wC1jXAN/oKs2cJ6sSRBC22vS0=";
   };
 
   postPatch = ''

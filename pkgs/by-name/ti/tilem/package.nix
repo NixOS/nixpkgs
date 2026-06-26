@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     libticables2
     libticalcs2
   ];
-  patches = [ ./gcc14-fix.patch ];
+  patches = [
+    ./gcc14-fix.patch
+    ./gcc15-fix.patch
+  ];
   env.NIX_CFLAGS_COMPILE = toString [ "-lm" ];
   meta = {
     homepage = "http://lpg.ticalc.org/prj_tilem/";

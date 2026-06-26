@@ -3,34 +3,39 @@
   fetchurl,
   stdenv,
   autoPatchelfHook,
+  zlib,
 }:
 
 let
   inherit (stdenv) hostPlatform;
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/lab/2026.02.13-41ac335/linux/x64/agent-cli-package.tar.gz";
-      hash = "sha256-mJPEmBNbmsTfgt0b7abrSHJLI52WfLny5Es4uGyDwew=";
+      url = "https://downloads.cursor.com/lab/2026.06.19-20-24-33-653a7fb/linux/x64/agent-cli-package.tar.gz";
+      hash = "sha256-3xHrn1JaG2Leok/CiWtZezERrYqVcpZggXSD/zuWyy4=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/lab/2026.02.13-41ac335/linux/arm64/agent-cli-package.tar.gz";
-      hash = "sha256-ncXdGxOYlwud4Z3w5DMOmXUZ2hEcI/q4stm0yACuvy4=";
+      url = "https://downloads.cursor.com/lab/2026.06.19-20-24-33-653a7fb/linux/arm64/agent-cli-package.tar.gz";
+      hash = "sha256-6iiinIexiEKqXDXOHzKut1d0Mtg89A8zel0zeXna4Qc=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/lab/2026.02.13-41ac335/darwin/x64/agent-cli-package.tar.gz";
-      hash = "sha256-KcmGT6WCEc97qKqtZknFsUo9RX2SOuyjv6Jyfnrv3Os=";
+      url = "https://downloads.cursor.com/lab/2026.06.19-20-24-33-653a7fb/darwin/x64/agent-cli-package.tar.gz";
+      hash = "sha256-HgxyZ1TPLnyJJJuvi8VrQhm33/rzD9kCwxy4Mp0D9C0=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/lab/2026.02.13-41ac335/darwin/arm64/agent-cli-package.tar.gz";
-      hash = "sha256-ib0ZsXVc2YqAkPuMie4kwWIFrmNcD+1vX3tcvyA/PJw=";
+      url = "https://downloads.cursor.com/lab/2026.06.19-20-24-33-653a7fb/darwin/arm64/agent-cli-package.tar.gz";
+      hash = "sha256-Qa22+f5+x5+4sHesqp24d9GlKqPp6xBJG7BFxz6LUVU=";
     };
   };
 in
 stdenv.mkDerivation {
   pname = "cursor-cli";
-  version = "0-unstable-2026-02-13";
+  version = "2026.06.19-20-24-33-653a7fb";
 
   src = sources.${hostPlatform.system};
+
+  buildInputs = lib.optionals hostPlatform.isLinux [
+    zlib
+  ];
 
   nativeBuildInputs = lib.optionals hostPlatform.isLinux [
     autoPatchelfHook

@@ -10,7 +10,7 @@
   copyDesktopItems,
   desktopToDarwinBundle,
   jdk,
-  jdk17,
+  jdk25,
   hmclJdk ? jdk.override {
     # Required by jar file
     enableJavaFX = true;
@@ -21,17 +21,19 @@
   },
   minecraftJdks ? [
     hmclJdk
-    jdk17
+    jdk25
   ],
   libxxf86vm,
   libxtst,
   libxrandr,
   libxext,
   libxcursor,
+  libxkbcommon,
   libx11,
   xrandr,
   glib,
   libGL,
+  glfw3,
   glfw3-minecraft,
   openal,
   libglvnd,
@@ -43,15 +45,18 @@
   callPackage,
   gtk3,
 }:
+let
+  glfw3' = if stdenv.hostPlatform.isLinux then glfw3-minecraft else glfw3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.10.3";
+  version = "3.15.2";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-+xxDACa2ECbWaCUzK0b/rcRS49Hex4GZDcNNK/aEURs=";
+    hash = "sha256-rT+RruLMz/DTlYSOMv4D6ZCOVt36iqyx42v8ea4XSdM=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -66,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   terracottaBundleJava = fetchurl {
     name = "hmcl-terracotta-bundle-java-${finalAttrs.version}";
     url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.terracottaBundleJavaPath}";
-    hash = "sha256-QXjo/NiYQyJfan15hnvJlBir9s9R6H+jHsr+K9M1oTw=";
+    hash = "sha256-1o/CUDeywtDlhAxqInk77aUwGCCYeZ84VMIyouN49uU=";
   };
   macOSProviderJava = fetchurl {
     name = "hmcl-macos-provider-java-${finalAttrs.version}";
@@ -137,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDeps = [
     libGL
-    glfw3-minecraft
+    glfw3'
     glib
     openal
     libglvnd
@@ -148,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxxf86vm
     libxext
     libxcursor
+    libxkbcommon
     libxrandr
     libxtst
     libpulseaudio
@@ -188,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath (minecraftJdks ++ lib.optional stdenv.hostPlatform.isLinux xrandr)
       }" \
       --run 'cd $HOME' \
-      --prefix JAVA_TOOL_OPTIONS " " "-Dorg.lwjgl.glfw.libname=${lib.getLib glfw3-minecraft}/lib/libglfw.so" \
       ''${gappsWrapperArgs[@]}
   '';
 
@@ -208,6 +213,15 @@ stdenv.mkDerivation (finalAttrs: {
       Hello Minecraft! Launcher (HMCL) is a free, open-source, and cross-platform Minecraft launcher.
       It provides comprehensive support for managing multiple game versions and mod loaders,
       including Forge, NeoForge, Fabric, Quilt, LiteLoader, and OptiFine.
+
+      Starting with Minecraft 26.1, Wayland support can be enabled
+      by adding the JDK arguments -DMC_DEBUG_ENABLED and
+      -DMC_DEBUG_PREFER_WAYLAND. If needed, configure them in
+      HMCL -> Advanced Settings -> JVM Options -> JVM Arguments.
+
+      Users who are still on an older version and want to use Wayland should
+      enable HMCL -> Advanced Settings -> Workaround -> Use System GLFW.
+      Otherwise, keep it disabled.
     '';
     maintainers = with lib.maintainers; [
       daru-san

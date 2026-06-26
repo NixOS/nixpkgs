@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
-    install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
+    install -Dm644 build/jameica-icon.png $out/share/icons/hicolor/64x64/apps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

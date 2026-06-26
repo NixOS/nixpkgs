@@ -11,22 +11,24 @@
   gtk3,
   pkg-config,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.00";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
-    tag = finalAttrs.version;
-    hash = "sha256-+Ecvy4h0aC9Gra9BcN8L/vgpnflq6W7KcnYCVr8uaQQ=";
+    # Rewritten git history many times
+    rev = "424db6105588e9fe6b929b6731ace4556a12f172";
+    hash = "sha256-Bj0LK6si1ocGriRJf5GHZ/Z2xVhtyCIiv7H5+h8Dong=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-0fEy/YuZa7dENfL3y+NN4SLWYwOLmXqHHJEiU37AkX4=";
+  vendorHash = "sha256-KaTatNjSUnQC44UsV3LFOlkad8WqLfTPFFff8Dn13DA=";
 
   ldflags = [
     "-s"
@@ -46,12 +48,23 @@ buildGoModule (finalAttrs: {
     copyDesktopItems
     pkg-config
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ];
+
+  # git ls-files doesn't work as source is not a git repo
+  checkFlags =
+    let
+      skippedTests = [
+        "TestOldVersionLiteralsAreAllowlisted"
+        "TestLinuxAppIdentityContract"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   env.CGO_ENABLED = 1;
 
   postInstall = ''
-    mv $out/bin/Picocrypt $out/bin/picocrypt-ng-gui
+    mv $out/bin/picocrypt $out/bin/picocrypt-ng-gui
     install -Dm644 $src/images/key.svg $out/share/icons/hicolor/scalable/apps/picocrypt-ng.svg
   '';
 
@@ -71,7 +84,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Picocrypt-NG/Picocrypt-NG";
     changelog = "https://github.com/Picocrypt-NG/Picocrypt-NG/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      tbutter
+      ryand56
+    ];
     mainProgram = "picocrypt-ng-gui";
   };
 })

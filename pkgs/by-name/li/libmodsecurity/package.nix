@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmodsecurity";
-  version = "3.0.14";
+  version = "3.0.15";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SaeBO3+WvPhHiJoiOmijB0G3/QYxjAdxgeCVqESS+4U=";
+    hash = "sha256-gI874wkqy8VuwxUmIgb8d7fULJUQ+rKBBF492NtuRMY=";
     fetchSubmodules = true;
   };
 
@@ -81,6 +81,27 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "ssdeep_inc_path=\"\''${path}/include\"" "ssdeep_inc_path=\"${ssdeep}/include\""
     substituteInPlace modsecurity.conf-recommended \
       --replace "SecUnicodeMapFile unicode.mapping 20127" "SecUnicodeMapFile $out/share/modsecurity/unicode.mapping 20127"
+
+    # https://github.com/owasp-modsecurity/ModSecurity/blob/v3.0.15/build.sh#L6-L25
+    cd src
+    echo "noinst_HEADERS = \\" > headers.mk
+    ls -1 \
+        actions/*.h \
+        actions/ctl/*.h \
+        actions/data/*.h \
+        actions/disruptive/*.h \
+        actions/transformations/*.h \
+        debug_log/*.h \
+        audit_log/writer/*.h \
+        collection/backend/*.h \
+        operators/*.h \
+        parser/*.h \
+        request_body_processor/*.h \
+        utils/*.h \
+        variables/*.h \
+        engine/*.h \
+        *.h | tr "\012" " " >> headers.mk
+    cd ../
   '';
 
   postInstall = ''

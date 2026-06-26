@@ -40,19 +40,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    NIX_CFLAGS_LINK = toString [
+      "-L${lib.getLib openssl}/lib"
+      "-L${lib.getLib sqlite}/lib"
+    ];
   };
-
-  NIX_CFLAGS_LINK = [
-    "-L${lib.getLib openssl}/lib"
-    "-L${lib.getLib sqlite}/lib"
-  ];
 
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Matrix bot which can generate \"This Week in X\" like blog posts ";
     homepage = "https://github.com/haecker-felix/hebbot";
-    changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v2.1";
     license = with lib.licenses; [ agpl3Only ];
     mainProgram = "hebbot";
     maintainers = with lib.maintainers; [ a-kenji ];

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = "uvloop";
     tag = "v${version}";
-    hash = "sha256-LAOa+Oshssy4ZHl4eE6dn2DeZQ9d5tRDV5Hv9BCJJ3c=";
+    hash = "sha256-9NJugzxFycr1LLZXiDKbpeVcIvlCPHHIcYMp8jmffuE=";
   };
 
   postPatch = ''
@@ -73,11 +73,18 @@ buildPythonPackage rec {
     # https://github.com/MagicStack/uvloop/issues/709
     "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # SSL record layer failures & ConnectionResetError
+    "tests/test_tcp.py::Test_AIO_TCPSSL"
+    "tests/test_tcp.py::Test_UV_TCPSSL"
+    "tests/test_unix.py::Test_AIO_UnixSSL"
+    "tests/test_unix.py::Test_UV_UnixSSL"
   ];
 
   preCheck = ''
@@ -99,7 +106,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/MagicStack/uvloop/releases/tag/v${version}";
+    changelog = "https://github.com/MagicStack/uvloop/releases/tag/${src.tag}";
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = lib.licenses.mit;

@@ -6,31 +6,36 @@
   fetchFromGitHub,
   mock,
   pyparsing,
+  pysocks,
   pytest-cov-stub,
   pytest-forked,
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
+  setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httplib2";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.31.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httplib2";
     repo = "httplib2";
-    rev = "v${version}";
-    hash = "sha256-76gdiRbF535CEaNXwNqsVeVc0dKglovMPQpGsOkbd/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1OO3BNtOGJxV9L34C60CHv95LLH9Ih1lY0zQUD4wrnc=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
 
   nativeCheckInputs = [
     cryptography
     mock
+    pysocks
     pytest-cov-stub
     pytest-forked
     pytest-randomly
@@ -58,14 +63,13 @@ buildPythonPackage rec {
     "test_connection_close"
   ];
 
-  disabledTestPaths = [ "python2" ];
-
   pythonImportsCheck = [ "httplib2" ];
 
   meta = {
+    changelog = "https://github.com/httplib2/httplib2/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

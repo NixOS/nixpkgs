@@ -1,22 +1,21 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "librespeed-cli";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "librespeed";
     repo = "speedtest-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-njaQ/Be5rDCqkZJkij0nRi8aIO5uZYo8t3BjIcdKoCM=";
+    hash = "sha256-Q6JdkXl6EaM/Uh2u2xH4Afa+aFvssZh98J7uUtJv/H0=";
   };
 
-  vendorHash = "sha256-dmaq9+0FjqYh2ZLg8bu8cPJZ9QClcvwid1nmsftmrf0=";
+  vendorHash = "sha256-LXSCOAX3EwDBJ37mkS/BZCllgEai8tC7WFy6pebNAyo=";
 
   # Tests have additional requirements
   doCheck = false;
@@ -32,6 +31,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "librespeed-cli";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

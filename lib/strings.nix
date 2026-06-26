@@ -6,8 +6,6 @@ let
 
   inherit (builtins) length;
 
-  inherit (lib.trivial) warnIf;
-
   asciiTable = import ./ascii-table.nix;
 
 in
@@ -16,6 +14,7 @@ rec {
 
   inherit (builtins)
     compareVersions
+    concatMap
     elem
     elemAt
     filter
@@ -56,7 +55,7 @@ rec {
     # Type
 
     ```
-    join :: string -> [ string ] -> string
+    join :: String -> [String] -> String
     ```
 
     # Examples
@@ -78,7 +77,7 @@ rec {
     # Type
 
     ```
-    concatStrings :: [string] -> string
+    concatStrings :: [String] -> String
     ```
 
     # Examples
@@ -108,7 +107,7 @@ rec {
     # Type
 
     ```
-    concatMapStrings :: (a -> string) -> [a] -> string
+    concatMapStrings :: (a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -139,7 +138,7 @@ rec {
     # Type
 
     ```
-    concatImapStrings :: (int -> a -> string) -> [a] -> string
+    concatImapStrings :: (Int -> a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -209,7 +208,7 @@ rec {
     # Type
 
     ```
-    concatStringsSep :: string -> [string] -> string
+    concatStringsSep :: String -> [String] -> String
     ```
 
     # Examples
@@ -244,7 +243,7 @@ rec {
     # Type
 
     ```
-    concatMapStringsSep :: string -> (a -> string) -> [a] -> string
+    concatMapStringsSep :: String -> (a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -280,7 +279,7 @@ rec {
     # Type
 
     ```
-    concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
+    concatIMapStringsSep :: String -> (Int -> a -> String) -> [a] -> String
     ```
 
     # Examples
@@ -316,7 +315,7 @@ rec {
     # Type
 
     ```
-    concatMapAttrsStringSep :: String -> (String -> Any -> String) -> AttrSet -> String
+    concatMapAttrsStringSep :: String -> (String -> a -> String) -> { [String] :: a } -> String
     ```
 
     # Examples
@@ -337,7 +336,6 @@ rec {
 
   /**
     Concatenate a list of strings, adding a newline at the end of each one.
-    Defined as `concatMapStrings (s: s + "\n")`.
 
     # Inputs
 
@@ -347,7 +345,7 @@ rec {
     # Type
 
     ```
-    concatLines :: [string] -> string
+    concatLines :: [String] -> String
     ```
 
     # Examples
@@ -361,7 +359,7 @@ rec {
 
     :::
   */
-  concatLines = concatMapStrings (s: s + "\n");
+  concatLines = lines: optionalString (lines != [ ]) (concatStringsSep "\n" lines + "\n");
 
   /**
     Given string `s`, replace every occurrence of the string `from` with the string `to`.
@@ -380,7 +378,7 @@ rec {
     # Type
 
     ```
-    replaceString :: string -> string -> string -> string
+    replaceString :: String -> String -> String -> String
     ```
 
     # Examples
@@ -413,7 +411,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> string -> string
+    replicate :: Int -> String -> String
     ```
 
     # Examples
@@ -445,7 +443,7 @@ rec {
     # Type
 
     ```
-    trim :: string -> string
+    trim :: String -> String
     ```
 
     # Examples
@@ -487,7 +485,7 @@ rec {
     # Type
 
     ```
-    trimWith :: { start :: Bool; end :: Bool } -> String -> String
+    trimWith :: { start :: Bool; end :: Bool; } -> String -> String
     ```
 
     # Examples
@@ -548,7 +546,7 @@ rec {
     # Type
 
     ```
-    makeSearchPath :: string -> [string] -> string
+    makeSearchPath :: String -> [String] -> String
     ```
 
     # Examples
@@ -565,7 +563,10 @@ rec {
     :::
   */
   makeSearchPath =
-    subDir: paths: concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
+    subDir: paths:
+    concatStringsSep ":" (
+      concatMap (path: if path != null then [ (path + "/" + subDir) ] else [ ]) paths
+    );
 
   /**
     Construct a Unix-style search path by appending the given
@@ -588,7 +589,7 @@ rec {
     # Type
 
     ```
-    makeSearchPathOutput :: string -> string -> [package] -> string
+    makeSearchPathOutput :: String -> String -> [Derivation] -> String
     ```
 
     # Examples
@@ -603,8 +604,14 @@ rec {
     :::
   */
   makeSearchPathOutput =
-    output: subDir: pkgs:
-    makeSearchPath subDir (map (lib.getOutput output) pkgs);
+    output:
+    let
+      getOutput' = lib.getOutput output;
+    in
+    subDir: pkgs:
+    concatStringsSep ":" (
+      concatMap (path: if path != null then [ (getOutput' path + "/" + subDir) ] else [ ]) pkgs
+    );
 
   /**
     Construct a library search path (such as RPATH) containing the
@@ -618,7 +625,7 @@ rec {
     # Type
 
     ```
-    makeLibraryPath :: [package] -> string
+    makeLibraryPath :: [Derivation] -> String
     ```
 
     # Examples
@@ -649,7 +656,7 @@ rec {
     # Type
 
     ```
-    makeIncludePath :: [package] -> string
+    makeIncludePath :: [Derivation] -> String
     ```
 
     # Examples
@@ -680,7 +687,7 @@ rec {
     # Type
 
     ```
-    makeBinPath :: [package] -> string
+    makeBinPath :: [Derivation] -> String
     ```
 
     # Examples
@@ -707,7 +714,7 @@ rec {
     # Type
 
     ```
-    normalizePath :: string -> string
+    normalizePath :: String -> String
     ```
 
     # Examples
@@ -722,15 +729,17 @@ rec {
     :::
   */
   normalizePath =
+    let
+      startsWithSlash = hasSuffix "/";
+    in
     s:
-    warnIf (isPath s)
-      ''
+    if isPath s then
+      throw ''
         lib.strings.normalizePath: The argument (${toString s}) is a path value, but only strings are supported.
-            Path values are always normalised in Nix, so there's no need to call this function on them.
-            This function also copies the path to the Nix store and returns the store path, the same as "''${path}" will, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x + y) "" (stringToCharacters s)
+            Path values are always normalised in Nix, so there's no need to call this function on them.''
+    else
+      builtins.foldl' (x: y: if y == "/" && startsWithSlash x then x else x + y) "" (
+        stringToCharacters s
       );
 
   /**
@@ -748,7 +757,7 @@ rec {
     # Type
 
     ```
-    optionalString :: bool -> string -> string
+    optionalString :: Bool -> String -> String
     ```
 
     # Examples
@@ -780,7 +789,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: string -> string -> bool
+    hasPrefix :: String -> String -> Bool
     ```
 
     # Examples
@@ -797,17 +806,18 @@ rec {
     :::
   */
   hasPrefix =
-    pref: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath pref)
-      ''
+    pref:
+    let
+      lenPrefix = stringLength pref;
+    in
+    if isPath pref then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
-            There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
-      (substring 0 (stringLength pref) str == pref);
+    else
+      str: substring 0 lenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -823,7 +833,7 @@ rec {
     # Type
 
     ```
-    hasSuffix :: string -> string -> bool
+    hasSuffix :: String -> String -> Bool
     ```
 
     # Examples
@@ -840,20 +850,23 @@ rec {
     :::
   */
   hasSuffix =
-    suffix: content:
+    suffix:
     let
-      lenContent = stringLength content;
       lenSuffix = stringLength suffix;
     in
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath suffix)
-      ''
+    if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
-            There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix);
+        There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
+        This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      content:
+      let
+        lenContent = stringLength content;
+      in
+      lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /**
     Determine whether a string contains the given infix
@@ -869,7 +882,7 @@ rec {
     # Type
 
     ```
-    hasInfix :: string -> string -> bool
+    hasInfix :: String -> String -> Bool
     ```
 
     # Examples
@@ -890,16 +903,19 @@ rec {
     :::
   */
   hasInfix =
-    infix: content:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath infix)
-      ''
+    infix:
+    let
+      escapedInfix = escapeRegex infix;
+    in
+    if isPath infix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasInfix: The first argument (${toString infix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (builtins.match ".*${escapeRegex infix}.*" "${content}" != null);
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      content: builtins.match ".*${escapedInfix}.*" "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
@@ -918,7 +934,7 @@ rec {
     # Type
 
     ```
-    stringToCharacters :: string -> [string]
+    stringToCharacters :: String -> [String]
     ```
 
     # Examples
@@ -953,7 +969,7 @@ rec {
     # Type
 
     ```
-    stringAsChars :: (string -> string) -> string -> string
+    stringAsChars :: (String -> String) -> String -> String
     ```
 
     # Examples
@@ -985,7 +1001,7 @@ rec {
     # Type
 
     ```
-    charToInt :: string -> int
+    charToInt :: String -> Int
     ```
 
     # Examples
@@ -1018,7 +1034,7 @@ rec {
     # Type
 
     ```
-    escape :: [string] -> string -> string
+    escape :: [String] -> String -> String
     ```
 
     # Examples
@@ -1050,7 +1066,7 @@ rec {
     # Type
 
     ```
-    escapeC = [string] -> string -> string
+    escapeC :: [String] -> String -> String
     ```
 
     # Examples
@@ -1082,7 +1098,7 @@ rec {
     # Type
 
     ```
-    escapeURL :: string -> string
+    escapeURL :: String -> String
     ```
 
     # Examples
@@ -1184,7 +1200,7 @@ rec {
     # Type
 
     ```
-    escapeShellArg :: string -> string
+    escapeShellArg :: String -> String
     ```
 
     # Examples
@@ -1220,7 +1236,7 @@ rec {
     # Type
 
     ```
-    escapeShellArgs :: [string] -> string
+    escapeShellArgs :: [String] -> String
     ```
 
     # Examples
@@ -1247,7 +1263,7 @@ rec {
     # Type
 
     ```
-    string -> bool
+    isValidPosixName :: String -> Bool
     ```
 
     # Examples
@@ -1287,7 +1303,7 @@ rec {
     # Type
 
     ```
-    string -> ( string | [string] | { ${name} :: string; } ) -> string
+    toShellVar :: String -> (String | [String] | { [String] :: String }) -> String
     ```
 
     # Examples
@@ -1304,8 +1320,11 @@ rec {
     :::
   */
   toShellVar =
-    name: value:
-    lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
+    name:
+    if (!isValidPosixName name) then
+      throw "toShellVar: ${name} is not a valid shell variable name"
+    else
+      value:
       if isAttrs value && !isStringLike value then
         "declare -A ${name}=(${
           concatStringsSep " " (lib.mapAttrsToList (n: v: "[${escapeShellArg n}]=${escapeShellArg v}") value)
@@ -1313,8 +1332,7 @@ rec {
       else if isList value then
         "declare -a ${name}=(${escapeShellArgs value})"
       else
-        "${name}=${escapeShellArg value}"
-    );
+        "${name}=${escapeShellArg value}";
 
   /**
     Translate an attribute set `vars` into corresponding shell variable declarations
@@ -1329,8 +1347,8 @@ rec {
 
     ```
     toShellVars :: {
-      ${name} :: string | [ string ] | { ${key} :: string; };
-    } -> string
+      [String] :: String | [String] | { [String] :: String };
+    } -> String
     ```
 
     # Examples
@@ -1362,7 +1380,7 @@ rec {
     # Type
 
     ```
-    escapeNixString :: string -> string
+    escapeNixString :: String -> String
     ```
 
     # Examples
@@ -1389,7 +1407,7 @@ rec {
     # Type
 
     ```
-    escapeRegex :: string -> string
+    escapeRegex :: String -> String
     ```
 
     # Examples
@@ -1416,7 +1434,7 @@ rec {
     # Type
 
     ```
-    escapeNixIdentifier :: string -> string
+    escapeNixIdentifier :: String -> String
     ```
 
     # Examples
@@ -1467,7 +1485,7 @@ rec {
     # Type
 
     ```
-    escapeXML :: string -> string
+    escapeXML :: String -> String
     ```
 
     # Examples
@@ -1501,7 +1519,7 @@ rec {
     # Type
 
     ```
-    toLower :: string -> string
+    toLower :: String -> String
     ```
 
     # Examples
@@ -1528,7 +1546,7 @@ rec {
     # Type
 
     ```
-    toUpper :: string -> string
+    toUpper :: String -> String
     ```
 
     # Examples
@@ -1555,7 +1573,7 @@ rec {
     # Type
 
     ```
-    toSentenceCase :: string -> string
+    toSentenceCase :: String -> String
     ```
 
     # Examples
@@ -1576,9 +1594,9 @@ rec {
       (
         let
           firstChar = substring 0 1 str;
-          rest = substring 1 (stringLength str) str;
+          rest = substring 1 (-1) str; # -1 takes till the end of the string
         in
-        addContextFrom str (toUpper firstChar + toLower rest)
+        toUpper firstChar + toLower rest
       );
 
   /**
@@ -1593,7 +1611,7 @@ rec {
     # Type
 
     ```
-    toCamelCase :: string -> string
+    toCamelCase :: String -> String
     ```
 
     # Examples
@@ -1635,7 +1653,7 @@ rec {
         first = if length parts > 0 then toLower (head parts) else "";
         rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
       in
-      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+      concatStrings ([ first ] ++ rest)
     );
 
   /**
@@ -1664,7 +1682,7 @@ rec {
     # Type
 
     ```
-    addContextFrom :: string -> string -> string
+    addContextFrom :: String -> String -> String
     ```
 
     # Examples
@@ -1705,7 +1723,7 @@ rec {
     # Type
 
     ```
-    splitString :: string -> string -> [string]
+    splitString :: String -> String -> [String]
     ```
 
     # Examples
@@ -1722,13 +1740,11 @@ rec {
     :::
   */
   splitString =
-    sep: s:
+    sep:
     let
-      splits = builtins.filter builtins.isString (
-        builtins.split (escapeRegex (toString sep)) (toString s)
-      );
+      escapedSep = escapeRegex (toString sep);
     in
-    map (addContextFrom s) splits;
+    s: map (addContextFrom s) (filter isString (split escapedSep (toString s)));
 
   /**
     Splits a string into substrings based on a predicate that examines adjacent characters.
@@ -1759,7 +1775,7 @@ rec {
     # Type
 
     ```
-    splitStringBy :: (string -> string -> bool) -> bool -> string -> [string]
+    splitStringBy :: (String -> String -> Bool) -> Bool -> String -> [String]
     ```
 
     # Examples
@@ -1795,31 +1811,27 @@ rec {
     predicate: keepSplit: str:
     let
       len = stringLength str;
+      withContext = addContextFrom str;
 
       # Helper function that processes the string character by character
       go =
         pos: currentPart: result:
         # Base case: reached end of string
         if pos == len then
-          result ++ [ currentPart ]
+          result ++ [ (withContext currentPart) ]
         else
           let
             currChar = substring pos 1 str;
             prevChar = if pos > 0 then substring (pos - 1) 1 str else "";
-            isSplit = predicate prevChar currChar;
           in
-          if isSplit then
+          if predicate prevChar currChar then
             # Split here - add current part to results and start a new one
-            let
-              newResult = result ++ [ currentPart ];
-              newCurrentPart = if keepSplit then currChar else "";
-            in
-            go (pos + 1) newCurrentPart newResult
+            go (pos + 1) (if keepSplit then currChar else "") (result ++ [ (withContext currentPart) ])
           else
             # Keep building current part
             go (pos + 1) (currentPart + currChar) result;
     in
-    if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
+    if len == 0 then [ (withContext "") ] else go 0 "" [ ];
 
   /**
     Returns a string without the specified prefix, if the prefix matches.
@@ -1835,7 +1847,7 @@ rec {
     # Type
 
     ```
-    removePrefix :: string -> string -> string
+    removePrefix :: String -> String -> String
     ```
 
     # Examples
@@ -1852,25 +1864,24 @@ rec {
     :::
   */
   removePrefix =
-    prefix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath prefix)
-      ''
+    prefix:
+    let
+      preLen = stringLength prefix;
+    in
+    if isPath prefix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.removePrefix: The first argument (${toString prefix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        let
-          preLen = stringLength prefix;
-        in
-        if substring 0 preLen str == prefix then
-          # -1 will take the string until the end
-          substring preLen (-1) str
-        else
-          str
-      );
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      str:
+      if substring 0 preLen str == prefix then
+        # -1 will take the string until the end
+        substring preLen (-1) str
+      else
+        str;
 
   /**
     Returns a string without the specified suffix, if the suffix matches.
@@ -1886,7 +1897,7 @@ rec {
     # Type
 
     ```
-    removeSuffix :: string -> string -> string
+    removeSuffix :: String -> String -> String
     ```
 
     # Examples
@@ -1903,25 +1914,26 @@ rec {
     :::
   */
   removeSuffix =
-    suffix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath suffix)
-      ''
+    suffix:
+    let
+      sufLen = stringLength suffix;
+    in
+    if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.removeSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any suffix in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        let
-          sufLen = stringLength suffix;
-          sLen = stringLength str;
-        in
-        if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
-          substring 0 (sLen - sufLen) str
-        else
-          str
-      );
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      str:
+      let
+        sLen = stringLength str;
+      in
+      if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
+        substring 0 (sLen - sufLen) str
+      else
+        str;
 
   /**
     Returns true if string `v1` denotes a version older than `v2`.
@@ -1987,7 +1999,7 @@ rec {
 
     :::
   */
-  versionAtLeast = v1: v2: !versionOlder v1 v2;
+  versionAtLeast = v1: v2: compareVersions v2 v1 != 1;
 
   /**
     This function takes an argument `x` that's either a derivation or a
@@ -2125,7 +2137,7 @@ rec {
     # Type
 
     ```
-    cmakeOptionType :: string -> string -> string -> string
+    cmakeOptionType :: String -> String -> String -> String
     ```
 
     # Examples
@@ -2150,8 +2162,9 @@ rec {
         "LIST"
       ];
     in
-    type: feature: value:
+    type:
     assert (elem (toUpper type) types);
+    feature: value:
     assert (isString feature);
     assert (isString value);
     "-D${feature}:${toUpper type}=${value}";
@@ -2171,7 +2184,7 @@ rec {
     # Type
 
     ```
-    cmakeBool :: string -> bool -> string
+    cmakeBool :: String -> Bool -> String
     ```
 
     # Examples
@@ -2187,9 +2200,8 @@ rec {
   */
   cmakeBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
-    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+    cmakeOptionType "bool" condition (if flag then "TRUE" else "FALSE");
 
   /**
     Create a `"-D<feature>:STRING=<value>"` string that can be passed to typical
@@ -2207,7 +2219,7 @@ rec {
     # Type
 
     ```
-    cmakeFeature :: string -> string -> string
+    cmakeFeature :: String -> String -> String
     ```
 
     # Examples
@@ -2221,11 +2233,7 @@ rec {
 
     :::
   */
-  cmakeFeature =
-    feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    cmakeOptionType "string" feature value;
+  cmakeFeature = cmakeOptionType "string";
 
   /**
     Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
@@ -2242,7 +2250,7 @@ rec {
     # Type
 
     ```
-    mesonOption :: string -> string -> string
+    mesonOption :: String -> String -> String
     ```
 
     # Examples
@@ -2277,7 +2285,7 @@ rec {
     # Type
 
     ```
-    mesonBool :: string -> bool -> string
+    mesonBool :: String -> Bool -> String
     ```
 
     # Examples
@@ -2295,7 +2303,6 @@ rec {
   */
   mesonBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
     mesonOption condition (lib.boolToString flag);
 
@@ -2314,7 +2321,7 @@ rec {
     # Type
 
     ```
-    mesonEnable :: string -> bool -> string
+    mesonEnable :: String -> Bool -> String
     ```
 
     # Examples
@@ -2332,7 +2339,6 @@ rec {
   */
   mesonEnable =
     feature: flag:
-    assert (lib.isString feature);
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
@@ -2351,7 +2357,7 @@ rec {
     # Type
 
     ```
-    enableFeature :: bool -> string -> string
+    enableFeature :: Bool -> String -> String
     ```
 
     # Examples
@@ -2391,7 +2397,7 @@ rec {
     # Type
 
     ```
-    enableFeatureAs :: bool -> string -> string -> string
+    enableFeatureAs :: Bool -> String -> String -> String
     ```
 
     # Examples
@@ -2426,7 +2432,7 @@ rec {
     # Type
 
     ```
-    withFeature :: bool -> string -> string
+    withFeature :: Bool -> String -> String
     ```
 
     # Examples
@@ -2465,7 +2471,7 @@ rec {
     # Type
 
     ```
-    withFeatureAs :: bool -> string -> string -> string
+    withFeatureAs :: Bool -> String -> String -> String
     ```
 
     # Examples
@@ -2506,7 +2512,7 @@ rec {
     # Type
 
     ```
-    fixedWidthString :: int -> string -> string -> string
+    fixedWidthString :: Int -> String -> String -> String
     ```
 
     # Examples
@@ -2544,7 +2550,7 @@ rec {
     # Type
 
     ```
-    fixedWidthNumber :: int -> int -> string
+    fixedWidthNumber :: Int -> Int -> String
     ```
 
     # Examples
@@ -2572,7 +2578,7 @@ rec {
     # Type
 
     ```
-    floatToString :: float -> string
+    floatToString :: Float -> String
     ```
 
     # Examples
@@ -2611,7 +2617,7 @@ rec {
     # Type
 
     ```
-    isConvertibleWithToString :: a -> bool
+    isConvertibleWithToString :: Any -> Bool
     ```
   */
   isConvertibleWithToString =
@@ -2640,7 +2646,7 @@ rec {
     # Type
 
     ```
-    isStringLike :: a -> bool
+    isStringLike :: Any -> Bool
     ```
   */
   isStringLike = x: isString x || isPath x || x ? outPath || x ? __toString;
@@ -2656,7 +2662,7 @@ rec {
     # Type
 
     ```
-    isStorePath :: a -> bool
+    isStorePath :: Any -> Bool
     ```
 
     # Examples
@@ -2707,7 +2713,7 @@ rec {
     # Type
 
     ```
-    toInt :: string -> int
+    toInt :: String -> Int
     ```
 
     # Examples
@@ -2777,7 +2783,7 @@ rec {
     # Type
 
     ```
-    toIntBase10 :: string -> int
+    toIntBase10 :: String -> Int
     ```
 
     # Examples
@@ -2848,7 +2854,7 @@ rec {
     # Type
 
     ```
-    fileContents :: path -> string
+    fileContents :: Path -> String
     ```
 
     # Examples
@@ -2939,7 +2945,7 @@ rec {
     # Type
 
     ```
-    levenshtein :: string -> string -> int
+    levenshtein :: String -> String -> Int
     ```
 
     # Examples
@@ -2991,7 +2997,7 @@ rec {
     # Type
 
     ```
-    commonPrefixLength :: string -> string -> int
+    commonPrefixLength :: String -> String -> Int
     ```
   */
   commonPrefixLength =
@@ -3023,7 +3029,7 @@ rec {
     # Type
 
     ```
-    commonSuffixLength :: string -> string -> int
+    commonSuffixLength :: String -> String -> Int
     ```
   */
   commonSuffixLength =
@@ -3060,7 +3066,7 @@ rec {
     # Type
 
     ```
-    levenshteinAtMost :: int -> string -> string -> bool
+    levenshteinAtMost :: Int -> String -> String -> Bool
     ```
 
     # Examples

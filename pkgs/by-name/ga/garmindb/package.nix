@@ -7,20 +7,20 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "garmindb";
-  version = "3.6.7";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "garmindb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dosw6/n4GYYJR3KFP4RdNOUpACpRAfMMmyNj/J54TMk=";
+    hash = "sha256-iqZHm4C3MB4Qfkg8fBHu+fvt0tQ+2AyBziwrC5ZkcyU=";
   };
 
   pythonRelaxDeps = [
     "sqlalchemy"
     "cached-property"
-    "garth"
+    "garminconnect"
     "tqdm"
     "fitfile"
     "tcxfile"
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-dateutil
     cached-property
     tqdm
-    garth
+    garminconnect
     fitfile
     tcxfile
     idbutils

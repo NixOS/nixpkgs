@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gast";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "gast";
     tag = version;
-    hash = "sha256-zrbxW8qWhCY6tObP+/WDReoCnlCpMEzQucX2inpRTL4=";
+    hash = "sha256-paaXVdhstNlLc/zv/L1tHuv9IZ0Vz/vz2x2y2ePpXRc=";
   };
 
   build-system = [ setuptools ];

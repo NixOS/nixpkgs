@@ -20,11 +20,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "coreutils-static";
-  version = "9.9";
+  version = "9.10";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.gz";
-    hash = "sha256-kacZ/Pkj3mhgFvLI0ISovh95PzQXOGEnPEZo98Za+Uo=";
+    hash = "sha256-4L3h+2hQlEf8cjzyUX6KjH+kZ2mRm7dJDtNQoukjhWI=";
   };
 
   configureFlags = [
@@ -32,6 +32,7 @@ let
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
     "--disable-dependency-tracking"
+    "--disable-nls"
     # libstdbuf.so fails in static builds
     "--enable-no-install-program=stdbuf"
     "--enable-single-binary=symlinks"
@@ -76,5 +77,8 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
+
+    # Remove documentation not needed in the bootstrap chain.
+    rm -rf $out/share/info $out/share/man
   ''

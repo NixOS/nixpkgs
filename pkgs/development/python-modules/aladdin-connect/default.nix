@@ -3,21 +3,24 @@
   requests,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aladdin-connect";
   version = "0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shoejosh";
     repo = "aladdin-connect";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kLvMpSGa5WyDOH3ejAJyFGsB9IiMXp+nvVxM/ZkxyFw=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
@@ -27,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Genie Aladdin Connect devices";
     homepage = "https://github.com/shoejosh/aladdin-connect";
-    changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${version}";
+    changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -56,7 +56,11 @@ stdenv.mkDerivation {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/Applications"
-    mv bin/chatterino.app "$out/Applications/"
+    mkdir -p $out/Applications
+    mv $out/bin/chatterino.app $out/Applications
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -s $out/Applications/chatterino.app/Contents/MacOS/chatterino $out/bin/chatterino
   '';
 }

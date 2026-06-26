@@ -2,20 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "classify-imports";
   version = "4.2.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "classify-imports";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "classify_imports" ];
 
@@ -27,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "ucarp";
   };
 })

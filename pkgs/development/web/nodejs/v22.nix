@@ -6,7 +6,6 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -17,14 +16,15 @@ let
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { patch_tools = false; }
+      [
+        ./gyp-patches-set-fallback-value-for-CLT-darwin.patch
+      ]
     else
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "22.22.0";
-  sha256 = "4c138012bb5352f49822a8f3e6d1db71e00639d0c36d5b6756f91e4c6f30b683";
+  version = "22.23.1";
+  sha256 = "b27385d6845089bdb91285d94b06c2a5cf1c37f8173a3c4e10824cc1ffadeaba";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -63,13 +63,6 @@ buildNodejs {
       (fetchpatch2 {
         url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
         hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
-      })
-      # update tests for nghttp2 1.65
-      ./deprecate-http2-priority-signaling.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
-        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
-        includes = [ "test/*" ];
       })
     ];
 }

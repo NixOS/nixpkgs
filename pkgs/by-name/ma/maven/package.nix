@@ -47,17 +47,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         // {
           overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
         };
+
+      # Exposed so other Maven versions (e.g. maven_4) can reuse the builder
+      # without duplicating build-maven-package.nix.
+      mkBuildMavenPackage =
+        maven:
+        makeOverridableMavenPackage (
+          callPackage ./build-maven-package.nix {
+            inherit maven;
+          }
+        );
     in
     {
       buildMaven = callPackage ./build-maven.nix {
         maven = finalAttrs.finalPackage;
       };
 
-      buildMavenPackage = makeOverridableMavenPackage (
-        callPackage ./build-maven-package.nix {
-          maven = finalAttrs.finalPackage;
-        }
-      );
+      inherit mkBuildMavenPackage;
+
+      buildMavenPackage = mkBuildMavenPackage finalAttrs.finalPackage;
+
       tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
@@ -78,13 +87,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    changelog = "https://maven.apache.org/docs/${finalAttrs.version}/release-notes.html";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ];
+    maintainers = with lib.maintainers; [
+      tricktron
+      britter
+    ];
     teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };

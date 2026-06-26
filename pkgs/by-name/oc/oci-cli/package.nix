@@ -1,9 +1,11 @@
 {
   lib,
   fetchFromGitHub,
+  fetchPypi,
   python3,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -12,27 +14,31 @@ let
     packageOverrides = self: super: {
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
         version = "0.10.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
-          hash = "";
-        };
+        src =
+          fetchPypi {
+            pname = "jmespath";
+            inherit version;
+            sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+          }
+          // {
+            tag = version;
+          };
         doCheck = false;
       });
     };
   };
 in
 
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "oci-cli";
-  version = "3.73.2";
+  version = "3.88.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
-    tag = "v${version}";
-    hash = "sha256-se8xUSamPI4K6JQ+eUjCgnB2E5j9iRVNqam4vdRELPA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jjh6YNIOkHA1XaejIFl9JU9ktAr58aMGt4Zu4ZVaXFQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -56,6 +62,7 @@ py.pkgs.buildPythonApplication rec {
     retrying
     six
     terminaltables
+    urllib3
   ];
 
   pythonRelaxDeps = [
@@ -66,6 +73,8 @@ py.pkgs.buildPythonApplication rec {
     "prompt-toolkit"
     "pyOpenSSL"
     "terminaltables"
+    "certifi"
+    "pytz"
   ];
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
@@ -98,18 +107,22 @@ py.pkgs.buildPythonApplication rec {
     "oci_cli"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    changelog = "https://github.com/oracle/oci-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       upl
     ];
+    mainProgram = "oci";
     maintainers = with lib.maintainers; [
       ilian
       FKouhai
     ];
   };
-}
+})

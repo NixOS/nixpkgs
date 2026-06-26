@@ -5,24 +5,22 @@
   meson,
   ninja,
   gettext,
-  gtk2,
+  gtk3,
   ncurses,
   openssl,
   pkg-config,
   readline,
-  nix-update-script,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gftp";
-  version = "2.9.1b-unstable-2025-05-12";
+  version = "2.9.1b-unstable-2026-03-30";
 
   src = fetchFromGitHub {
     owner = "masneyb";
     repo = "gftp";
-    rev = "48114635f7b7b1f9a5eda985021ea53b10a7a030";
-    hash = "sha256-unTsd2xX8Y71ItE3gYHoxUPgViK/xhZdx0IQYvDPaEc=";
+    rev = "f64d27b116be1fc444e0f50ec375847b72df65f7";
+    hash = "sha256-2CVRIrSOBi1AUoEKiyYhMmGcIIBnwMQ3EQsgBIvlXEs=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk2
+    gtk3
     ncurses
     openssl
     readline

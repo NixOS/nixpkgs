@@ -13,7 +13,7 @@
   lib,
   fetchurl,
   makeWrapper,
-  python312,
+  python314,
   openssl,
   jq,
   callPackage,
@@ -25,25 +25,9 @@
 }:
 
 let
-  python3 = python312;
-  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
-  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
-  pythonCustom = python3.override {
-    self = pythonCustom;
-    packageOverrides = _: super: {
-      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-        version = "24.2.1";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
-        };
-        # 36 failed tests
-        doCheck = false;
-      });
-    };
-  };
+  python3 = python314;
 
-  pythonEnv = pythonCustom.withPackages (
+  pythonEnv = python3.withPackages (
     p:
     with p;
     [
@@ -88,9 +72,6 @@ stdenv.mkDerivation rec {
     ./gsutil-disable-updates.patch
   ];
 
-  # Prevent Python from writing bytecode to ensure build determinism
-  env.PYTHONDONTWRITEBYTECODE = "1";
-
   installPhase = ''
     runHook preInstall
 
@@ -98,7 +79,15 @@ stdenv.mkDerivation rec {
     if [ -d platform/bundledpythonunix ]; then
       rm -r platform/bundledpythonunix
     fi
+    rm -f .install/bundled-python*
     cp -R * .install $out/google-cloud-sdk/
+
+    # Resolve readlink noise in shell initialization
+    # We patch the source script before wrapProgram renames it.
+    # This ensures that the resulting .gcloud-wrapped binary contains the fix.
+    substituteInPlace "$out/google-cloud-sdk/bin/gcloud" \
+      --replace-fail 'while _cloudsdk_link=$(readlink "$_cloudsdk_path")' 'while _cloudsdk_link=$(readlink "$_cloudsdk_path" 2>/dev/null)' \
+      --replace-fail 'CLOUDSDK_ROOT_DIR=$(_cloudsdk_root_dir "$0")' 'CLOUDSDK_ROOT_DIR=$(realpath "$(dirname "$0")/..")'
 
     mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
@@ -110,7 +99,7 @@ stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
-            --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
+            --set CLOUDSDK_PYTHON_ARGS "-S -B -W ignore" \
             --prefix PYTHONPATH : "${pythonEnv}/${python3.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
@@ -161,6 +150,36 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    # create cached byte-code at build time, see https://docs.python.org/3/library/compileall.html
+    # the excluded files contain python 2 syntax that fails to compile with python 3
+    find $out/google-cloud-sdk -name "*.py" \
+      -not -path "*/lib/third_party/yaml/scanner.py" \
+      -not -path "*/lib/third_party/yaml/error.py" \
+      -not -path "*/lib/third_party/yaml/constructor.py" \
+      -not -path "*/lib/third_party/yaml/parser.py" \
+      -not -path "*/lib/third_party/yaml/reader.py" \
+      -not -path "*/lib/third_party/yaml/loader.py" \
+      -not -path "*/lib/third_party/yaml/resolver.py" \
+      -not -path "*/yaml/lib2/scanner.py" \
+      -not -path "*/yaml/lib2/constructor.py" \
+      -not -path "*/yaml/lib2/reader.py" \
+      -not -path "*/yaml/lib2/resolver.py" \
+      -not -path "*/gcloud_crcmod/python2/crcmod.py" \
+      -not -path "*/gcloud_crcmod/python2/_crcfunpy.py" \
+      -not -path "*/concurrent/python2/concurrent/futures/_base.py" \
+      -not -path "*/third_party/gflags/__init__.py" \
+      -not -path "*/third_party/gflags/setup.py" \
+      -not -path "*/third_party/gflags/gflags2man.py" \
+      -not -path "*/third_party/apitools/setup.py" \
+      -not -path "*/third_party/apitools/ez_setup.py" \
+      -not -path "*/lib/third_party/pytz/lazy.py" \
+      -not -path "*/lib/third_party/fancy_urllib/__init__.py" \
+      -not -path "*/oauth2client/_pkce.py" \
+      -not -path "*/ext-runtime/nodejs/test/runtime_test.py" \
+      -exec ${pythonEnv}/bin/python -OO -m compileall {} +
+  '';
+
   doInstallCheck = true;
   installCheckPhase = ''
     # Avoid trying to write logs to homeless-shelter
@@ -181,6 +200,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
+    tests.gke-gcloud-auth-plugin = withExtraComponents [
+      components.gke-gcloud-auth-plugin
+    ];
     updateScript = ./update.sh;
   };
 

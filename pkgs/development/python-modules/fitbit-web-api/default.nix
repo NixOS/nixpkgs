@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fitbit-web-api";
-  version = "2.13.5";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "fitbit-web-api";
     tag = "v${version}";
-    hash = "sha256-HqlySvC6EGnetrh0t8shapS/ggSRVoI8xPXta2eBqlk=";
+    hash = "sha256-1XqUhQQRTlEOIbZGzRx9CvJVAE50Enu+4fQXpOgNPdA=";
   };
 
   build-system = [ hatchling ];

@@ -2,24 +2,24 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "scaleway-cli";
-  version = "2.52.0";
+  version = "2.57.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-92OSk0oJQrLAllbfsJB9FUC8C+0jLQLjw9wYHG+Lc98=";
+    hash = "sha256-5inoRcHXw6xOAkm2O0k9q3fO2KtFJtac1odSEvsq8Nc=";
   };
 
-  vendorHash = "sha256-1pi9WQZ6dwCVsJbpA+seIzRn5lFFOjYUvt8MKUHKcVg=";
+  vendorHash = "sha256-b5Zn4Jz251oTy92BunBK/5pbP5Mw/45qZn6bKH451t8=";
 
   env.CGO_ENABLED = 0;
 
@@ -42,6 +42,16 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  checkFlags = [
+    # This subtest hardcodes a go-humanize relative-time string ("35 years ago")
+    # for a fixed 1990 date instead of computing it, so it breaks once enough
+    # wall-clock time passes (now "36 years ago"). go-humanize truncates the
+    # elapsed time by a fixed 360-day year (Year = 12*Month, Month = 30*Day), so
+    # diff/Year rolled 35 -> 36 on 2026-05-12. Upstream keeps bumping the
+    # literal by hand rather than fixing it, so skip the time-dependent subtest.
+    "-skip=^TestMarshal/structWithMapsInSection$"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/scw autocomplete script basename=scw shell=bash >scw.bash

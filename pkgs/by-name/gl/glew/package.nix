@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cmake,
   libGLU,
   libxmu,
@@ -15,38 +14,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glew";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
-    sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
+    hash = "sha256-tkeQ+UuSas1+j4TF1gAKhstDlnvR5oiwMIkHl5nJ6Ik=";
   };
 
   outputs = [
     "bin"
     "out"
     "dev"
-  ];
-
-  patches = [
-    # https://github.com/nigels-com/glew/pull/342
-    (fetchpatch {
-      url = "https://github.com/nigels-com/glew/commit/966e53fa153175864e151ec8a8e11f688c3e752d.diff";
-      hash = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
-    })
-
-    # don't make EGL support disable GLX, use the same patch as ArchLinux
-    # https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/blob/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch
-    (fetchpatch {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/raw/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch?inline=false";
-      hash = "sha256-IG3FPhhaor1kshEH3Kr8yzIHqBhczRwCqH7ZeDwlzGE=";
-    })
-
-    # cmake 4 compatibility
-    (fetchpatch {
-      url = "https://github.com/nigels-com/glew/commit/a4d8b2a2a30576eb1b984ba5d573702acfc5b92e.diff";
-      hash = "sha256-S6Om0A4y5po2rHl8OXcue2zOcBpCmBZYvf10LfKEYfI=";
-    })
   ];
 
   nativeBuildInputs = [ cmake ];

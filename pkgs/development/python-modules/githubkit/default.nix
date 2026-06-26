@@ -3,69 +3,110 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   hishel,
   httpx,
   pydantic,
   pyjwt,
   pytest-cov-stub,
-  pytest-xdist,
   pytestCheckHook,
   typing-extensions,
   uv-build,
 }:
 
-buildPythonPackage rec {
+let
+
+  mkGithubkitSchema =
+    {
+      pname,
+      version,
+      src,
+    }:
+    buildPythonPackage {
+      inherit pname version src;
+      sourceRoot = "${src.name}/packages/${pname}";
+      pyproject = true;
+
+      # circular dependencies
+      pythonRemoveDeps = [
+        "githubkit"
+        "githubkit-schemas"
+      ];
+
+      build-system = [ uv-build ];
+    };
+
+in
+
+buildPythonPackage (finalAttrs: {
   pname = "githubkit";
-  version = "0.13.5";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    tag = "v${version}";
-    hash = "sha256-YKL31M1H4LBE29xmi6GfX3tTBGxS9yUvHQEiWke3ANA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zVUJWwmRx/2phkDWwWyazhPdwthsMMcE0S7E4R1TebQ=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/yanyongyu/githubkit/commit/2817664d904541242d4cedf7aae85cd4c4b606e2.patch?full_index=1";
-      hash = "sha256-mmtjlebHZpHX457frSOe88tsUo7iNdSIUynGZjcjuw4=";
-    })
-  ];
+  passthru.schemas = {
+    githubkit-schemas = mkGithubkitSchema {
+      pname = "githubkit-schemas";
+      version = "26.6.14";
+      inherit (finalAttrs) src;
+    };
 
-  pythonRelaxDeps = [ "hishel" ];
+    githubkit-schemas-2022-11-28 = mkGithubkitSchema {
+      pname = "githubkit-schemas-2022-11-28";
+      version = "26.6.14";
+      inherit (finalAttrs) src;
+    };
+
+    githubkit-schemas-2026-03-10 = mkGithubkitSchema {
+      pname = "githubkit-schemas-2026-03-10";
+      version = "26.6.14";
+      inherit (finalAttrs) src;
+    };
+
+    githubkit-schemas-ghec-2022-11-28 = mkGithubkitSchema {
+      pname = "githubkit-schemas-ghec-2022-11-28";
+      version = "26.6.14";
+      inherit (finalAttrs) src;
+    };
+
+    githubkit-schemas-ghec-2026-03-10 = mkGithubkitSchema {
+      pname = "githubkit-schemas-ghec-2026-03-10";
+      version = "26.6.14";
+      inherit (finalAttrs) src;
+    };
+  };
 
   build-system = [ uv-build ];
 
   dependencies = [
-    hishel
+    anyio
     httpx
-    pydantic
+    hishel
     typing-extensions
-  ];
+    pydantic
+  ]
+  ++ hishel.optional-dependencies.async
+  ++ hishel.optional-dependencies.httpx
+  # for simplicity we just propagate all schemas, rather than litter pkgs/development/python-modules
+  ++ lib.attrValues finalAttrs.passthru.schemas;
 
   optional-dependencies = {
-    all = [
-      anyio
-      pyjwt
-    ];
+    all = [ pyjwt ];
     jwt = [ pyjwt ];
     auth-app = [ pyjwt ];
-    auth-oauth-device = [ anyio ];
-    auth = [
-      anyio
-      pyjwt
-    ];
+    auth-oauth-device = [ ];
+    auth = [ pyjwt ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-    pytest-xdist
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   pythonImportsCheck = [ "githubkit" ];
 
@@ -82,8 +123,8 @@ buildPythonPackage rec {
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

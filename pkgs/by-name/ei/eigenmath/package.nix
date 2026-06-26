@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   buildPackages,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eigenmath";
-  version = "340-unstable-2025-05-05";
+  version = "350";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
     repo = "eigenmath";
-    rev = "94fee6b02ebd4cd718dd9ea45583a6af2129dd28";
-    hash = "sha256-2bdO0nRXhDZlEmGRfNf6g9zwc65Ih9Ymlo6PxlpAxes=";
+    tag = finalAttrs.version;
+    hash = "sha256-Depc6mzPK6FEGTUo2BmXoWlyzjQDU8Hiodp5UjxKlQE=";
   };
 
   checkPhase =
@@ -23,13 +23,13 @@ stdenv.mkDerivation {
     in
     ''
       runHook preCheck
-
-      for testcase in selftest1 selftest2; do
-        ${emulator} ./eigenmath "test/$testcase"
-      done
-
+      echo -e "clear\nstatus\nexit" >> test/selftest
+      ${emulator} ./eigenmath "test/selftest"
       runHook postCheck
     '';
+
+  # https://github.com/georgeweigt/eigenmath/issues/32
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   installPhase = ''
     runHook preInstall
@@ -39,9 +39,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  passthru = {
-    updateScript = unstableGitUpdater { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Computer algebra system written in C";
@@ -51,4 +49,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.unix;
   };
-}
+})

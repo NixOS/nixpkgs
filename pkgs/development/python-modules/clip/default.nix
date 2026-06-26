@@ -4,6 +4,7 @@
   ftfy,
   lib,
   regex,
+  setuptools,
   torch,
   torchvision,
   tqdm,
@@ -12,7 +13,9 @@
 buildPythonPackage {
   pname = "clip";
   version = "unstable-2022-11-17";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
@@ -21,7 +24,9 @@ buildPythonPackage {
     hash = "sha256-GAitNBb5CzFVv2+Dky0VqSdrFIpKKtoAoyqeLoDaHO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ftfy
     regex
     torch

@@ -14,6 +14,7 @@
   libkrb5,
   libmongocrypt,
   libpq,
+  dart-sass,
   makeWrapper,
 }:
 let
@@ -25,20 +26,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.6.4";
+  version = "2.25.7";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-t3zwxyjiocVoq7wbH4WYiUggaZFHlV9/vzrIorH7jPc=";
+    hash = "sha256-V8CqEzCw4DcLPCao4HRXrJXFeID2+Ef8fNW1xd1b8Vs=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-vjgteuMd+lkEL9vT1Ngndk8G3Ad1esa1NBPpEHBFmDg=";
+    hash = "sha256-JS4OY6CmihsbJRyPszSlNUEViFKfLm2vu+G2upIoLW8=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
+    dart-sass
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
@@ -62,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     pushd node_modules/sqlite3
     node-gyp rebuild
@@ -135,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       gepbird
       AdrienLemaire
       sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

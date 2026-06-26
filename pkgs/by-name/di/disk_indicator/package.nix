@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "-Werror" ""
     # avoid host-specific options
     substituteInPlace Makefile --replace "-march=native" ""
+    # fix signal handler signature
+    substituteInPlace src/main.c --replace-fail "void handle_signal()" "void handle_signal(int sig)"
   '';
 
   postConfigure = ''

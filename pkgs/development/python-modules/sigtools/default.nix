@@ -2,33 +2,41 @@
   lib,
   attrs,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   mock,
   repeated-test,
   setuptools-scm,
   sphinx,
   unittestCheckHook,
+  pythonAtLeast,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigtools";
   version = "4.0.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
+  src = fetchFromGitHub {
+    owner = "epsy";
+    repo = "sigtools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q5Bzc6fgDJCqt0SA/C/mg2fbUFyXLcsRU+tSl8FdZdI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ attrs ];
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [
     mock
     repeated-test
     sphinx
     unittestCheckHook
+  ];
+
+  unittestFlags = lib.optionals (pythonAtLeast "3.14") [
+    "-s sigtools/tests"
+    # python314 only: NameError: name 'o' is not defined
+    "-k [!RoundTripTests.test_locals]"
   ];
 
   pythonImportsCheck = [ "sigtools" ];
@@ -39,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

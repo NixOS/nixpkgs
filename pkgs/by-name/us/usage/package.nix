@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.16.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1vcJKCtDZtbL0cRAEQ6MgWlESRpOchi6uYMyZi0U9zM=";
+    hash = "sha256-ZXjOuf8xjKtFnxzrb4mU6TBae75Nyl6zGllT9orbNMY=";
   };
 
-  cargoHash = "sha256-rhx09WclXiZtPGsmBCG9ShfWgo7YFKFSPHQpqy9wbtE=";
+  cargoHash = "sha256-78lTRHIy1VYJP3dxljfrsMh1MXT7dyVw2yxHNrGJJk0=";
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # has --include-bash-completion-lib so requires external lib downloaded on runtime
-    "--skip=test_bash_completion_integration"
+    "--skip=test_bash_completion_init_integration"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

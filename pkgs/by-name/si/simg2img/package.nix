@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
-      dezgeg
       arkivm
     ];
   };

@@ -8,6 +8,7 @@
   makeDesktopItem,
   libicns,
 
+  libGL,
   libxcursor,
   libxext,
   libxi,
@@ -21,19 +22,20 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "sourcegit";
-  version = "2025.34";
+  version = "2026.11";
 
   src = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O7HzbrcQGgP3mRSfqLxoHPswVW99S9chb7ZWBeEelsY=";
+    hash = "sha256-Tt0YgRnX7v2wqeK7/JiQiuRXIAB+pPy1yetfPlg5i9c=";
+    fetchSubmodules = true;
   };
 
   patches = [ ./fix-darwin-git-path.patch ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nugetDeps = ./deps.json;
 
@@ -53,8 +55,10 @@ buildDotnetModule (finalAttrs: {
 
   # these are dlopen-ed at runtime
   # libxi is needed for right-click support
+  # libGL is needed for GPU-accelerated rendering (without it, Avalonia falls back to software rendering)
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
+    libGL
     libxcursor
     libxext
     libxi

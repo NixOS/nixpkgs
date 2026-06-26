@@ -13,7 +13,7 @@
   libsecret,
   openjdk,
   sqlite,
-  unixODBC,
+  unixodbc,
   gtk2,
   libxtst,
   glibcLocales,
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk2
     sqlite
-    unixODBC
+    unixodbc
     libxtst
     glibcLocales
   ];

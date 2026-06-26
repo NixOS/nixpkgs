@@ -6,7 +6,6 @@
 }:
 {
   keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
-  keycloak-config-cli = callPackage ./keycloak-config-cli { };
   keycloak-discord = callPackage ./keycloak-discord { };
   keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };

@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "update-checker";
   version = "0.18.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     pname = "update_checker";

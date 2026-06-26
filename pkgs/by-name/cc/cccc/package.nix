@@ -1,30 +1,37 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cccc";
-  version = "3.1.4";
+  version = "3.2.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cccc/${version}/cccc-${version}.tar.gz";
-    sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
+  src = fetchFromGitHub {
+    owner = "sarnold";
+    repo = "cccc";
+    tag = finalAttrs.version;
+    sha256 = "sha256-5UgCz9zURD+LsMB3kLSdkS1zFOTCuU16hK253GFu9HU";
   };
 
   hardeningDisable = [ "format" ];
 
-  patches = [ ./cccc.patch ];
-
-  preConfigure = ''
-    substituteInPlace install/install.mak --replace /usr/local/bin $out/bin
-    substituteInPlace install/install.mak --replace MKDIR=mkdir "MKDIR=mkdir -p"
-  '';
   buildFlags = [
     "CCC=c++"
     "LD=c++"
   ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp cccc/cccc $out/bin/
+
+    runHook postInstall
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-register " + lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   meta = {
     description = "C and C++ Code Counter";
@@ -34,13 +41,9 @@ stdenv.mkDerivation rec {
       on various metrics of the code. Metrics supported include lines of code, McCabe's
       complexity and metrics proposed by Chidamber&Kemerer and Henry&Kafura.
     '';
-    homepage = "https://cccc.sourceforge.net/";
+    homepage = "https://github.com/sarnold/cccc";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
-    # The last successful Darwin Hydra build was in 2023
-    # On linux fails to build on gcc-15, needs porting to c23, but
-    # the upstream code did not update since 2006.
-    broken = true;
+    maintainers = with lib.maintainers; [ tbutter ];
   };
-}
+})

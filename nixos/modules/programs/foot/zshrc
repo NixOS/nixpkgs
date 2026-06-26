@@ -9,14 +9,11 @@ function chpwd-osc7-pwd() {
     (( ZSH_SUBSHELL )) || osc7-pwd
 }
 
-precmd() {
-    print -Pn "\e]133;A\e\\"
-}
-
 function precmd {
     if ! builtin zle; then
         print -n "\e]133;D\e\\"
     fi
+    print -Pn "\e]133;A\e\\"
 }
 
 function preexec {

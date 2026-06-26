@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywemo";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pywemo";
     repo = "pywemo";
     tag = finalAttrs.version;
-    hash = "sha256-IyUahdExD6YNl4vG/bogiLlO8JaRUEslmc5/ZAUMomQ=";
+    hash = "sha256-/F9MhPmWSLT/ieI21rzJXvjEkH8xBttJYPaQ1wcVWOk=";
   };
 
   build-system = [ poetry-core ];

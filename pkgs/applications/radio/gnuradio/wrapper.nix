@@ -56,6 +56,7 @@
   ],
   # Allow to add whatever you want to the wrapper
   extraMakeWrapperArgs ? [ ],
+  packageOverrides ? (self: super: { }),
 }:
 
 let
@@ -191,7 +192,12 @@ let
   );
 
   packages = import ../../../top-level/gnuradio-packages.nix {
-    inherit lib stdenv newScope;
+    inherit
+      lib
+      stdenv
+      newScope
+      packageOverrides
+      ;
     gnuradio = unwrapped;
   };
   passthru = unwrapped.passthru // {

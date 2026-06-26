@@ -19,7 +19,6 @@
   libjack2,
   libpulseaudio,
   libusb1,
-  mesa-demos,
   openal,
   pciutils,
   pipewire,
@@ -28,6 +27,7 @@
   symlinkJoin,
   udev,
   vulkan-loader,
+  wrapGAppsHook3,
   xrandr,
 
   additionalLibs ? [ ],
@@ -62,7 +62,10 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    kdePackages.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     kdePackages.qtbase
@@ -72,6 +75,10 @@ symlinkJoin {
   ++ lib.optional stdenv.hostPlatform.isLinux kdePackages.qtwayland;
 
   postBuild = ''
+    # Required for org.gtk.Settings.FileChooser
+    gappsWrapperArgsHook
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
     wrapQtAppsHook
   '';
 
@@ -107,7 +114,6 @@ symlinkJoin {
       ++ additionalLibs;
 
       runtimePrograms = [
-        mesa-demos
         pciutils # need lspci
         xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ]

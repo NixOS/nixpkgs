@@ -16,7 +16,7 @@
   gtk3,
   libnova,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libnova
     libusb1
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   cmakeFlags = [

@@ -21,6 +21,11 @@ in
           enable = true;
           openFirewall = true;
           port = 1337;
+          # required to match certificate principals
+          extraFlags = [
+            "--hostname"
+            "server"
+          ];
         };
       };
     client1 = client;
@@ -58,7 +63,7 @@ in
     client2.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
 
     # Grep the ssh connect command from the output of 'upterm host'
-    ssh_command = client1.succeed("grep 'SSH Command' /tmp/session-details | awk -F'│' '{print $3}'").strip()
+    ssh_command = client1.succeed("grep -m1 '^[[:space:]]*ssh' /tmp/session-details").strip()
 
     # Connect with client2. Because we used '--force-command hostname' we should get "client1" as the output
     output = client2.succeed(ssh_command)

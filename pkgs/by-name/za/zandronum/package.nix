@@ -7,7 +7,7 @@
   makeWrapper,
   callPackage,
   soundfont-fluid,
-  SDL_compat,
+  sdl12-compat,
   libGL,
   libopus,
   glew,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     bzip2
     zlib
-    SDL_compat
+    sdl12-compat
     libjpeg
     sqlite
     game-music-emu

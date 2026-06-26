@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.33.0";
+  version = "0.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+576MAbtWFGaPu/HqhdeeRNHi84pLnDaMDa0e/J/CUs=";
+    hash = "sha256-mZ9u3mQ8JZIq+G1iwNQST8r7/rCWi/UW0j1xfeV9zFM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -145,7 +145,7 @@ buildPythonPackage (finalAttrs: {
       sourceRoot = "${finalAttrs.src.name}/internal/common-test-utils";
       # Include the test pdf/xml files etc. in the build output
       postPatch = ''
-        echo "graft src/test_data" > MANIFEST.in
+        echo "graft src/pyhanko_testing_commons/test_data" > MANIFEST.in
       '';
 
       build-system = [ setuptools ];

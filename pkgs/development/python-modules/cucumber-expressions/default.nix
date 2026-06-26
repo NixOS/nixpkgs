@@ -2,26 +2,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  poetry-core,
+  uv-build,
   pytestCheckHook,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "cucumber-expressions";
-  version = "18.0.1";
+  version = "19.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "cucumber-expressions";
     tag = "v${version}";
-    hash = "sha256-Mbf7bG7NvKFdv6kYPkd6UlPDJGjnK2GPl0qnLUhQ3es=";
+    hash = "sha256-RosIA8LaXdpnqJYfowB4d1gWZTd8OfuetiBLNYX5dRc=";
   };
 
   sourceRoot = "${src.name}/python";
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.0,<0.12.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   pythonImportsCheck = [ "cucumber_expressions" ];
 

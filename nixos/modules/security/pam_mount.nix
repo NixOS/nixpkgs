@@ -179,10 +179,10 @@ in
           }" />
           <!-- specify the binaries to be called -->
           <!-- the comma in front of the options is necessary for empty options -->
-          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ,${
+          <fusemount>${pkgs.fuse3}/bin/mount.fuse3 %(VOLUME) %(MNTPT) -o ,${
             lib.concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])
           }'</fusemount>
-          <fuseumount>${pkgs.fuse}/bin/fusermount -u %(MNTPT)</fuseumount>
+          <fuseumount>${pkgs.fuse3}/bin/fusermount3 -u %(MNTPT)</fuseumount>
           <!-- the comma in front of the options is necessary for empty options -->
           <cryptmount>${pkgs.pam_mount}/bin/mount.crypt -o ,${
             lib.concatStringsSep "," (cfg.cryptMountOptions ++ [ "%(OPTIONS)" ])

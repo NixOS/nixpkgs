@@ -4,16 +4,18 @@
   fetchzip,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "codebuff";
-  version = "1.0.615";
+  version = "1.0.681";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/codebuff/-/codebuff-${version}.tgz";
-    hash = "sha256-4nO7OFr4NDwUo70wHKRJGiGRvKaqOXog0evn5kotxY8=";
+    url = "https://registry.npmjs.org/codebuff/-/codebuff-${finalAttrs.version}.tgz";
+    hash = "sha256-tkQ8MOkQk4vaS9PFqlFBV6unEgysXcwHrKGgxfe60fM=";
   };
 
-  npmDepsHash = "sha256-VoxULd9oOMvR8LLl6F6XuSM6nkqe+7mXgVFjWjeqdNE=";
+  strictDeps = true;
+
+  npmDepsHash = "sha256-KB0QCfpGP32O5dU+/2dOEmX87iclJrZudIkTNp9ZxSw=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -31,4 +33,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.malo ];
     mainProgram = "codebuff";
   };
-}
+})

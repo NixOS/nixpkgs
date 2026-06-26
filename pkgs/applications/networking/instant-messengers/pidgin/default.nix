@@ -175,7 +175,7 @@ let
       homepage = "https://pidgin.im/";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.lucasew ];
+      maintainers = [ ];
     };
   };
 

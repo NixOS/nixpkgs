@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  distutils,
   doxygen,
   draco,
   embree,
@@ -24,8 +23,8 @@
   numpy,
   opencolorio,
   openimageio,
+  openshadinglanguage,
   opensubdiv,
-  osl,
   ptex,
   pyopengl,
   pyqt6,
@@ -36,9 +35,10 @@
   stdenv,
   onetbb,
   withDocs ? false,
-  withOsl ? true,
+  withOsl ? !stdenv.hostPlatform.isDarwin,
   withTools ? false,
   withUsdView ? false,
+  withMaterialX ? true,
   writeShellScriptBin,
 }:
 
@@ -52,25 +52,19 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.05.01";
+  version = "26.03";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
+    hash = "sha256-Ijh7x63TqEkittO+r//sIkBu7I52/6C7a2n9Nq6Kt7g=";
   };
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   patches = [
-    (fetchpatch {
-      name = "port-to-embree-4.patch";
-      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
-      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
-    })
     (fetchpatch {
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
       name = "propagate-dependencies-opengl.patch";
@@ -79,7 +73,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.OSL_LOCATION = "${osl}";
+  env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -96,8 +90,8 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" withMaterialX)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" withOsl)
   ];
 
   nativeBuildInputs = [
@@ -131,7 +125,7 @@ buildPythonPackage rec {
     libx11
     libxt
   ]
-  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withOsl [ openshadinglanguage ]
   ++ lib.optionals withUsdView [ qt6.qtbase ]
   ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
@@ -141,7 +135,6 @@ buildPythonPackage rec {
     numpy
     opensubdiv
     pyopengl
-    distutils
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL

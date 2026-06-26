@@ -60,7 +60,7 @@ rec {
     # Type
 
     ```
-    traceIf :: bool -> string -> a -> a
+    traceIf :: Bool -> String -> a -> a
     ```
 
     # Examples
@@ -167,7 +167,7 @@ rec {
 
     ```nix
     trace { a.b.c = 3; } null
-    trace: { a = <CODE>; }
+    trace: { a = <thunk>; }
     => null
     traceSeq { a.b.c = 3; } null
     trace: { a = { b = { c = 3; }; }; }
@@ -257,6 +257,23 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqFn :: (a -> b) -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqFn` usage example
+
+    ```nix
+    traceValSeqFn (v: v // { d = "foo";}) { a.b.c = 3; }
+    trace: { a = { b = { c = 3; }; }; d = "foo"; }
+    => { a = { ... }; }
+
+    :::
   */
   traceValSeqFn = f: v: traceValFn f (builtins.deepSeq v v);
 
@@ -268,6 +285,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeq :: a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeq` usage example
+
+    ```nix
+    traceValSeq { a.b.c = 3; }
+    trace: { a = { b = { c = 3; }; }; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeq = traceValSeqFn id;
 
@@ -288,6 +323,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqNFn :: (a -> b) -> Int -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqNFn` usage example
+
+    ```nix
+    traceValSeqNFn (v: v // { d = "foo";}) 2 { a.b.c = 3; }
+    trace: { a = { b = {…}; }; d = "foo"; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeqNFn =
     f: depth: v:
@@ -305,6 +358,24 @@ rec {
     `v`
 
     : Value to trace
+
+    # Type
+
+    ```
+    traceValSeqN :: Int -> a -> a
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.debug.traceValSeqN` usage example
+
+    ```nix
+    traceValSeqN 2 { a.b.c = 3; }
+    trace: { a = { b = {…}; }; }
+    => { a = { ... }; }
+    ```
+
+    :::
   */
   traceValSeqN = traceValSeqNFn id;
 
@@ -333,6 +404,12 @@ rec {
 
     : 4\. Function argument
 
+    # Type
+
+    ```
+    traceFnSeqN :: Int -> String -> (a -> b) -> a -> b
+    ```
+
     # Examples
     :::{.example}
     ## `lib.debug.traceFnSeqN` usage example
@@ -340,7 +417,7 @@ rec {
     ```nix
     traceFnSeqN 2 "id" (x: x) { a.b.c = 3; }
     trace: { fn = "id"; from = { a.b = {…}; }; to = { a.b = {…}; }; }
-    => { a.b.c = 3; }
+    => { a = { ... }; }
     ```
 
     :::
@@ -389,7 +466,7 @@ rec {
 
     ```
     runTests :: {
-      tests = [ String ];
+      tests :: [String];
       ${testName} :: {
         expr :: a;
         expected :: a;
@@ -489,7 +566,7 @@ rec {
       ];
     }
     ->
-    null
+    Null
     ```
 
     # Examples

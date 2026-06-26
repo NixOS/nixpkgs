@@ -30,17 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    # autoreconf will not succeed without libgcrypt, maybe due to leftover checks from ntfs-3g?
+    libgcrypt
   ];
 
   # We don't need GnuTLS despite the configure warning about its absence,
   # because ntfsdecrypt from ntfs-3g is not used in ntfsprogs-plus and is not built.
   # See: https://github.com/search?q=repo%3Antfsprogs-plus%2Fntfsprogs-plus%20gnutls&type=code
-  buildInputs = [
-    # autoreconf will not succeed without libgcrypt, maybe due to leftover checks from ntfs-3g?
-    libgcrypt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ]
-  ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ gettext ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ libuuid ]
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ gettext ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   configureFlags = [ "--exec-prefix=\${prefix}" ];
 

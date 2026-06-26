@@ -7,55 +7,57 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whoogle-search";
-  version = "1.2.2";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
     inherit (finalAttrs) version;
-    hash = "sha256-QU0VBMAh8MV32C/VDRWC+BHhaejcpiaMfMX3LCze2HM=";
+    hash = "sha256-Vq8CLElP1P/Lcq98IZHgug7a4+sSSyEL2ih4Y5McAfg=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [
-    attrs
-    beautifulsoup4
-    brotli
-    cachetools
-    certifi
-    cffi
-    click
-    cryptography
-    cssutils
-    defusedxml
-    flask
-    h11
-    httpcore
-    httpx
-    httpx.optional-dependencies.http2
-    httpx.optional-dependencies.socks
-    idna
-    itsdangerous
-    jinja2
-    markupsafe
-    more-itertools
-    packaging
-    pluggy
-    pycodestyle
-    pycparser
-    pyopenssl
-    pyparsing
-    pytest
-    python-dateutil
-    python-dotenv
-    soupsieve
-    stem
-    validators
-    waitress
-    wcwidth
-    werkzeug
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      attrs
+      beautifulsoup4
+      brotli
+      cachetools
+      certifi
+      cffi
+      click
+      cryptography
+      cssutils
+      defusedxml
+      flask
+      h11
+      httpcore
+      httpx
+      idna
+      itsdangerous
+      jinja2
+      markupsafe
+      more-itertools
+      packaging
+      pluggy
+      pycodestyle
+      pycparser
+      pyopenssl
+      pyparsing
+      pytest
+      python-dateutil
+      python-dotenv
+      soupsieve
+      stem
+      validators
+      waitress
+      wcwidth
+      werkzeug
+    ]
+    ++ httpx.optional-dependencies.http2
+    ++ httpx.optional-dependencies.socks;
 
   postInstall = ''
     # This creates renamed versions of the static files for cache busting,

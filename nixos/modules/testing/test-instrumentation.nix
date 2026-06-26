@@ -86,7 +86,8 @@ in
 
   options.testing = {
     backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
-      default = true;
+      # See assertion below for why the backdoor doesn't work with containers.
+      default = !config.boot.isContainer;
     };
 
     initrdBackdoor = lib.mkEnableOption ''
@@ -105,7 +106,20 @@ in
       {
         assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
         message = ''
-          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+          `testing.initrdBackdoor` requires `boot.initrd.systemd.enable` to be enabled.
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.backdoor;
+        message = ''
+          `testing.backdoor` uses virtio console, which does not work with
+          containers (we use `nsenter` instead).
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.initrdBackdoor;
+        message = ''
+          `testing.initrdBackdoor` does not work with containers as there is no initrd.
         '';
       }
     ];
@@ -224,11 +238,11 @@ in
     '';
 
     systemd.settings.Manager = managerSettings;
-    systemd.user.extraConfig = ''
+    systemd.user.settings.Manager = {
       # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+      DefaultTimeoutStartSec = 300;
+      DefaultDeviceTimeoutSec = 300;
+    };
 
     boot.consoleLogLevel = 7;
 

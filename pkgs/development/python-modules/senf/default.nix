@@ -9,14 +9,14 @@
 
 buildPythonPackage {
   pname = "senf";
-  version = "1.5.0-unstable-2024-11-26";
+  version = "1.5.1-unstable-2026-03-20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "senf";
-    rev = "b32bb8091f7b46679a23b3f9e9a9157eaa53be95";
-    hash = "sha256-JoFmQkjau8e8EXiJbWS7vnv1FarwerO4vGInosxlNEM=";
+    rev = "fab3fe68dfc384a80accd1e6aec5e22db9db62cf";
+    hash = "sha256-j4vhr9cWG2O0oOYbarJbNpEpcz5yqGJA56/e0NTgmjI=";
   };
 
   nativeCheckInputs = [

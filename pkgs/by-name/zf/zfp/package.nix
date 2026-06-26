@@ -10,6 +10,7 @@
   stdenv,
   config,
   testers,
+  bitStreamWordSize ? 64,
   enableCfp ? true,
   enableCuda ? config.cudaSupport,
   enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
@@ -70,6 +71,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
   ]
+  ++ lib.optional (bitStreamWordSize != 64) "-DZFP_BIT_STREAM_WORD_SIZE=${toString bitStreamWordSize}"
   ++ lib.optional enableCfp "-DBUILD_CFP=ON"
   ++ lib.optional enableCuda "-DZFP_WITH_CUDA=ON"
   ++ lib.optional enableFortran "-DBUILD_ZFORP=ON"
@@ -78,6 +80,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ [ "-DBUILD_UTILITIES=${if enableUtilities then "ON" else "OFF"}" ];
 
   doCheck = true;
+
+  # the testzfp regression test only supports the default 64-bit bitstream word
+  preCheck = lib.optionalString (bitStreamWordSize != 64) ''
+    checkFlagsArray+=(ARGS="--exclude-regex testzfp")
+  '';
 
   passthru.tests = {
     cmake-config = testers.hasCmakeConfigModules {

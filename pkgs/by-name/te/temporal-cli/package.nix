@@ -3,49 +3,46 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   stdenv,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.5.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y/hTD31WUcVn/OBuNwdhbjDZd36EKbOJRr9PFDKHifg=";
+    hash = "sha256-8e6sBlUC+N4P7FO4EOtc7sDzSAZwDovN+cGpV+rWObs=";
   };
 
-  vendorHash = "sha256-dZhrozZc3SeZQQ7lGeeICrptL2I0DH0EpsjCt4CjCJU=";
+  vendorHash = "sha256-N9K05Kcb0YaQO7M9gR22QzAOzbmgEhIqADcAESqYtQ8=";
 
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [
-    "./cmd/docgen"
-    "./tests"
+  subPackages = [
+    "cmd/temporal"
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/temporalio/cli/temporalcli.Version=${finalAttrs.version}"
+    "-X github.com/temporalio/cli/internal/temporalcli.Version=${finalAttrs.version}"
   ];
 
   # Tests fail with x86 on macOS Rosetta 2
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd temporal \
@@ -67,7 +64,10 @@ buildGoModule (finalAttrs: {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
     homepage = "https://docs.temporal.io/cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [
+      aaronjheng
+      jlesquembre
+    ];
     mainProgram = "temporal";
   };
 })

@@ -17,20 +17,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.6";
+  version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-aFS9At51o4OYLggXscgFo22VViwd6skB63iNPSPoWro=";
+    hash = "sha256-yN7dUhB8eMW/CK9HTeuK/CAYFjvWvCLApQ7mb71VLps=";
   };
 
-  cargoHash = "sha256-99MGWfZrDOav77SRI7c5V21JTfkq7ejC7x+ZiQ5J0Yw=";
+  cargoHash = "sha256-wSwXzaU872KqcRgAIKRuQFvG9f/q4z0OysysLyYMwdg=";
 
   separateDebugInfo = true;
-  strictDeps = true;
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     libcosmicAppHook

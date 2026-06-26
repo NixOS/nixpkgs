@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   zlib,
   libjpeg,
@@ -34,13 +34,12 @@ let
       rev = "ef3b57438564f2877148a23055f3f0ffce66df11";
       hash = "sha256-Cg96tsi6h1DX4VSsq1B8DTn0GxnBfoZK2nuxeT/+ca0=";
     };
-    patches = [ ];
   };
 
 in
 stdenv.mkDerivation {
   pname = "MultiVNC";
-  version = "2.8.1";
+  version = "0.6.0-2024-10-20";
 
   src = fetchFromGitHub {
     owner = "bk138";
@@ -69,7 +68,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    wxGTK32
+    wxwidgets_3_2
     zlib
     libjpeg
     libvncserver-patched

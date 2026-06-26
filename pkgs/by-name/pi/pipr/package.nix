@@ -3,6 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   bubblewrap,
+  oniguruma,
+  pkg-config,
   makeWrapper,
 }:
 
@@ -19,7 +21,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-SRIv/dZcyKm2E7c5/LtMCDnh+SDqPhJ01GZtkj0RgA0=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [ oniguruma ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
+
   postFixup = ''
     wrapProgram "$out/bin/pipr" --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
   '';

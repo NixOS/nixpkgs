@@ -30,10 +30,16 @@ let
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
       ];
       # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
-      extraPostPatch = lib.optionalString (lib.versionAtLeast version "147") ''
-        find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
-      '';
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2040877
+      extraPostPatch =
+        lib.optionalString (lib.versionAtLeast version "151" && lib.versionOlder version "152") ''
+          echo https://hg.mozilla.org/releases/comm-release/rev/becfb8fb2c70f1603882a2787e2170d5d8013949 >> sourcestamp.txt
+          echo https://hg.mozilla.org/releases/mozilla-release/rev/fc12dc911f904307729760a817deb829cbf8feb4 >> sourcestamp.txt
+        ''
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+        + lib.optionalString (lib.versionAtLeast version "140.8" && lib.versionOlder version "151") ''
+          find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+        '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
@@ -53,20 +59,26 @@ let
         license = lib.licenses.mpl20;
       };
     }).override
-      {
-        geolocationSupport = false;
-        webrtcSupport = false;
+      (
+        {
+          geolocationSupport = false;
+          webrtcSupport = false;
 
-        pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-      };
+          pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "149") {
+          # https://bugzilla.mozilla.org/show_bug.cgi?id=2025767
+          crashreporterSupport = false;
+        }
+      );
 
 in
 rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "147.0.2";
-    sha512 = "4fe6d0389e8bc6078b3d4db79d1f8547666950de4a5a72e49ba24d5b60cb531908b88efa9f3dd32e154ee917a8b80786389ce9b1186b6c45fb0717d4e180e537";
+    version = "152.0";
+    sha512 = "51b950af634e7c7dfb7c043d69f925ed6d50d4c44341761e7e3ef02d5db28d2c539cd8d9286195e3facf84869f57b12a58760105b5195c449b4e1e4c9b6200d2";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -79,8 +91,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.7.1esr";
-    sha512 = "2d0f61758b0428eb4eb8294c58d914e03842c9ad7685cd2eec26c723cc1491634f90fc9fcf5ad6d3f13738e141e96c692cd8ff1599869346e3247a0cae2349f4";
+    version = "140.12.0esr";
+    sha512 = "ccbcc305d5cc10aa01aa5071f40a21b42de0300d9ad6763c4fc4ad71bf797566f2380c8fd84d46952e7c4eae0a35905173e6906b108192833660eae2ceea7b51";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

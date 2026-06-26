@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "doggo";
-  version = "1.1.4";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = "doggo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yKEjTaDwJVycsGeoJTVMjN9D4AzRLXZAY5fVIp+B14c=";
+    hash = "sha256-Q4a859MoVSZ4hjXwaIekL1En6xpd4bZPQ9NGAkxSPto=";
   };
 
-  vendorHash = "sha256-ybI17J5EKvigBapt8Ed2FuMEzGUVzEpJ6OTVYWXVOOc=";
+  vendorHash = "sha256-JMyGYG3cLOZmH9EcLPe+5+ViHv7Z7brLj5uqJrPYm7A=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 

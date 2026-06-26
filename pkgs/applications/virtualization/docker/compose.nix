@@ -4,19 +4,18 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-
 buildGoModule rec {
   pname = "docker-compose";
-  version = "5.0.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     tag = "v${version}";
-    hash = "sha256-2lyjTNd4jf+wTtnFZaRT10ga0MHZondzb+0cM0ftCuY=";
+    hash = "sha256-sKfsPn8CV62TXY0LoquQYEUgSBVDRiKW0Z3/py1RFng=";
   };
 
-  vendorHash = "sha256-A9RHSM6BmcaIVHWOou50T1+N/Vh8H1+KtSKeh/ZJ2JQ=";
+  vendorHash = "sha256-1cYmWaj6gvmM6207dj8E7kVKIOJlS4js9EwNXhnv13A=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -46,6 +45,6 @@ buildGoModule rec {
     mainProgram = "docker-compose";
     homepage = "https://github.com/docker/compose";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ airone01 ];
   };
 }

@@ -66,7 +66,7 @@
   installPhase = ''
     runHook preInstall
     dune install -p ${pname} --prefix=$out --libdir $OCAMLFIND_DESTDIR
-    wrapProgram $out/bin/coq-lsp --prefix OCAMLPATH : $OCAMLPATH
+    wrapProgram $out/bin/coq-lsp --prefix OCAMLPATH : $OCAMLFIND_DESTDIR --prefix OCAMLPATH : $OCAMLPATH
     runHook postInstall
   '';
 

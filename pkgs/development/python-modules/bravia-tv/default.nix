@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bravia-tv";
   version = "1.0.11";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dcnielsen90";
     repo = "python-bravia-tv";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g47bDd5bZl0jad3o6T1jJLcnZj8nx944kz3Vxv8gD2U=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Package does not include tests
   doCheck = false;
@@ -30,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

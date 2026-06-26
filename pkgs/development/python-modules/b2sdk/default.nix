@@ -4,8 +4,8 @@
   fetchFromGitHub,
   logfury,
   annotated-types,
-  packaging,
-  pdm-backend,
+  hatchling,
+  hatch-vcs,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
@@ -14,27 +14,30 @@
   pythonOlder,
   requests,
   responses,
+  tenacity,
   tqdm,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.10.2";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-RWHD1ARPSKHmGKY0xdCBn3Qj4GxAfn4o8eacMQ5RT1k=";
+    hash = "sha256-JzJ83+W9k5ys8dj0Q3X4MY+GH4m8/crvKmeQKOttspM=";
   };
 
-  build-system = [ pdm-backend ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     annotated-types
-    packaging
     logfury
     requests
   ]
@@ -46,6 +49,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
     responses
+    tenacity
     tqdm
   ];
 

@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-iam-expand";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "py-iam-expand";
-    tag = version;
-    hash = "sha256-P6PWf7qkc/8/BeRycYgvFApIaUrbhKq4h718Nrs817U=";
+    tag = finalAttrs.version;
+    hash = "sha256-qe3eph3bvVy6Yql76e/OecHAXggp/KNLG1k0iWy4K1w=";
   };
 
   build-system = [ poetry-core ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to expand and deobfuscate AWS IAM actions";
     homepage = "https://github.com/prowler-cloud/py-iam-expand";
-    changelog = "https://github.com/prowler-cloud/py-iam-expand/releases/tag/${src.tag}";
+    changelog = "https://github.com/prowler-cloud/py-iam-expand/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

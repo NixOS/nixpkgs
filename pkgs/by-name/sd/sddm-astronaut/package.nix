@@ -2,62 +2,71 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   kdePackages,
   formats,
+  nix-update-script,
   themeConfig ? null,
   embeddedTheme ? "astronaut",
 }:
-stdenvNoCC.mkDerivation rec {
+let
+  configFile = (formats.ini { }).generate "" { General = themeConfig; };
+  basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
+  sedString = "ConfigFile=Themes/";
+in
+stdenvNoCC.mkDerivation {
   pname = "sddm-astronaut";
-  version = "1.0-unstable-2025-01-05";
+  version = "0-unstable-2026-06-17";
 
   src = fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
-    rev = "11c0bf6147bbea466ce2e2b0559e9a9abdbcc7c3";
-    hash = "sha256-gBSz+k/qgEaIWh1Txdgwlou/Lfrfv3ABzyxYwlrLjDk=";
+    rev = "cd46736b4135a71700d2225d60eb8e85917585eb";
+    hash = "sha256-5ys3pP5GgkrIua/4II8KiQbWCwK8PZK6Sj3lCMe9q1c=";
   };
 
   dontWrapQtApps = true;
 
+  nativeBuildInputs = [ installFonts ];
+
   propagatedBuildInputs = with kdePackages; [
-    qtsvg
-    qtmultimedia
-    qtvirtualkeyboard
+    # avoid .dev outputs propagation
+    qtsvg.out
+    qtmultimedia.out
+    qtvirtualkeyboard.out
   ];
 
-  installPhase =
-    let
-      iniFormat = formats.ini { };
-      configFile = iniFormat.generate "" { General = themeConfig; };
+  installPhase = ''
+    runHook preInstall
 
-      basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
-      sedString = "ConfigFile=Themes/";
-    in
-    ''
-      mkdir -p ${basePath}
-      cp -r $src/* ${basePath}
-    ''
-    + lib.optionalString (embeddedTheme != "astronaut") ''
+    mkdir -p ${basePath}
+    cp -r $src/* ${basePath}
+  ''
+  + lib.optionalString (embeddedTheme != "astronaut") ''
 
-      # Replaces astronaut.conf with embedded theme in metadata.desktop on line 9.
-      # ConfigFile=Themes/astronaut.conf.
-      sed -i "s|^${sedString}.*\\.conf$|${sedString}${embeddedTheme}.conf|" ${basePath}/metadata.desktop
-    ''
-    + lib.optionalString (themeConfig != null) ''
-      chmod u+w ${basePath}/Themes/
-      ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
-    '';
+    # Replaces astronaut.conf with embedded theme in metadata.desktop on line 9.
+    # ConfigFile=Themes/astronaut.conf.
+    sed -i "s|^${sedString}.*\\.conf$|${sedString}${embeddedTheme}.conf|" ${basePath}/metadata.desktop
+  ''
+  + lib.optionalString (themeConfig != null) ''
+    chmod u+w ${basePath}/Themes/
+    ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Modern looking qt6 sddm theme";
-    homepage = "https://github.com/${src.owner}/${src.repo}";
+    homepage = "https://github.com/Keyitdev/sddm-astronaut-theme";
     license = lib.licenses.gpl3;
-
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       danid3v
       uxodb
+      qweered
     ];
   };
 }

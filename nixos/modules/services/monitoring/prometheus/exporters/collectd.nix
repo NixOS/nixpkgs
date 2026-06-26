@@ -86,7 +86,7 @@ in
     let
       collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
         --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
-        --collectd.security-level ${cfg.collectdBinary.securityLevel} \
+        --collectd.security-level ${cfg.collectdBinary.securityLevel}
       '';
     in
     {

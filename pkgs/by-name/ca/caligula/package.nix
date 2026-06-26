@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caligula";
-  version = "0.4.10";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ifd3f";
     repo = "caligula";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oaSt6wzMzaGHPyuJ5NVcAJLblHQcHJA5a7o2wkJgZkU=";
+    hash = "sha256-0KSQd/DvIo813HSLL+Qvn+5GMFRK7CGxOSq4+Fyl8Zk=";
   };
 
-  cargoHash = "sha256-B09aKzNNhgXKg3PCYmlMz3/oOeeh1FQAL7+tywg/81Q=";
+  cargoHash = "sha256-ICvQ7XtA7705gJ0GijuZJROGAp/BMpyqsIygR+6kJ2I=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

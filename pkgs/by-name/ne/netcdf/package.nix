@@ -7,8 +7,8 @@
   bzip2,
   libzip,
   zstd,
-  szipSupport ? false,
-  szip,
+  szipSupport ? hdf5.szipSupport,
+  libaec,
   libxml2,
   m4,
   curl, # for DAP
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     zstd
   ]
-  ++ lib.optional szipSupport szip
+  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
@@ -101,5 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     changelog = "https://docs.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/RELEASE_NOTES.html";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
 })

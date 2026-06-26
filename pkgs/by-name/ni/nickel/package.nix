@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.15.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-NGivq2V4wdJapzU5iLcuHrz2RDz2WhnikmCq+75a338=";
+    hash = "sha256-D+OI00Ouwm0v65igIYSCGPXKCl6/SZsOyz1wFM1VAF4=";
   };
 
-  cargoHash = "sha256-uCy/Qo92yZ4pjjgW64nWYH21EbdMMwGXP5522tl8MAE=";
+  cargoHash = "sha256-hIeTHajL+h6xhuje8TmfgkkM9R+tGwYFzlnSwaN3nK8=";
 
   cargoBuildFlags = [
     "--package"
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/nickel-lang/nickel/blob/${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felschr

@@ -1,5 +1,5 @@
---- a/libaom-sys-0.17.2+libaom.3.11.0/vendor/build/cmake/aom_optimization.cmake
-+++ b/libaom-sys-0.17.2+libaom.3.11.0/vendor/build/cmake/aom_optimization.cmake
+--- a/vendor/build/cmake/aom_optimization.cmake
++++ b/vendor/build/cmake/aom_optimization.cmake
 @@ -212,7 +212,7 @@ endfunction()
  # Currently checks only for presence of required object formats and support for
  # the -Ox argument (multipass optimization).

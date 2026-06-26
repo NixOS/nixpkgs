@@ -1,26 +1,24 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  isPy312,
   fetchFromGitHub,
   flaky,
   hypothesis,
   pytest-xdist,
-  pytestCheckHook,
+  pytest7CheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coverage";
-  version = "7.13.2";
+  version = "7.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coveragepy";
     repo = "coveragepy";
-    tag = version;
-    hash = "sha256-dYgZLAiuPwYs4NomT+c2KS9VXXYEMW8oyHk2y4TCwe0=";
+    tag = finalAttrs.version;
+    hash = "sha256-3/Q6TQfoZNM7bHjviw/C70i2ZgjobHnynmqX9qvreYQ=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +27,7 @@ buildPythonPackage rec {
     flaky
     hypothesis
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   preCheck = ''
@@ -45,10 +43,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/coveragepy/coveragepy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/coveragepy/coveragepy/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Code coverage measurement for Python";
     homepage = "https://github.com/coveragepy/coveragepy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

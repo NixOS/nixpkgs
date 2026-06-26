@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation rec {
           gnugrep
           busybox
         ]
-      } \
+      }
   '';
 
   meta = {

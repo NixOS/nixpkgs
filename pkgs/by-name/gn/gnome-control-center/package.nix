@@ -68,6 +68,7 @@
   upower,
   wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
@@ -76,11 +77,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "49.4";
+  version = "50.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Exl15f3dII86MPdmocZn+Ms/FbaJqGjShaZBojQgSwI=";
+    hash = "sha256-tWvriHuUMumAp1e5juydMdiWlev/tHkbPDvUeWI6kmE=";
   };
 
   patches = [
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts

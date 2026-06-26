@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
 
   # build-system
   cmake,
@@ -36,8 +34,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
-  version = "0.0.37";
+  version = "0.0.42";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
@@ -45,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # ggml-python expects an older version of ggml than pkgs.ggml's
     fetchSubmodules = true;
-    hash = "sha256-QFpUGQ8m4c0SpHWnHhoyPdQkcywBToeLahDtG+JMcmA=";
+    hash = "sha256-dbYxAropTT8h1BnMg4Ua1hY/IUYWHaZcS0ckj38UoO4=";
   };
 
   build-system = [

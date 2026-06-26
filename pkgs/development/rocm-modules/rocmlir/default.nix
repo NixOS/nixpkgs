@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "7.1.1";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-A9vUvsEZrZlNEW4cscF66L48rJQ1zJYmIzwXQ2QzJ3s=";
+    hash = "sha256-0OvQT8pX6GbEqUwuauKGI66IHw8dsnt5mIijnzYyiRc=";
   };
 
   nativeBuildInputs = [
@@ -147,10 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-    page = "tags?per_page=4";
+    inherit finalAttrs;
+    page = "tags";
   };
 
   meta = {

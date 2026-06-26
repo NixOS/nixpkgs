@@ -100,7 +100,6 @@ let
       homepage = "https://docs.pytest.org";
       changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
       maintainers = with lib.maintainers; [
-        lovek323
         madjar
       ];
       license = lib.licenses.mit;

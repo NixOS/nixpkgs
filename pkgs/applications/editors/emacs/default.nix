@@ -13,8 +13,22 @@ lib.makeScope pkgs.newScope (
       inherit lib;
       inherit (pkgs)
         fetchFromGitHub
-        fetchzip
+        fetchgit
         ;
+    };
+
+    emacs31 = callPackage (self.sources.emacs31) inheritedArgs;
+
+    emacs31-gtk3 = self.emacs31.override {
+      withGTK3 = true;
+    };
+
+    emacs31-nox = self.emacs31.override {
+      noGui = true;
+    };
+
+    emacs31-pgtk = self.emacs31.override {
+      withPgtk = true;
     };
 
     emacs30 = callPackage (self.sources.emacs30) inheritedArgs;
@@ -31,11 +45,6 @@ lib.makeScope pkgs.newScope (
       withPgtk = true;
     };
 
-    emacs30-macport = callPackage (self.sources.emacs30-macport) (
-      inheritedArgs
-      // {
-        srcRepo = true;
-      }
-    );
+    emacs30-macport = callPackage (self.sources.emacs30-macport) inheritedArgs;
   }
 )

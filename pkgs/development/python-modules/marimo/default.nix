@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch2,
   fetchPypi,
 
   # build-system
@@ -14,13 +13,15 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  python-multipart,
   pyyaml,
-  ruff,
+  pyzmq,
   starlette,
   tomlkit,
   uvicorn,
@@ -29,28 +30,20 @@
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.23.10";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-7XQ0NGLIhDbugeSM97f1zA8FyrJ/1lAnl8Zb1DtTvEA=";
   };
 
-  patches = [
-    # https://github.com/marimo-team/marimo/pull/6714
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/Prince213/marimo/commit/b1c690e82e8117c451a74fdf172eb51a4861853d.patch?full_index=1";
-      hash = "sha256-iFS5NSGjaGdECRk0LCRSA8XzRb1/sVSZCTRLy6taHNU=";
-    })
-  ];
-
   build-system = [ uv-build ];
+
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     click
@@ -59,13 +52,15 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
     pygments
     pymdown-extensions
+    python-multipart
     pyyaml
-    ruff
+    pyzmq
     starlette
     tomlkit
     uvicorn

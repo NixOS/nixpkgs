@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "maiko";
-  version = "250616-de1fafba";
+  version = "260319-9259716e";
 
   src = fetchFromGitHub {
     owner = "Interlisp";
     repo = "maiko";
     tag = "maiko-${finalAttrs.version}";
-    hash = "sha256-RYBV3gqcDPxRteCvUyqm8lKUpW4r0L7kJLlED8M72DI=";
+    hash = "sha256-IqXDw5JuABs1IEKpvq3xjjl4NgZVojdxQYRV6TLhqOk=";
   };
 
   nativeBuildInputs = [ cmake ];

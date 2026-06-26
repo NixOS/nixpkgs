@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghr";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "siketyan";
     repo = "ghr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-L9+rcdt+MGZSCOJyCE4t/TT6Fjtxvfr9LBJYyRrx208=";
+    hash = "sha256-8DnujtAtJiSnrC3k5vGRQuk6RfC5Vn+z4HAVsEnXN7c=";
   };
 
-  cargoHash = "sha256-xRa/brOYJ19J25wGdtNR2g+ouMyvz9YFXnzepeipWNQ=";
+  cargoHash = "sha256-8b9kAl9KoeWG+LEFkRQd6zbiWqyIybbcXpImz+akS7M=";
 
   nativeBuildInputs = [
     installShellFiles

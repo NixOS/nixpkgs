@@ -9,13 +9,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-managedservices";
   version = "6.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7AyzhYvPjt9e7g7d7oFWBCTrhDUuDfCC3clOuZut/V4=";
     extension = "zip";
   };
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Managed Services Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/managedservices/azure-mgmt-managedservices";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-managedservices_${version}/sdk/managedservices/azure-mgmt-managedservices/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-managedservices_${finalAttrs.version}/sdk/managedservices/azure-mgmt-managedservices/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

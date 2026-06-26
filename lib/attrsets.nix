@@ -4,9 +4,7 @@
 { lib }:
 
 let
-  inherit (builtins) head length typeOf;
-  inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
+  inherit (builtins) head length;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -14,16 +12,18 @@ let
     sanitizeDerivationName
     ;
   inherit (lib.lists)
-    filter
-    foldr
-    foldl'
+    all
+    concatLists
     concatMap
     elemAt
-    all
-    partition
-    groupBy
-    take
+    filter
     foldl
+    foldl'
+    foldr
+    groupBy
+    partition
+    reverseList
+    take
     ;
 in
 
@@ -201,7 +201,7 @@ rec {
     # Type
 
     ```
-    attrsets.longestValidPathPrefix :: [String] -> Value -> [String]
+    longestValidPathPrefix :: [String] -> AttrSet -> [String]
     ```
 
     # Examples
@@ -352,7 +352,7 @@ rec {
     # Type
 
     ```
-    concatMapAttrs :: (String -> a -> AttrSet) -> AttrSet -> AttrSet
+    concatMapAttrs :: (String -> Any -> AttrSet) -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -371,7 +371,11 @@ rec {
 
     :::
   */
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
+  concatMapAttrs =
+    f: v:
+    listToAttrs (
+      concatLists (reverseList (mapAttrsToList (name: value: attrsToList (f name value)) v))
+    );
 
   /**
     Update or set specific paths of an attribute set.
@@ -514,7 +518,7 @@ rec {
     # Type
 
     ```
-    attrVals :: [String] -> AttrSet -> [Any]
+    attrVals :: [String] -> { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -537,7 +541,7 @@ rec {
     # Type
 
     ```
-    attrValues :: AttrSet -> [Any]
+    attrValues :: { [String] :: a } -> [a]
     ```
 
     # Examples
@@ -570,7 +574,7 @@ rec {
     # Type
 
     ```
-    getAttrs :: [String] -> AttrSet -> AttrSet
+    getAttrs :: [String] -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -603,7 +607,7 @@ rec {
     # Type
 
     ```
-    catAttrs :: String -> [AttrSet] -> [Any]
+    catAttrs :: String -> [{ [String] :: a }] -> [a]
     ```
 
     # Examples
@@ -646,7 +650,7 @@ rec {
     # Type
 
     ```
-    filterAttrs :: (String -> Any -> Bool) -> AttrSet -> AttrSet
+    filterAttrs :: (String -> a -> Bool) -> { [String] :: a } -> { [String] :: a }
     ```
 
     # Examples
@@ -737,7 +741,7 @@ rec {
     # Type
 
     ```
-    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
+    foldlAttrs :: ( a -> String -> b -> a ) -> a -> { [String] :: b } -> a
     ```
 
     # Examples
@@ -812,7 +816,7 @@ rec {
     # Type
 
     ```
-    foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any
+    foldAttrs :: (a -> b -> b) -> b -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -850,7 +854,7 @@ rec {
     # Type
 
     ```
-    collect :: (AttrSet -> Bool) -> AttrSet -> [x]
+    collect :: (AttrSet -> Bool) -> AttrSet -> [Any]
     ```
 
     # Examples
@@ -889,7 +893,7 @@ rec {
     # Type
 
     ```
-    cartesianProduct :: AttrSet -> [AttrSet]
+    cartesianProduct :: { [String] :: [a] } -> [{ [String] :: a }]
     ```
 
     # Examples
@@ -934,7 +938,7 @@ rec {
     # Type
 
     ```
-    mapCartesianProduct :: (AttrSet -> a) -> AttrSet -> [a]
+    mapCartesianProduct :: ({ [String] :: a } -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -966,7 +970,7 @@ rec {
     # Type
 
     ```
-    nameValuePair :: String -> Any -> { name :: String; value :: Any; }
+    nameValuePair :: String -> a -> { name :: String; value :: a; }
     ```
 
     # Examples
@@ -998,7 +1002,7 @@ rec {
     # Type
 
     ```
-    mapAttrs :: (String -> Any -> Any) -> AttrSet -> AttrSet
+    mapAttrs :: (String -> a -> b) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1033,7 +1037,7 @@ rec {
     # Type
 
     ```
-    mapAttrs' :: (String -> Any -> { name :: String; value :: Any; }) -> AttrSet -> AttrSet
+    mapAttrs' :: (String -> a -> { name :: String; value :: b; }) -> { [String] :: a } -> { [String] :: b }
     ```
 
     # Examples
@@ -1067,7 +1071,7 @@ rec {
     # Type
 
     ```
-    mapAttrsToList :: (String -> a -> b) -> AttrSet -> [b]
+    mapAttrsToList :: (String -> a -> b) -> { [String] :: a } -> [b]
     ```
 
     # Examples
@@ -1113,7 +1117,7 @@ rec {
     # Type
 
     ```
-    attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+    attrsToList :: { [String] :: a } -> [{ name :: String; value :: a; }]
     ```
 
     # Examples
@@ -1327,7 +1331,7 @@ rec {
     # Type
 
     ```
-    genAttrs :: [ String ] -> (String -> Any) -> AttrSet
+    genAttrs :: [String] -> (String -> a) -> { [String] :: a }
     ```
 
     # Examples
@@ -1364,7 +1368,7 @@ rec {
     # Type
 
     ```
-    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    genAttrs' :: [a] -> (a -> { name :: String; value :: b; }) -> { [String] :: b }
     ```
 
     # Examples
@@ -1498,7 +1502,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWithNames :: [ String ] -> (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWithNames :: [String] -> (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1533,7 +1537,7 @@ rec {
     # Type
 
     ```
-    zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet
+    zipAttrsWith :: (String -> [a] -> b) -> [{ [String] :: a }] -> { [String] :: b }
     ```
 
     # Examples
@@ -1558,7 +1562,7 @@ rec {
     # Type
 
     ```
-    zipAttrs :: [ AttrSet ] -> AttrSet
+    zipAttrs :: [{ [String] :: a }] -> { [String] :: [a] }
     ```
 
     # Examples
@@ -1589,7 +1593,7 @@ rec {
     # Type
 
     ```
-    mergeAttrsList :: [ Attrs ] -> Attrs
+    mergeAttrsList :: [AttrSet] -> AttrSet
     ```
 
     # Examples
@@ -1609,17 +1613,19 @@ rec {
     list:
     let
       # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
-      # Type: Int -> Int -> Attrs
+      # Type: Int -> Int -> AttrSet
       binaryMerge =
         start: end:
         # assert start < end; # Invariant
-        if end - start >= 2 then
-          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
-          # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
+        if end - start == 1 then
+          # Base case - there will be exactly 1 element due to the invariant, in
+          # which case we just return it directly
+          elemAt list start
         else
-          # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
-          elemAt list start;
+          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
+          # Relies on floor for odd results
+          # The invariant is satisfied because each half will have at least 1 element
+          binaryMerge start ((start + end) / 2) // binaryMerge ((start + end) / 2) end;
     in
     if list == [ ] then
       # Calling binaryMerge as below would not satisfy its invariant
@@ -1669,7 +1675,7 @@ rec {
     # Type
 
     ```
-    recursiveUpdateUntil :: ( [ String ] -> AttrSet -> AttrSet -> Bool ) -> AttrSet -> AttrSet -> AttrSet
+    recursiveUpdateUntil :: ([String] -> AttrSet -> AttrSet -> Bool) -> AttrSet -> AttrSet -> AttrSet
     ```
 
     # Examples
@@ -1799,22 +1805,28 @@ rec {
     :::
   */
   matchAttrs =
-    pattern: attrs:
+    let
+      recurse =
+        pattern: attrs:
+        all (
+          # Compare equality between `pattern` & `attrs`.
+          attr:
+          # Missing attr, not equal.
+          attrs ? ${attr}
+          && (
+            let
+              lhs = pattern.${attr};
+              rhs = attrs.${attr};
+            in
+            # Simple equality check is primarily for non-attrsets, but we run it
+            # on attrsets too, since it may let us avoid recursing
+            lhs == rhs || isAttrs lhs && isAttrs rhs && recurse lhs rhs
+          )
+        ) (attrNames pattern);
+    in
+    pattern:
     assert isAttrs pattern;
-    all (
-      # Compare equality between `pattern` & `attrs`.
-      attr:
-      # Missing attr, not equal.
-      attrs ? ${attr}
-      && (
-        let
-          lhs = pattern.${attr};
-          rhs = attrs.${attr};
-        in
-        # If attrset check recursively
-        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
-      )
-    ) (attrNames pattern);
+    recurse pattern;
 
   /**
     Override only the attributes that are already present in the old set

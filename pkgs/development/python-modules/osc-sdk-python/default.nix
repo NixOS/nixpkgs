@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.36.0";
+  version = "0.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     tag = "v${version}";
-    hash = "sha256-PzTdQ5/ZtMAJ+niQNTlXCstjqhpuSCnRo0CybUfsz7s=";
+    hash = "sha256-dS4vwBSvsjPu8JToXPww2tfN+zzCK/qzbxyZwA/n6js=";
     fetchSubmodules = true;
   };
 
@@ -30,10 +30,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "ruamel.yaml==0.17.32" "ruamel.yaml"
-  '';
+  pythonRelaxDeps = [
+    "ruamel.yaml"
+  ];
 
   # Only keep test not requiring access and secret keys
   enabledTestPaths = [ "tests/test_net.py" ];

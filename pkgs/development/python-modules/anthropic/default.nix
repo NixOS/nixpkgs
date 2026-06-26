@@ -16,7 +16,6 @@
   jiter,
   pydantic,
   sniffio,
-  tokenizers,
   typing-extensions,
 
   # optional dependencies
@@ -28,6 +27,7 @@
 
   # test
   dirty-equals,
+  http-snapshot,
   inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
@@ -38,14 +38,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.79.0";
+  version = "0.109.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-//VKkn9M2uOj8PBoWTY872ZOyTc+OjBgEUGtKsYDWpk=";
+    hash = "sha256-H+blENPgkKhoGPJmAtdszFsJDkAzgprlDso0o2fhwz8=";
   };
 
   postPatch = ''
@@ -66,7 +67,6 @@ buildPythonPackage (finalAttrs: {
     jiter
     pydantic
     sniffio
-    tokenizers
     typing-extensions
   ];
 
@@ -84,19 +84,28 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     dirty-equals
+    http-snapshot
     inline-snapshot
     nest-asyncio
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
     respx
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "anthropic" ];
 
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
+    # Tests try to launch bash and fail
+    "test_bash_session_persistence"
+    "test_bash_timeout"
+    "test_bash_sentinel_not_spoofable"
+    "test_bash_stdin_redirect"
+    "test_bash_session_closed_property"
+    "test_bash_outer_cancel_closes_subprocess_no_stale_state"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs

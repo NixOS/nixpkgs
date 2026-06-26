@@ -5,7 +5,7 @@
   cmake,
   cubeb,
   curl,
-  extra-cmake-modules,
+  kdePackages,
   ffmpeg,
   gtk3,
   libxrandr,
@@ -75,7 +75,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapGAppsHook3
@@ -84,6 +84,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     curl
     ffmpeg
     gtk3
@@ -112,7 +113,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postInstall = ''
-    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
     zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*

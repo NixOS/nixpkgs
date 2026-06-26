@@ -10,11 +10,12 @@
   pytestCheckHook,
   pytest-mock,
   pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedds-python";
-  version = "0.10.5";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -27,7 +28,16 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
         --replace-fail "pytest-cov" ""
+  ''
+  + lib.optionalString (!pythonOlder "3.13") ''
+    substituteInPlace clayer/pysertype.c \
+        --replace-fail "_Py_IsFinalizing()" "Py_IsFinalizing()"
   '';
+
+  disabledTests = lib.optionals (!pythonOlder "3.13") [
+    "test_dynamic_subscribe_complex"
+    "test_dynamic_publish_complex"
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,12 +46,15 @@ buildPythonPackage rec {
   dependencies = [ rich-click ];
 
   env.CYCLONEDDS_HOME = "${cyclonedds.out}";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-cov-stub
   ];
+
+  disabled = (!pythonOlder "3.14");
 
   meta = {
     description = "Python binding for Eclipse Cyclone DDS";

@@ -57,6 +57,21 @@ in
     '';
   };
 
+  sqlite = makeTest {
+    name = "mediawiki-sqlite";
+    nodes.machine = {
+      services.mediawiki.database.type = "sqlite";
+    };
+    testScript = ''
+      start_all()
+
+      machine.wait_for_unit("phpfpm-mediawiki.service")
+
+      page = machine.succeed("curl -fL http://localhost/")
+      assert "MediaWiki has been installed" in page
+    '';
+  };
+
   nohttpd = makeTest {
     name = "mediawiki-nohttpd";
     nodes.machine = {

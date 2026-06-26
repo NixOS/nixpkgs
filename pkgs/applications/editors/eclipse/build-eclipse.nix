@@ -28,7 +28,7 @@
   version,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   desktopItem = makeDesktopItem {
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
@@ -123,5 +123,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.jerith666 ];
   };
-
-}
+})

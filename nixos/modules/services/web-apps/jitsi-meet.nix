@@ -25,7 +25,7 @@ let
       userJson = pkgs.writeText "user.json" (builtins.toJSON userCfg);
     in
     (pkgs.runCommand "${varName}.js" { } ''
-      ${pkgs.nodejs}/bin/node ${extractor} ${source} ${varName} > default.json
+      ${pkgs.lib.getExe pkgs.nodejs-slim} ${extractor} ${source} ${varName} > default.json
       (
         echo "var ${varName} = "
         ${pkgs.jq}/bin/jq -s '.[0] * .[1]' default.json ${userJson}
@@ -651,19 +651,17 @@ in
       };
     };
 
-    services.jitsi-meet.config =
-      recursiveUpdate
-        (mkIf cfg.excalidraw.enable {
-          whiteboard = {
-            enabled = true;
-            collabServerBaseUrl = "https://${cfg.hostName}";
-          };
-        })
-        (
-          mkIf cfg.secureDomain.enable {
-            hosts.anonymousdomain = "guest.${cfg.hostName}";
-          }
-        );
+    services.jitsi-meet.config = mkMerge [
+      (mkIf cfg.excalidraw.enable {
+        whiteboard = {
+          enabled = true;
+          collabServerBaseUrl = "https://${cfg.hostName}";
+        };
+      })
+      (mkIf cfg.secureDomain.enable {
+        hosts.anonymousdomain = "guest.${cfg.hostName}";
+      })
+    ];
 
     services.jitsi-videobridge = mkIf cfg.videobridge.enable {
       enable = true;
@@ -756,5 +754,5 @@ in
   };
 
   meta.doc = ./jitsi-meet.md;
-  meta.maintainers = lib.teams.jitsi.members;
+  meta.teams = [ lib.teams.jitsi ];
 }

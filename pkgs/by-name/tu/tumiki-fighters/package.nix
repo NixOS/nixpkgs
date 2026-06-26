@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.21";
 
   src = fetchurl {
-    url = "http://abagames.sakura.ne.jp/windows/tf${
+    url = "https://abagames.sakura.ne.jp/windows/tf${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     sha256 = "0djykfc1r8ysapklm621h89ana1c4qzc1m5nr9bqw4iccnmvwk3p";

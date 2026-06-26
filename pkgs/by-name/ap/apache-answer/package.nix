@@ -4,11 +4,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   stdenv,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildGoModule (finalAttrs: {
   pname = "apache-answer";
   version = "1.7.1";
@@ -28,9 +30,10 @@ buildGoModule (finalAttrs: {
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) src version pname;
+      inherit pnpm;
       sourceRoot = "${finalAttrs.src.name}/ui";
-      fetcherVersion = 1;
-      hash = "sha256-6IeLOwsEqchCwe0GGj/4v9Q4/Hm16K+ve2X+8QHztQM=";
+      fetcherVersion = 3;
+      hash = "sha256-0Jqe0wig28Vb9y0/tZHDfE49MehNR7kJTpChz616tzU=";
     };
 
     nativeBuildInputs = [

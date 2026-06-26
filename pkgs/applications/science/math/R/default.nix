@@ -16,7 +16,6 @@
   perl,
   readline,
   tcl,
-  texlive,
   texliveSmall,
   tk,
   xz,
@@ -46,7 +45,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.2";
+  version = "4.6.0";
 
   src =
     let
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
+      hash = "sha256-uNybRUNmDHtZa4eTjfUyOUNQNgl2Un00QijuDtEuRew=";
     };
 
   outputs = [
@@ -157,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --disable-R-framework
     --without-x
+    --without-static-cairo
     OBJC="clang"
     CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
@@ -197,23 +197,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  # make tex output available to texlive.combine
-  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
-  passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
-  passthru.tlDeps = with texlive; [
-    amsfonts
-    amsmath
-    fancyvrb
-    graphics
-    hyperref
-    iftex
-    jknapltx
-    latex
-    lm
-    tools
-    upquote
-    url
+  passthru.tlDeps = ps: [
+    ps.amsfonts
+    ps.amsmath
+    ps.fancyvrb
+    ps.graphics
+    ps.hyperref
+    ps.iftex
+    ps.jknapltx
+    ps.latex
+    ps.lm
+    ps.tools
+    ps.upquote
+    ps.url
   ];
 
   meta = {

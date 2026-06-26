@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cdk-go";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "cdk-team";
     repo = "CDK";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mknmpRp8IcqSz7HrD8ertEfv+j6lNVjvjxTWa/qqWR0=";
+    hash = "sha256-CC6MFuyZznz3PYG/g36CzcBoNNnXUAwKAXbkzOLCLsk=";
   };
 
   vendorHash = "sha256-aJN/d/BxmleRXKw6++k6e0Vb0Gs5zg1QfakviABYTog=";

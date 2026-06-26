@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.69";
 
   src = fetchurl {
-    url = "http://www.dettus.net/dhex/dhex_${finalAttrs.version}.tar.gz";
+    url = "https://www.dettus.net/dhex/dhex_${finalAttrs.version}.tar.gz";
     sha256 = "06y4lrp29f2fh303ijk1xhspa1d4x4dm6hnyw3dd8szi3k6hnwsj";
   };
 

@@ -15,6 +15,7 @@ let
     "grug-far-nvim"
     "haskell-tools-nvim"
     "image-nvim"
+    "kulala-nvim"
     "lsp-progress-nvim"
     "lualine-nvim"
     "luasnip"

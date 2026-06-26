@@ -39,6 +39,8 @@
   orc,
   cairo,
   cjson,
+  libcbor,
+  libfido2,
   libusb1,
   libpulseaudio,
   cups,
@@ -70,13 +72,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.22.0";
+  version = "3.27.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = finalAttrs.version;
-    hash = "sha256-cJFY0v2zvbaKVINOKVZGvLozwgD7kf2ffVU9EGYBMGQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-4U3QC1hka+qTQ0F7GqKPiMVwkkFeJvbjNtom5A7V/Sg=";
   };
 
   postPatch = ''
@@ -117,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     glib
     icu
+    libcbor
+    libfido2
     libx11
     libxcursor
     libxdamage
@@ -173,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.mapAttrsToList lib.cmakeBool (
     {
       BUILD_TESTING = false; # false is recommended by upstream
+      CHANNEL_RDPEWA = true;
+      CHANNEL_RDPEWA_CLIENT = true;
       WITH_CAIRO = cairo != null;
       WITH_CUPS = cups != null;
       WITH_FAAC = withUnfree && faac != null;
@@ -227,9 +233,13 @@ stdenv.mkDerivation (finalAttrs: {
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ deimelias ];
+    maintainers = with lib.maintainers; [
+      cizra
+      deimelias
+    ];
     platforms = lib.platforms.unix;
   };
 })

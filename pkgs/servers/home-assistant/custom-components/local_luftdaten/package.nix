@@ -7,18 +7,14 @@
 buildHomeAssistantComponent rec {
   owner = "lichtteil";
   domain = "local_luftdaten";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lichtteil";
     repo = "local_luftdaten";
-    rev = version;
-    hash = "sha256-68clZgS7Qo62srcZWD3Un9BnNSwQUBr4Z5oBMTC9m8o=";
+    tag = version;
+    hash = "sha256-K8sQ/xm9aoJ6EBF9H9Y87m7a0OZN4y6T3DFZcSpPYOI=";
   };
-
-  # https://github.com/lichtteil/local_luftdaten/pull/70
-  # Replace undeclared async-timeout dependency with native asyncio.timeout
-  patches = [ ./async-timeout.patch ];
 
   meta = {
     changelog = "https://github.com/lichtteil/local_luftdaten/releases/tag/${version}";

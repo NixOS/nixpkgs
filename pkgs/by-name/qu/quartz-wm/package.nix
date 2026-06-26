@@ -23,6 +23,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
 
+  patches = [ ./fix-picture-typedef-conflict.patch ];
+
   configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [
     autoreconfHook
@@ -39,9 +41,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    homepage = "https://gitlab.freedesktop.org/xorg/app/quartz-wm";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "quartz-wm";
   };
 })

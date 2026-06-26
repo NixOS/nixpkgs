@@ -1,7 +1,7 @@
 {
   fetchzip,
   revision,
-  suffix,
+  browserVersion,
   system,
   throwSystem,
   stdenv,
@@ -10,6 +10,7 @@
 
   alsa-lib,
   at-spi2-atk,
+  expat,
   glib,
   libxcomposite,
   libxdamage,
@@ -23,15 +24,20 @@
   ...
 }:
 let
+  download =
+    (import ./browser-downloads.nix {
+      name = "chromium-headless-shell";
+      inherit revision browserVersion;
+    }).${system} or throwSystem;
+
   linux = stdenv.mkDerivation {
     name = "playwright-chromium-headless-shell";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-headless-shell-${suffix}.zip";
-      stripRoot = false;
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-4xPtmjRSbkWLmV2LzVClwjeQcmktZCvDS3gYo+FlkJc=";
-          aarch64-linux = "sha256-rnurwOiST8fdAC5kGC9uR+MRidGtIZCPQLrg+xZbuZQ=";
+          x86_64-linux = "sha256-Nr0/uczFTBTqvRPR0c/wflIqG5relgKfC9XsMOdE9iE=";
+          aarch64-linux = "sha256-veEBmsivFDrG1bArQ780+gMbsoT1Zv4VLcIPpgn4M/I=";
         }
         .${system} or throwSystem;
     };
@@ -44,13 +50,14 @@ let
     buildInputs = [
       alsa-lib
       at-spi2-atk
+      expat
       glib
       libxcomposite
       libxdamage
       libxfixes
       libxrandr
       libgbm
-      libgcc.lib
+      libgcc
       libxkbcommon
       nspr
       nss
@@ -62,12 +69,11 @@ let
   };
 
   darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-headless-shell-${suffix}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-9MsBmUuaHq3P/eWxGcihzk09e1zuEr4dIMo6ZjSM8ZQ=";
-        aarch64-darwin = "sha256-i8L+C4p8DCcqb5C5B5q+JuX/fTPxhBva2dlFVDkdfQ0=";
+        x86_64-darwin = "sha256-GEomMUuaIjhBEuWF/HyMohseJtwKOn5MCgh6kIB9ZeE=";
+        aarch64-darwin = "sha256-7laJtPAiy6pYAxCNBxRYk+FmriXemmLW8UYteEdVrd0=";
       }
       .${system} or throwSystem;
   };

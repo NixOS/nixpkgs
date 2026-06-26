@@ -6,19 +6,18 @@
   pytz,
   setuptools,
   setuptools-scm,
-  six,
   sqlalchemy,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygtfs";
-  version = "0.1.10";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bOG/bXz97eWM77AprQvEgtl9g2fQbbKcwniF1fAC0d0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-NaSGjzBBFK3mqHibcKV2gQIQoWn+qZay7KJasjcwxW4=";
   };
 
   build-system = [
@@ -29,20 +28,21 @@ buildPythonPackage rec {
   dependencies = [
     docopt
     pytz
-    six
     sqlalchemy
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
   enabledTestPaths = [ "pygtfs/test/test.py" ];
 
   pythonImportsCheck = [ "pygtfs" ];
 
   meta = {
     description = "Python module for GTFS";
-    mainProgram = "gtfs2db";
     homepage = "https://github.com/jarondl/pygtfs";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/jarondl/pygtfs/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "gtfs2db";
   };
-}
+})

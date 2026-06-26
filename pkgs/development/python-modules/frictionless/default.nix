@@ -195,7 +195,8 @@ buildPythonPackage rec {
     openpyxl
     xlrd
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  # datasette is transitively broken by asgi-csrf
+  ++ lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "datasette" ]);
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)
@@ -225,5 +226,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
+    mainProgram = "frictionless";
   };
 }

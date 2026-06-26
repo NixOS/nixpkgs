@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-sso";
-  version = "0.20.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomasvotava";
     repo = "fastapi-sso";
     tag = finalAttrs.version;
-    hash = "sha256-bj6csovJSVhzVaPfktJ68cOgULVifT1Ql14SL+paVG0=";
+    hash = "sha256-/5YuHLDYLnVQc/34OdlRTCJAVL2z6MZV8stSV/tpte4=";
   };
 
   build-system = [ poetry-core ];

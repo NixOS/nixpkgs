@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     HYPERROGUE_USE_GLEW = 1;
     HYPERROGUE_USE_PNG = 1;
     HYPERROGUE_USE_ROGUEVIZ = 1;
-  };
 
-  CXXFLAGS = [
-    "-I${lib.getDev SDL}/include/SDL"
-    "-DHYPERPATH='\"${placeholder "out"}/share/hyperrogue/\"'"
-    "-DRESOURCEDESTDIR=HYPERPATH"
-  ];
+    CXXFLAGS = toString [
+      "-I${lib.getDev SDL}/include/SDL"
+      "-DHYPERPATH='\"${placeholder "out"}/share/hyperrogue/\"'"
+      "-DRESOURCEDESTDIR=HYPERPATH"
+    ];
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.roguetemple.com/z/hyper/";
     changelog = "https://github.com/zenorogue/hyperrogue/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyperrogue";
-    maintainers = with lib.maintainers; [ rardiol ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };

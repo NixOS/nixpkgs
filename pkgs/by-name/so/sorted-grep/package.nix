@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
   };
 })

@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.2-beta-release";
+  version = "0.4.7-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-nx485HB0JqexcSdwhgbhoAwpK3Cg7tkgDrV3NM93pXk=";
+    hash = "sha256-Da/sgfhmSkUim05mJDNgxMohiLtAFdt3jyzsT/4vjj0=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-5Y6hTsHSFOPhgLwEhMNOOCyLYNjp1Q5n8My3Q6lr7hQ=";
+    hash = "sha256-6E7QAJO4R9Iszc8olyPnLUUAmrvMLDFivV3QN11qa60=";
   };
 
-  vendorHash = "sha256-4K0fxBBcv+ZSV0ocsoagjFAXRphA27xGO40pnewaKSU=";
+  vendorHash = "sha256-lJv1mBwwd9CTbSFVdu7H3Y9jkAJStMEa2SRYKAGOQUI=";
 
   preBuild = ''
     # Generate static pages

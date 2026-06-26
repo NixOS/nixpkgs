@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs)";
     homepage = "https://www.coin-or.org/SYMPHONY/index.htm";
-    changelog = "https://github.com/coin-or/SYMPHONY/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/coin-or/SYMPHONY/blob/releases/${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.linux;
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ b-rodrigues ];

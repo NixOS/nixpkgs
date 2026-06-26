@@ -1,33 +1,104 @@
 {
   lib,
-  callPackage,
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python3,
   nltk-data,
   writeShellScript,
   nix-update-script,
+
+  # frontend
+  fetchYarnDeps,
+  dart-sass,
+  nodejs,
+  fixup-yarn-lock,
+  stdenv,
+  yarn,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "3.9.2";
+  version = "3.19.2";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-jR9NGguxobUenjnvh6vhZztntxNM2rkwkWcq/DeB4JY=";
+    hash = "sha256-OH48XiOoaIdVCl5tm22OaI5UKKlhj8b0uVsGlgsjx6I=";
   };
 
-  frontend = callPackage (import ./mealie-frontend.nix src version) { };
+  frontend = stdenv.mkDerivation {
+    name = "mealie-frontend";
+    inherit version;
+    src = "${src}/frontend";
 
-  pythonpkgs = python3Packages;
-  python = pythonpkgs.python;
+    __structuredAttrs = true;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = "${src}/frontend/yarn.lock";
+      hash = "sha256-q3dqJrzqEx0G3Q/EGhjVzBd6XTAn6cELfaqLJCD5kFs=";
+    };
+
+    nativeBuildInputs = [
+      fixup-yarn-lock
+      nodejs
+      (yarn.override { inherit nodejs; })
+      writableTmpDirAsHomeHook
+      dart-sass
+    ];
+
+    env = {
+      NUXT_TELEMETRY_DISABLED = 1;
+    };
+
+    configurePhase = ''
+      runHook preConfigure
+
+      sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
+
+      yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
+      fixup-yarn-lock yarn.lock
+      yarn install --offline --frozen-lockfile --no-progress --non-interactive --ignore-scripts
+      patchShebangs node_modules
+
+      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
+
+      runHook postConfigure
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      yarn --offline generate
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mv .output/public $out
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Frontend for Mealie";
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
+        litchipi
+        esch
+      ];
+    };
+  };
+
+  python = python3;
+  pythonpkgs = python.pkgs;
 in
-pythonpkgs.buildPythonApplication rec {
+pythonpkgs.buildPythonApplication (finalAttrs: {
   pname = "mealie";
   inherit version src;
   pyproject = true;
+
+  __structuredAttrs = true;
 
   build-system = with pythonpkgs; [ setuptools ];
 
@@ -50,8 +121,10 @@ pythonpkgs.buildPythonApplication rec {
       beautifulsoup4
       extruct
       fastapi
+      freezegun
       html2text
       httpx
+      httpx-curl-cffi
       ingredient-parser-nlp
       isodate
       itsdangerous
@@ -81,6 +154,7 @@ pythonpkgs.buildPythonApplication rec {
       typing-extensions
       tzdata
       uvicorn
+      yt-dlp
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -88,7 +162,7 @@ pythonpkgs.buildPythonApplication rec {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==80.9.0"' '"setuptools"'
+     --replace-fail '"setuptools==82.0.1"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
@@ -108,11 +182,11 @@ pythonpkgs.buildPythonApplication rec {
       rm -f $out/bin/*
 
       makeWrapper ${start_script} $out/bin/mealie \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
-        --set STATIC_FILES "${frontend}"
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
+        --set STATIC_FILES "${finalAttrs.passthru.frontend}"
 
       makeWrapper ${init_db} $out/libexec/init_db \
-        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
+        --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath finalAttrs.passthru.dependencies}" \
         --set OUT "$out"
     '';
 
@@ -132,7 +206,13 @@ pythonpkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
     tests = {
       inherit (nixosTests) mealie;
     };
@@ -147,12 +227,13 @@ pythonpkgs.buildPythonApplication rec {
       the UI editor.
     '';
     homepage = "https://mealie.io";
-    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
+    changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       litchipi
       anoa
+      esch
     ];
     mainProgram = "mealie";
   };
-}
+})

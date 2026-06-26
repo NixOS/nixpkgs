@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qt5.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [

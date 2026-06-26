@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "lizard";
-  version = "1.20.0";
+  version = "1.22.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "terryyin";
     repo = "lizard";
-    rev = version;
-    hash = "sha256-HNpCg/ScD0aDdpVXA9Nb9QU+4ww6Kp2qIeu9Lj0O7A4=";
+    tag = version;
+    hash = "sha256-Gh7ufW8A3FiQMCppwl2SIeOie9O/kl3wYxV4kW4raDQ=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lizard" ];
 
   meta = {
-    changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/terryyin/lizard/blob/${src.tag}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
     mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";

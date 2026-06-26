@@ -25,19 +25,17 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cadwyn";
-  version = "5.6.1";
-  format = "pyproject";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zmievsa";
     repo = "cadwyn";
-    tag = version;
-    hash = "sha256-VVi79c/Y1mu520H/7gy9lGdBIVuKsYedU49P501NQao=";
+    tag = finalAttrs.version;
+    hash = "sha256-UI5gD4WXzn3a/7SDNKGvfGLRteMmCD/yHMEoXZ8By+A=";
   };
-
-  disabled = pythonAtLeast "3.14";
 
   build-system = [ hatchling ];
 
@@ -69,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Production-ready community-driven modern Stripe-like API versioning in FastAPI";
     homepage = "https://github.com/zmievsa/cadwyn";
-    changelog = "https://github.com/zmievsa/cadwyn/releases/tag/${version}";
+    changelog = "https://github.com/zmievsa/cadwyn/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ taranarmo ];
   };
-}
+})

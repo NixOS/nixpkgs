@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "oil-bugreport";
     homepage = "https://liboil.freedesktop.org";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

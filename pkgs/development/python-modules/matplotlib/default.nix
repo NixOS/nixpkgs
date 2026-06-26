@@ -76,13 +76,13 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.5";
+  version = "3.10.9";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NS7WzPt5mKAIgWkvOLTKCDxpHT4nW0FFQjcEw0yQkHY=";
+    hash = "sha256-/WZQjoxod9mOWGZUtgigRW241+ilRuseJgDv2VcwI1g=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -204,7 +204,6 @@ buildPythonPackage rec {
       bsd0
     ];
     maintainers = with lib.maintainers; [
-      lovek323
       veprbl
     ];
   };

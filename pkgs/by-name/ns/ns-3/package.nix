@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ns-3";
-  version = "44";
+  version = "47";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo = "ns-3-dev";
     rev = "ns-3.${finalAttrs.version}";
-    hash = "sha256-rw/WAMk4ZitULqkdyEh9vAFp1UrD1tw2JqgxOT5JQ5I=";
+    hash = "sha256-Av5Ret1v4RLafvYvUtCEh4Xb1ZwU3CgNOcDlRJrJsn8=";
   };
 
   nativeBuildInputs = [
@@ -118,13 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
      substituteInPlace src/tap-bridge/CMakeLists.txt \
-       --replace '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
+       --replace-fail '-DTAP_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/tap-bridge/' "-DTAP_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DRAW_SOCK_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DRAW_SOCK_CREATOR=\"$out/libexec/ns3/"
 
     substituteInPlace src/fd-net-device/CMakeLists.txt \
-      --replace '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
+      --replace-fail '-DTAP_DEV_CREATOR="''${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/fd-net-device/' "-DTAP_DEV_CREATOR=\"$out/libexec/ns3/"
   '';
 
   doCheck = false;
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     "build" + lib.optionalString enableDoxygen " doxygen" + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
-  CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
+  env.CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   # Make generated python bindings discoverable in customized python environment
   passthru = {

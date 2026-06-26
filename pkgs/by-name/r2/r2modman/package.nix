@@ -5,42 +5,42 @@
   dart-sass,
   electron,
   fetchFromGitHub,
-  fetchurl,
   makeDesktopItem,
   makeWrapper,
-  nix-update-script,
   nodejs,
   yarn-berry,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.13";
+  version = "3.2.17";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dy+xVGh5VNGXI34ecglLFl/h6SXyUdfzyvLCjXYmC/w=";
+    hash = "sha256-DXGgTezCcMl37Vu7R+2dwWJmuqsXXtlWRYMX9gqm7+w=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-5XTkUa31D83oZRZBQ9yUDjgf/4gWCDd+pr4FTNDW9F0=";
+    hash = "sha256-RAQgaxcQl15JqZsLA9ISfOiGgob4yYuc4bhjZFzW8xk=";
   };
 
   patches = [
-    # Temporary fix for MiSide cover image https://github.com/ebkr/r2modmanPlus/pull/2024
-    (fetchurl {
-      url = "https://github.com/ebkr/r2modmanPlus/commit/24a2b8386c7fe9a6856cea06967c96aa685d3660.patch";
-      hash = "sha256-6NmwFRtn8+t9XRPHHVLM05idbCSYcBG0VmUOd8fZKs0=";
-    })
-
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
+    ./yarn-4.14-support.patch
+
+    # Fix copying of wrapper files to game directory
+    ./wrapper-fix.patch
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
@@ -118,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };

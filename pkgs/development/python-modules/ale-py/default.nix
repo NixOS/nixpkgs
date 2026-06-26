@@ -7,8 +7,10 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
-  setuptools,
+  nanobind,
+  scikit-build-core,
+  # linux-only
+  jax,
 
   # buildInputs
   SDL2,
@@ -16,86 +18,63 @@
   zlib,
 
   # dependencies
-  importlib-resources,
   numpy,
-  typing-extensions,
-  jax,
 
   # tests
+  chex,
   gymnasium,
-  opencv-python,
   pytestCheckHook,
-
-  # Whether to enable recently added vector environments:
-  # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.11.0/docs/vector-environment.md
-  # FIXME: Disabled by default as it mysteriously causes stable-baselines3's tests to hang indefinitely.
-  withVectorEnv ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ale-py";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
-    tag = "v${version}";
-    hash = "sha256-4IkjW8HX21uBEHFtb3qETxco6FfDMgLbG1BDHWwvn58=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hFbreHk0i4h+JOyvDYcNX3TmwgvxNC5U0l5Xrqqz1zQ=";
   };
 
   build-system = [
     cmake
     ninja
-    pybind11
-    setuptools
-  ];
-
-  buildInputs = [
-    SDL2
-    zlib
-  ]
-  ++ lib.optionals withVectorEnv [
-    opencv
-  ];
-
-  dependencies = [
-    gymnasium
-    importlib-resources
-    numpy
-    typing-extensions
+    scikit-build-core
+    nanobind
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     jax
   ];
 
-  postPatch =
-    # Relax the pybind11 version
-    ''
-      substituteInPlace src/ale/python/CMakeLists.txt \
-        --replace-fail \
-          'find_package(pybind11 ''${PYBIND11_VER} QUIET)' \
-          'find_package(pybind11 QUIET)'
-    ''
-    + lib.optionalString (!withVectorEnv) ''
-      substituteInPlace setup.py \
-        --replace-fail \
-          "-DBUILD_VECTOR_LIB=ON" \
-          "-DBUILD_VECTOR_LIB=OFF"
-    '';
+  # disable lto on darwin, cmake cannot find llvm-ar
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ale/CMakeLists.txt \
+      --replace-fail \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
+  '';
 
   dontUseCmakeConfigure = true;
 
+  buildInputs = [
+    SDL2
+    zlib
+    opencv
+  ];
+
+  dependencies = [
+    numpy
+  ];
+
   pythonImportsCheck = [ "ale_py" ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
+    chex
     gymnasium
     pytestCheckHook
-  ]
-  + lib.optionals withVectorEnv [
-    opencv-python
   ];
 
   disabledTests = [
@@ -103,26 +82,36 @@ buildPythonPackage rec {
     # line 414 in test_display_screen
     "test_display_screen"
 
-    # test_atari_env.py tests fail on the majority of the environments because the ROM are missing.
+    # Most Atari tests fail because the ROM are missing.
     # The user is expected to manually download the roms:
     # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
+    "TestVectorEnv"
     "test_check_env"
+    "test_clone_pickle_restore_new_env"
+    "test_clone_restore"
+    "test_continuous_actions"
+    "test_determinism"
+    "test_gym_keys_to_action"
+    "test_jit"
+    "test_obs_params"
     "test_reset_step_shapes"
     "test_rollout_consistency"
+    "test_seeding"
     "test_sound_obs"
+    "test_state_serialize_roundtrip"
+  ];
+
+  disabledTestPaths = [
+    #
+    "tests/python/test_atari_vector_xla.py"
   ];
 
   meta = {
     description = "Simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
     mainProgram = "ale-import-roms";
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
-    changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
+    changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    badPlatforms = [
-      # FAILED: src/ale/libale.a
-      # /bin/sh: CMAKE_CXX_COMPILER_AR-NOTFOUND: command not found
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
-}
+})

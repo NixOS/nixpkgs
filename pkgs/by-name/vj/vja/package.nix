@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vja";
-  version = "5.0.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ce72";
     repo = "vja";
     tag = finalAttrs.version;
-    hash = "sha256-ny0ZKsAwjHgN/8XBewYRiKt3YK3XyKshmJVQsKJrwog=";
+    hash = "sha256-SLvr5e55XY+Yl3n5H6vvBV0nQ2DRcdIFaM8Wp0BGRrs=";
   };
 
   build-system = [
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     click
     click-aliases
     parsedatetime
+    pyjwt
     python-dateutil
     requests
   ];

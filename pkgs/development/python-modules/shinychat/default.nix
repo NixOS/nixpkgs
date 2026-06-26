@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "shinychat";
-  version = "0.2.8";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "shinychat";
-    tag = "py/v${version}";
-    hash = "sha256-thdLaZ+rnD8yumxhjXOLhufcSBD0oNKOWSxxDdJ9tNU=";
+    tag = "r/v${version}";
+    hash = "sha256-d+wcZuokZ8uH/z/IthH6h2SDD81NJg1cn6+jwYwfcxE=";
   };
 
   build-system = [

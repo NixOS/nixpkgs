@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     i3ipc
     psutil
     tenacity
-    xlib
+    python-xlib
   ];
 
   installPhase = ''
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       Therefore it's recommended to supplement the script with use of systemd user
       services for such background apps.
     '';
+    homepage = "https://github.com/alebastr/sway-systemd";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickhu ];

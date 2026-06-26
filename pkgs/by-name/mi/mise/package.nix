@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.2.9";
+  version = "2026.6.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JIItmBm0T50688seBgNyDHmPDlhLG90C+UGo1519Hk8=";
+    hash = "sha256-8sC/gSgpP2A6rh8j0aZeMq8pLwbBvcSUAxhehQlTLJg=";
   };
 
-  cargoHash = "sha256-mW3bsGA7Bx/aoh0GIIUBJaMhGgYzN9zT/nT44ADEqoc=";
+  cargoHash = "sha256-yya9rtEki0o0MfBeWK2/Mo16/I1Mg6aCZOQOP8aWJi0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
@@ -74,6 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    # Nix's Linux sandbox rejects setting setuid bits.
+    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
@@ -83,6 +89,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -104,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         # Ignore subcrate releases (fox, aqua-registry)
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
     tests = {

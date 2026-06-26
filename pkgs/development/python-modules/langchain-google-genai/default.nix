@@ -27,27 +27,22 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "4.2.0";
+  version = "4.2.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
-    tag = "libs/genai/v${version}";
-    hash = "sha256-1WL5pasYHKzXRbOGo910SP3YP6eg00aFoOd7RTwV++A=";
+    tag = "libs/genai/v${finalAttrs.version}";
+    hash = "sha256-NgP3KyhFprlUoZUg69ZVqTwG9IW6nvX3k6VYz69LdrU=";
   };
 
-  sourceRoot = "${src.name}/libs/genai";
+  sourceRoot = "${finalAttrs.src.name}/libs/genai";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-  ];
 
   dependencies = [
     filetype
@@ -74,6 +69,15 @@ buildPythonPackage rec {
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
     "test_serialize"
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for GenerateContentResponse
+    # extra inputs are not permitted
+    "test_grounding_metadata_to_citations_conversion"
+  ];
+
+  disabledTestPaths = [
+    # AssertionError: assert {'google_maps...s': None, ...} == {'google_maps...a'...
+    # https://github.com/langchain-ai/langchain-google/issues/1791
+    "tests/unit_tests/test_chat_models.py::test_response_to_result_grounding_metadata"
   ];
 
   pythonImportsCheck = [ "langchain_google_genai" ];
@@ -87,7 +91,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-google/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain integrations for Google Gemini";
     homepage = "https://github.com/langchain-ai/langchain-google/tree/main/libs/genai";
     license = lib.licenses.mit;
@@ -96,4 +100,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

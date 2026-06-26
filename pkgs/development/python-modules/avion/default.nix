@@ -6,15 +6,16 @@
   fetchPypi,
   pycryptodome,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "avion";
   version = "0.10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-v/0NwFmxDZ9kEOx5qs5L9sKzOg/kto79syctg0Ah+30=";
   };
 
@@ -24,7 +25,9 @@ buildPythonPackage rec {
       --replace "bluepy>==1.1.4" "bluepy>=1.1.4"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bluepy
     csrmesh
     pycryptodome
@@ -43,4 +46,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

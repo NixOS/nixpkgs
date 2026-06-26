@@ -1,4 +1,9 @@
-{ callPackage }:
+{
+  callPackage,
+  runCommand,
+  lib,
+  stdenv,
+}:
 let
   src = callPackage ./src.nix { };
 in
@@ -14,6 +19,8 @@ rec {
     # Flags based on discussion in https://github.com/NixOS/nixpkgs/issues/482250
     "--disable-debug"
     "--disable-debug-symbols"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--enable-lto=thin,cross"
   ];
 
@@ -22,6 +29,9 @@ rec {
       echo "applying LibreWolf patch: $patch_name"
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
+
+    rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
+    rm -rf toolkit/components/ml/vendor/openai
 
     cp -r ${source}/themes/browser .
     cp ${source}/assets/search-config.json services/settings/dumps/main/search-config.json
@@ -40,13 +50,22 @@ rec {
     echo "patching appstrings.properties"
     find . -path '*/appstrings.properties' -exec sed -i s/Firefox/LibreWolf/ {} \;
 
-    for fn in $(find "${source}/l10n/en-US/browser" -type f -name '*.inc.ftl'); do
-      target_fn=$(echo "$fn" | sed "s,${source}/l10n,browser/locales," | sed "s,\.inc\.ftl$,.ftl,")
+    for fn in $(find "${source}/l10n/en-US/browser" -type f -name '*.inc.*'); do
+      target_fn=$(echo "$fn" | sed "s,${source}/l10n/en-US/browser,browser/locales/en-US," | sed "s,\.inc,,")
       cat "$fn" >> "$target_fn"
     done
   '';
 
-  extraPrefsFiles = [ "${source}/settings/librewolf.cfg" ];
+  localSettingsPrefs = runCommand "local-settings.js" { } ''
+    # Import of `librewolf.cfg` file is already being done manually.
+    substitute ${source}/settings/defaults/pref/local-settings.js $out \
+      --replace-fail 'pref("general.config.filename", "librewolf.cfg");' ""
+  '';
+
+  extraPrefsFiles = [
+    "${source}/settings/librewolf.cfg"
+    localSettingsPrefs
+  ];
 
   extraPoliciesFiles = [ "${source}/settings/distribution/policies.json" ];
 

@@ -10,26 +10,30 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.7";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
+    hash = "sha256-8QOk96Y3GIIvBUGIDikMgTylx8y5aCyr68/TP5w5ha4=";
   };
 
-  patches =
-    lib.optional stdenv.hostPlatform.isRiscV
-      # Adds CMake option HWY_CMAKE_RVV
-      # https://github.com/google/highway/pull/1743
-      (
-        fetchpatch {
-          name = "libhwy-add-rvv-optout.patch";
-          url = "https://github.com/google/highway/commit/5d58d233fbcec0c6a39df8186a877329147324b3.patch";
-          hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
-        }
-      );
+  patches = [
+    # Apply upstream workaround for gcc-15 bug:
+    #   https://github.com/google/highway/issues/2813
+    #   https://github.com/google/highway/pull/2824
+    (fetchpatch {
+      name = "gcc-15-clone-hack-prerequisite.patch";
+      url = "https://github.com/google/highway/commit/3b680cde3a556bead9cc23c8f595d07a44d5a0d5.patch";
+      hash = "sha256-8xBPuhsifalhzKgeEOQq6yZw2NWas+SFQrNIaMicRnY=";
+    })
+    (fetchpatch {
+      name = "gcc-15-clone-hack.patch";
+      url = "https://github.com/google/highway/commit/5af21b8a9078330a3d7456d855e69245bb87bc7a.patch";
+      hash = "sha256-hC/oEdxHsdZKlLFIw929ZHjffPURGzk9jiKz6iGSLkY=";
+    })
+  ];
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
     # aarch64-specific code gets:

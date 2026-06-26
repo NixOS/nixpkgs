@@ -1,7 +1,6 @@
 {
   lib,
   beam27Packages,
-  elixir_1_18,
   stdenv,
   fetchurl,
   python3,
@@ -41,17 +40,17 @@ let
     ]
   );
 
-  beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
+  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rabbitmq-server";
-  version = "4.2.4";
+  version = "4.2.5";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XIBsD1xmRF4me4byAtiDqInmQ4y5dxKSezc2tZuapLU=";
+    hash = "sha256-cI/imLX4pdZTl1HDKaE2WwOOaWpwC78KyqWHmxsFQj0=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   boost,
@@ -21,21 +20,25 @@
   python3,
   qtbase,
   qtdeclarative,
+  qtscxml,
   qttools,
   validatePkgConfig,
   wrapQtAppsHook,
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     tag = finalAttrs.version;
-    hash = "sha256-/rb1Fx0TbBuff2dWAgxpd72opTnLe0itcGwLJ53Wu9U=";
+    hash = "sha256-FqpTEGbSwN+2oG/G2Zf80rSfezJP/ogtIkVdIrX4FMU=";
   };
 
   outputs = [
@@ -43,15 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
-
-  patches = [
-    # Remove when version > 0.3.0
-    (fetchpatch {
-      name = "0001-lomiri-download-manager-Properly-include-lomiri-api-includedirs.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/commit/b847aca92cea6f729b96f7a55f765ae4d9fbf741.patch";
-      hash = "sha256-hx/b80P5nbonlP3B8ekjZjxUGV3Ofm/lai0RU1ak9Gs=";
-    })
-  ];
 
   postPatch = ''
     # Substitute systemd's prefix in pkg-config call
@@ -71,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     validatePkgConfig
     wrapQtAppsHook
+  ]
+  ++ lib.optionals withQt6 [
+    qtscxml
   ]
   ++ lib.optionals withDocumentation [
     doxygen
@@ -98,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_DOC" withDocumentation)
-    (lib.cmakeBool "ENABLE_WERROR" true)
+    (lib.cmakeBool "ENABLE_WERROR" (!withQt6))
   ];
 
   makeTargets = [ "all" ] ++ lib.optionals withDocumentation [ "doc" ];
@@ -129,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
-    pkgConfigModules = [
+    pkgConfigModules = map (pc: pc + lib.optionalString withQt6 "-qt6") [
       "ldm-common"
       "lomiri-download-manager-client"
       "lomiri-download-manager-common"

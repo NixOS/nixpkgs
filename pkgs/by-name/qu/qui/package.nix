@@ -1,25 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   stdenvNoCC,
   nixosTests,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "qui";
-  version = "1.13.1";
+  version = "1.20.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zpOz5X3Okig5PNdzwa1nS6HaldSXEFIQ/Aj0dQczabs=";
+    hash = "sha256-h1OIz+4oVuHg7bKWSKgkEwouX1oJKJmOC1VI+nrPwmI=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_11
       typescript
     ];
 
@@ -42,9 +42,9 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-3TAB5StrKBmgit02J7GiMfk6EDl8oiLvcOAnCJ9ian4=";
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-nSlW06//r/olVgSBgHc8LGWWfNXewAF5cZXfoZemC+w=";
     };
 
     postBuild = ''
@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-F4P+hpbAFWCrk+lSleOQFTsR3kfZoWkMbybeKPzMv20=";
+  vendorHash = "sha256-4HQOoBDjV3Pt4O/KMu8c3aeUB5evceIdlAnsixO1Pjs=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -66,6 +66,14 @@ buildGoModule (finalAttrs: {
     "-X github.com/autobrr/qui/internal/buildinfo.Version=${finalAttrs.version}"
     "-X main.PolarOrgID="
   ];
+
+  # some season-pack tests use non-existent source paths (e.g. /media/...) and
+  # assert on a same-filesystem check that resolves them up to /. go's
+  # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
+  # something sane
+  preCheck = ''
+    export TMPDIR=/tmp
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

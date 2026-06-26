@@ -63,7 +63,7 @@ buildPythonPackage rec {
       --replace-fail '_port = get_free_port()' ""
 
     substituteInPlace tests/utils/server.py \
-      --replace-fail '_Middleware' '_Middlewares' \
+      --replace-fail '_Middleware' '_Middlewares'
   '';
 
   nativeBuildInputs = [ poetry-core ];

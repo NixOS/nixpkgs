@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   runCommand,
   config,
   pkg-config,
@@ -31,9 +30,10 @@
   libjwt,
   libyaml,
   json_c,
-  http-parser,
+  llhttp,
   # enable internal X11 support via libssh2
   enableX11 ? true,
+  enablePAM ? true,
   enableNVML ? config.cudaSupport,
   cudaPackages,
   symlinkJoin,
@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "25.11.2.1";
+  version = "26.05.1.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-ukQlxKD+XhvL/sh15g3Tk5drsgXkK3hV+PFa1d2y9mk=";
+    tag = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-ZH80Ws/9+7pjDe7aZyyDHXFbNvmw8C7OJXiw5+/3jkA=";
   };
 
   outputs = [
@@ -61,18 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     substituteInPlace src/common/env.c \
-        --replace "/bin/echo" "${lib.getExe' coreutils "echo"}"
+        --replace-fail "/bin/echo" "${lib.getExe' coreutils "echo"}"
 
     # Autoconf does not support split packages for pmix (libs and headers).
     # Fix the path to the pmix libraries, so dlopen can find it.
     substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
-        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
-                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+        --replace-fail 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                       'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
 
   ''
   + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
-        --replace '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
+        --replace-fail '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
   '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     dbus
     libbpf
-    http-parser
+    llhttp
     s2n-tls
   ]
   ++ lib.optionals enableX11 [ xauth ]
@@ -121,17 +121,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-freeipmi=${freeipmi}"
-    "--with-http-parser=${http-parser}"
+    "--with-llhttp-parser=${lib.getDev llhttp}"
     "--with-hwloc=${lib.getDev hwloc}"
     "--with-json=${lib.getDev json_c}"
     "--with-jwt=${libjwt}"
     "--with-lz4=${lib.getDev lz4}"
-    "--with-munge=${munge}"
+    "--with-munge=${lib.getDev munge}"
     "--with-yaml=${lib.getDev libyaml}"
     "--with-ofed=${lib.getDev rdma-core}"
     "--sysconfdir=/etc/slurm"
     "--with-pmix=${lib.getDev pmix}"
     "--with-bpf=${libbpf}"
+    "--enable-slurmrestd"
     "--with-s2n=${
       symlinkJoin {
         name = s2n-tls.name;
@@ -144,16 +145,35 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional enableNVML "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml")
+  ++ (lib.optional enablePAM "--enable-pam --with-pam_dir=${placeholder "out"}/lib/security");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
     patchShebangs ./doc/man/man2html.py
+  ''
+  + (lib.optionalString enablePAM ''
+    mkdir -p $out/lib/security
+  '');
+  postConfigure = lib.optionalString enablePAM ''
+    rm -rf $out
   '';
 
-  postInstall = ''
-    rm -f $out/lib/*.la $out/lib/slurm/*.la
+  postBuild = lib.optionalString enablePAM ''
+    make -C contribs/pam
+    make -C contribs/pam_slurm_adopt
   '';
+
+  postInstall =
+    (lib.optionalString enablePAM ''
+      export LIBRARY_PATH="$PWD/src/api/.libs:''${LIBRARY_PATH:+:$LIBRARY_PATH}"
+      mkdir -p $out/lib/security
+      make -C contribs/pam install
+      make -C contribs/pam_slurm_adopt install
+    '')
+    + ''
+      rm -f $out/lib/*.la $out/lib/slurm/*.la $out/lib/security/*.la
+    '';
 
   enableParallelBuilding = true;
 
@@ -166,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       markuskowa
+      edwtjo
     ];
   };
 })

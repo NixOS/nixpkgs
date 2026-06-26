@@ -5,17 +5,18 @@
   pkg-config,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flux9s";
-  version = "0.7.2";
+  version = "0.10.2";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-B1BZuR+ieW4/ykYl0kltM7hou7oBT9qky9MY5V43r9g=";
+    hash = "sha256-a+kGFxhqeo8Na5T4IZkyhFyPqT6FvOLP3oiuJUuJIOY=";
   };
 
-  cargoHash = "sha256-Re+vX59uJQyQsPBJTWjj8QphxqyN/KpbcS+jzRBlyEw=";
+  cargoHash = "sha256-M2UCpSwKVFGXACcYkxJ8TzRHYgTLqt29RBMMdRvHZv8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -24,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "K9s-inspired terminal UI for monitoring Flux GitOps resources in real-time";

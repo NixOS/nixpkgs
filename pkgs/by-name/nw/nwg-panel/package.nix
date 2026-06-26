@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-panel";
-  version = "0.10.13";
+  version = "0.10.15";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TfE2RjbCBoHcdp9st+HeVhSfTMahZdQaItOIuT8Sxcc=";
+    hash = "sha256-zRoOsVnwn2DQctB9ZP0pAAnf9Ragd2RZGHZGN1KnMsQ=";
   };
 
   # No tests
@@ -66,9 +66,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ++ [ libdbusmenu-gtk3 ];
 
   postInstall = ''
-    mkdir -p $out/share/{applications,pixmaps}
-    cp $src/nwg-panel-config.desktop nwg-processes.desktop $out/share/applications/
-    cp $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg $out/share/pixmaps/
+    install -D $src/nwg-panel-config.desktop nwg-processes.desktop -t $out/share/applications/
+    install -D $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
   preFixup = ''

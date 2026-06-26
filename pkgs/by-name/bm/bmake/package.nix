@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20251111";
+  version = "20260313";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RaP4UVZ3uo85M9ghP0u2EaXDyIOAvi5GIi+kRwlQYGA=";
+    hash = "sha256-dsjzzULuBc/7R7zIElbj1edCb00I5zN4i0WYXe30+XU=";
   };
 
   patches = [
@@ -62,7 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
       "varmod-localtime"
     ]
     # TODO: drop the name-conditioning on stdenv rebuild
-    ++ lib.optional (stdenv.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin") "export"
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin"
+    ) "export"
   );
 
   strictDeps = true;

@@ -9,14 +9,14 @@
   libxpm,
   pkg-config,
   xorgproto,
-  Xaw3d,
+  libxaw3d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvkbd";
   version = "4.1";
   src = fetchurl {
-    url = "http://t-sato.in.coocan.jp/xvkbd/xvkbd-${finalAttrs.version}.tar.gz";
+    url = "https://t-sato.in.coocan.jp/xvkbd/xvkbd-${finalAttrs.version}.tar.gz";
     sha256 = "1x5yldv9y99cw5hzzs73ygdn1z80zns9hz0baa355r711zghfbcm";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxtst
     xorgproto
     libxi
-    Xaw3d
+    libxaw3d
     libxpm
   ];
 

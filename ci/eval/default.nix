@@ -38,7 +38,6 @@ let
       fileset = unions (
         map (lib.path.append ../..) [
           ".version"
-          "ci/supportedSystems.json"
           "ci/eval/attrpaths.nix"
           "ci/eval/chunk.nix"
           "ci/eval/outpaths.nix"
@@ -53,7 +52,9 @@ let
       );
     };
 
-  supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
+  supportedSystems = builtins.fromJSON (
+    builtins.readFile ../../pkgs/top-level/release-supported-systems.json
+  );
 
   attrpathsSuperset =
     {
@@ -287,6 +288,9 @@ let
       #   | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
       # ```
       touchedFilesJson ? builtins.toFile "touched-files.json" "[ ]",
+      # The branch the local comparison is made against; matches the `master`
+      # used in the touched-files expression above.
+      baseBranch ? "master",
     }:
     let
       diffs = symlinkJoin {
@@ -304,7 +308,7 @@ let
       };
       comparisonReport = compare {
         combinedDir = combine { diffDir = diffs; };
-        inherit touchedFilesJson;
+        inherit touchedFilesJson baseBranch;
       };
     in
     comparisonReport;

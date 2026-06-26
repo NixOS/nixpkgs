@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.12";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-XwVvkxG5627E5BE2Yp0w/mFjaG1nYa0Olm8Gz6V4+eA=";
+    hash = "sha256-+lpJlGaVGTcZpoGvcHAsb5N5M4Y3McV4GSZpSwZxX3Y=";
   };
 
   cmakeFlags = [

@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   qtlocation,
   stdenv,
@@ -17,6 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h7PFoGJ5P+k5AEv+y0XReYnPdP/bD4nr/uW9jZ5DCy4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix build with gcc15
+    (fetchpatch {
+      url = "https://github.com/maplibre/maplibre-native/commit/dde3fdd398a5f7b49300b1a761057bdd3286ae24.patch";
+      hash = "sha256-UQ4Y2aoBsHQHEqlrwn4OUzICeT3MNVZlHFK/KphvV/c=";
+      stripLen = 1;
+      extraPrefix = "vendor/maplibre-native/";
+    })
+  ];
 
   postPatch = lib.optionals (lib.versionAtLeast qtlocation.version "6.10") ''
     # fix build with Qt 6.10

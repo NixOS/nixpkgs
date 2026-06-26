@@ -28,14 +28,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Dc67hYgZ0aAauZLrVp10jmP52AwdLIZw0iWR9YKHTtU=";
+    hash = "sha256-Z7Gq+kXIfMdZs48WeptRGXhXnLfehegAwTtQpTbPM4U=";
   };
 
   # Fix CMake 4 compatibility
@@ -84,7 +84,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mkl
     ]
     ++ lib.optionals withCUDA [
-      cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
+      cudaPackages.cccl # <nv/target> required by the fp16 headers in cudart
       cudaPackages.cuda_cudart
       cudaPackages.libcublas
       cudaPackages.libcurand

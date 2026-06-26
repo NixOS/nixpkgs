@@ -27,7 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pavlov99/ajsonrpc";
     changelog = "https://github.com/pavlov99/ajsonrpc/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     mainProgram = "async-json-rpc-server";
   };
 }

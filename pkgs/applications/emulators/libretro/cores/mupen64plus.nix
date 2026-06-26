@@ -12,13 +12,13 @@
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "0-unstable-2026-01-20";
+  version = "0-unstable-2026-05-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mupen64plus-libretro-nx";
-    rev = "bc43bcedc276861254b48526f56799d63a30723b";
-    hash = "sha256-0dofQP35EmVY6i5muwIARuF1G4+92jhFjAiWcwyJDTs=";
+    rev = "98c1b0d877542b01314b3b04272282ba223b65b3";
+    hash = "sha256-ardO7zuuG4rqm2d88IduMs3CVYNHiHyaxQ5ZDtbMVHU=";
   };
 
   # Fix for GCC 14
@@ -39,8 +39,6 @@ mkLibretroCore {
       url = "https://github.com/libretro/mupen64plus-libretro-nx/commit/3c3e7fbc70b8f533c09c964cf468ba5e8d61351c.patch?full_index=1";
       hash = "sha256-PCJLNYhhccnWLcnPaHL6tz+5qdjogJRYfzZIh3r+Vlk=";
     })
-    # Fix for GCC 15. See https://github.com/libretro/GLideN64/pull/1.
-    ./patches/mupen64plus-gcc-15.patch
   ];
 
   extraNativeBuildInputs = [

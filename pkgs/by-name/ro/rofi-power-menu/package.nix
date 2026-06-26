@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ ikervagyok ];
     platforms = lib.platforms.linux;
     mainProgram = "rofi-power-menu";
+    license = lib.licenses.mit;
   };
 })

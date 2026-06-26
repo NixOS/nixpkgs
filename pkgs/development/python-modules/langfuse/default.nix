@@ -2,62 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  anyio,
   backoff,
   httpx,
-  idna,
-  langchain,
-  llama-index,
-  openai,
   opentelemetry-api,
   opentelemetry-sdk,
   opentelemetry-exporter-otlp,
   packaging,
   poetry-core,
   pydantic,
-  requests,
   wrapt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "langfuse";
-  version = "3.11.2";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CZa1nzgGHQSx/cPkOxbDsfkWpgr/veWRN8zgHeYrJOw=";
+    hash = "sha256-BTwCAyqZMic5sOVAXOhhS6H1SBoEePo1fGOt5vLiLUo=";
   };
-
-  # https://github.com/langfuse/langfuse/issues/9618
-  disabled = pythonAtLeast "3.14";
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "packaging" ];
-
   dependencies = [
-    anyio
     backoff
     httpx
-    idna
     opentelemetry-api
     opentelemetry-sdk
     opentelemetry-exporter-otlp
     packaging
     pydantic
-    requests
     wrapt
   ];
-
-  optional-dependencies = {
-    langchain = [ langchain ];
-    llama-index = [ llama-index ];
-    openai = [ openai ];
-  };
 
   pythonImportsCheck = [ "langfuse" ];
 

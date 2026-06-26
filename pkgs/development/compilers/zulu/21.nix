@@ -6,8 +6,8 @@
 
 let
   # JDK FX can potentially be different version than regular JDK
-  zuluVersion = if enableJavaFX then "21.44.17" else "21.44.17";
-  jdkVersion = "21.0.8";
+  zuluVersion = if enableJavaFX then "21.50.19" else "21.50.19";
+  jdkVersion = "21.0.11";
 in
 callPackage ./common.nix (
   {
@@ -18,36 +18,36 @@ callPackage ./common.nix (
         inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-T+bGfe0IoYwX1Odh66CdRL1fzbvA63NqM9e2hLCbx2Y="
+            "sha256-YG9T25gv8n+LQ5yHPCNnpcv5D5/YVXj6jrB8AWqzbY4="
           else
-            "sha256-Y/Vru0aVjPVzUvugjydV4JU3mRleVUWswMipKSC+/x4=";
+            "sha256-vF4zg0Mct/Hc6MJi3UdFAe6b11afHFmotv5cFYmqSlg=";
       };
 
       aarch64-linux = {
         inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-6qFwo2rBV+mbEFDZNoqEs3z+2saj31fsOHG9jToST2Q="
+            "sha256-yIcj1OeL2mGJwF0SYGYnuc03OvhpIupo/BC8qINnIUs="
           else
-            "sha256-/38u3R1cFTy2y0k6OqNSNFPimgXsUTslwkqhR37AxyI=";
+            "sha256-zUvl6u1Q0rgUhd/iYOL6t+LJCoVL8Rt7+07raTZ1fEo=";
       };
 
       x86_64-darwin = {
         inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-PGnYq+9MskgczsEjx4aH5yDYjZLw8Tk8IZSMOXw03aw="
+            "sha256-5/L0FqpL6488uwzimXh9G6Io2cCTnU1+8n/6E+CNDK8="
           else
-            "sha256-KvCAUAtcwoamNTGHx8WbWq/LPtwpwch9H9cbotalI/E=";
+            "sha256-kGmQy+WZcx48jshfem8uctSg+ewcwYtrUqFuHi/Fk00=";
       };
 
       aarch64-darwin = {
         inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-Bj1cYFfm3dq+HB9tdnFwT7onVQ9Slf0zRFBK4z9LUoY="
+            "sha256-XEKUQWG187kByQOTpQrD4aCFCo+MyeuGGY2UqDRq/WQ="
           else
-            "sha256-0izgX+o+PyjIxZ8sNIvHjulnvxKJpPsoeWzAF3/2yNs=";
+            "sha256-Wc+JaVGh880TKr/B90uk2x+RbsyBs8ACLFwWohrpQK0=";
       };
     };
   }

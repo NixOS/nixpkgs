@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchsvn,
+  fetchurl,
   autoreconfHook,
   dbus,
+  fzssh,
   gettext,
   gnutls,
   libfilezilla,
@@ -15,35 +16,39 @@
   tinyxml,
   boost,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   xdg-utils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "filezilla";
-  version = "3.69.5";
+  version = "3.70.5";
 
-  src = fetchsvn {
-    url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11338";
-    hash = "sha256-OQZFwowkmiOcIjWoHkIFwsm6nuyMGSaBSn8zwVpCMAs=";
+  src = fetchurl {
+    # Upstream download link was made unstable on purpose
+    # See https://trac.filezilla-project.org/ticket/13186
+    url = "https://sources.archlinux.org/other/filezilla/filezilla-${finalAttrs.version}.tar.xz";
+    hash = "sha256-d8FsJfsdlNUSlLAe/SDT5cwRmESFfktDmCrKa4mO5dY=";
   };
 
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
+    "--with-wx-prefix=${wxwidgets_3_2}"
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     wrapGAppsHook3
+    xdg-utils
   ];
 
   buildInputs = [
     boost
     dbus
+    fzssh
     gettext
     gnutls
     libfilezilla
@@ -52,12 +57,18 @@ stdenv.mkDerivation {
     pugixml
     sqlite
     tinyxml
-    wxGTK32
     gtk3
-    xdg-utils
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
+    )
+  '';
 
   meta = {
     homepage = "https://filezilla-project.org/";
@@ -75,4 +86,4 @@ stdenv.mkDerivation {
       pSub
     ];
   };
-}
+})

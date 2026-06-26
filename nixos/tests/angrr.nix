@@ -95,7 +95,7 @@ in
     machine.succeed("su normal --command 'nix build /run/current-system --out-link /tmp/result-user-auto-gc-root-2'")
 
     machine.systemctl("start nix-gc.service")
-    # Not auto gc root will be removed
+    # No auto gc root will be removed
     machine.succeed("readlink /tmp/result-root-auto-gc-root-1")
     machine.succeed("readlink /tmp/result-root-auto-gc-root-2")
     machine.succeed("readlink /tmp/result-user-auto-gc-root-1")

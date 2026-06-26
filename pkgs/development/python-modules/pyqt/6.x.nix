@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchzip,
+  fetchPypi,
   pkg-config,
   dbus,
   lndir,
@@ -24,19 +24,15 @@
   withPdf ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqt6";
-  version = "6.9.0";
+  version = "6.11.0";
   pyproject = true;
 
-  # It looks like a stable release, but is it? Who knows.
-  # It's not on PyPI proper yet, at least, and the current
-  # actually-released version does not build with Qt 6.9,
-  # so we kinda have to use it.
-  # "ffs smdh fam" - K900
-  src = fetchzip {
-    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
-    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
+  src = fetchPypi {
+    pname = "pyqt6";
+    inherit (finalAttrs) version;
+    hash = "sha256-Rd1gqmmXbeGRi1zta057aiWr0qkZ7O9f1YJuzHZxiIk=";
   };
 
   patches = [
@@ -66,7 +62,7 @@ buildPythonPackage rec {
     EOF
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
+      --replace-fail 'version = "${finalAttrs.version}"' 'version = "${lib.versions.pad 3 finalAttrs.version}"'
   '';
 
   enableParallelBuilding = true;
@@ -166,4 +162,4 @@ buildPythonPackage rec {
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [ LunNova ];
   };
-}
+})

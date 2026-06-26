@@ -112,9 +112,9 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
+  # See https://download.kde.org/ls-lR.mirrorlist
   kde = [
     "https://download.kde.org/"
-    "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree
@@ -330,6 +330,17 @@
   # Python Test-PyPI
   testpypi = [
     "https://test.pypi.io/packages/source/"
+  ];
+
+  # TeX historic archive (see https://tug.org/historic/)
+  texhistoric = [
+    "https://ftp.math.utah.edu/pub/tex/historic/"
+    "https://texlive.info/historic/"
+    "https://ftp.tu-chemnitz.de/pub/tug/historic/"
+    "https://pi.kwarc.info/historic/"
+    "https://mirrors.tuna.tsinghua.edu.cn/tex-historic-archive/"
+    "https://mirror.nju.edu.cn/tex-historic/"
+    "ftp://tug.org/texlive/historic/"
   ];
 
   ### Linux distros

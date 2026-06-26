@@ -7,7 +7,7 @@ You can quickly check your edits with the following:
 
 ```ShellSession
 $ cd /path/to/nixpkgs
-$ $EDITOR doc/nixos/manual/... # edit the manual
+$ $EDITOR nixos/doc/manual/... # edit the manual
 $ nix-build nixos/release.nix -A manual.x86_64-linux
 ```
 

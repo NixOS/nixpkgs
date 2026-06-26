@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  writeScript,
   qt5,
   fetchurl,
   autoPatchelfHook,
@@ -13,11 +12,15 @@
   gtk3,
   pango,
   libxcb,
+  dbus,
+  procps,
+  runCommand,
+  xwayland-run,
 }:
 let
   pname = "synology-drive-client";
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
-  version = "4.0.2-17889";
+  version = "4.0.3-17892";
   buildNumberFn = ver: lib.last (lib.splitString "-" ver);
   meta = {
     description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
@@ -47,7 +50,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${finalAttrs.version}/Ubuntu/Installer/synology-drive-client-${buildNumberFn finalAttrs.version}.x86_64.deb";
-      sha256 = "sha256-refsAzqYmKAr107D4HiJViBQE1Qa6QoOECtX+TPjSwU=";
+      sha256 = "sha256-9q7FpZdNWZY+2DP98aDMe+vWEthpH0kcYsuncM3HjWc=";
     };
 
     nativeBuildInputs = [
@@ -84,7 +87,46 @@ let
       substituteInPlace $out/bin/synology-drive --replace /opt $out/opt
     '';
 
-    passthru = { inherit updateScript; };
+    passthru = {
+      inherit updateScript;
+      tests = {
+        wl =
+          runCommand "${pname}-wayland"
+            {
+              nativeBuildInputs = [
+                linux
+                (xwayland-run.override {
+                  withDbus = true;
+                })
+                procps
+              ];
+            }
+            ''
+              export HOME=$TMPDIR
+              export QT_QPA_PLATFORM=xcb
+
+              xwfb-run -c weston -- \
+                dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- sh -c '
+                echo "Starting Synology Drive..."
+                synology-drive
+
+                sleep 5
+
+                echo "Checking synology sub-processes..."
+                if pgrep -f cloud-drive-connec[t] > /dev/null; then
+                  echo "Synology sub-processes found."
+                  exit 0
+                fi
+
+                echo "Error: synology sub-processes not found."
+                ps -ef | grep "cloud-drive" | grep -v "grep" || echo "No cloud-drive processes found at all."
+                exit 1
+              '
+
+              touch $out
+            '';
+      };
+    };
   });
 
   darwin = stdenv.mkDerivation (finalAttrs: {
@@ -96,7 +138,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${finalAttrs.version}/Mac/Installer/synology-drive-client-${buildNumberFn finalAttrs.version}.dmg";
-      sha256 = "sha256-KAoc31Y2RTHu7RWgC61brtoeFR1c+pNi4Odub2JHrfQ=";
+      sha256 = "sha256-+ZJA7r0xYhpu614I1mqILCfYN/8YddEwgWglmmpfB+o=";
     };
 
     nativeBuildInputs = [

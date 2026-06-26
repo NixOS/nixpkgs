@@ -2,35 +2,49 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viddy";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "viddy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZdDe0ymPkj0ZGiPLo1Y0qMDk2SsUcPsSStay+Tuf4p0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RyPG8OAg3i9N2Fq5Hij48wMvfQuTNmJFpatvB3HbXKg=";
   };
 
-  cargoHash = "sha256-Bp3t/fjaFeouIoKlRvQPVDlc46Ggitfx6HUXE+RZN0A=";
+  cargoHash = "sha256-P+TtxV2kuHeBHr8GQeJ0VWPkjimfcAtBUFt0z79ML6A=";
 
-  env.VERGEN_BUILD_DATE = "2024-11-28"; # managed via the update script
-  env.VERGEN_GIT_DESCRIBE = "Nixpkgs";
+  __structuredAttrs = true;
 
-  passthru.updateScript.command = [ ./update.sh ];
+  env = {
+    VERGEN_BUILD_DATE = "2026-06-14"; # managed via the update script
+    VERGEN_GIT_DESCRIBE = "Nixpkgs";
+  };
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
+  versionCheckKeepEnvironment = [ "VIDDY_DATA" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  preInstallCheck = ''
+    export VIDDY_DATA="$PWD";
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
+    changelog = "https://github.com/sachaos/viddy/releases/tag/${finalAttrs.src.rev}";
     description = "Modern `watch` command";
-    changelog = "https://github.com/sachaos/viddy/releases";
     homepage = "https://github.com/sachaos/viddy";
     license = lib.licenses.mit;
+    mainProgram = "viddy";
     maintainers = with lib.maintainers; [
       j-hui
       phanirithvij
     ];
-    mainProgram = "viddy";
   };
 })

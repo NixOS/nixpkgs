@@ -3,26 +3,33 @@
   buildPythonPackage,
   aiodns,
   aiohttp,
+  cargo,
   cryptography,
   defusedxml,
   emoji,
-  fetchPypi,
+  fetchFromCodeberg,
   gnupg,
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
   replaceVars,
+  rustc,
   rustPlatform,
+  setuptools,
+  setuptools-rust,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.12.0";
+  version = "1.16.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dGn23K9XQv1i4OZu5EfFM4p0UgwZgqcHhOe3kN7y/dU=";
+  src = fetchFromCodeberg {
+    owner = "poezio";
+    repo = "slixmpp";
+    tag = "slix-${finalAttrs.version}";
+    hash = "sha256-d0laQWaqZUoviF7NM/egENQ3ArQE12ER0TzfPBcnc7Q=";
   };
 
   patches = [
@@ -31,14 +38,24 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-rust
+    setuptools-scm
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src;
-    hash = "sha256-eKXQeZ2RLHsTZmYszws4fCHgeiSO9wsrRbPkVV1gqZY=";
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   dependencies = [
@@ -50,11 +67,14 @@ buildPythonPackage rec {
   optional-dependencies = {
     xep-0363 = [ aiohttp ];
     xep-0444-compliance = [ emoji ];
-    xep-0464 = [ cryptography ];
-    safer-xml-parserig = [ defusedxml ];
+    xep-0454 = [ cryptography ];
+    safer-xml-parsing = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # don't test against pure python version in the source tree
@@ -73,8 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

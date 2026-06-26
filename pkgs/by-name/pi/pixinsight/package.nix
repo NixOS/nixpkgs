@@ -62,6 +62,7 @@ buildFHSEnv {
 
       libGL
       libdrm
+      vulkan-loader
       qt6Packages.qtbase
       gtk3
       fontconfig
@@ -71,6 +72,7 @@ buildFHSEnv {
       libssh2
       libpsl
       libidn2
+      libnghttp2
 
       brotli
       libdeflate

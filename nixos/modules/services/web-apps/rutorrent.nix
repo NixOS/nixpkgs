@@ -75,8 +75,8 @@ in
         default = [ "httprpc" ];
         example = literalExpression ''[ "httprpc" "data" "diskspace" "edit" "erasedata" "theme" "trafic" ]'';
         description = ''
-          List of plugins to enable. See the list of <link xlink:href="https://github.com/Novik/ruTorrent/wiki/Plugins#currently-there-are-the-following-plugins">available plugins</link>. Note: the <literal>unpack</literal> plugin needs the nonfree <literal>unrar</literal> package.
-          You need to either enable one of the <literal>rpc</literal> or <literal>httprpc</literal> plugin or enable the <xref linkend="opt-services.rutorrent.nginx.exposeInsecureRPC2mount"/> option.
+          List of plugins to enable. See the list of [available plugins](https://github.com/Novik/ruTorrent/wiki/Plugins#currently-there-are-the-following-plugins). Note: the `unpack` plugin needs the nonfree `unrar` package.
+          You need to either enable one of the `rpc` or `httprpc` plugin or enable the {option}`services.rutorrent.nginx.exposeInsecureRPC2mount` option.
         '';
       };
 
@@ -97,7 +97,7 @@ in
           "pm.max_requests" = 500;
         };
         description = ''
-          Options for ruTorrent's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+          Options for ruTorrent's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
         '';
       };
 
@@ -107,8 +107,8 @@ in
           default = false;
           description = ''
             Whether to enable nginx virtual host management.
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+            Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+            See {option}`services.nginx.virtualHosts` for further information.
           '';
         };
 
@@ -116,8 +116,8 @@ in
           type = types.bool;
           default = false;
           description = ''
-            If you do not enable one of the <literal>rpc</literal> or <literal>httprpc</literal> plugins you need to expose an RPC mount through scgi using this option.
-            Warning: This allow to run arbitrary commands, as the rtorrent user, so make sure to use authentification. The simplest way would be to use the <literal>services.nginx.virtualHosts.&lt;name&gt;.basicAuth</literal> option.
+            If you do not enable one of the `rpc` or `httprpc` plugins you need to expose an RPC mount through scgi using this option.
+            Warning: This allow to run arbitrary commands, as the rtorrent user, so make sure to use authentication. The simplest way would be to use the {option}`services.nginx.virtualHosts.<name>.basicAuth` option.
           '';
         };
       };

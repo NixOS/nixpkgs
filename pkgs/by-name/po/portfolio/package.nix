@@ -4,16 +4,38 @@
   glib,
   glib-networking,
   gtk3,
+  jdk21_headless,
+  jre_minimal,
   lib,
   libsecret,
   makeDesktopItem,
-  openjdk21,
   stdenvNoCC,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  imagemagick,
   gitUpdater,
 }:
 let
+  jre = jre_minimal.override {
+    jdk = jdk21_headless;
+    modules = [
+      "java.base"
+      "java.desktop"
+      "jdk.localedata"
+      "java.management"
+      "java.naming"
+      "java.net.http"
+      "java.security.jgss"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.net"
+      "jdk.httpserver"
+      "jdk.unsupported"
+      "jdk.xml.dom"
+    ];
+  };
+
   desktopItem = makeDesktopItem {
     name = "Portfolio";
     exec = "portfolio";
@@ -34,17 +56,20 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.81.5";
+  version = "0.84.2";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-/i0lcF5xDCaZgr/LJriojzQzMLqV1ULT+rBmEXVMsx0=";
+    hash = "sha256-boeXTZ0I0uGGuSSU/qVwxwb4dNs2NDL4ip4BsZhVOis=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook3
+    imagemagick
   ];
+
+  dontWrapGApps = true;
 
   dontConfigure = true;
   dontBuild = true;
@@ -87,15 +112,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     win32-x86-64\
     }
 
+    # Eclipse source bundles are not needed at runtime.
+    rm -f $out/portfolio/plugins/*.source_*.jar
+    rm -rf $out/portfolio/configuration/org.eclipse.equinox.source
+
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix PATH : ${openjdk21}/bin
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME "${jre}"
 
     # Create desktop item
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';

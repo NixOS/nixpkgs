@@ -9,12 +9,12 @@ buildNpmPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "css";
-    repo = "csso";
+    repo = "csso-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uPjRSBOFEl55gyObKEZMXGQ6eaQ3tBB48k5JgLGrbTw=";
+    hash = "sha256-mP3Q+7JlgIfPLZsCtYSpTBdV4+tT5qiEeP6fB87Wxw8=";
   };
 
-  npmDepsHash = "sha256-rGqj1vCswUfAQwM1Lk1qCWgUfzeefBONHeEn0NusOoc=";
+  npmDepsHash = "sha256-IKy4o/tcNo0Hy49aTKAoHhfsR3xUNFYeBuvSoZXh0UI=";
 
   dontNpmBuild = true;
 

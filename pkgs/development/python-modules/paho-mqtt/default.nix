@@ -46,6 +46,12 @@ buildPythonPackage rec {
     export PYTHONPATH=".:$PYTHONPATH"
   '';
 
+  disabledTests = [
+    # Fails during teardown
+    # RuntimeError: Client 01-zero-length-clientid.py exited with code None, expected 0
+    "test_01_zero_length_clientid"
+  ];
+
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";

@@ -5,17 +5,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rinf_cli";
-  version = "8.9.1";
+  version = "8.10.0";
 
   src = fetchFromGitHub {
     owner = "cunarist";
     repo = "rinf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N34Lys5P/3Os2yEl8x1LOJXhcTxp07V8J3B+DMlK3qk=";
+    hash = "sha256-ivfair5NC8RtxhOsHXlzR/AN28bZoEJDLg/9/2eSBIU=";
   };
   sourceRoot = "${finalAttrs.src.name}/rust_crate_cli";
 
-  cargoHash = "sha256-vnJloz0wUsJbLbAoiIMNxSUZmibRIF/eLIuqkEXbZp8=";
+  cargoHash = "sha256-0vhayxwQoeMuvvYImFsBiOQEqxub/hIipQrqpRaGXq0=";
 
   meta = {
     description = "Framework for creating cross-platform Rust apps leveraging Flutter";

@@ -22,16 +22,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "2.8.11";
+  version = "2.9.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    tag = "v${version}";
-    hash = "sha256-76DeL/KIna8Hd9eukCzuRXKO+awkbpc4trCeKTSfGmA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TNXsYZFL60jELed40b1hB8Rk43gcLbCwzzXc3fABu5k=";
   };
 
   build-system = [
@@ -68,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

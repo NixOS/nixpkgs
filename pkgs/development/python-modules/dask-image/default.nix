@@ -16,7 +16,6 @@
 
   # tests
   pyarrow,
-  pytest-flake8,
   pytestCheckHook,
   scikit-image,
 }:
@@ -33,6 +32,14 @@ buildPythonPackage rec {
     hash = "sha256-+nzYthnobcemunMcAWwRpHOQy6yFtjdib/7VZqWEiqc=";
   };
 
+  postPatch = ''
+    sed -i "/--flake8/d" pyproject.toml
+
+    # https://numpy.org/doc/stable//release/2.4.0-notes.html#removed-numpy-in1d
+    substituteInPlace tests/test_dask_image/test_ndmeasure/test_core.py \
+      --replace-fail "np.in1d" "np.isin"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -48,7 +55,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyarrow
-    pytest-flake8
     pytestCheckHook
     scikit-image
   ];
@@ -64,6 +70,11 @@ buildPythonPackage rec {
 
     # AssertionError (comparing slices)
     "test_find_objects_with_empty_chunks"
+
+    # scipy compat issue
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_generic_filter_identity"
+    "test_generic_filter_comprehensions"
   ];
 
   meta = {

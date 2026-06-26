@@ -11,6 +11,7 @@
   decorator,
   h11,
   puremagic,
+  typing-extensions,
   urllib3,
 
   # optional-dependencies
@@ -36,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.14.0";
+  version = "3.14.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-68bjR5lf1sKxShM4p3Fm7ff8HvmTk2Fdz53CwfHI9Q8=";
+    hash = "sha256-n8SQbK45B+mijEbnc/Otq+8NX0CIxuOQ72FEAhnOCac=";
   };
 
   build-system = [ hatchling ];
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     decorator
     h11
     puremagic
+    typing-extensions
     urllib3
   ];
 

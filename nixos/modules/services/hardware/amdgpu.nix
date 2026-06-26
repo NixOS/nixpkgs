@@ -40,30 +40,41 @@ in
     };
 
     opencl.enable = lib.mkEnableOption "OpenCL support using ROCM runtime library";
+    zluda.enable = lib.mkEnableOption "CUDA support using ZLUDA runtime library";
+    zluda.package = lib.mkPackageOption pkgs "zluda" { };
   };
 
-  config = {
-    boot.kernelParams =
-      lib.optionals cfg.legacySupport.enable [
-        "amdgpu.si_support=1"
-        "amdgpu.cik_support=1"
-        "radeon.si_support=0"
-        "radeon.cik_support=0"
-      ]
-      ++ lib.optionals cfg.overdrive.enable [
-        "amdgpu.ppfeaturemask=${cfg.overdrive.ppfeaturemask}"
-      ];
+  config = lib.mkMerge [
+    {
+      boot.kernelParams =
+        lib.optionals cfg.legacySupport.enable [
+          "amdgpu.si_support=1"
+          "amdgpu.cik_support=1"
+          "radeon.si_support=0"
+          "radeon.cik_support=0"
+        ]
+        ++ lib.optionals cfg.overdrive.enable [
+          "amdgpu.ppfeaturemask=${cfg.overdrive.ppfeaturemask}"
+        ];
 
-    boot.initrd.kernelModules = lib.optionals cfg.initrd.enable [ "amdgpu" ];
-
-    hardware.graphics = lib.mkIf cfg.opencl.enable {
-      enable = lib.mkDefault true;
-      extraPackages = [
-        pkgs.rocmPackages.clr
-        pkgs.rocmPackages.clr.icd
-      ];
-    };
-  };
+      boot.initrd.kernelModules = lib.optionals cfg.initrd.enable [ "amdgpu" ];
+    }
+    (lib.mkIf cfg.opencl.enable {
+      hardware.graphics = {
+        enable = lib.mkDefault true;
+        extraPackages = [
+          pkgs.rocmPackages.clr
+          pkgs.rocmPackages.clr.icd
+        ];
+      };
+    })
+    (lib.mkIf cfg.zluda.enable {
+      hardware.graphics = {
+        enable = lib.mkDefault true;
+        extraPackages = [ cfg.zluda.package ];
+      };
+    })
+  ];
 
   meta = {
     maintainers = with lib.maintainers; [ johnrtitor ];

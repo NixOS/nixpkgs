@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncbi-vdb";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "ncbi-vdb";
     tag = finalAttrs.version;
-    hash = "sha256-bYVwgNYnFg2OPaPWSbXIW+VXprxg/PxwHIRCnDfQRls=";
+    hash = "sha256-A6Pjy1dEkCHy1B6LrWwVs8Et41POvdK4Upsyp4JUnaU=";
   };
 
   nativeBuildInputs = [

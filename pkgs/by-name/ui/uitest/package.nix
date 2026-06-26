@@ -27,6 +27,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple testing framework for interactive tests";
+    homepage = "https://github.com/Grumbel/uitest";
     maintainers = [ lib.maintainers.SchweGELBin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;

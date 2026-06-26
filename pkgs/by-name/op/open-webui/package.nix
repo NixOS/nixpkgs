@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.2";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-2n2JGgnWEGsWVLnkWc+RilTybt3KXah8UzUUPINxzfE=";
+    hash = "sha256-0d9GfBQY6YtsUbHeO6NTFPFHV6WE51D4fq+NfsM7J5g=";
   };
 
   frontend = buildNpmPackage rec {
@@ -24,21 +24,15 @@ let
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
-    # TODO: should we automate this?
-    # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.2";
+    pyodideVersion = "0.28.3";
     pyodide = fetchurl {
-      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
+      hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-gaf4+/H3nqgebPtxnEeUw2uw5xVh+FE6UFqD3mRjhv0=";
+    npmDepsHash = "sha256-NhDsqfP95RAbSarM07OSII8vbPYWScRMxtWt+gRQ/4c=";
 
-    # See https://github.com/open-webui/open-webui/issues/15880
-    npmFlags = [
-      "--force"
-      "--legacy-peer-deps"
-    ];
+    npmFlags = [ "--force" ];
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -69,7 +63,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -92,6 +86,7 @@ python3Packages.buildPythonApplication rec {
       aiocache
       aiofiles
       aiohttp
+      aiosqlite
       alembic
       anthropic
       apscheduler
@@ -107,9 +102,11 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       brotli
+      brotlicffi
       chardet
       chromadb
       cryptography
+      datasets_3
       ddgs
       docx2txt
       einops
@@ -123,7 +120,6 @@ python3Packages.buildPythonApplication rec {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
-      google-generativeai
       googleapis-common-protos
       httpx
       itsdangerous
@@ -131,35 +127,34 @@ python3Packages.buildPythonApplication rec {
       langchain-classic
       langchain-community
       langchain-text-splitters
-      langdetect
       ldap3
       loguru
       markdown
-      msoffcrypto-tool
       mcp
+      msoffcrypto-tool
       nltk
       onnxruntime
       openai
       opencv-python-headless
-      openpyxl
-      opensearch-py
       opentelemetry-api
-      opentelemetry-sdk
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
+      opentelemetry-instrumentation-aiohttp-client
       opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-redis
       opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-aiohttp-client
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-sdk
+      openpyxl
+      opensearch-py
       pandas
       peewee
       peewee-migrate
-      pgvector
       pillow
       psutil
+      psycopg
       pyarrow
       pycrdt
       pydub
@@ -185,30 +180,39 @@ python3Packages.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      sqlalchemy
       starlette-compress
       starsessions
       tiktoken
       transformers
-      unstructured
       uvicorn
       validators
       xlrd
       youtube-transcript-api
     ]
+    ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
+    ++ sqlalchemy.optional-dependencies.asyncio
     ++ starsessions.optional-dependencies.redis;
 
-  optional-dependencies = with python3Packages; rec {
+  optional-dependencies = with python3Packages; {
     postgres = [
       pgvector
       psycopg2-binary
+    ];
+
+    mariadb = [
+      mariadb
+    ];
+
+    unstructured = [
+      unstructured
     ];
 
     all = [
       azure-search-documents
       colbert-ai
       elasticsearch
-      firecrawl-py
       gcp-storage-emulator
       moto
       oracledb
@@ -219,8 +223,10 @@ python3Packages.buildPythonApplication rec {
       qdrant-client
       weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ finalAttrs.passthru.optional-dependencies.unstructured
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
@@ -262,4 +268,4 @@ python3Packages.buildPythonApplication rec {
       codgician
     ];
   };
-}
+})

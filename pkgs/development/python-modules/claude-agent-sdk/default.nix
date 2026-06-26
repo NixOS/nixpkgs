@@ -8,19 +8,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  sniffio,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "claude-agent-sdk";
-  version = "0.1.37";
+  version = "0.2.110";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-agent-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xEWaEFOWQO2hn9OhVeMRVEZA8I1Ynau+9DoewR5Y5wQ=";
+    hash = "sha256-tz26ueGAMFM7sD95FoAzhKHvNo7NV9fYZoKfJy/t8Lw=";
   };
 
   build-system = [ hatchling ];
@@ -28,6 +29,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     anyio
     mcp
+    sniffio
     typing-extensions
   ];
 

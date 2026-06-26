@@ -2,58 +2,51 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
-  ipykernel,
-  msgpack,
-  networkx,
-  nglview,
-  numpy,
-  psutil,
-  py-cpuinfo,
-  pydantic,
-  pytestCheckHook,
-  pyyaml,
-  qcelemental,
-  scipy,
   setuptools,
+  setuptools-scm,
+  pyyaml,
+  py-cpuinfo,
+  psutil,
+  qcelemental,
+  pydantic,
+  pydantic-settings,
+  packaging,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.34.0";
+  version = "0.50.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VKULy45bYn5TmxU7TbOVK98r0pRMWAwissmgx0Ee/8w=";
+    hash = "sha256-x218Sq4QOoqTpcSM9TzQydhIn9LthflCuNh/P0stZmU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
-    msgpack
-    numpy
-    psutil
-    py-cpuinfo
-    pydantic
-    pyyaml
-    qcelemental
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  optional-dependencies = {
-    align = [
-      networkx
-      scipy
-    ];
-    viz = [
-      ipykernel
-      nglview
-    ];
-  };
+  dependencies = [
+    pyyaml
+    py-cpuinfo
+    psutil
+    qcelemental
+    pydantic
+    pydantic-settings
+    packaging
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "qcengine" ];
+
+  # These tests require network access
+  disabledTestPaths = [
+    "qcengine/tests/test_harness_canonical.py"
+  ];
 
   meta = {
     description = "Quantum chemistry program executor and IO standardizer (QCSchema) for quantum chemistry";
@@ -61,6 +54,5 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
     mainProgram = "qcengine";
-    broken = pythonAtLeast "3.14"; # https://github.com/MolSSI/QCEngine/issues/481
   };
 }

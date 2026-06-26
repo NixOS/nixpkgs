@@ -1,22 +1,24 @@
 {
   buildGoModule,
+  callPackage,
   lib,
   fetchFromGitHub,
   nixosTests,
 }:
-
+let
+  web = callPackage ./dashboard.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "frp";
-  version = "0.66.0";
-
+  version = "0.69.1";
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = "frp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GFvXdhX7kA43kppWWdL7KhummUCqpa1cQ7V2d9ISGfo=";
+    hash = "sha256-3tOOgnzZZ05En5NMLbp4UFNazX950Jbosvszmjf947c=";
   };
 
-  vendorHash = "sha256-m5ECF0cgp2LfsTKey02MHz5TfqfzOCT5cU5trUfrOjY=";
+  vendorHash = "sha256-JrkIztnmhEYAogr4pDWrPu9/j+C0VLpEyNbh2UK5UcY=";
 
   doCheck = false;
 
@@ -25,8 +27,14 @@ buildGoModule (finalAttrs: {
     "cmd/frps"
   ];
 
-  passthru.tests = {
-    frp = nixosTests.frp;
+  preBuild = ''
+    cp -r ${web.frpc} web/frpc/dist
+    cp -r ${web.frps} web/frps/dist
+  '';
+
+  passthru = {
+    tests.frp = nixosTests.frp;
+    inherit web;
   };
 
   meta = {
@@ -39,5 +47,6 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/fatedier/frp";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ epireyn ];
   };
 })

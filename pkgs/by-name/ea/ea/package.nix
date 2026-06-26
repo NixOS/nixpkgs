@@ -45,5 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/dduan/ea";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ deejayem ];
+    mainProgram = "ea";
   };
 })

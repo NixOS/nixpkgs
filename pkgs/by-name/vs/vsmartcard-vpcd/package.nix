@@ -8,6 +8,7 @@
   pcsclite,
   qrencode,
   python3,
+  python3Packages,
   help2man,
 }:
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     libtool
     pkg-config
+    python3Packages.wrapPython
     help2man
   ];
 
@@ -46,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--enable-infoplist";
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
 
   meta = {
     description = "Emulates a smart card and makes it accessible through PC/SC";

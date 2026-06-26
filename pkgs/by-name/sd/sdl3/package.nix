@@ -40,7 +40,7 @@
   wayland-scanner,
   zenity,
   # for passthru.tests
-  SDL_compat,
+  sdl12-compat,
   sdl2-compat,
   sdl3-image,
   sdl3-ttf,
@@ -70,7 +70,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.0";
+  version = "3.4.10";
 
   outputs = [
     "lib"
@@ -83,14 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-/A1y/NaZVebzI58F4TlwtDwuzlcA33Y1YuZqd5lz/Sk=";
+    hash = "sha256-6Dph2eLiJUmpQzPWe8EuY5LrWhrFwde2f2dwfgCcWNw=";
   };
 
   postPatch =
-    # Tests timeout on Darwin
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      # intermittent test failure
+      # https://github.com/libsdl-org/SDL/issues/15346
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 20)' \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 300)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
@@ -172,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
     (lib.cmakeBool "SDL_DBUS" dbusSupport)
+    (lib.cmakeBool "SDL_HIDAPI_LIBUSB" libusbSupport)
     (lib.cmakeBool "SDL_IBUS" ibusSupport)
     (lib.cmakeBool "SDL_JACK" jackSupport)
     (lib.cmakeBool "SDL_KMSDRM" drmSupport)
@@ -182,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
     (lib.cmakeBool "SDL_TEST_LIBRARY" true)
     (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
+    (lib.cmakeBool "SDL_VULKAN" vulkanSupport)
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
@@ -198,11 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
-  ]
-  ++ lib.optional (libusbSupport != stdenv.hostPlatform.isLinux) (
-    lib.cmakeBool "SDL_HIDAPI_LIBUSB" libusbSupport
-  )
-  ++ lib.optional (!vulkanSupport) (lib.cmakeBool "SDL_VULKAN" vulkanSupport);
+  ];
 
   doCheck = true;
 
@@ -240,11 +245,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      SDL_compat.tests
+      sdl12-compat.tests
       // sdl2-compat.tests
       // {
         inherit
-          SDL_compat
+          sdl12-compat
           sdl2-compat
           sdl3-image
           sdl3-ttf

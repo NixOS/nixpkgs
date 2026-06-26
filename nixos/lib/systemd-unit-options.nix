@@ -3,12 +3,8 @@
 let
   inherit (systemdUtils.lib)
     assertValueOneOf
-    automountConfig
     checkUnitConfig
     makeJobScript
-    mountConfig
-    serviceConfig
-    unitConfig
     unitNameType
     ;
 

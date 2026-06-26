@@ -5,33 +5,38 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  dbus,
   libsodium,
   openssl,
-  xxHash,
+  xxhash,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "pijul";
-  version = "1.0.0-beta.9";
+  version = "1.0.0-beta.14";
 
   src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
+    inherit (finalAttrs) version pname;
+    hash = "sha256-Ex8fCIcif2lmZ3ytLARwgGzEeq6GB2NDvwd96niDKbQ=";
   };
 
-  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
+  cargoHash = "sha256-yPzDzfD+QdhAXdyvzDV1z9HDe1mwF9cRCsliejr8H88=";
 
+  # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
   buildInputs = [
+    dbus
     openssl
     libsodium
-    xxHash
+    xxhash
   ]
   ++ (lib.optionals gitImportSupport [ libgit2 ]);
 
@@ -55,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pijul";
   };
-}
+})

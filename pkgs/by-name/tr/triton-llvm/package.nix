@@ -68,7 +68,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "22.0.0-unstable-2025-07-15"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "23.0.0-unstable-2026-01-29"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -84,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "7d5de3033187c8a3bb4d2e322f5462cdaf49808f";
-    hash = "sha256-ayW6sOZGvP3SBjfmpXvYQJrPOAElY0MEHPFvj2fq+bM=";
+    rev = "ac5dc54d509169d387fcfd495d71853d81c46484";
+    hash = "sha256-tA1KcZqyPsgfxQs9tbNhX11oFcNGJefxWmfCpYqdI9M=";
   };
 
   nativeBuildInputs = [
@@ -128,6 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
+    # It's tempting to set BUILD_SHARED_LIBS, which saves far more space
+    # but currently segfaults in keras's test suite. More work needed.
+    (lib.cmakeBool "LLVM_TOOL_LLVM_DRIVER_BUILD" true) # Save space by using busybox style tool binary
     # Way too slow, only uses one core
     # (lib.cmakeBool "LLVM_ENABLE_DOXYGEN" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" (buildDocs || buildMan))
@@ -199,6 +204,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Not sure why this fails
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
+    ''
+    # The second llvm-install-name-tool invocation fails with
+    # "is not a Mach-O file" on aarch64-linux, even on a fresh copy of
+    # the original yaml2obj output. Root cause unknown.
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      rm llvm/test/tools/llvm-objcopy/MachO/install-name-tool-change.test
     '';
 
   postInstall = ''

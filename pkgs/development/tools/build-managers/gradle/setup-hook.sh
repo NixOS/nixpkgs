@@ -4,7 +4,7 @@ gradleConfigureHook() {
     fi
     export GRADLE_USER_HOME
     export TERM=dumb
-    gradleFlagsArray+=(--no-daemon --console plain --init-script "${gradleInitScript:-@init_script@}")
+    gradleFlagsArray+=(--no-daemon -Dorg.gradle.console=plain --init-script "${gradleInitScript:-@init_script@}")
     if [ -n "${MITM_CACHE_CA-}" ]; then
         if [ -z "${MITM_CACHE_KEYSTORE-}" ]; then
             MITM_CACHE_KEYSTORE="$MITM_CACHE_CERT_DIR/keystore"

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F7z8WZAj00dYfawUiCTLnipkut9QAnXiO8DgIhJ/78U=";
+    hash = "sha256-S1oFajXaym787JFwKpZwajRaVyj3cxWT3DZE/fIZCSY=";
   };
 
-  cargoHash = "sha256-+XdOvjQJkeDBH/3XtMX0SCGyji10UgnSme4oZuhwiq8=";
+  cargoHash = "sha256-60cFl2+ZdYJ/iAC5IjP/5T9f8a/qxsK/szo7qT+/aU8=";
 
   # require internet access
   checkFlags = map (t: "--skip=${t}") [

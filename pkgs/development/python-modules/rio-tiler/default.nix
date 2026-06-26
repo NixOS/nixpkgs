@@ -4,63 +4,90 @@
   fetchFromGitHub,
   pytestCheckHook,
 
+  async-geotiff,
   attrs,
   boto3,
   cachetools,
   color-operations,
+  h5netcdf,
   hatchling,
-  httpx,
+  httpx2,
   morecantile,
   numexpr,
   numpy,
+  obstore,
   pydantic,
   pystac,
+  pytest-asyncio,
   rasterio,
   rioxarray,
+  typing-extensions,
+  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "7.8.1";
+  version = "9.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    tag = version;
-    hash = "sha256-w7uw5PY3uiJmxsgSB1YDbtG7IY1pd4WU3JExZRc40gs=";
+    tag = finalAttrs.version;
+    hash = "sha256-Tf3F/XRGdPDZqlXQfRc5cvGvUvu94Y6TO2cFqjFsg5g=";
   };
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cachetools
     color-operations
-    httpx
+    httpx2
     morecantile
     numexpr
     numpy
     pydantic
     pystac
     rasterio
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    xarray = [ rioxarray ];
+    zarr = [
+      obstore
+      zarr
+    ];
+    geotiff = [
+      async-geotiff
+      obstore
+    ];
+  };
 
   nativeCheckInputs = [
-    boto3
+    h5netcdf
     pytestCheckHook
-    rioxarray
-  ];
+    pytest-asyncio
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "rio_tiler" ];
+
+  disabledTests = [
+    # Requires network access
+    "test_dataset_reader"
+    # for some reason, str date representation are not the same
+    "test_xarray_reader"
+    "test_geoxarray_reader_coordinates"
+    "test_geoxarray_reader_compat"
+  ];
 
   meta = {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
-    # Tests broken with gdal 3.10
-    # https://github.com/cogeotiff/rio-tiler/issues/769
-    broken = true;
   };
-}
+})

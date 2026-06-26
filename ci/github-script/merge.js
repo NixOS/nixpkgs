@@ -2,11 +2,11 @@ const { classify } = require('../supportedBranches.js')
 
 function runChecklist({
   committers,
-  events,
   files,
   pull_request,
   log,
   maintainers,
+  reviews,
   user,
   userIsMaintainer,
 }) {
@@ -27,18 +27,35 @@ function runChecklist({
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
 
   const approvals = new Set(
-    events
+    reviews
       .filter(
-        ({ event, state, commit_id }) =>
-          event === 'reviewed' &&
-          state === 'approved' &&
+        ({ state, commit }) =>
+          state === 'APPROVED' &&
           // Only approvals for the current head SHA count, otherwise authors could push
           // bad code between the approval and the merge.
-          commit_id === pull_request.head.sha,
+          commit?.oid === pull_request.head.sha,
       )
-      .map(({ user }) => user?.id)
-      // Some users have been deleted, so filter these out.
-      .filter(Boolean),
+      .map(({ user }) => user.id),
+  )
+
+  // A "changes requested" review from a committer blocks both the merge queue and
+  // auto-merge, even if it was made on an older commit (unlike approvals, GitHub does
+  // not auto-dismiss changes-requested reviews on push). For each committer, take their
+  // latest actionable review; if it's CHANGES_REQUESTED, they're blocking the PR.
+  // Dismissed reviews surface as DISMISSED and comment-only follow-ups as COMMENTED, so
+  // both are skipped naturally — the prior actionable review still stands until the
+  // committer explicitly approves or requests changes again.
+  const committerReviewState = new Map()
+  for (const { user, state } of reviews) {
+    if (
+      committers.has(user.id) &&
+      ['APPROVED', 'CHANGES_REQUESTED'].includes(state)
+    ) {
+      committerReviewState.set(user.id, state)
+    }
+  }
+  const noBlockingReviews = !Array.from(committerReviewState.values()).includes(
+    'CHANGES_REQUESTED',
   )
 
   const checklist = {
@@ -46,13 +63,22 @@ function runChecklist({
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
-      'Approved by a committer.': committers.intersection(approvals).size > 0,
+      'Approved by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.intersection(approvals).size > 0,
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Opened by a committer.': committers.has(pull_request.user.id),
-      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.has(pull_request.user.id),
+      'Opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).':
+        pull_request.user.login === 'r-ryantm',
     },
+    'PR is not a draft': !pull_request.draft,
+    // CI state is intentionally *not* a checklist item: auto-merge exists precisely to
+    // cover unfinished CI, and an already-failed CI is reported via the merge message
+    // (see merge() below) rather than a blanket refusal.
+    'PR is not blocked by a "changes requested" review from a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+      noBlockingReviews,
   }
 
   if (user) {
@@ -62,8 +88,9 @@ function runChecklist({
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since
       // we can't reliably relate changed files to packages outside by-name.
-      checklist[`${user.login} is a maintainer of all touched packages.`] =
-        eligible.has(user.id)
+      checklist[
+        `${user.login} is a maintainer of all touched packages on the ${pull_request.base.ref} branch.`
+      ] = eligible.has(user.id)
     }
   } else {
     // This is only used when no user is passed, i.e. for labeling.
@@ -92,7 +119,7 @@ function hasMergeCommand(body) {
   return (body ?? '')
     .replace(/<!--.*?-->/gms, '')
     .replace(/(^`{3,})[^`].*?\1/gms, '')
-    .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/m)
+    .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/im)
 }
 
 async function handleMergeComment({ github, body, node_id, reaction }) {
@@ -118,6 +145,7 @@ async function handleMerge({
   dry,
   pull_request,
   events,
+  reviews,
   maintainers,
   getTeamMembers,
   getUser,
@@ -142,6 +170,14 @@ async function handleMerge({
   // TODO: Find a more efficient way of downloading all the *names* of the touched files,
   // including an early exit when the first non-by-name file is found.
   if (files.length >= 100) return false
+
+  const noPrFailuresState = (
+    await github.rest.repos.listCommitStatusesForRef({
+      ...context.repo,
+      ref: pull_request.head.sha,
+      per_page: 100,
+    })
+  ).data.find(({ context }) => context === 'no PR failures')?.state
 
   // Only look through comments *after* the latest (force) push.
   const lastPush = events.findLastIndex(
@@ -168,10 +204,12 @@ async function handleMerge({
         )),
   )
 
+  // Returns `{ reaction, messages }`: the reaction to leave on the merge comment and the
+  // lines to append to the bot's reply. Throws only on an unexpected API error.
   async function merge() {
     if (dry) {
       core.info(`Merging #${pull_number}... (dry)`)
-      return ['Merge completed (dry)']
+      return { reaction: 'ROCKET', messages: ['Merge completed (dry)'] }
     }
 
     // Using GraphQL mutations instead of the REST /merge endpoint, because the latter
@@ -191,16 +229,38 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
-      return [
-        `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
-      ]
+      log('merge', 'Queued for merge')
+      return {
+        reaction: 'ROCKET',
+        messages: [
+          `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
+        ],
+      }
     } catch (e) {
-      log('Enqueing failed', e.response.errors[0].message)
+      log('Enqueuing failed', e.response.errors[0].message)
     }
 
-    // If required status checks are not satisfied, yet, the above will fail. In this case
-    // we can enable auto-merge. We could also only use auto-merge, but this often gets
-    // stuck for no apparent reason.
+    // Enqueuing fails when the required status checks are not satisfied, yet. If CI has
+    // already failed, enabling auto-merge would be pointless: it would never fire, and
+    // fixing CI requires a new push, which invalidates this merge command anyway (we only
+    // act on comments after the latest push). So we don't enable auto-merge and instead
+    // ask for a fresh command once CI is green again.
+    if (['error', 'failure'].includes(noPrFailuresState)) {
+      log('merge', 'CI has failed, not enabling auto-merge')
+      return {
+        reaction: 'THUMBS_DOWN',
+        messages: [
+          ':x: Pull Request could not be merged: CI has failed (#305350).',
+          '',
+          '> [!TIP]',
+          '> PRs cannot be merged while CI is failing.',
+          '> Once CI is passing, comment `@NixOS/nixpkgs-merge-bot merge` again.',
+        ],
+      }
+    }
+
+    // CI has not finished yet, so we enable auto-merge. We could also only use auto-merge,
+    // but this often gets stuck for no apparent reason.
     try {
       await github.graphql(
         `mutation($node_id: ID!, $sha: GitObjectID) {
@@ -212,12 +272,18 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
-      return [
-        `:heavy_check_mark: Enabled Auto Merge (#306934)`,
-        '',
-        '> [!TIP]',
-        '> Sometimes GitHub gets stuck after enabling Auto Merge. In this case, leaving another approval should trigger the merge.',
-      ]
+      log('merge', 'Auto-merge enabled')
+      return {
+        reaction: 'ROCKET',
+        messages: [
+          `:heavy_check_mark: Enabled Auto Merge (#306934)`,
+          '',
+          '> [!TIP]',
+          '> [Auto Merge](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request) will queue this PR once required CI checks succeed.',
+          '> If CI fails instead, fixing it needs a new push, which disables Auto Merge and invalidates this command — comment `@NixOS/nixpkgs-merge-bot merge` again once CI is green.',
+          '> If GitHub gets stuck even though CI passed (it sometimes does), leaving another approval should kick off the merge.',
+        ],
+      }
     } catch (e) {
       log('Auto Merge failed', e.response.errors[0].message)
       throw new Error(e.response.errors[0].message)
@@ -260,11 +326,11 @@ async function handleMerge({
 
     const { result, eligible, checklist } = runChecklist({
       committers,
-      events,
       files,
       pull_request,
       log,
       maintainers,
+      reviews,
       user: comment.user,
       userIsMaintainer: await isMaintainer(comment.user.login),
     })
@@ -301,10 +367,12 @@ async function handleMerge({
     }
 
     if (result) {
-      await react('ROCKET')
       try {
-        body.push(...(await merge()))
+        const { reaction, messages } = await merge()
+        await react(reaction)
+        body.push(...messages)
       } catch (e) {
+        await react('THUMBS_DOWN')
         // Remove the HTML comment with node_id reference to allow retrying this merge on the next run.
         body.shift()
         body.push(`:x: Merge failed with: ${e} (#371492)`)
@@ -329,11 +397,11 @@ async function handleMerge({
 
   const { result } = runChecklist({
     committers,
-    events,
     files,
     pull_request,
     log,
     maintainers,
+    reviews,
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.

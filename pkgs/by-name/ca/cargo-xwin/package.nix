@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-xwin";
-  version = "0.21.4";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "rust-cross";
     repo = "cargo-xwin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mgFMjNxjB4S9/nou6S8NN8ZpXX7K49lLArt/cXcSPIE=";
+    hash = "sha256-pWaJKk4XgBeY4llRTHvuMg0mAfEV4GFpeWGaM8eYsN4=";
   };
 
-  cargoHash = "sha256-Md2pk8kYqUDPzRQedbne4Crg5UbGHHE5OTRz4LXLs3E=";
+  cargoHash = "sha256-iO0uAYdi8Vy9gi7lHsGRmhDsVNQCqo4E/nbTfI32jDs=";
 
   meta = {
     description = "Cross compile Cargo project to Windows MSVC target with ease";

@@ -6,32 +6,28 @@
   git,
   stdenv,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "entire";
-  version = "0.4.5";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "entireio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BDke84xQ6t7W+BONQn7r8ZBENNr8oGv8mtJ5unyv0lA=";
+    hash = "sha256-yGutKLwdTuGamZMdkqHlhBypZFuY9jM0w/1VW6ACppg=";
   };
 
-  vendorHash = "sha256-zgVdh80aNnvC1oMp/CS0nx4b1y9b0jwVKFotil6kQZ0=";
-
-  postPatch = ''
-    substituteInPlace go.mod --replace-fail "go 1.25.6" "go 1.25.5"
-  '';
+  vendorHash = "sha256-pIIrrbp3x15iiY3CuA+wU7315bHUSjvJWBa4Q58OorU=";
 
   subPackages = [ "cmd/entire" ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/entireio/cli/cmd/entire/cli/buildinfo.Version=${finalAttrs.version}"
-    "-X=github.com/entireio/cli/cmd/entire/cli/buildinfo.Commit=${finalAttrs.src.rev}"
+    "-X=github.com/entireio/cli/cmd/entire/cli/versioninfo.Version=${finalAttrs.version}"
+    "-X=github.com/entireio/cli/cmd/entire/cli/versioninfo.Commit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,6 +44,8 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/entire completion zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "CLI tool that captures AI agent sessions alongside git commits";
     longDescription = ''
@@ -56,9 +54,10 @@ buildGoModule (finalAttrs: {
       of how code was written in your repo.
     '';
     homepage = "https://github.com/entireio/cli";
-    changelog = "https://github.com/entireio/cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/entireio/cli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      iamanaws
       sheeeng
       squishykid
     ];

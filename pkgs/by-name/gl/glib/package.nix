@@ -82,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.86.3";
+  version = "2.88.1";
 
   outputs = [
     "bin"
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-syEdjTS5313KBXh+8K1dfKdd7JmLlw4aqwAB0imXfGU=";
+    hash = "sha256-UauATFb26rPlBFx3TRKQrF5Mkj1Pmj2OMxI77kXBhA4=";
   };
 
   patches =
@@ -252,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       # we're using plain
       "-DG_DISABLE_CAST_CHECKS"
     ];
+    DETERMINISTIC_BUILD = 1;
   };
 
   postPatch = ''
@@ -279,8 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
   '';
-
-  DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
@@ -375,7 +374,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/glib";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       raskin
     ];
     teams = [ lib.teams.gnome ];

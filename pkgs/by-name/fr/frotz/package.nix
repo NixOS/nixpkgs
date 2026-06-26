@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.55";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     tag = finalAttrs.version;

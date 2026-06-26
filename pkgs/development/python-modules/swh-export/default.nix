@@ -6,6 +6,7 @@
   setuptools-scm,
   boto3,
   click,
+  luigi,
   tqdm,
   pyorc,
   plyvel,
@@ -16,15 +17,15 @@
   swh-model,
   swh-storage,
   pytestCheckHook,
-  pytest-kafka,
+  pytest-click,
   pytest-mock,
   tzdata,
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-export";
-  version = "1.8.0";
+  version = "1.11.7";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -32,8 +33,8 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-export";
-    tag = "v${version}";
-    hash = "sha256-n97MMYn7EmTrv411YSxUD1+zfbFB8KOSns44N3NqqV8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aDIGbkyRMNoQOdlXwqfLyRqDfK6jNFMVFJv67OY1SCg=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   dependencies = [
     boto3
     click
+    luigi
     tqdm
     pyorc
     plyvel
@@ -63,7 +65,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-kafka
+    pytest-click
     pytest-mock
     pkgs.zstd
     pkgs.pv
@@ -85,6 +87,6 @@ buildPythonPackage rec {
     description = "Software Heritage dataset tools";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-export";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

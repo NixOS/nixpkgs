@@ -8,6 +8,7 @@
   mkdocs,
   python3,
   python3Packages,
+  runtimeShell,
 }:
 
 buildGoModule (
@@ -17,7 +18,7 @@ buildGoModule (
     ui = buildNpmPackage {
       inherit (finalAttrs) src version;
       pname = "ntfy-sh-ui";
-      npmDepsHash = "sha256-VxGNZgAp+w3vl6XaqUmkew2JYOgwiymInUwiyZ6/Gvs=";
+      npmDepsHash = "sha256-ASh88vfDrR+uf4IFOjj/SK2Hb+gwSNuKQwTGYBTogXo=";
 
       prePatch = ''
         cd web/
@@ -37,16 +38,16 @@ buildGoModule (
   in
   {
     pname = "ntfy-sh";
-    version = "2.15.0";
+    version = "2.24.0";
 
     src = fetchFromGitHub {
       owner = "binwiederhier";
       repo = "ntfy";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-vQ6cugoPLtuYqpZRj9gOR0x3+vOTRAkcBnkUyA6qmMw=";
+      hash = "sha256-ca04r8kMSAqWiEN6F36n75hy46Alb21UUtQ1/mwpQcY=";
     };
 
-    vendorHash = "sha256-7oFBD3FblGXZRyfvd2t9s3sKbmCB1L+IkeN83IjnGUk=";
+    vendorHash = "sha256-9xrqa/eDpyzeLBMM31Q8CsRhdATB2DYkOoE/CxycgzY=";
 
     doCheck = false;
 
@@ -54,6 +55,11 @@ buildGoModule (
       "-s"
       "-w"
       "-X main.version=${finalAttrs.version}"
+    ];
+
+    excludedPackages = [
+      # main module (heckel.io/ntfy/v2) does not contain package heckel.io/ntfy/v2/tools/loadtest
+      "tools/loadtest"
     ];
 
     nativeBuildInputs = [
@@ -66,6 +72,12 @@ buildGoModule (
 
     postPatch = ''
       sed -i 's# /bin/echo# echo#' Makefile
+      substituteInPlace \
+          cmd/subscribe_unix.go \
+          cmd/subscribe_darwin.go \
+        --replace \
+          'scriptLauncher = []string{"sh", "-c"}' \
+          'scriptLauncher = []string{"${runtimeShell}", "-c"}'
     '';
 
     preBuild = ''
@@ -81,6 +93,7 @@ buildGoModule (
     meta = {
       description = "Send push notifications to your phone or desktop via PUT/POST";
       homepage = "https://ntfy.sh";
+      changelog = "https://github.com/binwiederhier/ntfy/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         arjan-s

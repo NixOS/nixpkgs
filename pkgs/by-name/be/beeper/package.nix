@@ -3,33 +3,39 @@
   fetchurl,
   appimageTools,
   makeWrapper,
+  asar,
   writeShellApplication,
   curl,
   common-updater-scripts,
 }:
 let
   pname = "beeper";
-  version = "4.2.547";
+  version = "4.2.936";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-PuthmxdIuftaK9U9r52Fc9b8JzYPwxezRhWjdyo+nmA=";
+    hash = "sha256-/9IHHE4qeygvPHFRz3EoejkQml6WdebdeUR0Y6afP5I=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
 
     postExtract = ''
+      appRoot="$out/resources/app"
+      ${lib.getExe asar} extract "$out/resources/app.asar" "$appRoot"
+      rm "$out/resources/app.asar"
+
       # disable creating a desktop file and icon in the home folder during runtime
-      linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+      linuxConfigFilename=$appRoot/build/main/linux-*.mjs
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
       # disable auto update
-      sed -i 's/auto_update_disabled:[^,}]*/auto_update_disabled:true/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i 's/c=d??{},p=c.hw_acceleration??!0/c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0/g' $appRoot/build/main/index-*.mjs
 
       # prevent updates
-      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $appRoot/build/main/main-entry-*.mjs
 
-      # hide version status element on about page otherwise a error message is shown
-      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/PrefsPanes-*.css
+      # hide version status element on about page otherwise an error message is shown
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $appRoot/build-browser/*.css
+
     '';
   };
 in
@@ -48,7 +54,8 @@ appimageTools.wrapAppImage {
     . ${makeWrapper}/nix-support/setup-hook
     wrapProgram $out/bin/beeper \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
-      --set APPIMAGE beeper
+      --set APPIMAGE beeper \
+      --run 'exec >/dev/null' # as recommended in #486164
   '';
 
   passthru = {

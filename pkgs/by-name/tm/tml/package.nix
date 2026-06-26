@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tml";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "tml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QMXEKjOKYQlzXc2ds8OAAL5xUxayGb6mxxyeHsCkfwo=";
+    hash = "sha256-hDcQIBwjm7ZL9zUdTeZfvMeh/kqRk6wjwtCUvTJCG/U=";
   };
 
   vendorHash = "sha256-CHZS1SpPko8u3tZAYbf+Di882W55X9Q/zd4SmFCRgKM=";

@@ -9,7 +9,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [ sebtm ];
+  meta.maintainers = [ ];
 
   options = {
     services.tp-auto-kbbl = {

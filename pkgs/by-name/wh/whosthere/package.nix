@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "whosthere";
-  version = "0.5.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "ramonvermeulen";
     repo = "whosthere";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EuEq3HG7j5kz0GomJELcVy+POtbA+NtIM/Y/G3kGZn4=";
+    hash = "sha256-FgjsmUg4oEF+WVBhZXIE0MzpBr+s9sXuXIFxqHKD8U8=";
   };
 
-  vendorHash = "sha256-YVPsWpIXC5SLm+T2jEGqF4MBcKOAAk0Vpc7zCIFkNw8=";
+  vendorHash = "sha256-mQ17BCJGc4LQOUdyWGlWoSJPbqwg55vRGfEbrcDllG4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,16 +30,6 @@ buildGoModule (finalAttrs: {
     "-X"
     "main.versionStr=${finalAttrs.version}"
   ];
-
-  checkFlags =
-    let
-      # Skip tests that require filesystem access
-      skippedTests = [
-        "TestResolveLogPath"
-        "TestStateDir"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd whosthere \
@@ -65,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ramonvermeulen/whosthere";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "whosthere";
   };
 })

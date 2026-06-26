@@ -8,6 +8,8 @@
 
   callPackage,
 
+  bash,
+
   nixosTests,
   nix-update-script,
 }:
@@ -17,7 +19,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "183";
+  version = "224";
 
   outputs = [
     "out"
@@ -28,7 +30,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5TIcDK6M/9jDkJDWafRGw+/TaW7Pbvn1yl9ijnzP/Mc=";
+    hash = "sha256-IblAaM9FBdI2Y9rg36SWpclQ0jV6Y93RC+N+cXWEO94=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -41,7 +43,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-XiDYlw/byu8CWvg4KSPC7m8PGCZXtp08Y1velx4BR8U=";
+  vendorHash = "sha256-b+RreafBMCWT/jbWTlXaiDRzA4DRe76WaCEbrfRxV/4=";
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
@@ -58,13 +60,18 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
+  postPatch = ''
+    substituteInPlace internal/process/process_command_forking_test.go \
+      --replace "#!/bin/bash" "#!${lib.getExe bash}"
+  '';
+
   preBuild = ''
     # ldflags based on metadata from git and source
     ldflags+=" -X main.commit=$(cat COMMIT)"
     ldflags+=" -X main.date=$(cat SOURCE_DATE_EPOCH)"
 
-    # copy for go:embed in proxy/ui_embed.go
-    cp -r ${finalAttrs.passthru.ui}/ui_dist proxy/
+    # copy for go:embed in internal/server/ui_embed.go
+    cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
   '';
 
   excludedPackages = [
@@ -81,8 +88,8 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-        # Fail only on x86_64-darwin intermittently
+      skippedTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+        # Fail only on *-darwin intermittently
         # https://github.com/mostlygeek/llama-swap/issues/320
         "TestProcess_AutomaticallyStartsUpstream"
         "TestProcess_WaitOnMultipleStarts"
@@ -98,6 +105,7 @@ buildGoModule (finalAttrs: {
         "TestProcess_ForceStopWithKill"
         "TestProcess_StopCmd"
         "TestProcess_EnvironmentSetCorrectly"
+        "TestProcess_ReverseProxyPanicIsHandled"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

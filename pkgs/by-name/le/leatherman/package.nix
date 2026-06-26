@@ -27,6 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 3.2.2)" \
       "cmake_minimum_required(VERSION 3.10)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace \
+      curl/CMakeLists.txt \
+      dynamic_library/CMakeLists.txt \
+      execution/CMakeLists.txt \
+      file_util/CMakeLists.txt \
+      locale/CMakeLists.txt \
+      logging/CMakeLists.txt \
+      ruby/CMakeLists.txt \
+      util/CMakeLists.txt \
+      windows/CMakeLists.txt \
+      --replace-fail ' system' ""
+    substituteInPlace tests/CMakeLists.txt --replace-fail 'system ' ""
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

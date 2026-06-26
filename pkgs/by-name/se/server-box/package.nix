@@ -1,6 +1,6 @@
 {
   lib,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -13,16 +13,17 @@
 }:
 
 let
-  version = "1.0.1316";
+  version = "1.0.1426";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-yFBWFqTJJon6GeY6dQ0QL814/j1Y5ur4pz2uS7iIZCI=";
+    fetchSubmodules = true;
+    hash = "sha256-6/XKaE28v/LeDXnSAMX1alCIV2hBUeuDrH+Sa6t95m4=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
@@ -36,7 +37,7 @@ flutter338.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -92,7 +93,8 @@ flutter338.buildFlutterApplication {
 
   meta = {
     description = "Server status & toolbox";
-    homepage = "https://github.com/lollipopkit/flutter_server_box";
+    homepage = "https://serverbox.lpkt.cn";
+    downloadPage = "https://serverbox.lpkt.cn/installation";
     changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;

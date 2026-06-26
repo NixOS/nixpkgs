@@ -21,15 +21,15 @@
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.9.0";
+    version = "2.9.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-/IU5yJQzUwv/d4mXr+m/AKrw7ufY8r+JAysUhhaHUZY=";
+      hash = "sha256-S/E16Yf3Qh098qXxl0pimSy/5gkkd1n/Os6B9REWleg=";
     };
 
     nativeBuildInputs = [

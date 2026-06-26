@@ -11,10 +11,8 @@ let
     any
     attrNames
     attrValues
-    boolToString
     concatMap
     concatMapStringsSep
-    concatStrings
     elem
     filter
     filterAttrs
@@ -39,12 +37,10 @@ let
     mkRenamedOptionModule
     optional
     optionals
-    sort
     stringAfter
     stringLength
     trace
     types
-    versionOlder
     xor
     ;
 
@@ -384,8 +380,8 @@ let
           description = ''
             The full path to a file that contains the hash of the user's
             password. The password file is read on each system activation. The
-            file should contain exactly one line, which should be the password in
-            an encrypted form that is suitable for the `chpasswd -e` command.
+            file should contain exactly one line, the salted password hash
+            produced by `mkpasswd`.
 
             ${passwordDescription}
           '';
@@ -954,32 +950,8 @@ in
         };
       };
 
-      # Warn about user accounts with deprecated password hashing schemes
-      # This does not work when the users and groups are created by
-      # systemd-sysusers because the users are created too late then.
-      system.activationScripts.hashes =
-        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
-          {
-            deps = [ "users" ];
-            text = ''
-              users=()
-              while IFS=: read -r user hash _; do
-                if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
-                  users+=("$user")
-                fi
-              done </etc/shadow
-
-              if (( "''${#users[@]}" )); then
-                echo "
-              WARNING: The following user accounts rely on password hashing algorithms
-              that have been removed. They need to be renewed as soon as possible, as
-              they do prevent their users from logging in."
-                printf ' - %s\n' "''${users[@]}"
-              fi
-            '';
-          }
-        else
-          ""; # keep around for backwards compatibility
+      # for backwards compatibility
+      system.activationScripts.hashes = stringAfter [ "users" ] "";
 
       # for backwards compatibility
       system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -1115,14 +1087,19 @@ in
             -> !cfg.allowNoPasswordLogin
             -> any id (
               mapAttrsToList (
-                name: cfg:
-                (name == "root" || cfg.group == "wheel" || elem "wheel" cfg.extraGroups)
+                name: user:
+                (
+                  name == "root"
+                  || user.group == "wheel"
+                  || elem "wheel" user.extraGroups
+                  || elem name (cfg.groups.wheel.members or [ ])
+                )
                 && (
-                  allowsLogin cfg.hashedPassword
-                  || cfg.password != null
-                  || cfg.hashedPasswordFile != null
-                  || cfg.openssh.authorizedKeys.keys != [ ]
-                  || cfg.openssh.authorizedKeys.keyFiles != [ ]
+                  allowsLogin user.hashedPassword
+                  || user.password != null
+                  || user.hashedPasswordFile != null
+                  || user.openssh.authorizedKeys.keys != [ ]
+                  || user.openssh.authorizedKeys.keyFiles != [ ]
                 )
               ) cfg.users
               ++ [
@@ -1138,6 +1115,16 @@ in
           '';
         }
       ]
+      ++ flip mapAttrsToList config.boot.initrd.systemd.users (
+        name: user: {
+          assertion = config.boot.initrd.systemd.enable -> (baseNameOf user.shell != "cryptsetup-askpass");
+          message = ''
+            cryptsetup-askpass is not available in systemd stage 1. Please remove it from: boot.initrd.systemd.users.${name}.shell
+
+            Use `systemctl default` instead; see the NixOS 26.05 release notes for details. If you want to continue restricting the command for SSH login, you can use `command="systemctl default"` in SSH authorized keys instead; see `sshd(8)`.
+          '';
+        }
+      )
       ++ flatten (
         flip mapAttrsToList cfg.users (
           name: user:

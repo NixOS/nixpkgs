@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxmp";
-  version = "4.6.3";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "libxmp";
     repo = "libxmp";
     tag = "libxmp-${finalAttrs.version}";
-    hash = "sha256-VTjS5bVu+jiswP4GCTxcAdhtVdtopy4A3hxlzIQlZVU=";
+    hash = "sha256-MatT8/tR8Gs3Q6WE+LOlbcZEiAxfO0Y89bo0c5reAUA=";
   };
 
   outputs = [

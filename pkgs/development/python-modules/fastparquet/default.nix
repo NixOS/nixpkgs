@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2025.12.0";
+  version = "2026.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-cebu3E2sbVWRUYbSeuslCZhaF+zWV7E56iSwB7Ms3ts=";
+    hash = "sha256-thvoMXXiGtHGcJ0/IrGujjhVAvSmTMGmrlDHjG8R7PQ=";
   };
 
   build-system = [

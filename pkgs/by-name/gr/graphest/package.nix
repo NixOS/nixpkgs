@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
-    install -Dm444 build/icon.png $out/share/icons/hicolor/1024x1024/apps/graphest.png
+    install -Dm444 build/icon.png $out/share/icons/graphest.png
     install -Dm444 ${./mime.xml} $out/share/mime/packages/graphest.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

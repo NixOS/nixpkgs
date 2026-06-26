@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nebula3-python";
-  version = "3.8.3";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vesoft-inc";
     repo = "nebula-python";
-    tag = "v${version}";
-    hash = "sha256-p2dXpcOwVKbdfRKKTAc4LhaNuTjvPd8BBBI8aUivaZ4=";
+    tag = version;
+    hash = "sha256-WVbLywb/uVHWjtzXHSSlvBUwFz0p3VtiYwAl/0CcMDw=";
   };
 
   build-system = [ pdm-backend ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client API of Nebula Graph in Python";
     homepage = "https://github.com/vesoft-inc/nebula-python";
-    changelog = "https://github.com/vesoft-inc/nebula-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/vesoft-inc/nebula-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

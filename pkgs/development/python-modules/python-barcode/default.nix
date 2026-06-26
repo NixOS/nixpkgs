@@ -1,24 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   setuptools-scm,
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-barcode";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.16.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Oxgl+9sR5ZdGbf9ChrTqmx6GpXcXtZ5WOuZ5cm/IVN4=";
+  src = fetchFromGitHub {
+    owner = "WhyNotHugo";
+    repo = "python-barcode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a/w2JxFBm/jqIRnqIB7ZtkdiLnBNjbR0V5SNuau/YxY=";
   };
 
-  propagatedBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     images = [ pillow ];
@@ -28,7 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ]
-  ++ optional-dependencies.images;
+  ++ finalAttrs.passthru.optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
@@ -36,8 +42,8 @@ buildPythonPackage rec {
     description = "Create standard barcodes with Python";
     mainProgram = "python-barcode";
     homepage = "https://github.com/WhyNotHugo/python-barcode";
-    changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/WhyNotHugo/python-barcode/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

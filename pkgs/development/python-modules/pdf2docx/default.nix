@@ -15,7 +15,7 @@
   setuptools,
 }:
 let
-  version = "0.5.9";
+  version = "0.5.13";
 in
 buildPythonPackage {
   pname = "pdf2docx";
@@ -26,7 +26,7 @@ buildPythonPackage {
     owner = "ArtifexSoftware";
     repo = "pdf2docx";
     tag = "v${version}";
-    hash = "sha256-yfxBWQ8r0mCZkk7Gtbeub5x9HBpNWXv6kW1D678hN4g=";
+    hash = "sha256-GZ7aUTSGSly21lMiUOXc6Y8h9WY2zQQxF5M11PwTtCA=";
   };
 
   build-system = [

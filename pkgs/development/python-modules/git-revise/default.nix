@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "git-revise";
   version = "0.7.0-unstable-2025-01-28";
   format = "setuptools";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
-    changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mystor/git-revise/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "git-revise";
     maintainers = with lib.maintainers; [ _9999years ];

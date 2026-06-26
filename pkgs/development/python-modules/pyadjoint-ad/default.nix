@@ -4,20 +4,21 @@
   fetchFromGitHub,
   setuptools,
   scipy,
+  sympy,
   checkpoint-schedules,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyadjoint-ad";
-  version = "2025.10.0";
+  version = "2026.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
     tag = finalAttrs.version;
-    hash = "sha256-caW2X4q0mHnD8CEh5jjelD4xBth/R/8/P3m0tTeO/LQ=";
+    hash = "sha256-ChtZQ5MJeQt1CqAsFHTCwbIJrcwBKlNxSF5zi6pHLsA=";
   };
 
   build-system = [
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     scipy
+    sympy
     checkpoint-schedules
   ];
 

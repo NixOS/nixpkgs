@@ -8,7 +8,7 @@
   mint-x-icons,
   pantheon,
   jdupes,
-  libsForQt5,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
 
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
     mint-x-icons
@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation {
 
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     runHook preInstall

@@ -41,6 +41,11 @@ let
     if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
       export DBUS_SESSION_BUS_ADDRESS
       exec ${getExe sway} "$@"
+    elif [ -n "$XDG_RUNTIME_DIR" ] && [ -S "$XDG_RUNTIME_DIR/bus" ]; then
+      # Prefer the systemd --user bus (dbus-daemon or dbus-broker) over
+      # spawning a redundant session bus via dbus-run-session.
+      export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+      exec ${getExe sway} "$@"
     else
       exec ${optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${getExe sway} "$@"
     fi

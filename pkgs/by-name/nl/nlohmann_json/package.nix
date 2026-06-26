@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nlohmann/json/blob/develop/ChangeLog.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })

@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  undmg,
+  _7zz,
   zstd,
   alsa-lib,
   curl,
@@ -18,6 +18,7 @@
   libxcursor,
   libx11,
   libxcb,
+  xz, # liblzma
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -57,6 +58,7 @@ let
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
       zlib
+      xz
     ];
 
     runtimeDependencies = [
@@ -105,7 +107,8 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    # Warp.dmg is APFS formatted, which is unsupported by undmg
+    nativeBuildInputs = [ _7zz ];
 
     installPhase = ''
       runHook preInstall
@@ -123,7 +126,6 @@ let
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      imadnyc
       FlameFlag
       johnrtitor
       logger

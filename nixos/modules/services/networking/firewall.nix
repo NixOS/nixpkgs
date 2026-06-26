@@ -118,7 +118,7 @@ in
 
       logRefusedConnections = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to log rejected or dropped incoming connections.
           Note: The logs are found in the kernel logs, i.e. dmesg

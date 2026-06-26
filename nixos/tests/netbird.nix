@@ -7,12 +7,13 @@
   ];
 
   nodes = {
-    node =
-      { ... }:
-      {
-        services.netbird.enable = true;
-        services.netbird.clients.custom.port = 51819;
+    node = {
+      services.netbird = {
+        enable = true;
+        clients.custom.port = 51819;
+        ui.enable = true;
       };
+    };
   };
 
   /*

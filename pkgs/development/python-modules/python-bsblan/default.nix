@@ -2,13 +2,12 @@
   lib,
   aiohttp,
   aresponses,
-  backoff,
+  python-backoff,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  mashumaro,
-  orjson,
   packaging,
+  pydantic,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -20,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-bsblan";
-  version = "4.1.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t60WMq1kbCIkcQSfr03K9Z6ro3zFGaDxCnl/84by+Qw=";
+    hash = "sha256-4ds/zYedmdLA7zLe2KoJ4DMzHJC8459KjZIJlHrfWEQ=";
   };
 
   postPatch = ''
@@ -41,10 +40,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     aiohttp
-    backoff
-    mashumaro
-    orjson
     packaging
+    pydantic
+    python-backoff
     yarl
   ];
 

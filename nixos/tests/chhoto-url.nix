@@ -38,7 +38,7 @@
 
     resp = json.loads(machine.succeed("curl localhost:8000/api/getconfig"))
     assert resp["success"] is False
-    assert resp["reason"] == "No valid authentication was found"
+    assert resp["reason"] == "No valid authentication."
 
     resp = json.loads(machine.succeed("curl -H 'X-API-Key: api_key' localhost:8000/api/getconfig"))
     expected_version = "${config.nodes.machine.services.chhoto-url.package.version}"

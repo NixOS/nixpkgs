@@ -8,7 +8,7 @@
   gettext,
   libtool,
   python3,
-  wxGTK32,
+  wxwidgets_3_2,
   wrapGAppsHook3,
   llvmPackages,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libtool
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 

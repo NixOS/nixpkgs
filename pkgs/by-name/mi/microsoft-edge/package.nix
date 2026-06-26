@@ -90,6 +90,8 @@
   libsecret,
   # Edge Specific
   libuuid,
+  # Create a symlink at $out/bin/microsoft-edge-stable
+  withSymlink ? true,
 }:
 let
   opusWithCustomModes = libopus.override { withCustomModes = true; };
@@ -162,11 +164,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "145.0.3800.58";
+  version = "149.0.4022.80";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-RmXe5w7UQALjjEPfrH3l5nyi0U58x5OlNrtfWIY48U0=";
+    hash = "sha256-5rHSMX9HdxvQOQ03DnLJF7NTHY5Ybt7sSU5MrcGzRnY=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -256,6 +258,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
+    ${lib.optionalString withSymlink ''
+      ln -s $out/bin/microsoft-edge $out/bin/microsoft-edge-stable
+    ''}
+
     runHook postInstall
   '';
 
@@ -272,7 +278,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
-      bricklou
       jonhermansen
       iedame
     ];

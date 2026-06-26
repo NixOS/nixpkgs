@@ -151,6 +151,10 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
 
+    # Move the icon to a spec-compliant location
+    mkdir -p $out/share/icons/hicolor/512x512
+    mv $out/share/{pixmaps,icons/hicolor/512x512/apps}
+
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
       --replace /usr/bin/ $out/bin/ \

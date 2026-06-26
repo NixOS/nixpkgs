@@ -221,6 +221,9 @@ let
           "slynk/indentation"
           "slynk/retro"
         ];
+        meta = {
+          homepage = "https://github.com/joaotavora/sly";
+        };
       };
 
       cephes = build-with-compile-into-pwd {
@@ -246,7 +249,7 @@ let
         pname = "clx-truetype";
         version = "20160825-git";
         src = pkgs.fetchzip {
-          url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+          url = "https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
           sha256 = "079hyp92cjkdfn6bhkxsrwnibiqbz4y4af6nl31lzw6nm91j5j37";
         };
         lispLibs = with self; [
@@ -331,6 +334,9 @@ let
         nativeLibs = [
           pkgs.gtk4
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_adw = build-asdf-system {
@@ -347,6 +353,9 @@ let
         nativeLibs = [
           pkgs.libadwaita
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-gtk4_dot_webkit = build-asdf-system {
@@ -363,6 +372,9 @@ let
         nativeLibs = [
           pkgs.webkitgtk_6_0
         ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
       };
 
       cl-avro = build-asdf-system {
@@ -389,13 +401,15 @@ let
           time-interval
           trivial-extensible-sequences
         ];
+        meta = {
+          homepage = "https://github.com/SahilKang/cl-avro";
+        };
       };
 
       frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
         systems = [
           "frugal-uuid"
           "frugal-uuid/non-frugal"
-          "frugal-uuid/benchmark"
           "frugal-uuid/test"
         ];
         lispLibs =
@@ -434,6 +448,9 @@ let
           mcclim
           mcclim-layouts
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
       kons-9 = build-asdf-system {
@@ -466,6 +483,9 @@ let
           shasht
           org_dot_melusina_dot_confidence
         ];
+        meta = {
+          homepage = "https://github.com/kaveh808/kons-9";
+        };
       };
 
       nsb-cga = super.nsb-cga.overrideLispAttrs (old: {
@@ -529,7 +549,10 @@ let
           runHook postInstall
         '';
 
-        meta.mainProgram = "qlot";
+        meta = {
+          mainProgram = "qlot";
+          homepage = "https://github.com/fukamachi/qlot";
+        };
       };
 
       fset = super.fset.overrideLispAttrs (old: {

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pyfluidsynth";
-  version = "1.3.4";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ynQcJity5IljFJxzv4roDkXITCPJvfgDomujJMuy1bI=";
+    hash = "sha256-ap4duvRp/RH0UYTzfsKOGYsdZJWtdPYdxKV3JrKxujE=";
   };
 
   postPatch = ''

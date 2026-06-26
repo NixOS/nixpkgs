@@ -7,7 +7,7 @@
   tokenize-rt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyupgrade";
   version = "3.21.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "pyupgrade";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-u4iudzPhVuAOS9cL3z6FCVpWKJZHg7UGpe9aHnN7Byc=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

@@ -19,7 +19,7 @@
   gmp,
   gtk3,
   hicolor-icon-theme,
-  ilmbase,
+  hidapi,
   libpng,
   mpfr,
   nanosvg,
@@ -29,7 +29,7 @@
   openvdb,
   qhull,
   onetbb,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   libbgcode,
   heatshrink,
@@ -56,20 +56,20 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
+  wxGTK-override' = if wxGTK-override == null then wxwidgets_3_2 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.9.4";
+  version = "2.9.5";
   # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
   # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
   # with --cores 32 on clang).
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-1ilgr9RaIoWvj0TDVc20XjjUUcNtnicR7KlE0ii3GQE=";
+    hash = "sha256-tVC/hIykg0flc9HgB4ddJqUEVolZ4Lu/Cx5I10Z2eCI=";
     rev = "version_${finalAttrs.version}";
   };
 
@@ -78,6 +78,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/415703
     # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/merge_requests/5
     ./allow_wayland.patch
+    # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
+    ./no-ilmbase.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -93,6 +95,18 @@ clangStdenv.mkDerivation (finalAttrs: {
     + ''
       substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
         --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
+    ''
+    # Make PrusaSlicer handle the url "prusaslicer://"
+    + ''
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'Exec=prusa-slicer %F' \
+        'Exec=prusa-slicer %U'
+
+      substituteInPlace src/platform/unix/PrusaSlicer.desktop \
+        --replace-fail \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;' \
+        'MimeType=model/stl;application/vnd.ms-3mfdocument;application/prs.wavefront-obj;application/x-amf;x-scheme-handler/prusaslicer;'
     ''
   );
 
@@ -119,7 +133,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     gmp
     gtk3
     hicolor-icon-theme
-    ilmbase
+    hidapi
     libpng
     mpfr
     nanosvg-fltk
@@ -202,10 +216,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/lib"
     mv -v $out/bin/*.* $out/lib/
-
-    mkdir -p "$out/share/pixmaps/"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
 
     mkdir -p "$out"/share/mime/packages
     cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml

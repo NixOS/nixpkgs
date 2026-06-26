@@ -8,17 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "nuxmv";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "https://es-static.fbk.eu/tools/nuxmv/downloads/nuXmv-${version}-${
-      if stdenv.hostPlatform.isDarwin then "macosx64" else "linux64"
-    }.tar.gz";
+    url = "https://nuxmv.fbk.eu/downloads/nuXmv-${version}-${
+      if stdenv.hostPlatform.isDarwin then "macos-universal" else "linux64"
+    }.tar.xz";
     sha256 =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-48I+FhJUUam1nMCMMM47CwGO82BYsNz0eHDHXBfqO2E="
+        "sha256-3AoXEPCunzbhYjjUCzXc9m+CPTVwE70udMCfbpucbdU="
       else
-        "sha256-Gf+QgAjTrysZj7qTtt1wcQPganDtO0YtRY4ykhLPzVo=";
+        "sha256-x9/sQ3SbyyMMhX7+gQmbldhouU79n4G8zr5UKjBqfIM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 }

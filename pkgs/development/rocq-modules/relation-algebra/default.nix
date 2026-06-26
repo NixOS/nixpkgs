@@ -16,7 +16,7 @@ mkRocqDerivation {
       [ rocq-core.rocq-version ]
       [
         {
-          cases = [ (lib.versions.isEq "9.0") ];
+          cases = [ (lib.versions.range "9.0" "9.1") ];
           out = "1.8.0";
         }
       ]

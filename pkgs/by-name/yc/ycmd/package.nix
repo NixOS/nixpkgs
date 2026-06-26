@@ -43,10 +43,10 @@ stdenv.mkDerivation {
     [
       abseil-cpp
       boost
-      libllvm.all
-      libclang.all
       legacy-cgi
     ]
+    ++ libllvm.all
+    ++ libclang.all
     ++ [
       jedi
       jedi-language-server
@@ -135,7 +135,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ycm-core/ycmd";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      lnl7
       mel
       S0AndS0
     ];

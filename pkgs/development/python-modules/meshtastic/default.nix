@@ -33,20 +33,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshtastic";
-  version = "2.7.7";
+  version = "2.7.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = finalAttrs.version;
-    hash = "sha256-dpO5mYdEagJ/dDiKV7vJMRdQAZN0GY7/Sf6/kkHRpCM=";
+    hash = "sha256-u3lU48VyFsfwHVXz/mSmJUW7c+mQ5BR2SclwCKym27k=";
   };
 
   pythonRelaxDeps = [
     "bleak"
     "packaging"
     "protobuf"
+    "tabulate"
   ];
 
   build-system = [ poetry-core ];

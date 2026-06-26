@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       Guix is based on the Nix package manager.
     '';
     homepage = "https://guix.gnu.org/";
+    donationPage = "https://guix.gnu.org/donate/";
     changelog = "https://codeberg.org/guix/guix/raw/tag/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     mainProgram = "guix";

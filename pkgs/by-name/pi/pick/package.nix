@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

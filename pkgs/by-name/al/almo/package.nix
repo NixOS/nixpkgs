@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     homepage = "https://github.com/abap34/almo";
     changelog = "https://github.com/abap34/almo/releases/tag/${finalAttrs.src.tag}";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "almo";
   };
 })

@@ -50,7 +50,7 @@ in
           epkgs: [
             epkgs.emms
             epkgs.magit
-            epkgs.proofgeneral
+            epkgs.proof-general
           ]
         '';
         description = ''

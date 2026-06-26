@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "cb";
   };

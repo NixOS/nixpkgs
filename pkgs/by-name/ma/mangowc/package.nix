@@ -1,4 +1,5 @@
 {
+  cjson,
   lib,
   libx11,
   libinput,
@@ -23,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangowc";
-  version = "0.12.1";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
-    owner = "DreamMaoMao";
-    repo = "mangowc";
+    owner = "mangowm";
+    repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-Py8gfpkp+oYAnaCiFGytyLkxTd1DqFr/NH3DUma8meI=";
+    hash = "sha256-WfQNALT+8ZbjZG2co1tz2dZZZw1tcU5ynuFe+vVMbV0=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cjson
     libinput
     libxcb
     libxkbcommon
@@ -70,9 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "mango";
     description = "Lightweight and feature-rich Wayland compositor based on dwl";
-    homepage = "https://github.com/DreamMaoMao/mangowc";
+    homepage = "https://mangowm.github.io";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hustlerone ];
+    maintainers = with lib.maintainers; [
+      hustlerone
+      yvnth
+    ];
     platforms = lib.platforms.linux;
   };
 })

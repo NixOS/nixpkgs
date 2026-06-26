@@ -6,17 +6,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.3.0";
+  version = "1.4.0";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
   };
 
   buildInputs = [ python3 ];
+
+  nativeCheckInputs = [ python3 ];
+
+  strictDeps = true;
 
   doCheck = true;
   checkPhase = ''
@@ -26,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
+  '';
+
+  doInstallCheck = true;
+  # We can't do a version check because there is no version command
+  # but we do want to check that python3 is available
+  installCheckPhase = ''
+    $out/bin/nginxfmt --help
   '';
 
   meta = {

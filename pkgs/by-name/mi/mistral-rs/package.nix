@@ -20,7 +20,6 @@
 
   versionCheckHook,
 
-  testers,
   mistral-rs,
   nix-update-script,
 
@@ -74,13 +73,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.7.0";
+  version = "0.8.4";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2gE3LRm2oy6H+y6dRNnwYIjlaG67it16bfhfTk4CUTc=";
+    hash = "sha256-BSP8fi4grbEzGOfR4tGCJVjIom/1d2mnFrK8O6BRWL4=";
   };
 
   patches = [
@@ -94,9 +94,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+    ''
+    # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
+    # Instead, we provide cutlass in buildInputs.
+    + lib.optionalString cudaSupport ''
+      substituteInPlace mistralrs-flash-attn/build.rs \
+        --replace-fail \
+          ".with_cutlass(Some(CUTLASS_COMMIT))" \
+          ""
+
+      substituteInPlace mistralrs-quant/build.rs \
+        --replace-fail \
+          'builder = builder.with_cutlass(Some("7d49e6c7e2f8896c47f586706e67e1fb215529dc"));' \
+          ""
     '';
 
-  cargoHash = "sha256-nktoMh07PfGJ156XrKa1N/icB634cr9ybsHq/y9zHKo=";
+  cargoHash = "sha256-T4TPm31fihx9ZvQ6jme67yrc0osl4c9CiAm4+rISgFs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -116,11 +129,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
     cudaPackages.libcurand
+
+    # For compiling kernels
+    cudaPackages.cutlass
   ]
   ++ lib.optionals mklSupport [ mkl ];
 
@@ -185,6 +201,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
     "--skip=utils::tiktoken::tests::test_tiktoken_conversion"
+
+    # Spawn a nested sandbox (bubblewrap-like) which fails inside the nix build sandbox
+    "--skip=callbacks_outlive_manager_executor_tempdir"
+    "--skip=sandboxed_session_can_execute_python"
+    "--skip=sandboxed_session_default_policy_can_execute_python"
+
+    # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
+    "--skip=network_none_blocks_socket"
+    "--skip=rlimit_nproc_caps_processes"
+    "--skip=seccomp_blocks_ptrace"
+    "--skip=unshare_is_denied_inside_child"
   ];
 
   nativeInstallCheckInputs = [

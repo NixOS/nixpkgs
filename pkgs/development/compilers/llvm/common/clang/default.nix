@@ -166,6 +166,7 @@ stdenv.mkDerivation (
     ''
     + ''
       patchShebangs $python/bin
+      patchShebangs $python/share/clang/
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
@@ -244,6 +245,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man page for Clang ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

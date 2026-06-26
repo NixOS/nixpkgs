@@ -48,19 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     let
       inherit (lib) getBin getDev getLib;
 
-      coreutils_ =
-        (coreutils.override (prevArgs: {
-          # We want coreutils without ACL support.
-          aclSupport = false;
-          # Cannot use a single binary build, or it gets dynamically linked against gmp.
-          singleBinary = false;
-        })).overrideAttrs
-          (prevAttrs: {
-            # Increase header size to be able to inject extra RPATHs. Otherwise
-            # x86_64-darwin build fails as:
-            #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
-            NIX_LDFLAGS = (prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
-          });
+      coreutils_ = coreutils.override (prevArgs: {
+        # We want coreutils without ACL support.
+        aclSupport = false;
+        # Cannot use a single binary build, or it gets dynamically linked against gmp.
+        singleBinary = false;
+      });
 
       # Avoid messing with libkrb5 and libnghttp2.
       curl_ = curlMinimal.override (prevArgs: {

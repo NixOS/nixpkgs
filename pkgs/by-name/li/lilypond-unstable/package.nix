@@ -7,12 +7,14 @@
 
 lilypond.overrideAttrs (
   finalAttrs: prevAttrs: {
-    version = "2.25.32";
+    version = "2.27.1";
 
     src = fetchzip {
       url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
-      hash = "sha256-j7Avb9WSy27yQCak3KV7OB24M+T76b/tLcLoINLSEbo=";
+      hash = "sha256-SqnBem2dj7w6oRfxk+h5Ahq+NEPDdX7I/NRKZQnK1kU=";
     };
+
+    patches = [ ];
 
     passthru.updateScript = writeScript "update-lilypond-unstable" ''
       #!/usr/bin/env nix-shell

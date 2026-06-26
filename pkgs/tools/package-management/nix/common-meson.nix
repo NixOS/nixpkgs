@@ -45,7 +45,6 @@ assert (hash == null) -> (src != null);
   meson,
   ninja,
   mdbook,
-  mdbook-linkcheck,
   nlohmann_json,
   nixosTests,
   openssl,
@@ -116,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableDocumentation [
     (lib.getBin lowdown-unsandboxed)
     mdbook
-    mdbook-linkcheck
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal

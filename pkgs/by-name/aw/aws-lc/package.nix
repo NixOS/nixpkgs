@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.67.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-p58Re3HvBY/nzyCFvM5Ntx7Mb5OgcNQoZNloAJitDTY=";
+    hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
   };
 
   outputs = [
@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
     ninja run_minimal_tests
     runHook postCheck
+  '';
+
+  postInstall = ''
+    moveToOutput lib/crypto/cmake "$dev"
+    moveToOutput lib/ssl/cmake "$dev"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (

@@ -735,7 +735,16 @@
     ],
     "drawy": [
       "extra-cmake-modules",
-      "kcrash"
+      "kconfig",
+      "kconfigwidgets",
+      "kcoreaddons",
+      "kcrash",
+      "kdoctools",
+      "ki18n",
+      "kiconthemes",
+      "kwidgetsaddons",
+      "kxmlgui",
+      "syntax-highlighting"
     ],
     "drkonqi": [
       "extra-cmake-modules",
@@ -1387,6 +1396,14 @@
       "kiconthemes",
       "kirigami",
       "kirigami-addons"
+    ],
+    "karton": [
+      "extra-cmake-modules",
+      "kcoreaddons",
+      "ki18n",
+      "kiconthemes",
+      "kirigami",
+      "qqc2-desktop-style"
     ],
     "kasts": [
       "extra-cmake-modules",
@@ -3685,10 +3702,10 @@
       "knotifications",
       "knotifyconfig",
       "kstatusnotifieritem",
-      "kwallet",
       "kwidgetsaddons",
       "kwindowsystem",
-      "kxmlgui"
+      "kxmlgui",
+      "qtkeychain"
     ],
     "krdp": [
       "extra-cmake-modules",
@@ -3988,9 +4005,6 @@
       "kwallet",
       "kwidgetsaddons"
     ],
-    "kst-plot": [
-      "extra-cmake-modules"
-    ],
     "kstars": [
       "breeze-icons",
       "extra-cmake-modules",
@@ -4177,7 +4191,6 @@
       "ktextwidgets",
       "kxmlgui",
       "libktorrent",
-      "phonon",
       "syndication"
     ],
     "ktouch": [
@@ -4260,6 +4273,7 @@
       "extra-cmake-modules",
       "kcmutils",
       "kcoreaddons",
+      "kcrash",
       "ki18n",
       "kservice",
       "solid"
@@ -4401,6 +4415,7 @@
       "kxmlgui",
       "libplasma",
       "libqaccessibilityclient",
+      "milou",
       "plasma-activities",
       "plasma-wayland-protocols",
       "wayland",
@@ -4811,10 +4826,11 @@
       "kcoreaddons",
       "kcrash",
       "ki18n",
+      "kiconthemes",
       "kirigami",
       "kirigami-addons",
       "kmime",
-      "kxmlgui"
+      "knotifications"
     ],
     "massif-visualizer": [
       "extra-cmake-modules",
@@ -4968,6 +4984,7 @@
     "mimetreeparser": [
       "extra-cmake-modules",
       "kcalendarcore",
+      "kio",
       "kirigami",
       "kmbox",
       "kmime",
@@ -4979,7 +4996,9 @@
       "kcoreaddons",
       "kcrash",
       "kdoctools",
-      "ki18n"
+      "ki18n",
+      "kirigami",
+      "qqc2-desktop-style"
     ],
     "modemmanager-qt": [
       "extra-cmake-modules"
@@ -4995,6 +5014,7 @@
       "kcoreaddons",
       "kdbusaddons",
       "ki18n",
+      "kiconthemes",
       "kio",
       "kirigami",
       "kirigami-addons",
@@ -5002,7 +5022,6 @@
       "knotifications",
       "kquickcharts",
       "kquickimageeditor",
-      "kstatusnotifieritem",
       "kunifiedpush",
       "kwindowsystem",
       "libquotient",
@@ -5762,7 +5781,6 @@
       "knewstuff",
       "knighttime",
       "knotifications",
-      "knotifyconfig",
       "kpackage",
       "kparts",
       "kquickcharts",
@@ -5786,12 +5804,10 @@
       "libplasma",
       "milou",
       "packagekit-qt",
-      "phonon",
       "plasma-activities",
       "plasma-activities-stats",
       "plasma-nano",
       "plasma-wayland-protocols",
-      "plasma5support",
       "polkit-qt-1",
       "prison",
       "qcoro",
@@ -5910,6 +5926,7 @@
       "ki18n",
       "kio",
       "kirigami",
+      "kirigami-addons",
       "knotifications",
       "kwidgetsaddons",
       "kwindowsystem",
@@ -5937,13 +5954,15 @@
     ],
     "purpose": [
       "extra-cmake-modules",
+      "kcmutils",
       "kconfig",
       "kcoreaddons",
       "ki18n",
       "kio",
       "kirigami",
       "kitemmodels",
-      "kservice"
+      "kservice",
+      "prison"
     ],
     "pvfviewer": [
       "extra-cmake-modules",
@@ -6001,9 +6020,6 @@
       "kirigami"
     ],
     "raven": [
-      "akonadi",
-      "akonadi-contacts",
-      "akonadi-mime",
       "extra-cmake-modules",
       "kcmutils",
       "kconfig",
@@ -6013,14 +6029,7 @@
       "kio",
       "kirigami",
       "kirigami-addons",
-      "kitemmodels",
-      "kldap",
-      "kmailtransport",
-      "kmime",
-      "libkdepim",
-      "mailcommon",
-      "messagelib",
-      "pimcommon"
+      "kitemmodels"
     ],
     "rkward": [
       "extra-cmake-modules",
@@ -6601,5 +6610,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "eb343e85"
+  "version": "a9cc2f9b"
 }

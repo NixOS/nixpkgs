@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
+    homepage = "https://gitlab.com/irill/camlbz2";
     downloadPage = "https://gitlab.com/irill/camlbz2";
     license = lib.licenses.lgpl21;
     broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";

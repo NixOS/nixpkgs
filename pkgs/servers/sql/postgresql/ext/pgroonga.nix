@@ -6,7 +6,7 @@
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
-  xxHash,
+  xxhash,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -24,7 +24,7 @@ postgresqlBuildExtension (finalAttrs: {
   buildInputs = [
     msgpack-c
     groonga
-    xxHash
+    xxhash
   ];
 
   makeFlags = [

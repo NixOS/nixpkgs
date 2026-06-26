@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -17,13 +18,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -D source/fonts/{Geist,GeistMono}/otf/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Font family created by Vercel in collaboration with Basement Studio";

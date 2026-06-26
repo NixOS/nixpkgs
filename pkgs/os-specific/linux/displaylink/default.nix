@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu6.2-EXE.zip" \$PWD/${name}
-      nix-prefetch-url file://\$PWD/${name}
+      mv $PWD/"DisplayLink USB Graphics Software for Ubuntu6.2-EXE.zip" $PWD/${name}
+      nix-prefetch-url file://$PWD/${name}
 
       Alternatively, you can use the following command to download the
       file directly:

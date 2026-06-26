@@ -16,7 +16,7 @@ in
 {
 
   meta = {
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
   };
 
   ###### interface
@@ -39,6 +39,8 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
+
+    programs.fuse.enable = true;
 
     services.dbus.packages = [ cfg.package ];
 

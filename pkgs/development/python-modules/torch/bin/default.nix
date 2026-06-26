@@ -3,7 +3,7 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonAtLeast,
+  isPyPy,
   fetchurl,
 
   # nativeBuildInputs
@@ -15,8 +15,8 @@
   cudaPackages,
 
   # dependencies
-  cuda-bindings,
   filelock,
+  fsspec,
   jinja2,
   networkx,
   numpy,
@@ -25,8 +25,12 @@
   setuptools,
   sympy,
   typing-extensions,
+  # linux-only
+  cuda-bindings,
+  # x86_64-linux only
   triton,
 
+  config,
   callPackage,
 }:
 
@@ -34,17 +38,19 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.10.0";
+  version = "2.12.0";
 in
 buildPythonPackage {
   inherit version;
+  __structuredAttrs = true;
 
   pname = "torch";
   # Don't forget to update torch to the same version.
 
   format = "wheel";
 
-  disabled = pythonAtLeast "3.15";
+  # determine supported interpreters by the ones we have x86_64-linux wheels for
+  disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -85,8 +91,17 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
+  pythonRemoveDeps = [
+    "cuda-toolkit"
+    "nvidia-cublas"
+    "nvidia-cudnn-cu13"
+    "nvidia-cusparselt-cu13"
+    "nvidia-nccl-cu13"
+    "nvidia-nvshmem-cu13"
+  ];
   dependencies = [
     filelock
+    fsspec
     jinja2
     networkx
     numpy
@@ -99,7 +114,9 @@ buildPythonPackage {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     cuda-bindings
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ];
 
   postInstall = ''
     # ONNX conversion
@@ -134,7 +151,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  passthru.tests = callPackage ../tests { };
+  passthru.tests = callPackage ../tests {
+    inherit (config) rocmSupport cudaSupport;
+  };
 
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
@@ -161,5 +180,16 @@ buildPythonPackage {
       GaetanLepage
       junjihashimoto
     ];
+    # cuda-bindings<14,>=13.0.3 not satisfied by version 12.9.7
+    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings.version "13.0.3") {
+      unsupported-cuda-version = {
+        message = ''
+          cudaPackages is too old (${cudaPackages.cudaMajorMinorVersion}).
+          PyTorch expects cuda-bindings>=13.0.3, current is ${cuda-bindings.version}.
+          Please override cudaPackages with a more recent version.
+        '';
+        kind = "broken";
+      };
+    };
   };
 }

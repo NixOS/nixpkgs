@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   zlib,
@@ -19,14 +20,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensc";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     tag = finalAttrs.version;
-    hash = "sha256-H5df+x15fz28IlL/G9zPBxbNBzc+BlDmmgNZVEYQgac=";
+    hash = "sha256-s/3bIhPGa3+SKjMh0CNgsU3nOkhEaxPTpmEbc6VIn3Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-10275.patch";
+      url = "https://github.com/OpenSC/OpenSC/commit/814f745b3b6d100295f65f1935edd33d520d33ab.patch";
+      hash = "sha256-S8PeXCRAUlkKUPYOl/n5+4QIqWOZtHX3yEDnpFhJO8k=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -67,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
   meta = {
     description = "Set of libraries and utilities to access smart cards";

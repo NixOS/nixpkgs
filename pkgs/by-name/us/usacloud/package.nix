@@ -3,21 +3,22 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "usacloud";
-  version = "1.19.3";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uHZJnhj36NEAZxWfwrm0Dsw42NgQp37SgOduEGA8SEU=";
+    hash = "sha256-vFaJBPw13YmjIzzYeAJZxnOc+nzO1Rs81xGWJqXMrL0=";
   };
 
-  vendorHash = "sha256-bJV/m3b6UC3j1/SGJ7riz0GRxoCQ6lVU5DiatQWnIVc=";
+  vendorHash = "sha256-5UE0JAKEcKCyQg0ksnQt8WFHZlQZRVnM0LKwwnAgfqA=";
 
   ldflags = [
     "-s"
@@ -26,7 +27,11 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 

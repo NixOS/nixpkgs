@@ -55,7 +55,7 @@ fi
 export NIX_BINTOOLS${role_post}=@out@
 
 for cmd in \
-    ar as ld nm objcopy objdump readelf ranlib strip strings size windres
+    ar as ld nm objcopy objdump readelf ranlib strip strings size windres rc
 do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
@@ -63,6 +63,16 @@ do
         export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
     fi
 done
+
+# If there is no `<prefix>rc`, but there is a `<prefix>windres`, define
+# `RC<suffix>=${WINDRES<suffix>}`.
+if
+    [[ ! -v "RC${role_post}" ]] && [[ -v "WINDRES${role_post}" ]]
+then
+    windres_var="WINDRES${role_post}"
+    export "RC${role_post}=${!windres_var}"
+    unset -v windres_var
+fi
 
 # If unset, assume the default hardening flags.
 : ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}

@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Tzinfo object for the local timezone";
     homepage = "https://github.com/regebro/tzlocal";
     changelog = "https://github.com/regebro/tzlocal/blob/${version}/CHANGES.txt";
-    license = lib.licenses.cddl;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

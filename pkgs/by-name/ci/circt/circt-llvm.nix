@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
     # Based on utils/build-llvm.sh
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
-    (lib.cmakeBool "LLVM_ENABLE_ASSERTIONS" true)
+    (lib.cmakeBool "LLVM_ENABLE_ASSERTIONS" false) # Conflicts with nixpkgs hardening options
     (lib.cmakeBool "LLVM_ENABLE_BINDINGS" false)
     (lib.cmakeBool "LLVM_ENABLE_OCAMLDOC" false)
     (lib.cmakeFeature "LLVM_ENABLE_PROJECTS" "mlir")

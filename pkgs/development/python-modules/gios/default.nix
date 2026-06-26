@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.14";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "gios";
     tag = version;
-    hash = "sha256-ZQjDL6BG075nvhKGSYNy2O8Fu8hizTmKwit6fvdopxg=";
+    hash = "sha256-m7baTU7oWcjqCgiZ7GcOYVM23jcvycQcAbPhO1jWahk=";
   };
 
   build-system = [ setuptools ];

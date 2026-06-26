@@ -26,7 +26,7 @@ let
   ];
   resolvedLogoName =
     if (logoFile != null && logoName == null) then
-      lib.strings.removeSuffix ".png" (baseNameOf (toString logoFile))
+      lib.strings.removeSuffix ".png" (baseNameOf logoFile)
     else
       logoName;
 in

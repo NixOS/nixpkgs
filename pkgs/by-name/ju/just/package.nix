@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.46.0";
+  version = "1.54.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -30,14 +30,16 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-NE54LKS2bYBfQL+yLJPaG4iF7EiJfDqBfnsrlPo1+OE=";
+    hash = "sha256-sWEelwKEuxJUTh2Ejwr7e29j5EFVCSiQJoLCEH60PxI=";
   };
 
-  cargoHash = "sha256-yyaJAWp6luizA/aQuUGhdxRX2Ofri4CeLIO3/ndSCzc=";
+  cargoHash = "sha256-+eUi0g+ObJhlXhRLmWfRmTlnoxHHVdzTtXdX8LNloIc=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -49,6 +51,7 @@ rustPlatform.buildRustPackage {
     export USER=just-user
     export USERNAME=just-user
     export JUST_CHOOSER="${coreutils}/bin/cat"
+    export XDG_RUNTIME_DIR=$(mktemp -d)
 
     # Prevent string.rs from being changed
     cp tests/string.rs $TMPDIR/string.rs
@@ -65,10 +68,6 @@ rustPlatform.buildRustPackage {
     export PATH=${bashInteractive}/bin:$PATH
     patchShebangs tests
   '';
-
-  patches = [
-    ./fix-just-path-in-tests.patch
-  ];
 
   cargoBuildFlags = [
     "--package=just"
@@ -115,9 +114,10 @@ rustPlatform.buildRustPackage {
     description = "Handy way to save and run project-specific commands";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
-      xrelkd
       jk
       ryan4yin
+      xrelkd
+      yvnth
     ];
     mainProgram = "just";
   };
