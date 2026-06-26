@@ -16,16 +16,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "krillinai";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "krillinai";
     repo = "KlicStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CMeF24BCJ+wbiXCl0iJm0acNoggVxeOu3Q/cXJY8aQo=";
+    hash = "sha256-k1p9v3MQklycW2FsDCyEWNwjLFSymxx1qVg5qhC8xgI=";
   };
 
-  vendorHash = "sha256-bAKLNpt0K06egScyn7ImHV0csDsMQGUm92kU1PVQK+I=";
+  vendorHash = "sha256-OdmOalac4oked7vLGMWFCjjNU5TBq1P+HudE5a+bgq4=";
 
   nativeBuildInputs = [ pkg-config ];
 
