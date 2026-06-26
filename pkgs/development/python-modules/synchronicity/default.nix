@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "synchronicity";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "modal-labs";
     repo = "synchronicity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ny2TdzNJYNV02cFQoxY0HlfeQAy3Ewea+NusL6l5tSg=";
+    hash = "sha256-npn6SX3NV0Vcq305zyi0jEFGpdyoTESpnDTyuf+WKsQ=";
   };
 
   build-system = [
