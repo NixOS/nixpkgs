@@ -677,7 +677,6 @@ let
         # non-EFI tests can only run on x86
         platforms = mkIf (!isEfi) [
           "x86_64-linux"
-          "x86_64-darwin"
           "i686-linux"
         ];
         inherit broken;
