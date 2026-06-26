@@ -22,4 +22,5 @@ self: {
   river = self.callPackage ./modules/river.nix { };
   tray = self.callPackage ./modules/tray.nix { };
   wireplumber = self.callPackage ./modules/wireplumber.nix { inherit wireplumber; };
+  wl = self.callPackage ./modules/wl.nix { };
 }

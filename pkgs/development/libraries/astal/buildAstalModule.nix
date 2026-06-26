@@ -12,6 +12,7 @@
   vala,
   wayland,
   wayland-scanner,
+  wl-vapi-gen,
   python3,
 }:
 let
@@ -57,6 +58,7 @@ let
           vala
           wayland
           wayland-scanner
+          wl-vapi-gen
           python3
         ];
 
