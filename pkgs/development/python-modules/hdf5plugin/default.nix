@@ -90,17 +90,20 @@ buildPythonPackage (finalAttrs: {
     mkdir src/hdf5plugin/plugins
 
     mkdir -p pkg-config
-    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config/bz2.pc
-    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
-    {
-      echo "includedir=${lib.getDev zfp'}/include"
-      echo "Name: zfp"
-      echo "Version: ${zfp'.version}"
-      echo "Description: zfp"
-      echo "Libs: -L${lib.getLib zfp'}/lib -lzfp"
-      echo "Cflags: -I${lib.getDev zfp'}/include"
-    } > pkg-config/zfp.pc
     export PKG_CONFIG_PATH="$PWD/pkg-config''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+
+    # add expected alias for bzip2
+    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config/bz2.pc
+
+    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
+    cat >pkg-config/zfp.pc <<EOF
+    includedir=${lib.getDev zfp'}/include
+    Name: zfp
+    Version: ${zfp'.version}
+    Description: zfp
+    Libs: -L${lib.getLib zfp'}/lib -lzfp
+    Cflags: -I${lib.getDev zfp'}/include
+    EOF
   '';
 
   meta = {
