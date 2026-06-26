@@ -6,14 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-gateway-spi";
   version = "0.0.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "alibabacloud_gateway_spi";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ENHFOj/F+HkV+9a0mFuYM4p3bptEoCY/VmQ8UEgiO4s=";
   };
 
@@ -32,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
