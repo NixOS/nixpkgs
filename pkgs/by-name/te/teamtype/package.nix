@@ -50,8 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "teamtype";
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [
-      prince213
+      alerque
       ethancedwards8
+      prince213
     ];
   };
 })
