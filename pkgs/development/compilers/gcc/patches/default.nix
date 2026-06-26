@@ -119,6 +119,18 @@ optionals noSysDirs (
 # diffs from the Homebrew repo.
 ++ optionals targetPlatform.isDarwin (
   {
+    "16" = [
+      # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
+      ./15/libgcc-darwin-fix-reexport.patch
+      # Patches from https://github.com/iains/gcc-16-branch
+      (fetchpatch {
+        name = "gcc-16-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff";
+        hash = "sha256-dXfozKH//TRjAph7hUok7850hOdujTTi/iFM2HFA8fw=";
+      })
+      # Fixes detection of Darwin deployment target.
+      ./14/libgcc-darwin-detection.patch
+    ];
     "15" = [
       # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
       ./15/libgcc-darwin-fix-reexport.patch
