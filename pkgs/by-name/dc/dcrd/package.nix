@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://decred.org";
     description = "Decred daemon in Go (golang)";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ juaningan ];
   };
 })

@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Python library and command line utility for working with BagIt style packages";
     mainProgram = "bagit.py";
     homepage = "https://libraryofcongress.github.io/bagit-python/";
-    license = with lib.licenses; [ publicDomain ];
+    license = with lib.licenses; publicDomain;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

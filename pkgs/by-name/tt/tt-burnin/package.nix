@@ -37,6 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-burnin";
     changelog = "https://github.com/tenstorrent/tt-burnin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 })

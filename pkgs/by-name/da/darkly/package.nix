@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Bali10050/Darkly";
     changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "darkly-settings6";
   };

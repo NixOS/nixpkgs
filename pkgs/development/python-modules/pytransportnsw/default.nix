@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/Dav0815/TransportNSW";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

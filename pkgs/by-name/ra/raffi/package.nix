@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Fuzzel launcher based on yaml configuration";
     homepage = "https://github.com/chmouel/raffi";
     changelog = "https://github.com/chmouel/raffi/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [
       aos
       chmouel

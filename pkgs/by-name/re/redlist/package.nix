@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Convert Spotify playlists to local m3u's and fill the gaps";
     mainProgram = "redlist";
     homepage = "https://github.com/Laharah/redlist";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ lilahummel ];
   };
 })

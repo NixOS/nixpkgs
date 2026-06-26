@@ -56,7 +56,7 @@ buildGoModule rec {
   meta = {
     description = "Tool for creating NATS account and user access configurations";
     homepage = "https://github.com/nats-io/nsc";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ cbrewster ];
     mainProgram = "nsc";
   };

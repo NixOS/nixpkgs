@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       used for local analytics, timeseries, logfile processing,
       and more.
     '';
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     homepage = "https://github.com/kevinlawler/kerf1";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];

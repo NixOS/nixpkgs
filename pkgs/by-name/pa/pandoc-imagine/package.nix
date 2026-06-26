@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
       A pandoc filter that will turn code blocks tagged with certain classes
       into images or ASCII art
     '';
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
     mainProgram = "pandoc-imagine";
   };

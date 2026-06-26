@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Xeoma web server API";
     homepage = "https://github.com/jeradM/pyxeoma";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

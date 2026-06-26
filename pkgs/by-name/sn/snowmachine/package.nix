@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Python script that will make your terminal snow";
     homepage = "https://github.com/sontek/snowmachine";
     mainProgram = "snowmachine";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [
       djanatyn
       sontek

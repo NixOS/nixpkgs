@@ -159,6 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cherry-studio";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
-    license = with lib.licenses; [ agpl3Only ];
+    license = with lib.licenses; agpl3Only;
   };
 })

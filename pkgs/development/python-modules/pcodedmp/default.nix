@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Python VBA p-code disassembler";
     mainProgram = "pcodedmp";
     homepage = "https://github.com/bontchev/pcodedmp";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

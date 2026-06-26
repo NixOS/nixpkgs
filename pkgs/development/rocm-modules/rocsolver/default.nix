@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsolver";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     timeout = 14400; # 4 hours

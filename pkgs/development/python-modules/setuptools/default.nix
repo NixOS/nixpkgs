@@ -49,7 +49,7 @@ buildPythonPackage rec {
     changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = python.meta.platforms;
     teams = [ lib.teams.python ];
   };

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP Status for Humans";
     homepage = "https://github.com/avinassh/status/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

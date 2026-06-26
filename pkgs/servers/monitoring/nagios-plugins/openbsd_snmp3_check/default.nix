@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/alexander-naumov/openbsd_snmp3_check/releases/tag/v${version}";
     description = "SNMP v3 check for OpenBSD systems state monitoring";
     homepage = "https://github.com/alexander-naumov/openbsd_snmp3_check";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "openbsd_snmp3.py";

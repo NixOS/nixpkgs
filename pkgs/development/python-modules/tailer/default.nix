@@ -29,7 +29,7 @@ buildPythonPackage rec {
     description = "Python implementation implementation of GNU tail and head";
     mainProgram = "pytail";
     homepage = "https://github.com/six8/pytailer";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

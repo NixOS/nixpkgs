@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python HTTP library to call APIs";
     homepage = "https://github.com/sendgrid/python-http-client";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

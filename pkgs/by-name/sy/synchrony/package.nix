@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple deobfuscator for mangled or obfuscated JavaScript files";
     homepage = "https://deobfuscate.relative.im/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ pluiedev ];
     inherit (nodejs.meta) platforms;
     mainProgram = "synchrony";

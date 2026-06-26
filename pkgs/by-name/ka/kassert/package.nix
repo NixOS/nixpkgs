@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kamping-site.github.io/kassert/";
     downloadPage = "https://github.com/kamping-site/kassert";
     changelog = "https://github.com/kamping-site/kasser/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };

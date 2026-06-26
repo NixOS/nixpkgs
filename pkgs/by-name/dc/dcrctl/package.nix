@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://decred.org";
     description = "Secure Decred wallet daemon written in Go (golang)";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = [ ];
     mainProgram = "dcrctl";
   };

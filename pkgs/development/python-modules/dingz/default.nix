@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Python API for interacting with Dingz devices";
     mainProgram = "dingz";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

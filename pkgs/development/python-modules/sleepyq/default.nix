@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for SleepIQ API";
     homepage = "https://github.com/technicalpickles/sleepyq";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

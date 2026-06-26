@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       The program is mostly developed on Haiku, Linux and Windows, but is also
       portable on many other platforms.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "grafx2-sdl";
     maintainers = [ ];
     platforms = lib.platforms.unix;

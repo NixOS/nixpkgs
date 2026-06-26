@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Language Server implementation for Cargo.toml";
     homepage = "https://github.com/MathiasPius/crates-lsp";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
 
     platforms = [
       "x86_64-linux"

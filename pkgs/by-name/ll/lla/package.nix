@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://lla.chaqchase.com";
     changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;
     mainProgram = "lla";

@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Library to connect to a ZWave-Me instance";
     homepage = "https://github.com/Z-Wave-Me/zwave-me-ws";
     changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

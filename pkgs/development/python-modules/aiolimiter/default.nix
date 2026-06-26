@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Implementation of a rate limiter for asyncio";
     homepage = "https://github.com/mjpieters/aiolimiter";
     changelog = "https://github.com/mjpieters/aiolimiter/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
     description = "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
     # error: 'vvtanh' was not declared in this scope; did you mean 'tanh'?

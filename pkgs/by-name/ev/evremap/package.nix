@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
     description = "Keyboard input remapper for Linux/Wayland systems";
     homepage = "https://github.com/wez/evremap";
     maintainers = with lib.maintainers; [ pluiedev ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "evremap";
   };
 }

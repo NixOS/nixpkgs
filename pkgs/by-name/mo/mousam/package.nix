@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Beautiful and lightweight weather app based on Python and GTK4";
     homepage = "https://amit9838.github.io/mousam";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "mousam";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;

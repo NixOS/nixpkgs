@@ -30,7 +30,7 @@ buildPythonPackage {
     description = "Python SWF Parser";
     mainProgram = "swfparser";
     homepage = "https://github.com/facundobatista/yaswfp";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     mainProgram = "lupupy";
     homepage = "https://github.com/majuss/lupupy";
     changelog = "https://github.com/majuss/lupupy/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

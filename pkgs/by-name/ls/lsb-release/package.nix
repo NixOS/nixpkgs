@@ -23,7 +23,7 @@ replaceVarsWith {
   meta = {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
     mainProgram = "lsb_release";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

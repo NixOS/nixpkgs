@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Thread-safe connection pool";
     homepage = "https://github.com/zhouyl/ConnectionPool";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

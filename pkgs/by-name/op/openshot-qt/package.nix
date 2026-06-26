@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       and effects, and then export your film to DVD, YouTube, Vimeo, Xbox 360,
       and many other common formats.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "openshot-qt";
     maintainers = [ ];
     platforms = lib.platforms.unix;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to get fuel data from tankerkoenig.de";
     homepage = "https://github.com/ultrara1n/pytankerkoenig";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Custom YAML tag for referencing environment variables";
     homepage = "https://github.com/waylan/pyyaml-env-tag";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

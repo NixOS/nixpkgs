@@ -104,7 +104,7 @@ stdenv.mkDerivation {
     description = "UI Web Editor";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ unfreeRedistributable ];
+    license = with lib.licenses; unfreeRedistributable;
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "pinegrow";
   };

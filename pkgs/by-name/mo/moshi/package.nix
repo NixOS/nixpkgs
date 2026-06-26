@@ -129,7 +129,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/kyutai-labs/moshi";
     # The rust implementation is licensed under Apache
     # https://github.com/kyutai-labs/moshi/tree/main/rust#license
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.all;
     mainProgram = "moshi-cli";

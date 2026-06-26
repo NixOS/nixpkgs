@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GCC C++ STD manual pages";
     homepage = "https://gcc.gnu.org/";
-    license = with lib.licenses; [ fdl13Plus ];
+    license = with lib.licenses; fdl13Plus;
     platforms = lib.platforms.unix;
   };
 })

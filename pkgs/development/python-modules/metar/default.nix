@@ -25,7 +25,7 @@ buildPythonPackage rec {
     description = "Python parser for coded METAR weather reports";
     homepage = "https://github.com/python-metar/python-metar";
     changelog = "https://github.com/python-metar/python-metar/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ bsd1 ];
+    license = with lib.licenses; bsd1;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

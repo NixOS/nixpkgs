@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the ICMP protocol";
     homepage = "https://github.com/ValentinBELYN/icmplib";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

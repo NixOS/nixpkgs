@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
     changelog = "https://github.com/milesgranger/cramjam/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

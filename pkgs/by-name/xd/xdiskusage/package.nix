@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Program to show you what is using up all your disk space";
     homepage = "https://xdiskusage.sourceforge.net/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ fuzzdk ];
     platforms = with lib.platforms; linux;
     mainProgram = "xdiskusage";

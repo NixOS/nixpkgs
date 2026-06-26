@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
       sizes as well. Quicksand Family is available in three styles
       which are Light, Regular and Bold including true italics for each weight.
     '';
-    license = with lib.licenses; [ ofl ];
+    license = with lib.licenses; ofl;
     maintainers = with lib.maintainers; [ hubble ];
     platforms = lib.platforms.all;
   };

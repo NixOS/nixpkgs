@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/NETWAYS/check_interfaces/releases/tag/v${version}";
     description = "Icinga check plugin for network hardware interfaces";
     homepage = "https://github.com/NETWAYS/check_interfaces/";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "check_interfaces";

@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
     changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

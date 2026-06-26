@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "appintentsmetadataprocessor";
     description = "Open reimplementation of Apple's appintentsmetadataprocessor";
     homepage = "https://codeberg.org/viraptor/re-appintentsmetadataprocessor";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ viraptor ];
     platforms = lib.platforms.unix;
   };

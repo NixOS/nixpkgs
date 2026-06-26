@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
     description = "Comic Book converter";
     homepage = "https://github.com/gen2brain/cbconvert";
     changelog = "https://github.com/gen2brain/cbconvert/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "cbconvert";

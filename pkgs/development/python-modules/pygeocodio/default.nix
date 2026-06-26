@@ -45,7 +45,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/bennylope/pygeocodio/tree/master";
     changelog = "https://github.com/bennylope/pygeocodio/blob/${src.tag}/HISTORY.rst";
     homepage = "https://www.geocod.io/docs/#introduction";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
 }

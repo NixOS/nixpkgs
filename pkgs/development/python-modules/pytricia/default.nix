@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for fast IP address lookup in Python";
     homepage = "https://github.com/jsommers/pytricia";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ mkg ];
   };
 }

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for accessing WA Department of Fire and Emergency Services (DFES) feed";
     homepage = "https://github.com/exxamalte/python-georss-wa-dfes-client";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

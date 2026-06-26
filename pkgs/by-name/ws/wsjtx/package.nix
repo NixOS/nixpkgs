@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       contacts under extreme weak-signal conditions.
     '';
     homepage = "https://wsjt.sourceforge.io";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       lasandell

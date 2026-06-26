@@ -86,7 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       that can be accessed from other cells. These objects can represent
       anything including lists or matrices.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "pyspread";
     maintainers = with lib.maintainers; [ Merikei ];
     platforms = lib.platforms.linux;

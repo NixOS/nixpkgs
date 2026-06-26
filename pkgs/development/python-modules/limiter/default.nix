@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python rate-limiting, thread-safe and asynchronous decorators and context managers";
     homepage = "https://github.com/alexdelorenzo/limiter";
-    license = with lib.licenses; [ agpl3Only ];
+    license = with lib.licenses; agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

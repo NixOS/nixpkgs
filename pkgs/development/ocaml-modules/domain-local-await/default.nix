@@ -46,7 +46,7 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/ocaml-multicore/ocaml-domain-local-await";
     changelog = "https://github.com/ocaml-multicore/ocaml-domain-local-await/raw/v${finalAttrs.version}/CHANGES.md";
     description = "Scheduler independent blocking mechanism";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ toastal ];
   };
 })

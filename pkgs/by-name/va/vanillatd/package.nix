@@ -173,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
       ."${appName}";
     homepage = "https://github.com/TheAssemblyArmada/Vanilla-Conquer";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     platforms = with lib.platforms; darwin ++ linux;

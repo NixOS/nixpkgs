@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       not support.
     '';
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     mainProgram = "mgba";
     maintainers = with lib.maintainers; [ Gliczy ];
     platforms = lib.platforms.linux;

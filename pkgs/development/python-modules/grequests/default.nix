@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous HTTP requests";
     homepage = "https://github.com/kennethreitz/grequests";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ matejc ];
   };
 }

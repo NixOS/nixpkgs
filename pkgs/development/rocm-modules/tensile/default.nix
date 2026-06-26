@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/shared/tensile";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

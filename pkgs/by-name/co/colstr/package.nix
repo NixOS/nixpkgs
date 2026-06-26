@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Deterministically output each input argument in a color assigned to it";
     homepage = "https://git.sleeping.town/wonder/colstr";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "colstr";
     platforms = lib.platforms.all;

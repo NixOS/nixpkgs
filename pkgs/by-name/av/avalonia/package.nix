@@ -203,7 +203,7 @@ stdenvNoCC.mkDerivation (
 
       meta = {
         homepage = "https://avaloniaui.net/";
-        license = [ lib.licenses.mit ];
+        license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ corngood ];
         description = "Cross-platform UI framework for dotnet";
         sourceProvenance = with lib.sourceTypes; [

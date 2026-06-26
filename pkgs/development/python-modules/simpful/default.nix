@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "Library for fuzzy logic";
     homepage = "https://github.com/aresio/simpful";
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = with lib.licenses; lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };

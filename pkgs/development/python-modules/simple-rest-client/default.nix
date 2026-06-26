@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple REST client for Python";
     homepage = "https://github.com/allisson/python-simple-rest-client";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

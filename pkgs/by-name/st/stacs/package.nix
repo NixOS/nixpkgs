@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Static token and credential scanner";
     mainProgram = "stacs";
     homepage = "https://github.com/stacscan/stacs";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Generate pseudo-random and quasi-random numbers";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocrand";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

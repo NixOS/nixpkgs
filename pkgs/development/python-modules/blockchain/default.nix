@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client Blockchain Bitcoin Developer API";
     homepage = "https://github.com/blockchain/api-v1-client-python";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

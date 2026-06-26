@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "FEBio Suite Solver";
     mainProgram = "FEBioStudio";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     homepage = "https://febio.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];

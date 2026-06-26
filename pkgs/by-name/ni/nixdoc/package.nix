@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Generate documentation for Nix functions";
     mainProgram = "nixdoc";
     homepage = "https://github.com/nix-community/nixdoc";
-    license = [ lib.licenses.gpl3 ];
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       infinisil
       hsjobeki

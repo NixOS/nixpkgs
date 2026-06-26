@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "aiodnsbrute";
     homepage = "https://github.com/blark/aiodnsbrute";
     changelog = "https://github.com/blark/aiodnsbrute/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

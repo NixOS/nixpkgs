@@ -92,7 +92,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

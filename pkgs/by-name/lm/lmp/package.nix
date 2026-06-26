@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Scanning and validation toolkit for the Log4J vulnerability";
     homepage = "https://github.com/0xInfection/LogMePwn";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "lmp";
   };

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with SAJ inverters";
     homepage = "https://github.com/fredericvl/pysaj";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

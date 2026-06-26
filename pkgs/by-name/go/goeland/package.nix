@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/slurdge/goeland";
     changelog = "https://github.com/slurdge/goeland/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ lib.maintainers.sweenu ];
   };
 })

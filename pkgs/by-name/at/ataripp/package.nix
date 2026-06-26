@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
     maintainers = [ ];
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     platforms = lib.platforms.unix;
   };
 })

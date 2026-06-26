@@ -45,7 +45,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/314eter/ocaml-xxhash";
     description = "Bindings for xxHash, an extremely fast hash algorithm";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ toastal ];
   };
 }

@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Blazingly fast terminal recorder that generates animated gif images for the web written in rust";
     homepage = "https://github.com/sassman/t-rec-rs";
     changelog = "https://github.com/sassman/t-rec-rs/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [
       hoverbear
       matthiasbeyer

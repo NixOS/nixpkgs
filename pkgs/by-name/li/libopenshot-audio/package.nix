@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       high-quality editing and playback of audio, and is based on the amazing
       JUCE library.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

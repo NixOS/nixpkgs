@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Beancount plugin to generate periodic transactions";
     homepage = "https://github.com/dallaslu/beancount-periodic";
-    license = with lib.licenses; [ unlicense ];
+    license = with lib.licenses; unlicense;
     maintainers = with lib.maintainers; [ polyfloyd ];
   };
 }

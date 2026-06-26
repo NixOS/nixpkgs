@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic, lightweight and websocket-based webui library";
     homepage = "https://github.com/rawpython/remi";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
 }

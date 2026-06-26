@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://scipopt.org/";
     description = "Parallel Presolve for Integer and Linear Optimization";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     mainProgram = "papilo";
     maintainers = [ ];
     platforms = lib.platforms.unix;

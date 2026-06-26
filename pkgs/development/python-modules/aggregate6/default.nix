@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "IPv4 and IPv6 prefix aggregation tool";
     mainProgram = "aggregate6";
     homepage = "https://github.com/job/aggregate6";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ marcel ];
   };
 }

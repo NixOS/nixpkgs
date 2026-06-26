@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       application within another desktop as a 'substitute' for your normal
       terminal emulator.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

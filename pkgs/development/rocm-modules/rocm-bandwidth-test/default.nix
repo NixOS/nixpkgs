@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Bandwidth test for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm_bandwidth_test";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fangpen ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];

@@ -360,7 +360,7 @@ stdenv.mkDerivation (
     meta = {
       inherit version;
       homepage = "https://www.winehq.org/";
-      license = with lib.licenses; [ lgpl21Plus ];
+      license = with lib.licenses; lgpl21Plus;
       sourceProvenance = with lib.sourceTypes; [
         fromSource
         binaryNativeCode # mono, gecko

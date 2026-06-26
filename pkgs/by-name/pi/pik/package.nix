@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It works like pkill command but search is interactive.
     '';
     homepage = "https://github.com/jacek-kurlit/pik";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ bew ];
     mainProgram = "pik";
   };

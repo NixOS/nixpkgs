@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for process SRP requests for AWS Cognito";
     homepage = "https://github.com/capless/warrant-lite";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

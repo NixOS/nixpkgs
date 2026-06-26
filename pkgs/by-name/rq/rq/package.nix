@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool for doing record analysis and transformation";
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 })

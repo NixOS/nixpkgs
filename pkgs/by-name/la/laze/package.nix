@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "laze";
     homepage = "https://github.com/kaspar030/laze";
     changelog = "https://github.com/kaspar030/laze/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ dannixon ];
   };
 })

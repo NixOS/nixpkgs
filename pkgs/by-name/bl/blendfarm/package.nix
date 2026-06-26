@@ -134,7 +134,7 @@ buildDotnetModule rec {
   meta = {
     description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
     homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "blendfarm-nix";
     platforms = lib.platforms.unix;

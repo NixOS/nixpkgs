@@ -73,7 +73,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Libadwaita TIDAL client for Linux";
     homepage = "https://github.com/Nokse22/high-tide";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "high-tide";
     maintainers = with lib.maintainers; [
       drafolin

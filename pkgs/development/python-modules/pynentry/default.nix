@@ -30,7 +30,7 @@ buildPythonPackage {
   meta = {
     description = "Wrapper for pinentry for python";
     homepage = "https://github.com/Laharah/pynentry";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ lilahummel ];
   };
 }

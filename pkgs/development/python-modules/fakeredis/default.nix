@@ -76,7 +76,7 @@ buildPythonPackage (finalAttrs: {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/cunla/fakeredis-py";
     changelog = "https://github.com/cunla/fakeredis-py/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

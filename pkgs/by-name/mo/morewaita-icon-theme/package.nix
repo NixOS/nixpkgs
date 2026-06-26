@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Adwaita style extra icons theme for Gnome Shell";
     homepage = "https://github.com/somepaulo/MoreWaita";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pkosel

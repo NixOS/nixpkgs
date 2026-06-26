@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Python interface for Danfoss Air HRV systems";
     homepage = "https://github.com/JonasPed/pydanfoss-air";
     changelog = "https://github.com/JonasPed/pydanfoss-air/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool to sort a list of items based on pairwise comparisons";
     homepage = "https://github.com/hiAndrewQuinn/resorter";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     mainProgram = "resorter";
     maintainers = [ ];
     platforms = lib.platforms.all;

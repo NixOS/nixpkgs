@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Python library for YouLess sensors";
     homepage = "https://github.com/gjong/youless-python-bridge";
     changelog = "https://github.com/gjong/youless-python-bridge/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

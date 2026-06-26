@@ -89,7 +89,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Toolkit for checking, editing and uploading music. Catered to Gazelle-based trackers";
     homepage = "https://github.com/smokin-salmon/smoked-salmon";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     mainProgram = "salmon";
     maintainers = with lib.maintainers; [
       ambroisie

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for Ubiquiti Unifi LED controller";
     homepage = "https://github.com/florisvdk/unifiled";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

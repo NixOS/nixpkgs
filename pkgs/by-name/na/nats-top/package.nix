@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
     changelog = "https://github.com/nats-io/nats-top/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nats-top";
   };

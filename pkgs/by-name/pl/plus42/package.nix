@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://thomasokken.com/plus42/";
     changelog = "https://thomasokken.com/plus42/history.html";
     description = "Software clone of the HP-42S calculator (enhanced version)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "plus42dec";
     platforms = with lib.platforms; unix;

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interfacing with an EverLights control box";
     homepage = "https://github.com/joncar/pyeverlights";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

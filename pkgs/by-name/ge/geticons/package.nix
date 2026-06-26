@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI utility to get icons for apps on your system or other generic icons by name";
     mainProgram = "geticons";
     homepage = "https://git.sr.ht/~zethra/geticons";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
   };
 })

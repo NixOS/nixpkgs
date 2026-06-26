@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Command-line tool for git";
     homepage = "https://github.com/chriswalz/bit";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "bit";
   };

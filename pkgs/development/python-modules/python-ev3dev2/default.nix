@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python language bindings for ev3dev";
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

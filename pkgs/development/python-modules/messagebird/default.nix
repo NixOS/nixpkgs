@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client for MessageBird's REST API";
     homepage = "https://github.com/messagebird/python-rest-api";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

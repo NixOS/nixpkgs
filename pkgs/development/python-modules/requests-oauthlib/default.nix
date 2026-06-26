@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "OAuthlib authentication support for Requests";
     homepage = "https://github.com/requests/requests-oauthlib";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ prikhi ];
   };
 }

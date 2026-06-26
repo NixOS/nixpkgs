@@ -22,7 +22,7 @@ perlPackages.buildPerlPackage rec {
       cyplo
       cfouche
     ];
-    license = with lib.licenses; [ gpl1Plus ];
+    license = with lib.licenses; gpl1Plus;
     mainProgram = "rename";
   };
 }

@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Simple library to convert rtf to text";
     mainProgram = "striprtf";
     maintainers = with lib.maintainers; [ aanderse ];
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
   };
 }

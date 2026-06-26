@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Advanced version string comparison library";
     homepage = "https://github.com/repology/libversion";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
   };

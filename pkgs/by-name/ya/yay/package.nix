@@ -66,7 +66,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Jguer/yay";
     mainProgram = "yay";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
   };
 })

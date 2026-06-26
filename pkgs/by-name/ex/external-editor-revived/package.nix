@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Native messaging host for the Thunderbird addon allowing to edit mails in external programs";
     homepage = "https://github.com/Frederick888/external-editor-revived";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ mofrim ];
     mainProgram = "external-editor-revived";
   };

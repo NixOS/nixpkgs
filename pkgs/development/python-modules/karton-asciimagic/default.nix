@@ -29,7 +29,7 @@ buildPythonPackage rec {
     mainProgram = "karton-asciimagic";
     homepage = "https://github.com/CERT-Polska/karton-asciimagic";
     changelog = "https://github.com/CERT-Polska/karton-asciimagic/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

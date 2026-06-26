@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "High performance C++ math library";
     homepage = "https://bitbucket.org/blaze-lib/blaze";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.unix;
   };
 })

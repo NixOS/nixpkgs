@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ADS-B decoder swiss knife";
     homepage = "https://github.com/wiedehopf/readsb";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.linux; # uses epoll, hence its linux only
   };

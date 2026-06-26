@@ -31,7 +31,7 @@ let
       meta = {
         description = "Hyphen dictionary for ${shortDescription} from LibreOffice";
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
-        license = with lib.licenses; [ mpl20 ];
+        license = with lib.licenses; mpl20;
         maintainers = with lib.maintainers; [ theCapypara ];
         platforms = lib.platforms.all;
       };

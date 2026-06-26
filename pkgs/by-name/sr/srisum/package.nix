@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line utility to compute and check subresource integrity hashes";
     homepage = "https://github.com/zkat/srisum-rs";
     changelog = "https://github.com/zkat/srisum-rs/raw/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ pjjw ];
     platforms = lib.platforms.all;
     mainProgram = "srisum";

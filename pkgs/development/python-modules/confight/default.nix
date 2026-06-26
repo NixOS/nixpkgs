@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Python context manager for managing pid files";
     mainProgram = "confight";
     homepage = "https://github.com/avature/confight";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

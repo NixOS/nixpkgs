@@ -149,7 +149,7 @@ buildPythonApplication rec {
   meta = {
     description = "Tastiest API documentation system";
     homepage = "https://hotdoc.github.io/";
-    license = [ lib.licenses.lgpl21Plus ];
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

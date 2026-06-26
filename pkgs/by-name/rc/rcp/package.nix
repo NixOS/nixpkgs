@@ -58,7 +58,7 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";
     description = "Tools to efficiently copy, remove and link large filesets";
     homepage = "https://github.com/wykurz/rcp";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "rcp";
     maintainers = with lib.maintainers; [ wykurz ];
     # procfs only supports Linux and Android

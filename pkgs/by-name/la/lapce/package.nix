@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
     homepage = "https://github.com/lapce/lapce";
     changelog = "https://github.com/lapce/lapce/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     mainProgram = "lapce";
   };
 })

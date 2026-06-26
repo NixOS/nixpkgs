@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "corsair";
     homepage = "https://github.com/Santandersecurityresearch/corsair_scan";
     changelog = "https://github.com/Santandersecurityresearch/corsair_scan/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

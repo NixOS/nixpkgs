@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
     homepage = "https://www.kanji.uk/";
 
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ptrhlm
       stephen-huan

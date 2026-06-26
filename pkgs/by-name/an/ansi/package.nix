@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       the colors and styles, such as bold or italic.
     '';
     homepage = "https://github.com/phip1611/ansi-escape-sequences-cli";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ phip1611 ];
     mainProgram = "ansi";
   };

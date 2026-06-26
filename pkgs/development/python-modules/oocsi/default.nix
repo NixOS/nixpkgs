@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "OOCSI library for Python";
     homepage = "https://github.com/iddi/oocsi-python";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

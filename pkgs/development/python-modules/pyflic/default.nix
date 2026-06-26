@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with Flic buttons";
     homepage = "https://github.com/soldag/pyflic";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

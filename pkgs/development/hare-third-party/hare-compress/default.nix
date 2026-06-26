@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-compress/";
     description = "Compression algorithms for Hare";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ starzation ];
     inherit (hareHook.meta) platforms badPlatforms;
   };

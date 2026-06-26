@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       PowerUser64
       l1npengtul
     ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
 })

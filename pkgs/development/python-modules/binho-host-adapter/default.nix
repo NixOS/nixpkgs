@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python library for Binho Multi-Protocol USB Host Adapters";
     homepage = "https://github.com/adafruit/Adafruit_Python_PlatformDetect";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

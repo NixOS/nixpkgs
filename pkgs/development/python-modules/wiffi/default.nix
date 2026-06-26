@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python module to interface with STALL WIFFI devices";
     homepage = "https://github.com/mampfes/python-wiffi";
     changelog = "https://github.com/mampfes/python-wiffi/blob/${finalAttrs.version}/HISTORY.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

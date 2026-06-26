@@ -36,7 +36,7 @@ buildNpmPackage {
   meta = {
     description = "View your xunit results using JavaScript";
     homepage = "https://lukejpreston.github.io/xunit-viewer";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.all;
   };

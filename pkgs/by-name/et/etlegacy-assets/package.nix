@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   meta = {
     description = "ET: Legacy assets only";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [ cc-by-nc-sa-30 ];
+    license = with lib.licenses; cc-by-nc-sa-30;
     longDescription = ''
       ET: Legacy, an open source project fully compatible client and server
       for the popular online FPS game Wolfenstein: Enemy Territory - whose

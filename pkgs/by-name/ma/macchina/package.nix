@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Fast, minimal and customizable system information fetcher";
     homepage = "https://github.com/Macchina-CLI/macchina";
     changelog = "https://github.com/Macchina-CLI/macchina/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       _414owen
       progrm_jarvis

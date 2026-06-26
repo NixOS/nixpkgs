@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

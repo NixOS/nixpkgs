@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Flex SDK for Adobe Flash / ActionScript";
     homepage = "https://flex.apache.org/";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ dywedir ];
   };
 })

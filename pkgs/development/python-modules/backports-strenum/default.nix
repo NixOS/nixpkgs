@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Base class for creating enumerated constants that are also subclasses of str";
     homepage = "https://github.com/clbarnes/backports.strenum";
-    license = with lib.licenses; [ psfl ];
+    license = with lib.licenses; psfl;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

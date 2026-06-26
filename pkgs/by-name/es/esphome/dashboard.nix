@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "ESPHome dashboard";
     homepage = "https://esphome.io/";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
 })

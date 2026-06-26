@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python BTLE Device Interface for bluepy";
     homepage = "https://github.com/bimbar/bluepy_devices";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

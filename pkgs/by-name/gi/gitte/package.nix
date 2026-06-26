@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/ckruse/Gitte";
     mainProgram = "gitte";
     description = "GTK4/libadwaita Git client";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ckruse

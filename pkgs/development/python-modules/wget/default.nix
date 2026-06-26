@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pure python download utility";
     homepage = "https://bitbucket.org/techtonik/python-wget/";
-    license = with lib.licenses; [ unlicense ];
+    license = with lib.licenses; unlicense;
     maintainers = with lib.maintainers; [ prusnak ];
   };
 }

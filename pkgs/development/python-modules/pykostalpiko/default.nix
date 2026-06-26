@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library and CLI-tool to fetch the data from a Kostal Piko inverter";
     homepage = "https://github.com/Florian7843/pykostalpiko";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

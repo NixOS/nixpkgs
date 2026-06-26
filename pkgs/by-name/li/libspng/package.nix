@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple, modern libpng alternative";
     homepage = "https://libspng.org/";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ humancalico ];
     platforms = lib.platforms.all;
   };

@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library for decoding ROCm thread trace data";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprof-trace-decoder";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

@@ -82,7 +82,7 @@ buildPythonPackage {
   meta = {
     description = "Python MQTT client and broker implementation";
     homepage = "https://amqtt.readthedocs.io/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

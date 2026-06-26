@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings";
     homepage = "https://github.com/linuxboot/uefisettings";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     mainProgram = "uefisettings";
     maintainers = with lib.maintainers; [ surfaceflinger ];
     platforms = lib.platforms.linux;

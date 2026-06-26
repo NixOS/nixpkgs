@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       window whenever it is resized.
     '';
     homepage = "https://invisible-island.net/xterm";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = with lib.platforms; linux ++ darwin;
     changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
     mainProgram = "xterm";

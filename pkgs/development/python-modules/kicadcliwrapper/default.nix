@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Strongly typed, auto-generated bindings for KiCAD's CLI";
     homepage = "https://github.com/atopile/kicadcliwrapper";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

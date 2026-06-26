@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to work with Fortigate/Fortios devices";
     homepage = "https://github.com/fortinet-solutions-cse/fortiosapi";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       drawn by hand or any drawing software vym offers much more features to
       work with such maps.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "vym";
     maintainers = [ ];
     platforms = lib.platforms.linux;

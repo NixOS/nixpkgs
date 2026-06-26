@@ -30,6 +30,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/ocaml-multicore/lwt_eio";
     changelog = "https://github.com/ocaml-multicore/lwt_eio/raw/v${finalAttrs.version}/CHANGES.md";
     description = "Use Lwt libraries from within Eio";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
   };
 })

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple, small, efficient, C++ XML parser";
     homepage = "https://github.com/leethomason/tinyxml2";
     changelog = "https://github.com/leethomason/tinyxml2/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ zlib ];
+    license = with lib.licenses; zlib;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

@@ -101,7 +101,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Inkscape extension for machine embroidery design";
     homepage = "https://inkstitch.org/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [
       tropf
       pluiedev

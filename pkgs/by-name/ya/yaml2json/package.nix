@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/bronze1man/yaml2json/releases/tag/v${finalAttrs.version}";
     description = "Convert yaml to json";
     mainProgram = "yaml2json";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
   };
 })

@@ -58,7 +58,7 @@ buildDotnetModule rec {
   meta = {
     description = "Secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services";
     homepage = "https://github.com/git-ecosystem/git-credential-manager";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ _999eagle ];
     longDescription = ''

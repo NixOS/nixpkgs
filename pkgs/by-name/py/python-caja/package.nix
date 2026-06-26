@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Python binding for Caja components";
     homepage = "https://github.com/mate-desktop/python-caja";
-    license = [ lib.licenses.gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };

@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     description = "Opinioned code formatter for Beancount";
     mainProgram = "bean-black";
     homepage = "https://github.com/LaunchPlatform/beancount-black/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
 })

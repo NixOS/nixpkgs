@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Beets-audible: Organize Your Audiobook Collection With Beets";
     homepage = "https://github.com/Neurrone/beets-audible";
     platforms = with lib.platforms; linux ++ darwin ++ windows;
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ jwillikers ];
   };
 }

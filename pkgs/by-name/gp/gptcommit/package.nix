@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3";
     mainProgram = "gptcommit";
     homepage = "https://github.com/zurawiki/gptcommit";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = with lib.platforms; all;
   };

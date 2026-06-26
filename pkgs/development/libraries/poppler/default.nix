@@ -186,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ ];
     teams = [ lib.teams.freedesktop ];

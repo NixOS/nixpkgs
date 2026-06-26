@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SID player using libsidplayfp";
     homepage = "https://github.com/libsidplayfp/sidplayfp";
     changelog = "https://github.com/libsidplayfp/sidplayfp/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "sidplayfp";
     maintainers = with lib.maintainers; [
       OPNA2608

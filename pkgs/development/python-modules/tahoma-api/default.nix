@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interface with Tahoma REST API";
     homepage = "https://github.com/philklei/tahoma-api/";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

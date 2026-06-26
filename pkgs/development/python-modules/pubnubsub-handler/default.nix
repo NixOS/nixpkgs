@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "PubNub subscription between PubNub and Home Assistant";
     homepage = "https://github.com/w1ll1am23/pubnubsub-handler";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

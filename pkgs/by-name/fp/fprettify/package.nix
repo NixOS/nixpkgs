@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python";
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = [ ];
   };
 })

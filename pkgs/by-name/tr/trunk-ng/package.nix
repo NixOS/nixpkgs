@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk-ng";
     maintainers = with lib.maintainers; [ ctron ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 })

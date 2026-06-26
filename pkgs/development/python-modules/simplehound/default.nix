@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for Sighthound";
     homepage = "https://github.com/robmarkcole/simplehound";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

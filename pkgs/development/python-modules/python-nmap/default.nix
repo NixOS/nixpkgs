@@ -36,7 +36,7 @@ buildPythonPackage rec {
       It also supports nmap script outputs.
     '';
     homepage = "https://xael.org/pages/python-nmap-en.html";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

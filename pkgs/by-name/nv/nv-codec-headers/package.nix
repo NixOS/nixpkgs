@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
     description = "FFmpeg version of headers for NVENC - major version ${pick.version}";
     homepage = "https://ffmpeg.org/";
     downloadPage = "https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

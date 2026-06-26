@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/sanpii/effitask";
     maintainers = with lib.maintainers; [ davidak ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "effitask";
   };
 })

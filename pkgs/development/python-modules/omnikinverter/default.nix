@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Python module for the Omnik Inverter";
     homepage = "https://github.com/klaasnicolaas/python-omnikinverter";
     changelog = "https://github.com/klaasnicolaas/python-omnikinverter/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

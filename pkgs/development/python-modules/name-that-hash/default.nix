@@ -37,7 +37,7 @@ buildPythonPackage rec {
     longDescription = "Don't know what type of hash it is? Name That Hash will name that hash type! Identify MD5, SHA256 and 300+ other hashes.";
     description = "Module and CLI for the identification of hashes";
     homepage = "https://github.com/HashPals/Name-That-Hash";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

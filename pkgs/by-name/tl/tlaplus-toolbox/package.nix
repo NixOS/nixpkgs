@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       versions of your modules, run the TLC model checker, and run TLAPS, the TLA+ proof system.
     '';
     # http://lamport.azurewebsites.net/tla/license.html
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];

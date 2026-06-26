@@ -119,7 +119,7 @@ buildPythonPackage rec {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
     changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

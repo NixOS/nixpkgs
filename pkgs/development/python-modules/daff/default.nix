@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for comparing tables, producing a summary of their differences, and using such a summary as a patch file";
     homepage = "https://github.com/paulfitz/daff";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ turion ];
   };
 }

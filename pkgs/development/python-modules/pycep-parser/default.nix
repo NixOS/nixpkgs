@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
     changelog = "https://github.com/gruebel/pycep/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

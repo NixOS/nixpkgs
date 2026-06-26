@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python client for SiteSage Emonitor";
     mainProgram = "my_example";
     homepage = "https://github.com/bdraco/aioemonitor";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

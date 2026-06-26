@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "HIP wrapper for rocRAND and cuRAND";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hiprand";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

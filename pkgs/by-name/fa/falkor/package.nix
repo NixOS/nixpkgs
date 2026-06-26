@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Electron-based gaming hub";
     homepage = "https://github.com/Team-Falkor/falkor";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ icedborn ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];

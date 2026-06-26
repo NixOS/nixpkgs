@@ -47,7 +47,7 @@ buildPythonPackage rec {
       exchange rates published by the European Central Bank.
     '';
     homepage = "https://github.com/amatellanes/fixerio";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Wifi Radiothermostat";
     homepage = "https://github.com/mhrivnak/radiotherm";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

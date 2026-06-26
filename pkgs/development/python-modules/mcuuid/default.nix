@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Getting Minecraft player information from Mojang API";
     homepage = "https://github.com/clerie/mcuuid";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ clerie ];
   };
 }

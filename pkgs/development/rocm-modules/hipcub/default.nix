@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Thin wrapper library on top of rocPRIM or CUB";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipcub";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

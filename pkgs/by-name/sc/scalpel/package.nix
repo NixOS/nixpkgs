@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "scalpel";
     maintainers = with lib.maintainers; [ shard7 ];
     platforms = lib.platforms.unix;
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 })

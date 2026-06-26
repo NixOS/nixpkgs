@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Python API for OpenWrt ubus RPC";
     homepage = "https://github.com/Noltari/python-ubus-rpc";
     changelog = "https://github.com/Noltari/python-ubus-rpc/releases/tag/${version}";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

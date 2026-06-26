@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python library to control webOS based LG TV units";
     mainProgram = "aiopylgtvcommand";
     homepage = "https://github.com/bendavid/aiopylgtv";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

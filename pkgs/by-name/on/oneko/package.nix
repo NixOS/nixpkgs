@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       When the cat is done catching the mouse, it starts sleeping.
     '';
     homepage = "https://github.com/IreneKnapp/oneko";
-    license = with lib.licenses; [ publicDomain ];
+    license = with lib.licenses; publicDomain;
     maintainers = with lib.maintainers; [
       xaverdh
       irenes

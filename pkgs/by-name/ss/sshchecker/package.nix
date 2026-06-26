@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
       SSH login on the giving IP list.
     '';
     homepage = "https://github.com/lazytools/sshchecker";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

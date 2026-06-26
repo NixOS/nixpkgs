@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/jatinchowdhury18/ChowPhaser";
     description = "Phaser effect based loosely on the Schulte Compact Phasing 'A'";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     mainProgram = "ChowPhaserStereo";
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;

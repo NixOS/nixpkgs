@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Office 365 enumeration tool";
     homepage = "https://github.com/optiv/Go365";
     changelog = "https://github.com/optiv/Go365/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "Go365";
   };

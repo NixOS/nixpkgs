@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library that provides an interface to Nightscout";
     homepage = "https://github.com/marciogranzotto/py-nightscout";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

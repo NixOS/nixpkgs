@@ -50,7 +50,7 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "subfont";
     homepage = "https://github.com/Munter/subfont";
     changelog = "https://github.com/Munter/subfont/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ dav-wolff ];
   };
 })

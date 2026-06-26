@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Profiling with perf-counters and derived metrics";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler-register";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = with lib.licenses; mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

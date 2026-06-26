@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the StreamLabs API";
     homepage = "https://github.com/streamlabswater/stream-python";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

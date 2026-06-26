@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/CleoMenezesJr/Aurea";
     mainProgram = "aurea";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
   };
 })

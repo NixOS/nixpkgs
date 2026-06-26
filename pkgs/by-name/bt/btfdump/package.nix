@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     description = "BTF introspection tool";
     mainProgram = "btf";
     homepage = "https://github.com/anakryiko/btfdump";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = [ ];
   };
 }

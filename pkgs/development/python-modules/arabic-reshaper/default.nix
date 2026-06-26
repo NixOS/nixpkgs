@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
   };
 })

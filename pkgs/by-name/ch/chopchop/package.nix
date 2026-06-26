@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI to search for sensitive services/files/folders";
     homepage = "https://github.com/michelin/ChopChop";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

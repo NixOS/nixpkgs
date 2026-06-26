@@ -11,7 +11,7 @@
 
 rec {
   gcc_meta = {
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     teams = [ lib.teams.gcc ];
   };
 

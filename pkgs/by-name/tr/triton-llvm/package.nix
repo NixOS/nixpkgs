@@ -230,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage = "https://github.com/llvm/llvm-project";
     changelog = "https://github.com/llvm/llvm-project/releases/tag/llvmorg-${finalAttrs.version}";
-    license = with lib.licenses; [ ncsa ];
+    license = with lib.licenses; ncsa;
     maintainers = with lib.maintainers; [
       SomeoneSerge
     ];

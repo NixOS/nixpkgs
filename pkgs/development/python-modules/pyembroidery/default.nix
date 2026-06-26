@@ -48,7 +48,7 @@ buildPythonPackage {
   meta = {
     description = "Python library for the reading and writing of embroidery files";
     homepage = "https://github.com/inkstitch/pyembroidery";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ pluiedev ];
   };
 }

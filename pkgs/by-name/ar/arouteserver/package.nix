@@ -60,7 +60,7 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "arouteserver";
     homepage = "https://github.com/pierky/arouteserver";
     changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [
       marcel
       johannwagner

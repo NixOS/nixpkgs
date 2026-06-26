@@ -31,6 +31,6 @@ buildGoModule (finalAttrs: {
       fromSource
       binaryNativeCode
     ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
   };
 })

@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Sync personal and work git repositories from multiple providers";
     homepage = "https://github.com/orf/git-workspace";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "git-workspace";
   };

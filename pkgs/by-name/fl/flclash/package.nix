@@ -31,7 +31,7 @@ let
   meta = {
     description = "Proxy client based on ClashMeta, simple and easy to use";
     homepage = "https://github.com/chen08209/FlClash";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ VZstless ];
   };
 

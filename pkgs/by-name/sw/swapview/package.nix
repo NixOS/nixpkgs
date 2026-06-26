@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
     mainProgram = "swapview";
     homepage = "https://github.com/lilydjwg/swapview";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ oxalica ];
   };
 }

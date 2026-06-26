@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
     changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

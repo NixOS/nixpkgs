@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python parser for the Coffeescript Object Notation (CSON)";
     homepage = "https://github.com/avakar/pycson";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ xworld21 ];
   };
 }

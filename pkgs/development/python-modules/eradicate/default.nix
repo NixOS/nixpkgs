@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mainProgram = "eradicate";
     homepage = "https://github.com/myint/eradicate";
     changelog = "https://github.com/wemake-services/eradicate/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ mmlb ];
   };
 }

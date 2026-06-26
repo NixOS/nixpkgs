@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ library for half precision floating point arithmetics";
     homepage = "https://github.com/ROCm/half";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.unix;
   };

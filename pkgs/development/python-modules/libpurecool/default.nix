@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Dyson devices";
     homepage = "http://libpurecool.readthedocs.io";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

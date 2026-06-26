@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/spinframework/spin";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     mainProgram = "spin";
     maintainers = [ ];
     platforms = builtins.attrNames packageHashes;

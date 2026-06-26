@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/gptscript-ai/gptscript";
     changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v${finalAttrs.version}";
     description = "Build AI assistants that interact with your systems";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
     mainProgram = "gptscript";
   };

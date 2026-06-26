@@ -23,7 +23,7 @@ flutter338.buildFlutterApplication {
   meta = {
     description = "Badge Magic with LEDs - mobile and desktop app";
     homepage = "https://github.com/fossasia/badgemagic-app";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = [
       "aarch64-linux"

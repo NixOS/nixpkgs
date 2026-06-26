@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Pytest plugin for interaction with TestRail";
     homepage = "https://github.com/tolstislon/pytest-pytestrail";
     changelog = "https://github.com/tolstislon/pytest-pytestrail/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
 }

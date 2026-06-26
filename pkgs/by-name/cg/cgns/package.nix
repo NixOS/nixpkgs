@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cgns.github.io";
     downloadPage = "https://github.com/cgns/cgns";
     changelog = "https://github.com/cgns/cgns/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ zlib ];
+    license = with lib.licenses; zlib;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };

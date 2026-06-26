@@ -25,7 +25,7 @@ buildOctavePackage rec {
   meta = {
     name = "GNU Octave Clipping Polygons Tool";
     homepage = "https://gnu-octave.github.io/packages/octclip/";
-    license = with lib.licenses; [ gpl3Plus ]; # modified BSD?
+    license = with lib.licenses; gpl3Plus; # modified BSD?
     maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Perform boolean operations with polygons using the Greiner-Hormann algorithm";
   };

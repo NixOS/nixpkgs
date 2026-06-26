@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Webcam Capture Software";
     longDescription = "Webcamoid is a full featured and multiplatform webcam suite.";
     homepage = "https://github.com/webcamoid/webcamoid/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ robaca ];
     mainProgram = "webcamoid";

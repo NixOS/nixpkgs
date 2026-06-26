@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "UPnP client library for Python";
     homepage = "https://github.com/5kyc0d3r/upnpy";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

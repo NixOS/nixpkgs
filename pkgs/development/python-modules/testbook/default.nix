@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unit testing framework extension for testing code in Jupyter Notebooks";
     homepage = "https://testbook.readthedocs.io/";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ djacu ];
   };
 }

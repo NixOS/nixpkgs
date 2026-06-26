@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Verizon Fios Quantum gateway devices";
     homepage = "https://github.com/cisasteelersfan/quantum_gateway";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xinux-org/e-imzo-manager";
     mainProgram = "E-IMZO-Manager";
     description = "GTK application for managing E-IMZO keys";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       orzklv

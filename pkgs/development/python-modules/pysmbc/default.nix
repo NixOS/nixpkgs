@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

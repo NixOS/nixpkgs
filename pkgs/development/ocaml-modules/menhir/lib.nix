@@ -33,7 +33,7 @@ buildDunePackage {
       to OCaml code.  Menhir was designed and implemented by François Pottier
       and Yann Régis-Gianas.
     '';
-    license = with lib.licenses; [ lgpl2Only ];
+    license = with lib.licenses; lgpl2Only;
     maintainers = with lib.maintainers; [ vbgl ];
   };
 }

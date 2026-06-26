@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       It can run in an emulator or it can run natively on x86 hardware with the
       use of coreboot.
     '';
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ sigmasquadron ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];

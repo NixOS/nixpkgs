@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python field operations for Curve25519's prime";
     homepage = "https://github.com/BjoernMHaase/fe25519";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

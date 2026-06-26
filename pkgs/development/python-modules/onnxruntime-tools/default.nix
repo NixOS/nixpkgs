@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Transformers Model Optimization Tool of ONNXRuntime";
     homepage = "https://pypi.org/project/onnxruntime-tools/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Common orbital optimisation algorithms for quantum chemistry";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     homepage = "https://github.com/susilehtola/OpenOrbitalOptimizer";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];

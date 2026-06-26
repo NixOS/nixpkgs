@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://motif.ics.com";
     description = "Unix standard widget-toolkit and window-manager";
     platforms = lib.platforms.unix;
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; lgpl21Plus;
     maintainers = with lib.maintainers; [ qyliss ];
     broken = demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16";
   };

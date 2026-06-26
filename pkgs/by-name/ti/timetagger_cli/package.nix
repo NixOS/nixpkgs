@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Track your time from the command-line";
     homepage = "https://github.com/almarklein/timetagger_cli";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "timetagger";
   };

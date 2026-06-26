@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
     changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

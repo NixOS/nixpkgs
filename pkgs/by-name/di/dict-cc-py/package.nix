@@ -32,7 +32,7 @@ python3.pkgs.buildPythonPackage {
     description = "Unofficial command line client for dict.cc";
     mainProgram = "dict.cc.py";
     homepage = "https://github.com/rbaron/dict.cc.py";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     maintainers = [ ];
   };
 }

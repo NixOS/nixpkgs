@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module that exposes a dictionary subclass that allows items to be set like attributes";
     homepage = "https://github.com/mewwts/addict";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

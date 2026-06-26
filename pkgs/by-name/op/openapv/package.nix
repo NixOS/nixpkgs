@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";
     description = "Reference implementation of the APV codec";
     homepage = "https://github.com/AcademySoftwareFoundation/openapv";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
 })

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to retrieve information from Ombi";
     homepage = "https://github.com/larssont/pyombi";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

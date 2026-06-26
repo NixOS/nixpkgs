@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       OpenSSL. libnghttp2_asio provides both client and server APIs.
     '';
     homepage = "https://github.com/nghttp2/nghttp2-asio";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

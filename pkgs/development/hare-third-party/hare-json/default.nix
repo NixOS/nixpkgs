@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-json/";
     description = "This package provides JSON support for Hare";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ starzation ];
     inherit (hareHook.meta) platforms badPlatforms;
   };

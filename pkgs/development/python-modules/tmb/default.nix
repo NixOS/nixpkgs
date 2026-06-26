@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library that interacts with TMB API";
     homepage = "https://github.com/alemuro/tmb";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

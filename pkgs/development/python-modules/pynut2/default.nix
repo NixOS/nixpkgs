@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "API overhaul of PyNUT, a Python library to allow communication with NUT (Network UPS Tools) servers";
     homepage = "https://github.com/mezz64/python-nut2";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ lib.maintainers.luker ];
   };
 }
