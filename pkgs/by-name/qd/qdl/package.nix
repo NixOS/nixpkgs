@@ -11,6 +11,7 @@
   cmocka,
   ninja,
   nix-update-script,
+  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/linux-msm/qdl/commit/6f8700ed81b3614baa12786a9845c9abeab1e178.patch";
       hash = "sha256-fDC34Wq4MadDDLHVQ5zuRKE2zD2dOMTU8EGINcJTYuI=";
     })
+    # fix test linking
+    (fetchpatch2 {
+      url = "https://github.com/igoropaniuk/qdl/commit/a1d5e232326b97cbfd63f2d49caa9e0cc7950ab1.patch";
+      hash = "sha256-RRU1YfgeVhQ4g1NYIfgoGm5/1objVTslFXeCfuCMULE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -37,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmocka
     ninja
+    zip
   ];
   buildInputs = [
     libxml2
@@ -44,14 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
   ];
 
+  doCheck = true;
+
   mesonFlags = [
     "--prefix=${placeholder "out"}"
     "-DVERSION=${finalAttrs.src.rev}"
-
-    # Tests currently fail to link but seem rather new
-    # https://github.com/linux-msm/qdl/issues/260
-    # test_contents_selectors.c:(.text+0x234e): undefined reference to `firehose_alloc_op'
-    "-Dtests=disabled"
   ];
 
   enableParallelBuilding = true;
