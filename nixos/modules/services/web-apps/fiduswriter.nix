@@ -15,6 +15,15 @@ let
 
   cfg = config.services.fiduswriter;
   stateDir = "/var/lib/fiduswriter";
+
+  fidusSrc = "${cfg.package}/${pkgs.python3.sitePackages}/fiduswriter";
+  srcWithConfig = pkgs.symlinkJoin {
+    name = "fiduswriter-with-test-config";
+    paths = [ fidusSrc ];
+    postBuild = ''
+      cp ${../../../tests/fiduswriter/configuration-test.py} $out/configuration.py
+    '';
+  };
 in
 
 {
@@ -40,10 +49,15 @@ in
   config = mkIf cfg.enable {
     systemd.services.fiduswriter = {
       description = "Fidus Writer Collaborative Editor";
+
+      path = [
+        cfg.package
+      ];
+
       environment = {
         PROJECT_PATH = stateDir;
         PYTHONPATH = "${cfg.package.env.PYTHONPATH}";
-        SRC_PATH = "${cfg.package}/${pkgs.python3.sitePackages}/fiduswriter";
+        SRC_PATH = "${srcWithConfig}";
 
         GRANIAN_HOST = cfg.address;
         GRANIAN_PORT = toString cfg.port;
@@ -67,6 +81,14 @@ in
         ln -sf "${cfg.package.passthru.frontend}/static-collected" ${stateDir}/static-collected
         ln -sf "${cfg.package.passthru.frontend}/static-transpile" ${stateDir}/static-transpile
         ln -sf "${cfg.package.passthru.frontend}/static-libs" ${stateDir}/static-libs
+
+        # init db
+        fiduswriter migrate
+        fiduswriter createsuperuser \
+          --username=admin \
+          --email=admin@example.com \
+          --password=secret \
+          --noinput
       '';
 
       wantedBy = [
