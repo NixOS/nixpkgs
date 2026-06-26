@@ -1,11 +1,10 @@
 {
   lib,
   bundlerApp,
-  ruby_3_4,
   bundlerUpdateScript,
 }:
 
-(bundlerApp.override { ruby = ruby_3_4; }) {
+bundlerApp {
   pname = "colorls";
 
   gemdir = ./.;
@@ -22,7 +21,6 @@
       nicknovitski
       cbley
     ];
-    platforms = ruby_3_4.meta.platforms;
     mainProgram = "colorls";
   };
 }

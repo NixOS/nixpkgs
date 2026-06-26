@@ -7,19 +7,20 @@
   makeBinaryWrapper,
   nixosTests,
   callPackage,
+  ruby_3_4,
 }:
 stdenv.mkDerivation (
   finalAttrs:
   let
     # Use bundlerEnvArgs from passthru to allow overriding bundlerEnv arguments.
-    rubyEnv = bundlerEnv finalAttrs.passthru.bundlerEnvArgs;
+    rubyEnv = bundlerEnv (finalAttrs.passthru.bundlerEnvArgs // { ruby = ruby_3_4; });
     # We also need a separate nativeRubyEnv to precompile assets on the build
     # host. If possible, reuse existing rubyEnv derivation.
     nativeRubyEnv =
       if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
         rubyEnv
       else
-        buildPackages.bundlerEnv finalAttrs.passthru.bundlerEnvArgs;
+        buildPackages.bundlerEnv (finalAttrs.passthru.bundlerEnvArgs // { ruby = buildPackages.ruby_3_4; });
 
     bundlerEnvArgs = {
       name = "${finalAttrs.pname}-${finalAttrs.version}-gems";
