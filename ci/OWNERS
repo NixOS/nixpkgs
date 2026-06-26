@@ -327,6 +327,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
+# Web servers
+/doc/packages/nginx.section.md @leona-ya @Ma27
+/pkgs/servers/http/nginx/ @helsinki-Jo @leona-ya @Ma27
+/nixos/modules/services/web-servers/nginx/ @leona-ya @Ma27
+
 # D
 /pkgs/build-support/dlang @jtbx @TomaSajt
 
