@@ -5,7 +5,6 @@
   fetchurl,
   qt6Packages,
   cmark,
-  gpgme,
   taglib,
   wayland-protocols,
   wayland,
