@@ -28,14 +28,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LW6rY+zLta4hENBbTll+1amf9TYJiuAumwzgpk1LZ3M=";
+    hash = "sha256-wi5EITlRI8tgAXUV5u/CA3eiWjNAVs5ynT+PUsqcqVA=";
   };
 
   build-system = [
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
     "blosc"
     "blosc2"
-    "bz2"
+    "bzip2"
     "charls"
     "lz4"
     # "sperr" # not packaged?
@@ -91,9 +91,6 @@ buildPythonPackage (finalAttrs: {
 
     mkdir -p pkg-config
     export PKG_CONFIG_PATH="$PWD/pkg-config''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
-
-    # add expected alias for bzip2
-    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config/bz2.pc
 
     # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
     cat >pkg-config/zfp.pc <<EOF
