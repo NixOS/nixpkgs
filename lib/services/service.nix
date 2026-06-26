@@ -6,6 +6,7 @@
 # The module
 {
   lib,
+  config,
   ...
 }:
 let
@@ -49,6 +50,30 @@ in
           a shell script or `importas` from `pkgs.execline`.
         '';
       };
+
+      reloadSignal = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "SIGHUP";
+        description = ''
+          Configures the reload signal to send to the service manager.
+          Note: Setting this will set the respective setting for the type of notificationProtocol you want to use.
+        '';
+      };
+
+      reloadCommand = mkOption {
+        type = types.nullOr types.str;
+        default =
+          if (config.process.reloadSignal != null) then
+            "${pkgs.coreutils}/bin/kill -${config.process.reloadSignal} $MAINPID"
+          else
+            null;
+        example = lib.literalExpression "''${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+
+        description = ''
+          Command for reloading this service.
+        '';
+      };
     };
 
     notificationProtocol = mkOption {
@@ -64,4 +89,11 @@ in
       '';
     };
   };
+
+  config.assertions = [
+    {
+      assertion = (config.process.reloadSignal && config.process.reloadCommand);
+      message = "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand.";
+    }
+  ];
 }
