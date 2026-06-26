@@ -19063,6 +19063,8 @@ self: super: with self; {
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
+  stackit-core = callPackage ../development/python-modules/stackit-core { };
+
   stackprinter = callPackage ../development/python-modules/stackprinter { };
 
   stamina = callPackage ../development/python-modules/stamina { };
