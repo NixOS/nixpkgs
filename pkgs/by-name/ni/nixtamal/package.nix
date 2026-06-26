@@ -21,7 +21,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.8.0";
+  version = "1.8.2";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -30,13 +30,15 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-75p+4hZtgsiUeOxRhLpg3l/0G/XS2uCCPF58KbGTqJ8=";
+    hash = "sha256-WS3Au0V2AFUxRoINZvBLDJWvsTn/SyiN6jSLOWb+PQY=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     removeReferencesTo
     installShellFiles
+    # Compile-time preprocessing
+    ocamlPackages.ppx_deriving
     # Completions
     ocamlPackages.cmdliner
     # For manpages
@@ -48,7 +50,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   buildInputs = with ocamlPackages; [
     cmdliner
     fmt
-    ppx_deriving_qcheck
   ];
 
   propagatedBuildInputs = with ocamlPackages; [
@@ -62,8 +63,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     })
     kdl
     logs
-    ppx_deriving
-    qcheck-core
     saturn
     stdint
     uri
@@ -72,8 +71,10 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   checkInputs = with ocamlPackages; [
     alcotest
+    ppx_deriving_qcheck
     qcheck
     qcheck-alcotest
+    qcheck-core
   ];
 
   postPatch = ''
