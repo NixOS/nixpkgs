@@ -1,12 +1,9 @@
-{ buildAstalModule, json-glib }:
+{
+  buildAstalModule,
+  wl,
+}:
 buildAstalModule {
   name = "river";
-  buildInputs = [ json-glib ];
+  buildInputs = [ wl ];
   meta.description = "Astal module for River using IPC";
-
-  postUnpack = ''
-    rm -rf $sourceRoot/subprojects
-    mkdir -p $sourceRoot/subprojects
-    cp -r --remove-destination $src/lib/wayland-glib $sourceRoot/subprojects/wayland-glib
-  '';
 }
