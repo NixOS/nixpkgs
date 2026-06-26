@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
-      --zsh  <($out/bin/wt config shell completions zsh)
+      --nushell <($out/bin/wt config shell completions nu) \
+      --zsh <($out/bin/wt config shell completions zsh)
   '';
 
   nativeCheckInputs = [ gitMinimal ];
