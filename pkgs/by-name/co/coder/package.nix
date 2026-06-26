@@ -102,8 +102,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "coder";
     maintainers = with lib.maintainers; [
+      bpmct
+      developmentcats
       ghuntley
       kylecarbs
+      phorcys420
     ];
   };
 
