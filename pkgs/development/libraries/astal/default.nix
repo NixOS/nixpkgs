@@ -9,6 +9,7 @@ self: {
   auth = self.callPackage ./modules/auth.nix { };
   battery = self.callPackage ./modules/battery.nix { };
   bluetooth = self.callPackage ./modules/bluetooth.nix { };
+  brightness = self.callPackage ./modules/brightness.nix { };
   cava = self.callPackage ./modules/cava.nix { };
   gjs = self.callPackage ./modules/gjs.nix { };
   greet = self.callPackage ./modules/greet.nix { };
