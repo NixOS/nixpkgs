@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   imagemagick,
-  source-code-pro,
   python3Packages,
   nix-update-script,
   nixos-icons,
@@ -61,14 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPackages.cargo
     rustPlatform.cargoSetupHook
   ];
-
-  postConfigure = ''
-    patchShebangs --build font/makefont.sh
-    FONT_PATH=${source-code-pro}/share/fonts/opentype/SourceCodePro-Bold.otf
-    rm font/{SourceCodePro-Bold.ttf,font.bin,font_retina.bin}
-    ./font/makefont.sh 8 16 12 $FONT_PATH font/font.bin
-    ./font/makefont.sh 16 32 25 $FONT_PATH font/font_retina.bin
-  '';
 
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
