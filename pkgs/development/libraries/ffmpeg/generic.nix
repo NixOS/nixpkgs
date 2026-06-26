@@ -460,14 +460,6 @@ stdenv.mkDerivation (
           hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
-        (fetchpatch2 {
-          # this can be removed post 6.1
-          name = "fix_build_failure_due_to_PropertyKey_EncoderID";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
-          hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
-        })
-      ]
       ++ optionals (lib.versionOlder version "7.1.1") [
         (fetchpatch2 {
           name = "texinfo-7.1.patch";
