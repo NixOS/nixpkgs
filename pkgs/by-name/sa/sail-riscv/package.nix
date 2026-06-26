@@ -10,18 +10,24 @@
   ocamlPackages,
 
   gmp,
+  cli11,
+  jsoncons,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sail-riscv";
-  version = "0.8";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "sail-riscv";
-    rev = finalAttrs.version;
-    hash = "sha256-50ATe3DQcdyNOqP85mEMyEwxzpBOplzRN9ulaJNo9zo=";
+    tag = finalAttrs.version;
+    hash = "sha256-pi/XP6+NX/wNpBESmnEg2d5cppMpMwFripDPk9vTx9I=";
   };
+
+  patches = [
+    ./unvendor-deps.patch
+  ];
 
   nativeBuildInputs = [
     z3
@@ -32,16 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gmp
+    # Header-only
+    jsoncons
+    cli11
   ];
   strictDeps = true;
 
-  # sail-riscv 0.8 fails to install without compressed_changelog
-  ninjaFlags = [ "compressed_changelog" ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_LTO" true)
+  ];
 
   meta = {
     homepage = "https://github.com/riscv/sail-riscv";
     description = "Formal specification of the RISC-V architecture, written in Sail";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      xokdvium
+    ];
     license = lib.licenses.bsd2;
   };
 })
