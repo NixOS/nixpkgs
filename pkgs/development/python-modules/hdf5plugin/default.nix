@@ -57,6 +57,16 @@ buildPythonPackage (finalAttrs: {
     zstd
   ];
 
+  # devendor
+  postPatch = ''
+    rm -rf lib/c-blosc
+    rm -rf lib/c-blosc2
+    rm -rf lib/bzip2
+    rm -rf lib/charls
+    rm -rf lib/zfp
+    rm -rf lib/zstd
+  '';
+
   # opt-in to use use system libs instead
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
     "blosc"
