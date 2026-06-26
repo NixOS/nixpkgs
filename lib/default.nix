@@ -361,6 +361,7 @@ let
         isStringLike
         isValidPosixName
         toShellVar
+        toShellVar'
         toShellVars
         trim
         trimWith
