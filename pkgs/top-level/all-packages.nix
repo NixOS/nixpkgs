@@ -2936,11 +2936,6 @@ with pkgs;
 
   sshfs = sshfs-fuse; # added 2017-08-14
 
-  inherit (callPackages ../tools/misc/sshx { })
-    sshx
-    sshx-server
-    ;
-
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
   sslscan = callPackage ../tools/security/sslscan {
