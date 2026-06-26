@@ -109,6 +109,18 @@ This includes build-related flags and metadata.
 }
 ```
 
+## Building WebAssembly Parsers
+
+`buildGrammar` builds a native `$out/parser`.
+To build grammars as WebAssembly instead, use the `wasi32` cross package set, which installs `$out/parser.wasm`:
+
+```nix
+pkgsCross.wasi32.tree-sitter.builtGrammars.tree-sitter-nix
+```
+
+The Wasm build compiles `parser.c` and a C `scanner.c`.
+Grammars with C++ external scanners are rejected; use the native `buildGrammar` for those.
+
 ## Updating
 
 All grammar sources have a default update script defined.

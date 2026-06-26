@@ -7,15 +7,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "reticulated";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RFnexus";
     repo = "reticulated";
-    tag = finalAttrs.version;
-    hash = "sha256-55eK9AObUw8JLn4sNC5O8dNrfscwTwQpkVQAR+O9Lcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-02vdSKAEb59VucoDe5M+uSiNdyMybfQnhCr+LzGyNT0=";
   };
 
   postPatch = ''
