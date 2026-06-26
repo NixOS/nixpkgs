@@ -72,68 +72,81 @@ rec {
     max = a: b: if lessThan a b then b else a;
   };
 
-  # TODO: Combine this and automaticProblems into a `{ removal = { manual = true; ... }; ... }` structure for less error-prone changes
-  kinds = rec {
-    # Automatic and manual problem kinds
-    known = map (problem: problem.kindName) automaticProblems ++ manual;
-    # Problem kinds that are currently allowed to be specified in `meta.problems`
-    manual = [
-      "removal"
-      "deprecated"
-      "broken"
-    ];
-    # Problem kinds that are currently only allowed to be specified once
-    unique = [
-      "removal"
-    ];
+  kinds = {
+    maintainerless = {
+      manualAllowed = false;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = {
+        condition =
+          # To get usable output, we want to avoid flagging "internal" derivations.
+          # Because we do not have a way to reliably decide between internal or
+          # external derivation, some heuristics are required to decide.
+          #
+          # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+          # If `description` is not defined, the derivation is probably not a package.
+          # Simply checking whether `meta` is defined is insufficient,
+          # as some fetchers and trivial builders do define meta.
+          config: attrs:
+          # Order of checks optimised for short-circuiting the common case of having maintainers
+          (attrs.meta.maintainers or [ ] == [ ])
+          && (attrs.meta.teams or [ ] == [ ])
+          && (!attrs ? outputHash)
+          && (attrs ? meta.description);
+        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+      };
+    };
+    broken = {
+      manualAllowed = true;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = {
+        condition =
+          config:
+          let
+            # TODO: Consider deprecating this or making it generic for all problems
+            allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-    # Same thing but a set with null values (comes in handy at times)
-    manual' = genAttrs manual (k: null);
-    unique' = genAttrs unique (k: null);
+            allowBrokenPredicate =
+              lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
+                "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
+                config.allowBrokenPredicate;
+          in
+          if allowBroken then
+            attrs: false
+          else if config ? allowBrokenPredicate then
+            attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
+          else
+            attrs: attrs ? meta.broken && attrs.meta.broken;
+        value.message = "This package is broken.";
+      };
+    };
+    removal = {
+      manualAllowed = true;
+      isUnique = true;
+      nixpkgsInternalUseAllowed = false;
+      automatic = null;
+    };
+    deprecated = {
+      manualAllowed = true;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = false;
+      automatic = null;
+    };
   };
 
-  automaticProblems = [
-    {
-      kindName = "maintainerless";
-      condition =
-        # To get usable output, we want to avoid flagging "internal" derivations.
-        # Because we do not have a way to reliably decide between internal or
-        # external derivation, some heuristics are required to decide.
-        #
-        # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
-        # If `description` is not defined, the derivation is probably not a package.
-        # Simply checking whether `meta` is defined is insufficient,
-        # as some fetchers and trivial builders do define meta.
-        config: attrs:
-        # Order of checks optimised for short-circuiting the common case of having maintainers
-        (attrs.meta.maintainers or [ ] == [ ])
-        && (attrs.meta.teams or [ ] == [ ])
-        && (!attrs ? outputHash)
-        && (attrs ? meta.description);
-      value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
-    }
-    {
-      kindName = "broken";
-      condition =
-        config:
-        let
-          # TODO: Consider deprecating this or making it generic for all problems
-          allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+  # Problem kinds that are currently allowed to be specified in `meta.problems`
+  manualKinds = lib.filterAttrs (name: value: value.manualAllowed) kinds;
+  # Problem kinds that are currently only allowed to be specified once
+  uniqueKinds = lib.filterAttrs (name: value: value.isUnique) kinds;
 
-          allowBrokenPredicate =
-            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
-              "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
-              config.allowBrokenPredicate;
-        in
-        if allowBroken then
-          attrs: false
-        else if config ? allowBrokenPredicate then
-          attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
-        else
-          attrs: attrs ? meta.broken && attrs.meta.broken;
-      value.message = "This package is broken.";
-    }
-  ];
+  disallowNixpkgsInternalUseKinds = lib.filterAttrs (
+    name: value: !value.nixpkgsInternalUseAllowed
+  ) kinds;
+
+  automaticProblems = lib.mapAttrsToList (name: value: value.automatic // { kindName = name; }) (
+    lib.filterAttrs (name: value: value.automatic != null) kinds
+  );
 
   genAutomaticProblems =
     config: attrs:
@@ -148,7 +161,7 @@ rec {
     let
       types = lib.types;
       handlerType = types.enum handlers.levels;
-      problemKindType = types.enum kinds.known;
+      problemKindType = types.enum (attrNames kinds);
     in
     {
       handlers = lib.mkOption {
@@ -250,7 +263,8 @@ rec {
         record
         enum
         ;
-      kindType = enum kinds.manual;
+      # While we should only allow manual kinds, we need to allow `meta.problems = otherPackage.meta.problems`, which includes automatic ones as well
+      kindType = enum (attrNames kinds);
       subRecord = record {
         kind = kindType;
         message = str;
@@ -270,7 +284,7 @@ rec {
             let
               kindGroups = groupBy (kind: kind) (mapAttrsToList (name: problem: problem.kind or name) v);
             in
-            all (kind: kinds.manual' ? ${kind} && (kinds.unique' ? ${kind} -> length kindGroups.${kind} == 1)) (
+            all (kind: kinds ? ${kind} && (uniqueKinds ? ${kind} -> length kindGroups.${kind} == 1)) (
               attrNames kindGroups
             )
           );
@@ -294,14 +308,14 @@ rec {
           ++ concatLists (
             mapAttrsToList (
               kind: kindGroup:
-              optionals (!kinds.manual' ? ${kind}) (
+              optionals (!kinds ? ${kind}) (
                 map (
                   el:
                   "${ctx}.${el.name}: Problem kind ${kind}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${el.name}.kind`"
                 ) (filter (el: !el.explicit) kindGroup)
               )
               ++
-                optional (kinds.unique' ? ${kind} && length kindGroup > 1)
+                optional (uniqueKinds ? ${kind} && length kindGroup > 1)
                   "${ctx}: Problem kind ${kind} should be unique, but is used for these problems: ${
                     concatMapStringsSep ", " (el: el.name) kindGroup
                   }"
@@ -509,6 +523,12 @@ rec {
         );
       in
       processProblems pname problemsToHandle;
+
+  completeMetaProblems =
+    config: attrs:
+    mapAttrs (name: problem: { kind = name; } // problem) (
+      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+    );
 
   processProblems =
     pname: problemsToHandle:
