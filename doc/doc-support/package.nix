@@ -118,6 +118,8 @@ stdenvNoCC.mkDerivation (
         --script ./anchor-use.js \
         --toc-depth 1 \
         --section-toc-depth 1 \
+        --header ${./header.html}\
+        --no-navheader \
         manual.md \
         out/index.html
 
