@@ -4,6 +4,7 @@
   lib,
   pkgs,
   utils,
+  jdk25_headless,
   ...
 }:
 let
@@ -29,21 +30,16 @@ let
   );
 in
 {
-
   options = {
+    services.unifi.enable = lib.mkEnableOption "UniFi controller service";
 
-    services.unifi.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    services.unifi.jrePackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.unifiPackage.passthru.jrePackage or jdk25_headless;
+      defaultText = lib.literalExpression "unifiPackage.passthru.jrePackage";
+
       description = ''
-        Whether or not to enable the unifi controller service.
-      '';
-    };
-
-    services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
-      default = "jdk25_headless";
-      extraDescription = ''
-        Check the UniFi controller release notes to ensure it is supported.
+        Which Java runtime to use.
       '';
     };
 
@@ -56,6 +52,7 @@ in
     services.unifi.openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
+
       description = ''
         Whether or not to open the minimum required ports on the firewall.
 
@@ -69,6 +66,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 1024;
+
       description = ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
@@ -79,6 +77,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 4096;
+
       description = ''
         Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
@@ -89,15 +88,14 @@ in
       type = with lib.types; listOf str;
       default = [ ];
       example = lib.literalExpression ''["-Xlog:gc"]'';
+
       description = ''
         Set extra options to pass to the JVM.
       '';
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion =
@@ -128,16 +126,18 @@ in
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+
     users.groups.unifi = { };
 
+    # https://help.ubnt.com/hc/en-us/articles/218506997
     networking.firewall = lib.mkIf cfg.openFirewall {
-      # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080 # Port for UAP to inform controller.
         8880 # Port for HTTP portal redirect, if guest portal is enabled.
         8843 # Port for HTTPS portal redirect, ditto.
         6789 # Port for UniFi mobile speed test.
       ];
+
       allowedUDPPorts = [
         3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
@@ -151,6 +151,7 @@ in
 
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
+
       # Make sure package upgrades trigger a service restart
       restartTriggers = [
         cfg.unifiPackage
@@ -220,12 +221,13 @@ in
 
         # Needs network access
         PrivateNetwork = false;
+
         # Cannot be true due to OpenJDK
         MemoryDenyWriteExecute = false;
       };
     };
-
   };
+
   imports = [
     (lib.mkRemovedOptionModule [
       "services"
