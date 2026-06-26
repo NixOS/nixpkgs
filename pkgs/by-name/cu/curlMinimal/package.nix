@@ -96,6 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
   };
 
+  patches = [
+    # https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23
+    # According to <https://curl.se/mail/distros-2026-05/0000.html>, this fixes
+    # a performance regression, causing high CPU usage
+    ./fix-wakeup-consumption.patch
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
@@ -115,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     CXX = "${stdenv.cc.targetPrefix}c++";

@@ -5305,8 +5305,6 @@ with pkgs;
     sdk = true;
   };
 
-  openai = with python3Packages; toPythonApplication openai;
-
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
@@ -6509,8 +6507,8 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
-    libressl_4_1
     libressl_4_2
+    libressl_4_3
     ;
 
   openssl = openssl_3_6;

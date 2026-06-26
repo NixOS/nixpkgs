@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.17.1";
+  version = "5.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-IF+3Og67PrW3HuSnkarrjGl9RFHLrNEBo0CqmKliH1M=";
+    hash = "sha256-OI96936+4Jcx3VuPmHI2tcIssPxC7ofmLwWcvZxMw7E=";
   };
 
   pythonRelaxDeps = [

@@ -654,27 +654,93 @@ self: super: with self; {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  alibabacloud-actiontrail20200706 =
+    callPackage ../development/python-modules/alibabacloud-actiontrail20200706
+      { };
+
   alibabacloud-credentials = callPackage ../development/python-modules/alibabacloud-credentials { };
 
   alibabacloud-credentials-api =
     callPackage ../development/python-modules/alibabacloud-credentials-api
       { };
 
+  alibabacloud-cs20151215 = callPackage ../development/python-modules/alibabacloud-cs20151215 { };
+
+  alibabacloud-darabonba-array =
+    callPackage ../development/python-modules/alibabacloud-darabonba-array
+      { };
+
+  alibabacloud-darabonba-encode-util =
+    callPackage ../development/python-modules/alibabacloud-darabonba-encode-util
+      { };
+
+  alibabacloud-darabonba-map =
+    callPackage ../development/python-modules/alibabacloud-darabonba-map
+      { };
+
+  alibabacloud-darabonba-signature-util =
+    callPackage ../development/python-modules/alibabacloud-darabonba-signature-util
+      { };
+
+  alibabacloud-darabonba-string =
+    callPackage ../development/python-modules/alibabacloud-darabonba-string
+      { };
+
+  alibabacloud-darabonba-time =
+    callPackage ../development/python-modules/alibabacloud-darabonba-time
+      { };
+
+  alibabacloud-ecs20140526 = callPackage ../development/python-modules/alibabacloud-ecs20140526 { };
+
   alibabacloud-endpoint-util =
     callPackage ../development/python-modules/alibabacloud-endpoint-util
+      { };
+
+  alibabacloud-gateway-oss = callPackage ../development/python-modules/alibabacloud-gateway-oss { };
+
+  alibabacloud-gateway-oss-util =
+    callPackage ../development/python-modules/alibabacloud-gateway-oss-util
+      { };
+
+  alibabacloud-gateway-sls = callPackage ../development/python-modules/alibabacloud-gateway-sls { };
+
+  alibabacloud-gateway-sls-util =
+    callPackage ../development/python-modules/alibabacloud-gateway-sls-util
       { };
 
   alibabacloud-gateway-spi = callPackage ../development/python-modules/alibabacloud-gateway-spi { };
 
   alibabacloud-openapi-util = callPackage ../development/python-modules/alibabacloud-openapi-util { };
 
+  alibabacloud-oss-util = callPackage ../development/python-modules/alibabacloud-oss-util { };
+
+  alibabacloud-oss20190517 = callPackage ../development/python-modules/alibabacloud-oss20190517 { };
+
+  alibabacloud-ram20150501 = callPackage ../development/python-modules/alibabacloud-ram20150501 { };
+
+  alibabacloud-rds20140815 = callPackage ../development/python-modules/alibabacloud-rds20140815 { };
+
+  alibabacloud-sas20181203 = callPackage ../development/python-modules/alibabacloud-sas20181203 { };
+
+  alibabacloud-sls20201230 = callPackage ../development/python-modules/alibabacloud-sls20201230 { };
+
+  alibabacloud-sts20150401 = callPackage ../development/python-modules/alibabacloud-sts20150401 { };
+
   alibabacloud-tea = callPackage ../development/python-modules/alibabacloud-tea { };
 
+  alibabacloud-tea-openapi = callPackage ../development/python-modules/alibabacloud-tea-openapi { };
+
   alibabacloud-tea-util = callPackage ../development/python-modules/alibabacloud-tea-util { };
+
+  alibabacloud-tea-xml = callPackage ../development/python-modules/alibabacloud-tea-xml { };
+
+  alibabacloud-vpc20160428 = callPackage ../development/python-modules/alibabacloud-vpc20160428 { };
 
   aligator = callPackage ../development/python-modules/aligator { inherit (pkgs) aligator; };
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
+
+  aliyun-log-fastpb = callPackage ../development/python-modules/aliyun-log-fastpb { };
 
   aliyun-python-sdk-alimt = callPackage ../development/python-modules/aliyun-python-sdk-alimt { };
 
@@ -3582,6 +3648,8 @@ self: super: with self; {
   daphne = callPackage ../development/python-modules/daphne { };
 
   daqp = callPackage ../development/python-modules/daqp { };
+
+  darabonba-core = callPackage ../development/python-modules/darabonba-core { };
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
@@ -9205,6 +9273,8 @@ self: super: with self; {
   linode = callPackage ../development/python-modules/linode { };
 
   linode-api = callPackage ../development/python-modules/linode-api { };
+
+  linode-api4 = callPackage ../development/python-modules/linode-api4 { };
 
   linode-metadata = callPackage ../development/python-modules/linode-metadata { };
 
@@ -17703,6 +17773,10 @@ self: super: with self; {
   scalene = callPackage ../development/python-modules/scalene { };
 
   scales = callPackage ../development/python-modules/scales { };
+
+  scaleway = callPackage ../development/python-modules/scaleway { };
+
+  scaleway-core = callPackage ../development/python-modules/scaleway-core { };
 
   scalib = callPackage ../development/python-modules/scalib { };
 
