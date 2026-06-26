@@ -4,7 +4,7 @@
   fetchFromGitHub,
   obs-studio,
   cmake,
-  qtbase,
+  qt6,
   fetchpatch,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
 
   cmakeFlags = [

@@ -6,7 +6,7 @@
   pkg-config,
   obs-studio,
   libGL,
-  qtbase,
+  qt6,
   flatbuffers,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     obs-studio
     flatbuffers
     libGL
-    qtbase
+    qt6.qtbase
   ];
 
   dontWrapQtApps = true;

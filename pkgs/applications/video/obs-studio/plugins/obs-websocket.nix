@@ -5,7 +5,7 @@
   cmake,
   asio,
   obs-studio,
-  qtbase,
+  qt6,
   websocketpp,
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     asio
     obs-studio
-    qtbase
+    qt6.qtbase
     websocketpp
   ];
 
