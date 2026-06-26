@@ -1323,6 +1323,17 @@ lib.mapAttrs mkLicense (
       fullName = "Qwt exception 1.0";
     };
 
+    reticulum = {
+      # The Reticulum License restricts certain fields of use, notably systems
+      # intended to harm human beings and AI/ML training datasets. Such usage
+      # restrictions are incompatible with the Open Source Definition
+      # (https://opensource.org/osd), in particular "No Discrimination Against
+      # Fields of Endeavor".
+      free = false;
+      fullName = "Reticulum License";
+      url = "https://reticulum.network/license";
+    };
+
     ruby = {
       spdxId = "Ruby";
       fullName = "Ruby License";

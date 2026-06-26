@@ -858,7 +858,7 @@ in
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
   kbd-update-search-paths-patch = runTest ./kbd-update-search-paths-patch.nix;
   kea = runTest ./kea.nix;
-  keepalived = runTest ./keepalived.nix;
+  keepalived = discoverTests (import ./keepalived.nix);
   keepassxc = runTest ./keepassxc.nix;
   kerberos = handleTest ./kerberos/default.nix { };
   kernel-generic = handleTest ./kernel-generic { };
@@ -1646,6 +1646,7 @@ in
     "i686-linux"
   ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
+  systemd-initrd-non-nixos = runTest ./systemd-initrd-non-nixos.nix;
   systemd-initrd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];
     _module.args.systemdStage1 = true;

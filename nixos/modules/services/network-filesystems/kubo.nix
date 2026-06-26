@@ -332,8 +332,9 @@ in
     boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 7500000;
     boot.kernel.sysctl."net.core.wmem_max" = lib.mkDefault 7500000;
 
-    programs.fuse = lib.mkIf (cfg.autoMount && cfg.settings.Mounts.FuseAllowOther) {
-      userAllowOther = true;
+    programs.fuse = {
+      enable = lib.mkIf cfg.autoMount true;
+      userAllowOther = lib.mkIf cfg.settings.Mounts.fuseAllowOther true;
     };
 
     users.users = lib.mkIf (cfg.user == "ipfs") {

@@ -109,6 +109,11 @@ buildPythonPackage (finalAttrs: {
     '';
 
   disabledTestPaths = [
+    # MlflowVisBackend uses the deprecated mlflow filesystem store, which is
+    # throws an error since mlflow 3.13. See upstream issue:
+    # https://github.com/open-mmlab/mmengine/issues/1687
+    "tests/test_visualizer/test_vis_backend.py::TestMLflowVisBackend"
+
     # Require unpackaged aim
     "tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 

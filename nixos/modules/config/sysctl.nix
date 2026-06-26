@@ -74,7 +74,9 @@ in
           }
           (
             ''
+              set +e
               mmap_rnd_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              set -e
               if [[ -z "$mmap_rnd_bits_max" ]]; then
                 echo "Unable to determine mmap_rnd_bits_max. Check your kernel configfile is valid."
                 exit 1
@@ -83,7 +85,9 @@ in
             ''
             # HAVE_ARCH_MMAP_RND_COMPAT_BITS is not defined on 32-bit architectures or LoongArch64
             + lib.optionalString (with pkgs.stdenv.hostPlatform; (!is32bit && !isLoongArch64)) ''
+              set +e
               mmap_rnd_compat_bits_max=$(grep "^CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=" $configfile | grep --only-matching "[0-9]*$")
+              set -e
               if [[ -z "$mmap_rnd_compat_bits_max" ]]; then
                 echo "Unable to determine mmap_rnd_compat_bits_max. Check your kernel configfile is valid."
                 exit 1

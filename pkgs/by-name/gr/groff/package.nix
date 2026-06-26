@@ -48,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
-    # TODO: apply everywhere on rebuild
+  patches = [
     # This revert a upstream refactor in continuous rendering mode, but this
     # causes a big performance regression for big manpages like
     # `man 5 configuration.nix`.

@@ -42,6 +42,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  preCheck = ''
+    export OMP_NUM_THREADS=1
+  '';
+
   # RuntimeError: torch.compile is not supported on Python 3.14+
   disabledTests = lib.optionals (pythonAtLeast "3.14") [ "test_up" ];
 
