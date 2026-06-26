@@ -1128,6 +1128,7 @@ in
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
+  nginx-lua = runTest ./nginx-lua.nix;
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
