@@ -54,6 +54,13 @@ buildGoModule (finalAttrs: {
   # this is set due to failure of testset `net/http/httptest` on darwin
   __darwinAllowLocalNetworking = true;
 
+  # TestServerMultipleRequestsSameConnection binds a unix-domain socket inside
+  # the build sandbox; on Darwin that path exceeds the 104-byte sun_path limit,
+  # so bind() fails with EINVAL. Skip just that test there.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^TestServerMultipleRequestsSameConnection$"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
