@@ -19,6 +19,8 @@
   coreutils,
   lapack,
 
+  openmpCheckPhaseHook,
+
   # Reverse dependency
   sage,
 
@@ -121,6 +123,10 @@ buildPythonPackage (finalAttrs: {
     ln -s $out/${python.sitePackages}/numpy/_core/lib/pkgconfig $out/lib/pkgconfig
     ln -s ${placeholder "out"}/${finalAttrs.passthru.coreIncludeInnerDir} $out/include
   '';
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
+  ];
 
   preCheck = ''
     pushd $out
