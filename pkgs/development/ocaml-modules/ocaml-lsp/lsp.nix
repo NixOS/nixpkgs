@@ -25,7 +25,9 @@
   ocamlformat-rpc-lib,
   ocaml,
   version ?
-    if lib.versionAtLeast ocaml.version "5.4" then
+    if lib.versionAtLeast ocaml.version "5.5" then
+      "1.27.0"
+    else if lib.versionAtLeast ocaml.version "5.4" then
       "1.26.0"
     else if lib.versionAtLeast ocaml.version "5.3" then
       "1.23.1"
