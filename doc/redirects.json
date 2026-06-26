@@ -105,6 +105,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-modularServiceCompliance-nixos": [
+    "index.html#ex-modularServiceCompliance-nixos"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
@@ -901,6 +904,18 @@
   ],
   "glibcxxassertions": [
     "index.html#glibcxxassertions"
+  ],
+  "tester-modularServiceCompliance": [
+    "index.html#tester-modularServiceCompliance"
+  ],
+  "tester-modularServiceCompliance-inputs": [
+    "index.html#tester-modularServiceCompliance-inputs"
+  ],
+  "tester-modularServiceCompliance-manual": [
+    "index.html#tester-modularServiceCompliance-manual"
+  ],
+  "tester-modularServiceCompliance-return": [
+    "index.html#tester-modularServiceCompliance-return"
   ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
