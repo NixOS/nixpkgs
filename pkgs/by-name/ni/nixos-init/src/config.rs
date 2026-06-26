@@ -14,6 +14,8 @@ pub struct Config {
     pub sh_binary: Option<String>,
     pub etc_basedir: Option<String>,
     pub etc_metadata_image: Option<String>,
+    #[serde(default)]
+    pub etc_overlay_mutable: bool,
 }
 
 impl Config {
