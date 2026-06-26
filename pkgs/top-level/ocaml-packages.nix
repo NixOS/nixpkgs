@@ -691,6 +691,10 @@ let
 
         flex = callPackage ../development/ocaml-modules/flex { };
 
+        flint = callPackage ../development/ocaml-modules/flint {
+          flint-c = pkgs.flint;
+        };
+
         fmt = callPackage ../development/ocaml-modules/fmt { };
 
         fontconfig = callPackage ../development/ocaml-modules/fontconfig {
