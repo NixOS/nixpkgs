@@ -5,6 +5,7 @@
   fetchFromGitHub,
   python,
   setuptools,
+  pytestCheckHook,
   # dependencies
   regex,
   udapi,
@@ -12,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "udtools";
-  version = "0.2.7";
+  version = "0.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UniversalDependencies";
     repo = "tools";
     tag = "py${finalAttrs.version}";
-    hash = "sha256-P1gx6JRq1oWCXzB2uO/eCrw8ZgJ+0Y/0cvlLtj+X7SY=";
+    hash = "sha256-PeMIjxHU99HHNwT/D6UiS5HqxXj66ngRTYfA1xn9uOw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/udtools";
@@ -31,9 +32,8 @@ buildPythonPackage (finalAttrs: {
     regex
   ];
 
-  # pycheck tests are not enabled because they try to import packages/types
-  # that I can't seem to find anywhere on the internet.
-  # https://github.com/UniversalDependencies/tools/issues/158
+  nativeCheckInputs = [ pytestCheckHook ];
+
   pythonImportsCheck = [ "udtools" ];
 
   passthru.updateScript = nix-update-script {
