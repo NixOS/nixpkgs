@@ -841,7 +841,7 @@ in
                   SupplementaryGroups = cfg.extraGroups;
 
                   ExecStartPre = "${crowdsec} -t -error";
-                  ExecStart = "${crowdsec} -info";
+                  ExecStart = crowdsec;
                   ExecReload = [
                     "${crowdsec} -t -error"
                     "${lib.getExe' pkgs.coreutils "kill"} -HUP $MAINPID"
