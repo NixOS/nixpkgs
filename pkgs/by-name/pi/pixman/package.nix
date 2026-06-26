@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   libpng,
+  openmpCheckPhaseHook,
   glib, # just passthru
 
   # for passthru.tests
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    openmpCheckPhaseHook
     __flattenIncludeHackHook
   ];
 
@@ -60,11 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Darm-simd=disabled"
     "-Dneon=disabled"
   ];
-
-  preConfigure = ''
-    # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
-  '';
 
   enableParallelBuilding = true;
 

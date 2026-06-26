@@ -19,6 +19,8 @@
   coreutils,
   lapack,
 
+  openmpCheckPhaseHook,
+
   # Reverse dependency
   sage,
 
@@ -91,10 +93,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  preConfigure = ''
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
   buildInputs = [
     blas
     lapack
@@ -121,6 +119,10 @@ buildPythonPackage (finalAttrs: {
     ln -s $out/${python.sitePackages}/numpy/_core/lib/pkgconfig $out/lib/pkgconfig
     ln -s ${placeholder "out"}/${finalAttrs.passthru.coreIncludeInnerDir} $out/include
   '';
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
+  ];
 
   preCheck = ''
     pushd $out
