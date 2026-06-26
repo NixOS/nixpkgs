@@ -5,7 +5,7 @@
   cmake,
   curl,
   obs-studio,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
 
   cmakeFlags = [
