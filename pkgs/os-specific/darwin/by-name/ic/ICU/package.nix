@@ -104,48 +104,38 @@ let
     ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    postPatch =
-      lib.optionalString self.finalPackage.doCheck (
-        ''
-          # Skip test for missing encodingSamples data.
-          substituteInPlace test/cintltst/ucsdetst.c \
-            --replace-fail "&TestMailFilterCSS" "NULL"
+    postPatch = lib.optionalString self.finalPackage.doCheck ''
+      # Skip test for missing encodingSamples data.
+      substituteInPlace test/cintltst/ucsdetst.c \
+        --replace-fail "&TestMailFilterCSS" "NULL"
 
-          # Disable failing tests
-          substituteInPlace test/cintltst/cloctst.c \
-            --replace-fail 'TESTCASE(TestCanonicalForm);' ""
+      # Disable failing tests
+      substituteInPlace test/cintltst/cloctst.c \
+        --replace-fail 'TESTCASE(TestCanonicalForm);' ""
 
-          substituteInPlace test/intltest/rbbitst.cpp \
-            --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
+      substituteInPlace test/intltest/rbbitst.cpp \
+        --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
 
-          # Add missing test data. It’s not included in the source release.
-          chmod u+w "$NIX_BUILD_TOP/source/icu"
-          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu78.src} icu/testdata
-        ''
-        + lib.optionalString stdenv.hostPlatform.isx86_64 ''
-          # These tests fail under Rosetta 2 with a floating-point exception.
-          substituteInPlace test/intltest/caltest.cpp \
-            --replace-fail 'TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);' "" \
-            --replace-fail 'TESTCASE_AUTO(Test22750Roll);' ""
-        ''
-      )
-      + ''
-        # Otherwise `make install` is broken.
-        substituteInPlace Makefile.in \
-          --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
-        substituteInPlace config/dist-data.sh \
-          --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+      # Add missing test data. It’s not included in the source release.
+      chmod u+w "$NIX_BUILD_TOP/source/icu"
+      tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu78.src} icu/testdata
 
-        # Make sure this ICU build puts C++ symbols in a distinct namespace to avoid symbol clashes with other ICU
-        # implementations (including both the system ICU and builds of the upstream ICU).
-        # This breaks binary compatibility for the C++ API, but it’s not ABI stable anyway. Without doing this,
-        # `dotnet` crashes on macOS 26.4 when linked against `libicucore.A.dylib` from Nixpkgs.
-        substituteInPlace common/unicode/uvernum.h \
-          --replace-fail 'U_ICU_VERSION_SUFFIX ' 'U_ICU_VERSION_SUFFIX _nix'
-        # Only enable symbol renaming for C++ symbols. C symbols need to remain unversioned for compatibility.
-        substituteInPlace common/unicode/uversion.h \
-          --replace-fail U_DISABLE_RENAMING 0
-      '';
+      # Otherwise `make install` is broken.
+      substituteInPlace Makefile.in \
+        --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
+      substituteInPlace config/dist-data.sh \
+        --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+
+      # Make sure this ICU build puts C++ symbols in a distinct namespace to avoid symbol clashes with other ICU
+      # implementations (including both the system ICU and builds of the upstream ICU).
+      # This breaks binary compatibility for the C++ API, but it’s not ABI stable anyway. Without doing this,
+      # `dotnet` crashes on macOS 26.4 when linked against `libicucore.A.dylib` from Nixpkgs.
+      substituteInPlace common/unicode/uvernum.h \
+        --replace-fail 'U_ICU_VERSION_SUFFIX ' 'U_ICU_VERSION_SUFFIX _nix'
+      # Only enable symbol renaming for C++ symbols. C symbols need to remain unversioned for compatibility.
+      substituteInPlace common/unicode/uversion.h \
+        --replace-fail U_DISABLE_RENAMING 0
+    '';
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall =

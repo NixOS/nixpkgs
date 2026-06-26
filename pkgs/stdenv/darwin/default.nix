@@ -18,7 +18,7 @@
     if localSystem.isAarch64 then
       import ./bootstrap-files/aarch64-apple-darwin.nix
     else
-      import ./bootstrap-files/x86_64-apple-darwin.nix
+      throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
 
@@ -285,7 +285,6 @@ let
   };
   sdkDarwinPackages = prevStage: {
     inherit (prevStage.darwin)
-      Csu
       adv_cmds
       copyfile
       libiconv
@@ -1059,7 +1058,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             prevStage.updateAutotoolsGnuConfigScriptsHook
             prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
-          ++ lib.optionals localSystem.isx86_64 [ prevStage.darwin.Csu ]
           ++ (with prevStage.darwin; [
             binutils
             binutils.bintools
