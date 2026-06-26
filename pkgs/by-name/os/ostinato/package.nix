@@ -3,12 +3,9 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  qmake,
+  qt5,
   copyDesktopItems,
-  wrapQtAppsHook,
   makeDesktopItem,
-  qtbase,
-  qtscript,
   protobuf_21,
   libpcap,
   wireshark,
@@ -19,6 +16,11 @@
 }:
 let
   protobuf = protobuf_21;
+
+  ostinatoIcon = fetchurl {
+    url = "https://ostinato.org/images/site-logo.png";
+    sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "ostinato";
@@ -31,23 +33,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
   };
 
-  ostinatoIcon = fetchurl {
-    url = "https://ostinato.org/images/site-logo.png";
-    sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
-  };
-
   buildInputs = [
-    qtbase
+    qt5.qtbase
     protobuf
     libpcap
-    qtscript
+    qt5.qtscript
     libnl
   ];
 
   nativeBuildInputs = [
     copyDesktopItems
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   patches = [ ./drone_ini.patch ];
