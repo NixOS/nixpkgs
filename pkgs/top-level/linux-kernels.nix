@@ -348,8 +348,6 @@ in
 
         framework-laptop-kmod = callPackage ../os-specific/linux/framework-laptop-kmod { };
 
-        fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
-
         gasket = callPackage ../os-specific/linux/gasket { };
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
@@ -662,6 +660,7 @@ in
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
         nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
+        fwts-efi-runtime = throw "fwts-efi-runtime has been replaced by efi_test starting with kernel version 4.8, see https://bugs.launchpad.net/fwts/+bug/2138473"; # added 2026-05-16
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
