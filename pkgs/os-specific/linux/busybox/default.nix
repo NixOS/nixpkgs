@@ -270,12 +270,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Relies on suid/guid bits
         skip-testcase cpio.tests "cpio restores suid/sgid bits"
 
-        # Weird failures, looks related to our sandbox
-        skip-testcase tar.tests "tar does not extract into symlinks"
-        skip-testcase tar.tests "tar -k does not extract into symlinks"
-        skip-testcase tar.tests "tar Symlink attack: create symlink and then write through it"
-        skip-testcase tar.tests "tar Symlinks and hardlinks coexist"
-
         popd
       '';
     });
