@@ -1470,6 +1470,8 @@ let
 
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
+        ocaml-flint = callPackage ../development/ocaml-modules/flint { };
+
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
         ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
