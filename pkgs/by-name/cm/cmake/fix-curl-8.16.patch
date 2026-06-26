@@ -1,0 +1,13 @@
+diff --git a/Source/CTest/cmCTestCurl.h b/Source/CTest/cmCTestCurl.h
+index 7836f4b9c78a1d103eee515d618856a6712b4480..9113890b5a12cb157b691b66d96e25d0fd4b50ef 100644
+--- a/Source/CTest/cmCTestCurl.h
++++ b/Source/CTest/cmCTestCurl.h
+@@ -52,7 +52,7 @@ private:
+   std::vector<std::string> HttpHeaders;
+   std::string HTTPProxyAuth;
+   std::string HTTPProxy;
+-  curl_proxytype HTTPProxyType;
++  long HTTPProxyType;
+   bool UseHttp10 = false;
+   bool Quiet = false;
+   int TimeOutSeconds = 0;

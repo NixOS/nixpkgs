@@ -1,0 +1,11 @@
+--- a/nmcli/_system.py
++++ b/nmcli/_system.py
+@@ -43,7 +43,7 @@ class System:
+     def nmcli(self, parameters: CommandParameter) -> str:
+         if isinstance(parameters, str):
+             parameters = [parameters]
+-        c = ['sudo', 'nmcli'] if self._use_sudo else ['nmcli']
++        c = ['sudo', '@nmcli@'] if self._use_sudo else ['@nmcli@']
+         commands = c + parameters
+         try:
+             env = dict(os.environ, **{'LANG': self._lang})

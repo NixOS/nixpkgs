@@ -1,0 +1,15 @@
+diff --git a/src/daemon.c b/src/daemon.c
+index aefaf2d..7c004d0 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -193,9 +193,9 @@ get_current_system_dm_type (void)
+                 basename = g_file_get_basename (file);
+                 g_object_unref (file);
+ 
+-                if (g_strcmp0 (basename, "lightdm.service") == 0)
++                if (g_file_test (PATH_LIGHTDM_CONF, G_FILE_TEST_EXISTS))
+                         return DISPLAY_MANAGER_TYPE_LIGHTDM;
+-                else if (g_strcmp0 (basename, "gdm.service") == 0)
++                else if (g_file_test (PATH_GDM_CUSTOM, G_FILE_TEST_EXISTS))
+                         return DISPLAY_MANAGER_TYPE_GDM;
+         }

@@ -1,0 +1,9 @@
+--- a/BuildTools/SCons/SConscript.boot
++++ b/BuildTools/SCons/SConscript.boot
+@@ -129,5 +129 @@ vars.Add(PathVariable("sparkle_public_dsa_key", "Optional path to a public DSA k
+-env_ENV = {
+-    'PATH' : os.environ['PATH'],
+-    'LD_LIBRARY_PATH' : os.environ.get("LD_LIBRARY_PATH", ""),
+-    'TERM' : os.environ.get("TERM", ""),
+-}
++env_ENV = os.environ
