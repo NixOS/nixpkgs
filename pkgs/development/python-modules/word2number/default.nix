@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-dgHPEfieNDZnP6+YvywvN3ZzmeICav0WMYKkWDSJ/LE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '1.0'" "version = '${version}'"
+  '';
+
   build-system = [
     setuptools-scm
   ];
