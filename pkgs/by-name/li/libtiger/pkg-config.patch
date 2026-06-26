@@ -1,0 +1,37 @@
+From 3ebeb0932edc01b7768216dc7d3b3c5aac21fba0 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sun, 26 Feb 2023 17:21:48 +0000
+Subject: [PATCH] configure.ac: detect pkg-config properly
+
+When cross compiling, the relevant pkg-config program might be prefixed
+with the name of the host platform, so the previous check was not
+correct.  Detect pkg-config properly, using the appropriate macro.
+---
+ configure.ac | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 2f63684..bf2faf7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -46,7 +46,7 @@ AC_CHECK_FUNCS([select nanosleep usleep])
+ 
+ AC_TYPE_SIZE_T
+ 
+-AC_CHECK_PROG(HAVE_PKG_CONFIG,pkg-config,yes)
++PKG_PROG_PKG_CONFIG
+ 
+ AC_ARG_ENABLE(doc, [  --disable-doc           Disable building documentation (default enabled)])
+ if test "x$enable_doc" != "xno"
+@@ -57,7 +57,7 @@ else
+ fi
+ AM_CONDITIONAL(HAVE_DOXYGEN,test "${HAVE_DOXYGEN}" = "yes")
+ 
+-if test "x$HAVE_PKG_CONFIG" = "xyes"
++if test "x$PKG_CONFIG" != "x"
+ then
+   PKG_CHECK_MODULES(KATE,kate >= 0.2.0)
+   PKG_CHECK_MODULES(PANGOCAIRO,pangocairo >= 1.16)
+-- 
+2.37.1
+

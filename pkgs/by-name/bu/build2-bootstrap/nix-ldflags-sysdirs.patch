@@ -1,0 +1,42 @@
+diff --git a/libbuild2/cc/common.cxx b/libbuild2/cc/common.cxx
+index f848003c..0f14f9a5 100644
+--- a/libbuild2/cc/common.cxx
++++ b/libbuild2/cc/common.cxx
+@@ -966,6 +966,17 @@ namespace build2
+     void
+     msvc_extract_library_search_dirs (const strings&, dir_paths&); // msvc.cxx
+ 
++    static strings split (const string& s, const char delim) {
++      stringstream ss (s);
++      string item;
++      strings result;
++
++      while (getline (ss, item, delim)) {
++        result.push_back (item);
++      }
++      return result;
++    }
++
+     dir_paths common::
+     extract_library_search_dirs (const scope& bs) const
+     {
+@@ -987,8 +998,19 @@ namespace build2
+           msvc_extract_library_search_dirs (v, r);
+         else
+           gcc_extract_library_search_dirs (v, r);
++
+       };
+ 
++      // NIX_LDFLAGS are implicitly used when linking,
++      // so its -L flags effectively specify system dirs.
++      // However, they are only enabled when actually linking and are thus
++      // not detected by build2, so we need to manually pick them up here.
++      if (auto s = getenv ("NIX_LDFLAGS")) {
++        // TODO: do we need more robust args splitting here? e.g. shlex.split
++        auto args = split (s.value (), ' ');
++        gcc_extract_library_search_dirs (args, r);
++      }
++
+       // Note that the compiler mode options are in sys_lib_dirs.
+       //
+       if (auto l = bs[c_loptions]) extract (*l, c_loptions);

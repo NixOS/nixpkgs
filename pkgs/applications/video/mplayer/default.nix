@@ -1,0 +1,308 @@
+{
+  config,
+  lib,
+  stdenv,
+  fetchurl,
+  fetchsvn,
+  pkg-config,
+  freetype,
+  yasm,
+  ffmpeg_7,
+  aalibSupport ? true,
+  aalib,
+  fontconfigSupport ? true,
+  fontconfig,
+  freefont_ttf,
+  fribidiSupport ? true,
+  fribidi,
+  x11Support ? true,
+  libx11,
+  libxext,
+  libGLU,
+  libGL,
+  xineramaSupport ? true,
+  libxinerama,
+  xvSupport ? true,
+  libxv,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  screenSaverSupport ? true,
+  libxscrnsaver,
+  vdpauSupport ? false,
+  libvdpau,
+  cddaSupport ? !stdenv.hostPlatform.isDarwin,
+  cdparanoia,
+  dvdnavSupport ? !stdenv.hostPlatform.isDarwin,
+  libdvdnav,
+  dvdreadSupport ? true,
+  libdvdread,
+  bluraySupport ? true,
+  libbluray,
+  amrSupport ? false,
+  amrnb,
+  amrwb,
+  cacaSupport ? true,
+  libcaca,
+  lameSupport ? true,
+  lame,
+  speexSupport ? true,
+  speex,
+  theoraSupport ? true,
+  libtheora,
+  x264Support ? false,
+  x264,
+  jackaudioSupport ? false,
+  libjack2,
+  pulseSupport ? config.pulseaudio or false,
+  libpulseaudio,
+  bs2bSupport ? false,
+  libbs2b,
+  v4lSupport ? false,
+  libv4l,
+  # For screenshots
+  libpngSupport ? true,
+  libpng,
+  libjpegSupport ? true,
+  libjpeg,
+  useUnfreeCodecs ? false,
+  buildPackages,
+  versionCheckHook,
+}:
+
+assert xineramaSupport -> x11Support;
+assert xvSupport -> x11Support;
+
+let
+
+  codecs_src =
+    let
+      dir = "http://www.mplayerhq.hu/MPlayer/releases/codecs/";
+      version = "20071007";
+    in
+    if stdenv.hostPlatform.system == "i686-linux" then
+      fetchurl {
+        url = "${dir}/essential-${version}.tar.bz2";
+        sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
+      }
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "${dir}/essential-amd64-${version}.tar.bz2";
+        sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
+      }
+    else if stdenv.hostPlatform.system == "powerpc-linux" then
+      fetchurl {
+        url = "${dir}/essential-ppc-${version}.tar.bz2";
+        sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
+      }
+    else
+      null;
+
+  codecs =
+    if codecs_src != null then
+      stdenv.mkDerivation {
+        pname = "MPlayer-codecs-essential";
+
+        src = codecs_src;
+
+        installPhase = ''
+          mkdir $out
+          cp -prv * $out
+        '';
+
+        meta.license = lib.licenses.unfree;
+      }
+    else
+      null;
+
+  crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
+
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mplayer";
+  version = "1.5-unstable-2024-12-21";
+
+  src = fetchsvn {
+    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
+    rev = "38668";
+    hash = "sha256-ezWYBkhiSBgf/SeTrO6sKGbL/IrX+82KXCIlqYMEtgY=";
+  };
+
+  prePatch = ''
+    echo "${finalAttrs.version}" > VERSION
+    sed -i /^_install_strip/d configure
+
+    rm -rf ffmpeg
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    pkg-config
+    yasm
+  ]
+  ++ lib.optionals cacaSupport [
+    libcaca # caca-config
+  ];
+  buildInputs = [
+    freetype
+    ffmpeg_7
+  ]
+  ++ lib.optional aalibSupport aalib
+  ++ lib.optional fontconfigSupport fontconfig
+  ++ lib.optional fribidiSupport fribidi
+  ++ lib.optionals x11Support [
+    libx11
+    libxext
+    libGLU
+    libGL
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional xvSupport libxv
+  ++ lib.optional theoraSupport libtheora
+  ++ lib.optional cacaSupport libcaca
+  ++ lib.optional xineramaSupport libxinerama
+  ++ lib.optional dvdnavSupport libdvdnav
+  ++ lib.optional dvdreadSupport libdvdread
+  ++ lib.optional bluraySupport libbluray
+  ++ lib.optional cddaSupport cdparanoia
+  ++ lib.optional jackaudioSupport libjack2
+  ++ lib.optionals amrSupport [
+    amrnb
+    amrwb
+  ]
+  ++ lib.optional x264Support x264
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional screenSaverSupport libxscrnsaver
+  ++ lib.optional lameSupport lame
+  ++ lib.optional vdpauSupport libvdpau
+  ++ lib.optional speexSupport speex
+  ++ lib.optional libpngSupport libpng
+  ++ lib.optional libjpegSupport libjpeg
+  ++ lib.optional bs2bSupport libbs2b
+  ++ lib.optional v4lSupport libv4l;
+
+  strictDeps = true;
+
+  configurePlatforms = [ ];
+  configureFlags = [
+    (lib.enableFeature true "freetype")
+    (lib.enableFeature fontconfigSupport "fontconfig")
+    (lib.enableFeature x11Support "x11")
+    (lib.enableFeature x11Support "gl")
+    (lib.enableFeature xineramaSupport "xinerama")
+    (lib.enableFeature xvSupport "xv")
+    (lib.enableFeature alsaSupport "alsa")
+    (lib.enableFeature screenSaverSupport "xss")
+    (lib.enableFeature vdpauSupport "vdpau")
+    (lib.enableFeature cddaSupport "cdparanoia")
+    (lib.enableFeature dvdnavSupport "dvdnav")
+    (lib.enableFeature bluraySupport "bluray")
+    (lib.enableFeature amrSupport "libopencore_amrnb")
+    (lib.enableFeature cacaSupport "caca")
+    (lib.enableFeature lameSupport "mp3lame")
+    (lib.enableFeature (!lameSupport) "mp3lame-lavc")
+    (lib.enableFeature speexSupport "speex")
+    (lib.enableFeature theoraSupport "theora")
+    (lib.enableFeature x264Support "x264")
+    (lib.enableFeature (!x264Support) "x264-lavc")
+    (lib.enableFeature pulseSupport "pulse")
+    (lib.enableFeature v4lSupport "v4l2")
+    (lib.enableFeature v4lSupport "tv-v4l2")
+    (lib.enableFeature v4lSupport "radio")
+    (lib.enableFeature v4lSupport "radio-v4l2")
+    (lib.enableFeature v4lSupport "radio-capture")
+    (lib.enableFeature false "xanim")
+    (lib.enableFeature false "xvid")
+    (lib.enableFeature false "xvid-lavc")
+    (lib.enableFeature false "ossaudio")
+    (lib.enableFeature false "ffmpeg_a")
+    "--yasm=${buildPackages.yasm}/bin/yasm"
+    # Note, the `target` vs `host` confusion is intentional.
+    "--target=${stdenv.hostPlatform.config}"
+  ]
+  ++ lib.optional (!jackaudioSupport) "--disable-jack"
+  ++ lib.optional (useUnfreeCodecs && codecs != null && !crossBuild) "--codecsdir=${codecs}"
+  ++ lib.optional (stdenv.hostPlatform.isx86 && !crossBuild) "--enable-runtime-cpudetection"
+  ++ lib.optional fribidiSupport "--enable-fribidi"
+  ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) "--enable-vidix"
+  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-fbdev"
+  ++ lib.optionals crossBuild [
+    "--enable-cross-compile"
+    "--disable-vidix-pcidb"
+    "--with-vidix-drivers=no"
+  ];
+
+  preConfigure = ''
+    configureFlagsArray+=(
+      "--cc=$CC"
+      "--host-cc=$CC_FOR_BUILD"
+      "--as=$AS"
+      "--nm=$NM"
+      "--ar=$AR"
+      "--ranlib=$RANLIB"
+      "--windres=$WINDRES"
+    )
+  '';
+
+  postConfigure = ''
+    echo CONFIG_MPEGAUDIODSP=yes >> config.mak
+  '';
+
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      # Fixes compilation with newer versions of clang that make these warnings errors by default.
+      NIX_CFLAGS_COMPILE = "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
+    }
+    // {
+      NIX_LDFLAGS = toString (
+        lib.optionals fontconfigSupport [
+          "-lfontconfig"
+        ]
+        ++ lib.optionals fribidiSupport [
+          "-lfribidi"
+        ]
+        ++ lib.optionals x11Support [
+          "-lX11"
+          "-lXext"
+        ]
+        ++ lib.optionals x264Support [
+          "-lx264"
+        ]
+        ++ [ "-lfreetype" ]
+      );
+    };
+
+  installTargets = [ "install" ] ++ lib.optional x11Support "install-gui";
+
+  enableParallelBuilding = true;
+
+  # Provide a reasonable standard font when not using fontconfig. Maybe we should symlink here.
+  postInstall = lib.optionalString (!fontconfigSupport) ''
+    mkdir -p $out/share/mplayer
+    cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+    if test -f $out/share/applications/mplayer.desktop ; then
+      echo "NoDisplay=True" >> $out/share/applications/mplayer.desktop
+    fi
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--help";
+  doInstallCheck = true;
+
+  __structuredAttrs = true;
+
+  meta = {
+    description = "Movie player that supports many video formats";
+    homepage = "http://mplayerhq.hu";
+    license = lib.licenses.gpl2Only;
+    # Picking it up: no idea about the origin of some choices (but seems fine)
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
+  };
+})

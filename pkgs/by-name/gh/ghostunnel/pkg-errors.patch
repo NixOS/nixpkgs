@@ -1,0 +1,26 @@
+diff --git a/go.mod b/go.mod
+index d06c2e9117..f560c1cc69 100644
+--- a/go.mod
++++ b/go.mod
+@@ -192,6 +192,7 @@
+ 	github.com/nwaples/rardecode v1.1.3 // indirect
+ 	github.com/pelletier/go-toml/v2 v2.3.0 // indirect
+ 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
++	github.com/pkg/errors v0.9.1 // indirect
+ 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+ 	github.com/prometheus/client_model v0.6.2 // indirect
+ 	github.com/prometheus/common v0.67.5 // indirect
+diff --git a/go.sum b/go.sum
+index 4dea0025f3..1edce71302 100644
+--- a/go.sum
++++ b/go.sum
+@@ -460,6 +460,9 @@
+ github.com/pierrec/lz4 v2.6.1+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
+ github.com/pires/go-proxyproto v0.11.0 h1:gUQpS85X/VJMdUsYyEgyn59uLJvGqPhJV5YvG68wXH4=
+ github.com/pires/go-proxyproto v0.11.0/go.mod h1:ZKAAyp3cgy5Y5Mo4n9AlScrkCZwUy0g3Jf+slqQVcuU=
++github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
++github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
++github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
+ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

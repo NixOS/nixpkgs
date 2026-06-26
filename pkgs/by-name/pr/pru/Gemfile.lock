@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    pru (0.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pru
+
+BUNDLED WITH
+   2.1.4
