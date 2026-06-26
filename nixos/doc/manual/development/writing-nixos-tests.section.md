@@ -43,6 +43,8 @@ We refer to the whole test above as a test module, whereas the values
 in [`nodes.<name>`](#test-opt-nodes) and [`containers.<name>`](#test-opt-containers)
 are NixOS modules themselves.
 
+All test options are listed in [](#sec-test-options-reference).
+
 The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described [below](#ssec-test-script)). During the test, it will start one or more
 virtual machines and/or `systemd-nspawn` containers, the configuration of which is described by
@@ -109,6 +111,8 @@ pkgs.testers.runNixOSTest {
 ```
 
 `runNixOSTest` returns a derivation that runs the test.
+It accepts a test module with [these options](#sec-test-options-reference) available.
+It defaults to re-using `pkgs` for the [`hostPkgs`](#test-opt-hostPkgs) & [`node.pkgs`](#test-opt-node.pkgs) options.
 
 ## Test machines {#ssec-nixos-test-machines}
 
