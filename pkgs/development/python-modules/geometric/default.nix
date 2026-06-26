@@ -28,10 +28,6 @@ buildPythonPackage rec {
     six
   ];
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
