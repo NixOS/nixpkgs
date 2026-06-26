@@ -335,6 +335,40 @@ in
     hub = lib.mkOption {
       type = lib.types.submodule {
         options = {
+          updateOnStart = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = ''
+              Whether to run `cscli hub update` as part of the
+              `ExecStartPre` of `crowdsec.service`.
+
+              When `true` (the default, matching previous behaviour),
+              the service refreshes the hub data on every start.
+              This requires network connectivity to
+              `hub.crowdsec.net` at service-start time; if the call
+              fails (DNS unavailable, egress denied, air-gapped
+              host), the `ExecStartPre` script aborts under
+              `set -euo pipefail` and the service fails to start.
+              Combined with the `DynamicUser` + `StateDirectory`
+              semantics of `crowdsec-firewall-bouncer-register`,
+              the failure cascades permanently — see the
+              referenced issue for the cascade.
+
+              Set to `false` for:
+
+              - `pkgs.testers.nixosTest` VMs (no network by default).
+              - Air-gapped or DNS-strict deployments.
+              - First-boot environments where the service starts
+                before `network-online.target` is reachable.
+
+              When `false`, the hub data on disk is used as-is at
+              startup. Periodic updates via
+              `services.crowdsec.autoUpdateService = true` continue
+              to function independently and are not affected by
+              this option.
+            '';
+          };
+
           collections = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
@@ -553,6 +587,8 @@ in
       scriptArray = [
         "set -euo pipefail"
         "${lib.getExe' pkgs.coreutils "mkdir"} -p '${hubDir}'"
+      ]
+      ++ lib.optionals cfg.hub.updateOnStart [
         "${lib.getExe cscli} hub update"
       ]
       ++ lib.optionals (cfg.hub.collections != [ ]) [
