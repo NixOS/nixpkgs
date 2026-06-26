@@ -248,6 +248,43 @@ You can install the standalone parsers and queries directly without installing `
 })
 ```
 
+### Treesitter setup using WASM parsers and queries {#neovim-plugin-treesitter-wasm}
+
+Neovim can load WASM parsers when it is built with Wasmtime support.
+In nixpkgs, WASM parser plugins are available from the `wasi32` cross package set:
+
+```nix
+(pkgs.wrapNeovim (pkgs.neovim-unwrapped.override { wasmSupport = true; }) {
+  configure = {
+    packages.myPlugins =
+      with pkgs.pkgsCross.wasi32.vimPlugins;
+      let
+        # Select the grammars you need
+        treesitter-grammars = with nvim-treesitter-parsers; [
+          nix
+          python
+        ];
+        # Queries are needed for treesitter based syntax highlighting and folds.
+        treesitter-queries = map (p: p.associatedQuery) treesitter-grammars;
+      in
+      {
+        start = [
+          # regular plugins
+        ]
+        ++ treesitter-grammars
+        ++ treesitter-queries;
+      };
+  };
+})
+```
+
+Do not install both native and WASM parsers for the same language.
+For example, installing both `pkgs.vimPlugins.nvim-treesitter-parsers.nix` and
+`pkgs.pkgsCross.wasi32.vimPlugins.nvim-treesitter-parsers.nix` is invalid because Neovim
+loads the first `parser/nix.*` found on `runtimepath`.
+
+Use `:checkhealth vim.treesitter` to verify Nix-managed WASM parsers.
+
 You can enable treesitter features for installed grammars in a `FileType` autocommand
 or in an `ftplugin/<language>.lua` script, e.g.
 
