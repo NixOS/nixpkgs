@@ -224,14 +224,14 @@ in
                   notification_dir = lib.mkOption {
                     type = lib.types.path;
                     default = "${config_paths.config_dir}/notifications";
-                    defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_dir}/notifications";
+                    defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.config_dir}/notifications";
                     description = "Path to directory where configuration files for notification plugins are kept.";
                   };
 
                   plugin_dir = lib.mkOption {
                     type = lib.types.path;
                     default = "${config_paths.config_dir}/plugins";
-                    defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.data_dir}/plugins";
+                    defaultText = lib.literalExpression "\${config.services.crowdsec.settings.config.config_paths.config_dir}/plugins";
                     description = "Path to directory where the plugin binaries/scripts are located.";
                   };
 
@@ -907,9 +907,7 @@ in
             linkNotificationPlugin = name: {
               name = "${config_paths.plugin_dir}/notification-${name}";
               value."C+".argument = "${cfg.package}/bin/notification-${name}";
-            }
-
-            ;
+            };
 
             directories = map createDirectory dirs;
 
@@ -921,9 +919,6 @@ in
               (createFile config_paths.simulation_path (toYaml cfg.settings.simulation))
               (createFile "${cfg.settings.config.crowdsec_service.acquisition_dir}/0-nixos-generated.yaml" (
                 lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
-              ))
-              (createFile "${cfg.settings.config.api.server.console_path}" (
-                toYaml cfg.settings.console.configuration
               ))
             ];
 
