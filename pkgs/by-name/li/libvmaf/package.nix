@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvmaf";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "netflix";
     repo = "vmaf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6mwU2so1YM2pyWkJbDHVl443GgWtQazbBv3gTMBq5NA=";
+    sha256 = "sha256-4KD3A8odDPJ8pG7hFIGEoQkInh5zjSh+w6yClEa+Wis=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libvmaf";
