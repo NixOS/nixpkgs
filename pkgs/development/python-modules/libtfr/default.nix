@@ -4,7 +4,7 @@
   buildPythonPackage,
 
   # build-system
-  setuptools,
+  setuptools_80,
   pkg-config,
   cython,
   pkgconfig,
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
