@@ -61,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dneon=disabled"
   ];
 
-  preConfigure = ''
-    # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
-  '';
-
   enableParallelBuilding = true;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
