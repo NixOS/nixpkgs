@@ -124,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Etjean
       mulatta
+      David-Moody
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;
