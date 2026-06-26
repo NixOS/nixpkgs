@@ -12,6 +12,7 @@
   httpx,
   portend,
   psutil,
+  pydantic,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -24,30 +25,33 @@
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "3.2.0";
+  version = "3.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
     tag = "v${version}";
-    hash = "sha256-SqYLwbl+AyeqgYIwAd/Z39BSPXaYSXMnM6DAGUv3vQ8=";
+    hash = "sha256-b0iNu9CN4Tca2hGU0Rpr/v0Q4KWNPQNCp9BY5YnzjzA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     anyio
+    starlette
   ];
 
   optional-dependencies = {
     daphne = [ daphne ];
     examples = [
-      aiosqlite
       fastapi
-      sqlalchemy
-      starlette
+      pydantic
       uvicorn
+    ];
+    examples_db = [
+      aiosqlite
+      sqlalchemy
     ]
     ++ sqlalchemy.optional-dependencies.asyncio;
     granian = [ granian ];
