@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "1.9.6";
+  version = "1.9.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "markqvist";
     repo = "Sideband";
     tag = finalAttrs.version;
-    hash = "sha256-Dbhi4Sz+a42OILXcSfNNM4UDqMV5gHJ5xfYUMEON3ws=";
+    hash = "sha256-YL8wqZGBrMEtm+mLVjyaZpTPj8XVM0YUjP6Kfo7QHfw=";
   };
 
   # Unable to upstream all of this
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace sbapp/main.py \
       --replace-fail \
         "1.9.2" \
-        "1.9.6"
+        "1.9.7"
   '';
 
   build-system = with python3Packages; [
@@ -59,8 +59,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sh
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pycodec2
       pyaudio
+      pycodec2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pyobjus
