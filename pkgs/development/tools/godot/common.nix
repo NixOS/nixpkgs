@@ -99,7 +99,15 @@ let
 
   dottedVersion = lib.replaceStrings [ "-" ] [ "." ] version + lib.optionalString withMono ".mono";
 
-  harfbuzz-icu = harfbuzz.override { withIcu = true; };
+  harfbuzz-raster = harfbuzz.override {
+    withRaster = lib.versionAtLeast version "4.7";
+    withCairo = lib.versionAtLeast version "4.7";
+  };
+
+  harfbuzz-icu = harfbuzz-raster.override {
+    withIcu = true;
+    harfbuzz = harfbuzz-raster;
+  };
 
   mkTarget =
     target:
@@ -341,6 +349,8 @@ let
         );
 
       attrs = finalAttrs: {
+        __structuredAttrs = true;
+
         pname = "godot${suffix}";
         inherit version;
 
@@ -400,10 +410,16 @@ let
           dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
         '';
 
-        # darwin needs $HOME/.cache/clang/ModuleCache
-        preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-          export HOME=$(mktemp -d)
-        '';
+        # Godot 4.7 with system HarfBuzz needs explicit raster linkage, but should be resolved with 4.7.1.
+        # See https://github.com/godotengine/godot/pull/120568
+        preBuild =
+          lib.optionalString (!withBuiltins && lib.versionAtLeast version "4.7") ''
+            export NIX_LDFLAGS="$NIX_LDFLAGS -lharfbuzz-raster"
+          ''
+          # darwin needs $HOME/.cache/clang/ModuleCache.
+          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            export HOME=$(mktemp -d)
+          '';
 
         # From: https://github.com/godotengine/godot/blob/4.2.2-stable/SConstruct
         sconsFlags = mkSconsFlagsFromAttrSet (
@@ -645,7 +661,7 @@ let
           # when building the mono editor, we need to build the assemblies
           # before generating the bundle
           + lib.optionalString stdenv.hostPlatform.isDarwin ''
-            scons $sconsFlags generate_bundle=yes
+            scons "''${sconsFlags[@]}" generate_bundle=yes
           ''
         );
 
@@ -675,8 +691,18 @@ let
                 --replace-fail "Godot Engine" "Godot Engine ${
                   lib.versions.majorMinor version + lib.optionalString withMono " (Mono)"
                 }"
-              cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
-              cp icon.png "$out/share/icons/godot.png"
+              ${
+                if lib.versionOlder version "4.7" then
+                  ''
+                    cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
+                    cp icon.png "$out/share/icons/godot.png"
+                  ''
+                else
+                  ''
+                    cp misc/logo/icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
+                    cp misc/logo/icon.png "$out/share/icons/godot.png"
+                  ''
+              }
             ''
             + lib.optionalString withMono ''
               cp -r bin/GodotSharp "$out"/libexec/
