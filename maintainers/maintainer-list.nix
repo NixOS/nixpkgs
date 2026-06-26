@@ -8467,6 +8467,12 @@
     github = "eum3l";
     name = "Emil";
   };
+  euphemism = {
+    email = "nixpkgs@sidwell.dev";
+    github = "euphemism";
+    githubId = 1179754;
+    name = "Nicholas Sidwell";
+  };
   eureka-cpu = {
     email = "github.eureka@gmail.com";
     github = "eureka-cpu";
