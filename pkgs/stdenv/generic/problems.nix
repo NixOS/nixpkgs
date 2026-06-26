@@ -48,6 +48,8 @@ rec {
     groupBy
     subtractLists
     genAttrs
+    concatMap
+    unique
     ;
 
   handlers = rec {
@@ -119,14 +121,16 @@ rec {
           allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
           allowBrokenPredicate =
-            if config ? allowBrokenPredicate then
-              lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
-                "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
-                config.allowBrokenPredicate
-            else
-              x: false;
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
+              "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
+              config.allowBrokenPredicate;
         in
-        attrs: attrs.meta.broken or false && !allowBroken && !allowBrokenPredicate attrs;
+        if allowBroken then
+          attrs: false
+        else if config ? allowBrokenPredicate then
+          attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
+        else
+          attrs: attrs ? meta.broken && attrs.meta.broken;
       value.message = "This package is broken.";
     }
   ];
@@ -330,7 +334,10 @@ rec {
         };
       };
 
-    Returns both the structure itself for inspection and a function that can query it with very few allocations/lookups
+      Returns:
+      - the structure itself for inspection
+      - a function that can query the structure with very few allocations/lookups
+      - a list of problem kinds/names/packages that require handling
 
     This allows collapsing arbitrarily many problem handlers/matchers into a predictable structure that can be queried in a predictable and fast way
   */
@@ -351,6 +358,20 @@ rec {
             }) forPackage
           ) config.problems.handlers
         );
+
+      # Lookup table for all the kinds/names/packages that actually need to be
+      # handled
+      definedConstraints = listToAttrs (
+        map (ident: {
+          name = "${ident}s"; # plural
+          value = unique (
+            concatMap (
+              constraint:
+              optionals (constraint.${ident} != null && constraint.handler != "ignore") [ (constraint.${ident}) ]
+            ) constraints
+          );
+        }) identOrder
+      );
 
       getHandler =
         list:
@@ -410,26 +431,27 @@ rec {
       switch = doLevel 0 constraints;
     in
     {
-      inherit switch;
+      inherit switch definedConstraints;
       handlerForProblem =
         if isString switch then
-          pname: name: kind:
+          kind: name: pname:
           switch
         else
-          pname: name: kind:
+          kind:
           let
-            switch' = switch.kindSpecific.${kind} or switch.kindFallback;
+            kindSwitch = switch.kindSpecific.${kind} or switch.kindFallback;
           in
-          if isString switch' then
-            switch'
+          if isString kindSwitch then
+            name: pname: kindSwitch
           else
+            name:
             let
-              switch'' = switch'.nameSpecific.${name} or switch'.nameFallback;
+              nameSwitch = kindSwitch.nameSpecific.${name} or kindSwitch.nameFallback;
             in
-            if isString switch'' then
-              switch''
+            if isString nameSwitch then
+              pname: nameSwitch
             else
-              switch''.packageSpecific.${pname} or switch''.packageFallback;
+              pname: nameSwitch.packageSpecific.${pname} or nameSwitch.packageFallback;
     };
 
   genCheckProblems =
@@ -438,44 +460,50 @@ rec {
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
         handlerForProblem
+        definedConstraints
         ;
-      # Makes sure that automatic problems can cache with just config applied
-      automaticProblemsConfigCache = map (
-        problem: problem // { condition = problem.condition config; }
+
+      # All the problem kinds that actually need to be checked
+      configuredProblems = definedConstraints.kinds ++ definedConstraints.names;
+
+      # Filter out any problems that are always ignored in config.problems.
+      # Makes sure to cache the condition by appliny config, and the handler
+      # by applying the problem's kind and name
+      automaticProblemsConfigCache = concatMap (
+        problem:
+        optional (elem problem.kindName configuredProblems) {
+          condition = problem.condition config;
+          handler = handlerForProblem problem.kindName problem.kindName;
+        }
       ) automaticProblems;
     in
     attrs:
-    let
-      pname = getName attrs;
-      manualProblems = attrs.meta.problems or { };
-    in
     if
       # Fast path for when there's no problem that needs to be handled
-      # No automatic problems that needs handling
       all (
-        problem:
-        problem.condition attrs -> handlerForProblem pname problem.kindName problem.kindName == "ignore"
+        problem: problem.condition attrs -> problem.handler (getName attrs) == "ignore"
       ) automaticProblemsConfigCache
       && (
         # No manual problems
-        manualProblems == { }
+        !attrs ? meta.problems
         # Or all manual problems are ignored
-        || all (name: handlerForProblem pname name (manualProblems.${name}.kind or name) == "ignore") (
-          attrNames manualProblems
-        )
+        || all (
+          name: handlerForProblem (attrs.meta.problems.${name}.kind or name) name (getName attrs) == "ignore"
+        ) (attrNames attrs.meta.problems)
       )
     then
       null
     else
       # Slow path, only here we actually figure out which problems we need to handle
       let
+        pname = getName attrs;
         problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
             # Kind falls back to the name
             kind = problem.kind or name;
-            handler = handlerForProblem pname name kind;
+            handler = handlerForProblem kind name pname;
             inherit problem;
           }) problems
         );
