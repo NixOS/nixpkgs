@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4YHC77Hgvl2A15klilJx0JdP9VWSpqBSj9q//faMNM8=";
   };
 
@@ -105,6 +105,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/carygravel/scantpaper/blob/${src.tag}/changelog.md";
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://github.com/carygravel/scantpaper";
     license = licenses.gpl3Only;
