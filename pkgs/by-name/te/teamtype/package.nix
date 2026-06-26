@@ -5,6 +5,8 @@
   versionCheckHook,
   installShellFiles,
   nix-update-script,
+  pkg-config,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,7 +24,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-OIOffnCC9PlT/SXPOuTnKx3feZnkHP+jzbQIJWX0tzk=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+  ];
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   postInstall = ''
     installManPage \
