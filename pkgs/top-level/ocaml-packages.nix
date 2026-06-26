@@ -1373,6 +1373,8 @@ let
 
         mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
 
+        mlcuddidl = callPackage ../development/ocaml-modules/mlcuddidl { };
+
         mldoc = callPackage ../development/ocaml-modules/mldoc { };
 
         mlgmpidl = callPackage ../development/ocaml-modules/mlgmpidl { };
