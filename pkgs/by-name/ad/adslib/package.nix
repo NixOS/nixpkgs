@@ -5,18 +5,18 @@
   meson,
   ninja,
   pkg-config,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "adslib";
-  version = "0-unstable-2026-04-27";
+  version = "113.0.34-1";
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "ADS";
-    rev = "77953d58f2690436e82db9954e2e55878c5edaa4";
-    hash = "sha256-UDPuzqD1krEZa7436k1NvE0lJUmNYG4kiP5fstoRDMc=";
+    tag = finalAttrs.version;
+    hash = "sha256-Kh8BDioZdwSdATHPgZ7Ar3/E0y3eRRpG/38/2uHZEEQ=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # Downstream consumers (e.g. pyads) load the shared library as
-    # `adslib.so` rather than the meson default `libadslib.so`.
-    ln -s libadslib.so $out/lib/adslib.so
+    # `adslib.so` rather than the meson default `libAdsLib.so`.
+    ln -s libAdsLib.so $out/lib/adslib.so
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Beckhoff protocol to communicate with TwinCAT devices";
