@@ -661,7 +661,7 @@ in
 
   pain-control = mkTmuxPlugin {
     pluginName = "pain-control";
-    version = "unstable-2020-02-18";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-pain-control";
