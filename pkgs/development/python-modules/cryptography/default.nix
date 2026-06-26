@@ -71,6 +71,12 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--disable-pytest-warnings" ];
 
+  disabledTests = [
+    # Tries to allocate 1 TiB with vm.overcommit_memory=1
+    # https://github.com/pyca/cryptography/pull/14782
+    "test_argon2_malloc_failure"
+  ];
+
   disabledTestPaths = [
     # save compute time by not running benchmarks
     "tests/bench"

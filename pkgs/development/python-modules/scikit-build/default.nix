@@ -22,25 +22,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.18.1";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
+    hash = "sha256-RuGy1xND0U5MB9fmCQLmc8eN77miwoK3CtgPuFAq3i4=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "setuptools-75.0-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
-      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
-    })
-
-    # <https://github.com/scikit-build/scikit-build/pull/1160>
-    ./fix-cmake-4.patch
-  ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
   #  E   UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.

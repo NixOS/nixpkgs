@@ -4,6 +4,7 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   gnumake,
   tinycc,
   gnused,
@@ -33,6 +34,7 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
+      coreutils
       gnumake
       tinycc.compiler
       gnused
@@ -52,6 +54,14 @@ bash.runCommand "${pname}-${version}"
     # Unpack
     tar xzf ${src}
     cd sed-${version}
+
+    # Defeat parallel-build automake regen race: refresh generated-file
+    # mtimes and restore +x on autotools helpers.
+    touch Makefile.in Makefile aclocal.m4 config.h.in configure 2>/dev/null || true
+    for f in */Makefile.in; do touch "$f" 2>/dev/null || true; done
+    chmod +x configure config.guess config.sub install-sh missing compile \
+      depcomp mkinstalldirs help2man 2>/dev/null || true
+    [ -d build-aux ] && chmod +x build-aux/* 2>/dev/null || true
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"

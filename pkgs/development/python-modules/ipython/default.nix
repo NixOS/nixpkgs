@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
 
   # Build dependencies
@@ -16,6 +15,7 @@
   matplotlib-inline,
   pexpect,
   prompt-toolkit,
+  psutil,
   pygments,
   stack-data,
   traitlets,
@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ipython";
-  version = "9.9.0";
+  version = "9.14.0";
   outputs = [
     "out"
     "man"
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-SPvtGy3l4scXfu+hRKun/LgtrFFPCbV+KsnaNN21QiA=";
+    hash = "sha256-byf/Dx2eoFDgVR9xVovEs02KuleejxEcW0F19ErGtKo=";
   };
 
   build-system = [ setuptools ];
@@ -57,6 +57,7 @@ buildPythonPackage (finalAttrs: {
     matplotlib-inline
     pexpect
     prompt-toolkit
+    psutil
     pygments
     stack-data
     traitlets
@@ -84,16 +85,7 @@ buildPythonPackage (finalAttrs: {
     testpath
   ];
 
-  disabledTests = [
-    # UnboundLocalError: local variable 'child' referenced before assignment
-    "test_system_interrupt"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
-    "test_run_debug_twice"
-    "test_run_debug_twice_with_breakpoint"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];

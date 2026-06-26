@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld64";
-  version = "956.6";
+  version = "957.1";
 
   outputs = [
     "out"
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple-oss-distributions";
     repo = "ld64";
     tag = "ld64-${finalAttrs.version}";
-    hash = "sha256-2VlBjlCZ+ZPKGZ0f5UuG3jJTLZIBXf8IZOiD6snheh4=";
+    hash = "sha256-KUkEKz2jQq815ls25u0JMYmad4cN9PS/nC3E5eV19co=";
   };
 
   patches = [
@@ -137,9 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xar
   ];
-
-  # ld built with this fails to link glib's gio on x86_64 darwin
-  hardeningDisable = [ "libcxxhardeningfast" ];
 
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 

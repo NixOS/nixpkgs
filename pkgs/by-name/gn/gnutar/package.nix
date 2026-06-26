@@ -40,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     "info"
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional stdenv.hostPlatform.isCygwin gettext;
 

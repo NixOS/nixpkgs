@@ -1,3 +1,8 @@
+let
+  sourcesJson = (builtins.fromJSON (builtins.readFile ./sources.json));
+  inherit (builtins) split filter isString;
+in
+
 {
   lib,
   fetchurl,
@@ -57,7 +62,7 @@ let
     }
     .${buildPlatform.system};
 
-  sources = (lib.importJSON ./sources.json).${arch}.linux.mescc;
+  sources = sourcesJson."${arch}.linux.mescc";
 
   inherit (sources)
     libc_mini_SOURCES
@@ -67,7 +72,7 @@ let
     ;
 
   # add symlink() to libc+tcc so we can use it in ln-boot
-  libc_tcc_SOURCES = sources.libc_tcc_SOURCES ++ [ "lib/linux/symlink.c" ];
+  libc_tcc_SOURCES = "${sources.libc_tcc_SOURCES} lib/linux/symlink.c";
   setjmp_x86_64 = ./setjmp_x86_64.c;
 
   meta = {
@@ -254,39 +259,31 @@ let
 
   CC = toString ([ cc ] ++ ccArgs);
 
-  stripExt = source: lib.replaceStrings [ ".c" ] [ "" ] (baseNameOf source);
-
-  compile =
-    source:
-    kaem.runCommand (stripExt source) { } ''
-      mkdir ''${out}
-      cd ''${out}
-      ${CC} -c ${srcPrefix}/${source}
-    '';
-
-  crt1 = compile "/lib/linux/${arch}-mes-mescc/crt1.c";
-
-  getRes = suffix: res: "${res}/${res.name}${suffix}";
-
-  archive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (getRes ".o") sources}";
-  sourceArchive = out: sources: "catm ${out} ${lib.concatMapStringsSep " " (getRes ".s") sources}";
+  crt1 =
+    kaem.runCommand "${pname}-crt1-${version}"
+      {
+        inherit meta;
+      }
+      ''
+        mkdir ''${out}
+        cd ''${out}
+        ${CC} -c ${srcPrefix}/lib/linux/${arch}-mes-mescc/crt1.c
+      '';
 
   mkLib =
     libname: sources:
-    let
-      os = map compile sources;
-    in
     kaem.runCommand "${pname}-${libname}-${version}"
       {
         inherit meta;
       }
       ''
+        cd ${srcPost}/mes-${version}
         LIBDIR=''${out}/lib
         mkdir -p ''${LIBDIR}
-        cd ''${LIBDIR}
+        catm ''${LIBDIR}/${libname}.c ${sources}
 
-        ${archive "${libname}.a" os}
-        ${sourceArchive "${libname}.s" os}
+        ${CC} -S -o ''${LIBDIR}/${libname}.s ''${out}/lib/${libname}.c
+        ${CC} -c -o ''${LIBDIR}/${libname}.a ''${LIBDIR}/${libname}.s
       '';
 
   libc-mini = mkLib "libc-mini" libc_mini_SOURCES;
@@ -338,6 +335,9 @@ let
 
   # Build mes itself
   compiler =
+    let
+      objs = filter isString (split " " mes_SOURCES);
+    in
     kaem.runCommand "${pname}-${version}"
       {
         inherit pname version;
@@ -353,8 +353,19 @@ let
       }
       ''
         mkdir -p ''${out}/bin
+        ${lib.concatMapStringsSep "\n" (obj: ''
+          ${srcPost.bin}/bin/mes-m2 -e main ${srcPost.bin}/bin/mescc.scm -- \
+            -D HAVE_CONFIG_H=1 \
+            -I ${srcPrefix}/include \
+            -I ${srcPrefix}/include/linux/${arch} \
+            -I ${srcPost}/mes-${version}/src \
+            -c \
+            -o ${lib.removePrefix "src/" obj}.o \
+            ${srcPost}/mes-${version}/${obj}
+        '') objs}
 
         ${srcPost.bin}/bin/mes-m2 -e main ${srcPost.bin}/bin/mescc.scm -- \
+          -I ${srcPost}/mes-${version}/src \
           -L ''${srcPrefix}/lib \
           -L ${libs}/lib \
           -lc \
@@ -362,7 +373,7 @@ let
           -nostdlib \
           -o ''${out}/bin/mes \
           ${libs}/lib/${arch}-mes/crt1.o \
-          ${lib.concatMapStringsSep " " (getRes ".o") (map compile mes_SOURCES)}
+          ${lib.concatMapStringsSep " " (obj: "${lib.removePrefix "src/" obj}.o") objs}
       '';
 in
 {

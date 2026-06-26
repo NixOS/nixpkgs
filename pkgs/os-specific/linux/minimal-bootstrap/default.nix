@@ -184,6 +184,9 @@ lib.makeScope
           tinycc = tinycc-musl;
           gawk = gawk-mes;
           gnumakeBoot = gnumake;
+          # GNU Make's release tarball relies on preserved mtimes for
+          # pregenerated Autotools files.
+          gnutar = gnutar-musl;
         };
 
         gnumake-static = callPackage ./gnumake/static.nix {
@@ -366,61 +369,83 @@ lib.makeScope
           writeTextFile
           writeText
           ;
-        test = kaem.runCommand "minimal-bootstrap-test" { } (
-          ''
+
+        tests = {
+          bootstrap-chain = kaem.runCommand "minimal-bootstrap-bootstrap-chain-test" { } ''
             echo ${bash.tests.get-version}
-            echo ${bash-static.tests.get-version}
             echo ${bash_2_05.tests.get-version}
             echo ${binutils.tests.get-version}
-            echo ${binutils-static.tests.get-version}
             echo ${bison.tests.get-version}
             echo ${bzip2.tests.get-version}
-            echo ${bzip2-static.tests.get-version}
             echo ${coreutils-musl.tests.get-version}
-            echo ${coreutils-static.tests.get-version}
             echo ${diffutils.tests.get-version}
-            echo ${diffutils-static.tests.get-version}
             echo ${findutils.tests.get-version}
-            echo ${findutils-static.tests.get-version}
             echo ${gawk.tests.get-version}
             echo ${gawk-mes.tests.get-version}
-            echo ${gawk-static.tests.get-version}
-            echo ${gcc46.tests.get-version}
-            echo ${gcc46-cxx.tests.hello-world}
-            echo ${gcc10.tests.hello-world}
-            echo ${gcc-latest.tests.hello-world}
             echo ${gnugrep.tests.get-version}
-            echo ${gnugrep-static.tests.get-version}
             echo ${gnum4.tests.get-version}
             echo ${gnumake-musl.tests.get-version}
-            echo ${gnumake-static.tests.get-version}
-            echo ${gnupatch-static.tests.get-version}
             echo ${gnused.tests.get-version}
             echo ${gnused-mes.tests.get-version}
-            echo ${gnused-static.tests.get-version}
             echo ${gnutar.tests.get-version}
             echo ${gnutar-latest.tests.get-version}
             echo ${gnutar-musl.tests.get-version}
-            echo ${gnutar-static.tests.get-version}
             echo ${gzip.tests.get-version}
-            echo ${gzip-static.tests.get-version}
             echo ${heirloom.tests.get-version}
             echo ${mes.compiler.tests.get-version}
             echo ${musl.tests.hello-world}
-            echo ${patchelf-static.tests.get-version}
             echo ${python.tests.get-version}
             echo ${tinycc-mes.compiler.tests.chain}
             echo ${tinycc-musl.compiler.tests.hello-world}
             echo ${xz.tests.get-version}
-          ''
-          + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
-            echo ${gcc-glibc.tests.hello-world}
-            echo ${glibc.tests.hello-world}
-          '')
-          + ''
             mkdir ''${out}
-          ''
-        );
+          '';
+
+          static-tools = kaem.runCommand "minimal-bootstrap-static-tools-test" { } ''
+            echo ${bash-static.tests.get-version}
+            echo ${binutils-static.tests.get-version}
+            echo ${bzip2-static.tests.get-version}
+            echo ${bzip2-static.tests.compress}
+            echo ${coreutils-static.tests.get-version}
+            echo ${diffutils-static.tests.get-version}
+            echo ${findutils-static.tests.get-version}
+            echo ${gawk-static.tests.get-version}
+            echo ${gnugrep-static.tests.get-version}
+            echo ${gnumake-static.tests.get-version}
+            echo ${gnupatch-static.tests.get-version}
+            echo ${gnused-static.tests.get-version}
+            echo ${gnutar-static.tests.get-version}
+            echo ${gzip-static.tests.get-version}
+            echo ${patchelf-static.tests.get-version}
+            echo ${xz-static.tests.get-version}
+            mkdir ''${out}
+          '';
+
+          compiler = kaem.runCommand "minimal-bootstrap-compiler-test" { } (
+            ''
+              echo ${gcc46.tests.get-version}
+              echo ${gcc46-cxx.tests.hello-world}
+              echo ${gcc10.tests.hello-world}
+              echo ${gcc-latest.tests.hello-world}
+            ''
+            + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
+              echo ${gcc-glibc.tests.hello-world}
+              echo ${glibc.tests.hello-world}
+            '')
+            + ''
+              mkdir ''${out}
+            ''
+          );
+
+          full = kaem.runCommand "minimal-bootstrap-test" { } ''
+            echo ${tests.bootstrap-chain}
+            echo ${tests.static-tools}
+            echo ${tests.compiler}
+            mkdir ''${out}
+          '';
+        };
+
+        test = tests.full;
       }
       // (lib.optionalAttrs (hostPlatform.libc == "glibc")) {
         gcc-glibc = callPackage ./gcc/glibc.nix {

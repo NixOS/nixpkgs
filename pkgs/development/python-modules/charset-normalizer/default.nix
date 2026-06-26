@@ -4,10 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
+  ast-serialize,
   mypy,
   pytestCheckHook,
   requests,
   setuptools,
+  withMypyc ? !isPyPy,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +32,12 @@ buildPythonPackage rec {
   build-system = [
     setuptools
   ]
-  ++ lib.optional (!isPyPy) mypy;
+  ++ lib.optionals withMypyc [
+    ast-serialize
+    mypy
+  ];
 
-  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString (!isPyPy) "1";
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString withMypyc "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

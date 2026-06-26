@@ -481,9 +481,6 @@ stdenv.mkDerivation (
           hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
-        ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-      ]
       ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
@@ -491,24 +488,18 @@ stdenv.mkDerivation (
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.4") [
-        (fetchpatch2 {
-          name = "lcevcdec-4.0.0-compat.patch";
-          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
-          hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
-        })
-      ]
-      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
-        (fetchpatch2 {
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
-          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
-        })
-      ]
       ++ optionals (lib.versionOlder version "7.1.2") [
         (fetchpatch2 {
           name = "unbreak-svt-av1-3.0.0.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
           hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "6" && lib.versionOlder version "7.1.4") [
+        (fetchpatch2 {
+          name = "svt-av1-4.0.0-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
+          hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
       ];
 
@@ -840,7 +831,7 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang ]
+    ++ optionals withCudaLLVM [ clang.cc ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =

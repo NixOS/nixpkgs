@@ -63,11 +63,11 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     asn1crypto
     cryptography
+    lxml
     pyhanko-certvalidator
     pyyaml
     requests
     tzlocal
-    lxml
   ];
 
   optional-dependencies = {

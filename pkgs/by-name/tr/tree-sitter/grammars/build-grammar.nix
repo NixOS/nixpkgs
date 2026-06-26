@@ -27,6 +27,8 @@ stdenv.mkDerivation (
 
     inherit version src;
 
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       jq
     ]

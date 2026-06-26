@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  setuptools,
+  setuptools_80,
   django,
   coreschema,
   itypes,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-nNUzQbBaT7woI3fmvPvIM0SVDnt4iC2rQ9bDgUeFzLA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     django

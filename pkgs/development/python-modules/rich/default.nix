@@ -25,16 +25,16 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich";
-  version = "14.3.3";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
-    tag = "v${version}";
-    hash = "sha256-6udVO7N17ineQozlCG/tI9jJob811gqb4GtY50JZFb0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Uk3r6aYhrjYJ8GrMKfdlv3/muK/uUynd4pd1yWCwSOM=";
   };
 
   build-system = [ poetry-core ];
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
-    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Textualize/rich/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

@@ -3,7 +3,6 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatchling,
@@ -19,31 +18,26 @@
   cloudpickle,
   email-validator,
   dirty-equals,
+  hypothesis,
+  inline-snapshot,
   jsonschema,
   pytestCheckHook,
   pytest-mock,
   pytest-run-parallel,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.12.5";
+  version = "2.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-9TRLtVNBw2WHQnS0XFHg16Q7FdpTf3e2nb5qE5rlLUA=";
+    hash = "sha256-G4Xo6BF6tOn4g/qG3RNDP3/+lYnCOuw3AB1OrVOGcSA=";
   };
-
-  patches = lib.optionals (lib.versionAtLeast python.version "3.14.1") [
-    # Fix build with python 3.14.1
-    (fetchpatch {
-      url = "https://github.com/pydantic/pydantic/commit/53cb5f830207dd417d20e0e55aab2e6764f0d6fc.patch";
-      hash = "sha256-Y1Ob1Ei0rrw0ua+0F5L2iE2r2RdpI9DI2xuiu9pLr5Y=";
-    })
-  ];
 
   postPatch = ''
     sed -i "/--benchmark/d" pyproject.toml
@@ -68,15 +62,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cloudpickle
     dirty-equals
+    hypothesis
+    (inline-snapshot.overridePythonAttrs { doCheck = false; })
     jsonschema
     pytest-mock
     pytest-run-parallel
+    pytest-timeout
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     "tests/benchmarks"
+    "tests/pydantic_core/benchmarks"
 
     # avoid cyclic dependency
     "tests/test_docs.py"

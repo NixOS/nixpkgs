@@ -35,7 +35,6 @@
   lz4,
   openssl,
   libgcrypt,
-  libgpg-error,
   libidn2,
   curl,
   zlib,
@@ -106,6 +105,7 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? true,
+  withImds ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -142,6 +142,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
   withTimedated ? true,
@@ -190,7 +191,7 @@ assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
 let
-  wantCurl = withRemote || withImportd;
+  wantCurl = withRemote || withImportd || withImds;
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -201,13 +202,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.2";
+  version = "261";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NXmmSV7/9WIW6C8wjdOwaerCy4v7Zcrd8+XDzcS8rEk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6IB1ZEQqQ0impwBhCaLZAEgMVkVFU61JDVlGotxNzGQ=";
   };
 
   # PATCH POLICY
@@ -308,11 +309,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      # pefile is only required to trigger a check in meson to actually build
-      # ukify. This module should never appear in the runtime closure of ukify.
-      # Instead the pefile from buildInputs should be used.
-      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
-      ++ lib.optional withUkify ps.pefile
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -331,7 +328,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   ++ lib.optionals withGcrypt [
     libgcrypt
-    libgpg-error
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -347,7 +343,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withCryptsetup cryptsetup
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
@@ -498,6 +494,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "apparmor" withApparmor)
     (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
@@ -539,6 +536,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
     (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysinstall" withSysinstall)
     (lib.mesonBool "sysusers" withSysusers)
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
@@ -780,7 +778,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          systemd-repart-factory-reset
+          # systemd-repart-factory-reset # broken upstream
           ;
       }
       // {

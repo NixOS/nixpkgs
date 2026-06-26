@@ -19,7 +19,7 @@
   ompdSupport ? true,
   ompdGdbSupport ? ompdSupport,
   getVersionFile,
-  fetchpatch,
+  openmpCheckPhaseHook,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     lit
+  ];
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
   ];
 
   buildInputs = [

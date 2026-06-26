@@ -270,6 +270,13 @@ stdenv.mkDerivation {
         --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
     done
 
+    # Unlike Apple's PlistBuddy, xcbuild's only accepts capitalized commands,
+    # so the usage-description probe in permissions.prf always fails and the
+    # darwin permission plugins (Bluetooth, camera, ...) are silently never
+    # linked into qmake-built apps.
+    substituteInPlace mkspecs/features/permissions.prf \
+      --replace-fail "-c 'print " "-c 'Print "
+
     substituteInPlace mkspecs/common/macx.conf \
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
@@ -327,7 +334,12 @@ stdenv.mkDerivation {
   postFixup = ''
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
-    fixQtBuiltinPaths "$out" '*.pr?'
+    # fixQtBuiltinPaths reads qtPluginPrefix/qtQmlPrefix from the environment,
+    # but the setup hook only exports them for downstream packages; without
+    # them e.g. $$[QT_INSTALL_PLUGINS] in qt.prf is rewritten to "$out/"
+    # instead of "$out/${qtPluginPrefix}", breaking static plugin linking.
+    qtPluginPrefix=${qtPluginPrefix} qtQmlPrefix=${qtQmlPrefix} \
+      fixQtBuiltinPaths "$out" '*.pr?'
 
     # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
     # but we need it to be the output of this derivation.

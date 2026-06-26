@@ -17,6 +17,7 @@
   fetchpatch,
   makeWrapper,
   coq2html,
+  dune,
 }@args:
 let
   lib = import ../build-support/coq/extra-lib.nix { inherit (args) lib; };

@@ -134,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "frama-c";
-    broken = !lib.versionAtLeast ocamlPackages.ocaml.version "4.14";
+    broken =
+      !lib.versionAtLeast ocamlPackages.ocaml.version "4.14"
+      || lib.versionAtLeast ocamlPackages.ocaml.version "5.5";
   };
 })

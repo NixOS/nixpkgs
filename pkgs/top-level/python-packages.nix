@@ -27,6 +27,8 @@ self: super: with self; {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  setuptools_80 = callPackage ../development/python-modules/setuptools/80.nix { };
+
   # by_regex ensures inherit statements are sorted after the (first) attribute name that is inherited.
   # keep-sorted start block=yes newline_separated=yes by_regex=["(?:inherit\\s+\\([^)]+\\)\\n?\\s*)?(.+)"]
   a2a-sdk = callPackage ../development/python-modules/a2a-sdk { };
@@ -1161,6 +1163,8 @@ self: super: with self; {
   asserts = callPackage ../development/python-modules/asserts { };
 
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
+
+  ast-serialize = callPackage ../development/python-modules/ast-serialize { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
 
@@ -2863,7 +2867,11 @@ self: super: with self; {
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
-  ckzg = callPackage ../development/python-modules/ckzg { };
+  ckzg = callPackage ../development/python-modules/ckzg {
+    inherit (pkgs) clang;
+  };
+
+  clang = callPackage ../development/python-modules/clang { };
 
   clarabel = callPackage ../development/python-modules/clarabel { };
 
@@ -4182,6 +4190,9 @@ self: super: with self; {
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils { };
 
   distutils-extra = callPackage ../development/python-modules/distutils-extra { };
+
+  distutils_80 =
+    if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils/80.nix { };
 
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
@@ -8920,8 +8931,6 @@ self: super: with self; {
 
   libbs = callPackage ../development/python-modules/libbs { };
 
-  libclang = callPackage ../development/python-modules/libclang { };
-
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libcomps = lib.pipe pkgs.libcomps [
@@ -12133,6 +12142,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-semantic-conventions
       { };
 
+  opentelemetry-semantic-conventions-ai =
+    callPackage ../development/python-modules/opentelemetry-semantic-conventions-ai
+      { };
+
   opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
 
   opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
@@ -14914,7 +14927,9 @@ self: super: with self; {
     callPackage ../development/python-modules/pyobjc-framework-libdispatch
       { };
 
-  pyobjus = callPackage ../development/python-modules/pyobjus { };
+  pyobjus = callPackage ../development/python-modules/pyobjus {
+    inherit (pkgs) clang;
+  };
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 
@@ -16575,6 +16590,8 @@ self: super: with self; {
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
+
+  pytokens = callPackage ../development/python-modules/pytokens { };
 
   pytomlpp = callPackage ../development/python-modules/pytomlpp { };
 
@@ -21344,6 +21361,8 @@ self: super: with self; {
   vcard = callPackage ../development/python-modules/vcard { };
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
+
+  vcs-versioning = callPackage ../development/python-modules/vcs-versioning { };
 
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
     tag = "v${version}";
-    hash = "sha256-Sue8S/2/dY3aF7fihHuqpHXotcXcijcqAXGCJn8Z5VE=";
+    hash = "sha256-rMn5NmiwKhyj4U9kyyRf9ZheVnETpixZoL/AVlBlImQ=";
   };
 
   patches = [

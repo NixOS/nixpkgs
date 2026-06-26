@@ -31,7 +31,10 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
+    "bin"
+    "dev"
     "man"
+    "benchmark"
   ];
 
   strictDeps = true;
@@ -69,6 +72,12 @@ stdenv.mkDerivation {
     (lib.cmakeBool "JPEGXL_ENABLE_AVX512_ZEN4" true)
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
+
+  # Move `benchmark_xl` into a separate output to avoid a file collision
+  # with the `benchmark_xl` binary provided by `libjxl`.
+  postInstall = ''
+    moveToOutput "bin/benchmark_xl" "$benchmark"
+  '';
 
   doCheck = true;
 

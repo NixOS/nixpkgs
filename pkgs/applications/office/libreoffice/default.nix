@@ -398,6 +398,34 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
+
+    # Fix build with Poppler 26.02
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
+      hash = "sha256-IInhSoqTemDITB+AtkvVa9eGbodTbUGSpMMpC9N/mmg=";
+    })
+    # Fix build with Poppler 26.04
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.04.0.patch";
+      hash = "sha256-I9owj/NTCTi6ISszuasH410NLlhunPn/Ig22tenu8tw=";
+    })
+    # Fix build with Poppler 26.05
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.05.0.patch";
+      hash = "sha256-7wdiciTf/LrTk0MibBBYGliWRCvK1rtTGESgH7db1I4=";
+    })
+    # Fix build with Poppler 26.06
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
+      hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
+    })
+  ]
+  ++ lib.optionals (variant != "fresh") [
+    # Fix build with Poppler 26.01
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
+      hash = "sha256-5JTTvJFIV5MG0Gz7y46wAr3q9tWdSVoZ9TJQlMJVqBc=";
+    })
   ]
   ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking

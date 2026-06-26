@@ -56,33 +56,19 @@ let
       bonjourSupport ? false,
 
       # Curl
-      curlSupport ?
-        lib.versionAtLeast version "18"
-        && lib.meta.availableOn stdenv.hostPlatform curl
-        # Building statically fails with:
-        # configure: error: library 'curl' does not provide curl_multi_init
-        # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
-        && !stdenv.hostPlatform.isStatic,
+      curlSupport ? lib.versionAtLeast version "18" && lib.meta.availableOn stdenv.hostPlatform curl,
       curl,
 
       # GSSAPI
-      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
+      gssSupport ? with stdenv.hostPlatform; !isWindows,
       libkrb5,
 
       # icu
-      # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
-      #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
-      #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
-      #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
-      icuSupport ? !stdenv.hostPlatform.isStatic,
+      icuSupport ? true,
       icu,
 
       # JIT
-      jitSupport ?
-        stdenv.hostPlatform.canExecute stdenv.buildPlatform
-        # Building with JIT in pkgsStatic fails like this:
-        #   fatal error: 'stdio.h' file not found
-        && !stdenv.hostPlatform.isStatic,
+      jitSupport ? stdenv.hostPlatform.canExecute stdenv.buildPlatform,
       llvmPackages,
       nukeReferences,
       overrideCC,
@@ -100,21 +86,12 @@ let
       numactl,
 
       # PAM
-      pamSupport ?
-        lib.meta.availableOn stdenv.hostPlatform linux-pam
-        # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
-        #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
-        #     in function `pam_modutil_audit_write':(.text+0x571):
-        #     undefined reference to `audit_close'
-        && !stdenv.hostPlatform.isStatic,
+      pamSupport ? lib.meta.availableOn stdenv.hostPlatform linux-pam,
       linux-pam,
 
       # PL/Perl
       perlSupport ?
         lib.meta.availableOn stdenv.hostPlatform perl
-        # Building with perl in pkgsStatic gives this error:
-        #   configure: error: cannot build PL/Perl because libperl is not a shared library
-        && !stdenv.hostPlatform.isStatic
         # configure tries to call the perl executable for the version
         && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
       perl,
@@ -122,9 +99,6 @@ let
       # PL/Python
       pythonSupport ?
         lib.meta.availableOn stdenv.hostPlatform python3
-        # Building with python in pkgsStatic gives this error:
-        #  checking how to link an embedded Python application... configure: error: could not find shared library for Python
-        && !stdenv.hostPlatform.isStatic
         # configure tries to call the python executable
         && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
       python3,
@@ -132,8 +106,6 @@ let
       # PL/Tcl
       tclSupport ?
         lib.meta.availableOn stdenv.hostPlatform tcl
-        # tcl is broken in pkgsStatic
-        && !stdenv.hostPlatform.isStatic
         # configure fails with:
         #   configure: error: file 'tclConfig.sh' is required for Tcl
         && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -436,19 +408,6 @@ let
       + lib.optionalString (atLeast "18") ''
         substituteInPlace src/test/regress/parallel_schedule \
           --replace-fail numa ""
-      ''
-      # This check was introduced upstream to prevent calls to "exit" inside libpq.
-      # However, this doesn't work reliably with static linking, see this and following:
-      # https://postgr.es/m/flat/20210703001639.GB2374652%40rfd.leadboat.com#52584ca4bd3cb9dac376f3158c419f97
-      # Thus, disable the check entirely, as it would currently fail with this:
-      # > libpq.so.5.17:                  U atexit
-      # > libpq.so.5.17:                  U pthread_exit
-      # > libpq must not be calling any function which invokes exit
-      # Don't mind the fact that this checks libpq.**so** in pkgsStatic - that's correct, since PostgreSQL
-      # still needs a shared library internally.
-      + lib.optionalString (atLeast "15" && stdenv'.hostPlatform.isStatic) ''
-        substituteInPlace src/interfaces/libpq/Makefile \
-          --replace-fail "echo 'libpq must not be calling any function which invokes exit'; exit 1;" "echo;"
       '';
 
       postInstall = ''
@@ -474,8 +433,7 @@ let
         # because there is a realistic use-case for extensions to locate the /lib directory to
         # load other shared modules.
         remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
-      ''
-      + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
+
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
           for i in $lib/lib/*.a; do
@@ -486,8 +444,7 @@ let
             fi
           done
         fi
-      ''
-      + ''
+
         # The remaining static libraries are libpgcommon.a, libpgport.a and related.
         # Those are only used when building e.g. extensions, so go to $dev.
         moveToOutput "lib/*.a" "$dev"
@@ -532,18 +489,16 @@ let
       # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
       doCheck = false;
       doInstallCheck =
-        !(stdenv'.hostPlatform.isStatic)
-        &&
-          # Tests currently can't be run on darwin, because of a Nix bug:
-          # https://github.com/NixOS/nix/issues/12548
-          # https://git.lix.systems/lix-project/lix/issues/691
-          # The error appears as this in the initdb logs:
-          #   FATAL:  could not create shared memory segment: Cannot allocate memory
-          # Don't let yourself be fooled when trying to remove this condition: Running
-          # the tests works fine most of the time. But once the tests (or any package using
-          # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
-          # will be stuck around, and any future builds with the tests enabled *will* fail.
-          !(stdenv'.hostPlatform.isDarwin)
+        # Tests currently can't be run on darwin, because of a Nix bug:
+        # https://github.com/NixOS/nix/issues/12548
+        # https://git.lix.systems/lix-project/lix/issues/691
+        # The error appears as this in the initdb logs:
+        #   FATAL:  could not create shared memory segment: Cannot allocate memory
+        # Don't let yourself be fooled when trying to remove this condition: Running
+        # the tests works fine most of the time. But once the tests (or any package using
+        # postgresqlTestHook) fails on the same machine for a few times, enough IPC objects
+        # will be stuck around, and any future builds with the tests enabled *will* fail.
+        !(stdenv'.hostPlatform.isDarwin)
         &&
           # Regression tests currently fail in pkgsMusl because of a difference in EXPLAIN output.
           !(stdenv'.hostPlatform.isMusl)
@@ -626,20 +581,26 @@ let
         ];
         platforms = lib.platforms.unix;
 
-        # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
-        # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for
-        # the JIT apparently, but with a $(CLANG) that can produce binaries for the build, not the
-        # host-platform.
-        #
-        # I managed to get a cross-build with JIT support working with
-        # `depsBuildBuild = [ llvmPackages.clang ] ++ buildInputs`, but considering that the
-        # resulting LLVM IR isn't platform-independent this doesn't give you much.
-        # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
-        # a query, postgres would coredump with `Illegal instruction`.
-        #
-        # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
-        # to do JIT at **runtime**.
-        broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
+        broken =
+          # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
+          # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for
+          # the JIT apparently, but with a $(CLANG) that can produce binaries for the build, not the
+          # host-platform.
+          #
+          # I managed to get a cross-build with JIT support working with
+          # `depsBuildBuild = [ llvmPackages.clang ] ++ buildInputs`, but considering that the
+          # resulting LLVM IR isn't platform-independent this doesn't give you much.
+          # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
+          # a query, postgres would coredump with `Illegal instruction`.
+          #
+          # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
+          # to do JIT at **runtime**.
+          (jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform)
+          # While PostgreSQL claims to support static builds, it does not do so in a way that
+          # would work properly and consistently in pkgsStatic. The server heavily depends on
+          # the ability to load shared modules at runtime, but dlopen() is stubbed out in static
+          # musl builds. The important part is, that the separate libpq package builds in pkgsStatic.
+          || stdenv.hostPlatform.isStatic;
       };
     });
 

@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-  __structuredAttrs = false;
+  __structuredAttrs = true;
   nativeBuildInputs = [
     meson
     cmake

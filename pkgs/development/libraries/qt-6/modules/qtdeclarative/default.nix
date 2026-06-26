@@ -49,6 +49,14 @@ qtModule {
       url = "https://github.com/qt/qtdeclarative/commit/8a2c82be6ad90e3f2a0760d8bab1e3a8cdb2473a.diff";
       hash = "sha256-3KbyoQPAiRyCwGnwwYV3y0yz2i6UAJcX70EPsXV0ZZM=";
     })
+
+    # backport required at least for [musescore][1], and perhaps many other
+    # applications.
+    # [1]: https://github.com/musescore/MuseScore/issues/33015
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.diff";
+      hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
+    })
   ];
 
   cmakeFlags = [

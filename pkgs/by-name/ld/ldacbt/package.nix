@@ -2,19 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldacBT";
-  version = "2.0.2.3";
+  version = "2.0.72";
 
   src = fetchFromGitHub {
-    repo = "ldacBT";
-    owner = "ehfive";
-    tag = "v${finalAttrs.version}";
-    sha256 = "09dalysx4fgrgpfdm9a51x6slnf4iik1sqba4xjgabpvq91bnb63";
-    fetchSubmodules = true;
+    owner = "open-vela";
+    repo = "external_libldac";
+    rev = "5b4bf66096ba0d69615efb2422ba3d023c34c2fd";
+    hash = "sha256-5jeqTyhSBtYky15Xw1lIbUxeGZMQQQdM/EQUFicyi3Y=";
   };
 
   outputs = [
@@ -22,31 +20,99 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    cmake
+  patches = [
+    ./0001-abr-drop-support-for-dynamic-loading-libldac.patch
   ];
 
-  cmakeFlags = [
-    # CMakeLists.txt by default points to $out
-    "-DINSTALL_INCLUDEDIR=${placeholder "dev"}/include"
-  ];
+  env.NIX_CFLAGS_COMPILE = "-O2 -fPIC -fno-merge-constants -Wall -Iinc -Isrc -Iabr/inc";
 
-  # Fix the build with CMake 4.
-  #
-  # See: <https://github.com/EHfive/ldacBT/pull/1>
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        'cmake_minimum_required(VERSION 3.0)' \
-        'cmake_minimum_required(VERSION 3.0...3.10)'
+  # Verify finalAttrs.version matches LDACBT_LIB_VER_* in upstream source.
+  # Guards against silent version drift when the pinned commit changes.
+  preBuild = ''
+    awk -v want=${finalAttrs.version} '
+      /^#define LDACBT_LIB_VER_/ { v = v sep ($3+0); sep = "." }
+      END {
+        if (v != want) { print "version mismatch: package says " want ", source reports " v > "/dev/stderr"; exit 1 }
+      }
+    ' src/ldacBT_api.c
+  '';
+
+  # Upstream ships AOSP build files and a gcc/ makefile that only knows
+  # about the in-tree layout. Compile and link directly; the entire
+  # library is two umbrella translation units.
+  buildPhase = ''
+    runHook preBuild
+
+    soname=libldacBT.so.${lib.versions.major finalAttrs.version}
+    sofile=libldacBT.so.${finalAttrs.version}
+
+    $CC -shared -Wl,-soname,$soname src/ldaclib.c src/ldacBT.c abr/src/ldacBT_abr.c -lm -o $sofile
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 -t $out/lib $sofile
+    ln -s $sofile $out/lib/$soname
+    ln -s $sofile $out/lib/libldacBT.so
+
+    install -Dm644 inc/ldacBT.h $dev/include/ldac/ldacBT.h
+    install -Dm644 abr/inc/ldacBT_abr.h $dev/include/ldac/ldacBT_abr.h
+
+    mkdir -p $dev/lib/pkgconfig
+    cat > $dev/lib/pkgconfig/ldacBT-dec.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=$out/lib
+    includedir=$dev/include/ldac
+
+    Name: ldacBT-dec
+    Description: LDAC Bluetooth decoder
+    Version: ${finalAttrs.version}
+    Libs: -L\''${libdir} -lldacBT
+    Libs.private: -lm
+    Cflags: -I\''${includedir}
+    EOF
+
+    cat > $dev/lib/pkgconfig/ldacBT-enc.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=$out/lib
+    includedir=$dev/include/ldac
+
+    Name: ldacBT-enc
+    Description: LDAC Bluetooth encoder
+    Version: ${finalAttrs.version}
+    Libs: -L\''${libdir} -lldacBT
+    Libs.private: -lm
+    Cflags: -I\''${includedir}
+    EOF
+
+    cat > $dev/lib/pkgconfig/ldacBT-abr.pc <<EOF
+    prefix=$out
+    exec_prefix=\''${prefix}
+    libdir=$out/lib
+    includedir=$dev/include/ldac
+
+    Name: ldacBT-abr
+    Description: LDAC Bluetooth ABR library
+    Version: ${finalAttrs.version}
+    Libs: -L\''${libdir} -lldacBT
+    Libs.private: -lm
+    Cflags: -I\''${includedir}
+    EOF
+
+    runHook postInstall
   '';
 
   meta = {
-    description = "AOSP libldac dispatcher";
-    homepage = "https://github.com/EHfive/ldacBT";
+    description = "Sony LDAC Bluetooth decoder library (from AOSP via open-vela)";
+    homepage = "https://github.com/open-vela/external_libldac";
     license = lib.licenses.asl20;
-    # libldac code detects & #error's out on non-LE byte order
+    # LDAC bitstream format assumes LE; source has endian checks
     platforms = lib.platforms.littleEndian;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qweered ];
   };
 })

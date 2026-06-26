@@ -18,6 +18,7 @@
   pytz,
   scikit-build-core,
   setuptools-scm,
+  typing-extensions,
   pytest-reraise,
   pytestCheckHook,
 }:
@@ -69,6 +70,10 @@ buildPythonPackage rec {
   buildInputs = [
     duckdb
     openssl
+  ];
+
+  dependencies = [
+    typing-extensions
   ];
 
   optional-dependencies = {
