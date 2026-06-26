@@ -1,0 +1,13 @@
+diff --git a/BrickVaultApp.csproj b/BrickVaultApp.csproj
+index 584ab3c..62acdeb 100644
+--- a/BrickVaultApp.csproj
++++ b/BrickVaultApp.csproj
+@@ -17,6 +17,8 @@
+     <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
+     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
+     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
++    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.2.1" />
++    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.1" />
+     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+     <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
+       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
