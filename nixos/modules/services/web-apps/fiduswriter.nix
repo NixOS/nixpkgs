@@ -52,6 +52,8 @@ in
 
       path = [
         cfg.package
+        pkgs.nodejs # transpile
+        pkgs.rsync
       ];
 
       environment = {
@@ -73,17 +75,22 @@ in
         StateDirectory = "fiduswriter";
         ExecStart = "${cfg.package}/bin/fiduswriter-start";
 
-        Restart = "on-failure";
-        RestartSec = "5s";
+        # Restart = "on-failure";
+        # RestartSec = "5s";
       };
 
       preStart = ''
-        ln -sf "${cfg.package.passthru.frontend}/static-collected" ${stateDir}/static-collected
-        ln -sf "${cfg.package.passthru.frontend}/static-transpile" ${stateDir}/static-transpile
-        ln -sf "${cfg.package.passthru.frontend}/static-libs" ${stateDir}/static-libs
+        rsync -a "${cfg.package.passthru.frontend}/static-collected/" ${stateDir}/static-collected/
+        rsync -a "${cfg.package.passthru.frontend}/static-transpile/" ${stateDir}/static-transpile/
+        rsync -a "${cfg.package.passthru.frontend}/static-libs/" ${stateDir}/static-libs/
 
-        # init db
+        # run migrations and asset generation
         fiduswriter migrate
+        # TODO: needs npm deps ...
+        #fiduswriter transpile
+        #fiduswriter collectstatic --noinput
+
+        # TODO: create only on initial setup
         fiduswriter createsuperuser \
           --username=admin \
           --email=admin@example.com \
