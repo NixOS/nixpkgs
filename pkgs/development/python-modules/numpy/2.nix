@@ -19,6 +19,8 @@
   coreutils,
   lapack,
 
+  openmpCheckPhaseHook,
+
   # Reverse dependency
   sage,
 
@@ -111,6 +113,10 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     setuptools
     typing-extensions
+  ];
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
   ];
 
   preCheck = ''
