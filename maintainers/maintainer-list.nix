@@ -26993,6 +26993,11 @@
     githubId = 203195;
     name = "Szczyp";
   };
+  szhekpisov = {
+    github = "szhekpisov";
+    githubId = 87662520;
+    name = "Sergei Zhekpisov";
+  };
   szkiba = {
     email = "iszkiba@gmail.com";
     github = "szkiba";
