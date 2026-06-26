@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcpucycles";
-  version = "20260105";
+  version = "20260625";
 
   src = fetchzip {
     url = "https://cpucycles.cr.yp.to/libcpucycles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hWmMLBadM/E/kF8D/cTjU+G0f2HTkZQlKoIWsgzAFj0=";
+    hash = "sha256-zf/Xt0kpSR/trEjMJM3ZVv5b2ZmqlrmZtdWNWZfHMEU=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
