@@ -1,0 +1,111 @@
+From 5c096ad7a59a3e9edee66e27fbae46c30e4abd6b Mon Sep 17 00:00:00 2001
+From: asherzod1 <sh.abdumutalov1@gmail.com>
+Date: Wed, 11 Mar 2026 00:53:19 +0500
+Subject: [PATCH] fix: add Django 6 compatibility for signals, constraints, and
+ random char field
+
+---
+ django_extensions/db/fields/__init__.py        | 18 +++++++++++++-----
+ .../management/commands/list_signals.py        |  4 +++-
+ tests/test_management_command.py               |  6 +++++-
+ tests/testapp/models.py                        |  7 ++++++-
+ 4 files changed, 27 insertions(+), 8 deletions(-)
+
+diff --git a/django_extensions/db/fields/__init__.py b/django_extensions/db/fields/__init__.py
+index 938254e1f..c233cee84 100644
+--- a/django_extensions/db/fields/__init__.py
++++ b/django_extensions/db/fields/__init__.py
+@@ -86,7 +86,11 @@ def find_unique(self, model_instance, field, iterator, *args):
+ 
+         new = next(iterator)
+         kwargs[self.attname] = new
+-        while not new or queryset.filter(query, **kwargs):
++        while True:
++            matching = queryset.filter(query, **kwargs)
++            has_match = matching.exists() if hasattr(matching, "exists") else bool(matching)
++            if new and not has_match:
++                break
+             new = next(iterator)
+             kwargs[self.attname] = new
+         setattr(model_instance, self.attname, new)
+@@ -388,10 +392,14 @@ def in_unique_together(self, model_instance):
+         return False
+ 
+     def pre_save(self, model_instance, add):
+-        if (not add or self.keep_default) and getattr(
+-            model_instance, self.attname
+-        ) != "":
+-            return getattr(model_instance, self.attname)
++        current_value = getattr(model_instance, self.attname)
++        # Django 6 may call pre_save multiple times for inserts; if we've already
++        # populated the field value, reuse it instead of regenerating.
++        if current_value not in ("", None):
++            return current_value
++
++        if (not add or self.keep_default) and current_value != "":
++            return current_value
+ 
+         population = ""
+         if self.include_alpha:
+diff --git a/django_extensions/management/commands/list_signals.py b/django_extensions/management/commands/list_signals.py
+index 9cadc4f85..e7bc9d7f6 100644
+--- a/django_extensions/management/commands/list_signals.py
++++ b/django_extensions/management/commands/list_signals.py
+@@ -52,7 +52,9 @@ def handle(self, *args, **options):
+         for signal in signals:
+             signal_name = SIGNAL_NAMES.get(signal, "unknown")
+             for receiver in signal.receivers:
+-                if django.VERSION >= (5, 0):
++                if django.VERSION >= (6, 0):
++                    lookup, receiver, _sender, is_async = receiver
++                elif django.VERSION >= (5, 0):
+                     lookup, receiver, is_async = receiver
+                 else:
+                     lookup, receiver = receiver
+diff --git a/tests/test_management_command.py b/tests/test_management_command.py
+index ea205ed72..0fb9dc27b 100644
+--- a/tests/test_management_command.py
++++ b/tests/test_management_command.py
+@@ -3,6 +3,7 @@
+ import logging
+ import importlib
+ 
++import django
+ from django.core.management import (
+     call_command,
+     find_commands,
+@@ -421,7 +422,10 @@ def test_field_class(self):
+             stdout=out,
+         )
+         self.output = out.getvalue()
+-        self.assertIn("id - AutoField", self.output)
++        if django.VERSION >= (6, 0):
++            self.assertIn("id - BigAutoField", self.output)
++        else:
++            self.assertIn("id - AutoField", self.output)
+         self.assertIn("char_field - CharField", self.output)
+         self.assertIn("integer_field - IntegerField", self.output)
+         self.assertIn("foreign_key_field - ForeignKey", self.output)
+diff --git a/tests/testapp/models.py b/tests/testapp/models.py
+index 278402f51..3f31efcda 100644
+--- a/tests/testapp/models.py
++++ b/tests/testapp/models.py
+@@ -1,4 +1,5 @@
+ # -*- coding: utf-8 -*-
++import django
+ from django.db import models
+ from django.contrib.auth import get_user_model
+ from django.db.models import UniqueConstraint
+@@ -178,7 +179,11 @@ class Meta:
+                 fields=("common_field", "uniq_field"), name="unique_common_uniq_pair"
+             ),
+             models.CheckConstraint(
+-                check=~models.Q(common_field=models.F("another_common_field")),
++                **(
++                    {"condition": ~models.Q(common_field=models.F("another_common_field"))}
++                    if django.VERSION >= (5, 2)
++                    else {"check": ~models.Q(common_field=models.F("another_common_field"))}
++                ),
+                 name="common_and_another_common_differ",
+             ),
+         ]

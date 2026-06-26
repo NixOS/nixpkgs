@@ -1,0 +1,34 @@
+From 4e8bd61c216969615a492043092bd8298dcd1410 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Mon, 6 Nov 2023 09:33:45 -0500
+Subject: [PATCH] hardcode install_dir
+
+partially revert https://github.com/elFarto/nvidia-vaapi-driver/commit/60ab79608ae35bd929d3e1387d226547d18e6bed
+---
+ meson.build | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 990c2b2..f5e63d7 100644
+--- a/meson.build
++++ b/meson.build
+@@ -71,7 +71,6 @@ if gst_codecs_deps.found()
+ endif
+ 
+ nvidia_incdir = include_directories('nvidia-include')
+-nvidia_install_dir = libva_deps.get_variable(pkgconfig: 'driverdir')
+ 
+ shared_library(
+     'nvidia_drv_video',
+@@ -80,7 +79,7 @@ shared_library(
+     dependencies: deps,
+     include_directories: nvidia_incdir,
+     install: true,
+-    install_dir: nvidia_install_dir,
++    install_dir: get_option('libdir') / 'dri',
+     gnu_symbol_visibility: 'hidden',
+ )
+ 
+-- 
+2.42.0
+

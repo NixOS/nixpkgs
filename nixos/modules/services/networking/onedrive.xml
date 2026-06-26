@@ -1,0 +1,34 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="onedrive">
+ <title>Microsoft OneDrive</title>
+ <para>
+  Microsoft Onedrive is a popular cloud file-hosting service, used by 85% of Fortune 500 companies. NixOS uses a popular OneDrive client for Linux maintained by github user abraunegg. The Linux client is excellent and allows customization of which files or paths to download, not much unlike the default Windows OneDrive client by Microsoft itself. The client allows syncing with multiple onedrive accounts at the same time, of any type- OneDrive personal, OneDrive business, Office365 and Sharepoint libraries, without any additional charge.
+ </para>
+ <para>
+  For more information, guides and documentation, see <link xlink:href="https://abraunegg.github.io/"/>.
+ </para>
+ <para>
+  To enable OneDrive support, add the following to your <filename>configuration.nix</filename>:
+<programlisting>
+<xref linkend="opt-services.onedrive.enable"/> = true;
+</programlisting>
+  This installs the <literal>onedrive</literal> package and a service <literal>onedriveLauncher</literal> which will instantiate a <literal>onedrive</literal> service for all your OneDrive accounts. Follow the steps in documentation of the onedrive client to setup your accounts. To use the service with multiple accounts, create a file named <filename>onedrive-launcher</filename> in <filename>~/.config</filename> and add the filename of the config directory, relative to <filename>~/.config</filename>. For example, if you have two OneDrive accounts with configs in <filename>~/.config/onedrive_bob_work</filename> and <filename>~/.config/onedrive_bob_personal</filename>, add the following lines:
+<programlisting>
+onedrive_bob_work
+# Not in use:
+# onedrive_bob_office365
+onedrive_bob_personal
+</programlisting>
+  No such file needs to be created if you are using only a single OneDrive account with config in the default location <filename>~/.config/onedrive</filename>, in the absence of <filename>~/.config/onedrive-launcher</filename>, only a single service is instantiated, with default config path.
+</para>
+
+  <para>
+  If you wish to use a custom OneDrive package, say from another channel, add the following line:
+<programlisting>
+<xref linkend="opt-services.onedrive.package"/> = pkgs.unstable.onedrive;
+</programlisting>
+ </para>
+</chapter>

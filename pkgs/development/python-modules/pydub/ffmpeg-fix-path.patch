@@ -1,0 +1,28 @@
+diff --git a/pydub/utils.py b/pydub/utils.py
+index 2694f90..7764b3f 100644
+--- a/pydub/utils.py
++++ b/pydub/utils.py
+@@ -172,7 +172,7 @@ def get_encoder_name():
+     else:
+         # should raise exception
+         warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+-        return "ffmpeg"
++        return "@ffmpeg@"
+
+
+ def get_player_name():
+@@ -186,7 +186,7 @@ def get_player_name():
+     else:
+         # should raise exception
+         warn("Couldn't find ffplay or avplay - defaulting to ffplay, but may not work", RuntimeWarning)
+-        return "ffplay"
++        return "@ffplay@"
+
+
+ def get_prober_name():
+@@ -200,7 +200,7 @@ def get_prober_name():
+     else:
+         # should raise exception
+         warn("Couldn't find ffprobe or avprobe - defaulting to ffprobe, but may not work", RuntimeWarning)
+-        return "ffprobe"
++        return "@ffprobe@"

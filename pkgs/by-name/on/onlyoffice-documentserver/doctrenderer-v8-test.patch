@@ -1,0 +1,76 @@
+diff --git a/DesktopEditor/doctrenderer/test/json/main.cpp b/DesktopEditor/doctrenderer/test/json/main.cpp
+index e5c6a0e52d..9b127a9c44 100644
+--- a/DesktopEditor/doctrenderer/test/json/main.cpp
++++ b/DesktopEditor/doctrenderer/test/json/main.cpp
+@@ -472,26 +472,26 @@ TEST_F(CJSONTest, image_externalize)
+ 	int width = 1080;
+ 	int height = 480;
+ 	BYTE* bits = CValue::AllocImageBits(width, height);
+-	CValue img = CValue::CreateImage(bits, width, height, ifBGRA);
++	CValue img = CValue::CreateImage(bits, width, height, ImageFormat::ifBGRA);
+ 
+ 	EXPECT_TRUE(img.IsImage());
+ 	EXPECT_EQ(img.GetImageBits(), bits);
+ 	EXPECT_EQ(img.GetImageWidth(), width);
+ 	EXPECT_EQ(img.GetImageHeight(), height);
+-	EXPECT_EQ(img.GetImageFormat(), ifBGRA);
++	EXPECT_EQ(img.GetImageFormat(), ImageFormat::ifBGRA);
+ 
+ 	CValue::FreeImageBits(bits);
+ 
+ 	width = 50;
+ 	height = 100;
+ 	bits = CValue::AllocImageBits(width, height);
+-	img = CValue::CreateImage(bits, width, height, ifRGBA);
++	img = CValue::CreateImage(bits, width, height, ImageFormat::ifRGBA);
+ 
+ 	EXPECT_TRUE(img.IsImage());
+ 	EXPECT_EQ(img.GetImageBits(), bits);
+ 	EXPECT_EQ(img.GetImageWidth(), width);
+ 	EXPECT_EQ(img.GetImageHeight(), height);
+-	EXPECT_EQ(img.GetImageFormat(), ifRGBA);
++	EXPECT_EQ(img.GetImageFormat(), ImageFormat::ifRGBA);
+ 
+ 	CValue::FreeImageBits(bits);
+ }
+@@ -501,25 +501,25 @@ TEST_F(CJSONTest, image_not_externalize)
+ 	int width = 320;
+ 	int height = 480;
+ 	BYTE* bits = CValue::AllocImageBits(width, height);
+-	CValue img = CValue::CreateImage(bits, width, height, ifARGB, false);
++	CValue img = CValue::CreateImage(bits, width, height, ImageFormat::ifARGB, false);
+ 
+ 	EXPECT_TRUE(img.IsImage());
+ 	EXPECT_EQ(img.GetImageBits(), bits);
+ 	EXPECT_EQ(img.GetImageWidth(), width);
+ 	EXPECT_EQ(img.GetImageHeight(), height);
+-	EXPECT_EQ(img.GetImageFormat(), ifARGB);
++	EXPECT_EQ(img.GetImageFormat(), ImageFormat::ifARGB);
+ }
+ 
+ TEST_F(CJSONTest, image_wrong_size)
+ {
+ 	BYTE* bits = CValue::AllocImageBits(100, 100);
+-	CValue img = CValue::CreateImage(bits, 0, 100, ifARGB, false);
++	CValue img = CValue::CreateImage(bits, 0, 100, ImageFormat::ifARGB, false);
+ 	EXPECT_TRUE(img.IsUndefined());
+-	img = CValue::CreateImage(bits, -1, 100, ifARGB, false);
++	img = CValue::CreateImage(bits, -1, 100, ImageFormat::ifARGB, false);
+ 	EXPECT_TRUE(img.IsUndefined());
+-	img = CValue::CreateImage(bits, 0, 0, ifARGB, false);
++	img = CValue::CreateImage(bits, 0, 0, ImageFormat::ifARGB, false);
+ 	EXPECT_TRUE(img.IsUndefined());
+-	img = CValue::CreateImage(bits, -100, -100, ifARGB, false);
++	img = CValue::CreateImage(bits, -100, -100, ImageFormat::ifARGB, false);
+ 	EXPECT_TRUE(img.IsUndefined());
+ }
+ 
+@@ -593,7 +593,7 @@ TEST_F(CJSONTest, wrong_usage)
+ 	EXPECT_EQ(val.GetCount(), 0);
+ 	EXPECT_EQ(val.GetData(), nullptr);
+ 	EXPECT_EQ(val.GetImageBits(), nullptr);
+-	EXPECT_EQ(val.GetImageFormat(), ifInvalid);
++	EXPECT_EQ(val.GetImageFormat(), ImageFormat::ifInvalid);
+ 	EXPECT_EQ(val.GetImageHeight(), 0);
+ 	EXPECT_EQ(val.GetImageWidth(), 0);
+ #endif

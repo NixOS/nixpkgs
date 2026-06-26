@@ -1,0 +1,12 @@
+diff --git a/kiwix-desktop.pro b/kiwix-desktop.pro
+index c1f4f93..bf10828 100644
+--- a/kiwix-desktop.pro
++++ b/kiwix-desktop.pro
+@@ -27,7 +27,6 @@ QMAKE_CXXFLAGS += -std=c++17
+ QMAKE_LFLAGS +=  -std=c++17
+ 
+ !win32 {
+-    QMAKE_CXXFLAGS += -Werror
+     equals(QT_MAJOR_VERSION, 6):equals(QT_MINOR_VERSION, 6) {
+         # Fail the build on errors, except for 'template-id-cdtor' due to a problem with Qt headers.
+         # This can be removed when the Ubuntu package is fixed.

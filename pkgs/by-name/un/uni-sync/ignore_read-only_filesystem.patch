@@ -1,0 +1,13 @@
+diff --git a/src/main.rs b/src/main.rs
+index f07cc64..357a33b 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -46,7 +46,7 @@ fn main() -> Result<(), std::io::Error> {
+     configs = serde_json::from_str::<devices::Configs>(&config_content)?;
+
+     let new_configs = devices::run(configs);
+-    std::fs::write(&config_path, serde_json::to_string_pretty(&new_configs)?)?;
++    let _ = std::fs::write(&config_path, serde_json::to_string_pretty(&new_configs)?);
+
+     Ok(())
+ }
