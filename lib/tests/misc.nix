@@ -114,6 +114,7 @@ let
     fromHexString
     toInt
     toIntBase10
+    toShellVar'
     toShellVars
     types
     uniqueStrings
@@ -970,6 +971,135 @@ runTests {
   testEscapeXML = {
     expr = escapeXML ''"test" 'test' < & >'';
     expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
+  };
+
+  testToShellVar' = {
+    expr = ''
+      ${toShellVar' {
+        name = "string";
+        value = "Example value";
+      }}
+      ${toShellVar' {
+        name = "list";
+        value = [
+          "List item 1"
+          "List item 2"
+          "List item 3"
+        ];
+      }}
+      ${toShellVar' {
+        name = "attrs";
+        value = {
+          "First attr" = "First value";
+          "Second attr" = "Second value";
+          "Third attr" = "Third value";
+        };
+      }}
+
+      ${toShellVar' {
+        name = "exportedString";
+        value = "Example exported value";
+        export = true;
+      }}
+      ${toShellVar' {
+        name = "exportedList";
+        value = [
+          "Exported list item 1"
+          "Exported list item 2"
+          "Exported list item 3"
+        ];
+        export = true;
+      }}
+      ${toShellVar' {
+        name = "exportedAttrs";
+        value = {
+          "First exported attr" = "First exported value";
+          "Second exported attr" = "Second exported value";
+          "Third exported attr" = "Third exported value";
+        };
+        export = true;
+      }}
+
+      ${toShellVar' {
+        name = "readonlyString";
+        value = "Example read-only value";
+        readonly = true;
+      }}
+      ${toShellVar' {
+        name = "readonlyList";
+        value = [
+          "Read-only list item 1"
+          "Read-only list item 2"
+          "Read-only list item 3"
+        ];
+        readonly = true;
+      }}
+      ${toShellVar' {
+        name = "readonlyAttrs";
+        value = {
+          "First read-only attr" = "First read-only value";
+          "Second read-only attr" = "Second read-only value";
+          "Third read-only attr" = "Third read-only value";
+        };
+        readonly = true;
+      }}
+
+      ${toShellVar' {
+        name = "exportedReadonlyString";
+        value = "Example exported read-only value";
+        export = true;
+        readonly = true;
+      }}
+      ${toShellVar' {
+        name = "exportedReadonlyList";
+        value = [
+          "Exported read-only list item 1"
+          "Exported read-only list item 2"
+          "Exported read-only list item 3"
+        ];
+        export = true;
+        readonly = true;
+      }}
+      ${toShellVar' {
+        name = "exportedReadonlyAttrs";
+        value = {
+          "First exported read-only attr" = "First exported read-only value";
+          "Second exported read-only attr" = "Second exported read-only value";
+          "Third exported read-only attr" = "Third exported read-only value";
+        };
+        export = true;
+        readonly = true;
+      }}
+    '';
+    expected = ''
+      string='Example value'
+      declare -a list=('List item 1' 'List item 2' 'List item 3')
+      declare -A attrs=(['First attr']='First value' ['Second attr']='Second value' ['Third attr']='Third value')
+
+      exportedString='Example exported value'
+      export exportedString
+      declare -a exportedList=('Exported list item 1' 'Exported list item 2' 'Exported list item 3')
+      export exportedList
+      declare -A exportedAttrs=(['First exported attr']='First exported value' ['Second exported attr']='Second exported value' ['Third exported attr']='Third exported value')
+      export exportedAttrs
+
+      readonlyString='Example read-only value'
+      readonly readonlyString
+      declare -a readonlyList=('Read-only list item 1' 'Read-only list item 2' 'Read-only list item 3')
+      readonly readonlyList
+      declare -A readonlyAttrs=(['First read-only attr']='First read-only value' ['Second read-only attr']='Second read-only value' ['Third read-only attr']='Third read-only value')
+      readonly readonlyAttrs
+
+      exportedReadonlyString='Example exported read-only value'
+      export exportedReadonlyString
+      readonly exportedReadonlyString
+      declare -a exportedReadonlyList=('Exported read-only list item 1' 'Exported read-only list item 2' 'Exported read-only list item 3')
+      export exportedReadonlyList
+      readonly exportedReadonlyList
+      declare -A exportedReadonlyAttrs=(['First exported read-only attr']='First exported read-only value' ['Second exported read-only attr']='Second exported read-only value' ['Third exported read-only attr']='Third exported read-only value')
+      export exportedReadonlyAttrs
+      readonly exportedReadonlyAttrs
+    '';
   };
 
   testToShellVars = {

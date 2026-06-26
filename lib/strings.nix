@@ -1335,6 +1335,72 @@ rec {
         "${name}=${escapeShellArg value}";
 
   /**
+    Translate a Nix value into a shell variable declaration, with proper escaping.
+
+    This function is the same as `toShellVar`, but it takes an attribute set as
+    its argument and has additional options.
+
+    # Inputs
+
+    `name` (String)
+
+    : The name of the resulting shell variable.
+
+    `value` (String, list of strings or attribute set where every value is a string)
+
+    : The value of the resulting shell variable. See the description for
+    `lib.strings.toShellVar` for more information about the different types of
+    values that can be used.
+
+    `export` (Boolean; _optional_)
+
+    : If `true`, then the generated shell variable will be exported using [the
+    POSIX {command}`export` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_23).
+
+      _Default:_ `false`
+
+    `readonly` (Boolean; _optional_)
+
+    : If `true`, then the generated shell variable will be made read-only using
+    [the POSIX {command}`readonly` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_24).
+
+      _Default:_ `false`
+
+    # Type
+
+    ```
+    toShellVar' :: AttrSet -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toShellVar'` usage example
+
+    ```nix
+    ''
+      ${toShellVar' {
+        name = "DOOMWADDIR";
+        value = "${pkgs.freedoom}/share/games/doom";
+        export = true;
+      }}
+      crispy-doom -iwad freedoom2.wad
+    ''
+    ```
+
+    :::
+  */
+  toShellVar' =
+    {
+      name,
+      value,
+      export ? false,
+      readonly ? false,
+    }:
+    (toShellVar name value)
+    + (optionalString export "\nexport ${escapeShellArg name}")
+    + (optionalString readonly "\nreadonly ${escapeShellArg name}");
+
+  /**
     Translate an attribute set `vars` into corresponding shell variable declarations
     using `toShellVar`.
 
