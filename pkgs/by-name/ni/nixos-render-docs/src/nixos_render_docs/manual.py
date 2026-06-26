@@ -766,6 +766,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
+    p.add_argument('--nix-shell-command-hint', type=str)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -774,7 +775,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         redirects = None
         if args.redirects:
             with open(args.redirects) as raw_redirects:
-                redirects = Redirects(json.load(raw_redirects), redirects_script.read())
+                redirects = Redirects(json.load(raw_redirects), redirects_script.read(), args.nix_shell_command_hint)
 
         md = HTMLConverter(
             args.revision,

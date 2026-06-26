@@ -192,7 +192,12 @@ rec {
 
         nixos-render-docs -j $NIX_BUILD_CORES manual html \
           --manpage-urls ${manpageUrls} \
-          ${if checkRedirects then "--redirects ${./redirects.json}" else ""} \
+          ${
+            if checkRedirects then
+              "--redirects ${./redirects.json} --nix-shell-command-hint 'nix-shell nixos/doc/manual'"
+            else
+              ""
+          } \
           --revision ${escapeShellArg revision} \
           --generator "nixos-render-docs ${pkgs.lib.version}" \
           --stylesheet style.css \
