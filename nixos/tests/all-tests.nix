@@ -1619,6 +1619,16 @@ in
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  system-services-compliance = recurseIntoAttrs (
+    import ./system-services-compliance.nix {
+      inherit
+        pkgs
+        evalSystem
+        runTest
+        callTest
+        ;
+    }
+  );
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
