@@ -7,7 +7,6 @@
   makeBinaryWrapper,
   pkg-config,
   wrapGAppsHook3,
-  zip,
 
   electron_41,
   html-tidy,
@@ -67,7 +66,6 @@ buildNpmPackage (finalAttrs: {
     makeBinaryWrapper
     pkg-config
     wrapGAppsHook3
-    zip
   ];
 
   npmFlags = [ "--ignore-scripts" ];
@@ -97,20 +95,26 @@ buildNpmPackage (finalAttrs: {
     export npm_config_target="${electron.version}"
     export npm_config_nodedir="${electron.headers}"
 
-    # Create the electron archive to be used by electron-packager
+    # Provide a pre-extracted electron dist for @electron/packager.
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
-    pushd electron-dist
-    zip -0Xqr ../electron.zip .
-    popd
-
-    rm -r electron-dist
-
-    # force @electron/packager to use our electron instead of downloading it
+    # Force @electron/packager to use our electron instead of downloading it.
+    #
+    # @electron/packager normally unzips an electron release archive, but its
+    # extract-zip dependency intermittently deadlocks mid-extraction on newer
+    # node (a lost stream-completion event leaves the build hung forever, see
+    # https://github.com/NixOS/nixpkgs/issues/535781). Since we already have an
+    # unpacked dist, hand it to @electron/packager directly and turn its
+    # extract step into a plain recursive copy, avoiding extract-zip entirely.
     substituteInPlace \
       node_modules/@electron/packager/dist/packager.js \
-      --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
+      --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron-dist'"
+
+    substituteInPlace \
+      node_modules/@electron/packager/dist/unzip.js \
+      --replace-fail "await (0, extract_zip_1.default)(zipPath, { dir: targetDir });" \
+      "require('fs').cpSync(zipPath, targetDir, { recursive: true, dereference: true });"
 
     pushd app
     npm rebuild
