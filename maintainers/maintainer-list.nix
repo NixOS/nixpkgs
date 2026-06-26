@@ -12506,6 +12506,12 @@
     githubId = 4599384;
     name = "Jack Baldry";
   };
+  jdelacroix = {
+    email = "jdelacroix@gatech.edu";
+    github = "jdelacroix";
+    githubId = 807477;
+    name = "Jean-Pierre de la Croix";
+  };
   jdelStrother = {
     email = "me@delstrother.com";
     github = "jdelStrother";
