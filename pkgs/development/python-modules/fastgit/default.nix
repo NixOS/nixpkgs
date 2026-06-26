@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastgit";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AnswerDotAI";
     repo = "fastgit";
     tag = finalAttrs.version;
-    hash = "sha256-d/CGvKe+8FqTOyDsLmEHQZCWgsFvynmxwOY1VC1DtGE=";
+    hash = "sha256-rECQZAhtD6MsDwoED7K8I3HtYdbR8DqCZqP2AqNHroY=";
   };
 
   build-system = [ setuptools ];

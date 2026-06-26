@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-player";
-  version = "1.0.16";
+  version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-player";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-iDEyR+P+iXShH0YFtqxvPbbs9kgtYvAsuKchB6plnKI=";
+    hash = "sha256-aHQbwpNr8tsfUR0Dm4WTzz6XNXjgdqZ9/2AQRPPbnog=";
   };
 
-  cargoHash = "sha256-YzT16Ej+AyLLj8uHuHxZvHWujcW8jLjVg/4MmPyorH4=";
+  cargoHash = "sha256-KVaKTMrWijResBqzH62j/YqBR4TQ77x2sK/kN40UWjw=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
