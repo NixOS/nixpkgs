@@ -5,7 +5,7 @@
   gnutls,
   openssl,
   gsasl,
-  libidn,
+  libidn2,
   pkg-config,
   nlsSupport ? true,
   idnSupport ? true,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional gsaslSupport gsasl
-    ++ lib.optional idnSupport libidn
+    ++ lib.optional idnSupport libidn2
     ++ lib.optional (sslLibrary == "gnutls") gnutls
     ++ lib.optional (sslLibrary == "openssl") openssl;
 
