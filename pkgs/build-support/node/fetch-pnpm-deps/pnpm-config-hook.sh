@@ -80,12 +80,13 @@ pnpmConfigHook() {
     fi
 
     echo "Installing dependencies"
-    if [[ -n "$pnpmWorkspaces" ]]; then
-        local IFS=" "
-        for ws in $pnpmWorkspaces; do
-            pnpmInstallFlags+=("--filter=$ws")
-        done
-    fi
+
+    local -a pnpmWorkspacesArray
+    concatTo pnpmWorkspacesArray pnpmWorkspaces
+
+    for ws in "${pnpmWorkspacesArray[@]}"; do
+        pnpmInstallFlags+=("--filter=$ws")
+    done
 
     runHook prePnpmInstall
 
