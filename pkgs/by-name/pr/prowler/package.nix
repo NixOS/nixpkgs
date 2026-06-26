@@ -1,43 +1,42 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  python3Packages,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't work with latest pydantic
-      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: {
-        dependencies = [
-          python3.pkgs.pydantic_1
-          python3.pkgs.cryptography
-          python3.pkgs.email-validator
-        ];
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.12.3";
+  version = "5.31.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-6RPtld95MauhCmSLrgncr4+s16z0PfmiiC6eAph8ZmI=";
+    hash = "sha256-V3kPj3gtS8ZkeU/rBaTPaOdfWvYI70jAi52kCX0m/jg=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with py.pkgs; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3Packages; [
+    alibabacloud-actiontrail20200706
+    alibabacloud-credentials
+    alibabacloud-cs20151215
+    alibabacloud-ecs20140526
+    alibabacloud-oss20190517
+    alibabacloud-ram20150501
+    alibabacloud-sas20181203
+    alibabacloud-sts20150401
+    alibabacloud-tea-openapi
+    alibabacloud-vpc20160428
+    alibabacloud-gateway-oss-util
+    alibabacloud-rds20140815
+    alibabacloud-sls20201230
     alive-progress
-    awsipranges
     azure-identity
     azure-keyvault-keys
     azure-mgmt-apimanagement
@@ -52,6 +51,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     azure-mgmt-loganalytics
     azure-mgmt-monitor
     azure-mgmt-network
+    azure-mgmt-postgresqlflexibleservers
     azure-mgmt-rdbms
     azure-mgmt-recoveryservices
     azure-mgmt-recoveryservicesbackup
@@ -66,37 +66,51 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     azure-storage-blob
     boto3
     botocore
+    cloudflare
     colorama
     cryptography
     dash
     dash-bootstrap-components
+    defusedxml
     detect-secrets
     dulwich
     google-api-python-client
     google-auth-httplib2
+    h2
     jsonschema
     kubernetes
+    linode-api4
+    markdown
     microsoft-kiota-abstractions
     msgraph-sdk
     numpy
+    oci
+    okta
+    openstacksdk
     pandas
     py-iam-expand
     py-ocsf-models
-    pydantic_1
+    pydantic
     pygithub
     python-dateutil
     pytz
+    scaleway
     schema
     shodan
     slack-sdk
+    stackit-core
+    stackit-iaas
+    stackit-objectstorage
+    stackit-resourcemanager
     tabulate
     tzlocal
+    uuid6
   ];
 
   pythonImportsCheck = [ "prowler" ];
 
   meta = {
-    description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
+    description = "Security tool to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
     changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
