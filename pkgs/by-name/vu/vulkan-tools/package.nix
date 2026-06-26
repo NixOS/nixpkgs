@@ -20,6 +20,8 @@
   wayland-protocols,
   wayland-scanner,
   moltenvk,
+  ibtool,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,13 +35,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-+5BL28h7+r+mLr1Tr7UT4UEB8jRrIc2JwoasJ7HzxI0=";
   };
 
-  patches = [ ./wayland-scanner.patch ];
+  patches = [
+    ./wayland-scanner.patch
+    ./icd-path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
     wayland-scanner
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
   ];
 
   buildInputs = [
@@ -61,6 +69,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     moltenvk.dev
+    ibtool
   ];
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
@@ -79,10 +88,13 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DMOLTENVK_REPO_ROOT=${moltenvk}/share/vulkan/icd.d"
-    # Don’t build the cube demo because it requires `ibtool`, which is not available in nixpkgs.
-    "-DBUILD_CUBE=OFF"
+    "-DMOLTENVK_REPO_ROOT=${moltenvk}"
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper $out/cube/vkcubepp.app/Contents/MacOS/vkcubepp $out/bin/vkcubepp
+    makeWrapper $out/cube/vkcube.app/Contents/MacOS/vkcube $out/bin/vkcube
+  '';
 
   meta = {
     description = "Khronos official Vulkan Tools and Utilities";
