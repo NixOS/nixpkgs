@@ -24,16 +24,16 @@
   w3lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "playwrightcapture";
-  version = "1.39.12";
+  version = "1.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
-    tag = "v${version}";
-    hash = "sha256-k+mzrgw4BvTGmjp/j521BQKwnaHrcNrr/9U2mgzsf8E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H1zxPsLF6D8CJ89+WeRYKj4SXNVTCCd7AV5BW7Zcm4k=";
   };
 
   pythonRelaxDeps = [
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Capture a URL with Playwright";
     homepage = "https://github.com/Lookyloo/PlaywrightCapture";
-    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${src.tag}";
+    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
