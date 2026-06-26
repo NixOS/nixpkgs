@@ -5,17 +5,17 @@
   patches ? [ ],
 }:
 let
-  version = "4.5.11";
+  version = "4.5.13";
 in
 applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-YAWlge8dShDFfMBhyRQHryZUs1yD5KNKzXOyCpRsy9w=";
+    hash = "sha256-OH5Lfprlb/hiCs5mYtrSM97WNRKmA1mWv0JAgf38rDc=";
     passthru = {
       inherit version;
-      yarnHash = "sha256-GI8viCdSXY9u0sb8dV77CB0W47CtA7UJorL1bgasfzg=";
+      yarnHash = "sha256-9qA9OGudQPtnQfuILofMmA+wK9dBKANo4c++7acUf4U=";
       yarnMissingHashes = ./missing-hashes.json;
     };
   };
