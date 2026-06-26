@@ -292,6 +292,9 @@ let
 
         coin = callPackage ../development/ocaml-modules/coin { };
 
+        colibri2 = callPackage ../development/ocaml-modules/colibri2 { };
+        colibrilib = callPackage ../development/ocaml-modules/colibri2/colibrilib.nix { };
+
         colombe = callPackage ../development/ocaml-modules/colombe { };
 
         color = callPackage ../development/ocaml-modules/color { };
