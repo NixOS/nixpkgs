@@ -4,20 +4,28 @@ import html
 import json
 import re
 import xml.sax.saxutils as xml
-
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
 from markdown_it.token import Token
 
 from . import md, options
 from .html import HTMLRenderer, UnresolvedXrefError
-from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
+from .manual_structure import (
+    FragmentType,
+    TocEntry,
+    TocEntryType,
+    XrefTarget,
+    check_structure,
+    is_include,
+    make_xml_id,
+)
 from .md import Converter, Renderer
 from .redirects import Redirects
 from .src_error import SrcError
+
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -260,6 +268,8 @@ class HTMLParameters(NamedTuple):
     chunk_toc_depth: int
     section_toc_depth: int
     media_dir: Path
+    header: Path | None = None
+    no_navheader: bool = False
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -340,7 +350,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if toc.next:
             next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
-        if toc.prev or toc.parent or toc.next:
+        # nav_header is not disabled
+        if not self._html_params.no_navheader and (toc.prev or toc.parent or toc.next):
             nav_html = "\n".join([
                 '  <div class="navheader">',
                 '   <table width="100%" summary="Navigation header">',
@@ -364,6 +375,11 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 file.write(self._redirects.get_redirect_script(toc.target.path))
             scripts.append(f'./{redirects_name}')
 
+        header_content = ""
+        if self._html_params.header:
+            with open(self._html_params.header) as header_file:
+                header_content = header_file.read()
+
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
@@ -382,6 +398,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
+            header_content,
             nav_html,
             f'  <nav class="toc-sidebar">{sidebar}</nav>' if sidebar else "",
             '  <main class="content">',
@@ -766,6 +783,9 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
+    p.add_argument('--no-navheader', default=False, action='store_true')
+    p.add_argument('--header', type=Path,
+                   help='Inject any html fragment into the <body> as first child')
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -779,7 +799,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
+                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir, args.header, args.no_navheader),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
