@@ -10,18 +10,19 @@
   pydantic,
   pytestCheckHook,
   sqlalchemy,
+  typer,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlmodel";
-  version = "0.0.38";
+  version = "0.0.39";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
     tag = finalAttrs.version;
-    hash = "sha256-GjTqsZVvuTIYxzs7d0bFE6mKPQR4ZlZywGguzOVwHnk=";
+    hash = "sha256-KrKlg1ZiThxDHmrIwy+oEAAmwUn/u8n4FKGTu1iCh1A=";
   };
 
   build-system = [ pdm-backend ];
@@ -37,6 +38,7 @@ buildPythonPackage (finalAttrs: {
     dirty-equals
     fastapi
     pytestCheckHook
+    typer
   ];
 
   pythonImportsCheck = [ "sqlmodel" ];
