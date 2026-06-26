@@ -83,6 +83,10 @@ let
       version = "5.4";
       sha256 = "sha256-7FsKEr0cRVF4LIOvROWMyXBefRTBaS66ZqwtP2VLefM=";
     };
+    "5.5" = {
+      version = "5.5+1";
+      sha256 = "sha256-ERzTg6CFXm1Z0/NSXP5MwM0H/fSpN/4D2ISFcJa1qSI=";
+    };
   };
   param = {
     # Dummy version to let the `meta` attribute set evaluate
