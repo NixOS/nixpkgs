@@ -50,5 +50,20 @@ in
         '';
       };
     };
+
+    notificationProtocol = mkOption {
+      type = types.listOf (
+        types.enum [
+          "systemd"
+          "s6"
+        ]
+      );
+
+      default = [ ];
+      apply = v: lib.unique v;
+      description = ''
+        Notification protocol that this service supports with the underlying service manager.
+      '';
+    };
   };
 }
