@@ -67,7 +67,7 @@ in
             kernel = super.kernel.override (originalArgs: {
               inherit randstructSeed;
               kernelPatches = (originalArgs.kernelPatches or [ ]) ++ kernelPatches;
-              features = lib.recursiveUpdate super.kernel.features features;
+              features = lib.recursiveUpdate (super.kernel.features or { }) features;
             });
           }
         );

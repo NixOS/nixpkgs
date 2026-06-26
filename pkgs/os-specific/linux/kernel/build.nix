@@ -80,7 +80,7 @@ lib.makeOverridable (
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
-    features ? { },
+    features ? null,
     lib ? lib_,
     stdenv ? stdenv_,
   }:
@@ -529,13 +529,21 @@ lib.makeOverridable (
       inherit
         isZen
         withRust
-        # Forwarded into passthru so features survive kernel.override() call chains
-        # used by the NixOS module system (see boot.kernelPackages apply in kernel.nix).
-        features
         ;
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;
       kernelAtLeast = lib.versionAtLeast baseVersion;
+      # Only forward features into passthru when explicitly provided and non-empty.
+      # Using null as a sentinel for "not declared" preserves the pre-existing
+      # behaviour for linuxManualConfig kernels that don't declare features:
+      # kernel.features remains a missing attribute, so downstream `or` fallbacks
+      # (e.g. in systemd-boot.nix) continue to fire as before.
+      # An empty set is excluded for the same reason: the NixOS apply function in
+      # kernel.nix always passes at least `{}` via lib.recursiveUpdate, so without
+      # this guard features would leak into passthru on every override() call even
+      # for kernels that never declared any.
+    } // lib.optionalAttrs (features != null && features != { }) {
+      inherit features;
     };
 
     # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
