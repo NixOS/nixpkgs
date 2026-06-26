@@ -9903,7 +9903,9 @@ with pkgs;
 
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio { };
 
-  obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
+  obs-studio-plugins = recurseIntoAttrs (
+    callPackage ../applications/video/obs-studio/plugins.nix { }
+  );
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
   openambit = qt5.callPackage ../applications/misc/openambit { };
