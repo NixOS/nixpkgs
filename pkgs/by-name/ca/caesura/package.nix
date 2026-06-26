@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  cacert,
   flac,
   lame,
   makeBinaryWrapper,
@@ -16,32 +17,44 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caesura";
-  version = "0.27.2";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "RogueOneEcho";
     repo = "caesura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ifaZ+rmMmWhn8HM25sRPXJKuXvWE5VG+5hFMi9hqxA0=";
+    hash = "sha256-4vBRUYAO9JzZGN7L0s8T4JbXMMVUpMy21m9V18nti54=";
   };
 
-  cargoHash = "sha256-g8Duhl5nZ6umIrAafW7s4vtDS+f06CWnFLoLSw0wa4o=";
+  cargoHash = "sha256-TnxPINGHQyPHt6PNp780QMcfr1B1rb16lrb6PKAVif0=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
   ];
-  nativeCheckInputs = runtimeDeps;
+  nativeCheckInputs = [ cacert ] ++ runtimeDeps;
 
   env = {
     CAESURA_NIX = "1";
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   postPatch = ''
     substituteInPlace Cargo.toml crates/*/Cargo.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+
+    # Upstream documents that snapshot output depends on the SoX/FLAC build.
+    # Extend their existing platform-dependent snapshot normalization to image
+    # dimensions so the spectrogram tests can run with nixpkgs' sox_ng.
+    substituteInPlace crates/core/src/utils/testing/snapshots/file_snapshot.rs \
+      --replace-fail '        if let (Some(actual_audio), Some(stored_audio)) = (&mut actual.audio, &stored.audio) {' '        if let (Some(actual_image), Some(stored_image)) = (&mut actual.image, &stored.image) {
+            actual_image.width = stored_image.width;
+            actual_image.height = stored_image.height;
+        }
+        if let (Some(actual_audio), Some(stored_audio)) = (&mut actual.audio, &stored.audio) {'
   '';
 
   preCheck = ''
+    export HOME=$TMPDIR
     cat > config.yml <<EOF
     verbosity: trace
     EOF
