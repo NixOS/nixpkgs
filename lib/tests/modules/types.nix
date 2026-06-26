@@ -60,6 +60,10 @@ in
     };
     nullableValue.list = [ { bar = [ 1 ]; } ]; # list
     nullableValue.lambda = x: x; # Error
+    nullableValue.mixed = lib.mkMerge [
+      null
+      "foo"
+    ]; # Error
 
     # serializableValueWith { nullable = false; }
     structuredValue.null = null; # Error
