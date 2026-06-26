@@ -80,7 +80,6 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     # Set config used by tests to ensure reproducibility
     echo 'pbc_tools_pbc_fft_engine = "NUMPY"' > pyscf/pyscf_config.py
-    export OMP_NUM_THREADS=1
     ulimit -s 20000
     export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
   '';

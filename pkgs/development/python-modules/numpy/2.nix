@@ -93,10 +93,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  preConfigure = ''
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
   buildInputs = [
     blas
     lapack
