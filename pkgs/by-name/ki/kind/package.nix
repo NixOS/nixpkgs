@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kind";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     rev = "v${finalAttrs.version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-3icwtfwlSkYOEw9bzEhKJC7OtE1lnBjZSYp+cC/2XNc=";
+    hash = "sha256-ii0VhS1Nib+r2ZFIIkRvkcGY1fLxev6WnhbqvaZW7j8=";
   };
 
   patches = [
