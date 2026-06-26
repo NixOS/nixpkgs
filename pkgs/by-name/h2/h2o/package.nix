@@ -20,6 +20,8 @@
   ruby,
   withUring ? stdenv.hostPlatform.isLinux,
   liburing,
+  withZstandard ? true,
+  zstd,
   nixosTests,
 }:
 
@@ -53,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     ruby
   ]
-  ++ lib.optional withUring liburing;
+  ++ lib.optional withUring liburing
+  ++ lib.optional withZstandard zstd;
 
   buildInputs = [
     brotli
@@ -64,11 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     wslay
   ]
-  ++ lib.optional withBrotli brotli;
+  ++ lib.optional withBrotli brotli
+  ++ lib.optional withZstandard zstd;
 
   cmakeFlags = [
     "-DWITH_BROTLI=${if withBrotli then "ON" else "OFF"}"
     "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
+    "-DWITH_ZSTD=${if withZstandard then "ON" else "OFF"}"
   ];
 
   postInstall = ''
