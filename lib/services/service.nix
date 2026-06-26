@@ -50,5 +50,18 @@ in
         '';
       };
     };
+
+    notificationProtocol = mkOption {
+      type = types.enum [
+        "none"
+        "systemd"
+        "s6"
+      ];
+      default = "none";
+
+      description = ''
+        Notification protocol you want to use.
+      '';
+    };
   };
 }

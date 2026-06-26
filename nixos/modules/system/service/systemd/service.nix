@@ -170,7 +170,7 @@ in
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
-        Type = lib.mkDefault "simple";
+        Type = if (config.serviceManager.notificationProtocol == "systemd") then "notify" else "simple";
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [
