@@ -396,6 +396,25 @@ let
         };
       };
 
+      cl-gdk4 = build-asdf-system {
+        pname = "cl-gdk4";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+        ];
+        nativeBuildInputs = [
+          pkgs.gobject-introspection
+          pkgs.gtk4
+        ];
+        nativeLibs = [
+          pkgs.gtk4
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
       cl-avro = build-asdf-system {
         pname = "cl-avro";
         version = "trunk";
