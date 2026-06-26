@@ -1300,6 +1300,8 @@ self: super: with self; {
 
   audio-hotplug = callPackage ../development/python-modules/audio-hotplug { };
 
+  audio-offset-finder = callPackage ../by-name/au/audio-offset-finder { };
+
   audioop-lts =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
 
