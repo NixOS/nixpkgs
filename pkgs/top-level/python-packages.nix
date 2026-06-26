@@ -5130,6 +5130,8 @@ self: super: with self; {
 
   elvia = callPackage ../development/python-modules/elvia { };
 
+  email-reply-parser = callPackage ../development/python-modules/email-reply-parser { };
+
   email-validator = callPackage ../development/python-modules/email-validator { };
 
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
