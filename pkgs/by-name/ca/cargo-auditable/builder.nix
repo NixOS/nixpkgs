@@ -16,13 +16,10 @@ lib.extendMkDerivation {
       auditable ? true,
       hash ? "",
       cargoHash ? "",
-      passthru ? { },
       ...
     }:
     {
       inherit auditable pname;
-
-      __structuredAttrs = true;
 
       src = fetchFromGitHub {
         owner = "rust-secure-code";
@@ -48,9 +45,7 @@ lib.extendMkDerivation {
         installManPage cargo-auditable/cargo-auditable.1
       '';
 
-      passthru = passthru // {
-        bootstrap = auditable-bootstrap;
-      };
+      passthru.bootstrap = auditable-bootstrap;
 
       meta = {
         description = "Tool to make production Rust binaries auditable";
