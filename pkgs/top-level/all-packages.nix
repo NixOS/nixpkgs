@@ -9198,9 +9198,7 @@ with pkgs;
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
 
-  ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
-    protobuf = protobuf_21;
-  };
+  ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 

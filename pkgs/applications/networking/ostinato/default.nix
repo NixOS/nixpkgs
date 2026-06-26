@@ -9,7 +9,7 @@
   makeDesktopItem,
   qtbase,
   qtscript,
-  protobuf,
+  protobuf_21,
   libpcap,
   wireshark,
   gzip,
@@ -17,7 +17,9 @@
   gawk,
   libnl,
 }:
-
+let
+  protobuf = protobuf_21;
+in
 stdenv.mkDerivation rec {
   pname = "ostinato";
   version = "1.3.0";
