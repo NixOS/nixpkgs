@@ -19065,6 +19065,8 @@ self: super: with self; {
 
   stackit-core = callPackage ../development/python-modules/stackit-core { };
 
+  stackit-iaas = callPackage ../development/python-modules/stackit-iaas { };
+
   stackprinter = callPackage ../development/python-modules/stackprinter { };
 
   stamina = callPackage ../development/python-modules/stamina { };
