@@ -19,18 +19,21 @@ let
 
   ostinatoIcon = fetchurl {
     url = "https://ostinato.org/images/site-logo.png";
-    sha256 = "f5c067823f2934e4d358d76f65a343efd69ad783a7aeabd7ab4ce3cd03490d70";
+    hash = "sha256-9cBngj8pNOTTWNdvZaND79aa14OnrqvXq0zjzQNJDXA=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ostinato";
   version = "1.3.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pstavirs";
     repo = "ostinato";
-    rev = "v${version}";
-    sha256 = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/fPUxGeh5Cc3rb+1mR0chkiFPw5m+O6KtWDvzLn0iYo=";
   };
 
   buildInputs = [
@@ -45,6 +48,8 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     qt5.qmake
     qt5.wrapQtAppsHook
+    qt5.qtscript
+    protobuf
   ];
 
   patches = [ ./drone_ini.patch ];
@@ -91,4 +96,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rick68 ];
     platforms = with lib.platforms; linux ++ darwin ++ cygwin;
   };
-}
+})
