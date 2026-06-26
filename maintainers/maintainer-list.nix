@@ -1481,6 +1481,12 @@
     githubId = 89567766;
     name = "Zynix";
   };
+  alsvartr = {
+    email = "nazarov.pn@gmail.com";
+    github = "alsvartr";
+    githubId = 205880;
+    name = "Pavel Nazarov";
+  };
   alternateved = {
     email = "alternateved@pm.me";
     github = "alternateved";
