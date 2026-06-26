@@ -10,6 +10,7 @@
   pkg-config,
   python3,
   jonquil,
+  openmpCheckPhaseHook,
 }:
 
 assert (
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     pkg-config
     python3
+    openmpCheckPhaseHook
   ]
   ++ lib.optionals (buildType == "meson") [
     meson
