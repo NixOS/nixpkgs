@@ -101,6 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       bpmct
       developmentcats
+      faukah
       kylecarbs
       phorcys420
     ];
