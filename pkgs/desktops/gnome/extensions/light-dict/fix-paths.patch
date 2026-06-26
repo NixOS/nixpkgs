@@ -1,0 +1,82 @@
+diff --git a/cli/_ldocr.sh b/cli/_ldocr.sh
+index a91ddaa..b5e11bf 100644
+--- a/cli/_ldocr.sh
++++ b/cli/_ldocr.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash-path@
+ # SPDX-FileCopyrightText: tuberry
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
+diff --git a/cli/get-version.sh b/cli/get-version.sh
+index 85755fb..10545a0 100755
+--- a/cli/get-version.sh
++++ b/cli/get-version.sh
+@@ -1,6 +1,5 @@
+-#!/bin/bash
++#!@bash-path@
+ # SPDX-FileCopyrightText: tuberry
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
+-RET=$(curl -sSf https://extensions.gnome.org/extension/"$EGO"/ | grep data-svm | sed -e 's/.*: //; s/}}"//') # | xargs -I{} expr {} + 1)
+-echo "${RET:?'ERROR: Failed to fetch version, build with -Dversion option to skip'}"
++echo 83
+diff --git a/cli/update-po.sh b/cli/update-po.sh
+index 1fdca32..8adaffd 100755
+--- a/cli/update-po.sh
++++ b/cli/update-po.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash-path@
+ # SPDX-FileCopyrightText: tuberry
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ 
+diff --git a/meson.build b/meson.build
+index 3063486..9c98f9f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -37,7 +37,7 @@ if(target == 'system')
+   schema_dir = datadir / 'glib-2.0' / 'schemas'
+   target_dir = datadir / 'gnome-shell' / 'extensions' / metadata['uuid']
+ else
+-  target_root = (target == 'local') ? fs.expanduser('~/.local/share/gnome-shell/extensions/') : meson.project_build_root()
++  target_root = '###gnome-shell-extensions-path###'
+   target_dir = target_root / metadata['uuid']
+   locale_dir = target_dir / 'locale'
+   schema_dir = target_dir / 'schemas'
+diff --git a/src/extension.js b/src/extension.js
+index 6af3e19..dd22b6f 100644
+--- a/src/extension.js
++++ b/src/extension.js
+@@ -276,7 +276,7 @@ class DictAct extends F.Mortal {
+         let ret = new F.Mortal();
+         this.$set.tie([
+             K.OCRP, [K.OCRS, null, x => this.$src.tray.hub?.$menu.ocr.choose(x)],
+-        ], ret, () => { ret.cmd = `python ${T.ROOT}/ldocr.py -m ${OCRModes[ret[K.OCRS]]} ${ret[K.OCRP]}`; }).tie([
++        ], ret, () => { ret.cmd = `@python-executable-path@ ${T.ROOT}/ldocr.py -m ${OCRModes[ret[K.OCRS]]} ${ret[K.OCRP]}`; }).tie([
+             [K.KEYS, x => !!x.length, x => ret.$src.keys.toggle(x)],
+             [K.DOCR, null, x => { ret.$src.dwell.toggle(x); this.$src.tray.hub?.$setDwell(x); }],
+         ], ret);
+diff --git a/src/ldocr.py b/src/ldocr.py
+index 80a38b9..7f34f7f 100644
+--- a/src/ldocr.py
++++ b/src/ldocr.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!@python-executable-path@
+ # SPDX-FileCopyrightText: tuberry
+ # SPDX-License-Identifier: GPL-3.0-or-later
+ # type: ignore
+diff --git a/src/prefs.js b/src/prefs.js
+index 8d87e4e..de4cae4 100644
+--- a/src/prefs.js
++++ b/src/prefs.js
+@@ -205,7 +205,7 @@ class PrefsBasic extends UI.Page {
+         let opencv = '<a href="https://github.com/opencv/opencv-python">opencv-python</a>',
+             tesseract = '<a href="https://github.com/madmaze/pytesseract">pytesseract</a>',
+             ocr = T.seq(new UI.Help()[$].set({popover: new Gtk.Popover()[$].connect('notify::visible', w => w.child?.select_region(-1, -1))}), // HACK: workaround for full selection on popup
+-                w => T.execute(`python ${T.ROOT}/ldocr.py -h`).then(x => w.setup(x, {selectable: true, cssClasses: ['ld-popover']})).catch(e => w.setup(e.message, null, true)));
++                w => T.execute(`@python-executable-path@ ${T.ROOT}/ldocr.py -h`).then(x => w.setup(x, {selectable: true, cssClasses: ['ld-popover']})).catch(e => w.setup(e.message, null, true)));
+         this.$add([null, [
+             [[_('Enable s_ystray'), _('Scroll to toggle the trigger style')], K.TRAY],
+             [[_('_Trigger style'), _('Passive means pressing Alt to trigger')], K.PSV, K.TRG],
