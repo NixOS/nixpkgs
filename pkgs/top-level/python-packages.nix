@@ -19069,6 +19069,8 @@ self: super: with self; {
 
   stackit-objectstorage = callPackage ../development/python-modules/stackit-objectstorage { };
 
+  stackit-resourcemanager = callPackage ../development/python-modules/stackit-resourcemanager { };
+
   stackprinter = callPackage ../development/python-modules/stackprinter { };
 
   stamina = callPackage ../development/python-modules/stamina { };
