@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   libpng,
+  openmpCheckPhaseHook,
   glib, # just passthru
 
   # for passthru.tests
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    openmpCheckPhaseHook
     __flattenIncludeHackHook
   ];
 
