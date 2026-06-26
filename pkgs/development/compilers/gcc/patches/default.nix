@@ -122,6 +122,14 @@ optionals noSysDirs (
 # diffs from the Homebrew repo.
 ++ optionals stdenv.targetPlatform.isDarwin (
   {
+    "16" = [
+      # Patches from https://github.com/iains/gcc-16-branch
+      (fetchpatch {
+        name = "gcc-16-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff";
+        hash = "sha256-dXfozKH//TRjAph7hUok7850hOdujTTi/iFM2HFA8fw=";
+      })
+    ];
     "15" = [
       # Patches from https://github.com/iains/gcc-15-branch
       (fetchpatch {
