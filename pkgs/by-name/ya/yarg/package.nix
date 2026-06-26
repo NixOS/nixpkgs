@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/YARC-Official/YARG/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
+    mainProgram = "yarg";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
