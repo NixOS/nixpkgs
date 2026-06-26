@@ -1699,4 +1699,8 @@ in
       postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
     };
   };
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.ma27
+  ];
 }
