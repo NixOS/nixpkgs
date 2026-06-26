@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-ytoTTrnwN1lMw/gTxS4DRAq+tV5WzB2xHP4vVxLZ1ZI=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://web.archive.org/web/20190926040940/http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";
