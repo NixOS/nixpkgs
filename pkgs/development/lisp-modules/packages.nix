@@ -377,6 +377,25 @@ let
         };
       };
 
+      cl-gtk4_dot_sourceview = build-asdf-system {
+        pname = "cl-gtk4.sourceview";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+          cl-gtk4
+        ];
+        nativeBuildInputs = [
+          pkgs.gtksourceview5
+        ];
+        nativeLibs = [
+          pkgs.gtksourceview5
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
       cl-avro = build-asdf-system {
         pname = "cl-avro";
         version = "trunk";
