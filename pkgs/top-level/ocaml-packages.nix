@@ -762,6 +762,8 @@ let
           inherit (pkgs) gnuplot;
         };
 
+        grace = callPackage ../development/ocaml-modules/grace { };
+
         graphics =
           if lib.versionOlder "4.09" ocaml.version then
             callPackage ../development/ocaml-modules/graphics { }
