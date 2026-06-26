@@ -11,6 +11,7 @@
   flaky,
   flask,
   numpy,
+  websockets,
   setuptools,
 }:
 
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     flaky
     flask
     numpy
+    websockets
     pytestCheckHook
   ];
 
