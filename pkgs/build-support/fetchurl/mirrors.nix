@@ -54,8 +54,6 @@
 
   # GCC
   gcc = [
-    "https://gcc.gnu.org/pub/gcc/"
-    "https://sourceware.org/pub/gcc/"
     "https://mirror.koddos.net/gcc/"
     "https://bigsearcher.com/mirrors/gcc/"
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
