@@ -118,16 +118,12 @@ rec {
         config:
         let
           # TODO: Consider deprecating this or making it generic for all problems
-          allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
-
           allowBrokenPredicate =
             lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
               "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
               config.allowBrokenPredicate;
         in
-        if allowBroken then
-          attrs: false
-        else if config ? allowBrokenPredicate then
+        if config ? allowBrokenPredicate then
           attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
         else
           attrs: attrs ? meta.broken && attrs.meta.broken;
