@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rmux";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Helvesec";
     repo = "rmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zlgF+UOpQ67DPdD6U4r0eBTAQFMgFEljoQG4/YzNmlk=";
+    hash = "sha256-W+H5MBh+EPkppdDaHMTPUVM1ZpPca/MeVOs/GM1x8UQ=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-GowybnjrP39ZZDmSR+2u3Y6tWNY9+MM712U/WZQE80Q=";
+  cargoHash = "sha256-kGZczNoHKHWR4fpAvXRhldpYHVgSkIOgAa/OUSaZVvs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
