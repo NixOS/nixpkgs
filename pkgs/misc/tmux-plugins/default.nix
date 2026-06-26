@@ -1162,7 +1162,7 @@ in
 
   tmux-sm = mkTmuxPlugin {
     pluginName = "tmux-sm";
-    version = "0-unstable-2026-05-14";
+    version = "1.2.0";
     src = fetchFromGitHub {
       owner = "vimlinuz";
       repo = "tmux-sm";
