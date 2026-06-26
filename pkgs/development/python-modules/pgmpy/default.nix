@@ -94,6 +94,10 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  preCheck = ''
+    export OMP_NUM_THREADS=1
+  '';
+
   pythonImportsCheck = [ "pgmpy" ];
 
   meta = {
