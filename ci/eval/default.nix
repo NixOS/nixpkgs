@@ -92,6 +92,7 @@ let
       evalSystem ? builtins.currentSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
       attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
+      extraNixpkgsConfig' ? extraNixpkgsConfig,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -124,7 +125,7 @@ let
           --arg attrpathFile "${attrpathFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
-          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
+          --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig')} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
           > "$outputDir/result/$myChunk" \
@@ -216,6 +217,38 @@ let
       '';
 
   diff = callPackage ./diff.nix { };
+
+  checkNewPackages = {
+    # The system to evaluate.
+    # Note that this is intentionally not called `system`,
+    # because `--argstr system` would only be passed to the ci/default.nix file!
+    evalSystem ? builtins.currentSystem,
+    diffDir,
+  }: let
+      attrpathFile = "${runCommand "attrpathFile" {
+        # Don't depend on -dev outputs to reduce closure size for CI.
+        nativeBuildInputs = map lib.getBin [
+          jq
+        ];
+      } ''
+        mkdir -p $out
+        cat ${diffDir}/*/diff.json | jq '.added' > $out/${evalSystem}.json
+      ''}/${evalSystem}.json";
+     in
+      singleSystem {
+       inherit evalSystem attrpathFile;
+       extraNixpkgsConfig' = {
+            # List of problems that should fail for new packages
+            problems.matchers = lib.mkForce (
+              lib.optionals (!includeBroken) [
+                {
+                  kind = "broken";
+                  handler = "error";
+                }
+              ]
+            );
+       } // extraNixpkgsConfig;
+    };
 
   combine =
     {
@@ -319,6 +352,7 @@ in
     attrpathsSuperset
     singleSystem
     diff
+    checkNewPackages
     combine
     compare
     # The above three are used by separate VMs in a GitHub workflow,
