@@ -56,11 +56,18 @@ in
         User = "fiduswriter";
         Group = "fiduswriter";
 
+        StateDirectory = "fiduswriter";
         ExecStart = "${cfg.package}/bin/fiduswriter-start";
 
         Restart = "on-failure";
         RestartSec = "5s";
       };
+
+      preStart = ''
+        ln -sf "${cfg.package.passthru.frontend}/static-collected" ${stateDir}/static-collected
+        ln -sf "${cfg.package.passthru.frontend}/static-transpile" ${stateDir}/static-transpile
+        ln -sf "${cfg.package.passthru.frontend}/static-libs" ${stateDir}/static-libs
+      '';
 
       wantedBy = [
         "multi-user.target"

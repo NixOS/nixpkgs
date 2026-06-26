@@ -33,20 +33,17 @@
     machine =
       { config, ... }:
       {
-        services.icosa-gallery.host = "0.0.0.0";
-
         # forward ports from VM to host
         virtualisation.forwardPorts =
-          let
-            inherit (config.services.icosa-gallery) port;
-          in
-          [
-            {
+          map
+            (port: {
               from = "host";
-              host = { inherit port; };
-              guest = { inherit port; };
-            }
-          ];
+              host.port = port;
+              guest.port = port;
+            })
+            [
+              8000
+            ];
 
         # forwarded ports need to be accessible
         networking.firewall.enable = false;
