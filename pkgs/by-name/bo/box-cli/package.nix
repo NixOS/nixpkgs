@@ -6,17 +6,23 @@
 }:
 
 let
-  sources = import ./sources.nix;
+  sources = lib.importJSON ./sources.json;
+  platform =
+    sources.platforms.${stdenv.hostPlatform.system}
+      or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box-cli";
-  version = "0.1.112";
+  inherit (sources) version;
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  src = fetchurl sources.${stdenv.hostPlatform.system};
+  src = fetchurl {
+    url = "https://github.com/ariana-dot-dev/agent-server/releases/download/${sources.tag}/${platform.filename}";
+    inherit (platform) hash;
+  };
 
   dontUnpack = true;
 
@@ -30,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "CLI for Ascii Box cloud sandboxes";
     homepage = "https://ascii.dev";
@@ -37,6 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ pwnwriter ];
     mainProgram = "box";
-    platforms = lib.attrNames sources;
+    platforms = lib.attrNames sources.platforms;
   };
 })
