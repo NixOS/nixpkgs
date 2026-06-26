@@ -2881,6 +2881,9 @@
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
+  "setup-hook-omp-check": [
+    "index.html#setup-hook-omp-check"
+  ],
   "ninja": [
     "index.html#ninja"
   ],
