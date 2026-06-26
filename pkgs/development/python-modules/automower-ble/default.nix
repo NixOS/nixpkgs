@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     description = "Module to connect to Husqvarna Automower Connect";
     homepage = "https://github.com/alistair23/AutoMower-BLE";
     changelog = "https://github.com/alistair23/AutoMower-BLE/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })
