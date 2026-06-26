@@ -28,20 +28,20 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ccusage";
-  version = "20.0.6";
+  version = "20.0.14";
 
   src = fetchFromGitHub {
     owner = "ryoppippi";
     repo = "ccusage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uf/FlPprxx4jh74YwjmYMtoIHpTkKrWTLetbNoYiFv4=";
+    hash = "sha256-KtN0dJ183W9i9y+eyLl95WKXrtu7uF0D/sN6/hu6Sr4=";
   };
 
   # The Cargo workspace lives in rust/, not at the repo root.
   cargoRoot = "rust";
   buildAndTestSubdir = "rust";
 
-  cargoHash = "sha256-izA2Gs5nPmt0zn6/e1xM80vyyQHYKGEUDpUFRpyFiB8=";
+  cargoHash = "sha256-h3qXDzIu7Qv7/OnaVH9Fz3a3ZTChNS5JcaiHe/XG2eE=";
 
   __structuredAttrs = true;
   strictDeps = true;
