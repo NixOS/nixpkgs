@@ -5,6 +5,7 @@
   fetchurl,
   extraCommandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+  _7zz,
 }:
 
 let
@@ -31,7 +32,16 @@ in
     url = sources.url;
     hash = sources.hash;
   };
-  sourceRoot = "Kiro";
+
+  # Kiro.dmg is APFS formatted, unpack with 7zz
+  extraNativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ _7zz ];
+
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "Kiro.app" else "Kiro";
+
+  sourceExecutableName = if stdenv.hostPlatform.isDarwin then "code" else "kiro";
+
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   patchVSCodePath = true;
 
   tests = { };
