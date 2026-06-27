@@ -64,11 +64,14 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
   generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
-- `extraLuaPackages`: A function passed on to `lua.withPackages`
-- `withPython3`, `withNodeJs`, `withRuby` control when to enable neovim
+- `extraLuaPackages`: A function passed on to `lua.withPackages`.
+- `extraPython3Packages`: A function passed on to `python3.withPackages`.
+- `withPython3`, `withNodeJs`, `withRuby`, `withPerl` control when to enable neovim
   providers (see `:h provider`).
+- `vimAlias` and `viAlias` control whether to symlink the `vim` and `vi` binaries to `nvim` respectively.
+- `extraName` is a string appended to the package name and derivation name.
 
-```
+```nix
 wrapNeovimUnstable neovim-unwrapped {
   autoconfigure = true;
   autowrapRuntimeDeps = true;
@@ -98,7 +101,7 @@ wrapNeovimUnstable neovim-unwrapped {
 }
 ```
 
-You can explore the configuration with`nix repl` to discover these options and
+You can explore the configuration with `nix repl` to discover these options and
 override them. For instance:
 ```nix
 neovim.overrideAttrs (oldAttrs: {
