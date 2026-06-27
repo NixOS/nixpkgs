@@ -109,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
   doCheck = with stdenv.hostPlatform; !isStatic && isLinux;
   checkTarget = "unit";
