@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-knife";
-  version = "0.0.21";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "TakWolf";
     repo = "pixel-font-knife";
     tag = version;
-    hash = "sha256-f4jaLEPXl8oo1olWBeymMn5a8Tyl07h1TW4pZ5OItZU=";
+    hash = "sha256-ZZXanTQNkzFUb3PntyDpEZshYgp2WIR3TLSICT9sgzc=";
   };
 
   build-system = [ uv-build ];
