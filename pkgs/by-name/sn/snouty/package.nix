@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -7,22 +8,34 @@
   openssl,
   writableTmpDirAsHomeHook,
   podman,
+  docker-compose,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snouty";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "antithesishq";
     repo = "snouty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zO+2UFu/KD2dtE2AkUVv5A1EBFMsSTl8gP18bCxquI8=";
+    hash = "sha256-ob9Z20V7r126nFYsXnPaE1DFcmtbEYJjSlrrGucWpqg=";
   };
 
-  cargoHash = "sha256-fWdzaqyFT2ZFTy5AsejDgEm3E55syLKbYz5DW9Ra2PQ=";
+  cargoPatches = [
+    # merges snouty's Cargo.lock contents with hegeltest-c's Cargo.lock contents
+    ./hegeltest-c-deps.patch
+  ];
+
+  cargoHash = "sha256-EYVYpWS+Lg4CKDiYkypzAM080wdOBC09i+m3FD2lYTU=";
+
+  postPatch = ''
+    # the current rust setup hook leaves this unsubstituted file around unnecessarily
+    # but it makes hegeltest-c be unable to find the vendored deps
+    rm "$cargoDepsCopy"/.cargo/config.toml
+  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,10 +48,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  postInstall = ''
-    installShellCompletion \
-      $releaseDir/build/snouty-*/out/snouty.{bash,fish} \
-      --zsh $releaseDir/build/snouty-*/out/_snouty
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    installShellCompletion --cmd snouty \
+      --bash <($out/bin/snouty completions bash) \
+      --zsh <($out/bin/snouty completions zsh) \
+      --fish <($out/bin/snouty completions fish)
   '';
 
   useNextest = true;
@@ -46,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     podman
+    docker-compose
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
