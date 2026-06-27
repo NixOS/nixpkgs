@@ -146,13 +146,13 @@ let
     {
       # A path or cleanSourceWith result to filter and/or rename.
       src,
-      # Optional with default value: constant true (include everything)
+      # Optional with default value of null (include everything)
       # The function will be combined with the && operator such
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
       # Type: A function (Path -> Type -> Bool)
-      filter ? _path: _type: true,
+      filter ? null,
       # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
       name ? null,
@@ -163,7 +163,12 @@ let
     fromSourceAttributes {
       inherit (orig) origSrc;
       filter =
-        if orig.filter == null then filter else path: type: filter path type && orig.filter path type;
+        if orig.filter == null then
+          filter
+        else if filter == null then
+          orig.filter
+        else
+          path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
     };
 
@@ -438,9 +443,13 @@ let
     }:
     {
       _isLibCleanSourceWith = true;
-      inherit origSrc filter name;
+      inherit origSrc name;
+      # preserve outside checks, since a filter of null looks odd for
+      # comparisons
+      filter = if filter == null then _: _: true else filter;
       outPath = path {
-        inherit filter name;
+        inherit name;
+        ${if filter != null then "filter" else null} = filter;
         path = origSrc;
       };
     };
