@@ -1,16 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
   patchelf,
+  requireFile,
 }:
 stdenv.mkDerivation rec {
   pname = "mlc";
-  version = "3.9a";
+  version = "3.12";
 
-  src = fetchurl {
-    url = "https://downloadmirror.intel.com/736634/mlc_v${version}.tgz";
-    sha256 = "EDa5V56qCPQxgCu4eddYiWDrk7vkYS0jisnG004L+jQ=";
+  src = requireFile {
+    url = "https://www.intel.com/content/www/us/en/download/736633/intel-memory-latency-checker-intel-mlc.html";
+    sha256 = "4b8f7685d71998dd5d445432ab40c2115158462bfcd359113ae551a84e250c50";
+    name = "mlc_v${version}.tgz";
   };
 
   sourceRoot = "Linux";
