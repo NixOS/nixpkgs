@@ -1178,9 +1178,9 @@ in
     '';
     postConfigure = (old.postConfigure or "") + ''
       substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
-        --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",'
+        --replace-fail '"ltreesitter == 0.3.0",' '"ltreesitter >= 0.3.0",' \
+        --replace-fail '"luv == 1.52.1",' '"luv >= 1.52.1",' \
+        --replace-fail '"tl == 0.24.8",' '"tl >= 0.24.8",'
     '';
   });
 

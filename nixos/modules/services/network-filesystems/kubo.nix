@@ -334,7 +334,7 @@ in
 
     programs.fuse = {
       enable = lib.mkIf cfg.autoMount true;
-      userAllowOther = lib.mkIf cfg.settings.Mounts.fuseAllowOther true;
+      userAllowOther = lib.mkIf cfg.settings.Mounts.FuseAllowOther true;
     };
 
     users.users = lib.mkIf (cfg.user == "ipfs") {
