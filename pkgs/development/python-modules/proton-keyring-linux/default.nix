@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "proton-keyring-linux";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-keyring-linux";
     tag = "v${version}";
-    hash = "sha256-deld1MjuTjgjXBCUuDzYABRjN4gT1mz+duV0Qj4IWCg=";
+    hash = "sha256-b5MccHj0uH+XwhUfZmWQw15cUK343mK592kP1XIb5UA=";
   };
 
   build-system = [ setuptools ];
