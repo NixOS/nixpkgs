@@ -21,6 +21,7 @@
   libxml2,
   systemd,
   unzip,
+  vte-gtk4,
   nix-update-script,
   fetchpatch,
 }:
@@ -83,6 +84,7 @@ python3Packages.buildPythonApplication {
     libadwaita
     libxml2
     systemd
+    vte-gtk4
   ];
 
   dontUseCmakeConfigure = true;
