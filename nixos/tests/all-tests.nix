@@ -574,6 +574,7 @@ in
   fedimintd = runTest ./fedimintd.nix;
   ferm = runTest ./ferm.nix;
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
+  festival = runTest ./festival.nix;
   fider = runTest ./fider.nix;
   filebrowser = runTest ./filebrowser.nix;
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
