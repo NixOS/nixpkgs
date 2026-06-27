@@ -81,4 +81,7 @@ lib.makeScope newScope (self: {
   upc_ca_teo_hts = self.callPackage ./voices/upc_ca_teo_hts { };
   upc_ca_uri_hts = self.callPackage ./voices/upc_ca_uri_hts { };
 
+  # Czech
+  czech_mbrola_cz2 = self.callPackage ./voices/czech_mbrola_cz2 { };
+
 })
