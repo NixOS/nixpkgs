@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = with lib; {
+    changelog = "https://github.com/freescout-help-desk/freescout/releases/tag/${finalAttrs.src.tag}";
     description = "Free self-hosted help desk & shared mailbox";
     license = licenses.agpl3Only;
     homepage = "https://freescout.net/";
