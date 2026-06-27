@@ -144,7 +144,7 @@ let
   );
   useSharedNBytes = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.5");
   useSharedLief = lib.versionAtLeast version "25.6";
-  useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
   useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
@@ -190,7 +190,8 @@ let
     inherit nbytes;
   })
   // (lib.optionalAttrs useSharedMerve {
-    inherit merve;
+    # Merve cannot be built with simdutf_6, and upstream also disables simdutf support on the 24.x branch
+    merve = if majorVersion == "24" then (merve.override { simdutf = null; }) else merve;
   })
   // (lib.optionalAttrs useSharedZstd {
     inherit zstd;
