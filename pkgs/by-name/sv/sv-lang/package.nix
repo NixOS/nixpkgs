@@ -7,6 +7,7 @@
   cmake,
   ninja,
   fmt,
+  llvmPackages,
   mimalloc,
   python3,
 }:
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    llvmPackages.clang-tools
     python3
     ninja
   ];
@@ -59,6 +61,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ sharzy ];
     mainProgram = "slang";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
