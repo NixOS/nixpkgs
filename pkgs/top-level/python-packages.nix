@@ -10911,6 +10911,8 @@ self: super: with self; {
 
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
+  multiaddr = callPackage ../development/python-modules/multiaddr { };
+
   multidict = callPackage ../development/python-modules/multidict { };
 
   multimethod = callPackage ../development/python-modules/multimethod { };
@@ -13868,8 +13870,6 @@ self: super: with self; {
   py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
 
   py-moneyed = callPackage ../development/python-modules/py-moneyed { };
-
-  py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
 
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 

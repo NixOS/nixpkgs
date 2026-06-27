@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "py-multiaddr";
+  pname = "multiaddr";
   version = "0.0.11";
   pyproject = true;
 
