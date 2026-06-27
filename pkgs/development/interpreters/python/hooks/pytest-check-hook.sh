@@ -22,7 +22,7 @@ function _pytestIncludeExcludeExpr() {
 
 function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
-    runHook preCheck
+    runHook preInstallCheck
 
     # Compose arguments
     local -a flagsArray=(-m pytest)
@@ -90,11 +90,11 @@ EOF
     echoCmd 'pytest flags' "${flagsArray[@]}"
     @pythonCheckInterpreter@ "${flagsArray[@]}"
 
-    runHook postCheck
+    runHook postInstallCheck
     echo "Finished executing pytestCheckPhase"
 }
 
 if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using pytestCheckPhase"
-    appendToVar preDistPhases pytestCheckPhase
+    installCheckPhase=pytestCheckPhase
 fi
