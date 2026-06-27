@@ -26,9 +26,11 @@ let
   inSystem = config.boot.supportedFilesystems.btrfs or false;
 
   cfgScrub = config.services.btrfs.autoScrub;
+  cfgReclaim = config.services.btrfs.autoReclaim;
 
   enableAutoScrub = cfgScrub.enable;
-  enableBtrfs = inInitrd || inSystem || enableAutoScrub;
+  enableAutoReclaim = cfgReclaim.enable;
+  enableBtrfs = inInitrd || inSystem || enableAutoScrub || enableAutoReclaim;
 
 in
 
@@ -75,6 +77,71 @@ in
         '';
       };
 
+    };
+
+    services.btrfs.autoReclaim = {
+      enable = mkEnableOption "automatic background reclaim threshold for btrfs filesystems" // {
+        description = ''
+          Whether to enable automatic background reclaim for btrfs filesystems.
+
+          When enabled, a udev rule is installed that sets the
+          {file}`bg_reclaim_threshold` sysfs attribute on every btrfs
+          filesystem as it becomes available. This instructs the kernel to
+          automatically start a balance operation on block groups that exceed
+          the configured usage threshold.
+
+          For a more detailed explanation of btrfs balance and reclaim see
+          https://wiki.tnonline.net/w/Btrfs/Balance.
+        '';
+      };
+
+      dataThreshold = mkOption {
+        default = 10;
+        type = types.ints.between 0 100;
+        example = 75;
+        description = ''
+          Percentage of a data block group's space usage that triggers automatic
+          background reclaim via {command}`btrfs balance`.
+
+          This sets the {file}`allocation/data/bg_reclaim_threshold` sysfs
+          attribute on all btrfs filesystems, which is only available on Linux
+          kernel 5.19 and later. When the threshold is reached, btrfs will
+          automatically attempt to reclaim the data block group in the
+          background.
+
+          For more details on the reclaim mechanism see
+          https://btrfs.readthedocs.io/en/latest/Administration.html#uuid.
+
+          ::: {.warning}
+          Setting this value too high can cause excessive write amplification
+          on SSDs due to frequent block group reclaims.
+          :::
+        '';
+      };
+
+      metadataThreshold = mkOption {
+        default = 50;
+        type = types.ints.between 0 100;
+        example = 75;
+        description = ''
+          Percentage of a metadata block group's space usage that triggers automatic
+          background reclaim via {command}`btrfs balance`.
+
+          This sets the {file}`allocation/metadata/bg_reclaim_threshold` sysfs
+          attribute on all btrfs filesystems, which is only available on Linux
+          kernel 5.19 and later. When the threshold is reached, btrfs will
+          automatically attempt to reclaim the metadata block group in the
+          background.
+
+          For more details on the reclaim mechanism see
+          https://btrfs.readthedocs.io/en/latest/Administration.html#uuid.
+
+          ::: {.warning}
+          Setting this value too high can cause excessive write amplification
+          on SSDs due to frequent block group reclaims.
+          :::
+        '';
+      };
     };
   };
 
@@ -205,6 +272,21 @@ in
             };
         in
         listToAttrs (map scrubService cfgScrub.fileSystems);
+    })
+
+    (mkIf enableAutoReclaim {
+      assertions = [
+        {
+          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "5.19";
+          message = ''
+            services.btrfs.autoReclaim requires Linux kernel 5.19 or later.
+          '';
+        }
+      ];
+
+      services.udev.extraRules = ''
+        SUBSYSTEM=="btrfs", ACTION=="add", ATTR{allocation/data/bg_reclaim_threshold}="${toString cfgReclaim.dataThreshold}", ATTR{allocation/metadata/bg_reclaim_threshold}="${toString cfgReclaim.metadataThreshold}"
+      '';
     })
   ];
 }
