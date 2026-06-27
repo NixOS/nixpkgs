@@ -260,6 +260,7 @@ buildPythonPackage (finalAttrs: {
       picnoir
       thanegill
       karlbeecken
+      tmarkus
     ];
     mainProgram = "esphome";
   };
