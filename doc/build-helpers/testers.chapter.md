@@ -308,6 +308,25 @@ A common usage of the `version` attribute is to specify `version = "v${version}"
 
 :::
 
+:::{.example #ex-testversion-finalAttrs}
+
+# Check a program in its own derivation with `finalAttrs`
+
+In a package.nix, the current package can be referenced using [the `finalAttrs` pattern](#mkderivation-recursive-attributes):
+
+```nix
+{
+  stdenv,
+  # ...
+} stdenv.mkDerivation(finalAttrs: {
+  #...
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  #...
+})
+```
+
+:::
+
 ## `testBuildFailure` {#tester-testBuildFailure}
 
 Make sure that a build does not succeed. This is useful for testing testers.
