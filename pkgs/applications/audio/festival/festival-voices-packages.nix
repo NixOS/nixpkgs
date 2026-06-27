@@ -55,4 +55,30 @@ lib.makeScope newScope (self: {
   # English (GB)
   rab_diphone = self.callPackage ./voices/rab_diphone { };
   en1_mbrola = self.callPackage ./voices/en1_mbrola { };
+
+  # Catalan
+  upc_ca_pep_clunits = self.callPackage ./voices/upc_ca_pep_clunits { };
+  upc_ca_bet_clunits = self.callPackage ./voices/upc_ca_bet_clunits { };
+  upc_ca_teo_clunits = self.callPackage ./voices/upc_ca_teo_clunits { };
+  upc_ca_uri_clunits = self.callPackage ./voices/upc_ca_uri_clunits { };
+  upc_ca_ona_clunits = self.callPackage ./voices/upc_ca_ona_clunits { };
+  upc_ca_pau_clunits = self.callPackage ./voices/upc_ca_pau_clunits { };
+  upc_ca_eli_clunits = self.callPackage ./voices/upc_ca_eli_clunits { };
+  upc_ca_eva_clunits = self.callPackage ./voices/upc_ca_eva_clunits { };
+  upc_ca_mar_clunits = self.callPackage ./voices/upc_ca_mar_clunits { };
+  upc_ca_jan_clunits = self.callPackage ./voices/upc_ca_jan_clunits { };
+  upc_ca_pol_clunits = self.callPackage ./voices/upc_ca_pol_clunits { };
+
+  upc_ca_bet_hts = self.callPackage ./voices/upc_ca_bet_hts { };
+  upc_ca_eli_hts = self.callPackage ./voices/upc_ca_eli_hts { };
+  upc_ca_eva_hts = self.callPackage ./voices/upc_ca_eva_hts { };
+  upc_ca_jan_hts = self.callPackage ./voices/upc_ca_jan_hts { };
+  upc_ca_mar_hts = self.callPackage ./voices/upc_ca_mar_hts { };
+  upc_ca_ona_hts = self.callPackage ./voices/upc_ca_ona_hts { };
+  upc_ca_pau_hts = self.callPackage ./voices/upc_ca_pau_hts { };
+  upc_ca_pep_hts = self.callPackage ./voices/upc_ca_pep_hts { };
+  upc_ca_pol_hts = self.callPackage ./voices/upc_ca_pol_hts { };
+  upc_ca_teo_hts = self.callPackage ./voices/upc_ca_teo_hts { };
+  upc_ca_uri_hts = self.callPackage ./voices/upc_ca_uri_hts { };
+
 })
