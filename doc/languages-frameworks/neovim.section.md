@@ -25,7 +25,7 @@ neovim.override {
   withRuby = false;
   configure = {
     customRC = ''
-      # here your custom viml configuration goes!
+      " here your custom viml configuration goes!
     '';
     packages.myVimPackage = with pkgs.vimPlugins; {
       # See examples below on how to use custom packages.
@@ -47,7 +47,7 @@ neovim-qt.override {
   neovim = neovim.override {
     configure = {
       customRC = ''
-        # your custom viml configuration
+        " your custom viml configuration
       '';
     };
   };
