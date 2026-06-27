@@ -10,6 +10,7 @@
   gobject-introspection,
   intltool,
   libayatana-common,
+  libnotify,
   lomiri,
   pkg-config,
   systemd,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-bluetooth";
-  version = "24.5.0";
+  version = "26.6.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-bluetooth";
     tag = finalAttrs.version;
-    hash = "sha256-EreOhrlWbSZtwazsvwWsPji2iLfQxr2LbjCI13Hrb28=";
+    hash = "sha256-qaVn8rOfL59F8LKqi6InlpXNwohoETB3feExNyBvByM=";
   };
 
   postPatch = ''
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.cmake-extras
     glib
     libayatana-common
+    libnotify
     systemd
   ];
 
