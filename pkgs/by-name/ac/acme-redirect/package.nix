@@ -36,15 +36,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage acme-redirect.1 acme-redirect.d.5 acme-redirect.conf.5
     popd
 
+    # see nixos option systemd.packages
+    systemdUnitsTarget=$out/lib/systemd/system
+
+    # see nixos option systemd.tmpfiles.packages
+    systemdTmpfilesTarget=$out/lib/tmpfiles.d
+
+    # no nixos option systemd.sysusers.packages exists yet
+    systemdSysusersTarget=$out/lib/sysusers.d
+
     pushd contrib/systemd
-    install -Dm644 -t $out/usr/lib/systemd/system acme-redirect.service acme-redirect-renew.service acme-redirect-renew.timer
-    pushd $out/usr/lib/systemd/system
+    install -Dm644 -t  $systemdUnitsTarget acme-redirect.service acme-redirect-renew.service acme-redirect-renew.timer
+    pushd $systemdUnitsTarget
     substituteInPlace  acme-redirect.service acme-redirect-renew.service \
       --replace-fail '/usr/bin/acme-redirect' $out/bin/acme-redirect
     popd
 
-    install -Dm644 acme-redirect.sysusers $out/usr/lib/sysusers.d/acme-redirect.conf
-    install -Dm644 acme-redirect.tmpfiles $out/usr/lib/tmpfiles.d/acme-redirect.conf
+    install -Dm644 acme-redirect.sysusers $systemdSysusersTarget/acme-redirect.conf
+    install -Dm644 acme-redirect.tmpfiles $systemdTmpfilesTarget/acme-redirect.conf
     popd
   '';
 
