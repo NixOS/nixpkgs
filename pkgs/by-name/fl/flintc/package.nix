@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flintc";
-  version = "0.3.5";
+  version = "0.3.5-unstable-2026-06-17";
 
   src = fetchFromGitHub {
     owner = "flint-lang";
