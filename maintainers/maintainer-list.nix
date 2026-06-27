@@ -22910,6 +22910,12 @@
     github = "DaRacci";
     githubId = 90304606;
   };
+  rachyandco = {
+    name = "rachyandco";
+    email = "alexis@nymtech.net";
+    github = "rachyandco";
+    githubId = 2358699;
+  };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
     name = "ZHANG Yuntian";
