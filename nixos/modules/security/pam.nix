@@ -678,6 +678,18 @@ let
           '';
         };
 
+        rosec = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = ''
+              If enabled, pam_rosec will attempt to automatically unlock the
+              user's rosec vault upon login. If the user login password does not
+              match their vault password, rosec will prompt separately after login.
+            '';
+          };
+        };
+
         enableUMask = lib.mkOption {
           default = config.security.pam.enableUMask;
           defaultText = lib.literalExpression "config.security.pam.enableUMask";
@@ -1198,6 +1210,7 @@ let
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
+                      || cfg.rosec.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1260,6 +1273,12 @@ let
                       enable = cfg.enableGnomeKeyring;
                       control = "optional";
                       modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                    }
+                    {
+                      name = "rosec";
+                      enable = cfg.rosec.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
                     }
                     {
                       name = "intune";
@@ -1476,6 +1495,12 @@ let
                 settings = {
                   use_authtok = true;
                 };
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
             ];
 
@@ -1694,6 +1719,12 @@ let
                 settings = {
                   auto_start = true;
                 };
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
               {
                 name = "gnupg";
