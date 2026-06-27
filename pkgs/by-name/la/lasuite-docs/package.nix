@@ -11,7 +11,7 @@
   yarnConfigHook,
 }:
 let
-  version = "5.3.0";
+  version = "5.3.0-preprod";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
