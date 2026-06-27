@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
+    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
   };
 
   outputs = [
