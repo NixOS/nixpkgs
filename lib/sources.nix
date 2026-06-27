@@ -4,22 +4,31 @@
 # Tested in lib/tests/sources.sh
 let
   inherit (lib.strings)
-    match
-    split
-    storeDir
     escapeRegex
+    hasPrefix
+    hasSuffix
+    match
     removePrefix
+    removeSuffix
+    split
+    splitString
+    storeDir
+    stringLength
+    substring
     ;
   inherit (lib)
-    boolToString
-    filter
-    isString
-    readFile
-    concatStrings
-    length
-    elemAt
-    isList
     any
+    boolToString
+    concatStrings
+    elemAt
+    fileContents
+    filter
+    head
+    isList
+    isString
+    last
+    length
+    readFile
     ;
   inherit (lib.filesystem)
     pathIsRegularFile
@@ -62,17 +71,17 @@ let
       )
       ||
         # Filter out editor backup / swap files.
-        lib.hasSuffix "~" baseName
+        hasSuffix "~" baseName
       || match "^\\.sw[a-z]$" baseName != null
       || match "^\\..*\\.sw[a-z]$" baseName != null
       ||
 
         # Filter out generates files.
-        lib.hasSuffix ".o" baseName
-      || lib.hasSuffix ".so" baseName
+        hasSuffix ".o" baseName
+      || hasSuffix ".so" baseName
       ||
         # Filter out nix-build result symlinks
-        (type == "symlink" && lib.hasPrefix "result" baseName)
+        (type == "symlink" && hasPrefix "result" baseName)
       ||
         # Filter out sockets and other types of files we can't have in the store.
         (type == "unknown")
@@ -218,13 +227,13 @@ let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
     in
-    lib.cleanSourceWith {
+    cleanSourceWith {
       filter = (
         path: type:
         let
-          relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+          relPath = removePrefix (toString origSrc + "/") (toString path);
         in
-        lib.any (re: match re relPath != null) regexes
+        any (re: match re relPath != null) regexes
       );
       inherit src;
     };
@@ -272,7 +281,7 @@ let
         let
           base = baseNameOf name;
         in
-        type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
+        type == "directory" || any (ext: hasSuffix ext base) exts;
     in
     cleanSourceWith { inherit filter src; };
 
@@ -319,9 +328,9 @@ let
           packedRefsName = path + "/packed-refs";
           absolutePath =
             base: path:
-            if lib.hasPrefix "/" path then
+            if hasPrefix "/" path then
               path
-            else if lib.hasPrefix "/" base then
+            else if hasPrefix "/" base then
               "${base}/${path}"
             else
               "/${base}/${path}";
@@ -337,12 +346,12 @@ let
             { error = "File contains no gitdir reference: " + path; }
           else
             let
-              gitDir = absolutePath (dirOf path) (lib.head m);
+              gitDir = absolutePath (dirOf path) (head m);
               commonDir'' =
-                if pathIsRegularFile "${gitDir}/commondir" then lib.fileContents "${gitDir}/commondir" else gitDir;
-              commonDir' = lib.removeSuffix "/" commonDir'';
+                if pathIsRegularFile "${gitDir}/commondir" then fileContents "${gitDir}/commondir" else gitDir;
+              commonDir' = removeSuffix "/" commonDir'';
               commonDir = absolutePath gitDir commonDir';
-              refFile = lib.removePrefix "${commonDir}/" "${gitDir}/${file}";
+              refFile = removePrefix "${commonDir}/" "${gitDir}/${file}";
             in
             readCommitFromFile refFile commonDir
 
@@ -352,10 +361,10 @@ let
         # sometimes it stores something like: «ref: refs/heads/branch-name»
         then
           let
-            fileContent = lib.fileContents fileName;
+            fileContent = fileContents fileName;
             matchRef = match "^ref: (.*)$" fileContent;
           in
-          if matchRef == null then { value = fileContent; } else readCommitFromFile (lib.head matchRef) path
+          if matchRef == null then { value = fileContent; } else readCommitFromFile (head matchRef) path
 
         else if
           pathIsRegularFile packedRefsName
@@ -373,14 +382,14 @@ let
           if refs == [ ] then
             { error = "Could not find " + file + " in " + packedRefsName; }
           else
-            { value = lib.head (matchRef (lib.head refs)); }
+            { value = head (matchRef (head refs)); }
 
         else
           { error = "Not a .git directory: " + toString path; };
     in
     readCommitFromFile "HEAD";
 
-  pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
+  pathHasContext = builtins.hasContext or (hasPrefix storeDir);
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
 
@@ -411,6 +420,9 @@ let
   #
   # Inverse of toSourceAttributes for Source objects.
   fromSourceAttributes =
+    let
+      inherit (builtins) path;
+    in
     {
       origSrc,
       filter,
@@ -419,7 +431,7 @@ let
     {
       _isLibCleanSourceWith = true;
       inherit origSrc filter name;
-      outPath = builtins.path {
+      outPath = path {
         inherit filter name;
         path = origSrc;
       };
@@ -431,15 +443,14 @@ let
   urlToName =
     url:
     let
-      inherit (lib.strings) stringLength;
-      base = baseNameOf (lib.removeSuffix "/" (lib.last (lib.splitString ":" (toString url))));
+      base = baseNameOf (removeSuffix "/" (last (splitString ":" (toString url))));
       # chop away one git or archive-related extension
       removeExt =
         name:
         let
           matchExt = match "(.*)\\.(git|tar|zip|gz|tgz|bz|tbz|bz2|tbz2|lzma|txz|xz|zstd)$" name;
         in
-        if matchExt != null then lib.head matchExt else name;
+        if matchExt != null then head matchExt else name;
       # apply function f to string x while the result shrinks
       shrink =
         f: x:
@@ -461,9 +472,9 @@ let
       matchVer = match "([A-Za-z]+[-_. ]?)*(v)?([0-9.]+.*)" baseRev;
     in
     if matchHash != null then
-      builtins.substring 0 7 baseRev
+      substring 0 7 baseRev
     else if matchVer != null then
-      lib.last matchVer
+      last matchVer
     else
       baseRev;
 
@@ -623,7 +634,7 @@ let
 
     in
     src: patterns:
-    lib.cleanSourceWith {
+    cleanSourceWith {
       filter = mkSourceFilter src patterns;
       inherit src;
     };
