@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flintc";
-  version = "0.3.5-unstable-2026-06-17";
+  version = "0.3.5-unstable-2026-06-27";
 
   src = fetchFromGitHub {
     owner = "flint-lang";
     repo = "flintc";
     # tag = "v${finalAttrs.version}-core";
-    rev = "c020a74efe31d40a1cdaf1b8373e3d878432080f";
-    sha256 = "sha256-xL4OcN+V648OxRb2ic0WPSEk/AJLa9ybSVib+VJ4DyU=";
+    rev = "6178c30b0768a36ff91a522c46e380314155d038";
+    sha256 = "sha256-NIjU/4iYkz8XHaCDRJhJGyQLJVcjpAuFSckwfV5nnE0=";
   };
 
   llvm-src = fetchFromGitHub {
