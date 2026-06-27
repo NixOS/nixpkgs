@@ -20,23 +20,7 @@ let
     gifsicle
     ffmpeg
   ];
-  # Ensure PHP extensions: https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L135-L147
-  phpPackage = cfg.phpPackage.buildEnv {
-    extensions =
-      { enabled, all }:
-      enabled
-      ++ (with all; [
-        bcmath
-        ctype
-        curl
-        mbstring
-        gd
-        intl
-        zip
-        redis
-        imagick
-      ]);
-  };
+  phpPackage = cfg.phpPackage;
   configFile = pkgs.writeText "pixelfed-env" (lib.generators.toKeyValue { } cfg.settings);
   # Management script
   pixelfed-manage = pkgs.writeShellScriptBin "pixelfed-manage" ''
@@ -66,7 +50,12 @@ in
     pixelfed = {
       enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php83" { };
+      phpPackage = mkOption {
+        type = types.package;
+        default = cfg.package.phpPackage;
+        defaultText = lib.literalExpression "config.services.pixelfed.package.phpPackage";
+        description = "The PHP package to use for Pixelfed.";
+      };
 
       user = mkOption {
         type = types.str;
