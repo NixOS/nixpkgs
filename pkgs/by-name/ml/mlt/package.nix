@@ -1,4 +1,5 @@
 {
+  alsa-lib,
   config,
   lib,
   stdenv,
@@ -8,16 +9,22 @@
   which,
   ffmpeg,
   fftw,
+  fontconfig,
   frei0r,
   libdv,
+  libebur128,
+  libexif,
   libjack2,
   libsamplerate,
+  libspatialaudio,
   libvorbis,
   libxml2,
   libx11,
+  lilv,
   makeWrapper,
   movit,
   opencv4,
+  pango,
   rnnoise,
   rtaudio,
   rubberband,
@@ -78,18 +85,27 @@ stdenv.mkDerivation (finalAttrs: {
     (opencv4.override { inherit ffmpeg; })
     ffmpeg
     fftw
+    fontconfig
     frei0r
     libdv
+    libebur128
+    libexif
     libjack2
     libsamplerate
+    libspatialaudio
     libvorbis
     libxml2
+    lilv
     movit
+    pango
     rnnoise
     rtaudio
     rubberband
     sox
     vid-stab
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
