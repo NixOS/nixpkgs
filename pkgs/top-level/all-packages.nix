@@ -5995,13 +5995,6 @@ with pkgs;
 
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix { };
 
-  irrlicht =
-    if !stdenv.hostPlatform.isDarwin then
-      callPackage ../development/libraries/irrlicht { }
-    else
-      callPackage ../development/libraries/irrlicht/mac.nix {
-      };
-
   iso-flags-png-320x240 = iso-flags.overrideAttrs (oldAttrs: {
     buildFlags = [ "png-country-320x240-fancy" ];
     installPhase = ''
