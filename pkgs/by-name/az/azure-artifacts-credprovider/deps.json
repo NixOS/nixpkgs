@@ -97,9 +97,9 @@
   },
   {
     "pname": "Microsoft.Identity.Client.NativeInterop",
-    "version": "0.19.4",
-    "hash": "sha256-f4FmUEUZ5O20itkik7noUzQdawKKVlmVsgebFE4PvWA=",
-    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.19.4/microsoft.identity.client.nativeinterop.0.19.4.nupkg"
+    "version": "0.20.6",
+    "hash": "sha256-PbaN21Juuh5fnfp84uX+QtGXJ0NmFGEQE/WjylnWD8M=",
+    "url": "https://pkgs.dev.azure.com/artifacts-public/02d91361-94bc-4deb-ad0d-192aeb45aba2/_packaging/ed062375-12d3-41ae-84aa-f3a5cee3a2a8/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.20.6/microsoft.identity.client.nativeinterop.0.20.6.nupkg"
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
