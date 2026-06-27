@@ -1839,6 +1839,7 @@ in
   vsftpd = runTest ./vsftpd.nix;
   waagent = runTest ./waagent.nix;
   wakapi = runTest ./wakapi.nix;
+  wallos = runTest ./wallos.nix;
   warpgate = runTest ./warpgate.nix;
   warzone2100 = runTest ./warzone2100.nix;
   wasabibackend = runTest ./wasabibackend.nix;
