@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    (opencv4.override { inherit ffmpeg; })
+    (opencv4.override { ffmpeg-headless = ffmpeg; })
     ffmpeg
     fftw
     fontconfig
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
-      --replace '=''${prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/'
   '';
 
   passthru = {
