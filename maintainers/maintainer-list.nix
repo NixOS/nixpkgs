@@ -31276,6 +31276,12 @@
     github = "zuzuleinen";
     githubId = 944919;
   };
+  zwang20 = {
+    name = "Michael Wang";
+    github = "zwang20";
+    githubId = 41721295;
+    matrix = "@michael_wzq:matrix.org";
+  };
   zx2c4 = {
     email = "Jason@zx2c4.com";
     github = "zx2c4";
