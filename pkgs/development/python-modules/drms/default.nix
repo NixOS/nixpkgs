@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "drms";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "drms";
     tag = "v${version}";
-    hash = "sha256-Hd65bpJCknBeRd27JlcIkzzoZv5nGR7C6oMSGPFiyjA=";
+    hash = "sha256-f5t59a24aD8iXa3/zikgBnJeuUnZ4cvvpJuOfc80Xcw=";
   };
 
   build-system = [
