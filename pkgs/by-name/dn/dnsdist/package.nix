@@ -89,9 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (nixosTests) dnsdist;
-  };
+  passthru.tests = nixosTests.dnsdist;
 
   meta = {
     changelog = "https://www.dnsdist.org/changelog.html";
