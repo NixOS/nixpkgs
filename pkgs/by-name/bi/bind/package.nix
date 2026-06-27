@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bartoostveen ];
     platforms = lib.platforms.unix;
 
     outputsToInstall = [
