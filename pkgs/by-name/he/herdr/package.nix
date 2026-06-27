@@ -1,11 +1,36 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  writeShellScriptBin,
   zig_0_15,
   nix-update-script,
+  apple-sdk,
+  cctools,
 }:
 
+let
+  useDarwinSdkTools = stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isDarwin;
+  darwinSdkRoot = "${apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk";
+  darwinDeveloperDir = "${apple-sdk}/Platforms/MacOSX.platform/Developer";
+  darwinXcodeSelect = writeShellScriptBin "xcode-select" ''
+    if [ "$1" = "--print-path" ]; then
+      echo ${lib.escapeShellArg darwinDeveloperDir}
+      exit 0
+    fi
+    echo "unsupported xcode-select invocation: $*" >&2
+    exit 1
+  '';
+  darwinXcrun = writeShellScriptBin "xcrun" ''
+    if [ "$1" = "--sdk" ] && [ "$3" = "--show-sdk-path" ]; then
+      echo ${lib.escapeShellArg darwinSdkRoot}
+      exit 0
+    fi
+    echo "unsupported xcrun invocation: $*" >&2
+    exit 1
+  '';
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
   version = "0.7.0";
@@ -28,7 +53,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-pgGu8+NwvFcj6SrN4VaTHLeHdA7QY731ctyrHZwgFAc=";
   };
 
-  nativeBuildInputs = [ zig_0_15.hook ];
+  nativeBuildInputs = [
+    zig_0_15.hook
+  ]
+  ++ lib.optionals useDarwinSdkTools [
+    cctools
+    darwinXcodeSelect
+    darwinXcrun
+  ];
+
+  env = lib.optionalAttrs useDarwinSdkTools {
+    SDKROOT = darwinSdkRoot;
+  };
 
   # Upstream binary tests are renamed, added, or changed between releases and
   # depend on host process details, so Nix-only patches for them are brittle.
