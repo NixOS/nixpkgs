@@ -55,16 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Thumbnailer files are in `glycin-loaders`, but we provide them in this package
   postInstall = ''
     mkdir -p $out/share/thumbnailers
-    (
-      shopt -s failglob
 
-      for loader in ${lib.concatStringsSep " " glycin-loaders.passthru.enabledLoaders}; do
-        substitute \
-          "../glycin-loaders/glycin-$loader/glycin-$loader.thumbnailer.in" \
-          "$out/share/thumbnailers/glycin-$loader.thumbnailer" \
-          --subst-var-by "BINDIR" "$out/bin"
-      done
-    )
+    for loader in ${lib.concatStringsSep " " glycin-loaders.passthru.enabledLoaders}; do
+      substitute \
+        "../glycin-loaders/glycin-$loader/glycin-$loader.thumbnailer.in" \
+        "$out/share/thumbnailers/glycin-$loader.thumbnailer" \
+        --subst-var-by "BINDIR" "$out/bin"
+    done
   '';
 
   passthru.tests = {
