@@ -104,9 +104,9 @@ wrapNeovimUnstable neovim-unwrapped {
 You can explore the configuration with `nix repl` to discover these options and
 override them. For instance:
 ```nix
-neovim.overrideAttrs (oldAttrs: {
+neovim.override {
   autowrapRuntimeDeps = false;
-})
+}
 ```
 
 ## Specificities for some plugins {#neovim-plugin-specificities}
