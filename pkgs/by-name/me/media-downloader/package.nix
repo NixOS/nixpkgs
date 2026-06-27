@@ -1,29 +1,47 @@
 {
-  aria2,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
   cmake,
   extraPackages ? [
-    aria2
-    ffmpeg
     python3
+    deno
+    ffmpeg
+    yt-dlp
+    gallery-dl
+    you-get
+    svtplay-dl
+    aria2
+    wget
   ],
-  fetchFromGitHub,
-  ffmpeg,
-  lib,
   python3,
-  qt6,
-  stdenv,
+  deno,
+  ffmpeg,
+  yt-dlp,
+  gallery-dl,
+  you-get,
+  svtplay-dl,
+  aria2,
+  wget,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "5.4.9";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "media-downloader";
     rev = finalAttrs.version;
-    hash = "sha256-afQ3Tra7hUjrG3vs4XBfmvSOBrhG7k5fkEMDr6WF+Fo=";
+    hash = "sha256-4mHSBeIbJzTUT24hlLPg1dH69ZNsFWcsReBIP5eu278=";
   };
+
+  postPatch = ''
+    substituteInPlace src/settings.cpp \
+      --replace-fail 'return this->getOption( "UseSystemEngine",false ) ;' \
+                     'return this->getOption( "UseSystemEngine",true ) ;'
+  '';
 
   nativeBuildInputs = [
     cmake
