@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -23,12 +24,9 @@ let
         inherit sha256;
       };
 
-      installPhase = ''
-        mkdir -p $out/share/fonts/opentype/
-        # Pagella & Adventor are not flat archives
-        test -d "${abbreviation}${version}otf" && cd "${abbreviation}${version}otf"
-        cp -v *.otf $out/share/fonts/opentype/
-      '';
+      nativeBuildInputs = [
+        installFonts
+      ];
 
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
