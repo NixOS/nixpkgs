@@ -6804,13 +6804,22 @@ with pkgs;
     libsOnly = true;
   };
 
-  festival = callPackage ../applications/audio/festival/package.nix {
-    inherit (pkgs)
-      speech-tools
-      ncurses
-      alsa-lib
-      ;
-  };
+  festivalVoices = recurseIntoAttrs (callPackage ../applications/audio/festival/voices { });
+
+  festival =
+    (callPackage ../applications/audio/festival/package.nix {
+      inherit (pkgs) speech-tools ncurses alsa-lib;
+    }).overrideAttrs
+      (old: {
+        passthru = old.passthru // {
+          packages = festivalVoices;
+          tests =
+            old.passthru.tests or { }
+            // lib.mapAttrs (_: pkg: pkg.passthru.tests.synthesizes) (
+              lib.filterAttrs (_: lib.isDerivation) festivalVoices
+            );
+        };
+      });
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
