@@ -446,6 +446,14 @@ in
   };
   coturn = runTest ./coturn.nix;
   couchdb = runTest ./couchdb.nix;
+  credentials-fwcfg = runTest {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "fw_cfg";
+  };
+  credentials-smbios = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "smbios";
+  };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
   cross-seed = runTest ./cross-seed.nix;
@@ -1423,14 +1431,6 @@ in
   pykms = runTest ./pykms.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
-  qemu-vm-credentials-fwcfg = runTest {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "fw_cfg";
-  };
-  qemu-vm-credentials-smbios = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "smbios";
-  };
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
   qemu-vm-store = runTest ./qemu-vm-store.nix;
@@ -1713,6 +1713,7 @@ in
   systemd-user-settings = runTest ./systemd-user-settings.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;
   systemd-userdbd = runTest ./systemd-userdbd.nix;
+  systemd-varlink = runTest ./systemd-varlink.nix;
   systemtap = handleTest ./systemtap.nix { };
   szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
