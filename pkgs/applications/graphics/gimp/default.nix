@@ -104,14 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc_version = stdenv.cc.cc.name;
     })
 
-    # Use absolute paths instead of relying on PATH
-    # to make sure plug-ins are loaded by the correct interpreter.
-    # TODO: This now only appears to be used on Windows.
-    (replaceVars ./hardcode-plugin-interpreters.patch {
-      python_interpreter = python.interpreter;
-      PYTHON_EXE = null;
-    })
-
     # D-Bus configuration is not available in the build sandbox
     # so we need to pick up the one from the package.
     (replaceVars ./tests-dbus-conf.patch {
@@ -300,6 +292,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix storing recent file list in tests
     export HOME="$TMPDIR"
     export XDG_DATA_DIRS="${glib.getSchemaDataDirPath gtk3}:${adwaita-icon-theme}/share:$XDG_DATA_DIRS"
+  '';
+
+  # pygimp.interp not installed by Meson on Linux (only Windows/macOS).
+  # Without it, GIMP falls back to /usr/bin/env python3 for third-party
+  # Python plugins, which lacks pygobject3/gi.
+  postInstall = ''
+        mkdir -p "$out/lib/gimp/3.0/interpreters"
+        cat > "$out/lib/gimp/3.0/interpreters/pygimp.interp" <<EOF
+    python3=${python}/bin/python3
+    :Python:E::py::${python}/bin/python3:
+    EOF
   '';
 
   preFixup = ''
