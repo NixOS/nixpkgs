@@ -12,7 +12,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ghui";
-  version = "0.4.6";
+  version = "0.8.0";
 
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildNpmPackage (finalAttrs: {
     owner = "kitlangton";
     repo = "ghui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jMi2Pc2VTpj0cZ2zXqtunG0FxcglCNEt9WzWnwxq+Js=";
+    hash = "sha256-CAflNceWMOeH6ZDtmuGtlUhKWX0sRL/+453NyQ8Oqn4=";
   };
 
   # Upstream ghui is a Bun project and ships only `bun.lock`. We vendor an
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-pg+USHnvcxaXG/floNItLXNFJOPvuDltQCcN1qT/nng=";
+  npmDepsHash = "sha256-MkdgVTRUdUU3kVdwsxtHzS7U8CmP4PSMI3Vzl/h2eWY=";
   npmDepsFetcherVersion = 3;
 
   nativeBuildInputs = [ bun ];
