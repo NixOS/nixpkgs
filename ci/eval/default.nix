@@ -38,7 +38,7 @@ let
       fileset = unions (
         map (lib.path.append ../..) [
           ".version"
-          "ci/eval/attrpaths.nix"
+          "ci/eval/pre-eval.nix"
           "ci/eval/chunk.nix"
           "ci/eval/outpaths.nix"
           "default.nix"
@@ -56,11 +56,11 @@ let
     builtins.readFile ../../pkgs/top-level/release-supported-systems.json
   );
 
-  attrpathsSuperset =
+  preEval =
     {
       evalSystem,
     }:
-    runCommand "attrpaths-superset.json"
+    runCommand "pre-eval"
       {
         src = nixpkgs;
         # Don't depend on -dev outputs to reduce closure size for CI.
@@ -73,15 +73,15 @@ let
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
+        command time -f "Pre-eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
-            "$src/ci/eval/attrpaths.nix" \
-            -A paths \
+            "$src/ci/eval/pre-eval.nix" \
+            -A result \
             -I "$src" \
             --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --option eval-system "${evalSystem}" > $out/paths.json
+            --option eval-system "${evalSystem}" > $out/result.json
       '';
 
   singleSystem =
@@ -90,8 +90,8 @@ let
       # Note that this is intentionally not called `system`,
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem ? builtins.currentSystem,
-      # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
+      # The path to the `result.json` file from `preEval`
+      preEvalFile ? "${preEval { inherit evalSystem; }}/result.json",
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -121,12 +121,12 @@ let
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
-          --arg attrpathFile "${attrpathFile}" \
+          --arg preEvalFile "${preEvalFile}" \
           --arg systems "[ \"$system\" ]" \
           --arg includeBroken ${lib.boolToString includeBroken} \
           --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
-          -I ${attrpathFile} \
+          -I ${preEvalFile} \
           > "$outputDir/result/$myChunk" \
           2> "$outputDir/stderr/$myChunk"
         exitCode=$?
@@ -164,7 +164,7 @@ let
         echo "System: $evalSystem"
         cores=$NIX_BUILD_CORES
         echo "Cores: $cores"
-        attrCount=$(jq length "${attrpathFile}")
+        attrCount=$(jq '.paths | length' "${preEvalFile}")
         echo "Attribute count: $attrCount"
         echo "Chunk size: $chunkSize"
         # Same as `attrCount / chunkSize` but rounded up
@@ -316,7 +316,7 @@ let
 in
 {
   inherit
-    attrpathsSuperset
+    preEval
     singleSystem
     diff
     combine
