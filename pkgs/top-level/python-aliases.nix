@@ -247,6 +247,7 @@ mapAliases {
   ghidra-bridge = throw "'ghidra-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
+  glean-sdk = throw "'glean-sdk' has been removed, as it was broken and unmaintained in nixpkgs"; # Added 2026-06-11
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
   gotrue = throw "'gotrue' has been replaced by 'supabase-auth'"; # Added 2026-03-08

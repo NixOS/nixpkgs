@@ -1538,6 +1538,7 @@ mapAliases {
   mouse-actions-gui = throw "'mouse-actions-gui' has been removed as it depended on webkitgtk 4.0 and libsoup 2.4"; # Added 2026-06-07
   move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
+  mozphab = throw "'mozphab' has been removed due to being broken and unmaintained in nixpkgs"; # Added 2026-06-11
   mp3splt = throw "'mp3splt' has been removed due to lack of maintenance upstream."; # Added 2025-05-17
   mpage = throw "'mpage' has been removed due to being unmaintained and broken"; # Added 2026-05-05
   mpc-cli = throw "'mpc-cli' has been renamed to/replaced by 'mpc'"; # Converted to throw 2025-10-27
