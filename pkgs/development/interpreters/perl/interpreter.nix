@@ -229,6 +229,7 @@ stdenv.mkDerivation (
                   "-Dcc=${stdenv.cc.targetPrefix}cc"
                   "-Dnm=${stdenv.cc.targetPrefix}nm"
                   "-Dar=${stdenv.cc.targetPrefix}ar"
+                  "-Dranlib=${stdenv.cc.targetPrefix}ranlib"
                 ]
               else
                 [
