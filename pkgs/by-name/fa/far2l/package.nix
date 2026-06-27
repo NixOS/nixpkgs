@@ -130,10 +130,7 @@ stdenv.mkDerivation rec {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      hypersw
-      smakarov
-    ];
+    maintainers = with lib.maintainers; [ smakarov ];
     platforms = lib.platforms.unix;
   };
 }
