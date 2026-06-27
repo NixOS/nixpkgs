@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mawk";
-  version = "1.3.4-20240819";
+  version = "1.3.4-20260302";
 
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
       "https://invisible-island.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-bh/ejuetilwVOCMWhj/WtMbSP6t4HdWrAXf/o+6arlw=";
+    hash = "sha256-4sCKd9CoSgH5vkVNHKOHLU8QP5raaD0HUZiwxullYz0=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
