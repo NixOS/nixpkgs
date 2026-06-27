@@ -41,7 +41,7 @@ in
     clients = lib.mkOption {
       default = { };
       description = ''
-        Set of oauth2 clients. One vouch-proxy systemd unit with the name of the client, prefixed by `vouch-proxy.clientPrefix`, will be run for every client in this set.
+        Set of oauth2 clients. A vouch-proxy systemd unit with the name of the client will be run for every client in this set.
         Each of these sets should at least define the `port` attribute that defines the port this client's specific vouch-proxy instance listens on.
 
         If `configureNginx` is set to `true`, the `domain` attribute defining the name of the nginx virtualHost (`services.nginx.virtualHost.<name>`) that this client is running under should also be set.
@@ -88,14 +88,6 @@ in
           };
         }
       );
-    };
-
-    clientPrefix = lib.mkOption {
-      type = lib.types.str;
-      default = "vouch-";
-      description = ''
-        A prefix added to the name of every systemd unit and every oauth2 client-id managed by vouch-proxy. The attribute name in `vouch-proxy.clients` is added to this prefix to give the full names.
-      '';
     };
 
     user = lib.mkOption {
@@ -185,7 +177,7 @@ in
     users.groups."${cfg.group}" = { };
 
     systemd.services = lib.mapAttrs' (client: clientAttrs: {
-      name = "${cfg.clientPrefix}${client}";
+      name = "${client}";
       value = {
         description = "Vouch Proxy for ${client}.";
         after = [ "network.target" ];
@@ -207,13 +199,13 @@ in
                   cookie.domain = clientAttrs.domain;
                 });
                 oauth = {
-                  client_id = "${cfg.clientPrefix}${client}";
+                  client_id = "${client}";
                   callback_url = "https://${clientAttrs.domain}${cfg.settings.vouch.document_root}/auth";
                 }
                 // (lib.optionalAttrs (cfg.kanidmDomain != null) {
                   auth_url = "https://${cfg.kanidmDomain}/ui/oauth2";
                   token_url = "https://${cfg.kanidmDomain}/oauth2/token";
-                  user_info_url = "https://${cfg.kanidmDomain}/oauth2/openid/${cfg.clientPrefix}${client}/userinfo";
+                  user_info_url = "https://${cfg.kanidmDomain}/oauth2/openid/${client}/userinfo";
                 });
               }) cfg.clients.${client}.settings
             )
@@ -221,9 +213,9 @@ in
           Restart = "on-failure";
           RestartSec = 5;
           StartLimitBurst = 3;
-          StateDirectory = "${cfg.clientPrefix}${client}";
-          RuntimeDirectory = "${cfg.clientPrefix}${client}";
-          WorkingDirectory = "/var/lib/${cfg.clientPrefix}${client}";
+          StateDirectory = "vouch-${client}";
+          RuntimeDirectory = "vouch-${client}";
+          WorkingDirectory = "/var/lib/vouch-${client}";
 
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
