@@ -5006,11 +5006,6 @@ with pkgs;
     bintools = bintools-unwrapped;
   };
 
-  bintoolsDualAs = wrapBintoolsWith {
-    bintools = darwin.binutilsDualAs-unwrapped;
-    wrapGas = true;
-  };
-
   black = with python3Packages; toPythonApplication black;
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
