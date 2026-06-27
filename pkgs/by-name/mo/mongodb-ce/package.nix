@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
 
+  # Apple's LibreSSL tries to read this while running `mongod --version`
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (literal "/private/etc/ssl/openssl.cnf"))
+  '';
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
