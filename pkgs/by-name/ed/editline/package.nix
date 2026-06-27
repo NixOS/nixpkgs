@@ -16,7 +16,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
-  version = "1.17.1-unstable-2025-05-24";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
