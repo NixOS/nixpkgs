@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-autopxd2";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "autopxd2";
     inherit version;
-    hash = "sha256-fzq5xy7vPjxwgaEyBXk3Ke9JnySJ3PM5WAucFCZ/IP8=";
+    hash = "sha256-Zf44gmkuWvp8lfrScq4GAhOisLYu4scyuNp1Cn3lnVc=";
   };
 
   build-system = [
@@ -32,6 +33,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  # real_headers tests download headers at runtime
+  # libclang tests need clang2 python module
+  pytestFlags = [
+    "-m"
+    "not real_headers and not libclang"
   ];
 
   enabledTestPaths = [
