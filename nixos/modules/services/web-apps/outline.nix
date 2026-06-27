@@ -836,12 +836,18 @@ in
           ${
             if (cfg.databaseUrl == "local") then
               ''
-                export DATABASE_URL="''${DATABASE_URL:-${lib.escapeShellArg localPostgresqlUrl}}"
+                if [ -z "''${DATABASE_URL:-}" ]; then
+                  DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                fi
+                export DATABASE_URL
                 export PGSSLMODE="''${PGSSLMODE:-disable}"
               ''
             else
               ''
-                export DATABASE_URL="''${DATABASE_URL:-${lib.escapeShellArg cfg.databaseUrl}}"
+                if [ -z "''${DATABASE_URL:-}" ]; then
+                  DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                fi
+                export DATABASE_URL
               ''
           }
 
