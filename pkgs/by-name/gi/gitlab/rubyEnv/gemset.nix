@@ -1621,10 +1621,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1kycnkmlfzch27kcwr8ch7756rjvv1plvv34idllnsrykvhknzka";
+      sha256 = "0gb1rlwpgk1zbrb8i91n7qsrp0zpax0lxdwf101wwyvgf8wcr613";
       type = "gem";
     };
-    version = "0.5.0";
+    version = "0.5.2";
   };
   device_detector = {
     groups = [ "default" ];

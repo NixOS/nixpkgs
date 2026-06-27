@@ -16,11 +16,11 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "image-analyzer";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/image-analyzer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-N2aufwYEBVx7z2Vo7Qi4DP2MsDXXr5LrQdeNYOtNGnU=";
+    hash = "sha256-vsfDmtjrvAC49ynnJ7QguBfSVnt/sBpCy/Eau2l1/jQ=";
   };
 
   buildInputs = [
