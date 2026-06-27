@@ -3643,6 +3643,11 @@
     githubId = 23124539;
     name = "Błażej Sowa";
   };
+  bkaney = {
+    github = "bkaney";
+    githubId = 5303;
+    name = "Brian Kaney";
+  };
   bkchr = {
     email = "nixos@kchr.de";
     github = "bkchr";
