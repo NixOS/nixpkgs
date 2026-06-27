@@ -79,7 +79,7 @@ rec {
       // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
     );
 
-  wrapType2 =
+  wrapType2 = lib.makeOverridable (
     args@{
       src,
       extraPkgs ? pkgs: [ ],
@@ -108,9 +108,13 @@ rec {
             (lib.remove "src")
             (removeAttrs args)
           ]
+          // {
+            overrideAppImage = f: wrapType2 (args // (if lib.isFunction f then f args else f));
+          }
           // args.passthru or { };
       }
-    );
+    )
+  );
 
   defaultFhsEnvArgs = {
     # Most of the packages were taken from the Steam chroot
