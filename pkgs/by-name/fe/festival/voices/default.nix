@@ -45,6 +45,7 @@ lib.makeScope newScope (self: {
   cmu_us_rxr_cg = self.callPackage ./cmu_us_rxr_cg { };
   cmu_us_slp_cg = self.callPackage ./cmu_us_slp_cg { };
   cmu_us_slt_cg = self.callPackage ./cmu_us_slt_cg { };
+  czech_mbrola_cz2 = self.callPackage ./czech_mbrola_cz2 { };
   en1_mbrola = self.callPackage ./en1_mbrola { };
   kal_diphone = self.callPackage ./kal_diphone { };
   rab_diphone = self.callPackage ./rab_diphone { };
