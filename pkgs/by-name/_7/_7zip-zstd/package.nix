@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zip-zstd";
-  version = "26.01-v1.5.7-R1";
+  version = "26.02-v1.5.7-R1";
 
   src = fetchFromGitHub {
     owner = "mcmilk";
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if enableUnfree then
-        "sha256-P6kwg3McroMwqB5bryfoS9dIBsxcd84bVzsjUv5Bk5k="
+        "sha256-ugGYnyrQjhVwHP1mP/gVRhy7ZtlMFvTd0BHFaGFUpRE="
       else
-        "sha256-WowqcjcA/DUwj7DJrKDTYKpCDWd/tTIZ3yiuBgqXpmU=";
+        "sha256-L6Pj0ncXu9OMkEueZYQUCt9Sk8SjRgZVi84OrMWcrcA=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
