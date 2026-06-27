@@ -14714,6 +14714,12 @@
     githubId = 36413794;
     name = "Arek Kalandyk";
   };
+  korih = {
+    email = "mail@korih.com";
+    github = "korih";
+    githubId = 96402323;
+    name = "Kori Huen";
+  };
   korken89 = {
     email = "emil.fresk@gmail.com";
     github = "korken89";
