@@ -18,6 +18,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
   version = "8.2.11";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
