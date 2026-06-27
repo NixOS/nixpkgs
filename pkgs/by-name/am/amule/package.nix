@@ -21,6 +21,7 @@
   gtk3,
   libayatana-appindicator,
   libsysprof-capture,
+  libmaxminddb,
   libpng,
   pkg-config,
   readline,
@@ -52,13 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui"
     + lib.optionalString textClient "-cmd";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "amule-org";
     repo = "amule";
     tag = finalAttrs.version;
-    hash = "sha256-2qQof2/JFTfOmqd25+YVWBpZgCDCOwf3NBo1aHcMPds=";
+    hash = "sha256-zLd8mt+dYEilGcFn3qspZv5EkZ4TmBbKgvgcuSvswFk=";
   };
 
   __structuredAttrs = true;
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libayatana-appindicator
   ]
   ++ lib.optional httpServer libpng
+  ++ lib.optional (monolithic || enableDaemon || client) libmaxminddb
   # gettext runtime for NLS; on glibc libintl is part of libc
   ++ lib.optional (!stdenv.hostPlatform.isGnu) libintl
   # line editing in the interactive consoles of amulecmd and amuleweb
