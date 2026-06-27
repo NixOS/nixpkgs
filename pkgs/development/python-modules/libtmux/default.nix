@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.58.1";
+  version = "0.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+ipLzjdP5zqtJ5e+QqgUHiPVpp3BgJ3/qxbNNgh2mv8=";
+    hash = "sha256-RsK3nVGpgNX05tCc5kK5GFLUS5vVoe8NRKgg7Y/DzwM=";
   };
 
   patches = [ ./0001-fix-test_control_mode_stdout_preserves_non_ascii_out.patch ];
