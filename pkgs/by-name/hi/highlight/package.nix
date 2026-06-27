@@ -13,14 +13,17 @@
 }:
 
 let
-  self = stdenv.mkDerivation rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
     version = "4.20";
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-fMIyMR9RA60hdy1eniJkvLHK+WJPuVehWMyS9Lt6iQ4=";
     };
 
@@ -78,7 +81,7 @@ let
       platforms = lib.platforms.unix;
       maintainers = [ ];
     };
-  };
+  });
 
 in
 if stdenv.hostPlatform.isDarwin then self else perl.pkgs.toPerlModule self
