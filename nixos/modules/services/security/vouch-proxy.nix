@@ -29,8 +29,7 @@ in
       default = null;
       type = lib.types.nullOr lib.types.str;
       description = ''
-        If kanidm is used as an oauth2 provider, this should be set to the domain kanidm manages. From this setting, `settings.oauth.auth_url`, `settings.oauth.token_url` and `settings.oauth.user_info_url` are set accordingly.
-        Note that in kanidm,`settings.oauth.user_info_url` is different for every client, so this needs to be set if kanidm is used, so every vouch-proxy instance gets the correct url.
+        If kanidm is used as an oauth2 provider, this can be set to the domain kanidm manages. From this setting, `settings.oauth.auth_url`, `settings.oauth.token_url` and `settings.oauth.user_info_url` are set accordingly for every client.
       '';
     };
 
