@@ -6178,6 +6178,12 @@
     githubId = 39523942;
     name = "Alex Clarke";
   };
+  darkone = {
+    email = "darkone@darkone.yt";
+    github = "darkone-linux";
+    githubId = 162493435;
+    name = "Guillaume Ponçon";
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
