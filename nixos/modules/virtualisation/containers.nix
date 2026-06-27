@@ -118,12 +118,14 @@ in
     virtualisation.containers.containersConf.settings = {
       network.cni_plugin_dirs = map (p: "${lib.getBin p}/bin") cfg.containersConf.cniPlugins;
       engine = {
-        init_path = "${pkgs.catatonit}/bin/catatonit";
+        init_path = lib.mkDefault "/run/current-system/sw/bin/catatonit";
       }
       // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
         hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
       };
     };
+
+    environment.systemPackages = [ pkgs.catatonit ];
 
     virtualisation.containers.storage.settings.storage = {
       driver = lib.mkDefault "overlay";
