@@ -2137,10 +2137,6 @@ with haskellLib;
   # 2026-06-10: pin validation to < 1.2 due to breaking API changes affecting geojson
   validation = super.validation_1_1_5;
 
-  # 2026-06-22: allow doctest >= 0.25
-  # https://github.com/haskell/statistics/issues/232
-  statistics = doJailbreak super.statistics;
-
   # too strict bounds on extra < 1.8
   # https://github.com/georgefst/svgone/pull/3
   svgone = doJailbreak super.svgone;
