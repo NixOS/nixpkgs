@@ -586,8 +586,8 @@
   },
   {
     "pname": "ppy.LocalisationAnalyser.Tools",
-    "version": "2025.1208.0",
-    "hash": "sha256-diVAckS1zNyVE1UGkbiu9jH/25j/c+Ad5XC3EjdLDsg="
+    "version": "2026.611.0",
+    "hash": "sha256-f3QNC84ynXUHW0wvDZvCTCbNYpqdHzq12uNNwaB6M1g="
   },
   {
     "pname": "ppy.managed-midi",
@@ -616,8 +616,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.616.0",
-    "hash": "sha256-Q9pyMPIpyiAp63VYiWEM8Zbiek0aXdsNBZY2ECaaZ/U="
+    "version": "2026.623.0",
+    "hash": "sha256-IcCFJvj5ydy0r6mEpHgV+UK9N7cd/3CtjOCV2GT8HOY="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -646,8 +646,8 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2026.520.0",
-    "hash": "sha256-Owz9gClqs1Dnb+EHk4Xpl/tdbXSOwqrL67tTatj+HRU="
+    "version": "2026.623.0",
+    "hash": "sha256-LMT2AVjP/HIC3a7PZDR4Vhlr6CCEhPu5ZF1eSYDIjeY="
   },
   {
     "pname": "ppy.Veldrid",
