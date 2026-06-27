@@ -4991,6 +4991,8 @@ self: super: with self; {
 
   earn-e-p1 = callPackage ../development/python-modules/earn-e-p1 { };
 
+  earth2studio = callPackage ../development/python-modules/earth2studio { };
+
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   easydict = callPackage ../development/python-modules/easydict { };
@@ -14353,6 +14355,8 @@ self: super: with self; {
   pygraphviz = callPackage ../development/python-modules/pygraphviz { inherit (pkgs) graphviz; };
 
   pygreat = callPackage ../development/python-modules/pygreat { };
+
+  pygrib = callPackage ../development/python-modules/pygrib { };
 
   pygrok = callPackage ../development/python-modules/pygrok { };
 
