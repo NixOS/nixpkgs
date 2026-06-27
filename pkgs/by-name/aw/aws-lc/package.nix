@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
+    hash = "sha256-bK8xJifd5BZsr+eT/M4lPODzhPGXEOGQbhD1PwB980o=";
   };
 
   outputs = [
