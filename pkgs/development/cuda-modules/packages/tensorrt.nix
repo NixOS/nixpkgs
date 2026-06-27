@@ -46,7 +46,7 @@ buildRedist (
     ++ optionals (tensorrtOlder "10.14.1") [
       "samples"
     ]
-    ++ [
+    ++ optionals (tensorrtOlder "11.0.0") [
       "static"
       # "stubs" removed in postInstall
     ];

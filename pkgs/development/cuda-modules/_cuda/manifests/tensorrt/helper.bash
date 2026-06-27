@@ -11,26 +11,34 @@ mkRedistUrlRelativePath() {
   local -r redistSystem=${3:?}
 
   local -r tensorrtMajorMinorPatchVersion="$(echo "$tensorrtMajorMinorPatchBuildVersion" | cut -d. -f1-3)"
+  local -r tensorrtMajorVersion="$(echo "$tensorrtMajorMinorPatchVersion" | cut -d. -f1)"
   local -r tensorrtMinorVersion="$(echo "$tensorrtMajorMinorPatchVersion" | cut -d. -f2)"
+
+  local tarExtension=""
+  local platformExtension=""
+  case "$tensorrtMajorVersion" in
+  10) tarExtension="tar.gz" && platformExtension="-gnu" ;;
+  *) tarExtension="tar.zst" ;;
+  esac
 
   local archiveDir=""
   local archiveExtension=""
   local osName=""
   local platformName=""
   case "$redistSystem" in
-  linux-aarch64) archiveDir="tars" && archiveExtension="tar.gz" && osName="l4t" && platformName="aarch64-gnu" ;;
+  linux-aarch64) archiveDir="tars" && archiveExtension="$tarExtension" && osName="l4t" && platformName="aarch64$platformExtension" ;;
   linux-sbsa)
-    archiveDir="tars" && archiveExtension="tar.gz" && platformName="aarch64-gnu"
+    archiveDir="tars" && archiveExtension="$tarExtension" && platformName="aarch64$platformExtension"
     # 10.0-10.3 use Ubuntu 22.40
     # 10.4-10.6 use Ubuntu 24.04
     # 10.7+ use Linux
-    case "$tensorrtMinorVersion" in
-    0 | 1 | 2 | 3) osName="Ubuntu-22.04" ;;
-    4 | 5 | 6) osName="Ubuntu-24.04" ;;
+    case "$tensorrtMajorVersion.$tensorrtMinorVersion" in
+    10.0 | 10.1 | 10.2 | 10.3) osName="Ubuntu-22.04" ;;
+    10.4 | 10.5 | 10.6) osName="Ubuntu-24.04" ;;
     *) osName="Linux" ;;
     esac
     ;;
-  linux-x86_64) archiveDir="tars" && archiveExtension="tar.gz" && osName="Linux" && platformName="x86_64-gnu" ;;
+  linux-x86_64) archiveDir="tars" && archiveExtension="$tarExtension" && osName="Linux" && platformName="x86_64$platformExtension" ;;
   windows-x86_64)
     archiveExtension="zip" && platformName="win10"
     # Windows info is different for 10.0.*
@@ -45,8 +53,16 @@ mkRedistUrlRelativePath() {
     ;;
   esac
 
-  local -r relativePath="tensorrt/$tensorrtMajorMinorPatchVersion/$archiveDir/TensorRT-${tensorrtMajorMinorPatchBuildVersion}.${osName}.${platformName}.cuda-${cudaMajorMinorVersion}.${archiveExtension}"
-  echo "$relativePath"
+  case "$tensorrtMajorVersion" in
+  *)
+    local -r relativePath="tensorrt/$tensorrtMajorMinorPatchVersion/$archiveDir/TensorRT-Enterprise-${tensorrtMajorMinorPatchBuildVersion}-${osName}-${platformName}-cuda-${cudaMajorMinorVersion}-Release-external.${archiveExtension}"
+    echo "$relativePath"
+    ;;
+  10)
+    local -r relativePath="tensorrt/$tensorrtMajorMinorPatchVersion/$archiveDir/TensorRT-${tensorrtMajorMinorPatchBuildVersion}.${osName}.${platformName}.cuda-${cudaMajorMinorVersion}.${archiveExtension}"
+    echo "$relativePath"
+    ;;
+  esac
 }
 
 getNixStorePath() {

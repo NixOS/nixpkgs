@@ -17,6 +17,7 @@
   srcOnly,
   stdenv,
   stdenvNoCC,
+  zstd,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
@@ -256,6 +257,7 @@ extendMkDerivation {
             url = mkRedistUrl finalAttrs.passthru.redistName relative_path;
             inherit sha256;
           };
+          nativeBuildInputs = lib.optional (lib.hasSuffix ".zst" relative_path) zstd;
         }
       ) (getPreferredRelease finalAttrs.passthru.supportedReleases);
 
