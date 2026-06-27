@@ -360,12 +360,8 @@ in
 
       open = lib.mkOption {
         example = true;
-        description = "Whether to enable the open source NVIDIA kernel module.";
-        type = lib.types.nullOr lib.types.bool;
-        default = if lib.versionOlder nvidia_x11.version "560" then false else null;
-        defaultText = lib.literalExpression ''
-          if lib.versionOlder config.hardware.nvidia.package.version "560" then false else null
-        '';
+        description = "Whether to enable the open source NVIDIA kernel module. Must be set.";
+        type = lib.types.bool;
       };
 
       gsp.enable =
@@ -414,19 +410,15 @@ in
               message = "You cannot configure both X11 and Data Center drivers at the same time.";
             }
             {
-              assertion = cfg.open != null || cfg.datacenter.enable;
-              message = ''
-                You must configure `hardware.nvidia.open` on NVIDIA driver versions >= 560.
-                It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
-              '';
-            }
-            {
               assertion = !cfg.open || (nvidia_x11.open != null);
               message = ''
                 The selected NVIDIA package does not provide open kernel modules.
                 Set hardware.nvidia.open = false or choose a package branch with open module support.
               '';
             }
+          ];
+          warnings = lib.optional (cfg.open && (lib.versionOlder nvidia_x11.version "560")) [
+            "Open kernel modules older than version 560 lack many features and are not recommended for use."
           ];
           boot = {
             blacklistedKernelModules = [
