@@ -21465,6 +21465,8 @@ self: super: with self; {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
 
+  viztracer = callPackage ../development/python-modules/viztracer { };
+
   vl-convert-python = callPackage ../development/python-modules/vl-convert-python {
     inherit (pkgs) protobuf;
   };
