@@ -28,10 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Fix the cache invalidation not working; see
     # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4641313131
     ./fix-cache-invalidation.patch
-    # ble.sh reaches a runtime-dir fallback under the install base when the
-    # others are unusable (always on WSL); see
-    # https://github.com/NixOS/nixpkgs/pull/521218#issuecomment-4686973408
-    ./skip-readonly-runtime-dir.patch
   ];
 
   # ble.sh embeds the commit id, normally read from .git, which fetchFromGitHub omits.
@@ -40,6 +36,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     "BLE_GIT_COMMIT_ID=${builtins.substring 0 7 finalAttrs.src.rev}"
     "BLE_GIT_BRANCH=master"
   ];
+
+  postPatch = ''
+    patchShebangs --build make_command.sh make
+  '';
 
   doCheck = true;
   # auto-detection runs `make -n check` without makeFlags, which fails without BLE_GIT_COMMIT_ID
