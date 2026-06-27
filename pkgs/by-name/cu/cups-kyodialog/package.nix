@@ -23,13 +23,12 @@
 
 assert region == "Global" || region == "EU";
 
-let
-  kyodialog_version = "9.4";
-  date = "20240521";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-kyodialog";
-  version = "${kyodialog_version}-${date}";
+  version = "${finalAttrs.kyodialog_version}-${finalAttrs.date}";
+
+  kyodialog_version = "10.0";
+  date = "20240521";
 
   dontStrip = true;
 
@@ -39,10 +38,10 @@ stdenv.mkDerivation rec {
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
     urls = [
-      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-      "https://web.archive.org/web/20260107200228/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
+      "https://www.kyoceradocumentsolutions.us/content/dam/download-center-americas-cf/us/drivers/drivers/KyoceraLinuxPackages_${finalAttrs.date}_tar_gz.download.gz"
+      "https://web.archive.org/web/20260601160308/https://www.kyoceradocumentsolutions.us/content/dam/download-center-americas-cf/us/drivers/drivers/KyoceraLinuxPackages_${finalAttrs.date}_tar_gz.download.gz"
     ];
-    hash = "sha256-H9n4KpaLGNk5du4+BAmMjRyLmXaHap8HdNZlX/Kia4E=";
+    hash = "sha256-7oiw4vmhITdYIylOMCkmK4WBLHCxdcA4NAwvswCcJWg=";
     extension = "tar.gz";
     stripRoot = false;
     postFetch = ''
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
           or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     in
     ''
-      ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version}-0_${platform}.deb" data.tar.gz | tar -xz
+      ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${finalAttrs.kyodialog_version}-0_${platform}.deb" data.tar.gz | tar -xz
     '';
 
   nativeBuildInputs = [
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     # allow cups to find the ppd files
     mkdir -p $out/share/cups/model
-    mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
+    mv ./usr/share/kyocera${finalAttrs.kyodialog_version}/ppd${finalAttrs.kyodialog_version} $out/share/cups/model/Kyocera
 
     # remove absolute path prefixes to filters in ppd
     find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
@@ -98,18 +97,18 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
 
-    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${finalAttrs.pname}/copyright
   ''
   + lib.optionalString withQtGui ''
     install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
-    install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
+    install -D usr/bin/kyodialog${finalAttrs.kyodialog_version} $out/bin/kyodialog
 
-    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
+    install -Dm444 usr/share/kyocera${finalAttrs.kyodialog_version}/appicon_H.png $out/share/${finalAttrs.pname}/icons/appicon_H.png
 
-    install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
+    install -Dm444 usr/share/applications/kyodialog${finalAttrs.kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
     substituteInPlace $out/share/applications/kyodialog.desktop \
-      --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
-      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+      --replace Exec=\"/usr/bin/kyodialog${finalAttrs.kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
+      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${finalAttrs.pname}/icons/appicon_H.png
   '';
 
   meta = {
@@ -123,4 +122,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})
