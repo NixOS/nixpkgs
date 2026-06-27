@@ -2808,6 +2808,7 @@ with pkgs;
     pnpm_8
     pnpm_9
     pnpm_10_29_2
+    pnpm_10_34_0
     pnpm_10
     pnpm_11
     ;
