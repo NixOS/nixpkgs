@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "circumflex";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
     tag = finalAttrs.version;
-    hash = "sha256-VyUJ7qiaodLTdfGyh3/tLGfNVZCAxImxOuz4ztaaqtg=";
+    hash = "sha256-MA/7BMXuKydvtfeY+kMQiAUcCuEvwbXopaViM3wPvUE=";
   };
 
-  vendorHash = "sha256-4YL0N8wA8igveYfeL4uZDY5YD1InW0iD3WWq1E/vIJs=";
+  vendorHash = "sha256-wib8VrgkKtMkRx7RtQMJPtGPtTh6eGoI+8gp60z7l+w=";
 
   nativeBuildInputs = [ makeWrapper ];
 
