@@ -18,25 +18,25 @@ buildFestivalVoice (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    mkdir -p "$out/lib"
-    cp ${festival-czech}/lib/czech-mbrola.scm $out/lib/czech-mbrola.scm
+        mkdir -p "$out/lib"
+        cp ${festival-czech}/lib/czech-mbrola.scm $out/lib/czech-mbrola.scm
 
-    substituteInPlace $out/lib/czech-mbrola.scm       --replace-fail         '(defvar czech-mbrola_database nil)'         "(defvar czech-mbrola_database \"${
-            mbrola-voices.override { languages = [ ''cz2'' ]; }
+        substituteInPlace $out/lib/czech-mbrola.scm       --replace-fail         '(defvar czech-mbrola_database nil)'         "(defvar czech-mbrola_database \"${
+          mbrola-voices.override { languages = [ "cz2" ]; }
         }/data/cz2/cz2\")"
 
-    mkdir -p "$out/lib/voices/czech/czech_mbrola_cz2/festvox"
-    cat > "$out/lib/voices/czech/czech_mbrola_cz2/festvox/czech_mbrola_cz2.scm" << 'VOICESCM'
-(proclaim_voice
- '${finalAttrs.passthru.voiceName}
- '((language czech)
-   (gender male)
-   (description "Czech voice provided by the Mbrola cz2 database.")))
-VOICESCM
+        mkdir -p "$out/lib/voices/czech/czech_mbrola_cz2/festvox"
+        cat > "$out/lib/voices/czech/czech_mbrola_cz2/festvox/czech_mbrola_cz2.scm" << 'VOICESCM'
+    (proclaim_voice
+     '${finalAttrs.passthru.voiceName}
+     '((language czech)
+       (gender male)
+       (description "Czech voice provided by the Mbrola cz2 database.")))
+    VOICESCM
 
-    runHook postInstall
+        runHook postInstall
   '';
 
   passthru.voiceName = "czech_mbrola_cz2";
