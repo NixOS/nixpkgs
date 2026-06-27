@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  options,
   ...
 }:
 
@@ -11,7 +12,6 @@ let
   cfg = config.services.xandikos;
 in
 {
-
   options = {
     services.xandikos = {
       enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
@@ -57,89 +57,90 @@ in
         '';
       };
 
+      domain = mkOption {
+        type = types.nullOr types.str;
+        description = ''
+          If non-null, enables an nginx reverse proxy virtual host at this FQDN for xandikos.
+        '';
+        example = "xandikos.example.com";
+      };
+
       nginx = mkOption {
+        type = submodule {
+          imports = [
+            ../web-servers/nginx/vhost-options.nix
+            ../../misc/assertions.nix
+            (mkRemovedOptionModule [
+              "enable"
+            ] "Set ${options.services.xandikos.domain} to null if you want to disable the nginx integration.")
+            (mkRemovedOptionModule [ "hostName" ] "Set ${options.services.xandikos.domain} instead.")
+          ];
+        };
         default = { };
         description = ''
           Configuration for nginx reverse proxy.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Configure the nginx reverse proxy settings.
-              '';
-            };
-
-            hostName = mkOption {
-              type = types.str;
-              description = ''
-                The hostname use to setup the virtualhost configuration
-              '';
-            };
-          };
-        };
       };
-
     };
-
   };
 
   meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
-  config = mkIf cfg.enable (mkMerge [
-    {
+  config = mkIf cfg.enable {
+    systemd.services.xandikos = {
+      description = "A Simple Calendar and Contact Server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-      systemd.services.xandikos = {
-        description = "A Simple Calendar and Contact Server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-
-        serviceConfig = {
-          User = "xandikos";
-          Group = "xandikos";
-          DynamicUser = "yes";
-          RuntimeDirectory = "xandikos";
-          StateDirectory = "xandikos";
-          StateDirectoryMode = "0700";
-          PrivateDevices = true;
-          # Sandboxing
-          CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_PACKET AF_NETLINK";
-          RestrictNamespaces = true;
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          ExecStart = ''
-            ${cfg.package}/bin/xandikos \
-              --directory /var/lib/xandikos \
-              --listen-address ${cfg.address} \
-              --port ${toString cfg.port} \
-              --route-prefix ${cfg.routePrefix} \
-              ${lib.concatStringsSep " " cfg.extraOptions}
-          '';
-        };
+      serviceConfig = {
+        User = "xandikos";
+        Group = "xandikos";
+        DynamicUser = "yes";
+        RuntimeDirectory = "xandikos";
+        StateDirectory = "xandikos";
+        StateDirectoryMode = "0700";
+        PrivateDevices = true;
+        # Sandboxing
+        CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        ExecStart = ''
+          ${cfg.package}/bin/xandikos \
+            --directory /var/lib/xandikos \
+            --listen-address ${cfg.address} \
+            --port ${toString cfg.port} \
+            --route-prefix ${cfg.routePrefix} \
+            ${lib.concatStringsSep " " cfg.extraOptions}
+        '';
       };
-    }
+    };
 
-    (mkIf cfg.nginx.enable {
-      services.nginx = {
-        enable = true;
-        virtualHosts."${cfg.nginx.hostName}" = {
-          locations."/" = {
-            proxyPass = "http://${cfg.address}:${toString cfg.port}/";
+    services.nginx = mkIf (cfg.domain != null) {
+      enable = lib.mkDefault true;
+      virtualHosts."${cfg.domain}" = mkMerge [
+        (removeAttrs cfg.nginx [
+          "enable"
+          "hostName"
+          "assertions"
+          "warnings"
+        ])
+        {
+          locations."${cfg.routePrefix}" = {
+            proxyPass = mkDefault "http://${cfg.address}:${toString cfg.port}/";
+            recommendedProxySettings = mkDefault true;
           };
-        };
-      };
-    })
-  ]);
+        }
+      ];
+    };
+  };
 }
