@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.38.2";
+  version = "1.38.3";
   inherit (stdenvNoCC.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
@@ -20,8 +20,8 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-nHFdDu2KrzqZgw7glwvDtevH1CIbvB4vP/chBWHanX0=";
-      x86_64-linux = "sha256-h3RKH8mY1ncHjJcDEToZLQgwutxoiGYkQWMoR/yziJk=";
+      aarch64-linux = "sha256-7/l2bOGnr3HDim1FhzZ2IXUwSa498b3ltrnmlXUvMWc=";
+      x86_64-linux = "sha256-r//7jQihT9w3Wx992NDzAE6s31HOB/VjbX4WigHGs3M=";
     }
     .${system} or throwSystem;
 in
