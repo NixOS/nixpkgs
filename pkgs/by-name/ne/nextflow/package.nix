@@ -22,10 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
   version = "26.04.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "5b1659e65761970d68d988613458a2e58583d203";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U0QHIzIbNe9dxqxhGAxJuskR9183UgGgLZQAGB7TKmo=";
   };
 
