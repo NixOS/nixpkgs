@@ -211,6 +211,14 @@ in
           to `true`.
         '';
       };
+      expectBatteryRecalibration = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Lets you override the logic which would have shut down your laptop while
+          performing a battery recalibration.
+        '';
+      };
 
     };
 
@@ -261,6 +269,7 @@ in
         TimeAction = cfg.timeAction;
         AllowRiskyCriticalPowerAction = cfg.allowRiskyCriticalPowerAction;
         CriticalPowerAction = cfg.criticalPowerAction;
+        ExpectBatteryRecalibration = cfg.expectBatteryRecalibration;
       };
     };
   };
