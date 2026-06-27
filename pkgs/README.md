@@ -175,7 +175,7 @@ To add a package to Nixpkgs:
 - Format the commit messages in the following way:
 
   ```
-  (pkg-name): (from -> to | init at version | refactor | etc)
+  (pkg-name): (from -> to | init at `version` | drop | refactor | `your message`)
 
   (Motivation for change. Link to release notes. Additional information.)
   ```
@@ -183,6 +183,7 @@ To add a package to Nixpkgs:
   Examples:
 
   * nginx: init at 2.0.1
+  * hello: drop
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
@@ -715,7 +716,7 @@ We use jbidwatcher as an example for a discontinued project here.
     Example commit message:
 
     ```
-    jbidwatcher: remove
+    jbidwatcher: drop
 
     project was discontinued in march 2021. the program does not work anymore because ebay changed the login.
 
