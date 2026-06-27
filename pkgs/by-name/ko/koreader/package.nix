@@ -101,6 +101,10 @@ stdenv.mkDerivation {
   + ''
     cp -r ${src_repo}/resources/fonts/* $out/lib/koreader/fonts/
   ''
+  # Install icon
+  + ''
+    install -Dm444 ${src_repo}/resources/koreader.svg $out/share/icons/hicolor/scalable/apps/koreader.svg
+  ''
   # Remove broken symlinks
   + ''
     find $out -xtype l -print -delete
