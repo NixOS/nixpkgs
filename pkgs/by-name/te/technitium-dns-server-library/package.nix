@@ -3,7 +3,6 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server-library";
@@ -26,8 +25,6 @@ buildDotnetModule rec {
     "TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj"
     "TechnitiumLibrary.Security.OTP/TechnitiumLibrary.Security.OTP.csproj"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";
