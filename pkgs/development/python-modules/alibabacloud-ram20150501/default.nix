@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-ram20150501";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "alibabacloud_ram20150501";
     inherit (finalAttrs) version;
-    hash = "sha256-YlNRPIiAdp9P1bNv7d2zYqnKYorZrpwFwO6s9fvJW0I=";
+    hash = "sha256-dzFVfjw5oPAVm59dEMksDeZZXCf0VT3EWeA8zZpMIqU=";
   };
 
   build-system = [ setuptools ];
