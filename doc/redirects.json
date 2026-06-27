@@ -224,6 +224,9 @@
   "neovim-luarocks-based-plugins": [
     "index.html#neovim-luarocks-based-plugins"
   ],
+  "neovim-plugin-treesitter-wasm": [
+    "index.html#neovim-plugin-treesitter-wasm"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],

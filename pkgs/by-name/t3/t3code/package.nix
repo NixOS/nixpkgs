@@ -189,7 +189,7 @@ stdenv.mkDerivation (
 
       find "$out"/libexec/t3code -xtype l -delete
 
-      makeWrapper ${lib.getExe nodejs} "$out"/bin/t3code \
+      makeWrapper ${lib.getExe nodejs} "$out"/bin/t3 \
         --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs ${runtimePathWrapperArgs}
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
@@ -220,7 +220,7 @@ stdenv.mkDerivation (
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       for shell in bash fish zsh; do
-        installShellCompletion --cmd t3code --"$shell" <("$out/bin/t3code" --completions "$shell")
+        installShellCompletion --cmd t3 --"$shell" <("$out/bin/t3" --completions "$shell")
       done
     '';
 

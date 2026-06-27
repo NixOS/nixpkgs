@@ -4396,6 +4396,13 @@
     githubId = 48105979;
     name = "Caitlin Davitt";
   };
+  cakeforcat = {
+    email = "julia@cakeforcat.dev";
+    github = "cakeforcat";
+    githubId = 37912991;
+    name = "Julia Czarny";
+    matrix = "@cakeforcat:matrix.org";
+  };
   calavera = {
     email = "david.calavera@gmail.com";
     github = "calavera";

@@ -7,7 +7,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
-  version = "2.0.1";
+  version = "2.1.0";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "manic-systems";
     repo = "dix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTlFgBEVKJIXymfN2UU8hvGM71PYRcNgJ1XWUmG2AI4=";
+    hash = "sha256-+9I6WuPOc8Lj7NAxe19phlFiDypGQywopZ3dZK9d6F4=";
   };
 
-  cargoHash = "sha256-pNkSdsxOpv0E/xXs7tMg2vtP0PBU7p8fh3H4IX/u5k4=";
+  cargoHash = "sha256-k/of0KX2wBWh/etybbKn81O5UgJF0ylc2fl+HK8uIRQ=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
