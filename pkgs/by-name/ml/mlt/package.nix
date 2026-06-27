@@ -18,6 +18,7 @@
   makeWrapper,
   movit,
   opencv4,
+  rnnoise,
   rtaudio,
   rubberband,
   sox,
@@ -44,13 +45,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlt";
-  version = "7.38.0";
+  version = "7.40.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZWkgDffNZwJgfrFQNKfS+QzpcjaM0SEBbyxrVBqubc=";
+    hash = "sha256-rw1jnQJzbtpGsIe/AFMiy7k/3X0vkfkY3rG4E419aVM=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
     # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libxml2
     movit
+    rnnoise
     rtaudio
     rubberband
     sox
