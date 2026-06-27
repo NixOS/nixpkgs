@@ -21,7 +21,7 @@
 }:
 
 let
-  ffmpeg-ome = callPackage ./ffmpeg-minimal.nix { };
+  ffmpeg-ome = callPackage ./ffmpeg-ome-minimal.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";

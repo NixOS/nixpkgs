@@ -90,6 +90,9 @@ stdenv.mkDerivation {
     description = "Minimal FFmpeg build for OvenMediaEngine, replicating its upstream InstallPrerequisites.cmake configuration";
     homepage = "https://ffmpeg.org";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      findus
+    ];
   };
 }
