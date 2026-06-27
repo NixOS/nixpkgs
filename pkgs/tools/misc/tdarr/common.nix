@@ -24,6 +24,7 @@
   tesseract4,
   perl,
   apprise,
+  openssl,
 }:
 {
   pname,
@@ -129,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxfixes
     apprise
+    openssl
   ];
 
   postPatch = ''
