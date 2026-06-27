@@ -101,7 +101,10 @@ wrapNeovimUnstable neovim-unwrapped {
         })
       '';
     }
-    (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
+    (nvim-treesitter.withPlugins (p: [
+      p.nix
+      p.python
+    ]))
     hex-nvim
   ];
   extraLuaPackages = lp: [ lp.mpack ];
