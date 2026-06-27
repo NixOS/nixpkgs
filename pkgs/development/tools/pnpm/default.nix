@@ -30,9 +30,21 @@ let
         "CVE-2026-55699"
       ];
     };
-    "10" = {
+    # 10.34.1 made a breaking change that causes
+    # ERR_PNPM_MISSING_TARBALL_INTEGRITY error for some packages.
+    "10_34_0" = {
       version = "10.34.0";
       hash = "sha256-WOFDJYhx31FYm2UcBiBdq+xIdmpdu6PCWZm2m1C+WY4=";
+      knownVulnerabilities = [
+        "CVE-2026-55487"
+        "CVE-2026-55698"
+        "CVE-2026-55180"
+        "CVE-2026-55697"
+      ];
+    };
+    "10" = {
+      version = "10.34.4";
+      hash = "sha256-mM1XGNvYxLJokVZJO5WWzs9rZLGpjUoIfoITWhdbQOs=";
     };
     "11" = {
       version = "11.9.0";
