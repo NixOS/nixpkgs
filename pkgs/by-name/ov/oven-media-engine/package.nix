@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   callPackage,
+  ffmpeg-ome ? callPackage ./ffmpeg-ome-minimal.nix { },
   srt,
   bc,
   pkg-config,
@@ -20,9 +21,6 @@
   whisper-cpp,
 }:
 
-let
-  ffmpeg-ome = callPackage ./ffmpeg-ome-minimal.nix { };
-in
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
   version = "0.20.5";
