@@ -132,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!withGui) ''
     rm $out/bin/firewall-{applet,config}
+    rm $out/etc/xdg/autostart/firewall-applet.desktop
+    rm $out/share/applications/firewall-config.desktop
+    rm $out/share/metainfo/org.firewalld.firewall-config.metainfo.xml
   '';
 
   dontWrapGApps = true;
