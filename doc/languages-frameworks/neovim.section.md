@@ -25,7 +25,7 @@ neovim.override {
   withRuby = false;
   configure = {
     customRC = ''
-      # here your custom viml configuration goes!
+      " here your custom viml configuration goes!
     '';
     packages.myVimPackage = with pkgs.vimPlugins; {
       # See examples below on how to use custom packages.
@@ -47,7 +47,7 @@ neovim-qt.override {
   neovim = neovim.override {
     configure = {
       customRC = ''
-        # your custom viml configuration
+        " your custom viml configuration
       '';
     };
   };
@@ -64,11 +64,14 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
   generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
-- `extraLuaPackages`: A function passed on to `lua.withPackages`
-- `withPython3`, `withNodeJs`, `withRuby` control when to enable neovim
+- `extraLuaPackages`: A function passed on to `lua.withPackages`.
+- `extraPython3Packages`: A function passed on to `python3.withPackages`.
+- `withPython3`, `withNodeJs`, `withRuby`, `withPerl` control when to enable neovim
   providers (see `:h provider`).
+- `vimAlias` and `viAlias` control whether to symlink the `vim` and `vi` binaries to `nvim` respectively.
+- `extraName` is a string appended to the package name and derivation name.
 
-```
+```nix
 wrapNeovimUnstable neovim-unwrapped {
   autoconfigure = true;
   autowrapRuntimeDeps = true;
@@ -80,7 +83,8 @@ wrapNeovimUnstable neovim-unwrapped {
     vim.opt.colorcolumn = { 100 }
     vim.opt.termguicolors = true
   '';
-  # plugins accepts a list of either plugins or { plugin = ...; config = ..vimscript.. };
+  # plugins accepts a list of either plugins or attribute sets containing:
+  # { plugin = ...; config = ...; type = "viml"|"lua"; } (type defaults to "viml")
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
@@ -88,7 +92,19 @@ wrapNeovimUnstable neovim-unwrapped {
         map <Leader>$ <Cmd>Obsession<CR>
       '';
     }
-    (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
+    {
+      plugin = grug-far-nvim;
+      type = "lua";
+      config = ''
+        require('grug-far').setup({
+          startInInsertMode = false,
+        })
+      '';
+    }
+    (nvim-treesitter.withPlugins (p: [
+      p.nix
+      p.python
+    ]))
     hex-nvim
   ];
   extraLuaPackages = lp: [ lp.mpack ];
@@ -98,12 +114,12 @@ wrapNeovimUnstable neovim-unwrapped {
 }
 ```
 
-You can explore the configuration with`nix repl` to discover these options and
+You can explore the configuration with `nix repl` to discover these options and
 override them. For instance:
 ```nix
-neovim.overrideAttrs (oldAttrs: {
+neovim.override {
   autowrapRuntimeDeps = false;
-})
+}
 ```
 
 ## Specificities for some plugins {#neovim-plugin-specificities}

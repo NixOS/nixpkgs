@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flash-linear-attention";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "fla-org";
     repo = "flash-linear-attention";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g66yGHaBwEyjb+of76tKTtV/7as/2xQuqcjbGs4E3rU=";
+    hash = "sha256-vxNbZ+FkxJh2E0TF09Z7ghkm8eas7Q96heeSXwgV4uU=";
   };
 
   build-system = [ setuptools ];
