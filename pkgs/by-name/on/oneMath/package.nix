@@ -29,10 +29,13 @@ let
     name = "cuda-toolkit-joined";
     paths =
       with cudaPackages;
-      lib.flatten [
+      [
         cuda_cudart
         cuda_nvcc
-        (map
+        libcublas.stubs
+      ]
+      ++
+        lib.concatMap
           (x: [
             x
             x.lib
@@ -44,10 +47,7 @@ let
             libcufft
             libcurand
             libcusparse
-          ]
-        )
-        libcublas.stubs
-      ];
+          ];
     # Make stubs available at lib64 for FindCUDA
     postBuild = ''
       mkdir -p $out/lib64
