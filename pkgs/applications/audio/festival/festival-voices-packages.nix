@@ -33,6 +33,9 @@ lib.makeScope newScope (self: {
   cmu_us_slp_cg = self.callPackage ./voices/cmu_us_slp_cg { };
   cmu_us_slt_cg = self.callPackage ./voices/cmu_us_slt_cg { };
   kal_diphone = self.callPackage ./voices/kal_diphone { };
+  us1_mbrola = self.callPackage ./voices/us1_mbrola { };
+  us2_mbrola = self.callPackage ./voices/us2_mbrola { };
+  us3_mbrola = self.callPackage ./voices/us3_mbrola { };
 
   # Indian
   cmu_indic_ben_rm_cg = self.callPackage ./voices/cmu_indic_ben_rm_cg { };
@@ -51,4 +54,5 @@ lib.makeScope newScope (self: {
 
   # English (GB)
   rab_diphone = self.callPackage ./voices/rab_diphone { };
+  en1_mbrola = self.callPackage ./voices/en1_mbrola { };
 })

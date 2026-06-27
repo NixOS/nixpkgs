@@ -166,6 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
         extraLibs = lib.unique (lib.concatMap (v: v.passthru.extraLibDeps or [ ]) selectedVoices);
         voiceSiteInit = lib.concatMapStrings (v: v.passthru.siteInit or "") selectedVoices;
 
+        # Check if the voices are mbrola voices
+        mbrolaPackage = lib.findFirst (p: lib.getName p == "mbrola") null extraBins;
+
         defaultVoiceSiteInit = lib.optionalString (
           defaultVoice != null
         ) "(set! voice_default 'voice_${defaultVoice})\n";
@@ -209,6 +212,16 @@ stdenv.mkDerivation (finalAttrs: {
             ${combinedSiteInit}
             (provide 'siteinit)
             EOF
+          ''}
+
+          # If the voices are mbrola voices they will include mbrola in extraBins
+          # mbrola.scm needs to link to it
+          ${lib.optionalString (mbrolaPackage != null) ''
+            cp --remove-destination $(realpath $out/lib/mbrola.scm) $out/lib/mbrola.scm
+            substituteInPlace $out/lib/mbrola.scm \
+              --replace-fail \
+                '"/cstr/external/mbrola/mbrola"' \
+                '"${mbrolaPackage}/bin/mbrola"'
           ''}
         '';
       };
