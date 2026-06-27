@@ -5937,7 +5937,6 @@ final: prev: {
       buildLuarocksPackage,
       fetchFromGitHub,
       fetchurl,
-      inspect,
       ltreesitter,
       lua-cjson,
       luafilesystem,
@@ -5947,22 +5946,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.1.3-1";
+      version = "0.1.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.1.3-1.rockspec";
-          sha256 = "1mqg294rgzcfbfam0qdab3z93j7gsx250hs9f271337gqki34848";
+          url = "mirror://luarocks/teal-language-server-0.1.4-1.rockspec";
+          sha256 = "0hgjlpyc90r3m4n4y6k8vjf5cdkv1q5b1mrfc31pssrhfwplq5hq";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        tag = "0.1.3";
-        hash = "sha256-XuHm6AbcBmv0fyQjlJlBMWqJlGYoveW7BEEN+axMRhw=";
+        tag = "0.1.4";
+        hash = "sha256-5SdKjE690zxLAl2Kwcy2Bk49KUrpkYBPviK+mrQnMec=";
       };
 
       propagatedBuildInputs = [
         argparse
-        inspect
         ltreesitter
         lua-cjson
         luafilesystem
