@@ -5431,6 +5431,8 @@ self: super: with self; {
 
   eyed3 = callPackage ../development/python-modules/eyed3 { };
 
+  ez-setup = callPackage ../development/python-modules/ez-setup { };
+
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
   ezodf = callPackage ../development/python-modules/ezodf { };
@@ -7960,6 +7962,8 @@ self: super: with self; {
   iso3166 = callPackage ../development/python-modules/iso3166 { };
 
   iso4217 = callPackage ../development/python-modules/iso4217 { };
+
+  iso639-lang = callPackage ../development/python-modules/iso639-lang { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
@@ -18418,6 +18422,8 @@ self: super: with self; {
   slowapi = callPackage ../development/python-modules/slowapi { };
 
   slpp = callPackage ../development/python-modules/slpp { };
+
+  slskd-api = callPackage ../development/python-modules/slskd-api { };
 
   slugid = callPackage ../development/python-modules/slugid { };
 
