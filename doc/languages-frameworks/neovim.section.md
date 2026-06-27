@@ -83,12 +83,22 @@ wrapNeovimUnstable neovim-unwrapped {
     vim.opt.colorcolumn = { 100 }
     vim.opt.termguicolors = true
   '';
-  # plugins accepts a list of either plugins or { plugin = ...; config = ..vimscript.. };
+  # plugins accepts a list of either plugins or attribute sets containing:
+  # { plugin = ...; config = ...; type = "viml"|"lua"; } (type defaults to "viml")
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
       config = ''
         map <Leader>$ <Cmd>Obsession<CR>
+      '';
+    }
+    {
+      plugin = grug-far-nvim;
+      type = "lua";
+      config = ''
+        require('grug-far').setup({
+          startInInsertMode = false,
+        })
       '';
     }
     (nvim-treesitter.withPlugins (p: [ p.nix p.python ]))
