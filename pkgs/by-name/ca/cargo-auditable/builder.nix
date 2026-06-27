@@ -42,7 +42,20 @@ lib.extendMkDerivation {
         # https://github.com/rust-secure-code/cargo-auditable/issues/235
         "--skip=test_proc_macro"
         "--skip=test_self_hosting"
-      ];
+      ]
+      # TODO: Clean up on `staging`.
+      ++
+        lib.optionals
+          (
+            stdenv.hostPlatform.isMusl
+            || stdenv.hostPlatform.isAarch32
+            || stdenv.hostPlatform.isDarwin
+            || stdenv.hostPlatform.isMsvc
+          )
+          [
+            # Expects `linker = "rust-lld"` to work.
+            "--skip=test_bare_linker"
+          ];
 
       postInstall = ''
         installManPage cargo-auditable/cargo-auditable.1
