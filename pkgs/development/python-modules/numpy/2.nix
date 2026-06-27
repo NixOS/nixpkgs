@@ -48,13 +48,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-RiC1dLoDamK5B2VzHBL0V//K/Vix25q11wNGcl3Witk=";
   };
 
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ];
-
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
     substituteInPlace numpy/meson.build \
