@@ -83,22 +83,26 @@ rec {
     args@{
       src,
       extraPkgs ? pkgs: [ ],
+      extraInstallCommands ? "",
       ...
     }:
+    let
+      appimageContents = extract (
+        lib.filterAttrs (
+          key: value:
+          builtins.elem key [
+            "pname"
+            "version"
+            "src"
+          ]
+        ) args
+      );
+    in
     wrapAppImage (
       args
       // {
         inherit extraPkgs;
-        src = extract (
-          lib.filterAttrs (
-            key: value:
-            builtins.elem key [
-              "pname"
-              "version"
-              "src"
-            ]
-          ) args
-        );
+        src = appimageContents;
 
         # passthru src to make nix-update work
         # hack to keep the origin position (unsafeGetAttrPos)
@@ -109,9 +113,14 @@ rec {
             (removeAttrs args)
           ]
           // {
+            inherit appimageContents;
             overrideAppImage = f: wrapType2 (args // (if lib.isFunction f then f args else f));
           }
           // args.passthru or { };
+      }
+      // lib.optionalAttrs (args ? extraInstallCommands) {
+        extraInstallCommands =
+          lib.toShellVar "appimageContents" appimageContents + "\n" + extraInstallCommands;
       }
     )
   );
