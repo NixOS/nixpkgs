@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-gateway-spi";
-  version = "0.0.3";
+  version = "0.0.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "alibabacloud_gateway_spi";
     inherit (finalAttrs) version;
-    hash = "sha256-ENHFOj/F+HkV+9a0mFuYM4p3bptEoCY/VmQ8UEgiO4s=";
+    hash = "sha256-c9biDWW1Tu0m2JwZZA06dXLhjEXsraYn+Ab12+jtITA=";
   };
 
   build-system = [ setuptools ];

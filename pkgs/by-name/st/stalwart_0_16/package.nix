@@ -64,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-HVS89Wtjb2nIdyygP8bPRbVhyMRnJlZDfoCQqiMdVe0=";
 
   env = {
+    # https://docs.rs/openssl/latest/openssl/#manual
     OPENSSL_NO_VENDOR = true;
+    OPENSSL_DIR = lib.getDev openssl;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";

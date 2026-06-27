@@ -638,6 +638,9 @@ in
     forgejoPackage = pkgs.forgejo-lts;
   };
   freenet = runTest ./freenet.nix;
+  freescout = import ./freescout {
+    inherit runTest;
+  };
   freeswitch = runTest ./freeswitch.nix;
   freetube = discoverTests (import ./freetube.nix);
   freshrss = import ./freshrss { inherit runTest; };

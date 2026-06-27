@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchurl,
-  gpgme,
+  gpg,
   isPyPy,
   pythonAtLeast,
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  propagatedBuildInputs = [ gpgme ];
+  propagatedBuildInputs = [ gpg ];
 
   meta = {
     homepage = "https://launchpad.net/pygpgme";

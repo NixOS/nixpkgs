@@ -80,7 +80,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.16";
+  version = "2.16.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -90,7 +90,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-PUs/qIdF894232GmdjLsDD2rzU5NPTt/u20v93yZTog=";
+    hash = "sha256-jYQZwgBedpCALhXYw2qH7PwIoSz6ttUje78xjdF+CYc=";
   };
 
   patches = optionals cudaSupport [
