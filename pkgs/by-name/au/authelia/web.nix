@@ -62,4 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # (node:24500) Warning: File descriptor 19 closed but not opened in unmanaged mode
+  # (node:24500) Warning: File descriptor 19 opened in unmanaged mode twice
+  meta.broken = stdenv.hostPlatform.isDarwin;
 })
