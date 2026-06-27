@@ -7,13 +7,13 @@
   lib,
 }:
 let
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromCodeberg {
     repo = "gose";
     owner = "stv0g";
     tag = "v${version}";
-    hash = "sha256-T6PD6MI1IOAgtPOJuPSZp4te9BokKfj+TZHLRqt2FCo=";
+    hash = "sha256-2QHb2P5AhduNAfj39mXINgryR8zLFd/don2jzh1pP5U=";
   };
 
   frontend = buildNpmPackage {
@@ -37,7 +37,7 @@ buildGoModule {
   inherit version;
   inherit src;
 
-  vendorHash = "sha256-PTu4OzVjGVExuNDsK01p3/gAwNhDZbPewhI476m5i/M=";
+  vendorHash = "sha256-GgkHdeZUIaQH0dyVqgoBZ80qpL4zfg7paivOw/2Uw7Y=";
 
   env.CGO_ENABLED = 0;
 
