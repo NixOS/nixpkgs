@@ -162,7 +162,8 @@ let
     in
     fromSourceAttributes {
       inherit (orig) origSrc;
-      filter = path: type: filter path type && orig.filter path type;
+      filter =
+        if orig.filter == null then filter else path: type: filter path type && orig.filter path type;
       name = if name != null then name else orig.name;
     };
 
@@ -191,11 +192,14 @@ let
       attrs
       // {
         filter =
-          path: type:
-          let
-            r = attrs.filter path type;
-          in
-          builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
+          if attrs.filter == null then
+            path: type: builtins.trace "${attrs.name}.filter ${path} = true" true
+          else
+            path: type:
+            let
+              r = attrs.filter path type;
+            in
+            builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
       }
     )
     // {
@@ -416,7 +420,7 @@ let
     {
       # The original path
       origSrc = if isFiltered then src.origSrc else src;
-      filter = if isFiltered then src.filter else _: _: true;
+      filter = if isFiltered then src.filter else null; # make sure to handle this!
       name = if isFiltered then src.name else "source";
     };
 
