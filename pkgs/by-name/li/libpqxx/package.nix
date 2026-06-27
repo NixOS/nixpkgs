@@ -1,26 +1,23 @@
 {
   lib,
   stdenv,
-  gcc14Stdenv,
+  cmake,
   fetchFromGitHub,
   libpq,
   python3,
   postgresql,
   postgresqlTestHook,
-  autoreconfHook,
 }:
 
-# Work around issue reported in https://github.com/NixOS/nixpkgs/issues/476278.
-# Should be solved when libpqxx 8.x is released.
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.10.7";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
-    rev = finalAttrs.version;
-    hash = "sha256-A33Z6xSIReYHHS3KerBSDTuo59tixduxXVEMfa/2I7A=";
+    tag = finalAttrs.version;
+    hash = "sha256-b7NgMzqu0VkAFZPmaeE0eOmsedL76MvFtWKlmD8UfAo=";
   };
 
   outputs = [
@@ -29,8 +26,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    # Needed because Makefile.am is patched to disable the tools/lint test.
-    autoreconfHook
+    cmake
     python3
   ];
 
@@ -44,21 +40,25 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Disable linting step for tests, it tries to install packages with pip.
-    substituteInPlace Makefile.am \
-      --replace-fail "TESTS = tools/lint" ""
-
-    patchShebangs ./tools/splitconfig.py
-    # Needed for autoreconfHook
-    patchShebangs tools/*.py
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail '"\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}' '"''${CMAKE_INSTALL_FULL_INCLUDEDIR}' \
+      --replace-fail '"\''${prefix}/''${CMAKE_INSTALL_LIBDIR}' '"''${CMAKE_INSTALL_FULL_LIBDIR}'
   '';
 
-  configureFlags = [
-    "--disable-documentation"
-    "--enable-shared"
+  cmakeFlags = [
+    "-DBUILD_DOC=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = lib.meta.availableOn stdenv.hostPlatform postgresqlTestHook;
+
+  checkPhase = ''
+    runHook preCheck
+
+    test/runner
+
+    runHook postCheck
+  '';
 
   enableParallelBuilding = true;
 
