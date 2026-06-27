@@ -1730,6 +1730,7 @@ class NspawnMachine(BaseMachine):
 
         self.process = subprocess.Popen(
             [self.start_command],
+            cwd=self.state_dir,
             env={
                 "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
                 "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),

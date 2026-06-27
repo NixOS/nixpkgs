@@ -17,7 +17,7 @@ interface LatestInfo {
   readonly productVersion: string;
 }
 
-const platforms = ["aarch64-darwin", "x86_64-darwin", "x86_64-linux"] as const;
+const platforms = ["aarch64-darwin", "x86_64-linux"] as const;
 type Platform = (typeof platforms)[number];
 type InfoMap = Record<
   Platform,
@@ -29,7 +29,7 @@ type InfoMap = Record<
   }
 >;
 
-async function getInfo(targetSystem: "darwin-arm64" | "darwin-x64" | "linux-x64") {
+async function getInfo(targetSystem: "darwin-arm64" | "linux-x64") {
   const url =
     `https://windsurf-stable.codeium.com/api/update/${targetSystem}/stable/latest` as const;
 
@@ -57,7 +57,6 @@ async function main() {
 
   const info: InfoMap = {
     "aarch64-darwin": await getInfo("darwin-arm64"),
-    "x86_64-darwin": await getInfo("darwin-x64"),
     "x86_64-linux": await getInfo("linux-x64"),
   };
   if (JSON.stringify(oldInfo) === JSON.stringify(info)) {
@@ -66,7 +65,7 @@ async function main() {
   }
   for (const platform of platforms) {
     console.log(
-      `[update] Updating Windsurf ${platform} ${oldInfo[platform].version} -> ${info[platform].version}`,
+      `[update] Updating Devin Desktop ${platform} ${oldInfo[platform].version} -> ${info[platform].version}`,
     );
   }
   await fsPromises.writeFile(
@@ -74,7 +73,7 @@ async function main() {
     JSON.stringify(info, null, 2) + "\n",
     "utf-8",
   );
-  console.log("[update] Updating Windsurf complete");
+  console.log("[update] Updating Devin Desktop complete");
 }
 
 if (process.argv[1] === __filename) {

@@ -249,6 +249,9 @@ stdenv.mkDerivation (
       })
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     buildInputs = [
       libsecret
     ]

@@ -19,8 +19,6 @@
   netpbm,
   vhost-device-vsock,
   nixosTests,
-  qemu_pkg ? qemu_test,
-  qemu_test,
   setuptools,
   socat,
   systemd,
@@ -58,7 +56,6 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     netpbm
-    qemu_pkg
     socat
     util-linux
     vde2
