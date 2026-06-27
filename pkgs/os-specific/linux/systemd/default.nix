@@ -34,6 +34,7 @@
   acl,
   lz4,
   openssl,
+  libucontext,
   libgcrypt,
   libidn2,
   curl,
@@ -325,7 +326,9 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     linuxHeaders
   ]
-
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libucontext
+  ]
   ++ lib.optionals withGcrypt [
     libgcrypt
   ]
