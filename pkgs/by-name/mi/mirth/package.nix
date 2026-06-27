@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     install -Dm644 LICENSE README.md -t "$doc/share/doc/mirth"
 
     # stages 0–2 aren’t needed anymore
-    install -Dm755 bin/mirth3 "$bin/bin/mirth"
+    install -Dm755 bin/mirth3 "$bin/bin/mirthc"
 
     runHook postInstall
   '';
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   # it here, it will be more flexible towards allowing users to wrap the Mirth
   # binary with their own stdlib & other packages.
   postFixup = ''
-    makeBinaryWrapper "$bin/bin/mirth" "$out/bin/mirth" \
+    makeBinaryWrapper "$bin/bin/mirthc" "$out/bin/mirthc" \
       --add-flags "-P $lib/lib/mirth"
   '';
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://git.sr.ht/~typeswitch/mirth";
     license = lib.licenses.bsd0;
-    mainProgram = "mirth";
+    mainProgram = "mirthc";
     # https://git.sr.ht/~typeswitch/mirth/tree/main/item/src/mirth.h#L4-22
     platforms = [
       "aarch64-darwin"

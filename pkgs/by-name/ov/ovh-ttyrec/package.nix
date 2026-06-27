@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovh-ttyrec";
-  version = "1.1.7.1";
+  version = "1.2.0.0";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "ovh-ttyrec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VTF9WLwAIWWn+W0sLQaoFBFro+pSXKwcTO6q6MW6JD8=";
+    hash = "sha256-UC0+LW4iheVasCEznXw+OTyxMt3hO59gFhB2YiXCFZI=";
   };
 
   nativeBuildInputs = [ zstd ];

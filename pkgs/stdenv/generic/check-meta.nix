@@ -49,6 +49,7 @@ let
   inherit (import ./problems.nix { inherit lib; })
     problemsType
     genCheckProblems
+    completeMetaProblems
     ;
   checkProblems = genCheckProblems config;
 
@@ -669,6 +670,8 @@ let
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
+
+      problems = completeMetaProblems config attrs;
 
       available =
         validity.valid != "no"

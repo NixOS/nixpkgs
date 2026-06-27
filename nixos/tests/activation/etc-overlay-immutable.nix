@@ -76,6 +76,19 @@
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
 
+      with subtest("machine-id is set up without first-boot looping"):
+        # The baked-in placeholder is an empty regular file; systemd overlays
+        # /run/machine-id on top so the session has a valid ID while the
+        # commit service is condition-skipped (no writable /etc to commit to).
+        machine.succeed("stat --format '%F' /etc/machine-id | tee /dev/stderr | grep -q 'regular'")
+        machine.succeed("grep -qE '^[0-9a-f]{32}$' /etc/machine-id")
+        machine.fail("journalctl -b | grep -F 'System cannot boot: Missing /etc/machine-id'")
+        machine.fail("journalctl -b | grep -F 'Detected first boot'")
+        machine.fail("systemctl is-failed --quiet systemd-machine-id-commit.service")
+        assert machine.succeed(
+            "systemctl show -P ConditionResult systemd-machine-id-commit.service"
+        ).strip() == "no"
+
       with subtest("modes work correctly"):
         machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -q 'regular file'")
         machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -q 'regular file'")

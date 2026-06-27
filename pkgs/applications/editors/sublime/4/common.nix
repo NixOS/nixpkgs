@@ -230,13 +230,11 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    # FIXME: gated behind allowAliases to workaround https://github.com/NixOS/nixpkgs/issues/523712
-    problems =
-      lib.optionalAttrs config.allowAliases {
-        removal.message = "We have removed Python 3.3 package support ahead of upstream schedule but if you do not use any old packages, this should just work.";
-      }
-      // lib.optionalAttrs (lib.versionOlder buildVersion "4205") {
-        broken.message = "Packages, including core ones, do not run without plug-in host depending on insecure OpenSSL.";
-      };
+    problems = {
+      removal.message = "We have removed Python 3.3 package support ahead of upstream schedule but if you do not use any old packages, this should just work.";
+    }
+    // lib.optionalAttrs (lib.versionOlder buildVersion "4205") {
+      broken.message = "Packages, including core ones, do not run without plug-in host depending on insecure OpenSSL.";
+    };
   };
 })
