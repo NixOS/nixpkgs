@@ -2907,6 +2907,17 @@ with self;
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-Tiny-1.011.tar.gz";
       hash = "sha256-A9lntfgoRpCRN9WrmYSsVwrBCkQB4MYC89IgjEZayYI=";
     };
+    patches = [
+      (fetchpatch {
+        name = "CVE-2026-11702.patch";
+        url = "https://security.metacpan.org/patches/B/Bytes-Random-Secure-Tiny/1.011/CVE-2026-11702-r1.patch";
+        hash = "sha256-81wvVdtQsF5YeRhjAeaOFa7aE1cgdCni+G28LA7ZLqM=";
+      })
+    ];
+    preCheck = ''
+      # Remove test that CVE patch breaks: "Attempt to access disallowed key '_rng' in a restricted hash"
+      rm t/35-mrie-cover.t
+    '';
     meta = {
       description = "Tiny Perl extension to generate cryptographically-secure random bytes";
       license = with lib.licenses; [
