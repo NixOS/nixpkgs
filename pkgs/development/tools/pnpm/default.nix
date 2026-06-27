@@ -20,6 +20,15 @@ let
     "10_29_2" = {
       version = "10.29.2";
       hash = "sha256-hAL2daH0zJ1PJ7v6s1wtSi4dfrATHfA9rQlhnoZnTQw=";
+      knownVulnerabilities = [
+        "CVE-2026-48995"
+        "CVE-2026-50014"
+        "CVE-2026-50015"
+        "CVE-2026-50016"
+        "CVE-2026-50017"
+        "CVE-2026-50573"
+        "CVE-2026-55699"
+      ];
     };
     "10" = {
       version = "10.34.0";
@@ -35,6 +44,7 @@ let
     variant:
     callPackage ./generic.nix {
       inherit (variant) version hash;
+      knownVulnerabilities = variant.knownVulnerabilities or [ ];
       #FIXME: remove this hack in a future version.
       nodejs = null; # Passing null to detect out-of-tree overrides
     };
