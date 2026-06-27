@@ -28865,6 +28865,12 @@
     githubId = 122319;
     name = "Renato Alves";
   };
+  unreasonable0ne = {
+    name = "unreasonable0ne";
+    email = "unreasonable0ne@pm.me";
+    github = "unreasonable0ne";
+    githubId = 95241280;
+  };
   unrooted = {
     name = "Konrad Klawikowski";
     email = "konrad.root.klawikowski@gmail.com";
