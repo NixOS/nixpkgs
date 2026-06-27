@@ -206,7 +206,7 @@ buildPythonPackage (finalAttrs: {
     let
       register-python-argcomplete = lib.getExe' argcomplete "register-python-argcomplete";
     in
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd esphome \
         --bash <(${register-python-argcomplete} -s bash $out/bin/esphome) \
         --fish <(${register-python-argcomplete} -s fish $out/bin/esphome) \
