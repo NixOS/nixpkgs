@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sherlock";
-  version = "0.16.0-unstable-2026-05-09";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
