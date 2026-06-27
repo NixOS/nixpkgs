@@ -958,6 +958,8 @@ self: super: with self; {
 
   apkinspector = callPackage ../development/python-modules/apkinspector { };
 
+  apksigtool = callPackage ../development/python-modules/apksigtool { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   apollo-fpga = callPackage ../development/python-modules/apollo-fpga { };
@@ -6751,6 +6753,8 @@ self: super: with self; {
 
   google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
 
+  google-play-scraper = callPackage ../development/python-modules/google-play-scraper { };
+
   google-re2 = callPackage ../development/python-modules/google-re2 { };
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
@@ -7407,6 +7411,8 @@ self: super: with self; {
   http-sfv = callPackage ../development/python-modules/http-sfv { };
 
   http-snapshot = callPackage ../development/python-modules/http-snapshot { };
+
+  http-tools = callPackage ../development/python-modules/http-tools { };
 
   httpagentparser = callPackage ../development/python-modules/httpagentparser { };
 
@@ -9097,6 +9103,8 @@ self: super: with self; {
   librt = callPackage ../development/python-modules/librt { };
 
   libsass = callPackage ../development/python-modules/libsass { inherit (pkgs) libsass; };
+
+  libsast = callPackage ../development/python-modules/libsast { };
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
@@ -18123,6 +18131,8 @@ self: super: with self; {
   shellescape = callPackage ../development/python-modules/shellescape { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
+
+  shelljob = callPackage ../development/python-modules/shelljob { };
 
   sherpa-onnx = callPackage ../development/python-modules/sherpa-onnx {
     sherpa-onnx = pkgs.sherpa-onnx.override {
