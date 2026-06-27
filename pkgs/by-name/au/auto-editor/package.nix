@@ -54,6 +54,8 @@ buildNimPackage rec {
     # buildNimPackage hack
     substituteInPlace ae.nimble \
       --replace-fail '"main=auto-editor"' '"main"'
+
+    mv tests/unit.nim tests/tunit.nim # buildNimPackage expects tests to start with t
   '';
 
   nativeCheckInputs = [
@@ -64,7 +66,7 @@ buildNimPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/unit.nim"
+    nim_builder --phase:check
 
     substituteInPlace tests/test.py \
       --replace-fail '"./auto-editor"' "\"$out/bin/main\""
