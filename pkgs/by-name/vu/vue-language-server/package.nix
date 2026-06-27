@@ -4,13 +4,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_34_0,
   nodejs,
   nix-update-script,
   makeBinaryWrapper,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_34_0;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";

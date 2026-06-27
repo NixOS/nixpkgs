@@ -361,7 +361,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/lua-modules         @NixOS/lua
 
 # Neovim
-/pkgs/applications/editors/neovim      @NixOS/neovim
+/pkgs/applications/editors/neovim           @NixOS/neovim
+/doc/languages-frameworks/neovim.section.md @NixOS/neovim
 
 # VimPlugins
 /pkgs/applications/editors/vim/plugins         @NixOS/neovim
