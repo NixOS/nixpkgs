@@ -9168,13 +9168,6 @@ with pkgs;
     withConplay = false;
   };
 
-  mplayer = callPackage ../applications/video/mplayer (
-    {
-      libdvdnav = libdvdnav_4_2_1;
-    }
-    // (config.mplayer or { })
-  );
-
   mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 
   murmur =
