@@ -161,6 +161,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
       SuperSandro2000
+      yvnth
     ];
   };
 })
