@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   replaceVars,
-  fetchpatch,
 
   # nativeBuildInputs
   setuptools,
@@ -16,8 +15,8 @@
   # tests
   numba,
   pytestCheckHook,
+  pytest-xdist,
   writableTmpDirAsHomeHook,
-  numpy_1,
   writers,
   python,
 
@@ -56,11 +55,26 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-DMmUyTElDFyMK4BUQ4EhDNmG43lOWQHurKbnSyhAs5k=";
   };
 
+  patches = [
+    ./numpy2.5.patch
+  ]
+  ++ lib.optionals cudaSupport [
+    (replaceVars ./cuda_path.patch {
+      cuda_toolkit_path = cudatoolkit;
+      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+    })
+  ];
+
   postPatch = ''
     substituteInPlace numba/cuda/cudadrv/driver.py \
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
+
+    substituteInPlace setup.py \
+      --replace-fail 'max_numpy_run_version = "2.5"' 'max_numpy_run_version = "2.6"'
+    substituteInPlace numba/__init__.py \
+      --replace-fail "(2, 4)" "(2, 6)"
   '';
 
   build-system = [
@@ -84,15 +98,9 @@ buildPythonPackage (finalAttrs: {
     llvmlite
   ];
 
-  patches = lib.optionals cudaSupport [
-    (replaceVars ./cuda_path.patch {
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-    })
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
     writableTmpDirAsHomeHook
   ];
 
@@ -144,9 +152,6 @@ buildPythonPackage (finalAttrs: {
       cudaSupport = false;
       doFullCheck = true;
       testsWithoutSandbox = false;
-    };
-    numpy_1 = numba.override {
-      numpy = numpy_1;
     };
   };
 
