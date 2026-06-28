@@ -101,10 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      ./darwin-compilation.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
+    lib.optionals stdenv.hostPlatform.isMusl [
       ./quark_init_on_demand.patch
       ./gobject_init_on_demand.patch
     ]
