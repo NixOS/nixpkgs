@@ -114,6 +114,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://syncthing.net/";
     description = "Open Source Continuous File Synchronization";
+    donationPage = "https://syncthing.net/donations/";
     changelog = "https://github.com/syncthing/syncthing/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
