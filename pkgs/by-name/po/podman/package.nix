@@ -204,5 +204,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.linux;
   };
 })
