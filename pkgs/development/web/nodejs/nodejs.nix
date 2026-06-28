@@ -517,12 +517,6 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
-            # Apple SDK update broke something related to those tests, so skipping them for now
-            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isDarwin) [
-              "test-worker-track-unmanaged-fds"
-              "test-esm-import-meta-main-eval"
-              "test-worker-debug"
-            ]
             # These network/fetch/inspector tests fail on riscv64
             ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
               "test-fetch"
