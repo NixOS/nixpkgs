@@ -6,22 +6,19 @@
   runCommand,
   python3,
   vapoursynth,
-  qmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtwebsockets,
+  qt6,
 }:
 
 let
   unwrapped = stdenv.mkDerivation rec {
     pname = "vapoursynth-editor";
-    version = "R19-mod-4";
+    version = "R19-mod-6.8";
 
     src = fetchFromGitHub {
       owner = "YomikoR";
       repo = "vapoursynth-editor";
-      rev = lib.toLower version;
-      hash = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
+      tag = version;
+      hash = "sha256-eSdyhKRNsZeSRqkn5SzbB5YRuKehgCJD03PYiD5zQ/Y=";
     };
 
     postPatch = ''
@@ -30,15 +27,19 @@ let
     '';
 
     nativeBuildInputs = [
-      qmake
-      wrapQtAppsHook
+      qt6.qmake
+      qt6.wrapQtAppsHook
     ];
 
     buildInputs = [
-      qtbase
+      qt6.qtbase
       vapoursynth
-      qtwebsockets
+      qt6.qtwebsockets
+      qt6.qt5compat
     ];
+
+    # ../../common-src/helpers.h:4:10: fatal error: VapourSynth4.h: No such file or directory
+    env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude vapoursynth}/include/vapoursynth";
 
     dontWrapQtApps = true;
 
