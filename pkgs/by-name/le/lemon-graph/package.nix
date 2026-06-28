@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
     description = "Efficient library for combinatorial optimization tasks on graphs and networks";
     license = lib.licenses.boost;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
   };
 })
