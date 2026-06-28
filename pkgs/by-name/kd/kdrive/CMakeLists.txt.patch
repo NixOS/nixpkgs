@@ -1,0 +1,23 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8f0ac5c47..e2fa70454 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -317,11 +317,13 @@ elseif(BUILD_CLIENT)
+         message(STATUS "CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}")
+         if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+             find_program(CRASHPAD_HANDLER_PROGRAM NAMES crashpad_handler NO_CACHE)
+-            message(STATUS "crashpad_handler found in ${CRASHPAD_HANDLER_PROGRAM}")
+-            if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-                file(COPY ${CRASHPAD_HANDLER_PROGRAM} DESTINATION ${BIN_OUTPUT_DIRECTORY})
+-            else()
+-                install(PROGRAMS ${CRASHPAD_HANDLER_PROGRAM} DESTINATION ${CMAKE_INSTALL_BINDIR})
++            if(CRASHPAD_HANDLER_PROGRAM)
++                message(STATUS "crashpad_handler found in ${CRASHPAD_HANDLER_PROGRAM}")
++                if(CMAKE_BUILD_TYPE STREQUAL "Debug")
++                    file(COPY ${CRASHPAD_HANDLER_PROGRAM} DESTINATION ${BIN_OUTPUT_DIRECTORY})
++                else()
++                    install(PROGRAMS ${CRASHPAD_HANDLER_PROGRAM} DESTINATION ${CMAKE_INSTALL_BINDIR})
++                endif()
+             endif()
+         endif()
+     endif()
