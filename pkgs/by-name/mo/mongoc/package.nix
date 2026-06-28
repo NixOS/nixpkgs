@@ -10,18 +10,24 @@
   icu,
   cyrus_sasl,
   snappy,
+  nix-update-script,
+  version ? "1.30.8",
+  hash ? "sha256-gdng/aVri59LkHTX+CZqSa9rQ/29EAai3DPXsWm+4HM=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongoc";
-  version = "1.30.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     tag = finalAttrs.version;
-    hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
+    inherit hash;
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     rm -rf src/{libmongoc,libbson}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Official C client library for MongoDB";
