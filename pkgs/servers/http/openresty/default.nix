@@ -67,6 +67,9 @@ callPackage ../nginx/generic.nix args rec {
 
     wrapProgram $out/bin/restydoc \
       --prefix PATH : ${groff}/bin
+
+    substituteInPlace $out/bin/resty \
+      --replace-fail "'bin/nginx'" "'$out/bin/nginx'"
   '';
 
   passthru = {
