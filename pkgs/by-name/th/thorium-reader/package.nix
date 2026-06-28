@@ -1,12 +1,15 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   nodejs_24,
-  makeWrapper,
+  makeShellWrapper,
+  makeBinaryWrapper,
   electron,
   copyDesktopItems,
   makeDesktopItem,
+  desktopToDarwinBundle,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -24,23 +27,40 @@ buildNpmPackage (finalAttrs: {
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  # makeBinaryWrapper is preferred on Darwin since the OS may confuse itself
+  # into thinking it needs Rosetta 2 if it encounters a non-MachO executable
+  # in a .app bundle
 
+  # Simultaneously, we need makeShellWrapper on linux platforms to pass
+  # electron-specific flags.
   nativeBuildInputs = [
-    makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    makeShellWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    desktopToDarwinBundle
   ];
 
-  postInstall = ''
-    install -Dpm644 resources/icon.png $out/share/icons/thorium-reader.png
+  postInstall =
+    let
+      ozoneFlags = lib.optionalString stdenv.hostPlatform.isLinux ''--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"'';
+    in
+    ''
+      install -Dpm644 resources/icon.png $out/share/icons/thorium-reader.png
 
-    cp -r dist/* $out/lib/node_modules/EDRLab.ThoriumReader/
+      cp -r dist/* $out/lib/node_modules/EDRLab.ThoriumReader/
 
-    makeWrapper '${lib.getExe electron}' "$out/bin/thorium-reader" \
-      --add-flags $out/lib/node_modules/EDRLab.ThoriumReader \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
-  '';
+      ${
+        if stdenv.hostPlatform.isDarwin then "makeBinaryWrapper" else "makeWrapper"
+      } '${lib.getExe electron}' "$out/bin/thorium-reader" \
+        --add-flags $out/lib/node_modules/EDRLab.ThoriumReader \
+        ${ozoneFlags} \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
+    '';
 
   desktopItems = [
     (makeDesktopItem {
