@@ -219,6 +219,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cudnn # cudnn.h
       cudnn-frontend
       cuda_cudart
+      cuda_nvrtc
     ]
     ++ lib.optionals ncclSupport [ nccl ]
   )
