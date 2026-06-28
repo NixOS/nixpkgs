@@ -48,13 +48,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "27.0.0";
+  version = "27.1.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ikTkp/r24xTJ+RDMlu5q8PmFvGUeLz/sejeIjOSmd5M=";
+    hash = "sha256-EXtfkjNOl3Loml7GXWYE8hh/IqItqA677YEh0Ve6dOI=";
     fetchSubmodules = true;
   };
 
@@ -69,16 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
         p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
         p27 = "sha256-KcsyPBJLUOwRAtp95IYFiZZNMi1xWmYW7XXG+bMucmY=";
       };
-    in
-    symlinkJoin {
-      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
-      paths = [
-        (rustPlatform.fetchCargoVendor {
-          inherit (finalAttrs) src;
-          hash = "sha256-e7WGYm5RLmg9vjcMjy98RBW0QqjGTd8cPPeilhYbZ2I=";
-        })
-      ]
-      ++ lib.mapAttrsToList (
+      mainCargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) src;
+        hash = "sha256-8seehYc2W0lvW9WPewPHC3cLR9Lgj2qCib/EXK0gwVA=";
+      };
+      sorobanCargoDeps = lib.mapAttrs (
         protocol: hash:
         rustPlatform.fetchCargoVendor {
           pname = "stellar-core-${protocol}";
@@ -87,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
           inherit hash;
         }
       ) sorobanProtocolHashes;
+    in
+    symlinkJoin {
+      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
+      paths = [ mainCargoDeps ] ++ lib.attrValues sorobanCargoDeps;
+      passthru = {
+        inherit sorobanProtocolHashes mainCargoDeps sorobanCargoDeps;
+      };
       postBuild = ''
         # `soroban-synth-wasm` resolves this path relative to the vendored git
         # source root, but cargo vendors the workspace crates with versioned
@@ -159,6 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postCheck
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Reference peer-to-peer agent that manages the Stellar network";
