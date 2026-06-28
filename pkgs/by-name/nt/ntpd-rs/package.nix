@@ -33,13 +33,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # These fail based on timestamp issues with bundled certificates
   # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
-  checkFlags = [
-    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
-    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
-    "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
-    "--skip=daemon::ntp_source::tests::test_timeroundtrip"
-    "--skip=daemon::server::tests::test_server_serves"
-    "--skip=daemon::spawn::nts::tests::allow_srv_direct_name_resolution"
+  checkFlags = map (t: "--skip=${t}") [
+    "daemon::keyexchange::tests::key_exchange_connection_limiter"
+    "daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
+    "daemon::ntp_source::tests::test_deny_stops_poll"
+    "daemon::ntp_source::tests::test_timeroundtrip"
+    "daemon::server::tests::test_server_serves"
+    "daemon::spawn::nts::tests::allow_srv_direct_name_resolution"
+    "daemon::spawn::standard::tests::reresolves_on_unreachable"
+    "nts::tests::test_key_exchange_roundtrip_no_cookies"
+    "nts::tests::test_keyexchange_fixed_key_no_permission"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
+    "nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
+    "nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
+    "nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
+    "nts::tests::test_keyexchange_roundtrip_supports"
+    "nts::tests::test_keyexchange_roundtrip_upgrading"
+    "nts::tests::test_keyexchange_roundtrip_v4"
+    "nts::tests::test_keyexchange_roundtrip_v5"
+    "nts::tests::test_keyexchange_supports_no_permission"
   ];
 
   postPatch = ''
