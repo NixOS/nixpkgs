@@ -11,6 +11,13 @@
   runCommand,
   stylelint-lsp,
 }:
+let
+  pnpm = pnpm_9.overrideAttrs (old: {
+    meta = old.meta // {
+      knownVulnerabilities = [ ];
+    };
+  });
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
   version = "2.0.1";
@@ -26,12 +33,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs-slim
     pnpmConfigHook
     pnpmBuildHook
-    pnpm_9
+    pnpm
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-qzUvA00ujnIibQAONOPlp5BsXcwQb/gQvOPp83hMT5A=";
   };
