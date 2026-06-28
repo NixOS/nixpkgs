@@ -26,7 +26,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
-  version = "1.0.0";
+  version = "1.0.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Stremio";
     repo = "stremio-linux-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iCX2YOF+I5oqnpOLnBKI5l7wRk4Ij8st2RTix5byu5c=";
+    hash = "sha256-NbzUAv/L8xzdepqn677nlROumjlliZIHzPXIToHHeTU=";
   };
 
-  cargoHash = "sha256-4hioDrZAlZbi7ilUvfZJAVJoFAJmrErhxuemkmpKeCM=";
+  cargoHash = "sha256-yafkD7D0E+lbFV7MlLwQM4iWC8Glo/Tn2F+TFff6GoM=";
 
   postPatch = ''
     substituteInPlace data/com.stremio.Stremio.service \
@@ -83,6 +83,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGApp $out/bin/stremio \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}" \
       --prefix PATH : "${lib.makeBinPath [ nodejs ]}" \
+      --prefix ANV_DEBUG : "video-decode,video-encode" \
+      --prefix LC_NUMERIC : "C" \
       --prefix SERVER_PATH : "$out/libexec/stremio/server.js"
   '';
 
