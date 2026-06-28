@@ -27,13 +27,13 @@ let
 in
 buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2026.5.0";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-R00wt5W4kKmFIODEaGoUqDwfGyHH/2PpiRaC8Gq3d88=";
+    hash = "sha256-JIIis3wW0cU33ovRQfJi3HlB2YdLZ5IPvueq1dGFbas=";
   };
 
   patches = [
@@ -49,10 +49,6 @@ buildNpmPackage rec {
   ];
 
   postPatch = ''
-    # https://github.com/bitwarden/clients/pull/20480
-    substituteInPlace package-lock.json apps/desktop/desktop_native/napi/package.json \
-      --replace-fail '"@napi-rs/cli": "3.5.1"' '"@napi-rs/cli": "3.2.0"'
-
     # remove code under unfree license
     rm -r bitwarden_license
 
@@ -79,7 +75,7 @@ buildNpmPackage rec {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-xmb3zwE8/nWpRlUOgTz2UhNRaUA8KW9sHQHA97pjjfg=";
+  npmDepsHash = "sha256-sXFSjQw9iM5Ye03BX+ZzpDfeAyLTJoG/k46NiI3O8+A=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -89,7 +85,7 @@ buildNpmPackage rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-phvk4t1JKfSYGzm/vm1rT8A0fACHJF/C0WiZ2Lk3cV0=";
+    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -244,7 +240,10 @@ buildNpmPackage rec {
     inherit description;
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      amarshall
+      damidoug
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
