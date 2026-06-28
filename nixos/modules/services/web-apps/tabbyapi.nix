@@ -167,6 +167,13 @@ in
       wantedBy = [ "multi-user.target" ];
       description = "TabbyAPI - OAI compatible server for Exllama";
 
+      # Triton & huggingface downloader need writable cache folders
+      environment = {
+        HOME = "/var/lib/tabbyapi";
+        XDG_CACHE_HOME = "/var/lib/tabbyapi/.cache";
+        TRITON_CACHE_DIR = "/tmp/triton";
+      };
+
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} --config=${configFile}";
         Restart = "on-failure";

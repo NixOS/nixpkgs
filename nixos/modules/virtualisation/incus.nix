@@ -363,20 +363,26 @@ in
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
         "incusd".profile = ''
-          # This profile allows everything and only exists to give the
-          # application a name instead of having the label "unconfined"
+          # incusd is deliberatly left unconfined, with NO named profile attached to the binary.
+          # Incus checks its own confinement at startup by reading /proc/self/attr/current
+          # (https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/sys/apparmor.go).
+          # Anything other than "unconfined" makes Incus believe that the host process is
+          # itself confined, which sends every container down the "reuse my own profile" branch in
+          # https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/instance/drivers/driver_lxc.go
+          # instead of generating a "proper" per-container profile. Furthermore,
+          # that branch only strips " (enforce)" suffix before handing the string to lxc.apparmor.profile
+          # (https://github.com/lxc/incus/blob/92b0cbbc5728ed45578fdeeec634606af8826404/internal/server/instance/drivers/driver_lxc.go#L96),
+          # so the named profile with flags=(unconfined) produces a literal string
+          # "incusd (unconfined)", which the kernel rejects at change_profile() time
+          # with "label not found", failing every `incus start` when AppArmor is enabled.
+          # This was not caught before as AppArmor was stifled by bpf.
+
+          # We keep this policy to pull in the per-container /
+          # per-archive profiles incusd generates at runtime so
+          # apparmor_parser loads them.
 
           abi <abi/4.0>,
           include <tunables/global>
-
-          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
-            userns,
-
-            include "/var/lib/incus/security/apparmor/cache"
-
-            # Site-specific additions and overrides. See local/README for details.
-            include if exists <local/incusd>
-          }
 
           include "/var/lib/incus/security/apparmor/profiles"
         '';
