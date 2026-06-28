@@ -10,6 +10,11 @@
   libuuid,
   gnu-efi,
   libbfd,
+  util-linux,
+  buildPackages,
+  deterministic-host-uname,
+  # help2man runs host executables
+  withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     pkg-config
     help2man
+    util-linux # for getopt used by create-ccan-tree
+    deterministic-host-uname # build system incorrectly uses uname to determine host CPU
   ];
   buildInputs = [
     openssl
@@ -39,26 +46,24 @@ stdenv.mkDerivation (finalAttrs: {
     gnu-efi
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  preConfigure = ''
+    substituteInPlace configure.ac --replace-fail "@@NIX_GNUEFI@@" "${gnu-efi}"
 
-    substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"
-
-    lib/ccan.git/tools/create-ccan-tree --build-type=automake lib/ccan "talloc read_write_all build_assert array_size endian"
+    CC=${lib.getExe buildPackages.stdenv.cc} lib/ccan.git/tools/create-ccan-tree --build-type=automake lib/ccan "talloc read_write_all build_assert array_size endian"
     touch AUTHORS
     touch ChangeLog
 
-    echo "SUBDIRS = lib/ccan src docs" >> Makefile.am
+    echo "SUBDIRS = lib/ccan src ${lib.optionalString withMan "docs"}" > Makefile.am
 
     aclocal
     autoheader
     autoconf
     automake --add-missing -Wno-portability
-
-    ./configure --prefix=$out
-
-    runHook postConfigure
   '';
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   meta = {
     description = "Tools for maintaining UEFI signature databases";
