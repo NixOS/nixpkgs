@@ -590,7 +590,8 @@ By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or
 
 This script by default runs `yarn --offline build`, and it relies upon the project's dependencies installed at `node_modules`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
-- `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
+- `yarnBuildGlobalFlags`: Single string list of additional flags to pass `yarn`, or a Nix list of such additional flags (defaults to `--offline`).
+- `yarnBuildScript`: Sets a different `yarn ${yarnBuildGlobalFlags}` subcommand (defaults to `build`).
 - `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
 
 ##### `yarnInstallHook` arguments {#javascript-yarninstallhook}
