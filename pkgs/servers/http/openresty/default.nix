@@ -3,8 +3,10 @@
   runCommand,
   lib,
   fetchurl,
+  groff,
   perl,
   libpq,
+  makeWrapper,
   nixosTests,
   withPostgres ? true,
   curl,
@@ -40,6 +42,7 @@ callPackage ../nginx/generic.nix args rec {
 
   nativeBuildInputs = [
     libpq.pg_config
+    makeWrapper
     perl
   ];
 
@@ -61,6 +64,9 @@ callPackage ../nginx/generic.nix args rec {
     ln -s $out/nginx/bin/nginx $out/bin/nginx
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
+
+    wrapProgram $out/bin/restydoc \
+      --prefix PATH : ${groff}/bin
   '';
 
   passthru = {
