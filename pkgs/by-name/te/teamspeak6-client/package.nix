@@ -109,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper $out/share/teamspeak6-client/TeamSpeak $out/bin/TeamSpeak \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
+          gcc-unwrapped.lib
           udev
           libGL
           libpulseaudio
