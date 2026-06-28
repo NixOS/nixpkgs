@@ -20,7 +20,8 @@ _ = gettext.translation(
 # The following strings contain pieces of a nix-configuration file.
 # They are adapted from the default config generated from the nixos-generate-config command.
 
-cfghead = """# Edit this configuration file to define what should be installed on
+cfghead = """\
+# Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
@@ -33,20 +34,23 @@ cfghead = """# Edit this configuration file to define what should be installed o
     ];
 
 """
-cfgbootefi = """  # Bootloader.
+cfgbootefi = """\
+  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
 """
 
-cfgbootbios = """  # Bootloader.
+cfgbootbios = """\
+  # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "@@bootdev@@";
   boot.loader.grub.useOSProber = true;
 
 """
 
-cfgbootbiosbtrfs = """  # Bootloader.
+cfgbootbiosbtrfs = """\
+  # Bootloader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "@@bootdev@@";
   boot.loader.grub.useOSProber = true;
@@ -55,12 +59,14 @@ cfgbootbiosbtrfs = """  # Bootloader.
 
 """
 
-cfgbootnone = """  # Disable bootloader.
+cfgbootnone = """\
+  # Disable bootloader.
   boot.loader.grub.enable = false;
 
 """
 
-cfgbootgrubcrypt = """  # Setup keyfile
+cfgbootgrubcrypt = """\
+  # Setup keyfile
   boot.initrd.secrets = {
     "/boot/crypto_keyfile.bin" = null;
   };
@@ -69,7 +75,8 @@ cfgbootgrubcrypt = """  # Setup keyfile
 
 """
 
-cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
+cfgnetwork = """\
+  networking.hostName = "@@hostname@@"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -78,32 +85,38 @@ cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
 
 """
 
-cfgnetworkmanager = """  # Enable networking
+cfgnetworkmanager = """\
+  # Enable networking
   networking.networkmanager.enable = true;
 
 """
 
-cfgconnman = """  # Enable networking
+cfgconnman = """\
+  # Enable networking
   services.connman.enable = true;
 
 """
 
-cfgnmapplet = """  # Enable network manager applet
+cfgnmapplet = """\
+  # Enable network manager applet
   programs.nm-applet.enable = true;
 
 """
 
-cfgtime = """  # Set your time zone.
+cfgtime = """\
+  # Set your time zone.
   time.timeZone = "@@timezone@@";
 
 """
 
-cfglocale = """  # Select internationalisation properties.
+cfglocale = """\
+  # Select internationalisation properties.
   i18n.defaultLocale = "@@LANG@@";
 
 """
 
-cfglocaleextra = """  i18n.extraLocaleSettings = {
+cfglocaleextra = """\
+  i18n.extraLocaleSettings = {
     LC_ADDRESS = "@@LC_ADDRESS@@";
     LC_IDENTIFICATION = "@@LC_IDENTIFICATION@@";
     LC_MEASUREMENT = "@@LC_MEASUREMENT@@";
@@ -117,13 +130,15 @@ cfglocaleextra = """  i18n.extraLocaleSettings = {
 
 """
 
-cfggnome = """  # Enable the GNOME Desktop Environment.
+cfggnome = """\
+  # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
 """
 
-cfgplasma6 = """  # Enable the X11 windowing system.
+cfgplasma6 = """\
+  # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
@@ -133,7 +148,8 @@ cfgplasma6 = """  # Enable the X11 windowing system.
 
 """
 
-cfgxfce = """  # Enable the X11 windowing system.
+cfgxfce = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the XFCE Desktop Environment.
@@ -142,7 +158,8 @@ cfgxfce = """  # Enable the X11 windowing system.
 
 """
 
-cfgpantheon = """  # Enable the X11 windowing system.
+cfgpantheon = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Pantheon Desktop Environment.
@@ -151,7 +168,8 @@ cfgpantheon = """  # Enable the X11 windowing system.
 
 """
 
-cfgcinnamon = """  # Enable the X11 windowing system.
+cfgcinnamon = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Cinnamon Desktop Environment.
@@ -160,7 +178,8 @@ cfgcinnamon = """  # Enable the X11 windowing system.
 
 """
 
-cfgmate = """  # Enable the X11 windowing system.
+cfgmate = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the MATE Desktop Environment.
@@ -169,7 +188,8 @@ cfgmate = """  # Enable the X11 windowing system.
 
 """
 
-cfgenlightenment = """  # Enable the X11 windowing system.
+cfgenlightenment = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
@@ -181,7 +201,8 @@ cfgenlightenment = """  # Enable the X11 windowing system.
 
 """
 
-cfglxqt = """  # Enable the X11 windowing system.
+cfglxqt = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the LXQT Desktop Environment.
@@ -190,7 +211,8 @@ cfglxqt = """  # Enable the X11 windowing system.
 
 """
 
-cfglumina = """  # Enable the X11 windowing system.
+cfglumina = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Lumina Desktop Environment.
@@ -199,7 +221,8 @@ cfglumina = """  # Enable the X11 windowing system.
 
 """
 
-cfgbudgie = """  # Enable the X11 windowing system.
+cfgbudgie = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Budgie Desktop environment.
@@ -208,19 +231,22 @@ cfgbudgie = """  # Enable the X11 windowing system.
 
 """
 
-cfgkeymap = """  # Configure keymap in X11
+cfgkeymap = """\
+  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "@@kblayout@@";
     variant = "@@kbvariant@@";
   };
 
 """
-cfgconsole = """  # Configure console keymap
+cfgconsole = """\
+  # Configure console keymap
   console.keyMap = "@@vconsole@@";
 
 """
 
-cfgmisc = """  # Enable CUPS to print documents.
+cfgmisc = """\
+  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
@@ -242,7 +268,8 @@ cfgmisc = """  # Enable CUPS to print documents.
   # services.libinput.enable = true;
 
 """
-cfgusers = """  # Define a user account. Don't forget to set a password with ‘passwd’.
+cfgusers = """\
+  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."@@username@@" = {
     isNormalUser = true;
     description = "@@fullname@@";
@@ -252,28 +279,33 @@ cfgusers = """  # Define a user account. Don't forget to set a password with ‘
 
 """
 
-cfgfirefox = """  # Install firefox.
+cfgfirefox = """\
+  # Install firefox.
   programs.firefox.enable = true;
 
 """
 
-cfgautologin = """  # Enable automatic login for the user.
+cfgautologin = """\
+  # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "@@username@@";
 
 """
 
-cfgautologintty = """  # Enable automatic login for the user.
+cfgautologintty = """\
+  # Enable automatic login for the user.
   services.getty.autologinUser = "@@username@@";
 
 """
 
-cfgunfree = """  # Allow unfree packages
+cfgunfree = """\
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
 """
 
-cfgpkgs = """  # List packages installed in system profile. To search, run:
+cfgpkgs = """\
+  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -282,7 +314,8 @@ cfgpkgs = """  # List packages installed in system profile. To search, run:
 
 """
 
-cfgtail = """  # Some programs need SUID wrappers, can be configured further or are
+cfgtail = """\
+  # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = {
@@ -312,7 +345,8 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
 }
 """
 
-cfglatestkernel = """  # Use latest kernel.
+cfglatestkernel = """\
+  # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
 """
