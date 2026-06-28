@@ -47,6 +47,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_prometheus_sd" ];
 
+  passthru.pluginName = "netbox_prometheus_sd";
+
   meta = {
     description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
     homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";

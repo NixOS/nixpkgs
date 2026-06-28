@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_inventory" ];
 
+  passthru.pluginName = "netbox_inventory";
+
   meta = {
     description = "NetBox plugin to manage hardware inventory";
     homepage = "https://github.com/ArnesSI/netbox-inventory";

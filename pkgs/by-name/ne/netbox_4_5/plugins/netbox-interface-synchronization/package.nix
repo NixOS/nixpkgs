@@ -49,6 +49,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_interface_synchronization" ];
 
+  passthru.pluginName = "netbox_interface_synchronization";
+
   meta = {
     description = "Netbox plugin to compare and synchronize interfaces between devices and device types";
     homepage = "https://github.com/NetTech2001/netbox-interface-synchronization";

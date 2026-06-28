@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_lifecycle" ];
 
+  passthru.pluginName = "netbox_lifecycle";
+
   dependencies = [ django-polymorphic ];
 
   meta = {

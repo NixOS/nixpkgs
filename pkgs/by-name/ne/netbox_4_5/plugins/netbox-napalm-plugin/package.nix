@@ -43,6 +43,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_napalm_plugin" ];
 
+  passthru.pluginName = "netbox_napalm_plugin";
+
   meta = {
     description = "Netbox plugin for Napalm integration";
     homepage = "https://github.com/netbox-community/netbox-napalm-plugin";

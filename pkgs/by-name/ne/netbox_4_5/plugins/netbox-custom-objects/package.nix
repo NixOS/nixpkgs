@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_custom_objects" ];
 
+  passthru.pluginName = "netbox_custom_objects";
+
   meta = {
     description = "NetBox plugin to create new object types";
     homepage = "https://github.com/netboxlabs/netbox-custom-objects";

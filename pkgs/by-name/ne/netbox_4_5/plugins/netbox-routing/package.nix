@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_routing" ];
 
+  passthru.pluginName = "netbox_routing";
+
   dependencies = [ django-polymorphic ];
 
   meta = {

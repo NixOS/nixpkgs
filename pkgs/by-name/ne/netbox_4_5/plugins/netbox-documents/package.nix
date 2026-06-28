@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
   dontUsePythonImportsCheck = python.pythonVersion != netbox.python.pythonVersion;
   pythonImportsCheck = [ "netbox_documents" ];
 
+  passthru.pluginName = "netbox_documents";
+
   meta = {
     description = "Plugin designed to faciliate the storage of site, circuit, device type and device specific documents within NetBox";
     homepage = "https://github.com/jasonyates/netbox-documents";

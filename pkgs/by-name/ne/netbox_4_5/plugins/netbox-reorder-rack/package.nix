@@ -33,6 +33,8 @@ buildPythonPackage (finalAttrs: {
   dontUsePythonImportsCheck = python.pythonVersion != netbox.python.pythonVersion;
   pythonImportsCheck = [ "netbox_reorder_rack" ];
 
+  passthru.pluginName = "netbox_reorder_rack";
+
   meta = {
     description = "NetBox plugin to allow users to reorder devices within a rack using a drag and drop UI";
     homepage = "https://github.com/netbox-community/netbox-reorder-rack";

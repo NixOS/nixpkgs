@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_security" ];
 
+  passthru.pluginName = "netbox_security";
+
   meta = {
     description = "NetBox plugin covering various security and NAT related models";
     homepage = "https://github.com/andy-shady-org/netbox-security";

@@ -52,6 +52,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "netbox_qrcode" ];
 
+  passthru.pluginName = "netbox_qrcode";
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
