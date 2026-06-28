@@ -9,7 +9,7 @@
   libappindicator-gtk3,
 }:
 let
-  version = "8.2.3-unstable-2025-10-14";
+  version = "8.3.1";
   python3 = python312;
   nodejs = nodejs_24;
 
