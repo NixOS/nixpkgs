@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/icons/hicolor/{16x16,32x32,48x48,64x64,128x128,256x256}/apps
 
     for dimension in 16x16 32x32 48x48 64x64 128x128 256x256; do
-      magick convert ./icons/bluej-icon-512-embossed.png -geometry $dimension\
+      magick ./icons/bluej-icon-512-embossed.png -geometry $dimension\
         $out/share/icons/hicolor/$dimension/apps/bluej.png
     done
 

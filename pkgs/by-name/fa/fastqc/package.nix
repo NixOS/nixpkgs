@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create desktop item
     mkdir -p $out/share/{applications,icons}
-    # Freedesktop doesn't support windows ICO files. Use imagemagick to convert it to PNG
-    convert $out/FastQC/fastqc_icon.ico $out/share/icons/fastqc.png
+    # Freedesktop doesn't support windows ICO files. Use imagemagick to magick it to PNG
+    magick $out/FastQC/fastqc_icon.ico $out/share/icons/fastqc.png
 
     runHook postInstall
   '';

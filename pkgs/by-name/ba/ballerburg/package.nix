@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Generate and install icon files
     for size in 16 32 48 64 72 96 128 192 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert ${icon} -sample "$size"x"$size" \
+      magick ${icon} -sample "$size"x"$size" \
         -background white -gravity south -extent "$size"x"$size" \
         $out/share/icons/hicolor/"$size"x"$size"/apps/ballerburg.png
     done

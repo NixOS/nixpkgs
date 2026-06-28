@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     mv $out/bin/$pname $out/bin/${executableName}
     install -m 444 -D ${appimageContents}/${executableName}.desktop $out/share/applications/${executableName}.desktop
-    ${imagemagick}/bin/convert ${appimageContents}/${executableName}.png -resize 512x512 ${pname}_512.png
+    ${imagemagick}/bin/magick ${appimageContents}/${executableName}.png -resize 512x512 ${pname}_512.png
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${executableName}.png
 
     substituteInPlace $out/share/applications/${executableName}.desktop \

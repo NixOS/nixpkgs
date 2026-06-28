@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
     for size in 16 32 48 64 72 96 128 192 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" ${src}/Ripcord_Icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/ripcord.png
+      magick -resize "$size"x"$size" ${src}/Ripcord_Icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/ripcord.png
     done
 
     desktop-file-install --dir $out/share/applications \

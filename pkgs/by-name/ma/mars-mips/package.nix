@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     for size in 16 24 32 48 64 128 256 512
     do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" images/MarsThumbnail.gif $out/share/icons/hicolor/"$size"x"$size"/apps/mars.png
+      magick -resize "$size"x"$size" images/MarsThumbnail.gif $out/share/icons/hicolor/"$size"x"$size"/apps/mars.png
     done
 
     runHook postInstall

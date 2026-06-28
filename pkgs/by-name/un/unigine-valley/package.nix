@@ -109,11 +109,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$instdir/bin:$libPath
 
     # Make desktop Icon
-    convert $out/lib/unigine/valley/data/launcher/icon.png -resize 128x128 $out/share/icons/Valley.png
+    magick $out/lib/unigine/valley/data/launcher/icon.png -resize 128x128 $out/share/icons/Valley.png
     for RES in 16 24 32 48 64 128 256
     do
         mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
-        convert $out/lib/unigine/valley/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Valley.png
+        magick $out/lib/unigine/valley/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Valley.png
     done
 
     runHook postInstall

@@ -91,7 +91,7 @@ convertIconTheme() {
         local dim=$((iconSize * scale))
 
         echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
-        magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
+        magick -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
         convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
     }
 
@@ -107,7 +107,7 @@ convertIconTheme() {
 
             echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
-            magick convert -density "$density" -units PixelsPerInch "$out" "$out"
+            magick -density "$density" -units PixelsPerInch "$out" "$out"
             convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
         else
             return 1
@@ -167,7 +167,7 @@ convertIconTheme() {
                 case $type in
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
-                        magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
+                        magick -density "$density" -units PixelsPerInch "$icon" "$result"
                         convertIfUnsupportedIcon "$result" "$iconSize" "$scale"
                         foundIcon=OTHER
                         ;;

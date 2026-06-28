@@ -268,7 +268,7 @@ stdenvNoCC.mkDerivation rec {
       for n in 16 24 32 48 64 96 128 256; do
         size=$n"x"$n
         mkdir -p $out/hicolor/$size/apps
-        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
+        magick lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
         done;
     '';
   };

@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Prepare the desktop icon, the upstream icon is 200x200 but the hicolor theme does not
     # support this resolution. Nearest sizes are 192x192 and 256x256.
-    ${imagemagick}/bin/convert "opt/icons8/lunacy/Assets/LunacyLogo.png" -resize 192x192 lunacy.png
+    ${imagemagick}/bin/magick "opt/icons8/lunacy/Assets/LunacyLogo.png" -resize 192x192 lunacy.png
     install -D lunacy.png "$out/share/icons/hicolor/192x192/apps/lunacy.png"
 
     runHook postInstall

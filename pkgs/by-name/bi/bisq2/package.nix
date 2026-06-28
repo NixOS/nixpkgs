@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
-      magick convert opt/bisq2/lib/Bisq2.png -resize $size bisq2.png
+      magick opt/bisq2/lib/Bisq2.png -resize $size bisq2.png
       install -Dm644 -t $out/share/icons/hicolor/$size/apps bisq2.png
     done;
 

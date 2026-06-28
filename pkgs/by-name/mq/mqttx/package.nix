@@ -41,7 +41,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/1024x1024/apps/${pname}.png
 
-    ${imagemagick}/bin/convert ${appimageContents}/mqttx.png -resize 512x512 ${pname}_512.png
+    ${imagemagick}/bin/magick ${appimageContents}/mqttx.png -resize 512x512 ${pname}_512.png
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
 
     substituteInPlace $out/share/applications/${pname}.desktop \

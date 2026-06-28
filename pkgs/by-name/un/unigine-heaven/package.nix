@@ -64,11 +64,11 @@ stdenv.mkDerivation {
 
     wrapProgram $out/bin/heaven --prefix LD_LIBRARY_PATH : ${libglvnd}/lib:$out/bin:${openal}/lib --run "cd $out/lib/unigine/heaven/"
 
-    convert $out/lib/unigine/heaven/data/launcher/icon.png -resize 128x128 $out/share/icons/Heaven.png
+    magick $out/lib/unigine/heaven/data/launcher/icon.png -resize 128x128 $out/share/icons/Heaven.png
     for RES in 16 24 32 48 64 128 256
     do
         mkdir -p $out/share/icons/hicolor/"$RES"x"$RES"/apps
-        convert $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
+        magick $out/lib/unigine/heaven/data/launcher/icon.png -resize "$RES"x"$RES" $out/share/icons/hicolor/"$RES"x"$RES"/apps/Heaven.png
     done
 
     ln -s ${desktopItem}/share/applications/* $out/share/applications

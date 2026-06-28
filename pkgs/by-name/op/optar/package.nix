@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       --replace /usr/local $out
 
     substituteInPlace pgm2ps \
-      --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
+      --replace 'magick ' "${lib.getBin imagemagick}/bin/magick "
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-int" ];

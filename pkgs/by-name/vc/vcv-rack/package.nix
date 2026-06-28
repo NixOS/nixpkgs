@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
     for size in 16 24 32 48 64 128 256 512 1024; do
       mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps
       if [ ! -e icon_"$size"x"$size"x32.png ] ; then
-        convert -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
+        magick -resize "$size"x"$size" icon_1024x1024x32.png icon_"$size"x"$size"x32.png
       fi
       install -Dm644 icon_"$size"x"$size"x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/Rack.png
     done;

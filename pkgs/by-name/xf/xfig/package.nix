@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/{16x16,22x22,48x48,64x64}/apps
 
     for dimension in 16x16 22x22 48x48; do
-      magick convert doc/html/images/xfig-logo.png -geometry $dimension\
+      magick doc/html/images/xfig-logo.png -geometry $dimension\
         $out/share/icons/hicolor/16x16/apps/xfig.png
     done
     install doc/html/images/xfig-logo.png \

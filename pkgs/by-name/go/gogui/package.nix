@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     sizes=( 16x16 24x24 32x32 48x48 64x64 )
     for i in src/net/sf/gogui/images/*.svg; do
       for j in ''${sizes[@]}; do
-        convert $i -resize $j src/net/sf/gogui/images/$(basename $i .svg)-''${j}.png
+        magick $i -resize $j src/net/sf/gogui/images/$(basename $i .svg)-''${j}.png
       done
     done
 
     for i in src/net/sf/gogui/images/gogui-{black,white,setup}.svg; do
-      convert $i -resize 8x8 src/net/sf/gogui/images/$(basename $i .svg)-8x8.png
+      magick $i -resize 8x8 src/net/sf/gogui/images/$(basename $i .svg)-8x8.png
     done
 
     ant -Ddocbook-xsl.dir=${docbook-xsl-ns}/xml/xsl/docbook

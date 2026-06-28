@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/32x32/apps
-    convert graphics/paraicon.bmp $out/share/icons/hicolor/32x32/apps/freedroid.png
+    magick graphics/paraicon.bmp $out/share/icons/hicolor/32x32/apps/freedroid.png
   '';
 
   desktopItems = [

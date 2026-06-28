@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation {
     cp ${./forbid-desktop-item-creation} $out/bin/forbid-desktop-item-creation
     mv $out/bin/profiler.sh $out/bin/yourkit-java-profiler
     mkdir -p $out/share/icons
-    convert $out/bin/profiler.ico\[0] \
+    magick $out/bin/profiler.ico\[0] \
             -size 256x256 \
             $out/share/icons/yourkit-java-profiler.png
     rm $out/bin/profiler.ico

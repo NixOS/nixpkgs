@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for size in 16 32 48 64 72 96 128 192 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" build/icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/ente-desktop.png
+      magick -resize "$size"x"$size" build/icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/ente-desktop.png
     done
 
     mkdir -p $out/share/ente-desktop
