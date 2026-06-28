@@ -3562,7 +3562,7 @@ with pkgs;
       # If we are cross-compiling GNAT, we may as well do the same.
       gnat-bootstrap =
         if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap15
+          buildPackages.gnat-bootstrap16
         else
           buildPackages.gnat16;
       stdenv =
@@ -3571,7 +3571,7 @@ with pkgs;
           && stdenv.buildPlatform == stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
         then
-          overrideCC gccStdenv gnat-bootstrap15
+          overrideCC gccStdenv gnat-bootstrap16
         else
           stdenv;
     }
@@ -3590,6 +3590,11 @@ with pkgs;
 
   gnat-bootstrap15 = wrapCCWith {
     cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "15"; };
+    isAlireGNAT = true;
+  };
+
+  gnat-bootstrap16 = wrapCCWith {
+    cc = callPackage ../development/compilers/gnat-bootstrap { majorVersion = "16"; };
     isAlireGNAT = true;
   };
 

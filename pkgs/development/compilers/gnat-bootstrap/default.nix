@@ -112,6 +112,33 @@ stdenv.mkDerivation (
           };
         }
         .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "16" = {
+          gccVersion = "16.1.0";
+          alireRevision = "1";
+        }
+        // {
+          x86_64-darwin = {
+            inherit url;
+            hash = "sha256-u/cYFKqWLTaFADTscDxnrkYSoemKrfKpNIZ8XPlTbLI=";
+            upstreamTriplet = "x86_64-apple-darwin24.6.0";
+          };
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-5bKYPJnXDGa80BtAogLE82X0zTuYKdN2cKh503oMeic=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-linux = {
+            inherit url;
+            hash = "sha256-jJnqDJGBOjqbT4hDW0nRpV0oA3RXxJhvI7BuvQkPDQI=";
+            upstreamTriplet = "aarch64-linux-gnu";
+          };
+          aarch64-darwin = {
+            inherit url;
+            hash = "sha256-TJlV/Ngq6SwpIgGkwamTN3aRGP2BnEzJyBGovtWb6Y0=";
+            upstreamTriplet = "aarch64-apple-darwin24.6.0";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
       };
     inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
   in
