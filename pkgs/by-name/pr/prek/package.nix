@@ -9,8 +9,14 @@
   python312,
   versionCheckHook,
   nix-update-script,
+  withPythonSupport ? false,
 }:
-
+let
+  pythonRuntimeDeps = [
+    python312
+    uv
+  ];
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
   version = "0.3.11";
@@ -30,9 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     git
-    python312
-    uv
-  ];
+  ]
+  ++ pythonRuntimeDeps;
+
+  propagatedBuildInputs = [
+    git
+  ]
+  ++ lib.optionals withPythonSupport pythonRuntimeDeps;
 
   # many tests just do not work, as they require network access
   # best to disable all, as the upstream already tests everything
