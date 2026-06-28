@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python API client for Lidarr/Radarr/Readarr/Sonarr";
     homepage = "https://github.com/tkdrob/aiopyarr";
     changelog = "https://github.com/tkdrob/aiopyarr/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

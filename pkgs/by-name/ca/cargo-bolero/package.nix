@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Fuzzing and property testing front-end framework for Rust";
     mainProgram = "cargo-bolero";
     homepage = "https://github.com/camshaft/bolero";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ ekleog ];
   };
 })

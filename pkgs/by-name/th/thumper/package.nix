@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool to sync files from a local folder into a folder in a BunnyCDN Storage Zone";
     homepage = "https://github.com/kaaveland/thumper";
     changelog = "https://github.com/kaaveland/thumper/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ stv0g ];
     platforms = lib.platforms.all;
     mainProgram = "thumper";

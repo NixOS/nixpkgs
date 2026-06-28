@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Unlock your displays on your Mac! Flexible HiDPI scaling, XDR/HDR extra brightness, virtual screens, DDC control, extra dimming, PIP/streaming, EDID override and lots more";
     homepage = "https://betterdisplay.pro/";
     changelog = "https://github.com/waydabber/BetterDisplay/releases/tag/v${finalAttrs.version}";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = lib.platforms.darwin;

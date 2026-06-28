@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wayland-logout";
     homepage = "https://github.com/soreau/wayland-logout";
     maintainers = with lib.maintainers; [ quantenzitrone ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.linux;
   };
 })

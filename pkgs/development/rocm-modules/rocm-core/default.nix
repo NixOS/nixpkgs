@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utility for getting the ROCm release version";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-core";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

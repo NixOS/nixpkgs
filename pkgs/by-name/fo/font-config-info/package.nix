@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Prints a Linux system's font configuration";
     homepage = "https://github.com/derat/font-config-info";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "font-config-info";

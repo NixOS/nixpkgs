@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Engauge Digitizer is a tool for recovering graph data from an image file";
     mainProgram = "engauge";
     homepage = "https://markummitchell.github.io/engauge-digitizer";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };

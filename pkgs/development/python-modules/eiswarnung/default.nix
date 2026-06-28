@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     description = "Module for getting Eiswarning API forecasts";
     homepage = "https://github.com/klaasnicolaas/python-eiswarnung";
     changelog = "https://github.com/klaasnicolaas/python-eiswarnung/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

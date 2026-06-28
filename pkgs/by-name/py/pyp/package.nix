@@ -47,7 +47,7 @@ let
       homepage = "https://github.com/hauntsaninja/pyp";
       description = "Easily run Python at the shell";
       changelog = "https://github.com/hauntsaninja/pyp/blob/${finalAttrs.version}/CHANGELOG.md";
-      license = with lib.licenses; [ mit ];
+      license = with lib.licenses; mit;
       mainProgram = "pyp";
       maintainers = with lib.maintainers; [
         rmcgibbo

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = {
     description = "Multiplex interactions with lists of Python objects";
     homepage = "https://github.com/zardus/mulpyplexer";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -55,6 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Music theory binary and library for Rust";
     homepage = "https://github.com/twitchax/kord";
     maintainers = with lib.maintainers; [ kidsan ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
   };
 })

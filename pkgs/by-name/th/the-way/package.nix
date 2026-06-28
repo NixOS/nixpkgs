@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "the-way";
     homepage = "https://github.com/out-of-cheese-error/the-way";
     changelog = "https://github.com/out-of-cheese-error/the-way/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       numkem

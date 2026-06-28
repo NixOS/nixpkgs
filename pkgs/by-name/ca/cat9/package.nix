@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/letoram/cat9";
     description = "User shell for LASH";
-    license = with lib.licenses; [ unlicense ];
+    license = with lib.licenses; unlicense;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

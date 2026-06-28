@@ -23,7 +23,7 @@ buildNimPackage (
     meta = final.src.meta // {
       description = "Nim package cloner";
       mainProgram = "atlas";
-      license = [ lib.licenses.mit ];
+      license = lib.licenses.mit;
     };
   }
 )

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around UptimeKuma /metrics endpoint";
     homepage = "https://github.com/meichthys/utptime_kuma_monitor";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

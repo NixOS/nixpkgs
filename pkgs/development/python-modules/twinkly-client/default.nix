@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to communicate with Twinkly LED strings";
     homepage = "https://github.com/dr1rrb/py-twinkly-client";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

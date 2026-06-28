@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Python API client for the LG Smart TV running NetCast 3 or 4";
     homepage = "https://github.com/Drafteed/python-lgnetcast";
     changelog = "https://github.com/Drafteed/python-lgnetcast/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

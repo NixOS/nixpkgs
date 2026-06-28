@@ -51,7 +51,7 @@ buildPythonPackage rec {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
     changelog = "https://github.com/matthiask/html-sanitizer/blob/${version}/CHANGELOG.rst";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

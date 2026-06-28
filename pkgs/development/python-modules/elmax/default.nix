@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Python API client for the Elmax Cloud services";
     mainProgram = "poetry-template";
     homepage = "https://github.com/home-assistant-ecosystem/python-elmax";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

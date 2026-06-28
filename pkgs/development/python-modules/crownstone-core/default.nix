@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module with shared classes, util functions and definition of Crownstone";
     homepage = "https://github.com/crownstone/crownstone-lib-python-core";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     description = "Histograms with task scheduling";
     homepage = "https://dask-histogram.readthedocs.io/";
     changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

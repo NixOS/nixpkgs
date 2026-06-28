@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Python library for nello.io intercoms";
     mainProgram = "nello";
     homepage = "https://github.com/pschmitt/pynello";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

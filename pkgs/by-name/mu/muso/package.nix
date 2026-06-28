@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage {
     description = "Automatic music sorter (based on ID3 tags)";
     mainProgram = "muso";
     homepage = "https://github.com/quebin31/muso";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ crertel ];
   };
 }

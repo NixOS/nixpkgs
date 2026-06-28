@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "Enlighten Progress Bar for Python Console Apps";
     homepage = "https://github.com/Rockhopper-Technologies/enlighten";
     changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${version}";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [
       veprbl
       doronbehar

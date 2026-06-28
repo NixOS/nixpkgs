@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       based on Rust type annotations
     '';
     homepage = "https://github.com/jasonjmcghee/ron-lsp";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       Dietr1ch
     ];

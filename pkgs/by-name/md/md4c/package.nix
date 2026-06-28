@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Permissive license: MD4C is available under the MIT license.
     '';
     changelog = "https://github.com/mity/md4c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
     mainProgram = "md2html";
     platforms = lib.platforms.all;

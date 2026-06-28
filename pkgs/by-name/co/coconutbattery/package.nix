@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       It shows you live information about the battery quality in your Mac, iPhone and iPad.
     '';
     homepage = "https://www.coconut-flavour.com/coconutbattery";
-    license = with lib.licenses; [ unfree ];
+    license = with lib.licenses; unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [

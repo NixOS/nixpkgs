@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "WiFi password sharing via QR codes";
     homepage = "https://github.com/kokoye2007/wifi-qr";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "wifi-qr";
     platforms = lib.platforms.linux;

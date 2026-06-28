@@ -40,7 +40,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/akshaynagpal/w2n/releases/tag/${version}";
     description = "Convert number words (eg. twenty one) to numeric digits (21)";
     homepage = "http://w2n.readthedocs.io/";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.booxter ];
   };
 }

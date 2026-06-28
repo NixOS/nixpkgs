@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       sysrepo or FRRouting projects.
     '';
     homepage = "https://github.com/CESNET/libyang";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ woffs ];
   };

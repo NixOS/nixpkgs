@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       If vkd3d is available when building Wine, then Wine will use it to support
       Direct3D 12 applications.
     '';
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; lgpl21Plus;
     mainProgram = "vkd3d-compiler";
     maintainers = with lib.maintainers; [ liberodark ];
     inherit (wine.meta) platforms;

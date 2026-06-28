@@ -51,7 +51,7 @@ buildPerlPackage rec {
     longDescription = ''
       Part of BioPerl Extensions (BioPerl-Ext) distribution, a collection of Bioperl C-compiled extensions.
     '';
-    license = with lib.licenses; [ artistic1 ];
+    license = with lib.licenses; artistic1;
     maintainers = with lib.maintainers; [ apraga ];
   };
 }

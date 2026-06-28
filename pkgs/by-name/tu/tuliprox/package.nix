@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/euzu/tuliprox";
     changelog = "https://github.com/euzu/tuliprox/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "tuliprox";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
 })

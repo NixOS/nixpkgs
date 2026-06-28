@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Tool to abuse Exchange services";
     homepage = "https://github.com/sensepost/ruler";
     changelog = "https://github.com/sensepost/ruler/releases/tag/${version}";
-    license = with lib.licenses; [ cc-by-nc-40 ];
+    license = with lib.licenses; cc-by-nc-40;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ruler";
   };

@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     description = "TUI-based file manager for the Android Debug Bridge";
     homepage = "https://github.com/darkhz/adbtuifm";
     changelog = "https://github.com/darkhz/adbtuifm/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "adbtuifm";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

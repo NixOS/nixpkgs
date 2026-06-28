@@ -28,6 +28,6 @@ buildGoModule (finalAttrs: {
     description = "PEG parser generator for Go";
     mainProgram = "pigeon";
     maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
   };
 })

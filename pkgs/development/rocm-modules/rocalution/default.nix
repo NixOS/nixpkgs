@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Iterative sparse solvers for ROCm";
     homepage = "https://github.com/ROCm/rocALUTION";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

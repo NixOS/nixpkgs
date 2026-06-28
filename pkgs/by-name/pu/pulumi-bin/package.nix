@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with lib.maintainers; [
       ghuntley

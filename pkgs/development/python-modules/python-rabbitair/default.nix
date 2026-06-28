@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for the control of Rabbit Air air purifiers";
     homepage = "https://github.com/rabbit-air/python-rabbitair";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

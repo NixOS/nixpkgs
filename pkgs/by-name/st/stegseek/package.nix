@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       used to extract hidden data from files.
     '';
     homepage = "https://github.com/RickdeJager/stegseek";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "stegseek";
   };

@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to convert audio files from flac to mp3 format including the copying of tags";
     homepage = "https://github.com/robinbowes/flac2mp3";
     changelog = "https://github.com/robinbowes/flac2mp3/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ lilahummel ];
   };
 })

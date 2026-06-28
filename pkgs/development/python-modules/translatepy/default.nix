@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     description = "Module grouping multiple translation APIs";
     mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
-    license = with lib.licenses; [ agpl3Only ];
+    license = with lib.licenses; agpl3Only;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 })

@@ -78,7 +78,7 @@ buildDunePackage {
     homepage = "https://github.com/ocaml-multicore/eio";
     changelog = "https://github.com/ocaml-multicore/eio/raw/v${version}/CHANGES.md";
     description = "Effects-Based Parallel IO for OCaml";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ toastal ];
   };
 }

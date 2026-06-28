@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Status command for sway's swaybar implementing the swaybar-protocol";
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     changelog = "https://git.sr.ht/~tsdh/swayr/tree/main/item/swayrbar/NEWS.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ilkecan ];
     mainProgram = "swayrbar";

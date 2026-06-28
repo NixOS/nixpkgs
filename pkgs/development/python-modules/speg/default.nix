@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "PEG-based parser interpreter with memoization (in time)";
     homepage = "https://github.com/avakar/speg";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ xworld21 ];
   };
 }

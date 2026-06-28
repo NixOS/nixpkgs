@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple image hosting service";
     mainProgram = "pict-rs";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 })

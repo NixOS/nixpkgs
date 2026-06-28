@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of mongodb queries";
     homepage = "https://github.com/kapouille/mongoquery";
-    license = with lib.licenses; [ unlicense ];
+    license = with lib.licenses; unlicense;
     maintainers = with lib.maintainers; [ misuzu ];
   };
 }

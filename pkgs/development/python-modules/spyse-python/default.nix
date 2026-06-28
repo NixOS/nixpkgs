@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
     changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

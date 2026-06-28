@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "librespot";
     homepage = "https://github.com/librespot-org/librespot";
     changelog = "https://github.com/librespot-org/librespot/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ bennofs ];
   };
 })

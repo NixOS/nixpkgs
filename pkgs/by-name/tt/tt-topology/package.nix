@@ -60,6 +60,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/tenstorrent/tt-topology";
     changelog = "https://github.com/tenstorrent/tt-topology/blob/${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 }

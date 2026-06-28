@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "inql";
     homepage = "https://github.com/doyensec/inql";
     changelog = "https://github.com/doyensec/inql/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

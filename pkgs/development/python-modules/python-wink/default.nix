@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the Wink API";
     homepage = "https://github.com/python-wink/python-wink";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

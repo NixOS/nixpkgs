@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

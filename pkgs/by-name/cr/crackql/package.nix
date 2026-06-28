@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication {
     description = "GraphQL password brute-force and fuzzing utility";
     mainProgram = "crackql";
     homepage = "https://github.com/nicholasaleks/CrackQL";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

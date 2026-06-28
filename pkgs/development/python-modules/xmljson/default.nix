@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     description = "Converts XML into dictionary structures and vice-versa";
     mainProgram = "xml2json";
     homepage = "https://github.com/sanand0/xmljson";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
 })

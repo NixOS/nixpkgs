@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "kubesec";
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [
       fab
       jk

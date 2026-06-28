@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Enhanced port of Duke Nukem 3D for various platforms";
     homepage = "https://eduke32.com";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [
       qubitnano
     ];

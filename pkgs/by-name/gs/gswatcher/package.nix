@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple game server monitor and administrative tool";
     homepage = "https://github.com/lxndr/gswatcher";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
   };

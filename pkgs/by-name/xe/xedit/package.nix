@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple graphical text editor using Athena Widgets (Xaw)";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Visualize a log file with sparklines";
     homepage = "https://github.com/acj/krapslog-rs";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ yanganto ];
     mainProgram = "krapslog";
   };

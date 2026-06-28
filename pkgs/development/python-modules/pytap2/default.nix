@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Object-oriented wrapper around the Linux Tun/Tap device";
     homepage = "https://github.com/johnthagen/pytap2";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };

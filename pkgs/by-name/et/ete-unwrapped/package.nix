@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Improved Wolfenstein: Enemy Territory Engine";
     homepage = "https://github.com/etfdevs/ETe";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [
       ashleyghooper
       drupol

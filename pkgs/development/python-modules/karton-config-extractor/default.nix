@@ -35,7 +35,7 @@ buildPythonPackage rec {
     mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
     changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

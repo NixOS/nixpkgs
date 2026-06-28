@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "View and edit guitar tablature";
     homepage = "https://powertab.github.io/";
     changelog = "https://github.com/powertab/powertabeditor/blob/refs/tags/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin ++ windows;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "powertabeditor";

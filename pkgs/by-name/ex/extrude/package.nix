@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     description = "Tool to analyse binaries for missing security features";
     mainProgram = "extrude";
     homepage = "https://github.com/liamg/extrude";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

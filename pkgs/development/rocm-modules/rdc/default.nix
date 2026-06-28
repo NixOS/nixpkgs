@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rdc";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

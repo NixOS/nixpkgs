@@ -104,6 +104,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
     maintainers = [ ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 }

@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "ISO 4217 currency data package for Python";
     homepage = "https://github.com/dahlia/iso4217";
-    license = with lib.licenses; [ publicDomain ];
+    license = with lib.licenses; publicDomain;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Radio Interface Controller";
     homepage = "https://github.com/wraith-wireless/PyRIC";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

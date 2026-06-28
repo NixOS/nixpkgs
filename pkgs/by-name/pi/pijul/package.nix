@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [
       gal_bolle
       dywedir

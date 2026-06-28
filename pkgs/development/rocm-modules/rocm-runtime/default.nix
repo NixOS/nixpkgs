@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-runtime";
-    license = with lib.licenses; [ ncsa ];
+    license = with lib.licenses; ncsa;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

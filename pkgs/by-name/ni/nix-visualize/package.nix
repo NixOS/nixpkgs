@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication {
     description = "Generate dependency graphs of a given nix package";
     mainProgram = "nix-visualize";
     homepage = "https://github.com/craigmbooth/nix-visualize";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

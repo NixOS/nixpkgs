@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       directories by using history of accessed directories, live filtering, and
       access to commands by using the keyboard.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "worker";
     maintainers = [ ];
     inherit (libx11.meta) platforms;

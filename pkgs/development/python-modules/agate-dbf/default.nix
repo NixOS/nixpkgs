@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wireservice/agate-dbf/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Adds read support for dbf files to agate";
     homepage = "https://github.com/wireservice/agate-dbf";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
   };
 })

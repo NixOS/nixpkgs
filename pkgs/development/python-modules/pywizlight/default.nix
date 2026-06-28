@@ -44,7 +44,7 @@ buildPythonPackage rec {
     mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
     changelog = "https://github.com/sbidy/pywizlight/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -158,7 +158,7 @@ buildPythonPackage rec {
     homepage = "https://xon.sh/";
     description = "Python-powered shell";
     changelog = "https://github.com/xonsh/xonsh/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     mainProgram = "xonsh";
     maintainers = with lib.maintainers; [ samlukeyes123 ];
   };

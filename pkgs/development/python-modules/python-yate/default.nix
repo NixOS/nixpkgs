@@ -33,7 +33,7 @@ buildPythonPackage rec {
     mainProgram = "yate_callgen";
     homepage = "https://github.com/eventphone/python-yate";
     changelog = "https://github.com/eventphone/python-yate/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ clerie ];
   };
 }

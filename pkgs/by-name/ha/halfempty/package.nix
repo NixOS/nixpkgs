@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "halfempty";
     homepage = "https://github.com/googleprojectzero/halfempty/";
     maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = lib.platforms.unix;
   };
 })

@@ -108,7 +108,7 @@ buildGoModule (finalAttrs: {
     description = "Modern, colorful, super lightweight Redis GUI client";
     homepage = "https://github.com/tiny-craft/tiny-rdm";
     mainProgram = "tiny-rdm";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

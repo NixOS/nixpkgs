@@ -27,7 +27,7 @@ buildPythonPackage {
   meta = {
     description = "Determine the occurrence of the next full moon or to determine if a given date is/was/will be a full moon";
     homepage = "https://github.com/jr-k/python-fullmoon";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
 }

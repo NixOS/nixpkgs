@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python support for higher level Datagram";
     homepage = "https://github.com/jsbronder/asyncio-dgram";
     changelog = "https://github.com/jsbronder/asyncio-dgram/blob/${finalAttrs.src.tag}/ChangeLog";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

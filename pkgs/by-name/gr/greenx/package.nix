@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library for Green’s function based electronic structure theory calculations";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/nomad-coe/greenX";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];

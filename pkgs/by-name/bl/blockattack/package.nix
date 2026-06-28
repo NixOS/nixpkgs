@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source clone of Panel de Pon (aka Tetris Attack)";
     broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/blockattack/blockattack-game/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "blockattack";
     maintainers = [ ];
     inherit (SDL2.meta) platforms;

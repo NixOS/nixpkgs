@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-ssh/";
     description = "SSH client & server protocol implementation for Hare";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ patwid ];
 
     inherit (hareHook.meta) platforms badPlatforms;

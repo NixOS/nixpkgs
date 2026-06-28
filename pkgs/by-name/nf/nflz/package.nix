@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       belong to a set of ordered files. An example are photos from a camera.
     '';
     homepage = "https://github.com/phip1611/nflz";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ phip1611 ];
     mainProgram = "nflz";
   };

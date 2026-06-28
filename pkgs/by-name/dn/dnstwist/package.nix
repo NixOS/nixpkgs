@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Domain name permutation engine for detecting homograph phishing attacks";
     homepage = "https://github.com/elceef/dnstwist";
     changelog = "https://github.com/elceef/dnstwist/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnstwist";
   };

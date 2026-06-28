@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Python wrapper of the TestRail API";
     homepage = "https://github.com/tolstislon/testrail-api";
     changelog = "https://github.com/tolstislon/testrail-api/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
 }

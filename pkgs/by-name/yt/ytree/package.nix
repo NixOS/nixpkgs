@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.han.de/~werner/ytree.html";
     description = "Curses-based file manager similar to DOS Xtree(TM)";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "ytree";
     maintainers = [ ];
     platforms = lib.platforms.unix;

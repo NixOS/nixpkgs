@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Tool for refurbishing and modernizing Python codebases";
     mainProgram = "refurb";
     homepage = "https://github.com/dosisod/refurb";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ knl ];
   };
 })

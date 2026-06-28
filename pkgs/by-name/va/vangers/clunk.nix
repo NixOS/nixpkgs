@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Clunk - real-time binaural sound generation library. Versions for Vangers game. Porting to SDL2 and fix some errors";
     homepage = "https://github.com/stalkerg/clunk";
     platforms = lib.platforms.all;
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; lgpl21Plus;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
   };
 

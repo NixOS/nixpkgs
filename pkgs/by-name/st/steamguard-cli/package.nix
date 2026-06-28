@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/dyc3/steamguard-cli/releases/tag/v${finalAttrs.version}";
     description = "Linux utility for generating 2FA codes for Steam and managing Steam trade confirmations";
     homepage = "https://github.com/dyc3/steamguard-cli";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     mainProgram = "steamguard";
     maintainers = with lib.maintainers; [
       surfaceflinger

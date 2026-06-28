@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
-    license = with lib.licenses; [ sspl ];
+    license = with lib.licenses; sspl;
     longDescription = ''
       MongoDB CE (Community Edition) is a general purpose, document-based, distributed database.
       It is designed to be flexible and easy to use, with the ability to store data of any structure.

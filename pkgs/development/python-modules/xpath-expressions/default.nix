@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to handle XPath expressions";
     homepage = "https://github.com/orf/xpath-expressions";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

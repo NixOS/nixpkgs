@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       - glossary entries (LaTeX only)
       - document metadata (e.g. title, author, date, etc.)
     '';
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.all;
     maintainers = [ ];
   };

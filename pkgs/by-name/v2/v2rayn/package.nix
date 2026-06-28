@@ -111,7 +111,7 @@ buildDotnetModule (finalAttrs: {
     description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

@@ -27,7 +27,7 @@ buildGoModule rec {
   meta = {
     description = "Polyglot payload generator";
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "SNOWCRASH";
   };

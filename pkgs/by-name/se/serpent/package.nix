@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       features for contract programming.
     '';
     homepage = "https://github.com/ethereum/wiki/wiki/Serpent";
-    license = with lib.licenses; [ wtfpl ];
+    license = with lib.licenses; wtfpl;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

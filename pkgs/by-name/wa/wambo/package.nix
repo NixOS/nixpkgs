@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/phip1611/wambo";
     changelog = "https://github.com/phip1611/wambo/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ phip1611 ];
   };
 })

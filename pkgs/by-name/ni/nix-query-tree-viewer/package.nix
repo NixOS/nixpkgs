@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "GTK viewer for the output of `nix store --query --tree`";
     mainProgram = "nix-query-tree-viewer";
     homepage = "https://github.com/cdepillabout/nix-query-tree-viewer";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ cdepillabout ];
     platforms = lib.platforms.unix;
   };

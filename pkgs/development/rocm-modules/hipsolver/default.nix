@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm SOLVER marshalling library";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsolver";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

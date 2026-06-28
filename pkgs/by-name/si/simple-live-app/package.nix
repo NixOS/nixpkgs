@@ -57,7 +57,7 @@ flutter332.buildFlutterApplication rec {
     description = "Simply Watch Live";
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

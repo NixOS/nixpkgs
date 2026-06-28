@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the DOODS service";
     homepage = "https://github.com/snowzach/pydoods";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

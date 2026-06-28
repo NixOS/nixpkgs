@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User level public file sharing for the MATE desktop";
     mainProgram = "mate-file-share-properties";
     homepage = "https://github.com/mate-desktop/mate-user-share";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };

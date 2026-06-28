@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cebix/frodo4";
     description = "C64 emulator with emphasis on graphical accuracy";
     mainProgram = "Frodo";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ chordtoll ];
     platforms = lib.platforms.all;
   };

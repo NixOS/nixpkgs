@@ -27,6 +27,6 @@ buildPythonPackage rec {
   meta = {
     description = "Convert Matplotlib plots into Leaflet web maps";
     homepage = "https://github.com/jwass/mplleaflet";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
   };
 }

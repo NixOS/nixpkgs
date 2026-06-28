@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Python module to access Linn Ds and Openhome devices";
     homepage = "https://github.com/bazwilliams/openhomedevice";
     changelog = "https://github.com/bazwilliams/openhomedevice/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

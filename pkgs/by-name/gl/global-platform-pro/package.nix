@@ -87,7 +87,7 @@ maven.buildMavenPackage rec {
       fromSource
       binaryBytecode # deps
     ];
-    license = with lib.licenses; [ lgpl3 ];
+    license = with lib.licenses; lgpl3;
     mainProgram = "gp";
   };
 }

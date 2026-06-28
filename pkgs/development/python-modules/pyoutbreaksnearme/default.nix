@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Library for retrieving data from for Outbreaks Near Me";
     homepage = "https://github.com/bachya/pyoutbreaksnearme";
     changelog = "https://github.com/bachya/pyoutbreaksnearme/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python module to get information from Tautulli";
     homepage = "https://github.com/ludeeus/pytautulli";
     changelog = "https://github.com/ludeeus/pytautulli/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

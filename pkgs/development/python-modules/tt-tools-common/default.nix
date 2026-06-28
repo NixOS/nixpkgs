@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Helper library for common utilities shared across Tentorrent tools";
     homepage = "https://github.com/tenstorrent/tt-tools-common";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 }

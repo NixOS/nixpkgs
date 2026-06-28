@@ -34,7 +34,7 @@ buildGoModule {
   meta = {
     description = "TUI for journalctl, file system logs, as well as Docker and Podman containers";
     homepage = "https://github.com/Lifailon/lazyjournal";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "lazyjournal";

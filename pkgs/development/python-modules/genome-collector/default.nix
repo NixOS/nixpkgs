@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Genomes and build BLAST/Bowtie indexes in Python";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/genome_collector";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

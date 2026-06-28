@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       project that gave me almost everything I wanted to create this tool.
     '';
     homepage = "https://github.com/araujobsd/ifwifi";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     maintainers = [ ];
     # networkmanager doesn't work on darwin
     # even though the `wifiscanner` crate would work

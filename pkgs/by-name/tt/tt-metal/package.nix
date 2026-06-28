@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TT-NN operator library, and TT-Metalium low level kernel programming model";
     homepage = "https://github.com/tenstorrent/tt-metal";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = lib.platforms.linux;
   };
 })

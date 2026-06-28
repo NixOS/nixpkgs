@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "CLI to create graphs from CSV files";
     homepage = "https://github.com/mcastorina/graph-cli/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ leungbk ];
     mainProgram = "graph";
   };

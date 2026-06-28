@@ -125,7 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "tectonic";
     maintainers = with lib.maintainers; [
       lluchs

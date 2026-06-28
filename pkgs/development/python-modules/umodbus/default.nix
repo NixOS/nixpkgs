@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the Modbus protocol";
     homepage = "https://github.com/AdvancedClimateSystems/uModbus/";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

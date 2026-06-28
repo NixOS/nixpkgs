@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module with the Tuya API";
     homepage = "https://github.com/PaulAnnekov/tuyaha";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

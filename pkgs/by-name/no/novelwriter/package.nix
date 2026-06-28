@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     description = "Open source plain text editor designed for writing novels";
     homepage = "https://novelwriter.io";
     changelog = "https://github.com/vkbo/novelWriter/blob/main/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "novelwriter";
 

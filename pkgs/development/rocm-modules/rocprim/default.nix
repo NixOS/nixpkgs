@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm parallel primitives";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocprim";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

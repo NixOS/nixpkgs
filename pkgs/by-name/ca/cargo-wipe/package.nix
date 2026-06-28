@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = ''Cargo subcommand "wipe": recursively finds and optionally wipes all "target" or "node_modules" folders'';
     mainProgram = "cargo-wipe";
     homepage = "https://github.com/mihai-dinculescu/cargo-wipe";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ otavio ];
   };
 })

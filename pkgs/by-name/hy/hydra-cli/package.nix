@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Client for the Hydra CI";
     mainProgram = "hydra-cli";
     homepage = "https://github.com/nlewo/hydra-cli";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       lewo
       aleksana

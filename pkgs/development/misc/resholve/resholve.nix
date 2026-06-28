@@ -70,7 +70,7 @@ python27.pkgs.buildPythonApplication {
     description = "Resolve external shell-script dependencies";
     homepage = "https://github.com/abathur/resholve";
     changelog = "https://github.com/abathur/resholve/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.all;
     knownVulnerabilities = [

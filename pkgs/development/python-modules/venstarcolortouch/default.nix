@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python interface for Venstar ColorTouch thermostats Resources";
     homepage = "https://github.com/hpeyerl/venstar_colortouch";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

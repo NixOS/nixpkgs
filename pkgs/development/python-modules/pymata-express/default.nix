@@ -32,7 +32,7 @@ buildPythonPackage rec {
       hardware remotely over a serial link.
     '';
     homepage = "https://mryslab.github.io/pymata-express/";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

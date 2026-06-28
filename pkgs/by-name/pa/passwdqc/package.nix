@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.openwall.com/passwdqc/";
     description = "Passphrase strength checking and enforcement";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = [ ];
     mainProgram = "passwdqc";
     platforms = lib.platforms.unix;

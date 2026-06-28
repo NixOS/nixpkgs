@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     description = "Style enforcement for bash programs";
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.openstack ];
   };

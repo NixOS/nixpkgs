@@ -238,7 +238,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
     changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";
   };

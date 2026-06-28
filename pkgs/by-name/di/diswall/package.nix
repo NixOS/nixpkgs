@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       intruder to get any system information.
     '';
     homepage = "https://www.diswall.stream";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "diswall";
   };

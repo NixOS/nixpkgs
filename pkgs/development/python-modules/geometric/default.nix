@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Geometry optimization code for molecular structures";
     mainProgram = "geometric-optimize";
     homepage = "https://github.com/leeping/geomeTRIC";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
   };
 }

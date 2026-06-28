@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Calculates rank-width and rank-decompositions";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };

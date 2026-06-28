@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tkdrob/pyefergy/releases/tag/v${version}";
     description = "Python API library for Efergy energy meters";
     homepage = "https://github.com/tkdrob/pyefergy";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

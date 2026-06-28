@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Search through all your files";
     homepage = "https://github.com/luleyleo/clapgrep";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "clapgrep";

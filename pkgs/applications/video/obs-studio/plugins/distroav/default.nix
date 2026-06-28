@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Network A/V plugin for OBS Studio (formerly obs-ndi)";
     homepage = "https://github.com/DistroAV/DistroAV";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; gpl2;
     maintainers = with lib.maintainers; [ globule655 ];
     platforms = lib.platforms.linux;
   };

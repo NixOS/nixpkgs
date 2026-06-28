@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "Terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ ramkromberg ];
     mainProgram = "hecate";
   };

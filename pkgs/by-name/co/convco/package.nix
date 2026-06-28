@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       hoverbear
       cafkafk

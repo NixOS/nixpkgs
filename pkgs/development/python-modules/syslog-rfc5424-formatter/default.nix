@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python logging formatter for emitting RFC5424 Syslog messages";
     homepage = "https://github.com/easypost/syslog-rfc5424-formatter";
     changelog = "https://github.com/EasyPost/syslog-rfc5424-formatter/blob/v${finalAttrs.version}/CHANGES.md";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Flexible and performant C++ logging library for Tenstorrent projects";
     homepage = "https://github.com/tenstorrent/tt-logger";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = lib.platforms.linux;
   };
 })

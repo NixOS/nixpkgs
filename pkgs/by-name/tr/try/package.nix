@@ -70,7 +70,7 @@ stdenv.mkDerivation {
       pasqui23
       ezrizhu
     ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.linux;
   };
 }

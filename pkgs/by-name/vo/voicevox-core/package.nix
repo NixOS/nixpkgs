@@ -109,7 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/VOICEVOX/voicevox_core/releases/tag/${finalAttrs.version}";
     description = "Core library for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox_core";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       tomasajt
       eljamm

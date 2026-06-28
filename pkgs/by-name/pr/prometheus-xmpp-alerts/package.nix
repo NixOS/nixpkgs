@@ -58,6 +58,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "prometheus-xmpp-alerts";
     homepage = "https://github.com/jelmer/prometheus-xmpp-alerts";
     maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 }

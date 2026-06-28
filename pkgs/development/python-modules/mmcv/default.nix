@@ -150,7 +150,7 @@ buildPythonPackage (finalAttrs: {
     description = "Foundational Library for Computer Vision Research";
     homepage = "https://github.com/open-mmlab/mmcv";
     changelog = "https://github.com/open-mmlab/mmcv/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
 })

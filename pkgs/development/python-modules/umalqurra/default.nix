@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = {
     description = "Date Api that support Hijri Umalqurra calendar";
     homepage = "https://github.com/tytkal/python-hijiri-ummalqura";
-    license = with lib.licenses; [ publicDomain ];
+    license = with lib.licenses; publicDomain;
   };
 }

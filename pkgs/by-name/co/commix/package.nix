@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "commix";
     homepage = "https://github.com/commixproject/commix";
     changelog = "https://github.com/commixproject/commix/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

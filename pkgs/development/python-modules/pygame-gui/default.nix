@@ -103,7 +103,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
       emilytrau
       pbsds

@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/openclarity/kubeclarity";
     changelog = "https://github.com/openclarity/kubeclarity/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

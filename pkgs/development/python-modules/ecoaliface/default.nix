@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with eCoal water boiler controllers";
     homepage = "https://github.com/matkor/ecoaliface";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

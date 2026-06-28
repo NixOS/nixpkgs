@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://sr.ht/~leon_plickat/stacktile/";
     description = "Layout generator for the river Wayland compositor";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "stacktile";
     maintainers = [ ];
     platforms = lib.platforms.linux;

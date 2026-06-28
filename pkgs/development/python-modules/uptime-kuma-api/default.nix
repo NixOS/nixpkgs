@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Python wrapper for the Uptime Kuma Socket.IO API";
     homepage = "https://github.com/lucasheld/uptime-kuma-api";
     changelog = "https://github.com/lucasheld/uptime-kuma-api/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ julienmalka ];
   };
 }

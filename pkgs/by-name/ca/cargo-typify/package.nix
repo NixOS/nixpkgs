@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "JSON Schema to Rust type converter";
     homepage = "https://github.com/oxidecomputer/typify";
     changelog = "https://github.com/oxidecomputer/typify/blob/${finalAttrs.src.tag}/CHANGELOG.adoc";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "cargo-typify";
   };

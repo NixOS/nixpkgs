@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm SPARSE marshalling library";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipsparse";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

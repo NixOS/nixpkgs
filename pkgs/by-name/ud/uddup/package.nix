@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Tool for de-duplication URLs";
     mainProgram = "uddup";
     homepage = "https://github.com/rotemreiss/uddup";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

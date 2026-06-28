@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Remote Control for Mediaroom STB";
     homepage = "https://github.com/dgomes/pymediaroom";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

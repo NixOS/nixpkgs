@@ -35,7 +35,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/atmurray/aiopulse";
     changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Terminal weather app with ascii animation";
     homepage = "https://github.com/veirt/weathr";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [
       sudo-mac
       phanirithvij

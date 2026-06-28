@@ -26,7 +26,7 @@ buildPythonPackage rec {
     description = "Python module to help with the enumeration of subdomains";
     mainProgram = "subzerod";
     homepage = "https://github.com/sanderfoobar/subzerod";
-    license = with lib.licenses; [ wtfpl ];
+    license = with lib.licenses; wtfpl;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fortran interfaces for ROCm libraries";
     homepage = "https://github.com/ROCm/hipfort";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = with lib.licenses; mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

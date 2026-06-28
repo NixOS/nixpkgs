@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI Browser for BoltDB files";
     homepage = "https://github.com/br0xen/boltbrowser";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "boltbrowser";
   };

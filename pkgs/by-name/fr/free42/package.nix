@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://thomasokken.com/free42/";
     changelog = "https://thomasokken.com/free42/history.html";
     description = "Software clone of the HP-42S calculator";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;

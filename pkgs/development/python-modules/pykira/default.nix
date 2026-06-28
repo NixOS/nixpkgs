@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with Kira modules";
     homepage = "https://github.com/stu-gott/pykira";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

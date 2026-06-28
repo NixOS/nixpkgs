@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User-Mode Driver for Tenstorrent hardware";
     homepage = "https://github.com/tenstorrent/tt-umd";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = lib.platforms.linux;
   };
 })

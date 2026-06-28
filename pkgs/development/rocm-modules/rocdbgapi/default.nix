@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Debugger support for control of execution and inspection state of AMD's GPU architectures";
     homepage = "https://github.com/ROCm/ROCdbgapi";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

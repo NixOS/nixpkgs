@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/mrcjkb/vimcats";
     changelog = "https://github.com/mrcjkb/vimcats/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ mrcjkb ];
     mainProgram = "vimcats";
   };

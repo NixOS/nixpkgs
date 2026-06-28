@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     src.meta // {
       description = "Dead simple LAN file transfers from the command line";
-      license = with lib.licenses; [ mit ];
+      license = with lib.licenses; mit;
       platforms = lib.platforms.unix;
     };
 }

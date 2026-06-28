@@ -162,7 +162,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     inherit downloadPage description;
     homepage = "https://www.celestegame.com";
-    license = with lib.licenses; [ unfree ];
+    license = with lib.licenses; unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
     platforms = [

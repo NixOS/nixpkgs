@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/clearly-broken-software/ninjas2";
     description = "Sample slicer plugin for LV2, VST, and jack standalone";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
     mainProgram = "ninjas2";

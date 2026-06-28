@@ -209,7 +209,7 @@ lib.makeScope pkgs.newScope (
         broken = gimp.apiVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
-        license = with lib.licenses; [ gpl3Plus ];
+        license = with lib.licenses; gpl3Plus;
       };
     };
 
@@ -243,7 +243,7 @@ lib.makeScope pkgs.newScope (
         broken = lib.versionOlder gimp.version "3";
         description = "Suite of gimp plugins for texture synthesis";
         homepage = "https://github.com/bootchk/resynthesizer";
-        license = [ lib.licenses.gpl3Plus ];
+        license = lib.licenses.gpl3Plus;
       };
     };
 

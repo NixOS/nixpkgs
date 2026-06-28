@@ -30,7 +30,7 @@ buildPythonPackage rec {
     mainProgram = "autoit-ripper";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
     changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     description = "Rust adapter for Buildkite Test Analytics";
     mainProgram = "buildkite-test-collector";
     homepage = "https://buildkite.com/test-analytics";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ jfroche ];
   };
 }

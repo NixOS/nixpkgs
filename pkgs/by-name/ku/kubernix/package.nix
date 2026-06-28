@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Single dependency Kubernetes clusters for local testing, experimenting and development";
     mainProgram = "kubernix";
     homepage = "https://github.com/saschagrunert/kubernix";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ saschagrunert ];
     platforms = lib.platforms.linux;
   };

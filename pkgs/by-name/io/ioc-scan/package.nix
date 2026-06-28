@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Tool to search a filesystem for indicators of compromise (IoC)";
     homepage = "https://github.com/cisagov/ioc-scanner";
     changelog = "https://github.com/cisagov/ioc-scanner/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ cc0 ];
+    license = with lib.licenses; cc0;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

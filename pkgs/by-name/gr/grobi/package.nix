@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/fd0/grobi";
     description = "Automatically configure monitors/outputs for Xorg via RANDR";
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     platforms = lib.platforms.linux;
     mainProgram = "grobi";
   };

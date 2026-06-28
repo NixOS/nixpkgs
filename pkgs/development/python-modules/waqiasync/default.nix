@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python library for http://aqicn.org";
     homepage = "https://github.com/andrey-git/waqi-async";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

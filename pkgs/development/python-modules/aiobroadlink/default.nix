@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python module to control various Broadlink devices";
     mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

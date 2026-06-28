@@ -22,7 +22,7 @@ buildPythonPackage {
   meta = {
     description = "Python bindings for FoundationDB";
     homepage = "https://www.foundationdb.org";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

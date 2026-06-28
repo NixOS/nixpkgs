@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "Python wrapper for Twitter's REST and Streaming APIs";
     homepage = "https://github.com/geduldig/TwitterAPI";
     changelog = "https://github.com/geduldig/TwitterAPI/blob/v${version}/CHANGE.log";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

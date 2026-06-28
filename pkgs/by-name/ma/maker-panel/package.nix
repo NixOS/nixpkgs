@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Make mechanical PCBs by combining shapes together";
     homepage = "https://github.com/twitchyliquid64/maker-panel";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
   };
 })

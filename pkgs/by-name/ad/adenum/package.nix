@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication {
     description = "Tool to find misconfiguration through LDAP";
     mainProgram = "adenum";
     homepage = "https://github.com/SecuProject/ADenum";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

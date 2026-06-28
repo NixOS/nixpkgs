@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interacting with mutesync buttons";
     homepage = "https://github.com/currentoor/pymutesync";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

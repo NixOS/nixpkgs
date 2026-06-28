@@ -157,7 +157,7 @@ else
       '';
       meta = {
         description = "Android NDK toolchain, tuned for other platforms";
-        license = with lib.licenses; [ unfree ];
+        license = with lib.licenses; unfree;
         teams = [ lib.teams.android ];
       };
     };

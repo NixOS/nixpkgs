@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library to access FIBARO Home center";
     homepage = "https://github.com/rappenze/pyfibaro";
     changelog = "https://github.com/rappenze/pyfibaro/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

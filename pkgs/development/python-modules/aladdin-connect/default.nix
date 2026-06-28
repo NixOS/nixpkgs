@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python library for interacting with Genie Aladdin Connect devices";
     homepage = "https://github.com/shoejosh/aladdin-connect";
     changelog = "https://github.com/shoejosh/aladdin-connect/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

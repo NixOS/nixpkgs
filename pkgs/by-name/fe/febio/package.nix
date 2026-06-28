@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Software tool for nonlinear finite element analysis in biomechanics and biophysics";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     homepage = "https://febio.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];

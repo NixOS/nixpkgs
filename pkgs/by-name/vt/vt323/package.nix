@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/phoikoi/VT323/releases/tag/v${finalAttrs.version}";
     description = "Monospaced typeface designed to look like the VT320 text terminal glyphs";
     homepage = "https://github.com/phoikoi/VT323";
-    license = with lib.licenses; [ ofl ];
+    license = with lib.licenses; ofl;
     maintainers = with lib.maintainers; [ marcel ];
   };
 })

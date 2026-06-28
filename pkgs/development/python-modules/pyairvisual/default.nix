@@ -58,7 +58,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with AirVisual";
     homepage = "https://github.com/bachya/pyairvisual";
     changelog = "https://github.com/bachya/pyairvisual/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -81,7 +81,7 @@ maven.buildMavenPackage rec {
       connections to description logic reasoners.
     '';
     maintainers = with lib.maintainers; [ nessdoor ];
-    license = with lib.licenses; [ bsd2 ];
+    license = with lib.licenses; bsd2;
     # TODO Protege is able to run on Darwin as well, but I (@nessdoor) had no
     #      way of testing it nor any experience in packaging Darwin apps, so I
     #      will leave the task to someone who has the right tools and knowledge.

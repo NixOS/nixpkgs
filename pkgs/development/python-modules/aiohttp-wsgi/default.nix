@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "WSGI adapter for aiohttp";
     mainProgram = "aiohttp-wsgi-serve";
     homepage = "https://github.com/etianen/aiohttp-wsgi";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

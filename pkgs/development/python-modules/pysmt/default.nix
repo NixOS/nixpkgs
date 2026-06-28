@@ -25,7 +25,7 @@ buildPythonPackage rec {
     description = "Python library for SMT formulae manipulation and solving";
     mainProgram = "pysmt-install";
     homepage = "https://github.com/pysmt/pysmt";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for masking passwords";
     homepage = "https://github.com/asweigart/stdiomask";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

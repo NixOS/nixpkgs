@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Parse and Process AWS IAM Policies, Statements, ARNs and wildcards";
     homepage = "https://github.com/Netflix-Skunkworks/policyuniverse";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

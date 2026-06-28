@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "French TV service";
     homepage = "https://www.molotov.tv/";
-    license = with lib.licenses; [ unfree ];
+    license = with lib.licenses; unfree;
     maintainers = with lib.maintainers; [ apeyroux ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "molotov";

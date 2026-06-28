@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     homepage = "https://github.com/swisskyrepo/InternalAllTheThings";
     description = "Active Directory and Internal Pentest Cheatsheets";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = mkdocs.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];

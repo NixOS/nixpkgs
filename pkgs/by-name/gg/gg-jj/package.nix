@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
     changelog = "https://github.com/gulbanana/gg/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     inherit (cargo-tauri.hook.meta) platforms;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "gg";

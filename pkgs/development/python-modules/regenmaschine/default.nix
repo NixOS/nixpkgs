@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with RainMachine smart sprinkler controllers";
     homepage = "https://github.com/bachya/regenmaschine";
     changelog = "https://github.com/bachya/regenmaschine/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

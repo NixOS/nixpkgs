@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       vulnerabilities and makes loksh a good fit for resource-constrained
       systems.
     '';
-    license = with lib.licenses; [ publicDomain ];
+    license = with lib.licenses; publicDomain;
     maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle SDDS files";
     homepage = "https://pylhc.github.io/sdds/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

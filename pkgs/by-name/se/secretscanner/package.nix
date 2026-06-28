@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

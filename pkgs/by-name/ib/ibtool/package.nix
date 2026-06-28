@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Apple's ibtool reimplementation";
     homepage = "https://github.com/viraptor/ibtool";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "ibtool";
     maintainers = [ lib.maintainers.viraptor ];
   };

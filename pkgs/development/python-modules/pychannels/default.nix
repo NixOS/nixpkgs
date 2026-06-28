@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with the Channels app";
     homepage = "https://github.com/fancybits/pychannels";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

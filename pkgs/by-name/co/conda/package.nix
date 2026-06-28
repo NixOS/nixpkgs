@@ -143,7 +143,7 @@ buildFHSEnv {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ jluttine ];
   };
 }

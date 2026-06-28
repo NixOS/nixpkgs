@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Open reimplementation of Apple's PlistBuddy and plutil";
     homepage = "https://github.com/viraptor/re-plistbuddy";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ viraptor ];
     platforms = lib.platforms.darwin;
   };

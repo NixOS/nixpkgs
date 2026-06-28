@@ -104,7 +104,7 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

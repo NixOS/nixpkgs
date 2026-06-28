@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python implementation of a Web Thing server";
     homepage = "https://github.com/WebThingsIO/webthing-python";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

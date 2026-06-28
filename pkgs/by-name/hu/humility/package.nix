@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
     description = "Debugger for Hubris";
     mainProgram = "humility";
     homepage = "https://github.com/oxidecomputer/humility";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ therishidesai ];
   };
 }

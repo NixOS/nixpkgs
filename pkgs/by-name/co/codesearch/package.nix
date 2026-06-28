@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/google/codesearch";
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bennofs ];
   };
 })

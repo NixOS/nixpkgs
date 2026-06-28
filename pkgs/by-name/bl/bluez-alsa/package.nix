@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       BluezALSA if you disable `bluetooth-discover` and `bluez5-discover`
       modules in PA and configure it to play/capture sound over `bluealsa` PCM.
     '';
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "bluealsa";
     maintainers = with lib.maintainers; [ oxij ];
     platforms = lib.platforms.linux;

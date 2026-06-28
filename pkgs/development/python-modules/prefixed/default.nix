@@ -23,7 +23,7 @@ buildPythonPackage rec {
     description = "Prefixed alternative numeric library";
     homepage = "https://github.com/Rockhopper-Technologies/prefixed";
     changelog = "https://github.com/Rockhopper-Technologies/prefixed/releases/tag/${version}";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Set of comprehensive computer vision and machine intelligence libraries, utilities, and applications";
     homepage = "https://github.com/ROCm/MIVisionX";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     broken = useOpenCL;

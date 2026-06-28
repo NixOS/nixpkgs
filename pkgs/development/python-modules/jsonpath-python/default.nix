@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sean2077/jsonpath-python";
     description = "More powerful JSONPath implementations in modern python";
     maintainers = with lib.maintainers; [ dadada ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
   };
 }

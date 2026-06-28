@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
     mainProgram = "elf2uf2-rs";
     homepage = "https://github.com/JoNil/elf2uf2-rs";
-    license = with lib.licenses; [ bsd0 ];
+    license = with lib.licenses; bsd0;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       polygon

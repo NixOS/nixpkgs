@@ -332,7 +332,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Machine intelligence library for ROCm";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/miopen";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

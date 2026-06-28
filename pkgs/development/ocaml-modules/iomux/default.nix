@@ -28,7 +28,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/haesbaert/ocaml-iomux";
     description = "IO Multiplexers for OCaml";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ toastal ];
   };
 })

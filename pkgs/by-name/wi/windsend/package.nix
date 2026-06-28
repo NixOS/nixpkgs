@@ -71,7 +71,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
     description = "Quickly and securely sync clipboard, transfer files and directories between devices";
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "WindSend";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

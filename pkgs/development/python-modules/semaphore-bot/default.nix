@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple rule-based bot library for Signal Private Messenger";
     homepage = "https://github.com/lwesterhof/semaphore";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ onny ];
   };
 }

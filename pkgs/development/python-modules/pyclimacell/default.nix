@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for ClimaCell API";
     homepage = "https://github.com/raman325/pyclimacell";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

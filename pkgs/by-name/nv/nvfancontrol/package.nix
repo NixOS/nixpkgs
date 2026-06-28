@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     description = "Nvidia dynamic fan control for Linux";
     homepage = "https://github.com/foucault/nvfancontrol";
     changelog = "https://github.com/foucault/nvfancontrol/releases/tag/${version}";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devins2518 ];
     mainProgram = "nvfancontrol";

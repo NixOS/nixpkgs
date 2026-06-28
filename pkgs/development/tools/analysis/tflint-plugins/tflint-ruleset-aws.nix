@@ -46,6 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/terraform-linters/tflint-ruleset-aws/blob/v${version}/CHANGELOG.md";
     description = "TFLint ruleset plugin for Terraform AWS Provider";
     maintainers = with lib.maintainers; [ flokli ];
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
   };
 }

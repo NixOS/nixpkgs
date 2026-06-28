@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Hidapi bindings in ctypes";
     homepage = "https://github.com/apmorton/pyhidapi";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ ];
   };
 }

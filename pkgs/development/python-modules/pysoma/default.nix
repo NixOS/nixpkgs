@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the HTTP API provided by SOMA Connect";
     homepage = "https://pypi.org/project/pysoma";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

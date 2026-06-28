@@ -34,7 +34,7 @@ let
       meta = {
         description = "Type annotations for boto3 ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
-        license = with lib.licenses; [ mit ];
+        license = with lib.licenses; mit;
         maintainers = with lib.maintainers; [
           fab
         ];

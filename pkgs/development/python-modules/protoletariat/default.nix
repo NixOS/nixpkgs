@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python protocol buffers for the rest of us";
     homepage = "https://github.com/cpcloud/protoletariat";
     changelog = "https://github.com/cpcloud/protoletariat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

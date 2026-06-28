@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Personal finances manager, powered by KDE";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     maintainers = with lib.maintainers; [ joko ];
     homepage = "https://skrooge.org/";
   };

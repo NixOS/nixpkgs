@@ -33,7 +33,7 @@ buildPythonPackage rec {
     mainProgram = "karton-yaramatcher";
     homepage = "https://github.com/CERT-Polska/karton-yaramatcher";
     changelog = "https://github.com/CERT-Polska/karton-yaramatcher/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Tool to generate commands for security and network tools";
     homepage = "https://github.com/Orange-Cyberdefense/arsenal";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "arsenal";
   };

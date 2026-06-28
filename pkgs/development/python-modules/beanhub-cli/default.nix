@@ -105,7 +105,7 @@ buildPythonPackage rec {
     description = "Command line tools for BeanHub or Beancount users";
     homepage = "https://github.com/LaunchPlatform/beanhub-cli/";
     changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fangpen ];
     mainProgram = "bh";
   };

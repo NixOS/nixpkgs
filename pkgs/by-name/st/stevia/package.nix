@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User friendly on screen keyboard for Phosh";
     homepage = "https://gitlab.gnome.org/World/Phosh/stevia";
     changelog = "https://gitlab.gnome.org/World/Phosh/stevia/-/releases/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ungeskriptet

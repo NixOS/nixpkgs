@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Expressive and extensible TDD/BDD assertion library for Python";
     homepage = "https://expects.readthedocs.io/";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

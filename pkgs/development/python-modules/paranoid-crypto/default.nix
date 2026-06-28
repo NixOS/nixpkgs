@@ -60,7 +60,7 @@ buildPythonPackage {
   meta = {
     description = "Library contains checks for well known weaknesses on cryptographic artifacts";
     homepage = "https://github.com/google/paranoid_crypto";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

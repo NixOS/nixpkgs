@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Programmer's calculator";
     homepage = "https://git.sr.ht/~ft/pc";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ moody ];
     platforms = lib.platforms.unix;
     mainProgram = "pc";

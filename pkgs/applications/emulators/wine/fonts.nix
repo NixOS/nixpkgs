@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Microsoft replacement fonts by the Wine project";
     homepage = "https://wiki.winehq.org/Create_Fonts";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = with lib.licenses; lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       avnik

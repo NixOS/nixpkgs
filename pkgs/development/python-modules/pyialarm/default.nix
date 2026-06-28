@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with Antifurto365 iAlarm systems";
     homepage = "https://github.com/RyuzakiKK/pyialarm";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

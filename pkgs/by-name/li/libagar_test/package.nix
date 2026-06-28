@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     description = "Tests for libagar";
     mainProgram = "agartest";
     homepage = "http://libagar.org/index.html";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.linux;
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

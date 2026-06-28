@@ -92,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://arrow.apache.org/datafusion/";
     changelog = "https://github.com/apache/datafusion-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
 })

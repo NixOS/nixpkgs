@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication {
   meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     mainProgram = "apt-offline";
     maintainers = [ ];
   };

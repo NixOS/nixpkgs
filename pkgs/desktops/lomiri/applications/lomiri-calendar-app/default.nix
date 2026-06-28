@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Default Calendar application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-calendar-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-calendar-app/-/blob/v${finalAttrs.version}/ChangeLog";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     mainProgram = "lomiri-calendar-app";
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;

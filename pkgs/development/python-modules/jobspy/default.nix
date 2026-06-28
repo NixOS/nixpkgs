@@ -53,7 +53,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/Bunsly/JobSpy";
     homepage = "https://github.com/Bunsly/JobSpy";
     changelog = "https://github.com/Bunsly/JobSpy/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
 }

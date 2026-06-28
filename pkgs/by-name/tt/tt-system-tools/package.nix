@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-system-tools";
     changelog = "https://github.com/tenstorrent/tt-system-tools/blob/${finalAttrs.src.tag}/debian/changelog";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     platforms = lib.platforms.linux;
   };
 })

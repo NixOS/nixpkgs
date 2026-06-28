@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Python interface with Egardia/Woonveilig alarms";
     homepage = "https://github.com/jeroenterheerdt/python-egardia";
     changelog = "https://github.com/jeroenterheerdt/python-egardia/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

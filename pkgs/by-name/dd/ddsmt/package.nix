@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
   meta = {
     description = "Delta debugger for SMT benchmarks in SMT-LIB v2";
     homepage = "https://ddsmt.readthedocs.io/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
   };
 }

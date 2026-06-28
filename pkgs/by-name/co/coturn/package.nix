@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${finalAttrs.version}/ChangeLog";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin; # 2018-10-21

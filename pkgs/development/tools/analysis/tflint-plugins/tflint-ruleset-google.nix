@@ -40,6 +40,6 @@ buildGoModule rec {
     description = "TFLint ruleset plugin for Terraform Google Provider";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ john-rodewald ];
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
   };
 }

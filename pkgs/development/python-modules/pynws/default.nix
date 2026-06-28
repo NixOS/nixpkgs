@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Python library to retrieve data from NWS/NOAA";
     homepage = "https://github.com/MatthewFlamm/pynws";
     changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -33,7 +33,7 @@ buildPythonPackage rec {
       directional artifacts characteristic of Perlin noise.
     '';
     homepage = "https://github.com/lmas/opensimplex";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

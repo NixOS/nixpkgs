@@ -56,7 +56,7 @@ buildPythonPackage rec {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
     changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

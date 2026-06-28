@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.linux;
   };

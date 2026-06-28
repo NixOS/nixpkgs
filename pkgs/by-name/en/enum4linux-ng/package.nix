@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
     changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "enum4linux-ng";
   };

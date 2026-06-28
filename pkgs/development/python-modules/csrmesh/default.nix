@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the CSRMesh bridge protocol";
     homepage = "https://github.com/nkaminski/csrmesh";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = with lib.licenses; lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

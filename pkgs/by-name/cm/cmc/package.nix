@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/TimidRobot/cmc";
     description = "Manages SSH ControlMaster sessions";
     mainProgram = "cmc";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ chordtoll ];
     platforms = lib.platforms.all;
   };

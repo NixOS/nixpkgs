@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
     changelog = "https://github.com/tildearrow/furnace/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
     mainProgram = "furnace";

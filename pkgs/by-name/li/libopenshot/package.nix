@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       delivering high quality video editing, animation, and playback solutions
       to the world. API currently supports C++, Python, and Ruby.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };

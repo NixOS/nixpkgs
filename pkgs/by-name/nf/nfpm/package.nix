@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
       techknowlogick
       caarlos0
     ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "nfpm";
   };
 })

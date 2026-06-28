@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "MAC Address CLI Toolkit";
     homepage = "https://github.com/thatmattlove/oui";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ johannwagner ];
     mainProgram = "oui";
   };

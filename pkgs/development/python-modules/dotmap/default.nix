@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python for dot-access dictionaries";
     homepage = "https://github.com/drgrib/dotmap";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

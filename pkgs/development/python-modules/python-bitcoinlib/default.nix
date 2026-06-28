@@ -36,7 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
     changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ jb55 ];
   };
 }

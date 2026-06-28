@@ -111,7 +111,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/Wox-launcher/Wox/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     mainProgram = "wox";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ eljamm ];
   };
 })

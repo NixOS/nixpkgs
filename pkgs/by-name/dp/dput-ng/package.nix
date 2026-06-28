@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Next-generation Debian package upload tool";
     homepage = "https://dput.readthedocs.io/en/latest/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "dput";

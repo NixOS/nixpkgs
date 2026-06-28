@@ -50,7 +50,7 @@ buildPythonPackage rec {
       the workload and number of cores available.
     '';
     homepage = "https://github.com/omnilib/aiomultiprocess";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ lib.maintainers.fab ];
   };
 }

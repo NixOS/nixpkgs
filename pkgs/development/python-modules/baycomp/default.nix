@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library for Bayesian comparison of classifiers";
     homepage = "https://github.com/janezd/baycomp";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

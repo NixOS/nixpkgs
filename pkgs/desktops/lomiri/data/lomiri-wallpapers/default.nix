@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-wallpapers";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-wallpapers/-/blob/${finalAttrs.version}/ChangeLog";
     # On update, recheck debian/copyright for which licenses apply to the installed images
-    license = with lib.licenses; [ cc-by-sa-30 ];
+    license = with lib.licenses; cc-by-sa-30;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.all;
   };

@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
     description = "Lightweight utility to transcode FLAC releases";
     homepage = "https://github.com/lfence/red-trul";
     changelog = "https://github.com/lfence/red-trul/releases/tag/${finalAttrs.version}";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ lilahummel ];
   };
 })

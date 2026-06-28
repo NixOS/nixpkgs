@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/hakavlad/nohang";
     description = "Sophisticated low memory handler for Linux";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "nohang";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Dev380 ];

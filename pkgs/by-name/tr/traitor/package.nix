@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/liamg/traitor";
     platforms = lib.platforms.linux;
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Flat remix is a pretty simple icon theme inspired on material design";
     homepage = "https://drasite.com/flat-remix";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     # breeze-icons and pantheon.elementary-icon-theme dependencies are restricted to linux
     platforms = lib.platforms.linux;
     maintainers = [ ];

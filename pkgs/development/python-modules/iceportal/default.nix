@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Library for getting data from the ICE Portal";
     homepage = "https://github.com/home-assistant-ecosystem/python-iceportal";
     changelog = "https://github.com/home-assistant-ecosystem/python-iceportal/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

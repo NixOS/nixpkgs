@@ -33,7 +33,7 @@ buildPerlPackage rec {
   meta = {
     description = "Lightweight application for searching and streaming videos from YouTube";
     homepage = "https://github.com/trizen/youtube-viewer";
-    license = with lib.licenses; [ artistic2 ];
+    license = with lib.licenses; artistic2;
     maintainers = with lib.maintainers; [ woffs ];
     mainProgram = "youtube-viewer";
   };

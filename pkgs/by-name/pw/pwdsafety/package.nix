@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Command line tool checking password safety";
     homepage = "https://github.com/edoardottt/pwdsafety";
     changelog = "https://github.com/edoardottt/pwdsafety/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pwdsafety";
   };

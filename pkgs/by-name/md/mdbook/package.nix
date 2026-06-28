@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       Frostman
       matthiasbeyer

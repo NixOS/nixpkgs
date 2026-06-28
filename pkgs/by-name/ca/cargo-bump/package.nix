@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Increments the version number of the current project";
     mainProgram = "cargo-bump";
     homepage = "https://github.com/wraithan/cargo-bump";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ cafkafk ];
   };
 })

@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "AMD's graph optimization engine";
     homepage = "https://github.com/ROCm/AMDMIGraphX";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

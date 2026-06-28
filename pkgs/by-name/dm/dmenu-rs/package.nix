@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support"
       + lib.optionalString enablePlugins ", with all upstream plugins enabled";
     homepage = "https://github.com/Shizcow/dmenu-rs";
-    license = with lib.licenses; [ gpl3Only ];
+    license = with lib.licenses; gpl3Only;
     maintainers = with lib.maintainers; [ benjaminedwardwebb ];
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;

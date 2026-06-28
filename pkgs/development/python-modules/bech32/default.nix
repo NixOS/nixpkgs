@@ -22,6 +22,6 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/fiatjaf/bech32";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
   };
 })

@@ -874,7 +874,7 @@ rec {
     dictFileName = "cs_CZ";
     shortDescription = "Czech (Czechia)";
     readmeFile = "README_cs.txt";
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; gpl2;
   };
 
   # SLOVAK
@@ -966,7 +966,7 @@ rec {
     dictFileName = "he_IL";
     shortDescription = "Hebrew (Israel)";
     readmeFile = "README_he_IL.txt";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
   };
 
   # THAI
@@ -986,7 +986,7 @@ rec {
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
       homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
-      license = with lib.licenses; [ gpl3 ];
+      license = with lib.licenses; gpl3;
       maintainers = with lib.maintainers; [ toastal ]; # looking for a native speaker
       platforms = lib.platforms.all;
     };
@@ -1031,7 +1031,7 @@ rec {
     sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Bokmål (Norway)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
   };
 
   nn_NO = nn-no;
@@ -1041,7 +1041,7 @@ rec {
     sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
   };
 
   # TOKI PONA
@@ -1099,7 +1099,7 @@ rec {
     dictFileName = "pt_BR";
     shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
-    license = with lib.licenses; [ lgpl3 ];
+    license = with lib.licenses; lgpl3;
   };
 
   pt_PT = pt-pt;
@@ -1172,7 +1172,7 @@ rec {
     meta = {
       description = "Hunspell dictionary for ${shortDescription} from rospell";
       homepage = "https://sourceforge.net/projects/rospell/";
-      license = with lib.licenses; [ gpl2Only ];
+      license = with lib.licenses; gpl2Only;
       maintainers = with lib.maintainers; [ Andy3153 ];
     };
   };

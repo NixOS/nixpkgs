@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "iCESugar FPGA flash utility";
     mainProgram = "icesprog";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     homepage = "https://github.com/wuxx/icesugar";
   };

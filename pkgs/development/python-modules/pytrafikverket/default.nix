@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";
     homepage = "https://github.com/gjohansson-ST/pytrafikverket";
     changelog = "https://github.com/gjohansson-ST/pytrafikverket/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to parse command based CLI application";
     homepage = "https://github.com/flgy/commandparse";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = [ lib.maintainers.fab ];
   };
 }

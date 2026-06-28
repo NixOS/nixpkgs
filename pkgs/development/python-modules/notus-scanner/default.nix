@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
     changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

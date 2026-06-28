@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${finalAttrs.version}/debian/changelog";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "apt";
     maintainers = with lib.maintainers; [ VZstless ];
     platforms = lib.platforms.linux;

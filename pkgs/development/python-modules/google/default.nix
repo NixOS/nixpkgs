@@ -26,7 +26,7 @@ buildPythonPackage rec {
     description = "Python bindings to the Google search engine";
     mainProgram = "google";
     homepage = "https://pypi.org/project/google/";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

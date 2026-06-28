@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [
       kashw2
       cafkafk

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to communicate with opengarage.io";
     homepage = "https://github.com/Danielhiversen/pyOpenGarage";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

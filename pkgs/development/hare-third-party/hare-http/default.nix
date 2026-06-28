@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-http/";
     description = "HTTP(s) support for Hare";
-    license = with lib.licenses; [ mpl20 ];
+    license = with lib.licenses; mpl20;
     maintainers = with lib.maintainers; [ sikmir ];
     inherit (hareHook.meta) platforms badPlatforms;
   };

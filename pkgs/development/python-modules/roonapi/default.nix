@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Python library to interface with the Roon API";
     homepage = "https://github.com/pavoni/pyroon";
     changelog = "https://github.com/pavoni/pyroon/releases/tag/${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

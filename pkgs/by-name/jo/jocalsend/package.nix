@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://git.kittencollective.com/nebkor/joecalsend";
     description = "Rust terminal client for Localsend";
     changelog = "https://git.kittencollective.com/nebkor/joecalsend/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ unfreeRedistributable ];
+    license = with lib.licenses; unfreeRedistributable;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "jocalsend";
   };

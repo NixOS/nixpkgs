@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI application to create SSH tunnels";
     homepage = "https://github.com/davrodpin/mole";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "mole";

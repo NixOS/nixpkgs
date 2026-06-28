@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://scipopt.org";
     description = "Sequential object-oriented simPlex";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     mainProgram = "soplex";
     maintainers = [ ];
     platforms = lib.platforms.unix;

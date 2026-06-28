@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     description = "Tool to scan SAAS and PAAS applications";
     mainProgram = "cirrusgo";
     homepage = "https://github.com/Ph33rr/cirrusgo";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

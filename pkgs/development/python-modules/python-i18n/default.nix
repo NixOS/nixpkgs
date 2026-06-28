@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Easy to use i18n library";
     homepage = "https://github.com/danhper/python-i18n";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

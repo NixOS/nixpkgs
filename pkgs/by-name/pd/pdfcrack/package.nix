@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://pdfcrack.sourceforge.net/";
     description = "Small command line driven tool for recovering passwords and content from PDF files";
     mainProgram = "pdfcrack";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ qoelet ];
   };

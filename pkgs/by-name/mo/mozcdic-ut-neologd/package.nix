@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Dictionary converted from mecab-ipadic-NEologd for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-neologd";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
     # this does not need to be separately built

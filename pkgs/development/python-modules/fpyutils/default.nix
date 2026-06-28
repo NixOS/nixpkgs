@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Collection of useful non-standard Python functions";
     homepage = "https://github.com/frnmst/fpyutils";
     changelog = "https://blog.franco.net.eu.org/software/fpyutils-${version}/release.html";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

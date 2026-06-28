@@ -51,6 +51,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tenstorrent/luwen";
     changelog = "https://github.com/tenstorrent/luwen/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
   };
 })

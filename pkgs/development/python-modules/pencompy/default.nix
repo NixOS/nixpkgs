@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library for interacting with Pencom relay boards";
     homepage = "https://github.com/dubnom/pencompy";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

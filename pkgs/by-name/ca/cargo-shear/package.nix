@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-shear";
     homepage = "https://github.com/Boshen/cargo-shear";
     changelog = "https://github.com/Boshen/cargo-shear/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cathalmullan ];
   };
 })

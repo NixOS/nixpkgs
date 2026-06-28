@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
     mainProgram = "klayout";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${finalAttrs.version}";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

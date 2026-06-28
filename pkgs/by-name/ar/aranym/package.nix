@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       and direct access to various host resources including sound, disk drives,
       optical storage devices (CD/DVD-ROMs), parallel port and more.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     mainProgram = "aranym";
     maintainers = [ ];
     platforms = lib.platforms.unix;

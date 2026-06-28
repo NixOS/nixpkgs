@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Markdown shell pre-processor";
     homepage = "https://github.com/zimbatm/mdsh";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ zimbatm ];
     mainProgram = "mdsh";
   };

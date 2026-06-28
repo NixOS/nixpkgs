@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
     changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${finalAttrs.version}";
     description = "ETH-XMR atomic swap implementation";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = with lib.licenses; lgpl3Only;
     maintainers = with lib.maintainers; [
       happysalada
       lord-valen

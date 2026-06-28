@@ -201,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocblas";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

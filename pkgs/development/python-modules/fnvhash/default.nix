@@ -32,7 +32,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/znerol/py-fnvhash/releases/tag/${src.tag}";
     description = "Python FNV hash implementation";
     homepage = "https://github.com/znerol/py-fnvhash";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

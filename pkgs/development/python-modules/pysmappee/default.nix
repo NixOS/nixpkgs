@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Library for the Smappee dev API";
     homepage = "https://github.com/smappee/pysmappee";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

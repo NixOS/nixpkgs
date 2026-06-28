@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "PKCS#12 support for the Python requests library";
     homepage = "https://github.com/m-click/requests_pkcs12";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

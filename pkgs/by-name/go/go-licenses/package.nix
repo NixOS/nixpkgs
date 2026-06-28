@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
     description = "Reports on the licenses used by a Go package and its dependencies";
     mainProgram = "go-licenses";
     homepage = "https://github.com/google/go-licenses";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
 })

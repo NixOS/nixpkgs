@@ -109,7 +109,7 @@ flutter341.buildFlutterApplication {
     description = "Cross-platform open-source app built for handwriting";
     homepage = "https://github.com/saber-notes/saber";
     mainProgram = "saber";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

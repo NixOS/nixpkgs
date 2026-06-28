@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
       ConfluencePot is a simple honeypot for the Atlassian Confluence unauthenticated
       and remote OGNL injection vulnerability (CVE-2022-26134).
     '';
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "confluencepot";
   };

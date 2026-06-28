@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       provides generic line editing, history, and tokenization functions,
       similar to those found in GNU Readline.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.all;
   };

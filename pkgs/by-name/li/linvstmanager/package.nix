@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Graphical companion application for various bridges like LinVst, etc";
     mainProgram = "linvstmanager";
     homepage = "https://github.com/Goli4thus/linvstmanager";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ GabrielDougherty ];
   };

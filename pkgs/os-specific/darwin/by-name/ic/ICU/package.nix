@@ -83,7 +83,7 @@ let
 
     meta = {
       description = "Unicode and globalization support library with Apple customizations";
-      license = [ lib.licenses.icu ];
+      license = lib.licenses.icu;
       teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       pkgConfigModules = [

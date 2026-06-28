@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Flexit A/C units";
     homepage = "https://github.com/Sabesto/pyflexit";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

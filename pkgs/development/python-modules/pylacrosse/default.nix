@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "Python library for Jeelink LaCrosse";
     mainProgram = "pylacrosse";
     homepage = "https://github.com/hthiery/python-lacrosse";
-    license = with lib.licenses; [ lgpl2Plus ];
+    license = with lib.licenses; lgpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

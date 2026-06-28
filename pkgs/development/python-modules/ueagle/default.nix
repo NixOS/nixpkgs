@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library Rainforest EAGLE devices";
     homepage = "https://github.com/jcalbert/uEagle";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

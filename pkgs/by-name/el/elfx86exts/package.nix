@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/pkgw/elfx86exts";
     maintainers = with lib.maintainers; [ rmcgibbo ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "elfx86exts";
   };
 })

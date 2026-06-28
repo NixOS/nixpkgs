@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Python client for NATS messaging system";
     homepage = "https://github.com/Gr1N/nats-python";
     changelog = "https://github.com/Gr1N/nats-python/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

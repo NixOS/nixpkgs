@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "System and process monitor written with EFL";
     mainProgram = "evisum";
     homepage = "https://git.enlightenment.org/enlightenment/evisum";
-    license = with lib.licenses; [ isc ];
+    license = with lib.licenses; isc;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
   };

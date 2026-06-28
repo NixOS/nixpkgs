@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       Contains libraries and header files for developing applications that
       want to make use of librsb.
     '';
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ ravenjoad ];
     platforms = lib.platforms.all;
     # linking errors such as 'undefined reference to `gzungetc'

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for communicating with Crownstone USB dongles";
     homepage = "https://github.com/crownstone/crownstone-lib-python-uart";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

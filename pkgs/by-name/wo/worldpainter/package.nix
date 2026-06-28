@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.worldpainter.net/";
     description = "Interactive map generator for Minecraft";
     longDescription = "WorldPainter is an interactive map generator for Minecraft. It allows you to \"paint\" landscapes using similar tools as a regular paint program. Sculpt and mould the terrain, paint materials, trees, snow and ice, etc. onto it, and much more";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     maintainers = with lib.maintainers; [ eymeric ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];

@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
     description = "Easy, Concise and Decentralized Config management with Python";
     changelog = "https://github.com/bundlewrap/bundlewrap/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "bw";
-    license = [ lib.licenses.gpl3 ];
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ wamserma ];
   };
 })

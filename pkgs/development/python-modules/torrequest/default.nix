@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/erdiaker/torrequest";
     description = "Simple Python interface for HTTP(s) requests over Tor";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ applePrincess ];
   };
 }

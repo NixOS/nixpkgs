@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Offline search engine for manual pages, Arch Wiki, Gentoo Wiki and other documentation";
     homepage = "https://github.com/filiparag/wikiman";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "wikiman";

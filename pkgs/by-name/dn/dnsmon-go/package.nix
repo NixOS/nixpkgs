@@ -25,7 +25,7 @@ buildGoModule {
   meta = {
     description = "Tool to collect DNS traffic";
     homepage = "https://github.com/jonpulsifer/dnsmon-go";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dnsmon-go";
   };

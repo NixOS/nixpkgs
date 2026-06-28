@@ -57,7 +57,7 @@ let
     meta = {
       description = "Forward proxy module for CONNECT request handling";
       homepage = "https://github.com/chobits/ngx_http_proxy_connect_module";
-      license = with lib.licenses; [ bsd2 ];
+      license = with lib.licenses; bsd2;
       maintainers = [ ];
     };
   };
@@ -81,7 +81,7 @@ let
       meta = {
         description = "Validates Akamai v2 query string tokens";
         homepage = "https://github.com/kaltura/nginx-akamai-token-validate-module";
-        license = with lib.licenses; [ agpl3Only ];
+        license = with lib.licenses; agpl3Only;
         maintainers = [ ];
       };
     };
@@ -112,7 +112,7 @@ let
       meta = {
         description = "Integrate ARPA2 Resource ACLs into nginx";
         homepage = "https://gitlab.com/arpa2/nginx-auth-a2aclr";
-        license = with lib.licenses; [ isc ];
+        license = with lib.licenses; isc;
         maintainers = [ ];
       };
     };
@@ -130,7 +130,7 @@ let
       meta = {
         description = "Proxy to authenticated AWS services";
         homepage = "https://github.com/anomalizer/ngx_aws_auth";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -158,7 +158,7 @@ let
       meta = {
         description = "Brotli compression";
         homepage = "https://github.com/google/ngx_brotli";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -176,7 +176,7 @@ let
       meta = {
         description = "Adds ability to purge content from FastCGI, proxy, SCGI and uWSGI caches";
         homepage = "https://github.com/nginx-modules/ngx_cache_purge";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -194,7 +194,7 @@ let
       meta = {
         description = "Collection of small and useful nginx add-ons";
         homepage = "https://github.com/FRiCKLE/ngx_coolkit";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -214,7 +214,7 @@ let
       meta = {
         description = "WebDAV PROPFIND,OPTIONS,LOCK,UNLOCK support";
         homepage = "https://github.com/arut/nginx-dav-ext-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -232,7 +232,7 @@ let
       meta = {
         description = "Adds additional generic tools that module developers can use in their own modules";
         homepage = "https://github.com/vision5/ngx_devel_kit";
-        license = with lib.licenses; [ bsd3 ];
+        license = with lib.licenses; bsd3;
         maintainers = [ ];
       };
     };
@@ -252,7 +252,7 @@ let
       meta = {
         description = "Brings echo, sleep, time, exec and more shell-style goodies to Nginx";
         homepage = "https://github.com/openresty/echo-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -270,7 +270,7 @@ let
       meta = {
         description = "Fancy indexes module";
         homepage = "https://github.com/aperezdc/ngx-fancyindex";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ aneeshusa ];
       };
     };
@@ -288,7 +288,7 @@ let
       meta = {
         description = "Fluentd data collector";
         homepage = "https://github.com/fluent/nginx-fluentd-module";
-        license = with lib.licenses; [ asl20 ];
+        license = with lib.licenses; asl20;
         maintainers = [ ];
       };
     };
@@ -308,7 +308,7 @@ let
       meta = {
         description = "Creates variables with values from the maxmind geoip2 databases";
         homepage = "https://github.com/leev/ngx_http_geoip2_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ pinpox ];
       };
     };
@@ -342,7 +342,7 @@ let
       meta = {
         description = "IP address anonymizer";
         homepage = "https://github.com/masonicboom/ipscrub";
-        license = with lib.licenses; [ bsd3 ];
+        license = with lib.licenses; bsd3;
         maintainers = [ ];
       };
     };
@@ -360,7 +360,7 @@ let
       meta = {
         description = "Limit the total speed from the specific user";
         homepage = "https://github.com/yaoweibin/nginx_limit_speed_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -378,7 +378,7 @@ let
       meta = {
         description = "HTTP live module";
         homepage = "https://github.com/arut/nginx-live-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -414,7 +414,7 @@ let
       meta = {
         description = "Embed the Power of Lua";
         homepage = "https://github.com/openresty/lua-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -435,7 +435,7 @@ let
       meta = {
         description = "Expose Lua API to ngx_lua for Nginx upstreams";
         homepage = "https://github.com/openresty/lua-upstream-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -463,7 +463,7 @@ let
       meta = {
         description = "Open source, cross platform web application firewall (WAF)";
         homepage = "https://github.com/SpiderLabs/ModSecurity";
-        license = with lib.licenses; [ asl20 ];
+        license = with lib.licenses; asl20;
         maintainers = [ ];
       };
     };
@@ -481,7 +481,7 @@ let
       meta = {
         description = "Set, add, and clear arbitrary output headers";
         homepage = "https://github.com/openresty/headers-more-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ SuperSandro2000 ];
       };
     };
@@ -499,7 +499,7 @@ let
       meta = {
         description = "MPEG-TS Live Module";
         homepage = "https://github.com/arut/nginx-ts-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -519,7 +519,7 @@ let
       meta = {
         description = "Open-source, high performance, low rules maintenance WAF";
         homepage = "https://github.com/nbs-system/naxsi";
-        license = with lib.licenses; [ gpl3 ];
+        license = with lib.licenses; gpl3;
         maintainers = [ ];
       };
     };
@@ -554,7 +554,7 @@ let
       meta = {
         description = "Subset of the JavaScript language that allows extending nginx functionality";
         homepage = "https://nginx.org/en/docs/njs/";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ jvanbruegge ];
       };
     };
@@ -594,7 +594,7 @@ let
       meta = {
         description = "Automatic PageSpeed optimization";
         homepage = "https://github.com/apache/incubator-pagespeed-ngx";
-        license = with lib.licenses; [ asl20 ];
+        license = with lib.licenses; asl20;
         maintainers = [ ];
       };
     };
@@ -614,7 +614,7 @@ let
       meta = {
         description = "Use PAM for simple http authentication";
         homepage = "https://github.com/sto/ngx_http_auth_pam_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -632,7 +632,7 @@ let
       meta = {
         description = "Pinba module for nginx";
         homepage = "https://github.com/tony2001/ngx_http_pinba_module";
-        license = with lib.licenses; [ unfree ]; # no license in repo
+        license = with lib.licenses; unfree; # no license in repo
         maintainers = [ ];
       };
     };
@@ -650,7 +650,7 @@ let
       meta = {
         description = "Pure stream http push technology";
         homepage = "https://github.com/wandenberg/nginx-push-stream-module";
-        license = with lib.licenses; [ gpl3 ];
+        license = with lib.licenses; gpl3;
         maintainers = [ ];
       };
     };
@@ -668,7 +668,7 @@ let
       meta = {
         description = "Media Streaming Server";
         homepage = "https://github.com/arut/nginx-rtmp-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -689,7 +689,7 @@ let
       meta = {
         description = "Generates CDN tokens, either as a cookie or as a query string parameter";
         homepage = "https://github.com/kaltura/nginx-secure-token-module";
-        license = with lib.licenses; [ agpl3Only ];
+        license = with lib.licenses; agpl3Only;
         maintainers = [ ];
       };
     };
@@ -707,7 +707,7 @@ let
       meta = {
         description = "Various set_xxx directives added to the rewrite module (md5/sha1, sql/json quoting and many more)";
         homepage = "https://github.com/openresty/set-misc-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -725,7 +725,7 @@ let
       meta = {
         description = "Shibboleth auth request";
         homepage = "https://github.com/nginx-shib/nginx-http-shibboleth";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -743,7 +743,7 @@ let
       meta = {
         description = "Implements a collection of augmented statistics based on HTTP-codes and upstreams response time";
         homepage = "https://github.com/goldenclone/nginx-sla";
-        license = with lib.licenses; [ unfree ]; # no license in repo
+        license = with lib.licenses; unfree; # no license in repo
         maintainers = [ ];
       };
     };
@@ -761,7 +761,7 @@ let
       meta = {
         description = "Adds ability to cache static files";
         homepage = "https://github.com/friCKLE/ngx_slowfs_cache";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -779,7 +779,7 @@ let
       meta = {
         description = "Expose querystring parameters sorted in a variable";
         homepage = "https://github.com/wandenberg/nginx-sorted-querystring-module";
-        license = with lib.licenses; [ mit ];
+        license = with lib.licenses; mit;
         maintainers = [ ];
       };
     };
@@ -799,7 +799,7 @@ let
       meta = {
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [
           de11n
           despsyched
@@ -820,7 +820,7 @@ let
       meta = {
         description = "Send statistics to statsd";
         homepage = "https://github.com/harvesthq/nginx-statsd";
-        license = with lib.licenses; [ bsd3 ];
+        license = with lib.licenses; bsd3;
         maintainers = [ ];
       };
     };
@@ -838,7 +838,7 @@ let
       meta = {
         description = "Stream server traffic status core module";
         homepage = "https://github.com/vozlt/nginx-module-stream-sts";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -856,7 +856,7 @@ let
       meta = {
         description = "Stream server traffic status module";
         homepage = "https://github.com/vozlt/nginx-module-sts";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -874,7 +874,7 @@ let
       meta = {
         description = "Filter module which can do both regular expression and fixed string substitutions";
         homepage = "https://github.com/yaoweibin/ngx_http_substitutions_filter_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -892,7 +892,7 @@ let
       meta = {
         description = "Nginx sysguard module";
         homepage = "https://github.com/vozlt/nginx-module-sysguard";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -910,7 +910,7 @@ let
       meta = {
         description = "Handle file uploads using multipart/form-data encoding and resumable uploads";
         homepage = "https://github.com/fdintino/nginx-upload-module";
-        license = with lib.licenses; [ bsd3 ];
+        license = with lib.licenses; bsd3;
         maintainers = [ ];
       };
     };
@@ -928,7 +928,7 @@ let
       meta = {
         description = "Support upstream health check";
         homepage = "https://github.com/yaoweibin/nginx_upstream_check_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -951,7 +951,7 @@ let
       meta = {
         description = "Tarantool NginX upstream module (REST, JSON API, websockets, load balancing)";
         homepage = "https://github.com/tarantool/nginx_upstream_module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -969,7 +969,7 @@ let
       meta = {
         description = "URL encoding converting module";
         homepage = "https://github.com/vozlt/nginx-module-url";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = [ ];
       };
     };
@@ -993,7 +993,7 @@ let
       meta = {
         description = "Extract thumbs from a video file";
         homepage = "https://github.com/wandenberg/nginx-video-thumbextractor-module";
-        license = with lib.licenses; [ gpl3 ];
+        license = with lib.licenses; gpl3;
         maintainers = [ ];
       };
     };
@@ -1030,7 +1030,7 @@ let
       meta = {
         description = "VOD packager";
         homepage = "https://github.com/kaltura/nginx-vod-module";
-        license = with lib.licenses; [ agpl3Only ];
+        license = with lib.licenses; agpl3Only;
         maintainers = [ ];
       };
     };
@@ -1048,7 +1048,7 @@ let
       meta = {
         description = "Virtual host traffic status module";
         homepage = "https://github.com/vozlt/nginx-module-vts";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ SuperSandro2000 ];
       };
     };
@@ -1066,7 +1066,7 @@ let
       meta = {
         description = "Streaming ZIP archiver for nginx";
         homepage = "https://github.com/evanmiller/mod_zip";
-        license = with lib.licenses; [ bsd3 ];
+        license = with lib.licenses; bsd3;
         broken = stdenv.hostPlatform.isDarwin;
         maintainers = with lib.maintainers; [
           DutchGerman
@@ -1090,7 +1090,7 @@ let
       meta = {
         description = "Nginx modules for the Zstandard compression";
         homepage = "https://github.com/tokers/zstd-nginx-module";
-        license = with lib.licenses; [ bsd2 ];
+        license = with lib.licenses; bsd2;
         maintainers = with lib.maintainers; [ SuperSandro2000 ];
       };
     };

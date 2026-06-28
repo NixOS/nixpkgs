@@ -86,7 +86,7 @@ buildPythonPackage rec {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
     changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Multitrack Non-Linear Video Editor";
     homepage = "https://jliljebl.github.io/flowblade/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ polygon ];
     mainProgram = "flowblade";

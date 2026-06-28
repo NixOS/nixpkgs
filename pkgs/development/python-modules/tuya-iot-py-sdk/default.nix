@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tuya IoT Python SDK for Tuya Open API";
     homepage = "https://github.com/tuya/tuya-iot-python-sdk";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     description = "Library for the weenect API";
     homepage = "https://github.com/eifinger/aioweenect";
     changelog = "https://github.com/eifinger/aioweenect/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Program to convert the IANA timezone database files into VTIMEZONE files compatible with the iCalendar specification";
     changelog = "https://github.com/libical/vzic/blob/${finalAttrs.src.rev}/ChangeLog";
     mainProgram = "vzic";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = with lib.licenses; gpl2Plus;
     maintainers = with lib.maintainers; [ moraxyc ];
     broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
     platforms = lib.platforms.unix;

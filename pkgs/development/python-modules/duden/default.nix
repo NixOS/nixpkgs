@@ -53,7 +53,7 @@ let
         various information about given german word. The provided data are
         parsed from german dictionary duden.de.
       '';
-      license = with lib.licenses; [ mit ];
+      license = with lib.licenses; mit;
       mainProgram = "duden";
       maintainers = with lib.maintainers; [
         linuxissuper

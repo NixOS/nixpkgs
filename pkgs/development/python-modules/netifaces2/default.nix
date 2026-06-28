@@ -36,7 +36,7 @@ buildPythonPackage {
   meta = {
     description = "Portable network interface information";
     homepage = "https://github.com/SamuelYvon/netifaces-2";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ pluiedev ];
   };

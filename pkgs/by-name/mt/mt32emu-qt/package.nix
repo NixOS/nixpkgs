@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       synthesis and conversion of pre-recorded SMF files to WAVE making use of
       the mt32emu library and the Qt framework.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
   };

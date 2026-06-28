@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A complete implementation of 10918-1 (JPEG) coming from jpeg.org (the ISO group) with extensions for HDR, lossless and alpha channel coding standardized as ISO/IEC 18477 (JPEG XT)";
     homepage = "https://github.com/thorfdbg/libjpeg";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; gpl3;
     changelog = "https://github.com/thorfdbg/libjpeg/README.history";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;

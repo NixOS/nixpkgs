@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Use webpack to generate your static bundles";
     homepage = "https://github.com/owais/django-webpack-loader";
     changelog = "https://github.com/django-webpack/django-webpack-loader/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
   };
 }

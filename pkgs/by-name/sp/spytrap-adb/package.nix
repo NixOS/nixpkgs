@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/spytrap-org/spytrap-adb";
     changelog = "https://github.com/spytrap-org/spytrap-adb/releases/tag/v${finalAttrs.version}";
     mainProgram = "spytrap-adb";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ kpcyrd ];
     platforms = lib.platforms.all;
   };

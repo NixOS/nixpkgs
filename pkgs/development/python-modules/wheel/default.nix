@@ -40,7 +40,7 @@ buildPythonPackage rec {
       It should be noted that wheel is not intended to be used as a library,
       and as such there is no stable, public API.
     '';
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
 }

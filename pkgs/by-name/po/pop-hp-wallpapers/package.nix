@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Wallpapers for High-Performance System76 products";
     homepage = "https://pop.system76.com/";
-    license = with lib.licenses; [ cc-by-sa-40 ];
+    license = with lib.licenses; cc-by-sa-40;
     maintainers = with lib.maintainers; [ pandapip1 ];
     platforms = lib.platforms.all;
   };

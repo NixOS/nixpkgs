@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Visualization library for many-threaded devices";
     homepage = "https://github.com/Viskores/viskores";
     changelog = "https://github.com/Viskores/viskores/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];
   };

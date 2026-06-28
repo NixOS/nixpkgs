@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for libseccomp";
-    license = with lib.licenses; [ lgpl21 ];
+    license = with lib.licenses; lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

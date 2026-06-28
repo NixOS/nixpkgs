@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python wrapper for MeteoAlarm.org";
     homepage = "https://github.com/rolfberkenbosch/meteoalert-api";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

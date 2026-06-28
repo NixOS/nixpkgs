@@ -180,7 +180,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Native debugger extension for VSCode based on LLDB";
     homepage = "https://github.com/vadimcn/vscode-lldb";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.r4v3n6101 ];
     platforms = lib.platforms.all;
   };

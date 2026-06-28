@@ -87,7 +87,7 @@ buildPythonPackage (finalAttrs: {
       web application vulnerabilities.
     '';
     homepage = "https://wfuzz.readthedocs.io";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [
       bad3r
       pamplemousse

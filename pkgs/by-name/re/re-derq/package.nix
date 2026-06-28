@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "derq";
     description = "Open reimplementation of Apple's derq";
     homepage = "https://codeberg.org/viraptor/re-derq";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ viraptor ];
     platforms = lib.platforms.unix;
   };

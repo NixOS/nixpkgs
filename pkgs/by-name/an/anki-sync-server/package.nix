@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = with lib.licenses; agpl3Plus;
     maintainers = with lib.maintainers; [ martinetd ];
     mainProgram = "anki-sync-server";
   };

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "PyPA recommended tool for installing Python packages";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     homepage = "https://pip.pypa.io/";
     knownVulnerabilities = [
       "CVE-2021-28363"

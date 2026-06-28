@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
     mainProgram = "pykulersky";
     homepage = "https://github.com/emlove/pykulersky";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

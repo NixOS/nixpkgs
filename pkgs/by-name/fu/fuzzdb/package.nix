@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Comprehensive collection of attack patterns and predictable resource names used for security testing and fuzzing application";
     homepage = "https://github.com/fuzzdb-project/fuzzdb";
-    license = with lib.licenses; [ bsd3 ];
+    license = with lib.licenses; bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

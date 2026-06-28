@@ -47,7 +47,7 @@ buildGoModule (finalAttrs: {
     description = "YARA-based IOC scanner";
     mainProgram = "spyre";
     homepage = "https://github.com/spyre-project/spyre";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = with lib.licenses; lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

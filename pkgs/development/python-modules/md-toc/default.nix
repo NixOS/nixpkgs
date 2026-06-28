@@ -41,7 +41,7 @@ buildPythonPackage rec {
     mainProgram = "md_toc";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
     changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

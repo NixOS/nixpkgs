@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Print images inline in kitty";
     homepage = "https://git.sr.ht/~zethra/kitty-img";
     changelog = "https://git.sr.ht/~zethra/kitty-img/refs/${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ gaykitty ];
     mainProgram = "kitty-img";
   };

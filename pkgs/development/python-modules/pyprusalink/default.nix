@@ -31,7 +31,7 @@ buildPythonPackage rec {
     description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
     changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
-    license = with lib.licenses; [ asl20 ];
+    license = with lib.licenses; asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

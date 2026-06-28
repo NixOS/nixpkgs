@@ -33,7 +33,7 @@ appimageTools.wrapType2 rec {
   meta = {
     description = "Powerful and feature-rich Hypixel anti-sniping stats overlay";
     homepage = "https://cubelify.com/";
-    license = with lib.licenses; [ unfree ];
+    license = with lib.licenses; unfree;
     mainProgram = "cubelify";
     maintainers = with lib.maintainers; [ yunfachi ];
     platforms = [ "x86_64-linux" ];

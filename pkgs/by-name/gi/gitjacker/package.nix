@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
       even where directory listings are disabled.
     '';
     homepage = "https://github.com/liamg/gitjacker";
-    license = with lib.licenses; [ unlicense ];
+    license = with lib.licenses; unlicense;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

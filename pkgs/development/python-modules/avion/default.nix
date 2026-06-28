@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python API for controlling Avi-on Bluetooth dimmers";
     homepage = "https://github.com/mjg59/python-avion";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

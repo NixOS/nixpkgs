@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication {
     description = "Tool to searching for secret on swaggerhub";
     mainProgram = "swaggerhole";
     homepage = "https://github.com/Liodeus/swaggerHole";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

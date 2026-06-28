@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/HolyPangolin/animatch/";
     description = "Cute match three game for the Librem 5 smartphone";
     mainProgram = "animatch";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = with lib.licenses; gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
   };
 })

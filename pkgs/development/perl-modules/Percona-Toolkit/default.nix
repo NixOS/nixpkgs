@@ -66,7 +66,7 @@ buildPerlPackage {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks";
     homepage = "https://www.percona.com/software/database-tools/percona-toolkit";
     changelog = "https://docs.percona.com/percona-toolkit/release_notes.html";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

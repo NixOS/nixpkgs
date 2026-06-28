@@ -43,7 +43,7 @@ buildPythonPackage {
   meta = {
     description = "Control Govee Lights from Python";
     homepage = "https://github.com/wez/govee-py";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

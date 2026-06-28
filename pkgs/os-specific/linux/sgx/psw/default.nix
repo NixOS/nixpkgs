@@ -277,6 +277,6 @@ stdenv.mkDerivation rec {
       citadelcore
     ];
     platforms = [ "x86_64-linux" ];
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
   };
 }

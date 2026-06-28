@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client the Mi Tv 3";
     homepage = "https://github.com/simse/pymitv";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

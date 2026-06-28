@@ -37,7 +37,7 @@ buildPythonPackage rec {
     description = "Python tool for Nitrokeys' firmware update";
     mainProgram = "nkdfu";
     homepage = "https://github.com/Nitrokey/nkdfu";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; gpl2Only;
     maintainers = [ ];
   };
 }

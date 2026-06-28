@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mothsart/pouf";
     changelog = "https://github.com/mothsart/pouf/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ mothsart ];
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     mainProgram = "pouf";
   };
 })

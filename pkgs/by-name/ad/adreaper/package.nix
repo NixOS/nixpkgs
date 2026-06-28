@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/m0n1x90/ADReaper/releases/tag/ADReaperv${finalAttrs.version}";
     # Upstream doesn't have a license yet
     # https://github.com/AidenPearce369/ADReaper/issues/2
-    license = with lib.licenses; [ unfree ];
+    license = with lib.licenses; unfree;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ADReaper";
   };

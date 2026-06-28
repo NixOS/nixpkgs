@@ -71,7 +71,7 @@ lib.checkListOfEnum "vimix-icon-theme: color variants"
     meta = {
       description = "Material Design icon theme based on Paper icon theme";
       homepage = "https://github.com/vinceliuice/vimix-icon-theme";
-      license = with lib.licenses; [ cc-by-sa-40 ];
+      license = with lib.licenses; cc-by-sa-40;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ romildo ];
     };

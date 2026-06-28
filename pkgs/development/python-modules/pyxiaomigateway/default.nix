@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to communicate with the Xiaomi Gateway";
     homepage = "https://github.com/Danielhiversen/PyXiaomiGateway/";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Scan a file to look for certain PDF keywords";
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
-    license = with lib.licenses; [ free ];
+    license = with lib.licenses; free;
     mainProgram = "pdfid";
     maintainers = [ ];
     platforms = lib.platforms.unix;

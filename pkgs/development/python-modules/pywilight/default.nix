@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for WiLight device";
     homepage = "https://github.com/leofig-rj/pywilight";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

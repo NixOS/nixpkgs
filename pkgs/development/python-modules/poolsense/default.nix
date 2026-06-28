@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access PoolSense device";
     homepage = "https://github.com/haemishkyd/poolsense";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

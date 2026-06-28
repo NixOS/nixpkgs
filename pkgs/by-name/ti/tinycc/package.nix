@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
-    license = with lib.licenses; [ lgpl21Only ];
+    license = with lib.licenses; lgpl21Only;
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
       onemoresuza

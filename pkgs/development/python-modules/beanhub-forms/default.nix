@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "Library for generating and processing BeanHub's custom forms";
     homepage = "https://github.com/LaunchPlatform/beanhub-forms/";
     changelog = "https://github.com/LaunchPlatform/beanhub-forms/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
 }
