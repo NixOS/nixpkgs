@@ -36,6 +36,7 @@
   # passthru
   testers,
   wgpu-py,
+  pkgs,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "wgpu-py";
@@ -138,6 +139,8 @@ buildPythonPackage (finalAttrs: {
     package = wgpu-py;
     command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
   };
+
+  passthru.examples.triangle = pkgs.callPackage ./triangle.nix { };
 
   meta = {
     description = "WebGPU for Python";
