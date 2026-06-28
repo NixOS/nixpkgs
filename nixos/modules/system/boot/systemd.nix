@@ -40,6 +40,7 @@ let
     "network-online.target"
     "nss-lookup.target"
     "nss-user-lookup.target"
+    "time-set.target"
     "time-sync.target"
     "first-boot-complete.target"
   ]

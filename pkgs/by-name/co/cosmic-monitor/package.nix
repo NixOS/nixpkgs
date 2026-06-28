@@ -1,32 +1,27 @@
-# SPDX-License-Identifier: MIT
-# SPDX-FileCopyrightText: Lily Foster <lily@lily.flowers>
-# Portions of this code are adapted from nixos-cosmic
-# https://github.com/lilyinstarlight/nixos-cosmic
 {
   lib,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  libcosmicAppHook,
   just,
-  bash,
-  nix-update-script,
+  libcosmicAppHook,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "cosmic-idle";
+  pname = "cosmic-monitor";
   version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-idle";
+    repo = "cosmic-monitor";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-0tcrOfVT5b57ev3b5F2U78F2QPGFwp94bqFVNyKH0Yk=";
+    hash = "sha256-CiJ9LeNcdOyC8yn0c7hCz0QEecxYK95KGvs1SWr9360=";
   };
 
-  cargoHash = "sha256-wAjFC6qAC3nllbnZf0KVaZTEztNYo6GTvwcp5FYmXLw=";
+  cargoHash = "sha256-OMhLPQ3GkV/wdeb9F7lsKY1Uzzg8+UlhOeakGZo6mYk=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -34,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
 
   dontUseJustBuild = true;
@@ -47,10 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  postPatch = ''
-    substituteInPlace src/main.rs --replace-fail '"/bin/sh"' '"${lib.getExe' bash "sh"}"'
-  '';
 
   passthru = {
     tests = {
@@ -71,12 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Idle daemon for the COSMIC Desktop Environment";
-    homepage = "https://github.com/pop-os/cosmic-idle";
+    homepage = "https://github.com/pop-os/cosmic-monitor";
+    description = "COSMIC System Monitor";
+    mainProgram = "cosmic-monitor";
     license = lib.licenses.gpl3Only;
-    mainProgram = "cosmic-idle";
     teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 })
