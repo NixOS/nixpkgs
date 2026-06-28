@@ -79,6 +79,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211

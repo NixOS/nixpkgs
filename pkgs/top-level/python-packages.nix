@@ -516,8 +516,6 @@ self: super: with self; {
 
   aiorwlock = callPackage ../development/python-modules/aiorwlock { };
 
-  aiosasl = callPackage ../development/python-modules/aiosasl { };
-
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
   aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
@@ -599,8 +597,6 @@ self: super: with self; {
   aiowithings = callPackage ../development/python-modules/aiowithings { };
 
   aiowmi = callPackage ../development/python-modules/aiowmi { };
-
-  aioxmpp = callPackage ../development/python-modules/aioxmpp { };
 
   aioymaps = callPackage ../development/python-modules/aioymaps { };
 

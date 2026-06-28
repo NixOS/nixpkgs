@@ -89,7 +89,6 @@ let
           gst-plugins-base
           gst-plugins-good
           gst-libav
-          gst-vaapi
           ;
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
