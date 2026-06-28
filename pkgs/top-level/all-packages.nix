@@ -2413,18 +2413,6 @@ with pkgs;
     withCloudUi = true;
   };
 
-  nyxt = callPackage ../applications/networking/browsers/nyxt {
-    sbcl = sbcl_2_4_6;
-    inherit (gst_all_1)
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      ;
-  };
-
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
 
