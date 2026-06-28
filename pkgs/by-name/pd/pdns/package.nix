@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    changelog = "https://doc.powerdns.com/authoritative/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = lib.platforms.unix;
