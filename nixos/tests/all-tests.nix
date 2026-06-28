@@ -576,6 +576,7 @@ in
   ferm = runTest ./ferm.nix;
   ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
+  fiduswriter = import ./fiduswriter { inherit pkgs runTest; };
   filebrowser = runTest ./filebrowser.nix;
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
