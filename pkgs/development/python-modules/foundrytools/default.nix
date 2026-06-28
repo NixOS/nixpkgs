@@ -19,14 +19,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "foundrytools";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ftCLI";
     repo = "FoundryTools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dmMu9FTr754ax6dSfz1cn/CgmMVbEECQgyZaW+66UrU=";
+    hash = "sha256-E0sJ/shudZTvkB8be5KsPJDmCoytv2notrrNT9nDF0I=";
   };
 
   build-system = [
