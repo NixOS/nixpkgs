@@ -68,8 +68,10 @@ let
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
-  allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
-  blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+  licenseId = l: if l ? licenseType then lib.licenses.toSPDX l else l.url or l;
+
+  allowlist = map licenseId (config.allowlistedLicenses or config.whitelistedLicenses or [ ]);
+  blocklist = map licenseId (config.blocklistedLicenses or config.blacklistedLicenses or [ ]);
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -87,11 +89,11 @@ let
     attrs ? meta.license
     && (
       if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
+        any (l: elem (licenseId l) list) attrs.meta.license
       else if attrs.meta.license ? "licenseType" then
         containsListLicenses attrs.meta.license
       else
-        elem attrs.meta.license list
+        elem (licenseId attrs.meta.license) list
     );
 
   hasAllowlistedLicense = hasListedLicense allowlist;
