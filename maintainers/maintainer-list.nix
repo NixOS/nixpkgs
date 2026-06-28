@@ -18969,6 +18969,12 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+  mukundakatta = {
+    email = "mukunda.vjcs6@gmail.com";
+    github = "MukundaKatta";
+    githubId = 99349238;
+    name = "Mukunda Katta";
+  };
   mulatta = {
     email = "seungwon@mulatta.io";
     github = "mulatta";

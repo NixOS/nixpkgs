@@ -138,6 +138,8 @@ self: super: with self; {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  agent-budget = callPackage ../development/python-modules/agent-budget { };
+
   agent-client-protocol = callPackage ../development/python-modules/agent-client-protocol { };
 
   agent-py = callPackage ../development/python-modules/agent-py { };
@@ -2041,6 +2043,8 @@ self: super: with self; {
   beautysh = callPackage ../development/python-modules/beautysh { };
 
   bech32 = callPackage ../development/python-modules/bech32 { };
+
+  bedrock-ops = callPackage ../development/python-modules/bedrock-ops { };
 
   beetcamp = callPackage ../development/python-modules/beetcamp { };
 
@@ -5139,6 +5143,8 @@ self: super: with self; {
   embrace = callPackage ../development/python-modules/embrace { };
 
   embreex = callPackage ../development/python-modules/embreex { };
+
+  embspec = callPackage ../development/python-modules/embspec { };
 
   emcee = callPackage ../development/python-modules/emcee { };
 
