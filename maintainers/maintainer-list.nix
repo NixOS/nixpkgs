@@ -26043,6 +26043,11 @@
     github = "snpschaaf";
     githubId = 105843013;
   };
+  snregales = {
+    github = "snregales";
+    githubId = 31469087;
+    name = "Stephan N. Regales";
+  };
   snu = {
     email = "kabelfrickler@gmail.com";
     github = "snue";

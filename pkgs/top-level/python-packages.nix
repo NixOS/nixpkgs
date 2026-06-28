@@ -12364,6 +12364,8 @@ self: super: with self; {
 
   owslib = callPackage ../development/python-modules/owslib { };
 
+  oxitest = callPackage ../development/python-modules/oxitest { };
+
   oyaml = callPackage ../development/python-modules/oyaml { };
 
   p1monitor = callPackage ../development/python-modules/p1monitor { };
