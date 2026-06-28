@@ -299,7 +299,11 @@ let
                   default = "root";
                   type = types.str;
                   description = ''
-                    The user under which the container should run.
+                    The user under which the container should run. It must met the following conditions:
+
+                     * The home directory must be created and be non empty.
+                     * The user must have configured sub UID and GID ranges. E.g. set the
+                       autoSubUidGidRange option to true for this user.
                   '';
                 };
               };
@@ -599,6 +603,13 @@ in
                 podman,
                 ...
               }:
+              let
+                podmanUserIsNotRoot = cfg.backend == "podman" && podman.user != "root";
+                podmanUserConfig = config.users.users.${podman.user};
+                podmanUserHasSubUidGidRanges =
+                  (podmanUserConfig.subUidRanges != [ ] && podmanUserConfig.subGidRanges != [ ])
+                  || podmanUserConfig.autoSubUidGidRange;
+              in
               [
                 {
                   assertion = imageFile == null || imageStream == null;
@@ -611,11 +622,25 @@ in
                 }
                 {
                   assertion =
-                    cfg.backend == "podman" && podman.sdnotify == "healthy" && podman.user != "root"
-                    -> config.users.users.${podman.user}.uid != null;
+                    podmanUserIsNotRoot -> podmanUserConfig.createHome && podmanUserConfig.home != "/var/empty";
+                  message = ''
+                    Starting the podman container ${name} as non "root", requires its running user
+                    ${podman.user} has a home directory.
+                  '';
+                }
+                {
+                  assertion = podmanUserIsNotRoot && podman.sdnotify == "healthy" -> podmanUserConfig.uid != null;
                   message = ''
                     Rootless container ${name} (with podman and sdnotify=healthy)
                     requires that its running user ${podman.user} has a statically specified uid.
+                  '';
+                }
+                {
+                  assertion = podmanUserIsNotRoot -> podmanUserHasSubUidGidRanges;
+                  message = ''
+                    Rootless container ${name} (with podman) requires that its running user
+                    ${podman.user} has configured sub UID and GID ranges. E.g. set
+                    users.users.${podman.user}.autoSubUidGidRange to true.
                   '';
                 }
               ];
