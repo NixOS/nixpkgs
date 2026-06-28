@@ -25864,6 +25864,12 @@
     githubId = 57048005;
     name = "snicket2100";
   };
+  snifexx = {
+    name = "Matteo Bonesoli";
+    email = "snifex@phnxdev.eu";
+    githubId = 71451061;
+    github = "snifexx";
+  };
   sno2wman = {
     name = "SnO2WMaN";
     email = "me@sno2wman.net";
