@@ -132,6 +132,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # https://github.com/microsoft/onnxruntime/issues/9155
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
+  ]
+  # Include additional target_link_libraries needed for cudnn-frontend >= 2.19
+  # See: https://github.com/microsoft/onnxruntime/pull/28849
+  # These changes are included in 548ab6e and fc7a9f0 upstream
+  ++ lib.optionals cudaSupport [
+    ./nvrtc-link.patch
   ];
 
   postPatch = ''
