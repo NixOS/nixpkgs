@@ -55,7 +55,7 @@ let
     maintainers = with lib.maintainers; [
       hhr2020
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
 stdenv.mkDerivation {
@@ -67,12 +67,15 @@ stdenv.mkDerivation {
     ;
 
   nativeBuildInputs = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
   ];
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
     cp -r ${unwrapped}/share/* $out/share
     cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
@@ -83,7 +86,23 @@ stdenv.mkDerivation {
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
     ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R ${unwrapped}/Applications/Clash\ Verge.app $out/Applications/
+    chmod -R u+w $out/Applications/Clash\ Verge.app
 
+    ln -s ${mihomo}/bin/mihomo $out/Applications/Clash\ Verge.app/Contents/MacOS/verge-mihomo
+
+    mkdir -p $out/Applications/Clash\ Verge.app/Contents/Resources/resources
+    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/Applications/Clash\ Verge.app/Contents/Resources/resources/geoip.dat
+    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/Applications/Clash\ Verge.app/Contents/Resources/resources/geosite.dat
+    ln -s ${dbip-country-lite.mmdb} $out/Applications/Clash\ Verge.app/Contents/Resources/resources/Country.mmdb
+    cp ${service}/bin/clash-verge-service $out/Applications/Clash\ Verge.app/Contents/Resources/resources/clash-verge-service
+
+    ln -s "$out/Applications/Clash Verge.app/Contents/MacOS/clash-verge" "$out/bin/clash-verge"
+  ''
+  + ''
     runHook postInstall
   '';
   # For testing convenience

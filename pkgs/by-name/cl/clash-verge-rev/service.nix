@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   meta,
@@ -31,17 +33,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "standalone"
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     procps
   ];
   # build test helper binaries for tests
-  preCheck = ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     cargo build --features=standalone,test
   '';
-  checkFeatures = [
+  checkFeatures = lib.optionals stdenv.hostPlatform.isLinux [
     "standalone"
     "test"
     "client"
   ];
+  doCheck = stdenv.hostPlatform.isLinux;
   inherit meta;
 })
