@@ -299,7 +299,7 @@ let
                   default = "root";
                   type = types.str;
                   description = ''
-                    The user under which the container should run.
+                    The user under which the container should run. The user must be part of the "podman" group.
                   '';
                 };
               };
@@ -599,6 +599,14 @@ in
                 podman,
                 ...
               }:
+              let
+                nonRootPodmanUser = cfg.backend == "podman" && podman.user != "root";
+                podmanUserConfig = config.users.users.${podman.user};
+                podmanUserIsInPodmangroup =
+                  elem "podman" podmanUserConfig.extraGroups
+                  || podmanUserConfig.group == "podman"
+                  || elem podman.user config.users.groups."podman".members;
+              in
               [
                 {
                   assertion = imageFile == null || imageStream == null;
@@ -610,12 +618,16 @@ in
                   message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
                 }
                 {
-                  assertion =
-                    cfg.backend == "podman" && podman.sdnotify == "healthy" && podman.user != "root"
-                    -> config.users.users.${podman.user}.uid != null;
+                  assertion = nonRootPodmanUser && podman.sdnotify == "healthy" -> podmanUserConfig.uid != null;
                   message = ''
                     Rootless container ${name} (with podman and sdnotify=healthy)
                     requires that its running user ${podman.user} has a statically specified uid.
+                  '';
+                }
+                {
+                  assertion = nonRootPodmanUser -> podmanUserIsInPodmangroup;
+                  message = ''
+                    Rootless container ${name} (with podman) requires that its running user ${podman.user} is part of the "podman" user group.
                   '';
                 }
               ];
