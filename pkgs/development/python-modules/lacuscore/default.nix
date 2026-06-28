@@ -13,7 +13,7 @@
   ua-parser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lacuscore";
   version = "1.25.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gCNu0piYtyqXFIYhPhjrVk6qcPPVOsXDcFB3BG/g9G8=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
-    changelog = "https://github.com/ail-project/LacusCore/releases/tag/${src.tag}";
+    changelog = "https://github.com/ail-project/LacusCore/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
