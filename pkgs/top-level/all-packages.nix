@@ -2350,6 +2350,8 @@ with pkgs;
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
+  hareTools = recurseIntoAttrs (callPackage ./hare-tools.nix { });
+
   hdf5 = callPackage ../tools/misc/hdf5 {
     fortranSupport = false;
     fortran = gfortran;
