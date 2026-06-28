@@ -1247,11 +1247,11 @@
     "vendorHash": "sha256-C8TE7uxMf6LOTS6v22mXwUdk2eqQRinwrCH4ZVUCx4k="
   },
   "splunk-terraform_signalfx": {
-    "hash": "sha256-zwq7jCST2EkNk+UlKgLY2r3rCm5D009HYMru9KSVmuc=",
+    "hash": "sha256-bWZ5TvTVoYA6J67mi24rSzf5Qf6jk0RUgiC9CAa1s1o=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.30.2",
+    "rev": "v9.30.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-27mA2OAApUtPawZZk7Wxme9TfQY19TraIJSqHh8MFZg="
   },
