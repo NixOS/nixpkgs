@@ -12,7 +12,7 @@
   pnpmConfigHook,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
   version = "1.10.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
-    tag = "desktop/v${version}";
+    tag = "desktop/v${finalAttrs.version}";
     hash = "sha256-+k09Psuf6Bvjoc9Z1O0u2v44IIsaSQF1QbjJM6cWlUw=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     fetcherVersion = 3;
     hash = "sha256-dF0nnBBpJaFq6MYCZVMMt4D85EWDv8zsGEbVnyhP0kE=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -89,7 +92,7 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/follow" ];
   };
 
-  icon = src + "/apps/desktop/resources/icon.png";
+  icon = finalAttrs.src + "/apps/desktop/resources/icon.png";
 
   buildPhase = ''
     runHook preBuild
@@ -121,12 +124,12 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D "${desktopItem}/share/applications/"* \
+    install -m 444 -D "${finalAttrs.desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/follow.png
+      convert -background none -resize "$size"x"$size" ${finalAttrs.icon} $out/share/icons/hicolor/"$size"x"$size"/apps/follow.png
     done
 
     runHook postInstall
@@ -142,7 +145,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Next generation information browser";
     homepage = "https://github.com/RSSNext/Folo";
-    changelog = "https://github.com/RSSNext/Folo/releases/tag/${src.tag}";
+    changelog = "https://github.com/RSSNext/Folo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       amadejkastelic
@@ -151,4 +154,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "follow";
   };
-}
+})
