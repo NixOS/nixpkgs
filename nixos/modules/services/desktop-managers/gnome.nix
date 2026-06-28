@@ -400,6 +400,15 @@ in
         pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
 
+      # Restarting this unit terminates the active GNOME session.
+      systemd.user.services.gnome-session-monitor = {
+        restartIfChanged = false;
+        overrideStrategy = "asDropin";
+        # No need to add the NixOS default Environment="Path=coreutils:...",
+        # to the gnome-session-monitor service.
+        enableDefaultPath = false;
+      };
+
       services.udev.packages = [
         # Force enable KMS modifiers for devices that require them.
         # https://gitlab.gnome.org/GNOME/pkgs.mutter/-/merge_requests/1443
