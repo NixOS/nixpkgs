@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Core parser and runner for kulala.nvim";
+    description = "HTTP client library powering the Kulala toolchain";
     homepage = "https://github.com/mistweaverco/kulala-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
