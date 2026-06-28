@@ -862,6 +862,7 @@ mapAliases {
   gamecube-tools = throw "gamecube-tools was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   gamehub = throw "'gamehub' has been removed as it was archived upstream and depended on webkitgtk 4.0"; # Added 2026-06-07
   gandi-cli = throw "'gandi-cli' has been removed as it is unmaintained upstream"; # Added 2026-01-11
+  garage-webui = throw "'garage-webui' has been removed as it is unmaintained upstream"; # Added 2026-06-23
   garage_0_8 = throw "'garage_0_8' has been removed as it is unmaintained upstream"; # Added 2025-06-23
   garage_0_8_7 = throw "'garage_0_8_7' has been removed as it is unmaintained upstream"; # Added 2025-06-23
   garage_0_9 = throw "'garage_0_9' has been removed as it is unmaintained upstream"; # Added 2025-09-16
