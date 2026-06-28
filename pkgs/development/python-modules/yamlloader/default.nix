@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-BByyKCCRZZYloxKKZVhSyH82I4hZNxCRqUddinRzYpE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = [ "version" ]' 'version = "${version}"'
+  '';
+
   build-system = [
     hatch-vcs
     hatchling
