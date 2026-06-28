@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "djlint";
-  version = "1.36.4";
+  version = "1.39.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1DXBDVe8Ae8joJOYwwlBZB8MVubDPVhh+TiJBpL2u2M=";
+    hash = "sha256-vW1K8z4kPoPEHG2OCuZnIkJUo6zHWiA88QlyrSunMh4=";
   };
 
   build-system = with python3.pkgs; [
