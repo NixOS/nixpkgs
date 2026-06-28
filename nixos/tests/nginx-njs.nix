@@ -1,7 +1,8 @@
+{ pkgs, lib, ... }:
 {
   name = "nginx-njs";
 
-  containers.machine =
+  nodes.machine =
     {
       config,
       lib,

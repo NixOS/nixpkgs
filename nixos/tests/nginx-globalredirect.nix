@@ -2,7 +2,7 @@
 {
   name = "nginx-globalredirect";
 
-  containers = {
+  nodes = {
     webserver =
       { pkgs, lib, ... }:
       {

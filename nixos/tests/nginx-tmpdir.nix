@@ -5,7 +5,7 @@ in
 {
   name = "nginx-tmpdir";
 
-  containers.machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       environment.etc."tmpfiles.d/nginx-uploads.conf".text = "d ${dst-dir} 0755 nginx nginx 1d";

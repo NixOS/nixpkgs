@@ -1,7 +1,8 @@
+{ pkgs, ... }:
 {
   name = "nginx-auth";
 
-  containers = {
+  nodes = {
     webserver =
       { pkgs, lib, ... }:
       {
