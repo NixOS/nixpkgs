@@ -16,15 +16,16 @@ buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
 
   inherit (info) version vscodeVersion;
-  pname = "windsurf";
 
-  executableName = "windsurf";
-  longName = "Windsurf";
-  shortName = "windsurf";
-  libraryName = "windsurf";
-  iconName = "windsurf";
+  pname = "devin-desktop";
 
-  sourceRoot = if stdenv.hostPlatform.isDarwin then "Windsurf.app" else "Windsurf";
+  executableName = "devin-desktop";
+  longName = "devin-desktop";
+  shortName = "devin-desktop";
+  libraryName = "devin-desktop";
+  iconName = "devin-desktop";
+
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "Devin.app" else "Devin";
 
   src = fetchurl { inherit (info) url sha256; };
 
@@ -41,9 +42,9 @@ buildVscode {
     description = "Agentic IDE powered by AI Flow paradigm";
     longDescription = ''
       The first agentic IDE, and then some.
-      The Windsurf Editor is where the work of developers and AI truly flow together, allowing for a coding experience that feels like literal magic.
+      Devin Desktop is where the work of developers and AI truly flow together, allowing for a coding experience that feels like literal magic.
     '';
-    homepage = "https://codeium.com/windsurf";
+    homepage = "https://devin.ai/desktop";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       sarahec
@@ -51,7 +52,6 @@ buildVscode {
     ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
