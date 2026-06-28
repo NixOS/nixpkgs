@@ -1,4 +1,4 @@
-{ runTest, ... }:
+{ pkgs, runTest, ... }:
 builtins.listToAttrs (
   map
     (packageName: {
@@ -6,7 +6,7 @@ builtins.listToAttrs (
       value = runTest {
         name = "nginx-variant-${packageName}";
 
-        containers.machine =
+        nodes.machine =
           { pkgs, ... }:
           {
             services.nginx = {
