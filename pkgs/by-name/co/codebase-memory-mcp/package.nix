@@ -22,13 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  makefile = "Makefile.cbm";
+
   # scripts/build.sh verifies CC via `file`, which fails on Nix's compiler wrapper.
   # Call make directly — mirrors upstream flake.nix.
-  buildPhase = ''
-    runHook preBuild
-    make -j$NIX_BUILD_CORES -f Makefile.cbm cbm CFLAGS_EXTRA='-DCBM_VERSION=\"${finalAttrs.version}\"'
-    runHook postBuild
-  '';
+  makeFlags = [
+    "cbm"
+    "CFLAGS_EXTRA='-DCBM_VERSION=\"${finalAttrs.version}\"'"
+  ];
 
   installPhase = ''
     runHook preInstall
