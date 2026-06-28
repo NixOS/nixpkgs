@@ -28414,6 +28414,12 @@
     githubId = 5623227;
     name = "Quentin Boyer";
   };
+  tree-sapii = {
+    email = "supersapiiiiii@gmail.com";
+    github = "tree-sapii";
+    githubId = 144389458;
+    name = "sapii";
+  };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";
     github = "treemo";
