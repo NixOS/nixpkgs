@@ -4,6 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  nukeReferences,
+  python,
   replaceVars,
 
   # build
@@ -143,9 +145,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    nukeReferences
+  ]
   # building the docs fails with the following error when cross compiling
   #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     furo
     sphinx-autodoc-typehints
     sphinxHook
@@ -156,6 +161,10 @@ buildPythonPackage rec {
     psycopg-c
     typing-extensions
   ];
+
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/psycopg_c/{pq.c,_psycopg.c}
+  '';
 
   pythonImportsCheck = [
     "psycopg"
