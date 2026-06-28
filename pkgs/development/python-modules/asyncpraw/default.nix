@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncpraw";
-  version = "8.0.1";
+  version = "8.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "asyncpraw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lVRIZP9XsUEM1Czl4YC10EdSC8RmO5ugPgo3THyqi9A=";
+    hash = "sha256-Gc50zlsYp+5ooocfbfC4BhrJs4yOmOdOl9/T+ut4MMw=";
   };
 
   pythonRelaxDeps = [
