@@ -5,6 +5,17 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.services.accounts-daemon;
+
+  package =
+    if (cfg.useHomed || config.services.homed.enable) then
+      pkgs.accountsservice
+    else
+      pkgs.accountsservice.override {
+        useHomed = false;
+      };
+in
 {
   meta = {
     teams = [ lib.teams.freedesktop ];
@@ -24,21 +35,28 @@
         '';
       };
 
+      useHomed = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to use systemd-homed as a backend for account metedata discovery.
+        '';
+      };
     };
 
   };
 
   ###### implementation
-  config = lib.mkIf config.services.accounts-daemon.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.accountsservice ];
+    environment.systemPackages = [ package ];
 
     # Accounts daemon looks for dbus interfaces in $XDG_DATA_DIRS/accountsservice
     environment.pathsToLink = [ "/share/accountsservice" ];
 
-    services.dbus.packages = [ pkgs.accountsservice ];
+    services.dbus.packages = [ package ];
 
-    systemd.packages = [ pkgs.accountsservice ];
+    systemd.packages = [ package ];
 
     systemd.services.accounts-daemon =
       lib.recursiveUpdate

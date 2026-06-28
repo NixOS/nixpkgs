@@ -19,6 +19,7 @@
   vala,
   gettext,
   libxcrypt,
+  useHomed ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Hardcode dependency paths.
-    (replaceVars ./fix-paths.patch {
-      inherit shadow coreutils;
-    })
+    (replaceVars ./fix-paths.patch { inherit shadow coreutils; })
 
     # Do not try to create directories in /var, that will not work in Nix sandbox.
     ./no-create-dirs.patch
@@ -57,7 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Detect DM type from config file.
     # `readlink display-manager.service` won't return any of the candidates.
     ./get-dm-type-from-config.patch
-  ];
+
+  ]
+  ++ (lib.optionals (!useHomed) [
+    # Allow disabling systemd-homed support to avoid probing org.freedesktop.home1
+    # on systems that do not enable systemd-homed.
+    ./disable-homed.patch
+  ]);
 
   nativeBuildInputs = [
     gettext
@@ -97,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dadmin_group=wheel"
     "-Dlocalstatedir=/var"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-  ];
+  ]
+  ++ (lib.optionals (!useHomed) [ (lib.mesonBool "homed" useHomed) ]);
 
   postPatch = ''
     chmod +x meson_post_install.py

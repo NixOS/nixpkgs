@@ -1,0 +1,137 @@
+diff --git a/meson.build b/meson.build
+index 44f8b85..9d2b79f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -234,8 +234,10 @@ config_h.set_quoted('PATH_LIGHTDM_CONF', lightdm_conf_file)
+ 
+ create_homed = get_option('create_homed')
+ config_h.set10('CREATE_HOMED', create_homed)
++homed = get_option('homed')
++config_h.set10('HAVE_HOMED', homed)
+ 
+ if get_option('elogind')
+   logind_dep = dependency('libelogind', version: '>= 229.4')
+ else
+   logind_dep = dependency('libsystemd', version: '>= 186', required: false)
+@@ -276,4 +278,5 @@ output += '** LightDM configuration: ' + lightdm_conf_file + '\n'
+ output += '        cflags: ' + ' '.join(get_option('c_args')) + ' ' + ' '.join(get_option('c_link_args')) + '\n'
+ output += '        Maintainer mode: ' + get_option('maintainer_mode').to_string() + '\n'
+-output += '** Create homed users: ' + create_homed.to_string()
++output += '** Create homed users: ' + create_homed.to_string() + '\n'
++output += '** Support homed users: ' + homed.to_string()
+ message(output)
+diff --git a/meson_options.txt b/meson_options.txt
+index f657ec6..3d31108 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -18,4 +18,5 @@ option('docbook', type: 'boolean', value: false, description: 'build documentati
+ option('gtk_doc', type: 'boolean', value: false, description: 'use gtk-doc to build documentation')
+ option('tests',   type: 'boolean', value: true, description: 'run accountservice tests if possible')
+ 
+ option('create_homed', type: 'boolean', value: false, description: 'Use systemd-homed to create new user accounts')
++option('homed', type: 'boolean', value: true, description: 'Use systemd-homed as an account source')
+diff --git a/src/daemon.c b/src/daemon.c
+index d97f60e..b58c22d 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -569,6 +569,7 @@ bus_get_homed_user_record (GDBusConnection *bus,
+                            uid_t            uid,
+                            GError         **error)
+ {
++#if HAVE_HOMED
+         g_autofree char *json = NULL;
+ 
+         g_autoptr (GVariant) retval = NULL;
+@@ -613,6 +614,13 @@ bus_get_homed_user_record (GDBusConnection *bus,
+         }
+ 
+         return g_steal_pointer (&json);
++#else
++        if (error != NULL)
++                g_set_error (error, ERROR, ERROR_USER_DOES_NOT_EXIST,
++                             "systemd-homed support is disabled");
++
++        return NULL;
++#endif
+ }
+ 
+ static char *
+@@ -644,6 +652,7 @@ entry_generator_homed (Daemon         *daemon,
+                        struct spwd   **spent,
+                        char          **json)
+ {
++#if HAVE_HOMED
+         DaemonPrivate *priv = daemon_get_instance_private (daemon);
+ 
+         g_autoptr (GError) error = NULL;
+@@ -724,3 +733,6 @@ finished:
+-}
++#else
++        return;
++#endif
++}
+ 
+ static void
+@@ -1167,6 +1179,7 @@ static guint
+ setup_homed_monitor (Daemon *daemon)
+ {
+-        DaemonPrivate *priv = daemon_get_instance_private (daemon);
++#if HAVE_HOMED
++        DaemonPrivate *priv = daemon_get_instance_private (daemon);
+ 
+         if (!ensure_system_bus (daemon)) {
+                 g_warning ("Failed to init system bus to set up homed monitor!");
+@@ -1180,6 +1193,9 @@ setup_homed_monitor (Daemon *daemon)
+                                                    on_homed_users_monitor_changed,
+                                                    daemon,
+                                                    NULL);
++#else
++        return 0;
++#endif
+ }
+ 
+ static void
+@@ -2059,6 +2075,7 @@ daemon_delete_homed_user (Daemon  *daemon,
+                           User    *user,
+                           GError **error)
+ {
++#if HAVE_HOMED
+         DaemonPrivate *priv = daemon_get_instance_private (daemon);
+         const char *username = accounts_user_get_user_name (ACCOUNTS_USER (user));
+ 
+@@ -2075,6 +2092,11 @@ daemon_delete_homed_user (Daemon  *daemon,
+                                      HOMED_BUS_LONG_TIMEOUT,
+                                      NULL,
+                                      error);
++#else
++        if (error != NULL)
++                g_set_error (error, ERROR, ERROR_FAILED,
++                             "systemd-homed support is disabled");
++#endif
+ }
+ 
+ static void
+diff --git a/src/user.c b/src/user.c
+index 5f5a766..f26127f 100644
+--- a/src/user.c
++++ b/src/user.c
+@@ -1225,6 +1225,7 @@ homed_update (GDBusConnection *bus,
+               GHashTable      *blobs_map,
+               GError         **error)
+ {
++#if HAVE_HOMED
+         g_autoptr (GVariant) blobs = NULL;
+         g_autoptr (GUnixFDList) blob_fds = NULL;
+ 
+@@ -1284,6 +1285,11 @@ homed_update (GDBusConnection *bus,
+                 g_clear_error (&inner_error);
+                 flags |= HOMED_UPDATE_FLAGS_OFFLINE;
+         }
++#else
++        if (error != NULL)
++                g_set_error (error, ERROR, ERROR_FAILED,
++                             "systemd-homed support is disabled");
++#endif
+ }
+ 
+ static void
