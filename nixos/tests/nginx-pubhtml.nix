@@ -2,7 +2,7 @@
 {
   name = "nginx-pubhtml";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
