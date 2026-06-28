@@ -11271,4 +11271,6 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  genei-fonts = callPackages ../data/fonts/genei-fonts { };
 }
