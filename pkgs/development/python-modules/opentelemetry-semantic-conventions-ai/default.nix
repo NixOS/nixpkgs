@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 let
-  version = "0.4.15";
+  version = "0.5.1";
 in
 buildPythonPackage {
   pname = "opentelemetry-semantic-conventions-ai";
@@ -18,7 +18,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "opentelemetry_semantic_conventions_ai";
     inherit version;
-    hash = "sha256-Et4XLR4R0hxugrv1eMfopxNYmn/adq+e14VjJWSii4E=";
+    hash = "sha256-FTkGIA2MHS+OCb142+9SaRYCPehaw9qzWRK/r7af8Ew=";
   };
 
   build-system = [ hatchling ];
