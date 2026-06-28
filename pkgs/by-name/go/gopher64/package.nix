@@ -12,6 +12,7 @@
   cargo-bundle,
   cctools,
   gn,
+  lld,
   ninja,
   pkg-config,
   python3,
@@ -94,6 +95,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     pkg-config
     python3
   ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [ lld ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
     cctools.libtool
