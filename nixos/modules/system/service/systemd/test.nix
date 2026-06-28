@@ -76,6 +76,40 @@ let
         };
       };
 
+      # Test that `process.environment` becomes `Environment=` entries on the unit,
+      # that null values are dropped from `Environment=` and wrapped with unexport
+      # in `ExecStart`.
+      system.services.envvars = {
+        process = {
+          argv = [ hello' ];
+          environment = {
+            FOO = "bar";
+            BAZ = "qux";
+            DROPPED = null;
+          };
+        };
+      };
+
+      # Test that an explicit `systemd.service.environment` override wins over
+      # the portable default produced by `process.environment`.
+      system.services.envvars-override = {
+        process = {
+          argv = [ hello' ];
+          environment.FOO = "from-process";
+        };
+        systemd.service.environment.FOO = "from-systemd";
+      };
+
+      # Test that `process.environment` `null` unsets via wrapper even when the
+      # systemd layer sets the same key (true unset, not just "skip setting").
+      system.services.envvars-unset = {
+        process = {
+          argv = [ hello' ];
+          environment.FOO = null;
+        };
+        systemd.service.environment.FOO = "leaked";
+      };
+
       # Test extending process.argv with systemd specifiers
       system.services.argv-extended =
         { config, ... }:
@@ -136,6 +170,22 @@ runCommand "test-modular-service-systemd-units"
       # Test extending process.argv with systemd specifiers
       # The base command should be escaped ($1 -> $$1, m%n -> m%%n), but the appended --systemd-unit %n should not be
       grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "Fun $$1 fact, remainder is often expressed as m%%n" --systemd-unit %n' ${toplevel}/etc/systemd/system/argv-extended.service >/dev/null
+
+      # process.environment becomes Environment= entries; null values are dropped
+      # from Environment= and wrapped with unexport in ExecStart.
+      grep -F 'Environment="FOO=bar"' ${toplevel}/etc/systemd/system/envvars.service >/dev/null
+      grep -F 'Environment="BAZ=qux"' ${toplevel}/etc/systemd/system/envvars.service >/dev/null
+      ! grep -F 'Environment=.*DROPPED' ${toplevel}/etc/systemd/system/envvars.service
+      grep 'ExecStart=.*unexport.*DROPPED' ${toplevel}/etc/systemd/system/envvars.service >/dev/null
+
+      # systemd.service.environment override wins over process.environment.
+      grep -F 'Environment="FOO=from-systemd"' ${toplevel}/etc/systemd/system/envvars-override.service >/dev/null
+      ! grep -F 'FOO=from-process' ${toplevel}/etc/systemd/system/envvars-override.service
+
+      # process.environment null uses unexport wrapper for true unset, even when
+      # the systemd layer has an Environment= entry for the same key.
+      grep -F 'Environment="FOO=leaked"' ${toplevel}/etc/systemd/system/envvars-unset.service >/dev/null
+      grep 'ExecStart=.*unexport.*FOO' ${toplevel}/etc/systemd/system/envvars-unset.service >/dev/null
 
       [[ ! -e ${toplevel}/etc/systemd/system/foo.socket ]]
       [[ ! -e ${toplevel}/etc/systemd/system/bar.socket ]]

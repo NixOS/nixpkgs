@@ -1,3 +1,9 @@
+# Non-module arguments
+# These are separate from the module arguments to avoid implicit dependencies.
+# This makes service modules self-contained, allowing mixing of Nixpkgs versions.
+{ pkgs }:
+
+# The module
 {
   lib,
   config,
@@ -92,6 +98,11 @@ in
         to prevent systemd substitution. Set this option explicitly to enable
         systemd's substitution features.
 
+        When {option}`process.environment` contains keys set to `null`, the default
+        is automatically prefixed with `unexport KEY` invocations (from
+        `pkgs.execline`) so those variables are unset before the process starts,
+        regardless of what `Environment=` or inherited environment supplies.
+
         To extend {option}`process.argv` with systemd specifiers, you can append
         to the escaped arguments:
 
@@ -109,8 +120,19 @@ in
         for available specifiers like `%n`, `%i`, `%t`.
       '';
       type = types.str;
-      default = config.systemd.lib.escapeSystemdExecArgs config.process.argv;
-      defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.argv";
+      default =
+        let
+          nullEnvKeys = lib.attrNames (lib.filterAttrs (_: v: v == null) config.process.environment);
+        in
+        if nullEnvKeys == [ ] then
+          config.systemd.lib.escapeSystemdExecArgs config.process.argv
+        else
+          lib.concatMapStringsSep " " (
+            k: "${escapeSystemdExecArg "${pkgs.execline}/bin/unexport"} ${escapeSystemdExecArg k}"
+          ) nullEnvKeys
+          + " "
+          + config.systemd.lib.escapeSystemdExecArgs config.process.argv;
+      defaultText = lib.literalMD "The escaped `process.argv`, prefixed with `\"unexport\" \"KEY\"` (from `pkgs.execline`) for each key in `process.environment` set to `null`.";
     };
 
     systemd.services = mkOption {
@@ -149,7 +171,7 @@ in
         types.submoduleWith {
           class = "service";
           modules = [
-            ./service.nix
+            (lib.modules.importApply ./service.nix { inherit pkgs; })
           ];
           specialArgs = {
             inherit systemdPackage;
@@ -169,6 +191,9 @@ in
     systemd.services."" = {
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
+      environment = lib.mapAttrs (_: lib.mkDefault) (
+        lib.filterAttrs (_: v: v != null) config.process.environment
+      );
       serviceConfig = {
         Type = lib.mkDefault "simple";
         Restart = lib.mkDefault "always";

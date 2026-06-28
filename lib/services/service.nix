@@ -49,6 +49,25 @@ in
           a shell script or `importas` from `pkgs.execline`.
         '';
       };
+      environment = lib.mkOption {
+        type = types.lazyAttrsOf (
+          types.nullOr (types.coercedTo (types.either types.path types.package) (x: "${x}") types.str)
+        );
+        default = { };
+        example = lib.literalExpression ''{ FOO = "bar"; PATH = null; }'';
+        description = ''
+          Environment variables passed verbatim to the service process by the
+          service manager. Entries set to `null` actively unset the variable
+          before the process starts -- backends without native unset support use
+          a wrapper (e.g. `execline`'s `unexport`) so the variable is absent
+          even when the service manager or a backend-specific override would
+          otherwise supply it.
+
+          Values appear in the rendered unit and may be world-readable. For
+          secrets, use a backend-specific mechanism such as
+          `systemd.service.serviceConfig.EnvironmentFile`.
+        '';
+      };
     };
   };
 }

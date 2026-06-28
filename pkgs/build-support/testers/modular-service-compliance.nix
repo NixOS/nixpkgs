@@ -28,6 +28,10 @@ let
     services = {
       svc = {
         process.argv = [ "${coreutils}/bin/true" ];
+        process.environment = {
+          FOO = "bar";
+          DROPPED = null;
+        };
         assertions = [
           {
             assertion = true;
@@ -62,6 +66,19 @@ let
       testSubServiceArgv = {
         expr = c.services.child.process.argv;
         expected = [ "${coreutils}/bin/true" ];
+      };
+
+      # A set environment variable round-trips through process.environment.
+      testProcessEnvironment = {
+        expr = c.process.environment.FOO;
+        expected = "bar";
+      };
+
+      # A null environment variable is preserved as null (unset request),
+      # rather than coerced to a string or dropped from the attrset.
+      testProcessEnvironmentNull = {
+        expr = c.process.environment.DROPPED;
+        expected = null;
       };
 
       testAssertions = {
@@ -126,6 +143,9 @@ let
     mkdir -p "$dir"
     echo "$$" > "$dir/pid"
     printf '%s\n' "$@" > "$dir/args"
+    # Record the process's own environment as received from the service
+    # manager (NUL-delimited, as the kernel stores it).
+    "${coreutils}/bin/cat" "/proc/$$/environ" > "$dir/environ"
     exec "${coreutils}/bin/sleep" infinity
   '';
 
@@ -159,6 +179,31 @@ let
       grep -qxF -- ${lib.escapeShellArg arg} "${sharedDir}/${id}/args" \
         || { echo "${id}: expected arg ${lib.escapeShellArg arg} not found"; cat "${sharedDir}/${id}/args"; exit 1; }
     '') expectedArgs;
+
+  /**
+    Shell snippet: assert that the service's recorded environment contains
+    each `present` entry (an exact `KEY=value` string) and contains no
+    variable named in `absent`.
+  */
+  checkEnv =
+    id:
+    {
+      present ? [ ],
+      absent ? [ ],
+    }:
+    ''
+      # The recorded environ is NUL-delimited; render one entry per line.
+      tr '\0' '\n' < "${sharedDir}/${id}/environ" > "${sharedDir}/${id}/environ.lines"
+    ''
+    + lib.concatMapStrings (entry: ''
+      grep -qxF -- ${lib.escapeShellArg entry} "${sharedDir}/${id}/environ.lines" \
+        || { echo "${id}: expected env ${lib.escapeShellArg entry} not found"; cat "${sharedDir}/${id}/environ.lines"; exit 1; }
+    '') present
+    + lib.concatMapStrings (key: ''
+      if grep -qE ${lib.escapeShellArg "^${key}="} "${sharedDir}/${id}/environ.lines"; then
+        echo "${id}: env variable ${lib.escapeShellArg key} should be unset"; exit 1
+      fi
+    '') absent;
 
   mkTestScript =
     name: text:
@@ -228,6 +273,24 @@ in
         "--greeting"
         "hello"
       ]
+    );
+  };
+
+  environment = mkTest {
+    name = "${namePrefix}-environment";
+    services.test = {
+      process.argv = mkArgv "env" [ ];
+      process.environment = {
+        FOO = "bar";
+        DROPPED = null;
+      };
+    };
+    testExe = mkTestScript "environment" (
+      waitAndCheck "env" [ ]
+      + checkEnv "env" {
+        present = [ "FOO=bar" ];
+        absent = [ "DROPPED" ];
+      }
     );
   };
 
