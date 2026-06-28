@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.76.1";
+  version = "0.77.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1BE3PZvXUYSMvs65MS5kT3xp0P7pPjTXJKq6dEcmKqw=";
+    hash = "sha256-39rjb9GU37lGvNO45ibNfsbEkuzXuS4X5jyhDWXfMMc=";
   };
 
-  vendorHash = "sha256-x9G80vupcewg0FtIAnWSTQiPPWDIvfjqSpmmjAradwA=";
+  vendorHash = "sha256-EPkztm+7LgSB58ZFKViW4qlGhw+9zSNlJa4AKsZPfzs=";
 
   nativeBuildInputs = [
     installShellFiles
