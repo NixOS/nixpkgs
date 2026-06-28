@@ -16407,6 +16407,12 @@
     githubId = 112084382;
     name = "Luna Heyman";
   };
+  luna5akura = {
+    email = "734514717@qq.com";
+    github = "Luna5akura";
+    githubId = 118539965;
+    name = "LunaSakura";
+  };
   luna_1024 = {
     email = "contact@luna.computer";
     github = "luna-1024";
