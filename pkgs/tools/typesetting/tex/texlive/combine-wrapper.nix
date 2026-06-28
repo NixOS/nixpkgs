@@ -2,7 +2,7 @@
 {
   lib,
   toTLPkgList,
-  tl,
+  pkgs,
   buildTeXEnv,
 }:
 args@{
@@ -49,7 +49,7 @@ let
         operator =
           { pkg, ... }:
           pkgListToSets (
-            if pkg ? tlDeps then if builtins.isFunction pkg.tlDeps then pkg.tlDeps tl else pkg.tlDeps else [ ]
+            if pkg ? tlDeps then if builtins.isFunction pkg.tlDeps then pkg.tlDeps pkgs else pkg.tlDeps else [ ]
           );
       }
     );
