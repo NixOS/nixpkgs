@@ -161,6 +161,46 @@ with haskellLib;
     hackage-db-unstable
     ;
 
+  stack =
+    appendPatches
+      [
+        # Bug fix that is also necessary for the following patches to apply
+        (pkgs.fetchpatch {
+          name = "stack-dep-without-main-library.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/591b6eb225b4cd2cfa4d282089fdb33e86bb14ad.patch";
+          hash = "sha256-GTUBGZ1KWQii60Yt9JpKcwMkzuIuSTdKLGd3aM0jXWw=";
+        })
+        # FIXME(@sternenseemann): these URLs are not stable (yet)
+        # Pick patches to support semaphore-compat >= 2.0
+        # from https://github.com/commercialhaskell/stack/pull/6935
+        # c.f. https://github.com/commercialhaskell/stack/issues/693
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-compat-2.0.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/c9e3cbc3f460de65d5abeffb583242255b41be23.patch";
+          includes = [ "src/**" ];
+          hash = "sha256-flf1f/QoBZAw9VRTzdNJQu+Zt1b+9q/pi7+1ukCad6c=";
+        })
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-compat-compiler-paths.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/02fa193245fc7210c6ce88646b2fa94ab39b9fc4.patch";
+          hash = "sha256-oE0GfXADSYlPceurzeZbq1Ix14gOtZEBssA8ZINv2qs=";
+        })
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-ghc-compat-map.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/960e704b9cd61094b75fad4689f0034b4435a268.patch";
+          hash = "sha256-zYIsttG3z4gbpfXgQsKz0PlkAEzODlLYiYdPpfBohvM=";
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          # Stack's source files use CRLF
+          prePatch = ''
+            ${drv.prePatch or ""}
+            find doc src -type f -exec sed -i -e 's/\r$//' '{}' '+'
+          '';
+        }) super.stack
+      );
+
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
   extensions = doJailbreak (
