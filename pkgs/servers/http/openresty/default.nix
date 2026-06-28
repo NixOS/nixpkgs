@@ -7,17 +7,21 @@
   libpq,
   nixosTests,
   withPostgres ? true,
+  curl,
+  jq,
+  nix-update,
+  writeShellApplication,
   ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
-  nginxVersion = "1.27.1";
-  version = "${nginxVersion}.2";
+  version = "1.27.1.2";
+  nginxVersion = lib.concatStringsSep "." (lib.init (lib.splitString "." version));
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-dPB29+NksqmabF+btTHCdhDHiYWr6Va0QrGSoilfdUg=";
+    hash = "sha256-dPB29+NksqmabF+btTHCdhDHiYWr6Va0QrGSoilfdUg=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.
@@ -59,8 +63,32 @@ callPackage ../nginx/generic.nix args rec {
     ln -s $out/nginx/html $out/html
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) openresty-lua;
+  passthru = {
+    tests = {
+      inherit (nixosTests) openresty-lua;
+    };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "openresty-update";
+      runtimeInputs = [
+        curl
+        jq
+        nix-update
+      ];
+      text = ''
+        version="$(
+          curl -fsSL https://api.github.com/repos/openresty/openresty/tags?per_page=1 |
+            jq -r '.[0].name' |
+            sed 's/^v//'
+        )"
+        echo "Local: ${version}"
+        echo "Latest: $version"
+
+        nix-update \
+          --override-filename="pkgs/servers/http/openresty/default.nix" \
+          --version="''${version}" \
+          openresty
+      '';
+    });
   };
 
   meta = {
