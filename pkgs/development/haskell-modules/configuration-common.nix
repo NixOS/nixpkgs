@@ -1541,6 +1541,16 @@ with haskellLib;
   # https://github.com/haskellari/binary-instances/pull/34/changes#r3257818178
   binary-instances = doJailbreak super.binary-instances;
 
+  # 2026-06-28: allow QuickCheck 2.16 (upstream currently bound to 2.18)
+  # https://github.com/haskell-servant/servant/pull/1875 # krank:ignore-line
+  servant-auth-client = doJailbreak super.servant-auth-client;
+  servant-auth-server = doJailbreak super.servant-auth-server;
+
+  # 2026-06-28: allow doctest 0.25
+  # https://github.com/haskell-servant/servant/issues/1890
+  servant-auth-docs = doJailbreak super.servant-auth-docs;
+  servant-swagger = doJailbreak super.servant-swagger;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
