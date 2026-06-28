@@ -31,7 +31,10 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "vcs-versioning"' ""
+      --replace-fail ', "vcs-versioning"' "" \
+      --replace-fail 'setuptools_scm[toml]>=3.4,<10' 'setuptools_scm[toml]>=3.4'
+    substituteInPlace setup.cfg \
+      --replace-fail setuptools_scm==9.2.2 setuptools_scm>=9.2.2
   '';
 
   build-system = [
