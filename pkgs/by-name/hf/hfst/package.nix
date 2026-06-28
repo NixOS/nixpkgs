@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfst";
-  version = "3.16.2";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vp9rSQYNK991fCoEcW7tpVxCOemW2RFt0LujLGHFGVQ=";
+    hash = "sha256-zmKCaAjH9gn4kBFKbDZtHGSGMblLvh0iK03wM+V54E0=";
   };
 
   nativeBuildInputs = [
