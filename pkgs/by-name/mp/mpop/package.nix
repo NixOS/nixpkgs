@@ -20,11 +20,11 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpop";
-  version = "1.4.21";
+  version = "1.4.22";
 
   src = fetchurl {
     url = "https://marlam.de/mpop/releases/mpop-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-TKDR4NATZv4+DPSQ2I0VTfURJ4+1lWOHE748pnVmWFU=";
+    sha256 = "sha256-LNZKnCmlreNCkjDHBhDKS26jBfvCZPaWG12Fp6jOzUs=";
   };
 
   nativeBuildInputs = [
