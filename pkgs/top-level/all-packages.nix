@@ -10513,8 +10513,6 @@ with pkgs;
 
   ### SCIENCE/LOGIC
 
-  abella = callPackage ../applications/science/logic/abella { };
-
   inherit
     (callPackage ./rocq-packages.nix {
       inherit (ocaml-ng)
