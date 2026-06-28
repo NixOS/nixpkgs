@@ -8,12 +8,17 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "codebase-memory-mcp";
   version = "0.8.1";
+
   src = fetchFromGitHub {
     owner = "DeusData";
     repo = "codebase-memory-mcp";
     rev = "v${finalAttrs.version}";
     hash = "sha256-H0l8H2JhPT1Rs0p+CJC1a1qYtnZNgLGe6n7PmM+WvE4=";
   };
+
+  patches = [
+    ./remove-install-update.diff
+  ];
 
   nativeBuildInputs = [ gnumake ];
 
