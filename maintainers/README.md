@@ -34,6 +34,13 @@ In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <handle>`.
 
+Once the PR is merged you will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
+By joining, we will be able to ping you for review, and you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others, and managing labels.
+
+> [!NOTE]
+> The automatic GitHub team invite is usually only sent by email, and is only valid for one week!
+> Should it expire, please ask for a re-invite in the [GitHub org owners help desk Matrix channel](https://matrix.to/#/#org_owners:nixos.org).
+
 ### Losing maintainer status
 
 Maintainers who have become inactive can be removed.
@@ -53,11 +60,6 @@ This process is subject to error however, so we encourage PR authors to notify t
 
 Maintainers can also invoke the [nixpkgs-merge-bot](../ci/README.md#nixpkgs-merge-bot) to merge pull requests targeting packages they are the maintainer of, which satisfy the current security [constraints](../ci/README.md#merge-bot-constraints).
 Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-2789382120) and [#377027](https://github.com/NixOS/nixpkgs/pull/377027#issuecomment-2614510869)
-
-New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
-By joining, you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others, and managing labels.
-However, the GitHub team invite is usually only sent by email, and is only valid for one week!
-Should it expire, please ask for a re-invite in the [GitHub org owners help desk Matrix channel](https://matrix.to/#/#org_owners:nixos.org).
 
 ### Unofficial maintainer tooling
 
