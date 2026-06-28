@@ -37,8 +37,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "A fast terminal diff viewer and code review TUI";
+    description = "Fast terminal diff viewer and code review TUI";
     homepage = "https://github.com/jnsahaj/lumen";
+    changelog = "https://github.com/jnsahaj/lumen/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "lumen";
