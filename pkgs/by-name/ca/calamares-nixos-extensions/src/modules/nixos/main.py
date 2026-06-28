@@ -263,12 +263,6 @@ cfgautologin = """  # Enable automatic login for the user.
 
 """
 
-cfgautologingdm = """  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
-
-"""
-
 cfgautologintty = """  # Enable automatic login for the user.
   services.getty.autologinUser = "@@username@@";
 
@@ -876,8 +870,6 @@ def run():
             and gs.value("packagechooser_packagechooser") != ""
         ):
             cfg += cfgautologin
-            if gs.value("packagechooser_packagechooser") == "gnome":
-                cfg += cfgautologingdm
         elif gs.value("autoLoginUser") is not None:
             cfg += cfgautologintty
 
