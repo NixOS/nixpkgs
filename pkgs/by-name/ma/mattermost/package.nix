@@ -27,10 +27,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.2";
-    srcHash = "sha256-qqBqV55Qq2zZOKIZmRB0MyCjFkHDmfvQjmuMn2cP4hY=";
+    version = "11.7.4";
+    srcHash = "sha256-kO4ntGffvMis7JFZLMpnPdjotPiZ/kJcxeKoMjXAZ3U=";
     vendorHash = "sha256-XaXqQN20c3DhW2/L0zhTA8dLeRp4MyBxUKpiMVwp/7s=";
-    npmDepsHash = "sha256-37nkbIMuCI0ZSFc+TXky+kkrbLJNNzX/xBXGZjp4r7o=";
+    npmDepsHash = "sha256-lqgYZAGCjChGwBKACKKiMRzI2WP0ByanMMIVxo/h8t8=";
   },
   ...
 }:
@@ -265,7 +265,7 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        for ws in platform/{types,client,components,shared} channels; do
+        for ws in platform/{types,client,shared,components} channels; do
           if [ -d "$ws" ]; then
             npm run build --workspace="$ws"
           fi

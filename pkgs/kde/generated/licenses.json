@@ -236,6 +236,7 @@
     "LicenseRef-SJFonts"
   ],
   "bluedevil": [
+    "BSD-2-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -278,6 +279,7 @@
   "breeze-grub": [
     "BSD-2-Clause",
     "CC-BY-SA-4.0",
+    "CC0-1.0",
     "Font-exception-2.0",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
@@ -2674,6 +2676,19 @@
     "LicenseRef-KDE-Accepted-GPL",
     "LicenseRef-KDE-Accepted-LGPL"
   ],
+  "plasma-bigscreen": [
+    "CC-BY-SA-4.0",
+    "CC0-1.0",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-GPL",
+    "LicenseRef-KDE-Accepted-LGPL",
+    "MIT"
+  ],
   "plasma-browser-integration": [
     "BSD-2-Clause",
     "CC0-1.0",
@@ -2897,6 +2912,7 @@
   ],
   "plasma-welcome": [
     "BSD-2-Clause",
+    "CC-BY-SA-4.0",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
@@ -2911,6 +2927,7 @@
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "GPL-3.0-or-later",
+    "ISC",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -2964,20 +2981,19 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
-    "GPL-3.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL",
-    "MIT"
+    "LicenseRef-KDE-Accepted-LGPL"
   ],
   "poxml": [
     "CC0-1.0"
   ],
   "print-manager": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
@@ -3202,6 +3218,17 @@
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
+    "MIT"
+  ],
+  "union": [
+    "BSD-2-Clause",
+    "CC0-1.0",
+    "GPL-2.0-only",
+    "GPL-3.0-only",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-LGPL",
     "MIT"
   ],
   "wacomtablet": [],

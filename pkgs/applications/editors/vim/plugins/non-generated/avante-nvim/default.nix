@@ -9,15 +9,15 @@
   vimPlugins,
   vimUtils,
   makeWrapper,
-  pkgs,
+  perl,
 }:
 let
-  version = "0.0.27-unstable-2026-03-11";
+  version = "release-v0.1";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "9a7793461549939f1d52b2b309a1aa44680170c8";
-    hash = "sha256-EEkAoufj29P46RIUrRNG0xJL9Wu4X7LZCS1fer4/nZQ=";
+    rev = "2033b42ab72fb9f27b35769f9cb7a9f4f1993db4";
+    hash = "sha256-Ql/17DSHpBVbihUHssyZe3MGC5fgasbjgxdABp8xk24=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -28,7 +28,7 @@ let
     nativeBuildInputs = [
       pkg-config
       makeWrapper
-      pkgs.perl
+      perl
     ];
 
     buildInputs = [
@@ -66,15 +66,12 @@ vimUtils.buildVimPlugin {
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
     ''
-      mkdir -p $out/build
-      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
-
-      # Fixes PKCE auth flows not finding libcrypto
-      substituteInPlace "$out/lua/avante/auth/pkce.lua" \
-        --replace-fail 'pcall(ffi.load, "crypto")' 'pcall(ffi.load, "${lib.getLib openssl}/lib/libcrypto${ext}")'
+      # place dynamic shared libraries directly into lua/ for native C-module discovery
+      mkdir -p $out/lua
+      cp ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/lua/avante_repo_map${ext}
+      cp ${avante-nvim-lib}/lib/libavante_templates${ext} $out/lua/avante_templates${ext}
+      cp ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/lua/avante_tokenizers${ext}
+      cp ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/lua/avante_html2md${ext}
     '';
 
   passthru = {

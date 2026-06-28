@@ -46,13 +46,13 @@ let
       };
     };
     libxml2 = callPackage ./common.nix {
-      version = "2.15.2";
+      version = "2.15.3";
       src = fetchFromGitLab {
         domain = "gitlab.gnome.org";
         owner = "GNOME";
         repo = "libxml2";
         tag = "v${packages.libxml2.version}";
-        hash = "sha256-k5dZ75D/BOouYAjrof9Jm2lY29XZhOqS1kudDGmGY9Q=";
+        hash = "sha256-fDntZDyITs223by8n7ueOXiO7yyzshtANoWbY0+yeqo=";
       };
       extraMeta = {
         maintainers = with lib.maintainers; [

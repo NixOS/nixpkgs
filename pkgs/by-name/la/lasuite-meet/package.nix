@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.17.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-hmkJwFYTBTbYsroegaRp/dcaNmeyPQ0Rbh/D1PGbh04=";
+    hash = "sha256-pUCSdnTBj/qwc0cya3P96r89r2K1GNSGg4DeIhxUKwI=";
   };
 
   meta = {
@@ -46,7 +46,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
+      --replace-fail "uv_build>=0.11.16,<0.12.0" "uv_build"
   '';
 
   build-system = with python.pkgs; [ uv-build ];

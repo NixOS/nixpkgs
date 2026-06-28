@@ -10,7 +10,7 @@
   pyscreeze,
   pytweening,
   tkinter,
-  xlib,
+  python-xlib,
   xvfb-run,
   scrot,
 }:
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     mouseinfo
     pygetwindow
     pymsgbox
-    xlib
+    python-xlib
     tkinter
     pyperclip
     pyscreeze
@@ -62,6 +62,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/asweigart/pyautogui";
     changelog = "https://github.com/asweigart/pyautogui/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 })

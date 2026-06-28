@@ -15,6 +15,7 @@
   azure-identity,
   cyclopts,
   exceptiongroup,
+  griffelib,
   httpx,
   jsonref,
   jsonschema-path,
@@ -49,20 +50,22 @@
   opentelemetry-sdk,
   psutil,
   pytest-asyncio,
+  pytest-examples,
   pytest-httpx,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "jlowin";
+    owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YfFAJvfKLOgfGFWyQmR4FGHrRc066Y0mAYhXJqJ9vyw=";
+    hash = "sha256-rJpxPvqAaa6/vXhG1+R9dI32cY/54e6I+F/zyBVoqBM=";
   };
 
   build-system = [
@@ -78,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     authlib
     cyclopts
     exceptiongroup
+    griffelib
     httpx
     jsonref
     jsonschema-path
@@ -129,6 +133,7 @@ buildPythonPackage (finalAttrs: {
     opentelemetry-sdk
     psutil
     pytest-asyncio
+    pytest-examples
     pytest-httpx
     pytestCheckHook
     writableTmpDirAsHomeHook
@@ -165,6 +170,7 @@ buildPythonPackage (finalAttrs: {
 
     # Requires prefab-ui (optional dependency)
     "test_auto_registers_renderer_resource"
+    "test_auto_synthesizes_renderer_resource"
     "test_equivalent_to_app_true"
 
     # Requires pydocket (tasks optional dependency, not in test inputs)
@@ -202,6 +208,7 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Requires prefab-ui (optional dependency)
     "tests/apps"
+    "tests/docs/test_doc_examples.py"
     "tests/test_apps_prefab.py"
     "tests/test_fastmcp_app.py"
     # Subprocess crash recovery tests are flaky in sandbox
@@ -224,8 +231,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Fast, Pythonic way to build MCP servers and clients";
-    changelog = "https://github.com/jlowin/fastmcp/releases/tag/${finalAttrs.src.tag}";
-    homepage = "https://github.com/jlowin/fastmcp";
+    changelog = "https://github.com/PrefectHQ/fastmcp/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/PrefectHQ/fastmcp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

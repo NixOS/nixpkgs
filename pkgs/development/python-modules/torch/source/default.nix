@@ -550,7 +550,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # <thrust/*>
+      cccl # <thrust/*>
       cuda_cudart # cuda_runtime.h and libraries
       cuda_cupti # For kineto
       cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too

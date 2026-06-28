@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     tag = "v${version}";
-    hash = "sha256-zUV+sQdQ71ORKOZzd4yxgRK1HjtZc9wgkmnzz6bG8FA=";
+    hash = "sha256-G/RSopDFn6ma5rXFkRth3NncbTVrVF6OqgqaJZl3EkE=";
   };
 
   patches = [ ./dotnet-8-upgrade.patch ];

@@ -82,11 +82,6 @@ buildPythonPackage (finalAttrs: {
     stestrCheckHook
   ];
 
-  disabledTestsRegex = [
-    "openstackclient.tests.unit.common.test_module.TestModuleList*"
-    "openstackclient.tests.unit.common.test_clientmanager.TestClientManager*"
-  ];
-
   pythonImportsCheck = [
     "openstackclient"
     "openstackclient.api"

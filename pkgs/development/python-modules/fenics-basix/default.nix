@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fenics-basix";
-  version = "0.10.0.post0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "basix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iKG6Cs28D0scPEIRKoGk/CgquKzGZvIjf4UIj4MQXHA=";
+    hash = "sha256-MBrK7O3iQ0XFONebbAFXBom9i985EyTAXrOlSMiIpk8=";
   };
 
   dontUseCmakeConfigure = true;

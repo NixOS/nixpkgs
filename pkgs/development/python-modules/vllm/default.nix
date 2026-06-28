@@ -305,7 +305,7 @@ let
 
   mergedCudaLibraries = with cudaPackages; [
     cuda_cudart # cuda_runtime.h, -lcudart
-    cuda_cccl
+    cccl
     libcurand # curand_kernel.h
     libcusparse # cusparse.h
     libcusolver # cusolverDn.h

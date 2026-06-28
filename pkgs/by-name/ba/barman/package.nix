@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "barman";
-  version = "3.19.0";
+  version = "3.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-qjde8NdI+/2BH4L3LoxoYqdVwsaBXw1IcxYBx6sYqG8=";
+    hash = "sha256-7K7ibg2/hr5wBzGR8cW5FZNtPPFEBA7xPwmOl2c1fOU=";
   };
 
   patches = [

@@ -95,9 +95,6 @@ buildNpmPackage rec {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
-
   nativeBuildInputs = [
     cargo
     dart-sass

@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "icm";
-  version = "0.10.50";
+  version = "0.10.53";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "icm";
     tag = "icm-v${finalAttrs.version}";
-    hash = "sha256-zaKpKMVH2vzUk0ryWupE4ByqqcmAdJwAe5ybb2TNlvM=";
+    hash = "sha256-fx7RPt32Vuy0j+Ab9VtqXoJ/+Ql5h4ORNPYwARlll0U=";
   };
 
-  cargoHash = "sha256-5NcmFaRqDla2ei694fJiqNr5n4V3A/ai3/9fzBHNa3s=";
+  cargoHash = "sha256-5xlgEjQWPQEtLDzP403lFIEa2dvdsX6HujWMmCiFnD8=";
 
   nativeBuildInputs = [
     pkg-config

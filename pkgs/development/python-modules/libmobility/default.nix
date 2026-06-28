@@ -115,7 +115,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     lapack
   ]
   ++ (with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart # CUDA::cuda_driver (driver stub)
     libcublas
     libcufft

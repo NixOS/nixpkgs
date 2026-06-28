@@ -4,20 +4,21 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  vscode-extensions,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D92Ung7nYFVUKH7SiLKf8fsoLGZkl+zVZV2/DGoWfnI=";
+    hash = "sha256-jNBtpW7rhuapVES6Dj1ue9PIJOit/Gh5RflNZL32gTw=";
   };
 
-  cargoHash = "sha256-a1ATDCCZcXn9B1Ryx2oufFSvzECdH3+mXpojvW4/8nw=";
+  cargoHash = "sha256-xJmUyyU4Okvlh7m7tDJmfoOTXUglSltt4raPAf8O3/A=";
 
   cargoBuildFlags = [
     "--package=harper-cli"
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=harper-ls"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = vscode-extensions.elijah-potter.harper;
+    updateScript = nix-update-script { };
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

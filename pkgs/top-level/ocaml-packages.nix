@@ -1721,6 +1721,10 @@ let
 
         pbrt = callPackage ../development/ocaml-modules/pbrt { };
 
+        pbrt_services = callPackage ../development/ocaml-modules/pbrt/services.nix { };
+
+        pbrt_yojson = callPackage ../development/ocaml-modules/pbrt/yojson.nix { };
+
         pcre2 = callPackage ../development/ocaml-modules/pcre2 {
           inherit (pkgs) pcre2;
         };
@@ -2260,6 +2264,8 @@ let
         webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
 
         webmachine = callPackage ../development/ocaml-modules/webmachine { };
+
+        windtrap = callPackage ../development/ocaml-modules/windtrap { };
 
         wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 

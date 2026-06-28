@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asciinema";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-03olFWB/6O7V/B9gz6QACMxugrIx560fpp81IGVWv58=";
+    hash = "sha256-MZMc1YypMP2JEbpDmsGj+Sm+y3mfr50DnoCN04rY9xY=";
   };
 
-  cargoHash = "sha256-B6s3uUPGL8m076dl3P26j+frHWLi+wzED41BQ/rQAM8=";
+  cargoHash = "sha256-Qzxlp/c5VowlZplu7iMVh0a3+raQXsYmO8OEC45dSl4=";
 
   env.ASCIINEMA_GEN_DIR = "gendir";
 

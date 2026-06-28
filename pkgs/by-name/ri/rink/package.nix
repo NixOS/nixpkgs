@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       sb0
+      keysmashes
     ];
   };
 })

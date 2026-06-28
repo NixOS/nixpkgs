@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.23.0";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qBpdeIa4V5hfVbkwa+5gHszSwqXJej0k0BdVImTdwt8=";
+    hash = "sha256-k3xAaJiqldRZubAFrRuNM1e+3kH/5vv0maEeT/gdqK0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-H8UnrCZx9yjKn7YxRqv+uJ73fw/ngPFI6zdayUizo1k=";
+    hash = "sha256-9nhv31ljJ8DphOot3TAsYhbV6cx7Ovfe+ll+V2vJWx8=";
   };
 
   hcl2json-go-modules =
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     # Skip tests that require terraform (unfree)
-    yarn --offline workspace cdktn-cli test -- \
+    yarn --offline workspace cdktn-cli jest \
       --testPathIgnorePatterns \
        "src/test/cmds/(convert|init).test.ts"
 

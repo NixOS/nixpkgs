@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.17.1";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "anova_wifi";
     tag = "v${version}";
-    hash = "sha256-TRiv5ljdVqc4qeX+fSH+aTDf5UyNII8/twlNx3KC6oI=";
+    hash = "sha256-/9R/41gClcLuJoaJ+CokX9sh4mQryDUsleO+NylU1AE=";
   };
 
   build-system = [ poetry-core ];

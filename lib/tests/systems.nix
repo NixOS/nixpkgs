@@ -215,6 +215,22 @@ lib.runTests (
   })
 
   // {
+    test_platforms_pass_typecheck = {
+      # To improve performance, the result of parsing all 70+ systems in
+      # `lib.platforms` into their attrset representations aren't typechecked.
+      # The results are expected to be constant, and avoiding the slow
+      # validation gives a meaningful improvement to evaluation speed. We ensure
+      # that all systems pass validation here
+      expr = builtins.filter (
+        system:
+        let
+          evalResult = builtins.tryEval (lib.systems.parse.mkSystemFromString system);
+        in
+        evalResult.success == false
+      ) lib.platforms.all;
+
+      expected = [ ];
+    };
     test_equals_example_x86_64-linux = {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (
         lib.systems.elaborate "x86_64-linux"

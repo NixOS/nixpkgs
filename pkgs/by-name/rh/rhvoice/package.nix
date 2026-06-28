@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free and open source speech synthesizer for Russian language and others";
     homepage = "https://github.com/Olga-Yakovleva/RHVoice/wiki";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ berce ];
+    maintainers = [ ];
     platforms = with lib.platforms; all;
     mainProgram = "RHVoice-test";
   };

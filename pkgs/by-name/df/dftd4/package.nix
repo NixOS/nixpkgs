@@ -26,21 +26,20 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dftd4";
-  version = "3.7.0";
+  version = "4.2.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = "dftd4";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dixPCLH5dWkE2/7ghGEXJmX2/g1DN30dB4jX2d7fmio=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uKjNOIza3/I0oREp88oFESoNqEdumo1AztIjcrVb1O8=";
   };
 
   patches = [
-    # Make sure fortran headers are installed directly in /include
-    ./fortran-module-dir.patch
-
-    # Fix wrong generation of package config include paths
-    ./cmake.patch
+    # Fix pkg-config, meson and cmake paths for include and lib dirs
+    ./build-paths.patch
   ];
 
   nativeBuildInputs = [
@@ -88,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dftd4";
     license = with lib.licenses; [
       lgpl3Plus

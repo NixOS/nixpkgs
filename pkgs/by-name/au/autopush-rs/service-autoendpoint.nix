@@ -25,7 +25,7 @@ in
               description = "Endpoint of the database server.";
               type = lib.types.str;
               default = "";
-              example = lib.literalExpression "redis+socket://${config.services.redis.servers.autopush-rs.unixSocket}";
+              example = lib.literalExpression "redis+socket://\${config.services.redis.servers.autopush-rs.port}";
             };
           };
         };

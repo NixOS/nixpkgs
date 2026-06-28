@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 let
-  version = "0.25.3";
+  version = "0.25.4";
 in
 rustPlatform.buildRustPackage {
   pname = "yek";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "bodo-run";
     repo = "yek";
     tag = "v${version}";
-    hash = "sha256-pRDcH+KqD1xl7PEH8FCEV9w51TLvWFYph5hu51SLaog=";
+    hash = "sha256-vNcTyG3PsMP+pAb2UwkAQy3GDGarfAzsTUu/ok02/UA=";
   };
 
-  cargoHash = "sha256-Fb5/suTtR47KwUipKZoDU7cUo9xwwlJ/alNFm9fvFUQ=";
+  cargoHash = "sha256-KVUdwMar4TqnFX2VMV1Md0DJen0zWPlmIKQWYR1Fb1k=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

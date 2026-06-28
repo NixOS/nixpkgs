@@ -126,6 +126,28 @@ let
     '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath)
   );
 
+  # openresty bundles the lua module and resty.core; stock nginx needs them added.
+  packageBundlesLua = p: lib.getName p == "openresty";
+  luaEnv = pkgs.luajit_openresty.withPackages (
+    ps:
+    lib.optional (cfg.lua.enable && !packageBundlesLua cfg.package) ps.lua-resty-core
+    ++ cfg.lua.extraPackages ps
+  );
+  luaVersion = pkgs.luajit_openresty.luaversion;
+  # Lua modules install under lib/lua or share/lua depending on the package; ;; keeps nginx's defaults.
+  luaConfig = ''
+    lua_package_path '${
+      lib.concatMapStringsSep ";" (s: "${luaEnv}/${s}") [
+        "lib/lua/${luaVersion}/?.lua"
+        "lib/lua/${luaVersion}/?/init.lua"
+        "share/lua/${luaVersion}/?.lua"
+        "share/lua/${luaVersion}/?/init.lua"
+      ]
+    };;';
+    lua_package_cpath '${luaEnv}/lib/lua/${luaVersion}/?.so;;';
+    lua_ssl_trusted_certificate ${config.security.pki.caBundle};
+  '';
+
   toUpstreamParameter =
     key: value:
     if builtins.isBool value then lib.optionalString value key else "${key}=${toString value}";
@@ -294,6 +316,8 @@ let
             client_max_body_size ${cfg.clientMaxBodySize};
 
             server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+            ${optionalString cfg.lua.enable luaConfig}
 
             ${cfg.commonHttpConfig}
 
@@ -771,7 +795,11 @@ in
         apply =
           p:
           p.override {
-            modules = lib.unique (p.modules ++ cfg.additionalModules);
+            modules = lib.unique (
+              p.modules
+              ++ cfg.additionalModules
+              ++ lib.optional (cfg.lua.enable && !packageBundlesLua p) pkgs.nginxModules.lua
+            );
           };
         description = ''
           Nginx package to use. This defaults to the stable version. Note
@@ -789,6 +817,36 @@ in
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
+      };
+
+      lua = {
+        enable = mkEnableOption ''
+          Lua scripting in nginx via OpenResty's lua-nginx-module,
+          wiring up `lua_package_path`/`lua_package_cpath` for
+          {option}`services.nginx.lua.extraPackages`.
+
+          Use this to add Lua to a stock nginx. For the full OpenResty platform —
+          required by libraries that depend on its bundled lualib (for example
+          `lua-resty-openidc`, which needs `resty.string` and friends) — set
+          {option}`services.nginx.package` to `pkgs.openresty` instead; this option
+          then only sets up the search path and leaves OpenResty's built-in Lua
+          module in place
+        '';
+
+        extraPackages = mkOption {
+          type = types.functionTo (types.listOf types.package);
+          default = ps: [ ];
+          defaultText = literalExpression "ps: [ ]";
+          example = literalExpression ''
+            ps: with ps; [ lua-resty-openidc ]
+          '';
+          description = ''
+            Extra Lua packages to put on `lua_package_path` / `lua_package_cpath`,
+            for both stock nginx and `pkgs.openresty`. Packages are selected from
+            `pkgs.luajit_openresty.pkgs`. `lua-resty-core`, which the Lua module
+            requires to start, is added automatically.
+          '';
+        };
       };
 
       logError = mkOption {

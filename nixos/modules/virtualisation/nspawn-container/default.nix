@@ -21,6 +21,10 @@ let
   cfg = config.virtualisation;
 in
 {
+  imports = [
+    ../credentials-options.nix
+  ];
+
   options = {
 
     virtualisation.cmdline = lib.mkOption {
@@ -107,9 +111,6 @@ in
       }
     ];
 
-    # TODO(arianvp): Remove after https://github.com/NixOS/nixpkgs/pull/480686 is merged
-    console.enable = true;
-
     virtualisation.systemd-nspawn.options = [
       "--private-network"
       "--machine=${config.system.name}"
@@ -134,7 +135,8 @@ in
 
       # Send a READY=1 notification to a socket when the container is fully booted.
       "--notify-ready=yes"
-    ];
+    ]
+    ++ lib.mapAttrsToList (name: cred: "--load-credential=${name}:${cred.source}") cfg.credentials;
 
     system.build.nspawn =
       let

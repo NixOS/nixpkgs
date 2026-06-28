@@ -43,12 +43,9 @@
     "id": 5468470,
     "maintainers": {},
     "members": {
-      "aherrmann": 732652,
       "avdv": 3471749,
-      "ethercrow": 222467,
       "groodt": 343415,
-      "kalbasit": 87115,
-      "mboes": 51356
+      "kalbasit": 87115
     },
     "name": "Bazel"
   },
@@ -128,7 +125,6 @@
       "Pandapip1": 45835846,
       "a-kenji": 65275785,
       "drakon64": 6444703,
-      "michaelBelsanti": 62124625,
       "thefossguy": 44400303
     },
     "name": "COSMIC"
@@ -560,8 +556,7 @@
     "members": {
       "Ericson2314": 1055245,
       "peterwaller-arm": 52030119,
-      "rrbutani": 7833358,
-      "sternenseemann": 3154475
+      "rrbutani": 7833358
     },
     "name": "LLVM"
   },
@@ -847,6 +842,18 @@
     },
     "name": "Radicle"
   },
+  "redis": {
+    "description": "Maintain Redis, related packages, module, and tests.",
+    "id": 17932473,
+    "maintainers": {
+      "Hythera": 87016780,
+      "MiniHarinn": 52773156,
+      "debtquity": 225436867,
+      "kybe236": 118068228
+    },
+    "members": {},
+    "name": "Redis"
+  },
   "reproducible": {
     "description": "Team that is interested in reproducible builds",
     "id": 7625643,
@@ -935,6 +942,7 @@
     },
     "members": {
       "andir": 638836,
+      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -988,6 +996,17 @@
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "test-driver": {
+    "description": "Maintain the NixOS integration test driver.",
+    "id": 18201265,
+    "maintainers": {
+      "Ma27": 6025220,
+      "kmein": 10352507,
+      "tfc": 29044
+    },
+    "members": {},
+    "name": "test-driver"
   },
   "xen-project": {
     "description": "Maintain the Xen Project Hypervisor and the related tooling ecosystem. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",

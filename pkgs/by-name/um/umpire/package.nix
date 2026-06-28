@@ -6,6 +6,8 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? null,
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
 }:
 
 assert cudaSupport -> cudaPackages != null;
@@ -27,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.clr
   ];
 
   buildInputs = lib.optionals cudaSupport (
@@ -37,11 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  cmakeFlags = lib.optionals cudaSupport [
-    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
-    "-DENABLE_CUDA=ON"
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-  ];
+  cmakeFlags =
+    lib.optionals cudaSupport [
+      "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
+      "-DENABLE_CUDA=ON"
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+    ]
+    ++ lib.optionals rocmSupport [
+      "-DENABLE_HIP=ON"
+    ];
+
+  passthru = { inherit rocmSupport; };
 
   meta = {
     description = "Application-focused API for memory management on NUMA & GPU architectures";

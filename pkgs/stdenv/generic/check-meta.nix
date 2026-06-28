@@ -49,6 +49,7 @@ let
   inherit (import ./problems.nix { inherit lib; })
     problemsType
     genCheckProblems
+    completeMetaProblems
     ;
   checkProblems = genCheckProblems config;
 
@@ -300,7 +301,7 @@ let
 
   metaType =
     let
-      types = import ./meta-types.nix { inherit lib; };
+      types = import ../../../lib/meta-types.nix { inherit lib; };
       inherit (types)
         str
         union
@@ -669,6 +670,8 @@ let
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
+
+      problems = completeMetaProblems config attrs;
 
       available =
         validity.valid != "no"

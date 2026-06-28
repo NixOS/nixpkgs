@@ -52,7 +52,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.49.8";
+  version = "1.49.9";
 
   selectSystem =
     attrs:
@@ -67,9 +67,9 @@ let
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-5SmMFzQploo1EkXYmLDL4XdM+vKlIWkaIh1fFrIgrqY=";
-      x86_64-darwin = "sha256-2GgyiH7Bhm1MbjmgMvo8CuLQEsVCZkALiy1mtH/Zl1Q=";
-      aarch64-darwin = "sha256-a1nWzTR1dZhm/rVURl0kK2qTyHEnAZeQKiYKzRO6MqY=";
+      x86_64-linux = "sha256-Fx//NMDHqVaLwthOM7FeSgUXkvLOSbw5EH1qp1dgPcM=";
+      x86_64-darwin = "sha256-l5Jx0BUQR++tkF0cpctxhku6lB2rHEydp7roJy9AGFc=";
+      aarch64-darwin = "sha256-HCKt1rq6P7Uy6NJiFRBBp4YdpAdhwQQjEGT5h7IcyWE=";
     };
   };
 

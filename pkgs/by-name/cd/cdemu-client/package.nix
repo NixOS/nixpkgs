@@ -11,11 +11,11 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cdemu-client";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/cdemu-client-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WiKm00ZKUDeHX6RII4+JKruAzUyWzZWyI0iZeDqksnA=";
+    hash = "sha256-26KMd2NtoMHG2AJgPGSJTgcshfSyJzW0dUipmA3NGlw=";
   };
 
   nativeBuildInputs = [

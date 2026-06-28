@@ -17,12 +17,17 @@ let
 
   inherit (lib.strings) toJSON;
 
+  inherit (lib.trivial)
+    oldestSupportedReleaseIsAtLeast
+    ;
+
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
+  rustc-target-env = import ./rustc-target-env.nix;
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -449,6 +454,16 @@ let
                 else
                   final.parsed.cpu.name;
 
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_env
+              # Accomodate system definitions written before Nixpkgs learned about target_env.
+              env =
+                if rust ? platform.env then
+                  rust.platform.env
+                else if rustc-target-env ? ${final.rust.rustcTargetSpec} then
+                  rustc-target-env.${final.rust.rustcTargetSpec}
+                else
+                  "";
+
               # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
               os =
                 if rust ? platform then
@@ -690,9 +705,12 @@ let
         };
       };
     in
-    # TODO: Remove in 27.05.
+    # Platforms elaborated by pre-26.11 Nixpkgs will include the `linux-kernel` attr,
+    # so we can't assert its absence until 26.11 is the oldest supported release.
+    # Assertion will activate during the 27.05 cycle, when 26.05 support ends.
+    # TODO: Remove assertion in the 27.11 cycle.
     assert
-      args ? linux-kernel
+      oldestSupportedReleaseIsAtLeast 2611 && args ? linux-kernel
       -> throw "lib.systems.elaborate: linux-kernel has been removed; see the 26.11 release notes";
 
     assert final.useAndroidPrebuilt -> final.isAndroid;

@@ -257,16 +257,6 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.web.v2024_11_01'
-      azure-mgmt-web = super.azure-mgmt-web.overridePythonAttrs (attrs: rec {
-        version = "9.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_web";
-          inherit version;
-          hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
-        };
-      });
-
       # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
       azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {
         version = "34.1.0";

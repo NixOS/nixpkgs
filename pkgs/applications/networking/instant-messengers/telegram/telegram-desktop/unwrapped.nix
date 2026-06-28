@@ -8,6 +8,7 @@
   ninja,
   clang,
   python3,
+  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
@@ -19,7 +20,7 @@
   ffmpeg_6,
   protobuf,
   openal-soft,
-  minizip-ng,
+  minizip-ng-compat,
   range-v3,
   tl-expected,
   hunspell,
@@ -45,14 +46,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.8.2";
+  version = "6.9.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-1zKAywh6EXGDi5t7CKQRWADRKX0mFEMyeIoK4hrTFFQ=";
+    hash = "sha256-QCGtESg+38lHWCFcsevHdc0kQ7LKJQmJjUJWszphah8=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # to build bundled libdispatch
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     xxhash
     ffmpeg_6
     openal-soft
-    minizip-ng
+    minizip-ng-compat
     range-v3
     tl-expected
     rnnoise

@@ -307,7 +307,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
         toc = TocEntry.of(tokens[0])
         return "\n".join([
-            self._file_header(toc),
+            self._file_header(toc, sidebar=self._build_toc(tokens, 0)),
             ' <div class="book">',
             '  <div class="titlepage">',
             '   <div>',
@@ -316,13 +316,12 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             '   </div>',
             "   <hr />",
             '  </div>',
-            self._build_toc(tokens, 0),
             super(HTMLRenderer, self).render(tokens[6:]),
             ' </div>',
             self._file_footer(toc),
         ])
 
-    def _file_header(self, toc: TocEntry) -> str:
+    def _file_header(self, toc: TocEntry, sidebar: str = "") -> str:
         prev_link, up_link, next_link = "", "", ""
         prev_a, next_a, parent_title = "", "", "&nbsp;"
         nav_html = ""
@@ -384,6 +383,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ' </head>',
             ' <body>',
             nav_html,
+            f'  <nav class="toc-sidebar">{sidebar}</nav>' if sidebar else "",
+            '  <main class="content">',
         ])
 
     def _file_footer(self, toc: TocEntry) -> str:
@@ -424,6 +425,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ])
         return "\n".join([
             nav_html,
+            '  </main>',
             ' </body>',
             '</html>',
         ])

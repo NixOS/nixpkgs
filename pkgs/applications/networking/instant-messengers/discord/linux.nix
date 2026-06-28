@@ -153,14 +153,13 @@ let
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
     modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
-    if [ ! -f "$modules_dir/installed.json" ]; then
-      mkdir -p "$modules_dir"
-      for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-        ln -sfn "$store_modules/$m" "$modules_dir/$m"
-      done
-      echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
-        > "$modules_dir/installed.json"
-    fi
+    rm -rf "$modules_dir"
+    mkdir -p "$modules_dir"
+    for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
+      ln -sn "$store_modules/$m" "$modules_dir/$m"
+    done
+    echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
+      > "$modules_dir/installed.json"
   '';
 
   disableBreakingUpdates =
@@ -261,6 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
         ${lib.strings.optionalString enableAutoscroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName}:${addDriverRunpath.driverLink}/lib \
+        --suffix VK_ADD_DRIVER_FILES : "${addDriverRunpath.driverLink}/share/vulkan/icd.d" \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
         --run "${stageModules} $out/opt/${binaryName}/modules" \
         --add-flags ${lib.escapeShellArg commandLineArgs}

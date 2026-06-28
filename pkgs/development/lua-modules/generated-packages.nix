@@ -1040,15 +1040,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2657-1";
+      version = "0.0.2661-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2657-1.rockspec";
-          sha256 = "0c7q9gjx9p0gqgsf89b510g729hz8301qffd936m86pwqgzxmvqi";
+          url = "mirror://luarocks/fzf-lua-0.0.2661-1.rockspec";
+          sha256 = "0gw3q50zxawk81bnaxpj9n9n6fvv9qmyykvnxlha33bz0wvc13cq";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/988416cc782dfe28bff3f0da9b8c943b236cd86a.zip";
-        sha256 = "0hh2dkgpf1002b9ik2r1iakszs60qk9yb84db1jnkj2ks5mah98g";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/b6f0392fe1645973c795b5bbbd8d6db466a5a25a.zip";
+        sha256 = "17mr5nnsx86isk8zqknpc172hpg86nxvmplcwwnk67qg1y8a8jwa";
       };
 
       disabled = luaOlder "5.1";
@@ -1137,15 +1137,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.71-1";
+      version = "1.6.72-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.71-1.rockspec";
-          sha256 = "1gvwjg617qimb8i737hvdr423py7ry8c0lsna9chpxaks3j0cf4n";
+          url = "mirror://luarocks/grug-far.nvim-1.6.72-1.rockspec";
+          sha256 = "1ky24vksn0wvv058pvv03r163ba07s8b051mwi99qna2y77js2ds";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/c995bbacf8229dc096ec1c3d60f8531059c86c1b.zip";
-        sha256 = "15wv6hvkiqi0rdg59y7dgaz7g6nz3141fdmkdggrc1h8aadky9zr";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/c69859c1d5427ab5fc7ed12380ab521b4e336691.zip";
+        sha256 = "0yp64zp64zk5skf3blx359dmchy9wwfv4nf30hhdagvm8phbkkpx";
       };
 
       disabled = luaOlder "5.1";
@@ -1308,6 +1308,38 @@ final: prev: {
         longDescription = ''
           Provides ECMAScript regular expressions for Lua 5.1, 5.2, 5.3, 5.4 and LuaJit. Uses libregexp from Fabrice Bellard's QuickJS.
           	'';
+      };
+    }
+  ) { };
+
+  kulala-nvim = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      tree-sitter-kulala_http,
+    }:
+    buildLuarocksPackage {
+      pname = "kulala.nvim";
+      version = "6.17.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/kulala.nvim-6.17.0-1.rockspec";
+          sha256 = "1m2i088p9gdkvh2s1pgzwq7j2wi2n97k2qdwggi5g22c20ph9370";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/mistweaverco/kulala.nvim/archive/v6.17.0.zip";
+        sha256 = "03iilwmi10v6d849nxi47rgfg65qzir4h7h28iw2ga3l3f33h2gy";
+      };
+
+      disabled = luaOlder "5.1";
+      propagatedBuildInputs = [ tree-sitter-kulala_http ];
+
+      meta = {
+        homepage = "https://kulala.app";
+        license = lib.licenses.mit;
+        description = "A fully-featured 🤏 HTTP/GraphQL/gRPC/Websocket-client 🐼 interface 🖥️ for Neovim ❤️, that supports the Jetbrains .http spec (with full scripting support).";
       };
     }
   ) { };
@@ -4680,21 +4712,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "mini.test";
-      version = "0.17.0-1";
+      version = "0.18.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/mini.test-0.17.0-1.rockspec";
-          sha256 = "0k9qvizfb3if0r20zid8had91ckkfy061lznvmi4r9hyy421dwfw";
+          url = "mirror://luarocks/mini.test-0.18.0-1.rockspec";
+          sha256 = "0k0pdp5qalfhcmdaqi0mz3s0p7rwq88bjcs6b7s5z80rqrhji67k";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/echasnovski/mini.test/archive/v0.17.0.zip";
-        sha256 = "0hffg59cn8dlhnjnkcfs9vannf10n2j33lna2d8zbaxajxaa8jks";
+        url = "https://github.com/nvim-mini/mini.test/archive/v0.18.0.zip";
+        sha256 = "1q1qy3f0mxrqx96gq4q3h4w2qip40lqkyd9vs65zc76wj9wx37hw";
       };
 
       disabled = luaOlder "5.1";
 
       meta = {
-        homepage = "https://github.com/echasnovski/mini.test";
+        homepage = "https://github.com/nvim-mini/mini.test";
         license = lib.licenses.mit;
         description = "Test neovim plugins. Part of the mini.nvim suite.";
       };
@@ -5108,21 +5140,23 @@ final: prev: {
       fetchurl,
       fetchzip,
       luaOlder,
+      tree-sitter-orgmode,
     }:
     buildLuarocksPackage {
       pname = "orgmode";
-      version = "0.7.3-1";
+      version = "0.7.5-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/orgmode-0.7.3-1.rockspec";
-          sha256 = "1zvyidy23am6qkya8yc6pxxhc5nf42y8c9djfmlx67z89gxfxm9n";
+          url = "mirror://luarocks/orgmode-0.7.5-1.rockspec";
+          sha256 = "03spnsdpl34qkh14gniac15k4rncai2239wnv90p7z9wvkr2y0s1";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-orgmode/orgmode/archive/0.7.3.zip";
-        sha256 = "16glwzys6pcq8pi96jkdc93fasqgf0d8yqncxaw3741906mni9ym";
+        url = "https://github.com/nvim-orgmode/orgmode/archive/0.7.5.zip";
+        sha256 = "00x1spp077bgm180pr0pnwa6hk34isjizf2zxcmlaq06rk548i7i";
       };
 
       disabled = luaOlder "5.1";
+      propagatedBuildInputs = [ tree-sitter-orgmode ];
 
       meta = {
         homepage = "https://nvim-orgmode.github.io";
@@ -5903,7 +5937,6 @@ final: prev: {
       buildLuarocksPackage,
       fetchFromGitHub,
       fetchurl,
-      inspect,
       ltreesitter,
       lua-cjson,
       luafilesystem,
@@ -5913,22 +5946,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "teal-language-server";
-      version = "0.1.3-1";
+      version = "0.1.4-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/teal-language-server-0.1.3-1.rockspec";
-          sha256 = "1mqg294rgzcfbfam0qdab3z93j7gsx250hs9f271337gqki34848";
+          url = "mirror://luarocks/teal-language-server-0.1.4-1.rockspec";
+          sha256 = "0hgjlpyc90r3m4n4y6k8vjf5cdkv1q5b1mrfc31pssrhfwplq5hq";
         }).outPath;
       src = fetchFromGitHub {
         owner = "teal-language";
         repo = "teal-language-server";
-        tag = "0.1.3";
-        hash = "sha256-XuHm6AbcBmv0fyQjlJlBMWqJlGYoveW7BEEN+axMRhw=";
+        tag = "0.1.4";
+        hash = "sha256-5SdKjE690zxLAl2Kwcy2Bk49KUrpkYBPviK+mrQnMec=";
       };
 
       propagatedBuildInputs = [
         argparse
-        inspect
         ltreesitter
         lua-cjson
         luafilesystem
@@ -6000,8 +6032,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "nvim-telescope";
         repo = "telescope.nvim";
-        rev = "7d324792b7943e4aa16ad007212e6acc6f9fe335";
-        hash = "sha256-+e/ijnuw0Zrj+zcfO2iRusukD4WHrgVC5reOTNk/04o=";
+        rev = "427b576c16792edad01a92b89721d923c19ad60f";
+        hash = "sha256-/GycCrepwDer0UvBN/f84pJUSvNp+ZfTIUPv0psl+IQ=";
       };
 
       disabled = lua.luaversion != "5.1";
@@ -6227,6 +6259,36 @@ final: prev: {
         homepage = "https://github.com/rest-nvim/tree-sitter-http";
         license.fullName = "UNKNOWN";
         description = "tree-sitter parser for http";
+      };
+    }
+  ) { };
+
+  tree-sitter-kulala_http = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luarocks-build-treesitter-parser,
+    }:
+    buildLuarocksPackage {
+      pname = "tree-sitter-kulala_http";
+      version = "0.2.1-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/tree-sitter-kulala_http-0.2.1-1.rockspec";
+          sha256 = "05zrx3sqjdyibfdlm0ycf02s0vpzbaq47gwamg9bizjd5mhhyv22";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/mistweaverco/tree-sitter-kulala-http/archive/v0.2.1.zip";
+        sha256 = "1xl2qjfdqj13jmqzvh90i9djlqf675br42z6jm3cfkmj14riid1s";
+      };
+
+      nativeBuildInputs = [ luarocks-build-treesitter-parser ];
+
+      meta = {
+        homepage = "https://kulala.app";
+        license = lib.licenses.mit;
+        description = "Tree-sitter grammar for http (kulala-flavour).";
       };
     }
   ) { };

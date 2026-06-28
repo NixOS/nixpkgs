@@ -330,7 +330,7 @@ in
           '';
 
           config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
-            security.polkit.enable = lib.mkDefault true;
+            security.run0.enable = lib.mkDefault true;
             environment.systemPackages = [ pkgs.polkit-stdin-agent ];
           };
         }

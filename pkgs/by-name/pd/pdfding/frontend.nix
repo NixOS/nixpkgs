@@ -2,7 +2,6 @@
   stdenv,
   fetchNpmDeps,
   fetchzip,
-  fetchFromGitHub,
   npmHooks,
 
   tailwindcss_4,

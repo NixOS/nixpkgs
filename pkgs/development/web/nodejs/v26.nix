@@ -23,13 +23,16 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.3.0";
-  sha256 = "319ad5d7d20cc622e55eb75b9f1a2546b77a08bd462b67030d0c89316c2c2349";
+  version = "26.4.0";
+  sha256 = "9eceb3621024069d91035b5471d2ebe86aa04d22dbeba72a782eaf36ff9183ac";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
         [
-          ./configure-emulator.patch
+          (fetchpatch2 {
+            url = "https://github.com/nodejs/node/commit/b087e922bde7bfd0cb4b7340bb473ddbbb84ee85.patch?full_index=1";
+            hash = "sha256-338rkBx2OAKyaelFj6jePU+shl+KTAl29a8KBItbDqc=";
+          })
         ]
       else
         [

@@ -15,18 +15,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.43.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UFz+CQLGbzFlpa5Mhf/frnQJWttF35URvua1QTfoaZ0=";
+    hash = "sha256-pabav4ehssc3oQFuF4MgnSG7Ql1r5Y6n+ZzYbgh5tz8=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-7Pl020NKKzRpQftzEYRpQ0v1mkPnO3kVZITvFSLYztI=";
+  npmDepsHash = "sha256-Df1EVzKYWo5o2cvP3kFGcNKEuDu3fZno4OTKBe37IK8=";
 
   dontPatchElf = stdenv.hostPlatform.isDarwin;
 
@@ -54,9 +54,13 @@ buildNpmPackage (finalAttrs: {
     # Remove node-pty dependency from packages/core/package.json
     ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
 
-    # Fix ripgrep path for SearchText; ensureRgPath() on its own may return the path to a dynamically-linked ripgrep binary without required libraries
+    # Prefer the Nix ripgrep binary by prepending it to candidate paths
     substituteInPlace packages/core/src/tools/ripGrep.ts \
-      --replace-fail "await ensureRgPath();" "'${lib.getExe ripgrep}';"
+      --replace-fail "const candidatePaths = [" "const candidatePaths = [\"${lib.getExe ripgrep}\", "
+
+    # Trust the Nix store path by adding it to standard system prefixes
+    substituteInPlace packages/core/src/utils/paths.ts \
+      --replace-fail "const trustedPrefixes = [" "const trustedPrefixes = [\"/nix/store\", "
 
     # Disable auto-update by changing default values in settings schema
     sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts

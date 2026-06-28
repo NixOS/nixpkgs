@@ -46,6 +46,19 @@ let
   folders = lib.pipe cfg.settings.folders [
     (lib.filterAttrs (_: folder: folder.enable))
     builtins.attrValues
+    (map (
+      folder:
+      folder
+      // {
+        devices = map (
+          device:
+          if builtins.isString device then
+            { deviceId = cfg.settings.devices.${device}.id; }
+          else
+            { deviceId = cfg.settings.devices.${device.name}.id; } // device
+        ) folder.devices;
+      }
+    ))
   ];
 
   jq = "${pkgs.jq}/bin/jq";

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiodiscover";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodiscover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QQwEYxflOzNN+J0lCIp+LzwB7m000PgZH8MSsKTUEMw=";
+    hash = "sha256-yrXy665O9VZ3aWn23QQCJm5USBV0P5aTSsQU5QGIcP8=";
   };
 
   build-system = [ poetry-core ];

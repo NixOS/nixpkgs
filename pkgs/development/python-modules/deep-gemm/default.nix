@@ -60,7 +60,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
         paths = with cudaPackages; [
           (lib.getBin cuda_nvcc) # bin/nvcc, bin/ptxas, nvvm/, nvcc.profile
           (lib.getBin cutlass) # include/cute, include/cutlass
-          (lib.getInclude cuda_cccl) # include/cuda/std/* (libcu++)
+          (lib.getInclude cccl) # include/cuda/std/* (libcu++)
           (lib.getInclude cuda_cudart) # include/cuda_runtime.h, cuda_bf16.h, cuda_fp8.h
           (lib.getInclude cuda_cuobjdump) # bin/cuobjdump
         ];

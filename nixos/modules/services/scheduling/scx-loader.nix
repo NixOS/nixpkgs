@@ -75,7 +75,11 @@ in
       }
     ];
 
-    environment.systemPackages = [ cfg.package ] ++ cfg.schedsPackages;
+    environment = {
+      systemPackages = [ cfg.package ] ++ cfg.schedsPackages;
+      etc."scx_loader.toml".source = configFile;
+    };
+
     systemd.packages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
 
@@ -84,10 +88,6 @@ in
     systemd.services.scx_loader = {
       path = cfg.schedsPackages;
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        TemporaryFileSystem = [ "/etc" ];
-        BindReadOnlyPaths = [ "${configFile.outPath}:/etc/scx_loader.toml" ];
-      };
     };
   };
 

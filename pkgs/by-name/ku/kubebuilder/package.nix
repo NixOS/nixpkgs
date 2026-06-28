@@ -69,6 +69,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/kubernetes-sigs/kubebuilder";
     changelog = "https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cmars ];
+    maintainers = [ ];
   };
 })

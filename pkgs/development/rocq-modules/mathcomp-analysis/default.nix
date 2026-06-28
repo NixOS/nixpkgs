@@ -4,6 +4,7 @@
   mathcomp,
   mathcomp-finmap,
   mathcomp-bigenough,
+  mathcomp-real-closed,
   stdlib,
   single ? false,
   rocq-core,
@@ -58,6 +59,7 @@ let
       analysis-deps = [
         mathcomp.field
         mathcomp-bigenough
+        mathcomp-real-closed
       ];
       intra-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath =

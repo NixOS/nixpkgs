@@ -13,6 +13,8 @@
         pkgs.openssl
       ];
 
+      programs.fuse.enable = true;
+
       specialisation.fstab-test.configuration = {
         # This can't be fileSytems, as the qemu machinery doesn't honor it.
         virtualisation.fileSystems."/plain" = {

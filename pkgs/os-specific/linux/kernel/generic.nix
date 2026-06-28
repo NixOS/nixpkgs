@@ -79,6 +79,9 @@ lib.makeOverridable (
     extraMeta ? { },
     extraPassthru ? { },
 
+    target ? null,
+    buildDTBs ? null,
+
     isLTS ? false,
     isZen ? false,
 
@@ -284,26 +287,34 @@ lib.makeOverridable (
       };
     }; # end of configfile derivation
 
-    kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) {
-      inherit
-        pname
-        version
-        src
-        kernelPatches
-        randstructSeed
-        extraMakeFlags
-        extraMeta
-        configfile
-        modDirVersion
-        ;
-      pos = builtins.unsafeGetAttrPos "version" args;
+    kernel = (callPackage ./build.nix { inherit lib stdenv buildPackages; }) (
+      {
+        inherit
+          pname
+          version
+          src
+          kernelPatches
+          randstructSeed
+          extraMakeFlags
+          extraMeta
+          configfile
+          modDirVersion
+          ;
+        pos = builtins.unsafeGetAttrPos "version" args;
 
-      config = {
-        CONFIG_MODULES = "y";
-        CONFIG_FW_LOADER = "y";
-        CONFIG_RUST = if withRust then "y" else "n";
-      };
-    };
+        config = {
+          CONFIG_MODULES = "y";
+          CONFIG_FW_LOADER = "y";
+          CONFIG_RUST = if withRust then "y" else "n";
+        };
+      }
+      // lib.optionalAttrs (target != null) {
+        inherit target;
+      }
+      // lib.optionalAttrs (buildDTBs != null) {
+        inherit buildDTBs;
+      }
+    );
 
   in
   kernel.overrideAttrs (

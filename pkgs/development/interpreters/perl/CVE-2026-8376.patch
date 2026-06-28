@@ -1,0 +1,20 @@
+Targeted patch for CVE-2026-8376, based on 5e7f119eb2bb1181be908701f22bf7068e722f1c but avoids changes to t/re/pat_psycho.t as they do not apply cleanly.
+
+diff --git a/regcomp_study.c b/regcomp_study.c
+index b513454a4258..1602663f4b26 100644
+--- a/regcomp_study.c
++++ b/regcomp_study.c
+@@ -2784,6 +2784,13 @@ Perl_study_chunk(pTHX_
+                                                (U8 *) SvEND(data->last_found))
+                                 - (U8*)s;
+                         l -= old;
++
++                        if (l > 0 &&
++                            (mincount >= SSize_t_MAX / (SSize_t)l
++                             || old > SSize_t_MAX - mincount * (SSize_t)l)) {
++                            FAIL("Regexp out of space");
++                        }
++
+                         /* Get the added string: */
+                         last_str = newSVpvn_utf8(s  + old, l, UTF);
+                         last_chrs = UTF ? utf8_length((U8*)(s + old),

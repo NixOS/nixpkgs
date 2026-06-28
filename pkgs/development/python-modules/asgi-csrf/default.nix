@@ -49,6 +49,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "asgi_csrf" ];
 
   meta = {
+    # https://github.com/simonw/asgi-csrf/issues/38
+    broken = lib.versionAtLeast python-multipart.version "0.0.26";
     description = "ASGI middleware for protecting against CSRF attacks";
     license = lib.licenses.asl20;
     homepage = "https://github.com/simonw/asgi-csrf";

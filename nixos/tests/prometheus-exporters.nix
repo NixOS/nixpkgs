@@ -21,6 +21,9 @@ let
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
+    *  `testBackend` (optional)
+    *    whether to run in `containers` (default) or `nodes` scope
+    *
     *  Example:
     *    exporterTests.<exporterName> = {
     *      exporterConfig = {
@@ -108,7 +111,7 @@ let
           wait_for_unit("prometheus-bind-exporter.service")
           wait_for_open_port(9119)
           succeed(
-              "curl -sSf http://localhost:9119/metrics | grep 'bind_query_recursions_total 0'"
+              "curl -sSf http://localhost:9119/metrics | grep 'bind_up 1'"
           )
         '';
       };
@@ -168,6 +171,7 @@ let
     blackbox =
       { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           configFile = pkgs.writeText "config.yml" (
@@ -373,16 +377,23 @@ let
       };
 
     dovecot =
-      { ... }:
+      { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           scopes = [ "global" ];
-          socketPath = "/var/run/dovecot2/old-stats";
+          socketPath = "/var/run/dovecot2/stats-reader";
           user = "root"; # <- don't use user root in production
         };
         metricProvider = {
-          services.dovecot2.enable = true;
+          services.dovecot2 = {
+            enable = true;
+            settings = {
+              dovecot_config_version = pkgs.dovecot.version;
+              dovecot_storage_version = pkgs.dovecot.version;
+            };
+          };
         };
         exporterTest = ''
           wait_for_unit("prometheus-dovecot-exporter.service")
@@ -423,6 +434,7 @@ let
     ebpf =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           names = [ "timers" ];
@@ -447,7 +459,6 @@ let
           # `services.elasticsearch` is unmaintained; OpenSearch is the same
           # engine class and is explicitly supported by the exporter.
           services.opensearch.enable = true;
-          virtualisation.memorySize = 2048;
         };
         exporterTest = ''
           wait_for_unit("opensearch.service")
@@ -463,6 +474,7 @@ let
     fail2ban =
       { ... }:
       {
+        testBackend = "nodes"; # setfacl
         exporterConfig = {
           enable = true;
           exitOnError = true;
@@ -964,6 +976,7 @@ let
     modemmanager =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           refreshRate = "10s";
@@ -1099,7 +1112,7 @@ let
           wait_for_unit("nginx.service")
           wait_for_unit("prometheus-nextcloud-exporter.service")
           wait_for_open_port(9205)
-          succeed("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
+          wait_until_succeeds("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
         '';
       };
 
@@ -1658,24 +1671,6 @@ let
         '';
       };
 
-    scaphandre =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          boot.kernelModules = [ "intel_rapl_common" ];
-        };
-        exporterTest = ''
-          wait_for_unit("prometheus-scaphandre-exporter.service")
-          wait_for_open_port(8080)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:8080/metrics'"
-          )
-        '';
-      };
-
     shelly =
       { pkgs, ... }:
       {
@@ -2143,6 +2138,7 @@ let
     zfs =
       { ... }:
       {
+        testBackend = "nodes"; # zfs kmod
         exporterConfig = {
           enable = true;
         };
@@ -2165,13 +2161,14 @@ lib.mapAttrs (
     { pkgs, lib, ... }:
     let
       testConfig = testConfigFun { inherit pkgs lib; };
-      nodeName = testConfig.nodeName or exporter;
+      testBackend = testConfig.testBackend or "containers";
+      nodeName = "machine";
     in
     {
       name = "prometheus-${exporter}-exporter";
       node.pkgsReadOnly = testConfig.pkgsReadOnly or true;
 
-      nodes.${nodeName} = lib.mkMerge [
+      ${testBackend}.${nodeName} = lib.mkMerge [
         {
           services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
         }
@@ -2196,7 +2193,6 @@ lib.mapAttrs (
               "${nodeName}.${line}"
           ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest))
         )}
-        ${nodeName}.shutdown()
       '';
 
       meta.maintainers = [ ];

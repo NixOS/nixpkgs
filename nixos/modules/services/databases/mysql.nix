@@ -293,6 +293,19 @@ in
         '';
       };
 
+      secureSuperUserByDefault = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to automatically secure the root@localhost user with auth_socket authentication.
+
+          ::: {.note}
+          When enabled (default), the module will ensure root@localhost uses socket authentication,
+          preventing any local user from connecting as root without proper credentials.
+          :::
+        '';
+      };
+
       replication = {
         role = lib.mkOption {
           type = lib.types.enum [
@@ -410,6 +423,10 @@ in
       {
         assertion = !cfg.galeraCluster.enable || isMariaDB;
         message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
+      }
+      {
+        assertion = !isMariaDB || cfg.secureSuperUserByDefault == true;
+        message = "'services.mysql.secureSuperUserByDefault' has no effect on MariaDB (which is already secure by default)";
       }
     ]
     # galeraCluster options checks
@@ -571,6 +588,7 @@ in
         let
           # The super user account to use on *first* run of MySQL server
           superUser = if isMariaDB then cfg.user else "root";
+          isStateVersion2611Plus = lib.versionAtLeast config.system.stateVersion "26.11";
         in
         ''
           ${lib.optionalString isMariaDB ''
@@ -651,8 +669,34 @@ in
                 cat ${toString cfg.initialScript} | ${cfg.package}/bin/mysql -u ${superUser} -N
               ''}
 
+              # Secure root@localhost for MySQL/Percona on first initialization
+              ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
+                echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
+              ''}
+
               rm ${cfg.dataDir}/mysql_init
           fi
+
+          ${lib.optionalString (cfg.secureSuperUserByDefault && !isMariaDB) ''
+            # We try to detect if we are in the default insecure auth mode for MySQL (all users can connect with password)
+            # If the configuration has been moved to the socket-peer credential authentication we do nothing
+            # If we are not able to connect it also means the default setup has been adjusted, so we also skip and do not do any changes
+            if plugin_info=$(${cfg.package}/bin/mysql -u ${superUser} --skip-column-names 2>/dev/null -e "SELECT plugin FROM mysql.user WHERE user = 'root' AND host = 'localhost';"); then
+              case "$plugin_info" in
+                *auth_socket*) ;;
+                *)
+                  ${lib.optionalString isStateVersion2611Plus ''
+                    # Attempt to auto-fix to prevent local authentication without a password
+                    echo "Securing root@localhost with auth_socket to local connection without password, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-6qxx-6rg8-c4p8" >&2
+                    echo "ALTER USER root@localhost IDENTIFIED WITH auth_socket;" | ${cfg.package}/bin/mysql -u ${superUser} -N
+                  ''}
+                  ${lib.optionalString (!isStateVersion2611Plus) ''
+                    echo "Security warning: root@localhost seems to have open authentication, consider adjusting your configuration. See https://github.com/NixOS/nixpkgs/security/advisories/GHSA-6qxx-6rg8-c4p8" >&2
+                  ''}
+                  ;;
+              esac
+            fi
+          ''}
 
           ${lib.optionalString (cfg.ensureDatabases != [ ]) ''
             (

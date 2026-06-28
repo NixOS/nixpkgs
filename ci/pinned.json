@@ -12,19 +12,6 @@
       "revision": "8c91a71d13451abc40eb9dae8910f972f979852f",
       "url": "https://github.com/NixOS/nixpkgs/archive/8c91a71d13451abc40eb9dae8910f972f979852f.tar.gz",
       "hash": "sha256-fnzKKPvS+oieI/pTzotA5tkoM47EB1NpaBcgk4R97hE="
-    },
-    "treefmt-nix": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "numtide",
-        "repo": "treefmt-nix"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "db947814a175b7ca6ded66e21383d938df01c227",
-      "url": "https://github.com/numtide/treefmt-nix/archive/db947814a175b7ca6ded66e21383d938df01c227.tar.gz",
-      "hash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM="
     }
   },
   "version": 8

@@ -2164,6 +2164,21 @@ runTests {
     };
   };
 
+  testConcatMapAttrsDuplicates = {
+    expr =
+      concatMapAttrs
+        (name: value: {
+          final = value;
+        })
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = {
+      final = 2;
+    };
+  };
+
   testFilterAttrs = {
     expr = filterAttrs (n: v: n != "a" && (v.hello or false) == true) {
       a.hello = true;

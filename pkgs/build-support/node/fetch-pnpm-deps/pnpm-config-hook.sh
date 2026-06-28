@@ -118,4 +118,6 @@ pnpmConfigHook() {
     echo "Finished pnpmConfigHook"
 }
 
-postConfigureHooks+=(pnpmConfigHook)
+if [ -z "${dontPnpmConfigure-}" ]; then
+  postConfigureHooks+=(pnpmConfigHook)
+fi

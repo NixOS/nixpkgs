@@ -102,6 +102,8 @@ mapAliases {
   audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
+  avro3k = throw "'avro3k' was removed because it's unmaintained since 2014"; # added 2026-06-18
+  awesome-slugify = throw "'awesome-slugify' has been removed as it was unmaintained upstream"; # Added 2026-06-14
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
   backports-functools-lru-cache = throw "'backports-functools-lru-cache' has been removed from nixpkgs as it was not longer used in python2"; # Added 2026-01-14
   backports_shutil_get_terminal_size = throw "'backports_shutil_get_terminal_size' has been renamed to/replaced by 'backports-shutil-get-terminal-size'"; # Converted to throw 2025-10-29
@@ -242,12 +244,14 @@ mapAliases {
   fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
+  ghidra-bridge = throw "'ghidra-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
   gotrue = throw "'gotrue' has been replaced by 'supabase-auth'"; # Added 2026-03-08
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
+  gpgme = gpg; # added 2026-06-26
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
@@ -286,6 +290,7 @@ mapAliases {
   jaraco_stream = throw "'jaraco_stream' has been renamed to/replaced by 'jaraco-stream'"; # Converted to throw 2025-10-29
   jaraco_text = throw "'jaraco_text' has been renamed to/replaced by 'jaraco-text'"; # Converted to throw 2025-10-29
   JayDeBeApi = throw "'JayDeBeApi' has been renamed to/replaced by 'jaydebeapi'"; # Converted to throw 2025-10-29
+  jfx-bridge = throw "'jfx-bridge' has been removed as it was unmaintained upstream"; # Added 2026-04-05
   jinja2_pluralize = throw "'jinja2_pluralize' has been renamed to/replaced by 'jinja2-pluralize'"; # Converted to throw 2025-10-29
   jinja2_time = throw "'jinja2_time' has been renamed to/replaced by 'jinja2-time'"; # Converted to throw 2025-10-29
   JPype1 = throw "'JPype1' has been renamed to/replaced by 'jpype1'"; # Converted to throw 2025-10-29
@@ -298,7 +303,7 @@ mapAliases {
   jupyter_core = throw "'jupyter_core' has been renamed to/replaced by 'jupyter-core'"; # Converted to throw 2025-10-29
   jupyter_server = throw "'jupyter_server' has been renamed to/replaced by 'jupyter-server'"; # Converted to throw 2025-10-29
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
-  kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
+  kafka-python-ng = throw "'kafka-python-ng' has been replaced by 'kafka-python'"; # added 2026-06-13
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
   keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
@@ -367,6 +372,7 @@ mapAliases {
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
+  mysql-connector = mysql-connector-python; # added 2026-06-21
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
   ninja-python = throw "'ninja-python' has been renamed to/replaced by 'ninja'"; # Converted to throw 2025-10-29
   nitpick = throw "'nitpick' has been removed because it was unmaintained upstream since 2017 and using python2"; # added 2025-08-25
@@ -418,6 +424,7 @@ mapAliases {
   push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
   pushbullet = throw "'pushbullet' has been renamed to/replaced by 'pushbullet-py'"; # Converted to throw 2025-10-29
   Pweave = throw "'Pweave' has been renamed to/replaced by 'pweave'"; # Converted to throw 2025-10-29
+  py-deprecate = throw "'py-deprecate' has been renamed to/replaced by 'pydeprecate'"; # Converted to throw 2026-06-19
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
@@ -437,6 +444,7 @@ mapAliases {
   pygls_2 = pygls; # added 2026-01-05
   pygtk = throw "pygtk has been removed because it was not supported by python3"; # Added 2026-01-14
   pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
+  pyhidra = throw "'pyhidra' has been removed as it was incorporated into upstream and renamed 'pyghidra'"; # Added 2026-04-21
   pyhiveapi = throw "'pyhiveapi' has been renamed to/replaced by 'pyhive-integration'"; # Converted to throw 2025-10-29
   pyialarmxr = throw "'pyialarmxr' has been renamed to/replaced by 'pyialarmxr-homeassistant'"; # Converted to throw 2025-10-29
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
@@ -483,6 +491,7 @@ mapAliases {
   pysuez = throw "'pysuez' has been renamed to/replaced by 'pysuezv2'"; # Converted to throw 2025-10-29
   pytado = throw "'pytado' has been renamed to/replaced by 'python-tado'"; # Converted to throw 2025-10-29
   pytedee-async = aiotedee; # added 2025-07-06
+  pytest-kafka = throw "'pytest-kafka' was removed because it is no longer used"; # added 2026-06-17
   pytest-pep8 = throw "'pytest-pep8' has been renamed to/replaced by 'pytestpep8'"; # Converted to throw 2025-10-29
   pytest-subtests = throw "'pytest-subtests' has been integrated into pytest 9."; # Added 2026-01-21
   pytest_6 = throw "'pytest_6' has been renamed to/replaced by 'pytest'"; # Converted to throw 2025-10-29
@@ -515,6 +524,7 @@ mapAliases {
   pytorchWithCuda = throw "'pytorchWithCuda' has been renamed to/replaced by 'torchWithCuda'"; # Converted to throw 2025-10-29
   pytorchWithoutCuda = throw "'pytorchWithoutCuda' has been renamed to/replaced by 'torchWithoutCuda'"; # Converted to throw 2025-10-29
   pytwitchapi = throw "'pytwitchapi' has been renamed to/replaced by 'twitchapi'"; # Converted to throw 2025-10-29
+  pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
@@ -593,6 +603,7 @@ mapAliases {
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
+  subunit = python-subunit; # added 2026-06-21
   supafunc = throw "'supafunc' has been replaced by 'supabase-functions'"; # Added 2026-03-08
   supervise_api = throw "'supervise_api' has been renamed to/replaced by 'supervise-api'"; # Converted to throw 2025-10-29
   swh-perfecthash = throw "'swh-perfecthash' has been renamed to/replaced by 'swh-shard'"; # added 2025-11-13
@@ -651,6 +662,7 @@ mapAliases {
   x11_hash = throw "'x11_hash' has been renamed to/replaced by 'x11-hash'"; # Converted to throw 2025-10-29
   xapp = throw "'xapp' has been renamed to/replaced by 'python-xapp'"; # Converted to throw 2025-10-29
   xbox-webapi = throw "xbox-webapi was removed because Home Assistant switched to python-xbox"; # added 2025-12-03
+  xlib = python-xlib; # added 2026-06-21
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
   y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21
   Yapsy = throw "'Yapsy' has been renamed to/replaced by 'yapsy'"; # Converted to throw 2025-10-29

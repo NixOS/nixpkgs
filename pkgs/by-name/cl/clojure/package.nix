@@ -10,7 +10,9 @@
   rlwrap,
   makeWrapper,
   writeScript,
+  versionCheckHook,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
   version = "1.12.5.1654";
@@ -31,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =
@@ -69,11 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   installCheckPhase = ''
+    runHook preInstallCheck
+
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${finalAttrs.version}.jar
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = writeScript "update-clojure" ''
@@ -99,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://clojure.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
+    mainProgram = "clojure";
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,

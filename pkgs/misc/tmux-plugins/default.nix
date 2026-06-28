@@ -4,6 +4,7 @@
   pkgs,
   stdenv,
   config,
+  nix-update-script,
 }:
 
 let
@@ -45,6 +46,8 @@ let
 
             strictDeps = true;
             __structuredAttrs = true;
+
+            passthru.updateScript = nix-update-script { };
 
             inherit
               pluginName
@@ -235,12 +238,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.2.0";
+    version = "3.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
+      hash = "sha256-KHvBT8HjFZFwnpbWjW3LzXWUNOGbDgZTPncYvtIliD0=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -521,7 +524,7 @@ in
     rtpFilePath = "minimal.tmux";
     version = "0-unstable-2025-06-04";
     src = fetchFromGitHub {
-      owner = "niksingh710";
+      owner = "semi710";
       repo = "minimal-tmux-status";
       rev = "de2bb049a743e0f05c08531a0461f7f81da0fc72";
       hash = "sha256-0gXtFVan+Urb79AjFOjHdjl3Q73m8M3wFSo3ZhjxcBA=";
@@ -534,10 +537,10 @@ in
         quickly identify the prefix state. Designed to be minimal in appearance and dependencies, it is ideal for users
         who want essential information without clutter.
       '';
-      homepage = "https://github.com/niksingh710/minimal-tmux-status.git";
+      homepage = "https://github.com/semi710/minimal-tmux-status.git";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        niksingh710
+        semi710
       ];
       platforms = lib.platforms.unix;
     };
@@ -1357,6 +1360,49 @@ in
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ szaffarano ];
+    };
+  };
+
+  tmux-window-name = mkTmuxPlugin {
+    pluginName = "tmux-window-name";
+    version = "2024-03-08";
+    src = fetchFromGitHub {
+      owner = "ofirgall";
+      repo = "tmux-window-name";
+      rev = "34026b6f442ceb07628bf25ae1b04a0cd475e9ae";
+      sha256 = "sha256-BNgxLk/BkaQkGlB4g2WKVs39y4VHL1Y2TdTEoBy7yo0=";
+    };
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    rtpFilePath = "tmux_window_name.tmux";
+    postInstall = ''
+      script=$target/scripts/rename_session_windows.py
+
+      sed -i \
+        -e 's|^USR_BIN_REMOVER.*|USR_BIN_REMOVER = (r"^" + os.path.expanduser("~") + r"/.nix-profile/bin/(.+)( --.*)?", r"\\g<1>")|' \
+        -e 's|^\(\s*\)substitute_sets: List.*|\1substitute_sets: List[Tuple] = field(default_factory=lambda: [(os.path.expanduser("~") + r"/.nix-profile/bin/(.+) --.*", r"\\g<1>"), (r".+ipython([32])", r"ipython\\g<1>"), USR_BIN_REMOVER, (r"(bash) (.+)/(.+[ $])(.+)", r"\\g<3>\\g<4>")])|' \
+        -e 's|^\(\s*\)dir_programs: List.*|\1dir_programs: List[str] = field(default_factory=lambda: [os.path.expanduser("~") + "/.nix-profile/bin/" + p for p in ["vim", "vi", "git", "nvim"]])|' \
+        $script
+
+      for f in tmux_window_name.tmux scripts/rename_session_windows.py; do
+        wrapProgram $target/$f \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              (pkgs.python3.withPackages (
+                p: with p; [
+                  libtmux
+                  pip
+                ]
+              ))
+            ]
+          }
+      done
+    '';
+    meta = with lib; {
+      homepage = "https://github.com/ofirgall/tmux-window-name";
+      description = "Tmux plugin to name your windows smartly, like IDE's";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ndom91 ];
     };
   };
 }

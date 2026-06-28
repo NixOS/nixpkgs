@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jaxtyping";
-  version = "0.3.10";
+  version = "0.3.11";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "patrick-kidger";
     repo = "jaxtyping";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7HhStNjVKjnPfXiuXDLsvwH1efSGSMqRuCWeOtpcidw=";
+    hash = "sha256-oC8n4YiV39EjRm8vYDFrUVJmEPeH814q7uIKdmpqnJk=";
   };
 
   build-system = [ hatchling ];

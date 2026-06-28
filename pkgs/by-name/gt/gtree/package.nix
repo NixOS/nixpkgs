@@ -11,16 +11,16 @@
 # it's updated.
 buildGo126Module (finalAttrs: {
   pname = "gtree";
-  version = "1.13.6";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E3Nri8kFMh6NYp29vFFNAlJxdfOvLR1inbD+KALXZms=";
+    hash = "sha256-LMVXC22fTrPt4S5HkErMrpZwwanN5blY/TPUE8bg95s=";
   };
 
-  vendorHash = "sha256-Pkc2UV/77YdKm5ZWKCSKE0dljUzC5dw1f08T+3MvFTE=";
+  vendorHash = "sha256-Vd5VKKl79Qu5R7jOYS1CTtQuAis9vWUbpBWnEI7sgpk=";
 
   subPackages = [
     "cmd/gtree"

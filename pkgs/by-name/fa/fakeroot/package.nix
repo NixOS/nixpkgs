@@ -22,10 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "fakeroot";
     rev = "upstream/${finalAttrs.version}";
     domain = "salsa.debian.org";
-    hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
+    hash = "sha256-sAzXeONjDT753lbu7amQY6yXpaTNCa4wFOzB01SRbCs=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
+    ./add-missing-wrapawk.patch
     ./einval.patch
   ];
 

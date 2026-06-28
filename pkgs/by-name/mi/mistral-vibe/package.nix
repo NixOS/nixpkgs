@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # tests
+  gitMinimal,
   uv,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -22,13 +23,24 @@ let
           hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
         };
       });
+      opentelemetry-exporter-otlp-proto-http =
+        prev.opentelemetry-exporter-otlp-proto-http.overridePythonAttrs
+          (old: {
+            disabledTests =
+              (old.disabledTests or [ ])
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                # AssertionError: False is not true
+                # self.assertTrue(0.75 < after - before < 1.25)
+                "test_retry_timeout"
+              ];
+          });
     };
   };
   python3Packages = python.pkgs;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.15.0";
+  version = "2.18.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UGi20sH/w5Yv6d89c8/1+ly3xssqnjhLug8Mvb62kK0=";
+    hash = "sha256-2eDu2Fqd6K/ZxWSl/pXSN284z7UquNb+zwkHYe9ZWBw=";
   };
 
   build-system = with python3Packages; [
@@ -148,6 +160,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "vibe" ];
 
   nativeCheckInputs = [
+    # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
+    gitMinimal
     python3Packages.pytest-asyncio
     python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
@@ -161,6 +175,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
+    # vibe is spawned in a sub-process and fails to import `mcp`
+    # ModuleNotFoundError: No module named 'mcp'
+    "TestMCPConnectionPoolIntegration"
+
+    # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
+    "test_changes_when_file_changes"
+
     # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
     # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
     "test_generic_backend_streaming_uses_ssl_cert_file"

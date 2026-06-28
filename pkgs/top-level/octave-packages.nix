@@ -118,7 +118,6 @@ makeScope newScope (
 
     image = callPackage ../development/octave-modules/image {
       inherit (pkgs)
-        mesa
         gnuplot
         makeFontsConf
         writableTmpDirAsHomeHook

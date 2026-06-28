@@ -200,8 +200,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    warnings = lib.optional config.services.pulseaudio.enable "Support for Pulseaudio + gdm will be removed in NixOS 26.11";
-
     services.xserver.displayManager.lightdm.enable = false;
 
     users.users = lib.mkMerge [

@@ -4,6 +4,7 @@
   yq,
   python3Packages,
   fetchFromCodeberg,
+  ethtool,
   iproute2,
   libbpf,
   nixosTests,
@@ -62,6 +63,9 @@ let
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
         --replace-fail '/usr/share/iproute2' '${iproute2}/share/iproute2'
+
+      substituteInPlace libifstate/link/base.py \
+        --replace-fail "/usr/sbin/ethtool" "${lib.getExe ethtool}"
     ''
     + lib.optionalString withBpf ''
       substituteInPlace libifstate/bpf/ctypes.py \

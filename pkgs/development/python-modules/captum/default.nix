@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
@@ -52,6 +51,10 @@ buildPythonPackage rec {
     parameterized
     scikit-learn
   ];
+
+  preCheck = ''
+    export OMP_NUM_THREADS=1
+  '';
 
   disabledTestPaths =
     lib.optionals stdenv.hostPlatform.isDarwin [

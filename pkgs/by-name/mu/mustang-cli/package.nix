@@ -19,14 +19,14 @@ let
   };
 in
 maven.buildMavenPackage (finalAttrs: {
-  version = "2.23.1";
+  version = "2.24.0";
   pname = "mustang-cli";
 
   src = fetchFromGitHub {
     owner = "ZUGFeRD";
     repo = "mustangproject";
     tag = "core-${finalAttrs.version}";
-    hash = "sha256-HhNcmXXwnR2u1hjSeNYfU+j9EdJ+tbXhgWHj1k4eSuw=";
+    hash = "sha256-hNsVVG0OJlshv0J8l6TYtoFCaPKVQrv6U8HO/I6whBo=";
   };
 
   strictDeps = true;

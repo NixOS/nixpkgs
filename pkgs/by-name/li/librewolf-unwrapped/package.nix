@@ -29,9 +29,13 @@ in
     description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [
+      azahi
       dwrege
       fpletz
       hythera
+      mBornand
+      thbemme
+      wolfgangwalther
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

@@ -5,7 +5,6 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -13,16 +12,18 @@ let
     sanitizeDerivationName
     ;
   inherit (lib.lists)
-    filter
-    foldr
-    foldl'
+    all
+    concatLists
     concatMap
     elemAt
-    all
-    partition
-    groupBy
-    take
+    filter
     foldl
+    foldl'
+    foldr
+    groupBy
+    partition
+    reverseList
+    take
     ;
 in
 
@@ -370,7 +371,11 @@ rec {
 
     :::
   */
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
+  concatMapAttrs =
+    f: v:
+    listToAttrs (
+      concatLists (reverseList (mapAttrsToList (name: value: attrsToList (f name value)) v))
+    );
 
   /**
     Update or set specific paths of an attribute set.
@@ -1800,22 +1805,28 @@ rec {
     :::
   */
   matchAttrs =
-    pattern: attrs:
+    let
+      recurse =
+        pattern: attrs:
+        all (
+          # Compare equality between `pattern` & `attrs`.
+          attr:
+          # Missing attr, not equal.
+          attrs ? ${attr}
+          && (
+            let
+              lhs = pattern.${attr};
+              rhs = attrs.${attr};
+            in
+            # Simple equality check is primarily for non-attrsets, but we run it
+            # on attrsets too, since it may let us avoid recursing
+            lhs == rhs || isAttrs lhs && isAttrs rhs && recurse lhs rhs
+          )
+        ) (attrNames pattern);
+    in
+    pattern:
     assert isAttrs pattern;
-    all (
-      # Compare equality between `pattern` & `attrs`.
-      attr:
-      # Missing attr, not equal.
-      attrs ? ${attr}
-      && (
-        let
-          lhs = pattern.${attr};
-          rhs = attrs.${attr};
-        in
-        # If attrset check recursively
-        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
-      )
-    ) (attrNames pattern);
+    recurse pattern;
 
   /**
     Override only the attributes that are already present in the old set

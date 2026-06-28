@@ -53,7 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      azahi
       peterhoeg
     ];
     platforms = lib.platforms.unix;

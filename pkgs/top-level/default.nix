@@ -214,7 +214,29 @@ let
       ;
   };
 
-  pkgs = boot stages;
+  fixedPoint = boot stages;
+
+  pkgs =
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      fixedPoint
+    else
+      # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
+      # We replace these attribute paths with their original derivations again,
+      # because CI would just error out from the aborting attributes themselves.
+      # Internally all packages still see the aborting attributes if used as dependencies,
+      # because we do this here after the fixed-point is calculated.
+      # Note that we don't want to remove the attributes entirely like what aliases.nix does,
+      # because unlike aliases, CI still needs to check the packages to evaluate at all,
+      # which it wouldn't if they're removed entirely.
+      lib.updateManyAttrsByPath
+        (map (attrs: {
+          path = attrs.attrPath;
+          update =
+            _:
+            lib.getAttrFromPath attrs.attrPath fixedPoint.__internalBeforeInternallyDisallowedAttrPathsOverlay;
+        }) config.attrPathsDisallowedForInternalUse)
+        (removeAttrs fixedPoint [ "__internalBeforeInternallyDisallowedAttrPathsOverlay" ]);
 
 in
 checked pkgs

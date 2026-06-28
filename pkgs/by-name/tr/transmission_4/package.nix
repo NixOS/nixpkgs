@@ -24,11 +24,11 @@
   dht,
   libnatpmp,
   # Build options
-  enableGTK3 ? false,
-  gtkmm3,
+  enableGTK4 ? false,
+  gtkmm4,
   libpthread-stubs,
   libayatana-appindicator,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   enableQt5 ? false,
   enableQt6 ? false,
   enableMac ? false,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (cmakeBool "ENABLE_CLI" enableCli)
     (cmakeBool "ENABLE_DAEMON" enableDaemon)
-    (cmakeBool "ENABLE_GTK" enableGTK3)
+    (cmakeBool "ENABLE_GTK" enableGTK4)
     (cmakeBool "ENABLE_MAC" enableMac)
     (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
     (cmakeBool "INSTALL_LIB" installLib)
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ]
-  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
+  ++ optionals enableGTK4 [ wrapGAppsHook4 ]
   ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
   ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
   ++ optionals enableMac [
@@ -186,8 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
       qtsvg
     ]
   )
-  ++ optionals enableGTK3 [
-    gtkmm3
+  ++ optionals enableGTK4 [
+    gtkmm4
     libpthread-stubs
     libayatana-appindicator
   ]
@@ -232,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram =
       if (enableQt5 || enableQt6) then
         "transmission-qt"
-      else if enableGTK3 then
+      else if enableGTK4 then
         "transmission-gtk"
       else if enableMac then
         "transmission-mac"

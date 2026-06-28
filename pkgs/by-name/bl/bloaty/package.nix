@@ -86,6 +86,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/google/bloaty";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 }

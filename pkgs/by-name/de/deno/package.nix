@@ -33,17 +33,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.8.2";
+  version = "2.8.3";
+
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "denort"
+  ];
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-WtACDLrC1c7KxkoQgYrNavykkm8+tZmF46UU1YrLwVs=";
+    hash = "sha256-jOcIrZj+830XMZJcgTm0C4yDvk96dbW7RYGgyhLHS4Y=";
   };
 
-  cargoHash = "sha256-Og+owcfHfdFJ08Xtiye2IEvKWd2Q/7f7QzQ/898IOcQ=";
+  cargoHash = "sha256-QtCkmNXOrtl4T4NSESV7J3qiyKMwMOoa4oWfTZIJRMc=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -225,7 +232,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    # Remove non-essential binaries like denort and test_server
+    moveToOutput "bin/denort" "$denort"
+
+    # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
 
     # Do what `deno x --install-alias` would do (it doesn't work with Nix-packaged Deno)
@@ -279,6 +288,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       jk
       ofalvai
       mynacol
+      anish
     ];
     maxSilent = 14400; # 4h, double the default of 7200s; sometimes needed for x86_64-darwin on hydra
     platforms = [

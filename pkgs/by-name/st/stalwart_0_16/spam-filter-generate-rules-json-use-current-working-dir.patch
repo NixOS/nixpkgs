@@ -1,0 +1,21 @@
+diff --git a/generate_rules_json.py b/generate_rules_json.py
+index d0977d3..c54e976 100644
+--- a/generate_rules_json.py
++++ b/generate_rules_json.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ import json
+ import gzip
++import os
+ from pathlib import Path
+ 
+ try:
+@@ -11,7 +12,7 @@ except ImportError:
+     except ImportError:
+         raise ImportError("Install tomli: pip install tomli")
+ 
+-BASE_DIR = Path(__file__).parent
++BASE_DIR = Path(os.getcwd())
+ 
+ def load_toml(path: Path) -> dict:
+     raw = path.read_text(encoding="utf-8")

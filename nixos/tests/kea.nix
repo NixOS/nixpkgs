@@ -6,7 +6,6 @@
 # address.
 
 {
-  pkgs,
   lib,
   ...
 }:
@@ -15,7 +14,7 @@
 
   name = "kea";
 
-  nodes = {
+  containers = {
     router =
       { config, pkgs, ... }:
       {
@@ -26,6 +25,7 @@
           firewall.allowedUDPPorts = [ 67 ];
         };
 
+        services.resolved.enable = false;
         systemd.network = {
           enable = true;
           networks = {
@@ -141,6 +141,7 @@
           firewall.allowedUDPPorts = [ 53 ];
         };
 
+        services.resolved.enable = false;
         systemd.network = {
           enable = true;
           networks = {
@@ -152,8 +153,6 @@
             };
           };
         };
-
-        services.resolved.enable = false;
 
         # Set up an authoritative nameserver, serving the `lan.nixos.test`
         # zone and configure an ACL that allows dynamic updates from
@@ -213,6 +212,7 @@
       {
         virtualisation.vlans = [ 1 ];
         systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+        services.resolved.enable = false;
         networking = {
           useNetworkd = true;
           useDHCP = false;
@@ -222,16 +222,23 @@
       };
   };
   testScript =
-    { ... }:
+    # python
     ''
       start_all()
+
       router.wait_for_unit("kea-dhcp4-server.service")
-      client.systemctl("start systemd-networkd-wait-online.service")
-      client.wait_for_unit("systemd-networkd-wait-online.service")
-      client.wait_until_succeeds("ping -c 5 10.0.0.1")
-      router.wait_until_succeeds("ping -c 5 10.0.0.3")
-      nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
-      router.log(router.execute("curl 127.0.0.1:9547")[1])
-      router.succeed("curl --no-buffer 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
+
+      with subtest("DHCPv4"):
+          client.systemctl("start systemd-networkd-wait-online.service")
+          client.wait_for_unit("systemd-networkd-wait-online.service")
+          client.wait_until_succeeds("ping -c 5 10.0.0.1")
+          router.wait_until_succeeds("ping -c 5 10.0.0.3")
+
+      with subtest("DDNS"):
+          nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
+
+      with subtest("Prometheus Exporter"):
+          router.log(router.execute("curl 127.0.0.1:9547")[1])
+          router.succeed("curl --silent 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
     '';
 }

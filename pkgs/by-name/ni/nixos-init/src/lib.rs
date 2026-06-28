@@ -27,16 +27,6 @@ pub use crate::{
 
 pub const SYSROOT_PATH: &str = "/sysroot";
 
-/// Find the path to the toplevel closure of the system in a prefix.
-///
-/// Uses the `init=` parameter on the kernel command-line.
-///
-/// Returns the relative path of the init to the prefix, e.g. without the `/sysroot` prefix.
-pub fn find_toplevel_in_prefix(prefix: &str) -> Result<PathBuf> {
-    let init_in_sysroot = find_init_in_prefix(prefix)?;
-    verify_init_is_nixos(prefix, init_in_sysroot)
-}
-
 /// Verify that an init path is inside a `NixOS` toplevel directory.
 ///
 /// If the path is verified, returns the path to the toplevel.
@@ -87,20 +77,16 @@ pub fn find_init_in_prefix(prefix: &str) -> Result<PathBuf> {
 }
 
 /// Extract the value of the `init` parameter from the given kernel `cmdline`.
+///
+/// If `init=` appears multiple times the last one wins, matching the kernel.
+/// This is what makes appending `init=/bin/sh` at the boot prompt work even
+/// though the boot entry already has an `init=`.
 fn extract_init(cmdline: &str) -> Result<PathBuf> {
-    let init_params: Vec<&str> = cmdline
+    let init = cmdline
         .split_ascii_whitespace()
-        .filter(|p| p.starts_with("init="))
-        .collect();
-
-    if init_params.len() != 1 {
-        bail!("Expected exactly one init param on kernel cmdline: {cmdline}")
-    }
-
-    let init = init_params
-        .first()
-        .and_then(|s| s.split('=').next_back())
-        .context("Failed to extract init path from kernel cmdline: {cmdline}")?;
+        .filter_map(|p| p.strip_prefix("init="))
+        .next_back()
+        .with_context(|| format!("No init= parameter on kernel cmdline: {cmdline}"))?;
 
     Ok(PathBuf::from(init))
 }
@@ -128,5 +114,26 @@ mod tests {
         verify_init_is_nixos(prefix.path().to_str().unwrap(), "/toplevel/init")?;
 
         Ok(())
+    }
+
+    #[test]
+    fn test_extract_init_single() {
+        assert_eq!(
+            extract_init("root=fstab init=/nix/store/xxx-nixos/init quiet").unwrap(),
+            PathBuf::from("/nix/store/xxx-nixos/init")
+        );
+    }
+
+    #[test]
+    fn test_extract_init_last_wins() {
+        assert_eq!(
+            extract_init("init=/nix/store/xxx-nixos/init init=/bin/sh").unwrap(),
+            PathBuf::from("/bin/sh")
+        );
+    }
+
+    #[test]
+    fn test_extract_init_missing() {
+        assert!(extract_init("root=fstab quiet").is_err());
     }
 }

@@ -29,7 +29,7 @@ rec {
     extension = ".lzma";
   };
   lz4 = {
-    executable = pkgs: "${pkgs.lz4}/bin/lz4";
+    executable = pkgs: pkgs.lib.getExe pkgs.lz4;
     defaultArgs = [ "-l" ];
     extension = ".lz4";
   };

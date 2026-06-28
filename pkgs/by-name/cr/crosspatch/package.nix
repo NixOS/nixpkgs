@@ -67,6 +67,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/NickPlayzGITHUB/CrossPatch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ toodeluna ];
+    maintainers = with lib.maintainers; [ luna-the-tuna ];
   };
 }

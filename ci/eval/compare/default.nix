@@ -49,6 +49,7 @@ in
 {
   combinedDir,
   touchedFilesJson,
+  baseBranch,
   ownersFile ? ../../OWNERS,
 }:
 let
@@ -242,7 +243,7 @@ runCommand "compare"
       echo
       echo "# Performance comparison"
       echo
-      echo "This compares the performance of this branch against its pull request base branch (e.g., 'master')"
+      echo "This compares the performance of this branch against the \`${baseBranch}\` branch."
       echo
     } >> $out/step-summary.md
 

@@ -8,11 +8,11 @@
 
 let
   pname = "nrfconnect";
-  version = "5.2.1";
+  version = "5.3.1";
 
   src = fetchurl {
     url = "https://eu.files.nordicsemi.com/ui/api/v1/download?repoKey=web-assets-com_nordicsemi&path=external%2fswtools%2fncd%2flauncher%2fv${version}%2fnrfconnect-${version}-x86_64.AppImage";
-    hash = "sha256-3YPH/HmeAHm1Cf4/tCUIRTdT3JX0tOLVS/b6lk27Wn4=";
+    hash = "sha256-IRpY8D9jigQjWvBVEfFshqTV4h9/6OaJf9T178B2m/c=";
     name = "${pname}-${version}.AppImage";
   };
 

@@ -18,21 +18,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "actiona";
-  version = "3.11.1";
+  version = "3.11.4";
 
   src = fetchFromGitHub {
     owner = "Jmgr";
     repo = "actiona";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sJlzrrpmo2CbzChCtiyxqDtjoN58BN4Ptjm4sH83zAw=";
+    hash = "sha256-PQNbbIErw/fnEyIy80+300g3YC4pEqUB/m9l1dXvORU=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Meet Qt 6.10 requirement for explicit find_package of private targets
-    ./fix-qt6-10-private-targets.diff
-  ]
-  ++ lib.optionals (!textToSpeechSupport) [
+  patches = lib.optionals (!textToSpeechSupport) [
     # Removes TTS support
     ./disable-tts.patch
   ];

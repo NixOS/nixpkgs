@@ -42,6 +42,7 @@ makeScopeWithSplicing' {
     // {
 
       # LIBRARIES
+      accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
       accounts-qt = callPackage ../development/libraries/accounts-qt { };
       appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -99,6 +100,10 @@ makeScopeWithSplicing' {
       qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
+
+      qmenumodel = callPackage ../development/libraries/qmenumodel {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
 
       qodeassist-plugin = callPackage ../development/libraries/qodeassist-plugin { };
 

@@ -1,29 +1,30 @@
 {
   lib,
+  aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
-  orjson,
   fetchFromGitHub,
+  orjson,
+  poetry-core,
   propcache,
   pytest-asyncio,
   pytestCheckHook,
-  aiohttp,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nexia";
-  version = "2.11.1";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "nexia";
-    tag = version;
-    hash = "sha256-rGBfmFgSInp1+2FNFS0OZSyj53kMOK6MxWIra7VNYcM=";
+    tag = finalAttrs.version;
+    hash = "sha256-d3mV7kzUoM6JvZ82FLNxapkRZDjFH7V/rf4qjIyf2is=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
@@ -42,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for Nexia thermostats";
     homepage = "https://github.com/bdraco/nexia";
-    changelog = "https://github.com/bdraco/nexia/releases/tag/${src.tag}";
+    changelog = "https://github.com/bdraco/nexia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

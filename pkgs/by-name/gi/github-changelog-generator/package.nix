@@ -16,6 +16,7 @@ bundlerApp {
     homepage = "https://github.com/github-changelog-generator/github-changelog-generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      Scriptkiddi
       nicknovitski
     ];
     platforms = lib.platforms.unix;

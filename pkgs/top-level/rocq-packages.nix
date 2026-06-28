@@ -55,6 +55,7 @@ let
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
+      mathcomp-real-closed = callPackage ../development/rocq-modules/mathcomp-real-closed { };
       mathcomp-reals = self.mathcomp-analysis.reals;
       mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       micromega-plugin = callPackage ../development/rocq-modules/micromega-plugin { };

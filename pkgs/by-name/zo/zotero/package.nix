@@ -22,20 +22,21 @@
   xvfb-run,
   makeBinaryWrapper,
   doCheck ? false,
+  zotero,
 }:
 let
   # note-editor needs nodejs 22. Any newer version fails to build zotero's fork of @benrbray/prosemirror-math during npm install.
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "9.0.4";
+  version = "9.0.5";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-YMaDCYdCNJQ8zXfCkV5tb3RA3foXRlKo2TWv6pgk8VM=";
+    hash = "sha256-yNGx3GpBnQHB6//7JNKRz9GKjJJeUb/UkYDGDdOUTAk=";
   };
 
   pdf-js = buildNpmPackage {
@@ -193,6 +194,7 @@ buildNpmPackage (finalAttrs: {
     ./js-build-fixes.patch
     ./avoid-xulrunner-fetch.patch
     ./build-fixes.patch
+    ./fix-x86_64-darwin.patch
   ];
 
   postPatch = ''
@@ -223,30 +225,48 @@ buildNpmPackage (finalAttrs: {
     done
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    let
+      zoteroArch =
+        platform:
+        if platform.isAarch64 then
+          "arm64"
+        else if platform.isx86_64 then
+          "x64"
+        else if platform.isx86_32 then
+          "i686"
+        else
+          platform.parsed.cpu.name;
+    in
+    ''
+      runHook preBuild
 
-    npm run build
+      npm run build
 
-    # Place firefox files at the right place.
-    # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
-    mkdir -p app/xulrunner/
-  ''
-  + lib.optionalString stdenv.targetPlatform.isDarwin ''
-    cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
-  ''
-  + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
-    cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
-      lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
-    }"
-  ''
-  + ''
-    chmod -R u+w app/xulrunner/
+      # Place firefox files at the right place.
+      # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
+      mkdir -p app/xulrunner/
+    ''
+    + lib.optionalString stdenv.targetPlatform.isDarwin ''
+      cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+    ''
+    + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
+      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
+        lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
+      }"
+    ''
+    + ''
+      chmod -R u+w app/xulrunner/
 
-    ./app/scripts/dir_build
+      build_dir=$(mktemp -d)
+      ./app/scripts/prepare_build -s ./build -o "$build_dir" -c release
+      ./app/build.sh -d "$build_dir" -c release -s \
+        ${
+          if stdenv.targetPlatform.isDarwin then "-p m" else "-p l -a ${zoteroArch stdenv.targetPlatform}"
+        }
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   inherit doCheck;
   # Build with test support if `doCheck` is enabled.
@@ -326,7 +346,12 @@ buildNpmPackage (finalAttrs: {
     makeWrapper $out/Applications/Zotero.app/Contents/MacOS/zotero $out/bin/zotero
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.build-with-checks = zotero.override {
+      doCheck = true;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://www.zotero.org";

@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.86.502.g8cd7fb22";
+  version = "1.2.90.451.gb094aab0";
 
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "94";
+  rev = "96";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -144,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
-    hash = "sha512-wp+DHLFJM1yWhp2WNCnvUrLJUhdWqB7OvkIuljLNmmlDm0T+0Vt+/zYyx/pGCVqhv5zzMl6e+32hPD/elHMADA==";
+    hash = "sha512-rdffEwzlUf/kmxcO79+TzF0OKszWQhTdJgqQp/zhy+O5Ov+JhhjW2hXoltkhJbpQ2pJD9l4nuVDpTjQAc3VzAA==";
   };
 
   nativeBuildInputs = [
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : "$librarypath" \
       --prefix PATH : "${zenity}/bin" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+      --run 'if [[ "''${NIXOS_OZONE_WL:-default}" == "1" ]]; then unset DISPLAY; fi'
 
     runHook postFixup
   '';

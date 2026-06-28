@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "SinTan1729";
     repo = "chhoto-url";
     tag = finalAttrs.version;
-    hash = "sha256-B6bMuy/EEveYtQtGBO5CNeEUlPK8eQ412k+SwlRPm2M=";
+    hash = "sha256-n8fCQeY0gIyZuACKWa8Fk9TQ680PpVS2MHMFy7UgDwk=";
+    fetchLFS = true;
   };
 
   sourceRoot = "${finalAttrs.src.name}/actix";

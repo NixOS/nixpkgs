@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sure.am/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+      _74k1
       pjrm
     ];
     platforms = lib.platforms.linux;

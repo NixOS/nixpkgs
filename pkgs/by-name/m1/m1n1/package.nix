@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   imagemagick,
-  source-code-pro,
   python3Packages,
   nix-update-script,
   nixos-icons,
@@ -32,17 +31,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rxop5r+EVXnp1OVkGT6MUwcl6yNTJxJSJuruZiaou7g=";
+    hash = "sha256-yYXB2DhLcLqxaqwP5mII+j2PMIoXdZ35bpx/d0WSZA8=";
     fetchSubmodules = true;
   };
 
-  cargoVendorDir = ".";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version;
+    src = "${finalAttrs.src}/rust";
+    sourceRoot = "rust";
+    hash = "sha256-iuiRp2FA5jnb3uh/p1gpc7Sznt1s4/UR91wEtXTf97o=";
+  };
+  cargoRoot = "rust";
 
   postPatch = lib.optionalString (customLogo != null) ''
     magick ${customLogo} -resize 128x128 data/custom_128.png
@@ -55,14 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPackages.cargo
     rustPlatform.cargoSetupHook
   ];
-
-  postConfigure = ''
-    patchShebangs --build font/makefont.sh
-    FONT_PATH=${source-code-pro}/share/fonts/opentype/SourceCodePro-Bold.otf
-    rm font/{SourceCodePro-Bold.ttf,font.bin,font_retina.bin}
-    ./font/makefont.sh 8 16 12 $FONT_PATH font/font.bin
-    ./font/makefont.sh 16 32 25 $FONT_PATH font/font_retina.bin
-  '';
 
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"

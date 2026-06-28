@@ -1,7 +1,7 @@
 {
   aiofiles,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-wKB2WtC5zMEnT2wF9Ed0yW2w9c1p642SXJmy5jJrQQc=";
+    hash = "sha256-lsxN4gl1t7za/0ac6fXZysEeXSQtNAvQCMN/eqRvWoQ=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioimmich" ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
     syrupy

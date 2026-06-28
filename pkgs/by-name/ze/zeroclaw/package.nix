@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hVHfsBw3u0CLWAbmizLA9ZrB+3B0qBIrSUuzsyChwW0=";
+    hash = "sha256-dB/M5QdAyql/WXxwkX9V/bkiRsAv0J+tIbQN0wKLJpM=";
   };
 
   postPatch =
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -s ${zeroclaw-web} web/dist
     '';
 
-  cargoHash = "sha256-6MGIJsaqRp3k/ysjdu6BE2iM2sehERQR+QoSqiThSpg=";
+  cargoHash = "sha256-ZBmz877jEkTGopa5QxNUguxxKO45aZ6K5GXXAv4Ii4s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,6 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # wiremock tests require socket binding, which is denied in the darwin sandbox
   checkFlags = [
+    "--skip=commands::update::tests::download_binary_preserves_missing_checksum_fallback"
+    "--skip=commands::update::tests::download_binary_rejects_checksum_mismatch_without_writing"
+    "--skip=commands::update::tests::download_binary_verifies_checksum_before_writing"
     "--skip=tests::exchange_pairing_code_posts_code_and_returns_token"
     "--skip=tests::fetch_pairing_code_reads_gateway_pair_code_response"
     "--skip=integration::telegram_attachment_fallback::"
@@ -74,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";
     homepage = "https://github.com/zeroclaw-labs/zeroclaw";
-    changelog = "https://github.com/zeroclaw-labs/zeroclaw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/zeroclaw-labs/zeroclaw/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       drupol

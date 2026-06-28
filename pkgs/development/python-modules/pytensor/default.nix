@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.0.5";
+  version = "3.0.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-99AjktuPPn55ZLPKCv4qdE1lgy9p+NBuaq0vZMVhC50=";
+    hash = "sha256-/ECRFuRSTXZtBD8EUY3dg0Z4SxLG1+7DzHSWFSAnsoU=";
   };
 
   build-system = [
@@ -165,6 +165,13 @@ buildPythonPackage (finalAttrs: {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
+
+    # The IndexedElemwise fusion is intentionally disabled on the 3.0.x line
+    # (it can trigger a RecursionError, see the comment in
+    # pytensor/tensor/rewriting/indexed_elemwise.py), but these tests still
+    # assert that the fusion produces an IndexedElemwise node. Upstream test bug.
+    "tests/link/numba/test_indexed_elemwise.py"
+    "tests/benchmarks/test_gather_fusion.py"
   ];
 
   passthru.updateScript = nix-update-script {

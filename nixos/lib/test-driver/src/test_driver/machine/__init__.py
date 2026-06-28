@@ -1044,12 +1044,16 @@ class QemuMachine(BaseMachine):
             assert self.shell
 
             tic = time.time()
-            # TODO: do we want to bail after a set number of attempts?
-            while not shell_ready(timeout_secs=30):
+
+            for _ in range(10):
+                if shell_ready(timeout_secs=30):
+                    break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
                     "  To debug, enter the VM and run 'systemctl status backdoor.service'."
                 )
+            else:
+                raise RuntimeError("Shell did not start in time")
 
             while True:
                 chunk = self.shell.recv(1024)
@@ -1587,7 +1591,7 @@ class NspawnMachine(BaseMachine):
         # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
         # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
         # will continue to use the original /etc/profile.
-        command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
+        command = f"set -eo pipefail; USER=root HOME=/root source /etc/profile; set -u; {command}"
 
         cp = subprocess.run(
             [
@@ -1684,6 +1688,7 @@ class NspawnMachine(BaseMachine):
 
         self.process = subprocess.Popen(
             [self.start_command],
+            cwd=self.state_dir,
             env={
                 "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
                 "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),

@@ -49,9 +49,7 @@ buildPythonPackage (finalAttrs: {
     description = "Cryptography-based networking stack for wide-area networks";
     homepage = "https://reticulum.network";
     changelog = "https://github.com/markqvist/Reticulum/blob/${finalAttrs.version}/Changelog.md";
-    # Reticulum License
-    # https://github.com/markqvist/Reticulum/blob/master/LICENSE
-    license = lib.licenses.unfree;
+    license = lib.licenses.reticulum;
     maintainers = with lib.maintainers; [
       drupol
       fab

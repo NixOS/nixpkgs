@@ -39,7 +39,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     gmp
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ];
 
   env = {

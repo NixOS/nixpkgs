@@ -1,5 +1,4 @@
 {
-  fetchpatch,
   mkKdeDerivation,
   pkg-config,
   qtwayland,
@@ -10,15 +9,6 @@
 }:
 mkKdeDerivation {
   pname = "spectacle";
-
-  # Backport the upstream switch from runtime QLibrary loading to direct
-  # linking so Spectacle OCR can find Tesseract reliably on NixOS.
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/graphics/spectacle/-/commit/13b0be099e7abe9bbb17b90e62c2e83afb248db7.patch";
-      hash = "sha256-HEgHsuajaF+WVMiRp0YKRmi+/NsIy5s8frwMJRIdDY8=";
-    })
-  ];
 
   extraNativeBuildInputs = [ pkg-config ];
 

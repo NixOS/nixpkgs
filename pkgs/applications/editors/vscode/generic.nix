@@ -38,6 +38,10 @@
   webkitgtk_4_1,
   ripgrep,
   which,
+  libxtst,
+  libjpeg8,
+  pipewire,
+  libei,
 
   # needed to fix "Save as Root"
   asar,
@@ -149,6 +153,7 @@ stdenv.mkDerivation (
           extraBwrapArgs = [
             "--bind-try /etc/nixos/ /etc/nixos/"
             "--ro-bind-try /etc/xdg/ /etc/xdg/"
+            "--ro-bind-try /etc/vscode/policy.json /etc/vscode/policy.json"
           ];
 
           # symlink shared assets, including icons and desktop entries
@@ -244,6 +249,9 @@ stdenv.mkDerivation (
       })
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     buildInputs = [
       libsecret
     ]
@@ -256,6 +264,10 @@ stdenv.mkDerivation (
       systemdLibs
       webkitgtk_4_1
       libxkbfile
+      libxtst
+      libjpeg8.out
+      pipewire
+      libei
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [

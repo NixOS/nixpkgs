@@ -38,7 +38,10 @@ in
       changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
       description = "${old.meta.description} (Jellyfin fork)";
       homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-      maintainers = with lib.maintainers; [ justinas ];
+      maintainers = with lib.maintainers; [
+        dotlambda
+        justinas
+      ];
       pkgConfigModules = [ "libavutil" ];
     };
   })

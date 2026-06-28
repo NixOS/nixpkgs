@@ -20,7 +20,7 @@ in
 mkAppleDerivation {
   releaseName = "PowerManagement";
 
-  xcodeHash = "sha256-cjTF4dR6S55mLwp4GkQhkkNk9sMMKDc/5JTm46Z7/KE=";
+  xcodeHash = "sha256-06rCxqBUrYqBY7BDZ6s/vSoviUAmIbsQP1pfrvR2Gpk=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 

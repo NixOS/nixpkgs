@@ -1,9 +1,9 @@
 --- a/pubspec.yaml
 +++ b/pubspec.yaml
-@@ -56,11 +56,7 @@
+@@ -60,11 +60,7 @@
      git:
        url: https://github.com/edde746/background_downloader
-       ref: 4c965996210e408465e3c8b66e63ab4a659a62f9
+       ref: b4d36f88bb365faaf308ff26be7ade49bbaec859
 -  sentry_flutter:
 -    git:
 -      url: https://github.com/edde746/sentry-dart
@@ -13,7 +13,7 @@
    auto_updater:
      git:
        url: https://github.com/edde746/auto_updater
-@@ -102,16 +98,6 @@
+@@ -110,16 +106,6 @@
        url: https://github.com/edde746/auto_updater
        ref: 9e150f7
        path: packages/auto_updater_windows

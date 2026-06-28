@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "uarray";
     tag = version;
-    hash = "sha256-gCoSpyFPQTIi86y+4xtRb+vsRkjZ2O6KcCj8mj8tcTQ=";
+    hash = "sha256-Jut/V0/na+dcVpD7buW0DIS+KpA+dGRRb6QpPDt2/hY=";
   };
 
   preBuild = ''

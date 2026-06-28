@@ -26,11 +26,7 @@ let
 
   fmt =
     let
-      treefmtNixSrc = fetchTarball {
-        inherit (pinned.treefmt-nix) url;
-        sha256 = pinned.treefmt-nix.hash;
-      };
-      treefmtEval = (import treefmtNixSrc).evalModule pkgs ./treefmt.nix;
+      treefmt = pkgs.treefmt.withConfig ./treefmt.nix;
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
@@ -38,9 +34,8 @@ let
       };
     in
     {
-      shell = treefmtEval.config.build.devShell;
-      pkg = treefmtEval.config.build.wrapper;
-      check = treefmtEval.config.build.check nixFilesSrc;
+      pkg = treefmt;
+      check = treefmt.check nixFilesSrc;
     };
 
 in

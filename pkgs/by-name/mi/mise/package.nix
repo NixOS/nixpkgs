@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.6.0";
+  version = "2026.6.11";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UE+Mo6AtNiVgKOfLS7khAoVNJGyomL5Vb/pfcCke5fI=";
+    hash = "sha256-8sC/gSgpP2A6rh8j0aZeMq8pLwbBvcSUAxhehQlTLJg=";
   };
 
-  cargoHash = "sha256-N1/lLQZbkqeQavNGhYBx4PDl0cid+DACzy9gpj5g1rs=";
+  cargoHash = "sha256-yya9rtEki0o0MfBeWK2/Mo16/I1Mg6aCZOQOP8aWJi0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -75,6 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    # Nix's Linux sandbox rejects setting setuid bits.
+    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "5.2.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3PXLS1T1Q7AApoCVKXvMFqnGGLmMCXR9e3jlnj2GUpI=";
+    hash = "sha256-hj8qI0p9LM6ff/nErgt+YvOfWFBElLxJ2QI6IT0prOs=";
   };
 
   postPatch = ''

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.8";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-9gKpjmE8z/9PUILCiVK1utNYKD8kscbCBKxerqTO3z4=";
+    hash = "sha256-L27Rmd85+UbAbJYY2vxsWLbY+9nsWFmnEE4o3fK0UZU=";
   };
 
   patches = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-AMTSCM8dNwAddI3QZMFDzxJmJPvJ9fGK79at2I0S/pE=";
+    hash = "sha256-Vj1s8aA+L0GwJ6qr/5IXpYM5ZAY7qIiPn9BKadcO52E=";
   };
 
   nativeBuildInputs = [

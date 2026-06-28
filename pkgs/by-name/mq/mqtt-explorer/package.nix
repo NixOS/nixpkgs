@@ -56,12 +56,6 @@ stdenv.mkDerivation rec {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # disable code signing on macos
-  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-  '';
-
   configurePhase = ''
     runHook preConfigure
 
@@ -100,7 +94,9 @@ stdenv.mkDerivation rec {
 
     yarn --offline run electron-builder --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable code signing on macos
 
     runHook postBuild
   '';

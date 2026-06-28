@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hck";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = "hck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cycM40fm0bc6SCgGsMTKFVPUtjcXGpoMo3KhDDo74ZQ=";
+    hash = "sha256-W5y9NQjRkbb+ifOFMbqDECsm58rk6pozDprMnzC0euk=";
   };
 
-  cargoHash = "sha256-1Kaob5OZiM9WZ6lwuRvuDMtHVolRPjApQtQ52TQhs8A=";
+  cargoHash = "sha256-coaRVmI++074P8PhZ/Zmok0lwtEz+/38nkF2h0JraAo=";
 
   nativeBuildInputs = [ cmake ];
 

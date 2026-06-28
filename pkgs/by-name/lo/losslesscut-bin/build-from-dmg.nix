@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  _7zz,
+  undmg,
   pname,
   version,
   hash,
@@ -20,17 +20,16 @@ stdenvNoCC.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [ undmg ];
 
-  sourceRoot = "LosslessCut.app";
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/Applications"
-    cd ..
-    mv "$sourceRoot" "$out/Applications"
+    cp -r LosslessCut.app "$out/Applications"
     mkdir -p "$out/bin"
-    ln -s "$out/Applications/$(basename "$sourceRoot")/Contents/MacOS/LosslessCut" "$out/bin/losslesscut"
+    ln -s "$out/Applications/LosslessCut.app/Contents/MacOS/LosslessCut" "$out/bin/losslesscut"
     runHook postInstall
   '';
 

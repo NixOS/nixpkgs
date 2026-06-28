@@ -21,14 +21,26 @@
   zlib,
   llvmPackages_20,
   versionCheckHook,
+
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 let
-  turingstdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_20.stdenv else stdenv;
+  turingstdenv =
+    if stdenv.hostPlatform.isDarwin then
+      llvmPackages_20.stdenv
+    else if cudaSupport then
+      cudaPackages.backendStdenv
+    else
+      stdenv;
 in
 turingstdenv.mkDerivation (finalAttrs: {
   pname = "turingdb";
   version = "1.33";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "turing-db";
@@ -74,6 +86,10 @@ turingstdenv.mkDerivation (finalAttrs: {
     gitMinimal
     pkg-config
     python3
+  ]
+  ++ lib.optionals cudaSupport [
+    # Needed by transitive dependency faiss
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -90,7 +106,11 @@ turingstdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "NIX_BUILD" true)

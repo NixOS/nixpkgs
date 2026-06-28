@@ -18,11 +18,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cider-2";
-  version = "3.1.8";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://repo.cider.sh/apt/pool/main/cider-v${version}-linux-x64.deb";
-    hash = "sha256-cYtUVoDSESzElmmvhTPhLBXjiZF6fo3cJaw1QYCtVCg=";
+    hash = "sha256-Z5B7VQatTEktt4e7aF5EGDTufgwfRHJzCZ1Lia/aIFk=";
   };
 
   nativeBuildInputs = [
@@ -61,10 +61,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${lib.getExe asar} extract $out/lib/cider/resources/app.asar ./cider-build
-
-    # Patch login popup webview creation
-    substituteInPlace ./cider-build/.vite/build/events-*.js \
-      --replace-fail 'else if(c.includes(r))return{action:"allow"}' 'else if(c.includes(r))return{action:"allow",overrideBrowserWindowOptions:{webPreferences:{devTools:!0,nodeIntegration:!1,contextIsolation:!0,webSecurity:!1,sandbox:!1,experimentalFeatures:!0}}}'
 
     ${lib.getExe asar} pack ./cider-build $out/lib/cider/resources/app.asar
     rm -rf ./cider-build

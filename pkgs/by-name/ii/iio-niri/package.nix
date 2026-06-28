@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iio-niri";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Zhaith-Izaliel";
     repo = "iio-niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EwilbkL1cMH8l63Cm5eikVKc+YndsYsaYJxhCNJgz6M=";
+    hash = "sha256-2DWNq6qZmC4hNjgu1W6LBHkcDOSwRT0/8MnbJjyPHQM=";
   };
 
   cargoHash = "sha256-f/pFWlLxQebzawDdHj3UtpT5Kq9a6fm+tAssqg8ibdo=";

@@ -60,7 +60,7 @@ effectiveStdenv.mkDerivation rec {
     ]
     ++ lib.optionals enableCuda [
       cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
+      cudaPackages.cccl
       cudaPackages.libcublas
     ];
 

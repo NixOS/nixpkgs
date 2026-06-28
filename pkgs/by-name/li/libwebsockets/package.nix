@@ -65,7 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace "cmake/libwebsockets-config.cmake.in" --replace-fail \
       "set(LIBWEBSOCKETS_LIBRARIES websockets websockets_shared)" \
       "set(LIBWEBSOCKETS_LIBRARIES websockets)"
-  '';
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix doubled store path in macOS install_name
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'SET(CMAKE_INSTALL_NAME_DIR "''${CMAKE_INSTALL_PREFIX}/''${LWS_INSTALL_LIB_DIR}")' \
+        'SET(CMAKE_INSTALL_NAME_DIR "''${LWS_INSTALL_LIB_DIR}")'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic "";
 
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.

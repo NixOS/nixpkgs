@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rubyfmt";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "fables-tales";
     repo = "rubyfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pzv51KUvDi9MyOOj/RiJus91JzU5M2IhHDoxUS4cN2I=";
+    hash = "sha256-2pNM6C+Xm5Dy/0O+w76LwrbhDk5pRiZQ+ia7vqxJdRY=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libunwind
   ];
 
-  cargoHash = "sha256-Y7W3zwbScdZd+4W75od3CpwKWSxe1Bk2u2QEzgDUn/Y=";
+  cargoHash = "sha256-N3Wv4iducK6p0TzH2isD9x7jdDjjIm1o5NiWmthITOc=";
 
   env = {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";

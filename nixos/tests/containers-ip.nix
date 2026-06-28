@@ -47,9 +47,9 @@ in
           # need to distinguish because show-ip won't work for ipv6
           if container == "webserver4":
               ip = machine.succeed(f"nixos-container show-ip {container}").rstrip()
-              assert ip == "${nodes.machine.config.containers.webserver4.localAddress}"
+              assert ip == "${nodes.machine.containers.webserver4.localAddress}"
               return ip
-          return "${nodes.machine.config.containers.webserver6.localAddress}"
+          return "${nodes.machine.containers.webserver6.localAddress}"
 
 
       for container in "webserver4", "webserver6":

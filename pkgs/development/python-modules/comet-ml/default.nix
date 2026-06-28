@@ -17,21 +17,24 @@
   setuptools,
   simplejson,
   urllib3,
+  versionCheckHook,
   wrapt,
   wurlitzer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "comet-ml";
-  version = "3.55.0";
+  version = "3.58.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
+  # No GitHub repository
   src = fetchPypi {
     pname = "comet_ml";
-    inherit version;
-    hash = "sha256-bNfh6tVpsU2LrSLcAKy5lXLgd4lbo3/6dzzMB4+Eh08=";
+    inherit (finalAttrs) version;
+    hash = "sha256-6DHmsd7CcFd1QU06G09CVMeVuHGAtn8Rxsr1++epdeU=";
   };
 
-  pyproject = true;
   build-system = [
     setuptools
   ];
@@ -62,6 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "comet_ml" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+    # Skip pytestCheckHook, as Python tests require a lot of additional dependencies to run.
+  ];
+
   meta = {
     description = "Platform designed to help machine learning teams track, compare, explain, and optimize their models";
     homepage = "https://www.comet.com/site/";
@@ -70,4 +78,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "comet";
   };
-}
+})

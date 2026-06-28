@@ -1,7 +1,7 @@
 {
   _cuda,
   backendStdenv,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaAtLeast,
@@ -82,7 +82,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (getInclude cuda_nvcc)
-    cuda_cccl
+    cccl
     cuda_cudart
   ];
 

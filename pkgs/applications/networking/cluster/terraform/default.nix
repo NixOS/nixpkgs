@@ -200,8 +200,8 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.15.6";
-    hash = "sha256-FH5s0uyRESytv/1xloU3HXuH2ApjBC3FfEqFqIgBgFs=";
+    version = "1.15.7";
+    hash = "sha256-FF3LEovWjEDrKp6e6opRfCt8c4wghva3mjN97vCxq3E=";
     vendorHash = "sha256-3y9+KCmvskJ24X4F6gSLglmsl4hUlvzBb/ep4kcbS8A=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {

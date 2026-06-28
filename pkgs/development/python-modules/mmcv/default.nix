@@ -72,8 +72,8 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
+      cccl # <thrust/*>
       cuda_cudart # cuda_runtime.h
-      cuda_cccl # <thrust/*>
       libcublas # cublas_v2.h
       libcusolver # cusolverDn.h
       libcusparse # cusparse.h

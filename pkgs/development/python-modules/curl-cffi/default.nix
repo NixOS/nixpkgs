@@ -17,6 +17,7 @@
   pytest-trio,
   pytestCheckHook,
   python-multipart,
+  rich,
   trustme,
   uvicorn,
   websockets,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   dependencies = [
     cffi
     certifi
+    rich
   ];
 
   pythonImportsCheck = [ "curl_cffi" ];

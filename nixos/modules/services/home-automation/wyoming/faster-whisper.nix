@@ -39,6 +39,17 @@ in
             options = {
               enable = mkEnableOption "Wyoming faster-whisper server";
 
+              task = mkOption {
+                type = enum [
+                  "transcribe"
+                  "translate"
+                ];
+                default = "transcribe";
+                description = ''
+                  Whisper task to perform.
+                '';
+              };
+
               zeroconf = {
                 enable = mkEnableOption "zeroconf discovery" // {
                   default = true;
@@ -349,6 +360,8 @@ in
                 options.uri
                 "--device"
                 options.device
+                "--whisper-task"
+                options.task
                 "--stt-library"
                 options.sttLibrary
                 "--model"

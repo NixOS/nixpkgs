@@ -29,6 +29,7 @@ let
       django
       django-allauth
       django-anymail
+      django-async-backend
       django-cors-headers
       django-environ
       django-extensions

@@ -43,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optuna";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "optuna";
     repo = "optuna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DgmNIq4LksG3YRQLSbshMzGGRW/qAxMccs/oCRxI5tc=";
+    hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
   };
 
   build-system = [

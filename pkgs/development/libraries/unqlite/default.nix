@@ -7,21 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unqlite";
-  version = "1.1.9";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "symisc";
     repo = "unqlite";
-    rev = "v${version}";
-    sha256 = "sha256-WLsyGEt7Xe6ZrOGMO7+3TU2sBgDTSmfD1WzD70pcDjo=";
+    tag = version;
+    hash = "sha256-HXhI+IEnBBsWzI+EriGqqkJmeyOF+Y/NJzu4rMd0eY0=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
-  '';
 
   meta = {
     homepage = "https://unqlite.org/";

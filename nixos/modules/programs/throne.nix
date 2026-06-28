@@ -64,32 +64,36 @@ in
     # 3. Put ThroneCore into a systemd service, and let polkit check service name.
     #    This is the most secure and convenient way but requires heavy modification
     #    to Throne source code. Would be good to let upstream support that eventually.
-    security.polkit.extraConfig =
-      lib.mkIf (cfg.tunMode.enable && (!cfg.tunMode.setuid) && config.services.resolved.enable)
-        ''
-          polkit.addRule(function(action, subject) {
-            const allowedActionIds = [
-              "org.freedesktop.resolve1.revert",
-              "org.freedesktop.resolve1.set-domains",
-              "org.freedesktop.resolve1.set-default-route",
-              "org.freedesktop.resolve1.set-dns-servers"
-            ];
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+      extraConfig =
+        lib.mkIf (cfg.tunMode.enable && (!cfg.tunMode.setuid) && config.services.resolved.enable)
+          ''
+            polkit.addRule(function(action, subject) {
+              const allowedActionIds = [
+                "org.freedesktop.resolve1.revert",
+                "org.freedesktop.resolve1.set-domains",
+                "org.freedesktop.resolve1.set-default-route",
+                "org.freedesktop.resolve1.set-dns-servers"
+              ];
 
-            if (allowedActionIds.indexOf(action.id) !== -1) {
-              try {
-                var parentPid = polkit.spawn(["${lib.getExe' pkgs.procps "ps"}", "-o", "ppid=", subject.pid]).trim();
-                var parentCap = polkit.spawn(["${lib.getExe' pkgs.libcap "getpcaps"}", parentPid]).trim();
-                if (parentCap.includes("cap_net_admin") && parentCap.includes("cap_net_raw")) {
-                  return polkit.Result.YES;
-                } else {
+              if (allowedActionIds.indexOf(action.id) !== -1) {
+                try {
+                  var parentPid = polkit.spawn(["${lib.getExe' pkgs.procps "ps"}", "-o", "ppid=", subject.pid]).trim();
+                  var parentCap = polkit.spawn(["${lib.getExe' pkgs.libcap "getpcaps"}", parentPid]).trim();
+                  if (parentCap.includes("cap_net_admin") && parentCap.includes("cap_net_raw")) {
+                    return polkit.Result.YES;
+                  } else {
+                    return polkit.Result.NOT_HANDLED;
+                  }
+                } catch (e) {
                   return polkit.Result.NOT_HANDLED;
                 }
-              } catch (e) {
-                return polkit.Result.NOT_HANDLED;
               }
-            }
-          })
-        '';
+            })
+          '';
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ aleksana ];

@@ -836,14 +836,12 @@ in
           ${
             if (cfg.databaseUrl == "local") then
               ''
-                DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
-                export DATABASE_URL
-                export PGSSLMODE=disable
+                export DATABASE_URL="''${DATABASE_URL:-${lib.escapeShellArg localPostgresqlUrl}}"
+                export PGSSLMODE="''${PGSSLMODE:-disable}"
               ''
             else
               ''
-                DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
-                export DATABASE_URL
+                export DATABASE_URL="''${DATABASE_URL:-${lib.escapeShellArg cfg.databaseUrl}}"
               ''
           }
 

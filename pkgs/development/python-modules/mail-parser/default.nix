@@ -2,58 +2,56 @@
   lib,
   buildPythonPackage,
   python,
-  glibcLocales,
+  extract-msg,
   fetchFromGitHub,
+  hatchling,
   pytest-cov-stub,
+  pytest-mock,
   pytestCheckHook,
-  setuptools,
-  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mail-parser";
-  version = "4.1.4";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = "mail-parser";
-    tag = version;
-    hash = "sha256-wwLUD/k26utugK/Yx9eXYEdSOvrk0Cy6RkXGDnzZ+fE=";
+    tag = finalAttrs.version;
+    hash = "sha256-fuL2cWQSkYQKhG/UVNOp4ch4MrZINizvsPCQUzb3Z9c=";
   };
 
-  env.LC_ALL = "en_US.utf-8";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ glibcLocales ];
-
-  build-system = [ setuptools ];
-
-  pythonRemoveDeps = [ "ipaddress" ];
-
-  dependencies = [
-    six
-  ];
+  optional-dependencies = {
+    outlook = [ extract-msg ];
+  };
 
   pythonImportsCheck = [ "mailparser" ];
 
   nativeCheckInputs = [
     pytest-cov-stub
+    pytest-mock
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  # Taken from .travis.yml
+  # Taken from .github/workflows/main.yml
   postCheck = ''
     ${python.interpreter} -m mailparser -v
     ${python.interpreter} -m mailparser -h
     ${python.interpreter} -m mailparser -f tests/mails/mail_malformed_3 -j
+    ${python.interpreter} -m mailparser -f tests/mails/mail_outlook_1 -j
     cat tests/mails/mail_malformed_3 | ${python.interpreter} -m mailparser -k -j
   '';
 
   meta = {
+    changelog = "https://github.com/SpamScope/mail-parser/releases/tag/${finalAttrs.src.tag}";
     description = "Mail parser for python 2 and 3";
-    mainProgram = "mailparser";
+    mainProgram = "mail-parser";
     homepage = "https://github.com/SpamScope/mail-parser";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

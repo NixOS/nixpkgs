@@ -332,6 +332,17 @@
     "https://test.pypi.io/packages/source/"
   ];
 
+  # TeX historic archive (see https://tug.org/historic/)
+  texhistoric = [
+    "https://ftp.math.utah.edu/pub/tex/historic/"
+    "https://texlive.info/historic/"
+    "https://ftp.tu-chemnitz.de/pub/tug/historic/"
+    "https://pi.kwarc.info/historic/"
+    "https://mirrors.tuna.tsinghua.edu.cn/tex-historic-archive/"
+    "https://mirror.nju.edu.cn/tex-historic/"
+    "ftp://tug.org/texlive/historic/"
+  ];
+
   ### Linux distros
 
   # CentOS

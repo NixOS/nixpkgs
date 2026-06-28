@@ -77,7 +77,7 @@ let
   inherit (cudaPackages)
     libcublas
     cuda_nvcc
-    cuda_cccl
+    cccl
     cuda_cudart
     libcufft
     ;
@@ -255,7 +255,7 @@ let
     buildInputs =
       [ ]
       ++ lib.optionals with_cublas [
-        cuda_cccl
+        cccl
         cuda_cudart
         libcublas
         libcufft

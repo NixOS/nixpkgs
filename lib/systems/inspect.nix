@@ -2,14 +2,17 @@
 
 let
   inherit (lib)
+    all
     any
+    attrNames
     attrValues
     concatMap
     filter
+    flip
     hasPrefix
+    isAttrs
     isList
     mapAttrs
-    matchAttrs
     recursiveUpdateUntil
     toList
     ;
@@ -24,19 +27,49 @@ let
     execFormats
     ;
 
-  abis = mapAttrs (_: abi: removeAttrs abi [ "assertions" ]) lib.systems.parse.abis;
+  # Based on lib.attrsets.matchAttrs, but with:
+  # - the initial isAttrs assertion removed, since this function is only ever
+  # called with attrsets
+  # - isAttrs only performed on one side when recursing, since our input data
+  # will always share a structure
+  matchAttrsUnchecked =
+    pattern: attrs:
+    all (
+      # Compare equality between `pattern` & `attrs`.
+      attr:
+      # Missing attr, not equal.
+      attrs ? ${attr}
+      && (
+        let
+          lhs = pattern.${attr};
+          rhs = attrs.${attr};
+        in
+        # Simple equality check is primarily for non-attrsets, but we run it
+        # on attrsets too, since it may let us avoid recursing
+        lhs == rhs || isAttrs lhs && matchAttrsUnchecked lhs rhs
+      )
+    ) (attrNames pattern);
+
+  removeAssertions = flip removeAttrs [ "assertions" ];
+  abis = mapAttrs (
+    _: abi: if abi ? assertions then removeAssertions abi else abi
+  ) lib.systems.parse.abis;
 in
 
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
+  #
+  # Note: All toplevel attributes within a pattern are expected to be attrsets.
+  # matchAttrsUnchecked should be changed if a pattern is ever added that
+  # doesn't follow this axiom
   patterns = rec {
     # The patterns below are lists in sum-of-products form.
     #
     # Each attribute is list of product conditions; non-list values are treated
     # as a singleton list.  If *any* product condition in the list matches then
     # the predicate matches.  Each product condition is tested by
-    # `lib.attrsets.matchAttrs`, which requires a match on *all* attributes of
-    # the product.
+    # `matchAttrsUnchecked`, which requires a match on *all* attributes of the
+    # product.
 
     isi686 = {
       cpu = cpuTypes.i686;
@@ -489,14 +522,40 @@ rec {
       ) pat2
     ) pat1;
 
-  matchAnyAttrs =
-    patterns:
-    if isList patterns then
-      attrs: any (pattern: matchAttrs pattern attrs) patterns
-    else
-      matchAttrs patterns;
+  matchAnyPattern =
+    let
+      # same as matchAttrsUnchecked definition at the top of the file, but:
+      # - pattern names are cached and reused for multiple attrset calls
+      # - avoid running isAttrs since all patterns are nested attrsets
+      matchPattern =
+        pattern:
+        let
+          names = attrNames pattern;
+        in
+        attrs:
+        all (
+          attr:
+          attrs ? ${attr}
+          && (
+            let
+              lhs = pattern.${attr};
+              rhs = attrs.${attr};
+            in
+            lhs == rhs || matchAttrsUnchecked lhs rhs
+          )
+        ) names;
 
-  predicates = mapAttrs (_: matchAnyAttrs) patterns;
+    in
+    pattern:
+    if isList pattern then
+      let
+        cachedPatterns = map matchPattern pattern;
+      in
+      attrs: any (pattern: pattern attrs) cachedPatterns
+    else
+      matchPattern pattern;
+
+  predicates = mapAttrs (_: matchAnyPattern) patterns;
 
   # these patterns are to be matched against the entire
   # {host,build,target}Platform structure; they include a `parsed={}` marker so

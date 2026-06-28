@@ -5,17 +5,18 @@
   replaceVars,
   pyparsing,
   graphviz,
+  setuptools,
   pytestCheckHook,
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dot2tex";
   version = "2.11.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KZoq8FruW74CV6VipQapPieSk9XDjyjQirissyM/584=";
   };
 
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     ./remove-duplicate-script.patch
   ];
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,4 +50,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kjellmf/dot2tex";
     license = lib.licenses.mit;
   };
-}
+})

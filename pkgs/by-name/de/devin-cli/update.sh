@@ -3,8 +3,8 @@
 
 set -euo pipefail
 
-currentVersion=$(nix-instantiate --eval -E "with import ./. {}; devin-cli.version or (lib.getVersion devin-cli)" | tr -d '"')
-latestVersion=$(curl https://static.devin.ai/cli/current/manifest.json | jq '.version' | tr -d '"')
+currentVersion=$(nix-instantiate --eval --raw -E "with import ./. {}; devin-cli.version or (lib.getVersion devin-cli)")
+latestVersion=$(curl https://static.devin.ai/cli/current/manifest.json | jq -r '.version')
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
     echo "package is up-to-date: $currentVersion"
@@ -18,6 +18,7 @@ for system in \
     aarch64-linux \
     x86_64-darwin \
     aarch64-darwin; do
-    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix-instantiate --eval -E "with import ./. {}; devin-cli.src.url" --system "$system" | tr -d '"')))
+    hash=$(nix store prefetch-file --json --hash-type sha256 \
+      $(nix-instantiate --eval --raw -E "with import ./. {}; devin-cli.src.url" --system "$system") | jq -r '.hash')
     update-source-version devin-cli $latestVersion $hash --system=$system --ignore-same-version
 done

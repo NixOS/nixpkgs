@@ -131,6 +131,11 @@ rustPlatform.buildRustPackage {
     cp -r packaging/files/usr/lib $out/lib
     substituteInPlace $out/lib/NetworkManager/dispatcher.d/pre-down.d/gpclient.down \
       --replace-fail /usr/bin/gpclient $out/bin/gpclient
+
+    install -Dm644 packaging/files/usr/share/applications/gpgui.desktop \
+      $out/share/applications/gpgui.desktop
+    substituteInPlace $out/share/applications/gpgui.desktop \
+      --replace-fail /usr/bin/gpclient $out/bin/gpclient
   '';
 
   postFixup = ''

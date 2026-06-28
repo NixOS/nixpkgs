@@ -8,14 +8,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-protocol";
-  version = "0.0.16";
+  version = "0.0.18";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Not available vis Github yet; required by langchain-core
   src = fetchPypi {
     pname = "langchain_protocol";
     inherit (finalAttrs) version;
-    hash = "sha256-gGx83ZUbHE9pL6QPzmCCH/DyIdQ2DidnPd8sK5nCt/8=";
+    hash = "sha256-7D4ReC8e0MnbOOWp7QGw56DT+6QG+qiu9llLc8VqY+Y=";
   };
 
   build-system = [

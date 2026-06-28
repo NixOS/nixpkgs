@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pkg-config,
   glib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bluepy";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1v0wjy1rz0rbwghr1z3xhdm06lqn9iig6vr5j2wmymh3w6pysw9a";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-KnHtr+EDVl+5kCVv82JMFlMDaoN9/JDh4yuDn4OXHOw=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ glib ];
   nativeBuildInputs = [ pkg-config ];
@@ -34,4 +39,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
   };
-}
+})

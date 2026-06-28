@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioamazondevices";
-  version = "14.0.4";
+  version = "14.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C0cwPtAiA63DXqs8x0zlJ+y1BXgVe87Q56WKER/cmnk=";
+    hash = "sha256-54nlWZGLYTHbieVtYqUyP1Y3VZ98NhDEnmSzx+cPfJQ=";
   };
 
   build-system = [ poetry-core ];

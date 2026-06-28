@@ -58,6 +58,34 @@ let
       internal = true;
     };
 
+    attrPathsDisallowedForInternalUse = mkOption {
+      type = types.listOf (
+        types.submodule {
+          options.attrPath = lib.mkOption {
+            type = types.listOf types.str;
+            description = ''
+              Attribute path to disallow.
+            '';
+          };
+          options.reason = lib.mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = /* because */ "it's dangerous.";
+            description = ''
+              Reason for it being disallowed.
+            '';
+          };
+        }
+      );
+      internal = true;
+      default = [ ];
+      description = ''
+        List of attribute paths that may not be used by other packages in Nixpkgs.
+
+        Should usually only be defined by Nixpkgs CI.
+      '';
+    };
+
     # Config options
 
     warnUndeclaredOptions = mkOption {

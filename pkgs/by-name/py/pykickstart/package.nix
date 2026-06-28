@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pykickstart";
-  version = "3.73";
+  version = "3.75";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pykickstart";
     repo = "pykickstart";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-X5+wB4OgRiVuJE/FYU8yamd6pcnSM3H9kxC4aJ9f3v0=";
+    hash = "sha256-3tQ5tXUx2L3I0SyxVKgNRFv0AwYeG88vZOdSZDxj1Ks=";
   };
 
   build-system = with python3Packages; [

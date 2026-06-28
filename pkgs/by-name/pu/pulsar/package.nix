@@ -166,6 +166,8 @@ stdenv.mkDerivation (finalAttrs: {
       $opt/resources/app/ppm/bin/node
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      $opt/chrome_crashpad_handler
 
     # Replace the bundled git with the one from nixpkgs
     dugite=$opt/resources/app.asar.unpacked/node_modules/dugite

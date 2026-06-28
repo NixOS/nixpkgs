@@ -42,31 +42,38 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6ipzorykt9GoGTHTTLCyDf7vXx9mT5AITKA9pyQ3GwI=";
+    hash = "sha256-Mg6Gxy8FwqNjE9m4uOQnEY95PZJSQllDBU2KnS8UOHE=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail $'\tQml\n' $'\tQml\n\tQmlPrivate\n'
+  '';
+
   cmakeFlags = [
-    (lib.cmakeBool "SYSTEM_QCORO" true)
-    (lib.cmakeBool "SYSTEM_MOCR" true)
+    (lib.cmakeBool "MEMENTO_SYSTEM_QCORO" true)
+    (lib.cmakeBool "MEMENTO_SYSTEM_MOCR" true)
   ]
   ++ lib.optionals withOcr [
-    (lib.cmakeBool "OCR_SUPPORT" true)
+    (lib.cmakeBool "MEMENTO_OCR_SUPPORT" true)
   ];
 
   nativeBuildInputs = [
     cmake
     makeWrapper
+    qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt6Packages.qtbase
+    qt6Packages.qtdeclarative
     qt6Packages.qtsvg
     qt6Packages.qtwayland
     sqlite

@@ -408,6 +408,8 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 }
 ```
 
+If needed, `dontPnpmConfigure = true;` can be used to fully disable `pnpmConfigHook` without manually removing it from inputs.
+
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
 If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.

@@ -17,30 +17,22 @@
   libiconv,
   makeWrapper,
   nix-update-script,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
-  version = "2.43";
+  version = "2.44";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-XnA20uylHoly1P5qpM2JmkkV6C5//Xu5M+CjWwCiI7c=";
+    hash = "sha256-OV7WpM0NBfqOtFv9Co728UwHut4HhT2u5qgvamy/FAg=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/newsboat/newsboat/commit/f7936d13013d33946b28b2ac51f1266423d66b23.patch";
-      hash = "sha256-MnL/ylTIJJV1+3I1OxzNWedLUEZ4viuzxXNM63qk1aM=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-+QyN0YDQmSGVZ2ckLd5SDYRw/wZYFY6GNteeTRrNDcU=";
+    hash = "sha256-HJZnbQ7TDJ9zg0Rav1PCMEymaYy/mSxnrr2gkv4pTX0=";
   };
 
   # allow other ncurses versions on Darwin
