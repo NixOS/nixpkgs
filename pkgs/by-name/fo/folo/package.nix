@@ -144,7 +144,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RSSNext/Folo";
     changelog = "https://github.com/RSSNext/Folo/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iosmanthus ];
+    maintainers = with lib.maintainers; [
+      amadejkastelic
+      iosmanthus
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "follow";
   };
