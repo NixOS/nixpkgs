@@ -409,6 +409,7 @@ mapAliases {
   bob = throw "'bob' has been removed as it is unmaintained upstream and has vulnerable dependencies."; # Added 2025-12-29
   bodyclose = throw "'bodyclose' has been removed because it was broken for an entire release cycle."; # Added 2026-05-31
   boost177 = throw "Boost 1.77 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
+  botamusique = throw "botamusique has been removed as upstream stopped maintenance"; # Added 2026-06-28
   botan2 = throw "botan2 has been removed as it is EOL"; # Added 2025-10-20
   bower2nix = throw "bower2nix has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   boxfs = throw "'boxfs' has been removed, as it depends on unsupported fuse2 and unmaintained upstream"; # Added 2026-05-30
