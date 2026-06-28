@@ -7317,6 +7317,7 @@ with pkgs;
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
+  hareToolsHook = callPackage ../development/tools/hare-tools/hare-tools-hook.nix { };
 
   ### DEVELOPMENT / JAVA MODULES
 
