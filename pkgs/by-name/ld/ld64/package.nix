@@ -138,6 +138,9 @@ stdenv.mkDerivation (finalAttrs: {
     xar
   ];
 
+  # ld built with this fails to link glib's gio
+  hardeningDisable = [ "libcxxhardeningfast" ];
+
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 
   # Note for overrides: ld64 cannot be built as a debug build because of UB in its iteration implementations,
