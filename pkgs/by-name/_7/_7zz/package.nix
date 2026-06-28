@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+    "lib"
   ];
 
   setupHook = ./setup-hook.sh;
@@ -128,11 +129,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
+  postBuild = ''
+    make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ../../cmpl_gcc.mak
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
+
+    mkdir -p $lib/lib
+    install -Dm555 -t $lib/lib ../Format7zF/b/g/*
 
     runHook postInstall
   '';
