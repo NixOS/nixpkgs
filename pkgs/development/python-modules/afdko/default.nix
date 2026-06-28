@@ -69,6 +69,10 @@ buildPythonPackage (finalAttrs: {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    # integer underflow causes incorrect behavior
+    # patch submitted upstream as https://github.com/adobe-type-tools/afdko/pull/1843
+    ./0001-addfeatures-hmtx-avoid-unsigned-integer-underflow.patch
   ];
 
   env = {

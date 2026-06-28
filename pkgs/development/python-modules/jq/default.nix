@@ -38,6 +38,7 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to match exact error text, fails with jq 1.8
     "test_value_error_is_raised_if_program_is_invalid"
+    "test_value_error_is_raised_if_input_cannot_be_processed_by_program"
   ];
 
   pythonImportsCheck = [ "jq" ];
