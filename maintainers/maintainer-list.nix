@@ -24577,6 +24577,11 @@
     githubId = 47582;
     name = "Samir Talwar";
   };
+  samjoshuadud = {
+    name = "samcjdud";
+    github = "samjoshuadud";
+    githubId = 69428636;
+  };
   samlich = {
     email = "nixos@samli.ch";
     github = "samlich";
