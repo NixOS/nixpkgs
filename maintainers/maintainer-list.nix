@@ -19180,6 +19180,12 @@
     matrix = "@n4ch7:n3831.net";
     name = "N4CH723HR3R";
   };
+  n4kama = {
+    name = "nakama";
+    github = "n4kama";
+    githubId = 22456015;
+    email = "git@nakama.mov";
+  };
   n8henrie = {
     name = "Nathan Henrie";
     email = "nate@n8henrie.com";
