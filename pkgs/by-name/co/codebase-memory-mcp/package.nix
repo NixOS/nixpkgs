@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  enableParallelBuilding = true;
+
   makefile = "Makefile.cbm";
 
   # scripts/build.sh verifies CC via `file`, which fails on Nix's compiler wrapper.
