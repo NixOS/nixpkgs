@@ -1,0 +1,26 @@
+diff --git a/postlicyd/Makefile b/postlicyd/Makefile
+index 4f9f87e..5843bac 100644
+--- a/postlicyd/Makefile
++++ b/postlicyd/Makefile
+@@ -55,7 +55,7 @@ libpostlicyd_SOURCES = filter.c config.c query.c resources.c db.c dns.c \
+ 					   spf-proto.c $(FILTERS) $(GENERATED)
+ 
+ postlicyd_SOURCES = main-postlicyd.c libpostlicyd.a ../common/lib.a
+-postlicyd_LIBADD  = $(TC_LIBS) -lev -lpcre -lunbound -lsrs2
++postlicyd_LIBADD  = $(TC_LIBS) -lev -lpcre2-8 -lunbound -lsrs2
+ 
+ all:
+ 
+diff --git a/tests/Makefile b/tests/Makefile
+index ba734fb..12e9d93 100644
+--- a/tests/Makefile
++++ b/tests/Makefile
+@@ -36,7 +36,7 @@
+ include ../common/mk/tc.mk
+ 
+ TESTS = trie regexp spf rbl filters greylist qf
+-TESTLIBS=$(TC_LIBS) -lunbound -lev -lpcre -lsrs2
++TESTLIBS=$(TC_LIBS) -lunbound -lev -lpcre2-8 -lsrs2
+ 
+ all:
+ 

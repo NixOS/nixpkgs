@@ -4,7 +4,7 @@
   fetchFromGitHub,
   git,
   gperf,
-  pcre,
+  pcre2,
   unbound,
   libev,
   tokyocabinet,
@@ -40,13 +40,17 @@ stdenv.mkDerivation {
 
   src = pfixtoolsSrc;
 
-  patches = [ ./0001-Fix-build-with-unbound-1.6.1.patch ];
+  patches = [
+    ./0001-Fix-build-with-unbound-1.6.1.patch
+    ./0002-libcommon-pcre2.patch
+    ./0003-pfixtools-pcre2.patch
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     git
     gperf
-    pcre
+    pcre2
     unbound
     libev
     tokyocabinet
