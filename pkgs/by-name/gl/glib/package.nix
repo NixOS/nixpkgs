@@ -24,6 +24,8 @@
   gi-docgen,
   # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
   util-linuxMinimal ? null,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
   buildPackages,
 
   # this is just for tests (not in the closure of any regular package)
@@ -210,6 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDtrace [
     systemtap' # for dtrace
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   propagatedBuildInputs = [
@@ -253,6 +259,13 @@ stdenv.mkDerivation (finalAttrs: {
       "-DG_DISABLE_CAST_CHECKS"
     ];
     DETERMINISTIC_BUILD = 1;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Work around ld64 hardening issue.
+    #
+    # TODO: Clean up on `staging`.
+    CC_LD = "lld";
+    OBJC_LD = "lld";
   };
 
   postPatch = ''
