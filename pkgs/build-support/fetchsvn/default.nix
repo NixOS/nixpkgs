@@ -10,8 +10,13 @@
 }:
 
 let
-  repoToName =
-    url: rev:
+  # Derive a base derivation name from a SVN URL. Examples:
+  #   svn://h/repo/trunk          -> repo
+  #   svn://h/repo/branches/foo   -> repo-foo
+  #   svn://h/repo/tags/v1.0      -> repo-v1.0
+  #   svn://h/repo                -> repo
+  repoBaseName =
+    url:
     let
       inherit (lib)
         removeSuffix
@@ -22,28 +27,28 @@ let
         elemAt
         ;
       base = removeSuffix "/" (last (splitString ":" url));
-      path = reverseList (splitString "/" base);
-      repoName =
-        # ../repo/trunk -> repo
-        if head path == "trunk" then
-          elemAt path 1
-        # ../repo/branches/branch -> repo-branch
-        else if elemAt path 1 == "branches" then
-          "${elemAt path 2}-${head path}"
-        # ../repo/tags/tag -> repo-tag
-        else if elemAt path 1 == "tags" then
-          "${elemAt path 2}-${head path}"
-        # ../repo (no trunk) -> repo
-        else
-          head path;
+      pathParts = reverseList (splitString "/" base);
     in
-    "${repoName}-r${toString rev}";
+    if head pathParts == "trunk" then
+      elemAt pathParts 1
+    else if elemAt pathParts 1 == "branches" then
+      "${elemAt pathParts 2}-${head pathParts}"
+    else if elemAt pathParts 1 == "tags" then
+      "${elemAt pathParts 2}-${head pathParts}"
+    else
+      head pathParts;
 in
 
 {
   url,
+  # Subdirectory path within the repository (e.g., "trunk", "branches/foo").
+  # Ignored if `tag` is set.
+  path ? "",
+  # Tag name to fetch. Sets path to "tags/${tag}".
+  # Mutually exclusive with `path`.
+  tag ? null,
   rev ? "HEAD",
-  name ? repoToName url rev,
+  name ? null,
   sha256 ? "",
   hash ? "",
   ignoreExternals ? false,
@@ -51,13 +56,38 @@ in
   preferLocalBuild ? true,
 }:
 
+assert tag == null || path == "" || throw "fetchsvn: `tag` and `path` are mutually exclusive";
+
 assert sshSupport -> openssh != null;
+
+let
+  # The final URL: appends `/tags/${tag}` if `tag` is set, otherwise
+  # `/${path}` when `path` is non-empty, otherwise the url unchanged.
+  fullURL =
+    let
+      baseUrl = lib.removeSuffix "/" url;
+    in
+    if tag != null then
+      "${baseUrl}/tags/${tag}"
+    else if path != "" then
+      "${baseUrl}/${path}"
+    else
+      url;
+in
 
 if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
   stdenvNoCC.mkDerivation {
-    inherit name;
+    # When `tag` pins the snapshot, omit the `-r${rev}` suffix — the tag
+    # already uniquely identifies the build, so `repo-v1.0-rHEAD` would be noise.
+    name =
+      if name != null then
+        name
+      else if tag != null then
+        repoBaseName fullURL
+      else
+        "${repoBaseName fullURL}-r${toString rev}";
     builder = ./builder.sh;
     nativeBuildInputs = [
       cacert
@@ -78,8 +108,9 @@ else
       else
         lib.fakeSha256;
 
+    url = fullURL;
+
     inherit
-      url
       rev
       ignoreExternals
       ignoreKeywords
