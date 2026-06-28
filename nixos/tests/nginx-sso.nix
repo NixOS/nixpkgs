@@ -5,7 +5,7 @@
     maintainers = with pkgs.lib.maintainers; [ ambroisie ];
   };
 
-  nodes.machine = {
+  containers.machine = {
     services.nginx.sso = {
       enable = true;
       configuration = {
