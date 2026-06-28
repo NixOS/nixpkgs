@@ -14,17 +14,21 @@
   gtk2,
   which,
   withGtk ? false,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pktgen";
-  version = "24.10.3";
+  version = "26.03.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
-    rev = "pktgen-${finalAttrs.version}";
-    sha256 = "sha256-6KC1k+LWNSU/mdwcUKjCaq8pGOcO+dFzeXX4PJm0QgE=";
+    tag = "pktgen-${finalAttrs.version}";
+    hash = "sha256-GNBo0WsHevoge97gUgDdNygCHSA5fQ/73ibsTvDvVYI=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu
+    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${lib.getExe' util-linux "lscpu"}
   '';
 
   postInstall = ''
@@ -65,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     # include/cli.h and lib/liblua.so.
     rm -rf $out/include $out/lib
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Traffic generator powered by DPDK";
