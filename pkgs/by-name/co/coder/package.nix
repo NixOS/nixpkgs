@@ -37,6 +37,9 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
   version = channels.${channel}.version;
+
+  __structuredAttrs = true;
+
   src = fetchurl {
     hash = (channels.${channel}.hash).${system};
 
@@ -102,6 +105,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "coder";
     maintainers = with lib.maintainers; [
+      faukah
       ghuntley
       kylecarbs
     ];
