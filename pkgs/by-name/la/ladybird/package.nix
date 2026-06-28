@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  fetchurl,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
+  chromium-hsts-preload-list,
   cmake,
   ninja,
   pkg-config,
@@ -44,12 +44,6 @@
   simdjson,
 }:
 
-let
-  hstsPreloadData = fetchurl {
-    url = "https://raw.githubusercontent.com/chromium/chromium/aa04f175415addb04bb78936b0d8b973fbd8ea61/net/http/transport_security_state_static.json";
-    hash = "sha256-TKcPBRVxoZgka8M3vTV/dZ+4+f3t2+ZrZZYJl1QO4WM=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
   version = "0-unstable-2026-06-05";
@@ -97,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
 
     mkdir build/Caches/HSTSPreload
-    cp ${hstsPreloadData} build/Caches/HSTSPreload/transport_security_state_static.json
+    cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
   '';
 
   nativeBuildInputs = [
