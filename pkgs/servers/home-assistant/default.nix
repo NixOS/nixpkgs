@@ -150,6 +150,11 @@ let
           tag = version;
           hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
         };
+
+        # ancient pinned version requires pkg_resources
+        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+          self.setuptools_80
+        ];
       });
 
       # Pinned due to API changes in 0.1.0
