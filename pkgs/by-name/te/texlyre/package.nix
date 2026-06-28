@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "texlyre";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "TeXlyre";
     repo = "texlyre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aBGhTJS/UDcWOhzP4HtIQO5ZjNGXTj3oPLje65HIhe4=";
+    hash = "sha256-sUyQYtTuE5bNEqxDw9DYT0KRiww7PmGnQ7CYt60EbSc=";
   };
 
-  npmDepsHash = "sha256-davqKXgSwjPM0QQ/moo5sjh7e9wVXjH30SrFC4opmuQ=";
+  npmDepsHash = "sha256-bOhK7kQWY3QYri9S+WoD8VyZXTGK5gcK/ixpGeeP4hg=";
 
   postPatch = ''
     sed -i 's/"version": ".*"/"version": "${finalAttrs.version}"/' package.json
@@ -71,12 +71,12 @@ buildNpmPackage (finalAttrs: {
     updateScript = ./update.sh;
     drawioEmbed = stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "drawio-embed";
-      version = "29.7.9";
+      version = "30.2.2";
       src = fetchFromGitHub {
         owner = "TeXlyre";
         repo = "drawio-embed-mirror";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-mj+i+6n14Koo9TYaygrCgFg0OLfBZnnL6rE3PkJGa9w=";
+        hash = "sha256-bdOhviJl0P/+GSJKaHMbGoPf+uEhoX5GeyY6bGBOpCg=";
       };
       dontBuild = true;
       installPhase = "cp -a . $out";
