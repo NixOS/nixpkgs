@@ -10482,6 +10482,12 @@
     github = "GZGavinZhao";
     githubId = 74938940;
   };
+  h0nIg = {
+    name = "Hans-Joachim Kliemeck";
+    email = "git@kliemeck.de";
+    github = "h0nIg";
+    githubId = 2757302;
+  };
   h3cth0r = {
     name = "Hector Miranda";
     email = "hector.miranda@tec.mx";
