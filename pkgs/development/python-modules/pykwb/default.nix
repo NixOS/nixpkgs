@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pykwb";
-  version = "0.0.10";
+  version = "0.0.21";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mor2TKhq08w4HzaUaspWOMEFwJaAKjXKoNAaoZJqWPQ=";
+    hash = "sha256-53or6KOjZujOIq9yZ30Ph704I8T93AX/EoJZeVS3ihI=";
   };
 
   propagatedBuildInputs = [ pyserial ];
