@@ -5,12 +5,13 @@
     maintainers = [ h7x4 ];
   };
 
-  nodes = {
+  containers = {
     webserver =
       { ... }:
       {
         virtualisation.vlans = [ 1 ];
 
+        services.resolved.enable = false;
         networking = {
           useNetworkd = true;
           useDHCP = false;
@@ -36,6 +37,7 @@
       {
         virtualisation.vlans = [ 1 ];
 
+        services.resolved.enable = false;
         networking = {
           useNetworkd = true;
           useDHCP = false;

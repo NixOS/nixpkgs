@@ -2,7 +2,7 @@
 {
   name = "nginx-more-headers";
 
-  nodes = {
+  containers = {
     webserver =
       { pkgs, ... }:
       {

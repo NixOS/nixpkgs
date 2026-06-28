@@ -2,7 +2,7 @@
 {
   name = "nginx-modsecurity";
 
-  nodes.machine =
+  containers.machine =
     {
       config,
       lib,

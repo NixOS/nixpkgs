@@ -2,7 +2,7 @@
 {
   name = "nginx-etag-compression";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, lib, ... }:
     {
       services.nginx = {
@@ -28,7 +28,7 @@
     };
 
   testScript =
-    { nodes, ... }:
+    { containers, ... }:
     ''
       machine.wait_for_unit("nginx")
       machine.wait_for_open_port(80)
