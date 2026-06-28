@@ -126,6 +126,8 @@ python.pkgs.buildPythonApplication rec {
     ./ignore_links.patch
     # Remove flags output from an OCaml test's diff, as it's Debian-specific
     ./remove-flags-from-ocaml-diff.patch
+    # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/166
+    ./fix-tests-with-zipdetails-4.006.patch
   ];
 
   postPatch = ''
