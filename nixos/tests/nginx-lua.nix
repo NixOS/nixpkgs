@@ -4,7 +4,7 @@
 
   meta.maintainers = [ lib.maintainers.kranzes ];
 
-  containers.machine = {
+  nodes.machine = {
     services.nginx = {
       enable = true;
       lua = {
