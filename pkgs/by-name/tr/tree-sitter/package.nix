@@ -25,6 +25,7 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
   wasmSupport ? false,
   webUISupport ? false,
+  extraGrammars ? { },
 }:
 
 let
@@ -52,18 +53,20 @@ let
 
     Use pkgs.tree-sitter.grammars.<name> to access.
   */
-  grammars = import ./grammars {
-    inherit
-      lib
-      nix-update-script
-      fetchFromGitHub
-      fetchFromGitLab
-      fetchFromSourcehut
-      fetchFromCodeberg
-      fetchpatch
-      stdenv
-      ;
-  };
+  grammars =
+    import ./grammars {
+      inherit
+        lib
+        nix-update-script
+        fetchFromGitHub
+        fetchFromGitLab
+        fetchFromSourcehut
+        fetchFromCodeberg
+        fetchpatch
+        stdenv
+        ;
+    }
+    // extraGrammars;
 
   /**
     Attrset of compiled grammars.
