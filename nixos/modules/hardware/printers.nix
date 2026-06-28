@@ -10,22 +10,30 @@ let
   ensurePrinter =
     p:
     let
-      args = lib.cli.toCommandLineShellGNU { } (
-        {
-          p = p.name;
-          v = p.deviceUri;
-          m = p.model;
-        }
-        // lib.optionalAttrs (p.location != null) {
-          L = p.location;
-        }
-        // lib.optionalAttrs (p.description != null) {
-          D = p.description;
-        }
-        // lib.optionalAttrs (p.ppdOptions != { }) {
-          o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
-        }
-      );
+      args =
+        # Not using toCommandLineShellGNU since it omits empty strings for short options.
+        lib.cli.toCommandLineShell
+          (optionName: {
+            option = "-${optionName}";
+            sep = null;
+            explicitBool = false;
+          })
+          (
+            {
+              p = p.name;
+              v = p.deviceUri;
+              m = p.model;
+            }
+            // lib.optionalAttrs (p.location != null) {
+              L = p.location;
+            }
+            // lib.optionalAttrs (p.description != null) {
+              D = p.description;
+            }
+            // lib.optionalAttrs (p.ppdOptions != { }) {
+              o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
+            }
+          );
     in
     ''
       # shellcheck disable=SC2016
