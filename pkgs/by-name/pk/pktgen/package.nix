@@ -77,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://dpdk.org/";
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.abuibrahim ];
+    maintainers = with lib.maintainers; [
+      abuibrahim
+      stepbrobd
+    ];
   };
 })
