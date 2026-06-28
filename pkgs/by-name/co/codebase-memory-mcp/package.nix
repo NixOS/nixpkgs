@@ -1,8 +1,11 @@
 {
   lib,
-  stdenv,
+  bash,
   fetchFromGitHub,
-  gnumake,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+  stdenv,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -20,19 +23,43 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-install-update.diff
   ];
 
-  nativeBuildInputs = [ gnumake ];
+  postPatch = ''
+    substituteInPlace Makefile.cbm \
+      --replace-fail "npm ci &&" ""
 
-  buildInputs = [ zlib ];
+    substituteInPlace scripts/embed-frontend.sh \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
+  '';
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+    hash = "sha256-feoZNsZfrPgoLdjlnnh3w3vTxR6AwPdUkPubaR93TAk=";
+  };
+
+  npmRoot = "graph-ui";
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  buildInputs = [
+    bash
+    zlib
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  enableParallelBuilding = true;
 
   makefile = "Makefile.cbm";
 
   # scripts/build.sh verifies CC via `file`, which fails on Nix's compiler wrapper.
   # Call make directly — mirrors upstream flake.nix.
   makeFlags = [
-    "cbm"
+    "cbm-with-ui"
     "CFLAGS_EXTRA='-DCBM_VERSION=\"${finalAttrs.version}\"'"
   ];
 
