@@ -104,6 +104,16 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath runtimeExecDeps)
   ];
 
+  postInstall = ''
+    install -Dm644 \
+      icons/hicolor/scalable/apps/scantpaper.svg \
+      $out/share/icons/hicolor/scalable/apps/scantpaper.svg
+
+    install -Dm444 \
+      org.scantpaper.desktop \
+      $out/share/applications/org.scantpaper.desktop
+  '';
+
   meta = with lib; {
     changelog = "https://github.com/carygravel/scantpaper/blob/${src.tag}/changelog.md";
     description = "GUI to produce PDFs or DjVus from scanned documents";
