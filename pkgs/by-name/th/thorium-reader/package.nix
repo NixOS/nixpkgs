@@ -91,7 +91,10 @@ buildNpmPackage (finalAttrs: {
     description = "EPUB reader";
     homepage = "https://www.edrlab.org/software/thorium-reader/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ YodaDaCoda ];
+    maintainers = with lib.maintainers; [
+      YodaDaCoda
+      agarmu
+    ];
     platforms = lib.platforms.all;
     mainProgram = "thorium-reader";
   };
