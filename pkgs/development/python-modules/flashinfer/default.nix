@@ -21,6 +21,7 @@
 
   # dependencies
   click,
+  cuda-tile,
   einops,
   numpy,
   nvidia-cutlass-dsl,
@@ -60,12 +61,14 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = with cudaPackages; [
-    cccl
-    cuda_cudart
-    libcublas
-    libcurand
-  ];
+  buildInputs =
+    (with cudaPackages; [
+      cccl
+      cuda_cudart
+      libcublas
+      libcurand
+    ])
+    ++ [ cuda-tile ];
 
   # FlashInfer offers two installation modes:
   #
@@ -104,7 +107,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     tqdm
   ];
 
-  doCheck = "TODO";
+  doCheck = true;
 
   meta = {
     broken = !cudaSupport;
