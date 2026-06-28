@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bashNonInteractive,
   unixtools,
   which,
 }:
@@ -25,8 +26,18 @@ stdenv.mkDerivation (finalAttrs: {
     unixtools.column
     which
   ];
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   dontBuild = true;
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
