@@ -19,7 +19,6 @@
   stdenv,
   vulkan-loader,
   envsubst,
-  nix-update-script,
   cargo-about,
   versionCheckHook,
   buildFHSEnv,
@@ -292,17 +291,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(?!.*(?:-pre|0\\.999999\\.0|0\\.9999-temporary)$)(.+)$"
-
-        # use github releases instead of git tags
-        # zed sometimes moves git tags, making them unreliable
-        # see: https://github.com/NixOS/nixpkgs/pull/439893#issuecomment-3250497178
-        "--use-github-releases"
-      ];
-    };
+    updateScript = ./update.sh;
     fhs = fhs { zed-editor = finalAttrs.finalPackage; };
     fhsWithPackages =
       f:
