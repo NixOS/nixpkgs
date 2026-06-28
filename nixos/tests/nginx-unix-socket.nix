@@ -6,7 +6,7 @@ in
 {
   name = "nginx-unix-socket";
 
-  nodes = {
+  containers = {
     webserver =
       { pkgs, lib, ... }:
       {

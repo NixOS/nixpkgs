@@ -3,7 +3,7 @@
   name = "nginx-redirectcode";
   meta.maintainers = with lib.maintainers; [ misterio77 ];
 
-  nodes = {
+  containers = {
     webserver =
       { pkgs, lib, ... }:
       {
