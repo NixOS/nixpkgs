@@ -63,7 +63,7 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "3.0.3";
+    version = "3.0.4";
     pyproject = true;
 
     src = fetchFromGitHub {
@@ -73,7 +73,7 @@ let
       postFetch = ''
         sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pandas/_version.py
       '';
-      hash = "sha256-G+pWdmft/kcxv97ySa+0ZFEgvMKuNaK33DseZQ8R1z8=";
+      hash = "sha256-cPnvBVs5xXjbRoj6KU/KeNn+To9oue7H0OBaJ2JdJG4=";
     };
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
