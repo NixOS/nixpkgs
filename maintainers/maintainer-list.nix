@@ -28900,12 +28900,6 @@
     githubId = 2612464;
     name = "Vincent Laporte";
   };
-  vbmithr = {
-    email = "vb@luminar.eu.org";
-    github = "vbmithr";
-    githubId = 797581;
-    name = "Vincent Bernardoff";
-  };
   vbrandl = {
     name = "Valentin Brandl";
     email = "mail+nixpkgs@vbrandl.net";
