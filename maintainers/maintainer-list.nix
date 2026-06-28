@@ -814,6 +814,12 @@
     github = "aftix";
     githubId = 4008299;
   };
+  agarmu = {
+    name = "Mukul Agarwal";
+    email = "vcs@agarmu.com";
+    github = "agarmu";
+    githubId = 55563106;
+  };
   agbrooks = {
     email = "andrewgrantbrooks@gmail.com";
     github = "agbrooks";
