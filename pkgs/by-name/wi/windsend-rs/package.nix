@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "windsend-rs";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3D6Uj8buMceqXov6An+OxgOTcNFrX5PwxhphtbeUv0=";
+    hash = "sha256-5KsyuVelJZFoUT9EZJgNUVGnG2zWzGltx4G42WjW1c0=";
   };
 
-  cargoHash = "sha256-uRL9cnvEZzaO/Qewl8Nm1LZlidCLLDC/RDY2j5byMnE=";
+  cargoHash = "sha256-qJgW+AjAehU7Ge56MBzOmQKOAq48zuj+R422pOzE0RI=";
 
   sourceRoot = "${finalAttrs.src.name}/windSend-rs";
 
