@@ -29,7 +29,6 @@
   lemon-graph,
   libjpeg,
   or-tools,
-  pcre,
   python3,
   re2,
   readline,
@@ -82,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtdeclarative
     libsForQt5.qtsvg
     or-tools
-    pcre
     python3
     re2
     readline
