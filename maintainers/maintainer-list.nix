@@ -6561,12 +6561,6 @@
     githubId = 48378098;
     name = "Danila Danko";
   };
-  deepfire = {
-    email = "_deepfire@feelingofgreen.ru";
-    github = "deepfire";
-    githubId = 452652;
-    name = "Kosyrev Serge";
-  };
   DeeUnderscore = {
     email = "d.anzorge@gmail.com";
     github = "DeeUnderscore";
