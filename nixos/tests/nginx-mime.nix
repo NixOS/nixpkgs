@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "nginx-mime";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
-  containers = {
+  nodes = {
     server =
       { pkgs, ... }:
       {
