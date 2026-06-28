@@ -67,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.opendataplane.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.abuibrahim ];
+    maintainers = with lib.maintainers; [
+      abuibrahim
+      stepbrobd
+    ];
   };
 })
