@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-language";
   version = "2.21.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_language";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MPDmkVDJckVeJUOaCA97VjDyC9QE3O+KVq5QP5Skvm0=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Natural Language API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-language";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-language-v${version}/packages/google-cloud-language/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-language-v${finalAttrs.version}/packages/google-cloud-language/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
