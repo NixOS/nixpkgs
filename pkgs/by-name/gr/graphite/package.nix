@@ -12,7 +12,6 @@
   lld,
   pkg-config,
   binaryen,
-  wasm-pack,
   cargo-about,
   nodejs,
   wasm-bindgen-cli_0_2_121,
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmConfigHook
     binaryen
     wasm-bindgen-cli_0_2_121
-    wasm-pack
     nodejs
     cargo-about
     removeReferencesTo
