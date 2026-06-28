@@ -15,7 +15,6 @@
   gzip,
   bzip2,
   gnutar,
-  _7zz,
   xz,
   nix-update-script,
 
@@ -24,26 +23,169 @@
   libx11,
   withGUI ? true,
   wxwidgets_3_2,
-  withUCD ? true,
+  withSDL ? false, # SDL GUI (testing), disabled by default
+  SDL2,
+  harfbuzz,
+  fontconfig,
+  libxft,
+
+  # Dependencies for plugins (enabled by default)
+  # UCD
   libuchardet,
 
-  # Plugins (all are enabled by default)
-  withColorer ? true,
+  # Colorer
   spdlog,
   libxml2,
-  withMultiArc ? true,
+
+  # MultiArc
   libarchive,
 
-  withNetRocks ? true,
+  # NetRocks
   openssl,
   libssh,
   samba,
   libnfs,
   neon,
-  withPython ? false,
+  gnutls,
+  libtasn1,
+  p11-kit,
+
+  # AWS
+  aws-sdk-cpp,
+
+  # ImageViewer
+  imagemagick,
+  ffmpeg,
+
+  # ADB
+  android-tools,
+
+  # MTP
+  libmtp,
+  libusb1,
+
+  # GitGutter
+  git,
+
+  # Arclite
+  _7zz,
+
+  plugins ? [
+    "ucd"
+    "colorer"
+    "multiarc"
+    "netrocks"
+    "imageviewer"
+    "adb"
+    "mtp"
+    "gitgutter"
+    "arclite"
+    "align"
+    "autowrap"
+    "truncate"
+    "calc"
+    "compare"
+    "drawline"
+    "editcase"
+    "editorcomp"
+    "farftp"
+    "filecase"
+    "incsrch"
+    "inside"
+    "simpleindent"
+    "tmppanel"
+    "hexitor"
+    "openwith"
+    "edsort"
+    "memo"
+  ],
   python3Packages,
 }:
 
+let
+  supportedPlugins = [
+    "ucd"
+    "colorer"
+    "multiarc"
+    "netrocks"
+    "aws"
+    "imageviewer"
+    "adb"
+    "mtp"
+    "gitgutter"
+    "arclite"
+    "align"
+    "autowrap"
+    "truncate"
+    "calc"
+    "compare"
+    "drawline"
+    "editcase"
+    "editorcomp"
+    "farftp"
+    "filecase"
+    "incsrch"
+    "inside"
+    "simpleindent"
+    "tmppanel"
+    "hexitor"
+    "openwith"
+    "edsort"
+    "memo"
+    "python"
+  ];
+  pluginSpecificBuildInputs =
+    plugin:
+    [ ]
+    ++ lib.optional (plugin == "ucd") libuchardet
+    ++ lib.optionals (plugin == "colorer") [
+      spdlog
+      libxml2
+    ]
+    ++ lib.optionals (plugin == "multiarc") [
+      libarchive
+    ]
+    ++ lib.optionals (plugin == "netrocks") [
+      openssl
+      libssh
+      libnfs
+      neon
+      gnutls
+      libtasn1
+      p11-kit
+    ]
+    # Samba support is broken on Darwin
+    # https://github.com/elfmz/far2l/issues/3068
+    ++ lib.optional (plugin == "netrocks" && !stdenv.hostPlatform.isDarwin) samba
+    ++ lib.optional (plugin == "aws") aws-sdk-cpp
+    ++ lib.optionals (plugin == "imageviewer") [
+      imagemagick
+      ffmpeg
+    ]
+    ++ lib.optional (plugin == "adb") android-tools
+    ++ lib.optional (plugin == "gitgutter") git
+    ++ lib.optionals (plugin == "mtp") [
+      libmtp
+      libusb1
+    ]
+    ++ lib.optionals (plugin == "python") (
+      with python3Packages;
+      [
+        python
+        cffi
+        debugpy
+        pcpp
+      ]
+    );
+  pluginSpecificCmakeBool =
+    enable: plugin:
+    if plugin == "ucd" then
+      (lib.cmakeBool "USEUCD" enable)
+    else if plugin == "aws" then
+      (lib.cmakeBool "NR_AWS" enable)
+    else
+      (lib.cmakeBool (lib.toUpper plugin) enable);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "far2l";
   version = "2.9.1-unstable-2026-10-10";
@@ -63,35 +205,32 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    bash
-  ]
-  ++ lib.optional withTTYX libx11
-  ++ lib.optional withGUI wxwidgets_3_2
-  ++ lib.optional withUCD libuchardet
-  ++ lib.optionals withColorer [
-    spdlog
-    libxml2
-  ]
-  ++ lib.optionals withMultiArc [
-    libarchive
-  ]
-  ++ lib.optionals withNetRocks [
-    openssl
-    libssh
-    libnfs
-    neon
-  ]
-  ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
-  ++ lib.optionals withPython (
-    with python3Packages;
-    [
-      python
-      cffi
-      debugpy
-      pcpp
+  checkPluginsValid =
+    let
+      diffLists = lib.lists.subtractLists supportedPlugins plugins;
+      withNetRocks = builtins.elem "netrocks" plugins;
+      withAWS = builtins.elem "aws" plugins;
+    in
+    if diffLists != [ ] then
+      builtins.throw "Unsupported plugin: ${builtins.elemAt diffLists 0}"
+    else if withAWS && !withNetRocks then
+      builtins.throw "AWS plugin must be built only with NetRocks"
+    else
+      "";
+
+  buildInputs =
+    lib.optionals withSDL [
+      SDL2
+      harfbuzz
+      fontconfig
+      libxft
     ]
-  );
+    # TTYX backend
+    ++ lib.optional withTTYX libx11
+    # WxWidgets backend
+    ++ lib.optional withGUI wxwidgets_3_2
+    # Plugins dependencies
+    ++ lib.concatMap pluginSpecificBuildInputs plugins;
 
   postPatch = ''
     chmod +x far2l/bootstrap/*.sh
@@ -99,15 +238,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    # Backend setup
+    (lib.cmakeBool "USESDL" withSDL)
     (lib.cmakeBool "TTYX" withTTYX)
     (lib.cmakeBool "USEWX" withGUI)
-    (lib.cmakeBool "USEUCD" withUCD)
-    (lib.cmakeBool "COLORER" withColorer)
-    (lib.cmakeBool "MULTIARC" withMultiArc)
-    (lib.cmakeBool "NETROCKS" withNetRocks)
-    (lib.cmakeBool "PYTHON" withPython)
   ]
-  ++ lib.optionals withPython [
+  ++ lib.map (pluginSpecificCmakeBool true) plugins
+  ++ lib.map (pluginSpecificCmakeBool false) (lib.subtractLists plugins supportedPlugins)
+  ++ lib.optionals (builtins.elem "mtp" plugins) [
+    (lib.cmakeBool "MTP_SYSTEM_LIBUSB" true)
+    (lib.cmakeBool "MTP_SYSTEM_LIBMTP" true)
+  ]
+  ++ lib.optionals (builtins.elem "python" plugins) [
     (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
     (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
   ];
@@ -120,12 +262,19 @@ stdenv.mkDerivation (finalAttrs: {
     gzip
     bzip2
     gnutar
-  ];
+  ]
+  # Git for GitGutter plugin
+  ++ lib.optional (builtins.elem "gitgutter" plugins) git
+  # Tools for ADB plugin
+  ++ lib.optional (builtins.elem "adb" plugins) android-tools;
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+  ''
+  # Link 7z plugin if Arclite is enabled
+  + lib.optionalString (builtins.elem "arclite" plugins) ''
     # Link 7z plugin
     echo "Linking 7z libraries..."
     mkdir -p $out/lib/far2l/Plugins/arclite/plug/
