@@ -214,6 +214,11 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _30350n = {
+    name = "Max Schlecht";
+    github = "30350n";
+    githubId = 34186858;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
@@ -28408,6 +28413,12 @@
     github = "traxys";
     githubId = 5623227;
     name = "Quentin Boyer";
+  };
+  tree-sapii = {
+    email = "supersapiiiiii@gmail.com";
+    github = "tree-sapii";
+    githubId = 144389458;
+    name = "sapii";
   };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";
