@@ -1569,6 +1569,7 @@ in
   speedtest-tracker = runTest ./speedtest-tracker.nix;
   spiped = runTest ./spiped.nix;
   spire = runTest ./spire.nix;
+  spotify-ad-muter = runTest ./spotify-ad-muter.nix;
   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;
   squid = runTest ./squid.nix;
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;

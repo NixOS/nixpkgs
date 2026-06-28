@@ -452,6 +452,7 @@
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
+  ./services/audio/spotify-ad-muter.nix
   ./services/audio/spotifyd.nix
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
