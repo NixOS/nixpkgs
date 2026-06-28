@@ -7,13 +7,13 @@
 stdenv.mkDerivation (finalAttrs: {
   preferLocalBuild = true;
   pname = "freescout";
-  version = "1.8.225";
+  version = "1.8.226";
 
   src = fetchFromGitHub {
     owner = "freescout-help-desk";
     repo = "freescout";
     tag = finalAttrs.version;
-    hash = "sha256-kXZ6bjF36YO1p6q+KTugnBO+KxqQZci5O0RNM7lqecQ=";
+    hash = "sha256-9fojG6S6yb2+W94cHrLuYIRjRL8JWspsj4bNE4QKSuk=";
   };
 
   patches = [
@@ -46,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) freescout;
-  };
+  passthru.tests = lib.attrValues nixosTests.freescout;
 
   # Because freescout is searching for some folders only relative to it's own source location, we need to have the symlinks to the actual locations in here
   dontCheckForBrokenSymlinks = true;
@@ -56,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = with lib; {
+    changelog = "https://github.com/freescout-help-desk/freescout/releases/tag/${finalAttrs.src.tag}";
     description = "Free self-hosted help desk & shared mailbox";
     license = licenses.agpl3Only;
     homepage = "https://freescout.net/";

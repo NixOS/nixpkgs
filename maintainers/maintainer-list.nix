@@ -11274,12 +11274,6 @@
     github = "hxtmdev";
     githubId = 7771007;
   };
-  hypersw = {
-    email = "baltic@hypersw.net";
-    github = "hypersw";
-    githubId = 2332070;
-    name = "Serge Baltic";
-  };
   hythera = {
     name = "Hythera";
     github = "Hythera";
@@ -18136,12 +18130,6 @@
     github = "MaxwellDupre";
     githubId = 14096356;
     name = "Michael McLeod";
-  };
-  mikefaille = {
-    email = "michael@faille.io";
-    github = "mikefaille";
-    githubId = 978196;
-    name = "Michaël Faille";
   };
   mikehorn = {
     email = "mikehornproton@proton.me";
@@ -31287,6 +31275,12 @@
     name = "Andrei Boar";
     github = "zuzuleinen";
     githubId = 944919;
+  };
+  zwang20 = {
+    name = "Michael Wang";
+    github = "zwang20";
+    githubId = 41721295;
+    matrix = "@michael_wzq:matrix.org";
   };
   zx2c4 = {
     email = "Jason@zx2c4.com";
