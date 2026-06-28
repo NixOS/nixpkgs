@@ -13,7 +13,7 @@ builtins.listToAttrs (
         name = "nginx-http3-${pkgs.lib.getName nginxPackage}";
         meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
-        containers = {
+        nodes = {
           server =
             { lib, pkgs, ... }:
             {
