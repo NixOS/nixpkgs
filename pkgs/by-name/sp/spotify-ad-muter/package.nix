@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  bash,
   makeWrapper,
   runCommand,
   nixosTests,
@@ -13,6 +14,9 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spotify-ad-muter";
   version = "1.0.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = ./spotify-ad-muter.sh;
   dontUnpack = true;
@@ -29,9 +33,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 $src $out/bin/spotify-ad-muter
-    patchShebangs $out/bin/spotify-ad-muter
-    wrapProgram $out/bin/spotify-ad-muter \
+    install -Dm755 $src $out/bin/.spotify-ad-muter-wrapped
+    substituteInPlace $out/bin/.spotify-ad-muter-wrapped \
+      --replace-fail "#!/usr/bin/env bash" "#!${lib.getExe bash}"
+    makeWrapper $out/bin/.spotify-ad-muter-wrapped $out/bin/spotify-ad-muter \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}
 
     runHook postInstall
