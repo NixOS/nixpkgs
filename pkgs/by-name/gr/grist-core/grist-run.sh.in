@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eu
+
+export PATH=@path@
+# export GRIST_SANDBOX_FLAVOR=gvisor
+# export GVISOR_FLAGS="-unprivileged -ignore-cgroups"
+
+# export GRIST_INST_DIR=/tmp/grist
+# export GRIST_DATA_DIR=/tmp/grist/docs
+# export TYPEORM_DATABASE=/tmp/grist/db.sqlite3
+
+cd @gristOut@
+exec ./sandbox/run.sh
