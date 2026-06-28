@@ -28,7 +28,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/modctl --help > /dev/null
-    $out/bin/modctl version 2>&1 | grep -q "v${version}"
+    $out/bin/modctl version --log-dir="$TMPDIR" --storage-dir="$TMPDIR" 2>&1 | grep -q "v${version}"
     runHook postInstallCheck
   '';
 
