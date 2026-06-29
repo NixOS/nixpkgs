@@ -3,10 +3,12 @@
   argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
+  docutils,
   hatchling,
   hatch-vcs,
   installShellFiles,
   colorama,
+  filelock,
   packaging,
   platformdirs,
   tomli,
@@ -25,17 +27,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipx";
-  version = "1.14.0";
+  version = "1.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
     tag = finalAttrs.version;
-    hash = "sha256-4qSCyaYHam9y04qTgEUvbo/XiY9WNqX2fKZJOAVE2EM=";
+    hash = "sha256-oeZxtH3Wkx8VIcS+rAYKndbArSez3nO7N8r4sknd7cw=";
   };
 
+  patches = [
+    # Keep dependencies from Nix's PYTHONPATH visible to the subprocess import test.
+    ./preserve-pythonpath-in-import-test.patch
+  ];
+
   build-system = [
+    docutils
     hatchling
     hatch-vcs
   ];
@@ -43,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     argcomplete
     colorama
+    filelock
     packaging
     platformdirs
     tomli
@@ -108,7 +117,24 @@ buildPythonPackage (finalAttrs: {
     "test_unpin"
     "test_unpin_warning"
     "test_shared_libs_excludes_setuptools"
+    "execute"
+    "expose"
+    "health"
+    "manifest"
+    "outdated"
+    "reset"
+    "test_contract_success_envelope"
+    "test_download_standalone_python_sets_tar_filter"
+    "test_download_standalone_python_supports_early_python_310"
+    "test_list_selected_package"
+    "test_remove_stale_venv_resources_keeps_files_pipx_does_not_own"
+    "test_shared_libs_create_preserves_pip_args"
   ];
+
+  # Keep long Darwin sandbox paths from wrapping literal test output.
+  preCheck = ''
+    export COLUMNS=200
+  '';
 
   postInstall = ''
     installShellCompletion --cmd pipx \
@@ -125,7 +151,7 @@ buildPythonPackage (finalAttrs: {
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
     homepage = "https://github.com/pypa/pipx";
-    changelog = "https://github.com/pypa/pipx/blob/main/docs/changelog.md";
+    changelog = "https://github.com/pypa/pipx/blob/main/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yshym ];
   };
