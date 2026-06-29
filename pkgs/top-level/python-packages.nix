@@ -3289,6 +3289,8 @@ self: super: with self; {
 
   cmake-build-extension = callPackage ../development/python-modules/cmake-build-extension { };
 
+  cmake-parser = callPackage ../development/python-modules/cmake-parser { };
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
