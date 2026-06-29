@@ -1,8 +1,7 @@
 {
   blas,
-  cmake,
-  doxygen,
   example-robot-data,
+  jrl-cmakemodules,
   fetchFromGitHub,
   ffmpeg,
   ipopt,
@@ -10,7 +9,6 @@
   llvmPackages,
   lib,
   pinocchio,
-  pkg-config,
   stdenv,
 
   withMultithread ? true,
@@ -34,11 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
   propagatedBuildInputs = [
     blas
@@ -48,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
+  buildInputs = [
+    jrl-cmakemodules
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
     llvmPackages.openmp
   ];
 
@@ -56,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
