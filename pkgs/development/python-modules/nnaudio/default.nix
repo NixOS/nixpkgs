@@ -73,6 +73,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Test fixture matrix has other values
+    "test_cqt_1992_v2_linear[cpu]"
     "test_cqt_1992_v2_log[cpu]"
   ];
 
