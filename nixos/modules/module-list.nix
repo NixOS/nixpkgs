@@ -996,6 +996,7 @@
   ./services/misc/tp-auto-kbbl.nix
   ./services/misc/transfer-sh.nix
   ./services/misc/turn-rs.nix
+  ./services/misc/turnstone.nix
   ./services/misc/tuxclocker.nix
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
