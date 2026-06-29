@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j4n/IOLQiw+9j2hAS/fN2zWJI1xItFgm0BquPOZJr9E=";
+    hash = "sha256-O9bPu9Ez3F7vjlbNeEJvZdlc97HpH9CiNfN1TmLwhoM=";
   };
 
   cmakeFlags = [
