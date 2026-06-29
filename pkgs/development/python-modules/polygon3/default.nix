@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "polygon3";
-  version = "3.0.9";
+  version = "3.0.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
