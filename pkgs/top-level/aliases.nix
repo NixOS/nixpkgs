@@ -611,6 +611,8 @@ mapAliases {
   cudaPackages_12_3 = throw "CUDA 12.3 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
   cudaPackages_12_4 = throw "CUDA 12.4 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
   cudaPackages_12_5 = throw "CUDA 12.5 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2025-08-08
+  cup-docker = throw "'cup-docker' has been removed, due to being orphaned and packaged in an unreproducible manner"; # Added 2026-06-27
+  cup-docker-noserver = throw "'cup-docker-noserver' has been removed, due to being orphaned and packaged in an unreproducible manner"; # Added 2026-06-27
   cups-kyodialog3 = throw "'cups-kyodialog3' has been renamed to/replaced by 'cups-kyodialog'"; # Converted to throw 2025-10-27
   cura = throw "'cura' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22
   curaengine = throw "'curaengine' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "savonet";
     repo = "liquidsoap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aNsN65phkfFM7OD4oCMl0wP3quvUquHR325DDVIqs/M=";
+    hash = "sha256-9H0+si3JRw+NIBMWREHm4zzm4D4Asjoi6JbsJqJEpN0=";
   };
 
   postPatch = ''

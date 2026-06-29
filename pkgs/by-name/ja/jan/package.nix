@@ -12,16 +12,16 @@
 
 let
   pname = "Jan";
-  version = "0.7.9";
+  version = "0.8.2";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-3SN/yZr40Zp6Oa3rDUnum1m7dwK8jbe6Bxx9iSHDM9U=";
+    hash = "sha256-DUyPMsy9POcxY5OyQu1IBAijTbUZACQB87j0CQDrw8A=";
   };
 
   linux-src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-SMcjig6J/HCpLthT8dHC6yED6uuHyaTG/xLnUIlZHP8=";
+    hash = "sha256-OWg8P4g2g+LVJU+SnjajG2cqWnzl5X2fjqTGkIC3kAY=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -35,7 +35,7 @@ let
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
     mainProgram = "Jan";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
     platforms =
       lib.platforms.darwin
       ++ (with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64);
