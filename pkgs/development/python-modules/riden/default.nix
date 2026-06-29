@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-uR1CsVsGn/QC4krHaxl6GqRnTPbFdRaqyMEl2RVMHPU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "1.2.0"' 'version = "${version}"'
+  '';
+
   build-system = [
     poetry-core
     setuptools
