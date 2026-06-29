@@ -374,6 +374,11 @@
     ];
   };
 
+  yeslogic-fontconfig-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ fontconfig ];
+  };
+
   soup3-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsoup_3 ];
