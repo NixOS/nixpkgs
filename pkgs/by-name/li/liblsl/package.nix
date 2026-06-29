@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "LSL_UNIXFOLDERS" true)
+    (lib.cmakeBool "LSL_FRAMEWORK" false)
   ];
 
   passthru.updateScript = nix-update-script { };
