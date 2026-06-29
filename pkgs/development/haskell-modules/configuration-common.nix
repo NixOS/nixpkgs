@@ -1529,6 +1529,10 @@ with haskellLib;
   # https://github.com/haskell/fgl/issues/119
   fgl = doJailbreak super.fgl;
 
+  # 2026-06-28: allow QuickCheck 2.16
+  # https://codeberg.org/daniel-casanueva/graphviz/issues/7
+  graphviz = doJailbreak super.graphviz;
+
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
   lzma = doJailbreak super.lzma;
