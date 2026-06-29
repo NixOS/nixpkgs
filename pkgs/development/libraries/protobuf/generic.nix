@@ -17,6 +17,7 @@
 
   # downstream dependencies
   python3,
+  arrow-cpp,
   grpc,
   enableShared ? !stdenv.hostPlatform.isStatic,
 
@@ -160,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pythonProtobuf = python3.pkgs.protobuf;
+      inherit arrow-cpp;
       inherit grpc;
       inherit (python3.pkgs) celery;
 
