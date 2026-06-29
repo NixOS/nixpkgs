@@ -5,8 +5,10 @@
   callPackage,
   fetchurl,
   perl,
+  perlPackages,
   libintl,
   bashNonInteractive,
+  makeWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   gawk,
   freebsd,
@@ -14,6 +16,7 @@
 
   # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
+  full ? false,
   ncurses,
   procps,
 }:
@@ -49,9 +52,11 @@ let
       lib
       stdenv
       buildPackages
+      makeWrapper
       updateAutotoolsGnuConfigScriptsHook
       fetchurl
       perl
+      perlPackages
       libintl
       libiconv
       bashNonInteractive
@@ -61,6 +66,7 @@ let
       procps
       meta
       interactive
+      full
       ;
   };
 in
