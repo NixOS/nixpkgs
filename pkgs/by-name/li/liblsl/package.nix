@@ -18,6 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
   passthru.updateScript = nix-update-script { };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DLSL_UNIXFOLDERS=ON" ];
