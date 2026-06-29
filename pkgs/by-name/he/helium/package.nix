@@ -18,6 +18,9 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   extraPkgs = pkgs: [ ];
 
   extraInstallCommands = ''
@@ -41,7 +44,7 @@ appimageTools.wrapType2 {
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "helium";
-    maintainers = with lib.maintainers; [ jupiterscope ];
+    maintainers = with lib.maintainers; [ jupiterScope ];
     platforms = [ "x86_64-linux" ];
   };
 }
