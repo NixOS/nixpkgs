@@ -5,27 +5,25 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.services.xserver.windowManager.openbox;
 in
 
 {
-  options = {
-    services.xserver.windowManager.openbox.enable = mkEnableOption "openbox";
+  options.services.xserver.windowManager.openbox = {
+    enable = lib.mkEnableOption "openbox";
+    package = lib.mkPackageOption pkgs "openbox" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [
         {
           name = "openbox";
-          start = "
-          ${pkgs.openbox}/bin/openbox-session
-        ";
+          start = "${cfg.package}/bin/openbox-session";
         }
       ];
     };
-    environment.systemPackages = [ pkgs.openbox ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
