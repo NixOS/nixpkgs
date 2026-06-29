@@ -133,6 +133,7 @@ stdenv.mkDerivation {
     ./0004-Fix-flask-session-and-powerdns-admin-compatibility.patch
     ./0005-Fix-app-context-and-register-modules.patch
     ./0006-Fix-regex.patch
+    ./0007-Fix-oidc.patch
     ./0008-Fix-profile-save-overwriting-password-with-empty-val.patch
   ];
 
