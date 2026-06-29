@@ -20076,6 +20076,12 @@
     githubId = 6930756;
     name = "Nicolas Mattia";
   };
+  nmetschke = {
+    email = "niclas.metschke+nix@protonmail.com";
+    github = "nmetschke";
+    githubId = 94750751;
+    name = "Niclas Metschke";
+  };
   nmishin = {
     email = "sanduku.default@gmail.com";
     github = "Nmishin";
