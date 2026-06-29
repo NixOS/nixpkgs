@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://opencloud.eu/en";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.FKouhai ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
