@@ -561,7 +561,7 @@ let
           psqlSchema = lib.versions.major version;
 
           withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
-          withoutJIT = this;
+          withoutJIT = this.withPackages (_: [ ]);
 
           pkgs =
             let
