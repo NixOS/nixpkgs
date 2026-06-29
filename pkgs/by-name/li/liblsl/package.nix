@@ -16,14 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Xu/Bdv+aA+XG/fPBNDPcHELem17vaV86e6F8zfVI//o=";
   };
-  passthru.updateScript = nix-update-script { };
 
   __structuredAttrs = true;
   strictDeps = true;
   separateDebugInfo = true;
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DLSL_UNIXFOLDERS=ON" ];
+  cmakeFlags = [
+    (lib.cmakeBool "LSL_UNIXFOLDERS" true)
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "C++ lsl library for multi-modal time-synched data transmission over the local network";
