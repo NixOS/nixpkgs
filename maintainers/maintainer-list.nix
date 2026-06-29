@@ -25866,6 +25866,11 @@
     githubId = 1328977;
     name = "Trent Small";
   };
+  sj14 = {
+    github = "sj14";
+    githubId = 6493966;
+    name = "Simon Jürgensmeyer";
+  };
   sjagoe = {
     email = "simon@simonjagoe.com";
     github = "sjagoe";
