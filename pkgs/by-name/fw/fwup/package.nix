@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwup";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SIRDVlC/g+rq5m4Ind7dqPzjdCjAxRK/kAdXt6byL/8=";
+    hash = "sha256-FIC6zAb7y1GlexgVSP7pFq2Zmr1J/eOUxNqZ6Y/zpwE=";
   };
 
   nativeBuildInputs = [
