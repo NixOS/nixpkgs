@@ -9757,6 +9757,12 @@
     githubId = 16470252;
     name = "Gemini Lasswell";
   };
+  gbhu753 = {
+    email = "me@gurjotbhullar.com";
+    github = "GBHU753";
+    githubId = 100983240;
+    name = "Gurjot Bhullar";
+  };
   gbtb = {
     email = "goodbetterthebeast3@gmail.com";
     github = "gbtb";

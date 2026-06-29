@@ -3,20 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  mpire,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "semchunk";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "isaacus-dev";
     repo = "semchunk";
     tag = "v${version}";
-    hash = "sha256-8bceOMMnQ4JsbX7zU5zAoyP8esTm83m/a3VwwnUzCAA=";
+    hash = "sha256-jQQNb5E/EarsN9OwlF6l8huX06kM2EChfUYW+MM5uxA=";
   };
 
   build-system = [
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    mpire
     tqdm
   ];
 

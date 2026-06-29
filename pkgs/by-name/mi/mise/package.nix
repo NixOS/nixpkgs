@@ -75,9 +75,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    # Nix's Linux sandbox rejects setting setuid bits.
+    # Nix's build sandbox strips setuid bits, so this round-trip assertion
+    # fails on both Linux and Darwin (cf. apko's TestSpecialModeBits).
     "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [

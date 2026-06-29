@@ -204,6 +204,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Partly taken from https://github.com/rstudio/rstudio/pull/17470
     ./electron-41.patch
 
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+
     # Hack RStudio to only use the input R and provided libclang.
     (replaceVars ./r-location.patch {
       R = lib.getBin R;
@@ -254,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "rstudio-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-MuTY+vjtbgbk73dm6bsCUmi34z/HCDnB5/RLkZ/rrVo=";
+    hash = "sha256-rdtnQKaOUp9jfWRA4BuEOyJn8emimiy+Kvxu1939H30=";
   };
 
   preConfigure = ''

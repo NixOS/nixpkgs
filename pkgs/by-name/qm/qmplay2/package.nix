@@ -24,6 +24,7 @@
   vulkan-headers,
   vulkan-tools,
   rubberband,
+  deno,
   # Configurable options
   qtVersion ? "6", # Can be 5 or 6
 }:
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     vulkan-headers-qmplay2
     vulkan-tools
+    deno
   ]
   ++ lib.optionals (qtVersion == "6") [
     rubberband
@@ -93,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   # But sometimes we come across case-insensitive filesystems...
   postInstall = ''
     [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
+
+    wrapQtApp $out/bin/qmplay2 \
+      --prefix PATH : ${lib.makeBinPath [ deno ]}
   '';
 
   passthru = {
