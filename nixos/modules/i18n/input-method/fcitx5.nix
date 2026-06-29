@@ -144,6 +144,7 @@ in
     // lib.optionalAttrs (!cfg.waylandFrontend) {
       GTK_IM_MODULE = "fcitx";
       QT_IM_MODULE = "fcitx";
+      GLFW_IM_MODULE="ibus";
     };
 
     environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
