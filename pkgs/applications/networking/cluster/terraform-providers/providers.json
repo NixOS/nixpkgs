@@ -535,11 +535,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-NJ3g5w9bkY7tM/f67HOEiq6Uz99CHaJBKaW+mLHrxFM=",
+    "hash": "sha256-XJmSVCX6rigPD4oi0S4qUyvgvR5SkCHZV2rMAqsmIIo=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.76.0",
+    "rev": "v4.79.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1238,20 +1238,20 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "spacelift-io_spacelift": {
-    "hash": "sha256-k94bMIHlOBJ6zilasFCugt8fgZ4F5bl0kWOzdniy4D4=",
+    "hash": "sha256-2EGyYs8fy1y9g241spfKFwpv7ZTRJePvf06OS7EFDaU=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.52.0",
+    "rev": "v1.52.2",
     "spdx": "MIT",
     "vendorHash": "sha256-C8TE7uxMf6LOTS6v22mXwUdk2eqQRinwrCH4ZVUCx4k="
   },
   "splunk-terraform_signalfx": {
-    "hash": "sha256-zwq7jCST2EkNk+UlKgLY2r3rCm5D009HYMru9KSVmuc=",
+    "hash": "sha256-bWZ5TvTVoYA6J67mi24rSzf5Qf6jk0RUgiC9CAa1s1o=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.30.2",
+    "rev": "v9.30.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-27mA2OAApUtPawZZk7Wxme9TfQY19TraIJSqHh8MFZg="
   },
@@ -1283,11 +1283,11 @@
     "vendorHash": "sha256-R/+PS4cUtr8/twUXOPRiVweb5I9NNiD6mGOcAFr9IDs="
   },
   "sysdiglabs_sysdig": {
-    "hash": "sha256-yjuh6JVIt+FYVe9yILORklwt/KiBFcjmZnEHf5oeQQw=",
+    "hash": "sha256-r14FsYrLqcZLcQlm25qOCKICTAb3dMBkphRAHiUeXrs=",
     "homepage": "https://registry.terraform.io/providers/sysdiglabs/sysdig",
     "owner": "sysdiglabs",
     "repo": "terraform-provider-sysdig",
-    "rev": "v3.8.1",
+    "rev": "v3.8.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-HjrB7C0KaLJz9NVLfZdq5EZbNbF9lJPxSkQwnWUF978="
   },

@@ -214,6 +214,11 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _30350n = {
+    name = "Max Schlecht";
+    github = "30350n";
+    githubId = 34186858;
+  };
   _360ied = {
     name = "Brian Zhu";
     email = "therealbarryplayer@gmail.com";
@@ -771,12 +776,6 @@
     github = "aflatter";
     githubId = 168;
     name = "Alexander Flatter";
-  };
-  afldcr = {
-    email = "alex@fldcr.com";
-    github = "afldcr";
-    githubId = 335271;
-    name = "James Alexander Feldman-Crough";
   };
   afontain = {
     email = "afontain@posteo.net";
@@ -6562,12 +6561,6 @@
     githubId = 48378098;
     name = "Danila Danko";
   };
-  deepfire = {
-    email = "_deepfire@feelingofgreen.ru";
-    github = "deepfire";
-    githubId = 452652;
-    name = "Kosyrev Serge";
-  };
   DeeUnderscore = {
     email = "d.anzorge@gmail.com";
     github = "DeeUnderscore";
@@ -8665,12 +8658,6 @@
     email = "hi@f2k1.de";
     github = "f2k1de";
     githubId = 11199213;
-  };
-  f4814n = {
-    email = "me@f4814n.de";
-    github = "f4814";
-    githubId = 11909469;
-    name = "Fabian Geiselhart";
   };
   f4z3r = {
     email = "f4z3r-github@pm.me";
@@ -16462,6 +16449,12 @@
     github = "lutzberger";
     githubId = 115777584;
     name = "Lutz Berger";
+  };
+  luuumine = {
+    email = "nix@luuumine.com";
+    github = "luuumine";
+    githubId = 55056797;
+    name = "Romain Delhommais";
   };
   lux = {
     email = "lux@lux.name";
@@ -28409,17 +28402,17 @@
     githubId = 5623227;
     name = "Quentin Boyer";
   };
+  tree-sapii = {
+    email = "supersapiiiiii@gmail.com";
+    github = "tree-sapii";
+    githubId = 144389458;
+    name = "sapii";
+  };
   treemo = {
     email = "matthieu.chevrier@treemo.fr";
     github = "treemo";
     githubId = 207457;
     name = "Matthieu Chevrier";
-  };
-  trepetti = {
-    email = "trepetti@cs.columbia.edu";
-    github = "trepetti";
-    githubId = 25440339;
-    name = "Tom Repetti";
   };
   trespaul = {
     email = "paul@trespaul.com";
@@ -29090,12 +29083,6 @@
     github = "vbgl";
     githubId = 2612464;
     name = "Vincent Laporte";
-  };
-  vbmithr = {
-    email = "vb@luminar.eu.org";
-    github = "vbmithr";
-    githubId = 797581;
-    name = "Vincent Bernardoff";
   };
   vbrandl = {
     name = "Valentin Brandl";

@@ -318,8 +318,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "bohonghuang";
           repo = "cl-gtk4";
-          rev = "ff60e3495cdbba5c09d0bb8aa49f3184cc060c8e";
-          hash = "sha256-06cyPf+5z+GE3YvZEJ67kC281nkwRz/hoaykTISsni0=";
+          rev = "b3e69daf2f96e69881b053046bbe8544a54e087f";
+          hash = "sha256-9bRxxc3LtDR7gE0jorsrguRYaIq2InVOys27W7Im050=";
         };
         lispLibs = with self; [
           cl-gobject-introspection-wrapper
@@ -371,6 +371,44 @@ let
         ];
         nativeLibs = [
           pkgs.webkitgtk_6_0
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
+      cl-gtk4_dot_sourceview = build-asdf-system {
+        pname = "cl-gtk4.sourceview";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+          cl-gtk4
+        ];
+        nativeBuildInputs = [
+          pkgs.gtksourceview5
+        ];
+        nativeLibs = [
+          pkgs.gtksourceview5
+        ];
+        meta = {
+          homepage = "https://github.com/bohonghuang/cl-gtk4";
+        };
+      };
+
+      cl-gdk4 = build-asdf-system {
+        pname = "cl-gdk4";
+        version = self.cl-gtk4.version;
+        src = self.cl-gtk4.src;
+        lispLibs = with self; [
+          cl-gobject-introspection-wrapper
+        ];
+        nativeBuildInputs = [
+          pkgs.gobject-introspection
+          pkgs.gtk4
+        ];
+        nativeLibs = [
+          pkgs.gtk4
         ];
         meta = {
           homepage = "https://github.com/bohonghuang/cl-gtk4";

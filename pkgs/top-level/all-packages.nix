@@ -10511,10 +10511,6 @@ with pkgs;
 
   ### SCIENCE/LOGIC
 
-  abella = callPackage ../applications/science/logic/abella {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
-  };
-
   inherit
     (callPackage ./rocq-packages.nix {
       inherit (ocaml-ng)

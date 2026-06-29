@@ -37,10 +37,12 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 644 -t $out/etc/udev/rules.d 99-openlinkhub.rules
-    install -Dm 755 -t $out/bin $GOPATH/bin/OpenLinkHub
+    install -Dm 755 -t $out/opt/OpenLinkHub $GOPATH/bin/OpenLinkHub
 
-    mkdir -p $out/opt/OpenLinkHub
-    cp -r {database,static,web} $out/opt/OpenLinkHub
+    cp -rt $out/opt/OpenLinkHub database static web
+
+    mkdir -p $out/bin
+    ln -st $out/bin $out/opt/OpenLinkHub/OpenLinkHub
 
     runHook postInstall
   '';

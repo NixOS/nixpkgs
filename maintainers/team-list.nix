@@ -736,7 +736,6 @@ with lib.maintainers;
       dduan
       samasaur
       stephank
-      trepetti
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
