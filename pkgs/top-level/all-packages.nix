@@ -313,6 +313,8 @@ with pkgs;
 
   buildLakePackage = callPackage ../build-support/lake { };
 
+  buildOpenSCADPackage = callPackage ../build-support/build-openscad-package { };
+
   cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
 
   cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
@@ -2669,6 +2671,8 @@ with pkgs;
     openrgb-plugin-effects
     openrgb-plugin-hardwaresync
   ];
+
+  openscadPackages = dontRecurseIntoAttrs (callPackage ../top-level/openscad-packages.nix { });
 
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh { });
 
