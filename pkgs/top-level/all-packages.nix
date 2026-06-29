@@ -10712,14 +10712,6 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
-  hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
-    python = null;
-  };
-
-  pythia = callPackage ../development/libraries/physics/pythia {
-    hepmc = hepmc2;
-  };
-
   yoda-with-root = lowPrio (
     yoda.override {
       withRootSupport = true;
