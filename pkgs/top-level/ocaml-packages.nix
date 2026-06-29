@@ -1625,6 +1625,8 @@ let
 
         odds = callPackage ../development/ocaml-modules/odds { };
 
+        odep = callPackage ../development/ocaml-modules/odep { };
+
         odig = callPackage ../development/ocaml-modules/odig { };
 
         odoc = callPackage ../development/ocaml-modules/odoc {
