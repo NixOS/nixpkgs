@@ -8,6 +8,9 @@
 
 writeTextFile {
   name = "${drawio.pname}-headless-${drawio.version}";
+  derivationArgs = {
+    inherit (drawio) pname version;
+  };
 
   executable = true;
   destination = "/bin/drawio";
