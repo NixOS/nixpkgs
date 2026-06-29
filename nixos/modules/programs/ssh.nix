@@ -43,6 +43,10 @@ in
 
     programs.ssh = {
 
+      enable = lib.mkEnableOption "the system-wide OpenSSH client configuration, installing the `ssh` client and generating {file}`/etc/ssh/ssh_config`" // {
+        default = true;
+      };
+
       enableAskPassword = lib.mkOption {
         type = lib.types.bool;
         default = config.services.xserver.enable;
@@ -312,7 +316,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
 
     programs.ssh.setXAuthLocation = lib.mkDefault (
       config.services.xserver.enable
