@@ -5986,6 +5986,14 @@ self: super: with self; {
 
   flowmc = callPackage ../development/python-modules/flowmc { };
 
+  flowsint-api = callPackage ../development/python-modules/flowsint-api { };
+
+  flowsint-core = callPackage ../development/python-modules/flowsint-core { };
+
+  flowsint-enrichers = callPackage ../development/python-modules/flowsint-enrichers { };
+
+  flowsint-types = callPackage ../development/python-modules/flowsint-types { };
+
   fluent-logger = callPackage ../development/python-modules/fluent-logger { };
 
   fluent-pygments = callPackage ../development/python-modules/python-fluent/fluent-pygments.nix { };
@@ -17117,7 +17125,13 @@ self: super: with self; {
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
+  reconcrawl = callPackage ../development/python-modules/reconcrawl { };
+
   reconplogger = callPackage ../development/python-modules/reconplogger { };
+
+  reconspread = callPackage ../development/python-modules/reconspread { };
+
+  recontrack = callPackage ../development/python-modules/recontrack { };
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
@@ -18137,6 +18151,8 @@ self: super: with self; {
   shellescape = callPackage ../development/python-modules/shellescape { };
 
   shellingham = callPackage ../development/python-modules/shellingham { };
+
+  sherlock-project = callPackage ../development/python-modules/sherlock-project { };
 
   sherpa-onnx = callPackage ../development/python-modules/sherpa-onnx {
     sherpa-onnx = pkgs.sherpa-onnx.override {
