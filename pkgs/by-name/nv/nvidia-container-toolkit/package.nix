@@ -94,6 +94,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       cpcloud
       christoph-heiss
+      zeusec
     ];
   };
 })
