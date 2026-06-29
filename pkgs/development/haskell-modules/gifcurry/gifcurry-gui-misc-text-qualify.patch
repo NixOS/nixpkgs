@@ -1,0 +1,12 @@
+--- a/src/gui/GuiMisc.hs
++++ b/src/gui/GuiMisc.hs
+@@ -21,7 +21,8 @@
+ import Data.Word
+ import Data.Maybe
+ import Data.Char
+-import Data.Text
++import Data.Text (Text)
++import qualified Data.Text as Data.Text
+ import Data.Time
+ import Data.List
+ import Data.GI.Base.Overloading
