@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Should be removed when bumping to 2.6.x
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.27.1"
   '';
 
   nativeBuildInputs = [
