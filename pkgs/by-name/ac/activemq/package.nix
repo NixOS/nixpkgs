@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  nixosTests,
 }:
 
 let
@@ -28,6 +29,10 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) activemq;
+  };
 
   meta = {
     homepage = "https://activemq.apache.org/";

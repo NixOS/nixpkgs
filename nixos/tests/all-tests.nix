@@ -192,6 +192,7 @@ in
   activation-perlless = runTest ./activation/perlless.nix;
   activation-template-dropin = runTest ./activation/template-dropin.nix;
   activation-var = runTest ./activation/var.nix;
+  activemq = runTest ./activemq.nix;
   actual = runTest ./actual.nix;
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn [ "x86_64-linux" ] ./aesmd.nix;
