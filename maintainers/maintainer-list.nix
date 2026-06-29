@@ -10382,6 +10382,11 @@
     githubId = 95086304;
     name = "Guilherme Lima";
   };
+  guilhermeprokisch = {
+    github = "guilhermeprokisch";
+    githubId = 12011070;
+    name = "Guilherme Prokisch";
+  };
   guillaumekoenig = {
     email = "guillaume.edward.koenig@gmail.com";
     github = "guillaumekoenig";
