@@ -373,7 +373,7 @@ in
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2024-04-14";
+    version = "legacy";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
