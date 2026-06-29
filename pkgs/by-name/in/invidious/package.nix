@@ -31,6 +31,7 @@ in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iv-org";

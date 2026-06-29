@@ -10,32 +10,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "trivy";
-  # As of March 2026, trivy has made compromised releases twice.
-  # At a minimum, before updating, check the diff of this package, and of all
-  # dependencies/GitHub Actions changes, carefully.
-  # Also read about how the previous compromises occurred, and ensure
-  # that the signs present then are not present now.
-  # Finally, weigh the risk of a compromised release against the expected
-  # benefit of the update, and consider the possibility of not updating.
-  version = "0.69.3"; # Did you read the comment?
+  version = "0.71.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lzFcLyrORA+1LxS4nzJVvilg29GTNiGRmnjJ47ev/yU=";
+    hash = "sha256-GC9WiGp2Cn0SmErRxAdjpDJvoF0giKrj+NJAC5CaXV8=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-aqSB2pakYH713GSbIAHwAL9Gio17MzZtwqfh9sbzDBs=";
+  vendorHash = "sha256-Xr24mc1nDevpeACKciw1g1bTfLtCEwxfOuwPNxVhGxo=";
 
   subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/aquasecurity/trivy/pkg/version/app.ver=${finalAttrs.version}"
   ];
 

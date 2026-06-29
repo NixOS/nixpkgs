@@ -4,7 +4,7 @@
   stdenv,
   yarn-berry_4,
   nodejs_24,
-  electron_39,
+  electron_42,
   makeWrapper,
   ffmpeg-headless,
   copyDesktopItems,
@@ -15,7 +15,7 @@
 let
   yarn-berry = yarn-berry_4;
   nodejs = nodejs_24;
-  electron = electron_39;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
