@@ -4,7 +4,7 @@
   lib,
   nix-update-script,
 }:
-let.
+let
   pname = "helium";
   version = "0.13.6.1";
 
