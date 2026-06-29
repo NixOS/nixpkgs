@@ -7621,7 +7621,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) cgal_5 libxml2;
+    inherit (pkgs) ifcopenshell;
   };
 
   iglo = callPackage ../development/python-modules/iglo { };
