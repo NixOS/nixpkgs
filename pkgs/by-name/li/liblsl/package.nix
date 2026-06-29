@@ -1,9 +1,11 @@
 {
   cmake,
   stdenv,
+  runCommand,
   lib,
   fetchFromGitHub,
   boost,
+  catch2_3,
   pugixml,
   nix-update-script,
 }:
@@ -26,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     pugixml
+    catch2_3
   ];
 
   cmakeFlags = [
@@ -33,10 +36,27 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LSL_FRAMEWORK" false)
     (lib.cmakeBool "LSL_BUNDLED_BOOST" false)
     (lib.cmakeBool "LSL_FETCH_PUGIXML" false)
+    (lib.cmakeBool "LSL_TESTS_PREFER_SYSTEM_CATCH2" true)
     (lib.cmakeBool "LSL_BUILD_STATIC" stdenv.targetPlatform.isStatic)
+    (lib.cmakeBool "LSL_TOOLS" true)
+    (lib.cmakeBool "LSL_UNITTESTS" true)
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      # TODO(@Pandapip1): currently fails, investigate why
+      # exported = runCommand "lsl_test_exported" {
+      #   nativeBuildInputs = [ finalAttrs.finalPackage ];
+      # } "lsl_test_exported && touch $out";
+      internal = runCommand "lsl_test_internal" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } "lsl_test_internal && touch $out";
+      runtime_config = runCommand "lsl_test_runtime_config" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } "lsl_test_runtime_config && touch $out";
+    };
+  };
 
   meta = {
     description = "C++ lsl library for multi-modal time-synched data transmission over the local network";
