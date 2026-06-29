@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,12 +25,25 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    writableTmpDirAsHomeHook
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
-  versionCheckKeepEnvironment = [ "HOME" ];
+
+  # modctl's cobra commands invoke config.NewRoot(), which uses
+  # os/user.Current() to find the home directory. On darwin os/user
+  # bypasses $HOME and resolves it via getpwuid (returning /var/empty,
+  # not writable), so the install check fails. versionCheckHook only
+  # accepts a single argument, so wrap the binary and point
+  # --log-dir/--storage-dir at TMPDIR to keep the check working on all
+  # platforms.
+  preVersionCheck = ''
+    wrapper="$NIX_BUILD_TOP/modctl-version-check"
+    cat > "$wrapper" <<EOF
+    #!/bin/sh
+    exec "$out/bin/modctl" "\$@" --log-dir="$TMPDIR" --storage-dir="$TMPDIR"
+    EOF
+    chmod +x "$wrapper"
+    versionCheckProgram="$wrapper"
+  '';
 
   meta = {
     description = "CLI tool for managing OCI model artifacts based on Model Spec";
