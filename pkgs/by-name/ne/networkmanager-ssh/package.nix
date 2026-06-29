@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-ssh";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "danfruehauf";
     repo = "NetworkManager-ssh";
     tag = finalAttrs.version;
-    hash = "sha256-ExCU22V4fYuFXW/HqJ39+PbYykXu4rpk8+3/hg9KTMo=";
+    hash = "sha256-sRJhTRV9DohtentQCxERe69wSXFVF3t6Jz6K8YYg+5U=";
   };
 
   postPatch = ''
