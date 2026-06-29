@@ -2,33 +2,25 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   nixosTests,
   gitUpdater,
   static ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-cjk-sans";
   version = "2.004";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    tag = "Sans${version}";
+    tag = "Sans${finalAttrs.version}";
     hash = "sha256-i3ZKoSy2SVs46IViha+Sg8atH4n3ywgrunHPLtVT4Pk=";
-    sparseCheckout = [
-      "Sans/OTC"
-      "Sans/Variable/OTC"
-    ];
+    rootDir = if static then "Sans/OTC" else "Sans/Variable/OTC";
   };
 
-  installPhase =
-    let
-      font-path = if static then "Sans/OTC/*.ttc" else "Sans/Variable/OTC/*.otf.ttc";
-    in
-    ''
-      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
-    '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
@@ -58,4 +50,4 @@ stdenvNoCC.mkDerivation rec {
       emily
     ];
   };
-}
+})
