@@ -20,6 +20,9 @@
         api_ws = {
           url = "wss://example.com";
         };
+        bitcoin = {
+          esploraUrl = "https://mempool.space/signet/api";
+        };
         environment = { };
       };
     };

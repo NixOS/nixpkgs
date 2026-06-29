@@ -6,9 +6,9 @@
   pkg-config,
   protobuf,
   rustPlatform,
-  version ? "0.7.1",
-  hash ? "sha256-7meBYUN7sG1OAtMEm6I66+ptf4EfsbA+dm5/4P3IRV4=",
-  cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw=",
+  version ? "0.10.0",
+  hash ? "sha256-x2AC5SLXVqwV/1wNhDzfjfAPFH3ByOyGh5ogbOjSJ2k=",
+  cargoHash ? "sha256-EO0eZ2umyKuDuetQEdbFwtOX10rje6lWPO0tSNSzn0M=",
 }:
 
 rustPlatform.buildRustPackage rec {
