@@ -109,7 +109,10 @@ buildPythonPackage rec {
   ++ optional-dependencies.all;
 
   # test flags from .github/workflows/Python.yml
-  pytestFlags = [ "--verbose" ];
+  pytestFlags = [
+    "--verbose"
+    "-Wignore::DeprecationWarning"
+  ];
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
