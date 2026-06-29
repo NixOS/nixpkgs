@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblsl";
-  version = "1.17.5";
+  version = "1.17.7-unstable-2026-06-17";
 
   src = fetchFromGitHub {
     owner = "sccn";
     repo = "liblsl";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Xu/Bdv+aA+XG/fPBNDPcHELem17vaV86e6F8zfVI//o=";
+    rev = "e651023ca67996a05a028fd88a28603297120294";
+    hash = "sha256-hYG+sWnvY6NcapT3d+Kdf5nAXUBoDbiJRTGs/3sJV2k=";
   };
 
   __structuredAttrs = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LSL_UNIXFOLDERS" true)
     (lib.cmakeBool "LSL_FRAMEWORK" false)
     (lib.cmakeBool "LSL_BUNDLED_BOOST" false)
-    (lib.cmakeBool "LSL_BUNDLED_PUGIXML" false)
+    (lib.cmakeBool "LSL_FETCH_PUGIXML" false)
     (lib.cmakeBool "LSL_BUILD_STATIC" stdenv.targetPlatform.isStatic)
   ];
 
