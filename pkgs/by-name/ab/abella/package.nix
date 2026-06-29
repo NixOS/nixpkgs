@@ -13,10 +13,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://abella-prover.org/distributions/abella-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-80b/RUpE3KRY0Qu8eeTxAbk6mwGG6jVTPOP0qFjyj2M=";
+    hash = "sha256-80b/RUpE3KRY0Qu8eeTxAbk6mwGG6jVTPOP0qFjyj2M=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     rsync
