@@ -31,6 +31,6 @@ buildGoModule {
     homepage = "https://git.project-insanity.org/onny/netzservice-swka-exporter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
-    mainProgram = "netzservice-swka-exporter";
+    mainProgram = "cmd";
   };
 }
