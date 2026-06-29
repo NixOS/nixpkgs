@@ -1,0 +1,26 @@
+diff --git a/gulpfile.js b/gulpfile.js
+index fcfdf10..458d6d4 100644
+--- a/gulpfile.js
++++ b/gulpfile.js
+@@ -390,7 +390,6 @@ const runStaticScript = (script) => {
+ 
+ exports.electronMaker = async () => {
+   await prepareElectronMaker()
+-  runStaticScript('electron:make')
+ }
+ 
+ exports.electronMakerUnsigned = async () => {
+diff --git a/src/electron/electron/cli_install.cljs b/src/electron/electron/cli_install.cljs
+index 314819c..aeb9e16 100644
+--- a/src/electron/electron/cli_install.cljs
++++ b/src/electron/electron/cli_install.cljs
+@@ -64,6 +64,9 @@
+   (try
+     (let [cli-dir (if cli-dir! (cli-dir!) cli-dir)]
+       (cond
++        true
++        (log-warn! :cli/install (str "CLI script installation skipped, because it is already part of the nixpkgs package"))
++
+         (not (exists? cli-path))
+         (throw (js/Error. (str "Missing CLI script at " cli-path)))
+ 

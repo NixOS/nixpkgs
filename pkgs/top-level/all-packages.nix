@@ -2364,6 +2364,8 @@ with pkgs;
 
   limine-full = limine.override { enableAll = true; };
 
+  logseq = logseq_2;
+
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
