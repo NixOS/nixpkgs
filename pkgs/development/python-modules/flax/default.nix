@@ -46,6 +46,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-a78KiTsCCARWZvbxz9QKdUKnjkDJGXcPVVJu5rU4m/U=";
   };
 
+  # DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
+  postPatch = ''
+    substituteInPlace tests/nnx/transforms_test.py \
+      --replace-fail \
+        "with mesh:" \
+        "with jax.set_mesh(mesh):"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
