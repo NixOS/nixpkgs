@@ -219,6 +219,9 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     gl2ps
   ]
+  ++ lib.optionals withQt6 [
+    qt6.qttools
+  ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
