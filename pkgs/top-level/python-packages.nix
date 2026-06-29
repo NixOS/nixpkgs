@@ -2859,6 +2859,8 @@ self: super: with self; {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  cityhash = callPackage ../development/python-modules/cityhash { };
+
   cjkwrap = callPackage ../development/python-modules/cjkwrap { };
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
@@ -5217,6 +5219,8 @@ self: super: with self; {
   envoy-utils = callPackage ../development/python-modules/envoy-utils { };
 
   envs = callPackage ../development/python-modules/envs { };
+
+  envyaml = callPackage ../development/python-modules/envyaml { };
 
   enzyme = callPackage ../development/python-modules/enzyme { };
 
@@ -13649,6 +13653,8 @@ self: super: with self; {
 
   py-vapid = callPackage ../development/python-modules/py-vapid { };
 
+  py-yaml12 = callPackage ../development/python-modules/py-yaml12 { };
+
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
@@ -21996,6 +22002,8 @@ self: super: with self; {
   xnd = callPackage ../development/python-modules/xnd { };
 
   xonsh = callPackage ../by-name/xo/xonsh/unwrapped.nix { };
+
+  xorq = callPackage ../development/python-modules/xorq { };
 
   xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
 
