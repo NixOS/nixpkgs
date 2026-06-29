@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sccn/liblsl";
     changelog = "https://github.com/sccn/liblsl/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ abcsds ];
+    maintainers = with lib.maintainers; [
+      abcsds
+      pandapip1
+    ];
     platforms = lib.platforms.all;
   };
 })
