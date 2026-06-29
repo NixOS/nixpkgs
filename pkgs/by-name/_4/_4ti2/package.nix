@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "install-exec" ];
 
+  # two parallel processes try to install ppi into the same directory
+  enableParallelInstalling = false;
+
   meta = {
     homepage = "https://4ti2.github.io/";
     description = "Software package for algebraic, geometric and combinatorial problems on linear spaces";
