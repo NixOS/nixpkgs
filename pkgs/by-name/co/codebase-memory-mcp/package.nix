@@ -1,13 +1,17 @@
 {
   lib,
-  stdenv,
+  bash,
   fetchFromGitHub,
-  gnumake,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+  stdenv,
   zlib,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "codebase-memory-mcp";
   version = "0.8.1";
+
   src = fetchFromGitHub {
     owner = "DeusData";
     repo = "codebase-memory-mcp";
@@ -15,19 +19,47 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-H0l8H2JhPT1Rs0p+CJC1a1qYtnZNgLGe6n7PmM+WvE4=";
   };
 
-  nativeBuildInputs = [ gnumake ];
+  patches = [
+    ./remove-install-update.diff
+  ];
 
-  buildInputs = [ zlib ];
+  postPatch = ''
+    substituteInPlace Makefile.cbm \
+      --replace-fail "npm ci &&" ""
+
+    substituteInPlace scripts/embed-frontend.sh \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
+  '';
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+    hash = "sha256-feoZNsZfrPgoLdjlnnh3w3vTxR6AwPdUkPubaR93TAk=";
+  };
+
+  npmRoot = "graph-ui";
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  buildInputs = [
+    bash
+    zlib
+  ];
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  enableParallelBuilding = true;
 
   makefile = "Makefile.cbm";
 
   # scripts/build.sh verifies CC via `file`, which fails on Nix's compiler wrapper.
   # Call make directly — mirrors upstream flake.nix.
   makeFlags = [
-    "cbm"
+    "cbm-with-ui"
     "CFLAGS_EXTRA='-DCBM_VERSION=\"${finalAttrs.version}\"'"
   ];
 

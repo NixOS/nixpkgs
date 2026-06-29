@@ -1,0 +1,30 @@
+diff --git a/src/main.c b/src/main.c
+index f2b72cb..1663138 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -284,9 +284,6 @@ static void print_help(void) {
+     printf("Usage:\n");
+     printf("  codebase-memory-mcp              Run MCP server on stdio\n");
+     printf("  codebase-memory-mcp cli <tool> [json]  Run a single tool\n");
+-    printf("  codebase-memory-mcp install [-y|-n] [--force] [--dry-run]\n");
+-    printf("  codebase-memory-mcp uninstall [-y|-n] [--dry-run]\n");
+-    printf("  codebase-memory-mcp update [-y|-n]\n");
+     printf("  codebase-memory-mcp config <list|get|set|reset>\n");
+     printf("  codebase-memory-mcp --version    Print version\n");
+     printf("  codebase-memory-mcp --help       Print this help\n");
+@@ -331,15 +328,6 @@ static int handle_subcommand(int argc, char **argv) {
+             cbm_mem_init(MAIN_RAM_FRACTION);
+             return cbm_cmd_hook_augment();
+         }
+-        if (strcmp(argv[i], "install") == 0) {
+-            return cbm_cmd_install(argc - i - SKIP_ONE, argv + i + SKIP_ONE);
+-        }
+-        if (strcmp(argv[i], "uninstall") == 0) {
+-            return cbm_cmd_uninstall(argc - i - SKIP_ONE, argv + i + SKIP_ONE);
+-        }
+-        if (strcmp(argv[i], "update") == 0) {
+-            return cbm_cmd_update(argc - i - SKIP_ONE, argv + i + SKIP_ONE);
+-        }
+         if (strcmp(argv[i], "config") == 0) {
+             return cbm_cmd_config(argc - i - SKIP_ONE, argv + i + SKIP_ONE);
+         }
