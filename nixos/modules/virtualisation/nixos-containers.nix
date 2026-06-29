@@ -524,8 +524,8 @@ let
     tmpfs = null;
   };
 
-  # Parses an IPv4 address with an optional prefix
-  ipv4FromString =
+  # Parses an IP address with an optional prefix
+  ipFromString =
     str:
     let
       segments = lib.splitString "/" str;
@@ -610,10 +610,10 @@ in
                                 networking.interfaces = lib.mkIf config.privateNetwork (
                                   lib.mkMerge [
                                     (lib.mkIf (config.localAddress != null) {
-                                      eth0.ipv4.addresses = [ (ipv4FromString config.localAddress) ];
+                                      eth0.ipv4.addresses = [ (ipFromString config.localAddress) ];
                                     })
                                     (lib.mkIf (config.localAddress6 != null) {
-                                      eth0.ipv6.addresses = [ (lib.network.ipv6.fromString config.localAddress6) ];
+                                      eth0.ipv6.addresses = [ (ipFromString config.localAddress6) ];
                                     })
                                   ]
                                 );
