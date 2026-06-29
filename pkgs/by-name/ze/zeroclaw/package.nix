@@ -10,6 +10,7 @@
   gitMinimal,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -72,7 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) zeroclaw;
+    };
+  };
 
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";

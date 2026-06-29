@@ -1892,6 +1892,7 @@ in
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
+  zeroclaw = runTest ./zeroclaw.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
   zfs = import ./zfs.nix { inherit system pkgs runTest; };
   zigbee2mqtt = runTest ./zigbee2mqtt.nix;
