@@ -1464,6 +1464,12 @@
     githubId = 60479013;
     name = "Alma Cemerlic";
   };
+  aln730 = {
+    email = "arnsg730@proton.me";
+    github = "aln730";
+    githubId = 94751172;
+    name = "AGawas";
+  };
   Alper-Celik = {
     email = "alper@alper-celik.dev";
     name = "Alper Çelik";
