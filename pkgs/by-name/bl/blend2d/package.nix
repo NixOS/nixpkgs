@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "blend2d";
-  version = "0.21.2-unstable-2025-11-29";
+  version = "0-unstable-2025-11-29";
 
   src = fetchFromGitHub {
     owner = "blend2d";
