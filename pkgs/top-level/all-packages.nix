@@ -2039,8 +2039,6 @@ with pkgs;
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
-  frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
-
   uniscribe = callPackage ../tools/text/uniscribe { };
 
   inherit (callPackages ../tools/filesystems/garage { })
