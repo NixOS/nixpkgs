@@ -4245,7 +4245,7 @@
       ];
     "mpd" =
       ps: with ps; [
-        mpd2
+        python-mpd2
       ];
     "mqtt" =
       ps: with ps; [

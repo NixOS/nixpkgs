@@ -1470,6 +1470,7 @@ mapAliases {
   mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
   makeOverridable = warnAlias "'makeOverridable' has been removed from pkgs, use `lib.makeOverridable` instead" lib.makeOverridable; # Added 2025-10-30
   manaplus = throw "manaplus has been removed, as it was broken"; # Added 2025-08-25
+  mangowc = throw "'mangowc' has been renamed to 'mango'"; # Added 2026-06-23
   manrope = throw "'manrope' has been removed because its source has been pulled"; # Added 2025-12-20
   mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
   marwaita-manjaro = throw "'marwaita-manjaro' has been renamed to/replaced by 'marwaita-teal'"; # Converted to throw 2025-10-27
@@ -2245,7 +2246,8 @@ mapAliases {
   transmission_3-gtk = throw "transmission_3-gtk has been removed in favour of transmission_4-gtk. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
   transmission_3-qt = throw "transmission_3-qt has been removed in favour of transmission_4-qt. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
   transmission_3_noSystemd = throw "transmission_3_noSystemd has been removed in favour of transmission_4. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)"; # Added 2025-10-26
-  transmission_4-qt = transmission_4-qt5; # Added 2026-06-05
+  transmission_4-qt5 = lib.warnOnInstantiate "'transmission_4-qt5' has been removed in favour of 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
+  transmission_4-qt6 = lib.warnOnInstantiate "'transmission_4-qt6' has been renamed to 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
   travis = throw "'travis' has been removed because upstream has stopped maintaining it, and it contains dependencies with security vulnerabilities."; # Added 2026-02-14
   treefmt2 = throw "'treefmt2' has been renamed to/replaced by 'treefmt'"; # Converted to throw 2025-10-27
   tremor-language-server = throw "'tremor-language-server' has been removed because it is unmaintained"; # Added 2025-11-17
