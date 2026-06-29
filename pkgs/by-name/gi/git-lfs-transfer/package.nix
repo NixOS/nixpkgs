@@ -5,16 +5,16 @@
 }:
 buildGoModule {
   pname = "git-lfs-transfer";
-  version = "0.1.0-unstable-2024-10-07";
+  version = "0.1.0-unstable-2025-05-05";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "git-lfs-transfer";
-    rev = "422d24414fe4b803849b3f6fe7c4d8ab1b40803b";
-    hash = "sha256-YsplPW3i4W1RfkWQI1eGXFXb3JofQwKe+9LbjxeL1cM=";
+    rev = "0d51139d5979491e819ba4751235e2ab4b763c6e";
+    hash = "sha256-cufY0CdkTIVHFH3LesAxMDV4KNIqjxFO2m3dLoBNM9U=";
   };
 
-  vendorHash = "sha256-1cGlhLdnU6yTqzcB3J1cq3gawncbtdgkb3LFh2ZmXbM=";
+  vendorHash = "sha256-Uz99CTBr6nOdtducBTRvYcPbtvzMiIWh895uRkRyIGI=";
 
   meta = {
     description = "Server-side implementation of the Git LFS pure-SSH protocol";
