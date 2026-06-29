@@ -23113,6 +23113,12 @@
     github = "ranidspace";
     githubId = 56847308;
   };
+  rapatao = {
+    name = "Luiz H. Rapatão";
+    email = "rapatao@rapatao.com";
+    github = "rapatao";
+    githubId = 8259329;
+  };
   raphaelr = {
     email = "raphael-git@tapesoftware.net";
     matrix = "@raphi:tapesoftware.net";
