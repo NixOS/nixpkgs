@@ -2,39 +2,18 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  nix-update-script,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
-let
-  inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.9.1";
-  source =
-    {
-      x86_64-linux = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-94Zk7onepdNVEeDb+Vn4h680UoXCZPeZW+eGpaUrnwI=";
-      };
-      aarch64-linux = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
-        hash = "sha256-o9kJvxqHICzuFItPj6r76D8aEEF/8QsRwJvE4oxphfA=";
-      };
-      x86_64-darwin = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-x86_64.tar.xz";
-        hash = "sha256-9W6o5giLSR/5bWsgRTMHI3GS7565Nkdb2kZCIm5V/cQ=";
-      };
-      aarch64-darwin = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-macos-arm64.tar.xz";
-        hash = "sha256-bTxBvz+wpdNGUDHTFB1nN1UroMC3Bi2H/bzTVSCeMno=";
-      };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libfrida-core";
-  inherit version;
+  version = "17.9.11";
 
-  src = fetchurl {
-    inherit (source) url hash;
-  };
+  src =
+    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
   dontUnpack = true;
 
   installPhase = ''
@@ -46,7 +25,44 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    sources = {
+      x86_64-linux = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-x86_64.tar.xz";
+        hash = "sha256-xMrVB7TDb+Op3nfnXCr7f6AoMg07fVDSgU8eXsAKIf0=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-arm64.tar.xz";
+        hash = "sha256-8Crtn/amFtdenbkFYfyeK/zDyPiuekgog9KJBFKX01I=";
+      };
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-macos-x86_64.tar.xz";
+        hash = "sha256-2LtXQyP/wew0K20KoQoLNkslrvXJl8vipNQR9lghCVU=";
+      };
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-macos-arm64.tar.xz";
+        hash = "sha256-6sezmw6qZ5Mqe+QlGH8ynwFQ49nKvPZigZ/RJAC1z1M=";
+      };
+    };
+    updateScript = writeShellScript "update-libfrida-core" ''
+      set -o errexit
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
+      NEW_VERSION=$(curl --silent ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/frida/frida/releases/latest | jq '.tag_name' --raw-output)
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+        echo "The new version is the same as the old version."
+        exit 0
+      fi
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+        update-source-version "libfrida-core" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
+  };
 
   meta = {
     description = "Frida core library intended for static linking into bindings";
@@ -54,12 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://frida.re/news/";
     license = lib.licenses.wxWindowsException31;
     maintainers = with lib.maintainers; [ nilathedragon ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
