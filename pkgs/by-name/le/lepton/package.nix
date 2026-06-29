@@ -24,6 +24,9 @@ stdenv.mkDerivation {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
+  # CMake 4 rejects cmake_minimum_required < 3.5 (upstream uses 2.8).
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
+
   meta = {
     homepage = "https://github.com/dropbox/lepton";
     description = "Tool to losslessly compress JPEGs";
