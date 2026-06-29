@@ -2577,6 +2577,8 @@ let
 
       jjk.jjk = callPackage ./jjk.jjk { };
 
+      joelkoz.nodeuml = callPackage ./joelkoz.nodeuml { };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
