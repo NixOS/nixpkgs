@@ -69,4 +69,44 @@ in
       hash = "sha256-YSNP7GhS5i5mJDsa4UwsXJm8Tv43r9JxrcYIbkXQKm4=";
     };
   };
+
+  f39 = fedoraBackground rec {
+    version = "39.0.5";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-+dHhLs1X+oe/iLX4A3GlZfjqgZyNfY5f9e1L+Lq1yvo=";
+    };
+  };
+
+  f40 = fedoraBackground rec {
+    version = "40.2.0";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-5CRZV34NJG5K3vZkIsFssot5RXqgcwe9CmHpFofeIFE=";
+    };
+  };
+
+  f41 = fedoraBackground rec {
+    version = "41.0.2";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-CRKy9yqa6BEr8H52YofHN4+1RKm8rq7fln74NkONP1c=";
+    };
+  };
+
+  f42 = fedoraBackground rec {
+    version = "42.0.0";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-QRy1gUelUf2txyDr1NJ+go6HixhYtOzHomlMINa/baM=";
+    };
+  };
+
+  f43 = fedoraBackground rec {
+    version = "43.0.4";
+    src = fetchurl {
+      url = "https://github.com/fedoradesign/backgrounds/releases/download/v${version}/f${lib.versions.major version}-backgrounds-${version}.tar.xz";
+      hash = "sha256-/EjGszi6gTpcD5iPpABUsoJeBi31y1QDcFIvbWeq6yM=";
+    };
+  };
 }
