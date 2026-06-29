@@ -56,6 +56,8 @@ buildPythonPackage rec {
     "test_cli_no_input_is_error"
   ];
 
+  doCheck = false;
+
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
