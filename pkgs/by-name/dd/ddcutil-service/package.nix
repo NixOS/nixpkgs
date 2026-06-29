@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     ddcutil
   ];
 
+  # Also installs ddcutil-client, which is built by default
+  installTargets = "install-all";
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];
