@@ -566,9 +566,9 @@ let
       src = fetchFromGitHub {
         owner = "kjdev";
         repo = "nginx-oidc";
-        rev = "0.4.1";
+        rev = "0.5.0";
         fetchSubmodules = true;
-        sha256 = "sha256-Su9vRgORSSEGws/U6djqPqv73CrzqNAuemH++jKzCaM=";
+        sha256 = "sha256-NMLzaEjR5q1gx9DDa+yLY5NdOTaeoG94Yr8Kvk5BSEk=";
       };
 
       inputs = [
