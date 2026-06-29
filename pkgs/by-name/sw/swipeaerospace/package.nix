@@ -85,7 +85,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "swipeaerospace";
-  version = "0.3.0";
+  version = "0.3.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -93,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MediosZ";
     repo = "SwipeAeroSpace";
-    tag = finalAttrs.version;
-    hash = "sha256-wm2fx0co7oETr8CDV4ie0rjZylUrWB/j4r9D/wwnSso=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-468QGWjbRtA9Fml6jjeJZBTCUEp227cQPckqwyLK0dM=";
   };
 
   # Keep SettingsView unchanged, but open it through a regular WindowGroup.
