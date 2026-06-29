@@ -113,6 +113,19 @@ in
       defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.argv";
     };
 
+    systemd.mainExecReload = mkOption {
+      description = ''
+        TODO
+      '';
+      type = types.str;
+      default =
+        if config.process.reloadCommand then
+          config.systemd.lib.escapeSystemdExecArgs config.process.reloadCommand
+        else
+          "";
+      defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.reloadCommand";
+    };
+
     systemd.services = mkOption {
       description = ''
         This module configures systemd services, with the notable difference that their unit names will be prefixed with the abstract service name.
@@ -170,7 +183,15 @@ in
       # TODO description;
       wantedBy = lib.mkDefault [ "multi-user.target" ];
       serviceConfig = {
-        Type = lib.mkDefault "simple";
+        ExecReload = config.systemd.mainExecReload;
+        Type = lib.mkDefault (
+          if
+            (config.serviceManager.notificationProtocol == "systemd" && config.process.reloadCommand != null)
+          then
+            "notify-reload"
+          else
+            "simple"
+        );
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [
