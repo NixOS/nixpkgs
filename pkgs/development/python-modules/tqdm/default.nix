@@ -27,7 +27,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeCheckInputs = [
