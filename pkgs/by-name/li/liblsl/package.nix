@@ -3,6 +3,7 @@
   stdenv,
   runCommand,
   lib,
+  testers,
   fetchFromGitHub,
   boost,
   catch2_3,
@@ -20,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "e651023ca67996a05a028fd88a28603297120294";
     hash = "sha256-hYG+sWnvY6NcapT3d+Kdf5nAXUBoDbiJRTGs/3sJV2k=";
   };
+
+  patches = [
+    ./0001-pkg-config.patch
+  ];
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -49,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
       # exported = runCommand "lsl_test_exported" {
       #   nativeBuildInputs = [ finalAttrs.finalPackage ];
       # } "lsl_test_exported && touch $out";
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
       internal = runCommand "lsl_test_internal" {
         nativeBuildInputs = [ finalAttrs.finalPackage ];
       } "lsl_test_internal && touch $out";
@@ -63,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sccn/liblsl";
     changelog = "https://github.com/sccn/liblsl/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+    pkgConfigModules = [ "lsl" ];
     maintainers = with lib.maintainers; [
       abcsds
       pandapip1

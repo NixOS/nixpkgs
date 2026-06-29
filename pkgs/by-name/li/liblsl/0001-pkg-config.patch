@@ -1,0 +1,51 @@
+From da435e3db6033e2bff2388e3d35ea48b029e9ebd Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Sat, 27 Jun 2026 16:00:57 -0400
+Subject: [PATCH] feat: add pkg-config support
+
+---
+ cmake/Installation.cmake | 14 ++++++++++++++
+ lsl.pc.in                |  9 +++++++++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 lsl.pc.in
+
+diff --git a/cmake/Installation.cmake b/cmake/Installation.cmake
+index 4114d29a..4ed7d6e6 100644
+--- a/cmake/Installation.cmake
++++ b/cmake/Installation.cmake
+@@ -83,6 +83,20 @@ install(
+     DESTINATION ${LSL_CONFIG_INSTALL_DIR}
+ )
+ 
++# Generate pkg-config file
++if(LSL_UNIXFOLDERS AND NOT LSL_FRAMEWORK)
++    configure_file(
++        ${CMAKE_CURRENT_SOURCE_DIR}/lsl.pc.in
++        ${CMAKE_CURRENT_BINARY_DIR}/lsl.pc
++        @ONLY
++    )
++    install(
++        FILES ${CMAKE_CURRENT_BINARY_DIR}/lsl.pc
++        COMPONENT liblsl
++        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++    )
++endif()
++
+ if(APPLE AND LSL_FRAMEWORK AND NOT IOS)
+     # Create symlinks for the framework. The variables we want to use to identify the symlink locations
+     #  are not available at install time. Instead, we create a script during configuration time that will
+diff --git a/lsl.pc.in b/lsl.pc.in
+new file mode 100644
+index 00000000..49f90967
+--- /dev/null
++++ b/lsl.pc.in
+@@ -0,0 +1,9 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++
++Name: liblsl
++Description: @PROJECT_DESCRIPTION@
++Version: @PROJECT_VERSION@
++Libs: -L${libdir} -llsl
++Cflags: -I${includedir}
