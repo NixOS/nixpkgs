@@ -15,11 +15,8 @@ let
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
-appimageTools.wrapType2 {
+(appimageTools.wrapType2 {
   inherit pname version src;
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   extraPkgs = pkgs: [ ];
 
@@ -47,4 +44,7 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [ jupiterScope ];
     platforms = [ "x86_64-linux" ];
   };
-}
+}).overrideAttrs (old: {
+  strictDeps = true;
+  __structuredAttrs = true;
+})
