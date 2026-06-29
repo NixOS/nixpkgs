@@ -6,11 +6,11 @@
 
 let
   pname = "jbrowse";
-  version = "3.6.5";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-aCmNpZX8TBZm7nbS13GBUG4a/X4kvwWRHvwWWykoLwU=";
+    sha256 = "sha256-8d/nF2e92BLYzlw7MfLon+dWZnwnoIFCLy+gTGA1E14=";
   };
 
   appimageContents = appimageTools.extractType2 {
