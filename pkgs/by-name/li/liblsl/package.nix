@@ -3,6 +3,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  boost,
+  pugixml,
   nix-update-script,
 }:
 
@@ -21,10 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   separateDebugInfo = true;
   nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    boost
+    pugixml
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "LSL_UNIXFOLDERS" true)
     (lib.cmakeBool "LSL_FRAMEWORK" false)
+    (lib.cmakeBool "LSL_BUNDLED_BOOST" false)
+    (lib.cmakeBool "LSL_BUNDLED_PUGIXML" false)
   ];
 
   passthru.updateScript = nix-update-script { };
