@@ -121,7 +121,11 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  patches = [ ./ignore_links.patch ];
+  patches = [
+    ./ignore_links.patch
+    # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/166
+    ./fix-tests-with-zipdetails-4.006.patch
+  ];
 
   postPatch = ''
     # When generating manpage, use the installed version
