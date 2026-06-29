@@ -9,6 +9,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "statix";
   version = "0.5.8-unstable-2026-06-28";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "molybdenumsoftware";
