@@ -50,6 +50,9 @@ let
         knownVulnerabilities =
           extraVulnerabilities ++ (lib.optional eol "Nextcloud version ${version} is EOL");
       };
+
+      __structuredAttrs = true;
+      strictDeps = true;
     };
 in
 {
