@@ -6,6 +6,7 @@
   lvm2,
   fetchFromGitHub,
   nixosTests,
+  pkgsBuildBuild,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
@@ -23,9 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     lvm2
     udev
-  ];
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
+    pkgsBuildBuild.rustPlatform.bindgenHook
+    pkgsBuildBuild.stdenv.cc.libc
   ];
   buildInputs = [
     lvm2
