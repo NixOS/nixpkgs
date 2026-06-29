@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   pkgs,
   fetchFromGitHub,
   buildPythonPackage,
@@ -98,6 +99,11 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     "nltk/test/unit/test_downloader.py" # Touches network
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ModuleNotFoundError: No module named '_tkinter'
+    "test_chartparser_app_uses_pickle_load_not_pickle_load_standard"
   ];
 
   pythonImportsCheck = [ "nltk" ];
