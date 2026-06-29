@@ -792,6 +792,8 @@ self: super: with self; {
 
   amaranth-soc = callPackage ../development/python-modules/amaranth-soc { };
 
+  amaranth-stubs = callPackage ../development/python-modules/amaranth-stubs { };
+
   amarna = callPackage ../development/python-modules/amarna { };
 
   amazon-ion = callPackage ../development/python-modules/amazon-ion { inherit (pkgs) cmake; };
