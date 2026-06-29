@@ -28,12 +28,21 @@ dotnetConfigurePhase() {
 
   dotnetRestore() {
     local -r projectFile="${1-}"
+
+    local useRuntime=
+    _dotnetIsSolution "$projectFile" || useRuntime=1
+
     for runtimeId in "${runtimeIds[@]}"; do
+      local runtimeIdFlags=()
+      if [[ -n $useRuntime ]]; then
+        runtimeIdFlags+=("--runtime" "$runtimeId")
+      fi
+
       dotnet restore ${1+"$projectFile"} \
              -p:ContinuousIntegrationBuild=true \
              -p:Deterministic=true \
              -p:NuGetAudit=false \
-             --runtime "$runtimeId" \
+             "${runtimeIdFlags[@]}" \
              "${flags[@]}"
     done
   }
