@@ -22,22 +22,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-FphY53MaOUUR2oQfZak3HbT+kvysUnw2AIc4L9O+TcU=";
   };
 
+  postPatch = ''
+    substituteInPlace data/start-cosmic \
+      --replace-fail '/usr/bin/cosmic-session' "$out/bin/cosmic-session" \
+      --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
+    substituteInPlace data/cosmic.desktop \
+      --replace-fail '/usr/bin/start-cosmic' "$out/bin/start-cosmic"
+  '';
+
   cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
 
   separateDebugInfo = true;
-
-  postPatch = ''
-    substituteInPlace data/start-cosmic \
-      --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
-      --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
-    substituteInPlace data/cosmic.desktop \
-      --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
-  '';
-
   __structuredAttrs = true;
 
-  buildInputs = [ bash ];
+  env.ORCA = "orca"; # get orca from $PATH
+
   nativeBuildInputs = [ just ];
+
+  buildInputs = [ bash ];
 
   dontUseJustBuild = true;
 
@@ -52,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.ORCA = "orca"; # get orca from $PATH
 
   passthru = {
     providedSessions = [ "cosmic" ];

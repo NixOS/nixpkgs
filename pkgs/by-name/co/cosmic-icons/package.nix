@@ -24,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ just ];
 
+  propagatedBuildInputs = [
+    pop-icon-theme
+    hicolor-icon-theme
+  ];
+
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
-  ];
-
-  propagatedBuildInputs = [
-    pop-icon-theme
-    hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;

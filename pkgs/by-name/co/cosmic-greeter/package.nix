@@ -29,15 +29,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-oxXCAvBISkZu76VpvQ9AliFRJ8r5Ay7mjWf4sEwV0Xs=";
   };
 
+  postPatch = ''
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
+  '';
+
   cargoHash = "sha256-mfY2hsMxBooRjmTB2jgUIKyKHBpGfZ9Qslwv+2aEQyg=";
-
-  separateDebugInfo = true;
-
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   cargoBuildFlags = [ "--all" ];
 
+  separateDebugInfo = true;
   __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -65,11 +69,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  postPatch = ''
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
-  '';
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(

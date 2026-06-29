@@ -26,14 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-5DsnhaiJgmTakn+q9o2Q7IeuakAC/j0Ck3F3pfFx/EA=";
   };
 
-  cargoHash = "sha256-2E+98uWtahyQufoZTzdUtkwbuISsUHwlqOmMSpyi1O8=";
-
-  separateDebugInfo = true;
-
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
+  cargoHash = "sha256-2E+98uWtahyQufoZTzdUtkwbuISsUHwlqOmMSpyi1O8=";
+
+  separateDebugInfo = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
