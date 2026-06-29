@@ -18,13 +18,21 @@
   libxcb,
   ninja,
   pkg-config,
+  shaderc,
   qt5,
   qt6,
   taglib,
   vulkan-headers,
   vulkan-tools,
-  rubberband,
   deno,
+  expat,
+  libmpg123,
+  libogg,
+  libopenmpt,
+  libsysprof-capture,
+  libvorbis,
+  pipewire,
+  rubberband,
   # Configurable options
   qtVersion ? "6", # Can be 5 or 6
 }:
@@ -54,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    shaderc
   ]
   ++ lib.optionals (qtVersion == "6") [ qt6.wrapQtAppsHook ]
   ++ lib.optionals (qtVersion == "5") [ qt5.wrapQtAppsHook ];
@@ -76,6 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers-qmplay2
     vulkan-tools
     deno
+    expat
+    libmpg123
+    libogg
+    libopenmpt
+    libsysprof-capture
+    libvorbis
+    pipewire
   ]
   ++ lib.optionals (qtVersion == "6") [
     rubberband
