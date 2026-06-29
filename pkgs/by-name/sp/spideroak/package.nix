@@ -30,7 +30,7 @@ let
     zlib
   ];
 
-  version = "7.5.0";
+  version = "7.5.2";
 
 in
 stdenv.mkDerivation {
