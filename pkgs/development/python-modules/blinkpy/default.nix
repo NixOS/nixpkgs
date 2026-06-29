@@ -15,23 +15,28 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.25.6";
+  version = "0.25.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     tag = "v${version}";
-    hash = "sha256-OAa5sYuFGsxiS5r+v69dnXCQs7rmAFAHbmNXm3S6cgY=";
+    hash = "sha256-/GaSnovF6IwIKdbQ4bTqXI/lZERa2DhbLalOO+ZYXEY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "wheel>=0.40,<0.47" wheel \
-      --replace-fail "setuptools>=68,<81" setuptools
+      --replace-fail "wheel>=0.40,<0.48" wheel \
+      --replace-fail "setuptools>=68,<83" setuptools
   '';
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "requests"
+  ];
 
   dependencies = [
     aiofiles
