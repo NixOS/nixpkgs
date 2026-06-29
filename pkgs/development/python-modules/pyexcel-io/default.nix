@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-io";
-  version = "0.6.7.1";
+  version = "0.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-io";
     tag = "v${version}";
-    hash = "sha256-DBiHHiKXR26/WPJDmEZpRgjvJitFaidbV41Tvn0etLY=";
+    hash = "sha256-UPUMj9x6Vbecht6K/TfkM3/BZeTSnIoS2k74YYVSVWI=";
   };
 
   build-system = [ setuptools ];
