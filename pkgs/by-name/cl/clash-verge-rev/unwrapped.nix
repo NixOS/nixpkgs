@@ -13,7 +13,7 @@
   moreutils,
   nodejs,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 
@@ -37,8 +37,8 @@ rustPlatform.buildRustPackage {
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
     hash = pnpm-hash;
   };
 
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [
