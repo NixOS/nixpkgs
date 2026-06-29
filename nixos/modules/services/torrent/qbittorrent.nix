@@ -21,6 +21,7 @@ let
     collect
     mapAttrsRecursive
     optionals
+    recursiveUpdate
     ;
   inherit (lib.types)
     str
@@ -53,7 +54,17 @@ let
       else
         mkKeyValueDefault { } sep k v;
   };
-  configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
+  # Mirror of upstream qBittorrent's changedDefaults[] table:
+  # https://github.com/qbittorrent/qBittorrent/blob/master/src/app/upgrade.cpp
+  # Currently contains only QueueingSystemEnabled. If upstream adds entries,
+  # this seed needs to be expanded to match.
+  # Context: https://github.com/NixOS/nixpkgs/issues/516998
+  legacyDefaultsSeed = {
+    BitTorrent.Session.QueueingSystemEnabled = false;
+  };
+  configFile = pkgs.writeText "qBittorrent.conf" (
+    gendeepINI (recursiveUpdate legacyDefaultsSeed cfg.serverConfig)
+  );
 in
 {
   options.services.qbittorrent = {
@@ -116,6 +127,12 @@ in
         }
         ];
         ```
+
+        ::: {.note}
+        When this option is non-empty, the module pre-seeds `BitTorrent/Session/QueueingSystemEnabled = false` to match qBittorrent's documented default.
+        Without the seed, qBittorrent misclassifies the install as an upgrade from a pre-4.3 version and injects the historical default (`true`), enabling torrent queueing silently.
+        To opt back in to queueing, set `serverConfig.BitTorrent.Session.QueueingSystemEnabled = true` explicitly.
+        :::
       '';
       example = literalExpression ''
         {
@@ -239,6 +256,7 @@ in
     );
   };
   meta.maintainers = with maintainers; [
+    connor-grady
     fsnkty
     undefined-landmark
   ];
