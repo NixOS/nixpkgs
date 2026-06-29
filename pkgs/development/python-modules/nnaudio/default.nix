@@ -64,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     export NUMBA_CACHE_DIR=$(mktemp -d)
   '';
 
+  # urllib3.exceptions.MaxRetryError
+  # On darwin the tests fail to locate the audio files and fallback to downloading them from the
+  # internet
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   disabledTests = [
     # AttributeError: module 'scipy.signal' has no attribute 'blackmanharris'
     "test_cfp_original[cpu]"
