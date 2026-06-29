@@ -9,6 +9,10 @@
         extra-nix-path = [ "extra=/etc/value.nix" ];
       };
       environment.etc."value.nix".text = "42";
+
+      virtualisation.credentials."org.nixos.nix.settings".text = ''
+        extra-nix-path = credential=/etc/value.nix
+      '';
     };
   testScript = ''
     start_all()
@@ -17,5 +21,6 @@
     # unset NIX_PATH because environtment overrides the config
     print(machine.succeed("env -u NIX_PATH nix-instantiate --find-file extra"))
     print(machine.succeed("env -u NIX_PATH nix-instantiate --find-file nonextra"))
+    print(machine.succeed("env -u NIX_PATH nix-instantiate --find-file credential"))
   '';
 }
