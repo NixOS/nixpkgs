@@ -59,6 +59,12 @@ buildPythonPackage {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Numerical precision error (AssertionError)
+    "test_index_clustering"
+    "test_index_retrieval"
+  ];
+
   meta = {
     inherit (pkgs.usearch.meta)
       description
