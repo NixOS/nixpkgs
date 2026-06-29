@@ -26931,6 +26931,12 @@
     githubId = 332289;
     name = "Rafał Łasocha";
   };
+  swofty = {
+    email = "admin@swofty.net";
+    github = "Swofty-Developments";
+    githubId = 75875764;
+    name = "Jacob Nardella";
+  };
   sxmair = {
     email = "sumairhasan99@gmail.com";
     github = "sxmair";
