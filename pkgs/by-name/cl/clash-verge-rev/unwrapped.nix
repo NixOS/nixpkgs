@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   pname,
   version,
   src,
@@ -16,11 +18,11 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  wrapGAppsHook3,
 
   glib,
   kdePackages,
   libayatana-appindicator,
-  libsForQt5,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
@@ -59,14 +61,6 @@ rustPlatform.buildRustPackage {
       --replace-fail 'once("/tmp")' 'once(&std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string())))' \
       --replace-fail 'join("verge")' 'join("clash-verge-rev")'
 
-    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-
-    substituteInPlace $cargoDepsCopy/*/sysproxy-*/src/linux.rs \
-      --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
-      --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
-      --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
-
     # this file tries to override the linker used when compiling for certain platforms
     rm .cargo/config.toml
 
@@ -76,6 +70,15 @@ rustPlatform.buildRustPackage {
       del(.bundle.resources) |
       del(.bundle.externalBin)
     ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    substituteInPlace $cargoDepsCopy/*/sysproxy-*/src/linux.rs \
+      --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
+      --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
+      --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
 
     jq 'del(.bundle.externalBin)' src-tauri/tauri.linux.conf.json | sponge src-tauri/tauri.linux.conf.json
   '';
@@ -85,21 +88,28 @@ rustPlatform.buildRustPackage {
     jq
     moreutils
     nodejs
-    pkg-config
     pnpmConfigHook
     pnpm_9
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libayatana-appindicator
     libsoup_3
-    openssl
     webkitgtk_4_1
   ];
 
-  # make sure the .desktop file name does not contain whitespace,
-  # so that the service can register it as an auto-start item
-  postInstall = ''
-    mv $out/share/applications/Clash\ Verge.desktop $out/share/applications/clash-verge.desktop
-  '';
+  postInstall =
+    ""
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # make sure the .desktop file name does not contain whitespace,
+      # so that the service can register it as an auto-start item
+      mv $out/share/applications/Clash\ Verge.desktop $out/share/applications/clash-verge.desktop
+    '';
 }
