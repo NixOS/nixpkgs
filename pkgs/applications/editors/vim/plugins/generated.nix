@@ -5642,6 +5642,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ember-nvim = buildVimPlugin {
+    pname = "ember-nvim";
+    version = "0-unstable-2026-05-13";
+    src = fetchFromGitHub {
+      owner = "ember-theme";
+      repo = "nvim";
+      rev = "7365b8dede43a82ed1df741275b75333422e5402";
+      hash = "sha256-JJct0gFQYYTVamgxjvIxk3IgqsTB8PdU1tGyQYeJWdQ=";
+    };
+    meta.homepage = "https://github.com/ember-theme/nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   emmet-vim = buildVimPlugin {
     pname = "emmet-vim";
     version = "0-unstable-2026-03-24";
