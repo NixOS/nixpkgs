@@ -233,9 +233,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /doc/toolchains/llvm.chapter.md @NixOS/llvm
 
 # Audio
-/nixos/modules/services/audio/botamusique.nix @mweinelt
 /nixos/modules/services/audio/snapserver.nix @mweinelt
-/nixos/tests/botamusique.nix @mweinelt
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
