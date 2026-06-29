@@ -375,12 +375,18 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
-          defaultText = lib.literalExpression "config.services.fprintd.enable";
+          default = config.services.fprintd.enablePam;
+          defaultText = lib.literalExpression "config.services.fprintd.enablePam";
           type = lib.types.bool;
           description = ''
             If set, fingerprint reader will be used (if exists and
             your fingerprints are enrolled).
+
+            ::: {.note}
+            This setting should only be enabled for clients that can ensure
+            user attention, such as lockscreens.
+            See https://github.com/NixOS/nixpkgs/issues/442117
+            :::
           '';
         };
 
