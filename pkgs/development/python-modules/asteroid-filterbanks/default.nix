@@ -20,7 +20,7 @@
 
 buildPythonPackage {
   pname = "asteroid-filterbanks";
-  version = "0.4.0-unstable-2024-12-02";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
