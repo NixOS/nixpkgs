@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LSL_FRAMEWORK" false)
     (lib.cmakeBool "LSL_BUNDLED_BOOST" false)
     (lib.cmakeBool "LSL_BUNDLED_PUGIXML" false)
+    (lib.cmakeBool "LSL_BUILD_STATIC" stdenv.targetPlatform.isStatic)
   ];
 
   passthru.updateScript = nix-update-script { };
