@@ -60,7 +60,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     tidalapi
     requests
-    mpd2
+    python-mpd2
     pypresence
   ]);
 

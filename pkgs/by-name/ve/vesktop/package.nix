@@ -13,7 +13,7 @@
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10_29_2;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
     hash = "sha256-Ue1K1KmRi4gF7E519deVY7QH+22dqlECMjdA7Z7qDCA=";
   };
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_10
     jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
