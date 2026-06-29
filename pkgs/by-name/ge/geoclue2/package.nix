@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geoclue";
-  version = "2.7.2";
+  version = "2.8.1";
 
   outputs = [
     "out"
@@ -42,11 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "geoclue";
     repo = "geoclue";
     tag = finalAttrs.version;
-    hash = "sha256-LwL1WtCdHb/NwPr3/OLISwaAwplhJwiZT9vUdX29Bbs=";
+    hash = "sha256-CyZhUMAa2vMUi61sL+gGBZFxGo0lu7Cm68fTjcbblTg=";
   };
 
   patches = [
     ./add-option-for-installation-sysconfdir.patch
+    ./fix-sysusers_dir.patch
   ];
 
   separateDebugInfo = true;
