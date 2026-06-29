@@ -3,38 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pip,
   pylint,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "astroid";
-  version = "4.0.3"; # Check whether the version is compatible with pylint
+  version = "4.1.2"; # Check whether the version is compatible with pylint
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5p1xY6EWviSgmrLVOx3w7RcG/Vpx+sUtVndoxXrIFTQ=";
+    hash = "sha256-ADLAkPmLtiPx+7b9o0OLawupCtcAmT/jBdv7jqkWqBM=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pip
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html.
-    "test_identify_old_namespace_package_protocol"
-  ];
-
-  disabledTestPaths = [
-    # requires mypy
-    "tests/test_raw_building.py"
   ];
 
   passthru.tests = {
