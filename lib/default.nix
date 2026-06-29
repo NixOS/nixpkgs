@@ -355,6 +355,7 @@ let
         toShellVar
         toShellVar'
         toShellVars
+        toShellVars'
         trim
         trimWith
         escapeRegex

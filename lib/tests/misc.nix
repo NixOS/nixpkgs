@@ -116,6 +116,7 @@ let
     toIntBase10
     toShellVar'
     toShellVars
+    toShellVars'
     types
     uniqueStrings
     updateManyAttrsByPath
@@ -1134,6 +1135,107 @@ runTests {
       drv=/drv
       path=/path
       stringable='hello toString'
+    '';
+  };
+
+  testToShellVars' = {
+    expr = ''
+      ${toShellVars' {
+        vars = {
+          string = "Example value";
+          list = [
+            "List item 1"
+            "List item 2"
+            "List item 3"
+          ];
+          attrs = {
+            "First attr" = "First value";
+            "Second attr" = "Second value";
+            "Third attr" = "Third value";
+          };
+        };
+      }}
+
+      ${toShellVars' {
+        vars = {
+          exportedString = "Example exported value";
+          exportedList = [
+            "Exported list item 1"
+            "Exported list item 2"
+            "Exported list item 3"
+          ];
+          exportedAttrs = {
+            "First exported attr" = "First exported value";
+            "Second exported attr" = "Second exported value";
+            "Third exported attr" = "Third exported value";
+          };
+        };
+        export = true;
+      }}
+
+      ${toShellVars' {
+        vars = {
+          readonlyString = "Example read-only value";
+          readonlyList = [
+            "Exported read-only list item 1"
+            "Exported read-only list item 2"
+            "Exported read-only list item 3"
+          ];
+          readonlyAttrs = {
+            "First read-only attr" = "First read-only value";
+            "Second read-only attr" = "Second read-only value";
+            "Third read-only attr" = "Third read-only value";
+          };
+        };
+        readonly = true;
+      }}
+
+      ${toShellVars' {
+        vars = {
+          exportedReadonlyString = "Example exported read-only value";
+          exportedReadonlyList = [
+            "Read-only list item 1"
+            "Read-only list item 2"
+            "Read-only list item 3"
+          ];
+          exportedReadonlyAttrs = {
+            "First exported read-only attr" = "First exported read-only value";
+            "Second exported read-only attr" = "Second exported read-only value";
+            "Third exported read-only attr" = "Third exported read-only value";
+          };
+        };
+        export = true;
+        readonly = true;
+      }}
+    '';
+    expected = ''
+      declare -A attrs=(['First attr']='First value' ['Second attr']='Second value' ['Third attr']='Third value')
+      declare -a list=('List item 1' 'List item 2' 'List item 3')
+      string='Example value'
+
+      declare -A exportedAttrs=(['First exported attr']='First exported value' ['Second exported attr']='Second exported value' ['Third exported attr']='Third exported value')
+      export exportedAttrs
+      declare -a exportedList=('Exported list item 1' 'Exported list item 2' 'Exported list item 3')
+      export exportedList
+      exportedString='Example exported value'
+      export exportedString
+
+      declare -A readonlyAttrs=(['First read-only attr']='First read-only value' ['Second read-only attr']='Second read-only value' ['Third read-only attr']='Third read-only value')
+      readonly readonlyAttrs
+      declare -a readonlyList=('Exported read-only list item 1' 'Exported read-only list item 2' 'Exported read-only list item 3')
+      readonly readonlyList
+      readonlyString='Example read-only value'
+      readonly readonlyString
+
+      declare -A exportedReadonlyAttrs=(['First exported read-only attr']='First exported read-only value' ['Second exported read-only attr']='Second exported read-only value' ['Third exported read-only attr']='Third exported read-only value')
+      export exportedReadonlyAttrs
+      readonly exportedReadonlyAttrs
+      declare -a exportedReadonlyList=('Read-only list item 1' 'Read-only list item 2' 'Read-only list item 3')
+      export exportedReadonlyList
+      readonly exportedReadonlyList
+      exportedReadonlyString='Example exported read-only value'
+      export exportedReadonlyString
+      readonly exportedReadonlyString
     '';
   };
 
