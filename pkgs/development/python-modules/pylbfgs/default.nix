@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "dedupe-pylbfgs";
+  pname = "pylbfgs";
   version = "0.2.0.16";
   pyproject = true;
 

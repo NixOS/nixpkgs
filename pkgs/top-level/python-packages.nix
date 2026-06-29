@@ -4135,8 +4135,6 @@ self: super: with self; {
 
   dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
 
-  dedupe-pylbfgs = callPackage ../development/python-modules/dedupe-pylbfgs { };
-
   deebot-client = callPackage ../development/python-modules/deebot-client { };
 
   deemix = callPackage ../development/python-modules/deemix { };
@@ -14849,6 +14847,8 @@ self: super: with self; {
   pylatexenc = callPackage ../development/python-modules/pylatexenc { };
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
+
+  pylbfgs = callPackage ../development/python-modules/pylbfgs { };
 
   pyld = callPackage ../development/python-modules/pyld { };
 
