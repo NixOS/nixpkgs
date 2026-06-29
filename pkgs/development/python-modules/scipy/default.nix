@@ -101,7 +101,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    [
+      # precision issues on at least some x86_64 and aarch64
+      # see: https://github.com/scipy/scipy/issues/25488
+      "test_nyquist"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # The following tests are broken on aarch64-darwin with newer compilers and library versions.
       # See https://github.com/scipy/scipy/issues/18308
       "test_a_b_neg_int_after_euler_hypergeometric_transformation"
