@@ -1,0 +1,50 @@
+commit 51300c99f84b94114ce4dbaf1ab6531aeef0cde8
+Author: phanirithvij <phanirithvij2000@gmail.com>
+Date:   Thu Sep 18 11:56:20 2025 +0530
+
+    ignore patching sed -i; we use gnused on darwin
+
+    This reverts commit b0b6563c109ae12b94bfe4441eeb5e8ce1c8b5ce.
+
+diff --git a/kanban b/kanban
+index 0900aeb..02b4d28 100755
+--- a/kanban
++++ b/kanban
+@@ -67,8 +67,6 @@ COL1="\033[37;1m"
+ COL2="\033[91;1m"
+ COL3="\033[91;5m"
+ TMP=$(mktemp -t kanban.XXXXXXXX)
+-IS_MAC=0
+-[[ "$(uname)" =~ Darwin ]] && IS_MAC=1
+ [[ ! -n $TERM ]] && TERM=vt100
+ locale | grep -q "UTF-8" && UTF8=1
+ [[ -n $PLAIN ]] && unset UTF8
+@@ -111,11 +109,6 @@ maximum_todo[DOING]=5
+ # usage: fb put <x> <y> <string>
+ put() { printf "\x1B["$2";"$1"f$3" "$4"; }
+
+-sedi(){
+-  test $IS_MAC = 0 && sed -i "$@"
+-  test $IS_MAC = 1 && sed -i '' "$@"
+-}
+-
+ strtoline() {
+     str="$1"
+     char="$2"
+@@ -316,7 +309,7 @@ update_item_status(){
+     newitem="${newitem/$status/$2}"
+     newitem="${newitem/$flags/$newflags}"
+     newitem="${newitem/$dates/$newdates}"
+-    sedi "s|$item|$newitem|g" "$KANBANFILE" 
++    sed -i "s|$item|$newitem|g" "$KANBANFILE"
+     echo "$status -> $2"
+   fi
+ }
+@@ -334,7 +327,7 @@ update_item(){
+ #
+ '"$item" > $TMP.update
+   ${EDITOR} $TMP.update
+-  sedi "s|$item|$(cat $TMP.update | tail -n1)|g" "$KANBANFILE" 
++  sed -i "s|$item|$(cat $TMP.update | tail -n1)|g" "$KANBANFILE"
+   echo "updated item $1"
+ }
