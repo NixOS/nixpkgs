@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jsbeautifier";
-  version = "1.15.4";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-W7GNnvuTMdglc1+8U2DujxqsXlJ4AEKAOUOqf4VPdZI=";
+    hash = "sha256-RWA7IJdBD+7o06bvitWo4KDonzRzMYiKl+RvMyzo2VM=";
   };
 
   build-system = [ setuptools ];
