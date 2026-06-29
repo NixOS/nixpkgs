@@ -3,15 +3,14 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "pisces";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "laughedelic";
     repo = "pisces";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oou2IeNNAqR00ZT3bss/DbhrJjGeMsn9dBBYhgdafBw=";
   };
 
@@ -21,4 +20,4 @@ buildFishPlugin rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ vanilla ];
   };
-}
+})
