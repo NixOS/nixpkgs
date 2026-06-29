@@ -198,6 +198,9 @@ rec {
   };
 
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
+  multiPagesManualHTML = buildFromConfig ({ ... }: { }) (
+    config: config.system.build.manual.multiPagesManualHTML
+  );
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (
