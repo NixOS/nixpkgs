@@ -64,6 +64,7 @@ jobs:
               'ci/github-script/supportedSystems.js',
               'ci/pinned.json',
               'ci/supportedBranches.js',
+              'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('merge-group', true)
 
             if (files.some(file => [
@@ -88,6 +89,7 @@ jobs:
               'ci/github-script/withRateLimit.js',
               'ci/pinned.json',
               'ci/supportedBranches.js',
+              'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('pr', true)
 
   merge-group:
