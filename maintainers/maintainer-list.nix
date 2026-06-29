@@ -28864,6 +28864,11 @@
     github = "UnsolvedCypher";
     githubId = 3170853;
   };
+  untio11 = {
+    name = "Robin Kneepkens";
+    github = "untio11";
+    githubId = 14060658;
+  };
   uralbash = {
     email = "root@uralbash.ru";
     github = "uralbash";
