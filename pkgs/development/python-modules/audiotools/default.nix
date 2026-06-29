@@ -16,7 +16,7 @@
 
 buildPythonPackage {
   pname = "audiotools";
-  version = "3.1.1-unstable-2020-07-29";
+  version = "3.1.1";
   pyproject = true;
 
   build-system = [
