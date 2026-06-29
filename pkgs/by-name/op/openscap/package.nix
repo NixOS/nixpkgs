@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openscap";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "openscap";
     rev = finalAttrs.version;
-    hash = "sha256-AOldgYS8qMOLB/Nm2/O0obdDOrefSrubTETb50f3Gv8=";
+    hash = "sha256-NDsKziMVtfMsd+0IlrmOBUiq9ij+VSf1oEgeEfugKMY=";
   };
 
   strictDeps = true;
