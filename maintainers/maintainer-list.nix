@@ -29936,6 +29936,12 @@
     name = "Edward";
     keys = [ { fingerprint = "0BC2F3C6AE5D73DAE870CB0E8AE4DE0EFB6CC443"; } ];
   };
+  WiredMic = {
+    name = "Rasmus Enevoldsen";
+    github = "WiredMic";
+    githubId = 111731519;
+    email = "rasmus@enev.dk";
+  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
