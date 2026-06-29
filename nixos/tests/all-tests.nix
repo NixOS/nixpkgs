@@ -945,6 +945,7 @@ in
   litestream = runTest ./litestream.nix;
   livebook-service = runTest ./livebook-service.nix;
   livekit = runTest ./networking/livekit.nix;
+  lix = runTest ./lix.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
