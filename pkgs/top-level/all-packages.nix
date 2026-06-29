@@ -11264,4 +11264,8 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  kratix = callPackage ../by-name/kr/kratix/package.nix {
+    buildGoModule = buildGo125Module;
+  };
 }
