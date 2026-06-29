@@ -147,6 +147,9 @@ in
     pname = "flutter-wrapped";
     inherit (flutter) version;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       makeWrapper
     ]

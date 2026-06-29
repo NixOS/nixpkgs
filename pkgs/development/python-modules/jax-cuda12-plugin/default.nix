@@ -39,42 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-lXMXyv8eawBqE1UXM3cN8jWidHBkviawJ0YP46WPWO4=";
+      hash = "sha256-drv+zi9u/7TokI64pfvxq7wRJd5mdoPsL/ulHGPcV68=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-GkpKVqgyrTDgHBQIWx+iRApV+kzggI5AXnNlDv+K+zE=";
+      hash = "sha256-nNCTcHC70o5EuRQ1tSxyJcjtbLN922qQ6cJGhzoD+c0=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-oWugDXI2YUWCfKOajISfn+4Rd9ZzjJ7f1ys6n+31zxg=";
+      hash = "sha256-Trbo4Jkv2Yl9skaNoz8nauQU7ITcQ2gEEkQEQwUC7qw=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-6vGmGVqg60i0IMcfIrktGXeNlIAkl3yuRkEnnV9sH4E=";
+      hash = "sha256-dnoUgtv2UmiEA8TiL/AUcOGt0TxI+dgXFp/Y90QK/OU=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-7QdNN5Z7zmHBuv3fndCoMCMGwS+QcAylrfo9CP3Uruc=";
+      hash = "sha256-lIqYiSfLEIQ7UBohUYHMsdrtP6cFMbLxrghC/hwIsF4=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-dHnmfZ2Y1KD1JflPi4GIDcwFhjH23hGLkd6R2xtAle0=";
+      hash = "sha256-aXdqyEkRL0/C1vphb4dyEG2v84/NuCXE459H6HjydhA=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-96ahiBNJ3DnyRIGioBn/KUuUkJuAqIge/iHUW2pfaR0=";
+      hash = "sha256-DHoCBBVVhcwcT8swxmt/iBs45X4fDY6X1I4WVL8NJ/g=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-iIb8V5df7gG+FyX4mLaSkvYVtwgwrvXC+95jgzNha10=";
+      hash = "sha256-SUbsV923leLagojOsc7d1YwqIEoPd2WvierkhqHTrOc=";
     };
   };
 in
