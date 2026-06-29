@@ -51,6 +51,10 @@
   sdl3,
   sdl3-ttf,
   sdl3-image,
+  wrapGAppsHook3,
+  webkitgtk_4_1,
+  glib-networking,
+  gst_all_1,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -60,6 +64,7 @@
   withUnfree ? false,
   withWaylandSupport ? false,
   withSDL2 ? false,
+  withWebView ? false,
   makeWrapper,
 
   # tries to compile and run generate_argument_docbook.c
@@ -69,7 +74,14 @@
   remmina,
   nix-update-script,
 }:
-
+let
+  webview = fetchFromGitHub {
+    owner = "akallabeth";
+    repo = "webview";
+    rev = "2a0a1303c5e8c9c5b73fa9e461739042ebdabe6f"; # https://github.com/akallabeth/webview/commits/navigation-listener/
+    hash = "sha256-gT6lZCA++dbQZMWwbAfZyJqJ6hEIm7SW7eKLAWDLS/U=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
   version = "3.27.1";
@@ -99,6 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString nocaps ''
     substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
       --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
+  ''
+  + lib.optionalString withWebView ''
+    mkdir -p external
+    ln -s ${webview} external/webview
   '';
 
   nativeBuildInputs = [
@@ -109,6 +125,9 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     writableTmpDirAsHomeHook
     makeWrapper
+  ]
+  ++ lib.optionals withWebView [
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -164,6 +183,15 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_ttf
     SDL2_image
   ]
+  ++ lib.optionals withWebView [
+    webkitgtk_4_1
+    glib-networking
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav
+  ]
   ++ lib.optionals withUnfree [
     faac
   ];
@@ -193,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
       WITH_PCSC = pcsclite != null;
       WITH_PULSE = libpulseaudio != null;
       WITH_SERVER = buildServer;
-      WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
+      WITH_WEBVIEW = withWebView;
       WITH_VAAPI = false; # false is recommended by upstream
     }
     // lib.filterAttrs (name: value: value) {
