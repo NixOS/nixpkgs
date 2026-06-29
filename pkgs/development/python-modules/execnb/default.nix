@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "execnb";
-  version = "0.1.18";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VM2WsdFICc7trCjfupL5wW0UFTzRW5RPfWs6jYpCSDM=";
+    hash = "sha256-OTxSgnbKwwb1QQ01Hq1VwVauclbcEdAyR4+/T/wssj8=";
   };
 
   build-system = [ setuptools ];
