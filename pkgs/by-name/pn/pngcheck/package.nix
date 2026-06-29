@@ -1,44 +1,29 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  cmake,
   zlib,
-  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pngcheck";
-  version = "3.0.2";
+  version = "4.0.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/png-mng/pngcheck-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-DX4mLyQRb93yhHqM61yS2fXybvtC6f/2PsK7dnYTHKc=";
+  src = fetchFromGitHub {
+    owner = "pnggroup";
+    repo = "pngcheck";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1cBcSCkiJmHVgYVCY5Em1UtiyAXgd6djEAChrXptTQM=";
   };
 
-  hardeningDisable = [ "format" ];
-
-  postPatch = ''
-    substituteInPlace $makefile \
-      --replace "gcc" "$CC"
-  '';
-
-  makefile = "Makefile.unx";
-
-  nativeBuildInputs = [ installShellFiles ];
-
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  installPhase = ''
-    runHook preInstall
-    installBin pngcheck
-    installManPage $pname.1
-    runHook postInstall
-  '';
-
   meta = {
-    homepage = "https://pmt.sourceforge.net/pngcrush";
+    homepage = "https://www.libpng.org/pub/png/apps/pngcheck.html";
     description = "Verifies the integrity of PNG, JNG and MNG files";
-    license = lib.licenses.free;
+    license = lib.licenses.hpnd;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ starcraft66 ];
     mainProgram = "pngcheck";
