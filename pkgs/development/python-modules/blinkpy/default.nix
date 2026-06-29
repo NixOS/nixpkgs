@@ -13,7 +13,7 @@
   sortedcontainers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blinkpy";
   version = "0.25.7";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/GaSnovF6IwIKdbQ4bTqXI/lZERa2DhbLalOO+ZYXEY=";
   };
 
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Blink Camera system";
     homepage = "https://github.com/fronzbot/blinkpy";
-    changelog = "https://github.com/fronzbot/blinkpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/fronzbot/blinkpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
