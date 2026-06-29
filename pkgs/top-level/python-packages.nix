@@ -4364,6 +4364,8 @@ self: super: with self; {
 
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
 
+  django-jsonform = callPackage ../development/python-modules/django-jsonform { };
+
   django-lasuite = callPackage ../development/python-modules/django-lasuite { };
 
   django-leaflet = callPackage ../development/python-modules/django-leaflet { };
