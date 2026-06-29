@@ -76,12 +76,16 @@ buildNpmPackage (finalAttrs: {
       "$nm/@anthropic-ai/sandbox-runtime/vendor/seccomp"
   '';
 
-  postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${
-    lib.makeBinPath [
-      ripgrep
-      fd
-    ]
-  }";
+  postFixup = ''
+    wrapProgram $out/bin/pi --prefix PATH : ${
+      lib.makeBinPath [
+        ripgrep
+        fd
+      ]
+    } \
+      --set PI_SKIP_VERSION_CHECK 1 \
+      --set PI_TELEMETRY 0
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
