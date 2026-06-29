@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  testers,
+  validatePkgConfig,
   boost,
   cmake,
   howard-hinnant-date,
   ninja,
-  pkg-config,
   sqlite,
   zlib,
 }:
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    pkg-config
+    validatePkgConfig
   ];
 
   outputs = [
@@ -57,9 +58,27 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  propagatedBuildInputs = [
+    howard-hinnant-date
+    sqlite
+    zlib
+  ];
+
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "SYSTEM_DATE_H" true)
   ];
+
+  doCheck = true;
+
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "DjInterop" ];
+    };
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
     homepage = "https://github.com/xsco/libdjinterop";
@@ -67,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ benley ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "djinterop" ];
   };
 })
