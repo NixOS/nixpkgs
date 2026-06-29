@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5ukXh0y5EhQpCEL6T5NcZRGx79RDwqrGXnP1zAF6kuc=";
+    hash = "sha256-tvZWLyWxdSxAKVm92Zll0jpY+9x7YA9h9uBhmfVZfvA=";
   };
 
-  cargoHash = "sha256-vvhj0B/KYdOeddALh38MvAwrg8sIAIlEzTj0yFNEjFk=";
+  cargoHash = "sha256-BPqAX1ZbUygF+luLuPlV0eNf6KRdmm/YNJMCtnuqOPo=";
 
   # By default, no features are enabled
   # https://github.com/mycrl/turn-rs?tab=readme-ov-file#features-1
