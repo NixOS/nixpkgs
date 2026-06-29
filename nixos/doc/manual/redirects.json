@@ -862,6 +862,18 @@
   "module-services-szurubooru-extra-config": [
     "index.html#module-services-szurubooru-extra-config"
   ],
+  "module-services-oxibooru": [
+    "index.html#module-services-oxibooru"
+  ],
+  "module-services-oxibooru-basic-usage": [
+    "index.html#module-services-oxibooru-basic-usage"
+  ],
+  "module-services-oxibooru-reverse-proxy-configuration": [
+    "index.html#module-services-oxibooru-reverse-proxy-configuration"
+  ],
+  "module-services-oxibooru-extra-config": [
+    "index.html#module-services-oxibooru-extra-config"
+  ],
   "module-services-suwayomi-server": [
     "index.html#module-services-suwayomi-server"
   ],

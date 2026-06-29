@@ -1287,6 +1287,7 @@ in
   overseerr = runTest ./overseerr.nix;
   owi = runTest ./owi.nix;
   owncast = runTest ./owncast.nix;
+  oxibooru = handleTest ./oxibooru.nix { };
   oxidized = handleTest ./oxidized.nix { };
   oxwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./oxwm.nix;
   pacemaker = runTest ./pacemaker.nix;
