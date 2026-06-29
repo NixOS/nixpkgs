@@ -264,7 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString isCross ''
     patchShebangs --update --host "''${!outputBin}/bin"
   '';
-  disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
   buildInputs = lib.optional isCross runtimeShellPackage;
 
   passthru =
