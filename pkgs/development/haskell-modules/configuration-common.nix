@@ -1555,6 +1555,15 @@ with haskellLib;
   servant-auth-docs = doJailbreak super.servant-auth-docs;
   servant-swagger = doJailbreak super.servant-swagger;
 
+  # 2026-06-29: allow doctest 0.25
+  # https://github.com/sellout/yaya/issues/91
+  yaya = doJailbreak super.yaya;
+  yaya-containers = doJailbreak super.yaya-containers;
+  yaya-hedgehog = doJailbreak super.yaya-hedgehog;
+  yaya-lens = doJailbreak super.yaya-lens;
+  yaya-quickcheck = doJailbreak super.yaya-quickcheck;
+  yaya-unsafe = doJailbreak super.yaya-unsafe;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
