@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.6.7";
+  version = "2.7.0";
   pname = "jbake";
 
   src = fetchzip {
     url = "https://github.com/jbake-org/jbake/releases/download/v${finalAttrs.version}/jbake-${finalAttrs.version}-bin.zip";
-    sha256 = "sha256-kikGnFsParq8g0dzzYtMr2vIJD2ie8PeF6TG2G5K7KE=";
+    hash = "sha256-oaTZEXrI208tVP+lLgz2bplXvM7yYbcNlfkAvdOJCik=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
