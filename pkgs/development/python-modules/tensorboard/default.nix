@@ -69,7 +69,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${finalAttrs.version}/RELEASE.md";
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
