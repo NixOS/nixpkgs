@@ -83,8 +83,8 @@ buildNpmPackage (finalAttrs: {
         fd
       ]
     } \
-      --set PI_SKIP_VERSION_CHECK 1 \
-      --set PI_TELEMETRY 0
+      --set-default PI_SKIP_VERSION_CHECK 1 \
+      --set-default PI_TELEMETRY 0
   '';
 
   doInstallCheck = true;
