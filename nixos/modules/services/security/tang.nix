@@ -49,7 +49,7 @@ in
         StandardError = "journal";
         DynamicUser = true;
         StateDirectory = "tang";
-        RuntimeDirectory = "tang";
+        RuntimeDirectory = "tang-%i";
         StateDirectoryMode = "700";
         UMask = "0077";
         CapabilityBoundingSet = [ "" ];
