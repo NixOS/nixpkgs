@@ -238,6 +238,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
   ];
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: failed to initialize QNNPACK
+    "test_beat_detection"
+    "test_extended_analysis_fields"
+    "test_finalize_returns_audio_analysis_data"
+    "test_finalize_returns_none_on_early_exit"
+  ];
+
   pythonImportsCheck = [ "music_assistant" ];
 
   passthru = {
