@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.41";
+  version = "0.8.44";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "hdbscan";
     tag = "release-${version}";
-    hash = "sha256-4uwWoNkrdLB2KzDAksPupdgkIFBgTahzravOtu1WYws=";
+    hash = "sha256-mJz2CGiAgrz1M5w8XwCRjgQFBygQdVKyi2B8wFHWqGI=";
   };
 
   pythonRemoveDeps = [ "cython" ];
