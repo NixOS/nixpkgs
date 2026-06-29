@@ -399,6 +399,13 @@ rec {
       "altivec"
       "vsx"
     ];
+    e5500 = [
+      # v2.06, but does not implement AltiVec or VSX
+    ];
+    e6500 = [
+      "altivec"
+      # v2.06, but does not implement VSX
+    ];
     # Power ISA v2.07
     power8 = [
       "altivec"
@@ -599,6 +606,8 @@ rec {
       "power5+" = withInferiors [ "power5" ];
       power6 = withInferiors [ "power5+" ];
       power7 = withInferiors [ "power6" ];
+      e5500 = withInferiors [ "power4" ]; # does not have POWER7's usual extensions
+      e6500 = withInferiors [ "power5+" ]; # does not have POWER7's usual extensions
       power8 = withInferiors [ "power7" ];
       power9 = withInferiors [ "power8" ];
       power10 = withInferiors [ "power9" ];
