@@ -11,13 +11,13 @@ let
     owner = "onny";
     repo = "netzservice-swka-exporter";
     # rev = "v${version}";
-    rev = "9297b7bb7e08f0bf66a94ef0ce9c0eb1a8e4c29b";
-    hash = "sha256-FVoPSY5emWU//0hSkAvMbhK1IUB9H44XcpMN8NVmcNw=";
+    rev = "0a72845fb2ce432ae1340af11c84a2586b273fa8";
+    hash = "sha256-+Oqjh210mGul8yr+msKnfSMsTIGk7hLeAy6fiF17cac=";
   };
 in
 buildGoModule {
   pname = "prometheus-netzservice-swka-exporter";
-  vendorHash = "sha256-IDFdB86/pL3TiHjRdk/4+PR9XbV0/8EApAHU071DfRI=";
+  vendorHash = "sha256-ndX80xhz/KpOJh/vvRpM7oWPL5m8mNdrmvY1ssUN5io=";
   inherit src version;
 
   ldflags = [
