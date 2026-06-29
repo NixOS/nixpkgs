@@ -146,6 +146,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     homepage = "https://corefonts.sourceforge.net/";
