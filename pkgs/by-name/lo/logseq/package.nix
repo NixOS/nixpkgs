@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     # bumps better-sqlite3 to work with electron 39+
     # also fixes outdated yarn.lock
     ./bump-better-sqlite3.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -116,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-5DBVlCWlUXYvo0bJWQwvSNMW4P9E8kjE9RQe9/ViJM0=";
+    hash = "sha256-TFisR5GwcKmuddGhe0i6rAmr2wDWzed/mXnxVGARYK0=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
