@@ -1,0 +1,3 @@
+{ callPackage }: {
+  markitdown = callPackage ./markitdown { };
+}
