@@ -908,6 +908,7 @@ class QemuMachine(BaseMachine):
 
         return (rc, output.decode(errors="replace"))
 
+    @warnings.deprecated("Use the SSH backdoor instead")
     def shell_interact(self, address: str | None = None) -> None:
         """
         Allows you to directly interact with the guest shell. This should
