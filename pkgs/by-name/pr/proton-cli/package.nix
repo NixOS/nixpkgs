@@ -8,8 +8,7 @@
   webkitgtk_4_1,
   gtk3,
   nix-update-script,
-  testers,
-  proton-cli,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -62,14 +61,10 @@ buildGoModule (finalAttrs: {
       --zsh  <($out/bin/proton-cli completion zsh)
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = proton-cli;
-      command = "proton-cli --version";
-      version = finalAttrs.version;
-    };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unofficial command-line client for the Proton suite (Mail, Drive, Calendar, Contacts, Pass)";
