@@ -1,0 +1,127 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 106c3e9..20f1a5c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -619,6 +619,18 @@ if(NOT CMAKE_CROSSCOMPILING)
+ 	# temporaly glib-2.0 is static link
+ 	list(FILTER GTK2_LIBRARIES EXCLUDE REGEX ".*glib-2.0.so$")
+ 
++	# OpenSSL
++	if(NOT MSVC_VERSION)
++		if(CMAKE_HOST_APPLE)
++			IF(EXISTS "/usr/local/opt/openssl@1.1")
++				set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl@1.1")
++				set(OPENSSL_LIBRARIES "/usr/local/opt/openssl@1.1/lib")
++			endif()
++		endif()
++		find_package(OpenSSL REQUIRED)
++		list(APPEND NP2kai_OpenSSL_definitions "SUPPORT_OPENSSL" "SUPPORT_DEBUGSS")
++	endif()
++
+ 	# cmd-f to toggle fullscreen mode
+ 	if(CMAKE_HOST_APPLE)
+ 		add_compile_definitions(CMD_F_FSTOGGLE)
+@@ -841,53 +853,53 @@ else()
+ 	if(BUILD_SDL AND (USE_SDL EQUAL 1))
+ 		add_library(NP2kai_SDL1_base INTERFACE)
+ 		target_sources(NP2kai_SDL1_base INTERFACE ${NP2kai_SDL_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_SDL1_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=1" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${libcdio_definitions} ${libusb_1_definitions})
++		target_compile_definitions(NP2kai_SDL1_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=1" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions})
+ 		target_include_directories(NP2kai_SDL1_base INTERFACE ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+ 		if(MINGW OR MSYS OR CYGWIN)
+-	  	target_link_libraries(NP2kai_SDL1_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
++	  	target_link_libraries(NP2kai_SDL1_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
+ 		else()
+-	  	target_link_libraries(NP2kai_SDL1_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++	  	target_link_libraries(NP2kai_SDL1_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 		endif()
+ 	elseif(BUILD_SDL AND (USE_SDL EQUAL 2))
+ 		add_library(NP2kai_SDL2_base INTERFACE)
+ 		target_sources(NP2kai_SDL2_base INTERFACE ${NP2kai_SDL_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_SDL2_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=2" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${libcdio_definitions} ${libusb_1_definitions})
++		target_compile_definitions(NP2kai_SDL2_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=2" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions})
+ 		target_include_directories(NP2kai_SDL2_base INTERFACE ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+ 		if(MINGW OR MSYS OR CYGWIN)
+-	  	target_link_libraries(NP2kai_SDL2_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
++	  	target_link_libraries(NP2kai_SDL2_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
+ 		else()
+-	  	target_link_libraries(NP2kai_SDL2_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++	  	target_link_libraries(NP2kai_SDL2_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 		endif()
+ 	elseif(BUILD_SDL AND (USE_SDL EQUAL 3))
+ 		add_library(NP2kai_SDL3_base INTERFACE)
+ 		target_sources(NP2kai_SDL3_base INTERFACE ${NP2kai_SDL_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_SDL3_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=3" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${libcdio_definitions} ${libusb_1_definitions})
++		target_compile_definitions(NP2kai_SDL3_base INTERFACE ${NP2kai_SDL_definitions} "USE_SDL=3" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions})
+ 		target_include_directories(NP2kai_SDL3_base INTERFACE ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+ 		if(MINGW OR MSYS OR CYGWIN)
+-	  	target_link_libraries(NP2kai_SDL3_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
++	  	target_link_libraries(NP2kai_SDL3_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries} dxguid mad)
+ 		else()
+-	  	target_link_libraries(NP2kai_SDL3_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++	  	target_link_libraries(NP2kai_SDL3_base INTERFACE ${lib_math_libraries} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 		endif()
+ 	endif()
+ 
+ 	if(BUILD_X AND (USE_SDL EQUAL 1))
+ 		add_library(NP2kai_X_SDL1_base INTERFACE)
+ 		target_sources(NP2kai_X_SDL1_base INTERFACE ${NP2kai_X_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_X_SDL1_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=1" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
+-		target_include_directories(NP2kai_X_SDL1_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+-		target_link_libraries(NP2kai_X_SDL1_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Freetype_LIBRARIES} ${Fontconfig_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++		target_compile_definitions(NP2kai_X_SDL1_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=1" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
++		target_include_directories(NP2kai_X_SDL1_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
++		target_link_libraries(NP2kai_X_SDL1_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Freetype_LIBRARIES} ${Fontconfig_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL::SDL SDL_ttf::SDL_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 	elseif(BUILD_X AND (USE_SDL EQUAL 2))
+ 		add_library(NP2kai_X_SDL2_base INTERFACE)
+ 		target_sources(NP2kai_X_SDL2_base INTERFACE ${NP2kai_X_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_X_SDL2_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=2" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
+-		target_include_directories(NP2kai_X_SDL2_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+-		target_link_libraries(NP2kai_X_SDL2_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Fontconfig_LIBRARIES} ${Freetype_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++		target_compile_definitions(NP2kai_X_SDL2_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=2" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
++		target_include_directories(NP2kai_X_SDL2_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
++		target_link_libraries(NP2kai_X_SDL2_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Fontconfig_LIBRARIES} ${Freetype_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL2::SDL2 SDL2_ttf::SDL2_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 	elseif(BUILD_X AND (USE_SDL EQUAL 3))
+ 		add_library(NP2kai_X_SDL3_base INTERFACE)
+ 		target_sources(NP2kai_X_SDL3_base INTERFACE ${NP2kai_X_sources} ${NP2kai_Thread_sources} ${NP2kai_TickCount_sources} ${NP2kai_Network_sources})
+-		target_compile_definitions(NP2kai_X_SDL3_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=3" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
+-		target_include_directories(NP2kai_X_SDL3_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
+-		target_link_libraries(NP2kai_X_SDL3_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Fontconfig_LIBRARIES} ${Freetype_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
++		target_compile_definitions(NP2kai_X_SDL3_base INTERFACE ${NP2kai_X_definitions} "USE_SDL=3" "SUPPORT_SDL_AUDIO" ${lib_SDL_ttf_definitions} ${NP2kai_extra_definitions} ${NP2kai_LinkBreak_definitions} ${NP2kai_TickCount_definitions} ${NP2kai_Network_definitions} ${GTK2_DEFINITIONS} ${NP2kai_OpenSSL_definitions} ${libcdio_definitions} ${libusb_1_definitions} "SYSRESPATH=\"resources\"")
++		target_include_directories(NP2kai_X_SDL3_base INTERFACE ${NP2kai_X_include_dirs} ${lib_glib_include_dirs} ${lib_glibconfig_include_dirs} ${GTK2_INCLUDE_DIRS} ${X11_INCLUDE_DIRS} ${Fontconfig_INCLUDE_DIRS} ${Freetype_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS} ${LIBCDIO_INCLUDE_DIRS} ${LIBUSB_1_INCLUDE_DIRS} ${lib_vst3sdk_include_dirs})
++		target_link_libraries(NP2kai_X_SDL3_base INTERFACE ${lib_math_libraries} ${lib_glib_libraries} ${GTK2_LIBRARIES} ${X11_LIBRARIES} ${Fontconfig_LIBRARIES} ${Freetype_LIBRARIES} ${lib_vst3sdk_libraries} ${lib_Threads_libraries} SDL3::SDL3 SDL3_ttf::SDL3_ttf ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_dl_libraries})
+ 	endif()
+ 
+ 	if(MSVC_VERSION)
+@@ -908,10 +920,10 @@ else()
+ 		target_link_directories(NP2kai_Windows_base INTERFACE "${WDK_ROOT}\\Lib\\${WDK_VERSION}\\ucrt\\x64" "${WDK_ROOT}\\Lib\\${WDK_VERSION}\\um\\x64" "${WDK_ROOT}\\Lib\\${WDK_VERSION}\\km\\x64")
+ 		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+ #			target_link_libraries(NP2kai_Windows_base INTERFACE NP2kai_windows_932 NP2kai_windows_936 NP2kai_windows_950 NP2kai_windows_1252 shlwapi comctl32 atlsd libcmtd libucrtd libvcruntimed libcpmtd dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${LIBUSB_1_LINK_LIBRARIES} ${lib_vst3sdk_libraries})
+-			target_link_libraries(NP2kai_Windows_base INTERFACE winmm shlwapi comctl32 atls libcmtd libucrtd libvcruntimed libcpmtd dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_vst3sdk_libraries})
++			target_link_libraries(NP2kai_Windows_base INTERFACE winmm shlwapi comctl32 atls libcmtd libucrtd libvcruntimed libcpmtd dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_vst3sdk_libraries})
+ 		else()
+ #			target_link_libraries(NP2kai_Windows_base INTERFACE NP2kai_windows_932 NP2kai_windows_936 NP2kai_windows_950 NP2kai_windows_1252 shlwapi comctl32 atls libcmt libucrt libvcruntime libcpmt dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${LIBUSB_1_LIBRARIES} ${lib_vst3sdk_libraries})
+-			target_link_libraries(NP2kai_Windows_base INTERFACE winmm shlwapi comctl32 atls libcmt libucrt libvcruntime libcpmt dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_vst3sdk_libraries})
++			target_link_libraries(NP2kai_Windows_base INTERFACE winmm shlwapi comctl32 atls libcmt libucrt libvcruntime libcpmt dxguid d3d9 ddraw dinput8 dsound ws2_32 ${lib_Threads_libraries} ${OPENSSL_LIBRARIES} ${LIBCDIO_LINK_LIBRARIES} ${LIBUSB_1_LINK_LIBRARIES} ${lib_vst3sdk_libraries})
+ 		endif()
+ 	endif()
+ 
+diff --git a/sdl/fontmng.c b/sdl/fontmng.c
+index aa3fdde..6897c70 100644
+--- a/sdl/fontmng.c
++++ b/sdl/fontmng.c
+@@ -14,6 +14,14 @@
+ 
+ #if defined(SUPPORT_SDL_TTF)		/* use TTF */
+ 
++#if USE_SDL >= 3
++#include <SDL3_ttf/SDL_ttf.h>
++#elif USE_SDL == 2
++#include <SDL2_ttf/SDL_ttf.h>
++#elif USE_SDL == 1
++#include <SDL_ttf/SDL_ttf.h>
++#endif
++
+ #define FONTMNG_CACHE		64						/*!< Cache count */
+ 
+ /*! White */
