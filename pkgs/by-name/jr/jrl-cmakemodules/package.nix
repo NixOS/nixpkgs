@@ -4,6 +4,12 @@
   fetchFromGitHub,
   nix-update-script,
   cmake,
+
+  catch2_3,
+  matio,
+  python3Packages,
+  simde,
+  suitesparse,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +24,24 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "JRL_CMAKEMODULES_GENERATE_API_DOC" true)
+    (lib.cmakeBool "JRL_CMAKEMODULES_BUILD_TESTS" finalAttrs.doCheck)
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    catch2_3
+    matio
+    python3Packages.boost
+    python3Packages.nanobind
+    python3Packages.numpy
+    python3Packages.pytest
+    simde
+    suitesparse
+  ];
 
   passthru.updateScript = nix-update-script { };
 
