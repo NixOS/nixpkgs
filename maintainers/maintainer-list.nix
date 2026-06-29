@@ -2974,6 +2974,12 @@
     githubId = 2806307;
     keys = [ { fingerprint = "00F4 21C4 C537 7BA3 9820 E13F 6B95 E13D E469 CC5D"; } ];
   };
+  badheuristic = {
+    email = "steveoncaffeine@gmail.com";
+    github = "badheuristic";
+    githubId = 233336560;
+    name = "Stephen Adebambo";
+  };
   badmutex = {
     email = "github@badi.sh";
     github = "badmutex";
