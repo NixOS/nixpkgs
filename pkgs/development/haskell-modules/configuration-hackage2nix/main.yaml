@@ -30,6 +30,8 @@ default-package-overrides:
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2026-06-29: needs to match futhark-0.26.3
+  - futhark-manifest == 1.8.0.0
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
