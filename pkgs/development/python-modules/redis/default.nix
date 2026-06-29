@@ -41,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "redis";
-  version = "8.0.0";
+  version = "8.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ze9Q8IfSWDAEH0sR+ql0tOu7ajeXF78AKYD6SHpZqRU=";
+    hash = "sha256-41i4oZmbWi87KBSaAAaZe2gPlCpgw6kEPne1IA3PHQM=";
   };
 
   build-system = [ hatchling ];
