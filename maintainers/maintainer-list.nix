@@ -8716,6 +8716,12 @@
     name = "Fábio Batista";
     keys = [ { fingerprint = "D2D8 69D8 5EEC 30AD D327  B4A5 6CD5 5257 DB01 8B72"; } ];
   };
+  FabricSoul = {
+    name = "FabricSoul";
+    github = "FabricSoul";
+    githubId = 114606360;
+    email = "fabric.soul7@gmail.com";
+  };
   fallenbagel = {
     name = "fallenbagel";
     github = "fallenbagel";
