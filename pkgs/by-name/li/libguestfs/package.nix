@@ -169,7 +169,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
 
-    $out/bin/guestfish <<'EOF'
+    # set `LIBGUESTFS_DEBUG` and `LIBGUESTFS_TRACE` to debug any
+    # potential issues caused by updates/changes to/in the appliance
+    LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1 $out/bin/guestfish <<'EOF'
     add-drive disk1.img
     run
     list-filesystems
