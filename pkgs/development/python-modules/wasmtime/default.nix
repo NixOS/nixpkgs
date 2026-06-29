@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "45.0.0";
+  version = "46.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime-py";
     tag = finalAttrs.version;
-    hash = "sha256-XlAWPJB34uE+hbEMGZ46Ll6kXP+/lZ2amTKdjslGrP4=";
+    hash = "sha256-PWMrmr9PPi98lQe5+KaY4bPLOYyJ5qYugMJwVwwnuwA=";
   };
 
   postPatch = ''
