@@ -16,6 +16,8 @@
   pytestCheckHook,
   pythonAtLeast,
   pyyaml,
+  tomli,
+  tomli-w,
   tomlkit,
   typing-extensions,
   ujson,
@@ -23,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "25.3.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,6 +45,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    tomllib = [
+      tomli-w
+    ]
+    ++ lib.optionals (!pythonAtLeast "3.11") [
+      tomli
+    ];
+  };
+
   nativeCheckInputs = [
     cbor2
     hypothesis
@@ -56,7 +67,8 @@ buildPythonPackage rec {
     pyyaml
     tomlkit
     ujson
-  ];
+  ]
+  ++ optional-dependencies.tomllib;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
