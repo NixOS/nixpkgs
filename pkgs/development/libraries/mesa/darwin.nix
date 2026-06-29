@@ -45,6 +45,7 @@
 
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
+  withGLX = lib.elem "x11" eglPlatforms;
 in
 stdenv.mkDerivation {
   inherit (common)
@@ -97,12 +98,14 @@ stdenv.mkDerivation {
     python3Packages.python # for shebang
     spirv-llvm-translator
     spirv-tools
+    zlib
+  ]
+  ++ lib.optionals withGLX [
     libx11
     libxext
     libxfixes
     libxcb
     libxshmfence
-    zlib
   ];
 
   mesonAutoFeatures = "disabled";
@@ -128,6 +131,10 @@ stdenv.mkDerivation {
     (lib.mesonEnable "shared-llvm" true)
     (lib.mesonEnable "spirv-tools" true)
 
+    # Mesa OpenGL can't be built without GLX on darwin
+    (lib.mesonBool "opengl" withGLX)
+  ]
+  ++ lib.optionals withGLX [
     # Needed for Apple GLX support
     (lib.mesonOption "glx" "dri")
   ];
