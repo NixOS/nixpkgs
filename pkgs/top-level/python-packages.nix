@@ -5198,6 +5198,8 @@ self: super: with self; {
 
   esprima = callPackage ../development/python-modules/esprima { };
 
+  esptool = callPackage ../development/python-modules/esptool { };
+
   essent-dynamic-pricing = callPackage ../development/python-modules/essent-dynamic-pricing { };
 
   essentials = callPackage ../development/python-modules/essentials { };
