@@ -25925,6 +25925,11 @@
     name = "Sebastian Kowalak";
     matrix = "@scl:tchncs.de";
   };
+  skullgirl = {
+    name = "Skullgirl-(Lady-Bugged)";
+    github = "Skullman-G";
+    githubId = 64651571;
+  };
   skwig = {
     name = "skwig";
     github = "skwig";
