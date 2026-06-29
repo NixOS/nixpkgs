@@ -741,6 +741,10 @@ in
     inherit handleTestOn;
     package = pkgs.hadoop_3_3;
   };
+  hadoop_3_4 = import ./hadoop {
+    inherit handleTestOn;
+    package = pkgs.hadoop_3_4;
+  };
   haproxy = runTest ./haproxy.nix;
   harmonia = runTest ./harmonia.nix;
   haste-server = runTest ./haste-server.nix;
