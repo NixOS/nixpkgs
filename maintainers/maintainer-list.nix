@@ -19117,6 +19117,12 @@
     githubId = 93703653;
     name = "Marko Müller";
   };
+  mx6436 = {
+    email = "mx6436@foxmail.com";
+    github = "mx6436";
+    githubId = 96968598;
+    name = "Ming Xin";
+  };
   mxkrsv = {
     email = "mxkrsv@disroot.org";
     github = "mxkrsv";
