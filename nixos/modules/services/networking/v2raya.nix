@@ -21,6 +21,17 @@ in
         example = "pkgs.xray";
         extraDescription = "This is the package used for overriding the value of the `v2ray` attribute in the package set by `services.v2raya.package`.";
       };
+
+      extraArgs = mkOption {
+        description = "Extra command line arguments. see `v2raya --help` for more details.";
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+
+        example = [
+          "--log-disable-color"
+          "--version"
+        ];
+      };
     };
   };
 
@@ -50,7 +61,11 @@ in
 
         serviceConfig = {
           User = "root";
-          ExecStart = "${getExe (cfg.package.override { v2ray = cfg.cliPackage; })} --log-disable-timestamp";
+          ExecStart = toString [
+            (getExe (cfg.package.override { v2ray = cfg.cliPackage; }))
+            "--log-disable-timestamp"
+            cfg.extraArgs
+          ];
           Environment = [ "V2RAYA_LOG_FILE=/var/log/v2raya/v2raya.log" ];
           LimitNPROC = 500;
           LimitNOFILE = 1000000;
