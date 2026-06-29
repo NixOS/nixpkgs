@@ -460,6 +460,7 @@ in
   cups-pdf = runTest ./cups-pdf.nix;
   curl-impersonate = runTest ./curl-impersonate.nix;
   custom-ca = import ./custom-ca.nix { inherit pkgs runTest; };
+  cvmfs = runTest ./cvmfs.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
   darling-dmg = runTest ./darling-dmg.nix;
