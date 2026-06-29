@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mptcpd";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "multipath-tcp";
     repo = "mptcpd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gPXtYmCLJ8eL6VfCi3kpDA7lNn38WB6J4FXefdu2D7M=";
+    hash = "sha256-AjgdF+52FyxjKJaoUnPaBDc6eWgY4wHGGXyYh/T/yJs=";
   };
 
   outputs = [
