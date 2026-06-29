@@ -3267,8 +3267,8 @@ let
         mktplcRef = {
           name = "datawrangler";
           publisher = "ms-toolsai";
-          version = "1.24.0";
-          hash = "sha256-FWzrxf5uaPcbu1JCiYxsbkju1mY3n3F2vGLvfMuZxlc=";
+          version = "1.24.2";
+          hash = "sha256-mQGb+usJpu0v9FjtiW9srhljYFVzSVsO8REy3WHjnTI=";
         };
 
         meta = {
