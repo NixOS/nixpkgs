@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 12fef27a..1914680b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -104,12 +104,12 @@ else()
+     endif()
+ endif()
+ 
+-set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap )
++set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap:$ENV{PYTHONPATH} )
+ 
+ add_custom_command(
+     OUTPUT ${CMAKE_BINARY_DIR}/OCP/CMakeLists.txt
+     COMMAND
+-        ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_SOURCE_DIR}/pywrap"
++        ${CMAKE_COMMAND} -E env "PYTHONPATH=$ENV{PYTHONPATH}"
+         ${Python_EXECUTABLE}
+         -m bindgen
+         -n ${N_PROC}
