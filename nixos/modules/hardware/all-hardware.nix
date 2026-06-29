@@ -167,6 +167,13 @@ in
       # Misc "weak" dependencies
       "analogix-dp"
       "analogix-anx6345" # For DP or eDP (e.g. integrated display)
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.is64bit [
+      # (In the kernel config, LIBNVDIMM requires PHYS_ADDR_T_64BIT, which is not *exactly* is64bit but close enough.)
+      # Enables use of NixOS as U-Boot netinst images, which uses fake "pmem" block devices.
+      # See https://docs.u-boot.org/en/stable/develop/uefi/uefi.html#uefi-http-boot-using-the-legacy-tcp-stack
+      "of_pmem"
+      "nd_pmem"
     ];
 
     # Include lots of firmware.
