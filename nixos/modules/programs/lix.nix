@@ -29,19 +29,6 @@ let
     };
   };
 
-  makeNixBuildUser = nr: {
-    name = "nixbld${toString nr}";
-    value = {
-      description = "Lix build user ${toString nr}";
-      uid = builtins.add config.ids.uids.nixbld nr;
-      isSystemUser = true;
-      group = "nixbld";
-      extraGroups = [ "nixbld" ];
-    };
-  };
-
-  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
-
 in
 
 {
@@ -115,17 +102,6 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars;
-
-    nix.nrBuildUsers = lib.mkDefault (
-      if cfg.settings.auto-allocate-uids or false then
-        0
-      else
-        lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
-    );
-
-    users.users = nixbldUsers;
-
-    services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
 
     # Legacy configuration conversion.
     nix.settings.sandbox-fallback = false;
