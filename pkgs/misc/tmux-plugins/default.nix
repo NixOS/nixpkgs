@@ -1363,6 +1363,25 @@ in
     };
   };
 
+  tmux-tpad = mkTmuxPlugin {
+    pluginName = "tmux-tpad";
+    rtpFilePath = "tpad.tmux";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "Subbeh";
+      repo = "tmux-tpad";
+      rev = "v0.3.0";
+      hash = "sha256-w1eNg6n5JEWcKT7hCr3nFPe01kW3PwGBx8sdtfFojvk=";
+    };
+    meta = {
+      homepage = "https://github.com/Subbeh/tmux-tpad";
+      description = "Tmux scratchpad plugin";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ anned20 ];
+    };
+  };
+
   tmux-window-name = mkTmuxPlugin {
     pluginName = "tmux-window-name";
     version = "2024-03-08";

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   bison,
   libevent,
@@ -18,12 +17,15 @@
   libutempter,
   withSixel ? true,
   versionCheckHook,
-  nix-update-script,
+  common-updater-scripts,
+  writeShellScript,
+  curl,
+  jq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.6a";
+  version = "3.7";
 
   outputs = [
     "out"
@@ -34,19 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     tag = finalAttrs.version;
-    hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
+    hash = "sha256-dgqI1jZjnluN/F/AjngzcaMy3TgudmkvDT336YlhGZM=";
   };
-
-  patches = [
-    # Fix NULL pointer dereference in control_write() when a control-mode
-    # client is notified before control_state has been allocated.
-    # https://github.com/tmux/tmux/issues/4980
-    (fetchpatch {
-      name = "tmux-control-notify-uninitialized.patch";
-      url = "https://github.com/tmux/tmux/commit/e5a2a25fafb8ee107c230d8acad694f6b635f8bb.patch";
-      hash = "sha256-UPbhMNnH1WJwTH/LVwjVonTqvNhyuniUrYm7iLVkCfg=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -99,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
-    updateScript = nix-update-script { };
+    updateScript = writeShellScript "update-tmux" ''
+      latest=$(${lib.getExe curl} --silent ''${GITHUB_TOKEN:+--header "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/tmux/tmux/releases/latest | ${lib.getExe jq} -r .tag_name)
+      ${lib.getExe' common-updater-scripts "update-source-version"} tmux "$latest"
+    '';
   };
 
   meta = {
