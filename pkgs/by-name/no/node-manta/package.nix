@@ -53,7 +53,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/TritonDataCenter/node-manta";
     changelog = "https://github.com/TritonDataCenter/node-manta/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    maintainers = [ ];
     mainProgram = "mls";
   };
 }
