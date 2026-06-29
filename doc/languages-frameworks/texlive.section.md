@@ -32,6 +32,21 @@ There is a TeX Live packaging that lives entirely under attribute `texlive`.
   )
   ```
 
+- Packages can be overriden by passing a new package with the same `pname` to `.withPackages`. For instance, the following replaces Asymptote with the version from Nixpkgs, which is usually more up to date:
+  ```nix
+  texliveMedium.withPackages (ps: [ asymptote ])
+  ```
+
+- To exclude a package from a collection, use an empty override as below:
+  ```nix
+  texliveBasic.withPackages (
+    ps: with ps; [
+      collection-bibtexextra
+      { pname = "bib2gls"; }
+    ]
+  )
+  ```
+
 - To add the documentation for all packages in the environment, use
   ```nix
   texliveSmall.overrideAttrs { withDocs = true; }
