@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samloader-rs";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "topjohnwu";
     repo = "samloader-rs";
     tag = finalAttrs.version;
-    hash = "sha256-0EsSs7GI4D4N3w33NBHKIEDmGk29aRceOwzDA7cy924=";
+    hash = "sha256-vUoRO//RSPv0Z69nyeiwtFIN+5lkOjguR96KjsLpc5U=";
   };
 
-  cargoHash = "sha256-3i2232Rq9AEqPK8teVmu5kPX10ZopXTm7djUalfPFng=";
+  cargoHash = "sha256-rqJ0/h/HDBlXQ7MGQspKXMSUEGaddkxRqdQmwSlfttc=";
 
   nativeBuildInputs = [ perl ];
 
