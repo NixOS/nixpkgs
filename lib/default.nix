@@ -56,6 +56,7 @@ let
       # datatypes
       attrsets = callLibs ./attrsets.nix;
       lists = callLibs ./lists.nix;
+      linkedLists = callLibs ./linked-lists.nix;
       strings = callLibs ./strings.nix;
       stringsWithDeps = callLibs ./strings-with-deps.nix;
 
