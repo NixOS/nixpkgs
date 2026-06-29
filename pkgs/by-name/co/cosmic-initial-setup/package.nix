@@ -24,9 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-UABqbmbwW2ZBOO7mq16/h0s55VCWRF2yyf/1TaubC88=";
   };
 
-  cargoHash = "sha256-DESnl5NjakU4++Ep6CHxDZzHn+o0Gi0eREpXk5BN5iY=";
+  postPatch = ''
+    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
+    substituteInPlace justfile \
+      --replace-fail \
+      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
+      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
+  '';
 
-  separateDebugInfo = true;
+  cargoHash = "sha256-DESnl5NjakU4++Ep6CHxDZzHn+o0Gi0eREpXk5BN5iY=";
 
   buildFeatures = [ "nixos" ];
 
@@ -38,7 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/rust-secure-code/cargo-auditable/issues/225
   auditable = false;
 
+  separateDebugInfo = true;
   __structuredAttrs = true;
+
+  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -52,18 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  postPatch = ''
-    # Installs in $out/etc/xdg/autostart instead of /etc/xdg/autostart
-    substituteInPlace justfile \
-      --replace-fail \
-      "autostart-dst := rootdir / 'etc' / 'xdg' / 'autostart' / desktop-entry" \
-      "autostart-dst := prefix / 'etc' / 'xdg' / 'autostart' / desktop-entry"
-  '';
-
-  preFixup = ''
-    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
-  '';
-
   dontUseJustBuild = true;
   dontUseJustCheck = true;
 
@@ -76,7 +73,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ killall ]})
+  '';
 
   passthru = {
     tests = {
