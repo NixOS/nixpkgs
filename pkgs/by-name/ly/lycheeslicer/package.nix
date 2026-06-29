@@ -41,6 +41,11 @@ appimageTools.wrapType2 {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
+  postPatch = ''
+    substituteInPlace "$out/share/applications/Lychee Slicer.desktop" \
+      --replace-fail "Exec=lychee" "Exec=lycheeslicer"
+  '';
+
   extraPkgs = _: [
     libxshmfence
     wayland
@@ -56,6 +61,6 @@ appimageTools.wrapType2 {
       ZachDavies
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "LycheeSlicer";
+    mainProgram = "lycheeslicer";
   };
 }
