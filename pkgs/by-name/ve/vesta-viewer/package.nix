@@ -7,6 +7,7 @@
   copyDesktopItems,
   autoPatchelfHook,
   wrapGAppsHook3,
+  makeWrapper,
   _7zz,
   glib,
   gsettings-desktop-schemas,
@@ -45,6 +46,7 @@ let
       copyDesktopItems
       autoPatchelfHook
       wrapGAppsHook3
+      makeWrapper
     ];
     buildInputs = [
       glib
@@ -59,6 +61,9 @@ let
       libxtst
     ];
 
+    # Prevent wrapGAppsHook3 from auto-wrapping binaries.
+    dontWrapGApps = true;
+
     src = fetchzip {
       url = "https://jp-minerals.org/vesta/archives/${version}/VESTA-gtk3.tar.bz2";
       hash = "sha256-Dm4exMUgNZ6Sh8dVhsvLZGS38UXxe9t+9s3ttBQajGg=";
@@ -71,22 +76,18 @@ let
       cp -r * $out/lib/VESTA
 
       mkdir -p $out/bin
-      ln -s $out/lib/VESTA/VESTA{,-core,-gui} -t $out/bin
-
-      # VESTA resolves resources (img/, *.ini, *.dat) relative to argv[0].
-      # wrapProgram replaces the binary with a wrapper script, changing argv[0].
-      # Symlinking data files into $out/bin/ ensures they are found correctly.
-      for f in $out/lib/VESTA/*.ini $out/lib/VESTA/*.dat $out/lib/VESTA/asfdc; do
-        ln -s $f $out/bin/$(basename $f)
-      done
-
-      ln -s $out/lib/VESTA/img $out/bin/img
+      ln -s $out/lib/VESTA/VESTA{-core,-gui} -t $out/bin
 
       mkdir -p $out/share/icons/hicolor/{128x128,256x256}/apps
       ln -s $out/lib/VESTA/img/logo.png $out/share/icons/hicolor/128x128/apps/VESTA.png
       ln -s $out/lib/VESTA/img/logo@2x.png $out/share/icons/hicolor/256x256/apps/VESTA.png
 
       runHook postInstall
+    '';
+
+    # Wrap GSettings/XDG_DATA_DIRS into a single wrapper.
+    postFixup = ''
+      makeWrapper $out/lib/VESTA/VESTA $out/bin/VESTA "''${gappsWrapperArgs[@]}"
     '';
 
     desktopItems = [
@@ -130,7 +131,7 @@ stdenvNoCC.mkDerivation (
   {
     inherit pname version meta;
     # I could've written an update script here,
-    # but I didn't bother because the stable version hasn't been updated foryears.
+    # but I didn't bother because the stable version hasn't been updated for years.
   }
   // {
     "x86_64-linux" = linuxArgs;
