@@ -4,17 +4,20 @@
   fetchPypi,
   pretend,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "verspec";
   version = "0.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xFBMppeyBWzbS/pxIUYfWg6BgJJVtBwD3aS6gjY3wB4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pretend
@@ -31,10 +34,12 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible version handling";
     homepage = "https://github.com/jimporter/verspec";
-    license = with lib.licenses; [
-      bsd2 # and
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        asl20
+      ];
     maintainers = [ ];
   };
-}
+})
