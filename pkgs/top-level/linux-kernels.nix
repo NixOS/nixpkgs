@@ -400,6 +400,9 @@ in
 
         mstflint_access = callPackage ../os-specific/linux/mstflint_access { };
 
+        ntfs =
+          if lib.versionAtLeast kernel.version "6.1" then callPackage ../os-specific/linux/ntfs { } else null;
+
         broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 
         tbs = callPackage ../os-specific/linux/tbs { };
