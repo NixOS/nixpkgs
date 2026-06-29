@@ -19,6 +19,8 @@ lib.makeScope newScope (self: {
 
   ghidra-firmware-utils = self.callPackage ./extensions/ghidra-firmware-utils { };
 
+  ghidra-gamecube-loader = self.callPackage ./extensions/ghidra-gamecube-loader { };
+
   ghidra-golanganalyzerextension = self.callPackage ./extensions/ghidra-golanganalyzerextension { };
 
   ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };
