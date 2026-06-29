@@ -21,6 +21,7 @@
   nspr,
   dbus,
   atk,
+  curl,
   cups,
   libdrm,
   expat,
@@ -41,13 +42,13 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "17";
+  version = "18";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-/oeoLXKewjYkCO7naZNOzauWm1OYDKnsxXY9EkI7fTM=";
+    hash = "sha256-dhXUjj9x8v1bfHLPxNtcysj/eKeT3kkSeVuX6PKoykE=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -79,6 +80,7 @@ buildDotnetModule (finalAttrs: {
     libx11
     gtk3
     glib
+    curl
     alsa-lib
     nspr
     nss
@@ -110,7 +112,6 @@ buildDotnetModule (finalAttrs: {
     "Grayjay.Engine/Grayjay.Engine/Grayjay.Engine.csproj"
     "Grayjay.Desktop.CEF/Grayjay.Desktop.CEF.csproj"
     "FUTO.MDNS/FUTO.MDNS/FUTO.MDNS.csproj"
-    "JustCef/DotCef.csproj"
   ];
 
   testProjectFile = [
