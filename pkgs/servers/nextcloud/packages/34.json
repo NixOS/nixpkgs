@@ -80,9 +80,9 @@
     ]
   },
   "deck": {
-    "hash": "sha256-DVSFbea5d0CL3bdpO8iOBYXKHSbXCQ8oLHi5YkPbCI4=",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.17.4/deck-v1.17.4.tar.gz",
-    "version": "1.17.4",
+    "hash": "sha256-xbXx5NDVnR/qFk+29yrWTfsZL/NTKfvLd1D0IGf9Ie4=",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.18.2/deck-v1.18.2.tar.gz",
+    "version": "1.18.2",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "files_automatedtagging": {
-    "hash": "sha256-A9cjrz0sJKMA+LinBiyUWJ5UOgvyfiJ3dLLP2NKBy50=",
-    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v4.0.0/files_automatedtagging-v4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-3lsRT8oZ4lP1Kngl8E47rc/7FJmiaXv/x3BfGMfHcC8=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v5.0.0/files_automatedtagging-v5.0.0.tar.gz",
+    "version": "5.0.0",
     "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
     "homepage": "https://github.com/nextcloud/files_automatedtagging",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "files_retention": {
-    "hash": "sha256-67MPooGJuSX/sL/l44z/9CYSlv5/ACVRpl1Z5QTJ/xw=",
-    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.1/files_retention-v4.0.1.tar.gz",
-    "version": "4.0.1",
+    "hash": "sha256-aHcg9eKEd/4CXNUy5rrWmw9pP/mf54wp/PVQfqrHSM0=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v5.0.0/files_retention-v5.0.0.tar.gz",
+    "version": "5.0.0",
     "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
     "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-2jy9p4pu2OXdi8JENFCBcPSDHnGIQkpzuyKkjxALAE4=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.8/groupfolders-v21.0.8.tar.gz",
-    "version": "21.0.8",
+    "hash": "sha256-G0GiXYKeHwCycUpsTDykbYTSTK7FeTIvab1MWDhXFWI=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v22.0.1/groupfolders-v22.0.1.tar.gz",
+    "version": "22.0.1",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -165,16 +165,6 @@
     "version": "4.7.5",
     "description": "👥 Allows for better collaboration with external users by allowing users to create guests account.\n\nGuests accounts can be created from the share menu by entering either the recipients email or name and choosing \"create guest account\", once the share is created the guest user will receive an email notification about the mail with a link to set their password.\n\nGuests users can only access files shared to them and cannot create any files outside of shares, additionally, the apps accessible to guest accounts are whitelisted.",
     "homepage": "https://github.com/nextcloud/guests/",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "impersonate": {
-    "hash": "sha256-gAitAuNsRP1EbtO7VayGbL+2IlEoFQsomrPegUEDbqg=",
-    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v4.0.0/impersonate-v4.0.0.tar.gz",
-    "version": "4.0.0",
-    "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
-    "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
       "agpl"
     ]
@@ -279,16 +269,6 @@
       "agpl"
     ]
   },
-  "oidc_login": {
-    "hash": "sha256-KBa8A7aC0uS6FQoOSa7nIkaaYe+A2KeAtzfqoKw0Gn4=",
-    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.3.1/oidc_login.tar.gz",
-    "version": "3.3.1",
-    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication\n- Optional removal of special characters in UID\n- Mapping of multiple names to a single display name\n- Mapping for birthdate",
-    "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "onlyoffice": {
     "hash": "sha256-QaohaMbw7bncBqreb5W8XngzqqwqALnsGgT494xfr/E=",
     "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v10.1.2/onlyoffice.tar.gz",
@@ -370,9 +350,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-HGNCueLlZuauHi/0dltApMDj8FBZ4Ruj2T2F+/4qWY4=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v10.2.0/richdocuments-v10.2.0.tar.gz",
-    "version": "10.2.0",
+    "hash": "sha256-uGoXL/LnFaWlLRDdx95qmhD4HIW3p51CWlpKiWTScYg=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v11.0.0/richdocuments-v11.0.0.tar.gz",
+    "version": "11.0.0",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -390,9 +370,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-1oIezD9c7DPPGlFXfKrt/+3ohQpcD+JiKKArRXiDRYM=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.7/spreed-v23.0.7.tar.gz",
-    "version": "23.0.7",
+    "hash": "sha256-GY4YUgUZU6bYLf3tALx0dJhUTdHTTNdikBlC1cfobD0=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v24.0.1/spreed-v24.0.1.tar.gz",
+    "version": "24.0.1",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -419,26 +399,6 @@
       "agpl"
     ]
   },
-  "theming_customcss": {
-    "hash": "sha256-Fgu31s+K4MFUgvNe9mAVHi9C0iJnv40v1onUMk+lFZk=",
-    "url": "https://github.com/nextcloud/theming_customcss/releases/download/v1.20.0/theming_customcss.tar.gz",
-    "version": "1.20.0",
-    "description": "This app allows admins to customize the appearance of their Nextcloud instance by adding their own CSS rules.\n\nThe rules can be added in the admin settings in the \"Theming\" section. This allows you to easily adjust the look and feel of your Nextcloud instance without having to modify any files on the server.",
-    "homepage": "",
-    "licenses": [
-      "agpl"
-    ]
-  },
-  "twofactor_admin": {
-    "hash": "sha256-dx8bEsC/rSAKN9rwP2hf3d8G3f3J1RzCrSqU6BbcvRY=",
-    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.1/twofactor_admin-v4.11.1.tar.gz",
-    "version": "4.11.1",
-    "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
-    "homepage": "",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "twofactor_webauthn": {
     "hash": "sha256-cpjn8Md2MaVv063A2HwklgtGtPIkzyF/KgE/OzzP0bA=",
     "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v2.7.0/twofactor_webauthn-v2.7.0.tar.gz",
@@ -450,9 +410,9 @@
     ]
   },
   "unroundedcorners": {
-    "hash": "sha256-0+fOJnPsuengy8TPzTKizDnDXTlZStalFDOv+dFlRgc=",
-    "url": "https://github.com/OliverParoczai/nextcloud-unroundedcorners/releases/download/v1.1.5/unroundedcorners-v1.1.5.tar.gz",
-    "version": "1.1.5",
+    "hash": "sha256-RCnXfnl2dJ0NpcNJ+0+jcSsp/h4hHemPg3fkjkFoGl0=",
+    "url": "https://github.com/OliverParoczai/nextcloud-unroundedcorners/releases/download/v1.1.6/unroundedcorners-v1.1.6.tar.gz",
+    "version": "1.1.6",
     "description": "# Unrounded Corners\nA Nextcloud app that restores the corners of buttons and widgets to their original looks by unrounding them.",
     "homepage": "https://github.com/OliverParoczai/nextcloud-unroundedcorners",
     "licenses": [
