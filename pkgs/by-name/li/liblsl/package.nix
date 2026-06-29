@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-pkg-config.patch
+    ./0002-use-i8-for-i8-channels.patch
+    ./0003-use-sizet-for-message-count.patch
+    ./0004-use-int32_t-in-three-specific-spots.patch
   ];
 
   __structuredAttrs = true;
