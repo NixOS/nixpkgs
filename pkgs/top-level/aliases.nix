@@ -1010,6 +1010,7 @@ mapAliases {
   haxor-news = throw "'haxor-news' has been removed as it is unmaintained"; # Added 2026-06-16
   helix-gpt = throw "helix-gpt was deprecated in January 2026 and has been since removed"; # Added 2026-02-05
   HentaiAtHome = throw "'HentaiAtHome' has been renamed to/replaced by 'hentai-at-home'"; # Converted to throw 2025-10-27
+  heptabase = throw "'heptabase' bas been removed due to lack of maintenance."; # Added 2026-05-31
   hiawatha = throw "hiawatha has been removed, since it is no longer actively supported upstream, nor well maintained in nixpkgs"; # Added 2025-09-10
   hibernate = throw "hibernate has been removed due to lack of maintenance"; # Added 2025-09-10
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # Added 2025-08-20
