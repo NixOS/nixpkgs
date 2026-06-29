@@ -15,22 +15,24 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0        NAME    : set the name of the executed process to NAME
-#                          (if unset or empty, defaults to EXECUTABLE)
-# --inherit-argv0        : the executable inherits argv0 from the wrapper.
-#                          (use instead of --argv0 '$0')
-# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
-# --set          VAR VAL : add VAR with value VAL to the executable's environment
-# --set-default  VAR VAL : like --set, but only adds VAR if not already set in
-#                          the environment
-# --unset        VAR     : remove VAR from the environment
-# --chdir        DIR     : change working directory (use instead of --run "cd DIR")
-# --add-flag     ARG     : prepend the single argument ARG to the invocation of the executable
-#                          (that is, *before* any arguments passed on the command line)
-# --append-flag  ARG     : append the single argument ARG to the invocation of the executable
-#                          (that is, *after* any arguments passed on the command line)
-# --add-flags    ARGS    : prepend the whitespace-separated list of arguments ARGS to the invocation of the executable
-# --append-flags ARGS    : append the whitespace-separated list of arguments ARGS to the invocation of the executable
+
+# --argv0           NAME    : set the name of the executed process to NAME
+#                             (if unset or empty, defaults to EXECUTABLE)
+# --inherit-argv0           : the executable inherits argv0 from the wrapper.
+#                             (use instead of --argv0 '$0')
+# --resolve-argv0           : if argv0 doesn't include a / character, resolve it against PATH
+# --set             VAR VAL : add VAR with value VAL to the executable's environment
+# --set-from-file  VAR FILE : like --set, but takes a filepath, and sets VAR to the file's contents at runtime
+# --set-default     VAR VAL : like --set, but only adds VAR if not already set in
+#                             the environment
+# --unset           VAR     : remove VAR from the environment
+# --chdir           DIR     : change working directory (use instead of --run "cd DIR")
+# --add-flag        ARG     : prepend the single argument ARG to the invocation of the executable
+#                             (that is, *before* any arguments passed on the command line)
+# --append-flag     ARG     : append the single argument ARG to the invocation of the executable
+#                             (that is, *after* any arguments passed on the command line)
+# --add-flags       ARGS    : prepend the whitespace-separated list of arguments ARGS to the invocation of the executable
+# --append-flags    ARGS    : append the whitespace-separated list of arguments ARGS to the invocation of the executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -89,7 +91,7 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeWrapper
 makeCWrapper() {
     local argv0 inherit_argv0 n params cmd main flags executable length
-    local uses_sep_surround_check uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+    local uses_sep_surround_check uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf uses_file_contents
     local flagsBefore=() flagsAfter=()
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -100,6 +102,15 @@ makeCWrapper() {
             --set)
                 cmd=$(setEnv "${params[n + 1]}" "${params[n + 2]}")
                 main="$main$cmd"$'\n'
+                n=$((n + 2))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 2 arguments"$'\n'
+            ;;
+            --set-from-file)
+                cmd=$(setEnvFromFile "${params[n + 1]}" "${params[n + 2]}")
+                main="$main$cmd"$'\n'
+                uses_stdio=1
+                uses_string=1
+                uses_file_contents=1
                 n=$((n + 2))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 2 arguments"$'\n'
             ;;
@@ -213,6 +224,7 @@ makeCWrapper() {
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
     [ -z "$uses_sep_surround_check" ] || printf '\n%s\n' "$(setSepSurroundCheck)"
+    [ -z "$uses_file_contents" ] || printf '\n%s\n' "$(setEnvFromFileFn)"
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
@@ -282,6 +294,14 @@ setEnv() {
     assertValidEnvName "$1"
 }
 
+setEnvFromFile() {
+    local key value
+    key=$(escapeStringLiteral "$1")
+    value=$(escapeStringLiteral "$2")
+    printf '%s' "read_from_file(\"$key\", \"$value\");"
+    assertValidEnvName "$1"
+}
+
 # setDefaultEnv KEY VALUE
 setDefaultEnv() {
     local key value
@@ -345,6 +365,30 @@ int is_surrounded_by_sep(char *env, char *ptr, unsigned long len, char *sep) {
   }
 
   return 1;
+}
+"
+}
+
+setEnvFromFileFn(){
+  printf "%s" "\
+void read_from_file(char *var, char *filename) {
+  FILE *f = fopen(filename, \"r\");
+  if (access(filename, F_OK) != 0) {
+    fprintf(stderr, \"%s %s %s\n\", \"File\", filename, \"not found\");
+    abort();
+  }
+
+  fseek(f, 0, SEEK_END);
+  long fsize = ftell(f);
+  fseek(f, 0, SEEK_SET);
+
+  char *string = malloc(fsize);
+  fread(string, fsize - 1, 1, f);
+  fclose(f);
+  string[fsize - 1] = 0;
+
+  setenv(var, string, 1);
+  free(string);
 }
 "
 }
@@ -480,6 +524,10 @@ formatArgs() {
                 shift 2
             ;;
             --set-default)
+                formatArgsLine 2 "$@"
+                shift 2
+            ;;
+            --set-from-file)
                 formatArgsLine 2 "$@"
                 shift 2
             ;;
