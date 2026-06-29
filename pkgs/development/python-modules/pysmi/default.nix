@@ -23,6 +23,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ft8R73eUgb+pnr35ZVc2Br3BGHhUDHEcQ9k/K6tjYBk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "2.0.0"' 'version = "${finalAttrs.version}"'
+  '';
+
   build-system = [ flit-core ];
 
   dependencies = [
