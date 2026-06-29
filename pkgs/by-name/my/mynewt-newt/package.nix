@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "mynewt-newt";
-  version = "1.10.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newt";
     rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
-    sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
+    sha256 = "sha256-NehRdESW4u7IjK8tNvvbBjOw0Tc62RJrIANuaHfVxqQ=";
   };
 
-  vendorHash = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";
+  vendorHash = "sha256-xv2z22YFbeQeek6IQkhGp+3AqYjmbKDszVHqvEGD9XY=";
 
   doCheck = false;
 
