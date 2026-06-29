@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.6.0";
+  version = "1.6.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-EZNzP4myJTwkdyAHcUS2RCGPtaUlzt3bgZ4Qsw2RgBs=";
+    hash = "sha256-gvp4iS5cU7QhFNpHuS+ytxGVh+vWSlcS4cPV9O6c+tw=";
   };
 
   postPatch = ''
