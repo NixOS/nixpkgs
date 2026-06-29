@@ -51,6 +51,10 @@ let
     SMTP_FROM = cfg.smtp.fromAddress;
     SMTP_USERNAME = cfg.smtp.user;
     PORT = toString cfg.webPort;
+
+    PROMETHEUS_EXPORTER_ENABLED = toString cfg.prometheus.enable;
+    PROMETHEUS_EXPORTER_HOST = toString cfg.prometheus.listenAddress;
+    PROMETHEUS_EXPORTER_PORT = toString cfg.prometheus.port;
   }
   // redisEnv
   // cfg.environment;
@@ -127,7 +131,8 @@ let
   commonUnits =
     lib.optional cfg.redis.createLocally "redis-dawarich.service"
     ++ lib.optional cfg.database.createLocally "postgresql.target"
-    ++ lib.optional cfg.automaticMigrations "dawarich-init-db.service";
+    ++ lib.optional cfg.automaticMigrations "dawarich-init-db.service"
+    ++ lib.optional cfg.prometheus.enable "dawarich-prometheus-exporter.service";
 
   defaultSecretKeyBaseFile = "${dataDir}/secrets/secret-key-base";
   needsGenCredentialsUnit = cfg.secretKeyBaseFile == null;
@@ -508,6 +513,32 @@ in
         type = lib.types.bool;
         default = true;
       };
+
+      prometheus = {
+        enable = lib.mkOption {
+          description = "Whether to enable the Prometheus metrics exporter";
+          type = lib.types.bool;
+          default = false;
+        };
+
+        listenAddress = lib.mkOption {
+          description = "Host address to bind the metrics exporter to";
+          type = lib.types.str;
+          default = "127.0.0.1";
+        };
+
+        port = lib.mkOption {
+          description = "Port number to bind the metrics exporter to";
+          type = lib.types.port;
+          default = 9394;
+        };
+
+        metricPrefix = lib.mkOption {
+          description = "Prefix prepended to the exported metrics";
+          type = lib.types.str;
+          default = "ruby_";
+        };
+      };
     };
   };
 
@@ -620,6 +651,27 @@ in
             # Runtime directory and mode
             RuntimeDirectory = "dawarich-web";
             RuntimeDirectoryMode = "0750";
+          }
+          // cfgService;
+        };
+
+        # Prometheus exporter should not need runtime directory or credentials
+        systemd.services.dawarich-prometheus-exporter = lib.mkIf cfg.prometheus.enable {
+          after = [ "network.target" ];
+          wantedBy = [ "dawarich.target" ];
+          description = "Dawarich Prometheus exporter";
+          environment = env;
+          serviceConfig = {
+            ExecStart = lib.concatStringsSep [
+              "${lib.getExe' cfg.package "prometheus_exporter"}"
+              "--bind ${cfg.prometheus.listenAddress}"
+              "--port ${cfg.prometheus.port}"
+              "--prefix ${cfg.prometheus.metricPrefix}"
+            ];
+
+            Restart = "always";
+            RestartSec = 20;
+            WorkingDirectory = cfg.package;
           }
           // cfgService;
         };
