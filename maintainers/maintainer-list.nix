@@ -14649,6 +14649,12 @@
     github = "kmicklas";
     githubId = 929096;
   };
+  kmjayadeep = {
+    email = "kmjayadeep@gmail.com";
+    name = "Jayadeep KM";
+    github = "kmjayadeep";
+    githubId = 6793260;
+  };
   kmogged = {
     name = "Kevin";
     github = "kmogged";
