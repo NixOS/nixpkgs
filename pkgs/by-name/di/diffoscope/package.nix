@@ -362,7 +362,6 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       danielfullmer
       mdaniels5757
-      raitobezarius
     ];
     platforms = lib.platforms.unix;
     mainProgram = "diffoscope";

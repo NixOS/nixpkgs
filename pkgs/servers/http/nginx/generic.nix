@@ -318,7 +318,6 @@ stdenv.mkDerivation {
           das_j
           fpletz
           helsinki-Jo
-          raitobezarius
         ];
       };
 }
