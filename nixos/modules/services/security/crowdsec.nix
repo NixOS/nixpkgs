@@ -860,7 +860,7 @@ in
 
             createDirectory = dirPath: {
               name = dirPath;
-              value.D = {
+              value.d = {
                 user = cfg.user;
                 group = cfg.group;
               };
