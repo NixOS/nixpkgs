@@ -1,17 +1,19 @@
 {
   lib,
-  fetchzip,
+  fetchFromGitHub,
   wsjtx,
 }:
 
 wsjtx.overrideAttrs (
   finalAttrs: old: {
     pname = "wsjtz";
-    version = "2.7.0-rc7-1.48";
+    version = "2.0.16";
 
-    src = fetchzip {
-      url = "mirror://sourceforge/wsjt-z/Source/wsjtz-${finalAttrs.version}.zip";
-      hash = "sha256-8PHbBlF0MtIgLn4HCFkbGivy8vBwg7NbvjMLaRj+4nI=";
+    src = fetchFromGitHub {
+      owner = "sq9fve";
+      repo = "wsjt-z";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-O7HHAr3am4bH4b/RldoaB9LWWhciUbDc+u+lPO60UUY=";
     };
 
     postInstall = ''
@@ -19,12 +21,9 @@ wsjtx.overrideAttrs (
       mv $out/bin/wsjtx_app_version $out/bin/wsjtz_app_version
     '';
 
-    # Source isn't available in Git.
-    passthru = lib.removeAttrs old.passthru [ "updateScript" ];
-
     meta = {
       description = "WSJT-X fork, primarily focused on automation and enhanced functionality";
-      homepage = "https://sourceforge.net/projects/wsjt-z/";
+      homepage = "https://github.com/sq9fve/wsjt-z";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
