@@ -31,6 +31,7 @@ let
     }@args:
     stdenv.mkDerivation (finalAttrs: {
       pname = "barebox-${defconfig}";
+      strictDeps = true;
 
       version = if src == null then defaultVersion else version;
 
@@ -44,11 +45,17 @@ let
         bison
         dtc
         flex
-        openssl
-        libusb1
         lzop
+        openssl
         pkg-config
       ];
+
+      buildInputs = [
+        libusb1
+        lzop
+        openssl
+      ];
+
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
       hardeningDisable = [ "all" ];
@@ -76,6 +83,8 @@ let
       '';
 
       enableParallelBuilding = true;
+
+      __structuredAttrs = true;
 
       dontStrip = true;
 
