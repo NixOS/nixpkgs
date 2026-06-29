@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tdlib-purple";
-  version = "0.9.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "adrighem";
     repo = "tdlib-purple";
     rev = "tdlib-purple-v${version}";
-    sha256 = "";
+    sha256 = "sha256-H7fb/kYSjplrazwMbqQD9uLVUadIsn+O810G4Qhx6Rk=";
   };
 
   preConfigure = ''
