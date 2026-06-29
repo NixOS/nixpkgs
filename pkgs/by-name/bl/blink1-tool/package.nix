@@ -21,10 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "@git submodule update --init" "true"
+    substituteInPlace Makefile \
+      --replace-fail "INSTALL = install''\n" "INSTALL = install -D''\n"
+  ''
+  # Drop the hardcoded universal-binary flags so we build a single-arch.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail "-arch x86_64 -arch arm64" ""
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ];
 
   makeFlags = [
     "GIT_TAG_RAW=v${finalAttrs.version}"
@@ -42,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blink1.thingm.com/";
     license = with lib.licenses; [ cc-by-sa-40 ];
     maintainers = with lib.maintainers; [ cransom ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "blink1-tool";
   };
 })
