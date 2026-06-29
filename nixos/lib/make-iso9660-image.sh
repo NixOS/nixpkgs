@@ -53,6 +53,18 @@ if test -n "$efiBootable"; then
                   -isohybrid-gpt-basdat"
 fi
 
+if test -n "$chrpBootable"; then
+    chrpBootFlags="-sysid PPC -chrp-boot-part"
+
+    if [ -n "$tbxiBlessDir" -a -n "$tbxiBlessFile" ]; then
+        chrpBootFlags="-hfsplus
+                       -apm-block-size 2048
+                       -hfs-bless-by p $tbxiBlessDir
+                       -hfsplus-file-creator-type chrp tbxi $tbxiBlessDir/$tbxiBlessFile
+                       $chrpBootFlags"
+    fi
+fi
+
 touch pathlist
 
 
@@ -113,11 +125,13 @@ xorriso="xorriso
  ${isoBootFlags}
  ${usbBootFlags}
  ${efiBootFlags}
+ ${chrpBootFlags}
  -r
  -path-list pathlist
  --sort-weight 0 /
 "
 
+echo "Running: $xorriso"
 $xorriso -output $out/iso/$isoName
 
 if test -n "$compressImage"; then
