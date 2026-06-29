@@ -1,0 +1,62 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2d9de2f..5c185da 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,7 +12,7 @@ endif()
+ message(STATUS "${CMAKE_HOME_DIRECTORY}")
+ message(STATUS "installing to ${CMAKE_INSTALL_PREFIX}")
+ 
+-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -std=c++11 -stdlib=libc++")
++set(CMAKE_CXX_FLAGS_RELEASE "-O2 -std=c++11 ")
+ set(CMAKE_C_FLAGS_RELEASE "-O2 ")
+ set(CMAKE_VERBOSE_MAKEFILE OFF)
+ 
+diff --git a/dev/externals/fastconv/CMakeLists.txt b/dev/externals/fastconv/CMakeLists.txt
+index 73d768d..ddcf279 100644
+--- a/dev/externals/fastconv/CMakeLists.txt
++++ b/dev/externals/fastconv/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ if(APPLE)
+   set(CMAKE_C_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops")
+-  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops  -std=c++11 -stdlib=libc++")
++  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops  -std=c++11 ")
+ else()
+   if(MINGW OR MSVC)
+     if(MINGW) 
+diff --git a/dev/externals/mctools/CMakeLists.txt b/dev/externals/mctools/CMakeLists.txt
+index 84c0923..054a5df 100644
+--- a/dev/externals/mctools/CMakeLists.txt
++++ b/dev/externals/mctools/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ if(APPLE)
+   set(CMAKE_C_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops")
+-  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops -std=c++11 -stdlib=libc++")
++  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops -std=c++11 ")
+ #  SET(CMAKE_EXE_LINKER_FLAGS "-static")
+ else()
+   if(MINGW OR MSVC)
+diff --git a/dev/externals/paprogs/pvplay/CMakeLists.txt b/dev/externals/paprogs/pvplay/CMakeLists.txt
+index 8a42595..b7275ea 100644
+--- a/dev/externals/paprogs/pvplay/CMakeLists.txt
++++ b/dev/externals/paprogs/pvplay/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ if(APPLE)
+ # -mmacosx-version-min=10.9
+   set(CMAKE_C_FLAGS "-O2 -Wall  -Dunix  -DMAC -DPA_USE_COREAUDIO  -fomit-frame-pointer -funroll-loops")
+-  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -DMAC -DPA_USE_COREAUDIO -fomit-frame-pointer -mmacosx-version-min=10.9 -funroll-loops -std=c++11 -stdlib=libc++")
++  set(CMAKE_CXX_FLAGS "-O2 -Wall  -Dunix -DMAC -DPA_USE_COREAUDIO -fomit-frame-pointer -mmacosx-version-min=10.9 -funroll-loops -std=c++11 ")
+   include_directories ( /Developer/Headers/FlatCarbon )
+   find_library(COREAUDIOLIB CoreAudio)
+   find_library(AUDIOTOOLBOX AudioToolbox)
+diff --git a/dev/externals/reverb/CMakeLists.txt b/dev/externals/reverb/CMakeLists.txt
+index 30da6d6..9ab8cee 100644
+--- a/dev/externals/reverb/CMakeLists.txt
++++ b/dev/externals/reverb/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ if(APPLE)
+   set(CMAKE_C_FLAGS "-O2 -Wall  -Dunix -fomit-frame-pointer -funroll-loops")
+-  set(CMAKE_CXX_FLAGS "-O2 -Wall   -Dunix -fomit-frame-pointer -funroll-loops -std=c++11 -stdlib=libc++")
++  set(CMAKE_CXX_FLAGS "-O2 -Wall   -Dunix -fomit-frame-pointer -funroll-loops -std=c++11 ")
+ else()
+   if(MINGW OR MSVC)
+     if(MINGW)
