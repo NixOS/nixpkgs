@@ -25,7 +25,9 @@
 let
   nodejs = nodejs_24;
 
-  version = "2026.5.3";
+  source = lib.importJSON ./source.json;
+
+  inherit (source.authentik) version;
 
   cargoPackageFlags = [
     "--package"
@@ -36,7 +38,7 @@ let
     owner = "goauthentik";
     repo = "authentik";
     tag = "version/${version}";
-    hash = "sha256-nmAX8nwZpdDcFAPvC9hAEp0x43RnFtGLUTAm7NcvNZo=";
+    hash = source.authentik.hash;
   };
 
   meta = {
@@ -129,7 +131,7 @@ let
     sourceRoot = "${src.name}/website";
 
     inherit nodejs;
-    npmDepsHash = "sha256-SkIZF+wQPgoZOGJc0YR8Ot07KCsAdA1985SLQaoibfA=";
+    npmDepsHash = source.websiteNpmHash;
     npmDepsFetcherVersion = 2;
     makeCacheWritable = true;
     npmInstallFlags = [ "--legacy-peer-deps" ];
@@ -188,11 +190,8 @@ let
     sourceRoot = "${src.name}/web";
 
     outputHash =
-      {
-        "aarch64-linux" = "sha256-41xZEfLul92vJATZqyVnd7Pp++NzLL/u8NeJJPHpXrw=";
-        "x86_64-linux" = "sha256-FpfOl6wNCgXLg86+vbjnYkcOnpaOZBCNxJiFDRT5W3s=";
-      }
-      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
+      source.webuiHashes.${stdenvNoCC.hostPlatform.system}
+        or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -478,7 +477,7 @@ let
     pname = "authentik-worker";
     inherit version src meta;
 
-    cargoHash = "sha256-KExlNyT9G3R5rnt99beT2pYrWxezMLhGw+Q9T1X2kj4=";
+    cargoHash = source.workerCargoHash;
 
     nativeBuildInputs = [
       cmake
@@ -545,7 +544,7 @@ let
     # calculate the vendorHash without other dependencies, so it is only based on the `go.sum` file
     overrideModAttrs.postPatch = "";
 
-    vendorHash = "sha256-EVDOZ4USaJoIBDB8mM4ZSBfsSc1d/NOm1Qv/hUJ+8f4=";
+    vendorHash = source.proxyVendorHash;
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik-server
@@ -588,6 +587,16 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit proxy worker apiGoVendorHook;
+    updateDeps = {
+      workerCargoDeps = worker.cargoDeps;
+      proxyGoModules = proxy.goModules;
+      websiteNpmDeps = website-deps.npmDeps;
+      webuiDeps = webui-deps;
+    };
+    updateScript = {
+      command = [ ./update.py ];
+      supportedFeatures = [ "commit" ];
+    };
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
       inherit apiGoVendorHook;
