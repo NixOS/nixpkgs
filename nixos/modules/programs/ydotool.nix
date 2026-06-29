@@ -33,6 +33,8 @@ in
     lib.mkIf cfg.enable {
       users.groups."${config.programs.ydotool.group}" = { };
 
+      hardware.uinput.enable = true;
+
       systemd.services.ydotoold = {
         description = "ydotoold - backend for ydotool";
         wantedBy = [ "multi-user.target" ];
