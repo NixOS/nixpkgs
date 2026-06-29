@@ -4,8 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  future,
   numpy,
+  pandas,
   pillow,
   scipy,
   scikit-learn,
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     numpy
+    pandas
     pillow
     scipy
     scikit-learn
@@ -37,8 +37,12 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
-  pythonRemoveDeps = [ "unittest2" ];
+  # see https://github.com/MIC-DKFZ/batchgenerators/pull/78 and
+  # https://github.com/MIC-DKFZ/batchgenerators/pull/130
+  pythonRemoveDeps = [
+    "unittest2"
+    "future"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
