@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.5.1";
+  version = "2.9.95";
 
   src = fetchurl {
     url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
+    hash = "sha256-Gp17IMO/8/Pfe20mrRWL9ia4gzvxAyVxMrLrCqgYlpA=";
   };
 
   outputs = [
