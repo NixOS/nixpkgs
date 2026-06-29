@@ -1,16 +1,21 @@
 # shellcheck shell=bash
 #
-# Copy the source so it can be used by mix projects to assemble `deps`
-# do this before building to avoid build artifacts but after patching
-# to include any user modifications to the source
+# When using some libraries (eg. surface or fine)
+# building needs to access files in the build path of dependencies
+# as returned by `module_info/1` (which requires `erlangDeterministicBuilds == false`).
+# Hence this hook makes the build happen inside `$out/src` instead of /build/source`.
+#
+# Remark: any `patchPhase` will (correctly) be applied to `$out/src`.
 
 beamCopySourceHook() {
   echo "Executing beamCopySourceHook"
 
-  mkdir -p "$out/src"
-  cp -r "." "$out/src"
+  mkdir -p "$out"
+  src="$out/src"
+  cp -r "$sourceRoot" "$src"
+  sourceRoot="$src"
 
   echo "Finished beamCopySourceHook"
 }
 
-postPatchHooks+=(beamCopySourceHook)
+postUnpackHooks+=(beamCopySourceHook)

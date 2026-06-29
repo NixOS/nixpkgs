@@ -46,6 +46,10 @@
   # Deterministic Erlang builds remove full system paths from debug information
   # among other things to keep builds more reproducible. See their docs for more:
   # https://www.erlang.org/doc/man/compile
+  #
+  # Default to true to reduce the closure size
+  # but be aware that it breaks some apps (eg. those using Surface)
+  # see https://github.com/surface-ui/surface/issues/762#issuecomment-3577960256
   erlangDeterministicBuilds ? true,
 
   # Mix dependencies provided as a fixed output derivation
