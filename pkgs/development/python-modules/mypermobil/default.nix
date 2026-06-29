@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mypermobil";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Permobil-Software";
     repo = "mypermobil";
     tag = "v${version}";
-    hash = "sha256-linnaRyA45EzqeSeNmvIE5gXkHA2F504U1++QBeRa90=";
+    hash = "sha256-u/A+UcDXQvqwAaUkVVpj/w5BJn5Oocb5IAzTU0dIuyQ=";
   };
 
   build-system = [ setuptools ];
