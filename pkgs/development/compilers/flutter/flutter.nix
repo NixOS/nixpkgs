@@ -28,6 +28,7 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   flutterTools ? null,
+  aapt,
 }@args:
 
 let
@@ -155,6 +156,7 @@ let
       makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
         --set-default FLUTTER_ROOT "$out" \
         --set FLUTTER_ALREADY_LOCKED true \
+        --set NIX_AAPT2_BINARY_PATH "${aapt}/bin/aapt2" \
         --add-flags "--disable-dart-dev --packages='${flutterTools.pubcache}/package_config.json' \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
       runHook postInstall
