@@ -315,9 +315,9 @@ stdenv.mkDerivation {
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
-          das_j
-          fpletz
           helsinki-Jo
+          ma27
+          leona
         ];
       };
 }

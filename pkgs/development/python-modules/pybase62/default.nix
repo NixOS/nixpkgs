@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "suminb";
     repo = "base62";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/H16MT3mKCdXItoeOn1LWTHlgWmtwJdQHUaCp18eMz0=";
+    hash = "sha256-7N/SGJAVwJOy1ObijA2s9XMrqMMb2SUMJaN72ITUrOM=";
   };
 
   build-system = [ setuptools ];

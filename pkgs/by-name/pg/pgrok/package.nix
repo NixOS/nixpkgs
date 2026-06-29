@@ -4,24 +4,21 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "pgrok";
   version = "1.7.0";
+
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uMHeVxAGmAEIOfCK9SEFsL7GZZIUNMYdoV8XeHjXmWc=";
   };
-in
-
-buildGoModule {
-  inherit pname version src;
 
   outputs = [
     "out"
@@ -31,7 +28,7 @@ buildGoModule {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   postPatch = ''
@@ -47,14 +44,14 @@ buildGoModule {
   '';
 
   env.pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-O3bDxnxeRO20FsRNpgXfz4UweYJmeU6zgrrPJ05fgWo=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-8CLAtxqNgcVIUw4RKAy6jKlErmkgZYyVYFdrD+jyfAA=";
   };
 
   vendorHash = "sha256-fhyyyXHUJsIWiCZbqtLZZRuIG9hb0LAkSo7lKW0i8Sk";
@@ -62,7 +59,7 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=unknown"
     "-X main.date=unknown"
   ];
@@ -93,4 +90,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ tbutter ];
     mainProgram = "pgrok";
   };
-}
+})

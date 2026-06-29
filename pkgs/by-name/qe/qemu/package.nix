@@ -32,6 +32,7 @@
   libslirp,
   libcbor,
   darwin,
+  apple-sdk_15,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -251,7 +252,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
-  ++ lib.optionals valgrindSupport [ valgrind-light ];
+  ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
