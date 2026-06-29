@@ -38,15 +38,16 @@ in
 assert
   (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
   version = "2.9.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PiSBghhlxknijRqghkO8wn1CB2XqaJrjrvGNvZUlNbo=";
   };
 
@@ -93,7 +94,7 @@ pythonPackages.buildPythonApplication rec {
       --replace-fail "except BrokenPipeError, ConnectionResetError:" "except (BrokenPipeError, ConnectionResetError):"
 
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "==" ">="
 
     rm -rv \
@@ -191,7 +192,7 @@ pythonPackages.buildPythonApplication rec {
       pytestCheckHook
       writableTmpDirAsHomeHook
     ]
-    ++ lib.concatAttrValues optional-dependencies
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies
     ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
       "acoustid_lookup"
       "audible"
@@ -252,7 +253,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
+    changelog = "https://github.com/music-assistant/server/releases/tag/${finalAttrs.src.tag}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
       Music Assistant is a free, opensource Media library manager that connects to your streaming services and a wide
@@ -267,4 +268,4 @@ pythonPackages.buildPythonApplication rec {
     ];
     mainProgram = "mass";
   };
-}
+})
