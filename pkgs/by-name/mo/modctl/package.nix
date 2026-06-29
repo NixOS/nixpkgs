@@ -2,9 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "modctl";
   version = "0.2.2";
@@ -12,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "modelpack";
     repo = "modctl";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A7s2jM+hR5WgeiWzPjjfS/AJy35x6kzewIucz713zLc=";
   };
 
@@ -20,24 +22,23 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/modelpack/modctl/pkg/version.GitVersion=v${version}"
+    "-X github.com/modelpack/modctl/pkg/version.GitVersion=v${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/modctl --help > /dev/null
-    $out/bin/modctl version --log-dir="$TMPDIR" --storage-dir="$TMPDIR" 2>&1 | grep -q "v${version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "CLI tool for managing OCI model artifacts based on Model Spec";
     homepage = "https://github.com/modelpack/modctl";
-    changelog = "https://github.com/modelpack/modctl/releases/tag/v${version}";
+    changelog = "https://github.com/modelpack/modctl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ gbhu753 ];
     mainProgram = "modctl";
   };
-}
+})
