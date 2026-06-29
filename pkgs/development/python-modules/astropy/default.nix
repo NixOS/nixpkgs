@@ -54,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "7.2.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy";
     tag = "v${version}";
-    hash = "sha256-U9kCzyOZcttlUP0DUGkhJVkk96sBM/Gm/s5ZPJZcEoA=";
+    hash = "sha256-pKptFnbhiE6DfsEZ557ugd6nrbWGg2FmEdhp78z+bUM=";
   };
 
   env = lib.optionalAttrs stdenv.cc.isClang {
