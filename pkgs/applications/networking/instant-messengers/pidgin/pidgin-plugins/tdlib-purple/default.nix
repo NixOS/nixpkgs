@@ -9,21 +9,25 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tdlib-purple";
   version = "1.1.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "adrighem";
     repo = "tdlib-purple";
-    rev = "tdlib-purple-v${version}";
-    sha256 = "sha256-H7fb/kYSjplrazwMbqQD9uLVUadIsn+O810G4Qhx6Rk=";
+    tag = "tdlib-purple-v${finalAttrs.version}";
+    hash = "sha256-H7fb/kYSjplrazwMbqQD9uLVUadIsn+O810G4Qhx6Rk=";
   };
 
   preConfigure = ''
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION "lib/purple-2|' CMakeLists.txt
     sed -i -e 's|DESTINATION.*PURPLE_DATA_DIR}|DESTINATION "share|' CMakeLists.txt
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -42,8 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/adrighem/tdlib-purple";
     description = "libpurple Telegram plugin using tdlib";
+    changelog = "https://github.com/adrighem/tdlib-purple/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ highghlow ];
     platforms = lib.platforms.unix;
   };
-}
+})
