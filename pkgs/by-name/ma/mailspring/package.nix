@@ -26,15 +26,20 @@ let
     fetchSubmodules = true;
   };
 
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
+
   electron = electron_41;
 
   mailspring-sync = callPackage ./mailsync.nix { inherit src version; };
 
   mailspring-app = buildNpmPackage {
     pname = "mailspring-app";
-    inherit version src;
-    sourceRoot = "${src.name}/app";
-    npmDepsHash = "sha256-b8CscOVVIbjkdf977LVVzFkWxOwn8XOemYpud5yK6vU=";
+    inherit version src patches;
+    postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
+    npmDepsHash = "sha256-/caWmbN4Sl3DVPLXSaXrCHEyRsk/p3FwDqSZ7lfNgUk=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -59,9 +64,9 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "mailspring";
-  inherit version src;
+  inherit version src patches;
 
-  npmDepsHash = "sha256-3uidHfxgGONdtwAnoVytIbRqRjwtz3Yu8tNQ0qT8mJQ=";
+  npmDepsHash = "sha256-nHKFuTdk3qbAiSHksSo++mc8TMasspuym7MYxjuTTHI=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

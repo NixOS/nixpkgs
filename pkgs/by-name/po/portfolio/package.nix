@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  copyDesktopItems,
   fetchurl,
   glib,
   glib-networking,
@@ -9,6 +10,7 @@
   lib,
   libsecret,
   makeDesktopItem,
+  makeWrapper,
   stdenvNoCC,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -36,17 +38,7 @@ let
     ];
   };
 
-  desktopItem = makeDesktopItem {
-    name = "Portfolio";
-    exec = "portfolio";
-    icon = "portfolio";
-    comment = "Calculate Investment Portfolio Performance";
-    desktopName = "Portfolio Performance";
-    categories = [ "Office" ];
-    startupWMClass = "Portfolio Performance";
-  };
-
-  runtimeLibs = lib.makeLibraryPath [
+  runtimeDeps = [
     glib
     glib-networking
     gtk3
@@ -65,9 +57,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook3
+    copyDesktopItems
     imagemagick
+    makeWrapper
+    wrapGAppsHook3
   ];
+
+  buildInputs = runtimeDeps;
 
   dontWrapGApps = true;
 
@@ -116,20 +112,32 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm -f $out/portfolio/plugins/*.source_*.jar
     rm -rf $out/portfolio/configuration/org.eclipse.equinox.source
 
-    makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME "${jre}"
-
-    # Create desktop item
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/icons/hicolor/256x256/apps
     magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';
+
+  postFixup = ''
+    mkdir -p $out/bin
+    makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
+      --prefix PATH : ${lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME "${jre}"
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Portfolio";
+      exec = "portfolio";
+      icon = "portfolio";
+      comment = "Calculate Investment Portfolio Performance";
+      desktopName = "Portfolio Performance";
+      categories = [ "Office" ];
+      startupWMClass = "Portfolio Performance";
+    })
+  ];
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
 
