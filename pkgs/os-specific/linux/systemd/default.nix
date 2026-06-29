@@ -34,6 +34,7 @@
   acl,
   lz4,
   openssl,
+  libucontext,
   libgcrypt,
   libidn2,
   curl,
@@ -318,14 +319,23 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.llvmPackages.libllvm
   ];
 
-  autoPatchelfFlags = [ "--keep-libc" ];
+  autoPatchelfFlags = [
+    "--keep-libc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # TODO: can be unconditionalized on staging.
+    # Nixpkgs does not rely on gettext for libintl for musl.
+    "--ignore-missing=libintl.so.8"
+  ];
 
   buildInputs = [
     libxcrypt
     libuuid
     linuxHeaders
   ]
-
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libucontext
+  ]
   ++ lib.optionals withGcrypt [
     libgcrypt
   ]
