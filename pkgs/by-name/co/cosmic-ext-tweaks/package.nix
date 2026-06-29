@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+
   nativeBuildInputs = [
     libcosmicAppHook
     just

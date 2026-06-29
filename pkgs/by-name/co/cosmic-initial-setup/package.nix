@@ -47,7 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  env.DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  env = {
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+    DISABLE_IF_EXISTS = "/iso/nix-store.squashfs";
+  };
 
   nativeBuildInputs = [
     libcosmicAppHook
