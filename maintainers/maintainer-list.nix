@@ -28806,6 +28806,11 @@
     githubId = 12422133;
     name = "Chromo-residuum-opec";
   };
+  ui-1 = {
+    name = "ui-1";
+    github = "ui-1";
+    githubId = 134524800;
+  };
   uku3lig = {
     name = "uku";
     email = "hi@uku.moe";
