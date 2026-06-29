@@ -1907,6 +1907,12 @@
     githubId = 81317317;
     name = "Anna Aurora";
   };
+  anned20 = {
+    email = "annedouwe@bouma.tech";
+    github = "anned20";
+    githubId = 6921250;
+    name = "Anne Douwe Bouma";
+  };
   anninzy = {
     github = "anninzy";
     githubId = 143312793;
