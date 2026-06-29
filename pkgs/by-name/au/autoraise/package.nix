@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "autoraise";
-  version = "5.3";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "sbmpost";
     repo = "AutoRaise";
     rev = "v${version}";
-    hash = "sha256-OsvmNHpQ46+cWkR4Nz/9oIgSFSWLfCwZnAnRKRiNm5E=";
+    hash = "sha256-DQyXHZPM/5rt6Vhmyhb/ienvk0ZXzg6zbVAmUYeaOVA=";
   };
 
   buildInputs = [
