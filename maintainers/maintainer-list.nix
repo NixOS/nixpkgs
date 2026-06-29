@@ -19078,6 +19078,11 @@
     github = "musjj";
     githubId = 72612857;
   };
+  mutasem-mk4 = {
+    github = "Mutasem-mk4";
+    githubId = 140179052;
+    name = "Mutasem Kharma";
+  };
   mvisonneau = {
     name = "Maxime VISONNEAU";
     email = "maxime@visonneau.fr";
