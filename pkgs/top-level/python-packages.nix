@@ -10553,8 +10553,6 @@ self: super: with self; {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
-  mpire = callPackage ../development/python-modules/mpire { };
-
   mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
   mpl-typst = callPackage ../development/python-modules/mpl-typst {
@@ -18815,8 +18813,6 @@ self: super: with self; {
 
   sphinx-toolbox = callPackage ../development/python-modules/sphinx-toolbox { };
 
-  sphinx-versions = callPackage ../development/python-modules/sphinx-versions { };
-
   sphinxawesome-theme = callPackage ../development/python-modules/sphinxawesome-theme { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
@@ -18848,8 +18844,6 @@ self: super: with self; {
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp { };
 
   sphinxcontrib-httpdomain = callPackage ../development/python-modules/sphinxcontrib-httpdomain { };
-
-  sphinxcontrib-images = callPackage ../development/python-modules/sphinxcontrib-images { };
 
   sphinxcontrib-jinjadomain = callPackage ../development/python-modules/sphinxcontrib-jinjadomain { };
 
