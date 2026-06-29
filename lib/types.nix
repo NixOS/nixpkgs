@@ -83,7 +83,10 @@ let
     unions
     empty
     ;
-  inherit (lib.path) hasStorePathPrefix;
+
+  # lib.path also has a version of this function, but this one is faster since
+  # it works on non-path values
+  inherit (lib.strings) hasStorePathPrefix;
 
   inAttrPosSuffix =
     v: name:
@@ -684,14 +687,7 @@ rec {
         check =
           x:
           let
-            isInStore = hasStorePathPrefix (
-              if isPath x then
-                x
-              # Discarding string context is necessary to convert the value to
-              # a path and safe as the result is never used in any derivation.
-              else
-                /. + builtins.unsafeDiscardStringContext x
-            );
+            isInStore = if isExpectedType then hasStorePathPrefix x else false;
             isAbsolute = substring 0 1 (toString x) == "/";
             isExpectedType = (
               if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.

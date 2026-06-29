@@ -2702,6 +2702,100 @@ rec {
       false;
 
   /**
+    Whether a value `x`
+    has a [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
+    as a prefix.
+
+    :::{.note}
+    This function has identical logic to the function under the same name in
+    `lib.path`, but while the `lib.path` equivalent errors on non-path inputs,
+    this function accepts any type, and return false if the type can't be
+    coerced to a string.
+
+    This function is also slightly faster, as it works with the string
+    representation of the path, rather than splitting the path into components
+    :::
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    hasStorePathPrefix :: Any -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.hasStorePathPrefix` usage example
+
+    ```nix
+    # Subpaths of derivation outputs have a store path as a prefix
+    hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
+    => true
+
+    # The store directory itself is not a store path
+    hasStorePathPrefix /nix/store
+    => false
+
+    # Derivations and their string representations are both store paths
+    hasStorePathPrefix pkgs.git && hasStorePathPrefix /nix/store/bcnisk3ydfgv26v2gw3zlky24g00yww2-git-2.54.0
+    => true
+
+    # Store derivations are also store paths themselves
+    hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv
+    => true
+
+    # Paths outside the Nix store don't have a store path prefix
+    hasStorePathPrefix /home/user
+    => false
+
+    # Not all paths under the Nix store are store paths
+    hasStorePathPrefix /nix/store/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq
+    => false
+
+    # Values that can't be coerced to a string are rejected
+    isStorePath [] || isStorePath 42 || isStorePath {} || …
+    => false
+    ```
+
+    :::
+  */
+  hasStorePathPrefix =
+    let
+      withoutStorePrefix = removePrefix (storeDir + "/");
+      # NOTE: We could change the hash regex to be [0-9a-df-np-sv-z],
+      # because these are the actual ASCII characters used by Nix's base32 implementation,
+      # but this is not fully specified, so let's tie this too much to the currently implemented concept of store paths.
+      # Similar reasoning applies to the validity of the name part.
+      # We care more about discerning store path-ness on realistic values. Making it airtight would be fragile and slow.
+      matchFirstComponent = match ".{32}-[^/]+.*";
+      matchCaDrv = match "/[0-9a-z]{52}(/.*)?";
+    in
+    x:
+    if isStringLike x then
+      let
+        str = toString x;
+        afterStorePath = withoutStorePrefix str;
+      in
+      # path starts with the store directory (typically /nix/store),
+      # and is not the store directory itself, meaning there's at least one extra component
+      str != afterStorePath
+      # and the first component after the store directory has the expected format.
+      && matchFirstComponent afterStorePath != null
+      # alternatively match content‐addressed derivations, which _currently_ do
+      # not have a store directory prefix.
+      # This is a workaround for https://github.com/NixOS/nix/issues/12361 which
+      # was needed during the experimental phase of ca-derivations and should be
+      # removed once the issue has been resolved.
+      || matchCaDrv str != null
+    else
+      false;
+
+  /**
     Parse a string as an int. Does not support parsing of integers with preceding zero due to
     ambiguity between zero-padded and octal numbers. See `toIntBase10`.
 
