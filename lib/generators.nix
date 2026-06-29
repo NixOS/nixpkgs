@@ -80,6 +80,8 @@ let
   ## -- HELPER FUNCTIONS & DEFAULTS --
 in
 rec {
+  inherit (lib.ron) toRON;
+
   /**
     Convert a value to a sensible default string representation.
     The builtin `toString` function has some strange defaults,
