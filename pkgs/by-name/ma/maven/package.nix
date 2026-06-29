@@ -4,6 +4,8 @@
   fetchurl,
   jdk_headless,
   makeWrapper,
+  nix-update-script,
+  runCommand,
   stdenvNoCC,
   testers,
 }:
@@ -67,6 +69,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       buildMavenPackage = mkBuildMavenPackage finalAttrs.finalPackage;
 
+      # Local repository of the plugins this Maven version binds implicitly.
+      # Merged into the build-time repository by buildMavenPackage so a Maven
+      # upgrade does not require recomputing every package's mvnHash. The hash
+      # only changes when maven itself is upgraded.
+      defaultPluginsRepo = callPackage ./default-plugins.nix {
+        maven = finalAttrs.finalPackage;
+      };
+
+      # maven's src is a `mirror://apache` tarball, so the version is discovered
+      # from the upstream git tags instead, restricted to the 3.x series so it
+      # does not jump to the separate maven_4 package. The defaultPluginsRepo
+      # outputHash is bumped in the same run via --subpackage.
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--url"
+          "https://github.com/apache/maven"
+          "--version-regex"
+          "maven-(3\\..*)"
+          "--subpackage"
+          "defaultPluginsRepo"
+        ];
+      };
+
       tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
@@ -75,6 +100,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               mvn --version
           '';
         };
+
+        # Regression test for defaultPluginsRepo: the plugins that Maven binds
+        # implicitly must actually be present and resolvable, otherwise offline
+        # builds of packages that do not pin plugin versions break after a
+        # Maven upgrade. Asserts against a fixed list of core lifecycle plugins
+        # (an independent source of truth, so a broken extractor cannot make
+        # the test vacuously pass).
+        defaultPlugins =
+          runCommand "maven-default-plugins-test"
+            {
+              repo = finalAttrs.finalPackage.defaultPluginsRepo;
+            }
+            ''
+              plugins="$repo/.m2/org/apache/maven/plugins"
+              for plugin in \
+                maven-resources-plugin \
+                maven-compiler-plugin \
+                maven-surefire-plugin \
+                maven-jar-plugin \
+                maven-install-plugin \
+                maven-deploy-plugin \
+                maven-clean-plugin
+              do
+                if ! ls "$plugins/$plugin"/*/"$plugin"-*.jar >/dev/null 2>&1; then
+                  echo "default plugin $plugin missing from defaultPluginsRepo" >&2
+                  exit 1
+                fi
+                echo "found $plugin"
+              done
+              touch "$out"
+            '';
       };
     };
 
