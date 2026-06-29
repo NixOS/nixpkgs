@@ -1,0 +1,16 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/xvqx70fl7697g5rd00ch51baxrymkqxd-source",
+      "rev": "d297f5a81be2472905d367aa675dcbbca6e7a5d2",
+      "sha256": "0dax2bfzwygx4142qywib9n4z3h3cvvr5dy2h3jy35iizg16iqka",
+      "url": "https://github.com/NimParsers/parsetoml/archive/d297f5a81be2472905d367aa675dcbbca6e7a5d2.tar.gz",
+      "ref": "v0.7.2",
+      "packages": [
+        "parsetoml"
+      ],
+      "srcDir": "src"
+    }
+  ]
+}
