@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-jsonpath";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "python-jsonpath";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-eVypnFeqFW2WJfCinWXJulVtxaFpNomK2tZNbmxsxrY=";
+    hash = "sha256-2AV+X3Vs+pYi3Iv7zy9/nXna5PgrofHmrH0xyaumZWk=";
   };
 
   build-system = [ hatchling ];
