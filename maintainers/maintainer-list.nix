@@ -3951,6 +3951,12 @@
     githubId = 140968250;
     keys = [ { fingerprint = "8321 ED3A 8DB9 99A5 1F3B  F80F F268 2914 EA42 DE26"; } ];
   };
+  bpmct = {
+    name = "Ben Potter";
+    email = "ben@coder.com";
+    github = "bpmct";
+    githubId = 22407953;
+  };
   Br1ght0ne = {
     name = "Oleksii Filonenko";
     email = "nixpkgs@brightone.cloud";
@@ -6812,6 +6818,12 @@
     email = "developerguyn@gmail.com";
     github = "developer-guy";
     githubId = 16693043;
+  };
+  developmentcats = {
+    name = "Christofer";
+    email = "christofer@coder.com";
+    github = "DevelopmentCats";
+    githubId = 176868952;
   };
   devhell = {
     email = ''"^"@regexmail.net'';
@@ -21766,6 +21778,12 @@
     github = "phodina";
     githubId = 2997905;
     name = "Petr Hodina";
+  };
+  phorcys420 = {
+    name = "Adele";
+    email = "adele@coder.com";
+    github = "phorcys420";
+    githubId = 57866459;
   };
   photex = {
     email = "photex@gmail.com";
