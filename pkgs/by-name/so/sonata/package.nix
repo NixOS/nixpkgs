@@ -17,7 +17,7 @@ let
     buildPythonApplication
     dbus-python
     pygobject3
-    mpd2
+    python-mpd2
     setuptools
     ;
 in
@@ -53,7 +53,7 @@ buildPythonApplication (finalAttrs: {
   # included because it's difficult to build.
   pythonPath = [
     dbus-python
-    mpd2
+    python-mpd2
     pygobject3
     setuptools # pkg_resources is imported during runtime
   ];

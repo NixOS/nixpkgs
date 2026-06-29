@@ -1855,6 +1855,8 @@ with pkgs;
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
+  aiovban-pyaudio = python3Packages.toPythonApplication python3Packages.aiovban-pyaudio;
+
   clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
 
   cmdpack = callPackages ../tools/misc/cmdpack { };

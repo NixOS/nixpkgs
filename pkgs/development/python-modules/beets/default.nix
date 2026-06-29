@@ -70,7 +70,7 @@
   librosa,
   mp3gain,
   mp3val,
-  mpd2,
+  python-mpd2,
   pyacoustid,
   pylast,
   pyxdg,
@@ -350,9 +350,9 @@ buildPythonPackage (finalAttrs: {
         mbpseudo = { };
         metasync.testPaths = [ ];
         missing.testPaths = [ ];
-        mpdstats.propagatedBuildInputs = [ mpd2 ];
+        mpdstats.propagatedBuildInputs = [ python-mpd2 ];
         mpdupdate = {
-          propagatedBuildInputs = [ mpd2 ];
+          propagatedBuildInputs = [ python-mpd2 ];
           testPaths = [ ];
         };
         musicbrainz = { };
