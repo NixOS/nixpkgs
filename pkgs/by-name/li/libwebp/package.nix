@@ -58,13 +58,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "WEBP_USE_THREAD" threadingSupport)
-    (lib.cmakeBool "WEBP_BUILD_VWEBP" openglSupport)
-    (lib.cmakeBool "WEBP_BUILD_IMG2WEBP" (pngSupport || jpegSupport || tiffSupport))
-    (lib.cmakeBool "WEBP_BUILD_GIF2WEBP" gifSupport)
+    (lib.cmakeBool "WEBP_BUILD_VWEBP" (openglSupport && !stdenv.hostPlatform.isMinGW))
+    (lib.cmakeBool "WEBP_BUILD_IMG2WEBP" (
+      (pngSupport || jpegSupport || tiffSupport) && !stdenv.hostPlatform.isMinGW
+    ))
+    (lib.cmakeBool "WEBP_BUILD_GIF2WEBP" (gifSupport && !stdenv.hostPlatform.isMinGW))
     (lib.cmakeBool "WEBP_BUILD_ANIM_UTILS" false) # Not installed
     (lib.cmakeBool "WEBP_BUILD_EXTRAS" false) # Not installed
     (lib.cmakeBool "WEBP_ENABLE_SWAP_16BIT_CSP" swap16bitcspSupport)
     (lib.cmakeBool "WEBP_BUILD_LIBWEBPMUX" libwebpmuxSupport)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    (lib.cmakeBool "WEBP_BUILD_CWEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_DWEBP" false)
+    (lib.cmakeBool "WEBP_BUILD_WEBPINFO" false)
+    (lib.cmakeBool "WEBP_BUILD_WEBPMUX" false)
   ];
 
   nativeBuildInputs = [ cmake ];
