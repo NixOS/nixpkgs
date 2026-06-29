@@ -1,0 +1,31 @@
+diff --git a/hadrian/src/Settings/Packages.hs b/hadrian/src/Settings/Packages.hs
+index 5346545d93..c9bcf21a9f 100644
+--- a/hadrian/src/Settings/Packages.hs
++++ b/hadrian/src/Settings/Packages.hs
+@@ -150,7 +150,7 @@ packageArgs = do
+           -- the Stage1 libraries, as we already know that the bootstrap
+           -- compiler comes with the same versions as the one we are building.
+           --
+-            builder (Cabal Setup) ? cabalExtraDirs ffiIncludeDir ffiLibraryDir
++            notStage0 ? builder (Cabal Setup) ? cabalExtraDirs ffiIncludeDir ffiLibraryDir
+           , builder (Cabal Flags) ? ifM stage0
+               (andM [cross, bootCross] `cabalFlag` "internal-interpreter")
+               (arg "internal-interpreter")
+@@ -261,7 +261,7 @@ ghcBignumArgs = package ghcBignum ? do
+ 
+                        -- Ensure that the ghc-bignum package registration includes
+                        -- knowledge of the system gmp's library and include directories.
+-                     , notM (flag GmpInTree) ? cabalExtraDirs includesGmp librariesGmp
++                     , notStage0 ? notM (flag GmpInTree) ? cabalExtraDirs includesGmp librariesGmp
+                      ]
+                   ]
+                _ -> mempty
+@@ -424,7 +424,7 @@ rtsPackageArgs = package rts ? do
+               [ cabalExtraDirs libdwIncludeDir libdwLibraryDir
+               , cabalExtraDirs libnumaIncludeDir libnumaLibraryDir
+               , cabalExtraDirs libzstdIncludeDir libzstdLibraryDir
+-              , useSystemFfi ? cabalExtraDirs ffiIncludeDir ffiLibraryDir
++              , notStage0 ? useSystemFfi ? cabalExtraDirs ffiIncludeDir ffiLibraryDir
+               ]
+         , builder (Cc (FindCDependencies CDep)) ? cArgs
+         , builder (Cc (FindCDependencies  CxxDep)) ? cArgs
