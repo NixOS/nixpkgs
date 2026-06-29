@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.23.2";
+  version = "0.23.7-lyrical";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
+    hash = "sha256-rSN094tnR0GqCXkOUTry9Zk7tlWhKwNiIZDU4zTUNsw=";
   };
 
   # Fix boost 1.89 compatibility
