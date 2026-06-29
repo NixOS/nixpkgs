@@ -100,7 +100,7 @@ installManPage() {
     done
 }
 
-# installShellCompletion [--cmd <name>] ([--bash|--fish|--zsh] [--name <name>] <path>)...
+# installShellCompletion [--cmd <name>] ([--bash|--fish|--zsh|--nushell] [--name <name>] <path>)...
 #
 # Each path is installed into the appropriate directory for shell completions for the given shell.
 # If one of `--bash`, `--fish`, `--zsh`, or `--nushell` is given the path is assumed to belong to
