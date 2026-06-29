@@ -19,6 +19,7 @@
   which,
   python3,
   perl,
+  xxd,
   armTrustedFirmwareAllwinner,
   armTrustedFirmwareAllwinnerH6,
   armTrustedFirmwareAllwinnerH616,
@@ -98,6 +99,7 @@ let
           swig
           which # for scripts/dtc-version.sh
           perl # for oid build (secureboot)
+          xxd # for filechk_defaultenv.h rule
         ]
         ++ lib.optionals (!crossTools) toolsDeps
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
