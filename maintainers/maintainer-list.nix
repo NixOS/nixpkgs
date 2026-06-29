@@ -7921,6 +7921,11 @@
     githubId = 183738665;
     name = "Marcell Tóth";
   };
+  ELHart05 = {
+    name = "Okba Allaoua";
+    github = "ELHart05";
+    githubId = 96151694;
+  };
   eliandoran = {
     email = "contact@eliandoran.me";
     name = "Elian Doran";
