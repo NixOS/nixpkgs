@@ -1,7 +1,7 @@
 {
   hareHook,
   makeSetupHook,
-  lib
+  lib,
 }:
 
 makeSetupHook {

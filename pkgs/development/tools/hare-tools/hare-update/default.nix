@@ -2,7 +2,7 @@
   fetchFromSourcehut,
   hareToolsHook,
   lib,
-  stdenv
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
