@@ -7192,6 +7192,8 @@ self: super: with self; {
 
   hebg = callPackage ../development/python-modules/hebg { };
 
+  hebi-py = callPackage ../development/python-modules/hebi-py { };
+
   hegel-ip-client = callPackage ../development/python-modules/hegel-ip-client { };
 
   helion = callPackage ../development/python-modules/helion { };
