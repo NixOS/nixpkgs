@@ -9,7 +9,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonschema-rs";
   version = "0.46.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   # Fetching from Pypi, because there is no Cargo.lock in the GitHub repo.
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "jsonschema_rs";
     hash = "sha256-KyH4OOL8iA29d3nHAsMWKNixEO+f04n7hT9iB0dw9zU=";
   };
@@ -59,11 +59,11 @@ buildPythonPackage rec {
   meta = {
     description = "High-performance JSON Schema validator for Python";
     homepage = "https://github.com/Stranger6667/jsonschema/tree/master/crates/jsonschema-py";
-    changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${version}/crates/jsonschema-py/CHANGELOG.md";
+    changelog = "https://github.com/Stranger6667/jsonschema/blob/python-v${finalAttrs.version}/crates/jsonschema-py/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       DutchGerman
       friedow
     ];
   };
-}
+})
