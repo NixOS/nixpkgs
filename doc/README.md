@@ -58,7 +58,19 @@ Make sure that your local files aren't added to Git history by adding the follow
 
 Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
-### Testing redirects
+### Redirects check
+
+In order to improve the reading experience of the manuals, since [PR 353513](https://github.com/NixOS/nixpkgs/pull/353513), documentation anchors are checked in CI so that they always redirect to a relevant section instead of failing. For example, if support for a package is dropped, resulting in its deletion from the package set, the anchor leading to its documentation should redirect to the release notes section where this case is explained.
+
+The checks are done directly by `nixos-render-docs`, by comparing with a collection of identifiers in `redirects.json` files. More information is provided in `nrd`'s [README](../pkgs/by-name/ni/nixos-render-docs/README.md).
+
+#### Managing identifiers inside redirects.json files
+
+In order to manipulate the `redirects.json`, the `redirects` utility is accessible from the shell provided in the source directory.
+
+While more documentation is provided, you can read its [source code](../pkgs/by-name/ni/nixos-render-docs-redirects/src).
+
+#### Manually testing redirects
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
 
