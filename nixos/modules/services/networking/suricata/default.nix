@@ -149,6 +149,29 @@ in
         List of rules that should be disabled.
       '';
     };
+
+    netfilterQueues = mkOption {
+      type = types.listOf types.ints.u16;
+      default = [ ];
+      example = literalExpression ''
+        [ 67 68 69 ];
+      '';
+      description = ''
+        The netfilter queue numbers to listen on. They should be consecutive. Use in conjunction with `settings.nfq`.
+      '';
+    };
+
+    extraArgs = mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "-v"
+        "--simulate-ips"
+      ];
+      description = ''
+        Additional command-line arguments to pass to suricata.
+      '';
+    };
   };
 
   config =
@@ -167,18 +190,30 @@ in
             ++ (optionals (cfg.settings.pcap != null) cfg.settings.pcap)
           )
         );
+      netfilterQueuesSorted = builtins.sort (a: b: a < b) cfg.netfilterQueues;
+      listIsConsecutive = l: l == lib.genList (lib.add (lib.head l)) (lib.length l);
     in
     mkIf cfg.enable {
       assertions = [
         {
-          assertion = (builtins.length captureInterfaces) > 0;
+          assertion = lib.xor ((builtins.length captureInterfaces) > 0) (
+            (builtins.length netfilterQueuesSorted) > 0
+          );
           message = ''
-            At least one capture interface must be configured:
+            At least one layer 2 capture interface must be configured, or
+            `services.suricata.netfilterQueues` must be nonempty. Netfilter
+            capture mode is mutually exclusive with layer 2 capture modes.
+
+            Layer 2 capture interfaces:
             - `services.suricata.settings.af-packet`
             - `services.suricata.settings.af-xdp`
             - `services.suricata.settings.dpdk.interfaces`
             - `services.suricata.settings.pcap`
           '';
+        }
+        {
+          assertion = builtins.length captureInterfaces == 0 -> listIsConsecutive netfilterQueuesSorted;
+          message = "`services.suricata.netfilterQueues` must be consecutive (e.g. [ 5 6 7 8 ]).";
         }
       ];
 
@@ -253,11 +288,16 @@ in
           after = [ "suricata-update.service" ];
           serviceConfig =
             let
-              interfaceOptions = strings.concatMapStrings (interface: " -i ${interface}") captureInterfaces;
+              interfaceOptions = strings.concatMapStrings (interface: "-i ${interface}") captureInterfaces;
+              nfqueueOptions = lib.concatStringsSep " " (
+                map (s: "-q " + builtins.toString s) cfg.netfilterQueues
+              );
+              extraOptions = lib.concatStringsSep " " cfg.extraArgs;
+              captureModeOptions = if cfg.settings.nfq != null then nfqueueOptions else interfaceOptions;
             in
             {
               ExecStartPre = "!${pkg}/bin/suricata -c ${cfg.configFile} -T";
-              ExecStart = "!${pkg}/bin/suricata -c ${cfg.configFile}${interfaceOptions}";
+              ExecStart = "!${pkg}/bin/suricata -c ${cfg.configFile} ${captureModeOptions} ${extraOptions}";
               Restart = "on-failure";
 
               User = cfg.settings.run-as.user;
