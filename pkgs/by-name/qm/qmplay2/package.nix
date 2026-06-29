@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
   ];
 
+  cmakeFlags = lib.optionals (qtVersion == "5") [
+    (lib.cmakeBool "BUILD_WITH_QT6" false)
+  ];
+
   strictDeps = true;
 
   # Because we think it is better to use only lowercase letters!
