@@ -1,8 +1,8 @@
 {
   lib,
   callPackage,
-  writeShellScriptBin,
   beamPackages,
+  writeScript,
   mix2nix,
   fetchFromGitHub,
   git,
@@ -49,8 +49,8 @@ mixRelease rec {
             repo = "cldr";
             rev = "v${old.version}";
             hash =
-              assert old.version == "2.44.1";
-              "sha256-5XLPQYDW9yV0ZkWbyiB2s213GTccFjdqckBmx09n4eE=";
+              assert old.version == "2.47.2";
+              "sha256-XiShurm4i/Qxop1nE4Z/8tMj5953kUqn+4kBrILxO+Y=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
@@ -139,8 +139,8 @@ mixRelease rec {
 
   passthru = {
     tests = { inherit (nixosTests) mobilizon; };
-    updateScript = writeShellScriptBin "update.sh" ''
-      set -eou pipefail
+    updateScript = writeScript "update-mobilizon" ''
+      set -euo pipefail
 
       ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
       ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
