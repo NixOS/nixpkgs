@@ -51,6 +51,13 @@ stdenv'.mkDerivation (finalAttrs: {
         'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
 
     sed -e '1i #include <cstdint>' -i third_party/cxxopts/include/cxxopts.hpp
+
+    # Prevent setting the default nvcc arch flags, which can be
+    # ones that don't work with the current CUDA version
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'list(APPEND CUDA_NVCC_FLAGS ''${ARCH_FLAGS})' \
+        ""
   '';
 
   nativeBuildInputs = [
