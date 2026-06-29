@@ -2,10 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   scipy,
   numpy,
   pydoe,
+
+  # tests
   unittestCheckHook,
 }:
 
@@ -21,11 +27,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-gN4AOmtezJ1310TVcKLsJ6rOtv0rGkQ6LjVluIeYEGQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     scipy
     numpy
     pydoe
