@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/adrighem/tdlib-purple";
     description = "libpurple Telegram plugin using tdlib";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [ highghlow ];
     platforms = lib.platforms.unix;
   };
 }
