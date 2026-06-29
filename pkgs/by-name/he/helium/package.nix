@@ -44,7 +44,8 @@ in
     maintainers = with lib.maintainers; [ jupiterScope ];
     platforms = [ "x86_64-linux" ];
   };
-}).overrideAttrs (old: {
-  strictDeps = true;
-  __structuredAttrs = true;
-})
+}).overrideAttrs
+  (old: {
+    strictDeps = true;
+    __structuredAttrs = true;
+  })
