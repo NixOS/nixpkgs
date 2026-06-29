@@ -19,11 +19,6 @@ buildDotnetModule (finalAttrs: {
     ./publish-fix.patch
   ];
 
-  # from openutau/default.nix
-  # [...]/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(248,5): error MSB4018: The "GenerateDepsFile" task failed unexpectedly. [[...]/N_m3u8DL-RE.Common.csproj]
-  # [...]/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(248,5): error MSB4018: System.IO.IOException: The process cannot access the file '[...]/N_m3u8DL-RE.Common.deps.json' because it is being used by another process. [[...]/N_m3u8DL-RE.Common.csproj]
-  enableParallelBuilding = false;
-
   projectFile = "src/N_m3u8DL-RE.sln";
   nugetDeps = ./deps.json;
 

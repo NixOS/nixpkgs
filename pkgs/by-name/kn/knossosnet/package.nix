@@ -26,9 +26,6 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
-  # IO errors in build due to solution building race
-  enableParallelBuilding = false;
-
   runtimeDeps = [ openal ];
 
   nativeBuildInputs = [ copyDesktopItems ];
