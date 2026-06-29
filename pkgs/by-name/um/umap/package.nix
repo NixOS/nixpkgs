@@ -25,12 +25,21 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  outputs = [
+    "out"
+    "static"
+  ];
+
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
     tag = finalAttrs.version;
     hash = "sha256-rM1o83/udkqiVD0nSiAjNVAzriJr2ztvSXh45wxmYzU=";
   };
+
+  patches = [
+    ./use-hashed-pictogram-urls.patch
+  ];
 
   build-system = [
     python3.pkgs.hatchling
@@ -90,6 +99,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       makeWrapper ${start_script} $out/bin/umap-serve \
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PYTHONPATH : "${pythonPath}"
+
+      mkdir -p $static
+      STATIC_ROOT=$static ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear --link
+      find $static -type l -delete
     '';
 
   nativeCheckInputs =
