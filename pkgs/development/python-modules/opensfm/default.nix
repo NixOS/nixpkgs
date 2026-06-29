@@ -41,7 +41,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "0.5.1-unstable-2026-05-04";
+  version = "odm-4";
   pyproject = true;
 
   src = fetchFromGitHub {
