@@ -136,11 +136,13 @@ convertIconTheme() {
         local -r resultdir=$(mktemp -d)
 
         local -ar candidateIcons=(
-            "${sharePath}/icons/${theme}/"*"/${iconname}.png"
-            "${sharePath}/icons/${theme}/"*"/${iconname}.xpm"
+            "${sharePath}/icons/${theme}/"*"/apps/${iconname}.png"
+            "${sharePath}/icons/${theme}/"*"/apps/${iconname}.xpm"
+            "${sharePath}/icons/${iconname}.png"
+            "${sharePath}/icons/${iconname}.xpm"
         )
 
-        local -a scalableIcon=("${sharePath}/icons/${theme}/scalable/${iconname}.svg"*)
+        local -a scalableIcon=("${sharePath}/icons/${theme}/scalable/apps/${iconname}.svg"*)
         if [[ ${#scalableIcon[@]} = 0 ]]; then
             scalableIcon=('-')
         fi
@@ -206,7 +208,7 @@ convertIconTheme() {
         echo "$resultdir"
     }
 
-    iconsdir=$(getIcons "$sharePath" "apps/${iconName}" "$theme")
+    iconsdir=$(getIcons "$sharePath" "$iconName" "$theme")
     if [[ -n "$(ls -A1 "$iconsdir")" ]]; then
         icnsutil compose --toc "$out/${iconName}.icns" "$iconsdir/"*
     else
