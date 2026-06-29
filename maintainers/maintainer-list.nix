@@ -13866,6 +13866,12 @@
     githubId = 2469618;
     name = "Junji Hashimoto";
   };
+  jupiterscope = {
+    name = "JupiterScope";
+    email = "base@gbr.pw";
+    github = "garnicag";
+    githubId = 13151940;
+  };
   jurraca = {
     email = "julienu@pm.me";
     github = "jurraca";
