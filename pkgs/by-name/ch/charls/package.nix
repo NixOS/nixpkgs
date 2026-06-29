@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "charls";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "team-charls";
     repo = "charls";
     tag = version;
-    hash = "sha256-c1wrk6JLcAH7TFPwjARlggaKXrAsLWyUQF/3WHlqoqg=";
+    hash = "sha256-0NfTQfGw89SksrLRX81moj6uFrh1I67JMeT16Wcus1c=";
   };
 
   postPatch = ''
