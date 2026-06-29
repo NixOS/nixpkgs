@@ -21,16 +21,12 @@ let
       pname = "nextcloud";
       inherit version;
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       src = fetchurl {
         url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
         inherit hash;
-      };
-
-      passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
-        inherit packages;
       };
 
       installPhase = ''
@@ -39,6 +35,13 @@ let
         cp -R . $out/
         runHook postInstall
       '';
+
+      passthru = {
+        tests = lib.filterAttrs (
+          key: _: (lib.hasSuffix (lib.versions.major version) key)
+        ) nixosTests.nextcloud;
+        inherit packages;
+      };
 
       meta = {
         changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
