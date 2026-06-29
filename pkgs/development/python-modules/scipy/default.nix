@@ -106,6 +106,11 @@ buildPythonPackage (finalAttrs: {
       # see: https://github.com/scipy/scipy/issues/25488
       "test_nyquist"
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # more flakiness
+      # see: https://github.com/scipy/scipy/issues/25522
+      "test_convergence"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # The following tests are broken on aarch64-darwin with newer compilers and library versions.
       # See https://github.com/scipy/scipy/issues/18308
