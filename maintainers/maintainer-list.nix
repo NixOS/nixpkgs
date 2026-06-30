@@ -9669,6 +9669,12 @@
     githubId = 45048741;
     name = "Alwanga Oyango";
   };
+  galder = {
+    email = "galder@ibm.com";
+    github = "galderz";
+    githubId = 50187;
+    name = "Galder Zamarreño";
+  };
   gale-username = {
     name = "gale";
     email = "git@galewebsite.com";
