@@ -33,7 +33,6 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isa-l,
   isal,
   proxy-py,
   pytest-codspeed,
@@ -107,8 +106,7 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     gunicorn
-    # broken on aarch64-darwin
-    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
+    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
