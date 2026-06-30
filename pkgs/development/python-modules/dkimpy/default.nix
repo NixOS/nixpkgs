@@ -3,39 +3,40 @@
   fetchPypi,
   openssl,
   buildPythonPackage,
-  pytest,
+  setuptools,
+  pytestCheckHook,
   dnspython,
   pynacl,
   authres,
-  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dkimpy";
   version = "1.1.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tfYPtHu/XY12LxNLzqDDiOumtJg0KmgqIfFoZUUJS3c=";
   };
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     openssl
     dnspython
     pynacl
     authres
   ];
 
-  patchPhase = ''
-    substituteInPlace dkim/dknewkey.py --replace \
-      /usr/bin/openssl ${openssl}/bin/openssl
+  postPatch = ''
+    substituteInPlace dkim/dknewkey.py --replace-fail \
+      /usr/bin/openssl ${lib.getExe openssl}
   '';
 
-  checkPhase = ''
-    ${python.interpreter} ./test.py
-  '';
+  pythonImportsCheck = [ "dkim" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "DKIM + ARC email signing/verification tools + Python module";
@@ -49,4 +50,4 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/dkimpy";
     license = lib.licenses.bsd3;
   };
-}
+})
