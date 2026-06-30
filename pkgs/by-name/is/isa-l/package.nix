@@ -96,9 +96,5 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/intel/isa-l/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # https://github.com/intel/isa-l/issues/188
-      "i686-linux"
-    ];
   };
 })
