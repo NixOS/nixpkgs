@@ -460,5 +460,7 @@ in
     # Benefits from verbose sshd logging to observe failed login attempts,
     # so we set that here unless the user overrode it.
     services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
+
+    boot.kernelModules = [ "xt_multiport" ];
   };
 }
