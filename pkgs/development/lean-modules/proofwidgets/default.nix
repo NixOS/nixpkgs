@@ -10,13 +10,13 @@
 buildLakePackage (finalAttrs: {
   pname = "lean4-proofwidgets";
   # nixpkgs-update: no auto update
-  version = "0.0.99";
+  version = "0.0.102-unstable-2026-06-15";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "ProofWidgets4";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kGoEkKGrucNUWFYkHW2LsS1gI4C0J8bAHQL2MiE4Pzc=";
+    rev = "24b0d9dc081c5423f8eec7e866c441e5184f29d9";
+    hash = "sha256-2maEePJiEbN4S+IQb10ahm6E6mzYrUBzOe2KQHhSgFw=";
   };
 
   leanPackageName = "proofwidgets";
@@ -35,6 +35,12 @@ buildLakePackage (finalAttrs: {
     hash = "sha256-ssWSr2qfsIbX25DidiVPm0tsLGjrhQhQ6YKPL0rfc1k=";
   };
   npmRoot = "widget";
+
+  postPatch = ''
+    substituteInPlace lakefile.lean \
+      --replace-fail 'lean_lib ProofWidgets where' 'lean_lib ProofWidgets where
+      globs := #[.submodules `ProofWidgets]'
+  '';
 
   postConfigure = ''
     local realNpm

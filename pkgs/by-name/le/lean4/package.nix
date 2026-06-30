@@ -20,7 +20,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.30.0";
+  version = "4.31.0";
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
+    hash = "sha256-up4Juc/IyMuggGLMSDgwYEOoMk/K5U8NI0jzeAKqhO0=";
   };
 
   postPatch =
@@ -51,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf src/lake/examples/git/
     ''
     + (lib.optionalString enableMimalloc ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
       for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
         substituteInPlace "$file" \
           --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
@@ -87,13 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  patches = [ ./mimalloc.patch ];
-
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
     "-DINSTALL_CADICAL=OFF"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+    "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${finalAttrs.mimalloc-src}"
   ];
 
   passthru.tests = {
