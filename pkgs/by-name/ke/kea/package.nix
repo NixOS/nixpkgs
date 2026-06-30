@@ -31,18 +31,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "3.0.3"; # only even minor versions are stable
+  version = "3.2.0"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CXAt2weLY36F3pI2y+3T+51698bnlwJsU4tFdIrU1jE=";
+    hash = "sha256-FL9pXTe2W5sb9VD+pdCtr5gGxQ5UGe8qF2pLjpqt498=";
   };
 
   patches = [
     ./dont-create-system-paths.patch
-    # backport of an upstream fix for boost-1.89:
-    #   https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2771
-    ./boost-1.89.patch
   ];
 
   postPatch = ''
