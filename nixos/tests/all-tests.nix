@@ -418,6 +418,7 @@ in
   convos = runTest ./convos.nix;
   coredns = runTest ./coredns.nix;
   corerad = runTest ./corerad.nix;
+  cortex-metrics = runTest ./cortex-metrics.nix;
   corteza = runTest ./corteza.nix;
   cosmic = runTest {
     imports = [ ./cosmic ];
