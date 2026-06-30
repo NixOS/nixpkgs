@@ -605,20 +605,20 @@ let
       ${lib.optionalString (cfg.httpFileShare != null) ''
         Component ${toLua cfg.httpFileShare.domain} "http_file_share"
           modules_disabled = { "s2s" }
-        ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
-          http_host = "${cfg.httpFileShare.http_host}"
-        ''}
-        ${lib.optionalString (cfg.httpFileShare.http_external_url != null) ''
-          http_external_url = "${cfg.httpFileShare.http_external_url}"
-        ''}
-        ${settingsToLua "  http_file_share_" (
-          cfg.httpFileShare
-          // {
-            domain = null;
-            http_host = null;
-            http_external_url = null;
-          }
-        )}
+          ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
+            http_host = "${cfg.httpFileShare.http_host}"
+          ''}
+          ${lib.optionalString (cfg.httpFileShare.http_external_url != null) ''
+            http_external_url = "${cfg.httpFileShare.http_external_url}"
+          ''}
+          ${settingsToLua "  http_file_share_" (
+            cfg.httpFileShare
+            // {
+              domain = null;
+              http_host = null;
+              http_external_url = null;
+            }
+          )}
       ''}
 
       ${lib.concatStringsSep "\n" (
