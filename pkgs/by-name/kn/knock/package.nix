@@ -5,14 +5,16 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "knock";
   version = "0.0.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "nat-418";
     repo = "knock";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K+L4F4bTERQSqISAmfyps/U5GJ2N0FdJ3RmpiUmt4uA=";
   };
 
@@ -36,4 +38,4 @@ buildGoModule rec {
     changelog = "https://codeberg.org/nat-418/knock/raw/branch/trunk/CHANGELOG.md";
     maintainers = with lib.maintainers; [ nat-418 ];
   };
-}
+})

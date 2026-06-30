@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  protobuf,
+  protobuf_21,
   openssl,
   libpcap,
   traceroute,
@@ -15,19 +15,19 @@ let
   inherit (lib) optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spoofer";
   version = "1.4.13";
 
   src = fetchurl {
-    url = "https://www.caida.org/projects/spoofer/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-n3B2yAckbcm2kyv5QzBGh4nvKa0S/+EbGCxe0eyWG1U=";
+    url = "https://www.caida.org/projects/spoofer/downloads/spoofer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-n3B2yAckbcm2kyv5QzBGh4nvKa0S/+EbGCxe0eyWG1U=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
-    protobuf
+    protobuf_21
     libpcap
     traceroute
   ]
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "spoofer-prober";
   };
-}
+})
