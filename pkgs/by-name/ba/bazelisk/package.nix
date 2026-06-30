@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,11 +24,19 @@ buildGoModule (finalAttrs: {
     "-X github.com/bazelbuild/bazelisk/core.BazeliskVersion=v${finalAttrs.version}"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests) bazelisk;
+  };
+
   meta = {
     description = "User-friendly launcher for Bazel";
     mainProgram = "bazelisk";
     longDescription = ''
-      BEWARE: This package does not work on NixOS.
+      A user-friendly launcher for Bazel that automatically downloads and
+      runs the correct Bazel version for a given project.
+
+      On NixOS, enable the `programs.bazelisk` module to set up envfs and
+      a system bazelrc with the correct tool paths.
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
     changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${finalAttrs.version}";
