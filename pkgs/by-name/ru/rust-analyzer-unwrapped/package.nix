@@ -13,15 +13,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-analyzer-unwrapped";
-  version = "2026-06-01";
+  version = "2026-06-22";
 
-  cargoHash = "sha256-5njpo8AKVOSgCFwuqTL9sVODyjgsEfg5kHI3qM0DK9k=";
+  cargoHash = "sha256-PBqPUSF+rBsbAuplPScLHm6EAxxmTIic5jN+EomowJA=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = finalAttrs.version;
-    hash = "sha256-yJIyzYb6LhvbVMmj2EH62Mt0JHU3pQefr+oPEgaoaI8=";
+    hash = "sha256-1JBvwtGyIsEBIemJBi6syH7iQ+pct7i+HNa1WSZfozs=";
   };
 
   cargoBuildFlags = [
