@@ -46,9 +46,7 @@ outer@{
   postInstall ? "",
   meta ? null,
   nginx-doc ? outer.nginx-doc,
-  passthru ? {
-    tests = { };
-  },
+  passthru ? { },
 }:
 
 let
@@ -281,25 +279,28 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit modules;
-    tests = {
-      inherit (nixosTests)
-        nginx
-        nginx-auth
-        nginx-etag
-        nginx-etag-compression
-        nginx-globalredirect
-        nginx-http3
-        nginx-proxyprotocol
-        nginx-pubhtml
-        nginx-sso
-        nginx-status-page
-        nginx-unix-socket
-        ;
-      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme.nginx;
-      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
-    }
-    // passthru.tests;
+    tests =
+      passthru.tests or {
+        inherit (nixosTests)
+          nginx
+          nginx-auth
+          nginx-etag
+          nginx-etag-compression
+          nginx-globalredirect
+          nginx-http3
+          nginx-proxyprotocol
+          nginx-pubhtml
+          nginx-sso
+          nginx-status-page
+          nginx-unix-socket
+          ;
+        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+        acme-integration = nixosTests.acme.nginx;
+        acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
+      };
+  }
+  // lib.optionalAttrs (passthru ? updateScript) {
+    inherit (passthru) updateScript;
   };
 
   meta =
@@ -317,7 +318,6 @@ stdenv.mkDerivation {
           das_j
           fpletz
           helsinki-Jo
-          raitobezarius
         ];
       };
 }
