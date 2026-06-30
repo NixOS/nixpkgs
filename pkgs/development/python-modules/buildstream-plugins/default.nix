@@ -5,9 +5,10 @@
   gitUpdater,
   setuptools,
   cython,
+  buildstream,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buildstream-plugins";
   version = "2.7.0";
   pyproject = true;
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream-plugins";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vbHfceMdaedAg0fVt8pBF+S7yPYhfQlgEYvb48ym+4I=";
   };
 
@@ -37,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "BuildStream plugins";
     homepage = "https://github.com/apache/buildstream-plugins";
-    platforms = lib.platforms.linux;
+    inherit (buildstream.meta) platforms;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shymega ];
   };
-}
+})
