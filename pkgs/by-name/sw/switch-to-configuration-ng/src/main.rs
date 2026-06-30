@@ -2532,6 +2532,68 @@ won't take effect until you reboot the system.
     // because some may not be dependencies of the targets (i.e., they were manually started).
     // FIXME: detect units that are symlinks to other units.  We shouldn't start both at the same
     // time because we'll get a "Failed to add path to set" error from systemd.
+    //
+    // systemd timers cancelling stop commands:
+    // We must start the changed units that we stopped above with `restart` instead of `start`.
+    // This is because of systemd timers (and, more generally, anything that can pull a unit back
+    // up within the same systemd transaction, such as a `.target` being restarted while the unit
+    // is `WantedBy`/`RequiredBy` it), which can make our life miserable:
+    //     https://github.com/NixOS/nixpkgs/issues/49415
+    // If during the `stop` step above a timer (or dependency) restarts a unit, systemd cancels the
+    // stop and executes the restart. Because the `daemon-reload` that loads the new unit definition
+    // only happens *after* the stop step, such a cancelled stop leaves the unit running with the
+    // unit definition from *before* the configuration switch (e.g. the wrong binary or config).
+    // If we only `start`ed such a unit here, the `start` would be a no-op (the unit is already
+    // active) and the unit would keep running outdated.
+    // Thus, we must `restart` the units we stopped above (i.e. the units that are in both
+    // `units_to_stop` and `units_to_start`), which forces systemd to replace the running unit.
+    // We must do this only for the units we actually stopped, not for all `units_to_start`:
+    // if we `restart`ed all `.target`s, this would do too much, e.g. kill the network.
+    // A minor drawback is that units that fail the `restart` get a second chance with the
+    // subsequent `start`, which may be confusing when reading logs or designing timeouts.
+    // This mirrors the historical `switch-to-configuration.pl` fix for the same issue:
+    //     https://github.com/NixOS/nixpkgs/pull/307562
+    let units_to_restart_on_start = units_to_start
+        .keys()
+        .filter(|unit| units_to_stop.contains_key(*unit))
+        .cloned()
+        .collect::<Vec<String>>();
+    let units_to_restart_on_start_filtered =
+        filter_units(&units_to_filter, &units_to_stop)
+            .keys()
+            .filter(|unit| units_to_start.contains_key(*unit))
+            .cloned()
+            .collect::<Vec<String>>();
+    if !units_to_restart_on_start_filtered.is_empty() {
+        let mut units = units_to_restart_on_start_filtered
+            .iter()
+            .map(String::as_str)
+            .collect::<Vec<&str>>();
+        units.sort_by_key(|name| name.to_lowercase());
+        eprintln!(
+            "starting (via restart, see #49415) the following units: {}",
+            units.join(", ")
+        );
+    }
+    for unit in &units_to_restart_on_start {
+        match systemd.restart_unit(unit, "replace") {
+            Ok(job_path) => {
+                let mut jobs = submitted_jobs.borrow_mut();
+                jobs.insert(job_path, Job::Restart);
+            }
+            Err(err) => {
+                eprintln!("Failed to restart {unit}: {err}");
+                exit_code = 4;
+            }
+        }
+    }
+
+    block_on_jobs(&dbus_conn, &submitted_jobs);
+
+    // Ensure all active targets, as well as any changed units we stopped above, are started. The
+    // `restart`s above already replaced the units we stopped; the `start`s below additionally
+    // bring up the active targets and any genuinely new units. Units already started by the
+    // `restart` above are left untouched by `start`.
     let units_to_start_filtered = filter_units(&units_to_filter, &units_to_start);
     if !units_to_start_filtered.is_empty() {
         let mut units = units_to_start_filtered
