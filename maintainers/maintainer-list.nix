@@ -11902,6 +11902,13 @@
     email = "itepastra@gmail.com";
     keys = [ { fingerprint = "E681 4CAF 06AE B076 D55D  3E32 A16C DCBF 1472 541F"; } ];
   };
+  itscrystalline = {
+    email = "real@iw2tryhard.dev";
+    name = "Wararat C.";
+    github = "itscrystalline";
+    githubId = 62128640;
+    keys = [ { fingerprint = "48F3 C33F B4F7 A31C C4C5  2129 EA4F 5486 0C2B D5D4"; } ];
+  };
   itsvic-dev = {
     email = "contact@itsvic.dev";
     name = "Victor B.";
