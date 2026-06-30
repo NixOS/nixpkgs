@@ -1,11 +1,28 @@
 {
   lib,
   config,
+  # For wrapper
+  callPackage,
   python3Packages,
   # For aliases
   plover_4,
 }:
-python3Packages.toPythonApplication python3Packages.plover
+
+(python3Packages.toPythonApplication python3Packages.plover).overrideAttrs (
+  finalAttrs: previousAttrs: {
+    passthru = previousAttrs.passthru or { } // {
+      withPlugins = callPackage ./with-plugins.nix { python3 = python3Packages.python; };
+      tests = {
+        plover-with-lapwing = finalAttrs.passthru.withPlugins (
+          ps: with ps; [
+            plover-lapwing-aio
+          ]
+        );
+      }
+      // previousAttrs.passthru.tests or { };
+    };
+  }
+)
 # Aliases to now-dropped plover.stable and plover.dev
 # Added 2026-04-22
 # TODO(@ShamrockLee): remove after Nixpkgs 25.11 EOL
