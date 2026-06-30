@@ -2446,6 +2446,9 @@
   "ssec-pkgs-dockerTools-buildImage-examples": [
     "index.html#ssec-pkgs-dockerTools-buildImage-examples"
   ],
+  "ex-desktop-to-darwin-bundle": [
+    "index.html#ex-desktop-to-darwin-bundle"
+  ],
   "ex-dockerTools-buildImage": [
     "index.html#ex-dockerTools-buildImage"
   ],
@@ -2733,6 +2736,12 @@
   ],
   "desktop-file-utils": [
     "index.html#desktop-file-utils"
+  ],
+  "desktop-to-darwin-bundle": [
+    "index.html#desktop-to-darwin-bundle"
+  ],
+  "desktop-to-darwin-bundle-examples": [
+    "index.html#desktop-to-darwin-bundle-examples"
   ],
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
