@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python312Packages.buildPythonPackage rec {
+python312Packages.buildPythonApplication rec {
   pname = "ark-pixel-font";
   version = "2025.08.24";
   pyproject = false;
