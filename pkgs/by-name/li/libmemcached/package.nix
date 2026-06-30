@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   bison,
   cmake,
   flex,
@@ -21,6 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-jEw6L2/139oo4sGprl9Xp0DTarxAK1bEF2ak2kHWSAs=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    (fetchpatch {
+      name = "libcxx-compat.patch";
+      url = "https://github.com/awesomized/libmemcached/commit/547460c12287a34a5993045157a0e13e14203f92.patch";
+      includes = [ "test/lib/random.cpp" ];
+      hash = "sha256-aH51O4UM3M4yzTtC8bTy+6NKrtPfgqysrvspMZ/gWDc=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
