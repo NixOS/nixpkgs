@@ -1,0 +1,12 @@
+diff --git a/src/main/utils/setAsDefaultProtocolClient.ts b/src/main/utils/setAsDefaultProtocolClient.ts
+index c4b3580..8361226 100644
+--- a/src/main/utils/setAsDefaultProtocolClient.ts
++++ b/src/main/utils/setAsDefaultProtocolClient.ts
+@@ -11,6 +11,7 @@ export async function setAsDefaultProtocolClient(protocol: string) {
+     if (process.platform !== "linux") {
+         return app.setAsDefaultProtocolClient(protocol);
+     }
++    return true;
+ 
+     // electron setAsDefaultProtocolClient uses xdg-settings instead of xdg-mime.
+     // xdg-settings had a bug where it would also register the app as a handler for text/html,

@@ -77,11 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches = lib.optional withSystemVencord (
-    replaceVars ./use_system_vencord.patch {
-      inherit vencord;
-    }
-  );
+  patches =
+    lib.optional withSystemVencord (
+      replaceVars ./use_system_vencord.patch {
+        inherit vencord;
+      }
+    )
+    # prevent vesktop from setting itself as a sceme handler on linux
+    # this is taken care of in the .desktop file already
+    ++ lib.optional stdenv.hostPlatform.isLinux ./disable_xdg_mime.patch;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
