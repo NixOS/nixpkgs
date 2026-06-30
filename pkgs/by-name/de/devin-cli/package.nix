@@ -26,11 +26,6 @@ let
       url = "https://static.devin.ai/cli/${version}/devin-${version}-aarch64-apple-darwin.tar.gz";
       hash = "sha256-n0GtTUnA9OYw4VmAQkGA4rcOGk9ifwYz+ouyJEkZpAo=";
     };
-
-    x86_64-darwin = fetchurl {
-      url = "https://static.devin.ai/cli/${version}/devin-${version}-x86_64-apple-darwin.tar.gz";
-      hash = "sha256-KZ7FeZjOIR+/vW7Tt3BOBQUsShXOglaRbxxGSR6R2Bg=";
-    };
   };
 in
 
