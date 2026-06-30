@@ -294,6 +294,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build tests doc/manual
+  ''
+  # Older machines may struggle with this timeout. Unconditional to avoid bitrot.
+  + ''
+    substituteInPlace tests/functional2/meson.build \
+      --replace-fail 'timeout : 300' 'timeout : ${
+        if
+          (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) || stdenv.hostPlatform.isAarch64
+        then
+          "900"
+        else
+          "300"
+      }'
   '';
 
   preConfigure =
