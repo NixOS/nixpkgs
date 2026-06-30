@@ -1,9 +1,9 @@
 {
   lib,
   pkgs,
-  buildNavidromePlugin,
+  buildNavidromeGoPlugin,
 }:
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "listenbrainz-daily-playlist";
   version = "5.0.2";
 

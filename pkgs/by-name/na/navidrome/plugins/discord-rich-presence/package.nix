@@ -1,9 +1,9 @@
 {
   lib,
   pkgs,
-  buildNavidromePlugin,
+  buildNavidromeGoPlugin,
 }:
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "discord-rich-presence-plugin";
   version = "1.0.0";
 
