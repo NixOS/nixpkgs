@@ -9,16 +9,17 @@
   stb,
   libmeshb,
   rply,
+  onetbb,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "geogram";
-  version = "1.9.9";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "BrunoLevy";
     repo = "geogram";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAq6j/HUOv6In49lJVRZ2iS6ugbtYOxHN3PwTE1HZks=";
+    hash = "sha256-1NkoI5V1w18jd22ElrE/Yon08F2wPvGNCC3XqxSOX54=";
     fetchSubmodules = true;
   };
 
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     stb
     libmeshb
     rply
+    onetbb
   ];
 
   patches = [
