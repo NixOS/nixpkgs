@@ -118,11 +118,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "citrix-workspace";
-  version = "26.04.0.73";
+  version = "26.04.0.105";
 
   src = requireFile rec {
     name = "linuxx64-${version}.tar.gz";
-    sha256 = "1hp6ax0ix3id94njd43a35af3ydlb6sqwvbbabd5xp8d511m695f";
+    sha256 = "1kl6b1ldjd9gb6cmvhxf6ggvc3amq1kz0qwjlb1fp6dxx0pivwm8";
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
