@@ -10080,6 +10080,8 @@ self: super: with self; {
 
   metawear = callPackage ../development/python-modules/metawear { };
 
+  metbrewer = callPackage ../development/python-modules/metbrewer { };
+
   meteo-lt-pkg = callPackage ../development/python-modules/meteo-lt-pkg { };
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
