@@ -38,6 +38,8 @@ in
   withCudaLLVM = false;
   withCuvid = false;
   withDrm = false;
+  withGmp = false;
+  withNetwork = false;
   withNvcodec = false;
   withFontconfig = false;
   withFreetype = false;

@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "data-grand-lyon-ha";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "Crocmagnon";
     repo = "data_grand_lyon_ha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wpn3Ou8Cm+h5uyROw+6weDYyZHvLXLNpW3aIyKnUueE=";
+    hash = "sha256-cxyfvHeX59cHuxpQEy2kUhaObm7n0EF0MZTrGw17uik=";
   };
 
   build-system = [ hatchling ];

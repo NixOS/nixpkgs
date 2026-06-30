@@ -37,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.4.1";
+  version = "7.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "wagtail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Ar8lg340rafaRNgcohEBuloU/dJC+ODTzAMmrPS/PU=";
+    hash = "sha256-6IttzQnASWMDq4fgyrpJj3KrQvO4zMq+0dLTfm8bLzs=";
   };
 
   nativeBuildInputs = [

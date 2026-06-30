@@ -3694,6 +3694,8 @@ with pkgs;
 
   ghdl-llvm = ghdl.override { backend = "llvm"; };
 
+  ghdl-llvm-jit = ghdl.override { backend = "llvm-jit"; };
+
   gcc-arm-embedded = gcc-arm-embedded-15;
 
   # Haskell and GHC
@@ -10799,12 +10801,7 @@ with pkgs;
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }
   );
 
-  nixVersions = recurseIntoAttrs (
-    callPackage ../tools/package-management/nix {
-      storeDir = config.nix.storeDir or "/nix/store";
-      stateDir = config.nix.stateDir or "/nix/var";
-    }
-  );
+  nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix { });
 
   nix = nixVersions.stable;
 
