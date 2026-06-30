@@ -16326,6 +16326,17 @@
     matrix = "@lux:ontheblueplanet.com";
     name = "Lux";
   };
+  luytan = {
+    email = "luytan@khora.me";
+    github = "luytan";
+    githubId = 221864923;
+    name = "Luytan";
+    keys = [
+      {
+        fingerprint = "E7B7 215C 0DFB 3D8C 17EE  95E0 E0AD 187A 4F2B 41EF";
+      }
+    ];
+  };
   luz = {
     email = "luz666@daum.net";
     github = "Luz";
