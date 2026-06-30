@@ -1292,6 +1292,8 @@ with pkgs;
     )
   );
 
+  tw = ocamlPackages.tw.bin;
+
   wrapRetroArch = retroarch-bare.wrapper;
 
   # Aliases kept here because they are easier to use
