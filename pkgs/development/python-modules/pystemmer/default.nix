@@ -8,17 +8,16 @@
   libstemmer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystemmer";
-  version = "3.0.0";
-  format = "setuptools";
-  pyproejct = true;
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "pystemmer";
-    tag = "v${version}";
-    hash = "sha256-c3ucbneUo5UBfdrd5Ktl4HriVusvWBEA1brrgahEQ9A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GPPl6ioB9sB2y8G2hYfu2ksR+D9xNJjK6glMADLnr7M=";
   };
 
   build-system = [
@@ -47,12 +46,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Snowball stemming algorithms, for information retrieval";
-    downloadPage = "https://github.com/snowballstem/pystemmer";
-    homepage = "http://snowball.tartarus.org/";
+    homepage = "https://github.com/snowballstem/pystemmer";
     license = with lib.licenses; [
       bsd3
       mit
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
