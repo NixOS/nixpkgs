@@ -1704,6 +1704,7 @@ mapAliases {
   opencollada-blender = throw "opencollada-blender has been removed, as it is unmaintained upstream"; # Added 2026-04-26
   opencolorio_1 = throw "'opencolorio_1' has been removed. Use opencolorio instead"; # Added 2026-01-03
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
+  opendrop = throw "'opendrop' has been removed as it was unmaintained upstream"; # Added 2026-05-24
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
   opengfw = throw "'opengfw' has been removed because the upstream repository was deleted"; # Added 2026-03-16
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05
@@ -1734,6 +1735,7 @@ mapAliases {
   ossec-server = throw "'ossec-server' has been removed due to lack of maintenance"; # Added 2025-11-08
   overrideLibcxx = throw "overrideLibcxx has been removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = throw "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
+  owl = throw "'owl' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-24
   pactorio = throw "'pactorio' has been removed, as it has been unmaintained upstream since February 2024"; # Added 2026-01-01
   pacup = throw "'pacup' has been renamed to/replaced by 'perlPackages.pacup'"; # Converted to throw 2025-10-27
   PageEdit = throw "'PageEdit' has been renamed to/replaced by 'pageedit'"; # Converted to throw 2025-10-27
