@@ -1076,6 +1076,7 @@ in
       description = "Tmux plugin to open links in fzf";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ anned20 ];
     };
   };
 
