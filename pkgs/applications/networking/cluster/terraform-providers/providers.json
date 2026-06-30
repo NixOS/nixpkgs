@@ -319,11 +319,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-SguubBNjYqWuxeYkCKoPAK3Vvdv8wdBJfnvySwBQt8c=",
+    "hash": "sha256-Myy9UIvKD0W19CGToMjq1iGy4tBVpfACpqgibsKOvac=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.91.0",
+    "rev": "v2.92.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
