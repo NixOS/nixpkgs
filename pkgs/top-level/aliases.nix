@@ -1973,6 +1973,9 @@ mapAliases {
   rl_json = throw "'rl_json' has been renamed to/replaced by 'tclPackages.rl_json'"; # Converted to throw 2025-10-27
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27
   rockcraft = throw "rockcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
+  rocksdb_6_23 = throw "rocksdb_6_23 has been removed from nixpkgs, use `rocksdb` or build this version from source"; # Added 2026-06-30
+  rocksdb_7_10 = throw "rocksdb_7_10 has been removed from nixpkgs, use `rocksdb` or build this version from source"; # Added 2026-06-30
+  rocksdb_8_11 = throw "rocksdb_8_11 has been removed from nixpkgs, use `rocksdb` or build this version from source"; # Added 2026-06-30
   rofi-emoji-wayland = throw "'rofi-emoji-wayland' has been merged into `rofi-emoji as 'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-wayland = throw "'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-wayland-unwrapped = throw "'rofi-wayland-unwrapped' has been merged into 'rofi-unwrapped'"; # Added 2025-09-06
