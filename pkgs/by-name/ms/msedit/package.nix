@@ -5,20 +5,20 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  icu,
+  icu76,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "msedit";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "edit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sb73awgdajBKKW0QIpmKF6g9mIIS/1f0a6D/jQulnUM=";
+    hash = "sha256-9HoK5i0IimujfTQxDplBNJRO7qmD/S+SnLLnR95RHiQ=";
   };
 
-  cargoHash = "sha256-U8U70nzTmpY6r8J661EJ4CGjx6vWrGovu5m25dvz5sY=";
+  cargoHash = "sha256-r7AR6Mf13UUeooPV5/8gyp7HvmOeSaOJNotWWqU10SQ=";
 
   # Requires nightly features
   env = {
@@ -30,17 +30,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-headerpad_max_install_names"
       ]
     );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # https://github.com/microsoft/edit/releases/tag/v2.0.0
+    # see section 'Additonal notes to Building & Packaging
+    EDIT_CFG_ICUUC_SONAME = "${lib.getLib icu76}/lib/libicuuc.so.76";
+    EDIT_CFG_ICUI18N_SONAME = "${lib.getLib icu76}/lib/libicui18n.so.76";
+    EDIT_CFG_ICU_RENAMING_VERSION = 76;
   };
 
   buildInputs = [
-    icu
+    icu76
   ];
 
   # https://github.com/microsoft/edit/blob/f8bea2be191d00baa2a4551817541ea3f8c5b03e/src/icu.rs#L834
   # Required for Ctrl+F searching to work
   postFixup =
     let
-      rpathAppend = lib.makeLibraryPath [ icu ];
+      rpathAppend = lib.makeLibraryPath [ icu76 ];
     in
     lib.optionalString stdenv.hostPlatform.isElf ''
       patchelf $out/bin/edit \
