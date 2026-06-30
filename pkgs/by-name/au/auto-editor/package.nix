@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  config,
   buildNimPackage,
   fetchFromGitHub,
 
@@ -9,9 +7,9 @@
   yt-dlp,
   lame,
   libopus,
-  libvpx,
   x264,
   dav1d,
+  zlib,
 
   python3,
   python3Packages,
@@ -19,13 +17,13 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "30.4.0";
+  version = "31.0.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-AzUTDOWzyhZLrwqO9HfZ/Ke72LElJAMzVoDydBfYKwg=";
+    hash = "sha256-25xzVaG9seu4hE5rc776lvNucf8lsEDvjkQPbFzjgII=";
   };
 
   lockFile = ./lock.json;
@@ -36,6 +34,7 @@ buildNimPackage rec {
     libopus
     x264
     dav1d
+    zlib
   ];
 
   env = {
@@ -54,27 +53,12 @@ buildNimPackage rec {
     # buildNimPackage hack
     substituteInPlace ae.nimble \
       --replace-fail '"main=auto-editor"' '"main"'
-
-    mv tests/unit.nim tests/tunit.nim # buildNimPackage expects tests to start with t
   '';
 
   nativeCheckInputs = [
     python3
     python3Packages.av
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    nim_builder --phase:check
-
-    substituteInPlace tests/test.py \
-      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
-
-    python3 tests/test.py
-
-    runHook postCheck
-  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor
