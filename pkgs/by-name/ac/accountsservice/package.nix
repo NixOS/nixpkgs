@@ -9,7 +9,6 @@
   gobject-introspection,
   polkit,
   systemdLibs,
-  coreutils,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accountsservice";
-  version = "26.13.3";
+  version = "26.26.9";
 
   outputs = [
     "out"
@@ -36,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "accountsservice";
     repo = "accountsservice";
     tag = finalAttrs.version;
-    hash = "sha256-ZIfkBlEaITX2rDcV5al4e2IFP238MXOlWeGoh+3+DoQ=";
+    hash = "sha256-Q3/atkTRJ5Dzps1+zNxnWGaLnkOSMg+i7hzEMmhk6XI=";
   };
 
   patches = [
     # Hardcode dependency paths.
     (replaceVars ./fix-paths.patch {
-      inherit shadow coreutils;
+      inherit shadow;
     })
 
     # Do not try to create directories in /var, that will not work in Nix sandbox.

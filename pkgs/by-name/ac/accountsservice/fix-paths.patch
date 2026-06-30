@@ -78,15 +78,6 @@ index da6428c..682842d 100644
                          argv[1] = "-s";
                          argv[2] = shell;
                          argv[3] = "--";
-@@ -3163,7 +3163,7 @@ user_change_icon_file_classic_authorized_cb (Daemon                *daemon,
-                         return;
-                 }
- 
--                argv[0] = "/bin/cat";
-+                argv[0] = "@coreutils@/bin/cat";
-                 argv[1] = filename;
-                 argv[2] = NULL;
- 
 @@ -3279,7 +3279,7 @@ user_change_locked_authorized_cb (Daemon                *daemon,
                  } else {
                          const gchar *argv[5];
