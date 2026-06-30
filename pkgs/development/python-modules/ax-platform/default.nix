@@ -32,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   pname = "ax-platform";
   version = "1.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
