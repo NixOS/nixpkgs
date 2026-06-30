@@ -55,6 +55,7 @@
   rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
+  nix-update-script,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -616,7 +617,17 @@ stdenv.mkDerivation (finalAttrs: {
       };
     }
     // tests.fetchgit;
-    updateScript = ./update.sh;
+
+    # We get the source from the release packages, since that contains a few
+    # extra files that make the build easier without already having a Git
+    # installation.  We get the version from GitHub, however, as that provides
+    # a nicer API for checking what the latest version is.
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url"
+        "https://github.com/git/git"
+      ];
+    };
   };
 
   meta = {
