@@ -76,7 +76,7 @@ rec {
     maintainerless = {
       manualAllowed = false;
       isUnique = false;
-      nixpkgsInternalUseAllowed = true;
+      nixpkgsInternalUseAllowed = false;
       automatic = {
         condition =
           # To get usable output, we want to avoid flagging "internal" derivations.
