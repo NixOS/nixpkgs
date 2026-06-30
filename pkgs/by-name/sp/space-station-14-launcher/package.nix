@@ -39,7 +39,7 @@
 }:
 let
   pname = "space-station-14-launcher";
-  version = "0.38.0";
+  version = "0.39.0";
 in
 buildDotnetModule rec {
   inherit pname;
@@ -52,7 +52,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-/FPNCNDC09NMg1bTSZHNFfzabxYQ2FhV1t6Ire9WBtg=";
+    hash = "sha256-i5jcaB1wa+Toj6orpEQ9sK3EX1CLWadnhTEQDOU7QU4=";
     fetchSubmodules = true;
   };
 
