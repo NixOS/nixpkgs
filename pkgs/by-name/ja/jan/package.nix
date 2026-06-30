@@ -12,16 +12,16 @@
 
 let
   pname = "Jan";
-  version = "0.8.2";
+  version = "0.8.3";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-DUyPMsy9POcxY5OyQu1IBAijTbUZACQB87j0CQDrw8A=";
+    hash = "sha256-h2v71DzXez/+wlEp8IMVBk33LlXPhNPJ1UPNLYPShoE=";
   };
 
   linux-src = fetchurl {
-    url = "https://github.com/janhq/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-OWg8P4g2g+LVJU+SnjajG2cqWnzl5X2fjqTGkIC3kAY=";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
+    hash = "sha256-vEmioWQ4ic/FrtNFMKaLOcEy2BTRdouPc4PYWk90ZBI=";
   };
 
   appimageContents = appimageTools.extractType2 {
