@@ -29,6 +29,8 @@ let
     src = linux-src;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
     description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
@@ -56,13 +58,14 @@ let
         cudaPackages.cudatoolkit
       ];
 
-    inherit meta;
+    inherit passthru meta;
   };
 
   darwin = stdenv.mkDerivation {
     inherit
       pname
       version
+      passthru
       meta
       ;
 
