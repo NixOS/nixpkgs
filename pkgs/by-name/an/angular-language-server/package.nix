@@ -15,11 +15,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "21.2.2";
+  version = "21.2.3";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/angular/releases/download/vsix-${finalAttrs.version}/ng-template-${finalAttrs.version}.vsix";
-    hash = "sha256-rpll3EsTGEuynrw7EsP3GeltG/vtYqgO8mvTCVyU1ao=";
+    hash = "sha256-Gdxw1WvMQ/t4XUfDkekIvwOsWYjmDIjGE7scsImohNc=";
   };
 
   nativeBuildInputs = [
