@@ -35,12 +35,6 @@ let
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
 
-  # We only apply these patches when building a native toolchain for
-  # aarch64-darwin, as it breaks building a foreign one:
-  # https://github.com/iains/gcc-12-branch/issues/18
-  canApplyIainsDarwinPatches =
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildIsHost && hostIsTarget;
-
   inherit (lib) optionals optional;
 in
 
@@ -108,7 +102,7 @@ optionals noSysDirs (
 # Needed to build llvm-18 and later
 # See https://github.com/NixOS/nixpkgs/pull/354107/commits/2de1b4b14e17f42ba8b4bf43a29347c91511e008
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
-++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
+++ optional (atLeast14 && !stdenv.targetPlatform.isDarwin) ./cfi_startproc-reorder-label-14-1.diff
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
@@ -120,55 +114,46 @@ optionals noSysDirs (
 
 ## Darwin
 
-# Fixes detection of Darwin on x86_64-darwin and aarch64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (
-  # this one would conflict with gcc-14-darwin-aarch64-support.patch
-  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/14/libgcc-darwin-detection.patch
-++ optional (atLeast15 && stdenv.hostPlatform.isDarwin) ../patches/15/libgcc-darwin-detection.patch
-
 # Fix libgcc_s.1.dylib build on Darwin 11+ by not reexporting unwind symbols that don't exist
 ++ optional (
   atLeast15 && stdenv.hostPlatform.isDarwin
 ) ../patches/15/libgcc-darwin-fix-reexport.patch
 
-# Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
-
-# Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
-++ optional (
-  atLeast14 && stdenv.hostPlatform.isDarwin && langAda
-) ../patches/14/gcc-darwin-remove-coreservices.patch
 
 # Here we apply patches by Iains (https://github.com/iains)
 # GitHub's "compare" API produces unstable diffs, so we resort to reusing
 # diffs from the Homebrew repo.
-++ optionals canApplyIainsDarwinPatches (
+++ optionals stdenv.targetPlatform.isDarwin (
   {
+    "16" = [
+      # Patches from https://github.com/iains/gcc-16-branch
+      (fetchpatch {
+        name = "gcc-16-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff";
+        hash = "sha256-dXfozKH//TRjAph7hUok7850hOdujTTi/iFM2HFA8fw=";
+      })
+    ];
     "15" = [
-      # Patches from https://github.com/iains/gcc-15-branch/compare/releases/gcc-15..gcc-15.1-darwin-rc1
+      # Patches from https://github.com/iains/gcc-15-branch
       (fetchpatch {
         name = "gcc-15-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
-        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-15.3.0.diff";
+        hash = "sha256-PeAloBdUu+zRJlv86Z4x/FI8I7LiR5CJ3JlAJKs1iKU=";
       })
     ];
     "14" = [
-      # Patches from https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r2
+      # Patches from https://github.com/iains/gcc-14-branch
       (fetchpatch {
-        # There are no upstream release tags nor a static branch for 14.3.0 in https://github.com/iains/gcc-14-branch.
-        # aa4cd614456de65ee3417acb83c6cff0640144e9 is the merge base of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0 and https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.3.0
-        # 3e1d48d240f4aa5223c701b5c231c66f66ab1126 is the newest commit of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0
         name = "gcc-14-darwin-aarch64-support.patch";
-        url = "https://github.com/iains/gcc-14-branch/compare/aa4cd614456de65ee3417acb83c6cff0640144e9..3e1d48d240f4aa5223c701b5c231c66f66ab1126.diff";
-        hash = "sha256-BSTSYnkBJBEm++mGerVVyaCUC4dUyXq0N1tqbk25bO4=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/03d3e17099f5193226e459122b94ef8ff38a86bd/Patches/gcc/gcc-14.3.0.diff";
+        hash = "sha256-FzjLa6HHs+5ANrmFB3HzMDJAyo3EXbJkfJZqOq2RGaQ=";
       })
     ];
-    # Patches from https://github.com/iains/gcc-13-branch/compare/b71f1de6e9cf7181a288c0f39f9b1ef6580cf5c8..gcc-13-3-darwin
     "13" = [
+      # Patches from https://github.com/iains/gcc-13-branch
       (fetchpatch {
         name = "gcc-13-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/698885df7f624d0ce15bceb79a4d9760a473b502/gcc/gcc-13.4.0.diff";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/03d3e17099f5193226e459122b94ef8ff38a86bd/Patches/gcc/gcc-13.4.0.diff";
         hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
       })
     ];
@@ -176,20 +161,10 @@ optionals noSysDirs (
   .${majorVersion} or [ ]
 )
 
-# Use absolute path in GNAT dylib install names on Darwin
-++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
-  {
-    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    # After the Iains patch, GCC 13 and 14 share the same patch.
-    "13" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-  }
-  .${majorVersion} or [ ]
-)
-
+# Fixes detection of Darwin deployment target.
 ++ optional (
-  langAda && is13 && canApplyIainsDarwinPatches
-) ./13/gnat13-aarch64-darwin-trampoline.patch
+  atLeast14 && stdenv.targetPlatform.isDarwin
+) ../patches/14/libgcc-darwin-detection.patch
 
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
