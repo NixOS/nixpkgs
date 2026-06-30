@@ -2,14 +2,28 @@
   lib,
   stdenv,
   fetchMavenArtifact,
-  jdk11,
+  jdk17,
   makeWrapper,
 }:
 
 let
   pname = "aeron";
-  version = "1.49.0";
+  version = "1.50.4";
   groupId = "io.aeron";
+
+  aeronAll_1_50_4 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    version = "1.50.4";
+    hash = "sha256-wlpxmLWoEFSiUsUoMDfJhwNXZqftKIt6cSfpKwRAbtA=";
+  };
+
+  aeronSamples_1_50_4 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.50.4";
+    artifactId = "aeron-samples";
+    hash = "sha256-mn07b6P8HcNuwRUcbzfXkCpP/7cPChZJVx5VbyT5xrw=";
+  };
 
   aeronAll_1_49_0 = fetchMavenArtifact {
     inherit groupId;
@@ -669,8 +683,8 @@ let
     hash = "sha512-vyAq4mfLDDyaVk7wcIpPvPcxSt92Ek8mxfuuZwaX+0Wu9oJCpwbnjvS9+bvzcE4qSGxzY6eJIIX6nMdw0LkACg==";
   };
 
-  aeronAll = aeronAll_1_49_0;
-  aeronSamples = aeronSamples_1_49_0;
+  aeronAll = aeronAll_1_50_4;
+  aeronSamples = aeronSamples_1_50_4;
 
 in
 stdenv.mkDerivation {
@@ -702,8 +716,11 @@ stdenv.mkDerivation {
 
   postFixup = ''
     function wrap {
-      makeWrapper "${jdk11}/bin/java" "$out/bin/$1" \
+      makeWrapper "${jdk17}/bin/java" "$out/bin/$1" \
         --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/jdk.internal.misc=ALL-UNNAMED" \
+        --add-flags "--add-opens java.base/java.lang=ALL-UNNAMED" \
         --add-flags "--class-path ${aeronAll.jar}" \
         --add-flags "$2"
     }
