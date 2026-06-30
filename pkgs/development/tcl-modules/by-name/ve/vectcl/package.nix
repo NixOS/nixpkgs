@@ -7,13 +7,13 @@
 
 mkTclDerivation rec {
   pname = "vectcl";
-  version = "0.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "auriocus";
     repo = "VecTcl";
     tag = "v${version}";
-    hash = "sha256-nPs16Jy6KMEdupWJNhgYqosuW5Dlpb/dxxTrLpRbYf0=";
+    hash = "sha256-h+v0CnxS4Br/px9FDd59t/ijAdAS4XhFBlYjaTgQ26k=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -std=gnu17";
