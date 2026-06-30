@@ -106,6 +106,7 @@ let
         "pihole"
         "ping"
         "postfix"
+        "podman"
         "postgres"
         "process"
         "pve"
