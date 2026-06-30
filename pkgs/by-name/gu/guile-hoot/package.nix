@@ -62,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Scheme to WebAssembly compiler backend for GNU Guile and a general purpose WASM toolchain";
     homepage = "https://codeberg.org/spritely/hoot";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      lgpl3Plus
+    ];
     maintainers = with lib.maintainers; [ jinser ];
     platforms = lib.platforms.unix;
     mainProgram = "hoot";
