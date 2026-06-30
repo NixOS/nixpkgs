@@ -4,7 +4,7 @@
   stdenv,
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -21,7 +21,7 @@
 }:
 
 let
-  pnpm = pnpm_10_29_2;
+  pnpm = pnpm_10;
 
   legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
