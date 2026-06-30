@@ -145,6 +145,8 @@ lib.makeScope newScope (self: {
 
   play = self.callPackage ./cores/play.nix { };
 
+  potator = self.callPackage ./cores/potator.nix { };
+
   ppsspp = self.callPackage ./cores/ppsspp.nix { };
 
   prboom = self.callPackage ./cores/prboom.nix { };
