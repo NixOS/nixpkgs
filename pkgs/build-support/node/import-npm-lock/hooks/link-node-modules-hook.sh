@@ -1,4 +1,6 @@
 linkNodeModulesHook() {
+    export NIX_NODEJS_BUILDNPMPACKAGE=1
+
     echo "Executing linkNodeModulesHook"
     runHook preShellHook
 
