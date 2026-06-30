@@ -46,8 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # Fix build with gcc 14
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env = {
+    # Required by autoreconfHook to find gettext.m4 outside aclocal's default search path.
+    ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
+    # Fix build with gcc 14.
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   nativeBuildInputs = [
     pkg-config
