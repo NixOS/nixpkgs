@@ -15,8 +15,7 @@
   icu,
   jdk,
   lib,
-  nodejs_22,
-  nodejs-slim_22,
+  nodejs-slim,
   openssl,
   pkg-config,
   python3,
@@ -41,8 +40,11 @@ let
       $BUILDRT/Common/3dParty/icu/icu.pri \
       --replace-fail "ICU_MAJOR_VER = 74" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
 
-    mkdir $BUILDRT/Common/3dParty/icu/linux_64
-    ln -s ${icu}/lib $BUILDRT/Common/3dParty/icu/linux_64/build
+    mkdir -p $BUILDRT/Common/3dParty/icu/linux_64/build
+    ln -s ${icu.dev}/include $BUILDRT/Common/3dParty/icu/linux_64/build/include
+    for i in ${icu}/lib/* ; do
+      ln -s $i $BUILDRT/Common/3dParty/icu/linux_64/build/$(basename $i)
+    done
   '';
   icuQmakeFlags = [
     "QMAKE_LFLAGS+=-Wl,--no-undefined"
@@ -220,9 +222,6 @@ let
   });
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-web-apps";
-
-    # workaround for https://github.com/NixOS/nixpkgs/issues/477803
-    nodejs = nodejs_22;
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
@@ -729,8 +728,6 @@ let
       qmakeFlags
       ++ icuQmakeFlags
       ++ [
-        # c++1z for nodejs-slim_22.libv8 (20 seems to produce errors around 'is_void_v' there)
-        # c++ 20 for nodejs_23.libv8
         "CONFIG+=c++2a"
         # v8_base.h will set nMaxVirtualMemory to 4000000000/5000000000
         # which is not page-aligned, so disable memory limitation for now
@@ -740,6 +737,13 @@ let
       ];
     preConfigure = ''
       cd $BUILDRT
+
+      # We need to build statically to be able to piggy-back
+      # on nodejs's v8
+      substituteInPlace \
+        DesktopEditor/doctrenderer/doctrenderer.pri \
+        --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+        --replace-fail "CONFIG += plugin" ""
 
       substituteInPlace \
         DesktopEditor/doctrenderer/nativecontrol.h \
@@ -758,15 +762,25 @@ let
       done
 
       echo "== v8 =="
+      substituteInPlace \
+        DesktopEditor/doctrenderer/js_internal/v8/v8_base.h \
+        --replace-fail "args.Holder" "args.This"
+      substituteInPlace \
+        DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp \
+        --replace-fail "args.Holder" "args.This"
+
       mkdir -p Common/3dParty/v8_89/v8/out.gn/linux_64
-      # using nodejs_22 here is a workaround for https://github.com/NixOS/nixpkgs/issues/477805
-      ln -s ${nodejs-slim_22.libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
-      tar xf ${nodejs-slim_22.libv8.src} --one-top-level=/tmp/xxxxx
+      ln -s ${nodejs-slim.libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
+      tar xf ${nodejs-slim.libv8.src} --one-top-level=/tmp/xxxxx
       for i in /tmp/xxxxx/*/deps/v8/*; do
         cp -r $i Common/3dParty/v8_89/v8/
       done
 
       cd $BUILDRT/DesktopEditor/doctrenderer
+    '';
+    installPhase = ''
+      mkdir -p $out/lib
+      cp ../../build/lib/*/*.a $out/lib
     '';
     passthru.tests = lib.attrsets.genAttrs [ "embed/external" "embed/internal" "js_internal" "json" ] (
       test:
@@ -882,9 +896,21 @@ let
       xpsfile
       djvufile
     ];
-    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+    qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [
+      "QMAKE_LFLAGS+=-licui18n"
+    ];
     preConfigure = ''
       source ${fixIcu}
+
+      # We need to build statically to be able to piggy-back
+      # on nodejs's v8
+      substituteInPlace \
+        $BUILDRT/DesktopEditor/doctrenderer/doctrenderer.pri \
+        --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+        --replace-fail "CONFIG += plugin" ""
+
+      echo "LIBS += -L${openssl'.out}/lib -lcrypto" >> $BUILDRT/DesktopEditor/allthemesgen/allthemesgen.pro
+      echo "LIBS += -L${nodejs-slim.libv8}/lib -lv8 -pthread" >> $BUILDRT/DesktopEditor/allthemesgen/allthemesgen.pro
     '';
     dontStrip = true;
     installPhase = ''
@@ -953,9 +979,22 @@ buildCoreComponent "X2tConverter/build/Qt" {
     starmath
     ooxmlsignature
   ];
-  qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [ "X2tConverter.pro" ];
+  qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [
+    "QMAKE_LFLAGS+=-licui18n"
+    "X2tConverter.pro"
+  ];
   preConfigure = ''
     source ${fixIcu}
+
+    # We need to build statically to be able to piggy-back
+    # on nodejs's v8
+    substituteInPlace \
+      $BUILDRT/DesktopEditor/doctrenderer/doctrenderer.pri \
+      --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+      --replace-fail "CONFIG += plugin" ""
+
+    echo "LIBS += -L${nodejs-slim.libv8}/lib -lv8 -pthread" >> $BUILDRT/X2tConverter/build/Qt/X2tConverter.pro
+    echo "LIBS += -L${openssl'.out}/lib -lcrypto" >> $BUILDRT/X2tConverter/build/Qt/X2tConverter.pro
 
     # (not as patch because of line endings)
     sed -i '47 a #include <limits>' $BUILDRT/Common/OfficeFileFormatChecker2.cpp
