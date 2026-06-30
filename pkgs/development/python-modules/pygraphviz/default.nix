@@ -7,19 +7,20 @@
   coreutils,
   pkg-config,
   setuptools,
+  swig,
   pytest,
 }:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.14";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
     tag = "pygraphviz-${version}";
-    hash = "sha256-RyUmT2djj2GnVG82xO9HULMAJZb2LYMUGDRvCwaYBg8=";
+    hash = "sha256-AxiaKEmVjofAi6LV1ozOPERqZyOhmBWMLV3GYlhSuNo=";
   };
 
   patches = [
@@ -32,12 +33,24 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "swig>4.1.0"' ""
+  '';
+
   nativeBuildInputs = [
+    graphviz
     pkg-config
+    swig
+  ];
+
+  build-system = [
     setuptools
   ];
 
   buildInputs = [ graphviz ];
+
+  env.GRAPHVIZ_PREFIX = graphviz;
 
   nativeCheckInputs = [ pytest ];
 
