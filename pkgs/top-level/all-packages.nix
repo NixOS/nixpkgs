@@ -9241,8 +9241,6 @@ with pkgs;
     enableGL = false;
   };
 
-  ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
-
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     pythonPackages = python3Packages;
   };
