@@ -292,6 +292,9 @@ let
 
         coin = callPackage ../development/ocaml-modules/coin { };
 
+        colibri2 = callPackage ../development/ocaml-modules/colibri2 { };
+        colibrilib = callPackage ../development/ocaml-modules/colibri2/colibrilib.nix { };
+
         colombe = callPackage ../development/ocaml-modules/colombe { };
 
         color = callPackage ../development/ocaml-modules/color { };
@@ -1372,6 +1375,8 @@ let
 
         mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
 
+        mlcuddidl = callPackage ../development/ocaml-modules/mlcuddidl { };
+
         mldoc = callPackage ../development/ocaml-modules/mldoc { };
 
         mlgmpidl = callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1469,6 +1474,8 @@ let
         ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
         ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+
+        ocaml-flint = callPackage ../development/ocaml-modules/flint { };
 
         ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
 
