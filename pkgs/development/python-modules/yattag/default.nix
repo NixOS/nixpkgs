@@ -2,17 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yattag";
   version = "1.16.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uqjyVOfqXT4GGCga0v9WEODlNgs2COaVwpv7OynQUfQ=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "yattag" ];
 
@@ -22,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
-}
+})
