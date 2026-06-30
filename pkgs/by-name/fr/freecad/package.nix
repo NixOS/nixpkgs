@@ -30,6 +30,8 @@
   nix-update-script,
   gmsh,
   which,
+  gtk3,
+  gsettings-desktop-schemas,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -127,6 +129,7 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"
       ];
 
     postFixup = ''
