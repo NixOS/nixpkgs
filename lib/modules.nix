@@ -420,7 +420,12 @@ let
         args: fallbackFile: fallbackKey: m:
         if isFunction m then
           unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgs fallbackKey m args)
-        else if isAttrs m then
+        # If an attrset has an `outPath` member, it should be processed as a path and
+        # not a set, since that is how the nix language treats it for most purposes
+        # (concatenation, interpolation, toString, import, etc.).
+        # This allows, for example, to use derivations in imports without either
+        # turning them into a string, or explicitely using .outPath on them.
+        else if isAttrs m && !(m ? outPath) then
           if m._type or "module" == "module" then
             unifyModuleSyntax fallbackFile fallbackKey m
           else if m._type == "if" || m._type == "override" then
@@ -447,7 +452,10 @@ let
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
         else
           unifyModuleSyntax (toString m) (toString m) (
-            applyModuleArgsIfFunction (toString m) (import m) args
+            # note: we specifically try `m.outPath` first, because if the attrset
+            # also has a __toString member, builtins.import will choose that instead
+            # of outPath, and that'd be pretty surprising (cf PR #509749 for discussion)
+            applyModuleArgsIfFunction (toString m) (import (m.outPath or m)) args
           );
 
       checkModule =

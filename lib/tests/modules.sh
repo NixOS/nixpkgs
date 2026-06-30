@@ -489,6 +489,12 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: 
 # Check that imports can depend on derivations
 checkConfigOutput '^true$' config.enable ./import-from-store.nix
 
+# Check that imports treat attrsets with 'outPath' as paths
+checkConfigOutput '^true$' config.enable ./import-from-drv-like.nix
+checkConfigOutput '^2$' config.foo ./import-from-drv-like.nix
+# ...and that importApply also works correctly with it
+checkConfigOutput '^"bcd"$' config.value ./importApply-from-drv-like.nix
+
 # Check that configs can be conditional on option existence
 checkConfigOutput '^true$' config.enable ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
 checkConfigOutput '^360$' config.value ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
