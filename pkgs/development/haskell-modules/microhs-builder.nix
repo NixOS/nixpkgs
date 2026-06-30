@@ -158,9 +158,10 @@ let
   };
 
   hsLibBuildInputs = lib.filter (p: p ? isHaskellLibrary && p.isHaskellLibrary) propagatedBuildInputs;
+  hsLibClosedBuildInputs = lib.closePropagation hsLibBuildInputs;
   compilerWithPkgs = wrapMhs {
     microhs = compiler;
-    packages = hsLibBuildInputs;
+    packages = hsLibClosedBuildInputs;
   };
 
   compilerCommand' = "mhs";
@@ -210,9 +211,16 @@ stdenv.mkDerivation {
 
     echo "Building with ${compilerWithPkgs}"
     mkdir -p "$CABALDIR/${compiler.haskellCompilerName}/packages"
-    ${lib.concatMapStrings (p: ''
-      ln -s ${p}/${compilerLibdir}/packages/${p.name}.pkg $CABALDIR/${compiler.haskellCompilerName}/packages/${p.name}.pkg
-    '') (lib.closePropagation hsLibBuildInputs)}
+    ${lib.concatMapStrings (
+      p:
+      let
+        name = "${p.pname}-${p.version}";
+      in
+      ''
+        printf 'Exposing dependency ${name}\n'
+        ln -s ${p}/${compilerLibdir}/packages/${name}-${p.version}.pkg $CABALDIR/${compiler.haskellCompilerName}/packages/${name}.pkg
+      ''
+    ) hsLibClosedBuildInputs}
 
     runHook postSetupCompilerEnvironment
   '';
