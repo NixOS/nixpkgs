@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_MULTITHREADING=ON"
   ];
 
+  __structuredAtts = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   meta = {
