@@ -3,12 +3,33 @@
   installShellFiles,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   nix-update-script,
   testers,
   gimme-aws-creds,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+let
+  python =
+    let
+      packageOverrides = _: super: {
+        # okta>=3.0.0 breaks gimme-aws-creds, need to pin to 2.9.latest
+        okta = super.okta.overridePythonAttrs (_: rec {
+          version = "2.9.13";
+          src = fetchPypi {
+            pname = "okta";
+            inherit version;
+            hash = "sha256-jY6SZ1G3+NquF5TfLsGw6T9WO4smeBYT0gXLnRDoN+8=";
+          };
+        });
+      };
+    in
+    python3.override {
+      inherit packageOverrides;
+      self = python;
+    };
+in
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gimme-aws-creds";
   version = "2.8.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
@@ -28,7 +49,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "configparser"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python.pkgs; [
     boto3
     beautifulsoup4
     ctap-keyring-device
@@ -44,7 +65,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     responses
   ];
