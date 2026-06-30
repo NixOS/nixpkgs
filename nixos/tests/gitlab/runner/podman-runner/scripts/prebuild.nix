@@ -1,7 +1,12 @@
-{ writeShellScriptBin, nix }:
+{
+  lib,
+  writeShellScriptBin,
+  profileScript,
+}:
 writeShellScriptBin "gitlab-runner-pre-build-script"
   # bash
   ''
+    # shellcheck disable=SC1091
     set -e
     set -u
 
@@ -17,13 +22,9 @@ writeShellScriptBin "gitlab-runner-pre-build-script"
     }
 
     function setup() {
-        # We need to allow modification of nix config for cachix as
-        # otherwise it is link to the read only file in the store.
-        cp --remove-destination \
-            "$(readlink -f /etc/nix/nix.conf)" /etc/nix/nix.conf
+        echo "Source profile script."
+        . "${lib.getExe profileScript}"
 
-        # shellcheck disable=SC1091
-        . "${nix}/etc/profile.d/nix-daemon.sh"
     }
 
     function setup_pipeline_scratch_dir() {
@@ -39,14 +40,17 @@ writeShellScriptBin "gitlab-runner-pre-build-script"
     }
 
     function print_info() {
-      echo "Nix version:"
-      nix --version
+      echo "Nix version: $(nix --version)"
+
+      echo "Current working dir: '$(pwd)'."
+      echo "Permissions:"
+      ls -aln .
     }
 
     function main() {
-        print_info
         setup
         setup_pipeline_scratch_dir
+        print_info
     }
 
     section_start gitlab-runner-prebuild "Gitlab-Runner PreBuild Script"
