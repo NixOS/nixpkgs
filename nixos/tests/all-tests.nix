@@ -955,6 +955,7 @@ in
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  lprint = handleTest ./lprint.nix { };
   login-nosuid = runTest ./login-nosuid.nix;
   logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
