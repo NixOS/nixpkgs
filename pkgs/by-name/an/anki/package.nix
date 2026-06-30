@@ -189,6 +189,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtmultimedia
     qt6.qtsvg
     qt6.qtwebengine
   ]
