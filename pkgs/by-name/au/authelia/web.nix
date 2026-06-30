@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm; # This may be different than pkgs.pnpm
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = pnpmDepsHash;
   };
 
@@ -62,8 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  # (node:24500) Warning: File descriptor 19 closed but not opened in unmanaged mode
-  # (node:24500) Warning: File descriptor 19 opened in unmanaged mode twice
-  meta.broken = stdenv.hostPlatform.isDarwin;
 })
