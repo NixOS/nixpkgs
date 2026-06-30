@@ -7,6 +7,8 @@
   pidgin,
   tdlib,
   openssl,
+  pkg-config,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    libwebp
+    gettext
+  ];
+
   buildInputs = [
     libwebp
     pidgin
