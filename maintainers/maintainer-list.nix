@@ -26232,6 +26232,12 @@
     githubId = 115308;
     name = "Richard Marko";
   };
+  sorooris = {
+    email = "nixpkgs@pm.me";
+    github = "sorooris";
+    githubId = 10185314;
+    name = "Seb Soroori";
+  };
   sorpaas = {
     email = "hi@that.world";
     github = "sorpaas";
