@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g4u34sGdgv6mRRry9b5TAXSx+pmVwCNSD3YNtr6qRxo=";
+    hash = "sha256-J/uPQEZL7JW3Bfgo5FCJFw+zu5v/aimvdaAR5CtCOaM=";
   };
 
   outputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rxdaqEKDDMxFwRuX6kLhqGyFXJTz+Bx4mJJhYL5nPgU=";
+    hash = "sha256-uNRtkmZ5r4BriE00p1zpdev0DEv3q/eT4IU8ruwqI0s=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
