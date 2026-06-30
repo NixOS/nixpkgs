@@ -104,6 +104,7 @@ let
         system=$3
         outputDir=$4
         preEvalFile=$5
+        defaultProblemHandler=$6
 
         # Default is 5, higher values effectively disable the warning.
         # This randomly breaks Eval.
@@ -127,6 +128,7 @@ let
           --arg myChunk "$myChunk" \
           --arg preEvalFile "$preEvalFile" \
           --arg systems "[ \"$system\" ]" \
+          --argstr defaultProblemHandler "$defaultProblemHandler" \
           --arg includeBroken ${lib.boolToString includeBroken} \
           --argstr extraNixpkgsConfigJson ${lib.escapeShellArg (builtins.toJSON extraNixpkgsConfig)} \
           -I ${nixpkgs} \
@@ -194,6 +196,7 @@ let
         chunkedEval() {
           local chunkOutputDir=$1
           local preEvalFile=$2
+          local defaultProblemHandler=$3
 
           local attrCount=$(jq '.paths | length' "$preEvalFile")
           echo "Attribute count: $attrCount"
@@ -212,11 +215,11 @@ let
           runAllChunks() {
             seq -w 0 "$seq_end" |
               xargs -I{} -P"$cores" \
-              ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir" "$preEvalFile"
+              ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir" "$preEvalFile" "$defaultProblemHandler"
           }
 
           if [[ -n "$countInstructions" ]]; then
-            export seq_end cores chunkSize evalSystem chunkOutputDir preEvalFile
+            export seq_end cores chunkSize evalSystem chunkOutputDir preEvalFile defaultProblemHandler
             export -f runAllChunks
             perf stat \
               --event instructions:u --field-separator , --output "$chunkOutputDir"/perf-output-file \
@@ -245,13 +248,15 @@ let
         startEpoch=$(date +%s)
 
         # The first eval evaluates only attributes that are not disallowed for internal Nixpkgs use, ensuring that they don't depend on disallowed attributes
-        # Because the first eval doesn't evaluate the disallowed attributes themselves, but we still want to check that they don't fail evaluation, we evaluate them separately in a second eval
+        # It also uses "warn" as the default problem handler for internally disallowed problem kinds, which ensures no such warnings are thrown at all, because any stderr output fails CI.
+        # Because the first eval doesn't evaluate the disallowed attributes themselves, but we still want to check that they don't fail evaluation, we evaluate them separately in a second eval.
+        # The second eval uses "ignore" as the default problem handler for internally disallowed problem kinds, because we don't care about transitive warnings then.
         # The reason we need two evals is because we want disallowed attributes to be able to depend on other disallowed attributes, which inherently needs a separate Nixpkgs instantiation
         # And while we could interleave that instantiation into a single eval, that would ~double memory usage for all chunks, while doing it separately doesn't
         echo "Evaluating the internally allowed attributes"
-        chunkedEval "$chunkOutputDirs"/allowed ${preEvalFile}
+        chunkedEval "$chunkOutputDirs"/allowed ${preEvalFile} warn
         echo "Evaluating the internally disallowed attributes"
-        chunkedEval "$chunkOutputDirs"/disallowed "$disallowedAttributesPreEvalFile"
+        chunkedEval "$chunkOutputDirs"/disallowed "$disallowedAttributesPreEvalFile" ignore
 
         echo $(( $(date +%s) - startEpoch )) > "$out/${evalSystem}/total-time"
 

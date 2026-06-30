@@ -16,6 +16,8 @@
 
   attrPathsDisallowedForInternalUse ? [ ],
 
+  defaultProblemHandler ? "ignore",
+
   # Customize the config used to evaluate nixpkgs
   extraNixpkgsConfig ? { },
 }:
@@ -37,19 +39,27 @@ let
             allowVariants = !attrNamesOnly;
             checkMeta = true;
 
-            # We don't need to care about problems being caught using the
-            # standard mechanism, because any problems whose kind is not
-            # nixpkgsInternalUseAllowed cause the corresponding attributes to
-            # be disallowed entirely for internal use with
-            # attrPathsDisallowedForInternalUse, see also ./pre-eval.nix
+            # TODO: This should be synchronised with the problem kinds nixpkgsInternalUseAllowed:
+            # If allowed -> "error" (traditional default for broken) or "ignore"
+            # If not allowed -> defaultProblemHandler
             problems.matchers = lib.mkForce [
-              # We only need to set the broken handler to error, so that CI
-              # doesn't evaluate those. No reason it couldn't evaluate them
-              # afaik, but this is how it's been before.
               {
                 kind = "broken";
                 handler = "error";
               }
+              {
+                kind = "maintainerless";
+                handler = defaultProblemHandler;
+              }
+              {
+                kind = "removal";
+                handler = defaultProblemHandler;
+              }
+              # TODO: What to do about this? Doesn't currently give even a warning
+              #{
+              #  kind = "deprecated";
+              #  handler = defaultProblemHandler;
+              #}
             ];
             inherit attrPathsDisallowedForInternalUse;
 
