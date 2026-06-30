@@ -9364,6 +9364,13 @@
     github = "frectonz";
     githubId = 53809656;
   };
+  fred-drake = {
+    name = "Fred Drake";
+    email = "fred.drake@gmail.com";
+    github = "fred-drake";
+    githubId = 1041653;
+    keys = [ { fingerprint = "09F4 6F1B 2CE0 2DDC 3DB9  F2B0 88D2 0443 CB00 F7D4"; } ];
+  };
   fredeb = {
     email = "frederikbraendstrup@gmail.com";
     github = "FredeHoey";
