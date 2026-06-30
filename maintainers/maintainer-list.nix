@@ -29459,6 +29459,12 @@
     githubId = 45292658;
     name = "Julius Schmitt";
   };
+  voidlily = {
+    github = "voidlily";
+    githubId = 221749;
+    name = "voidlily";
+    keys = [ { fingerprint = "E735 CD3F A78C 0919 4012  ADF3 3FBF B3CC E12E 7D19"; } ];
+  };
   voidnoi = {
     email = "voidnoi@proton.me";
     github = "VoidNoi";
