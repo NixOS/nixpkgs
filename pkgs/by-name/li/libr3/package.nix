@@ -2,21 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pcre,
+  pcre2,
   pkg-config,
   check,
   autoreconfHook,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "r3";
-  version = "1.3.4";
+  pname = "libr3";
+  version = "2.0.0-unstable-2025-11-24";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "c9s";
     repo = "r3";
-    rev = finalAttrs.version;
-    sha256 = "09cixbms817p6nb77wz3rxp0znnac8ybycvsrrzgwlbfn58a3zwl";
+    rev = "b07a1d4dfe02766f104307ec8f00bb74c549bdd4";
+    hash = "sha256-qsnkzciPuBoz2ZJWQUEjieBIY5ix2coFTJaGtDBH6uo=";
   };
 
   nativeBuildInputs = [
@@ -24,15 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [ check ];
-  propagatedBuildInputs = [ pcre ];
+  buildInputs = [
+    check
+    pcre2
+  ];
 
-  strictDeps = true;
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     description = "High-performance path dispatching library";
     homepage = "https://github.com/c9s/r3";
     license = [ lib.licenses.mit ];
+    pkgConfigModules = [
+      "r3"
+    ];
   };
-
 })
