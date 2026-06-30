@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   util-linux,
 
@@ -53,6 +54,14 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
   };
+
+  patches = [
+    # Unit-less timedelta64 is deprecated in NumPy 2.5
+    (fetchpatch {
+      url = "https://github.com/dask/dask/commit/ade7a30c5a222f838b0f69f5a00c804e4cdf3d19.patch";
+      hash = "sha256-V2jNcTfmEXjUzsXKnK2+/AWaujXN+c7JCCGojzwY5dM=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace dask/tests/test_system.py \
