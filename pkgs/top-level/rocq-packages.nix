@@ -38,6 +38,7 @@ let
 
       bignums = callPackage ../development/rocq-modules/bignums { };
       hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
+      HoTT = callPackage ../development/rocq-modules/HoTT { };
       iris = callPackage ../development/rocq-modules/iris { };
       mathcomp = callPackage ../development/rocq-modules/mathcomp { };
       mathcomp-boot = self.mathcomp.boot;
