@@ -5,41 +5,52 @@
   makeBinaryWrapper,
   typst,
 }:
+lib.extendMkDerivation {
+  constructDrv = buildEnv;
+  excludeDrvArgNames = [
+    "packages"
+    "fonts"
+    "extraWrapperArgs"
+  ];
 
-lib.makeOverridable (
-  { ... }@typstPkgs:
-  {
-    packages ? (ps: [ ]),
-    fonts ? [ ],
-    extraWrapperArgs ? [ ],
-  }:
-  buildEnv {
-    inherit (typst) meta;
-    name = "${typst.name}-env";
+  extendDrvArgs =
+    finalAttrs:
+    {
+      packages ? (ps: [ ]),
+      fonts ? [ ],
+      extraWrapperArgs ? [ ],
+    }:
+    let
+      # Apply the selector
+      selectedPkgs = packages typstPackages;
+    in
+    {
+      inherit (typst) version;
+      pname = typst.pname + "-env";
 
-    paths = lib.foldl' (acc: p: acc ++ lib.singleton p ++ p.propagatedBuildInputs) [ ] (
-      packages typstPkgs
-    );
+      paths = [ typst ] ++ lib.concatMap (p: [ p ] ++ p.propagatedBuildInputs) selectedPkgs;
 
-    pathsToLink = [ "/lib/typst-packages" ];
+      pathsToLink = [
+        # The packages
+        "/lib/typst-packages"
+        # The Typst executable & completions
+        "/bin"
+        "/share"
+      ];
 
-    nativeBuildInputs = [ makeBinaryWrapper ];
+      derivationArgs = {
+        nativeBuildInputs = [ makeBinaryWrapper ];
+        typstFonts = fonts;
+        typstWrapperArgs = extraWrapperArgs;
+      };
 
-    postBuild = ''
-      export TYPST_LIB_DIR="$out/lib/typst/packages"
-      mkdir -p $TYPST_LIB_DIR
+      postBuild = ''
+        wrapProgram "$out/bin/typst" \
+          --set-default TYPST_PACKAGE_CACHE_PATH "$out/lib/typst-packages" \
+          --set-default TYPST_FONT_PATHS "$(IFS=":"; echo "''${typstWrapperArgs[*]}")" \
+          --add-flags "''${typstWrapperArgs[*]}"
+      '';
 
-      mv $out/lib/typst-packages $TYPST_LIB_DIR/preview
-
-      cp -r ${typst}/share $out/share
-      mkdir -p $out/bin
-
-      TYPST_FONT_PATHS=${lib.escapeShellArg (lib.concatStringsSep ":" fonts)}
-
-      makeWrapper "${lib.getExe typst}" "$out/bin/typst" \
-        --set TYPST_PACKAGE_CACHE_PATH $TYPST_LIB_DIR \
-        ''${TYPST_FONT_PATHS:+--set TYPST_FONT_PATHS "$TYPST_FONT_PATHS"} \
-        ${lib.escapeShellArgs extraWrapperArgs}
-    '';
-  }
-) typstPackages
+      meta = builtins.removeAttrs typst.meta [ "position" ];
+    };
+}

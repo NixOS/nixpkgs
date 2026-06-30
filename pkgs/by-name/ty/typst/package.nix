@@ -8,6 +8,7 @@
   nix-update-script,
   versionCheckHook,
   callPackage,
+  testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -69,10 +70,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
+    tests.wrapped = testers.testVersion {
+      package = finalAttrs.finalPackage.withPackages (p: [
+        p.note-me
+        p.abiding-ifacconf
+      ]);
+    };
     updateScript = nix-update-script { };
     packages = callPackage ./typst-packages.nix { };
-    wrapper = callPackage ./wrapper.nix { };
-    withPackages = ps: finalAttrs.passthru.wrapper { packages = ps; };
+    wrapper = callPackage ./wrapper.nix {
+      typstPackages = finalAttrs.passthru.packages;
+      typst = finalAttrs.finalPackage;
+    };
+    withPackages =
+      f:
+      finalAttrs.passthru.wrapper {
+        packages = f;
+      };
   };
 
   meta = {
