@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
   isPyPy,
   pythonOlder,
 
@@ -18,7 +17,6 @@
   # dependencies
   aiohappyeyeballs,
   aiosignal,
-  async-timeout,
   attrs,
   backports-zstd,
   frozenlist,
