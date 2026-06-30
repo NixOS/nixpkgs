@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dedupe-pylbfgs";
-  version = "0.2.0.16";
+  version = "0.2.0.16-redux-redux-redux-redux-redux-redux";
   pyproject = true;
 
   # NOTE: This is a fork of larsmans/pylbfgs maintained by dedupeio
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dedupeio";
     repo = "pylbfgs";
     tag = version;
-    hash = "sha256-H416dgZQxyqsnhmlK5keW8cJWY6gea4mebVuP0IEVOU=";
+    hash = "sha256-6AF4J4xw0HSifRo8hX9dX9uWQhPSacrqU/2KAge2n9M=";
   };
 
   patches = [
