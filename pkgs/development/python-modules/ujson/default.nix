@@ -6,17 +6,17 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ujson";
-  version = "5.11.0";
-  format = "setuptools";
+  version = "5.12.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4gSub5CfCZumtrlCExzuNZ3dorbk6jnBLri5kf4gEOA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-W36WQGwwGhNmU0R5pzUuxA7Gi7MnwMEZCRY1rNWSXjU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -25,7 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Ultra fast JSON encoder and decoder";
     homepage = "https://github.com/ultrajson/ultrajson";
+    changelog = "https://github.com/ultrajson/ultrajson/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
