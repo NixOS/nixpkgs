@@ -44,5 +44,6 @@ buildDunePackage (finalAttrs: {
     description = "OCaml bindings for Python";
     homepage = "https://github.com/ocamllibs/pyml";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

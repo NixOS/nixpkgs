@@ -47,6 +47,7 @@ libfprint.overrideAttrs (
       description = "Library designed to make it easy to add support for consumer fingerprint readers, with support for loaded drivers";
       license = lib.licenses.lgpl21;
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   }
 )

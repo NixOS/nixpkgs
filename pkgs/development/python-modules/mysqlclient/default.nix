@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
     license = lib.licenses.gpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 }

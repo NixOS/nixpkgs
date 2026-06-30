@@ -22,5 +22,6 @@ buildDunePackage (finalAttrs: {
       Result module defined in this library.
     '';
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "eatmydata";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

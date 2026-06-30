@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     description = "Set of tools for controlling the network subsystem in Linux";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

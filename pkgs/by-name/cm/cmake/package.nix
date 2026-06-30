@@ -222,5 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     mainProgram = "cmake";
     broken = (qt5UI && stdenv.hostPlatform.isDarwin);
+    hasNoMaintainersButDependents = true;
   };
 })

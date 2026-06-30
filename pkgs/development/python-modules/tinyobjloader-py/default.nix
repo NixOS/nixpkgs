@@ -22,6 +22,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "tinyobjloader" ];
 
   meta = tinyobjloader.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
   };
 }

@@ -64,6 +64,7 @@ let
       homepage = "https://github.com/textx/textx/";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 

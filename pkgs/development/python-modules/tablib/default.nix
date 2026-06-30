@@ -71,5 +71,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

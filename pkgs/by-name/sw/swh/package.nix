@@ -25,5 +25,6 @@ writeShellApplication {
   meta = {
     inherit (python3Packages.swh-core.meta) license mainProgram platforms;
     description = "Software Heritage command-line client";
+    hasNoMaintainersButDependents = true;
   };
 }

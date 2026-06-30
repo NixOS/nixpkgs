@@ -149,5 +149,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

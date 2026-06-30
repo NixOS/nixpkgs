@@ -77,5 +77,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "gf2";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

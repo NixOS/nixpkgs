@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.isc;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

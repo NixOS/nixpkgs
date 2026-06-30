@@ -115,5 +115,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    hasNoMaintainersButDependents = true;
   };
 }

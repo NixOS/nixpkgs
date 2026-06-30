@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GPL Optical Character Recognition";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

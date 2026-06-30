@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       Groonga is an open-source fulltext search engine and column store.
       It lets you write high-performance applications that requires fulltext search.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

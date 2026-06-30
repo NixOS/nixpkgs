@@ -23,5 +23,6 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Latin Modern font";
+    hasNoMaintainersButDependents = true;
   };
 }

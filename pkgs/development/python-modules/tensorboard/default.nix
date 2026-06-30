@@ -78,6 +78,7 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

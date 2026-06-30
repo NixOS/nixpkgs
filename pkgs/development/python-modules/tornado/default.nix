@@ -67,5 +67,6 @@ buildPythonPackage rec {
     homepage = "https://www.tornadoweb.org/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

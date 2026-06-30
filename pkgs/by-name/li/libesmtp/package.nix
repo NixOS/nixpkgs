@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://libesmtp.github.io/";
     license = lib.licenses.lgpl21Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

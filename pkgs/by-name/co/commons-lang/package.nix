@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    hasNoMaintainersButDependents = true;
   };
 })

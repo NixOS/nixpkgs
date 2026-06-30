@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "curlpp-config";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

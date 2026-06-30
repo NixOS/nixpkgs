@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xwud";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

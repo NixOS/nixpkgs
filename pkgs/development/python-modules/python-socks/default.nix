@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/romis2012/python-socks";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

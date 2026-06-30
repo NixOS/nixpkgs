@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.freedesktop.org/software/startup-notification";
     description = "Application startup notification and feedback library";
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

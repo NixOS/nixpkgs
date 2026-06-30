@@ -38,5 +38,6 @@ buildPythonPackage rec {
     changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

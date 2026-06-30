@@ -62,5 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "xdelta3";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

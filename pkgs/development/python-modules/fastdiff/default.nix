@@ -49,5 +49,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     # resulting compiled object panics at import
     broken = stdenv.hostPlatform.is32bit;
+    hasNoMaintainersButDependents = true;
   };
 }

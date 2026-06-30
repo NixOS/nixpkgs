@@ -150,5 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://digitalbitbox.com/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

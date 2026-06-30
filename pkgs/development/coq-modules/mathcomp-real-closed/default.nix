@@ -72,6 +72,7 @@ let
     meta = {
       description = "Mathematical Components Library on real closed fields";
       license = lib.licenses.cecill-c;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

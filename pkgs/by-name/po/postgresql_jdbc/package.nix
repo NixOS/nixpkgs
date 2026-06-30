@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

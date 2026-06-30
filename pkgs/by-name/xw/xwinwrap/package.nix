@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "xwinwrap";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -68,5 +68,6 @@ buildPythonPackage rec {
       # Segmentation fault (core dumped)
       "aarch64-linux"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     description = "ANSI colors for Python";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

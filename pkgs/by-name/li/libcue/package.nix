@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/lipnitsk/libcue";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

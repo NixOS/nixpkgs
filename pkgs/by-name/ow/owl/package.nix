@@ -44,5 +44,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "owl";
+    hasNoMaintainersButDependents = true;
   };
 }

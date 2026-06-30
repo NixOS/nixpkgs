@@ -75,5 +75,6 @@ buildPythonPackage rec {
     homepage = "https://django-storages.readthedocs.io";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

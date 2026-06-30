@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "keyfinder-cli";
+    hasNoMaintainersButDependents = true;
   };
 })

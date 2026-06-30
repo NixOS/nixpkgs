@@ -76,5 +76,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "ckb-next";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

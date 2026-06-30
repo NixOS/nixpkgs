@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "md2html";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: enable tests (needs Python)

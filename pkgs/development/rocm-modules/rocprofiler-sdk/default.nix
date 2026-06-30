@@ -216,5 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCm/rocprofiler-sdk";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -15,5 +15,6 @@ buildDunePackage {
 
   meta = gluten.meta // {
     description = "EIO runtime for gluten";
+    hasNoMaintainersButDependents = true;
   };
 }

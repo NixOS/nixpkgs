@@ -108,6 +108,7 @@
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      hasNoMaintainersButDependents = true;
     };
   };
 

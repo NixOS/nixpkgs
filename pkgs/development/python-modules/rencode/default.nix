@@ -52,5 +52,6 @@ buildPythonPackage rec {
     description = "Fast (basic) object serialization similar to bencode";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

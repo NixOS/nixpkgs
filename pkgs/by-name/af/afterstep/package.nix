@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "afterstep";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

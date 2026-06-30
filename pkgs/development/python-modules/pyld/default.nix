@@ -59,5 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/digitalbazaar/pyld";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

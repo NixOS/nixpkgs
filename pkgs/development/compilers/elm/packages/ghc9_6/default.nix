@@ -45,6 +45,7 @@ pkgs.haskell.packages.ghc96.override {
 
       ansi-wl-pprint = overrideCabal (drv: {
         jailbreak = true;
+        hasNoMaintainersButDependents = true;
       }) (self.callPackage ./ansi-wl-pprint { });
     };
 }

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://pypi.org/project/pytest-cache/";
     description = "Pytest plugin with mechanisms for caching across test runs";
+    hasNoMaintainersButDependents = true;
   };
 }

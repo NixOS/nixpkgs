@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     platforms = jre.meta.platforms;
     maintainers = [ ];
     mainProgram = "yed";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,4 +41,5 @@ haskellPackages.mkDerivation rec {
   license = lib.licenses.mpl20;
   maintainers = [ ];
   mainProgram = "nota";
+  hasNoMaintainersButDependents = true;
 }

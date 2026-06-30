@@ -36,5 +36,6 @@ buildPythonPackage rec {
     maintainers = [ ];
 
     longDescription = "num2words is a library that converts numbers like 42 to words like forty-two. It supports multiple languages (see the list below for full list of languages) and can even generate ordinal numbers like forty-second";
+    hasNoMaintainersButDependents = true;
   };
 }

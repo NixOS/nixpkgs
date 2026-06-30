@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Only;
     # See https://github.com/NixOS/nixpkgs/issues/388309
     broken = stdenv.hostPlatform.is32bit;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -111,5 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mednafen";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

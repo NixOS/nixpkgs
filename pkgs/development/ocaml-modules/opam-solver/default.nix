@@ -31,5 +31,6 @@ buildDunePackage {
   meta = opam.meta // {
     description = "This library is based on the Cudf and Dose libraries, and handles calls to the external solver from opam";
     maintainers = with lib.maintainers; [ stepbrobd ];
+    hasNoMaintainersButDependents = false;
   };
 }

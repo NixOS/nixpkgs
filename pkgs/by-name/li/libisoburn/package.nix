@@ -68,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "osirrox";
     maintainers = [ ];
     inherit (libisofs.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

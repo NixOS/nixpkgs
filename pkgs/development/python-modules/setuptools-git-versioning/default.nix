@@ -71,5 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

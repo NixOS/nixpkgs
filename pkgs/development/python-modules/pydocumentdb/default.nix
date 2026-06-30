@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-cosmos-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

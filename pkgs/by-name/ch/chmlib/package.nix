@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl2;
     description = "Library for dealing with Microsoft ITSS/CHM format files";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

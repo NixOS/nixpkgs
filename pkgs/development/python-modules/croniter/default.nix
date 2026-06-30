@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/kiorky/croniter/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

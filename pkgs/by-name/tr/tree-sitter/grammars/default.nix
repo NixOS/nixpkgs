@@ -50,6 +50,8 @@ lib.mapAttrs' (
       # Default to the source attr name as the language
       inherit language;
 
+      pos = builtins.unsafeGetAttrPos language grammar-sources;
+
       # Insert auto-update support
       passthru.updateScript = nix-update-script {
         extraArgs = [

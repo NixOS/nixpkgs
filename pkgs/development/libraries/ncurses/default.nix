@@ -287,6 +287,7 @@ stdenv.mkDerivation (finalAttrs: {
       base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
     platforms = lib.platforms.all;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ncurses_project" finalAttrs.version;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

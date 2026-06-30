@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tapanpandita/pocket";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     homepage = "https://gtkmm.org";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

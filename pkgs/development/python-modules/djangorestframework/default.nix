@@ -74,5 +74,6 @@ buildPythonPackage (finalAttrs: {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

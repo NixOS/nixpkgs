@@ -44,5 +44,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "tsc";
+    hasNoMaintainersButDependents = true;
   };
 })

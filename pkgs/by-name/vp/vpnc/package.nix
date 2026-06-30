@@ -73,5 +73,6 @@ stdenv.mkDerivation {
     description = "Virtual private network (VPN) client for Cisco's VPN concentrators";
     license = if opensslSupport then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

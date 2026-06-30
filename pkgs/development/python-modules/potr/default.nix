@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "http://python-otr.pentabarf.de/";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

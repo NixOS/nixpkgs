@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     mainProgram = "sigtool";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "flex";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

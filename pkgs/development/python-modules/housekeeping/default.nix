@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/housekeeping";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

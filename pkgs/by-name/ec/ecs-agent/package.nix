@@ -34,5 +34,6 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "agent";
+    hasNoMaintainersButDependents = true;
   };
 })

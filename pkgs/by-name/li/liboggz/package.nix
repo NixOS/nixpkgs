@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       including Dirac, FLAC, Speex and Theora.'';
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

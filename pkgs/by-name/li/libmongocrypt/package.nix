@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mongodb/libmongocrypt";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

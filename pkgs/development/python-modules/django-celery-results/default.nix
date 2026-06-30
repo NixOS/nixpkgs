@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/celery/django-celery-results/blob/v${version}/Changelog";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

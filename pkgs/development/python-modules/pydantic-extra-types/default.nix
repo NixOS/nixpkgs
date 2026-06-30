@@ -79,5 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydantic/pydantic-extra-types";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

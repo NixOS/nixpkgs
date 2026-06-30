@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "POSIX-C Library for handling Linear/Logitudinal Time Code (LTC)";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

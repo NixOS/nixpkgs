@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

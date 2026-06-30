@@ -85,4 +85,5 @@ mkDerivation {
   description = "The `gren` command line interface";
   license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
   mainProgram = "gren";
+  hasNoMaintainersButDependents = true;
 }

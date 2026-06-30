@@ -118,5 +118,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/simonw/datasette/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

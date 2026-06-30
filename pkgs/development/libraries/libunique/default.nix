@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     description = "Library for writing single instance applications";
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

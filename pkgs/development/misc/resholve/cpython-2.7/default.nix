@@ -424,6 +424,7 @@ stdenv.mkDerivation (
         # then. Some did, but many did not. So, in 2014, we extended that
         # sunset till 2020.
       ];
+      hasNoMaintainersButDependents = true;
     };
   }
   // crossCompileEnv

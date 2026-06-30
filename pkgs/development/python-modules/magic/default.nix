@@ -24,5 +24,6 @@ buildPythonPackage {
     description = "Python wrapper around libmagic";
     homepage = "http://www.darwinsys.com/file/";
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 }

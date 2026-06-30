@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
     maintainers = [ ];
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

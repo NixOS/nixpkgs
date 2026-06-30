@@ -446,7 +446,9 @@ let
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
+            meta.hasNoMaintainersButDependents = true;
           };
+          meta.hasNoMaintainersButDependents = true;
         };
         overrides = overrides prevStage;
         preHook = ''

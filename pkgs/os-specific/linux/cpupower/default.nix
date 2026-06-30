@@ -53,5 +53,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     mainProgram = "cpupower";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

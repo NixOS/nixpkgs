@@ -81,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "sshfs";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

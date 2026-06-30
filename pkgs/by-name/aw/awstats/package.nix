@@ -72,5 +72,6 @@ perlPackages.buildPerlPackage rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "awstats";
+    hasNoMaintainersButDependents = true;
   };
 }

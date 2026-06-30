@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "Python library for communicate with Yamaha RX-Vxxx receivers";
     homepage = "https://github.com/wuub/rxv";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

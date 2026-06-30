@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.quitte.de/dsp/caps.html";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

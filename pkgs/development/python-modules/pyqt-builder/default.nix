@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Python-PyQt/PyQt-builder";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

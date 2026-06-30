@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tristanpenman/valijson";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

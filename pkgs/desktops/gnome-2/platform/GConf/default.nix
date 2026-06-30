@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://bitbucket.org/blaze-lib/blaze";
     license = with lib.licenses; [ bsd3 ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "apulse";
+    hasNoMaintainersButDependents = true;
   };
 })

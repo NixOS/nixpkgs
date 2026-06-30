@@ -82,5 +82,6 @@ bootstrapStdenv.mkDerivation (finalAttrs: {
       lib.licenses.bsd3
     ];
     platforms = lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -34,5 +34,6 @@ buildDunePackage (finalAttrs: {
     '';
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

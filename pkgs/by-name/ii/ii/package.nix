@@ -23,5 +23,6 @@ gccStdenv.mkDerivation (finalAttrs: {
     description = "Irc it, simple FIFO based irc client";
     mainProgram = "ii";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

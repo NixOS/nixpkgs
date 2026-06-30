@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Screw remotes. Control your Roku with Python";
     homepage = "https://github.com/jcarbaugh/python-roku";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

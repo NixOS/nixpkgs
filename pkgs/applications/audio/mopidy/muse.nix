@@ -35,5 +35,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/cristianpb/muse";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

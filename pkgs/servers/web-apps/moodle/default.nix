@@ -142,5 +142,6 @@ stdenv.mkDerivation rec {
     homepage = "https://moodle.org/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

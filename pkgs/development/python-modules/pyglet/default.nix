@@ -154,5 +154,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     # The patch needs adjusting for other platforms.
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

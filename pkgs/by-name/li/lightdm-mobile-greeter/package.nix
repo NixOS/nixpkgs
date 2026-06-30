@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     mainProgram = "lightdm-mobile-greeter";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Enumerates all IP addresses on all network adapters of the system";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

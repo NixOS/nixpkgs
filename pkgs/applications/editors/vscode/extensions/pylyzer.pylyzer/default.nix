@@ -14,5 +14,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/mtshiba/pylyzer/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

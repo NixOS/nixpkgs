@@ -23,5 +23,6 @@ postgresqlBuildExtension (finalAttrs: {
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

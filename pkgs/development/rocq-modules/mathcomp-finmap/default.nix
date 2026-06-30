@@ -41,5 +41,6 @@ mkRocqDerivation {
   meta = {
     description = "Finset and finmap library";
     license = lib.licenses.cecill-b;
+    hasNoMaintainersButDependents = true;
   };
 }

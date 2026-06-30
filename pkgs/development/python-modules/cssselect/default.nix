@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/scrapy/cssselect/v${version}//CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

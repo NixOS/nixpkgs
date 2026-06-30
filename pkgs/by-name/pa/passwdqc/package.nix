@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "passwdqc";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -18,5 +18,6 @@ buildDunePackage {
     description = "Helper library for gathering system configuration";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

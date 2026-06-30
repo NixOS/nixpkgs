@@ -57,5 +57,6 @@ buildPythonPackage {
     changelog = "https://github.com/cheind/py-motmetrics/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

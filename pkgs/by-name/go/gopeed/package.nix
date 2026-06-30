@@ -42,7 +42,9 @@ let
       runHook postBuild
     '';
 
-    meta = metaCommon;
+    meta = metaCommon // {
+      hasNoMaintainersButDependents = true;
+    };
   };
 in
 flutter338.buildFlutterApplication {

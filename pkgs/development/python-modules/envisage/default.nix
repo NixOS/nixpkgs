@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/enthought/envisage";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

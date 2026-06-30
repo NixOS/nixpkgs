@@ -52,5 +52,6 @@ buildPythonPackage rec {
     description = "Simple python client for pushbullet.com";
     homepage = "https://github.com/randomchars/pushbullet.py";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

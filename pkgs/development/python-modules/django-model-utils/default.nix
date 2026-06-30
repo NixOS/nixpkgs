@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jazzband/django-model-utils/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

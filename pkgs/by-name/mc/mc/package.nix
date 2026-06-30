@@ -108,5 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mc";
+    hasNoMaintainersButDependents = true;
   };
 })

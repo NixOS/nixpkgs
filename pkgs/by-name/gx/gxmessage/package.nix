@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
     mainProgram = "gxmessage";
+    hasNoMaintainersButDependents = true;
   };
 })

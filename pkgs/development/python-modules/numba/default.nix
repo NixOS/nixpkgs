@@ -174,5 +174,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://numba.pydata.org/";
     license = lib.licenses.bsd2;
     mainProgram = "numba";
+    hasNoMaintainersButDependents = true;
   };
 })

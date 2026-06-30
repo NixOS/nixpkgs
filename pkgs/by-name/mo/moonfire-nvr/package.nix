@@ -75,5 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "moonfire-nvr";
+    hasNoMaintainersButDependents = true;
   };
 })

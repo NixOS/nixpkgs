@@ -57,5 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/samuelcolvin/rtoml";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

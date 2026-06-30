@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/migonzalvar/dj-email-url";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

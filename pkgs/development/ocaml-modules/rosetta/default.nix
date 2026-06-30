@@ -31,5 +31,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/rosetta";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

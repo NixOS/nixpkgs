@@ -27,5 +27,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "ejson";
     license = lib.licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
+    hasNoMaintainersButDependents = true;
   };
 })

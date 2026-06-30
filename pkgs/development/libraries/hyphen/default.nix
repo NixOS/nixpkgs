@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
       lgpl21
       mpl11
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

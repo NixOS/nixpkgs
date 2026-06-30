@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jketterl/pydigiham";
     description = "Bindings for the csdr library";
     license = lib.licenses.gpl3Only;
+    hasNoMaintainersButDependents = true;
   };
 }

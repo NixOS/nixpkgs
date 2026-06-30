@@ -119,5 +119,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
+    hasNoMaintainersButDependents = true;
   };
 }

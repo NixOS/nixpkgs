@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.qhull;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

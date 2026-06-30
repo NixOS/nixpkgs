@@ -36,6 +36,8 @@ lib.makeScope newScope (self: rec {
           unpackPhase = "tar xf $src";
 
           meta = {
+            # TODO: Why not?
+            requiresMaintainers = false;
             license =
               let
                 stringToLicense =

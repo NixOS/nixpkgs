@@ -63,5 +63,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/asweigart/pyautogui/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

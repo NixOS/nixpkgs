@@ -93,5 +93,6 @@ buildPythonPackage rec {
       gpl2Plus
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

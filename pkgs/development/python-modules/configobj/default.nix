@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

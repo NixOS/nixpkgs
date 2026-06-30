@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Easy to use progress bars";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

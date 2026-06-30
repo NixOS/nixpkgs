@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Automate data discovering and access inside a list of packages";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

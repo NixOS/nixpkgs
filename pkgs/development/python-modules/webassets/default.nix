@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miracle2k/webassets/";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

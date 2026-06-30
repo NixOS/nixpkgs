@@ -25,5 +25,6 @@ buildNpmPackage rec {
     homepage = "https://rtlcss.com";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

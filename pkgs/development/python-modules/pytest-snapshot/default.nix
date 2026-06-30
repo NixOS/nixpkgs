@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/joseph-roitman/pytest-snapshot/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -42,5 +42,6 @@ buildPythonPackage rec {
     license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

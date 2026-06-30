@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://developers.yubico.com/yubico-pam";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

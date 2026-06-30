@@ -80,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "elvis";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

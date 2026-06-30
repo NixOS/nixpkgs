@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libevent.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

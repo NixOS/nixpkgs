@@ -43,5 +43,6 @@ buildPythonPackage rec {
       isc
       bsdOriginal
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

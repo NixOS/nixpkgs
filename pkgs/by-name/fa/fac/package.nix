@@ -40,5 +40,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "fac";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

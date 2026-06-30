@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     description = "Library that helps you create bindings between C++ and Lua";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

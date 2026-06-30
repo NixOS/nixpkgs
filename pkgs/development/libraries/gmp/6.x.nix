@@ -110,6 +110,7 @@ let
 
       platforms = lib.platforms.all;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

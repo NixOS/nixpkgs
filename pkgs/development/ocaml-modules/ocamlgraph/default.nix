@@ -20,5 +20,6 @@ buildDunePackage (finalAttrs: {
     description = "Graph library for OCaml";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

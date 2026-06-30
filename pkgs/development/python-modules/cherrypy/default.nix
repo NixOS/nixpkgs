@@ -126,5 +126,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

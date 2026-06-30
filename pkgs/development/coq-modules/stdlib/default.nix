@@ -42,6 +42,7 @@ let
     meta = {
       description = "Compatibility metapackage for Coq Stdlib library after the Rocq renaming";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

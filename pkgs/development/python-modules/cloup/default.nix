@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     '';
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

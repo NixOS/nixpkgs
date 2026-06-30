@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     # See https://fedoraproject.org/wiki/Licensing/Par for license details
     license = lib.licenses.free;
+    hasNoMaintainersButDependents = true;
   };
 })

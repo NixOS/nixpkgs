@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for decrypting DVDs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

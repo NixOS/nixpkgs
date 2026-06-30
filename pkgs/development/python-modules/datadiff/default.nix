@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/datadiff/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

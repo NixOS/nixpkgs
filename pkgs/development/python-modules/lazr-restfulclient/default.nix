@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://git.launchpad.net/lazr.restfulclient/tree/NEWS.rst?h=${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

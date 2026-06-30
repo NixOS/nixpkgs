@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.publicDomain;
     description = "Fast, simple LZW file compressor";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

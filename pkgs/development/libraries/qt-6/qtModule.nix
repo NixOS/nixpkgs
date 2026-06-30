@@ -64,27 +64,27 @@ stdenv.mkDerivation (
 
     dontWrapQtApps = args.dontWrapQtApps or true;
   }
-)
-// {
-  meta =
+  // {
+    meta =
 
-    let
-      pos = builtins.unsafeGetAttrPos "pname" args;
-    in
-    {
-      homepage = "https://www.qt.io/";
-      description = "Cross-platform application framework for C++";
-      license = with lib.licenses; [
-        fdl13Plus
-        gpl2Plus
-        lgpl21Plus
-        lgpl3Plus
-      ];
-      maintainers = with lib.maintainers; [
-        nickcao
-      ];
-      platforms = lib.platforms.unix;
-      position = "${pos.file}:${toString pos.line}";
-    }
-    // (args.meta or { });
-}
+      let
+        pos = builtins.unsafeGetAttrPos "pname" args;
+      in
+      {
+        homepage = "https://www.qt.io/";
+        description = "Cross-platform application framework for C++";
+        license = with lib.licenses; [
+          fdl13Plus
+          gpl2Plus
+          lgpl21Plus
+          lgpl3Plus
+        ];
+        maintainers = with lib.maintainers; [
+          nickcao
+        ];
+        platforms = lib.platforms.unix;
+        position = "${pos.file}:${toString pos.line}";
+      }
+      // (args.meta or { });
+  }
+)

@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Terminal emulator library to mimic both vt100 and rxvt";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

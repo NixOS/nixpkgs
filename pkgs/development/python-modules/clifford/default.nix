@@ -69,5 +69,6 @@ buildPythonPackage rec {
     # Broken with numba >= 0.54
     # see https://github.com/pygae/clifford/issues/430
     broken = lib.versionAtLeast numba.version "0.58";
+    hasNoMaintainersButDependents = true;
   };
 }

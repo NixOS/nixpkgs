@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://wsgiproxy2.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

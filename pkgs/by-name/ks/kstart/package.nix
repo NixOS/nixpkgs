@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rra/kstart";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

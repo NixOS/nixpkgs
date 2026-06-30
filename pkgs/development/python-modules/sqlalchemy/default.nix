@@ -119,5 +119,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -92,5 +92,6 @@ buildPythonPackage {
     homepage = "https://github.com/mindsdb/type_infer";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

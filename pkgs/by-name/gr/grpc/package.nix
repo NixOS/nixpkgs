@@ -136,5 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://grpc.io/";
     platforms = lib.platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${finalAttrs.version}";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -27,5 +27,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/vscode-shellcheck/vscode-shellcheck";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

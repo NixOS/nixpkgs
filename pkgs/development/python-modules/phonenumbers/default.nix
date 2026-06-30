@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
     changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

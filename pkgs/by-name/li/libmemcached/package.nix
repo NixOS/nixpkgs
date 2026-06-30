@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source C/C++ client library and tools for the memcached server";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

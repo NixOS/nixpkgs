@@ -44,5 +44,6 @@ buildPythonPackage {
     homepage = "https://github.com/apirobot/django-rest-polymorphic";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

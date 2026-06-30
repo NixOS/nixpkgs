@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/pathlib2/";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

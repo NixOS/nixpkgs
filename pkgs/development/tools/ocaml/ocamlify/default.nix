@@ -26,5 +26,6 @@ buildDunePackage (finalAttrs: {
     description = "Include files in OCaml code";
     license = lib.licenses.lgpl21;
     mainProgram = "ocamlify";
+    hasNoMaintainersButDependents = true;
   };
 })

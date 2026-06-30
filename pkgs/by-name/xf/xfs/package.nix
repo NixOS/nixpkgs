@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isStatic;
+    hasNoMaintainersButDependents = true;
   };
 })

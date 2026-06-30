@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ratpoison";
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

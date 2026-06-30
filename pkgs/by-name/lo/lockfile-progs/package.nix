@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://packages.debian.org/sid/lockfile-progs";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

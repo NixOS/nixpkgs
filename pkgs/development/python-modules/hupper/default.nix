@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/hupper";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

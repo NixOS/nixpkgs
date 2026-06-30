@@ -76,5 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-core";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

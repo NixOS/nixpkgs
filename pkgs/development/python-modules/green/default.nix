@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CleanCut/green";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

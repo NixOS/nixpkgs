@@ -22,5 +22,6 @@ buildDunePackage {
   meta = opam-core.meta // {
     description = "Definition of opam datastructures and its file interface";
     maintainers = with lib.maintainers; [ sternenseemann ];
+    hasNoMaintainersButDependents = false;
   };
 }

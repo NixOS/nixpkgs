@@ -80,5 +80,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -102,5 +102,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

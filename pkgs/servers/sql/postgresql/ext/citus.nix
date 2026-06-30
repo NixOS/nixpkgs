@@ -79,6 +79,7 @@ postgresqlBuildExtension (finalAttrs: {
     changelog = "https://github.com/citusdata/citus/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     inherit (postgresql.meta) platforms;
   };
 })

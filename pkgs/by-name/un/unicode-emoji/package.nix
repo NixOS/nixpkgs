@@ -61,5 +61,6 @@ symlinkJoin {
     homepage = "https://home.unicode.org/emoji/";
     license = lib.licenses.unicode-dfs-2016;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

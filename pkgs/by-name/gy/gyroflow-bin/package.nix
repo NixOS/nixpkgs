@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = gyroflow.meta // {
     description = "Advanced gyro-based video stabilization tool (pre-built macOS binary)";
     maintainers = with lib.maintainers; [ Br1ght0ne ];
+    hasNoMaintainersButDependents = false;
     mainProgram = "gyroflow";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

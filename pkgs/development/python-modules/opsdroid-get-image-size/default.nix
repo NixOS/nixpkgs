@@ -38,5 +38,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "get-image-size";
+    hasNoMaintainersButDependents = true;
   };
 }

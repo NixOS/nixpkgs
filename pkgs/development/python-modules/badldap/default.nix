@@ -58,5 +58,6 @@ buildPythonPackage {
     homepage = "https://github.com/CravateRouge/badldap";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

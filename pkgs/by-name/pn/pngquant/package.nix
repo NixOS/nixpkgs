@@ -56,5 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "pngquant";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

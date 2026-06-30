@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xcb-util"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

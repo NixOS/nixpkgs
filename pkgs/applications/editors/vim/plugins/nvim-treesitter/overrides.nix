@@ -21,7 +21,10 @@ let
     {
       language,
       requires ? [ ],
-    }:
+    }@args:
+    let
+      pos = builtins.unsafeGetAttrPos "language" args;
+    in
     vimUtils.toVimPlugin (
       # Just mkdir + ln -s; cheaper to build than to substitute (and not
       # on cache.nixos.org anyway since release.nix doesn't recurse into
@@ -29,11 +32,23 @@ let
       # round-tripping each to a remote builder is very slow.
       runCommandLocal "nvim-treesitter-queries-${language}"
         {
+          inherit pos;
           passthru = {
             inherit language requires;
             isTreesitterQuery = true;
           };
-          meta.description = "Queries for ${language} from nvim-treesitter";
+          meta = {
+            description = "Queries for ${language} from nvim-treesitter";
+          }
+          // lib.optionalAttrs (pos.file == toString ./generated.nix) {
+            # vimPlugins.nvim-treesitter.withAllGrammars by default includes all plugins,
+            # and if .dependencies is evaluated it also causes all queries to be evaluated, so they always have a dependent,
+            # meaning we should really set hasNoMaintainersButDependents for the plugins that don't have a maintainer,
+            # but CI strictly requires the packages attribute be found somewhere if that attribute is set,
+            # which the withPlugins code of withAllGrammars doesn't trigger
+            # So we need to silence the maintainerless warning in another way, which is what requiresMaintainers is for
+            requiresMaintainers = false;
+          };
         }
         ''
           mkdir -p "$out/queries"
@@ -47,7 +62,9 @@ let
     );
 
   generated = callPackage ./generated.nix {
-    inherit (tree-sitter) buildGrammar;
+    buildGrammar = tree-sitter.buildGrammar.override {
+      generatedFile = ./generated.nix;
+    };
     inherit buildQueries;
   };
 

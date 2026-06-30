@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation rec {
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

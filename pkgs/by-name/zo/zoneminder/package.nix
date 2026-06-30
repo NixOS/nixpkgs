@@ -272,5 +272,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peat-psuwit ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

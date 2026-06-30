@@ -175,6 +175,7 @@ rec {
         nativeBuildInputs = [ buildPackages.nixos-render-docs ];
         inputs = sourceFilesBySuffices ./. [ ".md" ];
         meta.description = "The NixOS manual in HTML format";
+        meta.hasNoMaintainersButDependents = true;
         allowedReferences = [ "out" ];
       }
       ''

@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "omf-install";
     inherit (fish.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: customize the omf-install script

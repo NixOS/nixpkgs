@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jbig2dec";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

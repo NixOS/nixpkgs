@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/promplate/partial-json-parser";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

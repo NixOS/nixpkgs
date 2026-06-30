@@ -58,5 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/onnxconverter-common";
     changelog = "https://github.com/microsoft/onnxconverter-common/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

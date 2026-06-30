@@ -109,5 +109,6 @@ buildPythonPackage rec {
     homepage = "https://xgrammar.mlc.ai";
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl11;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

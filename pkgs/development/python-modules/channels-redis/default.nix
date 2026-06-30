@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

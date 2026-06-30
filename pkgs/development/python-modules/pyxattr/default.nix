@@ -26,5 +26,6 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     # Darwin doesn't need `attr` for this.
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

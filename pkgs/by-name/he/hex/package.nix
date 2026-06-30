@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "hx";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

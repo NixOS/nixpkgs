@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/srossross/rpmfile";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

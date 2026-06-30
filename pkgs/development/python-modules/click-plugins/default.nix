@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/click-contrib/click-plugins";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

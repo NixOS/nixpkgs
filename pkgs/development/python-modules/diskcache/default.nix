@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -59,6 +59,7 @@ let
       homepage = "https://github.com/stoplightio/vscode-spectral";
       description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   });
 in

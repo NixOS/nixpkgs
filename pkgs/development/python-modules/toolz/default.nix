@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

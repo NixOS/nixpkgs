@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       format, and tags them, all in one go.
     '';
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

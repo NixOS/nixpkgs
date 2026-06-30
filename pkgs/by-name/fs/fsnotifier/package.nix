@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fsnotifier";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

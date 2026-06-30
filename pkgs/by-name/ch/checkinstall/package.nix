@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     knownVulnerabilities = [
       "CVE-2020-25031"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

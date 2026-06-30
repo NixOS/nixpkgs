@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/backports.entry_points_selectable";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

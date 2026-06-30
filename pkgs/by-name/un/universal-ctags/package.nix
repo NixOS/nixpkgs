@@ -90,5 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     mainProgram = "ctags";
     priority = 1; # over the emacs implementation
+    hasNoMaintainersButDependents = true;
   };
 })

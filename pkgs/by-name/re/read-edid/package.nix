@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

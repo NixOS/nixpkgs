@@ -89,5 +89,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-commons/django-valkey/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "civetweb";
     homepage = "https://github.com/civetweb/civetweb";
     license = [ lib.licenses.mit ];
+    hasNoMaintainersButDependents = true;
   };
 })

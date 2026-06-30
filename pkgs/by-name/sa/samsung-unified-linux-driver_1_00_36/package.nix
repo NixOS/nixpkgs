@@ -123,5 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Probably won't work on anything else.
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

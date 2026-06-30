@@ -60,5 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fonttools/ufoLib2";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

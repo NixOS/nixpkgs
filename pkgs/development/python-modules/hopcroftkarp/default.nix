@@ -22,5 +22,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/sofiat-olaosebikan/hopcroftkarp";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

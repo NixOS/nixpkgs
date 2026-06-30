@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     mainProgram = "resvg";
+    hasNoMaintainersButDependents = true;
   };
 })

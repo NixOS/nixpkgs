@@ -53,5 +53,6 @@ buildDunePackage {
     description = "Syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocaml-ppx/ppx_import";
+    hasNoMaintainersButDependents = true;
   };
 }

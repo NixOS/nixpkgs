@@ -28,5 +28,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-pairs";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

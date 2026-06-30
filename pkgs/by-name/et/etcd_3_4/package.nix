@@ -45,5 +45,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

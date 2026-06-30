@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/python-proton-keyring-linux";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

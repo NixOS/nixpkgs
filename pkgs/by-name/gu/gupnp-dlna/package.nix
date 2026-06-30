@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     description = "Library to ease DLNA-related bits for applications using GUPnP";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

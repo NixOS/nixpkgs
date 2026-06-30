@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ClementJ18/moddb";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

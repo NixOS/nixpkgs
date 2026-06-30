@@ -171,5 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gtkd.org";
     license = lib.licenses.lgpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

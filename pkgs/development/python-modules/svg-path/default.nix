@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

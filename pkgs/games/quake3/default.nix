@@ -16,6 +16,7 @@ callPackage: rec {
       quake3arenadata
       quake3pointrelease
     ];
+    meta.hasNoMaintainersButDependents = true;
   };
 
   quake3arena-hires = quake3wrapper {
@@ -25,6 +26,7 @@ callPackage: rec {
       quake3pointrelease
       quake3hires
     ];
+    meta.hasNoMaintainersButDependents = true;
   };
 
   quake3demo = quake3wrapper {
@@ -33,6 +35,7 @@ callPackage: rec {
       quake3demodata
       quake3pointrelease
     ];
+    meta.hasNoMaintainersButDependents = true;
   };
 
   quake3demo-hires = quake3wrapper {
@@ -42,5 +45,6 @@ callPackage: rec {
       quake3pointrelease
       quake3hires
     ];
+    meta.hasNoMaintainersButDependents = true;
   };
 }

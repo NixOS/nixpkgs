@@ -8,6 +8,7 @@
   name,
   description ? "",
   deps ? [ ],
+  meta ? { },
   ...
 }@args:
 
@@ -31,7 +32,10 @@ stdenvNoCC.mkDerivation (
         python ${./extract-licenses-from-nupkgs.py} $out/lib > $out/share/licenses
       '';
 
-      meta.description = description;
+      meta = {
+        inherit description;
+      }
+      // meta;
     }
     (
       removeAttrs args [

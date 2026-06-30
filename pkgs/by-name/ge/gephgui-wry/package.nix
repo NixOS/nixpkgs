@@ -54,6 +54,7 @@ let
       license = lib.licenses.asl20;
       mainProgram = "pac";
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

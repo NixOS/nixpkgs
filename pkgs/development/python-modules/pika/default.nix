@@ -69,5 +69,6 @@ buildPythonPackage rec {
     homepage = "https://pika.readthedocs.org";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

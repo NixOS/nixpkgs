@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "x86_64-linux"
     ];
+    hasNoMaintainersButDependents = true;
   };
 
 })

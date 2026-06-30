@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xgc";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

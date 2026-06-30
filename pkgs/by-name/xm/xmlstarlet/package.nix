@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "xmlstarlet";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

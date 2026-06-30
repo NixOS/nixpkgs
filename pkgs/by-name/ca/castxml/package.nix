@@ -68,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "castxml";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

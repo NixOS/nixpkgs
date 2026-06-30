@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mailgun/expiringdict";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

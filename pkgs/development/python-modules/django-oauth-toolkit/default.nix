@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jazzband/django-oauth-toolkit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

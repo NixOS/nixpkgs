@@ -302,5 +302,6 @@ stdenv.mkDerivation rec {
       sample format or channel count and mixing several sounds into
       one are easily achieved using a sound server.
     '';
+    hasNoMaintainersButDependents = true;
   };
 }

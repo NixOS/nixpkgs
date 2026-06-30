@@ -97,6 +97,7 @@ let
         # network installation"
         license = lib.licenses.unfree;
         homepage = "https://web.archive.org/web/20221006174450/https://dn-works.com/ufas/";
+        hasNoMaintainersButDependents = true;
       };
     };
 in

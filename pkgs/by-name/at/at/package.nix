@@ -84,5 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";
     platforms = lib.platforms.linux;
     mainProgram = "at";
+    hasNoMaintainersButDependents = true;
   };
 })

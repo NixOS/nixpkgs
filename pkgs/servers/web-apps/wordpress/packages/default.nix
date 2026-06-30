@@ -69,6 +69,7 @@ let
             meta = {
               license = lib.licenses.${license};
             }
+            // (args.meta or { })
             // (args.passthru or { });
           }
           // lib.optionalAttrs (type == "language") {
@@ -107,12 +108,14 @@ let
           pname,
           data,
           license,
+          meta ? { },
         }:
         mkWordpressDerivation {
           inherit type pname license;
           version = data.version;
 
           src = fetchWordpress type data;
+          inherit meta;
         }
       ) { };
 
@@ -194,6 +197,8 @@ let
               type = lib.removeSuffix "s" type;
               inherit pname data;
               license = sourceJson.${type}.${pname};
+              # TODO: Why not?
+              meta.requiresMaintainers = false;
             }
           ) pkgs
         )

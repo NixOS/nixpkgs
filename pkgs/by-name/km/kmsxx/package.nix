@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

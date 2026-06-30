@@ -54,5 +54,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.blueOak100;
+    hasNoMaintainersButDependents = true;
   };
 }

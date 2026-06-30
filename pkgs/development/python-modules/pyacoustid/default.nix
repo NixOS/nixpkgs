@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/beetbox/pyacoustid";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

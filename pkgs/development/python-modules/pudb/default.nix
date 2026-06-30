@@ -50,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

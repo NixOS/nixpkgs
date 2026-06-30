@@ -51,5 +51,6 @@ stdenv.mkDerivation {
 
   meta = appstream.meta // {
     description = "Software metadata handling library - Qt";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     pkgConfigModules = [ "yajl" ];
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

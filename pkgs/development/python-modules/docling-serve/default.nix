@@ -106,5 +106,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

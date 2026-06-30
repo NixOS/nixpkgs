@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/Archive/murrine";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

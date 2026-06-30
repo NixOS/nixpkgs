@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/kmike/pymorphy2-dicts/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

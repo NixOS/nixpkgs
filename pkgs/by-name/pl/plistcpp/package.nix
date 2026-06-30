@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/matthewbauer/PlistCpp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

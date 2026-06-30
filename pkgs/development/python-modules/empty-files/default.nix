@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/EmptyFiles.Python";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

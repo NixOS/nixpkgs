@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     description = "Persistent/Functional/Immutable data structures";
     changelog = "https://github.com/tobgu/pyrsistent/blob/${finalAttrs.src.tag}/CHANGES.txt";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

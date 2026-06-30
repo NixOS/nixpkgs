@@ -104,5 +104,6 @@ buildPythonPackage rec {
     changelog = "https://docs.quantum.ibm.com/api/qiskit/release-notes";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

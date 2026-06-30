@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = python3.meta.platforms;
     maintainers = [ ];
     mainProgram = "mtprotoproxy";
+    hasNoMaintainersButDependents = true;
   };
 })

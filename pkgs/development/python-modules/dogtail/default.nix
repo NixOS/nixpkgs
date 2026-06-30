@@ -77,5 +77,6 @@ buildPythonPackage {
     homepage = "https://gitlab.com/dogtail/dogtail";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

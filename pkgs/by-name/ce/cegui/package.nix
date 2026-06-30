@@ -65,5 +65,6 @@ stdenv.mkDerivation {
     mainProgram = "CEGUISampleFramework-0.9999";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "http://faker.rtfd.org";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

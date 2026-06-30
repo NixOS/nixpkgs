@@ -14,6 +14,7 @@ makeGaugePlugin {
     homepage = "https://github.com/getgauge-contrib/gauge-go";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     platforms = [
       "aarch64-darwin"

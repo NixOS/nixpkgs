@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       "shaderc"
       "shaderc_static"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

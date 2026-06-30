@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

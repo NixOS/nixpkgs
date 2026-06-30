@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qjs";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

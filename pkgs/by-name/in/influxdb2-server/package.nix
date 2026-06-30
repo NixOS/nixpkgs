@@ -141,5 +141,6 @@ buildGoModule {
     license = lib.licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

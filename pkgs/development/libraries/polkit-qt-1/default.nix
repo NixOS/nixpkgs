@@ -31,5 +31,6 @@ mkDerivation rec {
     description = "Qt wrapper around PolKit";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -110,5 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
     mainProgram = "lnxrouter";
+    hasNoMaintainersButDependents = true;
   };
 })

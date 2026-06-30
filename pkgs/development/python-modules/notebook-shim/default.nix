@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/notebook_shim";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

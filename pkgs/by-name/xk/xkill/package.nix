@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xkill";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

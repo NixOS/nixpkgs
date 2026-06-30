@@ -24,5 +24,6 @@ buildPythonPackage (finalAttrs: {
     description = "Tiny pythonic visitor implementation";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

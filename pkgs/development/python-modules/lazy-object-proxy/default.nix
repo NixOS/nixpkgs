@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Fast and thorough lazy object proxy";
     homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
     license = with lib.licenses; [ bsd2 ];
+    hasNoMaintainersButDependents = true;
   };
 }

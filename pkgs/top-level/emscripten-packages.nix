@@ -46,6 +46,9 @@ rec {
           fi
           echo "================= /testing json_c using node ================="
         '';
+        meta = old.meta // {
+          hasNoMaintainersButDependents = false;
+        };
       });
 
   libxml2 =

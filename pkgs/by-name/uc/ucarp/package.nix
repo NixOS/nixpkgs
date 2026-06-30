@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "ucarp";
+    hasNoMaintainersButDependents = true;
   };
 })

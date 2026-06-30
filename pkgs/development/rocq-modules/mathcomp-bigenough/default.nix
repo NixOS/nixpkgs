@@ -33,5 +33,6 @@ mkRocqDerivation {
   meta = {
     description = "Small library to do epsilon - N reasonning";
     license = lib.licenses.cecill-b;
+    hasNoMaintainersButDependents = true;
   };
 }

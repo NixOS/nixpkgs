@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tofuSCHNITZEL/unifi_ap";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

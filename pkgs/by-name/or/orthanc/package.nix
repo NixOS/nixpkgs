@@ -128,5 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "Orthanc";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

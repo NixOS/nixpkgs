@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ds300/patch-package";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

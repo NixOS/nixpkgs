@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "rasqal" ];
+    hasNoMaintainersButDependents = true;
   };
 })

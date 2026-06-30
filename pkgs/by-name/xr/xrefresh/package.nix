@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xrefresh";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

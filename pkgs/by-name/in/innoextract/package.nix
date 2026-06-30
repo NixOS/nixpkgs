@@ -57,5 +57,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "innoextract";
+    hasNoMaintainersButDependents = true;
   };
 }

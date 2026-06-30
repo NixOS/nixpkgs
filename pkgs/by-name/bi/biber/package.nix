@@ -74,6 +74,7 @@ perlPackages.buildPerlModule {
     license = biberSource.meta.license;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram = "biber";
   };
 }

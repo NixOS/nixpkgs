@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jazzband/dj-database-url/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

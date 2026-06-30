@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
       lib.systems.inspect.patterns.isDarwin
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

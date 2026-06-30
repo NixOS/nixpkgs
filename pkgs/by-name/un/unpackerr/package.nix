@@ -31,5 +31,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "unpackerr";
+    hasNoMaintainersButDependents = true;
   };
 })

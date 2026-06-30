@@ -44,5 +44,6 @@ buildPythonPackage rec {
     description = "Generate and execute native code at run time, from Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

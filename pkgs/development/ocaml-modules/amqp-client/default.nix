@@ -35,5 +35,6 @@ buildDunePackage {
       You should install either amqp-client-async or amqp-client-lwt
       for actual client functionality.
     '';
+    hasNoMaintainersButDependents = true;
   };
 }

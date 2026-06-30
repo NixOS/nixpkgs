@@ -84,5 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gargoyle";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

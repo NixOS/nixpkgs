@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://flexmock.readthedocs.org";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -107,5 +107,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dbt-labs/dbt-common/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

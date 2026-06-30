@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Theme engines for GTK 2";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

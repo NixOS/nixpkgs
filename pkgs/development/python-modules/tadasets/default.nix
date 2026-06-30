@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://tadasets.scikit-tda.org";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

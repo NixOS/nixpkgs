@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Lucretiel/autocommand";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

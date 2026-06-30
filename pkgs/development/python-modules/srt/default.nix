@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

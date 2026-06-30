@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

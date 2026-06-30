@@ -87,5 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.shumatech.com/web/products/bossa";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

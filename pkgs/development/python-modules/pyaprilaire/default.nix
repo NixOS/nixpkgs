@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/marshmallow-code/apispec";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

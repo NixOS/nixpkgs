@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     description = "Toolkit for developing constraint-based systems";
     platforms = lib.platforms.all;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

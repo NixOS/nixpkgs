@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xfsinfo";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

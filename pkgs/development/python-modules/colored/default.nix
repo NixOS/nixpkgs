@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

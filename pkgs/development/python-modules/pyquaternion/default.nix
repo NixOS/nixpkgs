@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

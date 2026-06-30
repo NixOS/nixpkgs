@@ -67,5 +67,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

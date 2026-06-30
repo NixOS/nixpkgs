@@ -51,6 +51,7 @@ let
       description = "Web frontend for the Outer Wilds Mod Manager";
       homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_gui/frontend";
       license = lib.licenses.gpl3Plus;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

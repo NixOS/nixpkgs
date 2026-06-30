@@ -47,5 +47,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "pyspelling";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

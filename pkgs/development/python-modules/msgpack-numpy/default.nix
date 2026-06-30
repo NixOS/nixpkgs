@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lebedov/msgpack-numpy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

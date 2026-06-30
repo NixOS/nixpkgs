@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mcrypt.sourceforge.net";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

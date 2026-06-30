@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/repo-helper/hatch-requirements-txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

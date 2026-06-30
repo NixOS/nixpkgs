@@ -39,6 +39,7 @@ let
       description = "Qt wrapper around the D-Bus API from OpenRazer";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.linux;
+      hasNoMaintainersButDependents = true;
     };
   });
 in

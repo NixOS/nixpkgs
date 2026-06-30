@@ -81,6 +81,7 @@ postgresqlBuildExtension (finalAttrs: {
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
   };

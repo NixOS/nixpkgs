@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/elmindreda/duff";
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

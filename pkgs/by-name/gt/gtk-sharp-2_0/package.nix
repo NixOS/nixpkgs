@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

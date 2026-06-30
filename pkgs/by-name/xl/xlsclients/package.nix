@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlsclients";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

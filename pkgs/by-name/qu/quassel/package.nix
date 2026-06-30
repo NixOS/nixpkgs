@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     mainProgram =
       if monolithic then
         "quassel"

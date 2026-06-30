@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

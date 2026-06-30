@@ -44,5 +44,6 @@ php.buildComposerProject2 (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "castor";
+    hasNoMaintainersButDependents = true;
   };
 })

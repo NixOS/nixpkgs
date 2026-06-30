@@ -35,5 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

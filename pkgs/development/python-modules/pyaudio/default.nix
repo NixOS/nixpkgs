@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Python bindings for PortAudio";
     homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

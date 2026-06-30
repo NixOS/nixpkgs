@@ -33,5 +33,6 @@ buildDunePackage {
   meta = opam.meta // {
     description = "Small standard library extensions, and generic system interaction modules used by opam";
     maintainers = with lib.maintainers; [ sternenseemann ];
+    hasNoMaintainersButDependents = false;
   };
 }

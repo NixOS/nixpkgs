@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/icholy/durationpy";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

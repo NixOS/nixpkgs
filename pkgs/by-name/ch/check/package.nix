@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     mainProgram = "checkmk";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

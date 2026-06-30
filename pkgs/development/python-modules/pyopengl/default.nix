@@ -72,5 +72,6 @@ buildPythonPackage (finalAttrs: {
     '';
     license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

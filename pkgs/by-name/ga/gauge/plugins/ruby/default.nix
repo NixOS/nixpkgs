@@ -14,6 +14,7 @@ makeGaugePlugin {
     homepage = "https://github.com/getgauge/gauge-ruby/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"

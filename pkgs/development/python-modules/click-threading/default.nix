@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/click-contrib/click-threading/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -287,5 +287,6 @@ buildPythonPackage rec {
     description = "Asynchronous networking framework written in Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

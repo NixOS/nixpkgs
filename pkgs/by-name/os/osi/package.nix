@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.epl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://codeberg.org/hjacobs/python-clickclick/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "cd-paranoia";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

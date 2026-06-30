@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.playwitharena.de";
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 
 }

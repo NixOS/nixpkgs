@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -46,5 +46,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

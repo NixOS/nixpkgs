@@ -56,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/sphinx-remove-toctrees/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

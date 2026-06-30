@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     inherit (olm.meta) knownVulnerabilities;
+    hasNoMaintainersButDependents = true;
   };
 })

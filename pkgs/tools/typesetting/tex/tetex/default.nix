@@ -91,5 +91,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     hydraPlatforms = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

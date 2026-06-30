@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/noxdafox/pebble/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -47,5 +47,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ bsd3 ];
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

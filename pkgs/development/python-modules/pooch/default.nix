@@ -73,5 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fatiando/pooch";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

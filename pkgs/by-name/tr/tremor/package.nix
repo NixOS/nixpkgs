@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     description = "Fixed-point version of the Ogg Vorbis decoder";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

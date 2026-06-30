@@ -54,5 +54,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://revive.run";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

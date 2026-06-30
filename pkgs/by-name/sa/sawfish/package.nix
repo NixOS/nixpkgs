@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "sawfish";
+    hasNoMaintainersButDependents = true;
   };
 })

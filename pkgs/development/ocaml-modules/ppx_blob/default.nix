@@ -26,5 +26,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/johnwhitington/ppx_blob";
     description = "OCaml ppx to include binary data from a file as a string";
     license = lib.licenses.unlicense;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tomchristie/itypes";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

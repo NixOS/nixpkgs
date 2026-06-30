@@ -48,5 +48,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/mapbox/snuggs";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

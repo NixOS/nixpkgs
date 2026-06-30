@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     # something about missing `gzgetc` `gzopen` and `gzclose`
     # works on pkgsMusl so definitely a static problem
     broken = stdenv.hostPlatform.isStatic;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     folders to the trash.";
     platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

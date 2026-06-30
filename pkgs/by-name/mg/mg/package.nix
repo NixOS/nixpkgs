@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     license = lib.licenses.publicDomain;
     mainProgram = "mg";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

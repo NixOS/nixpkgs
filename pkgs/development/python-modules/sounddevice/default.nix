@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://python-sounddevice.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
+    hasNoMaintainersButDependents = true;
   };
 }

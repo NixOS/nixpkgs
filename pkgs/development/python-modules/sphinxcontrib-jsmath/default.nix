@@ -23,5 +23,6 @@ buildPythonPackage (finalAttrs: {
     description = "Sphinx extension which renders display math in HTML via JavaScript";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-jsmath";
     license = lib.licenses.bsd0;
+    hasNoMaintainersButDependents = true;
   };
 })

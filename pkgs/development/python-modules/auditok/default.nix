@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/amsehili/auditok/blob/v${version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

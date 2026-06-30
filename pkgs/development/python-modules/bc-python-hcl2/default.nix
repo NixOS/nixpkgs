@@ -37,5 +37,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "hcl2tojson";
+    hasNoMaintainersButDependents = true;
   };
 }

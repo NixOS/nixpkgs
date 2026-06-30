@@ -87,5 +87,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = webkitgtk_4_1.meta.platforms;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tardyp/txrequests";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

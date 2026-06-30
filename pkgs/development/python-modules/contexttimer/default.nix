@@ -41,5 +41,6 @@ buildPythonPackage {
     description = "Timer as a context manager";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

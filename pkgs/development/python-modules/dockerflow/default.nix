@@ -101,5 +101,6 @@ buildPythonPackage rec {
     description = "Python package to implement tools and helpers for Mozilla Dockerflow";
     homepage = "https://github.com/mozilla-services/python-dockerflow";
     license = lib.licenses.mpl20;
+    hasNoMaintainersButDependents = true;
   };
 }

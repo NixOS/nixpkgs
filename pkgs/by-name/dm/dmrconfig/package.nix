@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "dmrconfig";
+    hasNoMaintainersButDependents = true;
   };
 })

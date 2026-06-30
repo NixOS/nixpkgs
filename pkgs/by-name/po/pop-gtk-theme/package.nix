@@ -67,5 +67,6 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

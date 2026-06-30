@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 })

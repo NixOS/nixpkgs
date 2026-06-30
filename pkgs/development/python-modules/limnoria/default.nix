@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/progval/Limnoria/releases/tag/master-${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

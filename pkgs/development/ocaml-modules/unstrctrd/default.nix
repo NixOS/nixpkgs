@@ -43,5 +43,6 @@ buildDunePackage rec {
     homepage = "https://github.com/dinosaure/unstrctrd";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

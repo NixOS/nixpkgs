@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/vivien/i3blocks";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; freebsd ++ linux;
+    hasNoMaintainersButDependents = true;
   };
 }

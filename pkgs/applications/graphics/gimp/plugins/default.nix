@@ -77,7 +77,18 @@ lib.makeScope pkgs.newScope (
             "PKG_CONFIG_GIMP_${pkgConfigMajorVersion}_0_GIMPDATADIR" =
               "${placeholder "out"}/${gimp.targetDataDir}";
           }
+
           // attrs.env or { };
+
+          meta = {
+            # gimp{2,3}-with-plugins by default includes all plugins, so they always have a dependent,
+            # meaning we should really set hasNoMaintainersButDependents for the plugins that don't have a maintainer,
+            # but CI strictly requires the packages attribute be found somewhere if that attribute is set,
+            # which the `attrValues gimpPlugins` used by gimp{2,3}-with plugins doesn't trigger..
+            # So we need to silence the maintainerless warning in another way, which is what requiresMaintainers is for
+            requiresMaintainers = false;
+          }
+          // attrs.meta or { };
         }
       );
 

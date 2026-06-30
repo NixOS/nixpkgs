@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/to-mc/checksumdir";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

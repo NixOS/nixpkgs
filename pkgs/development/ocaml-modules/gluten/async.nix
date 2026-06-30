@@ -18,6 +18,7 @@ buildDunePackage {
   ];
 
   meta = gluten.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Async support for gluten";
   };
 }

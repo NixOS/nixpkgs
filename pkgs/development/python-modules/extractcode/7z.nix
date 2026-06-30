@@ -46,5 +46,6 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

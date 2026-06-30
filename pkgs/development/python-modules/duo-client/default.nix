@@ -58,5 +58,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

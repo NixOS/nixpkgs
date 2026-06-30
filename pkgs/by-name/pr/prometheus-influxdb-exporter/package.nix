@@ -38,5 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/prometheus/influxdb_exporter/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

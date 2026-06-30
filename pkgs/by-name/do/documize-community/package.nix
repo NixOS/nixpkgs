@@ -46,5 +46,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     mainProgram = "documize";
     homepage = "https://www.documize.com/";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     '';
     platforms = lib.platforms.unix;
     mainProgram = "sendmail";
+    hasNoMaintainersButDependents = true;
   };
 }

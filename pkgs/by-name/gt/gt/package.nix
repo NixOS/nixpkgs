@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

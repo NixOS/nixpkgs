@@ -23,5 +23,6 @@ buildGoModule (finalAttrs: {
     description = "Fast JSON serializer for Go";
     mainProgram = "easyjson";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

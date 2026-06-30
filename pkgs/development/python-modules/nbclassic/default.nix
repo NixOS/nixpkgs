@@ -51,5 +51,6 @@ buildPythonPackage rec {
     description = "Jupyter lab environment notebook server extension";
     homepage = "https://github.com/jupyter/nbclassic";
     license = with lib.licenses; [ bsd3 ];
+    hasNoMaintainersButDependents = true;
   };
 }

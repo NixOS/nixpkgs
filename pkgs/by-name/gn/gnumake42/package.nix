@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "make";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

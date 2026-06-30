@@ -36,5 +36,6 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

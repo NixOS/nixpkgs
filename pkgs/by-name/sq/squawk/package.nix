@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/sbdchd/squawk/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.mktemp.org";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

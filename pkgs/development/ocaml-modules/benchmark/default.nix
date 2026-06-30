@@ -26,5 +26,6 @@ buildDunePackage (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/Chris00/ocaml-benchmark/refs/tags/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.lgpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

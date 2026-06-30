@@ -35,5 +35,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

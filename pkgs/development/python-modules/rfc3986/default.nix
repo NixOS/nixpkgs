@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://rfc3986.readthedocs.org";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

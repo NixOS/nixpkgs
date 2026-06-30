@@ -239,5 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "ibus";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

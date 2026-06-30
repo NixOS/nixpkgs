@@ -65,6 +65,8 @@ let
         meta = {
           description = "Aspell dictionary for ${fullName}";
           platforms = lib.platforms.all;
+          # TODO: Why?
+          requiresMaintainers = false;
         }
         // (args.meta or { });
       }

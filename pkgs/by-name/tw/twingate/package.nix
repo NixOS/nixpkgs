@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://twingate.com";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

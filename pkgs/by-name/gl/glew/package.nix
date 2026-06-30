@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
         lib.subtractLists lib.platforms.darwin mesa.meta.platforms
       else
         mesa.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

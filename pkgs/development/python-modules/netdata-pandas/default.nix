@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/netdata/netdata-pandas";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

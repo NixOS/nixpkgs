@@ -11,5 +11,6 @@ makeSetupHook {
   meta = {
     description = "Sorts an array";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 } ./sortArray.bash

@@ -30,6 +30,7 @@ let
         artistic1
         gpl1Plus
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -50,6 +51,7 @@ let
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -75,6 +77,7 @@ let
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -100,6 +103,7 @@ let
         artistic1
         gpl2Only
       ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

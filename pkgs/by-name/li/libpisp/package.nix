@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Helper library to generate run-time configuration for the Raspberry Pi ISP (PiSP), consisting of the Frontend and Backend hardware components";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

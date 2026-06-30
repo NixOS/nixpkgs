@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rems-project/linksem";
     description = "Formalisation of substantial parts of ELF linking and DWARF debug information";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     license = lib.licenses.bsd2;
     platforms = ocaml.meta.platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.07");

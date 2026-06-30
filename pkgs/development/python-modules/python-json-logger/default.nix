@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/madzak/python-json-logger";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

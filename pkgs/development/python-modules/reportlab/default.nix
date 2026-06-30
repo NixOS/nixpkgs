@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://www.reportlab.com/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

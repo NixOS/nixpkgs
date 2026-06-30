@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://importlib-resources.readthedocs.io/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

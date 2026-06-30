@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "hdparm";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

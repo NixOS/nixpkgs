@@ -34,6 +34,7 @@ mkCoqDerivation {
   meta = {
     description = "Enhanced unification algorithm for Coq";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
   preBuild = ''
     coq_makefile -f _CoqProject -o Makefile

@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://grpc.io";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

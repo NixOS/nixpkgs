@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GeospatialPython/pyshp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

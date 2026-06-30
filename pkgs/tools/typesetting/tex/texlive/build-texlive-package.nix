@@ -57,9 +57,13 @@
   hasJar ? false,
   catalogue ? pname,
   extraNativeBuildInputs ? [ ],
+  meta ? { },
   ...
 }@args:
 
+let
+  _meta = meta;
+in
 let
   # common metadata
   name = "${pname}-${version}${extraVersion}";
@@ -90,7 +94,8 @@ let
   }
   // lib.optionalAttrs hasJar {
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-  };
+  }
+  // _meta;
 
   # if binfiles contains exactly one entry, use it as mainProgram, but allow overrides via args.mainProgram
   mainProgram =
@@ -281,6 +286,7 @@ let
     runCommand name
       {
         __structuredAttrs = true;
+        pos = builtins.unsafeGetAttrPos "shortdesc" args;
         inherit meta outputDrvs;
         outputs = if outputs != [ ] then outputs else [ "out" ];
         passthru = removeAttrs passthru [ "outputSpecified" ] // {

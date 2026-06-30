@@ -35,5 +35,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "vkbasalt";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -21,6 +21,7 @@ runCommand testName
     inherit moduleNames version versionCheck;
     meta = {
       description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}";
+      hasNoMaintainersButDependents = true;
     }
     # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
     # as hydra can't check this meta info in dependencies.

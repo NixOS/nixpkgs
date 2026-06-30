@@ -60,6 +60,7 @@ let
       license = lib.licenses.mit;
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

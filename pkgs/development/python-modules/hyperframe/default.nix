@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/hyperframe/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

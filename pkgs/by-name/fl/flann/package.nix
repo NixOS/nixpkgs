@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

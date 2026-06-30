@@ -55,13 +55,23 @@ lib.genAttrs cocPackages (
     cocPkg = pkgs.${pkg};
   in
   buildVimPlugin {
-    inherit (cocPkg) pname version meta;
+    inherit (cocPkg) pname version;
+    meta = cocPkg.meta // {
+      # TODO: Why?
+      hasNoMaintainersButDependents = false;
+      requiresMaintainers = false;
+    };
     src = "${cocPkg}/lib/node_modules/${cocPkg.pname}";
   }
 )
 // {
   coc-nginx = buildVimPlugin {
-    inherit (coc-nginx) pname version meta;
+    inherit (coc-nginx) pname version;
+    meta = coc-nginx.meta // {
+      # TODO: Why?
+      hasNoMaintainersButDependents = false;
+      requiresMaintainers = false;
+    };
     src = "${coc-nginx}/lib/node_modules/@yaegassy/coc-nginx";
   };
 }

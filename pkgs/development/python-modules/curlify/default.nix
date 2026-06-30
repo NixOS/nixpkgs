@@ -23,5 +23,6 @@ buildPythonPackage {
     description = "Convert python requests request object to cURL command";
     homepage = "https://github.com/ofw/curlify";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

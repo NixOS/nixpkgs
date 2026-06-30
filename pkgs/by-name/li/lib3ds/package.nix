@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lib3ds.sourceforge.net/";
     license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

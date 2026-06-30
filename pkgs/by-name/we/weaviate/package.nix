@@ -37,5 +37,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/weaviate/weaviate";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

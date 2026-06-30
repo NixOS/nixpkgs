@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -52,5 +52,6 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
+    hasNoMaintainersButDependents = true;
   };
 }

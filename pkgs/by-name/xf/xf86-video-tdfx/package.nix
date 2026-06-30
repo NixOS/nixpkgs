@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenv.hostPlatform != stdenv.buildPlatform)
       # broken due to missing I/O Port syscalls
       || stdenv.hostPlatform.isAarch64;
+    hasNoMaintainersButDependents = true;
   };
 })

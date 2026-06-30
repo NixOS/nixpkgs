@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xclock";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/geopy/geopy/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

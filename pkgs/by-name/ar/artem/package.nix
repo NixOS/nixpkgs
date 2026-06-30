@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     mainProgram = "artem";
+    hasNoMaintainersButDependents = true;
   };
 })

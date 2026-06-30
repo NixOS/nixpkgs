@@ -38,5 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/coleifer/wtf-peewee/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "disarchive";
     maintainers = [ ];
     platforms = guile.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

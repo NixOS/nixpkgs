@@ -45,5 +45,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyeve/eve/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

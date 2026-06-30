@@ -37,5 +37,6 @@ buildPythonPackage {
     homepage = "https://github.com/yifeikong/th1";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

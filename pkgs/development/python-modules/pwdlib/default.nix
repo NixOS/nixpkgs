@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/frankie567/pwdlib";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

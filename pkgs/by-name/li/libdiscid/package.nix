@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://musicbrainz.org/doc/libdiscid";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

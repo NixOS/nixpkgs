@@ -28,7 +28,9 @@ writeTextFile {
   '';
   derivationArgs = {
     # Inherit the metadata from the parent `ctags` derivation.
-    inherit (ctags) meta;
+    meta = ctags.meta // {
+      hasNoMaintainersButDependents = false;
+    };
 
     passthru = {
       # `ctagsWrapped` exists for backwards compatibility; ctagsWrapped used to be an attrset and

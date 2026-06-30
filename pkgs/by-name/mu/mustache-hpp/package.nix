@@ -26,5 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mustache text templates for modern C++";
     homepage = "https://github.com/kainjow/Mustache";
     license = lib.licenses.boost;
+    hasNoMaintainersButDependents = true;
   };
 })

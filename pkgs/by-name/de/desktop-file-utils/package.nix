@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command line utilities for working with .desktop files";
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

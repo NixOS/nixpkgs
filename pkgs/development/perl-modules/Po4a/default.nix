@@ -127,5 +127,6 @@ buildPerlPackage rec {
     description = "Tools for helping translation of documentation";
     homepage = "https://po4a.org";
     license = with lib.licenses; [ gpl2Plus ];
+    hasNoMaintainersButDependents = true;
   };
 }

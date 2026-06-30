@@ -154,5 +154,6 @@ else
       homepage = "https://github.com/ocaml/camlp4";
       platforms = ocaml.meta.platforms or [ ];
       license = lib.licenses.WITH lib.licenses.lgpl2Only lib.licenses.ocamlLgplLinkingException;
+      hasNoMaintainersButDependents = true;
     };
   }

@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

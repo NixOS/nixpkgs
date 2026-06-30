@@ -50,5 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mypyc/librt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

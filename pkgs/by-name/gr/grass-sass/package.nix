@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "grass";
+    hasNoMaintainersButDependents = true;
   };
 })

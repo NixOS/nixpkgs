@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     mainProgram = "ndppd";
+    hasNoMaintainersButDependents = true;
   };
 })

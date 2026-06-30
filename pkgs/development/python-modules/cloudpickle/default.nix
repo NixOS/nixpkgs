@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

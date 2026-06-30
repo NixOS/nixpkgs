@@ -39,4 +39,5 @@ mkDerivation {
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/hackage-db#readme";
   description = "Access cabal-install's Hackage database via Data.Map";
   license = lib.licensesSpdx."BSD-3-Clause";
+  hasNoMaintainersButDependents = true;
 }

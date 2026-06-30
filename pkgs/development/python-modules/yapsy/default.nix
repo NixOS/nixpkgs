@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

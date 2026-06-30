@@ -72,5 +72,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "localstack";
+    hasNoMaintainersButDependents = true;
   };
 })

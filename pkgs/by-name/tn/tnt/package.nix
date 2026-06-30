@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     description = "Template Numerical Toolkit: C++ headers for array and matrices";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

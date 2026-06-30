@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/orcasgit/python-fitbit";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

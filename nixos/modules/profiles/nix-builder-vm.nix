@@ -233,6 +233,7 @@ in
           mainProgram = "create-builder";
           description = "Create a Linux builder VM for macOS";
           platforms = lib.platforms.darwin;
+          hasNoMaintainersButDependents = true;
         };
         passthru = {
           # Let users in the repl inspect the config

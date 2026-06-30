@@ -55,6 +55,7 @@ let
     definitions = pkgs.jupyter-kernel.default // {
       sagemath = jupyter-kernel-definition;
     };
+    meta.hasNoMaintainersButDependents = true;
   };
 
   three = callPackage ./threejs-sage.nix { };

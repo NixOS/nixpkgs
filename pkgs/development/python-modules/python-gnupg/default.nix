@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

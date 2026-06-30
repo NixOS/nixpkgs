@@ -45,5 +45,6 @@ buildPythonPackage {
     homepage = "https://gyp.gsrc.io";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

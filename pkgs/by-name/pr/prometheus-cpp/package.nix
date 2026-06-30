@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Prometheus Client Library for Modern C++";
     homepage = "https://github.com/jupp0r/prometheus-cpp";
     license = [ lib.licenses.mit ];
+    hasNoMaintainersButDependents = true;
   };
 })

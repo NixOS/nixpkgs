@@ -125,5 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "jack" ];
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
       extensive test suite.
     '';
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

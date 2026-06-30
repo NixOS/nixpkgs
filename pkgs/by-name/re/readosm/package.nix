@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

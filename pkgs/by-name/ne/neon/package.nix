@@ -62,5 +62,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 }

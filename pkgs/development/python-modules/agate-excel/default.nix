@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/wireservice/agate-excel/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/jschema-to-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

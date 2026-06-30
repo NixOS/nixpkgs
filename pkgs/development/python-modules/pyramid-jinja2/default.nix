@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/pyramid_jinja2";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

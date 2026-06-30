@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maxcountryman/flask-login";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

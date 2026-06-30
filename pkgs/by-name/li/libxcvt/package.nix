@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    hasNoMaintainersButDependents = true;
   };
 })

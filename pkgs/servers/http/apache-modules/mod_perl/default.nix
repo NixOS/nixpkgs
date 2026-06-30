@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     mainProgram = "mp2bug";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

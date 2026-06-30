@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/cxx/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

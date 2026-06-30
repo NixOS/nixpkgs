@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://liblastfm.sourceforge.net";
     description = "Unofficial C lastfm library";
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

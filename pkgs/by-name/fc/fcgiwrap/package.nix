@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux;
     license = lib.licenses.mit;
     mainProgram = "fcgiwrap";
+    hasNoMaintainersButDependents = true;
   };
 })

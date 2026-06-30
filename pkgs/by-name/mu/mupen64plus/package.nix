@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.mupen64plus.org/";
     platforms = [ "x86_64-linux" ];
     mainProgram = "mupen64plus";
+    hasNoMaintainersButDependents = true;
   };
 })

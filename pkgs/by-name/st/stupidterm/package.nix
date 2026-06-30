@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "stupidterm";
+    hasNoMaintainersButDependents = true;
   };
 }

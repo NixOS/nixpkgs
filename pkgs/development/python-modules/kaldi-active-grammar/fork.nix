@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://kaldi-asr.org";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux;
   };
 }

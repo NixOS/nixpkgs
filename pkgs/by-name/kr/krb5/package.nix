@@ -179,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://web.mit.edu/kerberos/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

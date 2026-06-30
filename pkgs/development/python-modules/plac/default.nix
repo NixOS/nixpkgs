@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/micheles/plac";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

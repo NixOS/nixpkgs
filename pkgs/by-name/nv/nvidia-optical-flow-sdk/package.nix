@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://developer.nvidia.com/opticalflow-sdk";
     license = lib.licenses.bsd3; # applies to the header files only
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

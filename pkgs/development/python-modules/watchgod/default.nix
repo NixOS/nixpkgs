@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/samuelcolvin/watchgod";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

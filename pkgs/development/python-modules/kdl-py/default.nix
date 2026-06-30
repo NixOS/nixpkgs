@@ -33,5 +33,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "kdlreformat";
+    hasNoMaintainersButDependents = true;
   };
 }

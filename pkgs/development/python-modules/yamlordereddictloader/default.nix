@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

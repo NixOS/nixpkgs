@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/types-mock";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cvxgrp/scs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

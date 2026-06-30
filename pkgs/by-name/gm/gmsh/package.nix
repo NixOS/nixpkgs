@@ -122,5 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.onelab.info/gmsh/gmsh/-/releases/gmsh_${lib.concatStringsSep "_" (lib.versions.splitVersion finalAttrs.version)}#changelog";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

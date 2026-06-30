@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xmuu"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

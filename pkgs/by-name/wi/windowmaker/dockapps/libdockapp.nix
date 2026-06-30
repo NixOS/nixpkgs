@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.dockapps.net/libdockapp";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -55,5 +55,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

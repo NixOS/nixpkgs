@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

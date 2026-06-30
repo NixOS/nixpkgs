@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/ruamel-base/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

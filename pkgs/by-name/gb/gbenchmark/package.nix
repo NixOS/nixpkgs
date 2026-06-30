@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

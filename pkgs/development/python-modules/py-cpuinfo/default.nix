@@ -46,5 +46,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/benfred/py-spy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/benhoyt/inih/releases/tag/r${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

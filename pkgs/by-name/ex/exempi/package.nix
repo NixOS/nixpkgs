@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

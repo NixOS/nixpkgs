@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Microsoft Works document format import filter library";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

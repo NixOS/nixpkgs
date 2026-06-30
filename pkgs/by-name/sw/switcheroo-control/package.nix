@@ -68,5 +68,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

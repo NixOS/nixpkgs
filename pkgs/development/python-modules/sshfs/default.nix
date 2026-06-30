@@ -70,5 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fsspec/sshfs/";
     changelog = "https://github.com/fsspec/sshfs/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

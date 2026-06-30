@@ -56,5 +56,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
     mainProgram = "vcs";
+    hasNoMaintainersButDependents = true;
   };
 }

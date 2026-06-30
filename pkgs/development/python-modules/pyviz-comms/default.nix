@@ -47,5 +47,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://pyviz.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

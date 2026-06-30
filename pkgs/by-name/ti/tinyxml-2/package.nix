@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ zlib ];
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

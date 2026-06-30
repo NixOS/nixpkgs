@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Dobiasd/frugally-deep";
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

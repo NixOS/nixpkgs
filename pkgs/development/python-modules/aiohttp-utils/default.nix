@@ -62,5 +62,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/sloria/aiohttp-utils/tags/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stefankoegl/python-json-patch";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

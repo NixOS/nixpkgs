@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://tabo.pe/projects/django-treebeard/";
     changelog = "https://github.com/django-treebeard/django-treebeard/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

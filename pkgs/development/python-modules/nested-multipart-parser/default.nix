@@ -41,5 +41,6 @@ buildPythonPackage rec {
     description = "Parser for nested data for 'multipart/form'";
     homepage = "https://github.com/remigermain/nested-multipart-parser";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       mpl10
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

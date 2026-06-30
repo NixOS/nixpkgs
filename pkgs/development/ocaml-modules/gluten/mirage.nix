@@ -19,6 +19,7 @@ buildDunePackage {
   ];
 
   meta = gluten.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Mirage support for gluten";
   };
 }

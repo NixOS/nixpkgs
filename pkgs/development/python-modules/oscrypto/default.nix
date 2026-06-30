@@ -58,5 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wbond/oscrypto";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

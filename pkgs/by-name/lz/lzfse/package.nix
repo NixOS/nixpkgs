@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
     mainProgram = "lzfse";
+    hasNoMaintainersButDependents = true;
   };
 })

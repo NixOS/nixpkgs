@@ -27,5 +27,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/foutaise/texttable/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

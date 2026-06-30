@@ -28,5 +28,6 @@ buildGoModule (finalAttrs: {
       maintainers
       ;
     mainProgram = "plik";
+    hasNoMaintainersButDependents = true;
   };
 })

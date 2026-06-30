@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bastibe/python-soundfile";
     # https://github.com/bastibe/python-soundfile/issues/157
     broken = stdenv.hostPlatform.isi686;
+    hasNoMaintainersButDependents = true;
   };
 }

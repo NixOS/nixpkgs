@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cmacmackin/markdown-include";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

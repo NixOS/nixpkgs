@@ -73,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.corpit.ru/mjt/tinycdb.html";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

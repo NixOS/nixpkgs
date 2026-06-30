@@ -24,5 +24,6 @@ buildDunePackage {
     description = "API for writing dynamic Dune actions";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

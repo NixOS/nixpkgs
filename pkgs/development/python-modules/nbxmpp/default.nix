@@ -53,5 +53,6 @@ buildPythonPackage rec {
     description = "Non-blocking Jabber/XMPP module";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

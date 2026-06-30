@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/googleapis/python-crc32c/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

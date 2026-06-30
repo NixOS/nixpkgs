@@ -41,6 +41,7 @@
   expand-response-params,
   targetPackages ? { },
   wrapGas ? false,
+  meta ? { },
 
   # Note: the hardening flags are part of the bintools-wrapper, rather than
   # the cc-wrapper, because a few of them are handled by the linker.
@@ -487,5 +488,6 @@ stdenvNoCC.mkDerivation {
       description =
         attrByPath [ "meta" "description" ] "System binary utilities" bintools_ + " (wrapper script)";
       priority = 10;
-    };
+    }
+    // meta;
 }

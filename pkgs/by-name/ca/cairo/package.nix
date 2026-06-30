@@ -150,6 +150,7 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional gobjectSupport "cairo-gobject";
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   }
 )

@@ -105,5 +105,6 @@ buildPythonPackage rec {
     mainProgram = "certbot";
     maintainers = [ ];
     license = with lib.licenses; [ asl20 ];
+    hasNoMaintainersButDependents = true;
   };
 }

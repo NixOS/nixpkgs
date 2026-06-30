@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "Use Search URLs in your Django Haystack Application";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

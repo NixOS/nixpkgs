@@ -48,5 +48,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Asana/python-asana/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

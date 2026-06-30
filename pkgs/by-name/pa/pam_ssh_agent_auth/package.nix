@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     description = "PAM module for authentication through the SSH agent";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

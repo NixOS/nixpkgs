@@ -63,5 +63,6 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.asl20;
     description = "Python to Java bridge";
+    hasNoMaintainersButDependents = true;
   };
 }

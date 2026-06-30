@@ -59,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

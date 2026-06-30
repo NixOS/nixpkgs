@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible-community/molecule-plugins";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

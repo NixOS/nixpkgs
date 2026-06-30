@@ -82,5 +82,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/cldf/csvw";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

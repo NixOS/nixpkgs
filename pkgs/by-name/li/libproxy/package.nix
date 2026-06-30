@@ -138,5 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.systems.inspect.platformPatterns.isStatic
     ];
     mainProgram = "proxy";
+    hasNoMaintainersButDependents = true;
   };
 })

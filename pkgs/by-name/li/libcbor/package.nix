@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/PJK/libcbor";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

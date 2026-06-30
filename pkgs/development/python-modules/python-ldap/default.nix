@@ -83,5 +83,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

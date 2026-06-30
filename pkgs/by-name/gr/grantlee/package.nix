@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.lgpl21;
     inherit (qt5.qtbase.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 }

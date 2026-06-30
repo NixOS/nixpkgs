@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ lgpl3Plus ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # failing tests
+    hasNoMaintainersButDependents = true;
   };
 })

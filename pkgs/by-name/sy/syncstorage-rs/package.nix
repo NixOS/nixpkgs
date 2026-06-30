@@ -65,5 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "syncserver";
+    hasNoMaintainersButDependents = true;
   };
 })

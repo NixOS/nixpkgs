@@ -86,5 +86,6 @@ buildPythonPackage {
     changelog = "https://github.com/Unidata/netcdf4-python/raw/${tag}/Changelog";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

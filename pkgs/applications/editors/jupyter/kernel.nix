@@ -35,6 +35,7 @@ in
   create =
     {
       definitions ? default,
+      meta ? { },
     }:
     stdenv.mkDerivation {
 
@@ -94,6 +95,7 @@ in
         description = "Wrapper to create jupyter notebook kernel definitions";
         homepage = "https://jupyter.org/";
         maintainers = [ ];
-      };
+      }
+      // meta;
     };
 }

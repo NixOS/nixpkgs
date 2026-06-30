@@ -92,5 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libvirt.org/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

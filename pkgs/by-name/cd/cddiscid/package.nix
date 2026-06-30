@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
       from a CD-ROM disc.  It was originally designed for cdgrab (now
       abcde), but can be used for any purpose requiring CDDB data.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -104,5 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "debootstrap";
+    hasNoMaintainersButDependents = true;
   };
 })

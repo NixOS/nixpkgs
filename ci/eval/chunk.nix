@@ -8,6 +8,7 @@
   myChunk,
   includeBroken,
   systems,
+  defaultProblemHandler,
   extraNixpkgsConfigJson,
 }:
 
@@ -17,7 +18,7 @@ let
 
   unfiltered = import ./outpaths.nix {
     inherit path;
-    inherit includeBroken systems;
+    inherit includeBroken systems defaultProblemHandler;
     inherit (preEvalResult) attrPathsDisallowedForInternalUse;
     extraNixpkgsConfig = builtins.fromJSON extraNixpkgsConfigJson;
   };

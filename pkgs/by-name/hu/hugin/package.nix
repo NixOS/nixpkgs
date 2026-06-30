@@ -104,5 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

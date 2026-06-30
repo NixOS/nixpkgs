@@ -88,5 +88,6 @@ buildPythonPackage rec {
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/piskvorky/smart_open";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

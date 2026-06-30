@@ -128,6 +128,7 @@ stdenv.mkDerivation {
     description = "Email synchronization engine for Mailspring";
     homepage = "https://github.com/Foundry376/Mailspring-Sync";
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

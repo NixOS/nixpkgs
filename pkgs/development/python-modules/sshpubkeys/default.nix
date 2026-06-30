@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ojarva/python-sshpubkeys";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

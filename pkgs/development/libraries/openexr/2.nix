@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
       "CVE-2025-12840: EXR File Parsing Heap-based Buffer Overflow Remote Code Execution"
       "CVE-2026-27622: CompositeDeepScanLine integer-overflow leads to heap OOB write"
     ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kvas-it/pytest-console-scripts";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

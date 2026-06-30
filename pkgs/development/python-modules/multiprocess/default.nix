@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/uqfoundation/multiprocess";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

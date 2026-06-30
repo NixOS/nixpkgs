@@ -50,5 +50,6 @@ pythonPackages.buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "present";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -57,5 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/oxfordcontrol/Clarabel.rs";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

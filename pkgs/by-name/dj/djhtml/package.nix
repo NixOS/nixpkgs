@@ -26,5 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "djhtml";
+    hasNoMaintainersButDependents = true;
   };
 })

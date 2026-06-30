@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://gitlab.com/betamax/serializers";
     description = "Set of third-party serializers for Betamax";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 })

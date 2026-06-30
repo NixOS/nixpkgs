@@ -98,5 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "roxterm";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

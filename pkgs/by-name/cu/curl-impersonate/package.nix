@@ -214,5 +214,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "curl-impersonate";
+    hasNoMaintainersButDependents = true;
   };
 }

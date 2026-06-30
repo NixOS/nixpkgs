@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     description = "Multi-line edit box";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

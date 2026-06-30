@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://packages.debian.org/unstable/libs/liblockfile1";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

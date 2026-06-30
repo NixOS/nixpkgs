@@ -69,5 +69,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-solargraph";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -77,5 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "thermald";
+    hasNoMaintainersButDependents = true;
   };
 })

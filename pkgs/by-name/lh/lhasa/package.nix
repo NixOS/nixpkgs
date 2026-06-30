@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://fragglet.github.io/lhasa";
     mainProgram = "lha";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

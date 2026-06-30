@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "dtach";
+    hasNoMaintainersButDependents = true;
   };
 })

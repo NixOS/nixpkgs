@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     description = "Library to construct the suffix array and the BW transformed string";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

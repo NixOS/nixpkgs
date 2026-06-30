@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "sakura";
+    hasNoMaintainersButDependents = true;
   };
 })

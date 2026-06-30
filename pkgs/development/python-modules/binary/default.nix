@@ -40,5 +40,6 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

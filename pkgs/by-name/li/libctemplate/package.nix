@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/OlafvdSpek/ctemplate";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

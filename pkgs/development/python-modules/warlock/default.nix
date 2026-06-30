@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/bcwaldon/warlock";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

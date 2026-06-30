@@ -38,5 +38,6 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

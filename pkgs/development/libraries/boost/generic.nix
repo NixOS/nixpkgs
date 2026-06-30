@@ -274,6 +274,7 @@ stdenv.mkDerivation {
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     broken =
       enableNumpy && lib.versionOlder version "1.86" && lib.versionAtLeast python.pkgs.numpy.version "2";
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

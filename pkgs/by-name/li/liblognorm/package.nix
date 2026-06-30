@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     mainProgram = "lognormalizer";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

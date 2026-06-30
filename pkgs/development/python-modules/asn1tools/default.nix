@@ -76,5 +76,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "asn1tools";
+    hasNoMaintainersButDependents = true;
   };
 }

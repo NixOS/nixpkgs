@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.fraunhofer-fdk;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

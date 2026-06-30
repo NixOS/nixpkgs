@@ -50,5 +50,6 @@ buildPythonPackage rec {
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

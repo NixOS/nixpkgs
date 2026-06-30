@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlsatoms";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

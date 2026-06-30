@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

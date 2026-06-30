@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ziberna/i3-py";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

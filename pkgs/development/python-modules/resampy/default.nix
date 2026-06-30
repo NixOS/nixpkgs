@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bmcfee/resampy";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

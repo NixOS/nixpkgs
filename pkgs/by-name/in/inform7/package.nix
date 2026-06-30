@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     broken =
       (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
       || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    hasNoMaintainersButDependents = true;
   };
 }

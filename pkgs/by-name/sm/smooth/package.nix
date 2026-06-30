@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.artistic2;
     homepage = "http://www.smooth-project.org/";
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

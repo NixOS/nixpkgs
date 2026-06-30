@@ -43,5 +43,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/mwclient/mwclient";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

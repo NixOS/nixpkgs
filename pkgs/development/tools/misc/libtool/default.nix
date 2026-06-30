@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
 
     mainProgram = "libtool";
+    hasNoMaintainersButDependents = true;
   };
 }

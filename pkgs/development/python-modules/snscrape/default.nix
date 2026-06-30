@@ -55,5 +55,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "snscrape";
+    hasNoMaintainersButDependents = true;
   };
 }

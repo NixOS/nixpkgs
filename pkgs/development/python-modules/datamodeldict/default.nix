@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/usnistgov/DataModelDict/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

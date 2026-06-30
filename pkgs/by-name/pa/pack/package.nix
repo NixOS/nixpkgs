@@ -45,5 +45,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "pack";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

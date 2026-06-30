@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/neogeny/TatSu/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/Flask-OpenID/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

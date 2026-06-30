@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mpc";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -68,6 +68,7 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

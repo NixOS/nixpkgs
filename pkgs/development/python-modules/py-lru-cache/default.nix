@@ -20,5 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stucchio/Python-LRU-cache";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

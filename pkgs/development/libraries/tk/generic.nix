@@ -106,5 +106,6 @@ tcl.mkTclDerivation {
     platforms = lib.platforms.all;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin && lib.elem (lib.versions.majorMinor tcl.version) [ "8.5" ];
+    hasNoMaintainersButDependents = true;
   };
 }

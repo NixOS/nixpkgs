@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://telepathy.freedesktop.org/components/telepathy-qt/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

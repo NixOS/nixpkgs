@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bt-agent";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

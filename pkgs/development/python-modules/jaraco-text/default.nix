@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.text";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

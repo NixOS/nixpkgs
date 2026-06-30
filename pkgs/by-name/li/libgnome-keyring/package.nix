@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       users. The library libgnome-keyring is used by applications to integrate
       with the gnome-keyring system.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

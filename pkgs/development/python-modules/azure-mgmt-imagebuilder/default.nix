@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-imagebuilder_${finalAttrs.version}/sdk/compute/azure-mgmt-imagebuilder/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

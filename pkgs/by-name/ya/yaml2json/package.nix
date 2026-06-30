@@ -38,5 +38,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "yaml2json";
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

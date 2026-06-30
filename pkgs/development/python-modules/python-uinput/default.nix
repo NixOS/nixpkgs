@@ -26,5 +26,6 @@ buildPythonPackage rec {
     homepage = "https://tjjr.fi/sw/python-uinput/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

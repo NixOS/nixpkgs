@@ -68,5 +68,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/natumbri/mopidy-youtube";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

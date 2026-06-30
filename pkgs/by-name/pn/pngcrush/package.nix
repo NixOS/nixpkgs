@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.free;
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "pngcrush";
+    hasNoMaintainersButDependents = true;
   };
 })

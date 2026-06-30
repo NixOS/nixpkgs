@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Python API to MPV using JSON IPC";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

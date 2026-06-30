@@ -17,5 +17,6 @@ buildPythonPackage rec {
     description = "Timeout decorator";
     license = lib.licenses.mit;
     homepage = "https://github.com/pnpnpn/timeout-decorator";
+    hasNoMaintainersButDependents = true;
   };
 }

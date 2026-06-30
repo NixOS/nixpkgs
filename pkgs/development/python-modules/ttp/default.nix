@@ -106,5 +106,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dmulyalin/ttp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

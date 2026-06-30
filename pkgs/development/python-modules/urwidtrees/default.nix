@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pazz/urwidtrees/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

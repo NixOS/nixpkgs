@@ -23,5 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/asweigart/pytweening";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

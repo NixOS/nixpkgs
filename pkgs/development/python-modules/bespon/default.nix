@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gpoore/bespon_py";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

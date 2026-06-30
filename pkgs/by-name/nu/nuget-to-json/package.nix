@@ -35,5 +35,6 @@ replaceVarsWith {
   meta = {
     description = "Convert a nuget packages directory to a lockfile for buildDotnetModule";
     mainProgram = "nuget-to-json";
+    hasNoMaintainersButDependents = true;
   };
 }

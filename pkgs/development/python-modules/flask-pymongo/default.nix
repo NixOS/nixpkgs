@@ -38,5 +38,6 @@ buildPythonPackage rec {
     description = "PyMongo support for Flask applications";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

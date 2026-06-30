@@ -48,5 +48,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "alertad";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

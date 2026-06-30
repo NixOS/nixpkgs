@@ -50,4 +50,5 @@ mkDerivation {
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/distribution-nixpkgs#readme";
   description = "Types and functions to manipulate the Nixpkgs distribution";
   license = lib.licensesSpdx."BSD-3-Clause";
+  hasNoMaintainersButDependents = true;
 }

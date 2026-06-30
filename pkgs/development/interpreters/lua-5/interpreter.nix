@@ -231,6 +231,7 @@ stdenv.mkDerivation (
       mainProgram = "lua";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
+      hasNoMaintainersButDependents = true;
     };
   }
 )

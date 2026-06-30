@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Pylons/colander";
     license = lib.licenses.free; # http://repoze.org/LICENSE.txt
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

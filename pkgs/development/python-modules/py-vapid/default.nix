@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/mozilla-services/vapid";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

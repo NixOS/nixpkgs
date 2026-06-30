@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pavucontrol";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

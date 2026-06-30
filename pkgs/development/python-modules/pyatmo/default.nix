@@ -59,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jabesq/pyatmo/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

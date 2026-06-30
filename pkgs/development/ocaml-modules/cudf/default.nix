@@ -35,5 +35,6 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://gforge.inria.fr/projects/cudf/";
     license = lib.licenses.lgpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

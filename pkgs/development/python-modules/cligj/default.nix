@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mapbox/cligj";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -76,7 +76,7 @@ rec {
     maintainerless = {
       manualAllowed = false;
       isUnique = false;
-      nixpkgsInternalUseAllowed = true;
+      nixpkgsInternalUseAllowed = false;
       automatic = {
         condition =
           # To get usable output, we want to avoid flagging "internal" derivations.
@@ -87,13 +87,12 @@ rec {
           # If `description` is not defined, the derivation is probably not a package.
           # Simply checking whether `meta` is defined is insufficient,
           # as some fetchers and trivial builders do define meta.
-          config: attrs:
-          # Order of checks optimised for short-circuiting the common case of having maintainers
-          (attrs.meta.maintainers or [ ] == [ ])
+          config: attrs: requiresMaintainers:
+          requiresMaintainers
+          && (attrs.meta.maintainers or [ ] == [ ])
           && (attrs.meta.teams or [ ] == [ ])
-          && (!attrs ? outputHash)
-          && (attrs ? meta.description);
-        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+          && (attrs.meta.hasNoMaintainersButDependents or false == false);
+        value.message = "This is a leaf package without maintainer. If you need this package, become a maintainer to avoid it being removed.";
       };
     };
     broken = {
@@ -113,11 +112,11 @@ rec {
                 config.allowBrokenPredicate;
           in
           if allowBroken then
-            attrs: false
+            attrs: requiresMaintainers: false
           else if config ? allowBrokenPredicate then
-            attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
+            attrs: requiresMaintainers: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
           else
-            attrs: attrs ? meta.broken && attrs.meta.broken;
+            attrs: requiresMaintainers: attrs ? meta.broken && attrs.meta.broken;
         value.message = "This package is broken.";
       };
     };
@@ -149,10 +148,10 @@ rec {
   );
 
   genAutomaticProblems =
-    config: attrs:
+    config: attrs: requiresMaintainers:
     listToAttrs (
       map (problem: lib.nameValuePair problem.kindName problem.value) (
-        filter (problem: problem.condition config attrs) automaticProblems
+        filter (problem: problem.condition config attrs requiresMaintainers) automaticProblems
       )
     );
 
@@ -469,7 +468,7 @@ rec {
     };
 
   genCheckProblems =
-    config:
+    config: defaultRequiresMaintainers:
     let
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
@@ -491,11 +490,14 @@ rec {
         }
       ) automaticProblems;
     in
-    attrs:
+    attrs: pos:
+    let
+      requiresMaintainers = attrs.meta.requiresMaintainers or (defaultRequiresMaintainers attrs pos);
+    in
     if
       # Fast path for when there's no problem that needs to be handled
       all (
-        problem: problem.condition attrs -> problem.handler (getName attrs) == "ignore"
+        problem: problem.condition attrs requiresMaintainers -> problem.handler (getName attrs) == "ignore"
       ) automaticProblemsConfigCache
       && (
         # No manual problems
@@ -511,7 +513,7 @@ rec {
       # Slow path, only here we actually figure out which problems we need to handle
       let
         pname = getName attrs;
-        problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
+        problems = attrs.meta.problems or { } // genAutomaticProblems config attrs requiresMaintainers;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
@@ -525,9 +527,9 @@ rec {
       processProblems pname problemsToHandle;
 
   completeMetaProblems =
-    config: attrs:
+    config: attrs: requiresMaintainers:
     mapAttrs (name: problem: { kind = name; } // problem) (
-      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+      (attrs.meta.problems or { }) // genAutomaticProblems config attrs requiresMaintainers
     );
 
   processProblems =

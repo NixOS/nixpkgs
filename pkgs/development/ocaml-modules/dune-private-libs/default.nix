@@ -18,5 +18,6 @@ buildDunePackage {
     description = "Private libraries of Dune";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,5 +67,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })
