@@ -1,15 +1,21 @@
 {
   lib,
+  stdenv,
+  fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
-  librosa,
-  numpy,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  numpy,
   scipy,
-  stdenv,
   torch,
+
+  # tests
+  librosa,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 let
@@ -26,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nnaudio";
   version = "0.3.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "KinWaiCheuk";
@@ -57,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     export NUMBA_CACHE_DIR=$(mktemp -d)
   '';
 
+  # urllib3.exceptions.MaxRetryError
+  # On darwin the tests fail to locate the audio files and fallback to downloading them from the
+  # internet
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   disabledTests = [
     # AttributeError: module 'scipy.signal' has no attribute 'blackmanharris'
     "test_cfp_original[cpu]"
@@ -66,6 +78,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Test fixture matrix has other values
+    "test_cqt_1992_v2_linear[cpu]"
     "test_cqt_1992_v2_log[cpu]"
   ];
 

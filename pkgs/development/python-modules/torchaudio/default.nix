@@ -126,6 +126,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Very long to run
     "AutogradCPUTest"
+    "TestAutogradLfilterCPU"
+    "TestWav2Vec2Model"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!

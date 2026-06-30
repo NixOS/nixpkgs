@@ -72,12 +72,13 @@ let
 
   callPnpm =
     variant:
-    callPackage ./generic.nix {
-      inherit (variant) version hash;
-      knownVulnerabilities = variant.knownVulnerabilities or [ ];
-      #FIXME: remove this hack in a future version.
-      nodejs = null; # Passing null to detect out-of-tree overrides
-    };
+    callPackage ./generic.nix (
+      variant
+      // {
+        #FIXME: remove this hack in a future version.
+        nodejs = null; # Passing null to detect out-of-tree overrides
+      }
+    );
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in
