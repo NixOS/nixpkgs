@@ -37,6 +37,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export PYTHON=${python3Packages.python}/bin/python
+    export NMLC=$out/bin/nmlc
+
+    make regression
+
+    runHook postInstallCheck
+  '';
+
   meta = {
     changelog = "https://github.com/OpenTTD/nml/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/OpenTTD/nml";
