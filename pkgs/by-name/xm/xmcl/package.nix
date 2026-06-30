@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
   unpackPhase = "dpkg -x $src ./";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # Tools needed during the build process itself
   nativeBuildInputs = [
     dpkg # Unpacks the deb file
