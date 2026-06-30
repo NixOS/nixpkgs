@@ -1,46 +1,51 @@
 {
   electron,
   fetchFromGitHub,
+  nix-update-script,
   imagemagick,
   lib,
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
-  version = "0.6.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
-    tag = "v${version}";
-    hash = "sha256-huVk5KcsepDwtdWMm9pvn31GE1felbH1pR3mGqlSWRs=";
+    tag = "desktop/v${finalAttrs.version}";
+    hash = "sha256-+k09Psuf6Bvjoc9Z1O0u2v44IIsaSQF1QbjJM6cWlUw=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_11
     makeWrapper
     imagemagick
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
+      pnpmInstallFlags
       ;
-    pnpm = pnpm_10_29_2;
+    pnpm = pnpm_11;
     fetcherVersion = 3;
-    hash = "sha256-EP7bpbJUcKmHm7KMlKc0Fz2u0niQ3jC7YN/9pp7vucE=";
+    hash = "sha256-dF0nnBBpJaFq6MYCZVMMt4D85EWDv8zsGEbVnyhP0kE=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -67,6 +72,16 @@ stdenv.mkDerivation rec {
 
   dontCheckForBrokenSymlinks = true;
 
+  # Several build scripts import transitive dependencies directly (e.g.
+  # ast-kit from unplugin-ast).
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  postPatch = ''
+    # pnpm 11 verifies node_modules before every `pnpm run` which conflicts
+    # with --shamefully-hoist
+    echo 'verifyDepsBeforeRun: false' >> pnpm-workspace.yaml
+  '';
+
   desktopItem = makeDesktopItem {
     name = "folo";
     desktopName = "Folo";
@@ -77,7 +92,7 @@ stdenv.mkDerivation rec {
     mimeTypes = [ "x-scheme-handler/follow" ];
   };
 
-  icon = src + "/apps/desktop/resources/icon.png";
+  icon = finalAttrs.src + "/apps/desktop/resources/icon.png";
 
   buildPhase = ''
     runHook preBuild
@@ -86,13 +101,13 @@ stdenv.mkDerivation rec {
 
     # Build desktop app.
     cd apps/desktop
-    pnpm --offline --no-inline-css build:electron-vite
+    pnpm run build:electron-vite
     cd ../..
 
     # Remove dev dependencies.
     CI=true pnpm --ignore-scripts prune --prod
     # Clean up broken symlinks left behind by `pnpm prune`
-    find node_modules/.bin -xtype l -delete
+    [ -d node_modules/.bin ] && find node_modules/.bin -xtype l -delete
 
     runHook postBuild
   '';
@@ -109,24 +124,34 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/follow/apps/desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D "${desktopItem}/share/applications/"* \
+    install -m 444 -D "${finalAttrs.desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/follow.png
+      convert -background none -resize "$size"x"$size" ${finalAttrs.icon} $out/share/icons/hicolor/"$size"x"$size"/apps/follow.png
     done
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^desktop/v([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
+
   meta = {
     description = "Next generation information browser";
     homepage = "https://github.com/RSSNext/Folo";
-    changelog = "https://github.com/RSSNext/Folo/releases/tag/${src.tag}";
+    changelog = "https://github.com/RSSNext/Folo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iosmanthus ];
+    maintainers = with lib.maintainers; [
+      amadejkastelic
+      iosmanthus
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "follow";
   };
-}
+})
