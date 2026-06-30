@@ -1,0 +1,33 @@
+From 0e7c4fe2cd1e360b7a64615d8765c386ba66abf9 Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Sat, 18 Apr 2026 19:54:55 -0400
+Subject: [PATCH] tests: use kill -0 for alttab liveness check
+
+The run-in-xvfb test only needs to verify that the alttab
+process started by the script is still alive. ps -p is
+a poor fit for that: on Darwin it can fail with
+"Operation not permitted" even when the process is
+running.
+
+Use kill -0 instead. It is enough for this same-user
+liveness probe and allows the test suite to run on
+Darwin.
+---
+ test/run-in-xvfb.test | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/run-in-xvfb.test b/test/run-in-xvfb.test
+index 7c33ac3..24cf76f 100755
+--- a/test/run-in-xvfb.test
++++ b/test/run-in-xvfb.test
+@@ -122,7 +122,7 @@ check_alttab()
+ {
+     stage="$1" ; comment="$2"
+     sleep 0.5
+-    if ! ps -p "$alttab" >/dev/null ; then
++    if ! kill -0 "$alttab" >/dev/null 2>&1 ; then
+         echo "not ok $stage - $comment"
+         exit 1
+     else
+-- 
+2.50.1
