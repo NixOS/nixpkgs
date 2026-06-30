@@ -1,0 +1,47 @@
+{
+  "repo": "mlx-community/SmolLM-135M-Instruct-4bit",
+  "revision": "642e06afe3fab57fd6cc518637c471af0a569e1e",
+  "license": "asl20",
+  "files": [
+    {
+      "name": "config.json",
+      "hash": "sha256-S8mIHTnvf849+ATRlFWOKb2XTZZUN9weao+fegk5uA0=",
+      "type": "other"
+    },
+    {
+      "name": "merges.txt",
+      "hash": "sha256-C1Toqk5T1Tg+LkvGNaVrQ/lkf3sTgy1dns2PgtrE9RA=",
+      "type": "other"
+    },
+    {
+      "name": "model.safetensors",
+      "hash": "sha256-6RVg7iSxPu5t3rFIedcoqQeABT1pBXsV/xmcyt/P4zs=",
+      "type": "safetensor"
+    },
+    {
+      "name": "model.safetensors.index.json",
+      "hash": "sha256-KqM5FwLSDDyIbMYUjSEMhDv7Tf3jK3H+hZ8cdEzjXdM=",
+      "type": "other"
+    },
+    {
+      "name": "special_tokens_map.json",
+      "hash": "sha256-K3N5866BNSkoGlxgK8WhHB1OCpkQeqpZf+k2wegTylI=",
+      "type": "other"
+    },
+    {
+      "name": "tokenizer.json",
+      "hash": "sha256-nKms3bZSWhlOyKx6h/JPu6cjKpoV/6GvDBIk/NiI5Hw=",
+      "type": "other"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "hash": "sha256-dWaL2hHrDV7OE3tOs/sq1nn4R/0ZhGtyY2mibZL58o4=",
+      "type": "other"
+    },
+    {
+      "name": "vocab.json",
+      "hash": "sha256-grhAEuOt1NAdEroURCAm5JuMu66tH3ns89kZeE+C3Hk=",
+      "type": "other"
+    }
+  ]
+}
