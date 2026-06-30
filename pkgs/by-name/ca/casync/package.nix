@@ -9,18 +9,21 @@
   sphinx,
   acl,
   curl,
-  fuse,
   libselinux,
   udev,
   xz,
   zstd,
-  fuseSupport ? true,
+  fuseSupport ? false,
   selinuxSupport ? true,
   udevSupport ? true,
   glibcLocales,
   rsync,
   udevCheckHook,
 }:
+
+assert lib.assertMsg (
+  !fuseSupport
+) "'fuseSupport' is not supported anymore, as it depends on fuse2, which is deprecated";
 
 stdenv.mkDerivation {
   pname = "casync";
@@ -39,7 +42,6 @@ stdenv.mkDerivation {
     xz
     zstd
   ]
-  ++ lib.optionals fuseSupport [ fuse ]
   ++ lib.optionals selinuxSupport [ libselinux ]
   ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
@@ -66,10 +68,11 @@ stdenv.mkDerivation {
 
   env.PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
 
-  mesonFlags =
-    lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
-    ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
-    ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
+  mesonFlags = [
+    "-Dfuse=false"
+  ]
+  ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
+  ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''
