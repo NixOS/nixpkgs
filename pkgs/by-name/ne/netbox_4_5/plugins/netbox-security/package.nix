@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-security";
-  version = "1.4.5";
+  version = "1.5.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "andy-shady-org";
     repo = "netbox-security";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DGiuQignYPSTFFm0RkDl5kwYQJNKbRdgdmIZ1DKXkGs=";
+    hash = "sha256-DOutzFIF/ey2o9M3sb15rmbGJyzsTXfiwC5Rqks8vxc=";
   };
 
   build-system = [ setuptools ];
