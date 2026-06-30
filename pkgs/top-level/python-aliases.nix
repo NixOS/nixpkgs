@@ -77,6 +77,7 @@ mapAliases {
   # keep-sorted start case=no numeric=yes
   abjad = throw "'abjad' was removed due to lack of maintenance"; # Added 2026-03-24
   abodepy = throw "'abodepy' has been renamed to/replaced by 'jaraco-abode'"; # Converted to throw 2025-10-29
+  advocate = throw "'advocate' has been removed due to being archived upstream and unused"; # added 2026-07-01
   aioinflux = throw "'aioinflux' was removed because it is abandonned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
   aioshutil = throw "'aioshutil' was removed because uiprotect no longer depends on it"; # added 2026-02-16

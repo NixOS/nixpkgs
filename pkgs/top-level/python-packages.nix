@@ -106,8 +106,6 @@ self: super: with self; {
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
-  advocate = callPackage ../development/python-modules/advocate { };
-
   aeidon = callPackage ../development/python-modules/aeidon { };
 
   aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
