@@ -2191,6 +2191,8 @@ let
 
         tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
+        tw = callPackage ../development/ocaml-modules/tw { };
+
         twt = callPackage ../development/ocaml-modules/twt { };
 
         type_eq = callPackage ../development/ocaml-modules/type_eq { };
