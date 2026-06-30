@@ -30,8 +30,28 @@ buildGoModule (finalAttrs: {
     mv $out/bin/kitops $out/bin/kit
   '';
 
-  # The testing/ integration suite requires network access.
-  doCheck = false;
+  # These tests start the `kit dev` server or otherwise exercise code paths
+  # that contact a registry, which requires network access unavailable in
+  # the build sandbox.
+  checkFlags =
+    let
+      skippedTests = [
+        "TestDevCommand"
+        "TestDevDirectory"
+        "TestDevReferenceExtraction"
+        "TestListFormatVariants"
+      ];
+    in
+    [ "-skip=^(${builtins.concatStringsSep "|" skippedTests})$" ];
+
+  # `subPackages` limits the default `getGoDirs` to the root package, which has
+  # no tests, so run the whole module's test suite explicitly.
+  checkPhase = ''
+    runHook preCheck
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    go test ./... "$checkFlags"
+    runHook postCheck
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
