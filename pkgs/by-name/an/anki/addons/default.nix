@@ -16,6 +16,8 @@
 
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
+  more-overview-stats = callPackage ./more-overview-stats { };
+
   passfail2 = callPackage ./passfail2 { };
 
   puppy-reinforcement = callPackage ./puppy-reinforcement { };
