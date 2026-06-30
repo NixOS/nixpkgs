@@ -684,6 +684,7 @@ in
     inherit runTest;
   };
   gitolite = runTest ./gitolite.nix;
+  gitolite-declarative = runTest ./gitolite-declarative.nix;
   gitolite-fcgiwrap = runTest ./gitolite-fcgiwrap.nix;
   glance = runTest ./glance.nix;
   glances = runTest ./glances.nix;

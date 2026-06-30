@@ -7,52 +7,47 @@
 let
   cfg = config.services.gitolite;
   # Use writeTextDir to not leak Nix store hash into file name
-  pubkeyFile = (pkgs.writeTextDir "gitolite-admin.pub" cfg.adminPubkey) + "/gitolite-admin.pub";
-  hooks = lib.concatMapStrings (hook: "${hook} ") cfg.commonHooks;
+  pubkeyFile = lib.optionalString (cfg.adminPubkey != null) (
+    (pkgs.writeTextDir "gitolite-admin.pub" cfg.adminPubkey) + "/gitolite-admin.pub"
+  );
+  declarativeConfig = cfg.repos != null || cfg.extraConfig != null;
+  hooks = lib.concatMapStringsSep " " lib.escapeShellArg cfg.commonHooks;
 in
 {
+  meta.maintainers = with lib.maintainers; [ berber ];
+
   options = {
     services.gitolite = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Enable gitolite management under the
-          `gitolite` user. After
-          switching to a configuration with Gitolite enabled, you can
-          then run `git clone gitolite@host:gitolite-admin.git` to manage it further.
-        '';
-      };
+      enable = lib.mkEnableOption "gitolite";
 
       dataDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/gitolite";
         description = ''
-          The gitolite home directory used to store all repositories. If left as the default value
-          this directory will automatically be created before the gitolite server starts, otherwise
+          The Gitolite home directory used to store all repositories. If left as the default value
+          this directory will automatically be created before the Gitolite server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
           and permissions.
         '';
       };
 
       adminPubkey = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nullOr lib.types.str;
+        default = null;
         description = ''
           Initial administrative public key for Gitolite. This should
           be an SSH Public Key. Note that this key will only be used
           once, upon the first initialization of the Gitolite user.
           The key string cannot have any line breaks in it.
+
+          This option is required unless declarative configuration
+          via {option}`repos` or {option}`extraConfig` is used,
+          in which case Gitolite is administered directly on the server
+          without the admin repo.
         '';
       };
 
-      enableGitAnnex = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Enable git-annex support. Uses the `extraGitoliteRc` option
-          to apply the necessary configuration.
-        '';
-      };
+      enableGitAnnex = lib.mkEnableOption "git-annex support in gitolite";
 
       commonHooks = lib.mkOption {
         type = lib.types.listOf lib.types.path;
@@ -91,6 +86,17 @@ in
           `~/.gitolite.rc`, convert them to appropriate Perl
           statements, add them to this option, and remove the file.
 
+          For HTTP access, Gitolite reads `REMOTE_USER` set by the web
+          server (e.g. via Basic Auth or LDAP) as the username and
+          enforces access rules from `gitolite.conf` identically to SSH.
+          Configure your web server to run `gitolite-shell` as a CGI
+          or FCGI script under the Gitolite user. If SSH
+          access is not needed, you can also disable the `ssh-authkeys`
+          feature:
+          ```
+          @{$RC{ENABLE}} = grep { $_ ne 'ssh-authkeys' } @{$RC{ENABLE}};
+          ```
+
           See also the `enableGitAnnex` option.
         '';
       };
@@ -99,7 +105,7 @@ in
         type = lib.types.str;
         default = "gitolite";
         description = ''
-          Gitolite user account. This is the username of the gitolite endpoint.
+          Gitolite user account. This is the username of the Gitolite endpoint.
         '';
       };
 
@@ -118,19 +124,293 @@ in
           Primary group of the Gitolite user account.
         '';
       };
+
+      groups = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "@interns"    = [ "alice" "bob" ];
+            "@developers" = [ "carol" "dave" ];
+            "@staff"      = [ "@interns" "@developers" "eve" ];
+            "@oss-repos"  = [ "linux" "musl" ];
+            "@internal"   = [ "payroll" "hr-tools" ];
+            "@all-repos"  = [ "@oss-repos" "@internal" ];
+            "@wild"       = [ "a..*" ];
+          }
+        '';
+        description = ''
+          Group definitions for the Gitolite configuration.
+          Each attribute name is the group name (including the
+          `@` prefix) and the value is a list of members.
+          Members can be usernames, repo names, repo patterns
+          (e.g. `a..*`), or references to other groups. Gitolite
+          uses the same `@group = ...` syntax for both user and
+          repo groups; see the Gitolite documentation for
+          details. Members accept the same pattern syntax as
+          {option}`repos` attribute names and
+          {option}`repos.*.access.*.refex` entries.
+
+          Only valid in declarative configuration mode (when
+          {option}`repos` or {option}`extraConfig` is set).
+        '';
+      };
+
+      repos = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.attrsOf (
+            lib.types.submodule {
+              options = {
+                access = lib.mkOption {
+                  type = lib.types.listOf (
+                    lib.types.submodule {
+                      options = {
+                        perm = lib.mkOption {
+                          type = lib.types.str;
+                          example = "RW+";
+                          description = ''
+                            Permission string for this rule.
+                          '';
+                        };
+                        refex = lib.mkOption {
+                          type = lib.types.str;
+                          default = "";
+                          example = "refs/heads/main";
+                          description = ''
+                            A refex (a regex that matches a ref) this rule
+                            applies to.
+                          '';
+                        };
+                        users = lib.mkOption {
+                          type = lib.types.listOf lib.types.str;
+                          example = [
+                            "alice"
+                            "@staff"
+                          ];
+                          description = ''
+                            List of users or group references this rule applies to.
+                          '';
+                        };
+                      };
+                    }
+                  );
+                  default = [ ];
+                  description = ''
+                    Ordered list of access rules for this repository. Rules are
+                    applied top-to-bottom and the first matching rule wins, so
+                    order matters, especially for deny (`-`) rules.
+                  '';
+                };
+                gitConfig = lib.mkOption {
+                  type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);
+                  default = { };
+                  example = lib.literalExpression ''
+                    {
+                      core = { sharedRepository = "group"; };
+                      gitweb = { owner = "Alice Example"; };
+                    }
+                  '';
+                  description = ''
+                    Git config entries to set on this repository, as
+                    `config section.key = value` lines. The attribute
+                    set is keyed by section name; the inner attribute set is
+                    keyed by key name (which may include a subsection, e.g.
+                    `"subsection.key"`).
+
+                    ::: {.note}
+                    Gitolite restricts which git config keys may be set via
+                    the `GIT_CONFIG_KEYS` setting in `.gitolite.rc`. NixOS
+                    automatically derives the required patterns from the keys
+                    declared here and appends them to `GIT_CONFIG_KEYS` in
+                    `.gitolite.rc`, so this option works without any extra
+                    configuration.
+
+                    If you additionally use `config` directives in
+                    {option}`extraConfig` or included files, those keys are
+                    not visible to NixOS and must be permitted manually via
+                    {option}`extraGitoliteRc`.
+                    :::
+                  '';
+                };
+                options = lib.mkOption {
+                  type = lib.types.attrsOf lib.types.str;
+                  default = { };
+                  example = lib.literalExpression ''
+                    { "mirror.master" = "mars"; }
+                  '';
+                  description = ''
+                    Gitolite option entries for this repository, as
+                    `option key = value` lines. These are syntactic
+                    sugar for `config gitolite-options.key = value`.
+                  '';
+                };
+              };
+            }
+          )
+        );
+        default = null;
+        example = lib.literalExpression ''
+          {
+            myproject = {
+              access = [
+                { perm = "RW+"; users = [ "alice" "@admins" ]; }
+                { perm = "RW+"; refex = "VREF/NAME/docs/"; users = [ "@interns" ]; }
+                { perm = "-";   refex = "VREF/NAME/"; users = [ "@interns" ]; }
+                { perm = "R";   users = [ "bob" ]; }
+              ];
+              # Equivalent gitolite.conf:
+              #   repo myproject
+              #       RW+ = alice @admins
+              #       RW+ VREF/NAME/docs/ = @interns
+              #       -   VREF/NAME/      = @interns
+              #       R                   = bob
+            };
+            # Using a repo group (defined in services.gitolite.groups):
+            "@internal" = {
+              access = [
+                { perm = "RW+"; users = [ "@staff" ]; }
+                { perm = "R";   users = [ "@interns" ]; }
+              ];
+              # Equivalent gitolite.conf (when groups."@internal" = [ "payroll" "hr-tools" ]):
+              #   @internal = payroll hr-tools
+              #   repo @internal
+              #       RW+ = @staff
+              #       R   = @interns
+            };
+            myrepo = {
+              access = [
+                { perm = "RW+"; users = [ "alice" "bob" "@staff" ]; }
+                { perm = "-";   refex = "refs/heads/release/"; users = [ "junior" ]; }
+                { perm = "RW";  refex = "refs/heads/"; users = [ "junior" "@interns" ]; }
+                { perm = "R";   users = [ "dilbert" ]; }
+              ];
+              gitConfig = {
+                core = { sharedRepository = "group"; };
+                gitweb = { owner = "Alice Example"; description = "My repository"; };
+                # Subsection: "branch.main.rebase = true"
+                branch = { "main.rebase" = "true"; };
+              };
+              options = {
+                "mirror.master" = "mars";
+              };
+            };
+          }
+        '';
+        description = ''
+          Repo definitions for the Gitolite configuration.
+          Each attribute name is a repo name, repo pattern
+          (e.g. `a..*`), or repo group name defined in
+          {option}`groups`. See the Gitolite documentation
+          for repo patterns and special keywords.
+          Gitolite's `repo foo bar` syntax for declaring
+          multiple repos at once is not supported here; define
+          each repo as a separate attribute, or use a repo
+          group from {option}`groups` to apply the same rules
+          to multiple repos.
+
+          Setting this option (or {option}`extraConfig`) enables
+          declarative configuration mode, where Gitolite is managed
+          via NixOS options without the admin repo.
+
+          Setting this to an empty attrset (`repos = {}`) also enables
+          declarative mode (useful when all repo definitions are
+          provided via {option}`extraConfig`).
+
+          ::: {.warning}
+          The generated config is overwritten on every activation.
+          Do not edit `gitolite.conf` manually.
+          :::
+        '';
+      };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
+        default = null;
+        example = lib.literalExpression ''
+          '''
+            repo special
+                RW+     =   admin
+                option mirror.master = mars
+
+            include "''${pkgs.writeText "extra.conf" (builtins.readFile ./extra.conf)}"
+          '''
+        '';
+        description = ''
+          Extra Gitolite configuration appended to the generated
+          `gitolite.conf` after group and repo definitions.
+          Can be used for advanced directives not covered by the
+          structured {option}`groups` and {option}`repos` options.
+
+          Setting this option (or {option}`repos`) enables
+          declarative configuration mode, where Gitolite is managed
+          via NixOS options without the admin repo.
+
+          ::: {.note}
+          If you use `config` directives here or in included files,
+          Gitolite will reject them unless `GIT_CONFIG_KEYS` in
+          `.gitolite.rc` permits those keys. Unlike
+          {option}`repos.*.gitConfig`, NixOS cannot introspect
+          free-form text to derive the required permissions
+          automatically. Set `GIT_CONFIG_KEYS` yourself via
+          {option}`extraGitoliteRc`, for example:
+
+          ```
+          services.gitolite.extraGitoliteRc = '''
+            $RC{GIT_CONFIG_KEYS} = '.*';
+          ''';
+          ```
+          :::
+
+          ::: {.warning}
+          The generated config is overwritten on every activation.
+          Do not edit `gitolite.conf` manually.
+          :::
+        '';
+      };
+
+      keys = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+        default = { };
+        example = lib.literalExpression ''
+          {
+            alice = [
+              "ssh-ed25519 AAAA... alice@work"
+              "ssh-ed25519 AAAA... alice@home"
+            ];
+            bob = [ "ssh-ed25519 AAAA... bob@example.com" ];
+          }
+        '';
+        description = ''
+          SSH public keys to place in `~/.gitolite/keydir/`.
+          Each attribute name is the Gitolite username. The list
+          values are the public key contents. A single key generates
+          `name.pub`; multiple keys generate `name@0.pub`,
+          `name@1.pub`, etc. Gitolite treats all of these as
+          belonging to the same user.
+
+          Only valid in declarative configuration mode (when
+          {option}`repos` or {option}`extraConfig` is set).
+
+          ::: {.warning}
+          All keys in `keydir/` are replaced
+          on every activation.
+          :::
+        '';
+      };
+
     };
   };
 
   config = lib.mkIf cfg.enable (
     let
-      manageGitoliteRc = cfg.extraGitoliteRc != "";
+      manageGitoliteRc = declarativeConfig || cfg.extraGitoliteRc != "";
       rcDir = pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
       rcDirScript = ''
         mkdir "$out"
         export HOME=temp-home
         mkdir -p "$HOME/.gitolite/logs" # gitolite can't run without it
-        '${pkgs.gitolite}'/bin/gitolite print-default-rc >>"$out/gitolite.rc.default"
-        cat <<END >>"$out/gitolite.rc"
+        '${pkgs.gitolite}'/bin/gitolite print-default-rc >"$out/gitolite.rc.default"
+        cat <<END >"$out/gitolite.rc"
         # This file is managed by NixOS.
         # Use services.gitolite options to control it.
 
@@ -147,12 +427,136 @@ in
           1;
         ''} >>"$out/gitolite.rc"
       '';
+      generatedConfig =
+        "# This file is managed by NixOS. Do not edit.\n"
+        # Group definitions
+        + lib.optionalString (cfg.groups != { }) (
+          "\n# group definitions\n\n"
+          + lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (name: members: "${name} = ${lib.concatStringsSep " " members}") cfg.groups
+          )
+          + "\n"
+        )
+        # Repo definitions
+        + lib.optionalString (cfg.repos != null && cfg.repos != { }) (
+          "\n# repos\n\n"
+          + lib.concatStringsSep "\n\n" (
+            lib.mapAttrsToList (
+              repoName: repoCfg:
+              let
+                accessLines = map (
+                  rule:
+                  let
+                    refexPart = lib.optionalString (rule.refex != "") " ${rule.refex}";
+                  in
+                  "    ${rule.perm}${refexPart} = ${lib.concatStringsSep " " rule.users}"
+                ) repoCfg.access;
+                configLines = lib.concatLists (
+                  lib.mapAttrsToList (
+                    section: keys: lib.mapAttrsToList (key: value: "    config ${section}.${key} = ${value}") keys
+                  ) repoCfg.gitConfig
+                );
+                optionLines = lib.mapAttrsToList (key: value: "    option ${key} = ${value}") repoCfg.options;
+                allLines = accessLines ++ configLines ++ optionLines;
+              in
+              "repo ${repoName}\n" + lib.concatStringsSep "\n" allLines
+            ) cfg.repos
+          )
+          + "\n"
+        )
+        # Extra configuration
+        + lib.optionalString (cfg.extraConfig != null) ("\n# extra configuration\n\n" + cfg.extraConfig);
+      gitoliteConfigFile = pkgs.writeText "gitolite.conf" generatedConfig;
+      keyDir = pkgs.runCommand "gitolite-keydir" { preferLocalBuild = true; } (
+        ''
+          mkdir -p "$out"
+        ''
+        + lib.optionalString (cfg.keys != { }) (
+          lib.concatStringsSep "\n" (
+            lib.concatLists (
+              lib.mapAttrsToList (
+                name: userKeys:
+                if lib.length userKeys == 1 then
+                  [
+                    ''
+                      cp ${pkgs.writeText "${name}.pub" (lib.head userKeys)} "$out/${name}.pub"
+                    ''
+                  ]
+                else
+                  lib.imap0 (i: key: ''
+                    cp ${pkgs.writeText "${name}@${toString i}.pub" key} "$out/${name}@${toString i}.pub"
+                  '') userKeys
+              ) cfg.keys
+            )
+          )
+        )
+      );
     in
     {
-      services.gitolite.extraGitoliteRc = lib.optionalString cfg.enableGitAnnex ''
-        # Enable git-annex support:
-        push( @{$RC{ENABLE}}, 'git-annex-shell ua');
-      '';
+      assertions = [
+        {
+          assertion = cfg.adminPubkey != null || declarativeConfig;
+          message = "services.gitolite.adminPubkey must be set unless services.gitolite.repos or services.gitolite.extraConfig is set.";
+        }
+        {
+          assertion = cfg.adminPubkey == null || !declarativeConfig;
+          message = "services.gitolite.adminPubkey and declarative configuration (repos/extraConfig) are mutually exclusive.";
+        }
+        {
+          assertion = cfg.groups == { } || declarativeConfig;
+          message = "services.gitolite.groups has no effect without services.gitolite.repos or services.gitolite.extraConfig.";
+        }
+        {
+          assertion = cfg.keys == { } || declarativeConfig;
+          message = "services.gitolite.keys has no effect without services.gitolite.repos or services.gitolite.extraConfig.";
+        }
+        {
+          assertion = lib.all (keys: keys != [ ]) (lib.attrValues cfg.keys);
+          message = "services.gitolite.keys: each user must have at least one SSH public key.";
+        }
+      ]
+      ++ lib.concatLists (
+        lib.mapAttrsToList (
+          repoName: repo:
+          lib.imap0 (i: rule: {
+            assertion = rule.users != [ ];
+            message = "services.gitolite.repos.${repoName}.access[${toString i}]: users must not be empty.";
+          }) repo.access
+        ) (if cfg.repos != null then cfg.repos else { })
+      );
+
+      services.gitolite.extraGitoliteRc =
+        lib.optionalString cfg.enableGitAnnex ''
+          # Enable git-annex support:
+          push( @{$RC{ENABLE}}, 'git-annex-shell ua');
+        ''
+        +
+          lib.optionalString
+            (lib.any (repo: repo.gitConfig != { }) (
+              lib.attrValues (if cfg.repos != null then cfg.repos else { })
+            ))
+            (
+              let
+                # Collect all section.key pairs used in gitConfig across all repos,
+                # escape them as regex literals for GIT_CONFIG_KEYS.
+                allKeys = lib.unique (
+                  lib.concatLists (
+                    lib.mapAttrsToList (
+                      _: repo:
+                      lib.concatLists (
+                        lib.mapAttrsToList (
+                          section: keys: lib.mapAttrsToList (key: _: lib.escapeRegex "${section}.${key}") keys
+                        ) repo.gitConfig
+                      )
+                    ) (if cfg.repos != null then cfg.repos else { })
+                  )
+                );
+              in
+              ''
+                # Allow the git config keys declared in services.gitolite.repos.*.gitConfig:
+                $RC{GIT_CONFIG_KEYS} .= ' ${lib.concatStringsSep " " allKeys}';
+              ''
+            );
 
       users.users.${cfg.user} = {
         description = cfg.description;
@@ -166,6 +570,8 @@ in
       systemd.services.gitolite-init = {
         description = "Gitolite initialization";
         wantedBy = [ "multi-user.target" ];
+        after = [ "local-fs.target" ];
+        before = [ "sshd.service" ];
         unitConfig.RequiresMountsFor = cfg.dataDir;
 
         environment = {
@@ -200,17 +606,11 @@ in
             rcSetupScriptIfCustomFile =
               if manageGitoliteRc then
                 ''
-                  cat <<END
-                  <3>ERROR: NixOS can't apply declarative configuration
-                  <3>to your .gitolite.rc file, because it seems to be
-                  <3>already customized manually.
-                  <3>See the services.gitolite.extraGitoliteRc option
-                  <3>in "man configuration.nix" for more information.
-                  END
-                  # Not sure if the line below addresses the issue directly or just
-                  # adds a delay, but without it our error message often doesn't
-                  # show up in `systemctl status gitolite-init`.
-                  journalctl --flush
+                  echo "<3>ERROR: NixOS can't apply declarative configuration" >&2
+                  echo "<3>to your .gitolite.rc file, because it seems to be" >&2
+                  echo "<3>already customized manually." >&2
+                  echo "<3>See the services.gitolite.extraGitoliteRc option" >&2
+                  echo "<3>in \"man configuration.nix\" for more information." >&2
                   exit 1
                 ''
               else
@@ -242,13 +642,64 @@ in
             fi
 
             if [ ! -d repositories ]; then
-              gitolite setup -pk ${pubkeyFile}
-            fi
-            if [ -n "${hooks}" ]; then
-              cp -f ${hooks} .gitolite/hooks/common/
-              chmod +x .gitolite/hooks/common/*
-            fi
-            gitolite setup # Upgrade if needed
+              ${
+                if declarativeConfig then
+                  ''
+                    gitolite setup -a dummy
+                    # gitolite setup -a dummy creates a gitolite-admin.git repo
+                    # as part of its default config; remove it since we manage
+                    # configuration declaratively via NixOS options.
+                    rm -rf repositories/gitolite-admin.git
+                  ''
+                else
+                  ''
+                    gitolite setup -pk ${pubkeyFile}
+                  ''
+              }
+              ${
+                if declarativeConfig then
+                  ''
+                    elif [ -d repositories/gitolite-admin.git ]; then
+                      echo "<4>WARNING: repositories/gitolite-admin.git exists but is unused in declarative configuration mode." >&2
+                      echo "<4>The Gitolite configuration is now managed declaratively via NixOS options." >&2
+                      echo "<4>Consider backing it up and removing it:" >&2
+                      echo "<4>  rm -rf ${cfg.dataDir}/repositories/gitolite-admin.git" >&2
+                  ''
+                else
+                  ''
+                    elif [ ! -d repositories/gitolite-admin.git ]; then
+                      echo "<4>WARNING: repositories/gitolite-admin.git does not exist." >&2
+                      echo "<4>In admin-repo mode, you need this repo to manage Gitolite access." >&2
+                      echo "<4>If you previously used declarative configuration mode and removed it," >&2
+                      echo "<4>you can recreate it by running as the ${cfg.user} user:" >&2
+                      echo "<4>  gitolite setup -pk /path/to/your/admin-key.pub" >&2
+                  ''
+              }
+              fi
+              ${lib.optionalString (hooks != "") ''
+                cp -f ${hooks} .gitolite/hooks/common/
+                chmod +x .gitolite/hooks/common/*
+              ''}
+              ${
+                if declarativeConfig then
+                  ''
+                    # Declarative config management
+                    mkdir -p .gitolite/conf .gitolite/keydir .gitolite/triggers
+                    ln -sf ${gitoliteConfigFile} .gitolite/conf/gitolite.conf
+                    ln -sf ${pkgs.gitolite}/bin/triggers .gitolite/triggers
+                    # Remove old keys and install declared ones
+                    rm -f .gitolite/keydir/*.pub
+                    for f in ${keyDir}/*.pub; do
+                      [ -e "$f" ] && cp "$f" .gitolite/keydir/
+                    done
+                    gitolite compile
+                    gitolite trigger POST_COMPILE
+                  ''
+                else
+                  ''
+                    gitolite setup # Upgrade if needed
+                  ''
+              }
           '';
       };
 
