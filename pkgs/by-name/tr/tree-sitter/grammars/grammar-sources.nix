@@ -2649,7 +2649,7 @@
   };
 
   tact = {
-    version = "1.6.0-unstable-2025-05-01";
+    version = "0-unstable-2025-05-01";
     url = "github:tact-lang/tree-sitter-tact";
     rev = "a6267c2091ed432c248780cec9f8d42c8766d9ad";
     hash = "sha256-2AUN/VYor3K0hkneLYa6+LjE+V8EJogFqBTgdfvOiKM=";
