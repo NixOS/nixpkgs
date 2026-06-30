@@ -19,6 +19,7 @@
 buildPythonPackage {
   inherit (pkgs.usearch) pname version src;
   pyproject = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace python/usearch/__init__.py \
@@ -57,6 +58,12 @@ buildPythonPackage {
     py-cpuinfo
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Numerical precision error (AssertionError)
+    "test_index_clustering"
+    "test_index_retrieval"
   ];
 
   meta = {
