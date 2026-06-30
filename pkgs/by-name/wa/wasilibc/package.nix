@@ -40,12 +40,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     wkg
   ];
 
-  # These flags break pkgsCross.wasi32.llvmPackages.libcxx
-  hardeningDisable = [
-    "libcxxhardeningfast"
-    "libcxxhardeningextensive"
-  ];
-
   outputs = [
     "out"
     "dev"
