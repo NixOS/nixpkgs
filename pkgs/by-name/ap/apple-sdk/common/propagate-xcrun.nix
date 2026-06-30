@@ -4,12 +4,13 @@
   stdenv,
   stdenvNoCC,
   sdkVersion,
+  sdkPlatform,
 }:
 
 let
   plists = import ./plists.nix {
     inherit lib stdenvNoCC sdkVersion;
-    xcodePlatform = if stdenvNoCC.hostPlatform.isMacOS then "MacOSX" else "iPhoneOS";
+    xcodePlatform = sdkPlatform;
   };
   inherit (pkgsBuildHost) darwin cctools xcbuild;
 in

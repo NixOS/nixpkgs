@@ -752,6 +752,8 @@ rec {
     };
     uclibc = { };
 
+    simulator = { };
+
     unknown = { };
   };
 

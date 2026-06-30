@@ -10,32 +10,44 @@ cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
 
 
+# Sources portable across macOS and iOS.
+sources = [
+    'ExtentManager.cpp',
+    'expand_number.c',
+    'getmntopts.c',
+    'humanize_number.c',
+    'pidfile.c',
+    'realhostname.c',
+    'reexec_to_match_kernel.c',
+    'trimdomain.c',
+]
+
+# macOS-only: wipefs.cpp needs <sys/disk.h>, tzbootuuid.c needs <tzfile.h>,
+# tzlink.c uses xpc SPIs unavailable on iOS. Nixpkgs cross-file maps iOS -> 'ios'.
+if host_machine.system() == 'darwin'
+    sources += [
+        'wipefs.cpp',
+        'tzbootuuid.c',
+        'tzlink.c',
+        'tzlink.h',
+    ]
+endif
+
 # Libraries
 libutil = library(
     'util',
     darwin_versions : '1',
     install : true,
-    sources : [
-        'ExtentManager.cpp',
-        'expand_number.c',
-        'getmntopts.c',
-        'humanize_number.c',
-        'pidfile.c',
-        'realhostname.c',
-        'reexec_to_match_kernel.c',
-        'trimdomain.c',
-        'tzbootuuid.c',
-        'tzlink.c',
-        'tzlink.h',
-        'wipefs.cpp',
-    ],
+    sources : sources,
 )
 install_headers(
     'libutil.h',
     'mntopts.h',
-    'tzlink.h',
-    'wipefs.h',
 )
+# wipefs.h / tzlink.h declare symbols not compiled on iOS.
+if host_machine.system() == 'darwin'
+    install_headers('wipefs.h', 'tzlink.h')
+endif
 install_man(
     'expand_number.3',
     'getmntopts.3',

@@ -11,23 +11,23 @@
 # files.
 
 let
-  rev = "948ae97ca5703224bd3eada06b7a69f40dd15a02";
+  rev = "a2287c3041a3f2a204eb942e09c015eab00dc7dd";
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
     name = "config.guess-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    hash = "sha256-ZByuPAx0xJNU0+3gCfP+vYD+vhUBp3wdn6yNQsxFtss=";
+    hash = "sha256-UCBc8+xcdhWxf5N6Cle6v07FzQqt49ezzMvl8b+Rp+8=";
   };
   configSub = fetchurl {
     name = "config.sub-${builtins.substring 0 7 rev}";
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    hash = "sha256-/jovMvuv9XhIcyVJ9I2YP9ZSYCTsLw9ancdcL0NZo6Y=";
+    hash = "sha256-JrhS91pjdEg2CpVpMUOffoGL9jFQ6q25uFSENHYo0f0=";
   };
 in
 stdenv.mkDerivation {
   pname = "gnu-config";
-  version = "2024-01-01";
+  version = "2025-07-09";
 
   unpackPhase = ''
     runHook preUnpack

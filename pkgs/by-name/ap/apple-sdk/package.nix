@@ -17,6 +17,7 @@ in
 
   # Required by various phases
   callPackage,
+  buildPackages,
   jq,
   llvm,
 }:
@@ -28,11 +29,15 @@ let
   sdkVersion = sdkInfo.version;
 
   fetchSDK = callPackage ./common/fetch-sdk.nix { };
+  sdkPlatform =
+    if stdenv.hostPlatform.xcodePlatform != null then stdenv.hostPlatform.xcodePlatform else "MacOSX";
 
   phases = lib.composeManyExtensions (
-    [
+    lib.optionals stdenv.hostPlatform.isMacOS [
       (callPackage ./common/add-core-symbolication.nix { })
-      (callPackage ./common/derivation-options.nix { })
+    ]
+    ++ [
+      (callPackage ./common/derivation-options.nix { inherit sdkPlatform; })
       (callPackage ./common/passthru-private-frameworks.nix { inherit sdkVersion; })
       (callPackage ./common/passthru-source-release-files.nix { })
       (callPackage ./common/remove-disallowed-packages.nix { })
@@ -41,7 +46,7 @@ let
     # Avoid infinite recursions by not propagating certain packages, so they can themselves build with the SDK.
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })
-      (callPackage ./common/propagate-xcrun.nix { inherit sdkVersion; })
+      (callPackage ./common/propagate-xcrun.nix { inherit sdkVersion sdkPlatform; })
     ]
     # This has to happen last.
     ++ [
@@ -54,7 +59,14 @@ stdenvNoCC.mkDerivation (
     pname = "apple-sdk";
     inherit (sdkInfo) version;
 
-    src = fetchSDK sdkInfo;
+    src =
+      if stdenv.hostPlatform.isiOS then
+        (callPackage ./common/fetch-ios-sdk.nix { }) {
+          inherit sdkPlatform;
+          version = sdkVersion;
+        }
+      else
+        fetchSDK sdkInfo;
 
     dontConfigure = true;
 
@@ -72,13 +84,17 @@ stdenvNoCC.mkDerivation (
           "--subst-var-by"
           "sdkVersion"
           (lib.escapeShellArgs (lib.splitVersion sdkVersion))
+          "--subst-var-by"
+          "sdkPlatform"
+          (lib.escapeShellArgs (lib.splitVersion sdkPlatform))
+
         ];
       })
     ];
 
     installPhase =
       let
-        sdkName = "MacOSX${lib.versions.majorMinor sdkVersion}.sdk";
+        sdkName = "${sdkPlatform}${lib.versions.majorMinor sdkVersion}.sdk";
         sdkMajor = lib.versions.major sdkVersion;
       in
       ''
@@ -87,8 +103,8 @@ stdenvNoCC.mkDerivation (
         mkdir -p "$sdkpath"
 
         cp -rd . "$sdkpath/${sdkName}"
-        ln -s "${sdkName}" "$sdkpath/MacOSX${sdkMajor}.sdk"
-        ln -s "${sdkName}" "$sdkpath/MacOSX.sdk"
+        ln -s "${sdkName}" "$sdkpath/${sdkPlatform}${sdkMajor}.sdk"
+        ln -s "${sdkName}" "$sdkpath/${sdkPlatform}.sdk"
 
         # Swift adds these locations to its search paths. Avoid spurious warnings by making sure they exist.
         mkdir -p "$platformPath/Developer/Library/Frameworks"
@@ -99,7 +115,8 @@ stdenvNoCC.mkDerivation (
       '';
 
     passthru = {
-      sdkroot = finalAttrs.finalPackage + "/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk";
+      sdkroot =
+        finalAttrs.finalPackage + "/Platforms/${sdkPlatform}.platform/Developer/SDKs/${sdkPlatform}.sdk";
     };
 
     __structuredAttrs = true;

@@ -1028,6 +1028,9 @@ stdenvNoCC.mkDerivation {
     # These will become empty strings when not targeting Darwin.
     darwinMinVersion = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersion;
     darwinMinVersionVariable = lib.optionalString targetPlatform.isDarwin targetPlatform.darwinMinVersionVariable;
+    xcodePlatform = lib.optionalString targetPlatform.isDarwin (
+      targetPlatform.xcodePlatform or "MacOSX"
+    );
     # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
     ${if stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null then "fallback_sdk" else null} =
       apple-sdk.__spliced.buildTarget or apple-sdk;
