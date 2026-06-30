@@ -20,6 +20,7 @@
   scikit-learn,
   scipy,
   sympy,
+  tensorboard,
 
   # tests
   pyfakefs,
@@ -68,6 +69,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sqlalchemy
     tabulate
+    tensorboard
   ];
 
   disabledTestPaths = [
