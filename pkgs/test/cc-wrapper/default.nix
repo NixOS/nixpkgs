@@ -160,6 +160,10 @@ stdenv.mkDerivation {
     echo "Check whether CC and LD with NIX_X_USE_RESPONSE_FILE hardcodes all required binaries..." >&2
     NIX_CC_USE_RESPONSE_FILE=1 NIX_LD_USE_RESPONSE_FILE=1 ${CC} -v
 
+    echo "Check that non-ascii characters and spaces are passed through correctly" >&2
+    # https://github.com/NixOS/nixpkgs/issues/226034
+    LC_ALL=C NIX_CC_USE_RESPONSE_FILE=1 ${CC} -E -dM - -D "FOO=aλ\"	b\" c" < /dev/null | grep "FOO aλ"'"'"	b"'"'" c" -B 2 -A 2
+
     touch $out
   '';
 
