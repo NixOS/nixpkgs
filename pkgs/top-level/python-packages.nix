@@ -2957,6 +2957,8 @@ self: super: with self; {
 
   clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver { };
 
+  clickhouse-sqlalchemy = callPackage ../development/python-modules/clickhouse-sqlalchemy { };
+
   cliff = callPackage ../development/python-modules/cliff { };
 
   clifford = callPackage ../development/python-modules/clifford { };
