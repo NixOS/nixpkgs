@@ -13,7 +13,7 @@ in
   ];
 
   nodes.server =
-    { ... }:
+    { pkgs, ... }:
     {
       services.mobilizon = {
         enable = true;
@@ -37,6 +37,9 @@ in
       };
 
       networking.hosts."::1" = [ mobilizonDomain ];
+
+      # https://framagit.org/kaihuri/mobilizon/-/work_items/2070
+      services.postgresql.package = pkgs.postgresql_17;
     };
 
   testScript = ''
