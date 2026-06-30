@@ -23643,6 +23643,12 @@
     githubId = 988098;
     name = "Richard Palethorpe";
   };
+  richienb = {
+    email = "richiebendall@gmail.com";
+    github = "Richienb";
+    githubId = 29491356;
+    name = "Richie Bendall";
+  };
   rick68 = {
     email = "rick68@gmail.com";
     github = "rick68";
