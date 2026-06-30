@@ -1712,7 +1712,7 @@
   };
 
   nginx = {
-    version = "0-unstable-2026-01-02";
+    version = "1.0.1-unstable-2026-01-02";
     url = "github:opa-oz/tree-sitter-nginx";
     rev = "47ade644d754cce57974aac44d2c9450e823d4f4";
     hash = "sha256-exbjYJouZYcxC3suV7byqSEwu2r8hHj/wehPpf5Aecc=";

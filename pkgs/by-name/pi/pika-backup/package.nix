@@ -24,19 +24,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     tag = version;
-    hash = "sha256-02ChjIXjTos3jm6UR37tFWhRlUvyh/1r6zLsd6fQsyc=";
+    hash = "sha256-oM59t0oJzW7EyvcGoEwrokhxk+inxMLznf4Z2IEg3ig=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-e6hep/aTpC5HDI/UoSJONGZRP3rjA2eVh9G4DE3HJpE=";
+    hash = "sha256-CWyZYnurIWiGzfUpa7OgmLU/CVRiAGbgFM0+frRfi9c=";
   };
 
   patches = [

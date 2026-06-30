@@ -25,7 +25,6 @@
   gst-libav,
   gst-plugins-good,
   libnice,
-  enableE2E ? true,
   enableSecrets ? true,
   libsecret,
   enableRST ? true,
@@ -41,16 +40,16 @@
   extraPythonPackages ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
-    tag = version;
-    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
+    tag = finalAttrs.version;
+    hash = "sha256-tZ1+DRVCzwaWeur9mwc/zE34H2xdqk96upqWfqNTl3g=";
   };
 
   pyproject = true;
@@ -115,12 +114,9 @@ python3.pkgs.buildPythonApplication rec {
       httpx
       h2
       truststore
+      pysequoia
     ]
     ++ httpx.optional-dependencies.socks
-    ++ lib.optionals enableE2E [
-      pycrypto
-      python-gnupg
-    ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
@@ -145,14 +141,16 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";
+    changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
       hlad
       vbgl
+      haansn08
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
     mainProgram = "gajim";
   };
-}
+})

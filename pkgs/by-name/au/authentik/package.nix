@@ -190,7 +190,7 @@ let
     outputHash =
       {
         "aarch64-linux" = "sha256-41xZEfLul92vJATZqyVnd7Pp++NzLL/u8NeJJPHpXrw=";
-        "x86_64-linux" = "sha256-FpfOl6wNCgXLg86+vbjnYkcOnpaOZBCNxJiFDRT5W3s=";
+        "x86_64-linux" = "sha256-p6xjAinU2Isl/uYgoJuacqHN7jBnbWam40J6AQudbtQ=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";

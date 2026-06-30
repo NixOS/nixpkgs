@@ -16,6 +16,11 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-ZEd27lt5S7pnGGzTnxLV6voEpzXjvRjubjmusLuISZg=";
   };
 
+  postPatch = ''
+    substituteInPlace src/radar-toolbar.ts \
+      --replace-fail "/local/community/weather-radar-card/" "/local/nixos-lovelace-modules/"
+  '';
+
   npmDepsFetcherVersion = 2;
   npmFlags = [ "--legacy-peer-deps" ];
   npmDepsHash = "sha256-S3PZOcKBseohCKOUSRFCQj6fAJTrZLRD5916iB35rrc=";

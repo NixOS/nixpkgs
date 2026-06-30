@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pgcenter";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lesovsky";
     repo = "pgcenter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HSSHRMkzb0WkRAPEtG654ngnJw9rjkBq/v2Su4bUO8Y=";
+    sha256 = "sha256-sIdCcle7s9ZL8XlEd09yGgq/gC5YDVONzm5Fj9z0lLw=";
   };
 
   vendorHash = "sha256-nHPS/iLHQwM39UYpajQRAbZcK7PxTPU0mO2HapDRFDU=";

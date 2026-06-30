@@ -90,6 +90,7 @@ makeOverridable (
   in
   cases.${fetcher}.fetch cases.${fetcher}.arguments
   // {
+    inherit tag;
     rev = rev';
     meta.homepage = "${baseUrl}";
   }

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-scm,
   cffi,
   numpy,
   portaudio,
@@ -12,15 +13,18 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y6wrYBmPurhFM2l+fEkEzIlexp1fs5c1VsnrdKRimyw=";
+    hash = "sha256-Ikh7ZRmMtb8iCHVRBbUk94rRc+Wra0Rb2rHJifZpjfM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cffi
@@ -43,7 +47,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Play and Record Sound with Python";
-    homepage = "http://python-sounddevice.rtfd.org/";
+    homepage = "https://python-sounddevice.readthedocs.io/";
+    changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
   };
 }
