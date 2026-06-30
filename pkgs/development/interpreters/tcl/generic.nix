@@ -149,6 +149,9 @@ let
         makeSetupHook {
           name = "tcl-requires-check-hook";
           propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          substitutions = {
+            tclsh = "${baseInterp}/bin/tclsh";
+          };
           meta = {
             inherit (meta) maintainers platforms;
             license = lib.licenses.mit;
