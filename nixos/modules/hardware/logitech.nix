@@ -19,8 +19,8 @@ in
       [ "hardware" "logitech" "wireless" "enable" ]
     )
     (lib.mkRenamedOptionModule
-      [ "hardware" "logitech" "enableGraphical" ]
       [ "hardware" "logitech" "wireless" "enableGraphical" ]
+      [ "programs" "solaar" "enable" ]
     )
   ];
 
@@ -56,20 +56,11 @@ in
 
     wireless = {
       enable = lib.mkEnableOption "support for Logitech Wireless Devices";
-
-      enableGraphical = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable graphical support applications.";
-      };
     };
   };
 
   config = lib.mkIf (cfg.wireless.enable || cfg.lcd.enable) {
-    environment.systemPackages =
-      [ ]
-      ++ lib.optional cfg.wireless.enable pkgs.ltunify
-      ++ lib.optional cfg.wireless.enableGraphical pkgs.solaar;
+    environment.systemPackages = lib.optional cfg.wireless.enable pkgs.ltunify;
 
     services.udev = {
       # ltunifi and solaar both provide udev rules but the most up-to-date have been split
