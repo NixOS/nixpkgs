@@ -4,20 +4,19 @@
   fetchFromGitHub,
   buildNpmPackage,
   curl,
-  jdk17,
+  jdk,
   jq,
   makeWrapper,
   maven,
 }:
 
 let
-  jdk = jdk17;
-  version = "3.9.5";
+  version = "3.10.1";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-548vOJf0mlk1AuuMjEXpsiVjft6UbJrUxh5mSca8Xbw=";
+    hash = "sha256-MyJlFTtdab9vpv135px/YskREXzQN5GA2ebAQGLnPu0=";
   };
 
   npmPkg = buildNpmPackage {
@@ -45,7 +44,7 @@ let
   };
 
 in
-maven.buildMavenPackage {
+maven.buildMavenPackage rec {
   inherit src version;
 
   pname = "openrefine";
@@ -56,7 +55,15 @@ maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-SV5nfyUeyRul/YfZZXor8O37ARdCtKkrHCLzQrmr96s=";
+  mvnHash = "sha256-BQnZkyftdqf3UoWddyve7wP3U3cDbATYqopJhwsP/gY=";
+  mvnFetchExtraArgs.env = {
+    inherit (env) SOURCE_DATE_EPOCH;
+  };
+
+  env = {
+    # fix for "date 1980-01-01T00:00:00Z is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z"
+    SOURCE_DATE_EPOCH = "315532802"; # 1980-01-01T00:00:02Z
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
