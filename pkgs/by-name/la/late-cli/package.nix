@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "late-cli";
@@ -23,10 +25,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin=late"
   ];
 
+  env.LATE_CLI_VERSION = finalAttrs.version;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "^v([0-9.]+)-cli$"
+    ];
+  };
+
   meta = {
     description = "Companion CLI for late.sh";
     longDescription = ''
-      late-cli is a companion CLI for late.sh, a cozy terminal cloubhouse for developers.
+      late-cli is a companion CLI for late.sh, a cozy terminal clubhouse for developers.
       It provides local audio playback, paired controls, and visualizer sync.
     '';
     homepage = "https://late.sh";
