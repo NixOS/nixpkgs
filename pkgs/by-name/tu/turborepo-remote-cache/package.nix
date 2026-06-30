@@ -84,6 +84,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "This project is an open-source implementation of the Turborepo custom remote cache server.";
     license = lib.licenses.mit;
     mainProgram = "turborepo-remote-cache";
-    maintainers = with lib.maintainers; [ humemm ];
+    maintainers = with lib.maintainers; [
+      humemm
+      ibizaman
+    ];
   };
 })
