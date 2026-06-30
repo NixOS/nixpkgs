@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Implementation of Ogata's (2005) method for Hankel transforms";
     homepage = "https://github.com/steven-murray/hankel";
-    changelog = "https://github.com/steven-murray/hankel/v${finalAttrs.version}/CHANGELOG.rst";
+    changelog = "https://github.com/steven-murray/hankel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
