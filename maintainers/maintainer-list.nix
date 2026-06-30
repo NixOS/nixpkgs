@@ -7431,6 +7431,13 @@
     github = "DSeeLP";
     githubId = 46624152;
   };
+  dshatz = {
+    email = "dev@dshatz.com";
+    github = "dshatz";
+    githubId = 23437798;
+    name = "Daniels Šatcs";
+    keys = [ { fingerprint = "7452B4B47EA8F6635AB545CA4B974CC26375BB06"; } ];
+  };
   dsluijk = {
     name = "Dany Sluijk";
     email = "nix@dany.dev";
@@ -10168,6 +10175,12 @@
     github = "gonsolo";
     githubId = 2041764;
     name = "Andreas Wendleder";
+  };
+  goobertony = {
+    github = "goobertony";
+    email = "tonygameing@proton.me";
+    githubId = 133613491;
+    name = "Tonii Bittersweet";
   };
   goodrone = {
     email = "goodrone@gmail.com";
@@ -29445,6 +29458,12 @@
     github = "bratorange";
     githubId = 45292658;
     name = "Julius Schmitt";
+  };
+  voidlily = {
+    github = "voidlily";
+    githubId = 221749;
+    name = "voidlily";
+    keys = [ { fingerprint = "E735 CD3F A78C 0919 4012  ADF3 3FBF B3CC E12E 7D19"; } ];
   };
   voidnoi = {
     email = "voidnoi@proton.me";

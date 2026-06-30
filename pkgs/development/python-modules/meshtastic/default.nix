@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshtastic";
-  version = "2.7.9";
+  version = "2.7.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = finalAttrs.version;
-    hash = "sha256-u3lU48VyFsfwHVXz/mSmJUW7c+mQ5BR2SclwCKym27k=";
+    hash = "sha256-bzDGiwaq58zmp93HXK9dpMVQiVZJA8MRO63bm3SPDzU=";
   };
 
   pythonRelaxDeps = [

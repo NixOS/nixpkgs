@@ -13,10 +13,6 @@
   glib-networking,
   libadwaita,
 
-  # Test dependencies
-  xvfb-run,
-  dbus,
-
   # Optional dependencies
   enableJingle ? true,
   farstream,
@@ -121,26 +117,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [
-    xvfb-run
-    dbus
+    python3.pkgs.pytestCheckHook
   ];
-
-  checkPhase = ''
-    xvfb-run dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gui -v
-    ${python3.interpreter} -m unittest discover -s test/common -v
-  '';
-
-  # test are broken in 1.7.3, 1.8.0
-  doCheck = false;
 
   # necessary for wrapGAppsHook3
   strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";
-    description = "Jabber client written in PyGTK";
+    description = "XMPP chat client";
+    longDescription = "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.";
     changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
