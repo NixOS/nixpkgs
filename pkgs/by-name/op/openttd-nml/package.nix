@@ -30,7 +30,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    homepage = "http://openttdcoop.org/";
+    changelog = "https://github.com/OpenTTD/nml/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/OpenTTD/nml";
     description = "Compiler for OpenTTD NML files";
     mainProgram = "nmlc";
     license = lib.licenses.gpl2Plus;
