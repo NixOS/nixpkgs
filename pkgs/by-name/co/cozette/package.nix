@@ -5,6 +5,7 @@
   writeText,
   bdf2psf,
   codepoints ? (import ./default-codepoints.nix),
+  installFonts,
 }:
 
 let
@@ -14,6 +15,11 @@ stdenvNoCC.mkDerivation rec {
   pname = "cozette";
   version = "1.30.0";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://github.com/the-moonwitch/Cozette/releases/download/v.${version}/CozetteFonts-v-${
       builtins.replaceStrings [ "." ] [ "-" ] version
@@ -21,7 +27,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-Njh6V5wTBKM/1QKmPwG1qiOYyAJSVQXLTBLN03V6DaE=";
   };
 
-  nativeBuildInputs = [ bdf2psf ];
+  nativeBuildInputs = [
+    bdf2psf
+    installFonts
+  ];
 
   postBuild = ''
     # Confine Powerline left divider symbols to strictly 6 pixels wide
@@ -33,21 +42,6 @@ stdenvNoCC.mkDerivation rec {
 
     bdf2psf --fb cozette.bdf ${bdf2psf}/share/bdf2psf/standard.equivalents ${codepoints_set} 512 cozette6x13.psfu
     bdf2psf --fb cozette_hidpi.bdf ${bdf2psf}/share/bdf2psf/standard.equivalents ${codepoints_set} 512 cozette12x26.psfu
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 *.otf -t $out/share/fonts/opentype
-    install -Dm644 *.bdf -t $out/share/fonts/misc
-    install -Dm644 *.otb -t $out/share/fonts/misc
-    install -Dm644 *.woff -t $out/share/fonts/woff
-    install -Dm644 *.woff2 -t $out/share/fonts/woff2
-
-    install -Dm644 *.psfu -t "$out/share/consolefonts/"
-
-    runHook postInstall
   '';
 
   meta = {

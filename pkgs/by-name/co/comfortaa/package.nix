@@ -2,32 +2,38 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "comfortaa";
   version = "unstable-2021-07-29";
+
+  outputs = [
+    "out"
+    "webfont"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "comfortaa";
     rev = "2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b";
-    postFetch = ''
-      # Remove the OTF fonts as they are not needed and cause a hash mismatch
-      rm -rf $out/fonts/{OTF,otf}
-    '';
-    hash = "sha256-4ZBRaQyYlnt9l4NgBHezuCnR3rKTJ37L41RTbGAhd0M=";
+    hash = "sha256-O5+omTQIsc7lfNLonYC2qeRbLxrWYES0u9dGACNj54A=";
   };
 
   dontBuild = true;
+  nativeBuildInputs = [ installFonts ];
+
+  preInstall = ''
+    rm -r old/
+  '';
+  postInstall = ''
+    install -D FONTLOG.txt README.md -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+  '';
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype $out/share/doc/comfortaa
-    cp fonts/TTF/*.ttf $out/share/fonts/truetype
-    cp FONTLOG.txt README.md $out/share/doc/comfortaa
-
     runHook postInstall
   '';
 
@@ -38,4 +44,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})
