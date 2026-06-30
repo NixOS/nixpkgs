@@ -2,27 +2,36 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytestCheckHook,
+  setuptools,
   levenshtein,
   pycodestyle,
-  hypothesis,
-  pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fuzzywuzzy";
   version = "0.18.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) version;
+    pname = "fuzzywuzzy";
     sha256 = "1s00zn75y2dkxgnbw8kl8dw4p1mc77cv78fwfa4yb0274s96w0a5";
   };
 
-  propagatedBuildInputs = [ levenshtein ];
+  build-system = [ setuptools ];
+
+  dependencies = [ levenshtein ];
+
   nativeCheckInputs = [
+    pytestCheckHook
     pycodestyle
-    hypothesis
-    pytest
+  ];
+
+  pythonImportsCheck = [
+    "fuzzywuzzy"
   ];
 
   meta = {
@@ -31,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})
