@@ -1,0 +1,371 @@
+diff --git a/exp_trap.c b/exp_trap.c
+--- a/exp_trap.c
++++ b/exp_trap.c
+@@ -300,11 +300,11 @@ static int got_sig;		/* this records the last signal received */
+ Exp_TrapObjCmd(clientData, interp, objc, objv)
+ ClientData clientData;
+ Tcl_Interp *interp;
+-int objc;
++Tcl_Size objc;
+ Tcl_Obj *CONST objv[];
+ {
+ 	char *action = 0;
+-	int n;		/* number of signals in list */
++	Tcl_Size n;		/* number of signals in list */
+ 	Tcl_Obj **list;	/* list of signals */
+ 	char *arg;
+ 	int len;	/* length of action */
+
+diff --git a/exp_command.c b/exp_command.c
+--- a/exp_command.c
++++ b/exp_command.c
+@@ -575,7 +575,7 @@
+ Exp_SpawnObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     ExpState *esPtr = 0;
+@@ -749,7 +749,7 @@
+
+ 		int j;
+ 		RETSIGTYPE (*sig_handler)();
+-		int       lc;	/* number of signals in list */
++		Tcl_Size  lc;	/* number of signals in list */
+ 		Tcl_Obj** lv;	/* list of signals */
+
+ 		if ((objc - i) < 3) {
+@@ -1370,7 +1370,7 @@
+ Exp_ExpPidObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     char *chanName = 0;
+@@ -1420,7 +1420,7 @@
+ Exp_GetpidDeprecatedObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     expDiagLog("getpid is deprecated, use pid\r\n");
+@@ -1433,7 +1433,7 @@
+ Exp_SleepObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     double s;
+@@ -1837,7 +1837,7 @@
+ {
+     struct ExpState *esPtr;
+     char *p = i->value;
+-    int argc;
++    Tcl_Size argc;
+     char **argv;
+     int j;
+
+@@ -1916,7 +1916,7 @@
+ Exp_SendLogObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     static char* options[] = { "--", NULL };
+@@ -1960,7 +1960,7 @@
+ Exp_SendObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])
+ {
+     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+@@ -2158,7 +2158,7 @@
+ Exp_LogFileObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     static char resultbuf[1000];
+@@ -2291,7 +2291,7 @@
+ Exp_LogUserObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int old_loguser = expLogUserGet();
+@@ -2323,7 +2323,7 @@
+ Exp_DebugObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int now = FALSE;	/* soon if FALSE, now if TRUE */
+@@ -2393,7 +2393,7 @@
+ Exp_ExpInternalObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int newChannel = FALSE;
+@@ -2473,7 +2473,7 @@
+ Exp_ExitObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int value = 0;
+@@ -2529,7 +2529,7 @@
+ Exp_ConfigureObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])	/* Argument objects. */
+ {
+     /* Magic configuration stuff. */
+@@ -2570,7 +2570,7 @@
+ Exp_CloseObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[]) 	/* Argument objects. */
+ {
+     int onexec_flag = FALSE;	/* true if -onexec seen */
+@@ -2684,7 +2684,7 @@
+     int level,
+     CONST char *command,
+     Tcl_Command cmdInfo,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int i;
+@@ -2708,7 +2708,7 @@
+ Exp_StraceObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     static int trace_level = 0;
+@@ -2862,7 +2862,7 @@
+ Exp_WaitObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     char *chanName = 0;
+@@ -3075,7 +3075,7 @@
+ Exp_ForkObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int rc;
+@@ -3109,7 +3109,7 @@
+ Exp_DisconnectObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
+@@ -3219,7 +3219,7 @@
+ Exp_OverlayObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int newfd, oldfd;
+@@ -3310,7 +3310,7 @@
+ Exp_InterpreterObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     Tcl_Obj *eofObj = 0;
+@@ -3358,7 +3358,7 @@
+ Exp_ExpContinueObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     if (objc == 1) {
+@@ -3378,7 +3378,7 @@
+ Exp_InterReturnObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])
+ {
+     /* let Tcl's return command worry about args */
+@@ -3399,7 +3399,7 @@
+ Exp_OpenObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     ExpState *esPtr;
+
+diff --git a/expect.c b/expect.c
+--- a/expect.c
++++ b/expect.c
+@@ -408,7 +408,7 @@
+     Tcl_Interp *interp,
+     struct exp_cmd_descriptor *eg,
+     ExpState *default_esPtr,	/* suggested ExpState if called as expect_user or _tty */
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int i;
+@@ -1296,7 +1296,7 @@
+ expect_info(
+     Tcl_Interp *interp,
+     struct exp_cmd_descriptor *ecmd,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     struct exp_i *exp_i;
+@@ -1384,7 +1384,7 @@
+ Exp_ExpectGlobalObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int result = TCL_OK;
+@@ -2525,7 +2525,7 @@
+ Exp_ExpectObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int cc;			/* number of chars returned in a single read */
+@@ -2782,7 +2782,7 @@
+ Exp_TimestampObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+ 	char *format = 0;
+@@ -2870,7 +2870,7 @@
+
+ static int
+ process_di _ANSI_ARGS_ ((Tcl_Interp* interp,
+-			 int objc,
++			 Tcl_Size objc,
+ 			 Tcl_Obj *CONST objv[],		/* Argument objects. */
+ 			 int* at,
+ 			 int* Default,
+@@ -2880,7 +2880,7 @@
+ static int
+ process_di (
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[],		/* Argument objects. */
+     int* at,
+     int* Default,
+@@ -2962,7 +2962,7 @@
+ Exp_MatchMaxObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int size = -1;
+@@ -3008,7 +3008,7 @@
+ Exp_RemoveNullsObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int value = -1;
+@@ -3052,7 +3052,7 @@
+ Exp_ParityObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int parity;
+@@ -3091,7 +3091,7 @@
+ Exp_CloseOnEofObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+     int close_on_eof;
+@@ -3191,7 +3191,7 @@
+ cmdX(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST objv[])		/* Argument objects. */
+ {
+ 	exp_cmds_print();
+
+diff --git a/exp_inter.c b/exp_inter.c
+--- a/exp_inter.c
++++ b/exp_inter.c
+@@ -714,7 +714,7 @@
+ Exp_InteractObjCmd(
+     ClientData clientData,
+     Tcl_Interp *interp,
+-    int objc,
++    Tcl_Size objc,
+     Tcl_Obj *CONST initial_objv[])		/* Argument objects. */
+ {
+     ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);

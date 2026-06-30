@@ -1,0 +1,26 @@
+--- a/exp_command.c
++++ b/exp_command.c
+@@ -336,6 +336,14 @@ exp_close(
+        written now! */
+     Tcl_Flush(esPtr->channel);
+
++    /*
++     * Tcl 9 fix: Disarm event handlers BEFORE closing file descriptors.
++     * In Tcl 9, Tcl_DeleteChannelHandler accesses the underlying fd,
++     * so we must disarm while the fd is still valid.
++     */
++    exp_state_prep_for_invalidation(interp,esPtr);
++    esPtr->bg_status = unarmed;  /* Ensure bg handler won't fire */
++
+     /*
+      * Ignore close errors from ptys.  Ptys on some systems return errors for
+      * no evident reason.  Anyway, receiving an error upon pty-close doesn't
+@@ -382,8 +390,6 @@ exp_close(
+     }
+ #endif
+
+-    exp_state_prep_for_invalidation(interp,esPtr);
+-
+     if (esPtr->user_waited) {
+ 	if (esPtr->registered) {
+ 	    Tcl_UnregisterChannel(interp,esPtr->channel);
