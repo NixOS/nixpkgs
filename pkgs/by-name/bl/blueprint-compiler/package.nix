@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    python3
     wrapGAppsNoGuiHook
   ];
 
@@ -85,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "blueprint-compiler";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     description = "Markup language for GTK user interface files";
