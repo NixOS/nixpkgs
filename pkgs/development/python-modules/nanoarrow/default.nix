@@ -30,14 +30,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "nanoarrow";
-  version = "0.8.0";
+  version = "0.9.0.dev";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-nanoarrow";
     tag = "apache-arrow-nanoarrow-${finalAttrs.version}";
-    hash = "sha256-1iLbT1eeyZaoB75uYTgg4qns+C7b4DErqMwJ9nQPRls=";
+    hash = "sha256-mKC847cZR9ZGZS3NgB7wahSOYn+lV8Hne34RXv2ed48=";
   };
 
   # Pre-populate the meson subproject with the flatcc source so meson doesn't try to download it.
