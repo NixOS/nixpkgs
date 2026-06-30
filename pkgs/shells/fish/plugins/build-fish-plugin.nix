@@ -3,6 +3,7 @@
   lib,
   writeScript,
   wrapFish,
+  writableTmpDirAsHomeHook,
 }:
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
@@ -60,6 +61,7 @@ lib.extendMkDerivation {
       inherit doCheck;
 
       nativeCheckInputs = [
+        writableTmpDirAsHomeHook
         (wrapFish {
           pluginPkgs = checkPlugins;
           functionDirs = checkFunctionDirs;
@@ -68,7 +70,6 @@ lib.extendMkDerivation {
       ++ nativeCheckInputs;
 
       checkPhase = ''
-        export HOME=$(mktemp -d)  # fish wants a writable home
         fish "${writeScript "${finalAttrs.name}-test" checkPhase}"
       '';
     };
