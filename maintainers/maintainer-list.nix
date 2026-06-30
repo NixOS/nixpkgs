@@ -28629,6 +28629,13 @@
     github = "tudbut";
     githubId = 48156391;
   };
+  tuhana = {
+    name = "Tuhana";
+    github = "catuhana";
+    githubId = 108196023;
+    email = "tuhana.cat+nixpkgs@gmail.com";
+    matrix = "@cwtuh:matrix.org";
+  };
   Tungsten842 = {
     name = "Tungsten842";
     email = "886724vf@anonaddy.me";
