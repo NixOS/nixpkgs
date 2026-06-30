@@ -1162,12 +1162,12 @@ in
 
   tmux-sm = mkTmuxPlugin {
     pluginName = "tmux-sm";
-    version = "0-unstable-2026-05-14";
+    version = "0-unstable-2026-06-06";
     src = fetchFromGitHub {
       owner = "vimlinuz";
       repo = "tmux-sm";
-      rev = "97d411a11d124443c982d17fde03c1e09809d7b1";
-      hash = "sha256-7HW/TLP/yyQp4j0/utA0tibTv+suV1B2K56pUS3Z004=";
+      rev = "33b4841531eefcc30ebaa52438d7073b0066164b";
+      hash = "sha256-6zEx5X7j7Pm4Vn8edFtbaCkE8cDtN2rOQYVYJ/Vo5Qs=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     rtpFilePath = "main.tmux";
