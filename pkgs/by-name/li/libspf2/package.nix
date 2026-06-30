@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
     ];
     maintainers = with lib.maintainers; [
-      das_j
       euxane
       helsinki-Jo
     ];

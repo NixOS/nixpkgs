@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/philpennock/sieve-connect";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     mainProgram = "sieve-connect";
   };
 })
