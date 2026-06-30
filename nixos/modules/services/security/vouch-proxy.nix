@@ -177,7 +177,7 @@ in
     users.groups."${cfg.group}" = { };
 
     systemd.services = lib.mapAttrs' (client: clientAttrs: {
-      name = "${client}";
+      name = "vouch-${client}";
       value = {
         description = "Vouch Proxy for ${client}.";
         after = [ "network.target" ];
