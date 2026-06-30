@@ -1,0 +1,26 @@
+From 47ddb993b550a2b41a8b97397c6b1c8ec27b66f2 Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Tue, 30 Jun 2026 18:01:55 +0200
+Subject: [PATCH] build: fix target features for rustc 1.96
+
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ crates/simd_macros/src/target.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crates/simd_macros/src/target.rs b/crates/simd_macros/src/target.rs
+index 0f3c60c..e11262b 100644
+--- a/crates/simd_macros/src/target.rs
++++ b/crates/simd_macros/src/target.rs
+@@ -23,7 +23,7 @@ pub const TARGET_CPUS: &[TargetCpu] = &[
+         target_cpu: "v4",
+         target_arch: "x86_64",
+         target_features: &[
+-            "avx512bw", "avx512cd", "avx512dq", "avx512vl", // simd
++            "avx512f", "avx512bw", "avx512cd", "avx512dq", "avx512vl", // simd
+             "bmi1", "bmi2", "lzcnt", "movbe", "popcnt", // bit-operations
+         ],
+     },
+-- 
+2.54.0
+

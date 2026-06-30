@@ -23,6 +23,11 @@ buildPgrxExtension (finalAttrs: {
 
   cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
+  patches = [
+    # Build is broken with rustc 1.96, upstream fix PR: https://github.com/supervc-stack/VectorChord/pull/467
+    ./0001-build-fix-target-features-for-rustc-1.96.patch
+  ];
+
   # Include upgrade scripts in the final package
   # https://github.com/supervc-stack/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
   postInstall = ''
