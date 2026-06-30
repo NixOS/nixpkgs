@@ -49,6 +49,10 @@ buildPythonPackage {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
+  buildInputs = [
+    openvino-native
+  ];
+
   dependencies = [
     backports-strenum
     flatbuffers
@@ -71,10 +75,6 @@ buildPythonPackage {
     # https://github.com/google-ai-edge/LiteRT/pull/5298
     "backports.strenum"
   ];
-
-  postFixup = ''
-    addAutoPatchelfSearchPath ${openvino-native}/runtime/lib/
-  '';
 
   pythonImportsCheck = [
     "ai_edge_litert"
