@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libndctl";
-  version = "83";
+  version = "84";
 
   src = fetchFromGitHub {
     owner = "pmem";
     repo = "ndctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xhTZyRAQNomVyHCPUBwmM0Uuu1sMngTIJm8MF0gnRLk=";
+    hash = "sha256-3lw5lym3u3zC0IAyOzkWMFik/DxCe+UwkIWWWQk/VEk=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
