@@ -26,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   meta = {
     description = "NFS client library";
     homepage = "https://github.com/sahlberg/libnfs";
