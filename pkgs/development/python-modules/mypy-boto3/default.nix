@@ -475,8 +475,8 @@ in
       "sha256-duU3LIeW3FNiplVmduZsNXBoDK7vbO6ecrBt1Y7C9rU=";
 
   mypy-boto3-elasticache =
-    buildMypyBoto3Package "elasticache" "1.43.20"
-      "sha256-wXJzvzlQXgqrJfI/IV/KVmIQ5etRFuld69+mvgsK0Og=";
+    buildMypyBoto3Package "elasticache" "1.43.37"
+      "sha256-jD5yROkLZtZrSX0MMSTs9sCjNRs97g/T2wuDmnu1VWQ=";
 
   mypy-boto3-elasticbeanstalk =
     buildMypyBoto3Package "elasticbeanstalk" "1.43.0"
