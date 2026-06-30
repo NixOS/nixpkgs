@@ -118,6 +118,31 @@ let
       };
       buildInputs = [ libbass ];
     };
+
+    bassopus = {
+      h = {
+        linux = "c/bassopus.h";
+        darwin = "c/bassopus.h";
+      };
+      version = "2.4.3.1";
+      so = {
+        i686_linux = "libs/x86/libbassopus.so";
+        x86_64-linux = "libs/x86_64/libbassopus.so";
+        armv7l-linux = "libs/armhf/libbassopus.so";
+        aarch64-linux = "libs/aarch64/libbassopus.so";
+        x86_64-darwin = "libbassopus.dylib";
+        aarch64-darwin = "libbassopus.dylib";
+      };
+      url = {
+        linux = "https://web.archive.org/web/20260318004727/https://www.un4seen.com/files/bassopus24-linux.zip";
+        darwin = "https://web.archive.org/web/20260319021519/https://www.un4seen.com/files/bassopus24-osx.zip";
+      };
+      hash = {
+        linux = "sha256-eFqgsUjyypCqXohySCCq5OKPijTA+XulhQzQsMnaX1E=";
+        darwin = "sha256-g19vA+FdGSbBuiH9OG+4zZL4QZnHYADSDMVEaiIny64=";
+      };
+      buildInputs = [ libbass ];
+    };
   };
 
   dropBass =
@@ -125,6 +150,9 @@ let
     stdenv.mkDerivation {
       pname = "lib${name}";
       inherit (bass) version;
+
+      __structuredAttrs = true;
+      strictDeps = true;
 
       src = fetchurl {
         url = bass.url.${stdenv.hostPlatform.parsed.kernel.name};
