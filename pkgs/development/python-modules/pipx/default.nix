@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipx";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipx";
     tag = finalAttrs.version;
-    hash = "sha256-4qSCyaYHam9y04qTgEUvbo/XiY9WNqX2fKZJOAVE2EM=";
+    hash = "sha256-4/32zjdQxgb7titUnvIoEa35lpZYnxE4HBBvVrJv9JE=";
   };
 
   build-system = [
@@ -77,6 +77,12 @@ buildPythonPackage (finalAttrs: {
     # start local pypi server and use in tests
     "--net-pypiserver"
   ];
+
+  preCheck = ''
+    substituteInPlace tests/test_imports.py \
+      --replace-fail '"PYTHONPATH": str(root / "src")' \
+      '"PYTHONPATH": str(root / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")'
+  '';
 
   disabledTests = [
     # disable tests, which require internet connection
