@@ -10169,6 +10169,12 @@
     githubId = 2041764;
     name = "Andreas Wendleder";
   };
+  goobertony = {
+    github = "goobertony";
+    email = "tonygameing@proton.me";
+    githubId = 133613491;
+    name = "Tonii Bittersweet";
+  };
   goodrone = {
     email = "goodrone@gmail.com";
     github = "goodrone";
