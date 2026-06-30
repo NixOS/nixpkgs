@@ -1,0 +1,30 @@
+diff --git a/dist/launch_linux.sh b/dist/launch_linux.sh
+index 460fe5d..d38b4f7 100755
+--- a/dist/launch_linux.sh
++++ b/dist/launch_linux.sh
+@@ -10,4 +10,4 @@ JLINK_VM_OPTIONS="\
+ --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+ DIR=`dirname $0`
+ CLASSPATH_OPTIONS="-classpath $DIR/classpath/gson-2.8.9.jar:$DIR/classpath/protobuf-java-3.19.6.jar:$DIR/classpath/java-language-server.jar"
+-$DIR/linux/bin/java $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
++@java@ $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
+diff --git a/dist/launch_mac.sh b/dist/launch_mac.sh
+index d507fd2..d38b4f7 100755
+--- a/dist/launch_mac.sh
++++ b/dist/launch_mac.sh
+@@ -10,4 +10,4 @@ JLINK_VM_OPTIONS="\
+ --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+ DIR=`dirname $0`
+ CLASSPATH_OPTIONS="-classpath $DIR/classpath/gson-2.8.9.jar:$DIR/classpath/protobuf-java-3.19.6.jar:$DIR/classpath/java-language-server.jar"
+-$DIR/mac/bin/java $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
++@java@ $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
+diff --git a/dist/launch_windows.sh b/dist/launch_windows.sh
+index 612731c..070803d 100644
+--- a/dist/launch_windows.sh
++++ b/dist/launch_windows.sh
+@@ -10,4 +10,4 @@ JLINK_VM_OPTIONS="\
+ --add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+ DIR=`dirname $0`
+ CLASSPATH_OPTIONS="-classpath $DIR/classpath/gson-2.8.9.jar;$DIR/classpath/protobuf-java-3.19.6.jar;$DIR/classpath/java-language-server.jar"
+-$DIR/windows/bin/java $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
++@java@ $JLINK_VM_OPTIONS $CLASSPATH_OPTIONS $@
