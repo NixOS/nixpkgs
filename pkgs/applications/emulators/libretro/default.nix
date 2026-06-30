@@ -74,6 +74,8 @@ lib.makeScope newScope (self: {
 
   fmsx = self.callPackage ./cores/fmsx.nix { };
 
+  freechaf = self.callPackage ./cores/freechaf.nix { };
+
   freeintv = self.callPackage ./cores/freeintv.nix { };
 
   fuse = self.callPackage ./cores/fuse.nix { };
