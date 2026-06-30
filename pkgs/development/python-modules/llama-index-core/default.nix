@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
-  version = "0.14.19";
+  version = "0.14.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xcssJPBXq3bjSD13nsR6jRTmTWPVks8aKHZCZ3lSKY4=";
+    hash = "sha256-JH8J8lnW3QNMWUV5MD4zWoc9zaXfvGRxVXtI47sPg2o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
@@ -112,29 +112,31 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Tests require network access
     "tests/agent/"
+    "tests/base/llms/"
     "tests/callbacks/"
     "tests/chat_engine/"
     "tests/evaluation/"
     "tests/indices/"
     "tests/ingestion/"
+    "tests/llms/"
     "tests/memory/"
+    "tests/multi_modal_llms/"
     "tests/node_parser/"
     "tests/objects/"
     "tests/playground/"
     "tests/postprocessor/"
+    "tests/prompts/"
     "tests/query_engine/"
     "tests/question_gen/"
     "tests/response_synthesizers/"
     "tests/retrievers/"
+    "tests/schema/"
     "tests/selectors/"
+    "tests/test_prompt_helper_empty_input.py"
     "tests/test_utils.py"
     "tests/text_splitter/"
     "tests/token_predictor/"
     "tests/tools/"
-    "tests/schema/"
-    "tests/multi_modal_llms/"
-    "tests/prompts/"
-    "tests/base/llms/"
   ];
 
   disabledTests = [
