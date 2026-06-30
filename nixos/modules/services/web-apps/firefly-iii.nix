@@ -93,11 +93,12 @@ in
 
     group = lib.mkOption {
       type = lib.types.str;
-      default = if cfg.enableNginx then "nginx" else defaultGroup;
-      defaultText = "If `services.firefly-iii.enableNginx` is true then `nginx` else ${defaultGroup}";
+      default = defaultGroup;
       description = ''
-        Group under which firefly-iii runs. It is best to set this to the group
-        of whatever webserver is being used as the frontend.
+        Group under which firefly-iii runs.
+        While this also changes which group has access to the phpfpm socket,
+        changing {option}`services.firefly-iii.poolConfig."listen.group"`
+        is preferred.
       '';
     };
 
@@ -151,6 +152,9 @@ in
       default = { };
       defaultText = ''
         {
+          "listen.mode" = "0660";
+          "listen.owner" = if config.services.firefly-iii.enableNginx then config.services.nginx.user else config.services.firefly-iii.user;
+          "listen.group" = if config.services.firefly-iii.enableNginx then config.services.nginx.group else config.services.firefly-iii.group;
           "pm" = "dynamic";
           "pm.max_children" = 32;
           "pm.start_servers" = 2;
@@ -295,8 +299,8 @@ in
       '';
       settings = {
         "listen.mode" = lib.mkDefault "0660";
-        "listen.owner" = lib.mkDefault user;
-        "listen.group" = lib.mkDefault group;
+        "listen.owner" = lib.mkDefault (if cfg.enableNginx then config.services.nginx.user else user);
+        "listen.group" = lib.mkDefault (if cfg.enableNginx then config.services.nginx.group else group);
         "pm" = lib.mkDefault "dynamic";
         "pm.max_children" = lib.mkDefault 32;
         "pm.start_servers" = lib.mkDefault 2;
