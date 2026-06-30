@@ -8,6 +8,8 @@
 
   anki-connect = callPackage ./anki-connect { };
 
+  anki-draw = callPackage ./anki-draw { };
+
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
 
   fsrs4anki-helper = callPackage ./fsrs4anki-helper { };
