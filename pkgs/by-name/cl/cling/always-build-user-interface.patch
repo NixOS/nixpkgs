@@ -1,0 +1,18 @@
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index eb29252..a62c0de 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -8,7 +8,10 @@
+ 
+ add_subdirectory(Interpreter)
+ add_subdirectory(MetaProcessor)
+-if(CLING_INCLUDE_TESTS)
+-   add_subdirectory(UserInterface)
+-endif()
++# The UserInterface library (clingUserInterface) is linked unconditionally by the
++# cling driver, so it must always be built. Upstream cling 1.3 mistakenly gates it
++# behind CLING_INCLUDE_TESTS: the previous EXISTS check on the bundled textinput
++# sources was dropped when those were removed in favor of LLVM's LineEditor, but the
++# subdirectory must still be added. See lib/UserInterface and tools/driver.
++add_subdirectory(UserInterface)
+ add_subdirectory(Utils)
