@@ -3372,6 +3372,13 @@
     githubId = 4313548;
     name = "Ben Sparks";
   };
+  benhaskins = {
+    name = "Ben Haskins";
+    email = "ben.haskins@spang.co.uk";
+    github = "benhaskins";
+    githubId = 179679961;
+    keys = [ { fingerprint = "bnYZE0VGodlVwh/eUlqGQsAHeSE0hBPbo2EN2LrGu0M"; } ];
+  };
   benhiemer = {
     name = "Benedikt Hiemer";
     email = "ben.email@posteo.de";
