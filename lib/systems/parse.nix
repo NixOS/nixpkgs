@@ -347,6 +347,12 @@ rec {
         family = "sparc";
       };
 
+      xtensa = {
+        bits = 32;
+        significantByte = littleEndian;
+        family = "xtensa";
+      };
+
       wasm32 = {
         bits = 32;
         significantByte = littleEndian;
@@ -500,6 +506,7 @@ rec {
     apple = { };
     pc = { };
     knuth = { };
+    esp = { };
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = { };
@@ -856,8 +863,16 @@ rec {
           secondComponent = elemAt l 1;
           thirdComponent = elemAt l 2;
         in
+        # cpu-vendor-abi
+        if secondComponent == "esp" then
+          {
+            cpu = head l;
+            vendor = secondComponent;
+            kernel = "none";
+            abi = thirdComponent;
+          }
         # cpu-kernel-environment
-        if secondComponent == "linux" || elem thirdComponent linuxComponents then
+        else if secondComponent == "linux" || elem thirdComponent linuxComponents then
           {
             cpu = head l;
             kernel = secondComponent;
