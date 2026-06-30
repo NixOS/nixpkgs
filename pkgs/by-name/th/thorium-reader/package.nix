@@ -27,10 +27,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  # makeBinaryWrapper is preferred on Darwin since the OS may confuse itself
+  # makeBinaryWrapper is required on Darwin since MacOS is confuses itself
   # into thinking it needs Rosetta 2 if it encounters a non-MachO executable
-  # in a .app bundle
-
+  # in a .app bundle.
   # Simultaneously, we need makeShellWrapper on linux platforms to pass
   # electron-specific flags.
   nativeBuildInputs = [
