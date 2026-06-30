@@ -54,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/62b8f9fd0bb3b862823cd34afce4b389fbd27569.patch";
       hash = "sha256-ECEIt8lq/jBtDdBetErKpap2PWGav10vqCXKCpIQSyA=";
     })
+
+    # Also scan for .dylib loaders on Darwin.
+    ./queryloaders-darwin-dylib.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work

@@ -24,6 +24,7 @@
   libappindicator-gtk3,
   libvncserver,
   libpthread-stubs,
+  librsvg,
   libxdmcp,
   libxkbcommon,
   libsecret,
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libvncserver
     libpthread-stubs
+    librsvg
     libxdmcp
     libxkbcommon
     libsoup_3
