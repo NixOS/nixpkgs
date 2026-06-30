@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runtimeShell,
   man-db,
   groff,
   xdg-utils,
@@ -34,8 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/qman_tests_list.sh \
-      --replace-fail "/usr/bin/env bash" ${runtimeShell}
+    patchShebangs --build src/qman_tests_list.sh
     substituteInPlace src/config_def.py \
       --replace-fail "/usr/bin/man" ${man-db}/bin/man \
       --replace-fail "/usr/bin/groff" ${groff}/bin/groff \
