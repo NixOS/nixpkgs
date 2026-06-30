@@ -1494,7 +1494,7 @@
   };
 
   llvm = {
-    version = "0-unstable-2025-08-22";
+    version = "1.1.0-unstable-2025-08-22";
     url = "github:benwilliamgraham/tree-sitter-llvm";
     rev = "2914786ae6774d4c4e25a230f4afe16aa68fe1c1";
     hash = "sha256-jBSotMFsBUcgQrWH5p8EiywG00+v9QqePcUTI6ZqAkw=";
