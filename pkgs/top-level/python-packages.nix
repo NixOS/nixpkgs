@@ -11170,6 +11170,10 @@ self: super: with self; {
 
   natasha = callPackage ../development/python-modules/natasha { };
 
+  native-sparse-attention-pytorch =
+    callPackage ../development/python-modules/native-sparse-attention-pytorch
+      { };
+
   nats-py = callPackage ../development/python-modules/nats-py { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
