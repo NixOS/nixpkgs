@@ -33,9 +33,10 @@ let
 
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "Jan";
     maintainers = with lib.maintainers; [ dfjay ];
     platforms =
@@ -62,21 +63,15 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      passthru
-      meta
-      ;
+    inherit pname version;
 
     src = darwin-src;
 
-    dontUnpack = true;
-
-    sourceRoot = "${pname}.app";
     nativeBuildInputs = [
       makeWrapper
     ];
+
+    dontUnpack = true;
 
     installPhase = ''
       runHook preInstall
@@ -90,6 +85,8 @@ let
 
       runHook postInstall
     '';
+
+    inherit passthru meta;
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux
