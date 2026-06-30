@@ -45,7 +45,7 @@
   fast-bufio ? false,
   io-wchar ? false,
 
-  # Internaltionalization options
+  # Internationalization options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L181
   mb-capable ? false,
   mb-extended-charsets ? false,
