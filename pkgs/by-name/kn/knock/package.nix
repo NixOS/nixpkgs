@@ -15,8 +15,13 @@ buildGoModule (finalAttrs: {
     owner = "nat-418";
     repo = "knock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K+L4F4bTERQSqISAmfyps/U5GJ2N0FdJ3RmpiUmt4uA=";
+    hash = "sha256-Iqx/UBZlsO8qxXpiZ/m61ojvfepodwUoWaP2Q9uh648=";
   };
+
+  # devendor go modules
+  prePatch = ''
+    rm -rf vendor/
+  '';
 
   vendorHash = "sha256-wkSXdIgfkHbVJYsgm/hLAeKA9geof92U3mzSzt7eJE8=";
 
