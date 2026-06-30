@@ -314,4 +314,36 @@ in
           exit(1)
       '';
   };
+
+  zfs-mount-generator = makeTest {
+    name = "zfs-mount-generator";
+    nodes.machine =
+      { ... }:
+      {
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "00000000";
+        virtualisation = {
+          emptyDiskImages = [ 4096 ];
+        };
+      };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed(
+        "zpool create -O mountpoint=none test /dev/vdb",
+        # Enable list caching for the test pool.
+        "mkdir /etc/zfs/zfs-list.cache",
+        "touch /etc/zfs/zfs-list.cache/test",
+        "zfs create -o mountpoint=/tmp/foo test/foo",
+      )
+      # Wait for the zedlet to update the cache with the new dataset.
+      machine.wait_until_succeeds("grep -F test/foo /etc/zfs/zfs-list.cache/test", timeout=5)
+      machine.succeed(
+        # Rerun systemd generators.
+        "systemctl daemon-reload",
+        "systemctl cat tmp-foo.mount | grep zfs-mount-generator",
+        "systemctl is-active tmp-foo.mount",
+      )
+    '';
+  };
 }
