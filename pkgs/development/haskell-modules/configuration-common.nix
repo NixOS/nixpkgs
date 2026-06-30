@@ -1149,12 +1149,33 @@ with haskellLib;
   tailfile-hinotify = doJailbreak (dontCheck super.tailfile-hinotify);
 
   # 2025-09-01: Merged patch from upstream to fix bounds:
-  optics = appendPatch (fetchpatch {
-    name = "optics-fix-inspection-testing-bound";
-    url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
-    sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
-    relative = "optics";
-  }) super.optics;
+  optics = appendPatches [
+    (fetchpatch {
+      name = "optics-fix-inspection-testing-bound";
+      url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
+      sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
+      relative = "optics";
+    })
+    # Test suite changes from development branch which make it pass with GHC == 9.12.*
+    (fetchpatch {
+      name = "optics-inspection-tesing-lower-bound.patch";
+      url = "https://github.com/well-typed/optics/commit/121554907e4216c4a88323d441c7c11f19016062.patch";
+      hash = "sha256-L7HEK3l7lGvu1Rp8ygkQEZFnJW9R+dgaYGz4c7zVYiE=";
+      relative = "optics";
+    })
+    (fetchpatch {
+      name = "optics-inspection-testing-ghc-9.12-changes.patch";
+      url = "https://github.com/well-typed/optics/commit/aa3cf444b881b7e19a6a9764bcc0462c9ab00724.patch";
+      hash = "sha256-n2hnZXJV3fjRbHTRaM/eabTyS61T/+4mSU4AZBsEEkM=";
+      relative = "optics";
+    })
+    (fetchpatch {
+      name = "optics-inspection-ghc-9.12-skips.patch";
+      url = "https://github.com/well-typed/optics/commit/397fcf242257a7e3553b845e48d4531015f0478d.patch";
+      hash = "sha256-r/NPdUckh37Ed9gA7OXmDdZmMp3zjuGCB+0P8/Ce4i4=";
+      relative = "optics";
+    })
+  ] super.optics;
 
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
