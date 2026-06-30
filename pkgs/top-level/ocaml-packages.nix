@@ -288,6 +288,8 @@ let
 
         cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
+        cohttp-server-lwt-unix = callPackage ../development/ocaml-modules/cohttp/server-lwt-unix.nix { };
+
         cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
         coin = callPackage ../development/ocaml-modules/coin { };
