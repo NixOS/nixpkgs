@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gogcli";
-  version = "0.29.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "steipete";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JunPpEzbNp00uEiJ7AzouXyzFwyNLehLU7mwL3eh4bM=";
+    hash = "sha256-kTMxHPY3bv85X3H0TQGHLvL/nVVjh5fDF/S/z6Xd+bw=";
   };
 
-  vendorHash = "sha256-JrRIUYpw2lAD0ezi0HTZvS42OS7vP8DAHU3m0u3eCbM=";
+  vendorHash = "sha256-fof2DVm6Cn1ZW7gKSYLHX6M6nPbtYBn6EKinptjhhrE=";
 
   subPackages = [ "cmd/gog" ];
 
