@@ -3086,7 +3086,7 @@ with pkgs;
 
   vinyl-cache = vinyl-cache_9;
 
-  vncdo = with python3Packages; toPythonApplication vncdo;
+  vncdotool = with python3Packages; toPythonApplication vncdotool;
 
   # An alias to work around the splicing incidents
   # Related:

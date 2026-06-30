@@ -21490,7 +21490,7 @@ self: super: with self; {
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
-  vncdo = callPackage ../development/python-modules/vncdo { };
+  vncdotool = callPackage ../development/python-modules/vncdotool { };
 
   vnoise = callPackage ../development/python-modules/vnoise { };
 
