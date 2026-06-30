@@ -85,6 +85,8 @@ self: super: with self; {
 
   adblock = callPackage ../development/python-modules/adblock { };
 
+  adbutils = callPackage ../development/python-modules/adbutils { };
+
   add-trailing-comma = callPackage ../development/python-modules/add-trailing-comma { };
 
   addict = callPackage ../development/python-modules/addict { };
