@@ -11,6 +11,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
