@@ -8950,6 +8950,12 @@
       { fingerprint = "7E08 6842 0934 AA1D 6821  1F2A 671E 39E6 744C 807D"; }
     ];
   };
+  ferguscollins = {
+    email = "git@ferguscollins.com";
+    github = "ferguscollins";
+    githubId = 59059263;
+    name = "Fergus Collins";
+  };
   fernsehmuell = {
     email = "fernsehmuel@googlemail.com";
     matrix = "@fernsehmuell:matrix.org";
