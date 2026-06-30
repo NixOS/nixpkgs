@@ -509,6 +509,7 @@ with lib.maintainers;
       nickcao
       teutat3s
       transcaffeine
+      skowalak
     ];
     scope = "Maintain the foundational packages of the Matrix ecosystem.";
     shortName = "Matrix";

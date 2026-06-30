@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydevccu";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = finalAttrs.version;
-    hash = "sha256-/Z1+k9CNTQsqTXSIqmUQn7r5WBTgZmqsg5Z+cq9nR3Q=";
+    hash = "sha256-Sf8XBvkf6dRuA6daJ48WJHuVYBhznDcPWLl+4xm46n0=";
   };
 
   build-system = [ setuptools ];
