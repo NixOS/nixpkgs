@@ -13699,6 +13699,8 @@ self: super: with self; {
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
+  pyadi-iio = callPackage ../development/python-modules/pyadi-iio { };
+
   pyadjoint-ad = callPackage ../development/python-modules/pyadjoint-ad { };
 
   pyads = callPackage ../development/python-modules/pyads { };
