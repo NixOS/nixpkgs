@@ -1,14 +1,16 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openttd-nml";
   version = "0.9.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
@@ -17,17 +19,23 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-FVGjXh04uHZM9vZNzjdYEk4ClMR9t0kl44JePrUGx84=";
   };
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
   postPatch = ''
     echo 'version = "${finalAttrs.version}"' > nml/__version__.py
+
+    # Ply's source code is vendored.
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools", "ply"' '"setuptools"'
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pillow
+  dependencies = [
+    python3Packages.pillow
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/OpenTTD/nml/releases/tag/${finalAttrs.version}";
