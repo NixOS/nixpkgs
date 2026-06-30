@@ -398,6 +398,7 @@ mapAliases {
   bitwarden_rs-postgresql = throw "'bitwarden_rs-postgresql' has been renamed to/replaced by 'vaultwarden-postgresql'"; # Converted to throw 2025-10-27
   bitwarden_rs-sqlite = throw "'bitwarden_rs-sqlite' has been renamed to/replaced by 'vaultwarden-sqlite'"; # Converted to throw 2025-10-27
   bitwarden_rs-vault = throw "'bitwarden_rs-vault' has been renamed to/replaced by 'vaultwarden-vault'"; # Converted to throw 2025-10-27
+  bkyml = throw "''bkyml' has been removed due to a lack of upstream maintainance"; # Added 2026-06-16
   blackbox = throw "'blackbox' has been removed since it has been deprecated and archived upstream. Consider using pass instead"; # Added 2026-01-16
   blas-reference = throw "blas-reference has been removed since it has been discontinued as free-standing package. It is now contained within lapack-reference."; # Added 2025-10-21
   blender-hip = throw "blender-hip has been removed in favor of setting `config.rocmSupport = true` or using `pkgsRocm.blender`"; # Added 2026-01-04
