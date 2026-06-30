@@ -597,10 +597,22 @@ with pkgs;
             };
             inherit perl;
           };
-          libssh2 = buildPackages.libssh2.override {
-            fetchurl = stdenv.fetchurlBoot;
-            inherit zlib openssl;
-          };
+          libssh2 =
+            let
+              fetchurl = stdenv.fetchurlBoot;
+              m4 = m4.override { inherit fetchurl; };
+              autoconf = autoconf.override { inherit fetchurl m4; };
+              automake = automake.override { inherit autoconf fetchurl; };
+            in
+            buildPackages.libssh2.override {
+              inherit
+                autoconf
+                automake
+                fetchurl
+                openssl
+                zlib
+                ;
+            };
           # On darwin, libkrb5 needs bootstrap_cmds which would require
           # converting many packages to fetchurl_boot to avoid evaluation cycles.
           # So turn gssSupport off there, and on Windows.

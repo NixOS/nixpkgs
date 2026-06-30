@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  autoconf,
+  automake,
   fetchurl,
   openssl,
   zlib,
@@ -16,23 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libssh2";
-  version = "1.11.1";
+  version = "1.11.1-unstable-2026-06-30";
 
   src = fetchurl {
-    url = "https://www.libssh2.org/download/libssh2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2ex2y+NNuY7sNTn+LImdJrDIN8s+tGalaw8QnKv2WPc=";
+    url = "https://github.com/libssh2/libssh2/archive/6dc44da80e4ae2adfb188c1eefc5578c7bec0e67.tar.gz";
+    hash = "sha256-whgtUJ6oMcHh32+FGKQ29KhxfPJ+6L3R/Tasq+xacZE=";
+    name = finalAttrs.version;
   };
-
-  patches = [
-    # https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
-    ./CVE-2026-7598.patch
-  ];
-
-  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
-  # necessary for FreeBSD code path in configure
-  postPatch = ''
-    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
-  '';
 
   outputs = [
     "out"
@@ -42,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
 
   passthru.tests = {
     inherit
