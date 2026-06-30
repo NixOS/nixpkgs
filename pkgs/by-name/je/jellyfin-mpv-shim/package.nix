@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   copyDesktopItems,
-  fetchPypi,
+  fetchFromGitHub,
   gobject-introspection,
   makeDesktopItem,
   wrapGAppsHook3,
@@ -10,12 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.9.0";
+  version = "2.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YrwMvP66LAWKgx/yWBkWIkZtJ4a0YnhCiL7xB6fGm0E=";
+  src = fetchFromGitHub {
+    owner = "jellyfin";
+    repo = "jellyfin-mpv-shim";
+    tag = "v${version}";
+    hash = "sha256-x9ay4ucWBGRSTJxSJS6hkGTPAtlktOEBXUsutJTo2Fk=";
   };
 
   nativeBuildInputs = [
@@ -29,29 +31,22 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     jellyfin-apiclient-python
     mpv
-    pillow
     python-mpv-jsonipc
+    requests
 
-    # gui dependencies
+    # gui + mirror dependencies
+    pillow
     pystray
-    tkinter
-
-    # display_mirror dependencies
-    jinja2
-    pywebview
 
     # discord rich presence dependency
     pypresence
   ];
 
-  # override $HOME directory:
-  #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  #
-  # remove jellyfin_mpv_shim/win_utils.py:
-  #   ModuleNotFoundError: No module named 'win32gui'
   preCheck = ''
     export HOME=$TMPDIR
 
+    # remove jellyfin_mpv_shim/win_utils.py:
+    #   ModuleNotFoundError: No module named 'win32gui'
     rm jellyfin_mpv_shim/win_utils.py
   '';
 
@@ -60,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "check_updates: bool = True" "check_updates: bool = False" \
       --replace-fail "notify_updates: bool = True" "notify_updates: bool = False"
     # python-mpv renamed to mpv with 1.0.4
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace-fail "python-mpv" "mpv" \
       --replace-fail "mpv-jsonipc" "python_mpv_jsonipc"
   '';
@@ -70,7 +65,7 @@ python3Packages.buildPythonApplication rec {
     for s in 16 32 48 64 128 256; do
       mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
       ln -s $out/${python3Packages.python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
-        $out/share/icons/hicolor/''${s}x''${s}/apps/${pname}.png
+        $out/share/icons/hicolor/''${s}x''${s}/apps/jellyfin-mpv-shim.png
     done
   '';
 
@@ -84,9 +79,9 @@ python3Packages.buildPythonApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "jellyfin-mpv-shim";
+      exec = "jellyfin-mpv-shim";
+      icon = "jellyfin-mpv-shim";
       desktopName = "Jellyfin MPV Shim";
       categories = [
         "Video"
