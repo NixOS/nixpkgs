@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "oui";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "thatmattlove";
     repo = "oui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fNG20pryfs6bDjeexpf8UlevHatY6zdvGCHSFrfz8io=";
+    hash = "sha256-lwjDFd2rxMh7kHOuwgIeA2/gnzHoNkGKTQGd/xqshZY=";
   };
 
   vendorHash = "sha256-EOu9imj0YwYhHX7ZzE9BzhkoDitC5AHjlwoWmQs0Rj4=";

@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.19";
+  version = "5.1.21";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-ZsGRVuUpWIJnsSqcAQcerxvwWIRaGdAO2FM1k3D3g0M=";
+    hash = "sha256-IR5mKOsVJ/GPL2czdztLVXGJTNk1JXnWpzmqC/UIwuw=";
     fetchSubmodules = true;
   };
 
@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.extra-cmake-modules
     pkg-config
     wayland-scanner
     gettext
   ];
 
   buildInputs = [
+    kdePackages.plasma-wayland-protocols
     kdePackages.extra-cmake-modules
     expat
     isocodes

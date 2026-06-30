@@ -3513,8 +3513,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.25.0";
-          hash = "sha256-7DN0lYxwLL+Z0mIKApRHGHT7HiJZ0nfDMdojQm7XGAM=";
+          version = "1.27.1";
+          hash = "sha256-rCUIqxhR4AYteLKUGcpPuCV/NqV+tzjYU/TrPOcECdg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
@@ -3903,8 +3903,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.54.0";
-          hash = "sha256-G1L8fSRXj4rmyGFyvPuz7zoQ367Lc5PoyVOZnHPHcu0=";
+          version = "1.55.0";
+          hash = "sha256-ARY5w+40e5WRiVv8d9jPKPg2wFPQpJrkqD7+ncRzpgM=";
         };
         buildInputs = [ jdk ];
         meta = {

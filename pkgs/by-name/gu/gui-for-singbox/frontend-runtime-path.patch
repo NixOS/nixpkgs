@@ -27,31 +27,33 @@ diff -ruN a/src/stores/env.ts b/src/stores/env.ts
 diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
 --- a/src/stores/kernelApi.ts
 +++ b/src/stores/kernelApi.ts
-@@ -248,8 +248,12 @@
-   const runCoreProcess = (isAlpha: boolean) => {
-     return new Promise<number | void>((resolve, reject) => {
-       let output: string
-+      const coreWorkingDirectory =
-+        envStore.env.os === 'linux' && envStore.env.configPath
-+          ? `${envStore.env.configPath}/${CoreWorkingDirectory}`
-+          : CoreWorkingDirectory
-       const pid = ExecBackground(
--        CoreWorkingDirectory + '/' + getKernelFileName(isAlpha),
-+        coreWorkingDirectory + '/' + getKernelFileName(isAlpha),
-         getKernelRuntimeArgs(isAlpha),
-         (out) => {
-           output = out
-@@ -263,8 +267,9 @@
-           reject(output)
-         },
-         {
--          PidFile: CorePidFilePath,
-+          PidFile: coreWorkingDirectory + '/pid.txt',
-           StopOutputKeyword: CoreStopOutputKeyword,
-+          WorkingDirectory: envStore.env.configPath || envStore.env.basePath,
-           Env: getKernelRuntimeEnv(isAlpha),
-         },
-       ).catch((e) => reject(e))
+@@ -271,19 +271,24 @@
+   const runCoreProcess = async (isAlpha: boolean) => {
+     let stopped = false
++    const coreWorkingDirectory =
++      envStore.env.os === 'linux' && envStore.env.configPath
++        ? `${envStore.env.configPath}/${CoreWorkingDirectory}`
++        : CoreWorkingDirectory
+     const pid = await ExecBackground(
+-      CoreWorkingDirectory + '/' + getKernelFileName(isAlpha),
++      coreWorkingDirectory + '/' + getKernelFileName(isAlpha),
+       getKernelRuntimeArgs(isAlpha),
+       undefined,
+       async (end) => {
+         stopped = true
+         const logs = await ReadFile(CoreLogFilePath, { Range: '-4096' }).catch((err) => String(err))
+         logs.split('\n').forEach((line) => line && logsStore.recordKernelLog(line))
+         end && logsStore.recordKernelLog(end)
+         onCoreStopped()
+       },
+       {
+-        PidFile: CorePidFilePath,
+         LogFile: CoreLogFilePath,
++        PidFile: coreWorkingDirectory + '/pid.txt',
++        WorkingDirectory: envStore.env.configPath || envStore.env.basePath,
+         Env: getKernelRuntimeEnv(isAlpha),
+       },
+     )
 diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
 --- a/src/types/app.d.ts
 +++ b/src/types/app.d.ts
@@ -63,6 +65,30 @@ diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
    appPath: string
    os: OS
    arch: string
+diff -ruN a/src/views/PluginsView/index.vue b/src/views/PluginsView/index.vue
+--- a/src/views/PluginsView/index.vue
++++ b/src/views/PluginsView/index.vue
+@@ -37,7 +37,7 @@
+     label: 'common.openFile',
+     handler: async (id: string) => {
+       const plugin = pluginsStore.getPluginById(id)
+-      await OpenURI(envStore.env.basePath + '/' + plugin!.path)
++      await OpenURI(`${envStore.env.configPath || envStore.env.basePath}/${plugin!.path}`)
+     },
+   },
+ ]
+diff -ruN a/src/views/RulesetsView/index.vue b/src/views/RulesetsView/index.vue
+--- a/src/views/RulesetsView/index.vue
++++ b/src/views/RulesetsView/index.vue
+@@ -27,7 +27,7 @@
+     label: 'common.openFile',
+     handler: async (id: string) => {
+       const ruleset = rulesetsStore.getRulesetById(id)
+-      await OpenURI(envStore.env.basePath + '/' + ruleset!.path)
++      await OpenURI(`${envStore.env.configPath || envStore.env.basePath}/${ruleset!.path}`)
+     },
+   },
+   {
 diff -ruN a/src/utils/helper.ts b/src/utils/helper.ts
 --- a/src/utils/helper.ts
 +++ b/src/utils/helper.ts

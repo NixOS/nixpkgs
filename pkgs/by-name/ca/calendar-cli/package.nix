@@ -12,29 +12,25 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "calendar-cli";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycalendar";
     repo = "calendar-cli";
-    # https://github.com/pycalendar/calendar-cli/pull/113#issuecomment-3977892432
-    tag = "v0.15.0";
-    hash = "sha256-P6ClvX6C5VargAvudgSvBwObIUouTRg7SQ62KxhcKiE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5qPBHwOPW/HsmO/jBMyq6ROb23JYfJ/XLWmHwgb5kPY=";
   };
 
   postPatch = ''
-    substituteInPlace calendar_cli/metadata.py \
-      --replace-fail '"version": "1.0.1"' '"version": "${finalAttrs.version}"'
-
     patchShebangs tests
     substituteInPlace tests/test_calendar-cli.sh \
-      --replace-fail "../bin/calendar-cli.py" "$out/bin/calendar-cli" \
-      --replace-fail "../bin/calendar-cli" "$out/bin/calendar-cli"
+      --replace-fail "../bin/calendar-cli.py" "$out/bin/calendar-cli"
   '';
 
   build-system = with python3.pkgs; [
-    setuptools
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = with python3.pkgs; [
@@ -45,7 +41,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tzlocal
     click
     six
-    urllib3
     vobject
   ];
 
