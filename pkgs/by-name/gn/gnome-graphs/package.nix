@@ -14,12 +14,13 @@
   shared-mime-info,
   libadwaita,
   libgee,
+  sqlite,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-graphs";
-  version = "1.8.8";
+  version = "2.0.3";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -27,7 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "Graphs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XsdrXdIZmAngS52KmjcNbOWwYJsnhNGELSd0p3h/XWE=";
+    hash = "sha256-Fx2/xjr8EVIXmuPzcSVGx5eEPmBffHEqeZUvsN2+prs=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +47,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     libadwaita
     libgee
+    sqlite
   ];
 
   dependencies = with python3Packages; [
     pygobject3
+    gio-pyio
     numpy
     numexpr
     sympy
