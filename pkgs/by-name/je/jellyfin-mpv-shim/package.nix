@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   copyDesktopItems,
-  fetchFromGitHub,
+  fetchPypi,
   gobject-introspection,
   makeDesktopItem,
   wrapGAppsHook3,
@@ -13,11 +13,11 @@ python3Packages.buildPythonApplication rec {
   version = "2.10.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-mpv-shim";
-    tag = "v${version}";
-    hash = "sha256-x9ay4ucWBGRSTJxSJS6hkGTPAtlktOEBXUsutJTo2Fk=";
+  # contains shaderpacks
+  src = fetchPypi {
+    pname = "jellyfin_mpv_shim";
+    inherit version;
+    hash = "sha256-ZWmJQJAGAonStZyWww4P+034f2vGnTwLua7KUOqoBBE=";
   };
 
   nativeBuildInputs = [
