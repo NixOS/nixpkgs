@@ -228,6 +228,16 @@ rec {
     libc = "newlib";
   };
 
+  xtensa-esp-elf = {
+    config = "xtensa-esp-elf";
+    libc = "picolibc";
+  };
+
+  xtensa-none-elf = {
+    config = "xtensa-none-elf";
+    libc = "picolibc";
+  };
+
   m68k = {
     config = "m68k-unknown-linux-gnu";
   };
