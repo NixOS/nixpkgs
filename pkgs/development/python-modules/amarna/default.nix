@@ -33,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "amarna";
     homepage = "https://github.com/crytic/amarna";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

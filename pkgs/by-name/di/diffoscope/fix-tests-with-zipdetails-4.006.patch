@@ -1,0 +1,97 @@
+From fade8d04bfdbf473f3930feba7183957372e7fa7 Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Sun, 28 Jun 2026 16:20:43 -0400
+Subject: [PATCH] fix tests with zipdetails 4.006
+
+---
+ tests/comparators/test_zip.py            |  3 ++-
+ tests/data/zip2_zipdetails_expected_diff |  2 +-
+ tests/data/zip_zipdetails_expected_diff  | 10 +++++-----
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/tests/comparators/test_zip.py b/tests/comparators/test_zip.py
+index 75ec38be..ecff1930 100644
+--- a/tests/comparators/test_zip.py
++++ b/tests/comparators/test_zip.py
+@@ -81,7 +81,7 @@ def differences2(zip1, zip3):
+ 
+ 
+ @skip_unless_tools_exist("zipinfo", "zipdetails")
+-@skip_unless_tool_is_at_least("zipdetails", zipdetails_version, "4.004")
++@skip_unless_tool_is_at_least("zipdetails", zipdetails_version, "4.006")
+ @skip_unless_tool_is_at_least("perl", io_compress_zip_version, "2.212")
+ def test_metadata(differences):
+     assert_diff(differences[0], "zip_zipinfo_expected_diff")
+@@ -96,6 +96,7 @@ def test_compressed_files(differences):
+ 
+ 
+ @skip_unless_tools_exist("zipinfo", "bsdtar", "zipdetails")
++@skip_unless_tool_is_at_least("zipdetails", zipdetails_version, "4.006")
+ @skip_unless_tool_is_at_least("perl", io_compress_zip_version, "2.212")
+ def test_extra_fields(differences2):
+     assert_diff(differences2[0], "zip_bsdtar_expected_diff")
+diff --git a/tests/data/zip2_zipdetails_expected_diff b/tests/data/zip2_zipdetails_expected_diff
+index 291dca88..281cf6c5 100644
+--- a/tests/data/zip2_zipdetails_expected_diff
++++ b/tests/data/zip2_zipdetails_expected_diff
+@@ -5,7 +5,7 @@
+  #
+  0064 Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+  0066   Length              0009 (9)
+- 0068   Flags               03 (3) 'Modification Access'
++ 0068   Flags               03 (3) 'Modification & Access'
+ -0069   Modification Time   558AB455 (1435153493) 'Wed Jun 24 13:44:53 2015'
+ -006D   Access Time         558AB45F (1435153503) 'Wed Jun 24 13:45:03 2015'
+ +0069   Modification Time   41414141 (1094795585) 'Fri Sep 10 05:53:05 2004'
+diff --git a/tests/data/zip_zipdetails_expected_diff b/tests/data/zip_zipdetails_expected_diff
+index 978c2583..50df2696 100644
+--- a/tests/data/zip_zipdetails_expected_diff
++++ b/tests/data/zip_zipdetails_expected_diff
+@@ -23,7 +23,7 @@
+  #
+  0064 Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+  0066   Length              0009 (9)
+- 0068   Flags               03 (3) 'Modification Access'
++ 0068   Flags               03 (3) 'Modification & Access'
+ -0069   Modification Time   558AB455 (1435153493) 'Wed Jun 24 13:44:53 2015'
+ +0069   Modification Time   558AB474 (1435153524) 'Wed Jun 24 13:45:24 2015'
+  006D   Access Time         558AB45F (1435153503) 'Wed Jun 24 13:45:03 2015'
+@@ -85,7 +85,7 @@
+  #
+ -01BF Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+ -01C1   Length              0005 (5)
+--01C3   Flags               03 (3) 'Modification Access'
++-01C3   Flags               03 (3) 'Modification & Access'
+ -01C4   Modification Time   558AB455 (1435153493) 'Wed Jun 24 13:44:53 2015'
+ -01C8 Extra ID #2           7875 (30837) 'Unix Extra type 3 [ux]'
+ -01CA   Length              000B (11)
+@@ -96,7 +96,7 @@
+ -01D3   GID                 000003E8 (1000)
+ +024E Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+ +0250   Length              0005 (5)
+-+0252   Flags               03 (3) 'Modification Access'
+++0252   Flags               03 (3) 'Modification & Access'
+ +0253   Modification Time   558AB455 (1435153493) 'Wed Jun 24 13:44:53 2015'
+ +0257 Extra ID #2           7875 (30837) 'Unix Extra type 3 [ux]'
+ +0259   Length              000B (11)
+@@ -163,7 +163,7 @@
+  #
+ -020D Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+ -020F   Length              0005 (5)
+--0211   Flags               03 (3) 'Modification Access'
++-0211   Flags               03 (3) 'Modification & Access'
+ -0212   Modification Time   558AB455 (1435153493) 'Wed Jun 24 13:44:53 2015'
+ -0216 Extra ID #2           7875 (30837) 'Unix Extra type 3 [ux]'
+ -0218   Length              000B (11)
+@@ -174,7 +174,7 @@
+ -0221   GID                 000003E8 (1000)
+ +029C Extra ID #1           5455 (21589) 'Extended Timestamp [UT]'
+ +029E   Length              0005 (5)
+-+02A0   Flags               03 (3) 'Modification Access'
+++02A0   Flags               03 (3) 'Modification & Access'
+ +02A1   Modification Time   558AB474 (1435153524) 'Wed Jun 24 13:45:24 2015'
+ +02A5 Extra ID #2           7875 (30837) 'Unix Extra type 3 [ux]'
+ +02A7   Length              000B (11)
+-- 
+2.54.0
+
