@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-F2FomaYzrpOBvD2sxKjV7prGN+INKP8eJO2t/Z0J9YE=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.3.13/contacts-v8.3.13.tar.gz",
-    "version": "8.3.13",
+    "hash": "sha256-+13qOi3veMZ+QUN8G78a073u8MDgMfaR3HBu6eiEWYQ=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.3.14/contacts-v8.3.14.tar.gz",
+    "version": "8.3.14",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -70,9 +70,9 @@
     ]
   },
   "dav_push": {
-    "hash": "sha256-tSLsSgPHdpfcKPzJubwchBqQykLf9WV/mXfKKM2CSxs=",
-    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v1.0.1/dav_push.tar.gz",
-    "version": "1.0.1",
+    "hash": "sha256-OafUgG58+LsxibS/9aZjiOkdQcBV34xE6cmO9IkHMUo=",
+    "url": "https://github.com/bitfireAT/nc_ext_dav_push/releases/download/v1.0.2/dav_push.tar.gz",
+    "version": "1.0.2",
     "description": "In proprietary environments, changes in events and contacts are nowadays usually pushed to other clients so that they can update their views almost in real-time.\n\nWebDAV however (and in this context, especially CalDAV and CardDAV) doesn't currently support push notifications of clients when a collection has changed. So clients have to periodically ask the server for changes. This causes unnecessary delays and battery usage.\n\nThe WebDAV-Push standard, which is currently in development, wants to solve this problem with an open protocol, too.\n\nThis is the server part of these efforts to draft a standard and provide a working implementation (server + client) in order to demonstrate it.\n\n\nThe current WebDAV-Push draft is provided by [@bitfireAT](https://github.com/bitfireAT).\n          \nThis Nextcloud extension has been developed by [@verdigado](https://github.com/verdigado).",
     "homepage": "",
     "licenses": [
@@ -260,9 +260,9 @@
     ]
   },
   "notes": {
-    "hash": "sha256-Rdq91a2xH7JGzjBYj6D08j8EjaPndJKug7KY5Qki3UY=",
-    "url": "https://github.com/nextcloud-releases/notes/releases/download/v5.0.1/notes-v5.0.1.tar.gz",
-    "version": "5.0.1",
+    "hash": "sha256-G/npepK65ZAaF8k2ZsSsDzbd/mjGnKpdI2ixi+avf9w=",
+    "url": "https://github.com/nextcloud-releases/notes/releases/download/v5.0.2/notes-v5.0.2.tar.gz",
+    "version": "5.0.2",
     "description": "The Notes app is a distraction free notes taking app for [Nextcloud](https://www.nextcloud.com/). It provides categories for better organization and supports formatting using [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax. Notes are saved as files in your Nextcloud, so you can view and edit them with every Nextcloud client. Furthermore, a separate [REST API](https://github.com/nextcloud/notes/blob/master/docs/api/README.md) allows for an easy integration into apps ([Android](https://github.com/nextcloud/notes-android), [iOS](https://github.com/nextcloud/notes-ios), as well as [3rd-party apps](https://github.com/nextcloud/notes/wiki#3rd-party-clients) which allow convenient access to your Nextcloud notes). Further features include marking notes as favorites.",
     "homepage": "https://github.com/nextcloud/notes",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "previewgenerator": {
-    "hash": "sha256-i2Z/kOEi1e3SoNj5zs3CyDHeRTAGYpuCzH5zybDQ38A=",
-    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.13.0/previewgenerator-v5.13.0.tar.gz",
-    "version": "5.13.0",
+    "hash": "sha256-ip4gqIP2ciT45zlHr7R22YCb15kawM2S1/r87b5lyoc=",
+    "url": "https://github.com/nextcloud-releases/previewgenerator/releases/download/v5.14.0/previewgenerator-v5.14.0.tar.gz",
+    "version": "5.14.0",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**occ preview:generate-all -vvv**\n\nThe preview queue will be processed automatically by a background job if the system cron background job mode is configured in Nextcloud. Additionally, you may run **occ preview:pre-generate -vvv** to a process the queue of pending previews immediately.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
     "licenses": [
@@ -390,9 +390,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-BQFS9Dq3nk+7a2HT85tIXwaEaKXEmIuycM3JEeXuSTE=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v22.0.13/spreed-v22.0.13.tar.gz",
-    "version": "22.0.13",
+    "hash": "sha256-uBvz8qpJ/PDseSDLp4aWAmTlDIOtoGWAXRouYdqU3Yc=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v22.0.14/spreed-v22.0.14.tar.gz",
+    "version": "22.0.14",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
