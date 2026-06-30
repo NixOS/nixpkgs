@@ -1323,8 +1323,8 @@ in
       virtualHosts = mkOption {
         type = types.attrsOf (
           types.submodule (
-            import ./vhost-options.nix {
-              inherit config lib;
+            modules.importApply ./vhost-options.nix {
+              nixosConfig = config;
             }
           )
         );

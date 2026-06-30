@@ -147,11 +147,14 @@ in
 
     nginx = mkOption {
       type = types.submodule (
-        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-          # enable encryption by default,
-          # as sensitive login credentials should not be transmitted in clear text.
-          options.forceSSL.default = true;
-          options.enableACME.default = true;
+        lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
+          nixosConfig = config;
+          overrideFn = lib.flip lib.recursiveUpdate {
+            # enable encryption by default,
+            # as sensitive login credentials should not be transmitted in clear text.
+            options.forceSSL.default = true;
+            options.enableACME.default = true;
+          };
         }
       );
       default = { };

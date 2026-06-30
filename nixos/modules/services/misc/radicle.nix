@@ -267,10 +267,13 @@ in
           # Type of a single virtual host, or null.
           type = lib.types.nullOr (
             lib.types.submodule (
-              lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-                options.serverName = {
-                  default = "radicle-${config.networking.hostName}.${config.networking.domain}";
-                  defaultText = "radicle-\${config.networking.hostName}.\${config.networking.domain}";
+              lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
+                nixosConfig = config;
+                overrideFn = lib.flip lib.recursiveUpdate {
+                  options.serverName = {
+                    default = "radicle-${config.networking.hostName}.${config.networking.domain}";
+                    defaultText = "radicle-\${config.networking.hostName}.\${config.networking.domain}";
+                  };
                 };
               }
             )

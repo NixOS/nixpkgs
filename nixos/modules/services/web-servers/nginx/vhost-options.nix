@@ -3,11 +3,13 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ config, lib, ... }:
-
-with lib;
 {
-  options = {
+  nixosConfig,
+  overrideFn ? x: x,
+}:
+{ config, lib, ... }:
+overrideFn {
+  options = with lib; {
     serverName = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -358,8 +360,8 @@ with lib;
     locations = mkOption {
       type = types.attrsOf (
         types.submodule (
-          import ./location-options.nix {
-            inherit lib config;
+          lib.modules.importApply ./location-options.nix {
+            inherit nixosConfig;
           }
         )
       );
