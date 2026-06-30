@@ -876,6 +876,12 @@
     matrix = "aiya:catgirl.cloud";
     name = "aiya";
   };
+  aietes = {
+    email = "stefan@standa.de";
+    github = "Aietes";
+    githubId = 5823770;
+    name = "Stefan Krüger";
+  };
   aij = {
     email = "aij+git@mrph.org";
     github = "aij";
