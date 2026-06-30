@@ -15,6 +15,7 @@
   torchcodec,
 
   # tests
+  expecttest,
   inflect,
   parameterized,
   pytestCheckHook,
@@ -104,6 +105,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "torchaudio" ];
 
   nativeCheckInputs = [
+    expecttest
     inflect
     parameterized
     pytestCheckHook
