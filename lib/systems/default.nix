@@ -144,9 +144,14 @@ let
             # assume compatible cpu have all the instructions included
             final.parsed.cpu == platform.parsed.cpu
             ->
-              # if platform has gcc.arch, final must also have and can execute the gcc.arch of platform
+              # if platform has gcc.arch / gcc.cpu, final must also have and can execute the gcc.arch / gcc.cpu of platform
               (
-                platform ? gcc.arch -> final ? gcc.arch && architectures.canExecute final.gcc.arch platform.gcc.arch
+                (
+                  platform ? gcc.arch -> final ? gcc.arch && architectures.canExecute final.gcc.arch platform.gcc.arch
+                )
+                && (
+                  platform ? gcc.cpu -> final ? gcc.cpu && architectures.canExecute final.gcc.cpu platform.gcc.cpu
+                )
               )
           );
 
@@ -423,7 +428,14 @@ let
 
       }
       // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+      // (
+        let
+          defaultArchitectureTarget = if final.isPower64 && final.isLittleEndian then "power8" else "default";
+        in
+        mapAttrs (
+          n: v: v final.gcc.arch or final.gcc.cpu or defaultArchitectureTarget
+        ) architectures.predicates
+      )
       // args
       // {
         rust = rust // {
