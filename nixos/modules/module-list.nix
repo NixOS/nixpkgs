@@ -248,6 +248,7 @@
   ./programs/jai-jail.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
+  ./programs/jujutsu.nix
   ./programs/k3b.nix
   ./programs/k40-whisperer.nix
   ./programs/kbdlight.nix
