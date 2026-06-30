@@ -264,6 +264,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+  env = {
+    # On powerpc64, clang seems to indicate target support for AltiVec SIMD extension by default (GCC requires explicit opt-in).
+    # WTF includes some libraries that try to use AltiVec & VSX when available, but they throw up issues on AltiVec without VSX. :(
+    # Explicitly tell clang to not expose AltiVec support. Fixes FTBFS, and matches target baseline.
+    NIX_CFLAGS_COMPILE = lib.optionalString (
+      clangStdenv.hostPlatform.isPower64 && clangStdenv.hostPlatform.isBigEndian
+    ) "-mno-altivec";
+  };
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
