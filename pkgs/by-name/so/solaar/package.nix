@@ -18,14 +18,14 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
-  version = "1.1.19";
+  version = "1.1.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = finalAttrs.version;
-    hash = "sha256-Z3rWGmFQmfJvsWiPgxQmfXMPHXAAiFneBaoSVIXnAV8=";
+    hash = "sha256-h/uiy0TtMicKch2cdXHur5DkvQun2sAw2HpFI7Qstqg=";
   };
 
   outputs = [
