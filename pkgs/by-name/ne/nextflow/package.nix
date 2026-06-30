@@ -23,7 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "26.04.4";
 
   __structuredAttrs = true;
-  strictDeps = true;
+
+  # Suggested as an improvement, but currently breaks nix-build -A nextflow.tests
+  # strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
