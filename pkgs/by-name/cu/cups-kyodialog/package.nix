@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
       ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version}-0_${platform}.deb" data.tar.gz | tar -xz
     '';
 
+  patches = [
+    ./pypdf.patch
+  ];
+
   nativeBuildInputs = [
     autoPatchelfHook
     python3Packages.wrapPython
@@ -76,10 +80,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cups ] ++ lib.optionals withQtGui [ qt5.qtbase ];
 
   # For lib/cups/filter/kyofilter_pre_H.
-  # The source already contains a copy of pypdf3, but we use the Nix package
+  # The source already contains a copy of pypdf3, but we use the maintained
+  # Nix package instead and patch the legacy filter import accordingly.
   propagatedBuildInputs = with python3Packages; [
     reportlab
-    pypdf3
+    pypdf
     setuptools
   ];
 
@@ -88,10 +93,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/cups/model
     mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
 
+    # patch Nix-specific config path before installing the filter
+    substituteInPlace ./usr/lib/cups/filter/kyofilter_pre_H \
+    --replace-fail 'CONFIG_DIR = "/usr/share/kyocera/"' 'CONFIG_DIR = "'"$out"'/share/kyocera/"'
+
     # remove absolute path prefixes to filters in ppd
     find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
-
-
     mkdir -p $out/lib/cups/
     mv ./usr/lib/cups/filter/ $out/lib/cups/
     # for lib/cups/filter/kyofilter_pre_H

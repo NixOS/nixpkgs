@@ -1,0 +1,50 @@
+--- a/usr/lib/cups/filter/kyofilter_pre_H	2024-05-21 13:05:42.000000000 +0200
++++ b/usr/lib/cups/filter/kyofilter_pre_H	2026-04-05 10:41:59.608496326 +0200
+@@ -9,7 +9,7 @@
+ import tempfile
+ import time
+ import datetime
+-from PyPDF3 import PdfFileWriter, PdfFileReader
++from pypdf import PdfWriter, PdfReader
+ import re
+ import os
+ import ntpath
+@@ -247,7 +247,7 @@
+     fileout.write(kyo_in.read())
+     fileout.seek(0)
+     
+-    in_pdf = PdfFileReader(fileout)
++    in_pdf = PdfReader(fileout)
+ 
+     kyo_in.close()
+ 
+@@ -260,7 +260,7 @@
+     packet = BytesIO()
+     draw_watermark(packet, watermark_arguments)
+     packet.seek(0)
+-    watermark_pdf = PdfFileReader(packet)
++    watermark_pdf = PdfReader(packet)
+     return watermark_pdf
+ 
+ def get_base_watermark_position(page_size):
+@@ -453,14 +453,14 @@
+ 
+ def apply_watermark_to_pdf(base_pdf, watermark_pdf):
+     
+-    new_pdf = PdfFileWriter()
++    new_pdf = PdfWriter()
+     
+-    num_of_pages = base_pdf.getNumPages()
+-    watermark = watermark_pdf.getPage(0)
++    num_of_pages = len(base_pdf.pages)
++    watermark = watermark_pdf.pages[0]
+     for p in range(num_of_pages):
+-        page = base_pdf.getPage(p)
+-        page.mergePage(watermark)
+-        new_pdf.addPage(page)
++        page = base_pdf.pages[p]
++        page.merge_page(watermark)
++        new_pdf.add_page(page)
+ 
+     return new_pdf
+     
