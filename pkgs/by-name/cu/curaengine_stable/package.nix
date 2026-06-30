@@ -11,8 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
-    rev = finalAttrs.version;
-    sha256 = "sha256-8V21TRSqCN+hkTlz51d5A5oK5JOwEtx+ROt8cfJBL/0=";
+    tag = finalAttrs.version;
+    hash = "sha256-8V21TRSqCN+hkTlz51d5A5oK5JOwEtx+ROt8cfJBL/0=";
   };
 
   postPatch = ''

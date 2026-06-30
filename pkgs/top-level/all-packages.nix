@@ -3775,15 +3775,6 @@ with pkgs;
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );
 
-  tamarin-prover = (
-    callPackage ../applications/science/logic/tamarin-prover {
-      # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
-      # https://github.com/sebastiaanvisser/fclabels/issues/46
-      haskellPackages = haskell.packages.ghc96;
-      graphviz = graphviz-nox;
-    }
-  );
-
   inherit
     (callPackage ../development/compilers/haxe {
     })
@@ -9207,10 +9198,6 @@ with pkgs;
 
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
-  shogun = callPackage ../applications/science/machine-learning/shogun {
-    protobuf = protobuf_21;
-  };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
@@ -9428,8 +9415,6 @@ with pkgs;
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
-
-  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
   super-slicer-beta = super-slicer.beta;
 
@@ -10567,10 +10552,6 @@ with pkgs;
     coq
     ;
 
-  cubicle = callPackage ../applications/science/logic/cubicle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
@@ -10589,14 +10570,6 @@ with pkgs;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
-  };
-
-  satallax = callPackage ../applications/science/logic/satallax {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
-
-  statverif = callPackage ../applications/science/logic/statverif {
-    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
@@ -11176,7 +11149,6 @@ with pkgs;
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   ape = callPackage ../applications/misc/ape { };
-  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools

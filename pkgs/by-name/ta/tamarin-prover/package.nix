@@ -1,5 +1,5 @@
 {
-  haskellPackages,
+  haskell,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -8,11 +8,15 @@
   which,
   buildNpmPackage,
   maude,
-  graphviz,
+  graphviz-nox,
   glibcLocales,
 }:
 
 let
+  # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
+  # https://github.com/sebastiaanvisser/fclabels/issues/46
+  haskellPackages = haskell.packages.ghc96;
+
   inherit (haskellPackages) mkDerivation;
 
   version = "1.12.0";
@@ -177,7 +181,7 @@ mkDerivation (
       makeWrapper
       which
       maude
-      graphviz
+      graphviz-nox
     ];
     postInstall = ''
       wrapProgram $out/bin/tamarin-prover \
@@ -190,7 +194,7 @@ mkDerivation (
           lib.makeBinPath [
             which
             maude
-            graphviz
+            graphviz-nox
           ]
         }
       # so that the package can be used as a vim plugin to install syntax coloration
