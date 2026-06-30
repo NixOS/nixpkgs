@@ -10460,6 +10460,10 @@ with pkgs;
     lapack = lapack-ilp64;
   };
 
+  suitesparsePackages = recurseIntoAttrs (
+    callPackage ../by-name/su/suitesparse/default.nix { }
+  );
+
   trilinos-mpi = trilinos.override { withMPI = true; };
 
   wolfram-for-jupyter-kernel = callPackage ../applications/editors/jupyter-kernels/wolfram { };
