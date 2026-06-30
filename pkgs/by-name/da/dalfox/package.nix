@@ -1,10 +1,12 @@
 {
   lib,
-  buildGoModule,
+  rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dalfox";
   version = "3.1.2";
 
@@ -15,14 +17,18 @@ buildGoModule (finalAttrs: {
     hash = "sha256-0amVlnLwwb7YAUbTce9gRmjv3W1FMgc2/XZQKCettTY=";
   };
 
-  vendorHash = null;
+  cargoHash = "sha256-pxlUEGCrJjoakAVpXFq2q73wEWiODsHvdax12quDlec=";
 
-  ldflags = [
-    "-w"
-    "-s"
+  nativeBuildInputs = [
+    pkg-config
   ];
 
-  # Tests require network access
+  buildInputs = [
+    openssl
+  ];
+
+  # Many unit tests perform live HTTP requests / OOB interactsh lookups and
+  # fail in the sandbox.
   doCheck = false;
 
   meta = {
