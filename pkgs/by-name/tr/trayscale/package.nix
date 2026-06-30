@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
@@ -8,6 +9,7 @@
   gtk4,
   gobject-introspection,
   libadwaita,
+  desktopToDarwinBundle,
 }:
 
 buildGoModule (finalAttrs: {
@@ -35,6 +37,9 @@ buildGoModule (finalAttrs: {
     pkg-config
     gobject-introspection
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
   buildInputs = [
     gtk4
