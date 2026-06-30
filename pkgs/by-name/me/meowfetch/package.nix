@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/faynopi/meowfetch";
     changelog = "https://github.com/faynopi/meowfetch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [goobertony ];
+    maintainers = with lib.maintainers; [ goobertony ];
     mainProgram = "meowfetch";
   };
 })
