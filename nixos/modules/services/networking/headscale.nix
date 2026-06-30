@@ -36,8 +36,10 @@ in
       configFile = lib.mkOption {
         type = lib.types.path;
         readOnly = true;
-        default = settingsFormat.generate "headscale.yaml" cfg.settings;
-        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" config.services.headscale.settings'';
+        default = settingsFormat.generate "headscale.yaml" (
+          lib.filterAttrsRecursive (n: v: v != null) cfg.settings
+        );
+        defaultText = lib.literalExpression ''(pkgs.formats.yaml { }).generate "headscale.yaml" (lib.filterAttrsRecursive (n: v: v != null) config.services.headscale.settings)'';
         description = ''
           Path to the configuration file of headscale.
         '';
@@ -398,6 +400,16 @@ in
                 '';
               };
 
+              extra_records_path = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = ''
+                  Path to a JSON file containing extra DNS records.
+                  This is mutually exclusive with {option}`extra_records`.
+                '';
+                example = "/run/headscale/records.json";
+              };
+
               search_domains = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
                 default = [ ];
@@ -656,6 +668,10 @@ in
       {
         assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
         message = "dns.nameservers.global must be set when overriding local DNS";
+      }
+      {
+        assertion = with cfg.settings; dns.extra_records_path == null || dns.extra_records == null;
+        message = "dns.extra_records and dns.extra_records_path are mutually exclusive";
       }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
       (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")
