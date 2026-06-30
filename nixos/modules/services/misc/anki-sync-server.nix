@@ -122,17 +122,52 @@ in
         SYNC_BASE = cfg.baseDirectory;
         SYNC_HOST = specEscape cfg.address;
         SYNC_PORT = toString cfg.port;
+        PASSWORDS_HASHED = lib.mkIf (lib.versionAtLeast config.system.stateVersion "26.05") "1";
       };
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         StateDirectory = name;
+        StateDirectoryMode = "0750";
         ExecStart = anki-sync-server-run;
         Restart = "always";
         LoadCredential = map (
           x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
         ) usersWithIndexesFile;
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.baseDirectory
+        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };
