@@ -9,14 +9,14 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-youtube";
-  version = "3.7";
+  version = "4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natumbri";
     repo = "mopidy-youtube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iFt7r8Ljymc+grNJiOClTHkZOeo7AcYpcNc8tLMPROk=";
+    hash = "sha256-zNK44Nh60jQKsMlgofU8UJp8DkswusLKjNUFSWRdKME=";
   };
 
   postPatch = ''
@@ -27,6 +27,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --replace-fail 'patcher = mock.patch.object(youtube, "youtube_dl", spec=youtube_dl)' \
       'patcher = mock.patch.object(youtube, "youtube_dl", spec=yt_dlp)' \
       --replace-fail '"youtube_dl_package": "youtube_dl",' '"youtube_dl_package": "yt_dlp",'
+    substituteInPlace tests/test_extension.py \
+      --replace-fail 'assert "musicapi_cookie" in schema' 'assert "musicapi_cookiefile" in schema'
   '';
 
   build-system = [
