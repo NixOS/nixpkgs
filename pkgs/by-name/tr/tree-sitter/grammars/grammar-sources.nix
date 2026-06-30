@@ -1241,9 +1241,9 @@
   };
 
   ink = {
-    version = "0.1.1-unstable-2025-02-05";
+    version = "0-unstable-2025-02-05";
     url = "github:rhizoome/tree-sitter-ink";
-    rev = "3bafa20b888b97a505164fa9ee3812c331b2b809";
+    rev = "13771c1722a18311f94c0a4fee884ee7a06911bd";
     hash = "sha256-i+e+eaiAzTx2n9A0mlQ1SStGTbcS4LQJfmK8uNpzNiI=";
     meta = {
       license = lib.licenses.asl20;
