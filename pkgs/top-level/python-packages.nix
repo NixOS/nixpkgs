@@ -18748,6 +18748,10 @@ self: super: with self; {
 
   sphinx-click = callPackage ../development/python-modules/sphinx-click { };
 
+  sphinx-click-rst-to-ansi-formatter =
+    callPackage ../development/python-modules/sphinx-click-rst-to-ansi-formatter
+      { };
+
   sphinx-codeautolink = callPackage ../development/python-modules/sphinx-codeautolink { };
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
