@@ -18,6 +18,8 @@
   librsvg,
   gdk-pixbuf,
   adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  dconf,
   protobuf,
   perl,
   makeWrapper,
@@ -77,6 +79,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
+    gsettings-desktop-schemas
+    dconf
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -137,6 +141,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     + ''
       popd
     '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/yaak-app \
+      --inherit-argv0 \
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
+      --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
+  '';
 
   passthru.updateScript = nix-update-script { };
 
