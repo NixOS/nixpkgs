@@ -212,6 +212,7 @@
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
   ./programs/feedbackd.nix
+  ./programs/festival.nix
   ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
@@ -417,6 +418,7 @@
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix
+  ./services/accessibility/festival.nix
   ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
   ./services/admin/docuum.nix
