@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "casttube";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "10pw2sjy648pvp42lbbdmkkx79bqlkq1xcbzp1frraj9g66azljl";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # no tests
   doCheck = false;
@@ -26,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})
