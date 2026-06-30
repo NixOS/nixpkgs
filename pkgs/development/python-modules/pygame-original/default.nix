@@ -75,6 +75,9 @@ buildPythonPackage rec {
 
     # https://github.com/pygame/pygame/pull/4651
     ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
+
+    # Fix AVX2 detection
+    ./fix-avx2-detection.patch
   ];
 
   postPatch = ''
@@ -109,9 +112,13 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
   '';
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
-  };
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+    }
+    // {
+      PYGAME_DETECT_AVX2 = "1";
+    };
 
   checkPhase = ''
     runHook preCheck
@@ -133,7 +140,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for games (original distribution)";
     homepage = "https://www.pygame.org/";
-    changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
+    changelog = "https://github.com/pygame/pygame/releases/tag/${version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
