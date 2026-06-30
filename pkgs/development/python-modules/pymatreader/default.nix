@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pymatreader";
-  version = "1.0.0";
+  version = "1.2.3.dev0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "obob";
     repo = "pymatreader";
     tag = "v${version}";
-    hash = "sha256-cDEGEvBSj3gmjA+8aXULwuBVk09BLQbA91CNAxgtiLA=";
+    hash = "sha256-yrbWtJd6Rod/Au4FvzA+sXtybkz6+9eVh/5qfAHUdEw=";
   };
 
   postPatch = ''
