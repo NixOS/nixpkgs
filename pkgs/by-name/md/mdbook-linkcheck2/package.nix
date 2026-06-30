@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-linkcheck2";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "mdbook-linkcheck2";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-SvheBEIWiL1zdYeMQalbBeAQC86DycqV1/PTA+0S7Gg=";
+    sha256 = "sha256-D0pteKtmBDkqcaonbNzL6tyo97x+qQhn6oY88+4VGFE=";
   };
 
-  cargoHash = "sha256-s4nvVHl/bViIxZfqc4SxSnCCYIY/hxy0C7f2/9ztqts=";
+  cargoHash = "sha256-XY1epCro/BqHm95HVP1eK0oVLSPYjD2hU7IdiEkgNMM=";
 
   doCheck = false; # tries to access network to test broken web link functionality
 

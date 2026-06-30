@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprspace";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "hyprspace";
     repo = "hyprspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtotGhctQKfP68VgG6+NsrDdEOmN/wiAzvBqloHU5BQ=";
+    hash = "sha256-DmcfR8hA0IsFVEJPZ50jL81u3rw0ieVReTDDC8fTREQ=";
   };
 
   env.CGO_ENABLED = "0";
 
-  vendorHash = "sha256-O604bzvz6QjDdM9hK4gya3vOjlki4ZaohY363mi3Of4=";
+  vendorHash = "sha256-Pkj4q5v35JWwd4OPqj3AX8QLdrjnceT+90sioK5+VvQ=";
 
   ldflags = [
     "-s"
