@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3c0afed..8617a12 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -201,20 +198,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CFLAGS} ${ADDITIONAL_FLAGS}")
+ message("CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+ message("CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+ 
+-# Fetch RapidJSON
+-FetchContent_Declare(
+-    rapidjson
+-    GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+-    GIT_TAG ebd87cb468fb4cb060b37e579718c4a4125416c1
+-)
+-
+-# Disable RapidJSON tests and examples
+-set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "Build rapidjson tests" FORCE)
+-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "Build rapidjson examples" FORCE)
+-set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "Build rapidjson documentation" FORCE)
+-
+-# Make Rapidjson available
+-FetchContent_MakeAvailable(rapidjson)
++find_package(RapidJSON REQUIRED)
+ 
+ add_subdirectory(src)
+ 
