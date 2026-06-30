@@ -1,0 +1,12 @@
+diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
+index 361455ba5c..81f60c5973 100644
+--- a/config/system-headers.mozbuild
++++ b/config/system-headers.mozbuild
+@@ -857,7 +857,6 @@ system_headers = [
+     "sys/shm.h",
+     "sys/siginfo.h",
+     "sys/signal.h",
+-    "sys/single_threaded.h",
+     "sys/socket.h",
+     "sys/sockio.h",
+     "sys/sparc/frame.h",

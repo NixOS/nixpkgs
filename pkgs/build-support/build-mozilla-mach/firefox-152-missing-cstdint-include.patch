@@ -1,0 +1,10 @@
+--- a/dom/media/webaudio/blink/DenormalDisabler.h
++++ b/dom/media/webaudio/blink/DenormalDisabler.h
+@@ -29,6 +29,7 @@
+ 
+ #include <cmath>
+ #include <cstring>
++#include <cstdint>
+ 
+ namespace WebCore {
+ 
