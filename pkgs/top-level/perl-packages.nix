@@ -18071,6 +18071,11 @@ with self;
       url = "mirror://cpan/authors/id/A/AN/ANDYA/IPC-ShareLite-0.17.tar.gz";
       hash = "sha256-FNQGuR2pbWUh0NGoLSKjBidHZSJrhrClbn/93Plq578=";
     };
+    # t/sharelite.t calls IPC::ShareLite->new(...) which creates a SysV
+    # shared-memory segment. The darwin build sandbox denies that; the
+    # test bails with "Failed to create share at t/sharelite.t line 18"
+    # and 13/14 subtests get skipped. The module works at runtime.
+    doCheck = !stdenv.hostPlatform.isDarwin;
     meta = {
       description = "Lightweight interface to shared memory";
       license = with lib.licenses; [

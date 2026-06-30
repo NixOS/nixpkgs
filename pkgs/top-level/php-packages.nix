@@ -665,7 +665,14 @@ lib.makeScope pkgs.newScope (
               name = "session";
               doCheck = false;
             }
-            { name = "shmop"; }
+            {
+              name = "shmop";
+              # Tests try to create a private SysV shared-memory segment
+              # via shmop_open(IPC_PRIVATE, …), which fails in the darwin
+              # build sandbox ("Failed to create share"). The extension
+              # itself works at runtime; skip the tests on darwin.
+              doCheck = !stdenv.hostPlatform.isDarwin;
+            }
             {
               name = "simplexml";
               buildInputs = [
@@ -721,6 +728,9 @@ lib.makeScope pkgs.newScope (
             {
               name = "sysvshm";
               configureFlags = [ "CFLAGS=-std=gnu17" ];
+              # Same as shmop above: the test creates a SysV shm segment
+              # which the darwin build sandbox forbids.
+              doCheck = !stdenv.hostPlatform.isDarwin;
             }
             {
               name = "tidy";
