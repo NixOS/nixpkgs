@@ -7431,6 +7431,13 @@
     github = "DSeeLP";
     githubId = 46624152;
   };
+  dshatz = {
+    email = "dev@dshatz.com";
+    github = "dshatz";
+    githubId = 23437798;
+    name = "Daniels Šatcs";
+    keys = [ { fingerprint = "7452B4B47EA8F6635AB545CA4B974CC26375BB06"; } ];
+  };
   dsluijk = {
     name = "Dany Sluijk";
     email = "nix@dany.dev";
