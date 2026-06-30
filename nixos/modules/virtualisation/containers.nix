@@ -127,8 +127,6 @@ in
 
     virtualisation.containers.storage.settings.storage = {
       driver = lib.mkDefault "overlay";
-      graphroot = lib.mkDefault "/var/lib/containers/storage";
-      runroot = lib.mkDefault "/run/containers/storage";
     };
 
     environment.etc = {
