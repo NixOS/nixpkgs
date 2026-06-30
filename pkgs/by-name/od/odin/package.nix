@@ -5,11 +5,23 @@
   makeBinaryWrapper,
   which,
   nix-update-script,
+  wgpu-native,
+  enableWgpu ? true, # currently only available for x86_64-linux
 }:
 
 let
   llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
+  wgpu = wgpu-native.overrideAttrs (oldAttrs: rec {
+    version = "29.0.0.0";
+    src = fetchFromGitHub {
+      owner = "gfx-rs";
+      repo = "wgpu-native";
+      tag = "v${version}";
+      hash = "sha256-XOT6Wx5TfbFzwcSjoyqUwv7mbN0RShaMf99qADmCKxg=";
+      fetchSubmodules = true;
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
@@ -42,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
 
     patchShebangs --build build_odin.sh
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux" && enableWgpu) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isStatic)
+      "substituteInPlace vendor/wgpu/wgpu.odin --replace-fail \"#config(WGPU_SHARED, false)\" \"#config(WGPU_SHARED, true)\""
+    }
   '';
 
   env.LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
@@ -63,6 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share
     cp -r {base,core,vendor,shared} $out/share
+
+    ${lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux" && enableWgpu) ''
+      mkdir -p $out/share/vendor/wgpu/lib/wgpu-linux-x86_64-release/lib
+      ln -s ${wgpu}/lib/libwgpu_native.so $out/share/vendor/wgpu/lib/wgpu-linux-x86_64-release/lib/
+    ''}
 
     wrapProgram $out/bin/odin \
       --prefix PATH : ${
@@ -92,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
     changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.zlib;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
