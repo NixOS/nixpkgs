@@ -15,12 +15,6 @@
   linuxHeaders,
   freebsd,
 
-  # Some platforms have switched to using compiler-rt, but still want a
-  # libgcc.a for ABI compat purposes. The use case would be old code that
-  # expects to link `-lgcc` but doesn't care exactly what its contents
-  # are, so long as it provides some builtins.
-  doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD,
-
   # Whether to build the set of __atomic_* routines that would typically
   # be provided by libatomic in gcc environments.
   withAtomics ?
@@ -278,9 +272,6 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
       ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
       ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
-    ''
-    + lib.optionalString doFakeLibgcc ''
-      ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libgcc.a
     ''
     + lib.optionalString forceLinkCompilerRt ''
       ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
