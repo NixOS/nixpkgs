@@ -8,7 +8,8 @@
   removeReferencesTo,
   cppSupport ? true,
   fortranSupport ? false,
-  fortran,
+  gfortran,
+  fortran ? gfortran,
   zlibSupport ? true,
   zlib,
   szipSupport ? true,
@@ -29,10 +30,10 @@
 assert !cppSupport || !mpiSupport;
 
 let
-  inherit (lib) optional optionals;
+  inherit (lib) cmakeFeature optional;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.6";
   pname =
     "hdf5"
@@ -41,10 +42,13 @@ stdenv.mkDerivation rec {
     + lib.optionalString mpiSupport "-mpi"
     + lib.optionalString threadsafe "-threadsafe";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf5";
-    rev = "hdf5_${version}";
+    tag = "hdf5_${finalAttrs.version}";
     hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
 
@@ -105,7 +109,7 @@ stdenv.mkDerivation rec {
       with stdenv.hostPlatform; !(isDarwin && isx86_64)
     ))
   ]
-  ++ lib.optional (apiVersion != null) (lib.cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
+  ++ optional (apiVersion != null) (cmakeFeature "HDF5_DEFAULT_API_VERSION" apiVersion);
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
@@ -152,4 +156,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
-}
+})
