@@ -2331,6 +2331,7 @@ with pkgs;
       clojure = clojupyter.definition;
       octave = octave-kernel.definition;
       r = r-ark-kernel.definition;
+      ruby = iruby.definition;
       # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
     };
   };
