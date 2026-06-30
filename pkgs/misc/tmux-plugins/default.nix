@@ -1209,13 +1209,13 @@ in
 
   t-smart-tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "t-smart-tmux-session-manager";
-    version = "2.8.0";
+    version = "2.11.1";
     rtpFilePath = "t-smart-tmux-session-manager.tmux";
     src = pkgs.fetchFromGitHub {
       owner = "joshmedeski";
       repo = "t-smart-tmux-session-manager";
       rev = "v${version}";
-      hash = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+      hash = "sha256-iEiTF4NPUCVDp+bIfrbRx8HE1NrTJtxd667fTk0EfEA=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

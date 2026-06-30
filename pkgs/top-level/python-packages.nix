@@ -17945,6 +17945,8 @@ self: super: with self; {
 
   scspell = callPackage ../development/python-modules/scspell { };
 
+  scverse-misc = callPackage ../development/python-modules/scverse-misc { };
+
   sdbus = callPackage ../development/python-modules/sdbus { };
 
   sdbus-networkmanager = callPackage ../development/python-modules/sdbus-networkmanager { };

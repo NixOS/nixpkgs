@@ -410,6 +410,18 @@
     },
     "name": "GNOME"
   },
+  "gnome-circle": {
+    "description": "Maintain GNOME Circle applications.",
+    "id": 18234720,
+    "maintainers": {
+      "Aleksanaa": 42209822,
+      "Hythera": 87016780,
+      "getchoo": 48872998,
+      "michaelgrahamevans": 5932424
+    },
+    "members": {},
+    "name": "GNOME Circle"
+  },
   "golang": {
     "description": "Maintain Golang compilers",
     "id": 4020424,
@@ -937,8 +949,7 @@
     "description": "Reviews changes to core packages for Nixpkgs security vulnerabilities: https://github.com/NixOS/nixpkgs/issues/494349",
     "id": 16430758,
     "maintainers": {
-      "balsoft": 18467667,
-      "infinisil": 20525370
+      "balsoft": 18467667
     },
     "members": {
       "andir": 638836,

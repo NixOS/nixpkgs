@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cpc";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "probablykasper";
     repo = "cpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t9dAk0hIk8P/vt5wfQ5KvLU6f2DAllPy4BfB0q7F7CA=";
+    hash = "sha256-Gd2bFOyPERcwTGurJJDMNrRjFq7smtkgFMGUXxZVwaI=";
   };
 
-  cargoHash = "sha256-Zb6rnJjhYruoQ7MxCfrx9doDr+hnhCDqhq23xWtdhUY=";
+  cargoHash = "sha256-visApJ3DgQ1ohaQ2IE63bzdf0RuQI4NnpQqspP8WKjg=";
 
   meta = {
     mainProgram = "cpc";

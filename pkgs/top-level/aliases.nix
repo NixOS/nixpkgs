@@ -1843,6 +1843,7 @@ mapAliases {
   postgresql_13_jit = throw "postgresql_13_jit has been removed since it reached its EOL upstream"; # Added 2025-11-17
   postgresqlJitPackages = throw "'postgresqlJitPackages' has been renamed to/replaced by 'postgresqlPackages'"; # Converted to throw 2025-10-27
   pot = throw "'pot' has been removed as it requires libsoup 2.4 which is EOL"; # Added 2025-10-09
+  pothos = throw "'pothos' has been removed as it relies on pcre, and is unmaintained upstream"; # Added 2026-06-17
   powerdns = throw "'powerdns' has been renamed to/replaced by 'pdns'"; # Converted to throw 2025-10-27
   powwow = throw "'powwow' has been removed, since it's unmaintained since 2021 and doesn't build with glibc 2.42"; # Added 2025-09-28
   pqos-wrapper = throw "'pqos-wrapper' has been removed, since it's unmaintained since 2022 and archived upstream"; # Added 2026-05-13

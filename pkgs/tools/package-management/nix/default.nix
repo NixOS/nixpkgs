@@ -10,24 +10,8 @@
   pkgsi686Linux,
   pkgsStatic,
   nixosTests,
-
-  storeDir ? "/nix/store",
-  stateDir ? "/nix/var",
-  confDir ? "/etc",
 }:
 let
-  # Called for Nix == 2.28. Transitional until we always use
-  # per-component packages.
-  commonMeson =
-    args:
-    nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
-      inherit
-        storeDir
-        stateDir
-        confDir
-        ;
-    };
-
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
   addTestsShallowly =
@@ -166,46 +150,11 @@ let
       test = "shebang.sh";
     }
   ];
-
-  # Lowdown 3.0 compatibility patch for nix 2.28 and 2.30, which have a
-  # different markdown.cc layout (no LOWDOWN_TERM_NORELLINK branch) and
-  # never received an upstream backport.
-  lowdown30PatchOld = ./patches/lowdown-3.0-compat-2.28-2.30.patch;
 in
 lib.makeExtensible (
   self:
   (
     {
-      nix_2_28 = commonMeson {
-        version = "2.28.7";
-        src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
-          owner = "NixOS";
-          repo = "nix";
-          rev = "2.28.7";
-          hash = "sha256-Fq4+7uYz6bdE1HvPqn+qZcYX1rNilVKT7YAAPLA8170=";
-        });
-        self_attribute_name = "nix_2_28";
-        patches = [
-          lowdown30PatchOld
-        ];
-      };
-
-      nixComponents_2_30 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.30.5";
-          inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
-          src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-tGiV71RxtCNcUNX86ZwmOIghG4pLwm5nlRKd89er7Gk=";
-          });
-        }).appendPatches
-          [ lowdown30PatchOld ];
-
-      nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
-
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.31.5";
@@ -275,13 +224,16 @@ lib.makeExtensible (
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
         nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
+        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_31.";
         nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
         nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
         nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
+        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_31.";
         nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
+        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_31.";
         nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
         nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 

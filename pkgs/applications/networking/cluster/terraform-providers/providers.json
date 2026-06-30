@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-F6aSXitmu3FOVpRoFyAVPCZA7dHgRbBySda+uS1BDTY=",
+    "hash": "sha256-Hi37jOpSfBO13BrBSQCrTaYhcyIuL4PAIV9ow7f4eOU=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.110.0",
+    "rev": "v0.111.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-X4sWLYi9DKp3ex1XBwv2qiVliytOjs7Asy+rigKF/AE="
+    "vendorHash": "sha256-kvHI8cd/rl9kVKKzSwjrC0+Qikz3w2P9jgLvYa+T2DE="
   },
   "brightbox_brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -1184,13 +1184,13 @@
     "vendorHash": "sha256-w/AmSHydCeyp/EURgPY2c/E2LjqAXXCORI53X1hEdxY="
   },
   "scaleway_scaleway": {
-    "hash": "sha256-nBx7zmNiQHL+VomJJ4/tyd0gujc2BNQfVA8zG3hT0wc=",
+    "hash": "sha256-9fmNBTOG+A1X+em1nphvwmMUrM/kaR64HlI/e2QeWlA=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.76.0",
+    "rev": "v2.77.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-X5OVBa1vKsPA2gfXDZWJIcncor9V4NFmWILarqbIBiw="
+    "vendorHash": "sha256-nqDob9nyw21LwSj8lDrA/5kGxe4KwwnHy0+FedIJr3k="
   },
   "scottwinkler_shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",

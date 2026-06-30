@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mist-cli";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://github.com/ninxsoft/mist-cli/releases/download/v${finalAttrs.version}/mist-cli.${finalAttrs.version}.pkg";
-    hash = "sha256-d+tm37X6JC5r23D8WTsxIkL0RU4U58pJmLermwjOgCE=";
+    hash = "sha256-rUIA40JTXndE7W2wQiayhAP9RPTQMeJV8d6NUy/Immk=";
   };
 
   __structuredAttrs = true;

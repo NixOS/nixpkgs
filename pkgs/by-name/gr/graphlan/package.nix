@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "graphlan";
-  version = "0-unstable-2024-08-07";
+  version = "1.1.3-unstable-2024-08-07";
   pyproject = true;
 
   src = fetchFromGitHub {
