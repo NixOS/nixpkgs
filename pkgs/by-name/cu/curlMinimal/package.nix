@@ -6,6 +6,8 @@
   perl,
   nixosTests,
   autoreconfHook,
+  buildPackages,
+  runtimeShellPackage,
   brotliSupport ? false,
   brotli,
   c-aresSupport ? false,
@@ -82,6 +84,9 @@ assert
     ]) > 1
   );
 
+let
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
   version = "8.20.0";
@@ -248,7 +253,20 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
+  ''
+  # The wcurl shell script found in `''${!outputBin}/bin`, is located in the
+  # source along with all the scripts patched in `postPatch` above.
+  # `patchShebangs` at that stage causes the host intended wcurl script to get
+  # the buildPlatform's runtimeShell shebang, instead of the hostPlatform's. To
+  # make sure this doesn't happen we disallow it, and fix it above in the
+  # postInstall, and also with the conditional hostPlatform's
+  # runtimeShellPackage added in buildInputs.
+  + lib.optionalString isCross ''
+    patchShebangs --update --host "''${!outputBin}/bin"
   '';
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  buildInputs = lib.optional isCross runtimeShellPackage;
 
   passthru =
     let
