@@ -36,13 +36,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U4Rl1WiOg9DVFEnghKOy/WabeXf3l3zpaxqAmjneil0=";
+    hash = "sha256-6nAWYVt81mjvA7ssIAhFD+oTkVkuoHeAMV9dQpFlyJc=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
