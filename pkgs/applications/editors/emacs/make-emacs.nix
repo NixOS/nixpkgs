@@ -162,6 +162,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     patches fetchpatch
+    ++ [
+      ./load-the-early-default-library-after-early-init.el.patch
+    ]
     ++ lib.optionals withNativeCompilation [
       (replaceVars ./native-comp-driver-options-30.patch {
         backendPath = (
