@@ -14942,6 +14942,11 @@
     github = "Kalitsune";
     githubId = 74075397;
   };
+  kalkaro = {
+    name = "Kalkaro";
+    github = "Kalkaro";
+    githubId = 177581171;
+  };
   kamadorueda = {
     name = "Kevin Amado";
     email = "kamadorueda@gmail.com";
