@@ -1280,6 +1280,8 @@ self: super: with self; {
 
   atopile-easyeda2kicad = callPackage ../development/python-modules/atopile-easyeda2kicad { };
 
+  atopile-kicad-python = callPackage ../development/python-modules/atopile-kicad-python { };
+
   atproto = callPackage ../development/python-modules/atproto { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
@@ -13687,6 +13689,8 @@ self: super: with self; {
   py65 = callPackage ../development/python-modules/py65 { };
 
   py7zr = callPackage ../development/python-modules/py7zr { };
+
+  pyaaf2 = callPackage ../development/python-modules/pyaaf2 { };
 
   pyabpoa = toPythonModule (
     pkgs.abpoa.override {
