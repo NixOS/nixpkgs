@@ -25,6 +25,8 @@
 
   # tests
   nixosTests,
+  testers,
+  kea,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "postgresql" withPostgresql)
     (lib.mesonOption "localstatedir" "/var")
     (lib.mesonOption "runstatedir" "/run")
+    (lib.mesonOption "python.platlibdir" "${placeholder "python"}/${python3.sitePackages}")
+    (lib.mesonOption "python.purelibdir" "${placeholder "python"}/${python3.sitePackages}")
   ];
 
   postConfigure = ''
@@ -105,11 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja doc
   '';
 
-  postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
-  '';
-
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
@@ -118,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
     networking-networkd = lib.recurseIntoAttrs {
       inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
+    };
+
+    version = testers.testVersion {
+      package = kea;
+      command = "kea-shell -v";
+      version = finalAttrs.version;
     };
   };
 
