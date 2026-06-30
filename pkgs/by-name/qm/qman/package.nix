@@ -17,6 +17,7 @@
   xz,
   cunit,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dconfigdir=${placeholder "out"}/etc/xdg/qman"
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "TERM"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru.updateScript = nix-update-script { };
