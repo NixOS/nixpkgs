@@ -6,6 +6,7 @@
 let
   inherit (lib)
     all
+    any
     collect
     concatLists
     concatMap
@@ -184,12 +185,18 @@ rec {
     :::
   */
   mkEnableOption =
+    let
+      type = lib.types.bool;
+    in
     name:
-    mkOption {
+    # We inline the call to mkOption for performance, since mkEnableOption is
+    # used everywhere
+    {
+      _type = "option";
       default = false;
       example = true;
       description = "Whether to enable ${name}.";
-      type = lib.types.bool;
+      inherit type;
     };
 
   /**
@@ -306,6 +313,9 @@ rec {
     :::
   */
   mkPackageOption =
+    let
+      inherit (lib.types) nullOr package;
+    in
     pkgs: name:
     {
       nullable ? false,
@@ -318,27 +328,26 @@ rec {
       name' = if isList name then last name else name;
       default' = toList default;
       defaultText = showAttrPath default';
-      defaultValue = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
       defaults =
         if default != null then
           {
-            default = defaultValue;
+            default = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
             defaultText = literalExpression "${pkgsText}.${defaultText}";
           }
-        else
-          optionalAttrs nullable {
+        else if nullable then
+          {
             default = null;
-          };
+          }
+        else
+          { };
     in
     mkOption (
       defaults
       // {
         description =
           "The ${name'} package to use." + (if extraDescription == "" then "" else " ") + extraDescription;
-        type = with lib.types; (if nullable then nullOr else lib.id) package;
-      }
-      // optionalAttrs (example != null) {
-        example = literalExpression (
+        type = if nullable then nullOr package else package;
+        ${if example != null then "example" else null} = literalExpression (
           if isList example then "${pkgsText}.${showAttrPath example}" else example
         );
       }
@@ -421,25 +430,26 @@ rec {
   */
   mergeDefaultOption =
     loc: defs:
-    let
-      list = getValues defs;
-    in
-    if length list == 1 then
-      head list
-    else if all isFunction list then
-      x: mergeDefaultOption loc (map (f: f x) list)
-    else if all isList list then
-      concatLists list
-    else if all isAttrs list then
-      foldl' lib.mergeAttrs { } list
-    else if all isBool list then
-      foldl' lib."or" false list
-    else if all isString list then
-      lib.concatStrings list
-    else if all isInt list && all (x: x == head list) list then
-      head list
+    if length defs == 1 then
+      (head defs).value
     else
-      throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
+      let
+        list = getValues defs;
+      in
+      if all isFunction list then
+        x: mergeDefaultOption loc (map (f: f x) list)
+      else if all isList list then
+        concatLists list
+      else if all isAttrs list then
+        foldl' lib.mergeAttrs { } list
+      else if all isBool list then
+        any (x: x) list
+      else if all isString list then
+        lib.concatStrings list
+      else if all (x: isInt x && x == head list) list then
+        head list
+      else
+        throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
   /**
     Require a single definition.
@@ -498,26 +508,33 @@ rec {
   */
   mergeEqualOption =
     loc: defs:
-    if defs == [ ] then
-      abort "This case should never happen."
     # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
-    else if length defs == 1 then
+    if length defs == 1 then
       (head defs).value
+    else if defs == [ ] then
+      abort "This case should never happen."
     else
-      (foldl' (
-        first: def:
-        if def.value != first.value then
-          throw "The option `${showOption loc}' has conflicting definition values:${
-            showDefs [
-              first
-              def
-            ]
-          }\n${prioritySuggestion}"
-        else
-          first
-      ) (head defs) (tail defs)).value;
+      let
+        first = (head defs).value;
+      in
+      # Only fold to find the error if any of the values aren't equal
+      if all (def: def.value == first) (tail defs) then
+        first
+      else
+        (foldl' (
+          first: def:
+          if def.value != first.value then
+            throw "The option `${showOption loc}' has conflicting definition values:${
+              showDefs [
+                first
+                def
+              ]
+            }\n${prioritySuggestion}"
+          else
+            first
+        ) (head defs) (tail defs)).value;
 
   /**
     Extracts values of all `value` keys of the given list.
