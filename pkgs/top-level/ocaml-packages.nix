@@ -24,6 +24,8 @@ let
 
         aeneas = callPackage ../development/ocaml-modules/aeneas { };
 
+        alcobar = callPackage ../development/ocaml-modules/alcobar { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
