@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
   version = "1.109.5";
 
+  executableName = "openvscode-server";
+  longName = "OpenVSCode Server";
+
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
