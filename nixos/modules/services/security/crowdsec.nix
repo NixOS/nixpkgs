@@ -806,7 +806,6 @@ in
               description = "CrowdSec setup service";
               wantedBy = [ "multi-user.target" ];
               wants = [ "network-online.target" ];
-              before = [ "crowdsec.service" ];
               # for dns resolving
               after = [ "network-online.target" ];
               serviceConfig = createServiceConfig {
@@ -821,7 +820,10 @@ in
             crowdsec = {
               description = "CrowdSec Security Engine";
               wantedBy = [ "multi-user.target" ];
-              wants = [ "network-online.target" ];
+              wants = [
+                "network-online.target"
+                "crowdsec-setup.service"
+              ];
               after = [
                 "network-online.target"
                 "crowdsec-setup.service"
