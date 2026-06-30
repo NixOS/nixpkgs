@@ -10245,16 +10245,6 @@ with pkgs;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
 
-  inherit
-    (callPackage ../games/quake2/yquake2 {
-    })
-    yquake2
-    yquake2-ctf
-    yquake2-ground-zero
-    yquake2-the-reckoning
-    yquake2-all-games
-    ;
-
   ### DESKTOP ENVIRONMENTS
 
   arcan-wrapped = arcan.wrapper.override { };
