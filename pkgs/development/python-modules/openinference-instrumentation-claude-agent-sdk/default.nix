@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openinference-instrumentation-claude-agent-sdk";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Arize-ai";
     repo = "openinference";
     tag = "python-openinference-instrumentation-claude-agent-sdk-v${finalAttrs.version}";
-    hash = "sha256-wmwqmN/rN521TaXVZfkaRzHPVhANSgKaBVc4rhXgIII=";
+    hash = "sha256-BqDIHI2moNW+m5/CC7NLL0fLzAF9aGv5ncoVe6B2cRQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/instrumentation/${finalAttrs.pname}";
