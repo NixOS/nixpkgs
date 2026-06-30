@@ -2,25 +2,19 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freefont-ttf";
   version = "20120503";
 
   src = fetchzip {
-    url = "mirror://gnu/freefont/freefont-ttf-${version}.zip";
+    url = "mirror://gnu/freefont/freefont-ttf-${finalAttrs.version}.zip";
     hash = "sha256-K3kVHGcDTxQ7N7XqSdwRObriVkBoBYPKHbyYrYvm7VU=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "GNU Free UCS Outline Fonts";
@@ -32,6 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.gnu.org/software/freefont/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
-}
+})
