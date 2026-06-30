@@ -50,7 +50,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.10";
+  version = "0.16.11";
 
   __structuredAttrs = true;
 
@@ -58,10 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zP2FwRX9eaP8xn8WElf/1N4doHnvZ4rKQLYrUDoYwkQ=";
+    hash = "sha256-0A8IjetGV4h4qdpm44eZb0sNQ4abulb2+VUAeYWItT0=";
   };
 
-  cargoHash = "sha256-HVS89Wtjb2nIdyygP8bPRbVhyMRnJlZDfoCQqiMdVe0=";
+  cargoHash = "sha256-OpoQzNNm5JUrnk1tRZL9JUpDQnGH73Lj6SW52gSthl0=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual
@@ -211,6 +211,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::management::queue::manage_queue"
       # NOTE: long running test(s), needs live dependencies, likely to fail on systems under high load
       "smtp::inbound::antispam::antispam"
+      # flaky test (darwin): ... panicked at tests/src/smtp/inbound/mod.rs:287:18:
+      # Unexpected event: Refresh
+      # (linux): Invalid address: failed to lookup address information: Temporary failure in name resolution
+      "smtp::outbound::dane::dane_verify"
     ]
     # ... panicked at tests/src/lib.rs:49:13: Errors: [ Build { ... , message: "Invalid address: failed to lookup address information: Temporary failure in name resolution", }, ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -233,9 +237,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::lookup::utils::strategies"
       "smtp::management::report::manage_reports"
       "smtp::outbound::dane::dane_test"
-      # since 0.16.10
-      "smtp::outbound::dane::dane_downgrade_on_tlsa_servfail"
-      "smtp::outbound::dane::dane_verify"
       "smtp::outbound::extensions::extensions"
       "smtp::outbound::fallback_relay::fallback_relay"
       "smtp::outbound::ip_lookup::ip_lookup_strategy"
@@ -250,6 +251,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::reporting::tls::report_tls"
       "store::search_tests"
       "store::store_tests"
+      # since 0.16.10
+      "smtp::outbound::dane::dane_downgrade_on_tlsa_servfail"
     ]
   ) (test: "--skip=${test}");
 
