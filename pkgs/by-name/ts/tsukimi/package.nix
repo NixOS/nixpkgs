@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
-  version = "26.6.1";
+  version = "26.6.3";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fJT5o9GOQB5TIlbqTRcMCaf5OYYW+D19dNPbLFqViCg=";
+    hash = "sha256-Q+WMwd4GEA1K0Ul8e3g+uBmaUT7nWA865vhuIioqqi4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-Rdne9EQ9QSZ2RlYWEFEy9/OZEdIucQ/nB1Z8MJ0gAsU=";
+    hash = "sha256-P77AS0+zbi2lfgkH5TDg9JdoYAiWJVdlgHs/ThU547U=";
   };
 
   nativeBuildInputs = [
