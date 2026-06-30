@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "wn";
-  version = "0.14.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2mDEFx7Qn5LKyji4CgFhxvCUblZeXLf2hjy4i6lMjQ=";
+    hash = "sha256-Cdc8EEkVvLvFidrppyIgSClcg96zL8MYpitSEX8NUDw=";
   };
 
   build-system = [ hatchling ];
