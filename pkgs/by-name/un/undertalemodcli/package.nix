@@ -10,7 +10,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "UnderminersTeam";
     repo = "UndertaleModTool";
-    rev = version;
+    tag = version;
     sha256 = "sha256-FGEC0uLaKlBYB76xmzgNMLNMgmAQbQDrLbix4Me3oQE=";
     fetchSubmodules = true;
   };
@@ -25,9 +25,7 @@ buildDotnetModule rec {
   strictDeps = true;
   __structuredAttrs = true;
 
-  # generated via
-  # nix-build -A undertalemodcli.fetch-deps
-  # ./result
+  # generated via: $(nix-build -A undertalemodcli.fetch-deps)
   nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
