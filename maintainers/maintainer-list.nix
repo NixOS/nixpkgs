@@ -17610,6 +17610,12 @@
     githubId = 613740;
     name = "Martin Baillie";
   };
+  mbarneyjr = {
+    email = "mbarneyme@gmail.com";
+    github = "mbarneyjr";
+    githubId = 11701776;
+    name = "Michael Barney";
+  };
   mbe = {
     email = "brandonedens@gmail.com";
     github = "brandonedens";
