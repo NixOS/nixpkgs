@@ -179,13 +179,7 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      lib.lists.subtractLists [
-        # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
-        # use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
-        # TODO: Retest after ROCm 6.4 or torch 2.8
-        "gfx1010"
-        "gfx1012"
-      ] rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
+      rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
