@@ -702,6 +702,7 @@ in
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
   gocd-server = runTest ./gocd-server.nix;
+  gocron = runTest ./gocron.nix;
   gocryptfs = runTest ./gocryptfs.nix;
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
