@@ -2,15 +2,19 @@
   stdenv,
   jq,
   hydrogen-web-unwrapped,
-  conf ? { },
+  config,
+  conf ? config.hydrogen-web.conf or { },
 }:
 
-if (conf == { }) then
+if conf == { } then
   hydrogen-web-unwrapped
 else
-  stdenv.mkDerivation {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "${hydrogen-web-unwrapped.pname}-wrapped";
     inherit (hydrogen-web-unwrapped) version meta;
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     dontUnpack = true;
 
@@ -26,4 +30,4 @@ else
 
       runHook postInstall
     '';
-  }
+  })
