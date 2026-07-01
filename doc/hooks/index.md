@@ -47,6 +47,7 @@ tetex-tex-live.section.md
 udevCheckHook.section.md
 unzip.section.md
 validatePkgConfig.section.md
+autoPatchPkgConfigHook.section.md
 versionCheckHook.section.md
 waf.section.md
 writable-tmpdir-as-home-hook.section.md
