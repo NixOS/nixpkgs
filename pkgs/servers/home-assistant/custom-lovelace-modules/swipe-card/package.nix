@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bramkragten/swipe-card";
     changelog = "https://github.com/bramkragten/swipe-card/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gambled23 ];
+    maintainers = with lib.maintainers; [ Gambled23 ];
     platforms = lib.platforms.all;
   };
 })
