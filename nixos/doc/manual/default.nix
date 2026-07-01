@@ -203,6 +203,8 @@ rec {
           --script ./anchor-use.js \
           --toc-depth 1 \
           --chunk-toc-depth 1 \
+          --header ${./header.html}\
+          --no-navheader \
           ./manual.md \
           $dst/${common.indexPath}
 

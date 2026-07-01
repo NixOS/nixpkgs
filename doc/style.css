@@ -450,6 +450,7 @@ div.appendix .variablelist .term {
 
 :root {
   --sidebar-width: 20rem;
+  --header-height: 3rem;
   --background: #fff;
   --main-text-color: #000;
   --link-color: #405d99;
@@ -529,7 +530,7 @@ nav.toc-sidebar .toc dd {
     min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: var(--header-height) auto minmax(0, 1fr);
   }
 
   body:has(> nav.toc-sidebar) {
@@ -538,12 +539,12 @@ nav.toc-sidebar .toc dd {
 
   .navheader {
     grid-column: 1 / -1;
-    grid-row: 1;
+    grid-row: 2;
   }
 
   nav.toc-sidebar {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
     max-height: none;
     overflow-y: auto;
     border-bottom: none;
@@ -552,12 +553,82 @@ nav.toc-sidebar .toc dd {
 
   main.content {
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 3;
     overflow-y: auto;
     padding: 0 1rem;
   }
 
   body:has(> nav.toc-sidebar) main.content {
     grid-column: 2;
+  }
+}
+
+.manual-header {
+  background-color: var(--background);
+  border-bottom: 0.0625rem solid #d8d8d8;
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-header--title {
+  order: -1;
+  padding: 0.5rem 1rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--small-heading-color);
+  text-align: center;
+}
+
+.manual-header--tabs {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.manual-header--tab {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--main-text-color);
+  text-decoration: none;
+  border-bottom: 0.1875rem solid transparent;
+  border-top: 0.1875rem solid transparent;
+  transition: border-bottom-color 0.15s ease;
+}
+
+.manual-header--tab:hover {
+  border-bottom-color: var(--heading-color);
+  color: var(--main-text-color);
+}
+
+.manual-header--tab-active {
+  border-bottom-color: var(--heading-color);
+  color: var(--heading-color);
+  font-weight: 700;
+}
+
+@media screen and (min-width: 768px) {
+  .manual-header {
+    height: var(--header-height);
+    flex-direction: row;
+    align-items: stretch;
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .manual-header--title {
+    order: 0;
+    margin-left: auto;
+    padding: 0 1rem;
+    align-self: center;
+  }
+
+  .manual-header--tabs {
+    justify-content: flex-start;
+    padding: 0 1rem;
   }
 }
