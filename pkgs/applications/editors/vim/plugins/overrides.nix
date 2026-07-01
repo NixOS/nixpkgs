@@ -3025,6 +3025,12 @@ assertNoAdditions {
     };
   });
 
+  neovim-session-manager = super.neovim-session-manager.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
+
   neovim-tips = super.neovim-tips.overrideAttrs {
     dependencies = [
       self.nui-nvim
