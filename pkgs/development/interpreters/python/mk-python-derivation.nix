@@ -190,6 +190,9 @@ lib.extendMkDerivation {
       # "other" : Provide your own buildPhase and installPhase.
       format ? null,
 
+      # Whether or not a default update script will automatically be added.
+      enableDefaultUpdateScript ? true,
+
       meta ? { },
 
       doCheck ? true,
@@ -417,13 +420,15 @@ lib.extendMkDerivation {
           dependencies
           optional-dependencies
           ;
-        updateScript = nix-update-script { };
         # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
         # They are internal and subject to changes.
         # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
         ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
         ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
           builtins.unsafeGetAttrPos "stdenv" attrs;
+      }
+      // optionalAttrs enableDefaultUpdateScript {
+        updateScript = nix-update-script { };
       }
       // attrs.passthru or { };
 
