@@ -4,7 +4,7 @@ A free and open source manga reader server that runs extensions built for Tachiy
 
 ## Basic usage {#module-services-suwayomi-server-basic-usage}
 
-By default, the module will execute Suwayomi-Server backend and web UI:
+By default, the module will execute Suwayomi-Server backend and serve the web UI:
 
 ```nix
 { ... }:
@@ -72,11 +72,12 @@ You can configure a basic authentication to the web interface with:
     settings = {
       server.port = 4567;
       server = {
-        basicAuthEnabled = true;
-        basicAuthUsername = "username";
+        authMode = "basic_auth";
+        authUsername = "username";
 
-        # NOTE: this is not a real upstream option
-        basicAuthPasswordFile = ./path/to/the/password/file;
+        # NOTE: this option is a NixOS option only
+        # and doesn't exist in the upstream configuration
+        authPasswordFile = "/run/secrets/your-secret-password-file";
       };
     };
   };
@@ -109,3 +110,14 @@ Not all the configuration options are available directly in this module, but you
   };
 }
 ```
+
+## Migrating the data directory {#module-services-suwayomi-migrating-data-directory}
+
+The app's data directory has changed to reflect `services.suwayomi-server.dataDir` accurately.
+Previously, Suwayomi-Server would store it's files under `${dataDir}/.local/share/Tachidesk`.
+
+Migrating the data is done in two simple steps:
+- Move the contents of `${dataDir}/.local/share/Tachidesk` into `${dataDir}`.
+- Set `systemd.services.suwayomi-server.environment.JAVA_TOOL_OPTIONS` to
+  `"-Dsuwayomi.tachidesk.config.server.rootDir=${config.services.suwayomi-server.dataDir}"`
+  in your NixOS configuration.
