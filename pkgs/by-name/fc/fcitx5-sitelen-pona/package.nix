@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-sitelen-pona";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Toastberries";
     repo = "fcitx5-sitelen-pona";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZLp/p5umewp1seXFPtMevVBXfoNwHXAojYl5jWHHsTU=";
+    hash = "sha256-/pauEuE+hNdWhAz4CnSqySnF0h1toNGngHKOO9ntDnY=";
   };
 
   strictDeps = true;
