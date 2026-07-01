@@ -19,7 +19,7 @@
     environment = {
       # For glinfo and wayland-info:
       systemPackages = with pkgs; [
-        mesa-demos
+        mesa-utils
         wayland-utils
         alacritty
       ];

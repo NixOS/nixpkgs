@@ -8,7 +8,7 @@
   gnupg,
   icoutils,
   imagemagick,
-  mesa-demos,
+  mesa-utils,
   netcat-gnu,
   p7zip,
   python3,
@@ -42,7 +42,7 @@ let
     gnupg
     icoutils
     imagemagick
-    mesa-demos
+    mesa-utils
     netcat-gnu
     p7zip
     unzip
