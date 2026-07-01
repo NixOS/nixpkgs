@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromForgejo,
   cargo,
   desktop-file-utils,
   gnome-desktop,
@@ -22,18 +22,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "e-imzo-manager";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  src = fetchFromGitHub {
-    owner = "xinux-org";
+  src = fetchFromForgejo {
+    domain = "git.oss.uzinfocom.uz";
+    owner = "xinux";
     repo = "e-imzo-manager";
     tag = finalAttrs.version;
-    hash = "sha256-LX13zdwjlV99NziEP7PoJH8yxPV1gVQQH/L0VkuRLD4=";
+    hash = "sha256-QXAfrNPaq76HALhUlMdSygbfA5wJI4rGHDpnwPI/74w";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-qnwAJ0gRzIxEkkDeNqiYMB+Dvth4MugUIe9sv7c46/E=";
+    hash = "sha256-9yyTtMf1oCJWfFxWsaYWGT2/iTqU+3Ls0LIdHrNGZJI=";
   };
 
   strictDeps = true;
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/xinux-org/e-imzo-manager";
+    homepage = "https://git.oss.uzinfocom.uz/xinux/e-imzo-manager";
     mainProgram = "E-IMZO-Manager";
     description = "GTK application for managing E-IMZO keys";
     license = with lib.licenses; [ agpl3Plus ];
