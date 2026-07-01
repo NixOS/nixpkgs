@@ -90,6 +90,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "PDF processor written in Go";
+    changelog = "https://pdfcpu.io/changelog/";
     homepage = "https://pdfcpu.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
