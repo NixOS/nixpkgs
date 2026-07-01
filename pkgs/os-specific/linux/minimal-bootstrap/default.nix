@@ -6,7 +6,6 @@
   fetchurl,
   checkMeta,
 }:
-
 lib.makeScope
   # Prevent using top-level attrs to protect against introducing dependency on
   # non-bootstrap packages by mistake. Any top-level inputs must be explicitly
@@ -142,6 +141,7 @@ lib.makeScope
           tinycc = tinycc-musl;
           gnumake = gnumake-musl;
           gnutar = gnutar-musl;
+          targetPlatform = hostPlatform;
         };
 
         gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
@@ -150,24 +150,39 @@ lib.makeScope
           gnutar = gnutar-musl;
         };
 
-        gcc10 = callPackage ./gcc/10.nix {
+        gcc10-unwrapped = callPackage ./gcc/10.nix {
           gcc = gcc46-cxx;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
+        gcc10 = callPackage ./gcc/wrapper.nix {
+          gcc-unwrapped = gcc10-unwrapped;
+          bash-build = bash;
+          libc = musl;
+          libgcc = gcc10-unwrapped;
+          libstdcxx = gcc10-unwrapped;
+          targetPlatform = hostPlatform;
+          dynamicLinkerOverride = "";
+        };
 
-        gcc-latest-unwrapped = callPackage ./gcc/latest.nix {
+        gcc-latest-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils;
           gcc = gcc10;
+          gcc-buildbuild = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc-headers = musl;
+          libc = musl;
+          targetPlatform = hostPlatform;
         };
         gcc-latest = callPackage ./gcc/wrapper.nix {
           bash-build = bash;
           gcc-unwrapped = gcc-latest-unwrapped;
           targetPlatform = hostPlatform;
+          dynamicLinkerOverride = "";
           libc = musl;
-          libgcc = gcc-latest-unwrapped;
-          libstdcxx = gcc-latest-unwrapped;
         };
 
         gnugrep = callPackage ./gnugrep {
@@ -274,6 +289,56 @@ lib.makeScope
 
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+        libbacktrace = callPackage ./gcc/libbacktrace.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libgmp = callPackage ./gcc/gmp.nix {
+          gcc-buildbuild = gcc10;
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libiberty = callPackage ./gcc/libiberty.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpc = callPackage ./gcc/mpc.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpfr = callPackage ./gcc/mpfr.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libgcc = callPackage ./gcc/libgcc.nix {
+          binutils-buildbuild = binutils;
+          gcc-buildbuild = gcc10;
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          enableShared = false;
+          libc = musl;
+          libc-headers = musl;
+        };
+
+        libstdcxx = callPackage ./gcc/libstdcxx.nix {
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          libc = musl;
+          dynamicLinkerOverride = "";
+        };
+
         linux-headers = callPackage ./linux-headers {
           gcc = gcc-latest;
           gnumake = gnumake-musl;
@@ -301,6 +366,12 @@ lib.makeScope
         musl = callPackage ./musl {
           gcc = gcc46;
           gnumake = gnumake-musl;
+        };
+
+        musl-headers = callPackage ./musl/headers.nix {
+          gcc = gcc46;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
         };
 
         musl-static = callPackage ./musl/static.nix {
@@ -436,11 +507,8 @@ lib.makeScope
             ''
               echo ${gcc46.tests.get-version}
               echo ${gcc46-cxx.tests.hello-world}
-              echo ${gcc10.tests.hello-world}
-              echo ${gcc-latest-unwrapped.tests.hello-world}
             ''
             + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
-              echo ${gcc-glibc.tests.hello-world}
               echo ${glibc.tests.hello-world}
             '')
             + ''
@@ -459,10 +527,26 @@ lib.makeScope
         test = tests.full;
       }
       // (lib.optionalAttrs (hostPlatform.libc == "glibc")) {
-        gcc-glibc = callPackage ./gcc/glibc.nix {
+        gcc-glibc-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils-static;
           gcc = gcc-latest;
+          gcc-buildbuild = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc = glibc;
+          libc-headers = glibc;
+          targetPlatform = hostPlatform;
+        };
+
+        gcc-glibc = callPackage ./gcc/wrapper.nix {
+          bash-build = bash;
+          bash = bash-static;
+          binutils = binutils-static;
+          gcc-unwrapped = gcc-glibc-unwrapped;
+          libc = glibc;
+          targetPlatform = hostPlatform;
         };
 
         glibc = callPackage ./glibc {
@@ -470,6 +554,13 @@ lib.makeScope
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           gnugrep = gnugrep-static;
+        };
+
+        glibc-headers = callPackage ./glibc/headers.nix {
+          gcc = gcc-latest;
+          binutils-build = binutils;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
         };
       }
     )
