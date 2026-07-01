@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkKdeDerivation,
   qt5compat,
   qttools,
@@ -18,6 +20,8 @@ mkKdeDerivation {
     qt5compat
     qttools
     kauth
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     attr
   ];
