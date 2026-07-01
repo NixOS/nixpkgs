@@ -42,7 +42,8 @@
             };
 
             url = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.nullOr lib.types.str;
+              default = null;
               description = ''
                 Repository to add the runner to.
 
@@ -55,18 +56,26 @@
                 Otherwise, you are going to get a `404 NotFound`
                 from `POST https://api.github.com/actions/runner-registration`
                 in the configure script.
+
+                Mandatory unless `orgs` is used, in which case the URL is taken
+                from each `orgs.<name>.url` instead and this option is ignored.
               '';
               example = "https://github.com/nixos/nixpkgs";
             };
 
             tokenFile = lib.mkOption {
-              type = lib.types.path;
+              type = lib.types.nullOr lib.types.path;
+              default = null;
               description = ''
                 The full path to a file which contains either
 
                 * a fine-grained personal access token (PAT),
                 * a classic PAT
                 * or a runner registration token
+
+                Exactly one of `tokenFile` and `githubApp` must be set. Use
+                `githubApp` to authenticate via a GitHub App installation instead
+                of a token file.
 
                 Changing this option or the `tokenFile`’s content triggers a new runner registration.
 
@@ -126,6 +135,71 @@
               default = "auto";
             };
 
+            githubApp = lib.mkOption {
+              default = null;
+              description = ''
+                Authenticate the runner using a GitHub App installation instead
+                of a `tokenFile`. Exactly one of `tokenFile` and `githubApp` must
+                be set.
+
+                On every start the service derives a short-lived installation
+                access token from the App's private key, uses it to fetch a fresh
+                runner registration token and registers the runner with it. This
+                avoids storing a long-lived personal access token on the host and
+                pairs well with `ephemeral` runners.
+
+                The App needs read and write access to the
+                "self-hosted runners" administration of the organisation (or
+                repository) given in `url`, and must be installed on the `login`
+                below.
+              '';
+              example = lib.literalExpression ''
+                {
+                  id = 123456;
+                  login = "my-org";
+                  privateKeyFile = "/run/secrets/github-app.pem";
+                }
+              '';
+              type = lib.types.nullOr (
+                lib.types.submodule {
+                  options = {
+                    id = lib.mkOption {
+                      type = lib.types.int;
+                      description = "The GitHub App's ID (the numeric `App ID`, not the client ID).";
+                      example = 123456;
+                    };
+
+                    login = lib.mkOption {
+                      type = lib.types.nullOr lib.types.str;
+                      default = null;
+                      description = ''
+                        The organisation (or user) login the GitHub App is
+                        installed on. Used to look up the App installation and,
+                        for organisation-wide runners, as the registration scope.
+
+                        Mandatory unless `orgs` is used, in which case the login
+                        is taken from each `orgs.<name>.login` instead and this
+                        option is ignored.
+
+                        Changing this option triggers a new runner registration.
+                      '';
+                      example = "my-org";
+                    };
+
+                    privateKeyFile = lib.mkOption {
+                      type = lib.types.path;
+                      description = ''
+                        The full path to a file containing the GitHub App's
+                        PEM-encoded private key. The file should be deployed as a
+                        secret and is never copied into the Nix store.
+                      '';
+                      example = "/run/secrets/github-app.pem";
+                    };
+                  };
+                }
+              );
+            };
+
             name = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               description = ''
@@ -135,6 +209,107 @@
               '';
               example = "nixos";
               default = name;
+            };
+
+            count = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 1;
+              example = 4;
+              description = ''
+                Number of identical runner instances to create.
+
+                Without `orgs`, this fans the single entry (using the
+                entry-level `url`) out into `count` runner services:
+                `github-runner-<name>` for `count == 1` (unchanged) and
+                `github-runner-<name>-<n>` for `count > 1`. Each instance
+                registers under a distinct runner name.
+
+                With `orgs`, this is the default replica count for every org
+                that does not set its own; see `orgs.<name>.count`.
+
+                Pairs well with `ephemeral`.
+              '';
+            };
+
+            orgs = lib.mkOption {
+              default = { };
+              description = ''
+                Organisations (or repositories) to serve from this entry.
+
+                When set, the entry fans out into one systemd service per runner
+                named `github-runner-<name>-<org>-<n>`, where `<org>` is the
+                attribute name and `<n>` ranges over the per-org `count`. The
+                entry-level `githubApp`/`tokenFile` is shared across every org;
+                only the App `login` changes per org (defaulting to the
+                attribute name), so a single GitHub App installed on multiple
+                orgs serves all of them.
+
+                Leaving this empty (the default) keeps the single-runner
+                behaviour: the entry-level `url`, `name` and auth, fanned out by
+                the entry-level `count`.
+              '';
+              example = lib.literalExpression ''
+                {
+                  org-a.count = 12;
+                  org-b = {
+                    count = 2;
+                    extraLabels = [ "org-b" ];
+                  };
+                }
+              '';
+              type = lib.types.attrsOf (
+                lib.types.submodule (
+                  { name, ... }:
+                  {
+                    options = {
+                      url = lib.mkOption {
+                        type = lib.types.str;
+                        default = "https://github.com/${name}";
+                        defaultText = lib.literalExpression ''"https://github.com/''${name}"'';
+                        description = ''
+                          URL of the organisation (or repository) to connect to.
+                          Defaults to the GitHub URL derived from the attribute name.
+                        '';
+                      };
+
+                      login = lib.mkOption {
+                        type = lib.types.str;
+                        default = name;
+                        defaultText = lib.literalExpression "\${name}";
+                        description = ''
+                          GitHub login (org or user) the shared `githubApp` is
+                          installed on. Defaults to the attribute name. Ignored
+                          when authenticating via `tokenFile`.
+                        '';
+                      };
+
+                      count = lib.mkOption {
+                        type = lib.types.ints.positive;
+                        default = config.count;
+                        defaultText = lib.literalMD "the entry-level `count`";
+                        example = 4;
+                        description = ''
+                          Number of identical runner instances to create for this
+                          org. Defaults to the entry-level `count`. Each gets its
+                          own systemd service named `github-runner-<name>-<org>-<n>`
+                          and registers under a distinct runner name. Pairs well
+                          with `ephemeral`.
+                        '';
+                      };
+
+                      extraLabels = lib.mkOption {
+                        type = lib.types.listOf lib.types.str;
+                        default = [ ];
+                        example = lib.literalExpression ''[ "org-a" ]'';
+                        description = ''
+                          Extra labels added, on top of the entry-level `extraLabels`,
+                          only to this org's runners.
+                        '';
+                      };
+                    };
+                  }
+                )
+              );
             };
 
             runnerGroup = lib.mkOption {
