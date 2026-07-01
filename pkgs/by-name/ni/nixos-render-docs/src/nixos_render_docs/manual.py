@@ -494,9 +494,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 '</div>'
             )
         nav = render_entries(root.children, self._html_params.sidebar_depth)
-        figures = build_list("Figures", "list-of-figures", root.figures)
-        examples = build_list("Examples", "list-of-examples", root.examples)
-        return f'{nav}{figures}{examples}'
+        return f'{nav}'
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         # book heading := h1
