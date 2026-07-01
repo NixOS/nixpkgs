@@ -6313,6 +6313,12 @@
     github = "David-Kopczynski";
     githubId = 53194670;
   };
+  David-Moody = {
+    name = "David Moody";
+    email = "david.moody@scot.me.uk";
+    github = "David-Moody";
+    githubId = 63956662;
+  };
   david-sawatzke = {
     email = "d-nix@sawatzke.dev";
     github = "david-sawatzke";

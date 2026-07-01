@@ -20,13 +20,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "25.10.2";
+  version = "26.04.4";
+
+  __structuredAttrs = true;
+
+  # Suggested as an improvement, but currently breaks nix-build -A nextflow.tests
+  # strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "c03082c9b816774c799660d22c2b56d72218fddc";
-    hash = "sha256-k8B393GOsU1gs+ZS5x3VZUmz+n8lH8/cmXkpzU301lY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U0QHIzIbNe9dxqxhGAxJuskR9183UgGgLZQAGB7TKmo=";
   };
 
   nativeBuildInputs = [
@@ -124,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Etjean
       mulatta
+      David-Moody
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;
