@@ -1,0 +1,14 @@
+--- a/liberaforms/__init__.py
++++ b/liberaforms/__init__.py
+@@ -88,6 +88,11 @@
+ 
+     assets = AssetsEnvironment(app)
+     assets.url_expire = True
++    if os.getenv("CACHE_DIRECTORY") is not None:
++        assets.load_path = [
++            os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
++        ]
++        assets.directory = os.path.join(os.getenv("CACHE_DIRECTORY"), "static")
+     assets.register('backend_css', backend_css)
+     assets.register('frontend_css', frontend_css)
+     assets.register('landing_css', landing_css)

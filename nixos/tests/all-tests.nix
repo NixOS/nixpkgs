@@ -924,6 +924,7 @@ in
   lemurs-wayland-script = runTest ./lemurs/lemurs-wayland-script.nix;
   lemurs-xorg = runTest ./lemurs/lemurs-xorg.nix;
   lemurs-xorg-script = runTest ./lemurs/lemurs-xorg-script.nix;
+  liberaforms = runTest ./liberaforms.nix;
   libinput = runTest ./libinput.nix;
   librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
