@@ -24,6 +24,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = true;
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
+  checkFlags = [
+    # tries to read $PATH
+    "--skip=shell_env::tests::resolver_discards_stderr_without_breaking_env_resolution"
+    # tries to read shell pid
+    "--skip=shell_env::tests::timeout_kills_shell_process_group"
+  ];
+
+  # tons of unit tests use local ports
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
