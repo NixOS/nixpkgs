@@ -1,33 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  docutils,
   fetchFromGitHub,
+  pygments,
   pytestCheckHook,
   rich,
-  setuptools-scm,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "rich-rst";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = "rich-rst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7nniBu9UnXA0pogv0TDkANTeOcsVYbyDxEr6/r7MxcY=";
+    hash = "sha256-M4ngZNYPasEqqfRay8aGHDII+LkwLhBp5kF9ryJ5LwQ=";
   };
 
   build-system = [
     setuptools
-    setuptools-scm
   ];
 
   dependencies = [
-    docutils
+    pygments
     rich
   ];
 
