@@ -20,7 +20,7 @@
   feedparser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
   version = "4.4.3";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-brC/gMqxo6BsfMA+4u9alOtIH4js4EgdExT1LL0QXxU=";
   };
 
@@ -93,11 +93,11 @@ buildPythonPackage rec {
   meta = {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/codingjoe/django-health-check";
-    changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${src.tag}";
+    changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       onny
       dav-wolff
     ];
   };
-}
+})
