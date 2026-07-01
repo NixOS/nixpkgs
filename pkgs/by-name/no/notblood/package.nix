@@ -8,8 +8,8 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "dethrace";
-  version = "0.9.0";
+  pname = "notblood";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "clipmove";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    install -Dm755 dethrace $out/bin/dethrace
+    install -Dm755 notblood $out/bin/notblood
   '';
 
   meta = {
