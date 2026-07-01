@@ -84,11 +84,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    # Use the esptool executable directly in the ESP32 post build script, that
-    # gets executed by platformio. This is required, because platformio uses its
-    # own python environment through `python -m esptool` and then fails to find
-    # the esptool library.
-    ./esp32-post-build-esptool-reference.patch
     # Call the platformio binary directly instead of `python -m
     # esphome.platformio_runner`, which tries to import platformio as a Python
     # module.
@@ -110,7 +105,6 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
-    "esptool"
     "platformio"
   ];
 
@@ -120,7 +114,7 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
-  # Remove esptool and platformio from requirements
+  # Remove platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
   dependencies = [
@@ -133,6 +127,7 @@ buildPythonPackage (finalAttrs: {
     cryptography
     esphome-dashboard
     esphome-glyphsets
+    esptool
     freetype-py
     icmplib
     jinja2
@@ -157,12 +152,10 @@ buildPythonPackage (finalAttrs: {
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
-    # esptool is used in esphome/__main__.py
     # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
-        esptool
         git
       ]
     }"
@@ -221,7 +214,7 @@ buildPythonPackage (finalAttrs: {
     "test_clean_build_empty_cache_dir"
     "test_clean_all"
     "test_clean_all_partial_exists"
-    # tries to use esptool, which is wrapped in an fhsenv
+    # requires attached ESP at /dev/ttyUSB0
     "test_upload_using_esptool_passes_crystal_callback"
     "test_upload_using_esptool_path_conversion"
     "test_upload_using_esptool_skips_missing_extra_flash_images"
