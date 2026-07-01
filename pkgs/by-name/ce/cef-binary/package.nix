@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
   glib,
   nss,
   nspr,
@@ -90,12 +91,18 @@ stdenv.mkDerivation {
     hash = selectSystem srcHashes;
   };
 
+  nativeBuildInputs = [ cmake ];
+
   dontStrip = true;
 
   dontPatchELF = true;
 
   installPhase = ''
     runHook preInstall
+
+    cd ../
+    install -Dm555 build/libcef_dll_wrapper/libcef_dll_wrapper.a $out/build/libcef_dll_wrapper/libcef_dll_wrapper.a
+    rm -rf build/
 
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
     patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
