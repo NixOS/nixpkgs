@@ -7505,6 +7505,11 @@
     githubId = 82293276;
     name = "David Villafaña";
   };
+  Duckii92 = {
+    github = "Duckii92";
+    githubId = 293699311;
+    name = "Hoang Minh Duc";
+  };
   dudeofawesome = {
     email = "tourist-04.iced@icloud.com";
     github = "dudeofawesome";
