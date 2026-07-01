@@ -458,6 +458,8 @@ self: super: with self; {
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
 
+  aioptdevices = callPackage ../development/python-modules/aioptdevices { };
+
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
   aiopulsegrow = callPackage ../development/python-modules/aiopulsegrow { };

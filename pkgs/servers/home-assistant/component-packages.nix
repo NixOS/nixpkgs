@@ -5282,7 +5282,8 @@
       ];
     "ptdevices" =
       ps: with ps; [
-      ]; # missing inputs: aioptdevices
+        aioptdevices
+      ];
     "pterodactyl" =
       ps: with ps; [
         py-dactyl
@@ -8488,6 +8489,7 @@
     "proxmoxve"
     "prusalink"
     "ps4"
+    "ptdevices"
     "pterodactyl"
     "pure_energie"
     "purpleair"
