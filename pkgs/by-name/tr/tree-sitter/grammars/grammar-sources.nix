@@ -2063,10 +2063,10 @@
   };
 
   pod = {
-    version = "1.0.0-unstable-2026-03-23";
+    version = "1.1.0-unstable-2026-05-31";
     url = "github:tree-sitter-perl/tree-sitter-pod/release";
-    rev = "3f15a3f11b422753fbf985190dceacb4bbf80ecf";
-    hash = "sha256-Yu6sK+tGtFVgAZUE3pfoMLzMNwxQQuQu/ZtrM45tNHs=";
+    rev = "cd1931314beafeebc957964c65802961e283411e";
+    hash = "sha256-fKHVcAEuEqFtzPvS6aV7qfOQfpDPOb8MWx0sPPw9/SY=";
 
     meta = {
       license = lib.licenses.artistic2;
