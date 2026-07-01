@@ -66,6 +66,7 @@ let
 
       mkdir -p $out/bin
       ln -s $out/lib/VESTA/VESTA{,-core,-gui} -t $out/bin
+      ln -s $out/lib/VESTA/elements.ini $out/bin/elements.ini
 
       mkdir -p $out/share/icons/hicolor/{128x128,256x256}/apps
       ln -s $out/lib/VESTA/img/logo.png $out/share/icons/hicolor/128x128/apps/VESTA.png
