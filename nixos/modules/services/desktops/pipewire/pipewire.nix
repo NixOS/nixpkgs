@@ -11,9 +11,10 @@ let
   inherit (lib) maintainers teams;
   inherit (lib.attrsets)
     attrByPath
-    attrsToList
     concatMapAttrs
     filterAttrs
+    mapAttrs'
+    nameValuePair
     ;
   inherit (lib.lists) flatten optional optionals;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
@@ -23,7 +24,7 @@ let
     mkOption
     mkPackageOption
     ;
-  inherit (lib.strings) concatMapStringsSep hasPrefix optionalString;
+  inherit (lib.strings) hasPrefix optionalString;
   inherit (lib.types)
     attrsOf
     bool
@@ -32,17 +33,6 @@ let
     ;
 
   json = pkgs.formats.json { };
-  mapToFiles =
-    location: config:
-    concatMapAttrs (name: value: {
-      "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
-    }) config;
-  extraConfigPkgFromFiles =
-    locations: filesSet:
-    pkgs.runCommand "pipewire-extra-config" { } ''
-      mkdir -p ${concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
-      ${concatMapStringsSep ";" ({ name, value }: "ln -s ${value} $out/${name}") (attrsToList filesSet)}
-    '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins =
     cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.pipewire != null;
@@ -58,11 +48,14 @@ let
 
   configPackages = cfg.configPackages;
 
-  extraConfigPkg = extraConfigPkgFromFiles [ "pipewire" "client" "jack" "pipewire-pulse" ] (
-    mapToFiles "pipewire" cfg.extraConfig.pipewire
-    // mapToFiles "client" cfg.extraConfig.client
-    // mapToFiles "jack" cfg.extraConfig.jack
-    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
+  extraConfigPkg = pkgs.linkFarm "pipewire-extra-config" (
+    concatMapAttrs (
+      location: config:
+      mapAttrs' (
+        name: value:
+        nameValuePair "share/pipewire/${location}.conf.d/${name}.conf" (json.generate name value)
+      ) config
+    ) cfg.extraConfig
   );
 
   configs = pkgs.buildEnv {
