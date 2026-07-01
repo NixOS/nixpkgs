@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iredis";
   version = "1.16.1";
   pyproject = true;
@@ -19,11 +19,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "packaging" ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     configobj
     mistune
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     redis
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pexpect
     pytestCheckHook
