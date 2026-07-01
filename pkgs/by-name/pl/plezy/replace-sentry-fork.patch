@@ -1,0 +1,32 @@
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -60,11 +60,7 @@
+     git:
+       url: https://github.com/edde746/background_downloader
+       ref: b4d36f88bb365faaf308ff26be7ade49bbaec859
+-  sentry_flutter:
+-    git:
+-      url: https://github.com/edde746/sentry-dart
+-      path: packages/flutter
+-      ref: build/fetch-native-zip
++  sentry_flutter: 9.16.0
+   auto_updater:
+     git:
+       url: https://github.com/edde746/auto_updater
+@@ -110,16 +106,6 @@
+       url: https://github.com/edde746/auto_updater
+       ref: 9e150f7
+       path: packages/auto_updater_windows
+-  sentry:
+-    git:
+-      url: https://github.com/edde746/sentry-dart
+-      path: packages/dart
+-      ref: build/fetch-native-zip
+-  sentry_flutter:
+-    git:
+-      url: https://github.com/edde746/sentry-dart
+-      path: packages/flutter
+-      ref: build/fetch-native-zip
+   material_symbols_icons:
+     git:
+       url: https://github.com/edde746/material_symbols_icons

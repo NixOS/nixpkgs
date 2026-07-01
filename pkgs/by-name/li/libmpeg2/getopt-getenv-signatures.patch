@@ -1,0 +1,26 @@
+diff --git a/src/getopt.c b/src/getopt.c
+index 4744e43..19776f3 100644
+--- a/src/getopt.c
++++ b/src/getopt.c
+@@ -208,7 +208,7 @@ static char *posixly_correct;
+    whose names are inconsistent.  */
+ 
+ #ifndef getenv
+-extern char *getenv ();
++extern char *getenv (const char *);
+ #endif
+ 
+ static char *
+diff --git a/src/getopt.h b/src/getopt.h
+index b0147e9..6f1e784 100644
+--- a/src/getopt.h
++++ b/src/getopt.h
+@@ -133,7 +133,7 @@ struct option
+    errors, only prototype getopt for the GNU C library.  */
+ extern int getopt (int __argc, char *const *__argv, const char *__shortopts);
+ # else /* not __GNU_LIBRARY__ */
+-extern int getopt ();
++extern int getopt (int, char *const*, const char *);
+ # endif /* __GNU_LIBRARY__ */
+ 
+ # ifndef __need_getopt

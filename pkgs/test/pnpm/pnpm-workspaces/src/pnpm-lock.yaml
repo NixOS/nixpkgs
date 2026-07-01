@@ -1,0 +1,25 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/a:
+    dependencies:
+      '@pnpm-workspaces-test/a-dep':
+        specifier: workspace:*
+        version: link:../a-dep
+
+  packages/a-dep: {}
+
+  packages/b:
+    dependencies:
+      '@pnpm-workspaces-test/b-dep':
+        specifier: workspace:*
+        version: link:../b-dep
+
+  packages/b-dep: {}

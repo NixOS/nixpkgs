@@ -1,0 +1,45 @@
+From 6374ae0bcdfe33a18eb0ae6db28493b1f34a0a5b Mon Sep 17 00:00:00 2001
+From: itchyny <itchyny@cybozu.co.jp>
+Date: Mon, 13 Apr 2026 08:46:11 +0900
+Subject: [PATCH] Fix NUL truncation in the JSON parser
+
+This fixes CVE-2026-33948.
+---
+ src/util.c   | 8 +-------
+ tests/shtest | 6 ++++++
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/util.c b/src/util.c
+index fdfdb96d88..80d65fc808 100644
+--- a/src/util.c
++++ b/src/util.c
+@@ -312,13 +312,7 @@ static int jq_util_input_read_more(jq_util_input_state *state) {
+       if (p != NULL)
+         state->current_line++;
+ 
+-      if (p == NULL && state->parser != NULL) {
+-        /*
+-         * There should be no NULs in JSON texts (but JSON text
+-         * sequences are another story).
+-         */
+-        state->buf_valid_len = strlen(state->buf);
+-      } else if (p == NULL && feof(state->current_input)) {
++      if (p == NULL && feof(state->current_input)) {
+         size_t i;
+ 
+         /*
+diff --git a/tests/shtest b/tests/shtest
+index cb88745277..370f7b7c69 100755
+--- a/tests/shtest
++++ b/tests/shtest
+@@ -880,4 +880,10 @@ $JQ -nf $d/prog.jq 2> $d/out && {
+ }
+ diff $d/out $d/expected
+ 
++# CVE-2026-33948: No NUL truncation in the JSON parser
++if printf '{}\x00{}' | $JQ >/dev/null 2> /dev/null; then
++  printf 'Error expected but jq exited successfully\n' 1>&2
++  exit 1
++fi
++
+ exit 0

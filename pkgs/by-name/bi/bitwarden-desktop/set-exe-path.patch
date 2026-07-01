@@ -1,0 +1,13 @@
+diff --git a/apps/desktop/src/main.ts b/apps/desktop/src/main.ts
+index 86d07440a7..be9fa6b4ab 100644
+--- a/apps/desktop/src/main.ts
++++ b/apps/desktop/src/main.ts
+@@ -80,6 +80,8 @@ export class Main {
+       appDataPath = path.join(process.env.SNAP_USER_DATA, "appdata");
+     }
+ 
++    app.setPath("exe", "%%exePath%%");
++
+     app.on("ready", () => {
+       // on ready stuff...
+     });

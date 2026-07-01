@@ -1,0 +1,11 @@
+--- a/js/src/xsum/xsum.cpp
++++ b/js/src/xsum/xsum.cpp
+@@ -266,7 +266,7 @@
+ 
+   /* At this point, sacc->chunk[u] must be non-zero */
+ 
+-  if (xsum_debug) printf("u: %d, sacc->chunk[u]: %ld", u, sacc->chunk[u]);
++  if (xsum_debug) printf("u: %d, sacc->chunk[u]: %lld", u, sacc->chunk[u]);
+ 
+   /* Carry propagate, starting at the low-order chunks.  Note that the
+      loop limit of u may be increased inside the loop. */

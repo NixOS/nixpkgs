@@ -1,0 +1,107 @@
+{
+  lib,
+  stdenv,
+  copyDesktopItems,
+  buildNpmPackage,
+  electron,
+  fetchFromGitLab,
+  makeBinaryWrapper,
+  makeDesktopItem,
+  nix-update-script,
+}:
+buildNpmPackage (finalAttrs: {
+  pname = "gridtracker2";
+  version = "2.260613.0";
+
+  src = fetchFromGitLab {
+    owner = "gridtracker.org";
+    repo = "gridtracker2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cwsZZXIMIX19u3qlAk5b0Gi339dtuoHKSC7/rBvccJs=";
+  };
+
+  npmDepsHash = "sha256-5h3bswjVf/8JHhwHRFTUfydN7XXtWbxNHTZ0mLL7RT8=";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    copyDesktopItems
+  ];
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+
+  makeCacheWritable = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "GridTracker2";
+      desktopName = "GridTracker2";
+      exec = "gridtracker2 %U";
+      terminal = false;
+      type = "Application";
+      icon = "gridtracker2";
+      startupWMClass = "GridTracker2";
+      comment = "A warehouse of amateur radio information";
+      categories = [
+        "HamRadio"
+        "Network"
+      ];
+    })
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    # the electronDist directory needs to be outside of the working directory
+    # otherwise the electron-builder config accidentally includes it inside the .asar file
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
+
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist="$electron_dist" \
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
+    # ^ disable codesigning on Darwin
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dvm644 -t "$out/share/gridtracker2/resources" \
+     ./dist/linux*/resources/*
+    install -Dvm644 -t "$out/share/gridtracker2/locales" \
+      ./dist/linux*/locales/*
+    install -Dvm644 ./resources/icon.png \
+      "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
+
+    makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
+      --add-flags $out/share/gridtracker2/resources/app.asar \
+      --add-flags "--no-sandbox --disable-gpu-sandbox" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications $out/bin
+    cp -r dist/mac*/GridTracker2.app $out/Applications
+    ln -s $out/Applications/GridTracker2.app/Contents/MacOS/GridTracker2 $out/bin/gridtracker2
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Warehouse of amateur radio information";
+    homepage = "https://gridtracker.org/";
+    license = lib.licenses.bsd3;
+    platforms = electron.meta.platforms;
+    maintainers = with lib.maintainers; [ Cryolitia ];
+    mainProgram = "gridtracker2";
+  };
+})

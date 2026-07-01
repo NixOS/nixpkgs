@@ -1,0 +1,26 @@
+From 5405e02c629e689449e852424aed8cca217ed309 Mon Sep 17 00:00:00 2001
+From: Vincent Breitmoser <look@my.amazin.horse>
+Date: Thu, 10 Jun 2021 14:10:52 +0200
+Subject: [PATCH] vfs0090: add missing <linux/limits.h> include
+
+This header is needed for the NAME_MAX constant used in this file.
+
+---
+ vfs0090.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/vfs0090.c b/vfs0090.c
+index 8034faf..6070df7 100644
+--- a/vfs0090.c
++++ b/vfs0090.c
+@@ -24,6 +24,7 @@
+ 
+ #include <errno.h>
+ #include <ctype.h>
++#include <linux/limits.h>
+ #include <nss.h>
+ #include <pk11pub.h>
+ #include <sechash.h>
+-- 
+2.31.1
+

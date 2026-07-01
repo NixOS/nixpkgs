@@ -1,0 +1,128 @@
+{
+  lib,
+  fetchFromGitHub,
+  fetchPypi,
+  python3,
+  installShellFiles,
+  nix-update-script,
+  versionCheckHook,
+}:
+
+let
+  py = python3.override {
+    self = py;
+    packageOverrides = self: super: {
+      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.0";
+        src =
+          fetchPypi {
+            pname = "jmespath";
+            inherit version;
+            sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+          }
+          // {
+            tag = version;
+          };
+        doCheck = false;
+      });
+    };
+  };
+in
+
+py.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "oci-cli";
+  version = "3.88.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "oracle";
+    repo = "oci-cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jjh6YNIOkHA1XaejIFl9JU9ktAr58aMGt4Zu4ZVaXFQ=";
+  };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with py.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with py.pkgs; [
+    arrow
+    certifi
+    click
+    cryptography
+    jmespath
+    oci
+    prompt-toolkit
+    pyopenssl
+    python-dateutil
+    pytz
+    pyyaml
+    retrying
+    six
+    terminaltables
+    urllib3
+  ];
+
+  pythonRelaxDeps = [
+    "click"
+    "PyYAML"
+    "cryptography"
+    "oci"
+    "prompt-toolkit"
+    "pyOpenSSL"
+    "terminaltables"
+    "certifi"
+    "pytz"
+  ];
+
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
+  postInstall = ''
+    cat >oci.zsh <<EOF
+    #compdef oci
+    zmodload -i zsh/parameter
+    autoload -U +X bashcompinit && bashcompinit
+    if ! (( $+functions[compdef] )) ; then
+        autoload -U +X compinit && compinit
+    fi
+
+    EOF
+    cat src/oci_cli/bin/oci_autocomplete.sh >>oci.zsh
+
+    installShellCompletion \
+      --cmd oci \
+      --bash src/oci_cli/bin/oci_autocomplete.sh \
+      --zsh oci.zsh
+  '';
+
+  doCheck = true;
+
+  pythonImportsCheck = [
+    "oci_cli"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Command Line Interface for Oracle Cloud Infrastructure";
+    homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    changelog = "https://github.com/oracle/oci-cli/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
+      asl20 # or
+      upl
+    ];
+    mainProgram = "oci";
+    maintainers = with lib.maintainers; [
+      ilian
+      FKouhai
+    ];
+  };
+})

@@ -1,0 +1,11 @@
+{
+  "packageVersion": "152.0.2-1",
+  "source": {
+    "rev": "152.0.2-1",
+    "hash": "sha256-CgH0HOtNbdoHMZ/MJL/zPK0Gn+e+qqtZjqPDSq63gX8="
+  },
+  "firefox": {
+    "version": "152.0.2",
+    "hash": "sha512-5OVM///P1XUerFgXp7dLDvCqQ/wA7yk5fMnfmqUlcrInK5bmA3OnDXEr5NyEkXDY1cG0SfPql4tKso3uGQVrAw=="
+  }
+}

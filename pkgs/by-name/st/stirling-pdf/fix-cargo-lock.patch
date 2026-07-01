@@ -1,0 +1,33 @@
+diff --git a/frontend/src-tauri/Cargo.lock b/frontend/src-tauri/Cargo.lock
+index 87d5531..39b03ed 100644
+--- a/frontend/src-tauri/Cargo.lock
++++ b/frontend/src-tauri/Cargo.lock
+@@ -1966,7 +1966,7 @@ dependencies = [
+  "js-sys",
+  "log",
+  "wasm-bindgen",
+- "windows-core 0.61.2",
++ "windows-core 0.62.2",
+ ]
+ 
+ [[package]]
+@@ -6041,6 +6041,19 @@ dependencies = [
+  "windows-core 0.61.2",
+ ]
+ 
++[[package]]
++name = "windows-core"
++version = "0.61.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c0fdd3ddb90610c7638aa2b3a3ab2904fb9e5cdbecc643ddb3647212781c4ae3"
++dependencies = [
++ "windows-implement",
++ "windows-interface",
++ "windows-link 0.1.3",
++ "windows-result 0.3.4",
++ "windows-strings 0.4.2",
++]
++
+ [[package]]
+ name = "windows-core"
+ version = "0.62.2"

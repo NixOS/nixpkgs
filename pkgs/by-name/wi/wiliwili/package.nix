@@ -1,0 +1,82 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  mpv-unwrapped,
+  openssl,
+  curl,
+  libxkbcommon,
+  dbus,
+  libffi,
+  wayland,
+  egl-wayland,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "wiliwili";
+  version = "1.5.3";
+
+  src = fetchFromGitHub {
+    owner = "xfangfang";
+    repo = "wiliwili";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-NPJ1PLO6eqm4rBn4t965S0lqzT+npfYLWN6FKYCpnlQ=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    mpv-unwrapped
+    openssl
+    curl
+    libxkbcommon
+    dbus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libffi # needed for wayland
+    wayland
+    egl-wayland
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "PLATFORM_DESKTOP" true)
+    (lib.cmakeBool "INSTALL" true)
+    (lib.cmakeBool "GLFW_BUILD_WAYLAND" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "GLFW_BUILD_X11" stdenv.hostPlatform.isLinux)
+    # Otherwise cpr cmake will try to download zlib
+    (lib.cmakeBool "CPR_FORCE_USE_SYSTEM_CURL" true)
+  ];
+
+  meta = {
+    description = "Third-party Bilibili client with a switch-like UI";
+    homepage = "https://xfangfang.github.io/wiliwili";
+    # https://github.com/xfangfang/wiliwili/discussions/355
+    license = lib.licenses.gpl3Only;
+    mainProgram = "wiliwili";
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = with lib.platforms; unix ++ windows;
+    # Testing on darwin was blocked due to broken swift
+    # buildInputs should still need some tweaking, but can't be sure
+    badPlatforms = lib.platforms.darwin;
+  };
+})

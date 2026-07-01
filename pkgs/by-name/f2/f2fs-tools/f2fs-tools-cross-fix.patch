@@ -1,0 +1,29 @@
+diff --git a/configure.ac b/configure.ac
+index 9b0e872..0108219 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -20,14 +20,16 @@ AC_DEFINE([F2FS_MINOR_VERSION], m4_bpatsubst(f2fs_tools_version,
+ 				[\([0-9]*\).\([0-9]*\)\(\w\|\W\)*], [\2]),
+ 				[Minor version for f2fs-tools])
+ 
+-AS_IF([test -d .git],[
+-	AC_DEFINE([F2FS_TOOLS_DATE],
+-		"m4_bpatsubst(f2fs_tools_gitdate,
+-		[\([0-9-]*\)\(\w\|\W\)*], [\1])",
+-		[f2fs-tools date based on Git commits])],[
+-	AC_DEFINE([F2FS_TOOLS_DATE],
+-		"f2fs_tools_date",
+-		[f2fs-tools date based on Source releases])])
++dnl AS_IF([test -d .git],[
++dnl	AC_DEFINE([F2FS_TOOLS_DATE],
++dnl		"m4_bpatsubst(f2fs_tools_gitdate,
++dnl		[\([0-9-]*\)\(\w\|\W\)*], [\1])",
++dnl		[f2fs-tools date based on Git commits])],[
++dnl	AC_DEFINE([F2FS_TOOLS_DATE],
++dnl		"f2fs_tools_date",
++dnl		[f2fs-tools date based on Source releases])])
++
++AC_DEFINE([F2FS_TOOLS_DATE], "f2fs_tools_date", [f2fs-tools date based on Source releases])
+ 
+ AC_CONFIG_SRCDIR([config.h.in])
+ AC_CONFIG_HEADER([config.h])

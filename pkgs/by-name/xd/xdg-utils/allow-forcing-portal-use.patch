@@ -1,0 +1,29 @@
+From 835eed6a2b975fba40c3ac18b4cf5429ba9d2836 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Wed, 7 Sep 2022 08:45:56 -0700
+Subject: [PATCH] xdg-open: add $XDG_OPEN_USE_PORTAL env var
+
+When set, the same mechanism that is used in a flatpak is used,
+a dbus call to the portal. This is useful for distros with non-flatpak
+wrapper or sandboxing features which require the same treatment, eg NixOS.
+
+See https://github.com/NixOS/nixpkgs/issues/160923
+---
+ scripts/xdg-open.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/xdg-open.in b/scripts/xdg-open.in
+index 8de839a..80d8fb3 100644
+--- a/scripts/xdg-open.in
++++ b/scripts/xdg-open.in
+@@ -508,6 +508,10 @@ if [ x"$DE" = x"" ]; then
+     DE=generic
+ fi
+ 
++if [ -n "$NIXOS_XDG_OPEN_USE_PORTAL"  ]; then
++    DE=flatpak
++fi
++
+ DEBUG 2 "Selected DE $DE"
+ 
+ # sanitize BROWSER (avoid calling ourselves in particular)

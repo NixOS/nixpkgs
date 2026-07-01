@@ -1,0 +1,13 @@
+diff --git a/src/Directory.Packages.props b/src/Directory.Packages.props
+index 97dddded5..4c9e3e35c 100644
+--- a/src/Directory.Packages.props
++++ b/src/Directory.Packages.props
+@@ -34,7 +34,7 @@
+     <PackageVersion Include="Grpc.AspNetCore.Server.Reflection" Version="2.71.0" />
+     <PackageVersion Include="Grpc.Core.Testing" Version="2.46.6" />
+     <PackageVersion Include="Grpc.Net.Client" Version="2.71.0" />
+-    <PackageVersion Include="Grpc.Tools" Version="2.72.0" />
++    <PackageVersion Include="Grpc.Tools" Version="2.68.1" />
+     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
+     <PackageVersion Include="JsonDiffPatch.Net" Version="2.3.0" />
+     <PackageVersion Include="JsonPatch.Net" Version="3.3.0" />

@@ -1,0 +1,22 @@
+diff --git a/src/internal/ppxc__script_real.ml b/src/internal/ppxc__script_real.ml
+index 392f2a5..d950fc9 100644
+--- a/src/internal/ppxc__script_real.ml
++++ b/src/internal/ppxc__script_real.ml
+@@ -168,7 +168,7 @@ module C_content_make (E : Empty) = struct
+     if cnt = 0 then None else Some (String.concat "\n\n" l)
+ end
+ 
+-module C_content_phase0 = C_content_make ()
++module C_content_phase0 = C_content_make (struct end)
+ 
+ module type Const_common_s = sig
+   include module type of C_content_phase0
+@@ -300,7 +300,7 @@ module Const_phase0 = struct
+     else C_content_phase0.add_extract_source s2 loc exn f
+ end
+ 
+-module C_content = C_content_make ()
++module C_content = C_content_make (struct end)
+ 
+ module Const = struct
+   include Const_common (C_content)

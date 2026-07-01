@@ -1,0 +1,87 @@
+[
+  {
+    "pname": "AdvancedStringBuilder",
+    "version": "0.2.0",
+    "hash": "sha256-66bPgNGU/wLpGs9mydkBBlTEJRpvfHDwWEysUsufZJY="
+  },
+  {
+    "pname": "AngleSharp",
+    "version": "1.4.0",
+    "hash": "sha256-xHpoMkhYSj7ejeMmI2e7ygef84QGZhttPjYOnLjITd0="
+  },
+  {
+    "pname": "AsyncKeyedLock",
+    "version": "8.0.2",
+    "hash": "sha256-0NKdC+oxdYxS3Uz1lak5RpdTWyKYT7C3hkCdm5T0D84="
+  },
+  {
+    "pname": "CliFx",
+    "version": "3.0.0",
+    "hash": "sha256-RMHRAQ2SQB8G3GLzG5WGKNkWNJdLCwkedSoT0iKv9gk="
+  },
+  {
+    "pname": "CSharpier.MsBuild",
+    "version": "1.2.6",
+    "hash": "sha256-jvY05AmHK0MO9cbSTwAvAXf4urL+6Df2ug4IKwcleDw="
+  },
+  {
+    "pname": "Deorcify",
+    "version": "1.1.0",
+    "hash": "sha256-R3V/9z/dP0LyhMNh+SiHD5j+XGr/DxPo4qwaKB+Fbak="
+  },
+  {
+    "pname": "Gress",
+    "version": "2.2.0",
+    "hash": "sha256-2vzffEFC2NHH5KGXssvlR4rH+e1DrsFMHN+zQcOgyGI="
+  },
+  {
+    "pname": "JsonExtensions",
+    "version": "1.2.0",
+    "hash": "sha256-vhuDDUSzDS5u9dfup0qk6j7Vc9i8Wyo7dBivpVaEpDw="
+  },
+  {
+    "pname": "Polly",
+    "version": "8.6.6",
+    "hash": "sha256-0BrOttCw+HQYB24Y2uMy2vo0P5/txUlhELC8FlyLKps="
+  },
+  {
+    "pname": "Polly.Core",
+    "version": "8.6.6",
+    "hash": "sha256-y6/a4OWrUlRfe0J8qdhBRmYRDi6K2y+kwhEVCIUOjvU="
+  },
+  {
+    "pname": "PowerKit",
+    "version": "1.2.0",
+    "hash": "sha256-93mls5CuiOsNRqH+E+MQ/LSV7X2W8o+jOnPP1vvgdp0="
+  },
+  {
+    "pname": "RazorBlade",
+    "version": "1.0.0",
+    "hash": "sha256-ieuGwqM8HHtD+llYO3CdVB+fHHvQ6QnQiajttREFOXM="
+  },
+  {
+    "pname": "Spectre.Console",
+    "version": "0.55.2",
+    "hash": "sha256-PmvyqWWej8pT0X/J80Yr9ClMoO96zq7QlJme8AuQ6Tc="
+  },
+  {
+    "pname": "Spectre.Console.Ansi",
+    "version": "0.55.2",
+    "hash": "sha256-ha2TNW1IOgtkr1NUEs6sSlN6t+hwCEccUUiCGwEen9U="
+  },
+  {
+    "pname": "Superpower",
+    "version": "3.1.0",
+    "hash": "sha256-krsT4LFDHeCjwS0BbkgpBYggpr5Nmc1RXYyOjLqRifQ="
+  },
+  {
+    "pname": "WebMarkupMin.Core",
+    "version": "2.21.0",
+    "hash": "sha256-k51tTFcdL9Bwsg3gA51ZswGxDtdBFb22BAj9wbyZu1E="
+  },
+  {
+    "pname": "YoutubeExplode",
+    "version": "6.6.0",
+    "hash": "sha256-53mPbr8IVmJH2C3euhSz56Bl6fJt5yN0CU6vCmzUs4I="
+  }
+]
