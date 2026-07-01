@@ -111,31 +111,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
-  doCheck = false;
-  # TODO: investigate failures; see this and linked discussions:
-  # https://github.com/NixOS/nixpkgs/pull/192962
-  /*
-    doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
-      # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
-      && !is32bit;
-  */
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux);
   checkTarget = "unit";
   checkInputs = [
     cmocka
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-    tzdata
   ];
-  preCheck =
-    lib.optionalString stdenv.hostPlatform.isMusl ''
-      # musl doesn't respect TZDIR, skip timezone-related tests
-      sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Test timeouts on Darwin
-      sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
-    '';
+  preCheck = ''
+    # skip timezone-related tests, they are flaky inside the nix sandbox
+    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  '';
 
   postFixup = ''
     remove-references-to -t "$out" "$dnsutils/bin/delv"
@@ -168,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bartoostveen ];
     platforms = lib.platforms.unix;
 
     outputsToInstall = [
