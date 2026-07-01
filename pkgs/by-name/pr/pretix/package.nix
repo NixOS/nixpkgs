@@ -54,14 +54,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.5.3";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R77jPwcRgu5+NBR9H0tD14QfbUtoHme6z9maYzDVmPg=";
+    hash = "sha256-yKJGJziMpOB8ttz0n4USay03wJTId77bYT7id4OgoIE=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Gkcz/QJCNuvhIdZnP/mPx5GD0EOJzxoP1dGI43pyOro=";
+    hash = "sha256-DJCvNcgDIY71Q9qg4Ng7SAM9i9wHhHOdJonpt5t/Xx8=";
   };
 
   nativeBuildInputs = [
