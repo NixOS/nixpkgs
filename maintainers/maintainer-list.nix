@@ -507,6 +507,12 @@
     githubId = 13504599;
     name = "Adam Boseley";
   };
+  abstracts33d = {
+    email = "abstract.s33d@gmail.com";
+    github = "abstracts33d";
+    githubId = 16547134;
+    name = "Manuel Wegria";
+  };
   abueide = {
     email = "andrea@abueide.com";
     github = "abueide";
