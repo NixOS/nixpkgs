@@ -30417,6 +30417,12 @@
     github = "XBagon";
     githubId = 1523292;
   };
+  xBLACKICEx = {
+    email = "xBLACKICEx@outlook.com";
+    github = "xBLACKICEx";
+    githubId = "51036094";
+    name = "xBLACKICEx";
+  };
   xbreak = {
     email = "xbreak@alphaware.se";
     github = "xbreak";
