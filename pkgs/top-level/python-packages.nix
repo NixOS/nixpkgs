@@ -5264,11 +5264,15 @@ self: super: with self; {
 
   esper = callPackage ../development/python-modules/esper { };
 
+  esphome = callPackage ../development/python-modules/esphome { };
+
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
   esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
 
   esprima = callPackage ../development/python-modules/esprima { };
+
+  esptool = callPackage ../development/python-modules/esptool { };
 
   essent-dynamic-pricing = callPackage ../development/python-modules/essent-dynamic-pricing { };
 
