@@ -14,10 +14,17 @@
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
   "system-monitor@axet.github.com" = "system-monitor-3";
   "sysmonitor@talhasiddique7" = "system-monitor-4";
+  "system-monitor@jtourteau" = "system-monitor-5";
 
   "battery-time@eetumos.github.com" = "battery-time-3";
   "batterytime@typeof.pw" = "battery-time-2";
   "batime@martin.zurowietz.de" = "battery-time";
+
+  "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner";
+  "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner-2";
+
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
+  "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
 
   "nepali-date@biplab" = "nepali-calendar";
   "nepali-calendar-gs-extension@subashghimire.info.np" = "nepali-calendar-2";
@@ -43,6 +50,9 @@
   "public-ip-address@fire-man-x" = "public-ip-address";
   "public-ip-address@theophilediot.github.io" = "public-ip-address-2";
 
+  "system-rpg@conan513" = "systemquest";
+  "system-rpg@gnome-rpg.local" = "systemquest-2";
+
   "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
   "tailscale@joaophi.github.com" = "tailscale-qs-2";
 
@@ -54,7 +64,6 @@
   "openweather-extension@penguin-teal.github.io" = "openweather-refined";
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
   "power-profile@fthx" = "power-profile-indicator-2";
-  "FuzzyClock@fire-man-x" = "fuzzy-clock-3";
   "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
 
   # ############################################################################
