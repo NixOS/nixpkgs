@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail '"pytest-runner",' ""  '';
 
   pythonRelaxDeps = [
+    "pytenable"
     "python-socketio"
   ];
 
