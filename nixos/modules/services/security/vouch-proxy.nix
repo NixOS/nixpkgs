@@ -33,11 +33,6 @@ in
       '';
     };
 
-    domain = lib.mkOption {
-      type = lib.types.str;
-      description = "The domain vouch-proxy runs under in the oauth2-login-flow, used e.g. in the callback_url.";
-    };
-
     clients = lib.mkOption {
       default = { };
       description = ''
