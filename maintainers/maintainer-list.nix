@@ -28876,6 +28876,14 @@
     githubId = 110242808;
     name = "Vasilii Pustovoit";
   };
+  vavakado = {
+    email = "xor@vavakado.xyz";
+    github = "vavakado";
+    githubId = 80159210;
+    name = "Vladimir Rubin";
+    matrix = "@vavakado:imagisphe.re";
+    keys = [ { fingerprint = "A054 0374 CD37 2C71 FE6D  E0CF CAB7 4472 7F36 B524"; } ];
+  };
   vbgl = {
     email = "Vincent.Laporte@gmail.com";
     github = "vbgl";
