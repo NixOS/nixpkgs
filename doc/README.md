@@ -1,21 +1,32 @@
-# Contributing to the Nixpkgs reference manual
+# Contributing to the Nixpkgs manual
 
-This directory houses the source files for the Nixpkgs reference manual.
+This directory houses the source files for the Nixpkgs manual.
 
-> [!IMPORTANT]
-> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
+> [!NOTE]
 >
-> Going forward, this directory should **only** contain [reference documentation](https://nix.dev/contributing/documentation/diataxis#reference).
-> For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+> We are actively restructuring our documentation to be more beginner friendly.
 >
-> We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
-> This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
 
-For documentation only relevant for contributors, use Markdown files next to the source and regular code comments.
+When writing new docs use **Progressive Disclosure**
 
-> [!TIP]
-> Feedback for improving support for parsing and rendering doc-comments is highly appreciated.
-> [Open an issue](https://github.com/NixOS/nixpkgs/issues/new?labels=6.topic%3A+documentation&title=Doc%3A+) to request bugfixes or new features.
+Start simple, pick up beginners.
+Use **examples** first to show how to get something done. Keep **Explanation** lean.
+
+Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
+
+This directory contains **guides** and **reference** documentation for Nixpkgs.
+
+Borrowing from [Diátaxis framework](https://diataxis.fr/) what suits our needs:
+
+**Guides** are task-oriented. They can be tutorial-style walkthroughs or how-to sections.
+Explanations appear as prose after examples.
+
+**Reference** documentation is the specification of functions and attributes.
+
+We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
+This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
+
+See [Document structure](#document-structure) for a structural template.
 
 Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
@@ -209,6 +220,62 @@ You, as the writer of documentation, are still in charge of its content.
 
 **For prose style, see the [documentation styleguide](./styleguide.md).**
 
+### Document structure
+
+Organize each chapter as guide sections first, then a single `## Reference` section.
+
+A well-structured chapter looks like this:
+
+````markdown
+# Foo {#foo}
+
+`foo` builds Foo projects from a `foo.toml`.
+
+## Package a Foo application {#foo-packaging}
+
+:::{.example #ex-foo-packaging}
+
+# Package the hello app
+
+```nix
+{ foo }:
+buildFooPackage {
+  pname = "hello";
+  version = "1.0";
+}
+```
+
+:::
+
+`buildFooPackage` needs `pname` and `version`.
+Keep explanation short, and place it after the example.
+
+## Reference {#foo-reference}
+
+### `buildFooPackage` {#foo-buildFooPackage}
+
+Builds a Foo application from source.
+
+#### Inputs {#foo-buildFooPackage-inputs}
+
+`pname` (String)
+: The program name.
+
+#### Examples {#foo-buildFooPackage-examples}
+
+See [](#ex-foo-packaging).
+````
+
+Examples lives in one place: the guide owns it and the reference links to it.
+
+Guides introduce minimal working examples that are goal-oriented (typical usage)
+
+Reference may introduce additional examples that are unit-oriented. (minimal usage, edge-cases).
+If the guide example is already sufficient, just link to it from the reference.
+
+Follow this structure strictly; to deviate, ping @NixOS/documentation-team.
+
+
 ### One sentence per line
 
 Put each sentence in its own line.
@@ -284,7 +351,15 @@ Use the [admonition syntax](#admonitions) for callouts and examples.
 
 ### `callPackage`-compatible examples
 
-Provide at least one example per function.
+Provide at least one example per function, in its doc-comment.
+
+Keep each example at the level it documents:
+
+- A **reference example** might sometimes live in a doc-comment and show function call shape.
+- A **guide example** lives in a guide section and shows a complete task that may compose several functions.
+
+When the task is nothing more than the call itself, the guide example is enough.
+The reference example links to the guide example.
 
 Example code should be such that it can be passed to `pkgs.callPackage`.
 Instead of something like:
