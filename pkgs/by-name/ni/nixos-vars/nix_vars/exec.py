@@ -1,7 +1,7 @@
 import subprocess
 import graphlib
 import functools
-from typing import List
+from typing import List, Set
 from pathlib import Path
 from .config import VarsConfig, VarsGeneratorBackend, VarsGenerator, VarsFile
 from .error import VarsError
@@ -19,7 +19,7 @@ def build_binary(path: Path) -> Path:
 
 		return result.stdout.strip()
 	except subprocess.CalledProcessError as e:
-		raise VarsError(f"Error building {path}:\n{e.stderr}")
+		raise VarsError(f"Error building '{path}':\n{e.stderr}")
 
 
 def file_exists(
@@ -40,7 +40,7 @@ def file_exists(
 		return True
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
-			f"Error running the {backend.name}/exists script for {generator.name}/{file.name} [Exit code: {e.returncode}]:\n{e.stderr}"
+			f"Error running the '{backend.name}/exists' script for '{generator.name}/{file.name}' [Exit code: {e.returncode}]:\n{e.stderr}"
 		)
 
 
@@ -59,7 +59,7 @@ def get_secret(
 		)
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
-			f"Error getting secret {generator.name}/{file.name} via the {backend.name} backend:\n{e.stderr}"
+			f"Error getting secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
 		)
 
 
@@ -78,7 +78,62 @@ def set_secret(
 		)
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
-			f"Error setting secret {generator.name}/{file.name} via the {backend.name} backend:\n{e.stderr}"
+			f"Error setting secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
+		)
+
+
+# NOTE: we take strings here instead of proper VarsBackend/VarsFile object since
+# the secrets to be deleted might no longer exist in the configuration (e.g.
+# while garbage collecting).
+def delete_secret(
+	config: VarsConfig,
+	backend: VarsGeneratorBackend,
+	gen_name: str,
+	file_name: str,
+):
+	binary = build_binary(backend.delete)
+	try:
+		subprocess.run(
+			[binary, gen_name, file_name],
+			capture_output=True,
+			text=True,
+			check=True,
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error deleting secret '{gen_name}/{file_name}' via the '{backend.name}' backend:\n{e.stderr}"
+		)
+
+
+def list_secrets(
+	config: VarsConfig, backend: VarsGeneratorBackend
+) -> Set[tuple[str, str]]:
+	binary = build_binary(backend.list)
+	try:
+		pairs = set()
+		result = subprocess.run(
+			[binary],
+			capture_output=True,
+			text=True,
+			check=True,
+		)
+
+		for line in result.stdout.strip().split("\n"):
+			if not line:
+				continue
+
+			parts = line.strip().split()
+			if len(parts) == 2:
+				pairs.add((parts[0], parts[1]))
+			else:
+				raise VarsError(
+					f"Malformed output for list script in backend '{backend.name}': {line}"
+				)
+
+		return pairs
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error listing secrets for the '{backend.name}' backend:\n{e.stderr}"
 		)
 
 
@@ -109,7 +164,7 @@ def rebuild_order(config: VarsConfig) -> List[str]:
 				order.append(item)
 				break
 		else:
-			for file in generator.files:
+			for file in generator.files.values():
 				backend = config.generatorBackends[generator.backend]
 				if not file_exists(backend, generator, file):
 					print(f"- '{item}' (file '{file.name}' is missing)")

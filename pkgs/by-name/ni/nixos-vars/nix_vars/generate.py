@@ -24,14 +24,14 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 			generator = config.generators[entry]
 			binary = build_binary(generator.script)
 
+			print(f"Generating '{entry}'")
 			if args.dry_run:
-				print(f"Generating '{entry}'")
 				continue
 
 			for dep_name in generator.dependencies:
 				dep = config.generators[dep_name]
 				os.makedirs(in_dir / dep_name)
-				for file in dep.files:
+				for file in dep.files.values():
 					try:
 						get_secret(
 							config, dep, file, in_dir / dep_name / file.name
@@ -52,10 +52,12 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 			except subprocess.CalledProcessError as e:
 				raise VarsError(f"Error generating '{entry}': {e.stderr}")
 
-			for file in generator.files:
+			for file in generator.files.values():
 				try:
 					set_secret(config, generator, file, out_dir / file.name)
 				except subprocess.CalledProcessError as e:
 					raise VarsError(
 						f"Error setting '{entry}/{file.name}': {e.stderr}"
 					)
+
+	print(f"Successfully (re)run {len(order)} generator(s).")
