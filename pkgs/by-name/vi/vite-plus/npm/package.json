@@ -1,0 +1,8 @@
+{
+  "name": "vite-plus-cli",
+  "version": "0.2.1",
+  "private": true,
+  "dependencies": {
+    "vite-plus": "0.2.1"
+  }
+}

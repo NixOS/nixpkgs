@@ -8981,6 +8981,12 @@
       { fingerprint = "7E08 6842 0934 AA1D 6821  1F2A 671E 39E6 744C 807D"; }
     ];
   };
+  fengmk2 = {
+    email = "fengmk2@gmail.com";
+    github = "fengmk2";
+    githubId = 156269;
+    name = "MK";
+  };
   fernsehmuell = {
     email = "fernsehmuel@googlemail.com";
     matrix = "@fernsehmuell:matrix.org";
