@@ -17878,6 +17878,12 @@
     github = "merrkry";
     githubId = 124278440;
   };
+  mert-kurttutan = {
+    email = "mert-kurttutan@gmail.com";
+    name = "Mert Kurttutan";
+    github = "mert-kurttutan";
+    githubId = 88637659;
+  };
   messemar = {
     email = "martin.messer@cyberus-technology.de";
     name = "messemar";
