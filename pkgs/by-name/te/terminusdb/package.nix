@@ -71,13 +71,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminusdb";
-  version = "12.0.4";
+  version = "12.0.6";
 
   src = fetchFromGitHub {
     owner = "terminusdb";
     repo = "terminusdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vJifp0U4FrbtI86M8pt022BQWIIeK8jWWFG1Ch1m7IQ=";
+    hash = "sha256-TxLTPwESQ9pGrm/piWyyTwKlYtVogXRdQjnppvjX8F8=";
     leaveDotGit = true;
     postFetch = ''
       # Will be used for `TERMINUSDB_GIT_HASH`
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-SvWS18amC4FHuXc/N6e+tomwnVfJ/KlTLIACfl72Nqc=";
+    hash = "sha256-WymXMJaUKz/IT2gDgQYagin1Sfg1akqCU+mkYUs40Ic=";
   };
 
   postPatch = ''
