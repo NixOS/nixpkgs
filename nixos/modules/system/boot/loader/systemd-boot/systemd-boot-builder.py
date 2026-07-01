@@ -243,6 +243,38 @@ def run(
     return subprocess.run(cmd, check=True, text=True, stdout=stdout, stderr=sys.stderr)
 
 
+def bootctl_varlink_call(method: str, parameters: dict[str, Any]) -> dict[str, Any]:
+    # Spawn bootctl as a Varlink server on stdio, mirroring what varlinkctl
+    # does when given an executable path. We cannot talk to a running
+    # systemd-bootctl.socket because that would use bootctl from the booted
+    # system rather than the closure we are switching to, does not let us set
+    # SYSTEMD_ESP_PATH/SYSTEMD_XBOOTLDR_PATH, and is unavailable inside
+    # nixos-enter anyway.
+    env = os.environ | {
+        "SYSTEMD_VARLINK_LISTEN": "-",
+        "SYSTEMD_ESP_PATH": str(EFI_SYS_MOUNT_POINT),
+    }
+    if BOOT_MOUNT_POINT != EFI_SYS_MOUNT_POINT:
+        env["SYSTEMD_XBOOTLDR_PATH"] = str(BOOT_MOUNT_POINT)
+
+    proc = subprocess.Popen(
+        [f"{SYSTEMD}/bin/bootctl"],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=sys.stderr,
+        env=env,
+    )
+    assert proc.stdin is not None and proc.stdout is not None
+    request = json.dumps({"method": method, "parameters": parameters}).encode()
+    out, _ = proc.communicate(request + b"\0")
+    reply, _, _ = out.partition(b"\0")
+    if not reply:
+        raise RuntimeError(
+            f"bootctl exited with status {proc.returncode} without a Varlink reply"
+        )
+    return json.loads(reply)
+
+
 def generation_dir(profile: str | None, generation: int) -> Path:
     if profile:
         return Path(
@@ -479,55 +511,29 @@ def install_bootloader(args: argparse.Namespace) -> None:
             + ["install"]
         )
     else:
-        # Update bootloader to latest if needed
-        available_out = run(
-            [f"{SYSTEMD}/bin/bootctl", "--version"], stdout=subprocess.PIPE
-        ).stdout.split()[2]
-        installed_out = run(
-            [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}", "status"],
-            stdout=subprocess.PIPE,
-        ).stdout
+        # Let bootctl compare versions itself. Over Varlink, an already
+        # current binary comes back as an io.systemd.System error carrying
+        # ESTALE, which we can tell apart from real failures.
+        params: dict[str, Any] = {"operation": "update"}
+        if not CAN_TOUCH_EFI_VARIABLES:
+            params["touchVariables"] = False
+        if GRACEFUL:
+            params["graceful"] = True
+        reply = bootctl_varlink_call("io.systemd.BootControl.Install", params)
 
-        # See status_binaries() in systemd bootctl.c for code which generates this
-        # Matches
-        # Available Boot Loaders on ESP:
-        #  ESP: /boot (/dev/disk/by-partuuid/9b39b4c4-c48b-4ebf-bfea-a56b2395b7e0)
-        # File: └─/EFI/systemd/systemd-bootx64.efi (systemd-boot 255.2)
-        # But also:
-        # Available Boot Loaders on ESP:
-        #  ESP: /boot (/dev/disk/by-partuuid/9b39b4c4-c48b-4ebf-bfea-a56b2395b7e0)
-        # File: ├─/EFI/systemd/HashTool.efi
-        #       └─/EFI/systemd/systemd-bootx64.efi (systemd-boot 255.2)
-        installed_match = re.search(
-            r"^\W+.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
-            installed_out,
-            re.IGNORECASE | re.MULTILINE,
-        )
-
-        available_match = re.search(r"^\((.*)\)$", available_out)
-
-        if installed_match is None:
-            raise Exception(
-                "Could not find any previously installed systemd-boot. If you are switching to systemd-boot from a different bootloader, you need to run `nixos-rebuild switch --install-bootloader`"
-            )
-
-        if available_match is None:
-            raise Exception("could not determine systemd-boot version")
-
-        installed_version = installed_match.group(1)
-        available_version = available_match.group(1)
-
-        if installed_version < available_version:
-            print(
-                "updating systemd-boot from %s to %s"
-                % (installed_version, available_version),
-                file=sys.stderr,
-            )
-            run(
-                [f"{SYSTEMD}/bin/bootctl", f"--esp-path={EFI_SYS_MOUNT_POINT}"]
-                + bootctl_flags
-                + ["update"]
-            )
+        error = reply.get("error")
+        if error is not None:
+            error_params = reply.get("parameters") or {}
+            if (
+                error == "io.systemd.System"
+                and error_params.get("errno") == errno.ESTALE
+            ):
+                # Same or newer boot loader version already in place.
+                pass
+            else:
+                raise RuntimeError(
+                    f"bootctl update failed: {error} {json.dumps(error_params)}"
+                )
 
     (BOOT_MOUNT_POINT / NIXOS_DIR).mkdir(parents=True, exist_ok=True)
     (BOOT_MOUNT_POINT / "loader/entries").mkdir(parents=True, exist_ok=True)
