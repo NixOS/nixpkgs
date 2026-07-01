@@ -13961,6 +13961,13 @@
     githubId = 2396926;
     name = "Justin Woo";
   };
+  justkrysteq = {
+    email = "justkrysteq@proton.me";
+    github = "justkrysteq";
+    githubId = 43525126;
+    name = "Krysteq";
+    matrix = "@krysteq:matrix.org";
+  };
   jvanbruegge = {
     email = "supermanitu@gmail.com";
     github = "jvanbruegge";
