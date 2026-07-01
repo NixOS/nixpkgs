@@ -23,14 +23,25 @@ my $makeFlags = $ENV{'MAKE_FLAGS'};
 $SIG{PIPE} = 'IGNORE';
 
 # Read the answers.
+# mkValue emits a sentinel for lib.kernel.freeform "" since the intermediate
+# format can't express an empty-string answer. Record those options so
+# forceEmptyString can rewrite them to CONFIG_<name>="" after `make config`.
+my $emptyStringSentinel = '__NIXPKGS_EMPTY_STRING__';
 my %answers;
 my %requiredAnswers;
+my %emptyStringAnswers;
 open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die "Could not open answer file";
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
     if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(.*\S)\s*$/) {
-        $answers{$1} = $3;
+        if ($3 eq $emptyStringSentinel) {
+            # Answer "" now. forceEmptyString fixes up the entry later.
+            $answers{$1} = "";
+            $emptyStringAnswers{$1} = 1;
+        } else {
+            $answers{$1} = $3;
+        }
         $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {
         die "invalid config line: $_";
@@ -136,6 +147,34 @@ sub runConfig {
 # set in a previous run.)
 runConfig;
 runConfig;
+
+# Rewrite the recorded empty-string options to CONFIG_<name>="" in both .config
+# and the derived include/config/auto.conf, adding the line if absent.
+# Substituting the sentinel out of .config wouldn't work: `make config` rejects
+# an empty interactive answer and keeps any non-empty defconfig default (e.g.
+# CONFIG_LOCALVERSION="-v8"), so the sentinel never reaches .config for those.
+sub forceEmptyString {
+    my ($path) = @_;
+    return unless -f $path;
+    open my $in, "<", $path or die "Could not read $path: $!";
+    my @lines = <$in>;
+    close $in;
+    my %seen;
+    for my $line (@lines) {
+        if ($line =~ /^(?:# )?CONFIG_([A-Za-z0-9_]+)\b/ && exists $emptyStringAnswers{$1}) {
+            $line = "CONFIG_$1=\"\"\n";
+            $seen{$1} = 1;
+        }
+    }
+    for my $name (keys %emptyStringAnswers) {
+        push @lines, "CONFIG_$name=\"\"\n" unless $seen{$name};
+    }
+    open my $out, ">", $path or die "Could not write $path: $!";
+    print $out @lines;
+    close $out;
+}
+forceEmptyString("$buildRoot/.config");
+forceEmptyString("$buildRoot/include/config/auto.conf");
 
 # Read the final .config file and check that our answers are in
 # there.  `make config' often overrides answers if later questions
