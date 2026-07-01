@@ -121,6 +121,7 @@ mapAliases {
   bkcharts = throw "'bkcharts' has been removed as the upstream repository was archived in 2018"; # added 2025-08-26
   BlinkStick = throw "'BlinkStick' has been renamed to/replaced by 'blinkstick'"; # Converted to throw 2025-10-29
   boiboite-opener-framework = throw "'boiboite-opener-framework' has been removed as it was unmaintained upstream"; # Added 2026-03-23
+  botpy = "'botpy' has been renamed to/replaced by 'qq-botpy'"; # added 2026-06-25
   bsblan = throw "'bsblan' has been renamed to/replaced by 'python-bsblan'"; # Converted to throw 2025-10-29
   bsddb3 = throw "'bsddb3' has been removed because it was deprecated in favor of 'berkeleydb'"; # added 2026-01-20
   bt_proximity = throw "'bt_proximity' has been renamed to/replaced by 'bt-proximity'"; # Converted to throw 2025-10-29
@@ -154,9 +155,11 @@ mapAliases {
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
   deepsearch-glm = throw "'deepsearch-glm' has been removed due to lack of upstream maintenance"; # Added 2025-03-04
+  DeepTutor = throw "'DeepTutor' has been renamed to/replaced by 'deeptutor'"; # added 2026-06-25
   dictpath = throw "'dictpath' has been renamed to/replaced by 'pathable'"; # Converted to throw 2025-10-29
   diff_cover = throw "'diff_cover' has been renamed to/replaced by 'diff-cover'"; # Converted to throw 2025-10-29
   digital-ocean = throw "'digital-ocean' has been renamed to/replaced by 'python-digitalocean'"; # Converted to throw 2025-10-29
+  dingtalk-stream-sdk-python = throw "'dingtalk-stream-sdk-python' has been renamed to/replaced by 'dingtalk-stream'"; # added 2026-06-25
   discogs_client = throw "'discogs_client' has been renamed to/replaced by 'discogs-client'"; # Converted to throw 2025-10-29
   distutils_extra = throw "'distutils_extra' has been renamed to/replaced by 'distutils-extra'"; # Converted to throw 2025-10-29
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
@@ -381,6 +384,7 @@ mapAliases {
   nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
   nonbloat-db = throw "nonbloat-db has been removed because the upstream project was archived."; # added 2025-05-16
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
+  oapi-sdk-python = throw "This project have inconsistent naming, use pypi name 'lark-oapi'"; # added 2026-06-25
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
   objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
@@ -525,6 +529,7 @@ mapAliases {
   pytorch-bin = throw "'pytorch-bin' has been renamed to/replaced by 'torch-bin'"; # Converted to throw 2025-10-29
   pytorchWithCuda = throw "'pytorchWithCuda' has been renamed to/replaced by 'torchWithCuda'"; # Converted to throw 2025-10-29
   pytorchWithoutCuda = throw "'pytorchWithoutCuda' has been renamed to/replaced by 'torchWithoutCuda'"; # Converted to throw 2025-10-29
+  pytrec_eval = throw "'pytrec_eval' has been renamed to/replaced by 'pytrec-eval'"; # added 2026-06-24
   pytwitchapi = throw "'pytwitchapi' has been renamed to/replaced by 'twitchapi'"; # Converted to throw 2025-10-29
   pyupdate = throw "'pyupdate' has been removed because it was unused and unmaintained upstream"; # added 2026-06-11
   pyvicare-neo = throw "'pyvicare-neo' has been renamed to/replaced by 'pyvicare'"; # Converted to throw 2025-10-29
@@ -583,6 +588,7 @@ mapAliases {
   sip_4 = throw "'sip_4' has been renamed to/replaced by 'sip4'"; # Converted to throw 2025-10-29
   sipsimple = lib.warnOnInstantiate "'sipsimple' has been renamed to 'python3-sipsimple' to fit upstream naming" python3-sipsimple; # added 2026-01-05
   slackclient = throw "'slackclient' has been renamed to/replaced by 'slack-sdk'"; # Converted to throw 2025-10-29
+  slackify-markdown-python = throw "'slackify-markdown-python' has been renamed to/replaced by 'slackify-markdown'"; # added 2026-06-25
   sleekxmpp = throw "'sleekxmpp' has been removed because it was deprecated in favor of 'slixmpp'"; # added 2026-01-19
   smart_open = throw "'smart_open' has been renamed to/replaced by 'smart-open'"; # Converted to throw 2025-10-29
   smpp_pdu = throw "'smpp_pdu' has been renamed to/replaced by 'smpp-pdu'"; # Converted to throw 2025-10-29
@@ -659,6 +665,7 @@ mapAliases {
   Wand = throw "'Wand' has been renamed to/replaced by 'wand'"; # Converted to throw 2025-10-29
   WazeRouteCalculator = throw "'WazeRouteCalculator' has been renamed to/replaced by 'wazeroutecalculator'"; # Converted to throw 2025-10-29
   websocket_client = throw "'websocket_client' has been renamed to/replaced by 'websocket-client'"; # Converted to throw 2025-10-29
+  wecom-aibot-python-sdk = throw "'wecom-aibot-python-sdk' has been renamed to/replaced by 'wecom-aibot-sdk'"; # added 2026-06-25
   wgnlpy = throw "'wgnlpy' has been removed, as the upstream repository was unmaintained for several years"; # Converted to throw 2025-11-24
   worldengine = throw "worldengine has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   WSME = throw "'WSME' has been renamed to/replaced by 'wsme'"; # Converted to throw 2025-10-29

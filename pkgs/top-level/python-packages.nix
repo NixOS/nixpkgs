@@ -2292,6 +2292,8 @@ self: super: with self; {
 
   blurhash-python = callPackage ../development/python-modules/blurhash-python { };
 
+  bm25s = callPackage ../development/python-modules/bm25s { };
+
   bme280spi = callPackage ../development/python-modules/bme280spi { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
@@ -3912,6 +3914,8 @@ self: super: with self; {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deeptutor = callPackage ../development/python-modules/deeptutor { };
+
   deepwave = callPackage ../development/python-modules/deepwave { };
 
   deezer-py = callPackage ../development/python-modules/deezer-py { };
@@ -4061,6 +4065,8 @@ self: super: with self; {
   dill = callPackage ../development/python-modules/dill { };
 
   dinghy = callPackage ../development/python-modules/dinghy { };
+
+  dingtalk-stream = callPackage ../development/python-modules/dingtalk-stream { };
 
   dingz = callPackage ../development/python-modules/dingz { };
 
@@ -9410,6 +9416,10 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-readers-weather
       { };
 
+  llama-index-retrievers-bm25 =
+    callPackage ../development/python-modules/llama-index-retrievers-bm25
+      { };
+
   llama-index-vector-stores-chroma =
     callPackage ../development/python-modules/llama-index-vector-stores-chroma
       { };
@@ -11665,6 +11675,8 @@ self: super: with self; {
 
   oathtool = callPackage ../development/python-modules/oathtool { };
 
+  oauth-cli-kit = callPackage ../development/python-modules/oauth-cli-kit { };
+
   oauth2-client = callPackage ../development/python-modules/oauth2-client { };
 
   oauth2client = callPackage ../development/python-modules/oauth2client { };
@@ -13120,6 +13132,8 @@ self: super: with self; {
   pocket = callPackage ../development/python-modules/pocket { };
 
   pocket-tts = callPackage ../development/python-modules/pocket-tts { };
+
+  pocketbase = callPackage ../development/python-modules/pocketbase { };
 
   pocketsphinx = callPackage ../development/python-modules/pocketsphinx {
     inherit (pkgs) pocketsphinx;
@@ -16647,6 +16661,8 @@ self: super: with self; {
 
   pytransportnswv2 = callPackage ../development/python-modules/pytransportnswv2 { };
 
+  pytrec-eval = callPackage ../development/python-modules/pytrec-eval { };
+
   pytricia = callPackage ../development/python-modules/pytricia { };
 
   pytrydan = callPackage ../development/python-modules/pytrydan { };
@@ -16904,6 +16920,8 @@ self: super: with self; {
   qpageview = callPackage ../development/python-modules/qpageview { };
 
   qpsolvers = callPackage ../development/python-modules/qpsolvers { };
+
+  qq-botpy = callPackage ../development/python-modules/qq-botpy { };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
 
@@ -18386,6 +18404,8 @@ self: super: with self; {
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
+
+  slackify-markdown = callPackage ../development/python-modules/slackify-markdown { };
 
   slapd = callPackage ../development/python-modules/slapd { };
 
@@ -21728,6 +21748,8 @@ self: super: with self; {
   webthing = callPackage ../development/python-modules/webthing { };
 
   webthing-ws = callPackage ../development/python-modules/webthing-ws { };
+
+  wecom-aibot-sdk = callPackage ../development/python-modules/wecom-aibot-sdk { };
 
   weconnect = callPackage ../development/python-modules/weconnect { };
 
