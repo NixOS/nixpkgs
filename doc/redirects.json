@@ -3822,6 +3822,9 @@
   "javascript-yarn-v3-v4": [
     "index.html#javascript-yarn-v3-v4"
   ],
+  "javascript-fetchyarndeps": [
+    "index.html#javascript-fetchyarndeps"
+  ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
   ],

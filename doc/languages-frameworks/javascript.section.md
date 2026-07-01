@@ -582,6 +582,29 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+##### `fetchYarnDeps` arguments {#javascript-fetchyarndeps}
+
+`fetchYarnDeps` accepts the following arguments:
+
+- `yarnLock`: Path to the `yarn.lock` file to fetch dependencies for.
+- `hash` (or `sha256`): The output hash of the offline cache.
+- `mirrorUrl`: Optional registry mirror URL used in place of the default yarn
+  registry (`https://registry.yarnpkg.com/`). When set, any resolved URL
+  pointing at the default registry is rewritten to use this mirror before
+  downloading. This is useful for pointing at a local or internal registry
+  mirror. Note that changing the mirror does not change the output hash, since
+  the downloaded contents are identical.
+
+```nix
+{
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    mirrorUrl = "https://registry.npmmirror.com/";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+}
+```
+
 ##### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
 By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
