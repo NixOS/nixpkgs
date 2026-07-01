@@ -8,7 +8,7 @@
   makeWrapper,
   openssl,
   pcre,
-  nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
+  nim-unwrapped ? buildPackages.nim-unwrapped,
 }:
 
 let
@@ -18,7 +18,7 @@ let
       targetPlatformConfig = stdenv.targetPlatform.config;
     in
     stdenv.mkDerivation (finalAttrs: {
-      name = "${targetPlatformConfig}-nim-wrapper-${nimUnwrapped.version}";
+      pname = "${targetPlatformConfig}-nim-wrapper";
       inherit (nimUnwrapped) version;
       preferLocalBuild = true;
       strictDeps = true;
@@ -86,7 +86,7 @@ let
           runHook postBuild
         '';
 
-      wrapperArgs = lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
+      wrapperArgs = [
         "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${placeholder "out"}/bin"
         # Used by nim-gdb
 
@@ -148,6 +148,6 @@ let
     });
 in
 wrapNim {
-  nimUnwrapped = nim-unwrapped-2_2;
+  nimUnwrapped = nim-unwrapped;
   patches = [ ./nim2.cfg.patch ];
 }

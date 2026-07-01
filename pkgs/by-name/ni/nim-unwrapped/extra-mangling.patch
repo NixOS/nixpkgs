@@ -1,0 +1,17 @@
+diff --git a/compiler/modulegraphs.nim b/compiler/modulegraphs.nim
+index 55f751cda..b0b3e3f40 100644
+--- a/compiler/modulegraphs.nim
++++ b/compiler/modulegraphs.nim
+@@ -466,7 +466,11 @@ proc uniqueModuleName*(conf: ConfigRef; m: PSym): string =
+   for i in 0..<trunc:
+     let c = rel[i]
+     case c
+-    of 'a'..'z', '0'..'9':
++    of 'a'..'m':
++      result.add char(c.uint8 + 13)
++    of 'n'..'z':
++      result.add char(c.uint8 - 13)
++    of '0'..'9':
+       result.add c
+     of {os.DirSep, os.AltSep}:
+       result.add 'Z' # because it looks a bit like '/'
