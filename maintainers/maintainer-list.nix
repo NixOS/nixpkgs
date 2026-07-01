@@ -17233,6 +17233,12 @@
     githubId = 31626748;
     name = "Martin Ramm";
   };
+  Martins3 = {
+    email = "hubachelar@gmail.com";
+    github = "Martins3";
+    githubId = 16731244;
+    name = "Xueshi Hu";
+  };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
     github = "marzipankaiser";
