@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   alsa-lib,
-  SDL2,
-  SDL2_ttf,
+  sdl3,
+  sdl3-ttf,
   copyDesktopItems,
   expat,
   fetchurl,
@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
     "TOOLS=1"
+    "OSD=sdl3"
     "USE_LIBSDL=1"
     # "USE_SYSTEM_LIB_ASIO=1"
     "USE_SYSTEM_LIB_EXPAT=1"
@@ -84,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     rapidjson
     pugixml
     glm
-    SDL2
-    SDL2_ttf
+    sdl3
+    sdl3-ttf
     sqlite
     libsForQt5.qtbase
   ]
@@ -135,11 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
   # This replaces the `sw_vers` call with the macOS version actually being
   # targeted, so everything gets linked correctly.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in scripts/src/osd/{mac,sdl}.lua; do
-      substituteInPlace "$file" --replace-fail \
-        'backtick("sw_vers -productVersion")' \
-        "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
-      done
+    substituteInPlace scripts/src/osd/sdl3.lua --replace-fail \
+      'backtick("sw_vers -productVersion")' \
+      "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
   '';
 
   desktopItems = [
