@@ -82,6 +82,8 @@ lib.makeScope newScope (self: {
 
   genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix { };
 
+  gearsystem = self.callPackage ./cores/gearsystem.nix { };
+
   gpsp = self.callPackage ./cores/gpsp.nix { };
 
   gw = self.callPackage ./cores/gw.nix { };
