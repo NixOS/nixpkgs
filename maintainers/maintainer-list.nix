@@ -9014,6 +9014,12 @@
     githubId = 40620903;
     name = "figsoda";
   };
+  filiptronicek = {
+    email = "filip@trnck.dev";
+    github = "filiptronicek";
+    githubId = 29888641;
+    name = "Filip Troníček";
+  };
   fin-w = {
     email = "fin-w@tutanota.com";
     github = "fin-w";
