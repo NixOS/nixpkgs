@@ -134,6 +134,7 @@ in
     systemd.services.ensure-printers = {
       description = "Ensure NixOS-configured CUPS printers";
       wantedBy = [ "multi-user.target" ];
+      partOf = [ "cups.service" ];
       wants = [ "cups.service" ];
       after = [ "cups.service" ];
 
