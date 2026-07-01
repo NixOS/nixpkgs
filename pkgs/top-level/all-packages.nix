@@ -2771,18 +2771,6 @@ with pkgs;
     callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix
       { };
 
-  inherit (callPackages ../tools/security/pinentry { })
-    pinentry-curses
-    pinentry-emacs
-    pinentry-gtk2
-    pinentry-gnome3
-    pinentry-qt
-    pinentry-tty
-    pinentry-all
-    ;
-
-  pinentry_mac = callPackage ../tools/security/pinentry/mac.nix { };
-
   plan9port = callPackage ../tools/system/plan9port {
     inherit (darwin) DarwinTools;
   };
