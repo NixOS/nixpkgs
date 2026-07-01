@@ -633,6 +633,12 @@
     githubId = 749381;
     name = "Adam Tulinius";
   };
+  adamyi = {
+    email = "i@adamyi.com";
+    github = "adamyi";
+    githubId = 5311091;
+    name = "Adam Yi";
+  };
   adda = {
     email = "chocholaty.david@protonmail.com";
     matrix = "@adda0:matrix.org";
