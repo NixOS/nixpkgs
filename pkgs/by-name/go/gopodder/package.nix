@@ -7,6 +7,7 @@
 buildGoModule (finalAttrs: {
   pname = "gopodder";
   version = "1.2.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cbrgm";
