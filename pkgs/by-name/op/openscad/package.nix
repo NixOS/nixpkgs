@@ -30,6 +30,7 @@
   wayland-protocols,
   wrapGAppsHook3,
   cairo,
+  callPackage,
   openscad,
   runCommand,
   versionCheckHook,
@@ -209,16 +210,21 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "openscad";
   };
 
-  passthru.tests = {
-    lib3mf_support =
-      runCommand "${finalAttrs.pname}-lib3mf-support-test"
-        {
-          nativeBuildInputs = [ finalAttrs.finalPackage ];
-        }
-        ''
-          echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
-          echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
-          mv cube-import.3mf $out
-        '';
+  passthru = {
+    tests = {
+      lib3mf_support =
+        runCommand "${finalAttrs.pname}-lib3mf-support-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+            echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+            mv cube-import.3mf $out
+          '';
+    };
+    withPackages = callPackage ./wrapper.nix {
+      openscad = finalAttrs.finalPackage;
+    };
   };
 })
