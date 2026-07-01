@@ -21,7 +21,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchsnapshot";
   version = "0.1.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "torchsnapshot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-F8OaxLH8BL6MPNLFv1hBuVmeEdnEQ5w2Qny6by1wP6k=";
   };
 
@@ -74,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
     homepage = "https://github.com/pytorch/torchsnapshot/";
-    changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${version}";
+    changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
@@ -82,4 +82,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})
