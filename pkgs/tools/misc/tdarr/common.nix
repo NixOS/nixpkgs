@@ -25,6 +25,7 @@
   perl,
   apprise,
   openssl,
+  nixosTests,
 }:
 {
   pname,
@@ -199,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       command = [ ./update-hashes.sh ];
       supportedFeatures = [ "commit" ];
     };
+    tests.nixos = nixosTests.tdarr;
   }
   // passthru;
 

@@ -18,6 +18,7 @@ symlinkJoin {
   passthru = {
     server = tdarr-server;
     node = tdarr-node;
+    tests = tdarr-server.tests or { } // tdarr-node.tests or { };
   };
 
   meta = {
