@@ -6,22 +6,22 @@
 
   # build-system
   hatchling,
-  poetry-core,
 
   # dependencies
   docling,
+  pydantic,
   pydantic-settings,
   typer,
   boto3,
   pandas,
-  fastparquet,
-  pyarrow,
   httpx,
 
   # optional dependencies
   ray,
   rq,
   msgpack,
+  google-api-python-client,
+  google-auth-oauthlib,
 
   # tests
   pytestCheckHook,
@@ -31,29 +31,27 @@
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.8.1";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-9DzQY/XMmx/8XP1bMYZYl+Bp7AVcYfuv3MtO6lvQ/24=";
+    hash = "sha256-uFISZDwj2F9O+3QQiOBApwaPD5ac8C+m+jm9o7SOBnI=";
   };
 
   build-system = [
     hatchling
-    poetry-core
   ];
 
   dependencies = [
     docling
+    pydantic
     pydantic-settings
     typer
     boto3
     pandas
-    fastparquet
-    pyarrow
     httpx
   ];
 
@@ -63,12 +61,16 @@ buildPythonPackage rec {
       rq
       msgpack
     ];
+    gdrive = [
+      google-api-python-client
+      google-auth-oauthlib
+    ];
   };
 
   pythonRelaxDeps = [
     "boto3"
     "pandas"
-    "pyarrow"
+    "pydantic"
   ];
 
   pythonImportsCheck = [
@@ -102,6 +104,6 @@ buildPythonPackage rec {
     description = "Running a distributed job processing documents with Docling";
     homepage = "https://github.com/docling-project/docling-jobkit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ codgician ];
+    maintainers = [ ];
   };
 }
