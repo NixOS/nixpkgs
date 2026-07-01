@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.13.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-gxZ20qpG3iXwY21fY2lvafWudcnsqN6hOml1UR9fPKQ=";
+    sha256 = "sha256-G7DPiTYjm+8cMA9la88Erl5qHy/8I4j+SJK1rlAtgPA=";
   };
 
   outputs = [
