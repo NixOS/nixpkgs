@@ -41,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slack-bolt";
-  version = "1.28.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1AJO7+7YG/NFh6Rmqwkm6yua2LWdYQ9Rv1oadfHAlhE=";
+    hash = "sha256-3U15V++q/x73LuEgw9uWaIGWulJmPkmkpUxxK1EXuzU=";
   };
 
   build-system = [ setuptools ];
