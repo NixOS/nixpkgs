@@ -15,13 +15,13 @@
 let
   pname = "headplane";
   # Note, if you are upgrading this, you should upgrade headplane-agent at the same time
-  version = "0.6.2";
+  version = "0.6.3";
   pnpmDepsHash = "sha256-CsmffCo9Se/4oiOqbcuhjPMuGmR2GL+YfcyWgzBTAh8=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-2C/Pn2M2aHADtoljSFg9hz6xOaZp6IRI77jjy+LDAgw=";
+    hash = "sha256-zvJUTKRIlHyPMq80teVXBSb7K9Zz44Kuuj2PPi6qIOw=";
   };
 
   headplaneSshWasm = buildGoModule {
