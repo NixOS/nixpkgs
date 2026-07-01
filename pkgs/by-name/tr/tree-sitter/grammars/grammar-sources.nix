@@ -2943,6 +2943,18 @@
     };
   };
 
+  vcl = rec {
+    version = "0.3.1";
+    url = "github:ntsk/tree-sitter-vcl?ref=v${version}";
+    hash = "sha256-aqEKHAb/ILoVAG2h/VuAn83HRZamrEgcjIGPatcQCfI=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        ntsk
+      ];
+    };
+  };
+
   vento = {
     version = "0-unstable-2026-02-23";
     url = "github:ventojs/tree-sitter-vento";
