@@ -53,6 +53,23 @@ let
 
   postgresqlPackage =
     if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
+
+  machineLearningPackage =
+    if cfg.machine-learning.acceleration != null then
+      cfg.package.machine-learning.override {
+        python3 = pkgs.python3.override {
+          packageOverrides = _: pyPrev: {
+            onnxruntime = pyPrev.onnxruntime.override {
+              onnxruntime = pkgs.onnxruntime.override {
+                cudaSupport = cfg.machine-learning.acceleration == "cuda";
+                rocmSupport = cfg.machine-learning.acceleration == "rocm";
+              };
+            };
+          };
+        };
+      }
+    else
+      cfg.package.machine-learning;
 in
 {
   imports = [
@@ -198,6 +215,31 @@ in
         // {
           default = true;
         };
+      acceleration = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "cuda"
+            "rocm"
+          ]
+        );
+        default = null;
+        example = "cuda";
+        description = ''
+          Hardware acceleration backend for Immich machine learning.
+
+          When set, this sets `DEVICE` to the selected backend and runs Immich machine learning with an `onnxruntime` package built with the matching accelerator support.
+        '';
+      };
+      hsaGfxVersion = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "11.0.0";
+        description = ''
+          Override what ROCm detects the GPU model as for Immich machine learning.
+
+          This sets `HSA_OVERRIDE_GFX_VERSION` when non-null. Leave this as `null` to preserve native ROCm gfx detection. For example, RX 7900 XTX users may need `"11.0.0"`.
+        '';
+      };
       environment = mkOption {
         type = types.submodule { freeformType = types.attrsOf types.str; };
         default = { };
@@ -275,6 +317,11 @@ in
       {
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
+      }
+      {
+        assertion =
+          cfg.machine-learning.hsaGfxVersion == null || cfg.machine-learning.acceleration == "rocm";
+        message = "`services.immich.machine-learning.hsaGfxVersion` can only be set when `services.immich.machine-learning.acceleration` is `\"rocm\"`.";
       }
     ];
 
@@ -383,6 +430,12 @@ in
       XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
+    }
+    // lib.optionalAttrs (cfg.machine-learning.acceleration != null) {
+      DEVICE = cfg.machine-learning.acceleration;
+    }
+    // lib.optionalAttrs (cfg.machine-learning.hsaGfxVersion != null) {
+      HSA_OVERRIDE_GFX_VERSION = cfg.machine-learning.hsaGfxVersion;
     };
 
     systemd.slices.system-immich = {
@@ -428,7 +481,7 @@ in
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe cfg.package.machine-learning;
+        ExecStart = lib.getExe machineLearningPackage;
         Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;
