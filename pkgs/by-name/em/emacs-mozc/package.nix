@@ -1,49 +1,34 @@
 {
   lib,
-  fetchFromGitHub,
-  qt6,
   pkg-config,
-  bazel_8,
-  xdg-utils,
   python3,
-  libglvnd,
   libxcrypt-legacy,
+  glib,
   stdenv,
   writableTmpDirAsHomeHook,
   lndir,
-
-  dictionaries ? [ ],
-  merge-ut-dictionaries,
+  mozc,
 }:
 let
-  bazel = bazel_8;
-
-  ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
-
-  pname = "mozc-server";
-  version = "3.33.6133";
-
-  src = fetchFromGitHub {
-    owner = "google";
-    repo = "mozc";
-    tag = version;
-    hash = "sha256-4ZrCIWoqYjoBwaoXq2QGajIQgWP0m2V3ozWQhZIq138=";
-    fetchSubmodules = true;
-  };
+  inherit (mozc)
+    version
+    src
+    bazel
+    bazelPythonPatch
+    ;
+  pname = "emacs-mozc";
 
   nativeBuildInputs = [
     bazel
     lndir
     pkg-config
     python3
-    qt6.wrapQtAppsHook
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    libglvnd
+    glib
     libxcrypt-legacy
-    qt6.qtbase
   ];
 
   includePath = lib.makeIncludePath buildInputs;
@@ -56,33 +41,8 @@ let
     "--action_env=C_INCLUDE_PATH=${includePath}"
     "--action_env=CPLUS_INCLUDE_PATH=${includePath}"
     "--action_env=LIBRARY_PATH=${libraryPath}"
-    "gui/tool:mozc_tool"
-    "server:mozc_server"
+    "unix/emacs:mozc_emacs_helper"
   ];
-
-  bazelPythonPatch = ''
-    local_runtime_repo = use_repo_rule(
-        "@rules_python//python/local_toolchains:repos.bzl",
-        "local_runtime_repo",
-    )
-    local_runtime_toolchains_repo = use_repo_rule(
-        "@rules_python//python/local_toolchains:repos.bzl",
-        "local_runtime_toolchains_repo",
-    )
-
-    local_runtime_repo(
-        name = "local_python3",
-        interpreter_path = "python3",
-        on_failure = "fail",
-    )
-
-    local_runtime_toolchains_repo(
-        name = "local_toolchains",
-        runtimes = ["local_python3"],
-    )
-
-    register_toolchains("@local_toolchains//:all")
-  '';
 
   # vendoring: run "bazel vendor" to download all external dependencies,
   # then clean up sandbox-specific symlinks and markers so the output
@@ -97,7 +57,7 @@ let
         buildInputs
         ;
 
-      hash = "sha256-yFw2DcwbzGETXlh84VtBHG0HLundx5VJV+qP7PDbMic=";
+      hash = "sha256-/3skENyFujuslRXWg3sm2IFCzqV+zU4vxE0NxEs2vwE=";
       outputHashMode = "recursive";
 
       strictDeps = true;
@@ -152,9 +112,10 @@ stdenv.mkDerivation {
     EOF
 
     substituteInPlace config.bzl \
-      --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open" \
+      --replace-fail "/usr/lib/mozc" "${mozc}/lib/mozc" \
       --replace-fail "/usr" "$out"
 
+    # setup vendor dir
     cp -r --no-preserve=mode "${vendorDeps}"/* .
     substituteInPlace \
       vendor_dir/rules_python*/python/private/py_runtime_info.bzl \
@@ -165,9 +126,6 @@ stdenv.mkDerivation {
     for dir in vendor_dir/*/; do
       echo "pin(\"@@$(basename "$dir")\")"
     done > vendor_dir/VENDOR.bazel
-  ''
-  + lib.optionalString (dictionaries != [ ]) ''
-    cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
   '';
 
   buildPhase = ''
@@ -181,17 +139,18 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 bazel-bin/server/mozc_server "$out/lib/mozc/mozc_server"
-    install -Dm555 bazel-bin/gui/tool/mozc_tool "$out/lib/mozc/mozc_tool"
+    install -Dm555 bazel-bin/unix/emacs/mozc_emacs_helper "$out/bin/mozc_emacs_helper"
+    install -Dm444 unix/emacs/mozc.el                     "$out/share/emacs/site-lisp/emacs-mozc/mozc.el"
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit vendorDeps bazel bazelPythonPatch;
+    inherit vendorDeps;
   };
   meta = {
     description = "Japanese input method from Google";
+    mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
