@@ -2059,7 +2059,6 @@ dont-distribute-packages:
  - liquid-base
  - liquid-bytestring
  - liquid-containers
- - liquid-platform
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser

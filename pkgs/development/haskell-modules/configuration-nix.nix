@@ -1094,7 +1094,8 @@ builtins.intersectAttrs super {
     testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
   }) super.smtlib-backends-process;
 
-  # overrideCabal because the tests need to execute the built executable "fixpoint"
+  # overrideCabal because the tests need to execute the built executable "fixpoint",
+  # and the installed fixpoint executable shells out to z3/cvc5 at runtime.
   liquid-fixpoint = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/fixpoint:$PATH
@@ -1104,7 +1105,40 @@ builtins.intersectAttrs super {
       pkgs.cvc5
       pkgs.z3
     ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
   }) super.liquid-fixpoint;
+
+  # Same plumbing as the base liquid-fixpoint above; the alias is selected by
+  # the GHC 9.12 LiquidHaskell stack.
+  liquid-fixpoint_0_9_6_3_5 = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/fixpoint:$PATH
+    ''
+    + (drv.preCheck or "");
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
+  }) super.liquid-fixpoint_0_9_6_3_5;
 
   # overrideCabal because
   # - tests need to execute the built executable "liquid"

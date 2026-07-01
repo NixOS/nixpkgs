@@ -2982,6 +2982,27 @@ with haskellLib;
   # including the current one in nixpkgs.
   liquid-fixpoint = dontCheck super.liquid-fixpoint;
 
+  # liquid-* wrappers run the LH plugin in Custom Setup, so z3 needed at build time.
+  liquid-parallel = doJailbreak (addBuildTool pkgs.z3 super.liquid-parallel);
+  liquid-prelude = addBuildTool pkgs.z3 super.liquid-prelude;
+  liquid-vector = addBuildTool pkgs.z3 super.liquid-vector;
+
+  # patches from mgsloan/store#184 and mgsloan/store#185
+  store = appendPatches [
+    (pkgs.fetchpatch2 {
+      name = "store-isthname-ghc-internal-th-syntax.patch";
+      url = "https://github.com/mgsloan/store/commit/c42e0f1eb4fab73abe30c3a24ce14d027e3c5ff6.patch";
+      hash = "sha256-l7SHDuanT1mQGm0KtJQVET1D/XlJw4bpDXKQKqxqEy4=";
+      excludes = [ "ChangeLog.md" ];
+    })
+    (pkgs.fetchpatch2 {
+      name = "store-ctimer-lookuptypename.patch";
+      url = "https://github.com/mgsloan/store/commit/ebb6d72add5394ad0b02824cfe870688d359b63a.patch";
+      hash = "sha256-Dn9vaCHTQumDp2c7yIlYRc83WSua5VfnsU1cOrwWMMA=";
+      excludes = [ "ChangeLog.md" ];
+    })
+  ] super.store;
+
   # 2025-8-26: Too strict bounds on containers and text, see: https://github.com/stackbuilders/inflections-hs/pull/83
   inflections = doJailbreak super.inflections;
 
