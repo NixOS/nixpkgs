@@ -2,15 +2,16 @@ import os
 import tempfile
 import subprocess
 from pathlib import Path
+from typing import List
 from .args import VarsArgs
 from .config import VarsConfig
 from .exec import rebuild_order, build_binary, get_secret, set_secret
 from .error import VarsError
 
 
-def generate_vars(args: VarsArgs, config: VarsConfig):
-	order = rebuild_order(config)
-
+def generate_vars_from_order(
+	args: VarsArgs, config: VarsConfig, order: List[str]
+):
 	# NOTE: we are going to run the scripts inside bubblewrap, thus sharing a
 	# single temporary directory is not a concern.
 	with tempfile.TemporaryDirectory() as temp:
@@ -61,3 +62,17 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 					)
 
 	print(f"Successfully (re)run {len(order)} generator(s).")
+
+
+def generate_vars(args: VarsArgs, config: VarsConfig):
+	order = rebuild_order(config)
+	generate_vars_from_order(args, config, order)
+
+
+def regenerate_vars(args: VarsArgs, config: VarsConfig):
+	for gen_name in args.generators:
+		if gen_name not in config.generators:
+			raise VarsError(f"Invalid generator '{gen_name}'")
+
+	order = rebuild_order(config, args.generators)
+	generate_vars_from_order(args, config, order)
