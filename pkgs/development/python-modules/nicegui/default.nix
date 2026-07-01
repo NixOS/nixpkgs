@@ -47,14 +47,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.12.1";
+  version = "3.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pm8jUDdpRvPDVwHXHGwuqPogpE/HMS19uJ5beWch7TE=";
+    hash = "sha256-FSz+64H9iSc9gVGFQdBQS7Rbx6oQ5VK1zc7w0GjrRvg=";
   };
 
   pythonRelaxDeps = [
@@ -63,6 +63,8 @@ buildPythonPackage (finalAttrs: {
     "orjson"
     "python-multipart"
     "requests"
+    "aiohttp"
+    "starlette"
   ];
 
   build-system = [
