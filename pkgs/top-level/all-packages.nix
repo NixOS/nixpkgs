@@ -3689,6 +3689,95 @@ with pkgs;
     }
   );
 
+  gcobol = wrapCC (
+    gcc.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gcobol15 = wrapCC (
+    gcc15.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gcobol16 = wrapCC (
+    gcc16.cc.override {
+      name = "gcobol";
+      langCC = true; # required for cobol.
+      langC = true;
+      langJit = true;
+      langCobol = true;
+      profiledCompiler = false;
+    }
+  );
+
+  # Cannot override gcc.cc, as this is built at in earlier stdenv bootstrapping
+  # stage (in the native case), which doesn't have a fully-fledged fetchurl.
+  # fetchurl is required to build cargo, and thus evaluation fails as it cannot
+  # properly build the nativeBuildInputs of gccrs. Replace this with a proper
+  # override when cargo is no longer a dependency of gccrs
+  gccrs = pkgs."gccrs${toString default-gcc-version}";
+
+  gccrs14 = wrapCC (
+    gcc14.cc.override {
+      name = "gccrs";
+      langCC = true; # required for rust.
+      langC = true;
+      langJit = true;
+      langRust = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gccrs15 = wrapCC (
+    gcc15.cc.override {
+      name = "gccrs";
+      langCC = true; # required for rust.
+      langC = true;
+      langJit = true;
+      langRust = true;
+      profiledCompiler = false;
+    }
+  );
+
+  gccrs16 = wrapCC (
+    gcc16.cc.override {
+      name = "gccrs";
+      langCC = true; # required for rust.
+      langC = true;
+      langJit = true;
+      langRust = true;
+      profiledCompiler = false;
+    }
+  );
+
+  # Currently the algol68 frontend is only supported on gcc16+
+  # When gcc16 becomes the default gcc version, replace with a gcc.cc.override
+  # like above
+  ga68 = ga68_16;
+
+  ga68_16 = wrapCC (
+    gcc16.cc.override {
+      name = "ga68";
+      langC = true;
+      langCC = true;
+      langJit = true;
+      langAlgol68 = true;
+      profiledCompiler = false;
+    }
+  );
+
   ghdl-mcode = ghdl.override { backend = "mcode"; };
 
   ghdl-gcc = ghdl.override { backend = "gcc"; };
