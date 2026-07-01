@@ -1,60 +1,52 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchFromCodeberg,
   cmake,
   python3Packages,
-  libsForQt5,
-  SDL2,
+  qt6,
+  sdl3,
   fmt,
   toml11,
   libunarr,
 }:
 
-let
-  gladSrc = fetchFromGitHub {
-    owner = "Dav1dde";
-    repo = "glad";
-    rev = "v2.0.5";
-    hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.2";
+  version = "1.8.3-unstable-2026-05-17";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
+    # There are fixes for Wayland (as well as SDL3) after the last release
+    # that need to be included to get something that runs on Wayland
+    #rev = "v${finalAttrs.version}";
+    rev = "e09c3c1a753c6f85c86568a0b88ba79e230b6a07";
+    hash = "sha256-ud/Fau0VKKpTi6PEji/7hdhL1kbI6BD5KUdqzLqDkfU=";
   };
 
-  patches = [
-    # <https://github.com/nba-emu/NanoBoyAdvance/pull/410>
-    ./fix-toml11-4.0.patch
+  # As the environment variable can be overridden, until the Wayland + EGL
+  # issue is resolved "xcb" must be forced over "wayland". Upstream notes that
+  # this affects other emulators + Steam too.
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   nativeBuildInputs = [
     cmake
     python3Packages.jinja2
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    SDL2
+    qt6.qtbase
+    sdl3
     fmt
     toml11
     libunarr
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
-    (lib.cmakeBool "USE_SYSTEM_FMT" true)
-    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
     (lib.cmakeBool "PORTABLE_MODE" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -62,15 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MACOS_BUNDLE_QT" false)
   ];
 
+  postPatch = ''
+    substituteInPlace thirdparty/unarr-1.1.1-patch/CMakeLists.txt \
+      --replace-fail "-flto" ""
+  '';
+
   # Make it runnable from the terminal on Darwin
-  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin /* bash */ ''
     mkdir "$out/bin"
     ln -s "$out/Applications/NanoBoyAdvance.app/Contents/MacOS/NanoBoyAdvance" "$out/bin/NanoBoyAdvance"
   '';
 
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
-    homepage = "https://github.com/nba-emu/NanoBoyAdvance";
+    homepage = "https://nanoboyadvance.eu/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";
     maintainers = with lib.maintainers; [ tomasajt ];
