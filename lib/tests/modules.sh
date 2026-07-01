@@ -135,6 +135,29 @@ checkExpression() {
   }
 }
 
+checkConfigWarning() {
+    local warningContains=$1
+    local err=""
+    shift
+    if ! err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
+        logStartFailure
+        echo "ACTUAL: non-zero exit code, stderr:"
+        echo "$err"
+        echo "EXPECTED: exit code 0 with warning matching '$warningContains'"
+        logFailure
+        logEndFailure
+    elif echo "$err" | grep -E --silent "$warningContains" ; then
+        ((++pass))
+    else
+        logStartFailure
+        echo "ACTUAL stderr:"
+        echo "$err"
+        echo "EXPECTED: warning matching '$warningContains'"
+        logFailure
+        logEndFailure
+    fi
+}
+
 checkConfigError() {
     local errorContains=$1
     local err=""
@@ -437,6 +460,11 @@ checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./
 checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
+
+# Check nestedAttrsOf
+checkConfigOutput '^3$' config.value.b.d.e ./declare-nested-attrs.nix
+checkConfigError 'A definition for option .* is not of type .*' config.value.b.f ./declare-nested-attrs-unsound.nix
+checkConfigError 'expected an attribute set with keys from \[request, result\]' config.value.consumer ./declare-nested-attrs-misshapen.nix
 
 # submoduleWith
 
@@ -787,6 +815,10 @@ checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
 
+checkConfigOutput '2' config.bar.baz ./evalOption.nix
+checkConfigError 'not of type' config.foo.boo.bar ./extendOption.nix
+checkConfigError 'not of type' config.foo.boo.bar ./extendSubmodule.nix
+
 # specialArgs._class
 checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix
 checkConfigOutput '"bar"' config.conditionalImportAsNixos.config.foo ./specialArgs-class.nix
@@ -858,6 +890,63 @@ checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitio
 
 # attrListOf does not support type merging
 checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
+
+# contracts: basic want -> instances -> results round-trip (no mkContract or mkProviderType)
+checkConfigOutput '^6$' config.contracts.basic.results.consumer.x.value ./contracts-basic.nix
+
+# contracts: provider selection mechanisms
+# byRef: non-overridden instance falls back to defaultProvider (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.default ./contracts-provider-selection.nix
+# by reference: per-instance override (double: 5 * 2 = 10)
+checkConfigOutput '^10$' config.result.override ./contracts-provider-selection.nix
+# by name: defaultProviderName enum (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.by ./contracts-provider-selection.nix
+# instances-only routing: a leaf routed via an `instances` override resolves
+# even with no defaultProvider (increment: 5 + 1 = 6)
+checkConfigOutput '^6$' config.result.instancesOnly ./contracts-provider-selection.nix
+# unrouted leaf (no default, no override): accessing its result errors clearly
+checkConfigError 'contracts\.noProvider: an instance is .want.ed but routed to no provider' config.contracts.noProvider.results.consumer.unrouted.value ./contracts-provider-selection.nix
+# providerRequests: each provider's slice gathers only the requests routed to it
+# (default increment gets every instance but the `consumer.fast` override; double gets only it).
+checkConfigOutput '^"instance,slow"$' config.routed.increment ./contracts-provider-selection.nix
+checkConfigOutput '^"fast"$' config.routed.double ./contracts-provider-selection.nix
+# the routed slice mirrors `requests`, so request values survive
+checkConfigOutput '^"5"$' config.routed.incrementValue ./contracts-provider-selection.nix
+
+# contracts: deployer write at a `providerOptions` leaf must not mask consumer wants
+# (regression for the `_requests` re-application at `mkDefault` in mkProviderType).
+checkConfigOutput '^12$' config.contracts.wantForwarding.results.consumer.instance.value ./contracts-partial-overrides.nix
+
+# contracts: mkContract propagates request option defaults via extendSubmodule
+checkConfigOutput '^42$' config.result ./contracts-mkcontract.nix
+
+# contracts: varying nesting depths in want (flat, grouped, deeply nested)
+checkConfigOutput '^2$' config.contracts.arithmetic.results.myapp.simple.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^11$' config.contracts.arithmetic.results.myapp.db.primary.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^21$' config.contracts.arithmetic.results.myapp.db.replica.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^101$' config.contracts.arithmetic.results.myapp.caches.region-a.fast.value ./contracts-nesting-consumer.nix
+checkConfigOutput '^201$' config.contracts.arithmetic.results.myapp.caches.region-b.fast.value ./contracts-nesting-consumer.nix
+
+# contracts: providers' contract option may live at any nesting depth
+checkConfigOutput '^6$' config.contracts.depth0.results.consumer.instance.value ./contracts-nesting-provider.nix
+checkConfigOutput '^15$' config.contracts.depth1.results.consumer.instance.value ./contracts-nesting-provider.nix
+checkConfigOutput '^105$' config.contracts.depth2.results.consumer.instance.value ./contracts-nesting-provider.nix
+
+# contracts: request values are type-checked (string where int expected)
+checkConfigError 'is not of type.*signed integer' config.contracts.arithmetic.results.consumer.instance.value ./contracts-request-typecheck.nix
+
+# contracts: submodule-typed request options survive the want -> requests -> results round-trip
+checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.myapp.db.url ./contracts-submodule-request.nix
+
+# contracts: using a renamed contract name emits a deprecation warning in config.warnings
+checkConfigOutput 'oldName.*renamed.*newName' config.result ./contracts-contract-rename.nix
+# contracts: using a renamed contract name still produces the correct result
+checkConfigOutput '^6$' config.contracts.oldName.results.consumer.instance.value ./contracts-contract-rename.nix
+
+# contracts: using a renamed request option still forwards the value correctly
+checkConfigOutput '^6$' config.contracts.versioned.results.consumer.instance.value ./contracts-rename-warning.nix
+# contracts: using a renamed request option emits a deprecation warning on stderr
+checkConfigWarning 'request\.oldValue.*renamed.*request\.newValue' config.contracts.versioned.results.consumer.instance.value ./contracts-rename-warning.nix
 
 cat <<EOF
 ====== module tests ======
