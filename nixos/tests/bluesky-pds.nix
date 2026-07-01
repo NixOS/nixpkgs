@@ -2,7 +2,7 @@
 {
   name = "PDS";
 
-  nodes.machine = {
+  containers.machine = {
     services.bluesky-pds = {
       enable = true;
       settings = {
