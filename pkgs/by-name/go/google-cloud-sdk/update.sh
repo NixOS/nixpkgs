@@ -47,10 +47,35 @@ EOF
 
 } > "${PACKAGE_DIR}/data.nix"
 
-# nixpkgs uses its own Python wrapper; do not generate bundled Python components.
+# nixpkgs uses its own Python and only installs Linux/Darwin components.
+# Drop unsupported component metadata to reduce the generated JSON file size.
 curl -s "${CHANNEL_URL}/components-v${VERSION}.json" | jq '
+    def is_bundled_python_component:
+      .id | startswith("bundled-python3");
+
+    def is_unsupported_os_only_component:
+      (.platform.operating_systems // []) as $oses
+      | ($oses | length > 0)
+      and ([$oses[] | select(. == "LINUX" or . == "MACOSX")] | length == 0);
+
+    def is_unsupported_component:
+      is_bundled_python_component or is_unsupported_os_only_component;
+
+    (.components | map(select(is_unsupported_component) | .id)) as $dropped
+    |
+    def drop_unsupported_dependencies:
+      .dependencies = ((.dependencies // []) | map(. as $dep | select($dropped | index($dep) | not)));
+
+    def drop_unsupported_operating_systems:
+      if .platform.operating_systems then
+        .platform.operating_systems |= map(select(. == "LINUX" or . == "MACOSX"))
+      else
+        .
+      end;
+
     .components |= map(
-      select(.id | startswith("bundled-python3") | not)
-      | .dependencies = ((.dependencies // []) | map(select(startswith("bundled-python3") | not)))
+      select(is_unsupported_component | not)
+      | drop_unsupported_dependencies
+      | drop_unsupported_operating_systems
     )
 ' > "${PACKAGE_DIR}/components.json"
