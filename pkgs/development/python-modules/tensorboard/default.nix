@@ -14,30 +14,26 @@
   setuptools,
   tensorboard-data-server,
   werkzeug,
-  standard-imghdr,
 
+  # tests
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboard";
-  version = "2.20.0";
+  version = "2.21.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   # tensorflow/tensorboard is built from a downloaded wheel, because
   # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
+    hash = "sha256-cnkxbctr1bw5HWI96oQVMSmc3hiHMQ6BM7w0qZbTIlU=";
   };
-
-  pythonRelaxDeps = [
-    "google-auth-oauthlib"
-    "protobuf"
-  ];
 
   dependencies = [
     absl-py
@@ -50,11 +46,6 @@ buildPythonPackage rec {
     setuptools
     tensorboard-data-server
     werkzeug
-
-    # Requires 'imghdr' which has been removed from python in 3.13
-    # ModuleNotFoundError: No module named 'imghdr'
-    # https://github.com/tensorflow/tensorboard/issues/6964
-    standard-imghdr
   ];
 
   pythonImportsCheck = [
@@ -72,12 +63,15 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
+    downloadPage = "https://github.com/tensorflow/tensorboard";
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${finalAttrs.version}/RELEASE.md";
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
