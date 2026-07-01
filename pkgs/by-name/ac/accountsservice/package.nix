@@ -19,6 +19,7 @@
   vala,
   gettext,
   libxcrypt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -106,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "run_command(['./generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
   '';
+
+  passthru.tests = { inherit (nixosTests) accountsservice; };
 
   meta = {
     changelog = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/releases/${finalAttrs.src.tag}";

@@ -25,10 +25,12 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
+  openvinoSupport ? stdenv.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
   cudaPackages ? { },
+  openvino,
   rocmPackages,
 }@inputs:
 
@@ -234,6 +236,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     rocmPackages.rocm-smi
     rocmPackages.roctracer
   ]
+  ++ lib.optionals openvinoSupport [
+    openvino
+  ]
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     (darwinMinVersionHook "13.3")
   ];
@@ -291,6 +296,23 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+  ]
+  ++ lib.optionals openvinoSupport [
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
+    (lib.cmakeFeature "onnxruntime_USE_OPENVINO_AUTO" (
+      if effectiveStdenv.hostPlatform.system == "x86_64-linux" then "NPU,GPU,CPU" else "GPU"
+    ))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_GPU" true)
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_CPU" (
+      effectiveStdenv.hostPlatform.system == "x86_64-linux"
+    ))
+    (lib.cmakeBool "onnxruntime_USE_OPENVINO_NPU" (
+      effectiveStdenv.hostPlatform.system == "x86_64-linux"
+    ))
+    (lib.cmakeFeature "OpenVINO_DIR" "${lib.getDev openvino}/runtime/cmake")
+    # RTTI is disabled in default non-python builds (https://onnxruntime.ai/docs/build/custom.html#basic),
+    # but disabling it with OpenVINO will fail with `error: cannot use 'typeid' with '-fno-rtti'`
+    (lib.cmakeBool "onnxruntime_DISABLE_RTTI" false)
   ]
   ++ lib.optionals pythonSupport [
     (lib.cmakeBool "onnxruntime_ENABLE_PYTHON" true)

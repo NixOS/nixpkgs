@@ -20,14 +20,14 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
-  version = "1.3.1";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-42R4GrFioePGOiM/p9LLE3PR/TYhhnjwa9V/kvP4SWE=";
+    hash = "sha256-uZkXpzRIDzn6wT3GmwNQbtf2/G9ddU13f7iMkj9Qopc=";
   };
 
   nativeBuildInputs = [

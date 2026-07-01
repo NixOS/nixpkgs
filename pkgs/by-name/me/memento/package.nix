@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mg6Gxy8FwqNjE9m4uOQnEY95PZJSQllDBU2KnS8UOHE=";
+    hash = "sha256-A3moOjXubXSggaWaSpuYzp9mKIZYcgMehMG/qkUAtas=";
   };
 
   postPatch = ''

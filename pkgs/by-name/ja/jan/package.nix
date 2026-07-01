@@ -12,16 +12,16 @@
 
 let
   pname = "Jan";
-  version = "0.8.2";
+  version = "0.8.3";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-DUyPMsy9POcxY5OyQu1IBAijTbUZACQB87j0CQDrw8A=";
+    hash = "sha256-h2v71DzXez/+wlEp8IMVBk33LlXPhNPJ1UPNLYPShoE=";
   };
 
   linux-src = fetchurl {
-    url = "https://github.com/janhq/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-OWg8P4g2g+LVJU+SnjajG2cqWnzl5X2fjqTGkIC3kAY=";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
+    hash = "sha256-vEmioWQ4ic/FrtNFMKaLOcEy2BTRdouPc4PYWk90ZBI=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -29,11 +29,14 @@ let
     src = linux-src;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "Jan";
     maintainers = with lib.maintainers; [ dfjay ];
     platforms =
@@ -56,24 +59,19 @@ let
         cudaPackages.cudatoolkit
       ];
 
-    inherit meta;
+    inherit passthru meta;
   };
 
   darwin = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      meta
-      ;
+    inherit pname version;
 
     src = darwin-src;
 
-    dontUnpack = true;
-
-    sourceRoot = "${pname}.app";
     nativeBuildInputs = [
       makeWrapper
     ];
+
+    dontUnpack = true;
 
     installPhase = ''
       runHook preInstall
@@ -87,6 +85,8 @@ let
 
       runHook postInstall
     '';
+
+    inherit passthru meta;
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

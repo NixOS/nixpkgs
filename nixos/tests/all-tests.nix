@@ -174,6 +174,7 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
+  accountsservice = runTest ./accountsservice.nix;
   acl = pkgs.callPackage ./acl.nix { };
   acme = import ./acme/default.nix {
     inherit runTest;
@@ -701,6 +702,7 @@ in
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
   gocd-server = runTest ./gocd-server.nix;
+  gocron = runTest ./gocron.nix;
   gocryptfs = runTest ./gocryptfs.nix;
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;

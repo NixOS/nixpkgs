@@ -39,6 +39,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
       [
         evdev
       ]
+    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with python3Packages;
+      [
+        pyobjc-core
+        pyobjc-framework-Cocoa
+        pyobjc-framework-Quartz
+      ]
     );
 
   installPhase = ''
@@ -51,6 +59,31 @@ python3Packages.buildPythonApplication (finalAttrs: {
     install -Dm644 images/logo_icon.png $out/share/pixmaps/mouser.png
     install -Dm444 packaging/linux/69-mouser-logitech.rules \
       -t $out/lib/udev/rules.d
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    appBundle="$out/Applications/Mouser.app"
+    mkdir -p "$appBundle/Contents/MacOS" "$appBundle/Contents/Resources"
+    install -Dm644 images/AppIcon.icns "$appBundle/Contents/Resources/AppIcon.icns"
+
+    cat > "$appBundle/Contents/Info.plist" <<'EOF'
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>CFBundleName</key><string>Mouser</string>
+      <key>CFBundleDisplayName</key><string>Mouser</string>
+      <key>CFBundleExecutable</key><string>Mouser</string>
+      <key>CFBundleIdentifier</key><string>io.github.tombadash.mouser</string>
+      <key>CFBundleIconFile</key><string>AppIcon</string>
+      <key>CFBundleShortVersionString</key><string>${finalAttrs.version}</string>
+      <key>CFBundleVersion</key><string>${finalAttrs.version}</string>
+      <key>CFBundlePackageType</key><string>APPL</string>
+      <key>NSHighResolutionCapable</key><true/>
+      <key>LSUIElement</key><true/>
+      <key>LSMinimumSystemVersion</key><string>12.0</string>
+    </dict>
+    </plist>
+    EOF
   ''
   + ''
     runHook postInstall
@@ -70,6 +103,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ''
   + ''
     --add-flags "$out/share/mouser/main_qml.py"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper $out/bin/mouser $out/Applications/Mouser.app/Contents/MacOS/Mouser
   '';
 
   desktopItems = lib.optionals stdenv.hostPlatform.isLinux [

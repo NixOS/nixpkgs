@@ -1722,8 +1722,6 @@ with pkgs;
     util-linux = util-linuxMinimal;
   };
 
-  apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
-
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
   };
@@ -2542,10 +2540,6 @@ with pkgs;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
-  mir-qualia = callPackage ../tools/text/mir-qualia {
-    pythonPackages = python3Packages;
-  };
-
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
   mjpegtoolsFull = mjpegtools.override {
@@ -2883,10 +2877,6 @@ with pkgs;
 
   rmate = rubyPackages.rmate;
 
-  rmlint = callPackage ../tools/misc/rmlint {
-    inherit (python3Packages) sphinx;
-  };
-
   rpatool = with python3Packages; toPythonApplication rpatool;
 
   rpm = callPackage ../tools/package-management/rpm {
@@ -2969,10 +2959,6 @@ with pkgs;
     libxml2 = libxml2Python;
   };
 
-  privoxy = callPackage ../tools/networking/privoxy {
-    w3m = w3m-batch;
-  };
-
   tartube-yt-dlp = tartube.override {
     youtube-dl = yt-dlp;
   };
@@ -3036,9 +3022,9 @@ with pkgs;
   voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
   voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
 
-  openconnectPackages = callPackage ../tools/networking/openconnect { };
-
-  inherit (openconnectPackages) openconnect openconnect_openssl;
+  openconnectPackages = {
+    inherit openconnect openconnect_openssl;
+  };
 
   buildWasmBindgenCli = callPackage ../build-support/wasm-bindgen-cli { };
 
@@ -3785,15 +3771,6 @@ with pkgs;
 
   coreboot-toolchain = recurseIntoAttrs (
     callPackage ../development/tools/misc/coreboot-toolchain { }
-  );
-
-  tamarin-prover = (
-    callPackage ../applications/science/logic/tamarin-prover {
-      # 2025-03-07: dependency fclabels doesn't compile with GHC >= 9.8
-      # https://github.com/sebastiaanvisser/fclabels/issues/46
-      haskellPackages = haskell.packages.ghc96;
-      graphviz = graphviz-nox;
-    }
   );
 
   inherit
@@ -5419,15 +5396,6 @@ with pkgs;
 
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
-  };
-
-  spoofer = callPackage ../tools/networking/spoofer {
-    protobuf = protobuf_21;
-  };
-
-  spoofer-gui = callPackage ../tools/networking/spoofer {
-    withGUI = true;
-    protobuf = protobuf_21;
   };
 
   sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
@@ -9228,10 +9196,6 @@ with pkgs;
 
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
-  shogun = callPackage ../applications/science/machine-learning/shogun {
-    protobuf = protobuf_21;
-  };
-
   inherit
     ({
       softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
@@ -9449,8 +9413,6 @@ with pkgs;
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
-
-  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
   super-slicer-beta = super-slicer.beta;
 
@@ -10588,10 +10550,6 @@ with pkgs;
     coq
     ;
 
-  cubicle = callPackage ../applications/science/logic/cubicle {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
-
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
@@ -10610,14 +10568,6 @@ with pkgs;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
-  };
-
-  satallax = callPackage ../applications/science/logic/satallax {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
-
-  statverif = callPackage ../applications/science/logic/statverif {
-    ocaml = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
   };
 
   why3 = callPackage ../applications/science/logic/why3 { coqPackages = coqPackages_8_20; };
@@ -11197,7 +11147,6 @@ with pkgs;
   xml2rfc = with python3Packages; toPythonApplication xml2rfc;
 
   ape = callPackage ../applications/misc/ape { };
-  attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
 
   # Unix tools

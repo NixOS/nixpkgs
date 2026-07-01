@@ -4,34 +4,57 @@
   fetchFromGitHub,
   cmake,
   callPackage,
+  pkg-config,
 
   # Linux deps
   libGL,
+  libxcursor,
   libxext,
+  libxi,
   libx11,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
 
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2026.1";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kN4KYd0wTHqF3J4wFGHLmHifkxsb6J+Ex7gGRGnFiGk=";
+    hash = "sha256-kqKOf0zrHyqRTs+57owHR5sORZgNIgGghtjUtSaFjZw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # TODO devendor sdl3 and remove these
     libGL
+    libxcursor
     libx11
     libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
   ];
 
   preConfigure = ''
     cd dev
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # The test suite expects the executable to be in any of a number of locations
+  # that do not include the bin directory.
+  preCheck = ''
+    ln -s ../../bin/lobster lobster
   '';
 
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };

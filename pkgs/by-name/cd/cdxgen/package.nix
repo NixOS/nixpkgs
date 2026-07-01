@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "11.10.0";
 
   src = fetchFromGitHub {
-    owner = "CycloneDX";
+    owner = "cdxgen";
     repo = "cdxgen";
     tag = "v${finalAttrs.version}";
     hash = "sha256-RmgR6OfNrZUYFyn36zTHERIHlzszaFqTX8b4Rf2TF/U=";
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
     mainProgram = "cdxgen";
-    homepage = "https://github.com/CycloneDX/cdxgen";
+    homepage = "https://github.com/cdxgen/cdxgen";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       quincepie
