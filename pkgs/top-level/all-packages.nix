@@ -7017,6 +7017,11 @@ with pkgs;
     go = buildPackages.go_1_26;
   };
 
+  inherit ({ go_1_27 = callPackage ../development/compilers/go/1.27.nix { }; }) go_1_27;
+  buildGo127Module = callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_27;
+  };
+
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
