@@ -217,5 +217,7 @@ lib.makeScope newScope (self: {
 
   virtualjaguar = self.callPackage ./cores/virtualjaguar.nix { };
 
+  x1 = self.callPackage ./cores/x1.nix { };
+
   yabause = self.callPackage ./cores/yabause.nix { };
 })
