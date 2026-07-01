@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
   cmake,
@@ -10,7 +9,7 @@
   installShellFiles,
   makeBinaryWrapper,
   versionCheckHook,
-  librusty_v8 ? callPackage ./rusty-v8 { },
+  buildRustyV8,
   libffi,
   sqlite,
   lld,
@@ -30,6 +29,18 @@
 
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  librusty_v8 = buildRustyV8 rec {
+    version = "149.3.0";
+    src = fetchFromGitHub {
+      owner = "denoland";
+      repo = "rusty_v8";
+      tag = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-hQfSDpdQBeQrOerXi+fI6mGCXkFH2ro90eWZX7xcwjA=";
+    };
+    cargoHash = "sha256-ROz8f+o/OVNKSm4Hp1z4eCI2pmlNTUpBZ5447uvVXUk=";
+  };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
@@ -264,7 +275,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
           || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
       });
       # Also include librusty_v8 tests
-      librusty_v8-tests = librusty_v8.passthru.tests;
+      librusty_v8-tests = librusty_v8.overrideAttrs (fa: {
+        doCheck = true;
+      });
     };
     inherit librusty_v8;
   };
