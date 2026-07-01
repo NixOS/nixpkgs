@@ -175,6 +175,10 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
+      # cargo already builds in parallel, so let's set it explicitly
+      # to true to not change hashes when enableParallelBuildingByDefault is enabled
+      enableParallelBuilding = args.enableParallelBuilding or true;
+
       meta = meta // {
         badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
         # default to Rust's platforms
