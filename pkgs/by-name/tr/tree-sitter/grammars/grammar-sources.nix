@@ -736,10 +736,10 @@
   };
 
   fsharp = {
-    version = "0.3.0-unstable-2026-04-16";
+    version = "0.3.0-unstable-2026-06-11";
     url = "github:ionide/tree-sitter-fsharp";
-    rev = "5247c1197cb290fcaea0e0a793d32829c1396831";
-    hash = "sha256-ntcLDSt6BPF9PtASx221hwZhKl3yKKrzbEYQD/ghYxw=";
+    rev = "9a3c4ac77264e8463fee60bd14203ab31e36770e";
+    hash = "sha256-+Q8POg4I6D2aQDvrq1D8E6S+El+ao7NsSYvKXrU0CdQ=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
