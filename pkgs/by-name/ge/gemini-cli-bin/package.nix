@@ -131,6 +131,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "gemini";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    problems.removal.message = "gemini-cli-bin is deprecated and will be removed in a future release. Use gemini-cli or antigravity-cli instead.";
     priority = 10;
   };
 })
