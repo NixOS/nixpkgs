@@ -11,6 +11,7 @@
   aiohttp,
   importlib-metadata,
   nest-asyncio,
+  numpy,
   psutil,
   pyyaml,
   torch,
@@ -52,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     importlib-metadata
     nest-asyncio
+    numpy
     psutil
     pyyaml
     torch
