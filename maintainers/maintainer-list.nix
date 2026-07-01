@@ -9614,6 +9614,12 @@
     githubId = 293586;
     name = "Adam Gamble";
   };
+  Gambled23 = {
+    email = "ipog71@gmail.com";
+    github = "Gambled23";
+    githubId = 58153130;
+    name = "César González Girón";
+  };
   gamedungeon = {
     github = "GameDungeon";
     githubId = 60719255;
