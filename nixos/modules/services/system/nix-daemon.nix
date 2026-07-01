@@ -301,7 +301,9 @@ in
     (lib.mkIf cfg.enable {
       systemd.tmpfiles.rules = [
         "d  /nix/var                           0755 root root - -"
-        "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
+        # Prevent the current configuration from being garbage-collected.
+        "L+ /nix/var/nix/gcroots/booted-system  - - - - /run/booted-system"
+        "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
         # Boot-time cleanup
         "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
         "R! /nix/var/nix/temproots             -    -    -    - -"
