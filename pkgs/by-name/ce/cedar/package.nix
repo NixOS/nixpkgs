@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "--bin"
     "cedar"
+    "--bin"
+    "cedar-language-server"
   ];
 
   cargoTestFlags = finalAttrs.cargoBuildFlags;
