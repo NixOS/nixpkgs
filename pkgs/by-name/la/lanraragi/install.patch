@@ -1,5 +1,5 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index 0931979..50745d7 100644
+index 7039eb9..fd892ba 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
 @@ -92,36 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
@@ -12,15 +12,15 @@ index 0931979..50745d7 100644
 -IPC::Cmd->import('can_run');
 -require Config::AutoConf;
 -
--
 -say("\r\nWill now check if all LRR software dependencies are met. \r\n");
 -
--#Fails on win even if redis is in the path
--if ( IS_UNIX ) {
--    #Check for Redis
--    say("Checking for Redis...");
--    can_run('redis-server')
--      or die 'NOT FOUND! Please install a Redis server before proceeding.';
+-#Fails on win even if valkey or redis are in the path
+-if (IS_UNIX) {
+-
+-    #Check for Redis/Valkey
+-    say("Checking for Redis/Valkey...");
+-    can_run('valkey-server') || can_run('redis-server')
+-      or die 'NOT FOUND! Please install a Redis/Valkey server before proceeding.';
 -    say("OK!");
 -}
 -
@@ -39,14 +39,13 @@ index 0931979..50745d7 100644
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -170,13 +140,6 @@ if ( $back || $full ) {
+@@ -176,12 +146,6 @@ if ( $back || $full ) {
  #Clientside Dependencies with Provisioning
  if ( $front || $full ) {
  
 -    say("\r\nObtaining remote Web dependencies...\r\n");
 -
--    my $npmcmd = $legacy ? "npm install" : "npm ci";
--    if ( system($npmcmd) != 0 ) {
+-    if ( system( "npm ci" ) != 0 ) {
 -        die "Something went wrong while obtaining node modules - Bailing out.";
 -    }
 -

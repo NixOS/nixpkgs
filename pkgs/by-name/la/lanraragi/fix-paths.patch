@@ -1,30 +1,8 @@
-diff --git a/lib/LANraragi.pm b/lib/LANraragi.pm
-index 1342d66..600ccbe 100644
---- a/lib/LANraragi.pm
-+++ b/lib/LANraragi.pm
-@@ -25,6 +25,8 @@ use LANraragi::Model::Config;
- 
- use constant IS_UNIX => ( $Config{osname} ne 'MSWin32' );
- 
-+use FindBin;
-+
- # This method will run once at server start
- sub startup {
-     my $self = shift;
-@@ -34,7 +36,7 @@ sub startup {
-     say "ｷﾀ━━━━━━(ﾟ∀ﾟ)━━━━━━!!!!!";
- 
-     # Load package.json to get version/vername/description
--    my $packagejson = decode_json( Mojo::File->new('package.json')->slurp );
-+    my $packagejson = decode_json( Mojo::File->new("$FindBin::Bin/../package.json")->slurp );
- 
-     my $version = $packagejson->{version};
-     my $vername = $packagejson->{version_name};
 diff --git a/lib/LANraragi/Model/Archive.pm b/lib/LANraragi/Model/Archive.pm
-index 425f935..9483012 100644
+index fb793b8..63a85fa 100644
 --- a/lib/LANraragi/Model/Archive.pm
 +++ b/lib/LANraragi/Model/Archive.pm
-@@ -14,6 +14,7 @@ use File::Path  qw(remove_tree);
+@@ -15,6 +15,7 @@ use File::Path  qw(remove_tree);
  use File::Basename;
  use File::Copy "cp";
  use File::Path qw(make_path);
@@ -32,7 +10,7 @@ index 425f935..9483012 100644
  
  use LANraragi::Utils::Generic    qw(render_api_response);
  use LANraragi::Utils::String     qw(trim trim_CRLF);
-@@ -222,7 +223,7 @@ sub serve_thumbnail {
+@@ -224,7 +225,7 @@ sub serve_thumbnail {
          } else {
  
              # If the thumbnail doesn't exist, serve the default thumbnail.
@@ -42,36 +20,44 @@ index 425f935..9483012 100644
          return;
      } else {
 diff --git a/lib/LANraragi/Utils/Generic.pm b/lib/LANraragi/Utils/Generic.pm
-index 1b1ffbd..c0f87d6 100644
+index 97cb87d..a8d856b 100644
 --- a/lib/LANraragi/Utils/Generic.pm
 +++ b/lib/LANraragi/Utils/Generic.pm
-@@ -28,6 +28,8 @@ BEGIN {
-     }
- }
- 
+@@ -15,6 +15,7 @@ use Mojo::JSON qw(decode_json);
+ use Proc::Simple;
+ use Sys::CpuAffinity;
+ use Config;
 +use FindBin;
-+
- # Generic Utility Functions.
- use Exporter 'import';
- our @EXPORT_OK = qw(is_image is_archive render_api_response get_tag_with_namespace shasum_str start_shinobu
-@@ -149,7 +151,7 @@ sub start_shinobu {
+ 
+ use LANraragi::Utils::TempFolder qw(get_temp);
+ use LANraragi::Utils::String     qw(trim);
+@@ -153,7 +154,7 @@ sub start_shinobu {
      my $mojo = shift;
-     if ( IS_UNIX ) {
+     if (IS_UNIX) {
          my $proc = Proc::Simple->new();
 -        $proc->start( $^X, "./lib/Shinobu.pm" );
-+        $proc->start( $^X, "$FindBin::Bin/../lib/Shinobu.pm" );
++        $proc->start( $^X, "$FindBin::Bin/Shinobu.pm" );
          $proc->kill_on_destroy(0);
  
          $mojo->LRR_LOGGER->debug( "Shinobu Worker new PID is " . $proc->pid );
-@@ -198,7 +200,7 @@ sub get_css_list {
+@@ -202,7 +203,7 @@ sub get_css_list {
  
-     #Get all the available CSS sheets.
+     # Get all the available CSS sheets.
      my @css;
 -    opendir( my $dir, "./public/themes" ) or die $!;
 +    opendir( my $dir, "$FindBin::Bin/../public/themes" ) or die $!;
      while ( my $file = readdir($dir) ) {
          if ( $file =~ /.+\.css/ ) { push( @css, $file ); }
      }
+@@ -479,7 +480,7 @@ LUA
+ 
+ sub get_version {
+     # Load package.json to get version/vername/description
+-    $version_info = decode_json( Mojo::File->new('package.json')->slurp ), shift unless $version_info;
++    $version_info = decode_json( Mojo::File->new("$FindBin::Bin/../package.json")->slurp ), shift unless $version_info;
+     return $version_info;
+ }
+ 
 diff --git a/lib/LANraragi/Utils/I18N.pm b/lib/LANraragi/Utils/I18N.pm
 index b917c2c..bee242e 100644
 --- a/lib/LANraragi/Utils/I18N.pm
@@ -112,27 +98,27 @@ index b917c2c..bee242e 100644
  };
  
 diff --git a/lib/LANraragi/Utils/Logging.pm b/lib/LANraragi/Utils/Logging.pm
-index 7acbd01..b73ce3e 100644
+index 63c545c..38e149b 100644
 --- a/lib/LANraragi/Utils/Logging.pm
 +++ b/lib/LANraragi/Utils/Logging.pm
-@@ -19,7 +19,7 @@ our @EXPORT_OK = qw(get_logger get_plugin_logger get_logdir get_lines_from_file)
+@@ -32,7 +32,7 @@ our %LOGGER_CACHE;
  # Get the Log folder.
  sub get_logdir {
  
--    my $log_folder = "$FindBin::Bin/../log";
+-    my $log_folder = dirname(__FILE__) . "/../../../log";
 +    my $log_folder = "./log";
  
      # Folder location can be overriden by LRR_LOG_DIRECTORY
      if ( $ENV{LRR_LOG_DIRECTORY} ) {
 diff --git a/lib/LANraragi/Utils/TempFolder.pm b/lib/LANraragi/Utils/TempFolder.pm
-index a5ab8a8..64a5625 100644
+index 5d7bf68..480a012 100644
 --- a/lib/LANraragi/Utils/TempFolder.pm
 +++ b/lib/LANraragi/Utils/TempFolder.pm
 @@ -13,7 +13,7 @@ our @EXPORT_OK = qw(get_temp);
+ 
  #Get the current tempfolder.
- #This can be called from any process safely as it uses FindBin.
  sub get_temp {
--    my $temp_folder = "$FindBin::Bin/../temp";
+-    my $temp_folder = dirname(__FILE__) . "/../../../temp";
 +    my $temp_folder = "./temp";
  
      # Folder location can be overriden by LRR_TEMP_DIRECTORY
