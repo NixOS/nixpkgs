@@ -472,6 +472,9 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-newer-builtins": [
+    "index.html#sec-newer-builtins"
+  ],
   "sec-nixpkgs-release-26.11": [
     "release-notes.html#sec-nixpkgs-release-26.11"
   ],
