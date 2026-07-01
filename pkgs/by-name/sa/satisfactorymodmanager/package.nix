@@ -17,13 +17,13 @@ let
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
-  version = "3.0.7";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "satisfactorymodding";
     repo = "SatisfactoryModManager";
     tag = "v${version}";
-    hash = "sha256-DayFHFNKmYgH+LfXbQ/7h57Rw0iqtu3/snbyDd/EfkI=";
+    hash = "sha256-X8uky9+FhtaAHMY6XrvTZTo3mILcWnlrjq/1SJ9UBkw=";
   };
 
   patches = [
@@ -79,7 +79,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-LvDftUsmvrIY2WkC2pFxRasUGwytEE6ObhzDlrdgpB4=";
+  vendorHash = "sha256-a8o69vrW6TfrYmBRlSNE4NqemJUBFQilsVj+qwLYcbo=";
 
   buildPhase = ''
     runHook preBuild
