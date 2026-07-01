@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       name = "rusty-path-of-building-1";
       desktopName = "Path of Building";
       comment = "Offline build planner for Path of Exile";
-      exec = "rusty-path-of-building poe1";
+      exec = "rusty-path-of-building poe1 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -95,12 +95,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob" ];
     })
     (makeDesktopItem {
       name = "rusty-path-of-building-2";
       desktopName = "Path of Building 2";
       comment = "Offline build planner for Path of Exile 2";
-      exec = "rusty-path-of-building poe2";
+      exec = "rusty-path-of-building poe2 %u";
       terminal = false;
       type = "Application";
       icon = "path-of-building";
@@ -112,6 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "path"
         "exile"
       ];
+      mimeTypes = [ "x-scheme-handler/pob2" ];
     })
   ];
 
