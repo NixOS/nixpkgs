@@ -873,6 +873,13 @@ let
 
       IMA = yes;
 
+      INTEGRITY_SIGNATURE = yes;
+      INTEGRITY_ASYMMETRIC_KEYS = yes;
+      INTEGRITY_PLATFORM_KEYRING = yes;
+      INTEGRITY_MACHINE_KEYRING = whenAtLeast "6.4" yes;
+      INTEGRITY_CA_MACHINE_KEYRING = whenAtLeast "6.4" yes;
+      INTEGRITY_CA_MACHINE_KEYRING_MAX = whenAtLeast "6.4" yes;
+
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS = yes;
       # enable temporary caching of the last request_key() result
