@@ -1,5 +1,3 @@
-nvidia_x11: sha256:
-
 {
   stdenv,
   lib,
@@ -8,23 +6,25 @@ nvidia_x11: sha256:
   zlib,
   glibc,
   versionCheckHook,
+  version,
+  hash,
 }:
 
 let
   sys = lib.concatStringsSep "-" (lib.reverseList (lib.splitString "-" stdenv.system));
   bsys = builtins.replaceStrings [ "_" ] [ "-" ] sys;
-  fmver = nvidia_x11.fabricmanagerVersion;
   ldd = (lib.getBin glibc) + "/bin/ldd";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fabricmanager";
-  version = fmver;
+  inherit version;
+
   src = fetchurl {
     url =
       "https://developer.download.nvidia.com/compute/nvidia-driver/redist/fabricmanager/"
-      + "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
-    inherit sha256;
+      + "${sys}/${finalAttrs.pname}-${sys}-${finalAttrs.version}-archive.tar.xz";
+    inherit hash;
   };
 
   installPhase = ''
@@ -78,8 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Fabricmanager daemon for NVLink intialization and control";
     license = lib.licenses.unfreeRedistributable;
-    platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";
     maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})
