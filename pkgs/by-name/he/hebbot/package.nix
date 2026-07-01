@@ -8,22 +8,21 @@
   openssl,
   autoconf,
   automake,
-  unstableGitUpdater,
   sqlite,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hebbot";
-  version = "2.1-unstable-2024-09-20";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "haecker-felix";
     repo = "hebbot";
-    rev = "4c7152a3ce88ecfbac06f823abd4fd849e0c30d1";
-    hash = "sha256-y+KpxiEzVAggFoPvTOy0IEmAo2V6mOpM0VzEScUOtsM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-log2h3mWSBQu1zjki6mMW7Lcph2dht0ksVkdacum0Jc=";
   };
 
-  cargoHash = "sha256-xRTl6Z6sn44yaEIFxG2vVKlbruDmOS2CdPZeVmWYOoA=";
+  cargoHash = "sha256-cfHD66uf6zIeml69VRGy9bjbdS3PkOfNBdTam5UCzso=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,12 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
   };
 
-  passthru.updateScript = unstableGitUpdater { };
-
   meta = {
     description = "Matrix bot which can generate \"This Week in X\" like blog posts ";
     homepage = "https://github.com/haecker-felix/hebbot";
-    changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v2.1";
+    changelog = "https://github.com/haecker-felix/hebbot/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ agpl3Only ];
     mainProgram = "hebbot";
     maintainers = with lib.maintainers; [ a-kenji ];
