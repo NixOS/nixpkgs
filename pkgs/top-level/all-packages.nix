@@ -4002,6 +4002,10 @@ with pkgs;
 
   mono6 = callPackage ../development/compilers/mono/6.nix { };
 
+  monoBootstrap = recurseIntoAttrsWith { search = false; } (
+    callPackage ../development/compilers/mono/bootstrap { }
+  );
+
   mozart2 = callPackage ../development/compilers/mozart {
     emacs = emacs-nox;
     jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731

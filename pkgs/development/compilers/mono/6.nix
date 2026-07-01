@@ -2,6 +2,7 @@
   callPackage,
   fetchurl,
   fetchpatch,
+  monoBootstrap,
 }:
 
 callPackage ./generic.nix rec {
@@ -18,4 +19,9 @@ callPackage ./generic.nix rec {
       hash = "sha256-qyc3t1OyDzWBSnNW+W2YpdgFfTBs1Ew13jwdGKs09u0=";
     })
   ];
+  bootstrapMono = monoBootstrap.mono-6_12_0;
+  # mono 6.14.1 inherits the same recursive `(cd ../<peer>; make ...)`
+  # pattern in mcs/class libraries that races under `-j` (see
+  # mono_bootstrap_logs.md Run 1b/1c). Keep serial like the chain.
+  enableParallelBuilding = false;
 }
