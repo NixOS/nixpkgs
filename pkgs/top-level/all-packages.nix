@@ -3892,6 +3892,8 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
+  buildGithubBinary = callPackage ../build-support/github-binary { };
+
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 

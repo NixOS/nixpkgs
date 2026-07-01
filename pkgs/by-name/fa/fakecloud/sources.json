@@ -1,0 +1,21 @@
+{
+  "version": "0.13.3",
+  "assets": {
+    "aarch64-darwin": {
+      "asset": "fakecloud-v0.13.3-darwin-arm64.tar.gz",
+      "sha256": "1gi439kzxm4jph9i7j6d20jjdn8wc1mgmcy2sj629gs86cmxzrb7"
+    },
+    "aarch64-linux": {
+      "asset": "fakecloud-v0.13.3-linux-arm64.tar.gz",
+      "sha256": "0cnvnr43c501shrd0drfqz1cj59c6j313xl9dmbzdw7j8zbam3dd"
+    },
+    "x86_64-darwin": {
+      "asset": "fakecloud-v0.13.3-darwin-amd64.tar.gz",
+      "sha256": "06l0s4dwl43m7h4avz5sv7x0w3abaxi3yr73nra4qh016f59nsnk"
+    },
+    "x86_64-linux": {
+      "asset": "fakecloud-v0.13.3-linux-amd64.tar.gz",
+      "sha256": "1y6nrgw86lr62cdzfnav8q01p36gpn826d7vkr82z7bp9lffb60c"
+    }
+  }
+}
