@@ -1097,6 +1097,10 @@ rec {
   writeJSBin = name: writeJS "/bin/${name}";
 
   writeNginxConfig =
+    {
+      nginxPackage,
+      validateSyntax,
+    }:
     name: text:
     pkgs.runCommandLocal name
       {
@@ -1105,13 +1109,28 @@ rec {
         nativeBuildInputs = [
           gixy
           nginx-config-formatter
-        ];
+        ]
+        ++ lib.optional validateSyntax nginxPackage;
       } # sh
-      ''
-        printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
-        sed -i 's/ ;/;/g' $out
-        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
-      '';
+      (
+        ''
+          printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
+          sed -i 's/ ;/;/g' $out
+          gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
+        ''
+        + lib.optionalString validateSyntax ''
+          if nginx -h 2>&1 | grep -- -S; then
+            if ! nginx -S -c $out; then
+              echo "Nginx syntax validation failed. If it's a false positive, you can set \`services.nginx.validateSyntax = false\` to disable this check."
+              exit 1
+            fi
+          else
+            echo "Nginx package doesn't support syntax checking."
+            echo "Either disable syntax checking with \`services.nginx.validateSyntax = false\` or use a patched version of nginx that supports it."
+            exit 1
+          fi
+        ''
+      );
 
   /**
     writePerl takes a name an attributeset with libraries and some perl sourcecode and
