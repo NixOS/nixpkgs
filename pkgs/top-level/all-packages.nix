@@ -2969,10 +2969,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    extraFonts = true;
-  };
-
   tldr-hs = haskellPackages.tldr;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });

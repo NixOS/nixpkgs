@@ -1,41 +1,71 @@
 {
   lib,
+  stdenv,
   fetchurl,
-  tex,
-  extraFonts,
-  chineseFonts,
-  japaneseFonts,
-  koreanFonts,
+  gnutls,
+  guile_1_8,
+  xmodmap,
+  which,
+  freetype,
+  libjpeg,
+  sqlite,
+  texliveSmall ? null,
+  aspell ? null,
+  git ? null,
+  python3 ? null,
+  cmake,
+  pkg-config,
+  xdg-utils,
+  qt6,
+  ghostscriptX ? null,
+  extraFonts ? true,
+  chineseFonts ? false,
+  japaneseFonts ? false,
+  koreanFonts ? false,
 }:
-rec {
+
+let
   extraFontsSrc = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";
-    sha256 = "sha256-ZxobwAjIuZpxF7v3QsLa4UTA5+Sq0rWg8smX1Kp81EM=";
+    hash = "sha256-ZxobwAjIuZpxF7v3QsLa4UTA5+Sq0rWg8smX1Kp81EM=";
   };
 
   fullFontsSrc = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-windows-fonts-1.0-noarch.tar.gz";
-    sha256 = "sha256-Tui4RR7Hd7MxQTvYFcEKBGro6L+uyuIp6HueevGVv/s=";
+    hash = "sha256-Tui4RR7Hd7MxQTvYFcEKBGro6L+uyuIp6HueevGVv/s=";
   };
 
   chineseFontsSrc = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-chinese-fonts.tar.gz";
-    sha256 = "sha256-1wnVlFpFjJAjGlVaEm7/TTGO+6isFlFyV9rV0rXE+Xo=";
+    hash = "sha256-1wnVlFpFjJAjGlVaEm7/TTGO+6isFlFyV9rV0rXE+Xo=";
   };
 
   japaneseFontsSrc = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-japanese-fonts.tar.gz";
-    sha256 = "sha256-VgbBe+wwVrgCLzcj8qepeSx11bqcxR5MS2W+o/T+xrY=";
+    hash = "sha256-VgbBe+wwVrgCLzcj8qepeSx11bqcxR5MS2W+o/T+xrY=";
   };
 
   koreanFontsSrc = fetchurl {
     url = "https://www.texmacs.org/Download/ftp/fonts/TeXmacs-korean-fonts.tar.gz";
-    sha256 = "sha256-EBZ3BCOcTufzvfJzptLupkCRBwSdK0qqXXJUXE95XR0=";
+    hash = "sha256-EBZ3BCOcTufzvfJzptLupkCRBwSdK0qqXXJUXE95XR0=";
+  };
+
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "texmacs";
+  version = "2.1.5";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchurl {
+    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-s6EnvbqOeQELI5KRQVy+NDEzNSHiRHeoFLWG4bQCc2A=";
   };
 
   postPatch =
     (
-      if tex == null then
+      if texliveSmall == null then
         ''
           gunzip < ${fullFontsSrc} | (cd TeXmacs && tar xvf -)
         ''
@@ -52,7 +82,69 @@ rec {
     '')
     + (lib.optionalString koreanFonts ''
       gunzip < ${koreanFontsSrc} | (cd TeXmacs && tar xvf -)
-    '');
+    '')
+    + ''
+      substituteInPlace configure \
+        --replace-fail "-mfpmath=sse -msse2" ""
+    '';
+
+  nativeBuildInputs = [
+    guile_1_8
+    pkg-config
+    qt6.wrapQtAppsHook
+    xdg-utils
+    cmake
+  ];
+
+  buildInputs = [
+    gnutls
+    guile_1_8
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qt5compat
+    freetype
+    libjpeg
+    sqlite
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "TEXMACS_GUI" "Qt6")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "./TeXmacs.app/Contents/Resources")
+  ];
+
+  env.NIX_LDFLAGS = "-lz";
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv TeXmacs.app $out/Applications/
+    makeWrapper $out/Applications/TeXmacs.app/Contents/MacOS/TeXmacs $out/bin/texmacs
+  '';
+
+  qtWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      xmodmap
+      which
+      ghostscriptX
+      aspell
+      texliveSmall
+      git
+      python3
+    ])
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--set"
+    "TEXMACS_PATH"
+    "${placeholder "out"}/Applications/TeXmacs.app/Contents/Resources/share/TeXmacs"
+  ];
+
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    wrapQtApp $out/bin/texmacs
+  '';
 
   meta = {
     description = "WYSIWYW editing platform with special features for scientists";
@@ -77,5 +169,7 @@ rec {
     '';
     homepage = "http://texmacs.org/";
     license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.roconnor ];
+    platforms = lib.platforms.all;
   };
-}
+})
