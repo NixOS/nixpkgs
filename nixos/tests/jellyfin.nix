@@ -33,6 +33,7 @@
           hardwareDecodingCodecs = {
             h264 = true;
             hevc = true;
+            hevc10bit = true;
             vp9 = true;
             hevcRExt10bit = true;
             hevcRExt12bit = true;
@@ -174,7 +175,8 @@
           assert config.get("EnableIntelLowPowerH264HwEncoder") == True, f"Intel low power H264: expected True, got '{config.get('EnableIntelLowPowerH264HwEncoder')}'"
           assert config.get("EnableIntelLowPowerHevcHwEncoder") == True, f"Intel low power HEVC: expected True, got '{config.get('EnableIntelLowPowerHevcHwEncoder')}'"
 
-          # HEVC RExt color depth verification
+          # HEVC color depth verification
+          assert config.get("EnableDecodingColorDepth10Hevc") == True, f"HEVC 10bit: expected True, got '{config.get('EnableDecodingColorDepth10Hevc')}'"
           assert config.get("EnableDecodingColorDepth10HevcRext") == True, f"HEVC RExt 10bit: expected True, got '{config.get('EnableDecodingColorDepth10HevcRext')}'"
           assert config.get("EnableDecodingColorDepth12HevcRext") == True, f"HEVC RExt 12bit: expected True, got '{config.get('EnableDecodingColorDepth12HevcRext')}'"
 
