@@ -11025,6 +11025,12 @@
     github = "HolgerPeters";
     githubId = 4097049;
   };
+  Holiu0618 = {
+    email = "zvttt9db@anonaddy.me";
+    github = "Holiu0618";
+    githubId = 165534185;
+    name = "Holiu";
+  };
   hollowman6 = {
     email = "hollowman@hollowman.ml";
     github = "HollowMan6";
