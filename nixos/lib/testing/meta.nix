@@ -22,6 +22,13 @@ in
                 The [list of maintainers](https://nixos.org/manual/nixpkgs/stable/#var-meta-maintainers) for this test.
               '';
             };
+            teams = mkOption {
+              type = types.listOf types.raw;
+              default = [ ];
+              description = ''
+                The [list of teams](https://nixos.org/manual/nixpkgs/stable/#var-meta-teams) for this test.
+              '';
+            };
             timeout = mkOption {
               type = types.nullOr types.int;
               default = 3600; # 1 hour
