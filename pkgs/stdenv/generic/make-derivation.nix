@@ -37,6 +37,7 @@ let
     mapAttrs
     mapNullable
     optional
+    optionalAttrs
     optionalString
     optionals
     remove
@@ -1062,6 +1063,22 @@ let
 
         inherit passthru overrideAttrs;
         inherit meta;
+
+        # Pass through attribute position information for our input attrs.
+        # The reason this is here and not in meta is to avoid polluting `nix-env --meta` even more.
+        attributePositionInformation =
+          let
+            process =
+              a:
+              mapAttrs (
+                name: value:
+                {
+                  __pos = unsafeGetAttrPos name a;
+                }
+                // optionalAttrs (isAttrs value) (value.attributePositionInformation or (process value))
+              ) a;
+          in
+          attrs.attributePositionInformation or (process attrs);
       }
       //
         # Pass through extra attributes that are not inputs, but
