@@ -5,6 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
+  libappindicator-gtk3,
   glib,
   gobject-introspection,
   librsvg,
@@ -54,6 +55,7 @@ let
           gtk3
           gobject-introspection
           pygobject3
+          libappindicator-gtk3
         ];
 
       nativeBuildInputs = [
