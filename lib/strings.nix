@@ -1589,15 +1589,14 @@ rec {
   */
   toSentenceCase =
     str:
-    lib.throwIfNot (isString str)
-      "toSentenceCase does only accepts string values, but got ${typeOf str}"
-      (
-        let
-          firstChar = substring 0 1 str;
-          rest = substring 1 (-1) str; # -1 takes till the end of the string
-        in
-        toUpper firstChar + toLower rest
-      );
+    if !isString str then
+      throw "toSentenceCase does only accepts string values, but got ${typeOf str}"
+    else
+      let
+        firstChar = substring 0 1 str;
+        rest = substring 1 (-1) str; # -1 takes till the end of the string
+      in
+      toUpper firstChar + toLower rest;
 
   /**
     Converts a string to camelCase. Handles snake_case, PascalCase,
@@ -1633,7 +1632,9 @@ rec {
   */
   toCamelCase =
     str:
-    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+    if !isString str then
+      throw "toCamelCase does only accepts string values, but got ${typeOf str}"
+    else
       let
         separators = splitStringBy (
           prev: curr:
@@ -1653,8 +1654,7 @@ rec {
         first = if length parts > 0 then toLower (head parts) else "";
         rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
       in
-      concatStrings ([ first ] ++ rest)
-    );
+      concatStrings ([ first ] ++ rest);
 
   /**
     Appends string context from string like object `src` to `target`.
@@ -2532,8 +2532,9 @@ rec {
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
     in
-    assert lib.assertMsg (strw <= width)
-      "fixedWidthString: requested string length (${toString width}) must not be shorter than actual length (${toString strw})";
+    assert
+      strw <= width
+      || throw "fixedWidthString: requested string length (${toString width}) must not be shorter than actual length (${toString strw})";
     if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
   /**

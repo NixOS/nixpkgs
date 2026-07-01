@@ -38,6 +38,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     ./0001-Fix-docker-flag-default-for-Click-8.2-compatibility.patch
     ./0002-Fix-websocket-proxy-call-script-directly-as-executable.patch
+    # https://github.com/skypilot-org/skypilot/pull/9972
+    ./CVE-2026-13482.patch
   ];
 
   nativeBuildInputs = [
