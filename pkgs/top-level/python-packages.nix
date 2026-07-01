@@ -15353,6 +15353,10 @@ self: super: with self; {
 
   pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
 
+  pysail = callPackage ../development/python-modules/pysail {
+    protoc = pkgs.protobuf;
+  };
+
   pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
