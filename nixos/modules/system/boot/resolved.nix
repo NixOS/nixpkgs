@@ -30,9 +30,8 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  transformSettings =
-    settings:
-    lib.mapAttrs (
+  transformSettings = settings: {
+    Resolve = lib.mapAttrs (
       key: value:
       # concat lists for options that should result in space-separated values
       if
@@ -47,8 +46,9 @@ let
       else
         value
     ) settings;
+  };
 
-  resolvedConf = settingsToSections (transformSettings cfg.settings);
+  resolvedConf = settingsToSections (transformSettings cfg.settings.Resolve);
 in
 {
   imports = [
