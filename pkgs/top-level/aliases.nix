@@ -576,6 +576,7 @@ mapAliases {
   cordless = throw "'cordless' has been removed due to being archived upstream. Consider using 'discordo' instead."; # Added 2025-06-07
   corepack_latest = throw "'corepack_latest' has been removed, use 'corepack.override { nodejs-slim = pkgs.nodejs-slim_latest; }' instead"; # Added 2025-10-25
   coreth = throw "'coreth' has been moved to 'avalanchego' by upstream"; # Added 2026-01-15
+  cosmic-applibrary = warnAlias "'cosmic-applibrary' has been renamed to 'cosmic-app-library'" cosmic-app-library; # Added 2026-07-01
   cosmic-tasks = throw "'cosmic-tasks' has been renamed to/replaced by 'tasks'"; # Converted to throw 2025-10-27
   cotton = throw "'cotton' has been removed since it is vulnerable to CVE-2025-62518 and upstream is unmaintained"; # Added 2025-10-26
   cpp-ipfs-api = throw "'cpp-ipfs-api' has been renamed to/replaced by 'cpp-ipfs-http-client'"; # Converted to throw 2025-10-27
