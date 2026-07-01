@@ -1528,6 +1528,7 @@ in
   sdl3 = runTest ./sdl3.nix;
   searx = runTest ./searx.nix;
   seatd = runTest ./seatd.nix;
+  securo = runTest ./web-apps/securo.nix;
   seerr = runTest ./seerr.nix;
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
