@@ -8790,6 +8790,13 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  FatBoyXPC = {
+    name = "FatBoyXPC";
+    email = "fatboyxpc@gmail.com";
+    github = "FatBoyXPC";
+    githubId = 744962;
+    keys = [ { fingerprint = "0E08 1B81 CBCA 1CF7 9568  A13F C4ED 3CA2 3211 8969"; } ];
+  };
   faukah = {
     github = "faukah";
     name = "faukah";
