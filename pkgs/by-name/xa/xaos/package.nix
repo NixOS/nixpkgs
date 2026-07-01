@@ -12,10 +12,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
   version = "4.3.5";
-  outputs = [
-    "out"
-    "man"
-  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "xaos-project";
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "${datapath}"
     cp -r tutorial examples catalogs "${datapath}"
     install -D "xdg/xaos.png" "$out/share/icons/xaos.png"
-    install -D doc/xaos.6 "$man/man6/xaos.6"
   '';
 
   meta = finalAttrs.src.meta // {
