@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "68.1-unstable-2026-05-18";
+  version = "69.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
