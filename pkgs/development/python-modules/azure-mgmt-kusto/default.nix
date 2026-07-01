@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-kusto";
-  version = "3.4.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_kusto";
     inherit version;
-    hash = "sha256-K8keApefYp/u7cTZuWNYhltVlFethunG+ccJpAgyDmM=";
+    hash = "sha256-osN6N5zsZQukc/81g1hzJ15lYnAv0VezEjGh3a2FLn0=";
   };
 
   build-system = [ setuptools ];
