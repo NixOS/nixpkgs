@@ -6,7 +6,8 @@
   libjpeg_turbo,
   setuptools,
   numpy,
-  python,
+  pytest-memray,
+  pytestCheckHook,
   replaceVars,
 }:
 
@@ -32,14 +33,15 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  # upstream has no tests, but we want to test whether the library is found
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    pytest-memray
+    pytestCheckHook
+  ];
 
-    ${python.interpreter} -c 'from turbojpeg import TurboJPEG; TurboJPEG()'
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    # our patch breaks the test
+    "test_library_loading_error_message"
+  ];
 
   pythonImportsCheck = [ "turbojpeg" ];
 
