@@ -31,7 +31,6 @@ let
     length
     mapAttrs
     mapAttrsToList
-    mapAttrsRecursiveCond
     min
     optional
     optionalAttrs
@@ -279,7 +278,11 @@ let
         let
 
           # For definitions that have an associated option
-          declaredConfig = mapAttrsRecursiveCond (v: !isOption v) (_: v: v.value) options;
+          declaredConfig =
+            let
+              recurse = mapAttrs (n: v: if isOption v then v.value else recurse v);
+            in
+            recurse options;
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
@@ -564,12 +567,23 @@ let
         modulesPath:
         { disabled, modules }:
         let
-          keyFilter = filter (attrs: !isDisabled modulesPath disabled attrs);
+          isDisabledModule = isDisabled modulesPath disabled;
+          keyFilter = filter (attrs: !isDisabledModule attrs);
         in
-        map (attrs: attrs.module) (genericClosure {
-          startSet = keyFilter modules;
-          operator = attrs: keyFilter attrs.modules;
-        });
+        map (attrs: attrs.module) (
+          genericClosure (
+            if disabled == [ ] then
+              {
+                startSet = modules;
+                operator = attrs: attrs.modules;
+              }
+            else
+              {
+                startSet = keyFilter modules;
+                operator = attrs: keyFilter attrs.modules;
+              }
+          )
+        );
 
       toGraph =
         modulesPath:
@@ -631,6 +645,28 @@ let
     : 3\. Function argument
   */
   unifyModuleSyntax =
+    let
+      attrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "imports"
+        "options"
+        "config"
+        "meta"
+        "freeformType"
+      ];
+      shorthandAttrsToRemove = [
+        "_class"
+        "_file"
+        "key"
+        "disabledModules"
+        "require"
+        "imports"
+        "freeformType"
+      ];
+    in
     file: key: m:
     let
       addMeta =
@@ -654,17 +690,7 @@ let
     in
     if m ? config || m ? options then
       let
-        badAttrs = removeAttrs m [
-          "_class"
-          "_file"
-          "key"
-          "disabledModules"
-          "imports"
-          "options"
-          "config"
-          "meta"
-          "freeformType"
-        ];
+        badAttrs = removeAttrs m attrsToRemove;
       in
       if badAttrs != { } then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
@@ -690,17 +716,7 @@ let
         disabledModules = m.disabledModules or [ ];
         imports = m.require or [ ] ++ m.imports or [ ];
         options = { };
-        config = addFreeformType (
-          removeAttrs m [
-            "_class"
-            "_file"
-            "key"
-            "disabledModules"
-            "require"
-            "imports"
-            "freeformType"
-          ]
-        );
+        config = addFreeformType (removeAttrs m shorthandAttrsToRemove);
       };
 
   applyModuleArgsIfFunction =
@@ -877,15 +893,13 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [ name ];
-          defns = pushedDownDefinitionsByName.${name} or [ ];
           defns' = rawDefinitionsByName.${name} or [ ];
-          optionDecls = filter (
+          isOptionDecl =
             m:
             m.options ? _type
-            && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file)
-          ) decls;
+            && (m.options._type == "option" || throwDeclarationTypeError loc m.options._type m._file);
         in
-        if length optionDecls == length decls then
+        if all isOptionDecl decls then
           let
             opt = fixupOptionType loc (mergeOptionDecls loc decls);
           in
@@ -893,7 +907,34 @@ let
             matchedOptions = evalOptionValue loc opt defns';
             unmatchedDefns = [ ];
           }
-        else if optionDecls != [ ] then
+        # this may look like duplicate computations are performed, but testing
+        # with a minimal NixOS config (defined below):
+        #
+        # 1. in 97.61% of cases, the above `all isOptionDecl decls` passes
+        # 2. In 1.19% of the cases, there's only one decl and we short-circuit
+        # 3. in another 1.19% of the cases, we have to loop again, to check if
+        # any of the decls were options
+        # 4. In the final case, we pass the `any` and have to refilter. This
+        # only triggers in 1 of the 42500 calls to this function.
+        #
+        # The minimal config was defined with this expression:
+        #
+        # let nixos = import ./nixos/lib/eval-config.nix {
+        #   modules = [
+        #     ./nixos/modules/profiles/minimal.nix
+        #     {
+        #       fileSystems."/" = {
+        #         device = "/dev/sda1";
+        #         fsType = "ext4";
+        #       };
+        #       boot.loader.grub.devices = [ "/dev/sda" ];
+        #     }
+        #   ];
+        # }; in nixos.config.system.build.toplevel'
+        else if length decls > 1 && any isOptionDecl decls then
+          let
+            optionDecls = filter isOptionDecl decls;
+          in
           if
             all (x: x.options.type.name or null == "submodule") optionDecls
           # Raw options can only be merged into submodules. Merging into
@@ -921,7 +962,7 @@ let
               (head optionDecls).options.type.description or "<no description>"
             }' does not support nested options.\n${showRawDecls loc nonOptions}"
         else
-          mergeModules' loc decls defns
+          mergeModules' loc decls (pushedDownDefinitionsByName.${name} or [ ])
       ) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
@@ -1010,19 +1051,17 @@ let
     : 2\. Function argument
   */
   mergeOptionDecls =
-    loc: opts:
+    loc:
     foldl'
       (
         res: opt:
         let
-          t = res.type;
-          t' = opt.options.type;
-          mergedType = t.typeMerge t'.functor;
-          typesMergeable = mergedType != null;
-
           typeSet =
-            if opt.options ? type && res ? type then
-              if typesMergeable then
+            if res ? type && opt.options ? type then
+              let
+                mergedType = res.type.typeMerge opt.options.type.functor;
+              in
+              if mergedType != null then
                 {
                   type = mergedType;
                 }
@@ -1033,7 +1072,7 @@ let
             else
               { };
 
-          bothHave = k: opt.options ? ${k} && res ? ${k};
+          bothHave = k: res ? ${k} && opt.options ? ${k};
         in
         if bothHave "default" || bothHave "example" || bothHave "description" || bothHave "apply" then
           # Keep in sync with the same error above!
@@ -1078,8 +1117,7 @@ let
         declarations = [ ];
         declarationPositions = [ ];
         options = [ ];
-      }
-      opts;
+      };
 
   /**
     Merge all the definitions of an option to produce the final
@@ -1132,21 +1170,19 @@ let
           throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
-
-      # Apply the 'apply' function to the merged value. This allows options to
-      # yield a value computed from the definitions
-      value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
-
-      warnDeprecation =
-        if (opt.type.deprecationMessage != null) then
-          warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}"
-        else
-          x: x;
-
     in
-    warnDeprecation opt
+    (
+      if opt.type.deprecationMessage != null then
+        warn "The type `types.${opt.type.name}' of option `${showOption loc}' 'defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}" opt
+      else
+        opt
+    )
     // {
-      value = addErrorContext "while evaluating the option `${showOption loc}':" value;
+      value = addErrorContext "while evaluating the option `${showOption loc}':" (
+        # Apply the 'apply' function to the merged value. This allows options to
+        # yield a value computed from the definitions
+        if opt ? apply then opt.apply res.mergedValue else res.mergedValue
+      );
       inherit (res.defsFinal') highestPrio;
       definitions = map (def: def.value) res.defsFinal;
       files = map (def: def.file) res.defsFinal;
@@ -1186,49 +1222,16 @@ let
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
     defsFinal' =
-      let
-        # Process mkMerge and mkIf properties.
-        defsNormalized = concatMap (
-          m:
-          map (
-            value:
-            if value._type or null == "definition" then
-              value
-            else
-              {
-                inherit (m) file;
-                inherit value;
-              }
-          ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
-        ) defs;
-
-        # Process mkOverride properties.
-        defsFiltered = filterOverrides' defsNormalized;
-
-        # Sort mkOrder properties.
-        defsSorted =
-          # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defsFiltered.values then
-            sortProperties defsFiltered.values
-          else
-            defsFiltered.values;
-      in
       # Fast path: the overwhelming majority of options have exactly one
       # definition whose value carries no property wrapper
       # (mkIf/mkMerge/mkOverride/mkOrder/definition). In that case the
-      # discharge/filter/sort pipeline above is a no-op but still allocates
-      # several intermediate lists and closures. Detect it up front and hand
-      # the original singleton straight to the type merge. The let-bindings
-      # above are lazy and thus never forced on this branch.
+      # discharge/filter/sort pipeline below is a no-op but still allocates
+      # several intermediate lists and closures. Detect it up front and hand the
+      # original singleton straight to the type merge.
       if
         length defs == 1
-        && (
-          let
-            d = head defs;
-          in
-          addErrorContext "while evaluating definitions from `${d.file}':" (
-            !(isAttrs d.value && d.value ? _type)
-          )
+        && addErrorContext "while evaluating definitions from `${(head defs).file}':" (
+          !(head defs).value ? _type
         )
       then
         {
@@ -1236,6 +1239,33 @@ let
           highestPrio = defaultOverridePriority;
         }
       else
+        let
+          # Process mkMerge and mkIf properties.
+          defsNormalized = concatMap (
+            m:
+            map (
+              value:
+              if value._type or null == "definition" then
+                value
+              else
+                {
+                  inherit (m) file;
+                  inherit value;
+                }
+            ) (addErrorContext "while evaluating definitions from `${m.file}':" (dischargeProperties m.value))
+          ) defs;
+
+          # Process mkOverride properties.
+          defsFiltered = filterOverrides' defsNormalized;
+
+          # Sort mkOrder properties.
+          defsSorted =
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") defsFiltered.values then
+              sortProperties defsFiltered.values
+            else
+              defsFiltered.values;
+        in
         {
           values = defsSorted;
           inherit (defsFiltered) highestPrio;
@@ -1347,13 +1377,16 @@ let
           val;
     in
     cfg:
-    if cfg._type or "" == "merge" then
-      concatMap pushDownProperties cfg.contents
-    else if cfg._type or "" == "if" then
-      map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
-    else if cfg._type or "" == "override" then
-      map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
-    # FIXME: handle mkOrder?
+    if cfg ? _type then
+      if cfg._type == "if" then
+        map (mapAttrsIfAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      else if cfg._type == "merge" then
+        concatMap pushDownProperties cfg.contents
+      else if cfg._type == "override" then
+        map (mapAttrsIfAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      # FIXME: handle mkOrder?
+      else
+        [ cfg ]
     else
       [ cfg ];
 
@@ -1376,13 +1409,16 @@ let
   */
   dischargeProperties =
     def:
-    if def._type or "" == "merge" then
-      concatMap dischargeProperties def.contents
-    else if def._type or "" == "if" then
-      if isBool def.condition then
-        if def.condition then dischargeProperties def.content else [ ]
+    if def ? _type then
+      if def._type == "if" then
+        if isBool def.condition then
+          if def.condition then dischargeProperties def.content else [ ]
+        else
+          throw "‘mkIf’ called with a non-Boolean condition"
+      else if def._type == "merge" then
+        concatMap dischargeProperties def.contents
       else
-        throw "‘mkIf’ called with a non-Boolean condition"
+        [ def ]
     else
       [ def ];
 
@@ -1472,7 +1508,7 @@ let
   fixupOptionType =
     loc: opt:
     if opt.type.getSubModules or null == null then
-      opt // { type = opt.type or types.unspecified; }
+      if opt ? type then opt else opt // { type = types.unspecified; }
     else
       opt
       // {
@@ -1501,23 +1537,21 @@ let
   mergeAttrDefinitionsWithPrio =
     opt:
     let
-      defsByAttr = zipAttrs (
-        concatLists (
-          concatMap (
-            { value, ... }@def:
-            map (mapAttrsToList (
-              k: value: {
-                ${k} = def // {
-                  inherit value;
-                };
-              }
-            )) (pushDownProperties value)
-          ) opt.definitionsWithLocations
-        )
+      defsByAttr = concatLists (
+        concatMap (
+          { value, ... }@def:
+          map (mapAttrsToList (
+            k: value: {
+              ${k} = def // {
+                inherit value;
+              };
+            }
+          )) (pushDownProperties value)
+        ) opt.definitionsWithLocations
       );
     in
     assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
-    mapAttrs (
+    zipAttrsWith (
       k: v:
       let
         merging = mergeDefinitions (opt.loc ++ [ k ]) opt.type.nestedTypes.elemType v;
