@@ -35,6 +35,7 @@ let
     license = lib.licenses.lens;
     maintainers = with lib.maintainers; [
       dbirks
+      qweered
       RossComputerGuy
       starkca90
     ];
