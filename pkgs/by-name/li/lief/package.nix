@@ -8,6 +8,8 @@
   nix-update-script,
   testers,
   validatePkgConfig,
+  withPython ? true,
+  withRust ? true,
 }:
 
 let
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withPython [
     "py"
   ];
 
@@ -42,29 +46,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
-  buildInputs = with python3.pkgs; [
-    python
-    build
-    pathspec
-    pip
-    pydantic
-    scikit-build-core
-  ];
+  buildInputs =
+    with python3.pkgs;
+    lib.optionals withPython [
+      python
+      build
+      pathspec
+      pip
+      pydantic
+      scikit-build-core
+    ];
 
   cmakeFlags = [
-    (lib.cmakeBool "LIEF_PYTHON_API" true)
+    (lib.cmakeBool "LIEF_PYTHON_API" withPython)
+    (lib.cmakeBool "LIEF_RUST_API" withRust)
     (lib.cmakeBool "LIEF_EXAMPLES" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "Python_EXECUTABLE" pyEnv.interpreter)
   ];
 
-  postBuild = ''
+  postBuild = lib.optionalString withPython ''
     pushd ../api/python
     ${pyEnv.interpreter} -m build --no-isolation --wheel --skip-dependency-check --config-setting=--parallel=$NIX_BUILD_CORES
     popd
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString withPython ''
     pushd ../api/python
     ${pyEnv.interpreter} -m pip install --prefix $py dist/*.whl
     popd
