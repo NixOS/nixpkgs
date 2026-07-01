@@ -1,29 +1,31 @@
 let
   noop = pkgs: pkgs.writeShellScript "noop" "echo 'Unimplemented!'";
   root = "/tmp/vars-demo";
+  mkBackendScript =
+    name: text: pkgs:
+    pkgs.lib.getExe (
+      pkgs.writeShellApplication {
+        inherit name text;
+        runtimeInputs = [ pkgs.coreutils ];
+      }
+    );
 in
 {
   vars = {
     defaultGeneratorBackend = "example";
     generatorBackends.example = {
-      get =
-        pkgs:
-        pkgs.writeShellScript "get" ''
-          ${pkgs.coreutils}/bin/cat ${root}/generators/"$1"/files/"$2" > $out
-        '';
-      set =
-        pkgs:
-        pkgs.writeShellScript "set" ''
-          ${pkgs.coreutils}/bin/mkdir -p ${root}/generators/"$1"/files/
-          ${pkgs.coreutils}/bin/cat "$in" > ${root}/generators/"$1"/files/"$2"
-        '';
-      exists =
-        pkgs:
-        pkgs.writeShellScript "exists" ''
-          if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
-            exit 42
-          fi
-        '';
+      get = mkBackendScript "get" ''
+        cat ${root}/generators/"$1"/files/"$2" > $out
+      '';
+      set = mkBackendScript "set" ''
+        mkdir -p ${root}/generators/"$1"/files/
+        cat "$in" > ${root}/generators/"$1"/files/"$2"
+      '';
+      exists = mkBackendScript "exists" ''
+        if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
+          exit 42
+        fi
+      '';
       deploy = noop;
       fixup = noop; # This one's optional, but I wanted to make sure that works
     };
