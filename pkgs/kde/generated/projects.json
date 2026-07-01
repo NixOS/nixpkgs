@@ -4505,6 +4505,12 @@
     "project_path": "kdeedu/kwordquiz",
     "repo_path": "education/kwordquiz"
   },
+  "kwrite": {
+    "description": "Basic text editor",
+    "name": "kwrite",
+    "project_path": "applications/kwrite",
+    "repo_path": "utilities/kate"
+  },
   "kwrited": {
     "description": "Listen to traditional system notifications",
     "name": "kwrited",

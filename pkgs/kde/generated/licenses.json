@@ -2250,6 +2250,13 @@
     "GPL-3.0-or-later",
     "LGPL-2.0-or-later"
   ],
+  "kwrite": [
+    "CC0-1.0",
+    "GPL-2.0-or-later",
+    "LGPL-2.0-only",
+    "LGPL-2.0-or-later",
+    "MIT"
+  ],
   "kwrited": [
     "CC0-1.0",
     "GPL-2.0-or-later"

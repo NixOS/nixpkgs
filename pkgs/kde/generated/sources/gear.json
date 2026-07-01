@@ -979,6 +979,11 @@
     "url": "mirror://kde/stable/release-service/26.04.2/src/kwordquiz-26.04.2.tar.xz",
     "hash": "sha256-S9nqngXwCsKydkVzNa7l1Iwyt3VY5PgCxkMwVgR/Vd0="
   },
+  "kwrite": {
+    "version": "26.04.1",
+    "url": "mirror://kde/stable/release-service/26.04.1/src/kate-26.04.1.tar.xz",
+    "hash": "sha256-dMzh3H9Iim4fCkQSq+W8Qu20UGtBjC+UC37RElgCIZg="
+  },
   "libgravatar": {
     "version": "26.04.2",
     "url": "mirror://kde/stable/release-service/26.04.2/src/libgravatar-26.04.2.tar.xz",

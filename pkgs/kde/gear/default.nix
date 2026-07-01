@@ -196,6 +196,7 @@
   kweather = callPackage ./kweather { };
   kweathercore = callPackage ./kweathercore { };
   kwordquiz = callPackage ./kwordquiz { };
+  kwrite = callPackage ./kwrite { };
   libgravatar = callPackage ./libgravatar { };
   libkcddb = callPackage ./libkcddb { };
   libkdcraw = callPackage ./libkdcraw { };
