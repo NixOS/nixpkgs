@@ -449,7 +449,12 @@ rec {
   # WASM
   #
 
-  # For historical reasons, Nixpkgs's wasi32 (i.e., without a revision number) corresponds to WASI p1.
+  wasm32-wasip1 = {
+    config = "wasm32-unknown-wasip1";
+    useLLVM = true;
+  };
+
+  # Historical-reasons alias for wasm32-wasip1.
   wasi32 = {
     config = "wasm32-unknown-wasip1";
     useLLVM = true;
