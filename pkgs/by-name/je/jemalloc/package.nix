@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
+    # Profiling is inert unless enabled at runtime
+    "--enable-prof"
   ]
   # see the comment on stripPrefix
   ++ lib.optional stripPrefix "--with-jemalloc-prefix="
