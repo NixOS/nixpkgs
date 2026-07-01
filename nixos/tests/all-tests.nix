@@ -1121,6 +1121,7 @@ in
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_4 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_4; };
   netbox_4_5 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_5; };
+  netbox_4_6 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_6; };
   netdata = runTest ./netdata.nix;
   netfoil = runTest ./netfoil.nix;
   networking.networkd = handleTest ./networking/networkd-and-scripted.nix { networkd = true; };
