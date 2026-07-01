@@ -1872,6 +1872,9 @@ with pkgs;
     singleBinary = false;
   };
 
+  cpp-interop-clang-repl = cpp-interop.override { interpreter = "clang-repl"; };
+  cpp-interop-cling = cpp-interop.override { interpreter = "cling"; };
+
   cron = isc-cron;
 
   # Top-level fix-point used in `cudaPackages`' internals
