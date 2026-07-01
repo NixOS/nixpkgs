@@ -1,0 +1,6 @@
+allprojects {
+	tasks.withType(org.gradle.api.tasks.compile.JavaCompile).configureEach {
+		options.fork = true
+		options.forkOptions.executable = gradle.startParameter.projectProperties['NIX_JAVAC']
+	}
+}
