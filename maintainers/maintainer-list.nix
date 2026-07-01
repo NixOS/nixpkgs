@@ -30114,6 +30114,11 @@
     githubId = 168610;
     name = "Ricardo M. Correia";
   };
+  wjohnsto = {
+    name = "Will Johnston";
+    github = "wjohnsto";
+    githubId = 785258;
+  };
   wkral = {
     email = "william.kral@gmail.com";
     github = "wkral";
