@@ -5,47 +5,24 @@
   makeWrapper,
   python3Packages,
   tk,
-  addDriverRunpath,
 
   koboldLiteSupport ? true,
 
-  config,
-  cudaPackages ? { },
-
-  cublasSupport ? config.cudaSupport,
-  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
-  # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
-  cudaArches ? cudaPackages.flags.realArches or [ ],
-
-  clblastSupport ? stdenv.hostPlatform.isLinux,
-  clblast,
-  ocl-icd,
-
-  vulkanSupport ? true,
-  vulkan-loader,
-  shaderc,
-  metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
 }:
 
-let
-  makeBool = option: bool: (if bool then "${option}=1" else "");
-
-  libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
-    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
-  '';
-
-  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
-in
-effectiveStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.110";
+  version = "1.116.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wizg/XkNjWUeF0heK1sQQhfKRlIYBKwJmQ8fIaZ2zdE=";
+    hash = "sha256-jElhMxi8FyvprlSWlc0PQa0NtLvBNZXY3vF/7YKZFv4=";
   };
 
   enableParallelBuilding = true;
@@ -53,45 +30,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ]
-  ++ lib.optionals vulkanSupport [ shaderc ];
-
-  postPatch = ''
-    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
-    substituteInPlace "$PWD/Makefile" \
-      --replace-fail \
-        'CUBLASLD_FLAGS = -lcuda ' \
-        'CUBLASLD_FLAGS = '
-  '';
+  ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs = [
     tk
   ]
-  ++ finalAttrs.pythonInputs
-  ++ lib.optionals cublasSupport [
-    cudaPackages.libcublas
-    cudaPackages.cuda_nvcc
-    cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl
-  ]
-  ++ lib.optionals clblastSupport [
-    clblast
-    ocl-icd
-  ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-loader
-  ];
+  ++ finalAttrs.pythonInputs;
 
   pythonPath = finalAttrs.pythonInputs;
 
   makeFlags = [
-    (makeBool "LLAMA_CUBLAS" cublasSupport)
-    (makeBool "LLAMA_CLBLAST" clblastSupport)
-    (makeBool "LLAMA_VULKAN" vulkanSupport)
-    (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
+    "LLAMA_PORTABLE=1"
+  ];
+
+  buildFlags = [
+    "koboldcpp_default"
+    "koboldcpp_failsafe"
+    "koboldcpp_noavx2"
   ];
 
   installPhase = ''
@@ -101,15 +58,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp embd_res/*.embd "$out/bin"
-
-    ${lib.optionalString metalSupport ''
-      cp *.metal "$out/bin"
-    ''}
+    cp -r embd_res "$out/bin"
 
     ${lib.optionalString (!koboldLiteSupport) ''
-      rm "$out/bin/kcpp_docs.embd"
-      rm "$out/bin/klite.embd"
+      rm "$out/bin/embd_res/kcpp_docs.embd"
+      rm "$out/bin/embd_res/klite.embd"
     ''}
 
     runHook postInstall
@@ -118,7 +71,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
+      --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -127,7 +80,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
     homepage = "https://github.com/LostRuins/koboldcpp";
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [ agpl3Only ];
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
