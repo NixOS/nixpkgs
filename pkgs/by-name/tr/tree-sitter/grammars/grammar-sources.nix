@@ -2892,7 +2892,7 @@
   };
 
   unison = {
-    version = "2.1.3-unstable-2026-02-27";
+    version = "test-202601281012-unstable-2026-02-27";
     url = "github:kylegoetz/tree-sitter-unison";
     rev = "10365cc70ab2b2de85ea7ab35cf6b7636c36ce8b";
     hash = "sha256-l6X2x5lGlUhyf6Pr6lWd4aWacz7vmvtHVyM4qqPO8zg=";
