@@ -22769,9 +22769,9 @@
     name = "Redhawk";
   };
   redhood = {
-     name = "Alice Liddell";
-     github = "petalmaya";
-     githubId = "258934709";
+    name = "Alice Liddell";
+    github = "petalmaya";
+    githubId = 258934709;
   };
   redianthus = {
     github = "redianthus";
