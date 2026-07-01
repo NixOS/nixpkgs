@@ -7,6 +7,12 @@
   installShellFiles,
   nixosTests,
   versionCheckHook,
+  common-updater-scripts,
+  curlMinimal,
+  elm2nix,
+  nix-update,
+  nixfmt,
+  writeShellApplication,
 }:
 
 let
@@ -58,6 +64,30 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit elmUi;
     tests = { inherit (nixosTests.prometheus) alertmanager; };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "alertmanager-update";
+      runtimeInputs = [
+        curlMinimal
+        common-updater-scripts
+        elm2nix
+        nix-update
+        nixfmt
+      ];
+      text = ''
+        TAG=$(list-git-tags --url="https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}" | sort -V | tail -n1)
+
+        pushd pkgs/by-name/pr/prometheus-alertmanager
+        wcurl --output="elm.json" "https://raw.githubusercontent.com/prometheus/alertmanager/refs/tags/''${TAG}/ui/app/elm.json"
+        elm2nix convert > elm-srcs.nix
+        elm2nix snapshot > registry.dat
+        rm elm.json
+        nixfmt elm-srcs.nix
+        popd
+
+        nix-update prometheus-alertmanager --version "''${TAG#v}"
+        nix-update prometheus-alertmanager.elmUi
+      '';
+    });
   };
 
   nativeInstallCheckInputs = [
