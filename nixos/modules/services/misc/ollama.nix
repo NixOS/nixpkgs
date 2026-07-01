@@ -306,15 +306,17 @@ in
       script =
         let
           binaryInputs = lib.mapAttrs (_: lib.getExe) {
-            parallel = pkgs.parallel;
             awk = pkgs.gawk;
             sed = pkgs.gnused;
           };
+
           inherit (binaryInputs)
-            parallel
             awk
             sed
             ;
+
+          nproc = lib.getExe' pkgs.coreutils "nproc";
+          xargs = lib.getExe' pkgs.findutils "xargs";
 
           declaredModelsRegex = lib.pipe cfg.loadModels [
             (map lib.escapeRegex)
@@ -344,7 +346,7 @@ in
             fi
           ''}
 
-          '${parallel}' --tag '${ollama}' pull ::: ${lib.escapeShellArgs cfg.loadModels}
+          printf "%s\0" ${lib.escapeShellArgs cfg.loadModels} | '${xargs}' -0 -r -n 1 -P "$('${nproc}')" '${ollama}' pull
         '';
     };
 
