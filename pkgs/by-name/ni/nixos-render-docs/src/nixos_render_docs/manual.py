@@ -4,20 +4,28 @@ import html
 import json
 import re
 import xml.sax.saxutils as xml
-
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
 from markdown_it.token import Token
 
 from . import md, options
 from .html import HTMLRenderer, UnresolvedXrefError
-from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
+from .manual_structure import (
+    FragmentType,
+    TocEntry,
+    TocEntryType,
+    XrefTarget,
+    check_structure,
+    is_include,
+    make_xml_id,
+)
 from .md import Converter, Renderer
 from .redirects import Redirects
 from .src_error import SrcError
+
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -456,19 +464,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 if next_level:
                     result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
             return result
-        def build_list(kind: str, id: str, lst: Sequence[TocEntry]) -> str:
-            if not lst:
-                return ""
-            entries = [
-                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
-                for i, e in enumerate(lst, start=1)
-            ]
-            return (
-                f'<div class="{id}">'
-                f'<p><strong>List of {kind}</strong></p>'
-                f'<dl>{"".join(entries)}</dl>'
-                '</div>'
-            )
         # we don't want to generate the "Title of Contents" header for sections,
         # docbook didn't and it's only distracting clutter unless it's the main table.
         # we also want to generate tocs only for a top-level section (ie, one that is
@@ -485,8 +480,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             toc_depth = self._html_params.toc_depth
         if not (items := walk_and_emit(toc, toc_depth)):
             return ""
-        figures = build_list("Figures", "list-of-figures", toc.figures)
-        examples = build_list("Examples", "list-of-examples", toc.examples)
         return "".join([
             f'<div class="toc">',
             ' <p><strong>Table of Contents</strong></p>' if print_title else "",
@@ -494,8 +487,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             f'  {"".join(items)}'
             f' </dl>'
             f'</div>'
-            f'{figures}'
-            f'{examples}'
         ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:

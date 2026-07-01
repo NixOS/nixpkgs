@@ -34,10 +34,6 @@ body {
   }
 }
 
-.list-of-examples {
-  display: none;
-}
-
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -389,10 +385,6 @@ div.appendix dt {
 
 div.book .toc dt,
 div.appendix .toc dt {
-  margin-top: 0;
-}
-
-.list-of-examples dt {
   margin-top: 0;
 }
 
