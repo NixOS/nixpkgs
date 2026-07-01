@@ -67,7 +67,7 @@ in
 
   name = "matrix-authentication-service-upstream";
   meta = {
-    maintainers = pkgs.matrix-authentication-service.meta.maintainers ++ lib.teams.matrix.members;
+    teams = [ lib.teams.matrix ];
   };
 
   nodes = {
