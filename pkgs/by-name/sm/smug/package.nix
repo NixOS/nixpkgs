@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "smug";
-  version = "0.3.18";
+  version = "0.3.19";
 
   subPackages = [ "." ];
 
@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "ivaaaan";
     repo = "smug";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+A+FKHmJcStoumw/aDeSHG8nZ8hJbiizViC1MpbzT7g=";
+    hash = "sha256-xJMJgXQcriAgeCVkG/QJqxav1Aiu9XjM/hMPrY4jsHw=";
   };
 
   vendorHash = "sha256-0PWAY2CeBtaRqkN93ZWeVSynaMW8E9zJwUxI5CzC1mE=";

@@ -14,13 +14,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "buildkite-agent";
-  version = "3.128.0";
+  version = "3.129.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fBiIp9EyzIfoW4IbUZkePuBDyZRRWLGRClL57nio22E=";
+    hash = "sha256-k1q/7KRaIv5SE7CYFAzV8JB+czmX/bvwBp8JY9t77tI=";
   };
 
   vendorHash = "sha256-lRh5cAbg2yr+nvIaSRg3tG0tLvl7aDjyIoIjS1BvXNM=";

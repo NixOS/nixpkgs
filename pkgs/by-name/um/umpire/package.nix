@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "umpire";
   version = "2025.12.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
@@ -37,14 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cudatoolkit
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
       cuda_cudart
     ]
   );
 
   cmakeFlags =
     lib.optionals cudaSupport [
-      "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
       "-DENABLE_CUDA=ON"
       (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
     ]

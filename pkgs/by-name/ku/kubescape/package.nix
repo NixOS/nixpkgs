@@ -9,18 +9,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "4.0.9";
+  version = "4.0.10";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BkBRRrYs551bGnT00EvVSzaNQM8GfcltEl8xLb/AKd8=";
+    hash = "sha256-RbTGgSnaRUZdj2RdyTHgPy/+AbvAecTmdUeaDubyCSg=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GQTk12dHSNLWdLcb0VedK1Ex1uJOZtL3+XOnh527p/8=";
+  vendorHash = "sha256-y17ZrVzeRVzODGuIFKV8nsMu2720d/I4HUfwdinwOg4=";
 
   subPackages = [ "." ];
 

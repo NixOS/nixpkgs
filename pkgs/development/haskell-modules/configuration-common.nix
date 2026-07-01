@@ -2534,12 +2534,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.13";
+          version = "14.14";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-F34fAoNBcww9n6MsxYTjuBorOMcFzmo8nEj8rRomcrs=";
+            hash = "sha256-iAyGu0yKXpSg0uFgGvD1UGc35yDMLYQ/fHoRERiKJMU=";
           };
         })
       ];
