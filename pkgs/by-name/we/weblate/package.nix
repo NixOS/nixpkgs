@@ -34,23 +34,13 @@ let
     self = python;
     packageOverrides = _final: prev: {
       django = prev.django_6;
-      pygobject = prev.pygobject3;
     };
   };
   python3Packages = python.pkgs;
-
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
-    pango
-    harfbuzz
-    librsvg
-    gdk-pixbuf
-    glib
-    gobject-introspection
-  ];
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "2026.6.1";
+  version = "2026.8.1";
   pyproject = true;
 
   outputs = [
@@ -62,7 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
+    hash = "sha256-QHMl14vrUjGfHkOJIMUAdPA1jUTJlgCT5uEDuJBjwWo=";
   };
 
   postPatch = ''
@@ -82,7 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       staticSettings = writeText "static_settings.py" ''
         DEBUG = False
         STATIC_ROOT = os.environ["static"]
-        COMPRESS_OFFLINE = True
         # So we don't need postgres dependencies
         DATABASES = {}
       '';
@@ -93,7 +82,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
       ${manage} compilemessages
       ${manage} collectstatic --no-input
-      ${manage} compress
     '';
 
   # Upstream pins all dependencies, so their version constraints are mostly meaningless,
@@ -136,7 +124,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       disposable-email-domains
       django-appconf
       django-celery-beat
-      django-compressor
       django-cors-headers
       django-crispy-forms
       django-filter
@@ -154,8 +141,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gitpython
       hiredis
       html2text
+      httpx2
+      idna
       jsonschema
       lxml
+      matplotlib
       mistletoe
       nh3
       openpyxl
@@ -170,9 +160,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pillow
       pyaskalono
       pyasn1
-      pycairo
       pygments
-      pygobject
       pyicumessageformat
       pyjwt
       pyopenssl
@@ -192,17 +180,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
       translate-toolkit
       translation-finder
       twisted
+      unicode-segmentation-rs
       unidecode
       urllib3
       user-agents
+      webauthn
       weblate-fonts
       weblate-language-data
       weblate-schemas
     ]
     ++ django.optional-dependencies.argon2
     ++ celery.optional-dependencies.redis
+    ++ django-filter.optional-dependencies.drf
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ httpx2.optional-dependencies.brotli
+    ++ httpx2.optional-dependencies.socks
+    ++ httpx2.optional-dependencies.zstd
     ++ translate-toolkit.optional-dependencies.chardet
     ++ translate-toolkit.optional-dependencies.fluent
     ++ translate-toolkit.optional-dependencies.ini
@@ -218,6 +212,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Commented entries are not packaged yet
   optional-dependencies = with python3Packages; {
     amazon = [ boto3 ];
+    asgi = [ granian ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
     google = [
@@ -241,13 +236,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wsgi = [ granian ];
     # zxcvbn = [ django-zxcvbn-password-validator ];
   };
-
-  # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
-  env = {
-    inherit GI_TYPELIB_PATH;
-  };
-
-  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
   nativeCheckInputs =
     with python3Packages;
@@ -347,7 +335,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru = {
     inherit python;
     # We need to expose this so weblate can work outside of calling its bin output
-    inherit GI_TYPELIB_PATH;
     tests = {
       inherit (nixosTests) weblate;
     };

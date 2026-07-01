@@ -44,8 +44,6 @@ let
     CACHE_DIR = f"{DATA_DIR}/cache"
     STATIC_ROOT = "${finalPackage.static}"
     MEDIA_ROOT = "/var/lib/weblate/media"
-    COMPRESS_ROOT = "${finalPackage.static}"
-    COMPRESS_OFFLINE = True
     DEBUG = False
 
     with open("${cfg.djangoSecretKeyFile}") as f:
@@ -127,8 +125,6 @@ let
   environment = {
     PYTHONPATH = "${settingsDir}:${pythonEnv}/${python.sitePackages}/";
     DJANGO_SETTINGS_MODULE = "settings";
-    # We run Weblate through gunicorn, so we can't utilise the env var set in the wrapper.
-    inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
   # Packages needed at runtime
