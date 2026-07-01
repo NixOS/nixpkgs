@@ -19586,6 +19586,12 @@
     githubId = 26014535;
     name = "Negate This";
   };
+  Neila = {
+    email = "neilaspace@outlook.com";
+    github = "neila-a";
+    githubId = 78797625;
+    name = "Neil Alen";
+  };
   neilmayhew = {
     email = "nix@neil.mayhew.name";
     github = "neilmayhew";
