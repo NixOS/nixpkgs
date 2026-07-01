@@ -12,6 +12,10 @@
     };
     __allowFileset = false;
   },
+  # { ${system} = { ${key} = configOverlay; }; }
+  # Each key produces an extra job leaf at <attrPath>.${system}.${key} built
+  # with `recursiveUpdate nixpkgsArgs.config configOverlay`.
+  matrix ? { },
 }:
 
 let
@@ -162,6 +166,22 @@ let
   # patterns
   forMatchingSystems = metaPatterns: genAttrs (supportedMatches metaPatterns);
 
+  pkgsForMatrix = mapAttrs (
+    system:
+    mapAttrs (
+      _: configOverlay:
+      packageSet (
+        recursiveUpdate (
+          {
+            inherit system;
+            crossSystem = null;
+          }
+          // nixpkgsArgs
+        ) { config = configOverlay; }
+      )
+    )
+  ) matrix;
+
   /*
     Build a package on the given set of platforms.  The function `f'
     is called for each supported platform with Nixpkgs for that
@@ -201,6 +221,20 @@ let
   mapTestOnCross = _mapTestOnHelper (addMetaAttrs {
     maintainers = crossMaintainers;
   });
+
+  testOnMatrix =
+    metaPatterns: f:
+    forMatchingSystems metaPatterns (
+      system:
+      if (matrix.${system} or { }) == { } then
+        hydraJob' (f (pkgsFor system))
+      else
+        mapAttrs (_: pkgs: hydraJob' (f pkgs)) pkgsForMatrix.${system}
+    );
+
+  mapTestOnMatrix = mapAttrsRecursive (
+    path: metaPatterns: testOnMatrix metaPatterns (pkgs: getAttrFromPath path pkgs)
+  );
 
   # Recursive for packages and apply a function to them
   recursiveMapPackages =
@@ -246,14 +280,17 @@ in
     lib
     mapTestOn
     mapTestOnCross
+    mapTestOnMatrix
     recursiveMapPackages
     getPlatforms
     packagePlatforms
     pkgs
     pkgsFor
     pkgsForCross
+    pkgsForMatrix
     supportedMatches
     testOn
     testOnCross
+    testOnMatrix
     ;
 }
