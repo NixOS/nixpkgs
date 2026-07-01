@@ -851,6 +851,12 @@
     githubId = 6055037;
     name = "Alexander Hirner";
   };
+  AhmedAmr = {
+    email = "ahmedamr24680@gmail.com";
+    github = "AhmedAmrNabil";
+    githubId = 43810060;
+    name = "Ahmed Amr";
+  };
   ahoneybun = {
     email = "aaronhoneycutt@proton.me";
     github = "ahoneybun";
