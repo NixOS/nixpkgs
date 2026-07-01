@@ -6,7 +6,14 @@
   gtk2,
   gdk-pixbuf,
   dbus-glib,
-  xorg,
+  libX11,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXi,
+  libXrender,
+  libXt,
   libpulseaudio,
   libGL,
   pango,
@@ -46,14 +53,14 @@ stdenv.mkDerivation rec {
     pango
     freetype
     fontconfig
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXrender
-    xorg.libXcomposite
-    xorg.libXext
-    xorg.libX11
-    xorg.libXt
+    libXi
+    libXcursor
+    libXdamage
+    libXrender
+    libXcomposite
+    libXext
+    libX11
+    libXt
   ];
 
   installPhase = ''
