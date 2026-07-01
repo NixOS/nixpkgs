@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nixosTests,
   versionCheckHook,
   nix-update-script,
 }:
@@ -38,10 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r contrib/default_configs $out/share/clashtui/default_configs
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.clashtui = nixosTests.clashtui;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    description = "Mihomo (Clash.Meta) TUI Client";
+    description = "Mihomo (Clash.Meta) / sing-box TUI Client";
     homepage = "https://github.com/JohanChane/clashtui";
     changelog = "https://github.com/JohanChane/clashtui/releases/tag/v${finalAttrs.version}";
     mainProgram = "clashtui";
