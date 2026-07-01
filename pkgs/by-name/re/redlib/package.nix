@@ -4,21 +4,33 @@
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
+
+  cmake,
+  gitMinimal,
+
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "0.36.0-unstable-2025-12-16";
+  version = "0.36.0-unstable-2026-04-24";
 
   src = fetchFromGitHub {
     owner = "redlib-org";
     repo = "redlib";
-    rev = "ba98178bbce0f62265095ba085128c7022e51a1f";
-    hash = "sha256-ERTEoT7w8oGA0ztrzc9r9Bl/7OOay+APg3pW+h3tgvM=";
+    rev = "a4d36e954cf1bd64f209cd8868c5a29edc81b374";
+    hash = "sha256-siyD6A12UALQIV7BMd7zu1TaojleTEYtpxPszuhx1/Y=";
   };
 
-  cargoHash = "sha256-ageSjIX0BLVYlLAjeojQq5N6/VASOIpwXNR/3msl/p4=";
+  cargoPatches = [ ./native-roots.patch ];
+
+  cargoHash = "sha256-qDcDrZFWcFb0LRwumOc/+boIxmc6HYz+YqmP+kqK05E=";
+
+  nativeBuildInputs = [
+    cmake
+    gitMinimal
+    rustPlatform.bindgenHook
+  ];
 
   postInstall = ''
     install --mode=444 -D contrib/redlib.service $out/lib/systemd/system/redlib.service
@@ -56,8 +68,8 @@ rustPlatform.buildRustPackage {
     "--skip=test_oauth_client_refresh"
     "--skip=test_oauth_token_exists"
     "--skip=test_oauth_headers_len"
-    "--skip=oauth::test_generic_web_backend"
-    "--skip=oauth::test_mobile_spoof_backend"
+    "--skip=oauth::tests::test_generic_web_backend"
+    "--skip=oauth::tests::test_mobile_spoof_backend"
   ];
 
   env = {
@@ -77,6 +89,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       bpeetz
       Guanran928
+      ryand56
     ];
   };
 }
