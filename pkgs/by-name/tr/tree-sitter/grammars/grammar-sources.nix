@@ -1891,10 +1891,9 @@
   };
 
   org = {
-    version = "1.3.1-unstable-2023-06-19";
-    url = "github:milisims/tree-sitter-org";
-    rev = "64cfbc213f5a83da17632c95382a5a0a2f3357c1";
-    hash = "sha256-/03eZBbv23W5s/GbDgPgaJV5TyK+/lrWUVeINRS5wtA=";
+    version = "2.0.4";
+    url = "github:nvim-orgmode/tree-sitter-org";
+    hash = "sha256-76ImC8GMW+yAKG++AHryUi+MYTmtJ5ogygC+bgNMErA=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -1904,10 +1903,9 @@
   };
 
   org-nvim = {
-    version = "1.3.1-unstable-2023-06-19";
-    url = "github:emiasims/tree-sitter-org";
-    rev = "64cfbc213f5a83da17632c95382a5a0a2f3357c1";
-    hash = "sha256-/03eZBbv23W5s/GbDgPgaJV5TyK+/lrWUVeINRS5wtA=";
+    version = "2.0.4";
+    url = "github:nvim-orgmode/tree-sitter-org";
+    hash = "sha256-76ImC8GMW+yAKG++AHryUi+MYTmtJ5ogygC+bgNMErA=";
     meta = {
       license = lib.licenses.mit;
     };
