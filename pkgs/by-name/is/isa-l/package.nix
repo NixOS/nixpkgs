@@ -96,12 +96,5 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/intel/isa-l/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # <instantiation>:4:26: error: unexpected token in argument list
-      #  movk x7, p4_low_b1, lsl 16
-      "aarch64-darwin"
-      # https://github.com/intel/isa-l/issues/188
-      "i686-linux"
-    ];
   };
 })
