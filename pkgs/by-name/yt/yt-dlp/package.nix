@@ -2,11 +2,12 @@
   lib,
   stdenvNoCC,
   python3Packages,
+  buildPackages,
   atomicparsley,
   deno,
   # Override jsRuntime with `nodejs`, `bun`, `quickjs`, or `quickjs-ng` if you want to use another default JS runtime.
   # You still need to enable them in your yt-dlp config with `--js-runtimes [runtime]`.
-  jsRuntime ? deno,
+  jsRuntime ? if stdenvNoCC.hostPlatform.isRiscV64 then nodejs else deno,
   fetchFromGitHub,
   ffmpeg-headless,
   installShellFiles,
@@ -18,6 +19,7 @@
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
+  buildManpage ? buildPackages.pandoc.compiler.bootstrapAvailable,
   nix-update-script,
   # required for tests
   yt-dlp,
@@ -57,16 +59,16 @@ python3Packages.buildPythonApplication rec {
   __structuredAttrs = true;
   outputs = [
     "out"
-    "man"
     "doc"
-  ];
+  ]
+  ++ lib.optionals buildManpage [ "man" ];
 
   build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [
     installShellFiles
-    pandoc
-  ];
+  ]
+  ++ lib.optionals buildManpage [ pandoc ];
 
   # expose optional-dependencies, but provide all features
   dependencies =
@@ -98,16 +100,18 @@ python3Packages.buildPythonApplication rec {
     python devscripts/make_lazy_extractors.py
   '';
 
-  postBuild = ''
-    python devscripts/prepare_manpage.py yt-dlp.1.temp.md
-    pandoc -s -f markdown-smart -t man yt-dlp.1.temp.md -o yt-dlp.1
-    rm yt-dlp.1.temp.md
-
-    mkdir -p completions/{bash,fish,zsh}
-    python devscripts/bash-completion.py completions/bash/yt-dlp
-    python devscripts/zsh-completion.py completions/zsh/_yt-dlp
-    python devscripts/fish-completion.py completions/fish/yt-dlp.fish
-  '';
+  postBuild =
+    lib.optionalString buildManpage ''
+      python devscripts/prepare_manpage.py yt-dlp.1.temp.md
+      pandoc -s -f markdown-smart -t man yt-dlp.1.temp.md -o yt-dlp.1
+      rm yt-dlp.1.temp.md
+    ''
+    + ''
+      mkdir -p completions/{bash,fish,zsh}
+      python devscripts/bash-completion.py completions/bash/yt-dlp
+      python devscripts/zsh-completion.py completions/zsh/_yt-dlp
+      python devscripts/fish-completion.py completions/fish/yt-dlp.fish
+    '';
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -136,19 +140,21 @@ python3Packages.buildPythonApplication rec {
     fi
   '';
 
-  postInstall = ''
-    installManPage yt-dlp.1
+  postInstall =
+    lib.optionalString buildManpage ''
+      installManPage yt-dlp.1
+    ''
+    + ''
+      installShellCompletion \
+        --bash completions/bash/yt-dlp \
+        --fish completions/fish/yt-dlp.fish \
+        --zsh completions/zsh/_yt-dlp
 
-    installShellCompletion \
-      --bash completions/bash/yt-dlp \
-      --fish completions/fish/yt-dlp.fish \
-      --zsh completions/zsh/_yt-dlp
-
-    install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
-  ''
-  + lib.optionalString withAlias ''
-    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
-  '';
+      install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
+    ''
+    + lib.optionalString withAlias ''
+      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
