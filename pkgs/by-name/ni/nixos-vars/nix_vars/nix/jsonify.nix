@@ -39,7 +39,22 @@ let
         ];
       }).config.vars;
 
-  evalDeferredPackage = pkg: if pkg == null then null else (pkg pkgsHost').drvPath;
+  evalDeferredPackage =
+    pkg:
+    if pkg == null then
+      null
+    else
+      let
+        forced = pkg pkgsHost';
+        drv =
+          if forced.type or null == "derivation" then
+            forced
+          else
+            pkgsHost'.writeShellScript "vars-wrapper-script" ''
+              exec ${forced} "$@"
+            '';
+      in
+      drv.drvPath;
 in
 # Make this call idempotent
 if config._type or null == "vars-configuration" then
