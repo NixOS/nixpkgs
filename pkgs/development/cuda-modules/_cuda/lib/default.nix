@@ -12,10 +12,17 @@
 
   # See ./cuda.nix for documentation.
   inherit (import ./cuda.nix { inherit _cuda lib; })
+    _cudaCapabilitiesAreArchitectureSpecific
+    _cudaCapabilitiesAreFamilySpecific
+    _cudaCapabilitiesAreJetson
+    _cudaCapabilitiesAreJetsonArch
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
     _mkCudaVariant
     allowUnfreeCudaPredicate
+    cudaCapabilitiesAreJetson
+    cudaCapabilitiesAreJetsonArch
+    cudaCapabilitiesJetsonSubset
     ;
 
   # See ./licenses.nix for documentation.

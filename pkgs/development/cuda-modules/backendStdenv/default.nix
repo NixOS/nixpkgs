@@ -20,7 +20,14 @@ let
     toJSON
     toString
     ;
-  inherit (_cuda.db) allSortedCudaCapabilities cudaCapabilityToInfo nvccCompatibilities;
+  inherit (_cuda.db)
+    allSortedCudaCapabilities
+    architectureSpecificCudaCapabilities
+    cudaCapabilityToInfo
+    familySpecificCudaCapabilities
+    jetsonCudaCapabilities
+    nvccCompatibilities
+    ;
   inherit (_cuda.lib)
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
@@ -44,20 +51,6 @@ let
     versionOlder
     ;
   inherit (lib.versions) major;
-
-  # NOTE: By virtue of processing a sorted list (allSortedCudaCapabilities), our groups will be sorted.
-
-  architectureSpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
-  ) allSortedCudaCapabilities;
-
-  familySpecificCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
-  ) allSortedCudaCapabilities;
-
-  jetsonCudaCapabilities = filter (
-    cudaCapability: cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) allSortedCudaCapabilities;
 
   passthruExtra = {
     nvccHostCCMatchesStdenvCC = backendStdenv.cc == stdenv.cc;

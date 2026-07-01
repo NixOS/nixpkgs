@@ -62,4 +62,74 @@ bootstrapData
   cudaArchNameToCapabilities = lib.groupBy (
     cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
   ) db.allSortedCudaCapabilities;
+
+  /**
+    All architecture-specific CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    architectureSpecificCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  architectureSpecificCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isArchitectureSpecific
+  ) db.allSortedCudaCapabilities;
+
+  /**
+    All family-specific CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    familySpecificCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  familySpecificCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isFamilySpecific
+  ) db.allSortedCudaCapabilities;
+
+  /**
+    All Jetson CUDA capabilities, sorted by version.
+
+    # Type
+
+    ```
+    jetsonCudaCapabilities :: [CudaCapability]
+    ```
+  */
+  jetsonCudaCapabilities = lib.filter (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+  ) db.allSortedCudaCapabilities;
+
+  /**
+    Mapping of CUDA micro-architecture name to Jetson capabilities belonging to that
+    micro-architecture.
+
+    This is a Jetson-only subset of `cudaArchNameToCapabilities`: only architectures that have at
+    least one Jetson capability appear as keys, and their values contain only the Jetson
+    capabilities for that architecture.
+
+    # Type
+
+    ```
+    cudaArchNameToJetsonCapabilities :: AttrSet NonEmptyStr (NonEmptyListOf CudaCapability)
+    ```
+  */
+  cudaArchNameToJetsonCapabilities = lib.groupBy (
+    cudaCapability: db.cudaCapabilityToInfo.${cudaCapability}.archName
+  ) db.jetsonCudaCapabilities;
+
+  /**
+    The micro-architecture names that have at least one Jetson capability.
+
+    This is the set of valid `archName` values for `_cuda.lib.cudaCapabilitiesAreJetsonArch`.
+
+    # Type
+
+    ```
+    jetsonArchNames :: [String]
+    ```
+  */
+  jetsonArchNames = lib.attrNames db.cudaArchNameToJetsonCapabilities;
 }

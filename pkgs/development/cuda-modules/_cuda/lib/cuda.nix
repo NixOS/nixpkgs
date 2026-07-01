@@ -1,4 +1,11 @@
 { _cuda, lib }:
+let
+  jetsonSubset =
+    cudaCapabilities: lib.intersectLists _cuda.db.jetsonCudaCapabilities cudaCapabilities;
+  jetsonArchSubset =
+    archName: cudaCapabilities:
+    lib.intersectLists (_cuda.db.cudaArchNameToJetsonCapabilities.${archName} or [ ]) cudaCapabilities;
+in
 {
   /**
     Returns whether a capability should be built by default for a particular CUDA version.
@@ -101,6 +108,159 @@
     :::
   */
   _mkCudaVariant = version: "cuda${lib.versions.major version}";
+
+  /**
+    Returns whether a list of CUDA capabilities includes any architecture-specific capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesAreArchitectureSpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesAreArchitectureSpecific =
+    cudaCapabilities:
+    lib.intersectLists _cuda.db.architectureSpecificCudaCapabilities cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any family-specific capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesAreFamilySpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesAreFamilySpecific =
+    cudaCapabilities:
+    lib.intersectLists _cuda.db.familySpecificCudaCapabilities cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesAreJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesAreJetson = cudaCapabilities: jetsonSubset cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability belonging to the
+    given micro-architecture.
+
+    NOTE: No guarantees are made about this function's stability. You may use it at your own risk.
+
+    # Type
+
+    ```
+    _cudaCapabilitiesAreJetsonArch
+      :: (archName :: String)
+      -> (cudaCapabilities :: [CudaCapability])
+      -> Bool
+    ```
+
+    # Inputs
+
+    `archName`
+
+    : The micro-architecture name (e.g. `"Ampere"`, `"Blackwell"`)
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  _cudaCapabilitiesAreJetsonArch =
+    archName: cudaCapabilities: jetsonArchSubset archName cudaCapabilities != [ ];
+
+  /**
+    Returns the Jetson capabilities within a list of CUDA capabilities.
+
+    # Type
+
+    ```
+    cudaCapabilitiesJetsonSubset :: (cudaCapabilities :: [CudaCapability]) -> [CudaCapability]
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to filter
+  */
+  cudaCapabilitiesJetsonSubset = jetsonSubset;
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability.
+
+    This is the stable public API for `_cudaCapabilitiesAreJetson`.
+
+    # Type
+
+    ```
+    cudaCapabilitiesAreJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    ```
+
+    # Inputs
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  cudaCapabilitiesAreJetson = cudaCapabilities: jetsonSubset cudaCapabilities != [ ];
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability belonging to the
+    given micro-architecture.
+
+    This is the stable public API for `_cudaCapabilitiesAreJetsonArch`.
+
+    # Type
+
+    ```
+    cudaCapabilitiesAreJetsonArch
+      :: (archName :: String)
+      -> (cudaCapabilities :: [CudaCapability])
+      -> Bool
+    ```
+
+    # Inputs
+
+    `archName`
+
+    : The micro-architecture name (e.g. `"Ampere"`, `"Blackwell"`)
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to check
+  */
+  cudaCapabilitiesAreJetsonArch =
+    archName: cudaCapabilities: jetsonArchSubset archName cudaCapabilities != [ ];
 
   /**
     A predicate which, given a package, returns true if the package has a free license or one of NVIDIA's licenses.
