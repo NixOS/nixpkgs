@@ -18,7 +18,6 @@
   */
   # git-crypt,
   # transcrypt,
-  j2cli,
   esh,
   gnupg,
   coreutils,
@@ -30,7 +29,6 @@
   # Templates:
   withAwk ? true,
   withEsh ? true,
-  withJ2 ? true,
 
   # Encryption:
   withGpg ? true,
@@ -86,7 +84,6 @@ resholve.mkDerivation (finalAttrs: {
       ++ lib.optional withGpg gnupg
       ++ lib.optional withOpenssl openssl
       ++ lib.optional withAwk gawk
-      ++ lib.optional withJ2 j2cli
       ++ lib.optional withEsh esh
       ++ lib.optional withTar gnutar;
       fake = {
@@ -100,7 +97,7 @@ resholve.mkDerivation (finalAttrs: {
         # see head comment
         # "$GIT_CRYPT_PROGRAM" = [ "git-crypt" ];
         # "$TRANSCRYPT_PROGRAM" = [ "transcrypt" ];
-        "$J2CLI_PROGRAM" = lib.optional withJ2 "j2";
+        "$J2CLI_PROGRAM" = [ ];
         "$ESH_PROGRAM" = lib.optional withEsh "esh";
         # not in nixpkgs (yet)
         # "$ENVTPL_PROGRAM" = [ "envtpl" ];
@@ -117,7 +114,7 @@ resholve.mkDerivation (finalAttrs: {
         "$GPG_PROGRAM" = !withGpg;
         "$OPENSSL_PROGRAM" = !withOpenssl;
         "$AWK_PROGRAM" = !withAwk;
-        "$J2CLI_PROGRAM" = !withJ2;
+        "$J2CLI_PROGRAM" = false;
         "$ESH_PROGRAM" = !withEsh;
 
         # not in nixpkgs
@@ -129,7 +126,7 @@ resholve.mkDerivation (finalAttrs: {
               with properly in binlore and/or resholve.
       */
       execer = [
-        "cannot:${j2cli}/bin/j2"
+        "cannot:j2"
         "cannot:${esh}/bin/esh"
         "cannot:${git}/bin/git"
         "cannot:${gnupg}/bin/gpg"

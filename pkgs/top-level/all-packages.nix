@@ -10734,8 +10734,6 @@ with pkgs;
 
   jack_autoconnect = jack-autoconnect;
 
-  j2cli = with python311Packages; toPythonApplication j2cli;
-
   j2lint = with python3Packages; toPythonApplication j2lint;
 
   kmonad = haskellPackages.kmonad.bin;

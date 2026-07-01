@@ -282,6 +282,7 @@ mapAliases {
   iotawattpy = ha-iotawattpy; # added 2025-07-06
   ipython_genutils = throw "'ipython_genutils' has been renamed to/replaced by 'ipython-genutils'"; # Converted to throw 2025-10-29
   itanium_demangler = throw "'itanium_demangler' has been renamed to/replaced by 'itanium-demangler'"; # Converted to throw 2025-10-29
+  j2cli = throw "'j2cli' has been removed as it is unmaintained upstream"; # Added 2026-05-24
   jaraco_classes = throw "'jaraco_classes' has been renamed to/replaced by 'jaraco-classes'"; # Converted to throw 2025-10-29
   jaraco_collections = throw "'jaraco_collections' has been renamed to/replaced by 'jaraco-collections'"; # Converted to throw 2025-10-29
   jaraco_functools = throw "'jaraco_functools' has been renamed to/replaced by 'jaraco-functools'"; # Converted to throw 2025-10-29
