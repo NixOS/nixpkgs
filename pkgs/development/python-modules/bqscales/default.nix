@@ -8,6 +8,7 @@
   yarn-berry_3,
 
   # build-system
+  hatch,
   hatchling,
   hatch-build-scripts,
   hatch-jupyter-builder,
@@ -25,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   pname = "bqscales";
   version = "0.3.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bqplot";
@@ -32,10 +34,6 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-AAKnOEwdycSlxJEK0qbFJp2Dpiw/rEIk7fUa3NTymqQ=";
   };
-
-  postPatch = ''
-    sed -i "/\"hatch\"/d" pyproject.toml
-  '';
 
   missingHashes = ./missing-hashes.json;
 
@@ -55,6 +53,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
+    hatch
     hatch-build-scripts
     hatch-jupyter-builder
     hatch-nodejs-version

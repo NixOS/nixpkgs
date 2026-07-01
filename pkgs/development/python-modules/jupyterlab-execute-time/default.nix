@@ -4,11 +4,11 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
   hatch-jupyter-builder,
-
-  # build inputs
+  hatchling,
   jupyterlab,
+
+  # nativeBuildInputs
   nodejs,
   writableTmpDirAsHomeHook,
   yarn-berry_3,
@@ -17,15 +17,16 @@
   jupyter-packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-execute-time";
   version = "3.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "jupyterlab-execute-time";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1eNv6yTyorg64PXQm68eqp56Ig0eUbhPWluI/s4oijE=";
   };
 
@@ -38,12 +39,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    hatchling
     hatch-jupyter-builder
+    hatchling
+    jupyterlab
   ];
 
   nativeBuildInputs = [
-    jupyterlab
     nodejs
     writableTmpDirAsHomeHook
     yarn-berry_3
@@ -51,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-aCuw+4FqA0JPMr++AgE4WI+KmXda1IosaU2yk/vE7vw=";
   };
 
@@ -62,10 +63,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_execute_time" ];
 
+  # The package ships no Python test suite (it is a JS/TS JupyterLab extension)
+  doCheck = false;
+
   meta = {
     description = "JupyterLab extension for displaying cell timings";
     homepage = "https://github.com/deshaw/jupyterlab-execute-time";
+    changelog = "https://github.com/deshaw/jupyterlab-execute-time/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vglfr ];
   };
-}
+})
