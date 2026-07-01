@@ -17,6 +17,10 @@ contributing.md
 interoperability.md
 ```
 
+```{=include=} chapters
+languages-frameworks/index.md
+```
+
 ```{=include=} appendix html:into-file=//release-notes.html
 release-notes/release-notes.md
 ```
