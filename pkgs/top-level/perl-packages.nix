@@ -22119,17 +22119,11 @@ with self;
 
   ModuleCPANTSAnalyse = buildPerlPackage {
     pname = "Module-CPANTS-Analyse";
-    version = "1.02";
+    version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.02.tar.gz";
-      hash = "sha256-nhFzm5zQi6LXWllzfx+yl/RYA/KJBjxcdZv8eP1Rbns=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.03.tar.gz";
+      hash = "sha256-0OqFHALrJwA9gkJUeDdVJTn/YdTwhwKM3q0Advu9Rjo=";
     };
-
-    # Fails with 'symlinks not listed in MANIFEST is not ignored for a non-local distribution'
-    postPatch = ''
-      rm -f t/analyse/manifest.t
-    '';
-
     propagatedBuildInputs = [
       ArchiveAnyLite
       ArrayDiff
