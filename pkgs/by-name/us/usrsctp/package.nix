@@ -38,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  # GCC 16's unused variable analysis is more advanced, leading to a build
+  # failure since usrsctp builds with -Wno-error.
+  # https://github.com/sctplab/usrsctp/pull/744
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=unused-but-set-variable") ];
+
   # https://github.com/sctplab/usrsctp/issues/662
   postPatch = ''
     substituteInPlace usrsctplib/CMakeLists.txt \
