@@ -159,6 +159,8 @@ lib.makeScope newScope (self: {
 
   same_cdi = self.callPackage ./cores/same_cdi.nix { }; # the name is not a typo
 
+  sameduck = self.callPackage ./cores/sameduck.nix { };
+
   sameboy = self.callPackage ./cores/sameboy.nix { };
 
   scummvm = self.callPackage ./cores/scummvm.nix { };
