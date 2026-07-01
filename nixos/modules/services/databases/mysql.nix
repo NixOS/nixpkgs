@@ -213,7 +213,7 @@ in
       initialScript = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database.";
+        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database. Run as superuser.";
       };
 
       ensureDatabases = lib.mkOption {

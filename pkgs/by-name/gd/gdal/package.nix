@@ -113,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
-      lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      # mysql puts libraries into top-level `lib` (but has pkgconfig),
+      # mariadb puts them into a subdirectory (but has no pkgconfig)
+      lib.optionalString (libmysqlclient.pname != "mysql-client") "mysql/"
     }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
   ++ lib.optionals finalAttrs.doInstallCheck [
