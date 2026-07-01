@@ -1535,7 +1535,7 @@ in
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = runTest ./sfxr-qt.nix;
   sgt-puzzles = runTest ./sgt-puzzles.nix;
-  shadow = runTest ./shadow.nix;
+  shadow = import ./shadow { inherit runTest; };
   shadowsocks = handleTest ./shadowsocks { };
   shadps4 = runTest ./shadps4.nix;
   sharkey = runTest ./web-apps/sharkey.nix;
