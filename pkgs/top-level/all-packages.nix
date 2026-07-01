@@ -6467,6 +6467,11 @@ with pkgs;
 
   openssl = openssl_3_6;
 
+  # don't expose 3.1.2 as it's insecure
+  openssl_fips = (callPackages ../development/libraries/openssl { }).openssl_3_1_2.override {
+    enableFIPS = true;
+  };
+
   openssl_oqs = openssl.override {
     providers = [
       {
