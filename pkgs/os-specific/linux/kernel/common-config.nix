@@ -864,6 +864,12 @@ let
       CRYPTO_ECDSA = yes;
       CRYPTO_MLDSA = whenAtLeast "7.0" yes;
 
+      # Reserve enough space for 12000 single‐module certificates.
+      # Current `allmodconfig` builds produce in the region of ~7500 to
+      # ~9000 in‐tree modules, so this should be sufficient margin.
+      SYSTEM_EXTRA_CERTIFICATE = yes;
+      SYSTEM_EXTRA_CERTIFICATE_SIZE = freeform (toString (12000 * 260));
+
       SECONDARY_TRUSTED_KEYRING = yes;
       SYSTEM_BLACKLIST_KEYRING = yes;
 
