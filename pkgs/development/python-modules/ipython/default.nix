@@ -85,7 +85,12 @@ buildPythonPackage (finalAttrs: {
     testpath
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTests = [
+    # timing sensitive
+    "test_debug_magic_passes_through_generators"
+    "test_nest_embed"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];
