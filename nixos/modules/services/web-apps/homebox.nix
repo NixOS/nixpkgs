@@ -13,10 +13,18 @@ let
     mkOption
     types
     mkIf
+    versionOlder
     ;
 
   defaultUser = "homebox";
   defaultGroup = "homebox";
+
+  env-file-values = lib.mapAttrs' (n: v: {
+    name = lib.removeSuffix "_FILE" n;
+    value = v;
+  }) (lib.filterAttrs (n: v: v != null && lib.match ".+_FILE" n != null) cfg.settings);
+
+  env-nonfile-values = lib.filterAttrs (n: v: lib.match ".+_FILE" n == null) cfg.settings;
 in
 {
   options.services.homebox = {
@@ -33,7 +41,22 @@ in
       description = "Group under which Homebox runs.";
     };
     settings = mkOption {
-      type = types.submodule { freeformType = types.attrsOf (types.nullOr types.str); };
+      type = types.submodule {
+        freeformType = types.attrsOf (types.nullOr types.str);
+        options = {
+          HBOX_AUTH_API_KEY_PEPPER_FILE = mkOption {
+            type = lib.types.pathWith { inStore = false; };
+            description = ''
+              Server-side secret HMAC-keyed into stored API key hashes; the binary refuses to start if this is shorter
+              than 32 bytes. Generate with `openssl rand -base64 48`. Must stay stable across restarts — rotating it
+              invalidates every issued API key.
+
+              If `system.stateVersion` < 26.11 this value will be auto-generated if not set,
+              starting in 26.11 the pepper file must be explicitly set.
+            '';
+          };
+        };
+      };
       defaultText = lib.literalExpression ''
         {
           HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox";
@@ -51,6 +74,7 @@ in
         The homebox configuration as environment variables. For definitions and available options see the upstream
         [documentation](https://homebox.software/en/configure/#configure-homebox).
       '';
+
     };
     database = {
       createLocally = mkOption {
@@ -92,7 +116,7 @@ in
         HBOX_DATABASE_DRIVER = "sqlite3";
         HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
         HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
-        HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
+        HBOX_OPTIONS_GITHUB_RELEASE_CHECK = "false";
         HBOX_MODE = "production";
         # Fix this startup issue:
         #   failed to create modcache index dir: mkdir /var/empty/.cache: read-only file system
@@ -100,6 +124,7 @@ in
         # Fix uploading/saving attachments/images:
         # [...] rename /tmp/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed.1889b3d16ab36e22.tmp /var/lib/homebox/data/5f42f81b-e9ad-4495-b6a6-9e9f704db30e/documents/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed: invalid cross-device link" [...]
         TMPDIR = "/var/lib/homebox/tmp";
+
       })
 
       (mkIf cfg.database.createLocally {
@@ -108,6 +133,10 @@ in
         HBOX_DATABASE_USERNAME = "homebox";
         HBOX_DATABASE_DATABASE = "homebox";
         HBOX_DATABASE_PORT = toString config.services.postgresql.settings.port;
+      })
+
+      (mkIf (versionOlder config.system.stateVersion "26.11") {
+        HBOX_AUTH_API_KEY_PEPPER_FILE = "/etc/homebox/api-pepper-secret";
       })
     ];
 
@@ -121,18 +150,61 @@ in
         }
       ];
     };
+    systemd.services.homebox-setup =
+      mkIf (cfg.settings.HBOX_AUTH_API_KEY_PEPPER_FILE == "/etc/homebox/api-pepper-secret")
+        {
+          script = ''
+            if [ ! -r "$CONFIGURATION_DIRECTORY"/api-pepper-secret ]; then
+              openssl rand -base64 48 > "$CONFIGURATION_DIRECTORY"/api-pepper-secret
+              chmod 400 "$CONFIGURATION_DIRECTORY"/api-pepper-secret
+            fi
+          '';
+          path = [
+            pkgs.openssl
+          ];
+          serviceConfig = {
+            Type = "oneshot";
+            User = cfg.user;
+            Group = cfg.group;
+            ConfigurationDirectory = "homebox";
+          };
+        };
     systemd.services.homebox = {
-      requires = lib.optional cfg.database.createLocally "postgresql.target";
-      after = lib.optional cfg.database.createLocally "postgresql.target";
-      environment = lib.filterAttrs (_: v: v != null) cfg.settings;
+      requires =
+        lib.optionals (cfg.settings.HBOX_AUTH_API_KEY_PEPPER_FILE == "/etc/homebox/api-pepper-secret") [
+          "homebox-setup.service"
+        ]
+        ++ lib.optionals cfg.database.createLocally [
+          "postgresql.target"
+        ];
+      after =
+        lib.optionals (cfg.settings.HBOX_AUTH_API_KEY_PEPPER_FILE == "/etc/homebox/api-pepper-secret") [
+          "homebox-setup.service"
+        ]
+        ++ lib.optionals cfg.database.createLocally [
+          "postgresql.target"
+        ];
+      environment = lib.filterAttrs (_: v: v != null) env-nonfile-values;
       preStart = ''
         "${pkgs.coreutils}/bin/rm" -rf /var/lib/homebox/tmp
         "${pkgs.coreutils}/bin/mkdir" -p /var/lib/homebox/tmp
       '';
+      script = ''
+        CREDENTIALS_DIRECTORY=''${CREDENTIALS_DIRECTORY?"Systemd specifies this value"}
+
+        ${lib.strings.concatLines (
+          lib.attrsets.mapAttrsToList (
+            n: _: "export ${n}=$(<\"$CREDENTIALS_DIRECTORY\"/${n})"
+          ) env-file-values
+        )}
+
+        ${lib.getExe cfg.package}
+      '';
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = lib.getExe cfg.package;
+        ConfigurationDirectory = "homebox";
+        LoadCredential = lib.attrsets.mapAttrsToList (n: v: "${n}:${v}") env-file-values;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
