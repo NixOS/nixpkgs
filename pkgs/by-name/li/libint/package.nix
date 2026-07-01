@@ -2,17 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
   python3,
-  perl,
   gmpxx,
-  mpfr,
   boost,
-  eigen,
+  eigen_5,
   gfortran,
   cmake,
+  ninja,
   enableFMA ? stdenv.hostPlatform.fmaSupport,
   enableFortran ? true,
   enableSSE ? (!enableFortran) && stdenv.hostPlatform.isx86_64,
@@ -33,12 +29,12 @@
   # for the derivative order i, e.g. [6,5,4] supports ERIs for l=6, their first
   # derivatives for l=5 and their second derivatives for l=4.
   eriAm ? (builtins.genList (i: maxAm - 1 - i) (eriDeriv + 1)),
-  eri3Am ? (builtins.genList (i: maxAm - i) (eri2Deriv + 1)),
+  eri3Am ? (builtins.genList (i: maxAm - i) (eri3Deriv + 1)),
   eri2Am ? (builtins.genList (i: maxAm - i) (eri2Deriv + 1)),
 
   # Same as above for optimised code. Higher optimisations take a long time.
   eriOptAm ? (builtins.genList (i: maxAm - 3 - i) (eriDeriv + 1)),
-  eri3OptAm ? (builtins.genList (i: maxAm - 3 - i) (eri2Deriv + 1)),
+  eri3OptAm ? (builtins.genList (i: maxAm - 3 - i) (eri3Deriv + 1)),
   eri2OptAm ? (builtins.genList (i: maxAm - 3 - i) (eri2Deriv + 1)),
 
   # One-Electron integrals of all kinds including multipole integrals.
@@ -126,9 +122,55 @@ assert (
   ]
 );
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "libint";
-  version = "2.11.2";
+  version = "2.13.1";
+
+  src = fetchFromGitHub {
+    owner = "evaleev";
+    repo = "libint";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vXlHnQzmyDImyvO+Fo8v1ux6EXlw7PAdfXDXL+UyNdw=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    gmpxx
+    python3
+    ninja
+  ]
+  ++ lib.optional enableFortran gfortran;
+
+  buildInputs = [
+    boost
+    eigen_5
+  ];
+
+  cmakeFlags = [
+    "-DLIBINT2_MAX_AM=${toString maxAm}"
+    "-DLIBINT2_ERI_MAX_AM=${lib.concatStringsSep ";" (map toString eriAm)}"
+    "-DLIBINT2_ERI2_MAX_AM=${lib.concatStringsSep ";" (map toString eri2Am)}"
+    "-DLIBINT2_ERI3_MAX_AM=${lib.concatStringsSep ";" (map toString eri3Am)}"
+    "-DLIBINT2_ERI_OPT_AM=${lib.concatStringsSep ";" (map toString eriOptAm)}"
+    "-DLIBINT2_ERI2_OPT_AM=${lib.concatStringsSep ";" (map toString eri2OptAm)}"
+    "-DLIBINT2_ERI3_OPT_AM=${lib.concatStringsSep ";" (map toString eri3OptAm)}"
+    "-DLIBINT2_CARTGAUSS_ORDERING=${cartGaussOrd}"
+    "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
+    "-DLIBINT2_SHELL_SET=${shellSet}"
+    "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
+  ]
+  ++ lib.optional enableFMA "-DLIBINT2_GENERATE_FMA=ON"
+  ++ lib.optional (eriDeriv > 0) "-DLIBINT2_ENABLE_ERI=${toString eriDeriv}"
+  ++ lib.optional (eri2Deriv > 0) "-DLIBINT2_ENABLE_ERI2=${toString eri2Deriv}"
+  ++ lib.optional (eri3Deriv > 0) "-DLIBINT2_ENABLE_ERI3=${toString eri3Deriv}"
+  ++ lib.optional enableOneBody "-DLIBINT2_ENABLE_ONEBODY=${toString oneBodyDerivOrd}"
+  ++ lib.optional (multipoleOrd > 0) "-DLIBINT2_MULTIPOLE_MAX_ORDER=${toString multipoleOrd}"
+  ++ lib.optional enableGeneric "-DLIBINT2_ENABLE_GENERIC_CODE=ON"
+  ++ lib.optional (!enableContracted) "-DLIBINT2_CONTRACTED_INTS=OFF"
+  ++ lib.optional eri2PureSh "-DLIBINT2_ERI2_PURE_SH=ON"
+  ++ lib.optional eri3PureSh "-DLIBINT2_ERI3_PURE_SH=ON"
+  ++ lib.optional enableFortran "-DLIBINT2_ENABLE_FORTRAN=ON"
+  ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
 
   meta = {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -143,119 +185,4 @@ let
     ];
     platforms = [ "x86_64-linux" ];
   };
-
-  codeGen = stdenv.mkDerivation {
-    inherit pname version;
-
-    src = fetchFromGitHub {
-      owner = "evaleev";
-      repo = "libint";
-      rev = "v${version}";
-      hash = "sha256-pqv3lpaLtbSNi1oC361YeCg57Bb8jQ8eNzU3q4US1vc=";
-    };
-
-    # Replace hardcoded "/bin/rm" with normal "rm"
-    postPatch = ''
-      for f in \
-        bin/ltmain.sh \
-        configure.ac \
-        src/bin/libint/Makefile \
-        src/lib/libint/Makefile.library \
-        tests/eri/Makefile \
-        tests/hartree-fock/Makefile \
-        tests/unit/Makefile; do
-          substituteInPlace $f --replace-warn "/bin/rm" "rm"
-      done
-    '';
-
-    nativeBuildInputs = [
-      autoconf
-      automake
-      libtool
-      mpfr
-      python3
-      perl
-      gmpxx
-    ]
-    ++ lib.optional enableFortran gfortran;
-
-    buildInputs = [
-      boost
-      eigen
-    ];
-
-    configureFlags = [
-      "--with-max-am=${toString maxAm}"
-      "--with-eri-max-am=${lib.concatStringsSep "," (map toString eriAm)}"
-      "--with-eri3-max-am=${lib.concatStringsSep "," (map toString eri3Am)}"
-      "--with-eri2-max-am=${lib.concatStringsSep "," (map toString eri2Am)}"
-      "--with-eri-opt-am=${lib.concatStringsSep "," (map toString eriOptAm)}"
-      "--with-eri3-opt-am=${lib.concatStringsSep "," (map toString eri3OptAm)}"
-      "--with-eri2-opt-am=${lib.concatStringsSep "," (map toString eri2OptAm)}"
-      "--with-cartgauss-ordering=${cartGaussOrd}"
-      "--with-shgauss-ordering=${shGaussOrd}"
-      "--with-shell-set=${shellSet}"
-    ]
-    ++ lib.optional enableFMA "--enable-fma"
-    ++ lib.optional (eriDeriv > 0) "--enable-eri=${toString eriDeriv}"
-    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${toString eri2Deriv}"
-    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${toString eri3Deriv}"
-    ++ lib.optionals enableOneBody [
-      "--enable-1body=${toString oneBodyDerivOrd}"
-      "--enable-1body-property-derivs"
-    ]
-    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${toString multipoleOrd}"
-    ++ lib.optional enableGeneric "--enable-generic"
-    ++ lib.optional enableContracted "--enable-contracted-ints"
-    ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
-    ++ lib.optional eri2PureSh "--enable-eri2-pure-sh";
-
-    preConfigure = ''
-      ./autogen.sh
-    '';
-
-    makeFlags = [ "export" ];
-
-    installPhase = ''
-      mkdir -p $out
-      cp libint-${version}.tgz $out/.
-    '';
-
-    enableParallelBuilding = true;
-
-    inherit meta;
-  };
-
-  codeComp = stdenv.mkDerivation {
-    inherit pname version;
-
-    src = "${codeGen}/libint-${version}.tgz";
-
-    nativeBuildInputs = [
-      python3
-      cmake
-    ]
-    ++ lib.optional enableFortran gfortran;
-
-    buildInputs = [
-      boost
-      eigen
-    ];
-
-    # Default is just "double", but SSE2 is available on all x86_64 CPUs.
-    # AVX support is advertised, but does not work.
-    # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
-    cmakeFlags = [
-      "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
-    ]
-    ++ lib.optional enableFortran "-DENABLE_FORTRAN=ON"
-    ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
-
-    # Can only build in the source-tree. A lot of preprocessing magic fails otherwise.
-    dontUseCmakeBuildDir = true;
-
-    inherit meta;
-  };
-
-in
-codeComp
+})
