@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libappimage";
   version = "1.0.4-5";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "AppImageCommunity";
     repo = "libappimage";
@@ -53,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/AppImageCommunity/libappimage/commit/e5f6ea562611d534dc8e899a12ddf15c50e820be.patch";
       hash = "sha256-P6fPoiqVX3TrKGrU2EXIMBpQLGl7xNcy41Iq7vRM+n8=";
     })
+
+    # Respect relative/absolute CMAKE_INSTALL_INCLUDEDIR
+    ./209.patch
   ];
 
   postPatch = ''
@@ -68,6 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_XDGUTILS=1"
     "-DUSE_SYSTEM_XZ=1"
   ];
+
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/libappimage/libappimageTargets.cmake \
+      --replace-fail "$out" "$dev"
+  '';
 
   nativeBuildInputs = [
     cmake
