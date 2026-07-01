@@ -4,9 +4,13 @@
   fetchFromGitHub,
 
   # nativeBuildInputs
+  cmake,
   nasm,
-  autoreconfHook,
 
+  # buildInputs
+  zlib,
+
+  # nativeInstallCheckInputs
   versionCheckHook,
 
   # passthru
@@ -18,27 +22,39 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
-  version = "2.32.0";
+  version = "2.32.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LvxAlyBUSYEVLrMGcLii7bGvN1GZY/noYRSrBqsGiMI=";
+    hash = "sha256-JizQXhfDCL8aWEv52TBuXw06HA/8t7Ram/q9vSp5/DI=";
   };
 
   nativeBuildInputs = [
+    cmake
     nasm
-    autoreconfHook
   ];
 
-  # configure.ac has two code paths for assembler detection:
-  # 1. When AS is unset: searches for nasm and tests with correct nasm syntax
-  # 2. When AS is set: tests with yasm-style syntax that nasm rejects
-  # AM_PROG_AS sets AS=as, so we must unset it to use path 1.
-  preConfigure = ''
-    unset AS
-  '';
+  buildInputs = [
+    zlib
+  ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-DVERSION=\"${finalAttrs.version}\""
+    ];
+  };
+  cmakeFlags = [
+    (lib.cmakeBool "ISAL_BUILD_IGZIP_CLI" true)
+
+    # https://github.com/NixOS/nixpkgs/issues/144170
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
