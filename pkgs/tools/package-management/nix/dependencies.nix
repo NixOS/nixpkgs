@@ -4,6 +4,7 @@ regular@{
   aws-sdk-cpp,
   fetchFromGitHub,
   pkgs,
+  curl,
 }:
 
 {
@@ -34,5 +35,12 @@ regular@{
       # only a stripped down version is built which takes a lot less resources to build
       requiredSystemFeatures = [ ];
     };
+
+    # curl_multi_wakeup is busted since https://github.com/NixOS/nixpkgs/pull/525953 and missed the wakeup (seems like) on first download enqueue?
+    curl = curl.overrideAttrs (prevAttrs: {
+      patches = lib.filter (
+        patch: !lib.strings.hasSuffix "fix-wakeup-consumption.patch" patch
+      ) prevAttrs.patches;
+    });
   };
 }
