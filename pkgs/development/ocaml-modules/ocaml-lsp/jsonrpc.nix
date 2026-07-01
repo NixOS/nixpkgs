@@ -99,14 +99,12 @@ buildDunePackage {
   # that includes `Tuple and `Variant, constructors absent from Yojson.Safe.t
   # in yojson 3.0.0.  The lsp package aliases its own Json.t to
   # Ppx_yojson_conv_lib.Yojson.Safe.t, so the two types must match.
-  patches =
-    {
-      "1.9.0" = [ ./jsonrpc-yojson3-1.9.0.patch ];
-      "1.10.5" = [ ./jsonrpc-yojson3-1.9.0.patch ];
-      "1.18.0" = [ ./jsonrpc-yojson3-1.18.0.patch ];
-      "1.21.0" = [ ./jsonrpc-yojson3-1.21.0.patch ];
-    }
-    ."${version}" or [ ];
+  patches = lib.optionals (lib.elem version [
+    "1.9.0"
+    "1.10.5"
+    "1.18.0"
+    "1.21.0"
+  ]) [ ./jsonrpc-yojson3.patch ];
 
   inherit (params) minimalOCamlVersion;
 
