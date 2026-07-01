@@ -55,10 +55,8 @@ class VarsFile:
 	deploy: bool
 	secret: bool
 
-	def from_jsom(json: Any) -> Self:
-		return VarsFile(
-			name=json["name"], deploy=json["deploy"], secret=json["secret"]
-		)
+	def from_jsom(name: str, json: Any) -> Self:
+		return VarsFile(name=name, deploy=json["deploy"], secret=json["secret"])
 
 
 @dataclass
@@ -68,7 +66,7 @@ class VarsGenerator:
 	script: str
 	dependencies: List[str]
 	prompts: List[str]
-	files: List[VarsFile]
+	files: Mapping[str, VarsFile]
 
 	def from_jsom(name: str, json: Any) -> Self:
 		result = VarsGenerator(
@@ -77,11 +75,11 @@ class VarsGenerator:
 			script=json["script"],
 			dependencies=json["dependencies"],
 			prompts=json["prompts"],
-			files=[],
+			files={},
 		)
 
-		for file in json["files"].values():
-			result.files.append(VarsFile.from_jsom(file))
+		for k, v in json["files"].items():
+			result.files[k] = VarsFile.from_jsom(k, v)
 
 		return result
 
