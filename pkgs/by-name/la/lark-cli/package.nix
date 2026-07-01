@@ -3,9 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
   fetchurl,
-  runCommand,
   jq,
   testers,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,26 +25,19 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  postPatch =
-    let
-      metaDataRaw = fetchurl {
-        name = "meta_dataraw.json";
-        url = "https://web.archive.org/web/20260626061256/https://open.feishu.cn/api/tools/open/api_definition?protocol=meta&client_version=v${finalAttrs.version}";
-        hash = "sha256-W6KOtDW6gkZIqGa0A5QL0rVjVkRjM+gwW4S3AddPN1M=";
-      };
-
-      metaData =
-        runCommand "meta_data.json"
-          {
-            nativeBuildInputs = [ jq ];
-          }
-          ''
-            jq '.data' ${metaDataRaw} > $out
-          '';
-    in
-    ''
-      cp ${metaData} internal/registry/meta_data.json
+  metaData = fetchurl {
+    name = "meta_data.json";
+    url = "https://open.feishu.cn/api/tools/open/api_definition?protocol=meta&client_version=v${finalAttrs.version}";
+    hash = "sha256-ihPrq/VzFIBnlrKxE2762NpQZzBRk7ylM3Mvg0iJfCE=";
+    postFetch = ''
+      ${lib.getExe jq} -S ".data" "$out" > normalized
+      mv normalized "$out"
     '';
+  };
+
+  postPatch = ''
+    cp ${finalAttrs.metaData} internal/registry/meta_data.json
+  '';
 
   postInstall = ''
     mv $out/bin/cli $out/bin/lark-cli
@@ -56,6 +49,16 @@ buildGoModule (finalAttrs: {
     "-X github.com/larksuite/cli/internal/build.Version=v${finalAttrs.version}"
     "-X github.com/larksuite/cli/internal/build.Date=2026-06-01"
   ];
+
+  passthru = {
+    inherit (finalAttrs) metaData;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "metaData"
+      ];
+    };
+  };
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
