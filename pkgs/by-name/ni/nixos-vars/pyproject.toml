@@ -1,0 +1,6 @@
+[project]
+name = "nix-vars"
+version = "0.1.0"
+
+[project.scripts]
+nix-vars = "nix_vars.cli:main"

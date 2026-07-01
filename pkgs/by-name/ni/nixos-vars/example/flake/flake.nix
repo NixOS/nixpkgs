@@ -6,12 +6,12 @@
       system = "aarch64-linux";
 
       modules = [
-        ../../src/nix/module.nix
+        ../../nix_vars/nix/module.nix
         ../config.nix
       ];
     };
 
-    varsConfigurations.differentArch = import ../../src/nix/jsonify.nix {
+    varsConfigurations.differentArch = import ../../nix_vars/nix/jsonify.nix {
       config = inputs.self.nixosConfigurations.example;
       pkgsHost = inputs.nixpkgs.legacyPackages.x86_64-linux;
     };
