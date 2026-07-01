@@ -9,7 +9,8 @@
   libx11,
   libsForQt5,
   libiconv,
-  pcre-cpp,
+  pcre2,
+  libidn2,
   libidn,
   lua5,
   miniupnpc,
@@ -18,23 +19,16 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "eiskaltdcpp";
-  version = "2.4.2";
+  version = "2.4.2-unstable-2024-11-25";
 
   src = fetchFromGitHub {
     owner = "eiskaltdcpp";
     repo = "eiskaltdcpp";
-    rev = "v${version}";
-    sha256 = "sha256-JmAopXFS6MkxW0wDQ1bC/ibRmWgOpzU0971hcqAehLU=";
+    rev = "697db4b03e3d9ffa48b3d4c74fd043dee7663266";
+    hash = "sha256-6ExzvfBzV/iVMjdObW76usexm9MW5xwyvTisAFPLQ6Y=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/eiskaltdcpp/eiskaltdcpp/commit/5ab5e1137a46864b6ecd1ca302756da8b833f754.patch?full_index=1";
-      hash = "sha256-GIdcIHKXNSbHxbiMGRPgfq2w/zNSfR/FhyyXayFWfg8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -48,7 +42,8 @@ stdenv.mkDerivation rec {
     libsForQt5.qtscript
     bzip2
     libx11
-    pcre-cpp
+    pcre2
+    libidn2
     libidn
     lua5
     miniupnpc
@@ -63,18 +58,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required (VERSION 2.6.3)" "cmake_minimum_required (VERSION 3.10)"
-    substituteInPlace {dcpp,dht,extra,json}/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
-    substituteInPlace eiskaltdcpp-{cli,daemon}/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
-    substituteInPlace eiskaltdcpp-qt/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required (VERSION 2.8.11)" "cmake_minimum_required (VERSION 3.10)"
-  '';
-
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
     (lib.cmakeBool "DBUS_NOTIFY" true)
     (lib.cmakeBool "FREE_SPACE_BAR_C" true)
     (lib.cmakeBool "LUA_SCRIPT" true)
