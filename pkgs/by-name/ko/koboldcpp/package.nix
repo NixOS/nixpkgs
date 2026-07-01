@@ -5,13 +5,34 @@
   makeWrapper,
   python3Packages,
   tk,
+  autoAddDriverRunpath,
+  addDriverRunpath,
 
   koboldLiteSupport ? true,
+
+  cudaPackages ? { },
+
+  cublasSupport ? false,
 
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  cudaMaxArch =
+    let
+      cudaMaxCapability = lib.removeSuffix "a" (
+        cudaPackages.flags.dropDots (lib.last cudaPackages.flags.cudaCapabilities)
+      );
+    in
+    "${cudaMaxCapability}0";
+
+  libraryPathWrapperArgs = lib.optionalString (cublasSupport && stdenv.hostPlatform.isLinux) ''
+    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+  '';
+
+  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
   version = "1.116.1";
 
@@ -30,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
+  ]
+  ++ lib.optionals cublasSupport [
+    autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
@@ -37,19 +62,31 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     tk
   ]
-  ++ finalAttrs.pythonInputs;
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 
   makeFlags = [
     "LLAMA_PORTABLE=1"
+  ]
+  ++ lib.optionals cublasSupport [
+    "LLAMA_CUBLAS=1"
+    "CUBLAS_FLAGS=-DGGML_USE_CUDA -DSD_USE_CUDA"
+    "CUBLASLD_FLAGS=-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs -lcuda -lcublas -lcudart -lcublasLt -lpthread -ldl -lrt"
+    "NVCCFLAGS=--forward-unknown-to-host-compiler -use_fast_math -extended-lambda -Wno-deprecated-gpu-targets -DKCPP_LIMIT_CUDA_MAX_ARCH=${cudaMaxArch} ${cudaPackages.flags.gencodeString}"
   ];
 
   buildFlags = [
     "koboldcpp_default"
     "koboldcpp_failsafe"
     "koboldcpp_noavx2"
-  ];
+  ]
+  ++ lib.optionals cublasSupport [ "koboldcpp_cublas" ];
 
   installPhase = ''
     runHook preInstall
@@ -71,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      --prefix PATH : ${lib.makeBinPath [ tk ]}
+      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -80,12 +117,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
     homepage = "https://github.com/LostRuins/koboldcpp";
-    license = with lib.licenses; [ agpl3Only ];
+    license = with lib.licenses; [ agpl3Only ] ++ lib.optional cublasSupport nvidiaCudaRedist;
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
       FlameFlag
     ];
     platforms = lib.platforms.unix;
+    badPlatforms = lib.optionals cublasSupport lib.platforms.darwin;
   };
 })
