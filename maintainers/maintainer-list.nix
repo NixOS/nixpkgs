@@ -12676,6 +12676,12 @@
     githubId = 5741620;
     name = "Jeremy Schlatter";
   };
+  jeremystucki = {
+    email = "dev@jeremystucki.ch";
+    github = "jeremystucki";
+    githubId = 7629727;
+    name = "Jeremy Stucki";
+  };
   jerith666 = {
     email = "github@matt.mchenryfamily.org";
     github = "jerith666";
