@@ -27,6 +27,7 @@
   # This is usually used as a library, and it'd be a shame to force the GUI
   # libraries to the closure if GUI is not desired.
   withGui ? false,
+  withFrida ? false,
   # Deprecated in 24.11.
   doCheck ? true,
 }:
@@ -35,14 +36,14 @@ assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated"
 
 buildPythonPackage rec {
   pname = "androguard";
-  version = "4.1.3";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "androguard";
     owner = "androguard";
     tag = "v${version}";
-    sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
+    sha256 = "sha256-WajRUquDEzs0NanOLpb0gxnreqM8Jm/SxI2LYEifWxg=";
   };
 
   build-system = [
@@ -58,11 +59,9 @@ buildPythonPackage rec {
     colorama
     cryptography
     dataset
-    frida-python
     ipython
     loguru
     lxml
-    matplotlib
     mutf8
     networkx
     oscrypto
@@ -70,10 +69,12 @@ buildPythonPackage rec {
     pygments
     pyyaml
   ]
-  ++ networkx.optional-dependencies.default
-  ++ networkx.optional-dependencies.extra
   ++ lib.optionals withGui [
+    matplotlib
     pyqt5
+  ]
+  ++ lib.optionals withFrida [
+    frida-python
   ];
 
   nativeCheckInputs = [
