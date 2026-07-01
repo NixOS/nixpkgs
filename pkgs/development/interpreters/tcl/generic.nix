@@ -7,6 +7,7 @@
   tzdata,
   zip,
   zlib,
+  buildPackages,
 
   # Version specific stuff
   release,
@@ -28,27 +29,38 @@ let
 
     setOutputFlags = false;
 
-    postPatch = ''
-      substituteInPlace library/clock.tcl \
-        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
-        --replace "/usr/share/lib/zoneinfo" "" \
-        --replace "/usr/lib/zoneinfo" "" \
-        --replace "/usr/local/etc/zoneinfo" ""
-    ''
-    + extraPatch;
+    postPatch =
+      lib.optionalString stdenv.hostPlatform.isUnix ''
+        substituteInPlace library/clock.tcl \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+          --replace "/usr/share/lib/zoneinfo" "" \
+          --replace "/usr/lib/zoneinfo" "" \
+          --replace "/usr/local/etc/zoneinfo" ""
+      ''
+      + extraPatch;
 
-    nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
-      # Only used to detect the presence of zlib. Could be replaced with a stub.
-      zip
-    ];
+    nativeBuildInputs =
+      lib.optionals (lib.versionAtLeast version "9.0") [
+        # Only used to detect the presence of zlib. Could be replaced with a stub.
+        zip
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) [
+        buildPackages.tcl
+      ];
 
     buildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       zlib
     ];
 
-    preConfigure = ''
-      cd unix
-    '';
+    preConfigure =
+      if stdenv.hostPlatform.isMinGW then
+        ''
+          cd win
+        ''
+      else
+        ''
+          cd unix
+        '';
 
     # Note: pre-9.0 flags are temporarily interspersed to avoid a mass rebuild.
     configureFlags =
@@ -108,14 +120,21 @@ let
       let
         dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
         staticExtension = stdenv.hostPlatform.extensions.staticLibrary;
+        releaseBinFormat =
+          if stdenv.hostPlatform.isMinGW then
+            "${builtins.replaceStrings [ "." ] [ "" ] release}.exe"
+          else
+            release;
       in
       ''
         make install-private-headers
-        ln -s $out/bin/tclsh${release} $out/bin/tclsh
-        if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
-          ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
-        fi
-        ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+        ln -s $out/bin/tclsh${releaseBinFormat} $out/bin/tclsh
+        ${lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
+          if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
+            ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
+          fi
+        ''}
+        ${lib.optionalString (!stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW) ''
           ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
         ''}
       '';
