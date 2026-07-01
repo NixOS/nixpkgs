@@ -16,6 +16,7 @@
   moreutils,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
@@ -119,7 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   preFixup = ''
     # fixupPhase spends a lot of time trying to strip text files, which is especially slow on Darwin
