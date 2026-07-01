@@ -33,6 +33,17 @@
     && !stdenv.hostPlatform.isAarch,
   enablePolly ? true,
   enableTerminfo ? true,
+  # Build libLLVM with link-time optimization. Uses GCC full LTO with *fat* LTO
+  # objects (`-flto=auto -ffat-lto-objects`): the fat objects keep normal symbols,
+  # so LLVM's cmake feature tests and `ar`/`nm` still work — the two things plain
+  # GCC `-flto` breaks. Crucially this is a GCC build, so there is no
+  # clang -> libLLVM -> clang bootstrap cycle, and it can therefore be applied to
+  # the *baseline* libLLVM that clang itself links. Only takes effect for a GCC
+  # stdenv on Linux and never for the Darwin bootstrap (see `doLTO`); a no-op
+  # otherwise. Much heavier to build. On by default so every libLLVM consumer in
+  # this tree (clang, rustc, mesa, …) links the optimized library; set to false to
+  # opt a build out.
+  enableLTO ? true,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
@@ -47,6 +58,16 @@ let
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
   # and libunwind. It also wants to disable LTO in the first rebuild.
   isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
+
+  # GCC fat LTO only: clang LTO would re-introduce the libLLVM<->clang cycle, and
+  # the Darwin bootstrap explicitly cannot LTO. `-flto=auto` parallelises the LTO.
+  doLTO = enableLTO && (stdenv.cc.isGNU or false) && stdenv.hostPlatform.isLinux && !isDarwinBootstrap;
+  addBuildId = enableSharedLibraries && !stdenv.hostPlatform.isDarwin;
+  buildIdLinkerFlag = "-Wl,--build-id=sha1";
+  ltoCompileFlags = "-flto=auto -ffat-lto-objects";
+  ltoLinkFlags = lib.concatStringsSep " " (
+    lib.optional addBuildId buildIdLinkerFlag ++ [ "-flto=auto" ]
+  );
 in
 
 stdenv.mkDerivation (
@@ -125,6 +146,8 @@ stdenv.mkDerivation (
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
       [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ [
+        ./llvm-any-typeid-external-visibility.patch
+
         # Running the tests involves invoking binaries (like `opt`) that depend on
         # the LLVM dylibs and reference them by absolute install path (i.e. their
         # nix store path).
@@ -381,12 +404,24 @@ stdenv.mkDerivation (
         patchShebangs test/BugPoint/compile-custom.ll.py
       '';
 
-    # Workaround for configure flags that need to have spaces
-    preConfigure = ''
-      cmakeFlagsArray+=(
-        -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
-      )
-    '';
+    # Workaround for configure flags that need to have spaces.
+    preConfigure =
+      ''
+        cmakeFlagsArray+=(
+          -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
+      ''
+      + lib.optionalString doLTO ''
+          # Drive the LTO link through the gcc driver on every linked artifact,
+          # so the bitcode in the fat objects is actually optimized. These
+          # explicit CMake values must also carry the build-id flag because they
+          # replace CMake's LDFLAGS-derived defaults.
+          -DCMAKE_EXE_LINKER_FLAGS="${ltoLinkFlags}"
+          -DCMAKE_SHARED_LINKER_FLAGS="${ltoLinkFlags}"
+          -DCMAKE_MODULE_LINKER_FLAGS="${ltoLinkFlags}"
+      ''
+      + ''
+        )
+      '';
 
     # Defensive check: some paths (that we make symlinks to) depend on the release
     # version, for example:
@@ -424,8 +459,8 @@ stdenv.mkDerivation (
 
     env =
       # E.g. Mesa uses the build-id as a cache key (see #93946):
-      lib.optionalAttrs (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) {
-        LDFLAGS = "-Wl,--build-id=sha1";
+      lib.optionalAttrs addBuildId {
+        LDFLAGS = buildIdLinkerFlag;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
         # This test was introduced by https://github.com/llvm/llvm-project/pull/158719 to check
@@ -438,6 +473,10 @@ stdenv.mkDerivation (
         # Unfortunately "fixing" the test to pass just `DYLD_LIBRARY_PATH` would void the purpose
         # of the test itself, so we skip it instead.
         GTEST_FILTER = "-ProgramEnvTest.TestExecuteEmptyEnvironment";
+      }
+      // lib.optionalAttrs doLTO {
+        # Compile every TU as a fat LTO object (link flags added in preConfigure).
+        NIX_CFLAGS_COMPILE = ltoCompileFlags;
       };
 
     cmakeBuildType = "Release";

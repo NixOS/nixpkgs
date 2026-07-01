@@ -1,0 +1,33 @@
+diff --git a/include/llvm/ADT/Any.h b/include/llvm/ADT/Any.h
+--- a/include/llvm/ADT/Any.h
++++ b/include/llvm/ADT/Any.h
+@@ -27,5 +27,7 @@
+   // We also cannot mark it as `const`, otherwise msvc merges all definitions
+   // when lto is enabled, making any comparison return true.
+-  template <typename T> struct TypeId { static char Id; };
++  template <typename T> struct TypeId {
++    LLVM_EXTERNAL_VISIBILITY static char Id;
++  };
+ 
+  struct StorageBase {
+@@ -128,4 +130,4 @@
+ // See also https://github.com/llvm/llvm-project/issues/62270
+-template <typename T> char Any::TypeId<T>::Id = 1;
++template <typename T> LLVM_EXTERNAL_VISIBILITY char Any::TypeId<T>::Id = 1;
+ 
+ template <class T> T any_cast(const Any &Value) {
+diff --git a/test/tools/llvm-shlib/typeids.test b/test/tools/llvm-shlib/typeids.test
+--- a/test/tools/llvm-shlib/typeids.test
++++ b/test/tools/llvm-shlib/typeids.test
+@@ -10,5 +10,9 @@
+ # RUN: llvm-nm -C %llvmdylib | FileCheck %s
+ # RUN: llvm-nm -C %llvmdylib | FileCheck %s --check-prefix=SAFETY-CHECK
+ 
+-# CHECK-NOT: {{[^uvV]}} llvm::Any::TypeId
+-# SAFETY-CHECK: {{[uvV]}} llvm::Any::TypeId
++# GCC LTO can promote the normal GNU-unique/weak template definitions to
++# strong default-visible data symbols. That is still preemptable across DSOs,
++# so reject only symbols that are neither weak/GNU-unique nor default-visible
++# strong data.
++# CHECK-NOT: {{[^DuvV]}} llvm::Any::TypeId
++# SAFETY-CHECK: {{[DuvV]}} llvm::Any::TypeId
