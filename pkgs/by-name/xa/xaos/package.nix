@@ -45,23 +45,21 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/include/config.h \
       --replace-fail "/usr/share/XaoS" "${datapath}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace XaoS.pro \
+      --replace-fail \
+        "QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64" \
+        "QMAKE_APPLE_DEVICE_ARCHS = ${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"}"
   '';
 
   desktopItems = [ "xdg/xaos.desktop" ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D bin/xaos "$out/bin/xaos"
-
+  postInstall = ''
     mkdir -p "${datapath}"
     cp -r tutorial examples catalogs "${datapath}"
-
     install -D "xdg/xaos.png" "$out/share/icons/xaos.png"
-
     install -D doc/xaos.6 "$man/man6/xaos.6"
-
-    runHook postInstall
   '';
 
   meta = finalAttrs.src.meta // {
@@ -69,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ coolcuber ];
   };
 })
