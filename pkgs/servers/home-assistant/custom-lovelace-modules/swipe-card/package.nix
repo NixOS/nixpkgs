@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp ./dist/swipe-card.js $out
+    mkdir -p $out/bin
+    cp ./dist/swipe-card.js $out/bin
 
     runHook postInstall
   '';
