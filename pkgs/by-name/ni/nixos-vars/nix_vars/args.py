@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any, Self, Mapping
+from typing import Optional, Any, Self, Mapping, List
 from .error import VarsError
 
 
@@ -12,9 +12,15 @@ class VarsArgs:
 	attr: Optional[str]
 	dry_run: bool
 	yes: bool
+	generators: Optional[List[str]]
 	command: str  # gotta figure out how to type this properly
 
 	def from_dict(d: Mapping[str, Any]) -> Self:
+		# This one is only in the dict when the "regenerate" command is used.
+		# I wish we had proper sum types...
+		if "generators" not in d:
+			d["generators"] = None
+
 		args = VarsArgs(**d)
 
 		configSources = []

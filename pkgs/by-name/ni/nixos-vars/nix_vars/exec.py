@@ -151,12 +151,20 @@ def execution_order(config: VarsConfig) -> List[str]:
 
 # Returns a sublist of execution_order which only contains the generators
 # that need to be rebuilt.
-def rebuild_order(config: VarsConfig) -> List[str]:
+#
+# Optionally accepts a list of generators that must forcefully be included in
+# the returned list.
+def rebuild_order(config: VarsConfig, regenerate: List[str] = []) -> List[str]:
 	order = []
 
 	print("Rebuild order:")
 	for item in execution_order(config):
 		generator = config.generators[item]
+
+		if item in regenerate:
+			print(f"- '{item}' (forced)")
+			order.append(item)
+			continue
 
 		for dep in generator.dependencies:
 			if dep in order:
