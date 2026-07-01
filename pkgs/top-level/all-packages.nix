@@ -7802,19 +7802,11 @@ with pkgs;
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = dontRecurseIntoAttrs (
-    callPackage ../os-specific/linux/fuse {
-      util-linux = util-linuxMinimal;
-    }
-  );
-  fuse = fuse2;
-  fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
-  fuse3 = lowPrio (
+  fuse3 =
     if stdenv.hostPlatform.isDarwin then
       macfuse-stubs.override { isFuse3 = true; }
     else
-      fusePackages.fuse_3
-  );
+      callPackage ../os-specific/linux/fuse { util-linux = util-linuxMinimal; };
 
   gpm-ncurses = gpm.override { withNcurses = true; };
 
