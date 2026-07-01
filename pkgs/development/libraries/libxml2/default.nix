@@ -54,6 +54,13 @@ let
         tag = "v${packages.libxml2.version}";
         hash = "sha256-fDntZDyITs223by8n7ueOXiO7yyzshtANoWbY0+yeqo=";
       };
+      extraPatches = [
+        (fetchpatch {
+          name = "CVE-2026-11979.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c2e233fc1b341685fc99621b2768b503f777a72e.patch";
+          hash = "sha256-s7hnAW7r4fbb95WnFHhUMZbMJzTynV7umKIqc7Kdp/Q=";
+        })
+      ];
       extraMeta = {
         maintainers = with lib.maintainers; [
           jtojnar
