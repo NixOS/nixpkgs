@@ -12210,6 +12210,12 @@
     github = "jadewilk";
     githubId = 50517631;
   };
+  jagu = {
+    name = "Jagu";
+    github = "jagu-sayan";
+    githubId = 1262860;
+    email = "dv64dq9qc@mozmail.com";
+  };
   jaduff = {
     email = "jdduffpublic@proton.me";
     github = "jaduff";
