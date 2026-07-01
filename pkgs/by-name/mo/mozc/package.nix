@@ -47,13 +47,13 @@ buildBazelPackage rec {
   bazel = bazel_7;
 
   fetchAttrs = {
-    hash = "sha256-G05vlHiOJp4rvQBUj2ffRBuWBA/lpJju8CLiopYJckE=";
+    hash = "sha256-e5/SvGs8O4MzWMHHWGRokL5H5n3nwhMK18S7cIOQBbs=";
 
     preInstall = ''
       # Remove zip code data. It will be replaced with jp-zip-codes from nixpkgs
       rm -rv "$bazelOut"/external/zip_code_{jigyosyo,ken_all}
       # Remove references to buildInputs
-      rm -rv "$bazelOut"/external/{ibus,qt_linux}
+      rm -rv "$bazelOut"/external/qt_linux
       # Remove reference to the host platform
       rm -rv "$bazelOut"/external/host_platform
     '';
