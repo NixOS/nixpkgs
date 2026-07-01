@@ -8,6 +8,7 @@
   nixosTests,
   stdenv,
   versionCheckHook,
+  fetchpatch,
   x11Support ? true,
   zig_0_16,
 }:
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-FiHSUqAxJurlQuXEkpglWrd2tCqKZuucB4mipFGI4II=";
   };
+
+  # TODO(leana8959): remove this and bump version to 1.5
+  patches = [
+    (fetchpatch {
+      name = "validation-command";
+      url = "https://codeberg.org/fairyglade/ly/commit/3869bfd2f95acc4cd7dcc08675155047da1d4676.patch";
+      hash = "sha256-odsth21TeP9mDn9yUbUw0zCLou8XYPT4aAp1Tx7r1oY=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
