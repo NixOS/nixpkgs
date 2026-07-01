@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.23.0";
-          hash = "sha256-bbyFdb/hGPV93RJecdx6uozJIOaKitBBhwlI04s50NU=";
+          version = "3.23.1";
+          hash = "sha256-B97cImVKnholhZV0ZBru/gpeVSaTHOFfQywwmjk+kq8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -2015,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.83.2";
-          hash = "sha256-IsiK3A+aVlYKnTSkgeTz4ZZc1rXiYCKDXPVrJsnSFRk=";
+          version = "6.84.2";
+          hash = "sha256-UBoZ6DxT5d7zeTycgmuLomzoVcB7iAnflfxAup6QslI=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -4556,8 +4556,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "110.2.0";
-          hash = "sha256-5WCaYhWA6soB2AALFY/5Z7Y8IBAj5/4XSR/I4jHhth8=";
+          version = "110.2.1";
+          hash = "sha256-NcidslqM4AVrobOaxW1EBpMoBCTn2Bej86phIVU2psc=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -5498,8 +5498,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.15";
-          hash = "sha256-wNGIps0Y/p5X/lutOh1gTPWXh0zpdTm5fFiccba6Pww=";
+          version = "0.1.16";
+          hash = "sha256-rBpC3YIG4M4QDPg/zViinDGXk3U6GvJfiwVUe5NW2vU=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";

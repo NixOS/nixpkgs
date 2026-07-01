@@ -24,7 +24,7 @@ let
       repo = "Cataclysm-DDA";
       # Head of 0.H-branch
       tag = "cdda-${version}";
-      sha256 = "sha256-r4cl8cij68WmQRfg+DHQIeDBIwhgwSre6kAUYZaCPR8=n";
+      sha256 = "sha256-r4cl8cij68WmQRfg+DHQIeDBIwhgwSre6kAUYZaCPR8=";
     };
 
     patches = [

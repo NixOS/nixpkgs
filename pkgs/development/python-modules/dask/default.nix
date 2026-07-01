@@ -56,10 +56,11 @@ buildPythonPackage (finalAttrs: {
   };
 
   patches = [
-    # Unit-less timedelta64 is deprecated in NumPy 2.5
     (fetchpatch {
-      url = "https://github.com/dask/dask/commit/ade7a30c5a222f838b0f69f5a00c804e4cdf3d19.patch";
-      hash = "sha256-V2jNcTfmEXjUzsXKnK2+/AWaujXN+c7JCCGojzwY5dM=";
+      # Unit-less timedelta64 is deprecated in NumPy 2.5
+      name = "numpy-2.5-compat.patch";
+      url = "https://github.com/dask/dask/commit/ade7a30c5a222f838b0f69f5a00c804e4cdf3d19.patch?full_index=1";
+      hash = "sha256-4uZOHjWW+S7if47pOw9ydYAei9PsdIVqZYeYfHR93Z0=";
     })
   ];
 

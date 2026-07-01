@@ -90,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     gettext
     bzip2
-  ]
-  ++ lib.optional enableDebuginfod pkg-config;
+    pkg-config
+  ];
   buildInputs = [
     zlib
     zstd

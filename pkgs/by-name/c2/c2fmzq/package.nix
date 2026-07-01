@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "c2FmZQ";
-    repo = "c2FmZQ";
+    repo = "photos";
     rev = "v${finalAttrs.version}";
     hash = "sha256-qIJnrMqsaa7GcsJpyWHhi6nea72XCQy5BaGWBtQKzFo=";
   };
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Securely encrypt, store, and share files, including but not limited to pictures and videos";
-    homepage = "https://github.com/c2FmZQ/c2FmZQ";
+    homepage = "https://github.com/c2FmZQ/photos";
     license = lib.licenses.gpl3Only;
     mainProgram = "c2FmZQ-server";
     maintainers = with lib.maintainers; [ hmenke ];

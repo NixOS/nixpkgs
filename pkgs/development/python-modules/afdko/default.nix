@@ -73,6 +73,11 @@ buildPythonPackage (finalAttrs: {
     # integer underflow causes incorrect behavior
     # patch submitted upstream as https://github.com/adobe-type-tools/afdko/pull/1843
     ./0001-addfeatures-hmtx-avoid-unsigned-integer-underflow.patch
+
+    # spurious assertion when a high ghost stem is a glyph's first stem aborts
+    # variable-font hinting (e.g. cantarell-fonts, NixOS/nixpkgs#535887)
+    # patch submitted upstream as https://github.com/adobe-type-tools/afdko/pull/1844
+    ./0002-otfautohint-fix-assertion-high-ghost-first-stem.patch
   ];
 
   env = {
