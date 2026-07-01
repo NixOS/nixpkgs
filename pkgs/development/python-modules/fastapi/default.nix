@@ -18,6 +18,7 @@
   a2wsgi,
   dirty-equals,
   flask,
+  httpx2,
   inline-snapshot,
   pwdlib,
   pyjwt,
@@ -49,6 +50,12 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-lfmk8ZveKPukEEfwWq2mKtWmOHAtVzGuE5BsOskDzh0=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/test_tutorial/test_header_param_models/test_tutorial001.py \
+      tests/test_tutorial/test_header_param_models/test_tutorial003.py \
+      --replace-fail '"gzip, deflate"' '"gzip, deflate, br, zstd"'
+  '';
 
   build-system = [ pdm-backend ];
 
@@ -108,6 +115,7 @@ buildPythonPackage rec {
     a2wsgi
     dirty-equals
     flask
+    httpx2
     inline-snapshot
     pwdlib
     pyjwt
