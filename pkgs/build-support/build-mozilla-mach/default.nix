@@ -20,6 +20,8 @@
   extraMakeFlags ? [ ],
   extraPassthru ? { },
   tests ? { },
+  __structuredAttrs ? false,
+  strictDeps ? false,
 }:
 
 let
@@ -301,7 +303,12 @@ buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   version = packageVersion;
 
-  inherit src unpackPhase;
+  inherit
+    src
+    unpackPhase
+    __structuredAttrs
+    strictDeps
+    ;
 
   meta =
     meta

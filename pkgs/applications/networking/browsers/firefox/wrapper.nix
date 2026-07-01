@@ -215,6 +215,7 @@ let
     in
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
+      strictDeps = browser_.strictDeps or false;
       inherit pname version;
 
       desktopItem = makeDesktopItem (
