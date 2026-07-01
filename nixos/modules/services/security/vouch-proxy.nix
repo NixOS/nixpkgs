@@ -62,7 +62,7 @@ in
               description = ''
                 Environment file as defined in {manpage}`systemd.exec(5)`.
 
-                The environment variables definid therein are passed to the vouch-proxy instance protecting this client.
+                The environment variables defined therein are passed to the vouch-proxy instance protecting this client.
                 You can use environment variables to pass secrets to the service without adding
                 them to the world-redable nix store.
               '';
