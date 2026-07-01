@@ -57,6 +57,8 @@ buildGoModule (finalAttrs: {
     "-X github.com/larksuite/cli/internal/build.Date=2026-06-01"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "lark-cli --version";
