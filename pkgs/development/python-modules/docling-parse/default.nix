@@ -13,24 +13,26 @@
   libjpeg,
   qpdf,
   loguru-cpp,
+  openjpeg,
+  lcms2,
+  blend2d,
   # python dependencies
   tabulate,
   pillow,
   pydantic,
   docling-core,
-  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docling-parse";
-  version = "5.0.0";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
-    tag = "v${version}";
-    hash = "sha256-qxD3ryU1jXf8Gm5/IiG2NTOnRgA6HADPfgBj6Kn+Pj4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f6PoA+N/Idu9ImpdiZ0STQft7U+UyKNVcRbizDHXag0=";
   };
 
   postPatch = ''
@@ -62,6 +64,9 @@ buildPythonPackage rec {
     qpdf
     utf8cpp
     zlib
+    openjpeg
+    lcms2
+    blend2d
   ];
 
   env.USE_SYSTEM_DEPS = true;
@@ -92,18 +97,15 @@ buildPythonPackage rec {
     "docling_parse"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # The tests download a dataset from the Hugging Face at pytest session
+  # start (tests/conftest.py), which is not possible in the sandbox.
+  doCheck = false;
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/docling-project/docling-parse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
-    homepage = "https://github.com/DS4SD/docling-parse";
+    homepage = "https://github.com/docling-project/docling-parse";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # error: no matching conversion for functional-style cast from 'bool' to 'nlohmann::basic_json<>'
-    # See https://github.com/docling-project/docling-parse/issues/172 for context
-    broken = true;
   };
-}
+})
