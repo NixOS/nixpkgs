@@ -141,6 +141,8 @@ in
               NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
             };
 
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
             buildPhase = ''
               runHook preBuild
 
