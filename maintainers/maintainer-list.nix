@@ -15806,6 +15806,17 @@
     githubId = 124475;
     name = "Olli Helenius";
   };
+  ligerothetiger = {
+    email = "ligero@ligerothetiger.com";
+    name = "LigeroTheTiger";
+    github = "LigeroTheTiger";
+    githubId = 42996211;
+    keys = [
+      {
+        fingerprint = "5zLV9yqjL18GsG1qan0tGM5341niQNYnU/hiBCscn04";
+      }
+    ];
+  };
   lightbulbjim = {
     email = "chris@killred.net";
     github = "lightbulbjim";
