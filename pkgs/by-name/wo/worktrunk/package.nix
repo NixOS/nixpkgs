@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/wt config shell completions fish) \
       --nushell <($out/bin/wt config shell completions nu) \
       --zsh <($out/bin/wt config shell completions zsh)
+
+    # -L dereferences symlinks (e.g. skills/worktrunk/reference/README.md → repo
+    # root), so no dangling symlinks end up in $out.
+    cp -RL ${finalAttrs.src}/skills $out/
   '';
 
   nativeCheckInputs = [ gitMinimal ];
