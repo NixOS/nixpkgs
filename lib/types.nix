@@ -1177,6 +1177,10 @@ rec {
       };
     };
 
+  lua = serializableValueWith {
+    typeName = "lua";
+    extraValueTypes = [ luaInline ];
+  };
   # A value produced by `lib.mkLuaInline`
   luaInline = mkOptionType {
     name = "luaInline";
@@ -1594,26 +1598,32 @@ rec {
     Parameters:
     - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
     - nullable: Whether the structured value type allows `null` values.
+    - extraValueTypes: List of extra value types to allow, e.g. "[ lib.types.luaInline ]"
 
     Returns a type suitable for structured data formats that supports:
     - Basic types: boolean, integer, float, string, path
     - Complex types: attribute sets and lists
+    - Other user provided value types
   */
   serializableValueWith =
     {
       typeName,
       nullable ? true,
+      extraValueTypes ? [ ],
     }:
     let
-      baseType = oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ];
+      baseType = oneOf (
+        extraValueTypes
+        ++ [
+          bool
+          int
+          float
+          str
+          path
+          (attrsOf valueType)
+          (listOf valueType)
+        ]
+      );
       valueType = (if nullable then nullOr baseType else baseType) // {
         description = "${typeName} value";
       };
