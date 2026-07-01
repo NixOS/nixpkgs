@@ -49,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=e60d07255327db3fc4e3a28d7fcc792cd42c34d0";
       hash = "sha256-1uw+5nTjh+t1/L++fRNIlQWblwDwTJifH0EvAn3dym8=";
     })
+    # https://github.com/bluez/bluez/issues/1898
+    (fetchpatch2 {
+      name = "fix-a2dp-sink-priority-regression";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=066a164a524e4983b850f5659b921cb42f84a0e0";
+      hash = "sha256-7n/1Dtoaz0Ll3JL6kDjJGAmu5t04vgYELNMeugHe0Vg=";
+    })
     ./lreadline.patch
   ];
 
