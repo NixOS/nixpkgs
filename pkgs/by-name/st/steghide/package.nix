@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   autoreconfHook,
   libjpeg,
   libmcrypt,
@@ -13,10 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "steghide";
   version = "0.5.1.1";
 
-  src = fetchFromGitHub {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromCodeberg {
     owner = "museoa";
     repo = "steghide";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-uUXEipIUfu9AbG7Ekz+25JkWSEGzqA7sJHZqezLzUto=";
   };
 
@@ -41,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/museoa/steghide";
+    homepage = "https://codeberg.org/museoa/steghide";
     description = "Open source steganography program";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
