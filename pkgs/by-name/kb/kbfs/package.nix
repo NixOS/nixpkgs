@@ -4,8 +4,11 @@
   keybase,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "kbfs";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   inherit (keybase) src version vendorHash;
 
@@ -34,4 +37,4 @@ buildGoModule {
     ];
     license = lib.licenses.bsd3;
   };
-}
+})
