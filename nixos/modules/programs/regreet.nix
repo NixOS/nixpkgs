@@ -7,7 +7,13 @@
 let
   cfg = config.programs.regreet;
   settingsFormat = pkgs.formats.toml { };
-  user = config.services.greetd.settings.default_session.user;
+  userName = config.services.greetd.settings.default_session.user;
+  user = config.users.users.${userName} or { };
+  dataDir =
+    if lib.versionAtLeast (cfg.package.version) "0.2.0" then
+      "/var/lib/regreet"
+    else
+      "/var/cache/regreet";
 in
 {
   options.programs.regreet = {
@@ -137,6 +143,25 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = user != { };
+        message = "regreet: user ${userName} does not exist. Please create it before referencing it.";
+      }
+    ];
+
+    warnings = lib.optional ((user ? home) && (user.home == "/var/empty")) ''
+      regreet: the home directory for user ${userName} is set to an immutable path.
+      Consider setting
+      ```
+        users.users.${userName}.home = ${dataDir}; # Directory is created by this module automatically
+      ```
+      or using
+      ```
+        services.greetd.settings.default_session.user = "greeter"; # The default
+      ```
+    '';
+
     environment.systemPackages = [
       cfg.theme.package
       cfg.iconTheme.package
@@ -177,27 +202,20 @@ in
     systemd.tmpfiles.settings."10-regreet" =
       let
         defaultConfig = {
-          inherit user;
-          group =
-            if config.users.users.${user}.group != "" then config.users.users.${user}.group else "greeter";
+          user = userName;
+          group = if ((user.group or "") != "") then user.group else "greeter";
           mode = "0755";
         };
-        dataDir =
-          if lib.versionAtLeast (cfg.package.version) "0.2.0" then
-            { "/var/lib/regreet".d = defaultConfig; }
-          else
-            { "/var/cache/regreet".d = defaultConfig; };
       in
       {
         "/var/log/regreet".d = defaultConfig;
-      }
-      // dataDir;
+        ${dataDir}.d = defaultConfig;
+      };
 
-    assertions = [
-      {
-        assertion = (config.users.users.${user} or { }) != { };
-        message = "regreet: user ${user} does not exist. Please create it before referencing it.";
-      }
-    ];
+    # For GTK pipeline shader cache directory, which is created at `$HOME/.cache`.
+    # By default `$HOME` is `/var/empty` though, owned by root, so GTK is unable
+    # to create it. `/var/empty` is intentionally immutable on NixOS (`chattr +i`),
+    # so `systemd.tmpfiles` cannot create `/var/empty/.cache` either.
+    users.users = lib.mkIf (userName == "greeter") { greeter.home = lib.mkDefault dataDir; };
   };
 }
