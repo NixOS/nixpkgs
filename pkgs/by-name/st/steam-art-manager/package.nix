@@ -6,10 +6,10 @@
 
 let
   pname = "steam-art-manager";
-  version = "3.16.0";
+  version = "3.16.1";
   src = fetchurl {
     url = "https://github.com/Tormak9970/Steam-Art-Manager/releases/download/v${version}/steam-art-manager.AppImage";
-    hash = "sha256-khjSvATja5ffz7Z6uUmebU3rmgTI6xjNJMxHDBm3O5M=";
+    hash = "sha256-7Lqcj9Q5P29YFt6biFXLlVdWHdlzF/daLIaA2fGY0+A=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in

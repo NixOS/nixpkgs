@@ -20,13 +20,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "0.1-unstable-2026-05-29";
+  version = "0.1-unstable-2026-06-30";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "bf1a7cdb086587e6bed6e8ecd285a81c01a11c54";
-    hash = "sha256-epTJKmTCNL1Hm6/YdEWAgiOMVBSzC9/v/rjyOieP3yA=";
+    rev = "3dcbce715ae8b93107fa8632db15bf976862a573";
+    hash = "sha256-JP0D8r8o9+jnYk0/B5O722La+oZeC5iNQ3lonKFTmbQ=";
   };
 
   strictDeps = true;
