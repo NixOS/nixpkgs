@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "reolink-aio";
-  version = "0.21.1";
+  version = "0.21.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "reolink_aio";
     tag = finalAttrs.version;
-    hash = "sha256-Rq+fciIG3W0X+2zHSsI23pHbkr+A3flu3E6VbTEeKnI=";
+    hash = "sha256-XL6Z+1dr35XgMczUcxp4v3ejBcdgWkhUOISFA4lpjU4=";
   };
 
   build-system = [ setuptools ];
