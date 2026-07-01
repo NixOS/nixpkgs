@@ -1,5 +1,6 @@
 {
   stdenv,
+  callPackage,
   electron-unwrapped,
   wrapGAppsHook3,
   makeWrapper,
@@ -9,7 +10,7 @@
   gtk4,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "electron";
   inherit (electron-unwrapped) version;
 
@@ -39,10 +40,11 @@ stdenv.mkDerivation {
   passthru = {
     unwrapped = electron-unwrapped;
     inherit (electron-unwrapped) headers dist;
-  };
+  }
+  // (callPackage ./hooks { electron = finalAttrs.finalPackage; });
 
   __structuredAttrs = true;
   strictDeps = true;
 
   inherit (electron-unwrapped) meta;
-}
+})
