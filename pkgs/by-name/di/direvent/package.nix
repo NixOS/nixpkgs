@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-HbvGGSqrZ+NFclFIYD1XDGooKDgMlkIVdir5FSTXlbo=";
   };
 
+  patches = [
+    ./fix-darwin.patch
+  ];
+
   meta = {
     description = "Directory event monitoring daemon";
     mainProgram = "direvent";
