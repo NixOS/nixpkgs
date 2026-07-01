@@ -17,7 +17,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-FfvFq6a+7gsXrssEYCrjlDI5OroevY45t8q/fbiDKZ8=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isWasi [
+    ./wasi-disable-rlimit.patch
+  ];
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isWasi {
+    NIX_CFLAGS_COMPILE = "-D_WASI_EMULATED_PROCESS_CLOCKS";
+    NIX_LDFLAGS = "-lwasi-emulated-process-clocks";
+  };
 
   configureFlags = [
     "--enable-pcre2-16"
@@ -26,7 +35,10 @@ stdenv.mkDerivation rec {
     "--enable-jit=${if stdenv.hostPlatform.isS390x then "no" else "auto"}"
   ]
   # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
-  ++ lib.optional withJitSealloc "--enable-jit-sealloc";
+  ++ lib.optional withJitSealloc "--enable-jit-sealloc"
+  ++ lib.optionals stdenv.hostPlatform.isWasi [
+    "--disable-pcre2grep-callout-fork"
+  ];
 
   outputs = [
     "bin"
