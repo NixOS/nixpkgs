@@ -216,32 +216,72 @@ rec {
       mirrorArgs f';
 
   /**
+      Overrides a base package with specific attributes, while cleanly passing
+      through any additional arguments provided by `callPackage`.
+
+      This is specifically designed to facilitate the `by-name` migration for
+      package variants (e.g., migrating `package-gui` without losing the
+      user's ability to chain `.override` calls).
+
+      # Inputs
+
+      `basePackage`
+
+      : 1\. Function argument (The base derivation to override)
+
+      `excludeArgs`
+
+      : 2\. Function argument (A list of argument strings to remove from the passthrough)
+
+      `variantOverrides`
+
+      : 3\. Function argument (The attributes to override)
+
+      `variantArgs`
+
+      : 4\. Function argument (The arguments passed to the variant by `callPackage`)
+
+      # Type
+
+      ```
+      overrideVariant :: Derivation -> [String] -> AttrSet -> AttrSet -> Derivation
+      ```
+  */
+  overrideVariant =
+    basePackage: excludeArgs: variantOverrides: variantArgs:
+    basePackage.override (variantOverrides // removeAttrs variantArgs (excludeArgs ++ [ "lib" ]));
+
+  /**
     Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the
     arguments `args`, but any missing arguments are obtained from
     `autoArgs`.  This function is intended to be partially
-    parameterised, e.g.,
-
-      ```nix
-      callPackage = callPackageWith pkgs;
-      pkgs = {
-        libfoo = callPackage ./foo.nix { };
-        libbar = callPackage ./bar.nix { };
-      };
-      ```
+    parameterised.
 
     If the `libbar` function expects an argument named `libfoo`, it is
-    automatically passed as an argument.  Overrides or missing
-    arguments can be supplied in `args`, e.g.
+    automatically passed as an argument. Overrides or missing
+    arguments can be supplied in `args`.
 
-      ```nix
-      libbar = callPackage ./bar.nix {
-        libfoo = null;
-        enableX11 = true;
-      };
-      ```
+    # Examples
 
-    <!-- TODO: Apply "Example:" tag to the examples above -->
+    :::{.example}
+    ## `lib.customisation.callPackageWith` usage example
+
+    ```nix
+    callPackage = callPackageWith pkgs;
+    pkgs = {
+      libfoo = callPackage ./foo.nix { };
+      libbar = callPackage ./bar.nix { };
+    };
+
+    # Overriding or supplying missing arguments
+    libbar = callPackage ./bar.nix {
+      libfoo = null;
+      enableX11 = true;
+    };
+    ```
+
+    :::
 
     # Inputs
 

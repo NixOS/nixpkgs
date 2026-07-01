@@ -1,11 +1,9 @@
 {
+  lib,
   jabcode,
   ...
 }@args:
 
-jabcode.override (
-  {
-    subproject = "reader";
-  }
-  // removeAttrs args [ "jabcode" ]
-)
+lib.customisation.overrideVariant jabcode [ "jabcode" ] {
+  subproject = "reader";
+} args
