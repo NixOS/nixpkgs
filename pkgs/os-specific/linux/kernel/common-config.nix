@@ -867,9 +867,8 @@ let
       SECONDARY_TRUSTED_KEYRING = yes;
       SYSTEM_BLACKLIST_KEYRING = yes;
 
-      # Depends on MODULE_SIG and only really helps when you sign your modules
-      # and enforce signatures which we don't do by default.
-      SECURITY_LOCKDOWN_LSM = no;
+      SECURITY_LOCKDOWN_LSM = yes;
+      SECURITY_LOCKDOWN_LSM_EARLY = yes;
 
       IMA = yes;
 
