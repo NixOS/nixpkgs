@@ -17,13 +17,13 @@
 }:
 let
   pname = "rimsort";
-  version = "1.0.76";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     tag = "v${version}";
-    hash = "sha256-EO1j4GPRQSB+QEF4tB87x4nCUKpdWU9aGlDFghwxar0=";
+    hash = "sha256-Ic0iKt1t6AUD+SVqtz2bxk4LnF+++v6nHu/inXdOik0=";
     fetchSubmodules = true;
   };
 
@@ -51,6 +51,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   inherit pname;
   inherit version;
   inherit src;
@@ -136,6 +138,12 @@ stdenv.mkDerivation (finalAttrs: {
     "tests/models/metadata/test_metadata_factory.py"
   ];
 
+  disabledTests = [
+    # Work with hard-coded executable paths.
+    "test_execute_calls_runner_when_binary_exists"
+    "test_execute_shows_error_when_binary_missing"
+  ];
+
   pytestFlags = [ "--doctest-modules" ];
 
   desktopItems = [
@@ -191,7 +199,9 @@ stdenv.mkDerivation (finalAttrs: {
         }
       )
     ];
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
     mainProgram = "rimsort";
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
