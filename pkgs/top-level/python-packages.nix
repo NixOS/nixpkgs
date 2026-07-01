@@ -2401,6 +2401,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  briefcase = callPackage ../development/python-modules/briefcase { };
+
   bring-api = callPackage ../development/python-modules/bring-api { };
 
   broadbean = callPackage ../development/python-modules/broadbean { };
