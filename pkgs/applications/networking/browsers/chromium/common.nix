@@ -968,9 +968,9 @@ let
         use_vaapi = false;
         use_v4l2_codec = true;
       }
-      // lib.optionalAttrs pulseSupport {
-        use_pulseaudio = true;
-        link_pulseaudio = true;
+      // {
+        use_pulseaudio = pulseSupport;
+        link_pulseaudio = pulseSupport;
       }
       // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
       // (extraAttrs.gnFlags or { })
