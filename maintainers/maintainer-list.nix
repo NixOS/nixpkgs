@@ -7086,6 +7086,11 @@
     githubId = 10913120;
     name = "Dje4321";
   };
+  djmaxus = {
+    name = "djmaxus";
+    github = "djmaxus";
+    githubId = 44438314;
+  };
   djwf = {
     email = "dave@weller-fahy.com";
     github = "djwf";
