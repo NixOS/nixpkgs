@@ -28,12 +28,7 @@ buildPecl {
     description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
     license = with lib.licenses; [ asl20 ];
     homepage = "https://github.com/maxmind/MaxMind-DB-Reader-php";
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
-    teams = [
-      lib.teams.php
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
+    teams = [ lib.teams.php ];
   };
 }

@@ -46,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.doof.me.uk/xcowsay";
     description = "Tool to display a cute cow and messages";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 })

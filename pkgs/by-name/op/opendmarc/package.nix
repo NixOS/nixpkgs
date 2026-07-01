@@ -70,9 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       sendmail
     ];
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
 })
