@@ -856,7 +856,17 @@ let
       # only when compiled as yes, TPM 2.0 will automatically seed the kernel RNG
       HW_RANDOM = yes;
 
-      MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
+      MODULE_SIG = yes;
+      MODULE_SIG_ALL = no;
+      MODULE_SIG_KEY = freeform "";
+
+      # Support ECDSA and ML‐DSA module signatures.
+      CRYPTO_ECDSA = yes;
+      CRYPTO_MLDSA = whenAtLeast "7.0" yes;
+
+      SECONDARY_TRUSTED_KEYRING = yes;
+      SYSTEM_BLACKLIST_KEYRING = yes;
+
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = no;
