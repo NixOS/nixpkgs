@@ -43,6 +43,9 @@ let
     else
       pruned;
   configFile = format.generate "config.yaml" finalSettings;
+
+  extraConfigArgs = lib.imap0 (i: _: "%d/config-${toString i}") cfg.extraConfigFiles;
+  configFileArgs = [ configFile ] ++ extraConfigArgs;
 in
 {
   meta.maintainers = with lib.maintainers; [
@@ -388,13 +391,14 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
+        LoadCredential = lib.imap0 (i: path: "config-${toString i}:${path}") cfg.extraConfigFiles;
         ExecStartPre = ''
           ${getExe cfg.package} config check \
-            ${concatMapStringsSep " " (x: "--config ${x}") ([ configFile ] ++ cfg.extraConfigFiles)}
+            ${concatMapStringsSep " " (x: "--config ${x}") configFileArgs}
         '';
         ExecStart = ''
           ${getExe cfg.package} server \
-            ${concatMapStringsSep " " (x: "--config ${x}") ([ configFile ] ++ cfg.extraConfigFiles)}
+            ${concatMapStringsSep " " (x: "--config ${x}") configFileArgs}
         '';
         Restart = "on-failure";
         RestartSec = "1s";
@@ -436,6 +440,7 @@ in
         # Working and state directories
         StateDirectory = "matrix-authentication-service";
         StateDirectoryMode = "0700";
+        RuntimeDirectory = "matrix-authentication-service";
         WorkingDirectory = "/var/lib/matrix-authentication-service";
       };
     };
