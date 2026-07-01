@@ -7804,6 +7804,12 @@
     githubId = 63352906;
     keys = [ { fingerprint = "922F CA48 5FDB 20B1 ED1B  A61F 284D 11D3 33C4 D21B"; } ];
   };
+  edgarpost = {
+    name = "Edgar Post-Buijs";
+    email = "github@edgarpost.com";
+    github = "EdgarPost";
+    githubId = 488221;
+  };
   edlimerkaj = {
     name = "Edli Merkaj";
     email = "edli.merkaj@identinet.io";
