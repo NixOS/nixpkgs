@@ -3,8 +3,8 @@
   buildPlatform,
   hostPlatform,
   fetchurl,
-  bash-build,
   bash,
+  coreutils,
   gcc,
   binutils,
   gnumake,
@@ -14,18 +14,21 @@
   diffutils,
   findutils,
   gnutar,
+  gzip,
+  bzip2,
   xz,
+  libgmp,
+  libmpfr,
 }:
 let
-  pname = "gnugrep-static";
-  version = "3.12";
-
+  pname = "mpc";
+  version = "1.3.1";
   src = fetchurl {
-    url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
+    url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
+    hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
   };
 in
-bash-build.runCommand "${pname}-${version}"
+bash.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
@@ -39,33 +42,24 @@ bash-build.runCommand "${pname}-${version}"
       diffutils
       findutils
       gnutar
+      gzip
+      bzip2
       xz
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/grep --version
-        mkdir $out
-      '';
-
     meta = {
-      description = "GNU implementation of the Unix grep command";
-      homepage = "https://www.gnu.org/software/grep";
+      description = "GNU Compiler Collection, version ${version}";
+      homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
-      mainProgram = "grep";
-      platforms = lib.platforms.unix;
       teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
     # Unpack
     tar xf ${src}
-    cd grep-${version}
-
-    # Patch
-    # Drop dependency on build bash
-    sed -i '1c\\#!${lib.getExe bash}' src/egrep.sh
+    cd mpc-${version}
 
     # Configure
     bash ./configure \
@@ -73,14 +67,12 @@ bash-build.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      --disable-nls
+      --with-gmp=${libgmp} \
+      --with-mpfr=${libmpfr}
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
-
-    # Remove documentation not needed in the bootstrap chain.
-    rm -rf $out/share
   ''

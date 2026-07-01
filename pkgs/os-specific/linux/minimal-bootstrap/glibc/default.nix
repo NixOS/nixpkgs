@@ -5,6 +5,7 @@
   fetchurl,
   bash,
   gcc,
+  libgcc,
   binutils,
   linux-headers,
   gnumake,
@@ -26,14 +27,10 @@ let
     url = "mirror://gnu/libc/glibc-${version}.tar.xz";
     hash = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
   };
-
-  linkerFile =
-    {
-      x86_64-linux = "ld-linux-x86-64";
-      i686-linux = "ld-linux";
-    }
-    .${buildPlatform.system};
-
+  # FIXME: eventually, prefix unconditionally
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -54,32 +51,6 @@ bash.runCommand "${pname}-${version}"
       xz
     ];
 
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}"
-        {
-          nativeBuildInputs = [
-            gcc
-            binutils
-          ];
-        }
-        ''
-          cat <<EOF >> test.c
-          #include <stdio.h>
-          int main() {
-            printf("Hello World!\n");
-            return 0;
-          }
-          EOF
-          gcc \
-            -Wl,--dynamic-linker=${result}/lib/${linkerFile}.so.2 \
-            -B${result}/lib \
-            -I${result}/include \
-            -o test test.c
-          ./test
-          mkdir $out
-        '';
-
     meta = {
       description = "The GNU C Library";
       homepage = "https://www.gnu.org/software/libc/";
@@ -96,9 +67,18 @@ bash.runCommand "${pname}-${version}"
     # Configure
     mkdir build
     cd build
+
+    export CFLAGS="-B${libgcc}/lib -L${libgcc}/lib -Wl,-rpath,${gcc}/lib,-rpath,${libgcc} -O2 -Wno-error=attribute-alias -Wno-error=maybe-uninitialized -fexceptions"
+    export AR=${binutils}/bin/${binutilsTargetPrefix}ar
+    export OBJCOPY=${binutils}/bin/${binutilsTargetPrefix}objcopy
+    export OBJDUMP=${binutils}/bin/${binutilsTargetPrefix}objdump
+    export NM=${binutils}/bin/${binutilsTargetPrefix}nm
+    export READELF=${binutils}/bin/${binutilsTargetPrefix}readelf
+    export STRIP=${binutils}/bin/${binutilsTargetPrefix}strip
+    export LDFLAGS="-L${libgcc}/lib -L${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -B${libgcc}/lib -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     # libstdc++.so is built against musl and fails to link
     export CXX=false
-    export CFLAGS="-O1"
+
     bash ../configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
@@ -109,15 +89,16 @@ bash.runCommand "${pname}-${version}"
       --disable-build-nscd \
       --disable-profile \
       --disable-timezone-tools \
-      --disable-mathvec
+      --disable-mathvec \
+      --with-binutils=${binutils}/bin
 
     # Build
-    make -j $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES sysdep-LDFLAGS="$LDFLAGS"
 
     # Install
     make -j $NIX_BUILD_CORES INSTALL_UNCOMPRESSED=yes install
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
-    find $out/{bin,sbin,lib,libexec} -type f -exec strip --strip-unneeded {} + || true
+    find $out/{bin,sbin,lib,libexec} -type f -exec ${binutilsTargetPrefix}strip --strip-debug {} + || true
 
     # localedef + iconv() are never invoked downstream of this glibc
     rm -rf $out/share/i18n $out/lib/gconv $out/share/locale

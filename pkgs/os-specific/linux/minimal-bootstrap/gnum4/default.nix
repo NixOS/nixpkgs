@@ -69,7 +69,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      CFLAGS=-I${linux-headers}/include
+      CFLAGS="-I${linux-headers}/include"
 
     # Build
     make -j $NIX_BUILD_CORES

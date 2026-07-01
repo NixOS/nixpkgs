@@ -3,7 +3,6 @@
   buildPlatform,
   hostPlatform,
   fetchurl,
-  bash-build,
   bash,
   gcc,
   binutils,
@@ -15,17 +14,18 @@
   findutils,
   gnutar,
   xz,
+  libgmp,
 }:
 let
-  pname = "gnugrep-static";
-  version = "3.12";
+  pname = "mpfr";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
+    url = "mirror://gnu/mpfr/mpfr-${version}.tar.xz";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 in
-bash-build.runCommand "${pname}-${version}"
+bash.runCommand "${pname}-${version}"
   {
     inherit pname version;
 
@@ -42,30 +42,19 @@ bash-build.runCommand "${pname}-${version}"
       xz
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/grep --version
-        mkdir $out
-      '';
-
     meta = {
-      description = "GNU implementation of the Unix grep command";
-      homepage = "https://www.gnu.org/software/grep";
+      description = "GNU Compiler Collection, version ${version}";
+      homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
-      mainProgram = "grep";
-      platforms = lib.platforms.unix;
       teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
     # Unpack
     tar xf ${src}
-    cd grep-${version}
-
-    # Patch
-    # Drop dependency on build bash
-    sed -i '1c\\#!${lib.getExe bash}' src/egrep.sh
+    cd mpfr-${version}
 
     # Configure
     bash ./configure \
@@ -73,14 +62,11 @@ bash-build.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
-      --disable-nls
+      --with-gmp=${libgmp}
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
-
-    # Remove documentation not needed in the bootstrap chain.
-    rm -rf $out/share
   ''
