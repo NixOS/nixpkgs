@@ -17681,6 +17681,12 @@
     githubId = 2971615;
     name = "Marius Bergmann";
   };
+  mbwilding = {
+    email = "mbwilding@gmail.com";
+    github = "mbwilding";
+    githubId = 8856912;
+    name = "Matthew Wilding";
+  };
   mccartykim = {
     email = "mccartykim@zoho.com";
     github = "mccartykim";
