@@ -1,0 +1,13 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 877728afe3b..53a7f7e62d9 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -2596,7 +2596,7 @@
+ # 2. Remove the thin_archive config, so that the .a file actually contains all
+ #    .o files, instead of just references to .o files in the build directoy
+ config("thin_archive") {
+-  if ((is_apple && use_lld) || (is_linux && !is_clang) || current_os == "aix") {
++  if ((is_apple && use_lld) || (is_linux && (!is_clang || !use_lld)) || current_os == "aix") {
+     # The macOS and iOS linker ld64.ldd doesn't support thin archive without
+     # symbol table, gcc on linux also throws the error `archive has no index`.
+     # AIX does support -s option, not -S option.

@@ -1,0 +1,27 @@
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -613,12 +613,6 @@
+       ]
+     }
+ 
+-    # The performance improvement does not seem worth the risk. See
+-    # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
+-    # for discussion.
+-    if (!is_wasm) {
+-      cflags += [ "-fno-lifetime-dse" ]
+-    }
+ 
+     # TODO(hans): Remove this once Clang generates better optimized debug info
+     # by default. https://crbug.com/765793
+@@ -1881,11 +1875,6 @@
+       "-fsanitize=array-bounds",
+       "-fsanitize-trap=array-bounds",
+ 
+-      # Some code users feature detection to determine if UBSAN (or any
+-      # sanitizer) is enabled, they then do expensive debug like operations. We
+-      # want to suppress this behaviour since we want to keep performance costs
+-      # as low as possible while having these checks.
+-      "-fsanitize-ignore-for-ubsan-feature=array-bounds",
+ 
+       # Because we've enabled array-bounds sanitizing we also want to suppress
+       # the related warning about "unsafe-buffer-usage-in-static-sized-array",
