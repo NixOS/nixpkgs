@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ngff-zarr";
-  version = "0.36.0";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fideus-labs";
     repo = "ngff-zarr";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-TsPyW815ITcBtAvRyQgEqgHhp9MqtRlkmKLFNVdnKR8=";
+    hash = "sha256-v747oBJMKORiEgy3fVzzgl35+9uRbyGvtor+Ga4UkNI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/";
@@ -130,6 +130,9 @@ buildPythonPackage (finalAttrs: {
     "test_3d_zyx"
     "test_smaller_dask_graph"
     "test_tensorstore_compression"
+    # Test requires network access
+    "test_cli_orientation_preset_end_to_end"
+    "test_cli_itk_input_writes_orientation_automatically"
   ];
 
   meta = {
