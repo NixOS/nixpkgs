@@ -4608,6 +4608,13 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  cassandracomar = {
+    name = "Cassandra Comar";
+    github = "cassandracomar";
+    githubId = 320772;
+    email = "cass@mountclare.net";
+    keys = [ { fingerprint = "104E E74E 24A0 372B EAF5  5533 B019 18F7 7E04 AC99"; } ];
+  };
   castorNova2 = {
     email = "solemnsquire@gmail.com";
     github = "castorNova2";
