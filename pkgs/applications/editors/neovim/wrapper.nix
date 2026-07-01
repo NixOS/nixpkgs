@@ -206,7 +206,7 @@ let
           lib.concatStringsSep ";" [
             (genProviderCommand "node" finalAttrs.withNodeJs "${neovim-node-client}/bin/neovim-node-host")
             (genProviderCommand "perl" finalAttrs.withPerl "${perlEnv}/bin/perl")
-            (genProviderCommand "ruby" finalAttrs.withRuby "${finalAttrs.rubyEnv}/bin/neovim-ruby-host")
+            (genProviderCommand "ruby" finalAttrs.withRuby "${rubyEnv}/bin/neovim-ruby-host")
             (genProviderCommand "python3" finalAttrs.withPython3 "${hostPython3}/bin/nvim-python3")
           ];
 
@@ -265,7 +265,6 @@ let
           providerLuaRc
           packpathDirs
           ;
-        inherit python3Env rubyEnv;
         inherit wrapperArgs generatedWrapperArgs;
 
         runtimeDeps =
