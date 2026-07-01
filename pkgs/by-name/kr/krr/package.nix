@@ -1,51 +1,82 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   testers,
   krr,
 }:
 
-python3.pkgs.buildPythonPackage (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "krr";
-  version = "1.7.1";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "krr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bc1Ql3z/UmOXE2RJYC5/sE4a3MFdE06I3HwKY+SdSlk=";
+    hash = "sha256-1wCvoqlFBgC7SSPdq13q4CjR/rJnhv5g/xrty9YUQtg=";
   };
+
+  patches = [
+    # Upgrade to Pydantic v2
+    # https://github.com/robusta-dev/krr/pull/512
+    (fetchpatch {
+      url = "https://github.com/robusta-dev/krr/pull/512/commits/64f8242c6f7eea3ece50f1a51eb7a1278279ae2e.patch";
+      # requirements.txt is unused by the nixpkgs build (we use pyproject.toml)
+      # and doesn't apply cleanly to the v1.28.0 tag.
+      excludes = [ "requirements.txt" ];
+      hash = "sha256-Bxf/09FslVfG4VARFDCpn0byadFhq3SrrIvKwt4pu9A=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace robusta_krr/__init__.py \
-      --replace-warn '1.7.0-dev' '${finalAttrs.version}'
+      --replace-fail 'dev' '${finalAttrs.version}'
 
     substituteInPlace pyproject.toml \
-      --replace-warn '1.7.0-dev' '${finalAttrs.version}' \
-      --replace-fail 'aiostream = "^0.4.5"' 'aiostream = "*"' \
-      --replace-fail 'kubernetes = "^26.1.0"' 'kubernetes = "*"' \
-      --replace-fail 'pydantic = "1.10.7"' 'pydantic = "*"' \
-      --replace-fail 'typer = { extras = ["all"], version = "^0.7.0" }' 'typer = { extras = ["all"], version = "*" }'
+      --replace-fail '1.8.2-dev' '${finalAttrs.version}'
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiostream
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    # Transitive dependency version pins, not direct imports
+    "idna"
+    "setuptools"
+    "urllib3"
+    "zipp"
+  ];
+
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  dependencies = with python3Packages; [
     alive-progress
+    cachetools
     kubernetes
     numpy
-    poetry-core
+    pandas
     prometheus-api-client
     prometrix
-    pydantic_1
+    pydantic
+    pydantic-settings
+    pyyaml
+    requests
     slack-sdk
+    tenacity
     typer
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  # Tests require a Kubernetes cluster and use deprecated click API (mix_stderr)
+  doCheck = false;
 
   pythonImportsCheck = [
     "robusta_krr"
@@ -65,7 +96,7 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
       reduces costs and improves performance.
     '';
     homepage = "https://github.com/robusta-dev/krr";
-    changelog = "https://github.com/robusta-dev/krr/releases/tag/v${finalAttrs.src.rev}";
+    changelog = "https://github.com/robusta-dev/krr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "krr";
