@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nodejs,
@@ -10,26 +11,44 @@
 
 buildGoModule (finalAttrs: {
   pname = "godns";
-  version = "3.3.6";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YdIXMVtagF7uA9By6EHVdG2o5UwUi82XkYK26W5Fssg=";
+    hash = "sha256-LdMeb7pFYj+6HdUBgFkS756oox2HRgkwlHz65SgJoqY=";
   };
 
   vendorHash = "sha256-wGaRJFxuhwwwP7CBZ7eY5uR95EMdpWiJuU43eWXtHNo=";
+
   npmDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/web";
-    hash = "sha256-OsYBmDawDUCt/+s5kyOPawMA9BWQwJhd7TQNc55rPlc=";
+    src = stdenv.mkDerivation {
+      name = "godns-web-src";
+      src = "${finalAttrs.src}/web";
+      packageLock = ./package-lock.json;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir $out
+        cp -r $src/* $out
+        chmod +w $out
+        cp ${finalAttrs.packageLock} $out/package-lock.json
+      '';
+    };
+    hash = "sha256-f8BU3HfQX9E+AFpXvNjRJNwT5nX1WwyinMRb7DP0FYU=";
   };
+
+  packageLock = ./package-lock.json;
 
   npmRoot = "web";
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
   ];
+
+  postPatch = ''
+    cp ${finalAttrs.packageLock} web/package-lock.json
+  '';
 
   overrideModAttrs = oldAttrs: {
     # Do not add `npmConfigHook` to `goModules`
@@ -40,6 +59,8 @@ buildGoModule (finalAttrs: {
 
   # Some tests require internet access, broken in sandbox
   doCheck = false;
+
+  __darwinAllowLocalNetworking = true;
 
   preBuild = ''
     npm --prefix="$npmRoot" run build
