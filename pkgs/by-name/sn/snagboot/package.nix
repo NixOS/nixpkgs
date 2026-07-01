@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snagboot";
-  version = "2.4";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZjN4k5prOoEdAT4z37XiHdnUgLsz3zeR3+0zxY+2420=";
+    hash = "sha256-FOFvRzYk25M2P2T9TLRrhJDMyIe9troJ2DAP0at3aNY=";
   };
 
   build-system = with python3Packages; [
@@ -39,17 +39,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyserial
     tftpy
     crccheck
+    kivy
     libfdt
     # swig
     packaging
+    pyfatfs
     xmodem
   ];
 
   pythonRelaxDeps = [ "pylibfdt" ];
-
-  optional-dependencies = with python3Packages; {
-    gui = [ kivy ];
-  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="src/snagrecover/50-snagboot.rules"
