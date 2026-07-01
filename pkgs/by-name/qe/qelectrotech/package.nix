@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   patches = [
     # stripped down version of https://codeberg.org/gentoo/gentoo/src/branch/master/sci-electronics/qelectrotech/files/qelectrotech-0.90_pre20250820-cmake.patch
     ./system-pugixml.patch
+    # Qt-only replacements for upstream's KF5 color widgets.
+    ./qt-color-widgets.patch
   ];
 
   # fix wrong cmake conditional
@@ -60,21 +62,30 @@ stdenv.mkDerivation rec {
     pugixml
   ];
 
+  qtWrapperArgs = [
+    "--add-flags"
+    "--common-elements-dir=${placeholder "out"}/share/qelectrotech/elements"
+    "--add-flags"
+    "--common-tbt-dir=${placeholder "out"}/share/qelectrotech/titleblocks"
+    "--add-flags"
+    "--lang-dir=${placeholder "out"}/share/qelectrotech/lang"
+  ];
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 qelectrotech $out/bin/qelectrotech
 
-    install -Dm444 -t $out/share/applications misc/qelectrotech.desktop
+    install -Dm444 -t $out/share/applications ../misc/org.qelectrotech.qelectrotech.desktop
 
     mkdir -p $out/share/qelectrotech
-    cp -r elements $out/share/qelectrotech
-    cp -r titleblocks $out/share/qelectrotech
-    cp -r lang $out/share/qelectrotech
-    cp -r examples $out/share/qelectrotech
+    cp -r ../elements $out/share/qelectrotech
+    cp -r ../titleblocks $out/share/qelectrotech
+    cp -r ../lang $out/share/qelectrotech
+    cp -r ../examples $out/share/qelectrotech
 
     mkdir -p $out/share/icons/hicolor
-    cp -r ico $out/share/icons/hicolor
+    cp -r ../ico $out/share/icons/hicolor
 
     runHook postInstall
   '';

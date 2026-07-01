@@ -1,0 +1,168 @@
+diff --git a/cmake/qet_compilation_vars.cmake b/cmake/qet_compilation_vars.cmake
+index 84d7dce..c8a7d53 100644
+--- a/cmake/qet_compilation_vars.cmake
++++ b/cmake/qet_compilation_vars.cmake
+@@ -710,6 +710,15 @@ set(QET_SRC_FILES
+   ${QET_DIR}/sources/xml/terminalstripitemxml.h
+   )
+
++if(NOT BUILD_WITH_KF5)
++  list(APPEND QET_SRC_FILES
++    ${QET_DIR}/sources/ui/kcolorbutton.cpp
++    ${QET_DIR}/sources/ui/kcolorbutton.h
++    ${QET_DIR}/sources/ui/kcolorcombo.cpp
++    ${QET_DIR}/sources/ui/kcolorcombo.h
++  )
++endif()
++
+ set(TS_FILES
+   ${QET_DIR}/lang/qet_ar.ts
+   ${QET_DIR}/lang/qet_ca.ts
+diff --git a/sources/ui/kcolorbutton.cpp b/sources/ui/kcolorbutton.cpp
+new file mode 100644
+index 0000000..c778100
+--- /dev/null
++++ b/sources/ui/kcolorbutton.cpp
+@@ -0,0 +1,45 @@
++#include "kcolorbutton.h"
++
++#include <QColorDialog>
++#include <QPalette>
++
++KColorButton::KColorButton(QWidget *parent) :
++	QPushButton{parent},
++	m_color{Qt::black}
++{
++	connect(this, &QPushButton::clicked, this, &KColorButton::chooseColor);
++	updateButton();
++}
++
++QColor KColorButton::color() const
++{
++	return m_color;
++}
++
++void KColorButton::setColor(const QColor &color)
++{
++	m_color = color;
++	updateButton();
++}
++
++void KColorButton::chooseColor()
++{
++	const auto selected = QColorDialog::getColor(m_color, this);
++	if (!selected.isValid() || selected == m_color) {
++		return;
++	}
++
++	m_color = selected;
++	updateButton();
++	emit changed(m_color);
++}
++
++void KColorButton::updateButton()
++{
++	setText(m_color.isValid() ? m_color.name() : QString{});
++	auto pal = palette();
++	pal.setColor(QPalette::Button, m_color.isValid() ? m_color : QPalette{}.color(QPalette::Button));
++	setAutoFillBackground(true);
++	setPalette(pal);
++	update();
++}
+diff --git a/sources/ui/kcolorbutton.h b/sources/ui/kcolorbutton.h
+new file mode 100644
+index 0000000..a30c077
+--- /dev/null
++++ b/sources/ui/kcolorbutton.h
+@@ -0,0 +1,31 @@
++#ifndef QET_KCOLORBUTTON_H
++#define QET_KCOLORBUTTON_H
++
++#include <QColor>
++#include <QPushButton>
++
++class KColorButton : public QPushButton
++{
++	Q_OBJECT
++
++	public:
++		explicit KColorButton(QWidget *parent = nullptr);
++
++		QColor color() const;
++
++	public slots:
++		void setColor(const QColor &color);
++
++	signals:
++		void changed(const QColor &color);
++
++	private slots:
++		void chooseColor();
++
++	private:
++		void updateButton();
++
++		QColor m_color;
++};
++
++#endif // QET_KCOLORBUTTON_H
+diff --git a/sources/ui/kcolorcombo.cpp b/sources/ui/kcolorcombo.cpp
+new file mode 100644
+index 0000000..c0ac10d
+--- /dev/null
++++ b/sources/ui/kcolorcombo.cpp
+@@ -0,0 +1,27 @@
++#include "kcolorcombo.h"
++
++#include <QVariant>
++
++KColorCombo::KColorCombo(QWidget *parent) :
++	QComboBox{parent}
++{
++	connect(this, QOverload<int>::of(&QComboBox::activated), this, [this](int index) {
++		emit activated(itemData(index).value<QColor>());
++	});
++}
++
++void KColorCombo::setColors(const QList<QColor> &colors)
++{
++	clear();
++	for (const auto &color : colors) {
++		addItem(color.name(), color);
++	}
++}
++
++QColor KColorCombo::color(int index) const
++{
++	if (index < 0 || index >= count()) {
++		return {};
++	}
++	return itemData(index).value<QColor>();
++}
+diff --git a/sources/ui/kcolorcombo.h b/sources/ui/kcolorcombo.h
+new file mode 100644
+index 0000000..ca8f1c9
+--- /dev/null
++++ b/sources/ui/kcolorcombo.h
+@@ -0,0 +1,21 @@
++#ifndef QET_KCOLORCOMBO_H
++#define QET_KCOLORCOMBO_H
++
++#include <QColor>
++#include <QComboBox>
++
++class KColorCombo : public QComboBox
++{
++	Q_OBJECT
++
++	public:
++		explicit KColorCombo(QWidget *parent = nullptr);
++
++		void setColors(const QList<QColor> &colors);
++		QColor color(int index) const;
++
++	signals:
++		void activated(const QColor &color);
++};
++
++#endif // QET_KCOLORCOMBO_H
