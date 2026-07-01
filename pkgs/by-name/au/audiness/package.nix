@@ -17,6 +17,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "pytenable"
     "typer"
     "validators"
   ];
