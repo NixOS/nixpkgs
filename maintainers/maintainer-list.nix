@@ -7824,6 +7824,12 @@
     githubId = 22300113;
     name = "Eduardo Espadeiro";
   };
+  eduardofortesr = {
+    email = "eduardofortesr@gmail.com";
+    github = "eduardofortesr";
+    githubId = 263458971;
+    name = "Eduardo Fortes";
+  };
   eduardofuncao = {
     email = "eduardofuncao@hotmail.com";
     github = "eduardofuncao";
