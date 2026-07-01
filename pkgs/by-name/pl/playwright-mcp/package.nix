@@ -8,6 +8,7 @@
 }:
 buildNpmPackage rec {
   pname = "playwright-mcp";
+  # nixpkgs-update: no auto update
   version = "0.0.76";
 
   src = fetchFromGitHub {
