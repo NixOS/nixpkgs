@@ -27,10 +27,10 @@ def evaluate_config_raw(args: VarsArgs) -> Any:
 	elif args.file is not None:
 		expr = f"""
 import {jsonify} {{
-	config = (import ./{args.file}){"" if args.attr is None else f".{args.attr}"};
+	config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
-		evalCommand = ["--impure", "-E", expr]
+		evalCommand = ["--impure", "--expr", expr]
 
 	try:
 		result = subprocess.run(
