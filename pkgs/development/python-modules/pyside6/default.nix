@@ -97,13 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     python
     pythonImportsCheckHook
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ python.pkgs.qt6.qtwebengine ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   buildInputs = (
     if stdenv.hostPlatform.isLinux then
       # qtwebengine fails under darwin
       # see https://github.com/NixOS/nixpkgs/pull/312987
-      packages ++ [ python.pkgs.qt6.qtwebengine ]
+      packages
     else
       python.pkgs.qt6.darwinVersionInputs
       ++ [
@@ -113,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   propagatedBuildInputs = [ shiboken6 ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -132,6 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "PySide6" ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Python bindings for Qt";
