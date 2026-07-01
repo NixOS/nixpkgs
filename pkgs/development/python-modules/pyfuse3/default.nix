@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-HhEtWYWdxJZOMS3dqB2VdQS7aSdpkRhq7EZCJ55n2OE=";
   };
 
+  patches = [ ./pkgconfig_cross.patch ];
+
   build-system = [
     cython
     setuptools
