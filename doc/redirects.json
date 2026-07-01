@@ -2,6 +2,9 @@
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
+  "chap-first-package": [
+    "index.html#chap-first-package"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
@@ -105,6 +108,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-first-package-go": [
+    "index.html#ex-first-package-go"
+  ],
   "ex-modularServiceCompliance-nixos": [
     "index.html#ex-modularServiceCompliance-nixos"
   ],
@@ -130,6 +136,9 @@
   ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "first-package-go": [
+    "index.html#first-package-go"
   ],
   "friction-graphics": [
     "index.html#friction-graphics"
