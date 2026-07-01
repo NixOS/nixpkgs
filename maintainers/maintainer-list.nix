@@ -18770,6 +18770,13 @@
     matrix = "@motiejus:jakstys.lt";
     name = "Motiejus Jakštys";
   };
+  Mowerick = {
+    email = "oliverhagenauer@gmail.com";
+    github = "Mowerick";
+    githubId = 102822250;
+    keys = [ { fingerprint = "6472 901A F0E7 F983 4893  042F 5F76 361C 2EF9 C95F"; } ];
+    name = "Oliver Hagenauer";
+  };
   mpcsh = {
     email = "m@mpc.sh";
     github = "mpcsh";
