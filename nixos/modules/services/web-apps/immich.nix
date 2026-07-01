@@ -278,6 +278,16 @@ in
       }
     ];
 
+    warnings =
+      [ ]
+      ++ lib.optionals (cfg.user != cfg.database.user) [
+        ''
+          `config.services.immich.user` != `config.services.immich.database.user`: There will be likely a postgres error.
+          Make sure that `config.services.immich.database.user` and `config.services.immich.database.name` are correctly set!
+          Usually they should have the same value as `config.services.immich.user`.
+        ''
+      ];
+
     services.postgresql = mkIf cfg.database.enable {
       enable = true;
       ensureDatabases = mkIf cfg.database.createDB [ cfg.database.name ];
