@@ -9228,6 +9228,8 @@ self: super: with self; {
 
   lifx-emulator-core = callPackage ../development/python-modules/lifx-emulator-core { };
 
+  liger-kernel = callPackage ../development/python-modules/liger-kernel { };
+
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
   lightify = callPackage ../development/python-modules/lightify { };
