@@ -6,6 +6,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const { classify } = require('../supportedBranches.js')
   const { handleMerge } = require('./merge.js')
   const { handleReviewers } = require('./reviewers.js')
+  const { handleStaleConflict } = require('./stale-conflict.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -569,30 +570,35 @@ module.exports = async ({ github, context, core, dry }) => {
 
       const latest_event_at = new Date(
         events
-          .filter(({ event }) =>
-            [
-              // These events are hand-picked from:
-              //   https://docs.github.com/en/rest/using-the-rest-api/issue-event-types?apiVersion=2022-11-28
-              // Each of those causes a PR/issue to *not* be considered as stale anymore.
-              // Most of these use created_at.
-              'assigned',
-              'commented', // uses updated_at, because that could be > created_at
-              'committed', // uses committer.date
-              ...(item.labels.some(({ name }) => name === '5.scope: tracking')
-                ? ['cross-referenced']
-                : []),
-              'head_ref_force_pushed',
-              'milestoned',
-              'pinned',
-              'ready_for_review',
-              'renamed',
-              'reopened',
-              'review_dismissed',
-              'review_requested',
-              'reviewed', // uses submitted_at
-              'unlocked',
-              'unmarked_as_duplicate',
-            ].includes(event),
+          .filter(
+            ({ event, user }) =>
+              [
+                // These events are hand-picked from:
+                //   https://docs.github.com/en/rest/using-the-rest-api/issue-event-types?apiVersion=2022-11-28
+                // Each of those causes a PR/issue to *not* be considered as stale anymore.
+                // Most of these use created_at.
+                'assigned',
+                'commented', // uses updated_at, because that could be > created_at
+                'committed', // uses committer.date
+                ...(item.labels.some(({ name }) => name === '5.scope: tracking')
+                  ? ['cross-referenced']
+                  : []),
+                'head_ref_force_pushed',
+                'milestoned',
+                'pinned',
+                'ready_for_review',
+                'renamed',
+                'reopened',
+                'review_dismissed',
+                'review_requested',
+                'reviewed', // uses submitted_at
+                'unlocked',
+                'unmarked_as_duplicate',
+              ].includes(event) &&
+              // The bot's own comments (e.g. the stale merge-conflict nudge)
+              // must not reset the timer, or a nudged PR would never stay stale
+              // long enough to be drafted.
+              !(event === 'commented' && user?.login === 'nixpkgs-ci[bot]'),
           )
           .map(
             ({ created_at, updated_at, committer, submitted_at }) =>
@@ -620,6 +626,17 @@ module.exports = async ({ github, context, core, dry }) => {
             itemLabels,
             await handlePullRequest({ item, stats, events }),
           )
+        } else {
+          // Stale PRs skip the labeling above, but those stuck on a merge
+          // conflict get nudged and eventually drafted.
+          await handleStaleConflict({
+            github,
+            context,
+            log,
+            dry,
+            item,
+            events,
+          })
         }
       } else {
         stats.issues++
