@@ -1,9 +1,10 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
   openssl,
+  pkg-config,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,22 +20,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pxlUEGCrJjoakAVpXFq2q73wEWiODsHvdax12quDlec=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   # Many unit tests perform live HTTP requests / OOB interactsh lookups and
   # fail in the sandbox.
   doCheck = false;
 
+  doInstallCheck = true;
+
   meta = {
-    description = "Tool for analysing parameter and XSS scanning";
+    description = "Tool for analyzing parameter and XSS scanning";
     homepage = "https://github.com/hahwul/dalfox";
-    changelog = "https://github.com/hahwul/dalfox/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/hahwul/dalfox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dalfox";
