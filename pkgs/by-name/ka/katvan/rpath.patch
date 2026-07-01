@@ -1,0 +1,13 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 7308a8e..0271b34 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -53,7 +53,7 @@ elseif(UNIX)
+         set_property(TARGET katvan PROPERTY INSTALL_RPATH "$ORIGIN/../lib")
+         install(TARGETS typstdriver DESTINATION lib)
+     else()
+-        set_property(TARGET katvan PROPERTY INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}/katvan:$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
++        set_property(TARGET katvan PROPERTY INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}/katvan:${CMAKE_INSTALL_FULL_LIBDIR}")
+         install(TARGETS typstdriver DESTINATION ${CMAKE_INSTALL_LIBDIR}/katvan)
+     endif()
+ 
