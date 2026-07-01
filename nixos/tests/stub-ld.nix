@@ -24,6 +24,9 @@ import ./make-test-python.nix (
         libDir = pkgs.stdenv.hostPlatform.libDir;
         ldsoBasename = lib.last (lib.splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker);
 
+        libDir32 = "lib"; # pkgs.pkgsi686Linux.stdenv.hostPlatform.libDir
+        ldsoBasename32 = "ld-linux.so.2"; # last (splitString "/" pkgs.pkgsi686Linux.stdenv.cc.bintools.dynamicLinker)
+
         test-exec =
           builtins.mapAttrs
             (
@@ -39,6 +42,8 @@ import ./make-test-python.nix (
               aarch64-linux.hash = "sha256-hnldbd2cctQIAhIKoEZLIWY8H3jiFBClkNy2UlyyvAs=";
             };
         exec-name = "rustic";
+
+        if32 = pythonStatement: if pkgs.stdenv.hostPlatform.isx86_64 then pythonStatement else "pass";
       in
       ''
         machine.start()
@@ -46,26 +51,33 @@ import ./make-test-python.nix (
 
         with subtest("Check for stub (enabled, initial)"):
             machine.succeed('test -L /${libDir}/${ldsoBasename}')
+            ${if32 "machine.succeed('test -L /${libDir32}/${ldsoBasename32}')"}
 
         with subtest("Try FHS executable"):
             machine.copy_from_host('${test-exec.${pkgs.stdenv.hostPlatform.system}}','test-exec')
             machine.succeed('if test-exec/${exec-name} 2>outfile; then false; else [ $? -eq 127 ];fi')
             machine.succeed('grep -qi nixos outfile')
+            ${if32 "machine.copy_from_host('${test-exec."i686-linux"}','test-exec32')"}
+            ${if32 "machine.succeed('if test-exec32/${exec-name} 2>outfile32; then false; else [ $? -eq 127 ];fi')"}
+            ${if32 "machine.succeed('grep -qi nixos outfile32')"}
 
         with subtest("Disable stub"):
             machine.succeed("/run/booted-system/specialisation/nostub/bin/switch-to-configuration test")
 
         with subtest("Check for stub (disabled)"):
             machine.fail('test -e /${libDir}/${ldsoBasename}')
+            ${if32 "machine.fail('test -e /${libDir32}/${ldsoBasename32}')"}
 
         with subtest("Create file in stub location (to be overwritten)"):
             machine.succeed('mkdir -p /${libDir};touch /${libDir}/${ldsoBasename}')
+            ${if32 "machine.succeed('mkdir -p /${libDir32};touch /${libDir32}/${ldsoBasename32}')"}
 
         with subtest("Re-enable stub"):
             machine.succeed("/run/booted-system/bin/switch-to-configuration test")
 
         with subtest("Check for stub (enabled, final)"):
             machine.succeed('test -L /${libDir}/${ldsoBasename}')
+            ${if32 "machine.succeed('test -L /${libDir32}/${ldsoBasename32}')"}
       '';
   }
 )
