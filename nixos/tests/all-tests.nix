@@ -324,6 +324,7 @@ in
   calibre-server = import ./calibre-server.nix { inherit pkgs runTest; };
   calibre-web = runTest ./calibre-web.nix;
   canaille = runTest ./canaille.nix;
+  cardwire = runTest ./cardwire.nix;
   cassandra = runTest {
     imports = [ ./cassandra.nix ];
     _module.args.getPackage = pkgs: pkgs.cassandra;
