@@ -231,6 +231,12 @@
     github = "365tuwe";
     githubId = 10263091;
   };
+  _3j14 = {
+    name = "Jonas Drotleff";
+    github = "3j14";
+    githubId = 8471891;
+    matrix = "@sqrthalf:matrix.org";
+  };
   _3JlOy-PYCCKUi = {
     name = "3JlOy-PYCCKUi";
     email = "3jl0y_pycckui@riseup.net";
