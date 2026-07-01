@@ -13,6 +13,7 @@
   python-olm,
   unpaddedbase64,
   pycryptodome,
+  base58,
   # check deps
   pytestCheckHook,
   pytest-asyncio,
@@ -51,6 +52,7 @@ buildPythonPackage rec {
       python-olm
       unpaddedbase64
       pycryptodome
+      base58
     ];
   };
 
