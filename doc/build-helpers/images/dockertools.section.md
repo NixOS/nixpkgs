@@ -206,6 +206,17 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 : The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
 
+`includeNixDBHostSignatures` (Boolean; _optional_)
+
+: Copy the host builder's signatures for the Nix store paths into the image. The main purpose is to enable signature verification inside the container. Requires includeNixDB to be true.
+
+  :::{.caution}
+  Using this creates an image which is reproduceable under the assumption that the host has the same set of signatures for the image dependencies.
+  May break reproducibility, once dependencies are built and not signed immediately. Requires either sandbox turned off or building with relaxed mode.
+  :::
+
+  _Default value:_ `false`
+
 `contents` **DEPRECATED**
 
 : This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.
@@ -642,6 +653,17 @@ This allows the function to produce reproducible images.
 `meta` (Attribute Set)
 
 : The `meta` attribute of the resulting derivation, as in `stdenv.mkDerivation`. Accepts `description`, `maintainers` and any other `meta` attributes.
+
+`includeNixDBHostSignatures` (Boolean; _optional_)
+
+: Copy the host builder's signatures for the Nix store paths into the image. The main purpose is to enable signature verification inside the container. Requires includeNixDB to be true.
+
+  :::{.caution}
+  Using this creates an image which is reproduceable under the assumption that the host has the same set of signatures for the image dependencies.
+  May break reproducibility, once dependencies are built and not signed immediately. Requires either sandbox turned off or building with relaxed mode.
+  :::
+
+  _Default value:_ `false`
 
 `passthru` (Attribute Set; _optional_)
 
