@@ -270,9 +270,9 @@
     ]
   },
   "oidc": {
-    "hash": "sha256-CTnFegGasnG+2MPK6c0H01OjrEKSM0WALwns9nJySaA=",
-    "url": "https://github.com/H2CK/oidc/releases/download/1.17.0/oidc-1.17.0.tar.gz",
-    "version": "1.17.0",
+    "hash": "sha256-jPIkYSod3/aS4rJmj4m8qtEK+FXgvrdWYSmvsNnSUm8=",
+    "url": "https://github.com/H2CK/oidc/releases/download/2.0.1/oidc-2.0.1.tar.gz",
+    "version": "2.0.1",
     "description": "Nextcloud as OpenID Connect Identity Provider\n\nWith this app you can use Nextcloud as OpenID Connect Identity Provider. If other services\nare configured correctly, you are able to access those services with your Nextcloud login.\n\nFull documentation can be found at:\n\n- [User Documentation](https://github.com/H2CK/oidc/wiki#user-documentation)\n- [Developer Documentation](https://github.com/H2CK/oidc/wiki#developer-documentation)",
     "homepage": "https://github.com/H2CK/oidc",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-rEeaUUYhsTVLZDo11Xh/wGI3k97Tq5J0Jn18QY1M1Xs=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v8.1.2/user_saml-v8.1.2.tar.gz",
-    "version": "8.1.2",
+    "hash": "sha256-A61Bv3EJHk7iU8hmhnBsXS6zLeYakv4hNywCGfF92+g=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v8.1.3/user_saml-v8.1.3.tar.gz",
+    "version": "8.1.3",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\t* Authentik\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
