@@ -9044,6 +9044,13 @@
     githubId = 41450706;
     name = "fin-w";
   };
+  findus = {
+    email = "findus-nix@trsk.cc";
+    github = "findus";
+    githubId = 7995019;
+    matrix = "@findus:stratum0.org";
+    name = "findus";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
