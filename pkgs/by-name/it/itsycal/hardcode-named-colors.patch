@@ -1,0 +1,88 @@
+diff --git a/Itsycal/Themer.m b/Itsycal/Themer.m
+index 1bba0e1..0370ee3 100644
+--- a/Itsycal/Themer.m
++++ b/Itsycal/Themer.m
+@@ -92,7 +92,12 @@ - (NSColor *)DOWTextColor {
+ }
+ 
+ - (NSColor *)highlightedDOWBackgroundColor {
+-    return [NSColor colorNamed:@"HighlightedDOWBackgroundColor"];
++    return [NSColor colorWithName:@"HighlightedDOWBackgroundColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.235 green:0.235 blue:0.235 alpha:1.0];
++        return [NSColor colorWithSRGBRed:0.940 green:0.940 blue:0.940 alpha:1.0];
++    }];
+ }
+ 
+ - (NSColor *)highlightedDOWTextColor {
+@@ -104,7 +109,12 @@ - (NSColor *)hoveredCellColor {
+ }
+ 
+ - (NSColor *)mainBackgroundColor {
+-    return [NSColor colorNamed:@"MainBackgroundColor"];
++    return [NSColor colorWithName:@"MainBackgroundColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.150 green:0.160 blue:0.170 alpha:1.0];
++        return [NSColor colorWithSRGBRed:1.000 green:1.000 blue:1.000 alpha:1.0];
++    }];
+ }
+ 
+ - (NSColor *)monthTextColor {
+@@ -116,7 +126,12 @@ - (NSColor *)noncurrentMonthTextColor {
+ }
+ 
+ - (NSColor *)pendingBackgroundColor {
+-    return [NSColor colorNamed:@"PendingBackgroundColor"];
++    return [NSColor colorWithName:@"PendingBackgroundColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.450 green:0.450 blue:0.450 alpha:0.250];
++        return [NSColor colorWithSRGBRed:0.740 green:0.740 blue:0.740 alpha:0.250];
++    }];
+ }
+ 
+ - (NSColor *)resizeHandleBackgroundColor {
+@@ -124,7 +139,12 @@ - (NSColor *)resizeHandleBackgroundColor {
+ }
+ 
+ - (NSColor *)resizeHandleForegroundColor {
+-    return [NSColor colorNamed:@"ResizeHandleForegroundColor"];
++    return [NSColor colorWithName:@"ResizeHandleForegroundColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.700 green:0.700 blue:0.700 alpha:1.0];
++        return [NSColor colorWithSRGBRed:0.400 green:0.400 blue:0.400 alpha:1.0];
++    }];
+ }
+ 
+ - (NSColor *)selectedCellColor {
+@@ -132,7 +152,12 @@ - (NSColor *)selectedCellColor {
+ }
+ 
+ - (NSColor *)todayCellColor {
+-    return [NSColor colorNamed:@"TodayCellColor"];
++    return [NSColor colorWithName:@"TodayCellColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.200 green:0.550 blue:0.900 alpha:1.0];
++        return [NSColor colorWithSRGBRed:0.250 green:0.600 blue:1.000 alpha:1.0];
++    }];
+ }
+ 
+ - (NSColor *)tooltipBackgroundColor {
+@@ -144,7 +169,12 @@ - (NSColor *)weekTextColor {
+ }
+ 
+ - (NSColor *)windowBorderColor {
+-    return [NSColor colorNamed:@"WindowBorderColor"];
++    return [NSColor colorWithName:@"WindowBorderColor" dynamicProvider:^NSColor *(NSAppearance *appearance) {
++        NSAppearanceName name = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
++        if ([name isEqualToString:NSAppearanceNameDarkAqua])
++            return [NSColor colorWithSRGBRed:0.600 green:0.600 blue:0.600 alpha:0.400];
++        return [NSColor colorWithSRGBRed:0.400 green:0.400 blue:0.400 alpha:0.400];
++    }];
+ }
+ 
+ @end
