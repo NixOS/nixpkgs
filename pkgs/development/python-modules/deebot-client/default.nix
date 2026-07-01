@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   version = "18.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
