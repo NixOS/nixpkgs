@@ -7505,6 +7505,13 @@
     githubId = 82293276;
     name = "David Villafaña";
   };
+  duckysocks22 = {
+    email = "jjones213067@tuta.com";
+    github = "duckysocks22";
+    githubId = 175066341;
+    name = "Jaiden Jones";
+    keys = [ { fingerprint = "zfetx2opVnPHgBgEycfTBbFMwjC46kVXQgZsckFozQM"; } ];
+  };
   dudeofawesome = {
     email = "tourist-04.iced@icloud.com";
     github = "dudeofawesome";
