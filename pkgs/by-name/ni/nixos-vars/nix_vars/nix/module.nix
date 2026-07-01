@@ -43,7 +43,7 @@ let
 
         exists = delayedPackage ''
           Given $1=gen_name and $2=file_name, the script exists with status
-          code 0 if the secret exists, and with status code 1 otherwise.
+          code 0 if the secret exists, and with status code 42 otherwise.
         '';
 
         delete = nullableDelayedPackage ''

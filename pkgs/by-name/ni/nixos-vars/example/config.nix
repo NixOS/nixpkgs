@@ -21,7 +21,7 @@ in
         pkgs:
         pkgs.writeShellScript "exists" ''
           if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
-            exit 1
+            exit 42
           fi
         '';
       deploy = noop;
