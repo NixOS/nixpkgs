@@ -7,6 +7,7 @@
   p7zip,
   versionCheckHook,
 }:
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
   version = "6.0.1";
@@ -15,25 +16,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src =
     let
-      # nix store prefetch-file https://github.com/mas-cli/mas/releases/download/v$VERSION/mas-$VERSION-$ARCH.pkg
-      sources =
-        {
-          x86_64-darwin = {
-            arch = "x86_64";
-            hash = "sha256-7+iDBr4GG5bdTuAlAmMQkEkIzVgLo2+DEdravClaLtQ=";
-          };
-          aarch64-darwin = {
-            arch = "arm64";
-            hash = "sha256-BZ9UE8H28kjqiMNdLDUUyC9madR4rBV1mLUGyj6ol3Y=";
-          };
-        }
-        .${stdenvNoCC.hostPlatform.system}
-          or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+      baseUrl = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}";
+      sources = {
+        x86_64-darwin = fetchurl {
+          url = "${baseUrl}-x86_64.pkg";
+          hash = "sha256-7+iDBr4GG5bdTuAlAmMQkEkIzVgLo2+DEdravClaLtQ=";
+        };
+        aarch64-darwin = fetchurl {
+          url = "${baseUrl}-arm64.pkg";
+          hash = "sha256-BZ9UE8H28kjqiMNdLDUUyC9madR4rBV1mLUGyj6ol3Y=";
+        };
+      };
     in
-    fetchurl {
-      url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-${sources.arch}.pkg";
-      inherit (sources) hash;
-    };
+    sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,6 +65,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
@@ -76,6 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "mas";
     maintainers = with lib.maintainers; [
       zachcoyle
+      tiferrei
     ];
     platforms = [
       "x86_64-darwin"
