@@ -6,6 +6,7 @@
   imagemagick,
   xdg-utils,
   makeDesktopItem,
+  nodejs_22,
 }:
 
 buildNpmPackage rec {
@@ -27,6 +28,8 @@ buildNpmPackage rec {
     copyDesktopItems
     imagemagick
   ];
+
+  nodejs = nodejs_22;
 
   installPhase = ''
     runHook preInstall
