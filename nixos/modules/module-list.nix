@@ -1944,6 +1944,7 @@
   ./system/boot/nix-store-veritysetup.nix
   ./system/boot/plymouth-tpm2-totp.nix
   ./system/boot/plymouth.nix
+  ./system/boot/resolved-dnssec-trust-anchors.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix
