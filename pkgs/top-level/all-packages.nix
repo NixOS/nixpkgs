@@ -2250,6 +2250,8 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
+  headroom = with python3Packages; toPythonApplication headroom-ai;
+
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
   httpie = with python3Packages; toPythonApplication httpie;

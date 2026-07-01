@@ -1164,6 +1164,8 @@ self: super: with self; {
 
   asserts = callPackage ../development/python-modules/asserts { };
 
+  ast-grep-cli = callPackage ../development/python-modules/ast-grep-cli { };
+
   ast-grep-py = callPackage ../development/python-modules/ast-grep-py { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
@@ -7189,6 +7191,8 @@ self: super: with self; {
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
   headerparser = callPackage ../development/python-modules/headerparser { };
+
+  headroom-ai = callPackage ../development/python-modules/headroom { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
