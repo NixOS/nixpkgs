@@ -15,6 +15,18 @@ let
   inherit (lib.options) literalExpression;
   cfg = config.amazonImage;
   amiBootMode = if config.ec2.efi then "uefi" else "legacy-bios";
+  defaultConfigFile = pkgs.writeText "configuration.nix" ''
+    { modulesPath, ... }: {
+      imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
+      ${optionalString config.ec2.efi ''
+        ec2.efi = true;
+      ''}
+      ${optionalString config.ec2.zfs.enable ''
+        ec2.zfs.enable = true;
+        networking.hostId = "${config.networking.hostId}";
+      ''}
+    }
+  '';
 in
 {
   imports = [
@@ -46,6 +58,16 @@ in
   ];
 
   options.amazonImage = {
+    configFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
+        and be used when switching to a new configuration.
+        If set to `null`, the default Amazon EC2 image configuration is used.
+      '';
+    };
+
     contents = mkOption {
       example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -82,18 +104,7 @@ in
 
   config.system.build.amazonImage =
     let
-      configFile = pkgs.writeText "configuration.nix" ''
-        { modulesPath, ... }: {
-          imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
-          ${optionalString config.ec2.efi ''
-            ec2.efi = true;
-          ''}
-          ${optionalString config.ec2.zfs.enable ''
-            ec2.zfs.enable = true;
-            networking.hostId = "${config.networking.hostId}";
-          ''}
-        }
-      '';
+      configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
 
       zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
         inherit
