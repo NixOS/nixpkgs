@@ -17,6 +17,7 @@
   vulkanSupport ? false,
   vulkan-loader,
   shaderc,
+  metalSupport ? false,
   nix-update-script,
 }:
 
@@ -87,7 +88,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "CUBLASLD_FLAGS=-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs -lcuda -lcublas -lcudart -lcublasLt -lpthread -ldl -lrt"
     "NVCCFLAGS=--forward-unknown-to-host-compiler -use_fast_math -extended-lambda -Wno-deprecated-gpu-targets -DKCPP_LIMIT_CUDA_MAX_ARCH=${cudaMaxArch} ${cudaPackages.flags.gencodeString}"
   ]
-  ++ lib.optionals vulkanSupport [ "LLAMA_VULKAN=1" ];
+  ++ lib.optionals vulkanSupport [ "LLAMA_VULKAN=1" ]
+  ++ lib.optionals metalSupport [ "LLAMA_METAL=1" ];
 
   buildFlags = [
     "koboldcpp_default"
@@ -109,6 +111,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
     cp -r embd_res "$out/bin"
+
+    ${lib.optionalString metalSupport ''
+      cp *.metal "$out/bin"
+    ''}
 
     ${lib.optionalString (!koboldLiteSupport) ''
       rm "$out/bin/embd_res/kcpp_docs.embd"
@@ -136,7 +142,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       maxstrid
       FlameFlag
     ];
-    platforms = lib.platforms.unix;
+    platforms = if metalSupport then lib.platforms.darwin else lib.platforms.unix;
     badPlatforms = lib.optionals cublasSupport lib.platforms.darwin;
   };
 })
