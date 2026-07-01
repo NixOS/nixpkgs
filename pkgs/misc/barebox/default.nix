@@ -10,6 +10,7 @@
   openssl,
   pkg-config,
   buildPackages,
+  lz4,
 }:
 
 let
@@ -45,6 +46,7 @@ let
         bison
         dtc
         flex
+        lz4
         lzop
         openssl
         pkg-config
