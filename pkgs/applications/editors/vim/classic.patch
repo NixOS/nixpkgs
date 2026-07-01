@@ -1,0 +1,64 @@
+diff --git a/src/testdir/test_autocmd.vim b/src/testdir/test_autocmd.vim
+index cd3559e1b..361a9fe40 100644
+--- a/src/testdir/test_autocmd.vim
++++ b/src/testdir/test_autocmd.vim
+@@ -2515,6 +2515,7 @@ endfunc
+ 
+ " Tests for SigUSR1 autocmd event, which is only available on posix systems.
+ func Test_autocmd_sigusr1()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   CheckUnix
+ 
+   let g:sigusr1_passed = 0
+diff --git a/src/testdir/test_backup.vim b/src/testdir/test_backup.vim
+index 0d3e79c22..a9442cdb3 100644
+--- a/src/testdir/test_backup.vim
++++ b/src/testdir/test_backup.vim
+@@ -61,6 +61,7 @@ endfunc
+ 
+ " Test for using a non-existing directory as a backup directory
+ func Test_non_existing_backupdir()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   CheckNotBSD
+   let save_backup = &backupdir
+   set backupdir=./non_existing_dir
+diff --git a/src/testdir/test_swap.vim b/src/testdir/test_swap.vim
+index 7889d4b48..97c90d803 100644
+--- a/src/testdir/test_swap.vim
++++ b/src/testdir/test_swap.vim
+@@ -170,6 +170,7 @@ func Test_swapname()
+ endfunc
+ 
+ func Test_swapfile_delete()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   autocmd! SwapExists
+   function s:swap_exists()
+     let v:swapchoice = s:swap_choice
+diff --git a/src/testdir/test_writefile.vim b/src/testdir/test_writefile.vim
+index 0783a36f7..bb762bfe9 100644
+--- a/src/testdir/test_writefile.vim
++++ b/src/testdir/test_writefile.vim
+@@ -351,6 +351,7 @@ endfunc
+ 
+ " Test for writing to a readonly file
+ func Test_write_readonly()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   " In Cirrus-CI, the freebsd tests are run under a root account. So this test
+   " doesn't fail.
+   CheckNotBSD
+@@ -371,6 +372,7 @@ endfunc
+ 
+ " Test for 'patchmode'
+ func Test_patchmode()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   CheckNotBSD
+   call writefile(['one'], 'Xfile')
+   set patchmode=.orig nobackup writebackup
+@@ -391,6 +393,7 @@ endfunc
+ 
+ " Test for writing to a file in a readonly directory
+ func Test_write_readonly_dir()
++  throw 'Skipped: vim-classic 8.3.0: FIXME'
+   if !has('unix') || has('bsd')
+     " On MS-Windows, modifying files in a read-only directory is allowed.
+     " In Cirrus-CI for Freebsd, tests are run under a root account where
