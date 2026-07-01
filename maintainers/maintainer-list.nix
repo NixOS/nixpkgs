@@ -23286,6 +23286,12 @@
     githubId = 45141270;
     name = "Steve Mathew Joy";
   };
+  razelighter777 = {
+    email = "utilityemal77@gmail.com";
+    github = "razelighter777";
+    githubId = 25808399;
+    name = "Justin Suess";
+  };
   razvan = {
     email = "razvan.panda@gmail.com";
     github = "freeman42x";
