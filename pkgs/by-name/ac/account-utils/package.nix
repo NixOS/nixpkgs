@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "c_args" "-ffat-lto-objects")
   ];
 
+  doCheck = true;
+
   passthru.tests = {
     inherit (nixosTests) login-nosuid;
   };
