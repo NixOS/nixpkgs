@@ -15,6 +15,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-DmIjqBTIzwkQ8aJ6xCgIwjDtczlTH5AKbPKFUGx3qQ8=";
   };
 
+  __structuredAttrs = true;
   vendorHash = "sha256-gBURmodXkod4fukw6LWEY+MBxPcf4vn/f6K78UR77n0=";
 
   modRoot = "./cmd";
