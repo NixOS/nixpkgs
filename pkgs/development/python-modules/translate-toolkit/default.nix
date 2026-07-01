@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.11";
+  version = "3.19.19";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-+94oo6IYnRR4jnR60C3WNjesK6Tk6jND3xsYyx6sw0U=";
+    hash = "sha256-TWEVrZHtMgXn4oG3Wfx3LMbAoX1S770PCdRoq/qKzZE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -92,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
     changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
 })
