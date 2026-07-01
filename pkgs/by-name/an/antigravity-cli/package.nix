@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   autoPatchelfHook,
+  makeBinaryWrapper,
   versionCheckHook,
 }:
 let
@@ -41,7 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isElf [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenvNoCC.isLinux [
+    autoPatchelfHook
+    makeBinaryWrapper
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -52,6 +56,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm755 antigravity $out/bin/agy
 
     runHook postInstall
+  '';
+
+  # agy runs agent commands inside its own nsjail, which bind-mounts only the
+  # host's /lib, /lib64 and every directory on $PATH. On NixOS the binary's
+  # glibc interpreter lives in /nix/store (on none of those), so the jail cannot
+  # exec it and command execution fails; agy then falls back to running
+  # unsandboxed on the host. Putting /nix/store on $PATH makes nsjail bind-mount
+  # the store into the jail so the interpreter and every tool/library resolve.
+  postFixup = lib.optionalString stdenvNoCC.isLinux ''
+    wrapProgram $out/bin/agy --suffix PATH : /nix/store
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
