@@ -1894,6 +1894,7 @@ in
   };
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
+  yugabyte = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./yugabyte.nix;
   zammad = runTest ./zammad.nix;
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
