@@ -739,7 +739,7 @@ stdenv.mkDerivation (finalAttrs: {
 ### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
 
 ```nix
-pkgsCross.wasi32.callPackage (
+pkgsCross.wasm32-wasip1.callPackage (
   {
     fetchFromGitHub,
     rustPlatform,
