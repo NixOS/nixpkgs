@@ -2275,6 +2275,7 @@ mapAliases {
   ugarit-manifest-maker = throw "'ugarit-manifest-maker' has been removed because it is unmaintained"; # Added 2026-05-07
   uhttpmock_1_0 = warnAlias "'uhttpmock_1_0' has been renamed to 'uhttpmock'" uhttpmock; # Added 2026-05-30
   unicap = throw "'unicap' has been removed because it is unmaintained"; # Added 2025-05-17
+  unicorn-angr = throw "'unicorn-angr' has been removed as angr now uses upstream unicorn"; # Added 2026-02-04
   unifi-poller = throw "'unifi-poller' has been renamed to/replaced by 'unpoller'"; # Converted to throw 2025-10-27
   unixODBC = warnAlias "'unixODBC' has been renamed to 'unixodbc'" unixodbc; # Added 2026-02-12
   unixODBCDrivers = warnAlias "'unixODBCDrivers' has been renamed to 'unixodbcDrivers'" unixodbcDrivers; # Added 2026-02-12

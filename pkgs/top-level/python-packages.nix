@@ -166,8 +166,6 @@ self: super: with self; {
 
   aigpy = callPackage ../development/python-modules/aigpy { };
 
-  ailment = callPackage ../development/python-modules/ailment { };
-
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client =
@@ -16820,6 +16818,8 @@ self: super: with self; {
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
+  pyxdia = callPackage ../development/python-modules/pyxdia { };
+
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
   pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
@@ -21160,10 +21160,6 @@ self: super: with self; {
   unicodeit = callPackage ../development/python-modules/unicodeit { };
 
   unicorn = callPackage ../development/python-modules/unicorn { inherit (pkgs) unicorn; };
-
-  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
-    inherit (pkgs) unicorn-angr;
-  };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
