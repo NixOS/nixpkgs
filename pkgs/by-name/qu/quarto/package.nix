@@ -74,7 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin $out/share
 
-    rm -r bin/tools
+    rm -r bin/tools/*
+
+    mkdir bin/tools/aarch64
+    mkdir bin/tools/x86_64
+
+    ln -s ${lib.makeBinPath [ pandoc ]}/pandoc bin/tools/x86_64/pandoc
+    ln -s ${lib.makeBinPath [ pandoc ]}/pandoc bin/tools/aarch64/pandoc
+
 
     mv bin/* $out/bin
     mv share/* $out/share
