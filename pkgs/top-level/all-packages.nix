@@ -8548,6 +8548,8 @@ with pkgs;
 
   cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
 
+  cfait-gui = callPackage ../by-name/cf/cfait/package.nix { withGui = true; };
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
   cni = callPackage ../applications/networking/cluster/cni { };
