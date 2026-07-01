@@ -14,6 +14,9 @@
 
   cublasSupport ? false,
 
+  vulkanSupport ? false,
+  vulkan-loader,
+  shaderc,
   nix-update-script,
 }:
 
@@ -55,7 +58,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cublasSupport [
     autoAddDriverRunpath
     cudaPackages.cuda_nvcc
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ shaderc ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
@@ -67,6 +71,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaPackages.libcublas
     cudaPackages.cuda_cudart
     cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
   ];
 
   pythonPath = finalAttrs.pythonInputs;
@@ -79,14 +86,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "CUBLAS_FLAGS=-DGGML_USE_CUDA -DSD_USE_CUDA"
     "CUBLASLD_FLAGS=-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs -lcuda -lcublas -lcudart -lcublasLt -lpthread -ldl -lrt"
     "NVCCFLAGS=--forward-unknown-to-host-compiler -use_fast_math -extended-lambda -Wno-deprecated-gpu-targets -DKCPP_LIMIT_CUDA_MAX_ARCH=${cudaMaxArch} ${cudaPackages.flags.gencodeString}"
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ "LLAMA_VULKAN=1" ];
 
   buildFlags = [
     "koboldcpp_default"
     "koboldcpp_failsafe"
     "koboldcpp_noavx2"
   ]
-  ++ lib.optionals cublasSupport [ "koboldcpp_cublas" ];
+  ++ lib.optionals cublasSupport [ "koboldcpp_cublas" ]
+  ++ lib.optionals vulkanSupport [
+    "koboldcpp_vulkan"
+    "koboldcpp_vulkan_failsafe"
+    "koboldcpp_vulkan_noavx2"
+  ];
 
   installPhase = ''
     runHook preInstall
