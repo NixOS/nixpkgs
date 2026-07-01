@@ -31,24 +31,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccextractor";
-  version = "0.94-unstable-2025-05-20";
+  version = "0.96.6";
 
   src = fetchFromGitHub {
     owner = "CCExtractor";
     repo = "ccextractor";
-    rev = "407d0f4e93611c5b0ceb14b7fc01d4a4c2e90433";
-    hash = "sha256-BfsQmCNB4HRafqJ3pC2ECiwhOgwKuIqiLjr2/bvHr7Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nvfQX+1pM16ll7ruXcB22fWn2zQvmpUzKhD3vznEcbI=";
   };
 
   patches = [
-    ./remove-default-commit-hash.patch
     ./remove-vendored-libraries.patch
-    ./fix-avcodec-close.patch
-    (fetchpatch {
-      name = "CVE-2026-2245.patch";
-      url = "https://github.com/CCExtractor/ccextractor/commit/fd7271bae238ccb3ae8a71304ea64f0886324925.patch";
-      hash = "sha256-wZiJob5v4SVa5YBmiHuNvgphSi4PhTTb3hg4vs1lhVg=";
-    })
   ]
   ++ finalAttrs.cargoDeps.vendorStaging.patches;
 
@@ -58,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    patches = [ ./use-rsmpeg-0.15.patch ];
-    hash = "sha256-68Y8nzPHxhVIRHoPXOy9tc71177lCBuOf//z3cqyDGQ=";
+    hash = "sha256-0FPxU3rUoT3/Xy3mQjjQGmxkNjs++sQxjCJ1/UuRQlc=";
   };
 
   nativeBuildInputs = [
@@ -94,10 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     # The tests are all part of one `cargo test` invocation, so let’s
     # get the output from it.
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--verbose")
-
-    # TODO: This (and the corresponding patch) should probably be
-    # removed for the next stable release.
-    (lib.cmakeFeature "GIT_COMMIT_HASH" finalAttrs.src.rev)
   ]
   ++ lib.optionals enableOcr [
     (lib.cmakeBool "WITH_OCR" true)
@@ -140,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString enableOcr ''
     substituteInPlace src/lib_ccx/ocr.c \
-      --replace-fail 'getenv("TESSDATA_PREFIX")' '"${tesseract}/share"'
+      --replace-fail 'getenv("TESSDATA_PREFIX")' '"${tesseract}/share/"'
   '';
 
   meta = {
