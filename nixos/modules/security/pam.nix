@@ -2250,6 +2250,30 @@ in
               '';
             };
 
+            prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for interactive mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.interactive` option.
+
+                Requires {option}`security.pam.u2f.settings.interactive` to be set to `true`.
+              '';
+            };
+
+            cue_prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for cue mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.cue` option.
+
+                Requires {option}`security.pam.u2f.settings.cue` to be set to `true`.
+              '';
+            };
+
             cue = lib.mkOption {
               default = false;
               type = lib.types.bool;
