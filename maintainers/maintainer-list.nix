@@ -20815,6 +20815,12 @@
     githubId = 55047947;
     name = "Oli";
   };
+  olimoli = {
+    email = "olimoli@disroot.org";
+    github = "Diax170";
+    githubId = 138491143;
+    name = "Oli";
+  };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";
     github = "oliver-koss";
