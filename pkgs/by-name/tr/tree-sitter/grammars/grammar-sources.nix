@@ -1095,6 +1095,15 @@
     };
   };
 
+  haxe = {
+    version = "0.6.0";
+    url = "github:vantreeseba/tree-sitter-haxe";
+    hash = "sha256-i/wNeZwHDu1hcPXLjjjndiD4Qd/h8pxnKQkdZ5yzQg4=";
+    meta = {
+      license = lib.licenses.mit;
+    };
+  };
+
   hcl = {
     version = "1.2.0";
     url = "github:tree-sitter-grammars/tree-sitter-hcl";
