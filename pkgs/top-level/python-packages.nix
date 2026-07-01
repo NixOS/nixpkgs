@@ -780,6 +780,8 @@ self: super: with self; {
 
   alphaessopenapi = callPackage ../development/python-modules/alphaessopenapi { };
 
+  alphashape = callPackage ../development/python-modules/alphashape { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   altcha = callPackage ../development/python-modules/altcha { };
