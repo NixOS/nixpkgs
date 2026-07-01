@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
+  fetchFromCodeberg,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   python3Packages,
   libsForQt5,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
   version = "1.8.2";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
     rev = "v${finalAttrs.version}";
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Make it runnable from the terminal on Darwin
-  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin /* bash */ ''
     mkdir "$out/bin"
     ln -s "$out/Applications/NanoBoyAdvance.app/Contents/MacOS/NanoBoyAdvance" "$out/bin/NanoBoyAdvance"
   '';
 
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
-    homepage = "https://github.com/nba-emu/NanoBoyAdvance";
+    homepage = "https://nanoboyadvance.eu/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";
     maintainers = with lib.maintainers; [ tomasajt ];
