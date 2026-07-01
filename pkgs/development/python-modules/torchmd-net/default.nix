@@ -66,12 +66,6 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  checkInputs = lib.optionals stdenv.cc.isClang [
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # fatal error: 'omp.h' file not found
-    llvmPackages.openmp
-  ];
-
   disabledTests = [
     # Require internet access
     "test_dataset_s66x8"

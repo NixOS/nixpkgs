@@ -4,9 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -16,12 +13,17 @@
 
   # tests
   inflect,
+  librosa,
   parameterized,
   pytestCheckHook,
   pytorch-lightning,
+  requests,
   scipy,
   sentencepiece,
+  soundfile,
   unidecode,
+  # linux-only:
+  fairseq,
 
   # passthru
   torchaudio,
@@ -88,13 +90,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs =
-    lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals torch.stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   dependencies = [
     torch
@@ -111,11 +109,21 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     scipy
     sentencepiece
     unidecode
+    librosa
+    requests
+    soundfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fairseq
   ];
 
   disabledTestPaths = [
     # Require internet access
     "test/integration_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Passes, but hangs the build after Pytest completes
+    "test/torchaudio_unittest/models/models_test.py::TestConvTasNet"
   ];
 
   disabledTests = [
