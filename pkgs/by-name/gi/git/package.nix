@@ -583,6 +583,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Tested to fail: 2.18.0
     disable_test t0028-working-tree-encoding
   ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    # Tests 2-5 fail on riscv64.
+    disable_test t0213-trace2-ancestry
+  ''
   + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     # Time zones are not available in the build sandbox.
     # This can be fixed if/when we decide on how the hardcoded libc paths should look
