@@ -8,15 +8,12 @@
   absl-py,
   afdko,
   axisregistry,
-  babelfont,
   beautifulsoup4,
   black,
   brotli,
-  bumpfontversion,
   coreutils,
   diffenator2,
   ffmpeg-python,
-  font-v,
   fontbakery,
   fontfeatures,
   fontmake,
@@ -44,8 +41,6 @@
   requests,
   rich,
   ruamel-yaml,
-  skia-pathops,
-  statmake,
   strictyaml,
   tabulate,
   ttfautohint-py,
@@ -62,14 +57,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.995";
+  version = "0.9.996";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-XnlA5u6GP8K+xxazfxMrh16Utxs9uhfxoZFV81yFOfA=";
+    hash = "sha256-8tz6xsDtjJMa5Vnpv69BbcmGtDHp6eFlryAtO1zKyDs=";
   };
 
   postPatch = ''
@@ -131,12 +126,9 @@ buildPythonPackage rec {
     absl-py
     afdko
     axisregistry
-    babelfont
     beautifulsoup4
     brotli
-    bumpfontversion
     ffmpeg-python
-    font-v
     fontfeatures
     fontmake
     fonttools
@@ -159,8 +151,6 @@ buildPythonPackage rec {
     rich
     ruamel-yaml
     setuptools
-    skia-pathops
-    statmake
     strictyaml
     tabulate
     ttfautohint-py
