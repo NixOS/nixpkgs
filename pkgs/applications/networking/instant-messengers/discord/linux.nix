@@ -150,13 +150,33 @@ let
 
   # Symlink native modules from the nix store into the user config dir
   # where Discord's JS moduleUpdater expects them.
+  # Exception: discord_voice bundles Google MediaPipe's selfie-segmentation
+  # `.tflite` models, which the native voice engine opens read-write (O_RDWR).
+  # A symlink into the read-only Nix store makes that open fail with EACCES, so
+  # the segmentation graph errors on every frame and background blur / virtual
+  # backgrounds render a fully black camera image. Stage that one module as a
+  # writable copy instead, cached per version so we don't re-copy ~130 MB on
+  # every launch.
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
-    modules_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}/${version}/modules"
+    config_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/${lib.toLower binaryName}"
+    modules_dir="$config_dir/${version}/modules"
     rm -rf "$modules_dir"
     mkdir -p "$modules_dir"
     for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-      ln -sn "$store_modules/$m" "$modules_dir/$m"
+      if [ "$m" = "discord_voice" ]; then
+        voice_copy="$config_dir/${version}/modules-writable/discord_voice"
+        if [ ! -e "$voice_copy/.nix-staged" ]; then
+          rm -rf "$voice_copy"
+          mkdir -p "$voice_copy"
+          cp -RL "$store_modules/$m/." "$voice_copy/"
+          chmod -R u+w "$voice_copy"
+          : > "$voice_copy/.nix-staged"
+        fi
+        ln -sn "$voice_copy" "$modules_dir/$m"
+      else
+        ln -sn "$store_modules/$m" "$modules_dir/$m"
+      fi
     done
     echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
       > "$modules_dir/installed.json"
