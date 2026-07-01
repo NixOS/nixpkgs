@@ -1282,6 +1282,7 @@ in
   openvswitch = runTest ./openvswitch.nix;
   optee = runTestOn [ "aarch64-linux" ] ./optee.nix;
   orangefs = runTest ./orangefs.nix;
+  orbit = runTestOn [ "x86_64-linux" ] ./orbit.nix;
   orthanc = runTest ./orthanc.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
