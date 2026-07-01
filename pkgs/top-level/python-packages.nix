@@ -3308,6 +3308,8 @@ self: super: with self; {
 
   contexter = callPackage ../development/python-modules/contexter { };
 
+  contextily = callPackage ../development/python-modules/contextily { };
+
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
