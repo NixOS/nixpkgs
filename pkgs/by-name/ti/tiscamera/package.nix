@@ -14,7 +14,7 @@
   libuuid,
   libzip,
   orc,
-  pcre,
+  pcre2,
   zstd,
   glib,
   gobject-introspection,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libzip
     orc
-    pcre
+    pcre2
     zstd
     glib
     gst_all_1.gstreamer
