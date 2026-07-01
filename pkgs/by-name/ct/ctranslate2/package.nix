@@ -84,6 +84,11 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.gcc.arch or null != null) [
     (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
+  ]
+  ++ lib.optionals withCUDA [
+    # The legacy FindCUDA path reads arch flags only from CUDA_NVCC_FLAGS, not
+    # setupCudaHook's CMAKE_CUDA_ARCHITECTURES; otherwise nvcc defaults to sm_52.
+    (lib.cmakeFeature "CUDA_NVCC_FLAGS" (lib.concatStringsSep ";" cudaPackages.flags.gencode))
   ];
 
   buildInputs =
