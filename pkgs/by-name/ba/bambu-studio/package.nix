@@ -27,6 +27,7 @@
   libpng,
   libsecret,
   makeFontsConf,
+  libnoise,
   mpfr,
   nanum,
   nlopt,
@@ -66,13 +67,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.05.00.67";
+  version = "02.06.01.55";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jLaSUs6OmoD0yw1hOcJarYKfr1rbhB2TwRiBBU0utEI=";
+    hash = "sha256-k+t6zwjUQ6y4vAIhQSEnsGDzbxw/ouyslQypbloWIII=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     hicolor-icon-theme
     libpng
     libsecret
+    libnoise
     mpfr
     nlopt
     opencascade-occt_7_6
@@ -177,6 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEP_WX_GTK3" true)
     (lib.cmakeBool "SLIC3R_BUILD_TESTS" false)
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_LOG_DYN_LINK")
+
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
   ];
 
   preFixup = ''
