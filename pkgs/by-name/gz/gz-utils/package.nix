@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  gz-cmake,
+  gz-cmake, # currently, gz-utils is dependent on gz-cmake
   doxygen,
   graphviz,
 
