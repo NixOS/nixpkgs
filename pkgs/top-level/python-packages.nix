@@ -20026,6 +20026,8 @@ self: super: with self; {
 
   tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
 
+  tkinterdnd2 = callPackage ../development/python-modules/tkinterdnd2 { };
+
   tld = callPackage ../development/python-modules/tld { };
 
   tldextract = callPackage ../development/python-modules/tldextract { };
