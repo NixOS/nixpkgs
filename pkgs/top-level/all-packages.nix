@@ -11215,4 +11215,8 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  kak-tree-sitter-complete = kak-tree-sitter.override {
+    bundledParsers = "all";
+  };
 }
