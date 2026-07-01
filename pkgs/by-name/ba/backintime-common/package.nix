@@ -16,6 +16,7 @@
   gnugrep,
   man,
   asciidoctor,
+  bashNonInteractive,
 }:
 
 let
@@ -47,15 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/33Lx62S/9RcqrfJumE6/o3KnAObBa3DcmuGkcOXIQE=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     gettext
+    asciidoctor
+    man
   ];
 
   buildInputs = [
     python'
-    man
-    asciidoctor
+    bashNonInteractive
   ];
 
   installFlags = [ "DEST=$(out)" ];
@@ -83,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "'fusermount'" "'${lib.getExe' fuse3 "fusermount3"}'"
 
     substituteInPlace "bitlicense.py" \
-      --replace-fail "/usr/share/doc" "$out/share/doc" \
+      --replace-fail "/usr/share/doc" "$doc/share/doc" \
   '';
 
   dontAddPrefix = true;
