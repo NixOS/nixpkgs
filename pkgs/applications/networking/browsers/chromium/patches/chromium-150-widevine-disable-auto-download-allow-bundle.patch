@@ -1,0 +1,27 @@
+diff --git a/third_party/widevine/cdm/BUILD.gn b/third_party/widevine/cdm/BUILD.gn
+index 6d18f9fa163718d95610de9b6229dd38478543c7..93884543edcaa7211f4a7d61175bc068c6fd7dd4 100644
+--- a/third_party/widevine/cdm/BUILD.gn
++++ b/third_party/widevine/cdm/BUILD.gn
+@@ -19,7 +19,7 @@ buildflag_header("buildflags") {
+ 
+   flags = [
+     "ENABLE_WIDEVINE=$enable_widevine",
+-    "BUNDLE_WIDEVINE_CDM=$bundle_widevine_cdm",
++    "BUNDLE_WIDEVINE_CDM=true",
+     "ENABLE_WIDEVINE_CDM_COMPONENT=$enable_widevine_cdm_component",
+     "ENABLE_MEDIA_FOUNDATION_WIDEVINE_CDM=$enable_media_foundation_widevine_cdm",
+   ]
+diff --git a/third_party/widevine/cdm/widevine.gni b/third_party/widevine/cdm/widevine.gni
+index 927b2e4809cf76e6b3ef51ee6cd2bbd04a92d60b..41761d10a4105a20fc4acf35f761c7ab23f867dd 100644
+--- a/third_party/widevine/cdm/widevine.gni
++++ b/third_party/widevine/cdm/widevine.gni
+@@ -40,8 +40,7 @@ enable_library_widevine_cdm =
+ # Widevine CDM can be deployed as a component. Currently only supported on
+ # desktop platforms. The CDM can be bundled regardless whether it's a
+ # component. See below.
+-enable_widevine_cdm_component =
+-    enable_library_widevine_cdm && (is_win || is_mac || is_linux || is_chromeos)
++enable_widevine_cdm_component = false
+ 
+ # Enable (Windows) Media Foundation Widevine CDM component.
+ declare_args() {
