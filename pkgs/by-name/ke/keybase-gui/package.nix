@@ -41,16 +41,18 @@
 }:
 
 let
-  versionSuffix = "20250428154451.19f9cfeddb";
+  versionSuffix = "20260603142455.f60f2ff97e";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keybase-gui";
-  version = "6.5.1"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "6.6.3"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    hash = "sha256-PCKi1lavGwLbCoMTMG4h6PJTIzwRAu542eYqDDKzU4Y=";
+    url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${
+      finalAttrs.version + "-" + versionSuffix
+    }_amd64.deb";
+    hash = "sha256-4OqjEc2kLJpJ7FC7WR0DAfsmsrvoKHrm4RtBdGpkti4=";
   };
 
   nativeBuildInputs = [
@@ -140,7 +142,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/keybase-gui
 
     substituteInPlace $out/share/applications/keybase.desktop \
-      --replace run_keybase $out/bin/keybase-gui
+      --replace-fail run_keybase $out/bin/keybase-gui
   '';
 
   meta = {
@@ -159,4 +161,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
   };
-}
+})
