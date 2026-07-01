@@ -508,6 +508,8 @@ let
                 # All modules imported by the module for key1
                 modules = [
                   {
+                    # no disabled attribute, since this module doesn't disable
+                    # anything
                     key = <key1-1>;
                     module = <module for key1-1>;
                     # All modules imported by the module for key1-1
@@ -522,39 +524,60 @@ let
       */
       collectStructuredModules =
         let
-          collectResults = modules: {
-            disabled = concatLists (catAttrs "disabled" modules);
-            inherit modules;
+          defaultCollectedImports = {
+            modules = [ ];
           };
         in
-        parentFile: parentKey: initialModules: args:
-        collectResults (
-          imap1 (
-            n: x:
+        initialModules: args:
+        let
+          recurse =
+            parentFile: parentKey: imports:
             let
-              module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-              collectedImports = collectStructuredModules module._file module.key module.imports args;
+              disabled = catAttrs "disabled" modules;
+              modules = imap1 (
+                n: x:
+                let
+                  module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
+                  collectedImports =
+                    if module ? imports then
+                      recurse module._file module.key module.imports
+                    else
+                      defaultCollectedImports;
+                in
+                {
+                  key = module.key;
+                  module = module;
+                  modules = collectedImports.modules;
+                  # only include a disabled attribute if any modules have to be
+                  # disabled. most people don't disable any modules, which lets
+                  # us skip the work of merging the lists together
+                  ${if module ? disabledModules || collectedImports ? disabled then "disabled" else null} =
+                    (
+                      if module ? disabledModules then
+                        [
+                          {
+                            file = module._file;
+                            disabled = module.disabledModules;
+                          }
+                        ]
+                      else
+                        [ ]
+                    )
+                    ++ collectedImports.disabled or [ ];
+                }
+              ) imports;
             in
             {
-              key = module.key;
-              module = module;
-              modules = collectedImports.modules;
-              disabled =
-                (
-                  if module.disabledModules != [ ] then
-                    [
-                      {
-                        file = module._file;
-                        disabled = module.disabledModules;
-                      }
-                    ]
-                  else
-                    [ ]
-                )
-                ++ collectedImports.disabled;
-            }
-          ) initialModules
-        );
+              ${if disabled != [ ] then "disabled" else null} = concatLists disabled;
+              inherit modules;
+            };
+
+          result = recurse unknownModule "" initialModules;
+        in
+        {
+          disabled = result.disabled or [ ];
+          inherit (result) modules;
+        };
 
       # filterModules :: String -> { disabled, modules } -> [ Module ]
       #
@@ -587,11 +610,11 @@ let
         map toModuleGraph (filter (x: x.key != "lib/modules.nix") modules);
     in
     modulesPath: initialModules: args: {
-      modules = filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      modules = filterModules modulesPath (collectStructuredModules initialModules args);
       # Intentionally not shared with `modules` above: this allows
       # the return value of `collectStructuredModules`
       # to be garbage collected after `filterModules` returns.
-      graph = toGraph modulesPath (collectStructuredModules unknownModule "" initialModules args);
+      graph = toGraph modulesPath (collectStructuredModules initialModules args);
     };
 
   /**
@@ -673,9 +696,9 @@ let
           _file = toString m._file or file;
           _class = m._class or null;
           key = toString m.key or key;
-          disabledModules = m.disabledModules or [ ];
-          imports = m.imports or [ ];
-          options = m.options or { };
+          ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
+          ${if m ? imports then "imports" else null} = m.imports;
+          ${if m ? options then "options" else null} = m.options;
           config = addFreeformType (addMeta (m.config or { }));
         }
     else
@@ -687,8 +710,8 @@ let
         _file = toString m._file or file;
         _class = m._class or null;
         key = toString m.key or key;
-        disabledModules = m.disabledModules or [ ];
-        imports = m.require or [ ] ++ m.imports or [ ];
+        ${if m ? disabledModules then "disabledModules" else null} = m.disabledModules;
+        ${if m ? imports || m ? require then "imports" else null} = m.require or [ ] ++ m.imports or [ ];
         options = { };
         config = addFreeformType (
           removeAttrs m [
@@ -777,10 +800,13 @@ let
     mergeModules' prefix modules (
       concatMap (
         m:
-        map (config: {
-          file = m._file;
-          inherit config;
-        }) (pushDownProperties m.config)
+        if m.config != { } then
+          map (config: {
+            file = m._file;
+            inherit config;
+          }) (pushDownProperties m.config)
+        else
+          [ ]
       ) modules
     );
 
@@ -791,21 +817,24 @@ let
       declsByName = zipAttrs (
         map (
           module:
-          let
-            subtree = module.options;
-          in
-          if !(isAttrs subtree) then
-            throw ''
-              An option declaration for `${concatStringsSep "." prefix}' has type
-              `${typeOf subtree}' rather than an attribute set.
-              Did you mean to define this outside of `options'?
-            ''
+          if !module ? options then
+            { }
           else
-            mapAttrs (n: option: {
-              inherit (module) _file;
-              pos = unsafeGetAttrPos n subtree;
-              options = option;
-            }) subtree
+            let
+              subtree = module.options;
+            in
+            if !(isAttrs subtree) then
+              throw ''
+                An option declaration for `${concatStringsSep "." prefix}' has type
+                `${typeOf subtree}' rather than an attribute set.
+                Did you mean to define this outside of `options'?
+              ''
+            else
+              mapAttrs (n: option: {
+                inherit (module) _file;
+                pos = unsafeGetAttrPos n subtree;
+                options = option;
+              }) subtree
         ) modules
       );
 
