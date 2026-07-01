@@ -18,7 +18,7 @@ let
     ;
 
   settingsFormat = pkgs.formats.yaml { };
-  settingsFile = "/run/glance/glance.yaml";
+  settingsFile = if cfg.configFile != null then cfg.configFile else "/run/glance/glance.yaml";
 in
 {
   options.services.glance = {
@@ -99,6 +99,16 @@ in
       '';
     };
 
+    configFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = lib.literalExpression "./glance.yaml";
+      description = ''
+        Path to a YAML configuration file for Glance.
+        If set, `services.glance.settings` will be ignored.
+      '';
+    };
+
     environmentFile = mkOption {
       type = types.nullOr types.path;
       description =
@@ -172,13 +182,14 @@ in
       ];
 
       serviceConfig = {
-        ExecStartPre =
+        ExecStartPre = lib.optionalString (cfg.configFile == null) (
           # Use "+" to run as root because the secrets may not be accessible to glance
           "+"
           + pkgs.writeShellScript "glance-start-pre" ''
             ${utils.genJqSecretsReplacementSnippet cfg.settings settingsFile}
             chown $USER ${settingsFile}
-          '';
+          ''
+        );
         ExecStart = "${getExe cfg.package} --config ${settingsFile}";
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
