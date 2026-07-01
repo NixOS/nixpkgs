@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-kusto";
   version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_kusto";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-osN6N5zsZQukc/81g1hzJ15lYnAv0VezEjGh3a2FLn0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Kusto Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${finalAttrs.version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
