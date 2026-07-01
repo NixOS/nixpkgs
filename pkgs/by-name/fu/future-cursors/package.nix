@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation {
     description = "Future cursors for linux desktops";
     homepage = "https://github.com/yeyushengfan258/future-cursors";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ gambled23 ];
+    maintainers = with maintainers; [ Gambled23 ];
     platforms = platforms.linux;
   };
 }
