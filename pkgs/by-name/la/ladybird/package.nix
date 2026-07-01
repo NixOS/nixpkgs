@@ -42,6 +42,12 @@
   sdl3,
   icu78,
   simdjson,
+  gtk4,
+  libadwaita,
+  bison,
+  libxkbcommon,
+  withGtk ? false,
+  withQtOnMac ? false, # Qt is the default on other platforms
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -148,6 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
+  ]
+  ++ lib.optionals (withGtk && stdenv.hostPlatform.isLinux) [
+    gtk4
+    libadwaita
+    bison
+    libxkbcommon
   ];
 
   cmakeFlags = [
@@ -162,9 +174,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+  ]
+  # The check for linux can be removed if pr #9720 is merged upstream
+  ++ lib.optionals (withGtk && stdenv.hostPlatform.isLinux) [
+    "-DLADYBIRD_GUI_FRAMEWORK=Gtk"
+  ]
+  ++ lib.optionals (withQtOnMac && stdenv.hostPlatform.isDarwin) [
+    "-DLADYBIRD_GUI_FRAMEWORK=Qt"
   ];
-
-  # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
@@ -205,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt, GTK, or Cocoa GUI";
     homepage = "https://ladybird.org";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
