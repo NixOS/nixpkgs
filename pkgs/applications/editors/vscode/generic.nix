@@ -181,6 +181,8 @@ stdenv.mkDerivation (
       buildFHSEnv customizedArgs;
   in
   {
+    strictDeps = true;
+    __structuredAttrs = true;
 
     inherit
       pname
@@ -199,8 +201,16 @@ stdenv.mkDerivation (
         updateScript
         vscodeVersion
         ;
-      fhs = fhs { };
-      fhsWithPackages = f: fhs { additionalPkgs = f; };
+      fhs = (fhs { }).overrideAttrs (old: {
+        strictDeps = true;
+        __structuredAttrs = true;
+      });
+      fhsWithPackages =
+        f:
+        (fhs { additionalPkgs = f; }).overrideAttrs (old: {
+          strictDeps = true;
+          __structuredAttrs = true;
+        });
     }
     // lib.optionalAttrs (vscodeServer != null) {
       inherit rev vscodeServer;

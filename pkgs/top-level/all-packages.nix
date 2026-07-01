@@ -9719,8 +9719,8 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
-  antigravity-fhs = antigravity.fhs;
-  antigravity-fhsWithPackages = antigravity.fhsWithPackages;
+  antigravity-ide-fhs = antigravity-ide.fhs;
+  antigravity-ide-fhsWithPackages = antigravity-ide.fhsWithPackages;
 
   code-cursor-fhs = code-cursor.fhs;
   code-cursor-fhsWithPackages = code-cursor.fhsWithPackages;
