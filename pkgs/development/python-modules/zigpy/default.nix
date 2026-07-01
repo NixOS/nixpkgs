@@ -66,6 +66,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
     "test_quirks_v2"
+    # (Race condition) AssertionError: assert 4 == 3
+    "test_periodic_scan_priority"
   ];
 
   disabledTestPaths = [
