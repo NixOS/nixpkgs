@@ -21,25 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.53.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-/AXBMb+EEpA10omlpxG1jkCqMrhbB8AdEewyQrMJqTk=";
+    hash = "sha256-jwEuBM45CM7KB2Z0NouwtLWQZUx6dWhZxkPUXMmO5eY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JHTbbVzXWyigk8NGqvBjVKUuR2p6+gpFRY1GWZEvEFk=";
+    hash = "sha256-4D3yTwqzUb4ALTfJwVmGfBIFJ6/5VfeU7edEHpc8d5k=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-mYwkBQZ3ik3yGoPXc3BtLFhavmkj+QzZNMnYG3qyzyc=";
+    hash = "sha256-QvR4zi9m1V1dvoH82dSsxs4dW6nDCC8IkyTnvsX9IRI=";
   };
 
   nativeBuildInputs = [
