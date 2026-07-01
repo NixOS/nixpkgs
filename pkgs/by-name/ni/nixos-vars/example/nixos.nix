@@ -4,7 +4,7 @@ let
   sources = import ../npins;
   config = import "${sources.nixpkgs}/nixos/lib/eval-config.nix" {
     modules = [
-      ../src/nix/module.nix
+      ../nix_vars/nix/module.nix
       ./config.nix
     ];
   };

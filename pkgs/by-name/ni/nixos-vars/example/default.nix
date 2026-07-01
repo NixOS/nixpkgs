@@ -7,12 +7,12 @@ let
   pkgs = import sources.nixpkgs { };
   config = import "${sources.nixpkgs}/nixos/lib/eval-config.nix" {
     modules = [
-      ../src/nix/module.nix
+      ../nix_vars/nix/module.nix
       ./config.nix
     ];
   };
 in
-import ../src/nix/jsonify.nix {
+import ../nix_vars/nix/jsonify.nix {
   inherit config;
   pkgsHost = pkgs;
 }
