@@ -710,7 +710,10 @@ let
             "Package '${getNameWithVersion attrs}' in ${pos_str meta} ${warning.msg}"
             + lib.optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
         in
-        warn msg acc;
+        if config ? handleEvalIssue then
+          builtins.seq (config.handleEvalIssue warning.kind msg) acc
+        else
+          warn msg acc;
     in
     # Give all warnings first, then error if any
     builtins.seq (foldl' giveWarning null warnings) withError;

@@ -548,6 +548,7 @@ rec {
 
       warnings = map (x: {
         reason = "problem";
+        inherit (x) kind;
         msg = "has the following problem: ${fullMessage x}";
         remediation = "See https://nixos.org/manual/nixpkgs/unstable#sec-problems"; # TODO: Add remediation, maybe just link to docs to keep it small
       }) warnProblems;
