@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  nix-update-script,
   jq,
 
   # build-system
@@ -32,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gradio-client";
-  version = "2.3.0";
+  version = "2.5.0";
   pyproject = true;
 
   # no tests on pypi
