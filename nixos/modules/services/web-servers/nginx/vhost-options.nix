@@ -3,11 +3,13 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ config, lib, ... }:
-
-with lib;
 {
-  options = {
+  nixosConfig,
+  overrideFn ? x: x,
+}:
+{ config, lib, ... }:
+overrideFn {
+  options = with lib; {
     serverName = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -131,9 +133,11 @@ with lib;
 
     acmeRoot = mkOption {
       type = types.nullOr types.str;
-      default = "/var/lib/acme/acme-challenge";
+      default = if (config.acmeS3BucketHost != null) then null else "/var/lib/acme/acme-challenge";
+      defaultText = literalExpression ''if (config.acmeS3BucketHost != null) then null else "/var/lib/acme/acme-challenge"'';
       description = ''
         Directory for the ACME challenge, which is **public**. Don't put certs or keys in here.
+        Default to /var/lib/acme/acme-challenge or null if `acmeS3BucketHost` is set.
         Set to null to inherit from config.security.acme.
       '';
     };
@@ -148,6 +152,15 @@ with lib;
         With this option, you could request certificates for the present domain
         with an ACME client that is running on another host, which you would
         specify here.
+      '';
+    };
+
+    acmeS3BucketHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Host of the S3 bucket which to proxy requests.
+        Mandatory if security.acme.certs.<name>.s3Bucket is not null for this virtual host.
       '';
     };
 
@@ -358,8 +371,8 @@ with lib;
     locations = mkOption {
       type = types.attrsOf (
         types.submodule (
-          import ./location-options.nix {
-            inherit lib config;
+          lib.modules.importApply ./location-options.nix {
+            inherit nixosConfig;
           }
         )
       );

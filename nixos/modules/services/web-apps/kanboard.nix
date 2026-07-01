@@ -63,7 +63,9 @@ in
     };
     nginx = lib.mkOption {
       type = lib.types.nullOr (
-        lib.types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+        lib.types.submodule (
+          lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; }
+        )
       );
       default = { };
       description = ''

@@ -1155,7 +1155,9 @@ in
       nginx = mkOption {
         type =
           with types;
-          nullOr (submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
+          nullOr (
+            submodule (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; })
+          );
         default = null;
         description = ''
           Extra configuration for the nginx virtual host of Akkoma.

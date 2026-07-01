@@ -27,7 +27,9 @@ in
       enable = lib.mkEnableOption "a virtualhost to serve bentopdf through nginx";
 
       virtualHost = lib.mkOption {
-        type = lib.types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+        type = lib.types.submodule (
+          lib.modules.importApply ../web-servers/nginx/vhost-options.nix { nixosConfig = config; }
+        );
         default = { };
         example = lib.literalExpression ''
           {

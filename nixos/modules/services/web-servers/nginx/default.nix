@@ -460,6 +460,17 @@ let
             ''
               location ^~ /.well-known/acme-challenge/ {
                 ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
+                ${optionalString (vhost.acmeS3BucketHost != null) ''
+                  proxy_redirect off;
+                  proxy_set_header Host ${vhost.acmeS3BucketHost};
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_hide_header x-amz-version-id;
+                  proxy_hide_header x-amz-server-side-encryption;
+                  proxy_hide_header x-amz-id-2;
+                  proxy_hide_header x-amz-request-id;
+                  proxy_pass https://${vhost.acmeS3BucketHost};
+                ''}
                 ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
                 auth_basic off;
                 auth_request off;
@@ -1323,8 +1334,8 @@ in
       virtualHosts = mkOption {
         type = types.attrsOf (
           types.submodule (
-            import ./vhost-options.nix {
-              inherit config lib;
+            modules.importApply ./vhost-options.nix {
+              nixosConfig = config;
             }
           )
         );
@@ -1429,6 +1440,31 @@ in
           message = ''
             Options services.nginx.service.virtualHosts.<name>.enableACME and
             services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+          '';
+        }
+
+        {
+          assertion = all (
+            host:
+            !(host.enableACME || host.useACMEHost != null)
+            || (
+              (config.security.acme.certs.${defaultTo host.serverName host.useACMEHost}.s3Bucket != null)
+              -> (host.acmeS3BucketHost != null)
+            )
+          ) (attrValues virtualHosts);
+          message = ''
+            Option services.nginx.service.virtualHosts.<name>.acmeS3BucketHost need to be set
+            accordingly with security.acme.certs.<name>.s3Bucket (usually to "<s3Bucket>.<end-point>").
+          '';
+        }
+
+        {
+          assertion = all (
+            host: (host.acmeS3BucketHost != null -> (host.acmeRoot == null && host.acmeFallbackHost == null))
+          ) (attrValues virtualHosts);
+          message = ''
+            Options services.nginx.service.virtualHosts.<name>.acmeS3BucketHost is mutually exclusive to both
+            services.nginx.virtualHosts.<name>.acmeRoot and services.nginx.virtualHosts.<name>.acmeFallbackHost.
           '';
         }
 
