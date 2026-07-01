@@ -495,7 +495,7 @@ In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by th
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. New packages should use `3`:
+This is the version of the output of `fetchPnpmDeps`. New packages should use `4`:
 
 ```nix
 {
