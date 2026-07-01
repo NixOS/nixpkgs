@@ -2,48 +2,34 @@
   lib,
   stdenv,
   fetchFromCodeberg,
-  fetchFromGitHub,
   cmake,
   python3Packages,
-  libsForQt5,
+  qt6,
   SDL2,
   fmt,
   toml11,
   libunarr,
 }:
 
-let
-  gladSrc = fetchFromGitHub {
-    owner = "Dav1dde";
-    repo = "glad";
-    rev = "v2.0.5";
-    hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromCodeberg {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
+    hash = "sha256-G/STYu8vOTqoGAGfpPelYV/m0Cth4xMMD1QJ6TbqAF4=";
   };
-
-  patches = [
-    # <https://github.com/nba-emu/NanoBoyAdvance/pull/410>
-    ./fix-toml11-4.0.patch
-  ];
 
   nativeBuildInputs = [
     cmake
     python3Packages.jinja2
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
+    qt6.qtbase
     SDL2
     fmt
     toml11
@@ -51,16 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
-    (lib.cmakeBool "USE_SYSTEM_FMT" true)
-    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
     (lib.cmakeBool "PORTABLE_MODE" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "MACOS_BUILD_APP_BUNDLE" true)
     (lib.cmakeBool "MACOS_BUNDLE_QT" false)
   ];
+
+  postPatch = ''
+    substituteInPlace thirdparty/unarr-1.1.1-patch/CMakeLists.txt \
+      --replace-fail "-flto" ""
+  '';
 
   # Make it runnable from the terminal on Darwin
   postInstall = lib.optionals stdenv.hostPlatform.isDarwin /* bash */ ''
