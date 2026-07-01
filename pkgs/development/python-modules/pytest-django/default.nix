@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-django";
-  version = "4.11.1";
+  version = "4.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_django";
     inherit (finalAttrs) version;
-    hash = "sha256-qUkUGh7hA8sOeiDxRR01X4P15KXQe91Nz90f0P8ieZE=";
+    hash = "sha256-35TsgZqDyJecj23hPZzfvnbowh05Rzz+K0DJ/Jvjx1g=";
   };
 
   build-system = [

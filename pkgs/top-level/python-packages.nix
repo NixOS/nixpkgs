@@ -4350,6 +4350,8 @@ self: super: with self; {
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 
+  django-htmlmin = callPackage ../development/python-modules/django-htmlmin { };
+
   django-htmx = callPackage ../development/python-modules/django-htmx { };
 
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
@@ -10062,6 +10064,8 @@ self: super: with self; {
   meshio = callPackage ../development/python-modules/meshio { };
 
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
+
+  meshpy = callPackage ../development/python-modules/meshpy { };
 
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
@@ -20998,6 +21002,8 @@ self: super: with self; {
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
+  types-shapely = callPackage ../development/python-modules/types-shapely { };
+
   types-six = callPackage ../development/python-modules/types-six { };
 
   types-tabulate = callPackage ../development/python-modules/types-tabulate { };
@@ -21341,6 +21347,8 @@ self: super: with self; {
   uvloop = callPackage ../development/python-modules/uvloop { };
 
   uwsgi-chunked = callPackage ../development/python-modules/uwsgi-chunked { };
+
+  uwuipy = callPackage ../development/python-modules/uwuipy { };
 
   uxsim = callPackage ../development/python-modules/uxsim { };
 

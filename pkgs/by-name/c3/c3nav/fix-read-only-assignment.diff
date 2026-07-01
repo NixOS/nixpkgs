@@ -1,0 +1,12 @@
+diff --git a/src/c3nav/mapdata/utils/cache/maphistory.py b/src/c3nav/mapdata/utils/cache/maphistory.py
+index 94ba7b43..f80e0338 100644
+--- a/src/c3nav/mapdata/utils/cache/maphistory.py
++++ b/src/c3nav/mapdata/utils/cache/maphistory.py
+@@ -65,6 +65,7 @@ def simplify(self):
+         new_updates = ((i, update, (self.data == i)) for i, update in enumerate(self.updates))
+         new_updates, new_affected = zip(*((update, affected) for i, update, affected in new_updates
+                                           if i == 0 or affected.any()))
++        self.data = self.data.copy()
+         self.updates = list(new_updates)
+         for i, affected in enumerate(new_affected):
+             self.data[affected] = i
