@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   callPackage,
   stdenvNoCC,
@@ -80,4 +81,8 @@ lib.pipe root [
 ]
 // {
   inherit mkYaziPlugin;
+}
+// lib.optionalAttrs config.allowAliases {
+  kanagawa = throw "'yaziPlugins.kanagawa' has been moved to 'yaziFlavors.kanagawa'"; # Added 2026-06-07
+  nord = throw "'yaziPlugins.nord' has been moved to 'yaziFlavors.nord'"; # Added 2026-06-07
 }

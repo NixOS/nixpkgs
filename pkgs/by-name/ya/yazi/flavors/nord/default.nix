@@ -1,9 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  mkYaziPlugin,
+  mkYaziFlavor,
 }:
-mkYaziPlugin {
+mkYaziFlavor {
   pname = "nord.yazi";
   version = "0-unstable-2026-02-03";
 

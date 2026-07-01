@@ -11203,6 +11203,8 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
+  yaziFlavors = recurseIntoAttrs (callPackage ../by-name/ya/yazi/flavors { });
+
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
