@@ -26084,6 +26084,12 @@
     github = "sjmonson";
     githubId = 17662218;
   };
+  smorin = {
+    name = "Steve Morin";
+    email = "steve.morin@gmail.com";
+    github = "smorin";
+    githubId = 124719;
+  };
   smrehman = {
     name = "Syed Moiz Ur Rehman";
     email = "smrehman@proton.me";
