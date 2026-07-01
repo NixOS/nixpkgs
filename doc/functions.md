@@ -4,6 +4,7 @@ The Nixpkgs repository has several utility functions to manipulate Nix expressio
 
 ```{=include=} sections
 functions/library.md
+functions/newer-builtins.section.md
 functions/generators.section.md
 functions/debug.section.md
 functions/prefer-remote-fetch.section.md
