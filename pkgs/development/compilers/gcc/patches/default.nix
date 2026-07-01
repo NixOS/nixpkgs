@@ -112,9 +112,6 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
-# http://gcc.gnu.org/PR120718 backport (will be inclkuded in 15.3.0) to
-# fix `highway-1.3.0` ICE on aarch64-linux.
-++ optional is15 ./15/aarch64-sve-rtx.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 
@@ -149,9 +146,13 @@ optionals noSysDirs (
       # Patches from https://github.com/iains/gcc-15-branch/compare/releases/gcc-15..gcc-15.1-darwin-rc1
       (fetchpatch {
         name = "gcc-15-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
-        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/db0b924f94cc0e2e3504e5fc46893fb40c65ea9a/Patches/gcc/gcc-15.1.0.diff";
+        excludes = [
+          "fixincludes/fixincl.x"
+        ];
+        hash = "sha256-RW6rNzEWJoE2Tn5MuT+aWl0mlQltdbEeVKU46rbx8Sc=";
       })
+      ./15/fixup-gcc-15-darwin-aarch64-support.patch
     ];
     "14" = [
       # Patches from https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r2
