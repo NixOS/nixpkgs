@@ -1848,7 +1848,7 @@ rec {
   */
   last =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.last: list must not be empty!";
+    assert list != [ ] || throw "lists.last: list must not be empty!";
     elemAt list (length list - 1);
 
   /**
@@ -1881,7 +1881,7 @@ rec {
   */
   init =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
+    assert list != [ ] || throw "lists.init: list must not be empty!";
     genList (elemAt list) (length list - 1);
 
   /**
@@ -2157,7 +2157,8 @@ rec {
   */
   replaceElemAt =
     list: idx: newElem:
-    assert lib.assertMsg (idx >= 0 && idx < length list)
-      "'lists.replaceElemAt' called with index ${toString idx} on a list of size ${toString (length list)}";
+    assert
+      idx >= 0 && idx < length list
+      || throw "'lists.replaceElemAt' called with index ${toString idx} on a list of size ${toString (length list)}";
     genList (i: if i == idx then newElem else elemAt list i) (length list);
 }
