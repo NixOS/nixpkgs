@@ -78,19 +78,7 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.fuse old)
-    // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        (
-          if stdenv.cc.isClang then
-            "-Wno-error=incompatible-function-pointer-types"
-          else
-            "-Wno-error=incompatible-pointer-types"
-        )
-      ];
-    };
+  fuse = throw "'chickenPackages.fuse' has been removed, as it depends on 'fuse2' which is deprecated"; # Added 2026-06-24
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
