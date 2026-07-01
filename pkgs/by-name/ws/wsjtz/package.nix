@@ -1,17 +1,18 @@
 {
   lib,
-  fetchzip,
+  fetchFromGitHub,
   wsjtx,
 }:
-
 wsjtx.overrideAttrs (
   finalAttrs: old: {
     pname = "wsjtz";
-    version = "2.7.0-rc7-1.48";
+    version = "2.0.14";
 
-    src = fetchzip {
-      url = "mirror://sourceforge/wsjt-z/Source/wsjtz-${finalAttrs.version}.zip";
-      hash = "sha256-8PHbBlF0MtIgLn4HCFkbGivy8vBwg7NbvjMLaRj+4nI=";
+    src = fetchFromGitHub {
+      owner = "sq9fve";
+      repo = "wsjt-z";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-pgOGNA/EpyEj9qu61cbZsjv9sKDYKvNpfe8FBAcHkM8=";
     };
 
     postInstall = ''
@@ -29,6 +30,7 @@ wsjtx.overrideAttrs (
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
         scd31
+        fstracke
       ];
       mainProgram = "wsjtz";
     };

@@ -9510,6 +9510,13 @@
     githubId = 2881922;
     name = "Francis St-Amour";
   };
+  fstracke = {
+    email = "fritz.stracke@rwth-aachen.de";
+    github = "fstracke";
+    githubId = 31512703;
+    name = "Fritz Stracke";
+    keys = [ { fingerprint = "7A9D 6DB2 0C5A AA55 7838  EEE6 B8CA 2D9A D8F0 506F"; } ];
+  };
   ftrvxmtrx = {
     email = "ftrvxmtrx@gmail.com";
     github = "ftrvxmtrx";
