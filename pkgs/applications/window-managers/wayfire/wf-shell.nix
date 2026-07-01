@@ -8,15 +8,23 @@
   wayland-scanner,
   wayfire,
   alsa-lib,
-  gtkmm3,
-  gtk-layer-shell,
+  gtkmm4,
+  gtk4-layer-shell,
   pulseaudio,
-  libdbusmenu-gtk3,
+  pipewire,
+  wireplumber,
+  libdbusmenu,
+  libepoxy,
+  linux-pam,
+  vala,
+  gobject-introspection,
+  openssl,
+  inotify-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wf-shell";
-  version = "0.10.0";
+  version = "0.11.0-unstable-2026-04-26";
   outputs = [
     "out"
     "man"
@@ -25,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wf-shell";
-    rev = "v${finalAttrs.version}";
+    rev = "d340a173acfa2fe4bcf8088e154f76c43b5d4ab9";
     fetchSubmodules = true;
-    hash = "sha256-PLTeFGecxVwU2LdwnDwiWB1OcbaZjJemMpT0pcCFf/w=";
+    hash = "sha256-I2PnrBrcD0VaxztJB6JyzfuYP6J0mXJ7ATrqgUzeCiM=";
   };
 
   nativeBuildInputs = [
@@ -35,18 +43,33 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wayland-scanner
+    vala
+    gobject-introspection
   ];
 
   buildInputs = [
     wayfire
     alsa-lib
-    gtkmm3
-    gtk-layer-shell
+    gtkmm4
+    gtk4-layer-shell
     pulseaudio
-    libdbusmenu-gtk3
+    wireplumber
+    libdbusmenu
+    libepoxy
+    linux-pam
+    pipewire.dev
+
+    #wf-json
+    openssl
+
+    #wayland-logout
+    inotify-tools
   ];
 
-  mesonFlags = [ "--sysconfdir /etc" ];
+  postPatch = ''
+    substituteInPlace data/meson.build \
+      --replace-fail "/etc/pam.d/" "etc/pam.d"
+  '';
 
   meta = {
     homepage = "https://github.com/WayfireWM/wf-shell";
