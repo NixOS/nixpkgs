@@ -161,17 +161,34 @@ with haskellLib;
     hackage-db-unstable
     ;
 
-  # Stack uses pure nix-shells for certain operations including HTTPS requests
-  # This patch makes stack add pkgs.cacert, so the certificate DB is available.
-  # https://github.com/commercialhaskell/stack/pull/6854 krank:ignore-line
   stack =
     appendPatches
       [
+        # Bug fix that is also necessary for the following patches to apply
         (pkgs.fetchpatch {
-          name = "stack-add-cacert-to-pure-shells.patch";
-          url = "https://github.com/commercialhaskell/stack/commit/e869263cbd84a9e59ce1fa467e82993c8e7fb1dd.patch";
-          hash = "sha256-O7GaNgcGBY6m6GHqVtejqOu2HCWWKWXARPnr/upT1RQ=";
-          includes = [ "src/Stack/Nix.hs" ];
+          name = "stack-dep-without-main-library.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/591b6eb225b4cd2cfa4d282089fdb33e86bb14ad.patch";
+          hash = "sha256-GTUBGZ1KWQii60Yt9JpKcwMkzuIuSTdKLGd3aM0jXWw=";
+        })
+        # FIXME(@sternenseemann): these URLs are not stable (yet)
+        # Pick patches to support semaphore-compat >= 2.0
+        # from https://github.com/commercialhaskell/stack/pull/6935
+        # c.f. https://github.com/commercialhaskell/stack/issues/693
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-compat-2.0.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/c9e3cbc3f460de65d5abeffb583242255b41be23.patch";
+          includes = [ "src/**" ];
+          hash = "sha256-flf1f/QoBZAw9VRTzdNJQu+Zt1b+9q/pi7+1ukCad6c=";
+        })
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-compat-compiler-paths.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/02fa193245fc7210c6ce88646b2fa94ab39b9fc4.patch";
+          hash = "sha256-oE0GfXADSYlPceurzeZbq1Ix14gOtZEBssA8ZINv2qs=";
+        })
+        (pkgs.fetchpatch {
+          name = "stack-semaphore-ghc-compat-map.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/960e704b9cd61094b75fad4689f0034b4435a268.patch";
+          hash = "sha256-zYIsttG3z4gbpfXgQsKz0PlkAEzODlLYiYdPpfBohvM=";
         })
       ]
       (
@@ -179,7 +196,7 @@ with haskellLib;
           # Stack's source files use CRLF
           prePatch = ''
             ${drv.prePatch or ""}
-            sed -i -e 's/\r$//' src/Stack/Nix.hs
+            find doc src -type f -exec sed -i -e 's/\r$//' '{}' '+'
           '';
         }) super.stack
       );
