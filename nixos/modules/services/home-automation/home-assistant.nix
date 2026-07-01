@@ -831,6 +831,29 @@ in
           "template"
         ]
     );
+
+    fileBackupContract.input = {
+      user = lib.mkOption {
+        description = ''
+          As which user the backup should run.
+        '';
+        type = lib.types.str;
+        default = "hass";
+      };
+
+      sourceDirectories = lib.mkOption {
+        description = ''
+          Directories to backup.
+        '';
+        type = lib.types.nonEmptyListOf lib.types.str;
+        default = [
+          cfg.configDir
+        ];
+        defaultText = [
+          "config.services.home-assistant.configDir"
+        ];
+      };
+    };
   };
 
   config = mkIf cfg.enable {
