@@ -25525,6 +25525,12 @@
     github = "shgew";
     githubId = 5584672;
   };
+  shichirouji21 = {
+    name = "shichirouji21";
+    email = "shichirouji21@proton.me";
+    github = "shichirouji21";
+    githubId = 189993052;
+  };
   shift = {
     name = "Vincent Palmer";
     email = "shift@someone.section.me";
