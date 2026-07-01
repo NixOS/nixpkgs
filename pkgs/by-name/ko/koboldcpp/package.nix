@@ -22,6 +22,7 @@
   vulkanSupport ? false,
   vulkan-loader,
   shaderc,
+  vulkan-tools,
   metalSupport ? false,
   nix-update-script,
 }:
@@ -72,7 +73,12 @@ let
     ];
   };
 
-  runtimePath = [ tk ];
+  runtimePath = [
+    tk
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-tools
+  ];
 
   wrapperArgs = lib.escapeShellArgs (
     [
@@ -118,7 +124,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [ shaderc ];
 
-  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues {
+    inherit (python3Packages)
+      customtkinter
+      darkdetect
+      jinja2
+      packaging
+      psutil
+      tkinter
+      ;
+  };
 
   buildInputs = [
     tk
