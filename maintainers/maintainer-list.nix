@@ -13658,6 +13658,11 @@
     githubId = 4611077;
     name = "Raymond Gauthier";
   };
+  jromer = {
+    github = "jelleromer";
+    githubId = 11951893;
+    name = "Jelle Römer";
+  };
   jrpotter = {
     email = "jrpotter2112@gmail.com";
     github = "jrpotter";
