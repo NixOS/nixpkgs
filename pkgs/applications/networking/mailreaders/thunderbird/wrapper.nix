@@ -10,6 +10,7 @@ browser: args:
 (wrapFirefox browser (
   {
     libName = "thunderbird";
+    isMail = true;
   }
   // args
 ))
