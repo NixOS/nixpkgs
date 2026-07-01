@@ -665,6 +665,8 @@ with pkgs;
   fetchFromRadicle = callPackage ../build-support/fetchradicle { };
   fetchRadiclePatch = callPackage ../build-support/fetchradiclepatch { };
 
+  fetchFromRNS = callPackage ../build-support/fetchrns { };
+
   fetchgx = callPackage ../build-support/fetchgx { };
 
   fetchItchIo = callPackage ../build-support/fetchitchio { };
