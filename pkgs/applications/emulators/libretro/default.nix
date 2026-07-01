@@ -90,6 +90,8 @@ lib.makeScope newScope (self: {
 
   hatari = self.callPackage ./cores/hatari.nix { };
 
+  jaxe = self.callPackage ./cores/jaxe.nix { };
+
   mame = self.callPackage ./cores/mame.nix { };
 
   mame2000 = self.callPackage ./cores/mame2000.nix { };
