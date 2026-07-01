@@ -14051,6 +14051,14 @@
     name = "Kenichi Kamiya";
     keys = [ { fingerprint = "9121 5D87 20CA B405 C63F  24D2 EF6E 574D 040A E2A5"; } ];
   };
+  kacper-uminski = {
+    name = "Kacper Uminski";
+    email = "kacper+nixpkgs@lysator.liu.se";
+    github = "kacper-uminski";
+    githubId = 57466578;
+    matrix = "@kacper.uminski:matrix.org";
+    keys = [ { fingerprint = "3DF9 3DEB CAA9 81FA B3E2  A7F0 87DA 201D E02F 14B1"; } ];
+  };
   kaction = {
     name = "Dmitry Bogatov";
     email = "KAction@disroot.org";
