@@ -89,3 +89,36 @@ See the option description for more information.
 [environment](#opt-services.netbird.clients._name_.environment) allows you to pass additional configurations
 through environment variables, but special care needs to be taken for overriding config location and
 daemon address due [hardened](#opt-services.netbird.clients._name_.hardened) option.
+
+## Feature Configuration {#module-services-netbird-features}
+
+NetBird features (DNS, routing, SSH, Rosenpass, etc.) are configured via `NB_*` environment variables
+using the [extraEnvironment](#opt-services.netbird.clients._name_.extraEnvironment) option.
+Settings that affect the [config.json](#opt-services.netbird.clients._name_.config) (e.g. MTU, management URL)
+can be set via the `config` option.
+
+```nix
+{
+  services.netbird.clients.work = {
+    port = 51820;
+
+    # Feature flags via environment variables
+    extraEnvironment = {
+      NB_DISABLE_DNS = "true";
+      NB_ALLOW_SERVER_SSH = "true";
+      NB_ENABLE_ROSENPASS = "true";
+      NB_HOSTNAME = "my-peer";
+    };
+
+    # Config.json overrides
+    config = {
+      ManagementURL = "https://management.example.com:443";
+      Mtu = 1280;
+    };
+  };
+}
+```
+
+The NetBird client reads its full set of `NB_*` flags via `setFlagsFromEnvVars()`.
+Consult the [upstream source](https://github.com/netbirdio/netbird/blob/main/client/internal/connect.go)
+for the complete list of supported variables.
