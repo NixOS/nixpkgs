@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

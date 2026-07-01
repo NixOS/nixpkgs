@@ -9486,12 +9486,6 @@
     githubId = 2881922;
     name = "Francis St-Amour";
   };
-  ftrvxmtrx = {
-    email = "ftrvxmtrx@gmail.com";
-    github = "ftrvxmtrx";
-    githubId = 248148;
-    name = "Sigrid Solveig Haflínudóttir";
-  };
   ftsimas = {
     name = "Filippos Tsimas";
     email = "filippos.tsimas@outlook.com";
