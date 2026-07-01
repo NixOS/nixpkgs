@@ -152,8 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxkb_bin_dir=${xkbcomp}/bin"
     "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
     "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+
     "-Dxcsecurity=true"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -176,6 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace hw/xquartz/mach-startup/stub.c \
       --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
   '';
+
+  # avoid linux rebuilds
+  ${if stdenv.hostPlatform.isDarwin then "hardeningDisable" else null} = [ "strictflexarrays1" ];
 
   # default X install symlinks this to Xorg, we want XQuartz
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
