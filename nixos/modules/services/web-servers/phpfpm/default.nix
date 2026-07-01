@@ -12,6 +12,10 @@ let
 
   runtimeDir = "/run/phpfpm";
 
+  escapeValue =
+    value:
+    if match "[[:alnum:]]*" value == null then ''"${escape [ ''"'' "$" ''\'' ] value}"'' else value;
+
   toStr =
     value:
     if true == value then
@@ -19,7 +23,7 @@ let
     else if false == value then
       "no"
     else
-      toString value;
+      escapeValue (toString value);
 
   fpmCfgFile =
     pool: poolOpts:
