@@ -15900,6 +15900,12 @@
     githubId = 36448130;
     name = "Michael Brantley";
   };
+  limwa = {
+    name = "André Lima";
+    github = "limwa";
+    githubId = 13498603;
+    email = "me@limwa.pt";
+  };
   linbreux = {
     email = "linbreux@gmail.com";
     github = "linbreux";

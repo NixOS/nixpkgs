@@ -785,6 +785,12 @@ stdenv.mkDerivation (finalAttrs: {
           ;
       }
       // {
+        inherit (prefixTests "systemd-xdg-autostart")
+          systemd-xdg-autostart-basic
+          systemd-xdg-autostart-in-system-environment
+          ;
+      }
+      // {
         inherit (nixosTests)
           simple-vm
           fsck-systemd-stage-1
