@@ -10,10 +10,20 @@
   glib,
   shared-mime-info,
 }:
-
+let
+  # Upstream doesn't pin the version of `xdgmime` in their git repository,
+  # so it has to be fetched separately.
+  xdgmime = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xdg";
+    repo = "xdgmime";
+    rev = "04ce4cd90cb3fa77d5348662de221a6f33b21b17";
+    hash = "sha256-0sjH6qG0RYb1kCw4+veTpzv1zJCzoTd2LPa9pqsZrgY=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shared-mime-info";
-  version = "2.4";
+  version = "2.5.1";
 
   outputs = [
     "out"
@@ -24,9 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "shared-mime-info";
-    rev = finalAttrs.version;
-    hash = "sha256-5eyMkfSBUOD7p8woIYTgz5C/L8uQMXyr0fhL0l23VMA=";
+    tag = finalAttrs.version;
+    hash = "sha256-FZFrsCYRyLSFWSOlAt+f6jUEVNy52plhEytu+0tFFvU=";
   };
+
+  postPatch = ''
+    ln -s ${xdgmime} subprojects/xdgmime
+  '';
 
   nativeBuildInputs = [
     meson
@@ -46,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dupdate-mimedb=true"
+    "-Dbuild-spec=false"
   ];
 
   meta = {
