@@ -19228,6 +19228,12 @@
     githubId = 61601147;
     name = "basti n00b0ss";
   };
+  n0pl4c3 = {
+    email = "mail@n0pl4c3.net";
+    github = "n0pl4c3";
+    githubId = 69087176;
+    name = "n0pl4c3";
+  };
   n3oney = {
     name = "Michał Minarowski";
     email = "nixpkgs@neoney.dev";
