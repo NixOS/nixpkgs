@@ -8,21 +8,21 @@
 }:
 
 let
-  version = "7.21";
+  version = "7.23";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
   # Use `./update.sh` to generate the entries below
   srcs = {
     x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-wrY7+1E3SNpBu4PsNGX+yoWjlR0Clr5e40xgLZmbEkc=";
+      hash = "sha256-dZtLaqDZ93ExiCFilRGT86DlS/YOHY3EJVqjCKzKtYg=";
     };
     aarch64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
-      hash = "sha256-jYw6ihHRvmnM0/T2L7AbuNRc3YVkReGoMJH1ebPIWec=";
+      hash = "sha256-aLOTwAB1jUd/3kPJVf91QvEvdvP16HzdqSMVL8eRvU0=";
     };
     x86_64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-gUeNcFyXjEIkcN0NqLd3ByNyoB/hW/4HrvWmYs+Bpy8=";
+      hash = "sha256-2h+zw9d0gTbJs2m2g9V0s3LLHtBJpjSoH4XZORg0bY8=";
     };
   };
 in

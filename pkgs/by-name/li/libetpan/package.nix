@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libetpan";
-  version = "1.10";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "dinhviethoa";
     repo = "libetpan";
     tag = finalAttrs.version;
-    hash = "sha256-dG1qsYv9W0l6LLMW+XnKtUunga3IGVxEy34Tnp+K99o=";
+    hash = "sha256-OBLGek7WYjiAiMMhycbx4eUy8d4XLF/B9p7GGO6LFHA=";
   };
 
   outputs = [

@@ -1,0 +1,38 @@
+From dc35a26c5b38bad40dd44d67609b6a89ee0d7774 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Mon, 29 Jun 2026 13:48:41 +0000
+Subject: [PATCH] Fix spurious assertion when a high ghost stem is a glyph's
+ first stem
+
+In calcInstanceStems() the per-stem loop initializes lo = None and
+hi = None, then computes one or both locations per stem. For a 'high'
+ghost stem (a hint anchored only at the top edge) only hi is computed;
+lo is then unconditionally overwritten by hi on the next line, so its
+incoming value is dead.
+
+The 'high' branch nonetheless asserted lo is not None. When a high ghost
+is the glyph's first stem -- exactly the case for small diagonal accents
+-- lo is still None from its initialization, so the assertion fired and
+aborted hinting of the whole font.
+
+Drop the dead lo operand from the assertion, because hi is the only
+value actually read.
+---
+ python/afdko/otfautohint/hinter.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/afdko/otfautohint/hinter.py b/python/afdko/otfautohint/hinter.py
+index 354d92f2f..1cea13a88 100644
+--- a/python/afdko/otfautohint/hinter.py
++++ b/python/afdko/otfautohint/hinter.py
+@@ -2007,7 +2007,7 @@ def calcInstanceStems(self, glidx) -> None:
+                 lo = lo + 21
+                 hi = lo - 21
+             elif isG == 'high':
+-                assert lo is not None and hi is not None
++                assert hi is not None
+                 lo = hi
+                 hi = lo - 20
+             else:
+--
+2.49.0

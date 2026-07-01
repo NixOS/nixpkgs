@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Governikus";
-    repo = "AusweisApp2";
+    repo = "AusweisApp";
     rev = finalAttrs.version;
     hash = "sha256-pr41KbejZCOvfXH2uHO5MA/VklSNU38EL6AgznvGqeY=";
   };
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Official authentication app for German ID card and residence permit";
-    downloadPage = "https://github.com/Governikus/AusweisApp2/releases";
+    downloadPage = "https://github.com/Governikus/AusweisApp/releases";
     homepage = "https://www.ausweisapp.bund.de/open-source-software";
     license = lib.licenses.eupl12;
     mainProgram = "AusweisApp";

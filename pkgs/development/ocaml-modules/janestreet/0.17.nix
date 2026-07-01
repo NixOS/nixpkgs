@@ -1578,7 +1578,7 @@ with self;
       if lib.versionAtLeast ppxlib.version "0.36" then
         {
           version = "0.17.1";
-          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=$";
+          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=";
         }
       else
         {

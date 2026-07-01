@@ -45,8 +45,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
-    fetcherVersion = 3;
-    hash = "sha256-Kw3GLCPM/WeY9tQ7oAzj9PZIrX4DfudrAnYh92+5hbs=";
+    fetcherVersion = 4;
+    hash = "sha256-wtWYdIfqytwn8PNahbQ/WxJuhhH1lbgNshQy6V0vvcA=";
+    pnpmInstallFlags = [
+      # Increase number of fetch attempts to work around timeout issues on slow
+      # networks: "TimeoutError: The operation was aborted due to timeout".
+      #
+      # If this still happens on your network, consider changing some of the
+      # fetch setting and opening a pull request:
+      # https://pnpm.io/settings#request-settings
+      "--fetch-retries=5"
+    ];
   };
 
   cargoRoot = "../..";
@@ -118,8 +127,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     version = finalAttrs.version;
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
     pnpm = pnpm_11;
-    fetcherVersion = 3;
-    hash = "sha256-RIoTkX0ivaM9EJt3fsLpZhHd2lE4ZtDnAi9syONXUus=";
+    fetcherVersion = 4;
+    hash = "sha256-quVUYsT3u4UBhuJ75QQ4SEuW8MhGQ0vGhtwtUj/eKHs=";
   };
 
   passthru.tursoPlugin = stdenv.mkDerivation {
