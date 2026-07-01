@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pexpect,
   pillow,
-  pycryptodomex,
+  cryptography,
   pytestCheckHook,
   pyvirtualdisplay,
   setuptools,
@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "vncdo";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "vncdotool";
     tag = "v${version}";
-    hash = "sha256-QrD6z/g85FwaZCJ1PRn8CBKCOQcbVjQ9g0NpPIxguqk=";
+    hash = "sha256-CXxuaAi/B7NiGp1dhhe7iBw0qOdPfsKg7zMMwavGCW8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
-    pycryptodomex
+    cryptography
     twisted
   ];
 
@@ -36,6 +36,16 @@ buildPythonPackage rec {
     pytestCheckHook
     pyvirtualdisplay
   ];
+
+  #  Disable integration tests that require LibVNCServer examples.
+  #  The pure Nix sandbox prohibits vncdotool to download these.
+  #
+  #  libvncserver outputs do not include examples since upstream
+  #  LibVNCServer does not easily provide examples.
+  #
+  #  Perhaps a Patch to tests/functional/libvncserver.py to provide
+  #  LibVNCServer examples via eg. LIBVNCSERVER_DIR is a solution.
+  disabledTestPaths = [ "tests/functional" ];
 
   pythonImportsCheck = [ "vncdotool" ];
 
