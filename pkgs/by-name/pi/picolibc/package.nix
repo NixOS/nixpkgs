@@ -1,5 +1,6 @@
 {
-  stdenv,
+  stdenvNoLibc,
+  buildPackages,
   fetchFromGitHub,
   lib,
   meson,
@@ -19,8 +20,8 @@
 
   # Testing options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L75
-  picolib ? stdenv.hostPlatform.isNone,
-  semihost ? stdenv.hostPlatform.isNone,
+  picolib ? stdenvNoLibc.hostPlatform.isNone,
+  semihost ? stdenvNoLibc.hostPlatform.isNone,
 
   # Stdio Options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L114
@@ -34,7 +35,7 @@
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L129
   io-float-exact ? true,
   atomic-ungetc ? true,
-  posix-console ? !stdenv.hostPlatform.isNone,
+  posix-console ? !stdenvNoLibc.hostPlatform.isNone,
   format-default ? "double",
   printf-aliases ? true,
   io-percent-b ? false,
@@ -44,7 +45,7 @@
   fast-bufio ? false,
   io-wchar ? false,
 
-  # Internaltionalization options
+  # Internationalization options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L181
   mb-capable ? false,
   mb-extended-charsets ? false,
@@ -55,7 +56,7 @@
 
   # Startup/shutdown options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L198
-  picocrt ? stdenv.hostPlatform.isNone,
+  picocrt ? stdenvNoLibc.hostPlatform.isNone,
   picocrt-enable-mmu ? true,
   picocrt-lib ? true,
   picoexit ? true,
@@ -65,7 +66,7 @@
   # Legacy (non-picoexit) startup/shutdown options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L217
   newlib-atexit-dynamic-alloc ? false,
-  newlib-global-atexit ? !stdenv.hostPlatform.isNone,
+  newlib-global-atexit ? !stdenvNoLibc.hostPlatform.isNone,
   newlib-register-fini ? false,
 
   # Malloc options
@@ -80,9 +81,9 @@
   # TLS storage options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L244
   thread-local-storage ? "picolibc",
-  tls-model ? if stdenv.hostPlatform.isNone then "local-exec" else "global-dynamic",
+  tls-model ? if stdenvNoLibc.hostPlatform.isNone then "local-exec" else "global-dynamic",
   newlib-global-errno ? false,
-  errno-function ? if stdenv.hostPlatform.isNone then "false" else "auto",
+  errno-function ? if stdenvNoLibc.hostPlatform.isNone then "false" else "auto",
   tls-rp2040 ? false,
 
   # Math options
@@ -92,9 +93,9 @@
 let
   inherit (lib.strings) mesonBool mesonOption;
 
-  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  canExecute = stdenvNoLibc.buildPlatform.canExecute stdenvNoLibc.hostPlatform;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "picolibc";
   version = "1.8.9-2";
   strictDeps = true;
@@ -110,6 +111,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-djOZKkinsaaYD4tUEA6mKdo+5em0GP1/+rI0mIm7Vs8=";
   };
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
 
   nativeBuildInputs = [
     meson
