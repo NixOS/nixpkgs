@@ -1,0 +1,69 @@
+diff --git a/build/jpsModelToBazelCommunityOnly.cmd b/build/jpsModelToBazelCommunityOnly.cmd
+index 80dbbb6122d2..75d23293d85e 100755
+--- a/build/jpsModelToBazelCommunityOnly.cmd
++++ b/build/jpsModelToBazelCommunityOnly.cmd
+@@ -9,7 +9,7 @@ export RUN_WITHOUT_ULTIMATE_ROOT=true
+ 
+ script_dir="$(cd "$(dirname "$0")"; pwd)"
+ cd "$script_dir/../platform/build-scripts/bazel"
+-exec /bin/bash "../../../bazel.cmd" run "$@" //:jps-to-bazel
++exec @bazel@ run @commandArgs@ "$@" //:jps-to-bazel
+ 
+ :CMDSCRIPT
+
+diff --git a/platform/build-scripts/bazel/jps-to-bazel.cmd b/platform/build-scripts/bazel/jps-to-bazel.cmd
+index f33d4ca6bb49..3195de8d4ca3 100755
+--- a/platform/build-scripts/bazel/jps-to-bazel.cmd
++++ b/platform/build-scripts/bazel/jps-to-bazel.cmd
+@@ -9,7 +9,7 @@ script_dir="$(cd "$(dirname "$0")"; pwd)"
+ root="$script_dir/../../../.."
+ 
+ cd "$script_dir"
+-exec /bin/bash "$root/bazel.cmd" run //:jps-to-bazel -- "$@"
++exec @bazel@ run @commandArgs@ //:jps-to-bazel -- "$@"
+ :CMDSCRIPT
+ 
+ pushd "%~dp0"
+
+diff --git a/bazel-build-all-community.cmd b/bazel-build-all-community.cmd
+index ed59fbe48ad5..17caf4956340 100755
+--- a/bazel-build-all-community.cmd
++++ b/bazel-build-all-community.cmd
+@@ -8,7 +8,7 @@ set -eu
+ root="$(cd "$(dirname "$0")"; pwd)"
+ 
+ cd "$root"
+-exec /bin/bash "$root/bazel.cmd" build //... @rules_jvm//... @lib//...
++exec @bazel@ build @commandArgs@ //... @rules_jvm//... @lib//...
+ :CMDSCRIPT
+ 
+ pushd "%~dp0"
+
+diff --git a/build/assertJpsModelToBazelCommunityPaths.sh b/build/assertJpsModelToBazelCommunityPaths.sh
+index b147061c7f4e..0cda7e02bde0 100755
+--- a/build/assertJpsModelToBazelCommunityPaths.sh
++++ b/build/assertJpsModelToBazelCommunityPaths.sh
+@@ -14,6 +14,6 @@ echo "Bazel output base: $output_base"
+ ./bazel-build-all-community.cmd
+ 
+ cd "$script_dir/../platform/build-scripts/bazel"
+-exec /bin/bash "../../../bazel.cmd" run "$@" //:jps-to-bazel -- \
++exec @bazel@ run @commandArgs@ "$@" //:jps-to-bazel -- \
+   "--assert-all-library-roots-exist-with-output-base=$output_base" \
+   --assert-all-module-outputs-exist
+
+diff --git a/build/run_build_target.sh b/build/run_build_target.sh
+index f88147ba39ce..d4eae90d84c9 100755
+--- a/build/run_build_target.sh
++++ b/build/run_build_target.sh
+@@ -19,7 +19,7 @@ done
+ 
+ cd "$root"
+ if [ ${#args[@]} -eq 0 ]; then
+-  exec /bin/bash "$root/bazel.cmd" run "$build_target_name" --
++  exec @bazel@ run @commandArgs@ "$build_target_name" --
+ else
+-  exec /bin/bash "$root/bazel.cmd" run "$build_target_name" -- "${args[@]}"
++  exec @bazel@ run @commandArgs@ "$build_target_name" -- "${args[@]}"
+ fi
+

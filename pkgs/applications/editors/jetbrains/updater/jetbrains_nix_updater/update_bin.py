@@ -6,17 +6,17 @@ from jetbrains_nix_updater.ides import Ide
 from jetbrains_nix_updater.util import replace_blocks, convert_hash_to_sri
 
 
-def run_bin_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
+async def run_bin_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     urls_nix = ""
     for system, url in info.urls.items():
         urls_nix += f"""
         {system} = {{
           url = "{url}";
-          hash = "{convert_hash_to_sri(info.download_sha256(system))}";
+          hash = "{await convert_hash_to_sri(info.download_sha256(system))}";
         }};"""
 
     try:
-        replace_blocks(
+        await replace_blocks(
             config,
             ide.drv_path,
             [

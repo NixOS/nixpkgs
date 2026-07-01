@@ -1,0 +1,11 @@
+diff --git a/toolchain/cc_wrapper.sh.tpl b/toolchain/cc_wrapper.sh.tpl
+index f08eef4..7d4f42e 100644
+--- a/toolchain/cc_wrapper.sh.tpl
++++ b/toolchain/cc_wrapper.sh.tpl
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@
+ #
+ # Copyright 2021 The Bazel Authors. All rights reserved.
+ #
+

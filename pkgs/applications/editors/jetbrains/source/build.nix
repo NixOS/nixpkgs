@@ -1,28 +1,36 @@
+# TODO: This is currently only supported for x86_64-linux
 {
+  alsa-lib,
+  bash,
+  callPackage,
+  cmake,
   fetchFromGitHub,
   fetchurl,
   fetchzip,
-  lib,
-  linkFarm,
-  makeWrapper,
-  runCommand,
-  stdenv,
-  stdenvNoCC,
-  rustPlatform,
-  callPackage,
-
-  ant,
-  cmake,
   fsnotifier,
   glib,
   glibc,
   jetbrains,
-  kotlin,
+  lib,
   libdbusmenu,
-  maven,
-  p7zip,
-  pkg-config,
+  libpanel,
   libx11,
+  libxcrypt-legacy,
+  libxi,
+  libxml2_13,
+  libxrender,
+  libxtst,
+  linkFarm,
+  maven,
+  ncurses,
+  pkg-config,
+  python3,
+  replaceVars,
+  runCommand,
+  rustPlatform,
+  stdenv,
+  xz,
+  zlib,
 }:
 {
   version,
@@ -30,20 +38,28 @@
   buildType,
   ideaHash,
   androidHash,
-  jpsHash,
   restarterHash,
-  mvnDeps,
-  repositories,
-  kotlin-jps-plugin,
+  bazelConfig,
 }:
 let
-  kotlin' = kotlin.overrideAttrs (oldAttrs: {
-    version = "2.2.20";
-    src = fetchurl {
-      url = oldAttrs.src.url;
-      hash = "sha256-gfAmTJBztcu9s/+EGM8sXawHaHn8FW+hpkYvWlrMRCA=";
-    };
-  });
+  # The build number with the patch part removed. This is required for the build, since the build appends a patch part itself for plugins, otherwise
+  # they fail with an invalid semver version ("The plugin build number 261.25134.95.20260601 is expected to match the Semantic Versioning")
+  buildNumberMinor = builtins.concatStringsSep "." (lib.init (lib.splitString "." buildNumber));
+
+  bazel = callPackage ./bazel.nix { } { inherit (bazelConfig) base jbPatches; };
+  # If the build fails, try bumping up the registry commit.
+  bazelRegistry = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-central-registry";
+    inherit (bazelConfig.registry) rev hash;
+  };
+
+  localJdkVersion = "local_jdk_21";
+  bazelArgs = [
+    "--lockfile_mode=off"
+    "--features=-module_maps"
+    "--host_features=-module_maps"
+  ];
 
   jbr = jetbrains.jdk-no-jcef-21;
 
@@ -60,12 +76,6 @@ let
     rev = "${buildType}/${version}";
     hash = androidHash;
   };
-
-  src = runCommand "source" { } ''
-    cp -r ${ideaSrc} $out
-    chmod +w -R $out
-    cp -r ${androidSrc} $out/android
-  '';
 
   libdbusmenu-jb = libdbusmenu.overrideAttrs (old: {
     version = "jetbrains-fork";
@@ -100,8 +110,8 @@ let
       libx11
       libdbusmenu
     ];
-    inherit src;
-    sourceRoot = "${src.name}/native/LinuxGlobalMenu";
+    src = ideaSrc;
+    sourceRoot = "${ideaSrc.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
     postPatch = ''
       # Fix the build with CMake 4.
@@ -123,8 +133,8 @@ let
   restarter = rustPlatform.buildRustPackage {
     pname = "restarter";
     version = buildNumber;
-    inherit src;
-    sourceRoot = "${src.name}/native/restarter";
+    src = ideaSrc;
+    sourceRoot = "${ideaSrc.name}/native/restarter";
 
     cargoHash = restarterHash;
 
@@ -135,91 +145,64 @@ let
     ];
   };
 
-  jpsRepo = callPackage ./jps_repo.nix { inherit jpsHash src jbr; };
-
-  jps-bootstrap = stdenvNoCC.mkDerivation {
-    pname = "jps-bootstrap";
-    version = buildNumber;
-    inherit src;
-    sourceRoot = "${src.name}/platform/jps-bootstrap";
-    nativeBuildInputs = [
-      ant
-      makeWrapper
-      jbr
-    ];
-    patches = [ ../patches/kotlinc-path.patch ];
-    postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
-    buildPhase = ''
-      runHook preBuild
-
-      BUILD_HOME=$(mktemp -d)
-      ant -Duser.home=${jpsRepo} -Dbuild.dir="$BUILD_HOME" -f jps-bootstrap-classpath.xml
-
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/share/java/
-      cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
-      cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
-      makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
-        --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
-
-      runHook postInstall
-    '';
-  };
-
-  artefactsJson = lib.importJSON mvnDeps;
+  # These maven artifacts are downloaded by the JPS installer and not provided via Bazel (or at least JPS doesn't pick them up). This is probably a bug in the installer
+  # and hopefully something JetBrains will fix, we optimistically asume so. If this doesn't hold true, we might want to revert to pre-fetching all Maven artifacts ourselves
+  # instead of maintaining this manual list here. See state before the PR that introduced this change for reference for the automated maven fetching.
+  artefacts = [
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/apache/maven/archetype/archetype-catalog/2.2/archetype-catalog-2.2.jar";
+      hash = "sha256-ES4G5qzBQFrTulGEQug10dQnWO8x8Lu9syqh4VoX0Q8=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.jar";
+      hash = "sha256-27jFPMwLFqndg3DW595jECRoyu2sHl+i60GDGaaHUpM=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/sonatype/nexus/nexus-indexer-artifact/1.0.1/nexus-indexer-artifact-1.0.1.jar";
+      hash = "sha256-FxA1dAMi+WvYwVXPtgUJYt1h15dqSUwKrG1Gs8gxdMQ=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/apache/lucene/lucene-core/2.4.1/lucene-core-2.4.1.jar";
+      hash = "sha256-uF1sKmtMKekPp8XZSyH+eW+caFeHAmi1aQR2USa65xg=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/apache/maven/archetype/archetype-descriptor/2.2/archetype-descriptor-2.2.jar";
+      hash = "sha256-Fi/wzIBEUwfeBfXgzpwBTozSLPvS7WEK45gG5FksUlU=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/apache/maven/archetype/archetype-common/2.2/archetype-common-2.2.jar";
+      hash = "sha256-OgCngVeoL/93gzR2QlVkJYUSdEPgs9pWvNtvig+RAiA=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "org/sonatype/nexus/nexus-indexer/3.0.4/nexus-indexer-3.0.4.jar";
+      hash = "sha256-nUOijQdYkU/c6iikNmAawm0Go7VdKDu2vgMhzNNjGlg=";
+    }
+    {
+      repo = "repo.maven.apache.org/maven2";
+      path = "com/fasterxml/jackson/core/jackson-core/2.19.0/jackson-core-2.19.0.jar";
+      hash = "sha256-2o6Fm6yUh0UoEWol8gxoVg5Ch6y/J2KHEbik+WsChDA=";
+    }
+  ];
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = lib.concatMap (url: [
-        "https://cache-redirector.jetbrains.com/${url}/${entry.url}"
-        "https://${url}/${entry.url}"
-      ]) repositories;
+      urls = [
+        "https://cache-redirector.jetbrains.com/${entry.repo}/${entry.path}"
+        "https://${entry.repo}/${entry.path}"
+      ];
       # Do not try to retry 4xx errors
       curlOptsList = [ "--no-retry-all-errors" ];
-      sha256 = entry.hash;
+      hash = entry.hash;
     };
   };
-  mvnRepo = linkFarm "intellij-deps" (map mkRepoEntry artefactsJson);
-
-  kotlin-jps-plugin-classpath =
-    let
-      repoBaseUrl = "packages.jetbrains.team/maven/p/ij/intellij-dependencies";
-      repoUrls = [
-        "https://cache-redirector.jetbrains.com/${repoBaseUrl}"
-        "https://${repoBaseUrl}"
-      ];
-      groupId = "org/jetbrains/kotlin";
-      artefactId = "kotlin-jps-plugin-classpath";
-      version = kotlin-jps-plugin.version;
-    in
-    fetchurl {
-      urls = map (
-        url:
-        lib.concatStringsSep "/" [
-          url
-          groupId
-          artefactId
-          version
-          "${artefactId}-${version}.jar"
-        ]
-      ) repoUrls;
-      hash = kotlin-jps-plugin.hash;
-    };
-
-  targetClass =
-    if buildType == "pycharm" then
-      "intellij.pycharm.community.build"
-    else
-      "intellij.idea.community.build";
-  targetName =
-    if buildType == "pycharm" then
-      "PyCharmCommunityInstallersBuildTarget"
-    else
-      "OpenSourceCommunityInstallersBuildTarget";
+  mvnRepo = linkFarm "intellij-jps-deps" (map mkRepoEntry artefacts);
 
   xplat-launcher = fetchzip {
     urls = [
@@ -230,87 +213,163 @@ let
     stripRoot = false;
   };
 
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
+  bazelTarget =
+    if buildType == "pycharm" then
+      "@community//python/build:i_build_target"
+    else
+      "//build:i_build_target";
+
   pname = "${buildType}-oss";
-  inherit version buildNumber;
-  name = "${finalAttrs.pname}-${version}.tar.gz";
-  inherit src;
-  nativeBuildInputs = [
-    p7zip
-    jbr
-    jps-bootstrap
+
+in
+bazel.package {
+  inherit version;
+  name = "${pname}-${version}.tar.gz";
+  src = ideaSrc;
+
+  buildInputs = [
+    zlib
+    stdenv.cc
+    libxi
+    libxtst
+    alsa-lib
+    libxrender
+    libxcrypt-legacy
+    xz
+    ncurses
+    libxml2_13
+    libpanel
+    python3
   ];
-  repo = mvnRepo;
+
+  nativeBuildInputs = [
+    stdenv.cc
+    bash
+  ];
+
+  bazel = bazel;
+  targets = [ bazelTarget ];
+  registry = bazelRegistry;
+  commandArgs = bazelArgs;
+
+  postUnpack = ''
+    ln -s ${androidSrc} "$sourceRoot/android"
+  '';
 
   patches = [
+    ## BAZEL
+    (replaceVars ../patches/module.patch { sysroot = lib.getDev stdenv.cc.libc; })
+    (bazel.addFilePatch {
+      path = "b/build/rules_java_stub.patch";
+      file = replaceVars ../patches/rules_java_stub.patch { bash = lib.getExe bash; };
+    })
+    (bazel.addFilePatch {
+      path = "b/platform/build-scripts/bazel/build/rules_java_stub.patch";
+      file = replaceVars ../patches/rules_java_stub.patch { bash = lib.getExe bash; };
+    })
+    ../patches/cc.patch
+    (bazel.addFilePatch {
+      path = "b/build/cc_wrapper.patch";
+      file = replaceVars ../patches/cc_wrapper.patch { bash = lib.getExe bash; };
+    })
+    (bazel.addFilePatch {
+      # TODO: remove with newer idea-oss not using nested bazel for fetch phase
+      path = "b/platform/build-scripts/bazel/build/cc_wrapper.patch";
+      file = replaceVars ../patches/cc_wrapper.patch { bash = lib.getExe bash; };
+    })
+    (replaceVars ../patches/bash.patch { bash = lib.getExe bash; })
+    (replaceVars ../patches/bazel.patch {
+      bazel = lib.getExe bazel;
+      commandArgs = lib.concatStringsSep " " (bazelArgs ++ [ "--registry=file://${bazelRegistry}" ]);
+    })
+    ## INSTALLER
     ../patches/no-download.patch
     ../patches/disable-sbom-generation.patch
     ../patches/bump-jackson-core-in-source.patch
   ];
 
-  # Regarding brokenPlugins.json:
-  #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
-  #  downloaded without hash changes. The file is not important for the IDEs to function properly.
-  postPatch = ''
+  autoPatchelfVendorDirs = [
+    "toolchains_llvm++llvm+llvm_toolchain_llvm"
+    "rules_python++python+python_3_11_x86_64-unknown-linux-gnu"
+    "rules_java++toolchains+remote_java_tools_linux"
+    "+jbr_toolchains+remotejbr21_linux"
+    "rules_java++toolchains+remotejdk25_linux"
+  ];
+
+  bazelPreBuild = ''
+    ## BAZEL PATCHES
+    # Patch the version number (remove JetBrains/ prefix)
+    substituteInPlace .bazelversion --replace-fail "JetBrains/" ""
+    substituteInPlace platform/build-scripts/bazel/.bazelversion --replace-fail "JetBrains/" ""
+
+    # just in case there's no newline at the end of file
+    echo >> platform/build-scripts/bazel/.bazelrc
+    # covered by patch
+    # echo "common ${builtins.concatStringsSep " " bazelArgs}" >> platform/build-scripts/bazel/.bazelrc
+    # echo "common --registry=file://${bazelRegistry}" >> platform/build-scripts/bazel/.bazelrc
+
+    # remote jdk won't work unpatched for repo fetching phase in nested bazel call
+    echo "run --extra_toolchains=@@rules_java++toolchains+local_jdk//:all --tool_java_runtime_version=${localJdkVersion} --java_runtime_version=${localJdkVersion}" >> platform/build-scripts/bazel/.bazelrc
+
+    # TODO: tricky decision to make, for read flow nested bazel should see it, but for population flow
+    #       there's 2 bazel invocations sharing those dirs - is it safe? Or at least when deps&patches&options are the same?
+    # TODO: repo_cache&vendor_dir location being the same for read&populate flows might change in future?
+    [ -d repo_cache ] && echo "common --repository_cache=../../../repo_cache" >> platform/build-scripts/bazel/.bazelrc
+    [ -d vendor_dir ] && echo "common --vendor_dir=../../../vendor_dir" >> platform/build-scripts/bazel/.bazelrc
+
+    ## INSTALLER PATCHES
     cp ${restarter}/bin/restarter bin/linux/amd64/restarter
     cp ${fsnotifier}/bin/fsnotifier bin/linux/amd64/fsnotifier
     cp ${libdbm}/lib/libdbm.so bin/linux/amd64/libdbm.so
 
     substituteInPlace \
-      platform/build-scripts/src/org/jetbrains/intellij/build/kotlin/KotlinCompilerDependencyDownloader.kt \
-      --replace-fail 'JPS_PLUGIN_CLASSPATH_HERE' '${kotlin-jps-plugin-classpath}' \
-      --replace-fail 'KOTLIN_PATH_HERE' '${kotlin'}'
-    substituteInPlace \
       platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt \
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
+    # Regarding brokenPlugins.json:
+    #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
+    #  downloaded without hash changes. The file is not important for the IDEs to function properly.
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
       --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
+
     substituteInPlace \
       build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt \
       --replace-fail 'MAVEN_REPO_HERE' '${mvnRepo}/.m2/repository/' \
       --replace-fail 'MAVEN_PATH_HERE' '${maven}/maven'
 
-    echo '${buildNumber}.SNAPSHOT' > build.txt
+    echo '${buildNumberMinor}.SNAPSHOT' > build.txt
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-
-    ln -s "$repo"/.m2 ../.m2
-    export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
-    jps-bootstrap \
-      -Dbuild.number=${buildNumber} \
-      -Djps.kotlin.home=${kotlin'} \
-      -Dintellij.build.target.os=linux \
-      -Dintellij.build.target.arch=x64 \
-      -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
-      -Dintellij.build.unix.snaps=false \
-      --java-argfile-target=java_argfile \
-      "$PWD" \
-      ${targetClass} \
-      ${targetName}
-
-    runHook postConfigure
-  '';
-  buildPhase = ''
-    runHook preBuild
-
-    java \
-      -Djps.kotlin.home=${kotlin'} \
-      "@java_argfile"
-
-    runHook postBuild
-  '';
   installPhase = ''
     runHook preInstall
+
+    ${bazel}/bin/bazel run \
+      --registry=file://${bazelRegistry} \
+      --repository_cache=repo_cache \
+      --vendor_dir=vendor_dir ${builtins.concatStringsSep " " bazelArgs} \
+      ${bazelTarget} \
+      -- \
+      --jvm_flag=-Dbuild.number=${buildNumberMinor} \
+      --jvm_flag=-Dintellij.build.target.os=current \
+      --jvm_flag=-Dintellij.build.target.arch=current
+
     mv out/*/artifacts/*-no-jbr.tar.gz $out
+
     runHook postInstall
   '';
+
+  env = {
+    # TODO: remove in newer versions of idea-oss, where nested bazel isn't called or doesn't use java during fetch phase
+    JAVA_HOME = jbr.home;
+  };
+
+  bazelRepoCacheFOD = {
+    outputHash = bazelConfig.repoCacheFODHashes.${stdenv.hostPlatform.system};
+    outputHashAlgo = "sha256";
+  };
 
   passthru = {
     inherit
@@ -318,7 +377,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       buildNumber
       libdbm
       fsnotifier
-      jps-bootstrap
       ;
   };
-})
+}

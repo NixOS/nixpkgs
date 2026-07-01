@@ -1,0 +1,14 @@
+diff --git a/platform/build-scripts/bazel/.bazelrc b/platform/build-scripts/bazel/.bazelrc
+index 2b841ba02720..b615ee329514 100644
+--- a/platform/build-scripts/bazel/.bazelrc
++++ b/platform/build-scripts/bazel/.bazelrc
+@@ -87,7 +87,7 @@ common --enable_platform_specific_config
+ common --incompatible_enable_proto_toolchain_resolution
+ 
+ # Do not depend on external environment
+-common --action_env BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
++common --action_env BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=0
+ common --action_env BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
+ startup --noautodetect_server_javabase
+ 
+
