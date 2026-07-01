@@ -20423,6 +20423,8 @@ self: super: with self; {
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
+  tt-perf-report = callPackage ../development/python-modules/tt-perf-report { };
+
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
   ttach = callPackage ../development/python-modules/ttach { };
