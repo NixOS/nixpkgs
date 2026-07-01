@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  pkgsCross,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,16 +16,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-fastsampling" ];
 
+  makeFlags = [ "AR:=$(AR)" ];
+
   postInstall = ''
     mv $out/bin/iperf $out/bin/iperf2
     ln -s $out/bin/iperf2 $out/bin/iperf
   '';
+
+  passthru.tests = {
+    cross-aarch64 = pkgsCross.aarch64-multiplatform.iperf2;
+  };
 
   meta = {
     homepage = "https://sourceforge.net/projects/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+    mainProgram = "iperf2";
     maintainers = with lib.maintainers; [ randomizedcoder ];
 
     # prioritize iperf3

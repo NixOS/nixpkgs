@@ -16,13 +16,13 @@ let
   # Keep this in sync with upstream locked version (likely a stable release, but not always latest)
   matrix-js-sdk = stdenv.mkDerivation (finalAttrs: {
     pname = "matrix-js-sdk";
-    version = "41.8.0-rc.0";
+    version = "41.8.0";
 
     src = fetchFromGitHub {
       owner = "matrix-org";
       repo = "matrix-js-sdk";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-1e6nWeHNAhVynxv2R7GY5NRCBN0BriRjA3zLK0D5O9g=";
+      hash = "sha256-9OWB3Hz8EoDIu27jvA6Am4l1dH53IZGE9TStB2Viw6E=";
     };
 
     pnpmDeps = fetchPnpmDeps {
@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.20.2";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-paUcZhjcLbJOpQOR8gRpGe0LzSaKtWsTzE1svzQaVZY=";
+    hash = "sha256-H+In5fsX82eMDGk5kaS5ulqU1U5S67auEPc24rtCkuA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
