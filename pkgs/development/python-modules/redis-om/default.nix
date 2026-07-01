@@ -2,16 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  hatchling,
   unasync,
-  poetry-core,
   python,
   click,
   hiredis,
   more-itertools,
   pydantic,
+  pydantic-extra-types,
   python-ulid,
   redis,
+  redisvl,
   redisTestHook,
   types-redis,
   typing-extensions,
@@ -21,45 +22,43 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.3.5";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";
     tag = "v${version}";
-    hash = "sha256-TfwMYDZYDKCdI5i8izBVZaXN5GC/Skhkl905c/DHuXY=";
+    hash = "sha256-qjGrhEINW9p2Rd3O5WI4QKYcj8tn/FI3pjnhI1k3mmc=";
   };
 
-  patches = [
-    # Include redis_om package, https://github.com/redis/redis-om-python/pull/718
-    (fetchpatch {
-      name = "include-redis_om.patch";
-      url = "https://github.com/redis/redis-om-python/commit/cc03485f148dcc2f455dd8cafd3b116758504c50.patch";
-      hash = "sha256-UzQfRbLCTnKW5jxQhldI9KCuN//bx3/PvNnfd872D+o=";
-    })
-  ];
-
   build-system = [
+    hatchling
     unasync
-    poetry-core
   ];
-
-  # it has not been maintained at all for a half year and some dependencies are outdated
-  # https://github.com/redis/redis-om-python/pull/554
-  # https://github.com/redis/redis-om-python/pull/577
-  pythonRelaxDeps = true;
 
   dependencies = [
     click
     hiredis
     more-itertools
     pydantic
+    pydantic-extra-types
     python-ulid
     redis
+    redisvl
     types-redis
     typing-extensions
   ];
+
+  postPatch = ''
+    # We don't want to use a formatter in our build.
+    substituteInPlace make_sync.py \
+      --replace-fail 'ruff' 'true'
+
+    # Fix `click` not finding the correct package to use for the version command.
+    substituteInPlace aredis_om/cli/main.py \
+      --replace-fail '@click.version_option()' '@click.version_option(package_name = "redis_om")'
+  '';
 
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} make_sync.py
@@ -82,7 +81,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Object mapping, and more, for Redis and Python";
-    mainProgram = "migrate";
+    mainProgram = "om";
     homepage = "https://github.com/redis/redis-om-python";
     changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
