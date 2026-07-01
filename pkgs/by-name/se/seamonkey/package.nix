@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   pname = "seamonkey";
   version = "2.53.23";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # Upstream requires highly deprecated build tools to compile from source
   src = fetchurl {
     url = "https://archive.seamonkey-project.org/releases/${version}/linux-x86_64/en-US/seamonkey-${version}.en-US.linux-x86_64.tar.bz2";
