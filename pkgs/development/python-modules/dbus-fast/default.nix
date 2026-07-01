@@ -11,6 +11,7 @@
   pytest-cov-stub,
   python,
   setuptools,
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -55,16 +56,33 @@ buildPythonPackage (finalAttrs: {
     "dbus_fast.message"
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    let
+      setupSessionConf =
+        if stdenv.hostPlatform.isDarwin then
+          # The session.conf that dbus ships on Darwin listens via launchd, which is
+          # not available inside the build sandbox. Generate one that listens on a
+          # private unix socket so dbus-run-session can spin up a throwaway bus for
+          # the tests, the same way it does on Linux.
+          ''
+            sessionConf="$TMPDIR/session.conf"
+            substitute ${./session.darwin.conf} "$sessionConf" --subst-var TMPDIR
+          ''
+        else
+          "sessionConf=${dbus}/share/dbus-1/session.conf";
+    in
+    ''
+      runHook preCheck
 
-    # test_peer_interface times out
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python.interpreter} -m pytest -k "not test_peer_interface"
+      ${setupSessionConf}
 
-    runHook postCheck
-  '';
+      # test_peer_interface times out
+      dbus-run-session \
+        --config-file="$sessionConf" \
+        ${python.interpreter} -m pytest -k "not test_peer_interface"
+
+      runHook postCheck
+    '';
 
   meta = {
     description = "Faster version of dbus-next";
