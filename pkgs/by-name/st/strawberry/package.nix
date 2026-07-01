@@ -30,7 +30,6 @@
   taglib,
   util-linux,
   sparsehash,
-  rapidjson,
 
   # tests
   gtest,
@@ -38,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.18";
+  version = "1.2.21";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-5h1psYJDKnFFgIGZY3ecCttgkR+zuUwa3b/A4keLk9o=";
+    hash = "sha256-FI+lyVx9x82o2HZ9YysIlPsSAl94YUD8nrHP0HsmO2E=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     taglib
     sparsehash
-    rapidjson
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
