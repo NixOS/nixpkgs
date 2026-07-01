@@ -3,6 +3,7 @@
 
 fetchLibrustyV8 {
   version = "145.0.0"; # From source's Cargo.lock
+  archivePrefix = "librusty_v8_release";
   shas = {
     x86_64-linux = "sha256-chV1PAx40UH3Ute5k3lLrgfhih39Rm3KqE+mTna6ysE=";
     aarch64-linux = "sha256-4IivYskhUSsMLZY97+g23UtUYh4p5jk7CzhMbMyqXyY=";
