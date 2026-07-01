@@ -3024,11 +3024,24 @@ assertNoAdditions {
     ];
   };
 
+  neovim-project = super.neovim-project.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      neovim-session-manager
+    ];
+  };
+
   neovim-sensible = super.neovim-sensible.overrideAttrs (old: {
     meta = old.meta // {
       license = lib.licenses.mit;
     };
   });
+
+  neovim-session-manager = super.neovim-session-manager.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  };
 
   neovim-tips = super.neovim-tips.overrideAttrs {
     dependencies = [
@@ -4059,8 +4072,7 @@ assertNoAdditions {
     };
   });
 
-  scretch-nvim = super.scretch-nvim.overrideAttrs {
-  };
+  scretch-nvim = super.scretch-nvim.overrideAttrs { };
 
   search-and-replace-nvim = super.search-and-replace-nvim.overrideAttrs {
     runtimeDeps = [
@@ -5627,8 +5639,7 @@ assertNoAdditions {
     };
   });
 
-  vim-tabby = super.vim-tabby.overrideAttrs {
-  };
+  vim-tabby = super.vim-tabby.overrideAttrs { };
 
   vim-table-mode = super.vim-table-mode.overrideAttrs (old: {
     meta = old.meta // {
