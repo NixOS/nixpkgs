@@ -77,6 +77,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Forward journald logs to syslog-ng.
+    services.journald.settings.Journal.ForwardToSyslog = lib.mkDefault true;
+
     systemd.services.syslog-ng = {
       description = "syslog-ng daemon";
       wantedBy = [ "multi-user.target" ];
