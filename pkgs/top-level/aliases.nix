@@ -1511,6 +1511,7 @@ mapAliases {
   migra = throw "migra has been removed because it has transitively been marked as broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   mihomo-party = throw "'mihomo-party' has been removed due to upstream license violation"; # Added 2025-08-20
   mime-types = throw "'mime-types' has been renamed to/replaced by 'mailcap'"; # Converted to throw 2025-10-27
+  min = throw "'min' has been removed as it depends on pcre, which is deprecated"; # Added 2026-06-15
   mindforger = throw "'mindforger' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-15
   minecraft = throw "'minecraft' has been removed because the package was broken. Consider using 'prismlauncher' instead"; # Added 2025-09-06
   minetest = throw "'minetest' has been renamed to/replaced by 'luanti'"; # Converted to throw 2025-10-27
