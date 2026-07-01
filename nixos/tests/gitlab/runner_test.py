@@ -26,7 +26,6 @@ class Nix:
     jq: str
     gitlab_state_path: str
     create_runner_payload_file: str
-    auth_payload_file: str
     runner_token_env_file: str
 
 
@@ -35,12 +34,12 @@ out_dir = os.environ.get("out", os.getcwd())
 nix = Nix(
     jq=JQ_BINARY,
     gitlab_state_path=GITLAB_STATE_PATH,
-    auth_payload_file=AUTH_PAYLOAD_FILE,
     create_runner_payload_file=CREATE_RUNNER_PAYLOAD_FILE,
     runner_token_env_file=RUNNER_TOKEN_ENV_FILE,
 )
 vms = Machines(gitlab, gitlab_runner)
 runnerConfigs: dict[str, Runner] = {}
+rootPAT = "root-PAT-01234567890"
 
 
 def wait_for_services():
@@ -63,15 +62,11 @@ def test_connection():
     )
 
     vms.gitlab.succeed(
-        f"echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @{nix.auth_payload_file} http://gitlab/oauth/token | {nix.jq} -r '.access_token')\" >/tmp/headers"
+      f"/run/wrappers/bin/sudo -u gitlab gitlab-rails runner \"token = User.find_by_username('root').personal_access_tokens.create(scopes: ['api'], name: 'Test Token', expires_at: 365.days.from_now); token.set_token('{rootPAT}'); token.save!\""
     )
 
-    vms.gitlab.copy_from_vm("/tmp/headers")
-    out_dir = os.environ.get("out", os.getcwd())
-    vms.gitlab_runner.copy_from_host(str(Path(out_dir, "headers")), "/tmp/headers")
-
     print("==> Testing connection.")
-    vms.gitlab_runner.succeed("curl -v -H @/tmp/headers http://gitlab/api/v4/version")
+    vms.gitlab_runner.succeed(f"curl -v -H 'Authorization: Bearer {rootPAT}' http://gitlab/api/v4/version")
 
 
 def test_register_runner(name: str, tokenFile: str):
@@ -93,7 +88,7 @@ def test_register_runner(name: str, tokenFile: str):
         f"""
     curl -s -X POST \
         -H 'Content-Type: application/json' \
-        -H @/tmp/headers \
+        -H 'Authorization: Bearer {rootPAT}' \
         -d @{nix.create_runner_payload_file} \
         http://gitlab/api/v4/user/runners
     """
@@ -138,7 +133,7 @@ def test_runner_registered(r: Runner):
         f"""
         curl -s -X GET \
         -H 'Content-Type: application/json' \
-        -H @/tmp/headers \
+        -H 'Authorization: Bearer {rootPAT}' \
         http://gitlab/api/v4/runners/{r.id}"""
     )[1]
     runnerStatus = json.loads(resp)

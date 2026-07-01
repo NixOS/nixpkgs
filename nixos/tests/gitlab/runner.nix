@@ -137,14 +137,6 @@ in
   testScript =
     { nodes, ... }:
     let
-      authPayload = pkgs.writeText "auth.json" (
-        builtins.toJSON {
-          grant_type = "password";
-          username = "root";
-          password = initialRootPassword;
-        }
-      );
-
       runnerTokenEnv = pkgs.writeText "runner-token.env" ''
         CI_SERVER_URL=http://gitlab
         CI_SERVER_TOKEN=$token
@@ -162,7 +154,6 @@ in
       JQ_BINARY="${pkgs.jq}/bin/jq"
       GITLAB_STATE_PATH="${nodes.gitlab.services.gitlab.statePath}"
       RUNNER_TOKEN_ENV_FILE="${runnerTokenEnv}"
-      AUTH_PAYLOAD_FILE="${authPayload}"
       CREATE_RUNNER_PAYLOAD_FILE="${createRunnerPayload}"
 
       ${lib.readFile ./runner_test.py}

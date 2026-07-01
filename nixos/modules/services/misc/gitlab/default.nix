@@ -177,7 +177,7 @@ let
         port = cfg.registry.externalPort;
         key = cfg.registry.keyFile;
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
-        issuer = cfg.registry.issuer;
+        issuer = cfg.registry.settings.auth.token.issuer;
       };
       elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
       extra = { };
@@ -574,73 +574,6 @@ in
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
         '';
-      };
-
-      registry = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Enable GitLab container registry.";
-        };
-        package = mkOption {
-          type = types.package;
-          default =
-            if versionAtLeast config.system.stateVersion "23.11" then
-              pkgs.gitlab-container-registry
-            else
-              pkgs.distribution;
-          defaultText = literalExpression "pkgs.distribution";
-          description = ''
-            Container registry package to use.
-
-            External container registries such as `pkgs.distribution` are not supported
-            anymore since GitLab 16.0.0.
-          '';
-        };
-        host = mkOption {
-          type = types.str;
-          default = config.services.gitlab.host;
-          defaultText = literalExpression "config.services.gitlab.host";
-          description = "GitLab container registry host name.";
-        };
-        port = mkOption {
-          type = types.port;
-          default = 4567;
-          description = "GitLab container registry port.";
-        };
-        certFile = mkOption {
-          type = types.path;
-          description = "Path to GitLab container registry certificate.";
-        };
-        keyFile = mkOption {
-          type = types.path;
-          description = "Path to GitLab container registry certificate-key.";
-        };
-        defaultForProjects = mkOption {
-          type = types.bool;
-          default = cfg.registry.enable;
-          defaultText = literalExpression "config.${opt.registry.enable}";
-          description = "If GitLab container registry should be enabled by default for projects.";
-        };
-        issuer = mkOption {
-          type = types.str;
-          default = "gitlab-issuer";
-          description = "GitLab container registry issuer.";
-        };
-        serviceName = mkOption {
-          type = types.str;
-          default = "container_registry";
-          description = "GitLab container registry service name.";
-        };
-        externalAddress = mkOption {
-          type = types.str;
-          default = "";
-          description = "External address used to access registry from the internet";
-        };
-        externalPort = mkOption {
-          type = types.port;
-          description = "External port used to access registry from the internet";
-        };
       };
 
       smtp = {
@@ -1177,16 +1110,6 @@ in
     warnings = [
       (mkIf
         (
-          cfg.registry.enable
-          && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0"
-          && cfg.registry.package == pkgs.distribution
-        )
-        ''
-          Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
-          Please back up your data and migrate to the gitlab-container-registry package.''
-      )
-      (mkIf
-        (
           versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0"
           && versionOlder (getVersion cfg.packages.gitlab) "16.5.0"
         )
@@ -1334,51 +1257,6 @@ in
           RemainAfterExit = true;
         };
       };
-
-    systemd.services.gitlab-registry-cert = optionalAttrs cfg.registry.enable {
-      path = with pkgs; [ openssl ];
-
-      script = ''
-        mkdir -p $(dirname ${cfg.registry.keyFile})
-        mkdir -p $(dirname ${cfg.registry.certFile})
-        openssl req -nodes -newkey rsa:4096 -keyout ${cfg.registry.keyFile} -out /tmp/registry-auth.csr -subj "/CN=${cfg.registry.issuer}"
-        openssl x509 -in /tmp/registry-auth.csr -out ${cfg.registry.certFile} -req -signkey ${cfg.registry.keyFile} -days 3650
-        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.keyFile})
-        chown ${cfg.user}:${cfg.group} $(dirname ${cfg.registry.certFile})
-        chown ${cfg.user}:${cfg.group} ${cfg.registry.keyFile}
-        chown ${cfg.user}:${cfg.group} ${cfg.registry.certFile}
-      '';
-
-      unitConfig = {
-        ConditionPathExists = "!${cfg.registry.certFile}";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        Slice = "system-gitlab.slice";
-      };
-    };
-
-    # Ensure Docker Registry launches after the certificate generation job
-    systemd.services.docker-registry = optionalAttrs cfg.registry.enable {
-      wants = [ "gitlab-registry-cert.service" ];
-      after = [ "gitlab-registry-cert.service" ];
-    };
-
-    # Enable Docker Registry, if GitLab-Container Registry is enabled
-    services.dockerRegistry = optionalAttrs cfg.registry.enable {
-      enable = true;
-      enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
-      package = cfg.registry.package;
-      port = cfg.registry.port;
-      extraConfig = {
-        auth.token = {
-          realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
-          service = cfg.registry.serviceName;
-          issuer = cfg.registry.issuer;
-          rootcertbundle = cfg.registry.certFile;
-        };
-      };
-    };
 
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault (cfg.smtp.enable && cfg.smtp.address == "localhost");
@@ -1910,6 +1788,6 @@ in
 
   };
 
-  meta.doc = ./gitlab.md;
+  meta.doc = ./default.md;
   meta.teams = [ teams.gitlab ];
 }

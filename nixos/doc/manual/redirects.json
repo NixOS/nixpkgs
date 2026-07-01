@@ -1412,6 +1412,9 @@
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
   ],
+  "module-services-gitlab-registry-database-migration": [
+    "index.html#module-services-gitlab-registry-database-migration"
+  ],
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
   ],

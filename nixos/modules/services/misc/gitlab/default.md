@@ -124,6 +124,20 @@ A list of all available rake tasks can be obtained by running:
 $ sudo -u git -H gitlab-rake -T
 ```
 
+## GitLab Container Registry Migration to database metadata store {#module-services-gitlab-registry-database-migration}
+
+For a general explanation please read the [official documentation](https://docs.gitlab.com/administration/packages/container_registry_metadata_database/).
+
+With the NixOS module, please run the following steps for the three-step import:
+
+* `systemctl stop gitlab-container-registry`
+* `sudo -u gitlab-container-registry database import --step-one --log-to-stdout /etc/gitlab-container-registry-config.json`
+* `sudo -u gitlab-container-registry database import --step-two --log-to-stdout /etc/gitlab-container-registry-config.json`
+* `sudo -u gitlab-container-registry database import --step-three --log-to-stdout /etc/gitlab-container-registry-config.json`
+
+Please make sure that `services.gitlab.registry.settings.database.enabled` is `true` or `prefer` before restarting the
+`gitlab-container-registry` systemd service.
+
 ## Runner {#module-services-gitlab-runner}
 
 GitLab Runner is a CI runner which is an executable which you can host yourself.
