@@ -1,10 +1,15 @@
 {
   stdenv,
   lib,
+  fetchurl,
   fetchFromGitHub,
   gnat,
   gnatcoll-core,
+  gnatcoll-gmp,
+  gnatcoll-iconv,
   gprbuild,
+  sarif-ada,
+  vss-extra,
   python3,
   ocamlPackages,
   makeWrapper,
@@ -14,20 +19,91 @@ let
   gnat_version = lib.versions.major gnat.version;
 
   # gnatprove fsf-14 requires gpr2 from a special branch
-  gpr2_24_2_next =
-    (gpr2.override {
-      # pregenerated kb db is not included
-      gpr2kbdir = "${gprbuild}/share/gprconfig";
+  gpr2_24_2_next = gpr2.overrideAttrs (
+    final: _: {
+      version = "24.2.0-next";
+      src = fetchFromGitHub {
+        owner = "AdaCore";
+        repo = "gpr";
+        tag = "v${final.version}";
+        hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
+      };
+      patches = [ ];
+    }
+  );
+
+  # gnatprove fsf-15 requires gnatcoll/gpr2 version 25.0.0
+  gnatcoll-core_25 = gnatcoll-core.overrideAttrs (
+    final: _: {
+      version = "25.0.0";
+
+      src = fetchFromGitHub {
+        owner = "AdaCore";
+        repo = "gnatcoll-core";
+        tag = "v${final.version}";
+        hash = "sha256-z7zwPUHDKgmmQOzsS7+DL1+gwLvEM0j8F8wQDfeBNus=";
+      };
+    }
+  );
+  gnatcoll-iconv_25 =
+    (gnatcoll-iconv.override {
+      gnatcoll-core = gnatcoll-core_25;
     }).overrideAttrs
-      (old: rec {
-        version = "24.2.0-next";
-        src = fetchFromGitHub {
-          owner = "AdaCore";
-          repo = "gpr";
-          rev = "v${version}";
-          hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
-        };
-      });
+      (
+        final: _: {
+          version = "25.0.0";
+
+          src = fetchFromGitHub {
+            owner = "AdaCore";
+            repo = "gnatcoll-bindings";
+            tag = "v${final.version}";
+            hash = "sha256-s8VinVPm0syS8kdU1rswU+ePUBdTZvg72CBxtPc/zCs=";
+          };
+        }
+      );
+  gnatcoll-gmp_25 =
+    (gnatcoll-gmp.override {
+      gnatcoll-core = gnatcoll-core_25;
+    }).overrideAttrs
+      (
+        final: _: {
+          version = "25.0.0";
+
+          src = fetchFromGitHub {
+            owner = "AdaCore";
+            repo = "gnatcoll-bindings";
+            tag = "v${final.version}";
+            hash = "sha256-s8VinVPm0syS8kdU1rswU+ePUBdTZvg72CBxtPc/zCs=";
+          };
+        }
+      );
+  gpr2_25 =
+    (gpr2.override {
+      # Comes with a pre-generated kb config
+      gpr2kbdir = null;
+      gnatcoll-core = gnatcoll-core_25;
+      gnatcoll-iconv = gnatcoll-iconv_25;
+      gnatcoll-gmp = gnatcoll-gmp_25;
+    }).overrideAttrs
+      (
+        final: _: {
+          version = "25.0.0";
+          src = fetchurl {
+            url = "https://github.com/AdaCore/gpr/releases/download/v25.0.0/gpr2-with-gprconfig_kb-25.0.tgz";
+            hash = "sha256-bhOJvAALpbZUbxer370M2h7vbJby3gOOJdwuWERe3rY=";
+          };
+          patches = [ ];
+        }
+      );
+
+  gpr2' =
+    {
+      "14" = gpr2_24_2_next;
+      "15" = gpr2_25;
+      "16" = gpr2;
+    }
+    ."${gnat_version}" or null;
+  gnatcoll-core' = if gnat_version == "15" then gnatcoll-core_25 else gnatcoll-core;
 
   # TODO:
   # Build why3 (github.com/AdaCore/why3) as separate package and not as submodule.
@@ -43,13 +119,6 @@ let
     };
 
   spark2014 = {
-    "12" = {
-      src = fetchSpark2014 {
-        rev = "ab34e07080a769b63beacc141707b5885c49d375"; # branch fsf-12
-        hash = "sha256-7pe3eWitpxmqzjW6qEIEuN0qr2IR+kJ7Ssc9pTBcCD8=";
-      };
-      commit_date = "2022-05-25";
-    };
     "13" = {
       src = fetchSpark2014 {
         rev = "12db22e854defa9d1c993ef904af1e72330a68ca"; # branch fsf-13
@@ -80,7 +149,7 @@ let
     };
     "15" = {
       src = fetchSpark2014 {
-        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91";
+        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91"; # branch fsf-15
         hash = "sha256-KjAWMgMT3Tp/s/DQ20ZZajty9Zrv8aPFocwgv5LkjSw=";
       };
       patches = [
@@ -92,6 +161,20 @@ let
       ];
       commit_date = "2025-06-10";
     };
+    "16" = {
+      src = fetchSpark2014 {
+        rev = "42554fc241fcd1fdf08d3a2feccb3f86912acbc0"; # branch fsf-16
+        hash = "sha256-3dkEVrgBu5ks4O/08DEaVfbeQ9qaDo2DJA9mH1XnI+0=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-16 branch
+        ./0001-fix-install-fsf-16.patch
+
+        # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
+        ./0002-mute-aarch64-warnings.patch
+      ];
+      commit_date = "2026-01-05";
+    };
   };
 
   thisSpark =
@@ -101,7 +184,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "gnatprove";
-  version = "fsf-${gnat_version}_${thisSpark.commit_date}";
+  version = "${gnat_version}-fsf-${thisSpark.commit_date}";
 
   src = thisSpark.src;
 
@@ -120,7 +203,8 @@ stdenv.mkDerivation {
   ]);
 
   buildInputs = [
-    gnatcoll-core
+    gnatcoll-core'
+    gpr2'
   ]
   ++ (with ocamlPackages; [
     ocamlgraph
@@ -134,12 +218,10 @@ stdenv.mkDerivation {
     sexplib
     yojson_2
   ])
-  ++ (lib.optionals (gnat_version == "14") [
-    gpr2_24_2_next
-  ])
-  ++ (lib.optionals (gnat_version == "15") [
-    gpr2
-  ]);
+  ++ lib.optionals (lib.versionAtLeast gnat.version "16") [
+    sarif-ada
+    vss-extra
+  ];
 
   propagatedBuildInputs = [
     gprbuild
@@ -169,7 +251,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Software development technology specifically designed for engineering high-reliability applications";
     homepage = "https://github.com/AdaCore/spark2014";
-    maintainers = [ lib.maintainers.jiegec ];
+    maintainers = with lib.maintainers; [
+      jiegec
+      sempiternal-aurora
+    ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

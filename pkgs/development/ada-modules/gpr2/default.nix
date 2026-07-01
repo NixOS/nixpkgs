@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   gprbuild,
   which,
   gnat,
@@ -9,18 +9,21 @@
   gnatcoll-core,
   gnatcoll-iconv,
   gnatcoll-gmp,
+  fetchpatch2,
   enableShared ? !stdenv.hostPlatform.isStatic,
   # kb database source, if null assume it is pregenerated
-  gpr2kbdir ? null,
+  gpr2kbdir ? "${gprbuild}/share/gprconfig",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpr2";
-  version = "25.0.0";
+  version = "26.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/AdaCore/gpr/releases/download/v${version}/gpr2-with-gprconfig_kb-${lib.versions.majorMinor version}.tgz";
-    sha512 = "70fe0fcf541f6d3d90a34cab1638bbc0283dcd765c000406e0cfb73bae1817b30ddfe73f3672247a97c6b6bfc41900bc96a4440ca0c660f9c2f7b9d3cc8f8dcf";
+  src = fetchFromGitHub {
+    owner = "AdaCore";
+    repo = "gpr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HoD0TuhOinPGYB7gnLtJ0Zonz4RK4HA3IoOFe5NxfUE=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +40,20 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (gpr2kbdir != null) [
     "GPR2KBDIR=${gpr2kbdir}"
+  ];
+
+  patches = [
+    # gpr2-log.ads:140:09: error: completion of nonlimited type cannot be limited
+    # gpr2-log.ads:140:09: error: component "Ref" of type "Reference_Type" has limited type
+    (fetchpatch2 {
+      url = "https://github.com/AdaCore/gpr/commit/43bb629645c3f558bbba5e3cf4b5902dddae3a6a.patch?full_index=1";
+      hash = "sha256-EeqlHLoQEQdEnbre38UHxBgsfSUNksXnU3oOtBKw5Ek=";
+    })
+    # gpr2-tree_internal.adb:1926:18: error: actual for aliased formal "Container" has wrong accessibility in return (RM 6.4.1(6.4))
+    (fetchpatch2 {
+      url = "https://github.com/AdaCore/gpr/commit/12c649aa4d4c4e334b8271ac619500532aaeb21f.patch?full_index=1";
+      hash = "sha256-jp8VZGgyiVeJZTpdeAnHf2VrCc58/MMYfyjiOSaMx6w=";
+    })
   ];
 
   configurePhase = ''
@@ -61,12 +78,13 @@ stdenv.mkDerivation rec {
     description = "Framework for analyzing the GNAT Project (GPR) files";
     homepage = "https://github.com/AdaCore/gpr";
     license = with lib.licenses; [
-      asl20
+      llvm-exception
       gpl3Only
     ];
-    maintainers = with lib.maintainers; [ heijligen ];
+    maintainers = with lib.maintainers; [
+      heijligen
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.all;
-    # TODO(@sternenseemann): investigate failure with gnat 13
-    broken = lib.versionOlder gnat.version "14";
   };
-}
+})

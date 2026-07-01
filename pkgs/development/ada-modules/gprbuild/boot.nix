@@ -8,28 +8,15 @@
   xmlada, # for src
 }:
 
-let
-  version = "25.0.0";
-
-  gprConfigKbSrc = fetchFromGitHub {
-    name = "gprconfig-kb-${version}-src";
-    owner = "AdaCore";
-    repo = "gprconfig_kb";
-    rev = "v${version}";
-    sha256 = "09x1njq0i0z7fbwg0mg39r5ghy7369avbqvdycfj67lpmw17gb1r";
-  };
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gprbuild-boot";
-  inherit version;
+  version = "26.0.0";
 
   src = fetchFromGitHub {
-    name = "gprbuild-${version}";
     owner = "AdaCore";
     repo = "gprbuild";
-    rev = "v${version}";
-    sha256 = "1mqsmc0q5bzg8223ls18kbvaz6mhzjz7ik8d3sqhhn24c0j6wjaw";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j9UQw275cfCkYdmDyc4g2LuFSrqXmWGV66AaykctKSA=";
   };
 
   nativeBuildInputs = [
@@ -37,19 +24,21 @@ stdenv.mkDerivation {
     which
   ];
 
-  # Fix compilation with GNAT 16
-  patches = lib.optionals (lib.versionAtLeast gnat.version "16") [
-    # gpr-compilation-process.adb:44:29: error: operator for type "String" is not declared in "Env_Maps"
-    (fetchpatch2 {
-      url = "https://github.com/AdaCore/gprbuild/commit/6421e350274b3018a26bd058b1c90d033b053f71.patch?full_index=1";
-      hash = "sha256-u9bmr8abmthlyHoeqW5nS2CnaxXmbx6WVwhemxVtw+0=";
-    })
-    # gpr-compilation-protocol.adb:981:13: error: "time_t" is undefined
-    (fetchpatch2 {
-      url = "https://github.com/AdaCore/gprbuild/commit/6b6be939d69d534beb7faca17664d7a1ffa9c81e.patch?full_index=1";
-      hash = "sha256-YUjBvA4bBsrCB46o5WVHOZR6qOf2bkMg+A9qlystDbc=";
-    })
-  ];
+  patches =
+    lib.optionals (lib.versionOlder gnat.version "15") [
+      # gpr-compilation-protocol.adb:982:27: error: "To_Unix_Time_64" not declared in "Conversions"
+      (fetchpatch2 {
+        url = "https://github.com/AdaCore/gprbuild/commit/5c89819c8d84ca4a75663d3720185f5ed2d8fae6.patch?full_index=1";
+        hash = "sha256-sZ+XfU9DDzRBVY/QYDWZS1xuR9BF2pa+QvoHHi5/IY4=";
+      })
+    ]
+    ++ lib.optionals (lib.versionAtLeast gnat.version "16") [
+      # gpr-compilation-process.adb:44:29: error: operator for type "String" is not declared in "Env_Maps"
+      (fetchpatch2 {
+        url = "https://github.com/AdaCore/gprbuild/commit/6421e350274b3018a26bd058b1c90d033b053f71.patch?full_index=1";
+        hash = "sha256-u9bmr8abmthlyHoeqW5nS2CnaxXmbx6WVwhemxVtw+0=";
+      })
+    ];
 
   postPatch = ''
     # The Makefile uses gprbuild to build gprbuild which
@@ -84,7 +73,7 @@ stdenv.mkDerivation {
 
     ./bootstrap.sh \
       --with-xmlada=${xmlada.src} \
-      --with-kb=${gprConfigKbSrc} \
+      --with-kb=${finalAttrs.finalPackage.passthru.gprconfig_kb} \
       --prefix=$out
 
     # Install custom compiler description which can detect nixpkgs'
@@ -104,11 +93,23 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    gprconfig_kb = fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "gprconfig_kb";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-Ugzn03z93ZoRRkgq3XSeIsvCb2IKh2WWj7TWzqTos70=";
+    };
+  };
+
   meta = {
     description = "Multi-language extensible build tool";
     homepage = "https://github.com/AdaCore/gprbuild";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

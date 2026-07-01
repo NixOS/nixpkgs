@@ -14,6 +14,7 @@
   zlib,
   python3,
   ncurses,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 let
@@ -34,15 +35,15 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnatcoll-${component}";
-  version = "25.0.0";
+  version = "26.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-bindings";
-    rev = "v${version}";
-    sha256 = "0ayc7zvv8w90v0xzhrjk2x88zrsk62xxcm27ya9crlp6affn5idk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7XC/oA2/Z4ytmN3/36vUbYOKHQyinbM8AAINrgitJYY=";
   };
 
   nativeBuildInputs = [
@@ -59,22 +60,35 @@ stdenv.mkDerivation rec {
   ]
   ++ libsFor."${component}" or [ ];
 
-  # explicit flag for GPL acceptance because upstream
-  # allows a gcc runtime exception for all bindings
-  # except for readline (since it is GPL w/o exceptions)
-  buildFlags = lib.optionals (component == "readline") [
+  makeFlags = [
+    "--prefix"
+    (placeholder "out")
+  ]
+  ++ lib.optionals (!enableShared) [
+    "--library-types"
+    "static"
+  ];
+
+  buildFlags = [
+    "--target"
+    stdenv.hostPlatform.config
+  ]
+  ++ lib.optionals (component == "readline") [
+    # explicit flag for GPL acceptance because upstream
+    # allows a gcc runtime exception for all bindings
+    # except for readline (since it is GPL w/o exceptions)
     "--accept-gpl"
   ];
 
   buildPhase = ''
     runHook preBuild
-    ${python3.interpreter} ${component}/setup.py build --prefix $out $buildFlags
+    ${python3.interpreter} ${component}/setup.py build $makeFlags --jobs $NIX_BUILD_CORES $buildFlags
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    ${python3.interpreter} ${component}/setup.py install --prefix $out
+    ${python3.interpreter} ${component}/setup.py install $makeFlags
     runHook postInstall
   '';
 
@@ -83,6 +97,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdaCore/gnatcoll-bindings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      sempiternal-aurora
+    ];
   };
-}
+})
