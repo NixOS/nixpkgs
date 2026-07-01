@@ -17878,6 +17878,12 @@
     github = "merrkry";
     githubId = 124278440;
   };
+  mert-kurttutan = {
+    email = "mert-kurttutan@gmail.com";
+    name = "Mert Kurttutan";
+    github = "mert-kurttutan";
+    githubId = 88637659;
+  };
   messemar = {
     email = "martin.messer@cyberus-technology.de";
     name = "messemar";
@@ -27441,6 +27447,12 @@
     email = "fede_rico_94@hotmail.com";
     github = "tembleking";
     githubId = 2988780;
+  };
+  temidaradev = {
+    name = "temidaradev";
+    email = "temidaradev@proton.me";
+    github = "temidaradev";
+    githubId = 118509044;
   };
   tengkuizdihar = {
     name = "Tengku Izdihar";

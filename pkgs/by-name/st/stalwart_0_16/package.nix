@@ -112,6 +112,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
+  cargoBuildFlags = [
+    "-p"
+    "stalwart"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
   doCheck = true;
   nativeCheckInputs = [
     openssl
