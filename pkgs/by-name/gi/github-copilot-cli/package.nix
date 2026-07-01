@@ -10,20 +10,32 @@
   bash,
   nodejs,
   versionCheckHook,
-  nix-update-script,
 }:
-
+let
+  arch =
+    with stdenv.hostPlatform;
+    if isx86_64 then
+      "x64"
+    else if isAarch64 then
+      "arm64"
+    else
+      throw "Unsupported arch: ${stdenv.hostPlatform.system}";
+  platform = if stdenv.hostPlatform.isDarwin then "darwin-${arch}" else "linux-${arch}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.26";
+  version = "1.0.65";
 
-  # GitHub provide platform-specific SEA binaries as well as a "universal"
-  # package.  Use the universal package as it gives us a bit more flexibility
-  # about how it's configured.  In particular, the SEA binary has fixed ideas
-  # about how paths should be set up which don't reliably hold when using Nix.
   src = fetchurl {
-    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-zNO0clQRfgw6CX9K8NaJXsoOhhNjBfK7KAr0AoL7Oqo=";
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}-${platform}.tgz";
+    hash =
+      {
+        "x86_64-darwin" = "sha256-D72R1Vt/6eSg7INVYjPtC5W/6oPVzpVC1Tn4q831Wqs=";
+        "aarch64-darwin" = "sha256-Ly/Tay3iOMzsipaWLTTh3HKBYwvq7Nu3yQpYrC39UPI=";
+        "x86_64-linux" = "sha256-E8vo0HUyvw9U7cXbjeY7H9atxdMHHLMXcGgWEciuqK0=";
+        "aarch64-linux" = "sha256-3l260k1Uw79owiBP2bhNfGgqkE35JN7zPSb8OXIpeuI=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -67,15 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  # TODO are these errors still present after moving to using the "universal"
-  # package?
-  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - OpenSSL errors in sandbox
 
-  # Looks like GitHub use tags for both pre-release and actually released
-  # versions, but only the actual versions will be available as a GitHub
-  # release, so use the release endpoint rather than nix-update-script`'s
-  # default of looking for tags.
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
@@ -87,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       me-and
     ];
     mainProgram = "copilot";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
