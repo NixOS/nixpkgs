@@ -5,7 +5,7 @@
   cmake,
   python3Packages,
   qt6,
-  SDL2,
+  sdl3,
   fmt,
   toml11,
   libunarr,
@@ -13,14 +13,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.3";
+  version = "1.8.3-unstable-2026-05-17";
 
   src = fetchFromCodeberg {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-G/STYu8vOTqoGAGfpPelYV/m0Cth4xMMD1QJ6TbqAF4=";
+    # There are fixes for Wayland (as well as SDL3) after the last release
+    # that need to be included to get something that runs on Wayland
+    #rev = "v${finalAttrs.version}";
+    rev = "e09c3c1a753c6f85c86568a0b88ba79e230b6a07";
+    hash = "sha256-ud/Fau0VKKpTi6PEji/7hdhL1kbI6BD5KUdqzLqDkfU=";
   };
+
+  # As the environment variable can be overridden, until the Wayland + EGL
+  # issue is resolved "xcb" must be forced over "wayland". Upstream notes that
+  # this affects other emulators + Steam too.
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
+    "--set QT_QPA_PLATFORM xcb"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -30,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    SDL2
+    sdl3
     fmt
     toml11
     libunarr
