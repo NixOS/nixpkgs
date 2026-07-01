@@ -1,15 +1,13 @@
 {
   buildAstalModule,
   json-glib,
-  gdk-pixbuf,
   quarrel,
 }:
 buildAstalModule {
-  name = "notifd";
+  name = "brightness";
   buildInputs = [
     json-glib
-    gdk-pixbuf
     quarrel
   ];
-  meta.description = "Astal module for notification daemon";
+  meta.description = "Astal module for brightness devices";
 }
