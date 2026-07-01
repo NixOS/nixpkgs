@@ -66,25 +66,19 @@ stdenv'.mkDerivation (finalAttrs: {
     "xcrun"
   ];
 
-  version = "0.1.1-unstable-2019-11-20";
+  version = "0.2.1";
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "viraptor";
     repo = "xcbuild";
-    rev = "dbaee552d2f13640773eb1ad3c79c0d2aca7229c";
-    hash = "sha256-7mvSuRCWU/LlIBdmnC59F4SSzJPEcQhlmEK13PNe1xc=";
+    tag = finalAttrs.version;
+    hash = "sha256-xOcDaChNji8Z/WlzCcAqYQtzOk1BETr6MKs6uRf+/hg=";
   };
 
   patches = [
-    # Add missing header for `abort`
-    ./patches/includes.patch
     # Prevent xcrun from recursively invoking itself but still find native toolchain binaries
     ./patches/Use-system-toolchain-for-usr-bin.patch
     # Suppress warnings due to newer SDKs with unknown keys
     ./patches/Suppress-unknown-key-warnings.patch
-    # Don't pipe stdout / stderr of processes launched by xcrun
-    ./patches/fix-interactive-apps.patch
-    # Fallback to $HOME and correctly handle missing home directories
-    ./patches/fix-no-home-directory-crash.patch
   ];
 
   prePatch = ''
@@ -93,43 +87,26 @@ stdenv'.mkDerivation (finalAttrs: {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  postPatch = ''
-    substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
-      --replace-fail "/usr/bin/touch" "touch"
-    substituteInPlace Libraries/pbxbuild/Sources/Tool/MakeDirectoryResolver.cpp \
-      --replace-fail "/bin/mkdir" "mkdir"
-    substituteInPlace Libraries/pbxbuild/Sources/Tool/SymlinkResolver.cpp \
-      --replace-fail "/bin/ln" "ln"
-    substituteInPlace Libraries/pbxbuild/Sources/Tool/ScriptResolver.cpp \
-      --replace-fail "/bin/sh" "sh"
-  ''
-  + lib.optionalString (!stdenv'.hostPlatform.isDarwin) ''
-    # Fix build on gcc-13 due to missing includes
-    sed -e '1i #include <cstdint>' -i \
-      Libraries/libutil/Headers/libutil/Permissions.h \
-      Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
-      Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
+  postPatch =
+    lib.optionalString (!stdenv'.hostPlatform.isDarwin) ''
+      # Fix build on gcc-13 due to missing includes
+      sed -e '1i #include <cstdint>' -i \
+        Libraries/libutil/Headers/libutil/Permissions.h \
+        Libraries/pbxbuild/Headers/pbxbuild/Tool/AuxiliaryFile.h \
+        Libraries/pbxbuild/Headers/pbxbuild/Tool/Invocation.h
 
-    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-    sed 1i'#include <sys/sysmacros.h>' \
-      -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
-  ''
-  + lib.optionalString stdenv'.hostPlatform.isDarwin ''
-    # Apple Open Sourced LZFSE, but not libcompression, and it isn't
-    # part of an impure framework we can add
-    substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
-      --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
-  '';
+      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+      sed 1i'#include <sys/sysmacros.h>' \
+        -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+    ''
+    + lib.optionalString stdenv'.hostPlatform.isDarwin ''
+      # Apple Open Sourced LZFSE, but not libcompression, and it isn't
+      # part of an impure framework we can add
+      substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
+        --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
+    '';
 
   strictDeps = true;
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
-
-  # CMake 4 dropped support of versions lower than 3.5, and versions
-  # lower than 3.10 are deprecated.
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -168,7 +145,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Xcode-compatible build tool";
-    homepage = "https://github.com/facebook/xcbuild";
+    homepage = "https://github.com/viraptor/xcbuild";
     license = with lib.licenses; [
       bsd2
       bsd3
