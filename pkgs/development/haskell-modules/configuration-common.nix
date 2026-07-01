@@ -1564,6 +1564,21 @@ with haskellLib;
   yaya-quickcheck = doJailbreak super.yaya-quickcheck;
   yaya-unsafe = doJailbreak super.yaya-unsafe;
 
+  # https://github.com/ghcjs/jsaddle/pull/165
+  jsaddle-warp = appendPatch (fetchpatch {
+    name = "add-threaded-flag";
+    url = "https://github.com/ghcjs/jsaddle/commit/71942e99e33cec69bff307e6289d2b0e714f8279.patch";
+    relative = "jsaddle-warp";
+    sha256 = "sha256-mDztKB2rktARDA2gMM+zGyavnAEAlF1Ik23Ji52tGSE";
+  }) super.jsaddle-warp;
+
+  # https://github.com/fpco/http-reverse-proxy/pull/53/
+  http-reverse-proxy = appendPatch (fetchpatch {
+    name = "add-threaded-flag";
+    url = "https://github.com/fpco/http-reverse-proxy/commit/47f81a066b37115d5bd120583570d45345aab3e0.patch";
+    sha256 = "sha256-sLZTVlypqeI9i+3K/1IxAJFAywcxE4JM00giUGpJIKI";
+  }) super.http-reverse-proxy;
+
   # chell-quickcheck doesn't work with QuickCheck >= 2.15 with no known fix yet
   # https://github.com/typeclasses/chell/issues/5
   system-filepath = dontCheck super.system-filepath;
