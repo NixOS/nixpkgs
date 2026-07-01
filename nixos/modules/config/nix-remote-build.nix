@@ -242,6 +242,12 @@ in
           + "      "
           + (concatStringsSep "\n      " (map (m: m.hostName) (filter badMachine cfg.buildMachines)));
         }
+        {
+          assertion = cfg.buildMachines != [ ] -> config.lix.buildMachines.machines == { };
+          message = ''
+            mix-matching between lix and nix build machines is not supported.
+          '';
+        }
       ];
 
     # List of machines for distributed Nix builds
