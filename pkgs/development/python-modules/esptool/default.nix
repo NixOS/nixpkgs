@@ -142,6 +142,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       dotlambda
+      tmarkus
     ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "esptool";
