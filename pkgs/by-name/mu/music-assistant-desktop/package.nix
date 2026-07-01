@@ -30,13 +30,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-AzKUv0lEpxM4lVEmgDV89RCD78YKcGNj1FTBs8spdyI=";
+    hash = "sha256-t63DUejUyNnOD7gIPow/xsCo2TcmDaK3C5R+TkoBZo8=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-PevHpvDIlah0jQw/mZkDxQ5xY3t6KicGLlDYbtPco5A=";
+  cargoHash = "sha256-Z7iyPEEPvUhVLma4n20faoz47CK+PHAIB6epNDF5sUo=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
