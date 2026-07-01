@@ -1,11 +1,9 @@
 {
+  lib,
   jabcode,
   ...
 }@args:
 
-jabcode.override (
-  {
-    subproject = "writer";
-  }
-  // removeAttrs args [ "jabcode" ]
-)
+lib.customisation.overrideVariant jabcode [ "jabcode" ] {
+  subproject = "writer";
+} args
