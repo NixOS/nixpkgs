@@ -230,7 +230,7 @@
   };
 
   capnp = {
-    version = "1.5.0-unstable-2024-04-20";
+    version = "stable-unstable-2024-04-20";
     url = "github:amaanq/tree-sitter-capnp";
     rev = "7b0883c03e5edd34ef7bcf703194204299d7099f";
     hash = "sha256-WKrZuOMxmdGlvUI9y8JgwCNMdJ8MULucMhkmW8JCiXM=";
