@@ -403,10 +403,10 @@
   };
 
   d = {
-    version = "0.8.2-unstable-2025-06-29";
+    version = "0.9.1-unstable-2026-06-19";
     url = "github:gdamore/tree-sitter-d";
-    rev = "fb028c8f14f4188286c2eef143f105def6fbf24f";
-    hash = "sha256-Xi8out5j4L5pAArA9zmLA7aGhma++G+AaVLgFW+TEAo=";
+    rev = "64f27931b4e6fdd75af1102c79bacbca68a8dacc";
+    hash = "sha256-LNEFFoN9lA3fBgzBDrv3NdADS5UIQYHq851KePl6siE=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
