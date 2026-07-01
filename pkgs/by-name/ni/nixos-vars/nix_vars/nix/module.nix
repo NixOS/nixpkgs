@@ -15,7 +15,7 @@ let
     description:
     lib.mkOption {
       inherit description;
-      type = lib.types.nullOr (lib.types.functionTo lib.types.package);
+      type = lib.types.nullOr (lib.types.functionTo lib.types.pathInStore);
       example = pkgs: pkgs.writeShellScript "echo 'Hi!'";
       default = null;
     };

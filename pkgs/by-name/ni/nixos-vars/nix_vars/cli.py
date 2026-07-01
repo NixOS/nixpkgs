@@ -4,6 +4,7 @@ from pathlib import Path
 from .error import VarsError
 from .eval import evaluate_config
 from .generate import generate_vars
+from .gc import collect_garbage
 from .args import VarsArgs
 
 
@@ -71,7 +72,6 @@ def main() -> None:
 
 	args = parser.parse_args()
 	args = VarsArgs(**vars(args))
-	print(args)
 
 	try:
 		config = evaluate_config(args)
@@ -79,6 +79,8 @@ def main() -> None:
 			print(config)
 		elif args.command == "generate":
 			generate_vars(args, config)
+		elif args.command == "collect-garbage":
+			collect_garbage(args, config)
 		else:
 			raise VarsError(f"Command '{args.command}' is not implemented :(")
 	except VarsError as e:
