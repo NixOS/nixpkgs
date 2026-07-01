@@ -77,7 +77,19 @@ in
               '';
               type = lib.types.submodule {
                 freeformType = yaml.type;
-                options = { };
+                options = {
+                  vouch = {
+                    domains = lib.mkOption {
+                      default = [ ];
+                      type = lib.types.listOf lib.types.str;
+                      description = ''
+                        Explicit list of domains protected by this vouch-proxy instance. Each $domain in this list must serve the url `https://vouch.$domain`.
+
+                        If left empty, anyone who can authenticate with the configured provider will be accepted.
+                      '';
+                    };
+                  };
+                };
               };
             };
           };
@@ -119,18 +131,6 @@ in
               type = lib.types.str;
               description = "The location within every client's host where its corresponding vouch-proxy is served.";
             };
-            allowAllUsers = lib.mkOption {
-              default = cfg.settings.vouch.domains == null;
-              type = lib.types.bool;
-              description = "Accept anyone who can authenticate at the configured provider. This is the fallback if no granular configuration is defined in `services.vouch-proxy.settings.vouch.domains`.";
-            };
-            domains = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr (lib.types.listOf lib.types.str);
-              description = ''
-                List of domains protected by vouch-proxy. Each $domain in this list must serve the url `https://vouch.$domain`.
-              '';
-            };
           };
           oauth = {
             provider = lib.mkOption {
@@ -171,7 +171,7 @@ in
     };
     users.groups."${cfg.group}" = { };
 
-    systemd.services = lib.mapAttrs' (client: clientAttrs: {
+    systemd.services = lib.mapAttrs' (client: clientConfig: {
       name = "vouch-${client}";
       value = {
         description = "Vouch Proxy for ${client}.";
@@ -183,19 +183,20 @@ in
           DynamicUser = true;
           User = cfg.user;
           Group = cfg.group;
-          EnvironmentFile = clientAttrs.environmentFile;
+          EnvironmentFile = clientConfig.environmentFile;
           ExecStart = "${cfg.package}/bin/vouch-proxy -config ${
             yaml.generate "config.yml" (
               lib.recursiveUpdate (lib.recursiveUpdate cfg.settings {
                 vouch = {
-                  port = clientAttrs.port;
+                  port = clientConfig.port;
                 }
-                // (lib.optionalAttrs cfg.settings.vouch.allowAllUsers {
-                  cookie.domain = clientAttrs.domain;
+                // (lib.optionalAttrs (clientConfig.settings.vouch.domains == [ ]) {
+                  allowAllUsers = true;
+                  cookie.domain = clientConfig.domain;
                 });
                 oauth = {
                   client_id = "${client}";
-                  callback_url = "https://${clientAttrs.domain}${cfg.settings.vouch.document_root}/auth";
+                  callback_url = "https://${clientConfig.domain}${cfg.settings.vouch.document_root}/auth";
                 }
                 // (lib.optionalAttrs (cfg.kanidmDomain != null) {
                   auth_url = "https://${cfg.kanidmDomain}/ui/oauth2";
@@ -249,14 +250,14 @@ in
     }) cfg.clients;
 
     services.nginx.virtualHosts = lib.mkIf cfg.configureNginx (
-      lib.mapAttrs' (_: clientAttrs: {
-        name = clientAttrs.domain;
+      lib.mapAttrs' (_: clientConfig: {
+        name = clientConfig.domain;
         value = {
           extraConfig = ''
             error_page 401 = @error401;
           '';
           locations."@error401".return = ''
-            302 https://${clientAttrs.domain}${cfg.settings.vouch.document_root}/login?url=$scheme://$http_host$request_uri&vouch-failcount=$auth_resp_failcount&X-Vouch-Token=$auth_resp_jwt&error=$auth_resp_err
+            302 https://${clientConfig.domain}${cfg.settings.vouch.document_root}/login?url=$scheme://$http_host$request_uri&vouch-failcount=$auth_resp_failcount&X-Vouch-Token=$auth_resp_jwt&error=$auth_resp_err
           '';
 
           locations."/".extraConfig = ''
@@ -264,7 +265,7 @@ in
           '';
 
           locations."${cfg.settings.vouch.document_root}" = {
-            proxyPass = "http://[::1]:${builtins.toString clientAttrs.port}";
+            proxyPass = "http://[::1]:${builtins.toString clientConfig.port}";
             extraConfig = ''
               proxy_set_header X-Forwarded-Host $host;
               proxy_pass_request_body off;
