@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weblate-schemas";
-  version = "2026.4";
+  version = "2026.5";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate_schemas";
     tag = finalAttrs.version;
-    hash = "sha256-OPuhRsUmVte54UPNna76N5Kbg1Tl7p8OdKbE6VHWcvg=";
+    hash = "sha256-UaY2lGzgSXx4wcNKi0GRvAIITi5hf3T74wwccm9BZW4=";
   };
 
   build-system = [ setuptools ];
