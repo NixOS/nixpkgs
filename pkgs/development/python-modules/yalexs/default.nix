@@ -2,6 +2,7 @@
   lib,
   aiofiles,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   ciso8601,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "9.2.7";
+  version = "9.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-HZN3ot5z/JbWZaWLffyTWLneD1gG3tTdYLKevXYnJnw=";
+    hash = "sha256-EKqHPzNtEh2CplWjMPI8ZAMPnD2/3uEBNKoMyKBiGbU=";
   };
 
   build-system = [ poetry-core ];
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-cov-stub
