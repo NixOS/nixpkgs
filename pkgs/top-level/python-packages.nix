@@ -17186,6 +17186,8 @@ self: super: with self; {
 
   regex = callPackage ../development/python-modules/regex { };
 
+  regina = toPythonModule (pkgs.regina-normal.override { python3 = python; });
+
   regional = callPackage ../development/python-modules/regional { };
 
   regress = callPackage ../development/python-modules/regress { };
