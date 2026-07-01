@@ -3,6 +3,7 @@
   lib,
   bundlerEnv,
   fetchFromGitHub,
+  nixosTests,
   ruby_3_4,
   stdenv,
   tailwindcss_4,
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     cp -r {public,bin,app,config,db,lib,vendor} $out/
-    cp -r {Rakefile,config.ru} $out/
+    cp -r {Rakefile,config.ru,.sure-version} $out/
 
     ln -s /run/sure/tmp $out/tmp
     ln -s /run/sure/log $out/log
@@ -82,7 +83,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit rubyEnv;
     updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) sure;
+    };
   };
 
   meta = {

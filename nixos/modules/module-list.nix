@@ -1805,6 +1805,7 @@
   ./services/web-apps/strfry.nix
   ./services/web-apps/strichliste.nix
   ./services/web-apps/stump.nix
+  ./services/web-apps/sure.nix
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
   ./services/web-apps/tabbyapi.nix
