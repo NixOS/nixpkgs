@@ -11,7 +11,7 @@
   mesa-demos,
   netcat-gnu,
   p7zip,
-  python3,
+  python312,
   unzip,
   wget,
   wine,
@@ -70,7 +70,7 @@ let
       libGL
     ];
 
-  python = python3.withPackages (
+  python = python312.withPackages (
     ps: with ps; [
       wxpython
       setuptools
