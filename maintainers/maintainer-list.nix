@@ -20018,6 +20018,12 @@
     github = "niklaskorz";
     githubId = 590517;
   };
+  niklasravnsborg = {
+    name = "Niklas Ravnsborg";
+    github = "niklasravnsborg";
+    githubId = 6717303;
+    keys = [ { fingerprint = "0C90 DD8A 0EE9 93DF 8D58  7AF9 8360 E6C5 8AE8 F3ED"; } ];
+  };
   niklasthorild = {
     name = "Niklas Thorild";
     email = "niklas@thorild.se";
@@ -29023,6 +29029,11 @@
     name = "Matthew M";
     github = "UnsolvedCypher";
     githubId = 3170853;
+  };
+  untio11 = {
+    name = "Robin Kneepkens";
+    github = "untio11";
+    githubId = 14060658;
   };
   uralbash = {
     email = "root@uralbash.ru";
