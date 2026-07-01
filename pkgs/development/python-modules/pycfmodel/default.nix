@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycfmodel";
   version = "2.1.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fI6CeBJc1ry0vbXCxq7sfGiNDIrb3TiyimNacoOg8Lw=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Model for Cloud Formation scripts";
     homepage = "https://github.com/Skyscanner/pycfmodel";
-    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${src.tag}";
+    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
