@@ -15721,6 +15721,12 @@
     githubId = 54590679;
     name = "Liam Murphy";
   };
+  liamnwhite1 = {
+    email = "whiteln@ornl.gov";
+    github = "liamnwhite1";
+    githubId = 47892904;
+    name = "Liam White";
+  };
   Liamolucko = {
     name = "Liam Murphy";
     email = "liampm32@gmail.com";
@@ -20170,6 +20176,12 @@
     github = "Nmishin";
     githubId = 4242897;
     name = "Nikolai Mishin";
+  };
+  nmwsharp = {
+    email = "nmwsharp@gmail.com";
+    github = "nmwsharp";
+    githubId = 12726725;
+    name = "Nicholas Sharp";
   };
   noaccos = {
     name = "Francesco Noacco";
