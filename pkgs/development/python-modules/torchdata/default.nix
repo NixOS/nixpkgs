@@ -16,6 +16,7 @@
 
   # tests
   datasets,
+  expecttest,
   parameterized,
   pytest-xdist,
   pytestCheckHook,
@@ -52,6 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     datasets
+    expecttest
     parameterized
     pytest-xdist
     pytestCheckHook
