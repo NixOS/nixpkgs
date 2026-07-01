@@ -21,6 +21,12 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-9n610J62IPUXYQ/u+WjGTtowYFKQ45wE8M7UkLdEKVM=";
   };
 
+  # linol 0.11 vendors a jsonrpc library whose Json.t type included `Tuple and
+  # `Variant, constructors removed from Yojson.Safe.t in yojson 3.0.0.  They
+  # are never constructed anywhere in the compiled code, so removing them from
+  # the type definition is safe.
+  patches = [ ./linol-yojson3.patch ];
+
   propagatedBuildInputs = [
     logs
     ppx_yojson_conv_lib
