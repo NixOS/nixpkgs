@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   electron_42,
+  cacert,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
@@ -50,6 +51,11 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_build_from_source = "true";
+
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
