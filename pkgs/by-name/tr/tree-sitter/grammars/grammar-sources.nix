@@ -2241,9 +2241,9 @@
   };
 
   r = {
-    version = "1.2.0";
+    version = "1.3.0";
     url = "github:r-lib/tree-sitter-r";
-    hash = "sha256-SkCLFIUvJWTtg4m5NMfHbBKald470Kni2mhj2Oxc5ZU=";
+    hash = "sha256-KSmrEe1W7gAowfVz9wVqfgm7p1ekMiLLrjdPuMX0Rb8=";
     meta = {
       license = lib.licenses.mit;
     };
