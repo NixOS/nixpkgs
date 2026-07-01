@@ -2,21 +2,22 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   kicad,
   versioneer,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pcbnewtransition";
   version = "0.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname;
-    inherit version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-zLnvbu0G2mJKCHLCjbIKHBqSfdEyhR+1afkOFU++TfI=";
   };
 
-  propagatedBuildInputs = [ kicad ];
+  build-system = [ setuptools ];
+  dependencies = [ kicad ];
 
   nativeBuildInputs = [ versioneer ];
 
@@ -25,11 +26,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library that allows you to support both, KiCad 5, 6 and 7 in your plugins";
     homepage = "https://github.com/yaqwsx/pcbnewTransition";
-    changelog = "https://github.com/yaqwsx/pcbnewTransition/releases/tag/v${version}";
+    changelog = "https://github.com/yaqwsx/pcbnewTransition/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jfly
       matusf
     ];
   };
-}
+})
