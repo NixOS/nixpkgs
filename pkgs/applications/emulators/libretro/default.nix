@@ -134,6 +134,8 @@ lib.makeScope newScope (self: {
 
   parallel-n64 = self.callPackage ./cores/parallel-n64.nix { };
 
+  pd777 = self.callPackage ./cores/pd777.nix { };
+
   pcsx2 = self.callPackage ./cores/pcsx2.nix { };
 
   pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix { };
