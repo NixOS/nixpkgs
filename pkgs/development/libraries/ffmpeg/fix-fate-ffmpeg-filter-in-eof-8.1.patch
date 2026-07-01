@@ -1,0 +1,13 @@
+diff --git a/tests/fate/ffmpeg.mak b/tests/fate/ffmpeg.mak
+index cd00275638..d9458b7e1f 100644
+--- a/tests/fate/ffmpeg.mak
++++ b/tests/fate/ffmpeg.mak
+@@ -257,7 +257,7 @@ fate-ffmpeg-filter-in-eof: CMD = framecrc
+     -f rawvideo -s 352x288 -pix_fmt yuv420p -t 1 -i $(TARGET_PATH)/tests/data/vsynth1.yuv  \
+     -f rawvideo -s 352x288 -pix_fmt yuv420p -t 1 -i $(TARGET_PATH)/tests/data/vsynth1.yuv  \
+     -filter_complex "[0][1]concat" -c:v rawvideo
+-FATE_FFMPEG-$(call FRAMECRC, RAWVIDEO, RAWVIDEO, CONCAT_FILTER) += fate-ffmpeg-filter-in-eof
++FATE_SAMPLES_FFMPEG-$(call FRAMECRC, RAWVIDEO, RAWVIDEO, CONCAT_FILTER) += fate-ffmpeg-filter-in-eof
+ 
+ # Test termination on streamcopy with -t as an output option.
+ fate-ffmpeg-streamcopy-t: tests/data/vsynth1.yuv
