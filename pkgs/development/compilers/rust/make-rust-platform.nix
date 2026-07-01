@@ -64,6 +64,7 @@
             stdenv
             ;
         })
+        cargoAuditHook
         cargoBuildHook
         cargoCheckHook
         cargoInstallHook
