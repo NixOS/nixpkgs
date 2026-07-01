@@ -2250,8 +2250,6 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
-  html-proofer = callPackage ../tools/misc/html-proofer { };
-
   httpie = with python3Packages; toPythonApplication httpie;
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;

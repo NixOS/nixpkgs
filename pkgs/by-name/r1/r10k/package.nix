@@ -10,7 +10,7 @@
   testers,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "r10k";
   gemdir = ./.;
   exes = [ "r10k" ];
@@ -33,7 +33,7 @@ bundlerApp rec {
       package = r10k;
       version = (import ./gemset.nix).r10k.version;
     };
-    updateScript = bundlerUpdateScript pname;
+    updateScript = bundlerUpdateScript "r10k";
   };
 
   meta = {
