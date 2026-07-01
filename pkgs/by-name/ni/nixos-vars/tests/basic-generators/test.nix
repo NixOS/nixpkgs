@@ -15,6 +15,12 @@ pkgs.testers.runNixOSTest {
       "nix-command"
       "flakes"
     ];
+
+    system.extraDependencies = [
+      pkgs.python314
+      pkgs.cowsay
+      pkgs.coreutils
+    ];
   };
 
   testScript = ''
@@ -35,8 +41,8 @@ pkgs.testers.runNixOSTest {
     machine.succeed("nix-vars collect-garbage -f /etc/nixos/config2.nix ")
 
     # "derived" depends on "example"
-    t.assertIn("Successfully (re)run 1 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g derived"))
-    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g example"))
-    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g example -g derived"))
+    t.assertIn("Successfully (re)run 1 generator(s).", machine.succeed("nix-vars regenerate -f /etc/nixos/config2.nix -g derived"))
+    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars regenerate -f /etc/nixos/config2.nix -g example"))
+    t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars regenerate -f /etc/nixos/config2.nix -g example -g derived"))
   '';
 }
