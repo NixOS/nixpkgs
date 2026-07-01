@@ -127,7 +127,8 @@ let
       ++ lib.optional static "etc";
       setOutputFlags = false;
       separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin
+        !stdenv.hostPlatform.isNone
+        && !stdenv.hostPlatform.isDarwin
         && !stdenv.hostPlatform.isAndroid
         && !(stdenv.hostPlatform.useLLVM or false)
         && stdenv.cc.isGNU;
