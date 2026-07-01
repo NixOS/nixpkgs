@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromSourcehut,
+  installIconsHook,
   pkg-config,
   vulkan-headers,
   libxkbcommon,
@@ -27,7 +28,13 @@ buildGoModule (finalAttrs: {
   };
   vendorHash = "sha256-mgvfrNKvdjLa7O0oTSec8u3eHHU66ZDqpKzNeeyy2J0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    installIconsHook
+    pkg-config
+  ];
   buildInputs = [
     vulkan-headers
     libxkbcommon
@@ -41,14 +48,13 @@ buildGoModule (finalAttrs: {
   ];
 
   tags = [ "sqlite_math_functions" ];
-  ldflags = [ "-X git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${finalAttrs.version}" ];
+  ldflags = [
+    "-X"
+    "git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${finalAttrs.version}"
+  ];
 
   postInstall = ''
     install -Dm644 -t $out/share/applications assets/transito.desktop
-    for icon in assets/transito_*.png; do
-      name=$(basename $icon .png)
-      install -Dm644 $icon $out/share/icons/hicolor/''${name#transito_}/apps/transito.png
-    done
   '';
 
   doCheck = false; # no test

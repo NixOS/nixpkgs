@@ -131,6 +131,12 @@
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
+  "exinstall-icons-hook-examples-detection": [
+    "index.html#exinstall-icons-hook-examples-detection"
+  ],
+  "exinstall-icons-hook-examples-manual": [
+    "index.html#exinstall-icons-hook-examples-manual"
+  ],
   "friction-graphics": [
     "index.html#friction-graphics"
   ],
@@ -142,6 +148,24 @@
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "install-icons-hook": [
+    "index.html#install-icons-hook"
+  ],
+  "install-icons-hook-examples": [
+    "index.html#install-icons-hook-examples"
+  ],
+  "install-icons-hook-exclusive-variables": [
+    "index.html#install-icons-hook-exclusive-variables"
+  ],
+  "install-icons-hook-icons-to-install": [
+    "index.html#install-icons-hook-icons-to-install"
+  ],
+  "install-icons-hook-search-dir": [
+    "index.html#install-icons-hook-search-dir"
+  ],
+  "install-icons-hook-variables": [
+    "index.html#install-icons-hook-variables"
   ],
   "installfonts": [
     "index.html#installfonts"
