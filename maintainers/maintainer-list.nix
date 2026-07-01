@@ -9734,6 +9734,11 @@
     githubId = 4065244;
     name = "Gary Guo";
   };
+  gaupee = {
+    github = "ZeikoFr";
+    githubId = 54892453;
+    name = "Gwendal Aupee";
+  };
   gauravghodinde = {
     email = "gauravghodinde@gmail.com";
     github = "gauravghodinde";
