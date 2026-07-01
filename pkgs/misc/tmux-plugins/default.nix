@@ -171,7 +171,7 @@ in
   copy-toolkit = mkTmuxPlugin {
     pluginName = "copy-toolkit";
     rtpFilePath = "copytk.tmux";
-    version = "2021-12-20";
+    version = "1.1";
     src = fetchFromGitHub {
       owner = "CrispyConductor";
       repo = "tmux-copy-toolkit";
