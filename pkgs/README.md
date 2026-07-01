@@ -676,9 +676,50 @@ If you do need to create this sort of patch file, one way to do so is with git:
 
 ## Deprecating/removing packages
 
-There is currently no policy when to remove a package.
+Before removing a package, try to find a new maintainer or fix smaller issues first.
 
-Before removing a package, one should try to find a new maintainer or fix smaller issues first.
+If your package is widely used (by other packages, NixOS modules, or end-user configs), give people more warnings before you remove it.
+
+### Deprecation before removal
+
+Evaluation-time warnings are the only channel that reliably reaches every user.
+
+You should include removals/deprecations into the release notes.
+
+**When a replacement exists**, use `warnAlias` in `pkgs/top-level/aliases.nix` to use the replacement while emitting an eval-warning into the users terminal.
+Keep the alias for at least one full release cycle so that users on stable have time to migrate, then convert it to a `throw`.
+
+```nix
+{
+  # 26.05: warn and redirect
+  jbidwatcher = warnAlias "'jbidwatcher' has been renamed to 'jbidwatcher2'" jbidwatcher2; # Added 2026-05-01
+
+  # 26.11 (or later): convert to throw
+  jbidwatcher = throw "'jbidwatcher' has been removed. Use 'jbidwatcher2' instead."; # Converted to throw 2026-11-01
+}
+```
+
+**When no replacement exists**, consider adding a `lib.warn` to the package expression for one release before removing it, so users get a heads-up while their system still builds.
+
+**When immediate removal is necessary** (e.g., security vulnerability, package already fails to build), go directly to a `throw`.
+
+For bigger removals (an entire package set, a widely-used library, a language ecosystem), the **warning phase** matters even more.
+Post in the [Breaking changes thread on Discourse](https://discourse.nixos.org/t/breaking-changes-announcement-for-unstable/17574) *before* you merge the removal.
+
+### Writing good messages
+
+The `throw` message is the only thing users see when their evaluation breaks.
+We don't know how good everyone is at finding github PRs and issues. To show users we care about them.
+Tell them what happened and what to do about it:
+
+```nix
+# "[What happened]. [Optional migration instruction]"
+# ->
+throw
+  "'pkgs.foolers.foo' has been removed. Use 'foo' from the top-level package set instead (pkgs.foo)." # Added 2026-03-29
+```
+
+Always include a date comment (`# Added YYYY-MM-DD`) so that stale throws can be identified and pruned by `maintainers/scripts/remove-old-aliases.py`.
 
 ### Steps to remove a package from Nixpkgs
 
@@ -688,23 +729,22 @@ We use jbidwatcher as an example for a discontinued project here.
 1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
 1. Remove the actual package including its directory, e.g. `git rm -rf pkgs/applications/misc/jbidwatcher`
 1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
-1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`.
+1. Add an alias in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`.
    Package sets typically do not have aliases, so we can't add them there.)
 
-    For example in this case:
+    If the package has been moved or renamed, use `warnAlias` (see above).
+    If it has been removed entirely, use a `throw` with a good message:
 
     ```nix
     {
-      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+      jbidwatcher = throw "'jbidwatcher' has been removed because the project was discontinued and the ebay login it depends on no longer works."; # Added 2021-03-15
     }
     ```
 
-    The throw message should explain in short why the package was removed for users that still have it installed.
-
-1. Test if the changes introduced any issues by running `nix-env -qaP -f . --show-trace`.
+2. Test if the changes introduced any issues by running `nix-env -qaP -f . --show-trace`.
    It should show the list of packages without errors.
-1. Commit the changes.
-   Explain again why the package was removed.
+3. Commit the changes.
+   Explain why the package was removed.
    If it was declared discontinued upstream, add a link to the source.
 
     ```ShellSession
@@ -722,8 +762,8 @@ We use jbidwatcher as an example for a discontinued project here.
     https://web.archive.org/web/20210315205723/http://www.jbidwatcher.com/
     ```
 
-1. Push changes to your GitHub fork with `git push`
-1. Create a pull request against Nixpkgs.
+4. Push changes to your GitHub fork with `git push`
+5. Create a pull request against Nixpkgs.
    Mention the package maintainer.
 
 This is what the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
