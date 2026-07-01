@@ -246,7 +246,7 @@ let
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" { } ''
     mkdir -p $out/lib/wasm32-wasip1
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
+    for lib in ${pkgsCross.wasm32-wasip1.llvmPackages.libcxx}/lib/*; do
       ln -s $lib $out/lib/wasm32-wasip1
     done
   '';
@@ -426,8 +426,8 @@ buildStdenv.mkDerivation {
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
     # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    export WASM_CC=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}c++
   ''
   + lib.optionalString pgoSupport ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
