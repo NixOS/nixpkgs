@@ -28,6 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./nix-store-date.patch
+
+    # GCC 16's unused variable analysis is more advanced than previous
+    # versions, and detects that these variables are unused.
+    # https://github.com/wolfcw/libfaketime/pull/528
+    (fetchpatch {
+      name = "libfaketime-silence-unused-variable-warning.patch";
+      url = "https://github.com/wolfcw/libfaketime/commit/712733e5f01e45372f3160cfdbcfd91520cb093d.patch";
+      hash = "sha256-Gu13gFhgvkncj8aowAnSRbHbUCctF5sakbX4uRwdy+A=";
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
