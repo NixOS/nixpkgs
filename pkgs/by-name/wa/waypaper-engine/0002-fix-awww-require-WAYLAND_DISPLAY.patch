@@ -1,0 +1,25 @@
+From ca72f91c758570545667779dd27085be838c759c Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 7 Jun 2026 22:43:51 +0530
+Subject: [PATCH] fix(awww): require WAYLAND_DISPLAY
+
+---
+ daemon/internal/backend/awww/awww.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/daemon/internal/backend/awww/awww.go b/daemon/internal/backend/awww/awww.go
+index 943cbe0..e582a8b 100644
+--- a/daemon/internal/backend/awww/awww.go
++++ b/daemon/internal/backend/awww/awww.go
+@@ -75,7 +75,7 @@ func (a *Awww) Name() string { return "awww" }
+ 
+ func (a *Awww) IsAvailable() bool {
+ 	_, err := exec.LookPath(cliBinary)
+-	return err == nil
++	return err == nil && os.Getenv("WAYLAND_DISPLAY") != ""
+ }
+ 
+ func (a *Awww) Capabilities() backend.Capabilities {
+-- 
+2.54.0
+
