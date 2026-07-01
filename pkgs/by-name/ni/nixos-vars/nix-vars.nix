@@ -15,8 +15,4 @@ buildPythonApplication {
       ./pyproject.toml
     ];
   };
-
-  postInstall = ''
-    cp -r nix_vars/nix $out/lib/python3.13/site-packages/nix_vars
-  '';
 }
