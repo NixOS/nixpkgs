@@ -17949,6 +17949,12 @@
     github = "metalmatze";
     githubId = 872251;
   };
+  metehanyurtseven = {
+    email = "metehan.yurtseven@icloud.com";
+    name = "Metehan Yurtseven";
+    github = "MetehanYurtseven";
+    githubId = 11601179;
+  };
   mevatron = {
     email = "mevatron@gmail.com";
     name = "mevatron";
