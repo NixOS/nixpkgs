@@ -2,24 +2,31 @@
   lib,
   go,
   buildGoModule,
+  callPackage,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   versionCheckHook,
 }:
 
+let
+  elmUi = callPackage ./elm-ui.nix { };
+in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.31.1";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HkM2bpZ0vM/Uoj9cFEAKi56Cj5ixcx65dH1pJNkK6WQ=";
+    hash = "sha256-VXhu50KERPb4FDdcNDMftBqZVk2ipIphhejAE1wMSOk=";
   };
 
-  vendorHash = "sha256-X8BiQ9OSXj56mbjmb0AFaSsAWGwDhhMV/RztklxHYa4=";
+  postPatch = ''
+    cp -r ${elmUi}/. ui/app/dist
+  '';
+  vendorHash = "sha256-t5jQtccln3dfcHlnEOnLQHfjzfU9kY9Y7q+r4AigvBE=";
 
   subPackages = [
     "cmd/alertmanager"
@@ -48,7 +55,10 @@ buildGoModule (finalAttrs: {
     installShellCompletion amtool.zsh
   '';
 
-  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+  passthru = {
+    inherit elmUi;
+    tests = { inherit (nixosTests.prometheus) alertmanager; };
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook
