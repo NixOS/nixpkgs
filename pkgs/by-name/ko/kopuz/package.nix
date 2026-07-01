@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   cmake,
+  git,
   openssl,
   tailwindcss_4,
   dioxus-cli,
@@ -20,28 +21,30 @@
   xdotool,
   wayland,
   dbus,
+  libayatana-appindicator,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kopuz";
-  version = "0.6.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Kopuz-org";
     repo = "kopuz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HT76hfgTEkEVV1wn2r97PshoRJ08r4fTrExmQDuymg=";
+    hash = "sha256-d6wSefvx2KT1EyhLq2pn9MSDtW+AvDj7WVz27MJeTmg=";
   };
 
-  cargoHash = "sha256-lTGrwN2CGbmOgrjjbqrizNWPQoxWrEbDkcjhjMergoE=";
+  cargoHash = "sha256-fr65eE8wFWtW/PT5ZACGMcNCo/QNo9xf39LVBQMGLVk=";
 
   nativeBuildInputs = [
     pkg-config
     cmake
     tailwindcss_4
     dioxus-cli
+    git
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
@@ -60,12 +63,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xdotool
     wayland
     dbus
+    libayatana-appindicator
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    tailwindcss -i tailwind.css -o kopuz/assets/tailwind.css --minify
+    tailwindcss -i tailwind.css -o crates/kopuz/assets/tailwind.css --minify
 
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
             mkdir -p "$TMPDIR/fake-bin"
@@ -95,11 +99,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
           install -Dm644 data/com.temidaradev.kopuz.desktop \
             $out/share/applications/com.temidaradev.kopuz.desktop
           substituteInPlace $out/share/applications/com.temidaradev.kopuz.desktop \
+            --replace-fail "Exec=kopuz" "Exec=$out/bin/kopuz"
 
           install -Dm644 data/com.temidaradev.kopuz.metainfo.xml \
             $out/share/metainfo/com.temidaradev.kopuz.metainfo.xml
 
-          install -Dm644 kopuz/assets/logo.png \
+          install -Dm644 crates/kopuz/assets/logo.png \
             $out/share/icons/hicolor/256x256/apps/com.temidaradev.kopuz.png
         ''
       else
@@ -119,6 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gappsWrapperArgs+=(
       --chdir $out/bin
       --prefix PATH : ${lib.makeBinPath [ yt-dlp ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libayatana-appindicator ]}
     )
   '';
 
