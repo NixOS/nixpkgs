@@ -86,6 +86,7 @@ let
       maintainers = with lib.maintainers; [
         ryantm
         sfrijters
+        cobrasoftware
       ];
     };
 

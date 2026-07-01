@@ -5347,6 +5347,13 @@
     githubId = 180339;
     name = "Andrew Cobb";
   };
+  cobrasoftware = {
+    name = "Cobra";
+    email = "nix.sector025@passinbox.com";
+    github = "CobraSoftware";
+    githubId = 169102765;
+
+  };
   coca = {
     github = "Coca162";
     githubId = 62479942;
