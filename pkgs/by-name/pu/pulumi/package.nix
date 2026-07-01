@@ -17,18 +17,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.192.0";
+  version = "3.229.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rcDXC+xlUa67afuXvmEv8UNsYWBvQQ0P4httdtdcrh4=";
+    hash = "sha256-KV6DqegNLgRKp+ytiomznv99zcHOF+x6WS+M55gt+aU=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-BaFw8EnPd2GPA/p9wm8XpVy/iE8gqbteRnMQC8Z4NHQ=";
+  vendorHash = "sha256-N8ly2IO+exihaqhljzNx8LbLXkI9lBmjVCzH8bLacCk=";
 
   sourceRoot = "${finalAttrs.src.name}/pkg";
 
@@ -60,6 +60,10 @@ buildGoModule (finalAttrs: {
     # Skip tests that fail in Nix sandbox.
     "-skip=^${
       lib.concatStringsSep "$|^" [
+        # Fail in Nix sandbox due to missing terminal padding support.
+        "TestInfoXTerm"
+        "TestInfoVT102"
+
         # Concurrent map modification in test case.
         # TODO: remove after the fix is merged and released.
         # https://github.com/pulumi/pulumi/pull/19200
@@ -76,6 +80,7 @@ buildGoModule (finalAttrs: {
         "TestValidateRelativeDirectory"
         "TestRepoLookup"
         "TestDSConfigureGit"
+        "TestResolvePackage"
 
         # Tries to clone repo: github.com/pulumi/templates.git
         "TestGenerateOnlyProjectCheck"
@@ -92,6 +97,7 @@ buildGoModule (finalAttrs: {
 
         # Connects to https://api.pulumi.com/…
         "TestGetLatestPluginIncludedVersion"
+        "TestRunNewYesWithAILanguage"
 
         # Connects to https://pulumi-testing.vault.azure.net/…
         "TestAzureCloudManager"
@@ -108,6 +114,9 @@ buildGoModule (finalAttrs: {
         # Downloads pulumi-resource-random from Pulumi plugin registry.
         "TestPluginInstallCancellation"
 
+        # Tries to execute a plugin binary.
+        "TestPluginRunCommand"
+
         # Requires language-specific tooling and/or Internet access.
         "TestGenerateProgram"
         "TestGenerateProgramVersionSelection"
@@ -117,6 +126,9 @@ buildGoModule (finalAttrs: {
         "TestGeneratePackageTwo"
         "TestParseAndRenderDocs"
         "TestImportResourceRef"
+
+        # Fetches remote asset from raw.githubusercontent.com.
+        "TestL2ResourceAssetArchive"
       ]
     }$"
   ];
