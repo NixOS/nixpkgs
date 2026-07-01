@@ -6660,6 +6660,17 @@ with pkgs;
 
   reposilitePlugins = recurseIntoAttrs (callPackage ../by-name/re/reposilite/plugins.nix { });
 
+  rocksdb_10_10 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "10.10.1";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
+    };
+  };
+
   rocksdb_9_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "9.10.0";
@@ -6671,17 +6682,6 @@ with pkgs;
     };
   };
 
-  rocksdb_8_11 = rocksdb.overrideAttrs rec {
-    pname = "rocksdb";
-    version = "8.11.4";
-    src = fetchFromGitHub {
-      owner = "facebook";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
-    };
-  };
-
   rocksdb_8_3 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.3.2";
@@ -6690,28 +6690,6 @@ with pkgs;
       repo = pname;
       rev = "v${version}";
       hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
-    };
-  };
-
-  rocksdb_7_10 = rocksdb.overrideAttrs rec {
-    pname = "rocksdb";
-    version = "7.10.2";
-    src = fetchFromGitHub {
-      owner = "facebook";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
-    };
-  };
-
-  rocksdb_6_23 = rocksdb.overrideAttrs rec {
-    pname = "rocksdb";
-    version = "6.23.3";
-    src = fetchFromGitHub {
-      owner = "facebook";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
     };
   };
 

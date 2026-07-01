@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  rocksdb,
+  rocksdb_10_10,
   testers,
   protobuf,
   backend ? "rocksdb",
@@ -57,8 +57,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     PROTOC_INCLUDE = "${protobuf}/include";
   }
   // lib.optionalAttrs hasRocksDB {
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
   };
 
   nativeBuildInputs = [

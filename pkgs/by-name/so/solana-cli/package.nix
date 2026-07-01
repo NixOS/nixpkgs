@@ -14,7 +14,7 @@
   clang,
   libclang,
   libusb1,
-  rocksdb,
+  rocksdb_10_10,
   # Taken from https://github.com/anza-xyz/agave/blob/master/scripts/agave-build-lists.sh
   solanaPkgs ? [
     "solana"
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would
     # try to build RocksDB from source.
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
 
     # Require this on darwin otherwise the compiler starts rambling about missing
     # cmath functions
