@@ -27448,6 +27448,12 @@
     github = "tembleking";
     githubId = 2988780;
   };
+  temidaradev = {
+    name = "temidaradev";
+    email = "temidaradev@proton.me";
+    github = "temidaradev";
+    githubId = 118509044;
+  };
   tengkuizdihar = {
     name = "Tengku Izdihar";
     email = "tengkuizdihar@gmail.com";
