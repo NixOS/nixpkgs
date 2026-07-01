@@ -88,6 +88,15 @@ in
           });
       };
 
+      extraInstallCommands = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Additional shell commands inserted in the bootloader installer
+          script after generating menu entries.
+        '';
+      };
+
       populateCmd = mkOption {
         type = types.str;
         readOnly = true;
@@ -116,6 +125,9 @@ in
         + flip concatMapStrings cfg.mirroredBoots (args: ''
           ${builder} ${builderArgs} -d '${args.path}' -c "$@"
         '')
+        + ''
+          ${cfg.extraInstallCommands}
+        ''
       );
     in
     mkIf cfg.enable {
