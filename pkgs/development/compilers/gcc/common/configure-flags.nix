@@ -98,6 +98,10 @@ let
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
         ]
+        ++ lib.optionals (targetPlatform.libc == "mlibc") [
+          # mlibc depends on a hosted libstdc++ header when wchar_t is enabled
+          "--disable-wchar_t"
+        ]
         ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
           # See Note [Windows Exception Handling]
           "--enable-sjlj-exceptions"
@@ -123,7 +127,7 @@ let
           }"
           "--enable-nls"
         ]
-        ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
+        ++ lib.optionals (targetPlatform.libc == "uclibc") [
           # libsanitizer requires netrom/netrom.h which is not
           # available in uclibc.
           "--disable-libsanitizer"
@@ -270,6 +274,11 @@ let
       "--with-gnu-as"
       "--without-gnu-ld"
     ]
+    ++ lib.optional (lib.elem targetPlatform.libc [
+      # mlibc doesn't support libsanitizer yet. libsanitizer is fragile.
+      "mlibc"
+      "musl"
+    ]) "--disable-libsanitizer"
     ++
       lib.optional (targetPlatform.libc == "musl")
         # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
