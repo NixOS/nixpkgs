@@ -11,11 +11,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.42.0";
+  version = "0.49.0";
 
   src = fetchzip {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini-cli-bundle.zip";
-    hash = "sha256-Qkb39ehFabpRGxqpl3wCzoK3A2z5TMnKswngLz6kP/s=";
+    hash = "sha256-R7Lg9xCzyqAria0FyZmwzeLr1K0A/gw40c+rmOPwn5A=";
     stripRoot = false;
   };
 
@@ -33,23 +33,57 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   patchPhase = ''
     runHook prePatch
 
-    # chunk filenames contain unpredictable hashes, use glob to iterate
+    chunkCount=0
+    autoUpdatePatches=0
+    rgCandidatePathPatches=0
+    trustedPrefixPatches=0
+
+    # Chunk filenames contain unpredictable hashes, use glob to iterate
     for chunk in ./chunk-*.js; do
 
-      # disable auto-update
-      if grep -q 'enableAutoUpdate: {' "$chunk"; then
+      chunkCount=$((chunkCount + 1))
+
+      # Disable auto-update
+      if sed -n '/enableAutoUpdate: {/,/}/p' "$chunk" | grep -Fq 'default: true'; then
         sed -i '/enableAutoUpdate: {/,/}/ s/default: true/default: false/' "$chunk"
+        autoUpdatePatches=$((autoUpdatePatches + 1))
       fi
 
-      # use `ripgrep` from `nixpkgs`, more dependencies but prevent downloading incompatible binary on NixOS
-      # this workaround can be removed once the following upstream issue is resolved:
-      # https://github.com/google-gemini/gemini-cli/issues/11438
-      if grep -q 'await resolveExistingRgPath();' "$chunk"; then
-        substituteInPlace "$chunk" \
-          --replace-fail 'const existingPath = await resolveExistingRgPath();' 'const existingPath = "${lib.getExe ripgrep}";'
+      # Prefer the Nix ripgrep binary by prepending it to candidate paths
+      if grep -Fq 'const candidatePaths = [' "$chunk"; then
+        substituteInPlace "$chunk" --replace-fail \
+          'const candidatePaths = [' 'const candidatePaths = ["${lib.getExe ripgrep}", '
+        rgCandidatePathPatches=$((rgCandidatePathPatches + 1))
+      fi
+
+      # Trust the Nix store path by adding it to standard system prefixes
+      if grep -Fq 'const trustedPrefixes = [' "$chunk"; then
+        substituteInPlace "$chunk" --replace-fail \
+          'const trustedPrefixes = [' 'const trustedPrefixes = ["/nix/store", '
+        trustedPrefixPatches=$((trustedPrefixPatches + 1))
       fi
 
     done
+
+    if (( chunkCount == 0 )); then
+      echo "error: no chunk files found" >&2
+      exit 1
+    fi
+
+    if (( autoUpdatePatches == 0 )); then
+      echo "error: failed to patch auto-update default" >&2
+      exit 1
+    fi
+
+    if (( rgCandidatePathPatches == 0 )); then
+      echo "error: failed to patch ripgrep candidate paths" >&2
+      exit 1
+    fi
+
+    if (( trustedPrefixPatches == 0 )); then
+      echo "error: failed to patch trusted prefixes" >&2
+      exit 1
+    fi
 
     runHook postPatch
   '';
@@ -97,6 +131,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "gemini";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    problems.removal.message = "gemini-cli-bin is deprecated and will be removed in a future release. Use gemini-cli or antigravity-cli instead.";
     priority = 10;
   };
 })
