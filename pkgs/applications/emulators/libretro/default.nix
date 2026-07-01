@@ -183,6 +183,8 @@ lib.makeScope newScope (self: {
 
   tgbdual = self.callPackage ./cores/tgbdual.nix { };
 
+  theodore = self.callPackage ./cores/theodore.nix { };
+
   thepowdertoy = self.callPackage ./cores/thepowdertoy.nix { };
 
   tic80 = self.callPackage ./cores/tic80.nix { };
