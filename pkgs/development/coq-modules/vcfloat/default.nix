@@ -34,9 +34,9 @@ let
           out = "2.1.1";
         }
       ] null;
-    release."2.3".sha256 = "sha256-fV7w/kYTpcBxrHFzEvx+eydDHbGH05/seucrgSjKK3w=";
-    release."2.2".sha256 = "sha256-PyMm84ZYh+dOnl8Kk2wlYsQ+S/d1Hsp6uv2twTedEPg=";
-    release."2.1.1".sha256 = "sha256-bd/XSQhyFUAnSm2bhZEZBWB6l4/Ptlm9JrWu6w9BOpw=";
+    release."2.3".hash = "sha256-fV7w/kYTpcBxrHFzEvx+eydDHbGH05/seucrgSjKK3w=";
+    release."2.2".hash = "sha256-PyMm84ZYh+dOnl8Kk2wlYsQ+S/d1Hsp6uv2twTedEPg=";
+    release."2.1.1".hash = "sha256-bd/XSQhyFUAnSm2bhZEZBWB6l4/Ptlm9JrWu6w9BOpw=";
     releaseRev = v: "v${v}";
 
     propagatedBuildInputs = [

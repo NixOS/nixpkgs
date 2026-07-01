@@ -22,7 +22,7 @@ mkCoqDerivation {
 
   release."2022-02-15" = {
     rev = "7c26f9a017395c240845184dfed23489d29dbae5";
-    sha256 = "sha256-SNoQzGYw5tuabHUDwMAyUsAa/WNoYjmyR85b7a0hVl4=";
+    hash = "sha256-SNoQzGYw5tuabHUDwMAyUsAa/WNoYjmyR85b7a0hVl4=";
   };
 
   installPhase = ''
