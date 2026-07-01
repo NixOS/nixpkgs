@@ -46,6 +46,31 @@ Attempt to build the new grammar: `nix-build -A tree-sitter-grammars.tree-sitter
 This will fail due to the invalid hash.
 Review the downloaded source, then update the source definition with the printed source `hash`.
 
+## Extending Grammars
+
+Overlays may extend the grammar set without modifying nixpkgs by overriding `tree-sitter` with `extraGrammars`.
+Extra grammars use the expanded `pkgs.tree-sitter.grammars` form: each key is the final `tree-sitter-*` attribute name, and each value provides `language`, `version`, and `src`.
+When added through an overlay, extra grammars are also available through `pkgs.tree-sitter.builtGrammars`, `pkgs.tree-sitter-grammars`, and `pkgs.tree-sitter.withPlugins`.
+
+```nix
+final: prev: {
+  tree-sitter = prev.tree-sitter.override {
+    extraGrammars = {
+      tree-sitter-foolang = {
+        language = "foolang";
+        version = "0.42.0";
+        src = final.fetchFromGitHub {
+          owner = "example";
+          repo = "tree-sitter-foolang";
+          tag = "v0.42.0";
+          hash = "";
+        };
+      };
+    };
+  };
+}
+```
+
 ## Pinning Grammar Sources
 
 To pin to a specific ref, append this to the source `url` to override the default version tag.
