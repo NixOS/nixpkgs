@@ -13,7 +13,7 @@
   libipt,
   zlib,
   dejagnu,
-  sourceHighlight,
+  source-highlight,
   python3,
   elfutils,
   guile,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (
       mpfr
       python3
       readline
-      sourceHighlight
+      source-highlight
       zlib
     ]
     ++ lib.optionals stdenv.buildPlatform.isLinux [
