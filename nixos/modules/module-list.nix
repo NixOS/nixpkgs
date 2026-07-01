@@ -591,6 +591,7 @@
   ./services/desktops/linyaps.nix
   ./services/desktops/malcontent.nix
   ./services/desktops/neard.nix
+  ./services/desktops/oo7.nix
   ./services/desktops/pipewire/pipewire.nix
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/playerctld.nix
