@@ -287,7 +287,7 @@ in
           # it's relatively simple, however, we avoid the composefs dependency.
           # Since this script is not idempotent, it should not run when etc hasn't
           # changed.
-          if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f /run/current-system/etc)" ]]; then
+          if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f "''${oldSystemConfig:-/nonexistent}/etc" 2>/dev/null)" ]]; then
             echo "remounting /etc..."
 
             ${lib.optionalString config.system.etc.overlay.mutable ''

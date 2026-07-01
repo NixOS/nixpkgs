@@ -65,6 +65,16 @@ let
       # Ensure a consistent umask.
       umask 0022
 
+      # Capture the previous system before nixos-init updates
+      # /run/current-system, so snippets that need to compare against
+      # the old generation can use $oldSystemConfig.
+      oldSystemConfig="$(readlink -f /run/current-system 2>/dev/null || true)"
+      export oldSystemConfig
+
+      ${lib.optionalString (!onlyDry) ''
+        ${config.system.nixos-init.package}/bin/activate "$systemConfig"
+      ''}
+
       ${lib.concatStringsSep "\n" (
         lib.filter (v: v != "") (
           textClosureList withDrySnippets (attrNames (lib.filterAttrs (_: v: v.text != "") withDrySnippets))
@@ -72,12 +82,6 @@ let
       )}
     ''
     + optionalString (!onlyDry) ''
-      # Make this configuration the current configuration.
-      # The readlink is there to ensure that when $systemConfig = /system
-      # (which is a symlink to the store), /run/current-system is still
-      # used as a garbage collection root.
-      ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
-
       exit $_status
     '';
 
@@ -237,7 +241,18 @@ in
       visible = false;
       description = ''
         The {manpage}`env(1)` executable that is linked system-wide to
-        `/usr/bin/env`.
+        `/usr/bin/env`. When set to `null`, `/usr/bin/env` is removed
+        at activation.
+      '';
+    };
+
+    environment.createUsrBinEnv = mkOption {
+      default = true;
+      type = types.bool;
+      internal = true;
+      description = ''
+        Whether the system manages `/usr/bin/env` at activation.
+        Modules that provide `/usr/bin` themselves set this to `false`.
       '';
     };
 
@@ -284,38 +299,11 @@ in
       "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
     ];
 
-    system.activationScripts.usrbinenv =
-      if config.environment.usrbinenv != null then
-        ''
-          mkdir -p /usr/bin
-          chmod 0755 /usr/bin
-          ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
-          mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
-        ''
-      else
-        ''
-          rm -f /usr/bin/env
-          if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
-          if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
-        '';
+    # Handled by nixos-init activate, kept as an empty stub for deps compat.
+    system.activationScripts.usrbinenv = "";
 
-    system.activationScripts.specialfs = ''
-      specialMount() {
-        local device="$1"
-        local mountPoint="$2"
-        local options="$3"
-        local fsType="$4"
-
-        if mountpoint -q "$mountPoint"; then
-          local options="remount,$options"
-        else
-          mkdir -p "$mountPoint"
-          chmod 0755 "$mountPoint"
-        fi
-        mount -t "$fsType" -o "$options" "$device" "$mountPoint"
-      }
-      source ${config.system.build.earlyMountScript}
-    '';
+    # Handled by nixos-init activate, kept as an empty stub for deps compat.
+    system.activationScripts.specialfs = "";
 
     systemd.user = lib.mkIf config.system.activatable {
       services.nixos-activation = {

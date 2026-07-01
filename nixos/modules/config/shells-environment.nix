@@ -200,9 +200,20 @@ in
       visible = false;
       description = ''
         The shell executable that is linked system-wide to
-        `/bin/sh`. Please note that NixOS assumes all
-        over the place that shell to be Bash, so override the default
-        setting only if you know exactly what you're doing.
+        `/bin/sh`. When set to `null`, `/bin/sh` is removed at
+        activation. Please note that NixOS assumes all over the place
+        that shell to be Bash, so override the default setting only if
+        you know exactly what you're doing.
+      '';
+    };
+
+    environment.createBinSh = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      internal = true;
+      description = ''
+        Whether the system manages `/bin/sh` at activation. Modules
+        that provide `/bin` themselves set this to `false`.
       '';
     };
 
@@ -267,14 +278,8 @@ in
       ''}
     '';
 
-    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] ''
-      # Create the required /bin/sh symlink; otherwise lots of things
-      # (notably the system() function) won't work.
-      mkdir -p /bin
-      chmod 0755 /bin
-      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
-    '';
+    # Handled by nixos-init activate, kept as an empty stub for deps compat.
+    system.activationScripts.binsh = lib.stringAfter [ "stdio" ] "";
 
   };
 
