@@ -8,7 +8,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "officecli";
-  version = "1.0.116";
+  version = "1.0.125";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildDotnetModule (finalAttrs: {
     owner = "iOfficeAI";
     repo = "OfficeCLI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QDMBX5oX318WXItcKXsCR4IYwojlVq2kCTj1+wTQlyY=";
+    hash = "sha256-zp8P8j3gZxOXAJzPAAhfTJL9Ni45N/BZufuCbJQk/9U=";
   };
 
   projectFile = "src/officecli/officecli.csproj";
