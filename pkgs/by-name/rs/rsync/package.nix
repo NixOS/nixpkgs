@@ -48,6 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Linux can hard-link symlinks; configure defaults this check to "no" when
+  # cross-compiling (e.g. pkgsStatic) because it cannot run the probe.
+  # That leaves hardlink_symlinks false while itemize still reports identical
+  # --copy-dest/--link-dest symlinks with blank attribute flags, so
+  # testsuite/itemize.test fails (https://github.com/NixOS/nixpkgs/issues/537437).
+  preConfigure =
+    lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform != stdenv.buildPlatform)
+      ''
+        export rsync_cv_can_hardlink_symlink=yes
+      '';
+
   preBuild = ''
     patchShebangs ./runtests.py
   '';
