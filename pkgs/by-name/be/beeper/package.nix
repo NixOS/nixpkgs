@@ -44,12 +44,17 @@ appimageTools.wrapAppImage {
 
   src = appimageContents;
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  # add libunity because Electron loads it dynamically for app.setBadgeCount();
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    pkgs.libunity
+  ];
 
   extraInstallCommands = ''
     install -Dm 644 ${appimageContents}/beepertexts.png $out/share/icons/hicolor/512x512/apps/beepertexts.png
-    install -Dm 644 ${appimageContents}/beepertexts.desktop -t $out/share/applications/
-    substituteInPlace $out/share/applications/beepertexts.desktop --replace-fail "AppRun" "beeper"
+    # name desktop launcher BeeperTexts.desktop to match the ID used by launcher updates (DBUS signals sent using libunity)
+    install -Dm 644 ${appimageContents}/beepertexts.desktop $out/share/applications/BeeperTexts.desktop
+    substituteInPlace $out/share/applications/BeeperTexts.desktop --replace-fail "AppRun" "beeper"
 
     . ${makeWrapper}/nix-support/setup-hook
     wrapProgram $out/bin/beeper \
