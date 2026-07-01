@@ -1,5 +1,6 @@
 {
   lib,
+  buildEnv,
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -14,12 +15,18 @@
 
   cublasSupport ? false,
 
+  rocmSupport ? false,
+  rocmPackages ? { },
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
+
   vulkanSupport ? false,
   vulkan-loader,
   shaderc,
   metalSupport ? false,
   nix-update-script,
 }:
+
+assert !(cublasSupport && rocmSupport);
 
 let
   cudaMaxArch =
@@ -30,11 +37,60 @@ let
     in
     "${cudaMaxCapability}0";
 
-  libraryPathWrapperArgs = lib.optionalString (cublasSupport && stdenv.hostPlatform.isLinux) ''
-    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
-  '';
+  libraryPathWrapperArgs =
+    lib.optionals (cublasSupport && stdenv.hostPlatform.isLinux) [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ addDriverRunpath.driverLink ])
+    ]
+    ++ lib.optionals (rocmSupport && stdenv.hostPlatform.isLinux) [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${rocmPath}/lib"
+      "--set-default"
+      "HIP_PATH"
+      "${rocmPath}"
+      "--set-default"
+      "ROCM_PATH"
+      "${rocmPath}"
+    ];
 
-  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
+  rocmBuildInputs = with rocmPackages; [
+    clr
+    hipblas
+    rocblas
+  ];
+
+  rocmPath = buildEnv {
+    name = "rocm-path";
+    paths = rocmBuildInputs ++ [
+      rocmPackages.clang
+      rocmPackages.hipcc
+      rocmPackages.rocm-device-libs
+    ];
+  };
+
+  runtimePath = [ tk ];
+
+  wrapperArgs = lib.escapeShellArgs (
+    [
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath runtimePath)
+    ]
+    ++ libraryPathWrapperArgs
+  );
+
+  effectiveStdenv =
+    if cublasSupport then
+      cudaPackages.backendStdenv
+    else if rocmSupport then
+      rocmPackages.stdenv
+    else
+      stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
@@ -73,6 +129,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_cudart
     cudaPackages.cuda_cccl
   ]
+  ++ lib.optionals rocmSupport rocmBuildInputs
   ++ lib.optionals vulkanSupport [
     vulkan-loader
   ];
@@ -88,6 +145,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "CUBLASLD_FLAGS=-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs -lcuda -lcublas -lcudart -lcublasLt -lpthread -ldl -lrt"
     "NVCCFLAGS=--forward-unknown-to-host-compiler -use_fast_math -extended-lambda -Wno-deprecated-gpu-targets -DKCPP_LIMIT_CUDA_MAX_ARCH=${cudaMaxArch} ${cudaPackages.flags.gencodeString}"
   ]
+  ++ lib.optionals rocmSupport [
+    "LLAMA_HIPBLAS=1"
+    "ROCM_PATH=${rocmPath}"
+    "HCC=${rocmPackages.clang}/bin/clang"
+    "HCXX=${rocmPackages.clang}/bin/clang++"
+    "GPU_TARGETS=${builtins.concatStringsSep " " rocmGpuTargets}"
+  ]
   ++ lib.optionals vulkanSupport [ "LLAMA_VULKAN=1" ]
   ++ lib.optionals metalSupport [ "LLAMA_METAL=1" ];
 
@@ -97,6 +161,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "koboldcpp_noavx2"
   ]
   ++ lib.optionals cublasSupport [ "koboldcpp_cublas" ]
+  ++ lib.optionals rocmSupport [ "koboldcpp_hipblas" ]
   ++ lib.optionals vulkanSupport [
     "koboldcpp_vulkan"
     "koboldcpp_vulkan_failsafe"
@@ -127,8 +192,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
+      ${wrapperArgs}
   '';
+
+  requiredSystemFeatures = lib.optionals rocmSupport [ "big-parallel" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -143,6 +210,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       FlameFlag
     ];
     platforms = if metalSupport then lib.platforms.darwin else lib.platforms.unix;
-    badPlatforms = lib.optionals cublasSupport lib.platforms.darwin;
+    badPlatforms = lib.optionals (cublasSupport || rocmSupport) lib.platforms.darwin;
   };
 })
