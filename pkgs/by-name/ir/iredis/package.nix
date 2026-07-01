@@ -1,14 +1,16 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iredis";
   version = "1.16.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
@@ -22,11 +24,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "redis"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     configobj
     mistune
@@ -37,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     redis
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pexpect
     pytestCheckHook
@@ -61,6 +63,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "iredis" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
