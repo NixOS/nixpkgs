@@ -22,23 +22,29 @@ let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.3.0-20250808"; # from cmake/par2-turbo.cmake
-    hash = "sha256-ZP8AI5htmEcxQQtvgShcQ8qNoRL+jBR1BdKS6yyuB/E=";
+    rev = "v1.4.0-20260323"; # from cmake/par2-turbo.cmake
+    hash = "sha256-oeQY7GJkaEmxEqJALpjAPFpfq+YsNWv4VajotE25xCI=";
+  };
+  rapidyencSrc = fetchFromGitHub {
+    owner = "nzbgetcom";
+    repo = "rapidyenc";
+    rev = "v1.1.1-20260217"; # from cmake/rapidyenc.cmake
+    hash = "sha256-1K0LrB1AhacYS/54eCn+vQFAwP6IUVUrPCqFopojXDE=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "26.0";
+  version = "26.1";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IyaTe0bBQKnIuG3wq29KMZjKSiKu3Atd3GsNg8PGhRI=";
+    hash = "sha256-sZwUixSoqs0l2KOx6WnvLTCUGsSAO4QCTKqnhD58r70=";
   };
 
   patches = [
-    # remove git usage for fetching modified+vendored par2cmdline-turbo
+    # remove git usage for fetching modified+vendored par2cmdline-turbo and rapidyenc
     ./remove-git-usage.patch
   ];
 
@@ -60,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  preConfigure = ''
-    mkdir -p build/par2-turbo/src
-    cp -r ${par2TurboSrc} build/par2-turbo/src/par2-turbo
-    chmod -R u+w build/par2-turbo/src/par2-turbo
-  '';
-
   postPatch = ''
+    substituteInPlace cmake/par2-turbo.cmake \
+      --subst-var-by 'par2_turbo_src' '${par2TurboSrc}' \
+
+    substituteInPlace cmake/rapidyenc.cmake \
+      --subst-var-by 'rapidyenc_src' '${rapidyencSrc}'
+
     substituteInPlace daemon/util/Util.cpp \
       --replace-fail "std::string(\"uname \")" "std::string(\"${lib.getExe deterministic-uname} \")"
   '';

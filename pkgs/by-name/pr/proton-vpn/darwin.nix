@@ -8,12 +8,15 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-vpn";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchurl {
     url = "https://github.com/ProtonVPN/ios-mac-app/releases/download/mac%2F${finalAttrs.version}/ProtonVPN_mac_v${finalAttrs.version}.dmg";
-    hash = "sha256-F5NS7NNqxNJcl7gFaqWtWxBxBbV6Btp7cyyDpegEGLQ=";
+    hash = "sha256-lB44pIA5AxdcYQ/iccWcqJDOrQkVLRVl0vy1HuPPl8o=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   sourceRoot = ".";
 

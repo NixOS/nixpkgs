@@ -183,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/bestpractical/rt";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
   };

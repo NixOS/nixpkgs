@@ -6,7 +6,7 @@
 }:
 
 let
-  privateFrameworks = "/Library/Apple/System/Library/PrivateFrameworks";
+  privateFrameworks = "/System/Library/PrivateFrameworks";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ios-deploy";
@@ -23,9 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     awk '{ print "\""$0"\\n\""}' src/scripts/lldb.py >> src/ios-deploy/lldb.py.h
+    cp -RL ${privateFrameworks}/MobileDevice.framework MobileDevice.framework
     clang src/ios-deploy/ios-deploy.m \
       -framework Foundation \
-      -F${privateFrameworks} -framework MobileDevice \
+      -F. -framework MobileDevice \
       -o ios-deploy
 
     runHook postBuild

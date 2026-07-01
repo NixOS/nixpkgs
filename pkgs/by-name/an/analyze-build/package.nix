@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ RossSmyth ];
+    maintainers = [ ];
     platforms = lib.intersectLists python3.meta.platforms clang-unwrapped.meta.platforms;
   };
 })

@@ -51,10 +51,6 @@ let
     };
 in
 {
-  modules15 = common {
-    version = "0.15.1";
-    hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
-  };
   modules27 = common {
     version = "0.27.0";
     hash = "sha256-1hE+AKsC6Td+Al7LFN6bgPicU8dtWd3A8PP7VKZLvYM=";

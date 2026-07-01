@@ -25,6 +25,14 @@ toPythonModule (
       ./python-install.patch
     ];
 
+    postPatch = ''
+      ${orig.postPatch or ""}
+
+      # %init block lands in SWIG_mod_exec (returns int) under swig >= 4.4.
+      substituteInPlace bindings/python/sigrok/core/classes.i \
+        --replace-fail 'return nullptr;' 'return -1;'
+    '';
+
     nativeBuildInputs =
       orig.nativeBuildInputs or [ ]
       ++ [

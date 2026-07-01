@@ -1,4 +1,4 @@
-# Test that buildLakePackage works with nix-only deps (no lake-manifest.json).
+# Test that buildLakePackage works with nix-only deps (empty lake-manifest.json).
 # Builds a Lean proof of the weak minimax inequality using mathlib.
 {
   leanPackages,

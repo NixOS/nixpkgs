@@ -37,12 +37,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.15";
+  version = "5.16";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-sL1K9Dtr3jRUIn1LOY6ex6Db1RQ0acE3P8gkw8qrCQk=";
+    hash = "sha256-u5tsZ+u2o+Btn/T04EF6l77wFZ0mkSvpsOdaMpAf1JM=";
   };
 
   nativeBuildInputs = [
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "Gnucash";
         repo = "gnucash-docs";
         tag = finalAttrs.version;
-        hash = "sha256-EI/By0Ek3qDCmi6svX96Wg78UnmsDZzQLRSqErPUuxA=";
+        hash = "sha256-KC2POdwKma2CWpom3kN4X4MAItJFeWHl4SIV7sb+KCo=";
       };
 
       nativeBuildInputs = [ cmake ];

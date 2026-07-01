@@ -21,6 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-axWG5cJtNaoZl7cG+Zyo1k+eA8pXHDWFgHqpTmQNHlo=";
   };
 
+  # pyo3 0.23 has no python 3.14 support yet.
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook

@@ -33,6 +33,7 @@
   speexdsp,
   onetbb,
   webrtc-audio-processing,
+  x42-plugins,
   zam-plugins,
   zita-convolver,
   wrapGAppsHook3,
@@ -60,13 +61,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.2.1";
+  version = "8.2.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bGjIqts06ruwMQIW5hk4wlG7G/7GtgFVBgSr68tkIqY=";
+    hash = "sha256-VyfLoQPBZAXurS1/HxTLNioo/OT1LsQLZZXu9kDeP5Y=";
   };
 
   nativeBuildInputs = [
@@ -114,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     webrtc-audio-processing
     zita-convolver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    x42-plugins
   ];
 
   preFixup =
@@ -123,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
         zam-plugins # maximizer
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        x42-plugins # autotune
       ];
 
       ladspaPlugins = [

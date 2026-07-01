@@ -14,20 +14,21 @@
   cctools,
   nix-update-script,
   versionCheckHook,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pyL2QhvycaGBYgelsHK5Ces195Z1aY2XZyecsPXO/X4=";
+    hash = "sha256-/3NgMZ0B+B0BHPBi/vuiCS6xi70wgNKCZH0hTpkWi+U=";
   };
 
-  cargoHash = "sha256-gvG6+strULIewJgFdGg3fJ2mjUVjgi9/Q7pDredYuiU=";
+  cargoHash = "sha256-aZSnQmOwqo0OG3XXM5eups0cKNs80j/nAsZB5tnWUrY=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
@@ -52,6 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     VERGEN_GIT_DESCRIBE = finalAttrs.version;
@@ -74,23 +77,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preBuild =
     let
-      rustTarget = stdenv.hostPlatform.rust.rustcTarget;
-      rustTargetUnderscore = builtins.replaceStrings [ "-" ] [ "_" ] rustTarget;
+      buildTarget = stdenv.buildPlatform.rust.rustcTarget;
+      buildTargetUnderscore = lib.replaceString "-" "_" buildTarget;
     in
     ''
       make -C policies
       (cd "$npmRoot" && npm run build)
 
-      # Fix aws-lc-sys cross-compilation:
-      # The cc crate looks for "aarch64-linux-gnu-gcc")
-      # when CC is unset and TARGET != HOST, but Nix's cross-compiler is
-      # named "aarch64-unknown-linux-gnu-gcc" (with vendor).
-      # We set the target-specific CC_<target> variable so the cc crate
-      # and aws-lc-sys find the correct cross-compiler, then unset the
-      # generic CC so aws-lc-sys doesn't misassign it.
-      export CC_${rustTargetUnderscore}=$CC
-      export CXX_${rustTargetUnderscore}=$CXX
-      unset CC CXX
+      # Fix aws-lc-sys cross-compilation
+      export CC_${buildTargetUnderscore}=$CC_FOR_BUILD
+      export CXX_${buildTargetUnderscore}=$CXX_FOR_BUILD
     '';
 
   # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
@@ -117,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/element-hq/matrix-authentication-service";
     changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    teams = [ lib.teams.matrix ];
     mainProgram = "mas-cli";
   };
 })

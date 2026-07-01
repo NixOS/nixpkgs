@@ -1,35 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   jinja2,
   setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "junit2html";
-  version = "30.1.3";
+  version = "31.1.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1q6KpKdrZvp8XvxGCkoorlZDDgvGg/imTX8+NEOBbWs=";
+  src = fetchFromGitLab {
+    owner = "inorton";
+    repo = "junit2html";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TF+ifAFPn3PQwYQFruP++bWo6/6J8LEmDJYXDYSwcq0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ jinja2 ];
+  dependencies = [ jinja2 ];
 
-  # Tests are not shipped with PyPi and source is not tagged
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "junit2htmlreport" ];
 
   meta = {
     description = "Generate HTML reports from Junit results";
     homepage = "https://gitlab.com/inorton/junit2html";
+    changelog = "https://gitlab.com/inorton/junit2html/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "junit2html";
   };
-}
+})

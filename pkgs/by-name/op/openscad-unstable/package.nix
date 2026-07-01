@@ -72,52 +72,49 @@ clangStdenv.mkDerivation rec {
     bison
     cmake
     flex
-    libsForQt5.qt5.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     llvmPackages.bintools
     wrapGAppsHook3
     ninja
     pkg-config
   ];
-  buildInputs =
-    with libsForQt5;
-    with qt5;
-    [
-      catch2_3
-      clipper2
-      glm
-      onetbb
-      mimalloc
-      boost
-      cairo
-      cgal
-      double-conversion
-      eigen
-      fontconfig
-      freetype
-      glib
-      gmp
-      opencsg
-      harfbuzz
-      hidapi
-      lib3mf
-      libspnav
-      libzip
-      manifold
-      mpfr
-      qscintilla
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libxdmcp
-      libice
-      libsm
-      wayland
-      wayland-protocols
-      qtwayland
-      libGLU
-    ]
-    ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras;
+  buildInputs = [
+    catch2_3
+    clipper2
+    glm
+    onetbb
+    mimalloc
+    boost
+    cairo
+    cgal
+    double-conversion
+    eigen
+    fontconfig
+    freetype
+    glib
+    gmp
+    opencsg
+    harfbuzz
+    hidapi
+    lib3mf
+    libspnav
+    libzip
+    manifold
+    mpfr
+    libsForQt5.qscintilla
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libxdmcp
+    libice
+    libsm
+    wayland
+    wayland-protocols
+    libsForQt5.qtwayland
+    libGLU
+  ]
+  ++ lib.optional clangStdenv.hostPlatform.isDarwin libsForQt5.qtmacextras;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons

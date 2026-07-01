@@ -30,8 +30,8 @@ buildPythonPackage rec {
   patches = [
     # Fix time-of-day-dependent failure in series_time validation.
     (fetchpatch2 {
-      url = "https://github.com/ImagingDataCommons/highdicom/commit/e9e3f2514a74b0d4be736cff222c934ef66d67ff.patch";
-      hash = "sha256-48dJAimxXYG0FQouquY5TLXi+3HarS8yx9HoLXiFymM=";
+      url = "https://github.com/ImagingDataCommons/highdicom/commit/e9e3f2514a74b0d4be736cff222c934ef66d67ff.patch?full_index=1";
+      hash = "sha256-1h9xmcezxuvHw54t4kLahDB62d0XHzEyrmHmPf6NW7M=";
     })
   ];
 

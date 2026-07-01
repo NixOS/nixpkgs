@@ -11,6 +11,7 @@
   pyclibrary,
   setuptools,
   setuptools-scm,
+  cuda-pathfinder,
 
   # env
   symlinkJoin,
@@ -19,7 +20,6 @@
   numpy,
 
   # tests
-  cuda-pathfinder,
   pytest-benchmark,
   pytestCheckHook,
   util-linux,
@@ -54,6 +54,7 @@ let
       "13.0" = import ./13_0.nix args;
       "13.1" = import ./13_1.nix args;
       "13.2" = import ./13_2.nix args;
+      "13.3" = import ./13_3.nix args;
     }
     .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
 
@@ -114,6 +115,9 @@ buildPythonPackage (finalAttrs: {
     pyclibrary
     setuptools
     setuptools-scm
+  ]
+  ++ lib.optionals (cudaAtLeast "13.3") [
+    cuda-pathfinder
   ];
 
   env = {
@@ -197,7 +201,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Standard set of low-level interfaces, providing access to the CUDA host APIs from Python";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_bindings";
-    changelog = "https://nvidia.github.io/cuda-python/${finalAttrs.version}/release/${finalAttrs.version}-notes.html";
+    changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary Software
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

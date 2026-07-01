@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.13.2";
+  version = "3.15.2";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-2OLtf47fmNiEFOkjHiDCj99seiMy25PlmRDSFKu9WFI=";
+    hash = "sha256-rT+RruLMz/DTlYSOMv4D6ZCOVt36iqyx42v8ea4XSdM=";
   };
 
   # - HMCL prompts users to download prebuilt Terracotta binary for
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   terracottaBundleJava = fetchurl {
     name = "hmcl-terracotta-bundle-java-${finalAttrs.version}";
     url = "https://raw.githubusercontent.com/HMCL-dev/HMCL/v${finalAttrs.version}/${finalAttrs.terracottaBundleJavaPath}";
-    hash = "sha256-QXjo/NiYQyJfan15hnvJlBir9s9R6H+jHsr+K9M1oTw=";
+    hash = "sha256-1o/CUDeywtDlhAxqInk77aUwGCCYeZ84VMIyouN49uU=";
   };
   macOSProviderJava = fetchurl {
     name = "hmcl-macos-provider-java-${finalAttrs.version}";

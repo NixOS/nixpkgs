@@ -6,18 +6,20 @@
   stress,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  snakemake,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.16.3";
+  version = "9.23.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+eEzpRY6ZEKB3v1/AkHDg4bOcM2Y6pt4UMrdKF6soac=";
+    hash = "sha256-3u48cmG6+C4yU9k1v4kUxRVloYR3MlfhXdOoZ9XSB4I=";
   };
 
   postPatch = ''
@@ -33,6 +35,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = with python3Packages; [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "packaging"
+    "sqlmodel"
+  ];
   dependencies = with python3Packages; [
     appdirs
     conda-inject
@@ -53,19 +59,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
     reretry
     smart-open
-    snakemake-interface-executor-plugins
     snakemake-interface-common
+    snakemake-interface-executor-plugins
     snakemake-interface-logger-plugins
-    snakemake-interface-storage-plugins
     snakemake-interface-report-plugins
     snakemake-interface-scheduler-plugins
+    snakemake-interface-storage-plugins
+    sqlmodel
     stopit
     tabulate
+    tenacity
     throttler
     toposort
     wrapt
     yte
   ];
+
+  pythonImportsCheck = [ "snakemake" ];
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
@@ -81,11 +91,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
       requests-mock
       snakemake-executor-plugin-cluster-generic
       snakemake-storage-plugin-fs
+      snakemake-storage-plugin-http
+      snakemake-storage-plugin-s3
       stress
-      versionCheckHook
       polars
     ])
-    ++ [ writableTmpDirAsHomeHook ];
+    ++ [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   enabledTestPaths = [
     "tests/tests.py"
@@ -97,6 +111,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: expected file "onerror_module2.log" not produced
+    "test_module_onerror"
+
     # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
     "test_ancient"
     "test_conda_create_envs_only"
@@ -119,13 +136,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_issue1256"
     "test_issue2574"
 
-    # Require `snakemake-storage-plugin-fs` (circular dependency)
-    "test_default_storage"
-    "test_default_storage_local_job"
-    "test_deploy_sources"
-    "test_output_file_cache_storage"
-    "test_storage"
-
     # Tries to access internet
     "test_report_after_run"
 
@@ -135,10 +145,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Needs unshare
     "test_nodelocal"
-
-    # Requires snakemake-storage-plugin-http
-    "test_keep_local"
-    "test_retrieve"
 
     # Requires conda
     "test_jupyter_notebook"
@@ -179,7 +185,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_issue1331"
   ];
 
-  pythonImportsCheck = [ "snakemake" ];
+  # Circular dependencies
+  doCheck = false;
+  passthru.tests.pytest = snakemake.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     homepage = "https://snakemake.github.io";

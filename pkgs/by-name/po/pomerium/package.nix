@@ -16,14 +16,14 @@ let
     mapAttrsToList
     ;
 
-  version = "0.32.7";
+  version = "0.32.9";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-JPRyLQzQmC3EiIp+rOMx24JVneFUN7ovC2eYrKxf3ik=";
+    hash = "sha256-TGsbAAGt0nvARgMrYMMFEUA24I0z8aOeB9p2y5FhU3I=";
   };
-  vendorHash = "sha256-ST33a/YNJiE70ORWNxS9gFNfHcNGGiQhOpUwqgbEJiQ=";
+  vendorHash = "sha256-R5YSMHTaBKzHzrVm586QYeMqc6hILr8CLjp1QDupyGY=";
 
   getEnvoy = buildGoModule {
     pname = "pomerium-get-envoy";

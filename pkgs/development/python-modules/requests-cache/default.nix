@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests-cache";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t9SJ+enZHHYPRXaSrPop2hVOagE4oMnuXExO2DeNttc=";
+    hash = "sha256-qil5z54kkxu8QlPQ2P/7jo+VyfC+KhhiSUyAVmuLG/o=";
   };
 
   build-system = [ hatchling ];

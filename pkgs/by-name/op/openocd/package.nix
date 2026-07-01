@@ -82,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     mainProgram = "openocd";

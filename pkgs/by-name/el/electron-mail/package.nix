@@ -10,20 +10,20 @@
 
 let
   pname = "electron-mail";
-  version = "5.3.6";
+  version = "5.3.7";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-      hash = "sha256-3BWrVMlSUMMmuj6EAmqVtlHGCcminuVHkyPnc3TvgpM=";
+      hash = "sha256-VJbCQ/4yIuBE4NPDFUbp8t2G/QjUclphH/MghvamDVo=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
-      hash = "sha256-z7j5WrU1F+iX8UDLWS5sXLwHjobPKJZFKXTcHTOQ/Eo=";
+      hash = "sha256-ulB+dlp6ZBhcBJiLY4k+E/oEWy9XSIuIzd5rTzEq9+4=";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-x64.dmg";
-      hash = "sha256-7i0p7mBkzViXGdUrHXTrDDGdIy81p2YIei5Qsk8G5GU=";
+      hash = "sha256-LbAqUj34m8qSq8sQ1xgCQj9+MfJHoFDRMq+/waMKtzM=";
     };
   };
 

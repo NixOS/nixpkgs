@@ -6,7 +6,7 @@
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,17 +16,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zinvolt";
-  version = "0.4.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-zinvolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-psZ9/V/bBGGvKdKxuvncJzJOB1jolYTeNw2XOJmxfco=";
+    hash = "sha256-e4kbAEUxJzc2qOnXhtNMFUeDcsUc/G1Wo0LHwTQcgXs=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

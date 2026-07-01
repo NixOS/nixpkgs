@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "charls";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "team-charls";
     repo = "charls";
     tag = finalAttrs.version;
-    hash = "sha256-U21SdVRTPNI5BFGOyM3Y/ByKDP6ZI2g/BtAJYXH5Dv4=";
+    hash = "sha256-0NfTQfGw89SksrLRX81moj6uFrh1I67JMeT16Wcus1c=";
   };
 
   postPatch = ''

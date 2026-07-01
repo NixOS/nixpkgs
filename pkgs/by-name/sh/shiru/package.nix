@@ -5,7 +5,7 @@
   nodejs,
   fetchFromGitHub,
   python3,
-  electron_39,
+  electron_42,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
@@ -15,17 +15,17 @@
 }:
 let
   pnpm = pnpm_10;
-  electron = electron_39;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shiru";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "RockinChaos";
     repo = "shiru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LccI6Z4hhkmzWHt0CKum9giJMVGm3qM0ZKNvChUCYQ4=";
+    hash = "sha256-+qXbtRucviNvdZYqIh/CjYX0AGIIxAmw8V5j41BocGE=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       cd electron
     '';
     fetcherVersion = 3;
-    hash = "sha256-bTo6sEQuUghwm2I99WB7+akL4AOZ1ZN2ovaLWrd5MMg=";
+    hash = "sha256-y+CWr/YLmDjB9GDTFlsMni7uGAME3XOG3GB43KzZxOQ=";
   };
 
   buildPhase = ''
@@ -65,7 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./node_modules/.bin/electron-builder --dir \
       --c.electronDist=electron-dist \
-      --c.electronVersion=${electron.version}
+      --c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        --c.npmRebuild=false \
+        --c.mac.identity=null \
+        --c.mac.notarize=false \
+      ''}
 
     runHook postBuild
   '';
@@ -73,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/shiru"
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shiru"
 
@@ -82,7 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/share/lib/shiru/resources/app.asar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
       --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    cp -r dist/mac*/Shiru.app "$out/Applications/"
 
+    mkdir -p "$out/bin"
+    makeWrapper \
+      "$out/Applications/Shiru.app/Contents/MacOS/Shiru" \
+      "$out/bin/shiru" \
+      --set-default ELECTRON_IS_DEV 0
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -116,7 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       naomieow
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "shiru";
   };
 })

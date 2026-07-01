@@ -10,11 +10,11 @@
 
 buildOctavePackage rec {
   pname = "optim";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VUqOGLtxla6GH1BZwU8aVXhEJlwa3bW/vzq5iFUkeH4=";
+    sha256 = "sha256-Wfs3caLSojE0R1MsWaLgAKanu3pnfz74GD+6qrVJOhQ=";
   };
 
   buildInputs = [
@@ -34,9 +34,10 @@ buildOctavePackage rec {
       publicDomain
     ];
     # Modified BSD code seems removed
-    maintainers = with lib.maintainers; [ ravenjoad ];
+    maintainers = with lib.maintainers; [
+      ravenjoad
+      lnk3
+    ];
     description = "Non-linear optimization toolkit";
-    # Hasn't been updated since 2022, and fails to build with octave >= 10.1.0
-    broken = true;
   };
 }

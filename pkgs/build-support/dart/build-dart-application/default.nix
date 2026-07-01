@@ -71,8 +71,7 @@ lib.extendMkDerivation {
         if autoPubspecLock == null then
           throw "The pubspecLock argument is required. If import-from-derivation is allowed (it isn't in Nixpkgs), you can set autoPubspecLock to the path to a pubspec.lock instead."
         else
-          assert lib.assertMsg (builtins.pathExists autoPubspecLock)
-            "The pubspec.lock file could not be found!";
+          assert builtins.pathExists autoPubspecLock || throw "The pubspec.lock file could not be found!";
           lib.importJSON (
             runCommand "${lib.getName args}-pubspec-lock-json" {
               nativeBuildInputs = [ yq ];

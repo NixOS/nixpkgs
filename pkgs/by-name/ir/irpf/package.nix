@@ -17,7 +17,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2026-1.2";
+  version = "2026-1.5";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     fetchzip {
       url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-      hash = "sha256-Zw/QtmbINCV1VPz52KCxam+WFgkh8Kjz1v0e7oVeZCs=";
+      hash = "sha256-/y0XE+i+Sug/2TfqQuPQesYaDVn41v3hkikU/hmxxNE=";
     };
 
   nativeBuildInputs = [

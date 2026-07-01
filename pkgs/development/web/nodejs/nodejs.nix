@@ -10,6 +10,7 @@
   c-ares,
   gtest,
   hdrhistogram_c,
+  libffiReal,
   libuv,
   lief,
   llhttp,
@@ -22,22 +23,31 @@
   simdjson,
   simdutf,
   simdutf_6 ? (
-    simdutf.overrideAttrs {
-      version = "6.5.0";
+    simdutf.overrideAttrs (
+      {
+        version = "6.5.0";
 
-      src = fetchFromGitHub {
-        owner = "simdutf";
-        repo = "simdutf";
-        rev = "v6.5.0";
-        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-      };
-    }
+        src = fetchFromGitHub {
+          owner = "simdutf";
+          repo = "simdutf";
+          rev = "v6.5.0";
+          hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
+        };
+      }
+      // (lib.optionalAttrs stdenv.buildPlatform.isDarwin {
+        # Fix build on darwin
+        postPatch = ''
+          substituteInPlace tools/CMakeLists.txt --replace-fail '-Wl,--gc-sections' ""
+        '';
+      })
+    )
   ),
   sqlite,
+  temporal_capi,
   uvwasi,
   zlib,
   zstd,
-  icu,
+  icu78,
   bash,
   ninja,
   pkgconf,
@@ -128,6 +138,7 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
     if majorVersion == 24 then "24.14.0" else "25.4"
   );
@@ -135,12 +146,14 @@ let
   useSharedLief = lib.versionAtLeast version "25.6";
   useSharedMerve = lib.versionAtLeast version (if majorVersion == 24 then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedTemporal = majorVersion == "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
     inherit
       brotli
       libuv
+      nghttp2
       nghttp3
       ngtcp2
       openssl
@@ -149,16 +162,6 @@ let
       ;
     cares = c-ares;
     http-parser = llhttp;
-    nghttp2 = nghttp2.overrideAttrs {
-      patches = [
-        (fetchpatch2 {
-          url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
-          hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
-          excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
-          revert = true;
-        })
-      ];
-    };
   }
   // (lib.optionalAttrs useSharedAdaAndSimd {
     inherit
@@ -170,9 +173,15 @@ let
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
   })
+  // (lib.optionalAttrs useSharedTemporal {
+    inherit temporal_capi;
+  })
   // (lib.optionalAttrs useSharedGtestAndHistogram {
     inherit gtest;
     hdr-histogram = hdrhistogram_c;
+  })
+  // (lib.optionalAttrs useSharedFFI {
+    ffi = libffiReal;
   })
   // (lib.optionalAttrs useSharedLief {
     inherit lief;
@@ -265,7 +274,7 @@ let
       # that use bash wrappers, e.g. polaris-web.
       buildInputs = [
         bash
-        icu
+        icu78
       ]
       ++ builtins.attrValues sharedLibDeps;
 
@@ -319,6 +328,7 @@ let
         # perspective).
         "--emulator=${emulator}"
       ]
+      ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
@@ -396,6 +406,7 @@ let
           "tooltest"
           "cctest"
         ]
+        ++ lib.optional useSharedFFI "build-ffi-tests"
         ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
           # There are some test failures on macOS before v20 that are not worth the
           # time to debug for a version that would be eventually removed in less
@@ -507,11 +518,44 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
+            # Apple SDK update broke something related to those tests, so skipping them for now
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isDarwin) [
+              "test-worker-track-unmanaged-fds"
+              "test-esm-import-meta-main-eval"
+              "test-worker-debug"
+            ]
+            # These network/fetch/inspector tests fail on riscv64
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
+              "test-fetch"
+              "test-http2-allow-http1-upgrade-ws"
+              "test-http-proxy-fetch"
+              "test-http-set-global-proxy-from-env-fetch"
+              "test-http-set-global-proxy-from-env-fetch-default"
+              "test-http-set-global-proxy-from-env-fetch-empty"
+              "test-http-set-global-proxy-from-env-fetch-no-proxy"
+              "test-http-set-global-proxy-from-env-fetch-restore"
+              "test-http-set-global-proxy-from-env-override-fetch"
+              "test-inspector-invalid-protocol"
+              "test-inspector-network-content-type"
+              "test-inspector-network-fetch"
+              "test-inspector-network-websocket"
+              "test-report-exclude-network"
+              "test-tls-set-default-ca-certificates-append-fetch"
+              "test-tls-set-default-ca-certificates-reset-fetch"
+              "test-use-env-proxy-cli-http"
+              "test-wasm-web-api"
+            ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
+            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+            # OpenSSL reports different errors
+            # https://github.com/nodejs/node/pull/62629
+            # patch does not apply
+            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
+            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
@@ -678,7 +722,7 @@ let
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
-        knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+        knownVulnerabilities = lib.optional (lib.versionOlder version "22") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

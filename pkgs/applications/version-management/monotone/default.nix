@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free distributed version control system";
+    homepage = "https://github.com/7c6f434c/monotone-mirror";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;

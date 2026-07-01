@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/skorokithakis/catt";
     changelog = "https://github.com/skorokithakis/catt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.RossSmyth ];
+    maintainers = [ ];
     mainProgram = "catt";
   };
 })

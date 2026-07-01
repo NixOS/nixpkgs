@@ -765,7 +765,9 @@ let
     ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = with pkgs; [ zlib.dev ];
+    Rhdf5lib = with pkgs; [
+      cmake
+    ];
     Rhpc = with pkgs; [
       zlib
       bzip2.dev
@@ -821,7 +823,10 @@ let
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
-    RProtoBuf = [ pkgs.protobuf ];
+    RProtoBuf = with pkgs; [
+      protobuf
+      abseil-cpp.dev
+    ];
     rsamplr = with pkgs; [
       cargo
       rustc
@@ -862,6 +867,10 @@ let
       rustc
     ];
     arcpbf = with pkgs; [
+      cargo
+      rustc
+    ];
+    tinyimg = with pkgs; [
       cargo
       rustc
     ];
@@ -966,6 +975,7 @@ let
       fontconfig.dev
       freetype.dev
     ];
+    rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
     tesseract = with pkgs; [
@@ -1227,10 +1237,16 @@ let
       xz.dev
       zlib.dev
     ];
+    fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive ];
+    lpsymphony = with pkgs; [
+      symphony
+      cgl
+      clp
+    ];
     gdalcubes = with pkgs; [
       proj.dev
       gdal
@@ -1250,6 +1266,10 @@ let
     cartogramR = with pkgs; [
       fftw.dev
       pkg-config
+    ];
+    Rhdf5lib = with pkgs; [
+      curl
+      zlib.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
@@ -1541,7 +1561,13 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     markets = [ pkgs.gsl ];
-    rlas = [ pkgs.boost ];
+    rlas = with pkgs; [
+      boost
+      gdal
+      proj
+      sqlite
+      geos
+    ];
     bgx = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
@@ -1947,6 +1973,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    fixest = old.fixest.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1976,6 +2006,10 @@ let
     });
 
     ironseed = old.ironseed.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    ramr = old.ramr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
@@ -2438,6 +2472,10 @@ let
             ".onLoad <- function(libname, pkgname) {
              Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
       '';
+    });
+
+    RProtoBuf = old.RProtoBuf.overrideAttrs (attrs: {
+      configureFlags = [ "ac_cv_prog_cxx_cxx11=" ];
     });
 
     JavaGD = old.JavaGD.overrideAttrs (attrs: {
@@ -2948,7 +2986,10 @@ let
     );
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
-      preConfigure = ''
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail '--libs SYMPHONY' '--libs symphony' \
+          --replace-fail '--cflags SYMPHONY' '--cflags symphony'
         patchShebangs configure
       '';
     });
@@ -3108,7 +3149,13 @@ let
 
     Rhdf5lib =
       let
-        hdf5 = pkgs.hdf5_1_10;
+        hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
+          cmakeFlags = attrs.cmakeFlags ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
+          buildInputs = attrs.buildInputs ++ [ pkgs.curl.dev ];
+          postInstall = attrs.postInstall or "" + ''
+            cp src/libhdf5.settings $dev/lib
+          '';
+        });
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
         propagatedBuildInputs = attrs.propagatedBuildInputs ++ [

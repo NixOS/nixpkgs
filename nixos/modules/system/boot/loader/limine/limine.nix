@@ -29,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
@@ -202,6 +202,17 @@ in
     force = lib.mkEnableOption null // {
       description = ''
         Force installation even if the safety checks fail, use absolutely only if necessary!
+      '';
+    };
+
+    extraInstallCommands = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
       '';
     };
 
@@ -443,14 +454,25 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.replaceVarsWith {
-          src = ./limine-install.py;
-          isExecutable = true;
-          replacements = {
-            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-            configPath = limineInstallConfig;
-          };
-        };
+        build.installBootLoader =
+          let
+            install = pkgs.replaceVarsWith {
+              src = ./limine-install.py;
+              isExecutable = true;
+              replacements = {
+                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                configPath = limineInstallConfig;
+              };
+            };
+
+            final = pkgs.writeScript "limine-install.sh" ''
+              #!${pkgs.runtimeShell}
+              set -euo pipefail
+              ${install} "$@"
+              ${cfg.extraInstallCommands}
+            '';
+          in
+          final;
       };
     })
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable) {
@@ -503,7 +525,9 @@ in
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          for efi in "''${fwupd_efi[@]}"; do
+            ${lib.getExe cfg.secureBoot.sbctl} sign -o "/run/fwupd-efi/$(basename "$efi").signed" "$efi"
+          done
         '';
       };
 

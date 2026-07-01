@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thunderbird-mcp";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "TKasperczyk";
     repo = "thunderbird-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3o1NskuMc4vQzjaUYgoFL7JZ46Enr6qdPcnePjtul2s=";
+    hash = "sha256-wewuXZV6tjSJ3gjmUkIoRFWwGbqVUc7xxEt1kp9dWSM=";
   };
 
   postPatch = ''

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minimap2";
-  version = "2.30";
+  version = "2.31";
 
   src = fetchFromGitHub {
     repo = "minimap2";
     owner = "lh3";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TnJ/h04QdTdL56yyh+3Po19UAzrAkictu5Q6OiCQ2DY=";
+    sha256 = "sha256-RH9IvpmcDEnuFEXucORpzeWc+yJlAvW4r6RnaUT+//c=";
   };
 
   buildInputs = [ zlib ];

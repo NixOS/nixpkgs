@@ -2,11 +2,11 @@
 #!nix-shell --pure -i python3 -p "python3.withPackages (ps: with ps; [ requests ])"
 
 import json
-import re
+import os
 import requests
 import sys
 
-feature_versions = (8, 11, 17, 21, 25)
+all_feature_versions = (8, 11, 17, 21, 25, 26)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)
@@ -57,7 +57,30 @@ def generate_sources(assets, feature_version, out):
     return out
 
 
-out = {}
+# Parse optional version arguments; default to all known versions.
+# This is especially helpful when adding a new version without updating everything..
+if len(sys.argv) > 1:
+    try:
+        feature_versions = tuple(int(v) for v in sys.argv[1:])
+    except ValueError:
+        print(f"usage: {sys.argv[0]} [version ...]", file=sys.stderr)
+        print(f"  version: one or more feature version numbers, e.g. 21 25", file=sys.stderr)
+        sys.exit(1)
+    unknown = [v for v in feature_versions if v not in all_feature_versions]
+    if unknown:
+        print(f"warning: unknown feature version(s): {', '.join(str(v) for v in unknown)}", file=sys.stderr)
+else:
+    feature_versions = all_feature_versions
+
+sources_path = os.path.join(os.path.dirname(__file__), "sources.json")
+
+# Load existing sources so unrelated versions are preserved during partial updates.
+try:
+    with open(sources_path) as f:
+        out = json.load(f)
+except FileNotFoundError:
+    out = {}
+
 for feature_version in feature_versions:
     # Default user-agent is blocked by Azure WAF.
     headers = {'user-agent': 'nixpkgs-temurin-generate-sources/1.0.0'}
@@ -68,6 +91,6 @@ for feature_version in feature_versions:
         sys.exit(1)
     generate_sources(resp.json(), f"openjdk{feature_version}", out)
 
-with open("sources.json", "w") as f:
+with open(sources_path, "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
     f.write('\n')

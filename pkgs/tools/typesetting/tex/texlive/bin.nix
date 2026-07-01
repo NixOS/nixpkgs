@@ -7,6 +7,8 @@
   unzip,
   buildPackages,
   texlive,
+  gnum4,
+  jdk_headless,
   zlib,
   libiconv,
   libpng,
@@ -141,10 +143,7 @@ let
   common = {
     # initial TeX Live 2025 release
     # src = fetchurl {
-    #   urls = [
-    #     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #     "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
-    #   ];
+    #   url = "mirror://texhistoric/systems/texlive/${year}/texlive-${year}0308-source.tar.xz";
     #   hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     # };
 
@@ -367,6 +366,7 @@ rec {
         veprbl
         raskin
         jwiegley
+        xworld21
       ];
       platforms = lib.platforms.all;
     };
@@ -788,6 +788,60 @@ rec {
     preConfigure = "cd utils/xpdfopen";
 
     enableParallelBuilding = true;
+  };
+
+  # tex4ht.jar
+  # we build this as a TeX package, but under texlive.bin to avoid exposing it in texlivePackages
+  tex4htJar = stdenv.mkDerivation {
+    pname = "tex4ht-jar";
+    inherit (texlive.pkgs.tex4ht) meta version;
+
+    outputs = [ "tex" ];
+
+    src = texlive.pkgs.tex4ht.texsource + "/source/generic/tex4ht";
+
+    nativeBuildInputs = [
+      gnum4
+      jdk_headless
+      (texlive.schemes.texliveBasic.withPackages (ps: [
+        # override tex4ht-jar with an empty package to avoid a self dependency
+        { pname = "tex4ht-jar"; }
+        ps.protex
+        ps.tex4ht
+      ]))
+    ];
+
+    preHook = ''
+      export out="$tex"
+    '';
+
+    # the current Makefile is broken, so we build the artifact by hand
+    # we also use latex instead of htlatex as the latter is orders of magnitude slower
+    buildPhase = ''
+      make tex4ht-dir.tex
+
+      mkdir -p work.dir/src/tex4ht
+      for f in *-xtpipes.tex ; do
+        latex -output-directory=work.dir/src/tex4ht "\\RequirePackage{tex4ht}\\input $f"
+      done
+
+      mkdir -p work.dir/src/xtpipes
+      latex -output-directory=work.dir/src/xtpipes "\\RequirePackage{tex4ht}\\input xtpipes.tex"
+
+      mkdir -p work.dir/src/xtpipes/util
+      mv work.dir/src/xtpipes/xtpipes.java.java work.dir/src/xtpipes.java
+      mv work.dir/src/xtpipes/ScriptsManager*.java work.dir/src/xtpipes/util
+
+      mkdir -p xtpipes.dir/xtpipes/lib
+      cp work.dir/src/xtpipes/xtpipes*.{4xt,dtd} xtpipes.dir/xtpipes/lib
+
+      javac -d xtpipes.dir work.dir/src/{*,*/*,*/*/*}.java
+      jar cf tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar -C xtpipes.dir .
+    '';
+
+    installPhase = ''
+      install -D -t "$tex"/tex4ht/bin tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar
+    '';
   };
 
 } # un-indented

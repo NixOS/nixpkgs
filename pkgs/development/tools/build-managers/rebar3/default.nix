@@ -48,6 +48,13 @@ let
       for i in _checkouts/* ; do
           ln -s $(pwd)/$i $(pwd)/_build/default/lib/
       done
+    ''
+    # OTP 29 tests fail on warnings, fixed in https://github.com/erlang/rebar3/pull/2996
+    + lib.optionalString ((lib.versions.major erlang.version) == "29") ''
+      substituteInPlace rebar.config --replace-fail 'nowarn_deprecated_catch' 'nowarn_deprecated_catch,nowarn_export_var_subexpr'
+
+      substituteInPlace apps/rebar/test/rebar_xref_SUITE.erl \
+        --replace-fail 'xref_test, xref_ignore_test,' 'xref_test,'
     '';
 
     buildPhase = ''

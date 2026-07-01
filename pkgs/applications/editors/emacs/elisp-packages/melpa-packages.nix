@@ -773,7 +773,7 @@ let
           mozc = super.mozc.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace src/unix/emacs/mozc.el \
-                --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+                --replace '"mozc_emacs_helper"' '"${pkgs.mozc}/bin/mozc_emacs_helper"'
             '';
           });
 
@@ -1535,6 +1535,8 @@ let
           ob-chatgpt-shell = ignoreCompilationError super.ob-chatgpt-shell;
 
           org-change = ignoreCompilationError super.org-change; # elisp error
+
+          org-cite-overlay = ignoreCompilationError super.org-cite-overlay; # native-ice
 
           org-edit-latex = mkHome super.org-edit-latex;
 

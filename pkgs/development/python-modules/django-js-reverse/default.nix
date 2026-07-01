@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-js-reverse";
-  version = "0.10.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vintasoftware";
     repo = "django-js-reverse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0S1g8tLWaJVV2QGPeiBOevhz9f0ueINxA9HOcnXuyYg=";
+    hash = "sha256-XpHQXZuIRl6qBDmbFX/IhHxwrOiMiiiTIF5x3W13kGA=";
   };
 
   build-system = [ setuptools ];

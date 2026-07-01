@@ -3,7 +3,6 @@
   stdenv,
   appstream-glib,
   blueprint-compiler,
-  bubblewrap,
   cargo,
   dbus,
   desktop-file-utils,
@@ -15,39 +14,32 @@
   hicolor-icon-theme,
   lcms2,
   libadwaita,
+  libglycin,
   libseccomp,
   libxml2,
   meson,
   ninja,
   nix-update-script,
   pkg-config,
-  replaceVars,
   rustPlatform,
   rustc,
   sqlite,
   wrapGAppsHook4,
 }:
-
-let
-  glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-    bwrap = "${bubblewrap}/bin/bwrap";
-  };
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromCodeberg {
     owner = "edestcroix";
     repo = "Recordbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9rrVlD+ODl+U9bPzbXGLQBLkbnfAm4SmJHRcVife33A=";
+    hash = "sha256-HskhMZy8y61c/j/F5e5aM41AQ8t+TCUq/iY23SFB92o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-W60X69/fEq/X6AK1sbT6rb+SsF/oPzfUvrar0fihr88=";
+    hash = "sha256-xHukIMUG5himj1umKn+IKM7kJ29MH/pt/jPEHd2EeT0=";
   };
 
   strictDeps = true;
@@ -60,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # For `glib-compile-schemas`
     gtk4 # For `gtk-update-icon-cache`
     libxml2 # For `xmllint`
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -70,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
     dbus
     gtk4
     hicolor-icon-theme
@@ -79,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ (with gst_all_1; [
+    gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
@@ -91,22 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
-
-  # Workaround copied from https://github.com/NixOS/nixpkgs/blob/e39fe935fc7537bee0440935c12f5c847735a291/pkgs/by-name/lo/loupe/package.nix#L60-L74
-  preConfigure = ''
-    # Dirty approach to add patches after cargoSetupPostUnpackHook
-    # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycinPathsPatch}
-    popd
-  '';
-  preFixup = ''
-    # Needed for the glycin crate to find loaders.
-    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   checkPhase = ''
     runHook preCheck

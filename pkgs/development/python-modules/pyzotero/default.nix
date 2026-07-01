@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyzotero";
-  version = "1.11.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urschrei";
     repo = "pyzotero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8K9Lg9Ehl0QARU2tAidMyynorPIMGtxDXzshmbpb6So=";
+    hash = "sha256-5Ew5u6+a+8wv0scyQ4IOcZWCimEQLbe9OuKBIKrPoXc=";
   };
 
   postPatch = ''

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "functionalplus";
-  version = "0.2.27";
+  version = "0.2.28";
 
   src = fetchFromGitHub {
     owner = "Dobiasd";
     repo = "FunctionalPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LlWdzxfFkbfkb9wAmpb86Ah97pWlW3w7DdW6JPu1xdc=";
+    hash = "sha256-cXZGiiuxrsYic3PMLj4F7fTPfTsWugChrFqrzI6cLt4=";
   };
 
   nativeBuildInputs = [ cmake ];

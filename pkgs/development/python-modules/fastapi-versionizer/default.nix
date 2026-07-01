@@ -44,6 +44,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # openapi schema expectations drift with newer fastapi/pydantic
+    "tests/test_simple.py"
+    "tests/test_with_root_path.py"
+  ];
+
   meta = {
     changelog = "https://github.com/alexschimpf/fastapi-versionizer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "API versionizer for FastAPI web applications";

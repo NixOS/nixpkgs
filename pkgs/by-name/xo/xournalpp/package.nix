@@ -11,7 +11,6 @@
 
   adwaita-icon-theme,
   alsa-lib,
-  binutils,
   glib,
   gsettings-desktop-schemas,
   gtk3,
@@ -20,7 +19,6 @@
   libsndfile,
   libxml2,
   libzip,
-  pcre,
   poppler,
   portaudio,
   qpdf,
@@ -33,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RNGVUgpn1Wefc48x5E88AGk4rtXyu0RovZxaS2bqQ+c=";
+    hash = "sha256-JvB9Oh56ujg7L+q1wTuLsel9Wl2Fyoz9nnz0m/mGxAU=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libxml2
     libzip
-    pcre
     poppler
     portaudio
     qpdf

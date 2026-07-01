@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.53.0";
+  version = "0.61.1";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jK3/NDNQkeeCKP2iMIJMCq9lrDZ9ksiEnHhFmrz+gew=";
+    hash = "sha256-y5oMR5Vawf/1QUj3ACDdqAjKT+Q2gizRfKkal340EP8=";
   };
-  cargoHash = "sha256-OK2vlXYFdjMHqzVR6ZoRn7WEfAUVATGhk32JLoDED5c=";
+  cargoHash = "sha256-Oy/IqAK5ml1vu0eee+pF5pRjzk0Na/Fb04e1Mx0d924=";
 
   nativeBuildInputs = [
     pkg-config
@@ -80,6 +80,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # panics with "exact-path fallback must not recursively cover descendants"
       "capability_ext::tests::test_from_profile_allow_file_falls_back_to_exact_directory_when_present"
+
+      # nono-cli
+      # wants access to /var/folders
+      "sandbox_state::cap_file_validation_tests::test_acceptable_temp_roots_includes_var_folders_on_macos"
+      "sandbox_state::cap_file_validation_tests::test_validate_rejects_path_outside_temp"
+      # don't work inside of the /nix dir
+      # unsure why home is still under /nix with writableTmpDirAsHomeHook
+      "deprecated_override_deny_flag_emits_single_warning_on_stderr"
+      "deprecated_override_deny_flag_warning_is_emitted_once_for_multiple_uses"
+      "override_deny_alias_and_bypass_protection_merge_in_argv_order"
 
       # env_vars
       # don't work inside of the /nix dir

@@ -4,36 +4,40 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_11,
   pnpmConfigHook,
   python3,
-  electron_39,
+  electron_42,
   makeDesktopItem,
   makeBinaryWrapper,
   copyDesktopItems,
 }:
 
+let
+  electron = electron_42;
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.3";
+  version = "5.12.4";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRco2eyQrWf5jGvdWYn4mt8FD/xu1+FftQoB3wuF2Lw=";
+    hash = "sha256-0TQKQfjfA1Nn/xvtHF0t6i+whLkyu1kVwuZ62Z0AZgk=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-s/KllzT46L2o4SWS3z3Z7FDQD6FEEEAnPdM6tsfGRUo=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-D9Ge0Ao1fnVA1hk+K1ScZ3iCnl1+iqUtZSG5ACO2H2M=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10_29_2
+    pnpm
     pnpmConfigHook
     makeBinaryWrapper
     copyDesktopItems
@@ -43,10 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    npm_config_nodedir=${electron_39.headers} \
-      node --run pack -- \
-      -c.electronDist=${electron_39}/libexec/electron \
-      -c.electronVersion=${electron_39.version}
+    pnpm exec electron-vite build
+    npm_package_config_node_gyp_nodedir=${electron.headers} \
+      pnpm exec electron-builder --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -59,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
+    makeBinaryWrapper '${lib.getExe electron}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
       --inherit-argv0
 

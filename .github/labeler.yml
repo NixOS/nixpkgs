@@ -9,6 +9,7 @@
           - '^release-'
           - '^staging-\d'
           - '^staging-next-\d'
+          - '^staging-nixos-\d'
 
 # NOTE: bsd, darwin and cross-compilation labels are handled by ofborg
 "6.topic: agda":

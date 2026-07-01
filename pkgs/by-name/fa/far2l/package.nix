@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     tag = "v_${version}";
-    hash = "sha256-pqyAZtVeE3awejx1/glJgAQN6fjAe4YHJX/fLHlF1+Y=";
+    hash = "sha256-LP+agJrYxjH6vLAg6cJTU4/9jYGF9iaZzxA7hozDKNY=";
   };
 
   nativeBuildInputs = [
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ hypersw ];
+    maintainers = with lib.maintainers; [ smakarov ];
     platforms = lib.platforms.unix;
   };
 }

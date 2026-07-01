@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.6.6";
 
   src = fetchFromGitHub {
-    owner = "willeccles";
+    owner = "sophec";
     repo = "cfm";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-uXL0RO9P+NYSZ0xCv91KzjHOJJI500YUT8IJkFS86pE=";
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/willeccles/cfm";
+    homepage = "https://github.com/sophec/cfm";
     description = "Simple and fast TUI file manager with no dependencies";
     license = lib.licenses.mpl20;
     maintainers = [ ];

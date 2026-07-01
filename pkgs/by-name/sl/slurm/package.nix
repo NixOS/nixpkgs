@@ -30,7 +30,7 @@
   libjwt,
   libyaml,
   json_c,
-  http-parser,
+  llhttp,
   # enable internal X11 support via libssh2
   enableX11 ? true,
   enablePAM ? true,
@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "25-11-5-1";
+  version = "26.05.1.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-YGENCN4Ge8wftpSNSA9zw2xV0Ltd0wJMROY+fwOREE8=";
+    tag = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-ZH80Ws/9+7pjDe7aZyyDHXFbNvmw8C7OJXiw5+/3jkA=";
   };
 
   outputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     dbus
     libbpf
-    http-parser
+    llhttp
     s2n-tls
   ]
   ++ lib.optionals enableX11 [ xauth ]
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-freeipmi=${freeipmi}"
-    "--with-http-parser=${http-parser}"
+    "--with-llhttp-parser=${lib.getDev llhttp}"
     "--with-hwloc=${lib.getDev hwloc}"
     "--with-json=${lib.getDev json_c}"
     "--with-jwt=${libjwt}"
@@ -132,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc/slurm"
     "--with-pmix=${lib.getDev pmix}"
     "--with-bpf=${libbpf}"
+    "--enable-slurmrestd"
     "--with-s2n=${
       symlinkJoin {
         name = s2n-tls.name;

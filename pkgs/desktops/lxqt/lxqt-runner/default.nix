@@ -10,7 +10,7 @@
   lxqt-build-tools,
   lxqt-globalkeys,
   muparser,
-  pcre,
+  pcre2,
   pkg-config,
   qtbase,
   qtsvg,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libqtxdg
     lxqt-globalkeys
     muparser
-    pcre
+    pcre2
     qtbase
     qtsvg
     qtwayland

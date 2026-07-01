@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dgraph";
-  version = "25.3.3";
+  version = "25.3.7";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zkx9dWEWRhUj/hwcgDyH3ikbcvjVHJnALNERunXytag=";
+    hash = "sha256-5v2+RooZD6LOfU5UgcfEffMURB6qasrpXtn/KofmVQs=";
   };
 
-  vendorHash = "sha256-I+eLpWdS4Dc3XPbeJ8jlSc/ZIw6yveovcIXnfihke3s=";
+  vendorHash = "sha256-9JC2Bcd6ldY4t439nTDnd58mcSOg6DdjYqzN/9EvHYc=";
 
   doCheck = false;
 

@@ -1,34 +1,45 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  fastapi,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # optional-dependencies
+  aiohttp,
+  pydantic,
   flask,
+  pyyaml,
+
+  # tests
+  fastapi,
   httpx,
   mypy-boto3-s3,
   numpy,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pyyaml,
   scipy,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dependency-injector";
-  version = "4.48.3";
+  version = "4.49.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ets-labs";
     repo = "python-dependency-injector";
-    tag = version;
-    hash = "sha256-J4M4SM256vZa2JUhagcbKu+DAUk1Op9HN+WpLL6ScBc=";
+    tag = finalAttrs.version;
+    hash = "sha256-ncxKYzkV10hA2D8U1/zvkYJ/VFhNUsvRaOBNjzhIdtA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -46,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     scipy
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "dependency_injector" ];
 
@@ -56,15 +67,16 @@ buildPythonPackage rec {
     "tests/unit/wiring/test_*_py36.py"
     "tests/unit/providers/configuration/test_from_pydantic_py36.py"
     "tests/unit/providers/configuration/test_pydantic_settings_in_init_py36.py"
+
+    # Requires unpackaged fast-depends
+    "tests/unit/wiring/test_fastdepends.py"
   ];
 
   meta = {
     description = "Dependency injection microframework for Python";
     homepage = "https://github.com/ets-labs/python-dependency-injector";
-    changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${src.tag}/docs/main/changelog.rst";
+    changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${finalAttrs.src.tag}/docs/main/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gerschtli ];
-    # https://github.com/ets-labs/python-dependency-injector/issues/726
-    broken = lib.versionAtLeast pydantic.version "2";
   };
-}
+})

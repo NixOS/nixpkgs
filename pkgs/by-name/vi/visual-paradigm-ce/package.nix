@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "18.0.20260303";
+  version = "18.0.20260521";
 
   src =
     let
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-n6cijv9ndliqcvcbIOnMB/mwIjkOzWe1AcJZB+HdHBg=";
+      hash = "sha256-L5BxY7o2AwRRU6AnDeFk45ubhYTe8s+N/W66TSfLb3A=";
     };
 
   passthru.updateScript = writeScript "update-visual-paradigm-ce" ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     set -eu -o pipefail
 
-    version = "$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
+    version="$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
 
     update-source-version visual-paradigm-ce "$version"
   '';

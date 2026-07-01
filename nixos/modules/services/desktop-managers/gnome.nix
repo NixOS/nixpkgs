@@ -325,7 +325,11 @@ in
       i18n.inputMethod.enable = mkDefault true;
       i18n.inputMethod.type = mkDefault "ibus";
       programs.dconf.enable = true;
-      security.polkit.enable = true;
+      security.polkit = {
+        enable = true;
+        # Required by gnome-initial-setup, gnome-system-monitor, gvfs for admin://
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       security.rtkit.enable = mkDefault true;
       services.accounts-daemon.enable = true;
       services.dleyna.enable = mkDefault true;
@@ -469,6 +473,7 @@ in
         pkgs.gnome-maps
         pkgs.gnome-music
         pkgs.gnome-system-monitor
+        pkgs.gnome-tecla
         pkgs.gnome-weather
         pkgs.loupe
         pkgs.nautilus

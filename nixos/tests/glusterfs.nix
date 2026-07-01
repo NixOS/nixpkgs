@@ -49,6 +49,14 @@ in
     server1.wait_for_unit("glusterd.service")
     server2.wait_for_unit("glusterd.service")
 
+    # The glusterfind delete hook must be a real file, not the dangling
+    # symlink it used to be after being copied out of the package (#257863).
+    server1.succeed("test -f /var/lib/glusterd/hooks/1/delete/post/S57glusterfind-delete-post")
+    server1.fail("test -L /var/lib/glusterd/hooks/1/delete/post/S57glusterfind-delete-post")
+
+    # The volume option presets must be installed (#33159).
+    server1.succeed("test -f /var/lib/glusterd/groups/metadata-cache")
+
     server1.wait_until_succeeds("gluster peer status")
     server2.wait_until_succeeds("gluster peer status")
 
@@ -63,6 +71,9 @@ in
     server2.succeed("mkdir -p /data/vg0")
     server1.succeed("gluster volume create gv0 server1:/data/vg0 server2:/data/vg0")
     server1.succeed("gluster volume start gv0")
+
+    # Applying a group preset needs /var/lib/glusterd/groups populated (#33159).
+    server1.succeed("gluster volume set gv0 group metadata-cache")
 
     # test clients
     client1.wait_for_unit("gluster.mount")

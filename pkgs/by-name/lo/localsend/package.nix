@@ -141,6 +141,7 @@ let
   metaCommon = {
     description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
+    donationPage = "https://localsend.org/donate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sikmir

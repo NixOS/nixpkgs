@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   openssl,
   zlib,
@@ -13,27 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwebsockets";
-  version = "4.4.1";
+  version = "4.4.5";
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
+    hash = "sha256-VY5caFHEJY06Vb4abDKmfcL12lRkmk0auxb/4ZZwqqc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2025-11677.patch";
-      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2f082ec31261f556969160143ba94875d783971a";
-      hash = "sha256-FeiZAbr1kpt+YNjhi2gfG2A6nXKiSssMFRmlALaneu4=";
-    })
-    (fetchpatch {
-      name = "CVE-2025-11678.patch";
-      url = "https://libwebsockets.org/git/libwebsockets/patch?id=2bb9598562b37c942ba5b04bcde3f7fdf66a9d3a";
-      hash = "sha256-1uQUkoMbK+3E/QYMIBLlBZypwHBIrWBtm+KIW07WRj8=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -69,12 +55,25 @@ stdenv.mkDerivation (finalAttrs: {
       ]
   );
 
+  postPatch = ''
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail '=\''${exec_prefix}/''${LWS_INSTALL_LIB_DIR}' '=''${CMAKE_INSTALL_FULL_LIBDIR}' \
+      --replace-fail '=\''${prefix}/''${LWS_INSTALL_INCLUDE_DIR}' '=''${CMAKE_INSTALL_FULL_INCLUDEDIR}'
+  ''
   # Remove after https://github.com/warmcat/libwebsockets/pull/3567 has been merged or otherwise addressed
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
     substituteInPlace "cmake/libwebsockets-config.cmake.in" --replace-fail \
       "set(LIBWEBSOCKETS_LIBRARIES websockets websockets_shared)" \
       "set(LIBWEBSOCKETS_LIBRARIES websockets)"
-  '';
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix doubled store path in macOS install_name
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'SET(CMAKE_INSTALL_NAME_DIR "''${CMAKE_INSTALL_PREFIX}/''${LWS_INSTALL_LIB_DIR}")' \
+        'SET(CMAKE_INSTALL_NAME_DIR "''${LWS_INSTALL_LIB_DIR}")'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic "";
 
   postInstall = ''
     # Fix path that will be incorrect on move to "dev" output.

@@ -5,13 +5,13 @@
 }:
 buildDubPackage (finalAttrs: {
   pname = "ddhx";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "dd86k";
     repo = "ddhx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1AoTSoykukvKEsdAU0WUQA7LwVebKELam/0kqEWTxFc=";
+    hash = "sha256-1dbY7xUOpwihrppuB+tyHuV2b12E4Yv2J69LXULxmg0=";
   };
 
   dubLock = ./dub-lock.json;
@@ -31,5 +31,6 @@ buildDubPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.unix;
+    mainProgram = "ddhx";
   };
 })

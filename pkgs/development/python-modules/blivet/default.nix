@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.13.1";
+  version = "3.13.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-5uhiCnwj5DyffsI2XEaLdvHMepjGWt2JlDmyZExSNRI=";
+    hash = "sha256-Yq8lIgu2S4L2PNeJ+ybn6daaPA2XlDJkUPihHiH2n+w=";
   };
 
   postPatch = ''

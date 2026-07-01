@@ -24,7 +24,7 @@
   setuptools,
   stestr,
   stevedore,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
   urllib3,
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pyyaml
     stestr
     stevedore
-    subunit
+    python-subunit
     testscenarios
     testtools
     urllib3

@@ -25,6 +25,8 @@
   fontsConf,
   fontconfig,
   freetype,
+  libGL,
+  libsecret,
   libx11,
   libxext,
   libxi,
@@ -122,6 +124,9 @@ let
 
             # For Soong sync
             e2fsprogs
+
+            libsecret
+            libGL
           ]
         }"
     '';

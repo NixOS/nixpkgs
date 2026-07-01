@@ -50,7 +50,6 @@
           rxvt-unicode-unwrapped
           rxvt-unicode-unwrapped-emoji
           st
-          termite
           tmux
           wezterm
           yaft

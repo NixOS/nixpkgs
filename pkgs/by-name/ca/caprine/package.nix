@@ -27,14 +27,15 @@ buildNpmPackage rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postBuild = ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
+        -c.electronDist="$electron_dist" \
         -c.electronVersion=${electron.version}
   '';
 

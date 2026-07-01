@@ -7,8 +7,8 @@
 
 skawarePackages.buildPackage {
   pname = "skalibs";
-  version = "2.14.5.1";
-  sha256 = "sha256-+jWccEObSAQAoKLvaAJqJzazFQJanZXfadNGAfuTjw8=";
+  version = "2.15.0.0";
+  sha256 = "sha256-f96W6K+0GRWToVMoiD6cdybJaJHPBxIiFGgh6Mh/gAc=";
 
   description = "Set of general-purpose C programming libraries";
 

@@ -3,10 +3,12 @@
   rustPlatform,
   fetchFromGitLab,
   pkg-config,
+  stdenv,
+
+  # Linux-only
   vulkan-loader,
   alsa-lib,
   udev,
-  shaderc,
   libxcb,
   libxkbcommon,
   autoPatchelfHook,
@@ -15,7 +17,12 @@
   libxcursor,
   libxrandr,
   wayland,
-  stdenv,
+
+  # Both platforms
+  shaderc,
+
+  # macOS-only
+  desktopToDarwinBundle,
 }:
 
 let
@@ -25,7 +32,6 @@ let
   timestamp = "1769191511";
   rev = "1d12f35edd6cdbfc1fb921c167cdd7beeeffe248";
 in
-
 rustPlatform.buildRustPackage {
   pname = "veloren";
   inherit version;
@@ -44,30 +50,46 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-1qLE1UeP2i0xaOGLniZzdjIkBbme6rctGfcO9Kfoh5E=";
 
   postPatch = ''
+    # Fix hashbrown on rust ≥1.95
+    # (https://github.com/rust-lang/hashbrown/pull/662)
+    substituteInPlace "$cargoDepsCopy"/*/hashbrown-0.16.0/src/lib.rs \
+      --replace-fail 'strict_provenance_lints' 'strict_provenance_lints,trivial_clone'
+    substituteInPlace "$cargoDepsCopy"/*/hashbrown-0.16.0/src/raw/mod.rs \
+      --replace-fail 'T: Copy,' 'T: core::clone::TrivialClone,'
+
     # Force vek to build in unstable mode
-    cat <<'EOF' | tee "$cargoDepsCopy"/*/vek-*/build.rs
+    tee "$cargoDepsCopy"/*/vek-*/build.rs > /dev/null <<'EOF'
     fn main() {
       println!("cargo:rustc-check-cfg=cfg(nightly)");
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+
     # Fix assets path
     substituteAllInPlace common/assets/src/lib.rs
+
     # Do not use mold, it produces broken binaries
     substituteInPlace .cargo/config.toml --replace-fail mold gold
   '';
 
   nativeBuildInputs = [
-    autoPatchelfHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [
+    shaderc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     udev
     libxcb
     libxkbcommon
-    shaderc
     stdenv.cc.cc # libgcc_s.so.1
   ];
 
@@ -92,7 +114,7 @@ rustPlatform.buildRustPackage {
   # Some tests require internet access
   doCheck = false;
 
-  appendRunpaths = [
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
     (lib.makeLibraryPath (
       [
         libx11
@@ -113,6 +135,7 @@ rustPlatform.buildRustPackage {
     install -Dm644 assets/voxygen/net.veloren.veloren.desktop -t "$out/share/applications"
     install -Dm644 assets/voxygen/net.veloren.veloren.png -t "$out/share/icons/hicolor/256x256/apps"
     install -Dm644 assets/voxygen/net.veloren.veloren.metainfo.xml -t "$out/share/metainfo"
+
     # Assets directory
     mkdir -p "$out/share/veloren"; cp -ar assets "$out/share/veloren/"
   '';
@@ -122,9 +145,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.veloren.net";
     license = lib.licenses.gpl3Only;
     mainProgram = "veloren-voxygen";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rnhmjoj
+      philocalyst
       tomodachi94
     ];
   };

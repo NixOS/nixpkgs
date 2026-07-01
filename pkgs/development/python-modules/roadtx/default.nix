@@ -7,19 +7,21 @@
   requests,
   roadlib,
   selenium,
-  selenium-wire,
+  selenium-wire-roadtx,
   setuptools,
   signxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roadtx";
-  version = "1.21.1";
+  version = "1.22.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UxyyvVWuRE/Uh7zUtSN6GdRdintNpFAHVQ+ufc+uFjU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-2GIJAjLxOqy3E+5j1gnby8F5IAvdnChMT4Lfq5I5zeE=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +32,7 @@ buildPythonPackage rec {
     requests
     roadlib
     selenium
-    selenium-wire
+    selenium-wire-roadtx
     signxml
   ];
 
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

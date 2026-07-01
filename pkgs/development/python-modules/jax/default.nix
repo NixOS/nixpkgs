@@ -6,7 +6,6 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -41,7 +40,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.10.0";
+  version = "0.10.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,17 +49,8 @@ buildPythonPackage (finalAttrs: {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-/RCihrjONN/+QwyQRNEmlIa7JsCLzz+SkBe5sd+ThgU=";
+    hash = "sha256-OQkh9uC8NsxoG3SByPybXQ81c11T3lYgjaU3tbB0+6E=";
   };
-
-  patches = [
-    # setup.py: Include only jax.* in the built wheel
-    # https://github.com/jax-ml/jax/pull/37182
-    (fetchpatch {
-      url = "https://github.com/jax-ml/jax/commit/cb5a91780f84f124090d8f94e99c8771e87590f6.patch";
-      hash = "sha256-p6X9IFe4YUb2MQp7YjJHme1dueZ1Y37IKnANGruW1cM=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -135,6 +125,13 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+
+    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
+    # self.subTest(dtype=...) when shipping subtest reports between workers.
+    # The assertions themselves pass; the failure is a harness artifact of running with
+    # --numprocesses.
+    # New test in jax 0.10.2 (tests/random_impl_test.py).
+    "test_random_bits"
   ]
   ++ lib.optionals usingMKL [
     # See

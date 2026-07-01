@@ -13,7 +13,7 @@ makeGaugePlugin {
     description = "Gauge plugin that lets you write tests in Java";
     homepage = "https://github.com/getgauge/gauge-java/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [
       # Native binary written in go
       binaryNativeCode

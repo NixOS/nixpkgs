@@ -12,20 +12,21 @@
   pytest-httpx,
   pytestCheckHook,
   setuptools,
+  sybil,
   typer,
   uvicorn,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomeconnect";
-  version = "0.36.0";
+  version = "0.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tm8CEIv2QfawDs26oCnwXZ4cX/9785h7IX/kuCzjCWc=";
+    hash = "sha256-dzDNwqAYS1Sqhcd9koNTtSkXZ/t78WC/YIKOaA4uqzI=";
   };
 
   build-system = [ setuptools ];
@@ -50,13 +51,14 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-httpx
     pytestCheckHook
+    sybil
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "aiohomeconnect" ];
 
   meta = {
-    description = "asyncio client for the Home Connect API";
+    description = "Client for the Home Connect API";
     homepage = "https://github.com/MartinHjelmare/aiohomeconnect";
     changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

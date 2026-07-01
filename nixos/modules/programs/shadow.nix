@@ -267,13 +267,22 @@ in
             group = "root";
             inherit source;
           };
+          mkCapRoot = capabilities: source: {
+            inherit capabilities source;
+            owner = "root";
+            group = "root";
+          };
         in
         {
           su = mkSetuidRoot "${config.security.shadow.su.package}/bin/su";
           sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
           newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
-          newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
-          newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
+          # File capabilities instead of setuid root, mirroring shadow's
+          # own --with-fcaps install mode and what Arch/Fedora/Debian ship.
+          # The kernel only requires CAP_SETUID/CAP_SETGID over the parent
+          # userns to write a multi-line /proc/<pid>/[ug]id_map.
+          newuidmap = mkCapRoot "cap_setuid+ep" "${cfg.package.out}/bin/newuidmap";
+          newgidmap = mkCapRoot "cap_setgid+ep" "${cfg.package.out}/bin/newgidmap";
         }
         // lib.optionalAttrs config.users.mutableUsers {
           chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";

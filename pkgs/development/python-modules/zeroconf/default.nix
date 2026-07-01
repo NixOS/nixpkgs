@@ -13,16 +13,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zeroconf";
-  version = "0.148.0";
+  version = "0.149.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    tag = version;
-    hash = "sha256-odjuJrUXQXn3WeF/oS8DLO937p2nHpSk9QGO4Tgsd8o=";
+    tag = finalAttrs.version;
+    hash = "sha256-l/F+Cz0HEtsgfQj01ayl+FQYoQbZVpMfRhNs27BqThI=";
   };
 
   build-system = [
@@ -48,9 +48,6 @@ buildPythonPackage rec {
     "test_launch_and_close"
     "test_launch_and_close_context_manager"
     "test_launch_and_close_v4_v6"
-
-    # Flaky (see e.g. https://hydra.nixos.org/build/326378736); https://github.com/python-zeroconf/python-zeroconf/issues/1663
-    "test_run_coro_with_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -63,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
-}
+})

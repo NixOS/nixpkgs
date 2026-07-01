@@ -7,6 +7,7 @@
   testers,
   versionCheckHook,
   hello,
+  gettext,
   gnulib,
 }:
 
@@ -29,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-liconv";
   };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [
+    gettext
+  ];
 
   doCheck = true;
 

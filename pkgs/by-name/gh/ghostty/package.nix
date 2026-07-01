@@ -174,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       features, or native UIs. Ghostty provides all three.
     '';
     homepage = "https://ghostty.org/";
+    donationPage = "https://ghostty.org/docs/sponsor";
     downloadPage = "https://ghostty.org/download";
     changelog = "https://ghostty.org/docs/install/release-notes/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version

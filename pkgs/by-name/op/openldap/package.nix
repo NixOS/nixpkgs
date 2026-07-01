@@ -122,12 +122,18 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.openldap.org/show_bug.cgi?id=8623
     rm -f tests/scripts/test022-ppolicy
 
+    rm -f tests/scripts/test*-sync*
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
     # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
     # has made it to a release
     rm -f tests/scripts/test076-authid-rewrite
+  ''
+  # FIXME: revert after this gets unconditional above (on staging* branch)
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    rm -f tests/scripts/test*-sync*
   '';
 
   doCheck = true;

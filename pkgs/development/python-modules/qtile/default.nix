@@ -16,11 +16,11 @@
   dbus-fast,
   iwlib,
   libcst,
-  mpd2,
+  python-mpd2,
+  prompt-toolkit,
   psutil,
   pulsectl-asyncio,
   pygobject3,
-  pytz,
   pyxdg,
   xcffib,
   extraPackages ? [ ],
@@ -52,6 +52,7 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-httpbin,
+  pytest-rerunfailures,
   pytest-xdist,
   writableTmpDirAsHomeHook,
   anyio,
@@ -70,7 +71,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.35.0";
+  version = "0.36.0";
   # nixpkgs-update: no auto update
   # should be updated alongside with `qtile-extras`
 
@@ -80,13 +81,8 @@ buildPythonPackage (finalAttrs: {
     owner = "qtile";
     repo = "qtile";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5XHzlS/Knw/VmVtnM7wToJ/F12GAa2lwdWuXBJHXnZM=";
+    hash = "sha256-yFh9h3djV52zdZjPYwOWaMzN9ZNhFdZYyxFJreoJBCk=";
   };
-
-  patches = [
-    # https://github.com/qtile/qtile/pull/5889
-    ./fix-test-net.patch
-  ];
 
   build-system = [
     setuptools
@@ -108,6 +104,7 @@ buildPythonPackage (finalAttrs: {
 
   pypaBuildFlags = [
     "--config-setting=backend=wayland"
+    "--config-setting=FONTCONFIG=${lib.getLib fontconfig}/lib/libfontconfig.so"
     "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
     "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
     "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
@@ -121,11 +118,13 @@ buildPythonPackage (finalAttrs: {
     dbus-fast
     iwlib
     libcst
-    mpd2
+    python-mpd2
+    # prompt-toolkit used for qtile repl
+    # see https://github.com/qtile/qtile/blob/master/libqtile/scripts/repl.py
+    prompt-toolkit
     psutil
     pulsectl-asyncio
     pygobject3
-    pytz
     pyxdg
     xcffib
   ];
@@ -154,10 +153,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-asyncio
     pytest-httpbin
+    pytest-rerunfailures
     pytest-xdist
     writableTmpDirAsHomeHook
     anyio
-    fontconfig
     gdk-pixbuf
     gobject-introspection
     isort
@@ -167,15 +166,16 @@ buildPythonPackage (finalAttrs: {
     xvfb
   ];
 
+  pytestFlags = [
+    "--reruns 3"
+    "--reruns-delay 5"
+  ];
+
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
 
   disabledTests = [
-    # ModuleNotFoundError: No module named 'libqtile'
-    # known issue upstream: https://github.com/qtile/qtile/issues/5883
-    "test_identify_output"
-
     # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
     "test_defaults"
     "test_device_actions"
@@ -212,6 +212,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "http://www.qtile.org/";
     license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
+    changelog = "https://github.com/qtile/qtile/blob/v${finalAttrs.version}/CHANGELOG";
     mainProgram = "qtile";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

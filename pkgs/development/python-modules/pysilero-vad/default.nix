@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysilero-vad";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0PDtooVmy09i2fE40ZhaPIKfOTqXQS/rs7dwtm0+pQ=";
+    hash = "sha256-gQDZuu8hN0s+yfkp22w39/Aje5/6qdX0W95FPu6obw0=";
   };
 
   build-system = [

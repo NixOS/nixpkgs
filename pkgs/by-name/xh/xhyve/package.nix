@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight Virtualization on macOS Based on bhyve";
     homepage = "https://github.com/mist64/xhyve";
-    maintainers = [ lib.maintainers.lnl7 ];
+    maintainers = [ ];
     license = lib.licenses.bsd2;
     platforms = lib.platforms.darwin;
     # never built on aarch64-darwin since first introduction in nixpkgs

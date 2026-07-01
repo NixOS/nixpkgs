@@ -655,9 +655,12 @@ rec {
       checked =
         lib.warnIf (contents != null)
           "in docker image ${name}: The contents parameter is deprecated. Change to copyToRoot if the contents are designed to be copied to the root filesystem, such as when you use `buildEnv` or similar between contents and your packages. Use copyToRoot = buildEnv { ... }; or similar if you intend to add packages to /bin."
-          lib.throwIf
-          (contents != null && copyToRoot != null)
-          "in docker image ${name}: You can not specify both contents and copyToRoot.";
+          (
+            if (contents != null && copyToRoot != null) then
+              throw "in docker image ${name}: You can not specify both contents and copyToRoot."
+            else
+              x: x
+          );
 
       rootContents = if copyToRoot == null then contents else copyToRoot;
 
@@ -1030,11 +1033,12 @@ rec {
       debug ? false,
     }:
     assert (
-      lib.assertMsg (layeringPipeline == null -> maxLayers > 1)
-        "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})"
+      (layeringPipeline == null -> maxLayers > 1)
+      || throw "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})"
     );
     assert (
-      lib.assertMsg (enableFakechroot -> !stdenv.hostPlatform.isDarwin) ''
+      (enableFakechroot -> !stdenv.hostPlatform.isDarwin)
+      || throw ''
         cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
               - use `fakeRootCommands` with the restricted `fakeroot` environment
               - cross-compile your packages
@@ -1271,11 +1275,11 @@ rec {
       command ? null,
       run ? null,
     }:
-    assert lib.assertMsg (!(drv.drvAttrs.__structuredAttrs or false))
-      "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
-    assert lib.assertMsg (
-      command == null || run == null
-    ) "streamNixShellImage: Can't specify both command and run";
+    assert
+      !(drv.drvAttrs.__structuredAttrs or false)
+      || throw "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
+    assert
+      command == null || run == null || throw "streamNixShellImage: Can't specify both command and run";
     let
 
       # A binary that calls the command to build the derivation

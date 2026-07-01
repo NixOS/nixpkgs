@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "radvd";
-  version = "2.20";
+  version = "2.21";
 
   src = fetchFromGitHub {
     owner = "radvd-project";
     repo = "radvd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s9KP6F6rSumuNDOV4rtE7I+o742al4hc3/dgNkpCCyQ=";
+    hash = "sha256-02ZoLJ8nCk531M6DkP3UIPXgWyOOl2X163ou0ezHwKE=";
   };
 
   nativeBuildInputs = [

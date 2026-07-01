@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
+  # override ECM defaults that assume Qt6
+  # this can't be cmakeFlags because we need this to be set last so it wins
+  preConfigure = ''
+    appendToVar cmakeFlags "-DKDE_INSTALL_LOGGINGCATEGORIESDIR=${placeholder "out"}/share/qlogging-categories5"
+  '';
+
   buildInputs =
     with libsForQt5;
     with libsForQt5.__internalKF5;

@@ -4,17 +4,16 @@
   python3Packages,
   testers,
   nix-update-script,
-  qbit-manage,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.7.0";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
-    tag = "v${version}";
-    hash = "sha256-cPN4GhB7TuhiGau8Nb9hVNubF6fppyS2tuFGJ+spPaI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iS6DiyPqRQo/NVczumZx06VYrWgCv+w9OK4jHDKE8PQ=";
   };
 
   pyproject = true;
@@ -43,6 +42,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "croniter"
     "fastapi"
+    "qbittorrent-api"
     "requests"
     "uvicorn"
   ];
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
-        package = qbit-manage;
+        package = finalAttrs.finalPackage;
         command = "env HOME=$TMPDIR qbit-manage --version";
       };
     };
@@ -65,4 +65,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "qbit-manage";
   };
-}
+})

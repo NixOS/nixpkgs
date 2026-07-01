@@ -85,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.3";
+  version = "2.52.4";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -100,10 +100,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
+    hash = "sha256-z0B2ocoqZHiO3KjEUtjrto1eKWXliP5Go4igFlE+3OQ=";
   };
 
-  patches = lib.optionals clangStdenv.hostPlatform.isLinux [
+  patches = [
+    # Fix build with system malloc
+    # See: https://bugs.webkit.org/show_bug.cgi?id=316083
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/a6bc685a685c8f16c919dc6310a62a26971d396e.patch";
+      hash = "sha256-X3E9SYykYomoBeAL4vS1Iuw2fPdO8fI7MvAW/kEhTMc=";
+      name = "fix-build-with-system-malloc.patch";
+    })
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;

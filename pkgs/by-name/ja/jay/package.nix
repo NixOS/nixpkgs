@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JOt3xEONGDmLovk72hX0d3De01zTd51d2/J4HziBE9I=";
+    sha256 = "sha256-tC2V1BgUGsUMpZsKXjFSS8Mp28LrNI/QNu761zpgAkc=";
   };
 
-  cargoHash = "sha256-wK9v3YwP067etFAu6Ca9Sts+QrD4uL48chbL6tZKFkk=";
+  cargoHash = "sha256-96vCkZR/8dgZH0hJPeKzP7jQZ41W7XTi9yMnxFaIhoY=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -48,6 +48,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   runtimeDependencies = [
     libglvnd
     vulkan-loader
+  ];
+
+  checkFlags = [
+    # these 5 tests fail in the lix sandbox because they rely on io_uring
+    "--skip=cpu_worker::tests::cancel"
+    "--skip=cpu_worker::tests::complete"
+    "--skip=eventfd_cache::tests::test"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_kernel"
+    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_userspace"
   ];
 
   postInstall = ''
@@ -72,7 +81,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ uku3lig ];
     mainProgram = "jay";
   };
 })

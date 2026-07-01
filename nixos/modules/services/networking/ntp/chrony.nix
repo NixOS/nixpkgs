@@ -300,6 +300,7 @@ in
       serviceConfig = {
         Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${toString chronyFlags}";
+        Restart = "on-failure";
 
         # Proc filesystem
         ProcSubset = "pid";

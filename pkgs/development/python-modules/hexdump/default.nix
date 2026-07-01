@@ -33,8 +33,7 @@ buildPythonPackage rec {
     description = "Library to dump binary data to hex format and restore from there";
     homepage = "https://pypi.org/project/hexdump/"; # BitBucket site returns 404
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [
-      frogamic
+    maintainers = [
     ];
   };
 }

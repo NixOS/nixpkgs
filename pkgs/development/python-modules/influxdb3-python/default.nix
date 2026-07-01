@@ -14,17 +14,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "influxdb3-python";
-  version = "0.18.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IR1Jd/4cKk+79lh8NrfLfDtFQgEDEe9KCDIuOyUVsE=";
+    hash = "sha256-gCIaOE0k/h1Lb4wIuw+eOEjwdDJVc8tGd3Ql6JE+gmE=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=82.0.1" "setuptools"
     # Upstream falls back to a default version if not in a GitHub Actions
     substituteInPlace setup.py \
       --replace-fail "version=get_version()," "version = '${finalAttrs.version}',"

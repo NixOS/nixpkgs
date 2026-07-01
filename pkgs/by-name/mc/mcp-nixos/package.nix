@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
 }:
@@ -39,6 +40,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # Requires network access
     "test_valid_channel"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_read_text_file"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];

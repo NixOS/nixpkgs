@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyenvisalink";
-  version = "4.9";
+  version = "4.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-WtBopLUCArWM4JwA517bnYidfOwqU3v7ApZCbsMuY/o=";
+    hash = "sha256-V/Sr49e78CO4tBRKkKMQ1Z8bA6/YeEVHdoPx2KY7+mI=";
   };
 
   build-system = [ setuptools ];

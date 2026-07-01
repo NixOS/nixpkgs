@@ -36,7 +36,7 @@
   withIPXE ? true,
   ipxe,
   withOVMF ? true,
-  OVMF,
+  OVMF-xen,
   withSeaBIOS ? true,
   seabios-qemu,
 
@@ -210,6 +210,120 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-QttKWdmWC6Zn5k2hd6RIMCpLWv71HB/A9mCbDP+i8to=";
     })
 
+    # XSA #490
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa490-4.21.patch";
+      hash = "sha256-PF4zNeaS8aXHBNKLcgjVBUqmREg+nvdyHyLlhX2YBiw=";
+    })
+
+    # XSA #491
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa491-4.21.patch";
+      hash = "sha256-I21YIcaK1v7BfBJi/aiVACgR3QyN+/gXnB4YMprT4zA=";
+    })
+
+    # XSA #492
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-01.patch";
+      hash = "sha256-U3nE7jgTKh2HmS9tMVQG+TIGvgU5B1aikC3NSER0CaY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-02.patch";
+      hash = "sha256-Y3k9ICThfnIcu59F2pFDbFWD5DL6siPJmINmC7nT2uY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-03.patch";
+      hash = "sha256-k4nPft59/MQwYKcdrzj5d80+LDhp05e86iJWzabjkQc=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-04.patch";
+      hash = "sha256-Mn+8q9zsstXbmrS/rkDdtwWEiD3EGNlmpa+eB1wESA4=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-05.patch";
+      hash = "sha256-csf9nf6cz3skhq1ph8HIs2AEVgBkw29hP39zwqy2vwM=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-06.patch";
+      hash = "sha256-urY9bjqqzKSGqGqEhDnagLUrzDsKkARMERT7vmukeUU=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-07.patch";
+      hash = "sha256-OyUC9bJevxiMuJuyJO9Z3ScXebe7lZM95HkK5YxGino=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-08.patch";
+      hash = "sha256-g3zV+r9LKjuMbkl4gprhWqClOgDU/Kbesr39LQiM+Aw=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-09.patch";
+      hash = "sha256-Wuc5dqwm+zwlYOzDXpRgyQH584sKwETi+xcE7HASHyI=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-10.patch";
+      hash = "sha256-ggln1O+epVOErBSUhIxX7xhwBy808vnQtcae3KYoQdo=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-11.patch";
+      hash = "sha256-/Yb1i/ms8MaVsEa/nK84CTFclOKcJoWMjjQJQab7l40=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-12.patch";
+      hash = "sha256-IpUeM+t7AZ8IVlzake+PiFAe0FCeFzChy+eaN9MAiSM=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-13.patch";
+      hash = "sha256-3vZj9VrDcFtlKrlMy1OD//F+6O252m23jJ0BRShQ6wA=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-14.patch";
+      hash = "sha256-LiBavW+FTfXdELs8Fm79KeOvskRqDXytv/e7eYRgSvY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-15.patch";
+      hash = "sha256-0eK2hIFPNDIfv2W0ivkGL8Z3F+NpN4p2X0JVKjeBYWE=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-16.patch";
+      hash = "sha256-iEEkPC9mIuSF6Swt3/myUizsc8DubSPEkLkf1zm0/NE=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-17.patch";
+      hash = "sha256-YNo1wr+fRKk8+78Jf/zqJ7q9ugbzg7gyiyJ3zU+nB60=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa492/xsa492-4.20-18.patch";
+      hash = "sha256-qNWe3iw+bYDtvBZ2KVfcy4VKu/waOyhoKZ0L8bqLdNc=";
+    })
+
+    # XSA #493
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-01.patch";
+      hash = "sha256-SvAj+9CIyedpFENCB/lQTJUB4kpVkGh+z+NNk82lQqM=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-02.patch";
+      hash = "sha256-4fajBBBKMnMTy7mvFSUghwkRbYo833s3jATeGfiOrjc=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-03.patch";
+      hash = "sha256-/AI9gtd60UWf89NNd7+Zx1g+KyAIM2wCih/07LN5zt4=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-04.patch";
+      hash = "sha256-qvXQG9VZkgca/za3bx1zTDkmRz5lFT3JPkbdI1mlBGY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa493/xsa493-4.20-05.patch";
+      hash = "sha256-6pGjjPjalw6TY0n9TInE3nCXNmt6BUxwy1r1xf55U7k=";
+    })
+
+    # XSA #494
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa494-4.20.patch";
+      hash = "sha256-ns0s++J2adUD/HWuMiYad/g3MITs+twlMnkpFnP7T0w=";
+    })
+
     # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
@@ -276,7 +390,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-qemu-traditional"
     "--with-system-qemu"
     (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
+    (if withOVMF then "--with-system-ovmf=${OVMF-xen.mergedFirmware}" else "--disable-ovmf")
     (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
     (enableFeature withFlask "xsmpolicy")
   ];

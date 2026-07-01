@@ -7,21 +7,24 @@
   ncurses,
   procps,
   pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   tmux,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.55.1";
+  version = "0.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A8mi0Q9ScbHmFRSvcF+wbn+lAO8B3/rU/+HvTXvxWPE=";
+    hash = "sha256-RsK3nVGpgNX05tCc5kK5GFLUS5vVoe8NRKgg7Y/DzwM=";
   };
+
+  patches = [ ./0001-fix-test_control_mode_stdout_preserves_non_ascii_out.patch ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -31,34 +34,33 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   nativeCheckInputs = [
-    procps
-    tmux
     ncurses
-    pytest-rerunfailures
+    procps
     pytestCheckHook
+    pytest-rerunfailures
+    pytest-xdist
+    tmux
   ];
 
   enabledTestPaths = [ "tests" ];
 
-  disabledTests = [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
     "test_new_session_width_height"
-    # Assertion error
+    # AssertionError: assert '' == '$'
+    "test_capture_pane"
+    # AssertionError: assert '' == '$'
     "test_capture_pane_start"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # tests/test_pane.py:113: AssertionError
-    "test_capture_pane_start"
-    # assert (1740973920.500444 - 1740973919.015309) <= 1.1
-    "test_retry_three_times"
-    "test_function_times_out_no_raise"
-    # assert False
-    "test_retry_three_times_no_raise_assert"
+    # AssertionError: assert '' == '$'
+    "test_capture_pane_end"
+    # IndexError: list index out of range
+    "test_new_window_with_environment"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
-
   pythonImportsCheck = [ "libtmux" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Typed scripting library / ORM / API wrapper for tmux";

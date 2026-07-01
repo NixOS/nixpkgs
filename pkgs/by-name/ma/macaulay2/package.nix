@@ -23,6 +23,7 @@
   flint,
   frobby,
   gdbm,
+  getconf,
   gfortran,
   gfan,
   givaro,
@@ -53,28 +54,29 @@
   readline,
   singular,
   texinfo,
-  time,
+  runtimeShell,
   topcom,
   which,
   xz,
+  llvmPackages,
 
   downloadDocs ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "macaulay2";
-  version = "1.26.05";
+  version = "1.26.06";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-UiPLownaFtuYFUlZhBl+Nl/sRZRhG9OUwepZtFTkTqc";
+    hash = "sha256-2e39qzBO63Ft+yw+tJChLsupeinalTkDwXp3WBF2wms=";
     fetchSubmodules = true;
   };
 
   docs = fetchurl {
     url = "https://macaulay2.com/Downloads/OtherSourceCode/Macaulay2-docs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-rz9b7HvxfxI978yM9wE7XvLu7DO38i/amokXBU0RjSg=";
+    hash = "sha256-0+ilvDh87Gmwzx0bLhT6nnadcPwgU3uB6pKhP9VqW0Q=";
   };
 
   buildInputs = [
@@ -87,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     flint
     frobby
     gdbm
+    getconf
     givaro
     glpk
     gtest
@@ -111,6 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     singular
     xz
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   nativeBuildInputs = [
@@ -119,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     emacs-nox
     flex
     gdbm
+    getconf
     gfortran
     makeWrapper
     pkg-config
@@ -145,6 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
+    substituteInPlace configure.ac \
+      --replace-fail "[\$gfan_version], [ge], [0.8]" "[\$gfan_version], [ge], [0.6]"
+    substituteInPlace Macaulay2/packages/gfanInterface.m2 \
+      --replace-fail 'MinimumVersion => ("0.8"' 'MinimumVersion => ("0.6"'
   '';
 
   preConfigure = ''
@@ -156,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-download"
     "--enable-shared"
-    "--with-issue=nixos"
+    "--with-issue=Nix"
     "--with-boost-libdir=${boost}/lib"
     "--with-system-libs"
     "CPPFLAGS=-I${lib.getDev cddlib}/include/cddlib"
@@ -179,8 +190,17 @@ stdenv.mkDerivation (finalAttrs: {
     "MakeDocumentation=false"
   ];
 
+  env.LDFLAGS = lib.concatStringsSep " " (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-lblas"
+    ]
+  );
+
   postInstall = ''
-    wrapProgram "$out/bin/M2" \
+    substituteInPlace "$out/bin/M2" \
+      --replace-fail "/bin/sh" "${runtimeShell}"
+
+    wrapProgram "$out/bin/M2-binary" \
       --prefix PATH : ${
         lib.makeBinPath [
           _4ti2
@@ -196,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
           topcom
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${
+      --prefix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${
         lib.makeLibraryPath [
           cddlib
           flint
@@ -268,5 +288,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://macaulay2.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

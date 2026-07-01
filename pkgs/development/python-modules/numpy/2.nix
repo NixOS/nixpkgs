@@ -13,7 +13,6 @@
   meson-python,
   mesonEmulatorHook,
   pkg-config,
-  xcbuild,
 
   # native dependencies
   blas,
@@ -85,7 +84,6 @@ buildPythonPackage (finalAttrs: {
     meson-python
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
@@ -150,6 +148,10 @@ buildPythonPackage (finalAttrs: {
     "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
     "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_floor_division_errors" # FloatingPointError: invalid value encountered in floor_divide
+    "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage ...>]
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')

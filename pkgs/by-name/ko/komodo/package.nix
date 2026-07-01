@@ -2,31 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komodo";
-  version = "1.19.5";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dLBgdcrIp5QM2TVIa86qX7m1c5n+qOIQJtqJPGvIZ+0=";
+    hash = "sha256-Hw0JD4e/ODK19M/bZtX9foCu5c79XA8Jgv2fleltdLs=";
   };
 
-  # Temporary fix to get build to pass until https://github.com/moghtech/komodo/pull/1122
-  patches = [
-    ./rustc-1_9_2-fixes.patch
-  ];
+  cargoHash = "sha256-b/AgQBmS1QfP+BOCT4xL8majVKobig5M2YJhGuXMToc=";
 
-  cargoHash = "sha256-jf/Jp28g3inGn5jQp3cACdhl//tbXTMc1vP1K3g/CyQ=";
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   # disable for check. document generation is fail
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
+
+  # xtask is a workspace-internal build helper, not a user-facing program.
+  postInstall = ''
+    rm -f $out/bin/xtask
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -53,8 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://komo.do";
     changelog = "https://github.com/moghtech/komodo/releases/tag/v${finalAttrs.version}";
-    mainProgram = "komodo";
-    maintainers = with lib.maintainers; [ r17x ];
+    mainProgram = "km";
+    maintainers = with lib.maintainers; [
+      r17x
+      channinghe
+    ];
     license = lib.licenses.gpl3;
   };
 })

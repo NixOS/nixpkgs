@@ -2,82 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
-  stdenvNoCC,
-  nodejs,
-  pnpm_10,
-  templ,
-  pnpmConfigHook,
-  fetchPnpmDeps,
   versionCheckHook,
   nix-update-script,
 }:
 
-let
-  version = "1.1.4";
+buildGoModule (finalAttrs: {
+  pname = "ldap-manager";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "netresearch";
     repo = "ldap-manager";
-    tag = "v${version}";
-    hash = "sha256-G4UUgjTbRmVmbLvSv95kwhqnTUCygW8plkdYFGcHBqE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wq/VZ+F/m13YQjJfCoN+UgaeAazWup2JINJ3I9KM3d0=";
   };
 
-  frontend = stdenvNoCC.mkDerivation {
-    pname = "ldap-manager-frontend";
-    inherit version src;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    pnpmDeps = fetchPnpmDeps {
-      pname = "ldap-manager";
-      inherit version src;
-      pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-XFdKb43NxslB60GEDIBbKFYRClq0SeUqPwA81SAZaug=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm css:build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r internal/web/static $out/static
-
-      runHook postInstall
-    '';
-  };
-in
-
-buildGoModule (finalAttrs: {
-  pname = "ldap-manager";
-  inherit version src;
-
-  vendorHash = "sha256-ekgnjhO9GAml/A8pf9Hj6lseYJkvvf87f7tiwWixyKU=";
-
-  nativeBuildInputs = [
-    templ
-  ];
-
-  patches = [
-    # Add --version support
-    # https://github.com/netresearch/ldap-manager/pull/462
-    (fetchpatch {
-      url = "https://github.com/netresearch/ldap-manager/pull/462.patch";
-      hash = "sha256-OykLep7uGZ79/lqOC4KNnSThCqQsmDo6vDqaoWVX3XI=";
-    })
-  ];
+  vendorHash = "sha256-sE8XGlQg6FLDfgYdioa5i5Gv8LyQo16p0oIaiyMOzZ4=";
 
   excludedPackages = [
     "internal/e2e"
@@ -85,8 +25,7 @@ buildGoModule (finalAttrs: {
   ];
 
   preBuild = ''
-    cp -r ${frontend}/static/* internal/web/static/
-    templ generate
+    go tool templ generate
   '';
 
   ldflags = [

@@ -3,24 +3,32 @@
   lib,
   fetchPypi,
   portalocker,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.11.10";
-  format = "setuptools";
+  pyproject = true;
   pname = "applicationinsights";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b761f3ef0680acf4731906dfc1807faa6f2a57168ae74592db0084a6099f7b3";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-C3YfPvBoCs9HMZBt/BgH+qbypXFornRZLbAISmCZ97M=";
   };
 
-  propagatedBuildInputs = [ portalocker ];
+  build-system = [ setuptools ];
+
+  dependencies = [ portalocker ];
+
+  pythonImportsCheck = [ "applicationinsights" ];
 
   meta = {
     description = "This project extends the Application Insights API surface to support Python";
     homepage = "https://github.com/Microsoft/ApplicationInsights-Python";
+    changelog = "https://pypi.org/project/applicationinsights/${finalAttrs.version}/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

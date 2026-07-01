@@ -3,33 +3,39 @@
   fetchurl,
   appimageTools,
   makeWrapper,
+  asar,
   writeShellApplication,
   curl,
   common-updater-scripts,
 }:
 let
   pname = "beeper";
-  version = "4.2.808";
+  version = "4.2.948";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-ql5WkKVgQiKIHkNKd805xFezsvoW+8dqXx6MzfsxceM=";
+    hash = "sha256-MvfQSCV8b5aOeOSlTnRlOupzg+wmHhG0hGWznwCx0Yc=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
 
     postExtract = ''
+      appRoot="$out/resources/app"
+      ${lib.getExe asar} extract "$out/resources/app.asar" "$appRoot"
+      rm "$out/resources/app.asar"
+
       # disable creating a desktop file and icon in the home folder during runtime
-      linuxConfigFilename=$out/resources/app/build/main/linux-*.mjs
+      linuxConfigFilename=$appRoot/build/main/linux-*.mjs
       echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
       # disable auto update
-      sed -i 's/auto_update_disabled:[^,}]*/auto_update_disabled:true/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i 's/c=d??{},p=c.hw_acceleration??!0/c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0/g' $appRoot/build/main/index-*.mjs
 
       # prevent updates
-      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $out/resources/app/build/main/main-entry-*.mjs
+      sed -i -E 's/executeDownload\([^)]+\)\{/executeDownload(){return;/g' $appRoot/build/main/main-entry-*.mjs
 
-      # hide version status element on about page otherwise a error message is shown
-      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $out/resources/app/build/renderer/*.css
+      # hide version status element on about page otherwise an error message is shown
+      sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $appRoot/build-browser/*.css
+
     '';
   };
 in

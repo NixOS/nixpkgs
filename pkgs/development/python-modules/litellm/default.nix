@@ -43,7 +43,6 @@
   python-dotenv,
   python-multipart,
   pyyaml,
-  requests,
   resend,
   restrictedpython,
   rich,
@@ -62,19 +61,19 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.83.14";
+  version = "1.89.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-SZow0qof9DRlohWjT3J/NHtmhe96OLLcdHt55RQ7Zmw=";
+    tag = "v${version}";
+    hash = "sha256-tPw4cDqCQgyC8EoB5EPfui2gT+frjlSMOv95ntUXTWk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build==0.10.7" "uv_build"
+      --replace-fail "uv_build==0.11.8" "uv_build"
   '';
 
   build-system = [ uv-build ];
@@ -90,7 +89,6 @@ buildPythonPackage rec {
     openai
     pydantic
     python-dotenv
-    requests
     tiktoken
     tokenizers
   ];
@@ -175,7 +173,7 @@ buildPythonPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)"
       ];
     };
   };

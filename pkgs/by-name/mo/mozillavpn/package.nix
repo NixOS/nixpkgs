@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.36.0";
+  version = "2.38.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Mig/GJCFodOoTGk5iCO5WoFGYv3CdD7de65xgLf4xgk=";
+    hash = "sha256-IaMmW9ODlac/7Kqp9tEalVvLkUHaK786+HnTOqWVAk8=";
   };
   patches = [
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-5147SMY/lowPr4LYhaCBMRxDG53bxc67tsl8WaRuaQc=";
+    hash = "sha256-Y4Y2ZZh9Kdj6zZCHgvLNdfB0ehaF5nDJSOjTLelmYrE=";
   };
 
   buildInputs = [

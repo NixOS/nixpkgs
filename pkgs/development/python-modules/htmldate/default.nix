@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.4";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
     tag = "v${version}";
-    hash = "sha256-ZSHQgj6zXmLdqDQWGnh2l70iXzdohsxdAIQGDSBufIA=";
+    hash = "sha256-3qtksgzqcgWtUv81Aqeh0nTWYnH0PjPLG4NuYChbV0g=";
   };
 
   build-system = [ setuptools ];

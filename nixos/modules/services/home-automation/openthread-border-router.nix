@@ -203,15 +203,6 @@ in
       ]) cfg.backboneInterfaces
     );
 
-    # OTBR uses avahi for mDNS service publishing
-    services.avahi = {
-      enable = lib.mkDefault true;
-      publish = {
-        enable = lib.mkDefault true;
-        userServices = lib.mkDefault true;
-      };
-    };
-
     # The upstream service files (src/agent/otbr-agent.service.in, src/web/otbr-web.service.in) use
     # EnvironmentFile and CMake-substituted platform scripts that don't translate to NixOS, so the
     # services are rebuilt here from typed module options instead.

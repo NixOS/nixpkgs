@@ -8,7 +8,7 @@
   gobject-introspection,
   ninja,
   glib,
-  librest_1_0,
+  librest,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    librest_1_0
+    librest
   ];
 
   passthru = {

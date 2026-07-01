@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sev-snp-measure";
-  version = "0.0.12";
+  version = "0.0.13";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "virtee";
     repo = "sev-snp-measure";
     tag = "v${version}";
-    hash = "sha256-UcXU6rNjcRN1T+iWUNrqeJCkSa02WU1/pBwLqHVPRyw=";
+    hash = "sha256-euAmKIdLJiA+iRlsPJCxPuquE9eznwd937LVWO4DKpc=";
   };
 
   nativeBuildInputs = [

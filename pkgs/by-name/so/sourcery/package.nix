@@ -8,30 +8,39 @@
 }:
 
 let
-  platformInfos = {
-    "x86_64-linux" = {
-      platform = "manylinux1_x86_64";
-      hash = "sha256-tnRFcgMgHGcWtTGPFZZPkE9IKDfvejLmvvD2iwPbbLY=";
-    };
-    "x86_64-darwin" = {
-      platform = "macosx_10_9_universal2";
-      hash = "sha256-6dbLiFUku0F+UiFV6P6nXpR6dezSntriVJyTfFaIgP0=";
-    };
-  };
-
   inherit (stdenv.hostPlatform) system;
-  platformInfo = platformInfos.${system} or (throw "Unsupported platform ${system}");
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sourcery";
-  version = "1.37.0";
+  version = "1.43.0";
   format = "wheel";
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    format = "wheel";
-    inherit (platformInfo) platform hash;
-  };
+  passthru.sources =
+    let
+      fetchWheel =
+        { platform, hash }:
+        fetchPypi {
+          format = "wheel";
+          inherit (finalAttrs) pname version;
+          inherit platform hash;
+        };
+    in
+    {
+      "x86_64-linux" = fetchWheel {
+        platform = "manylinux1_x86_64";
+        hash = "sha256-oUL7EVbfwgV1K1Rv0kzW5r1AXr167BCXwzntDgVyTc0=";
+      };
+      "x86_64-darwin" = fetchWheel {
+        platform = "macosx_10_9_x86_64";
+        hash = "sha256-Ynn1BUBrmzRV2sL5ZGwOEQ/ccoV0edwFt4iiz9KN+k8=";
+      };
+      "aarch64-darwin" = fetchWheel {
+        platform = "macosx_11_0_arm64";
+        hash = "sha256-iQNOSoAClAk2FMjAExfgsFHDXS56vwieePGDCYRRbgQ=";
+      };
+    };
+
+  src = finalAttrs.passthru.sources.${system} or (throw "Unsupported platform ${system}");
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -45,9 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "sourcery";
     maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

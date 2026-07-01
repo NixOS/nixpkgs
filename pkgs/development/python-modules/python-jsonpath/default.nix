@@ -7,17 +7,17 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-jsonpath";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jg-rp";
     repo = "python-jsonpath";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-eVypnFeqFW2WJfCinWXJulVtxaFpNomK2tZNbmxsxrY=";
+    hash = "sha256-2AV+X3Vs+pYi3Iv7zy9/nXna5PgrofHmrH0xyaumZWk=";
   };
 
   build-system = [ hatchling ];
@@ -34,13 +34,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ optional-dependencies.strict;
+  ++ finalAttrs.passthru.optional-dependencies.strict;
 
   meta = {
-    changelog = "https://github.com/jg-rp/python-jsonpath/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jg-rp/python-jsonpath/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Flexible JSONPath engine for Python with JSON Pointer and JSON Patch";
     homepage = "https://github.com/jg-rp/python-jsonpath";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

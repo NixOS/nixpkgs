@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-base";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sktime";
     repo = "skbase";
     tag = "v${version}";
-    hash = "sha256-qKMOvGm876zG2P9W593922YZvOOCSgUeEWXWkKiTnEY=";
+    hash = "sha256-OxsaBzdT8Tv6eVGd4jyfmmdjp4+5jdfEh34rkyWgZpA=";
   };
 
   build-system = [ setuptools ];

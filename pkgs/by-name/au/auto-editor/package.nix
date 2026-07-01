@@ -5,24 +5,13 @@
   buildNimPackage,
   fetchFromGitHub,
 
-  withHEVC ? true,
-  withWhisper ? false, # TODO: Investigate linker failure. See PR 476678
-  withVpx ? true,
-  withSvtAv1 ? true,
-  withCuda ? false,
-  withVpl ? stdenv.hostPlatform.isLinux,
-
   ffmpeg-full,
   yt-dlp,
   lame,
   libopus,
   libvpx,
   x264,
-  x265,
   dav1d,
-  svt-av1,
-  libvpl,
-  whisper-cpp,
 
   python3,
   python3Packages,
@@ -30,13 +19,13 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "29.7.0";
+  version = "30.4.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-R1GnvFjC/nq/gIiX6rUxP7qR3IfpGfc4Ci28AIk4CfQ=";
+    hash = "sha256-AzUTDOWzyhZLrwqO9HfZ/Ke72LElJAMzVoDydBfYKwg=";
   };
 
   lockFile = ./lock.json;
@@ -47,20 +36,16 @@ buildNimPackage rec {
     libopus
     x264
     dav1d
-  ]
-  ++ lib.optionals withHEVC [ x265 ]
-  ++ lib.optionals withWhisper [ whisper-cpp ]
-  ++ lib.optionals withVpx [ libvpx ]
-  ++ lib.optionals withSvtAv1 [ svt-av1 ]
-  ++ lib.optionals withVpl [ libvpl ];
+  ];
 
-  nimFlags =
-    lib.optionals withHEVC [ "-d:enable_hevc" ]
-    ++ lib.optionals withWhisper [ "-d:enable_whisper" ]
-    ++ lib.optionals withVpx [ "-d:enable_vpx" ]
-    ++ lib.optionals withSvtAv1 [ "-d:enable_svtav1" ]
-    ++ lib.optionals withCuda [ "-d:enable_cuda" ]
-    ++ lib.optionals withVpl [ "-d:enable_vpl" ];
+  env = {
+    # Nothing should be dynamically linked, as ffmpeg should already link it.
+    DISABLE_HEVC = "1";
+    DISABLE_WHISPER = "1";
+    DISABLE_VPX = "1";
+    DISABLE_SVTAV1 = "1";
+    DISABLE_VPL = "1";
+  };
 
   postPatch = ''
     substituteInPlace src/log.nim \
@@ -69,6 +54,8 @@ buildNimPackage rec {
     # buildNimPackage hack
     substituteInPlace ae.nimble \
       --replace-fail '"main=auto-editor"' '"main"'
+
+    mv tests/unit.nim tests/tunit.nim # buildNimPackage expects tests to start with t
   '';
 
   nativeCheckInputs = [
@@ -79,7 +66,7 @@ buildNimPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    eval "nim r --nimcache:$NIX_BUILD_TOP/nimcache $nimFlags $src/tests/unit.nim"
+    nim_builder --phase:check
 
     substituteInPlace tests/test.py \
       --replace-fail '"./auto-editor"' "\"$out/bin/main\""

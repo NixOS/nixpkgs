@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyituran";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shmuelzon";
     repo = "pyituran";
     tag = version;
-    hash = "sha256-Nil9bxXzDvwMIVTxeaVUOtJwx92zagA6OzQV3LMR8d8=";
+    hash = "sha256-+3trWl9eijrtGfgBn5m4KfIVhS8u/o8n90bs3a3K9mo=";
   };
 
   postPatch = ''

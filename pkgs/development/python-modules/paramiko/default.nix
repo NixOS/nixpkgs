@@ -30,6 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     bcrypt
     cryptography
+    invoke
     pynacl
   ];
 
@@ -39,7 +40,6 @@ buildPythonPackage rec {
       gssapi
     ];
     ed25519 = [ ];
-    invoke = [ invoke ];
   };
 
   nativeCheckInputs = [

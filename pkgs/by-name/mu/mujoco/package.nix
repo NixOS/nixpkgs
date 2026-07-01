@@ -20,14 +20,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "255c84dadd029fd8ad25c5efb5933e47beaa00c7";
-      hash = "sha256-TJT2Kzc64zI42FAbbGWP3Sshh1dU/D/AtEpgZrrhebg=";
+      rev = "5650e9cf76d3be4318d5fa3af38ee483ddfd5e4a";
+      hash = "sha256-O9ClnGm4WSTX3g1Q2VYTMhUtGG52XBwxzgHtWW9WSG0=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "5c55f5d4f45a1b09c5d98aa63a671993ebd42c69";
-      hash = "sha256-CChXn58cqam3d6Q61ZJMr5NFq1Ezc5uywA7FSPhk4GI=";
+      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
+      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "75bcd155c40cb48e647c87c3f29052360255bc9e";
-      hash = "sha256-ZBm3ac6Kt7gOqNip6PeNNMiOF0fwG+7PJYA47KT0ogI=";
+      rev = "ea13a98decd497a8c5588fb5de71b57bcf10d864";
+      hash = "sha256-v9bNWc9yfK3vG8hYhQ7vkc7DHaoPF6RAKfX9kC0Gw8c=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -53,11 +53,17 @@ let
       rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
       hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
     };
+    miniz = fetchFromGitHub {
+      owner = "richgel999";
+      repo = "miniz";
+      rev = "d10b03cc73475af673df40f06e5cefd1d5f940d9";
+      hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
+    };
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "62ccc56af071eaa478bef6ed41fd7a55d3bb2d80";
-      hash = "sha256-kIxHtE0L/axV9WKnQzyFN0mxoIFAI33Z+MP0P/MtQPw=";
+      rev = "d1c2fc0caa5f644f3a0f220290d4a868c68ed4f6";
+      hash = "sha256-enwzl4td3lgYwQ4PXfcONKQrxChnJcvf8ehnJ6vf0yg=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
@@ -82,7 +88,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.8.1";
+  version = "3.10.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-eoZblIIH+tUNKPdVERGh1dE0KoWwMpP0LA6FgcJCiNU=";
+    hash = "sha256-wNsTTq5z+wKE0rSw2cyY1tJxP5i7LGu05DR7KfZEBtE=";
   };
 
   patches = [
@@ -128,8 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Move things into place so that cmake doesn't try downloading dependencies.
   preConfigure = ''
     mkdir -p build/_deps
-    ln -s ${pin.abseil-cpp} build/_deps/abseil-cpp-src
     ln -s ${pin.benchmark} build/_deps/benchmark-src
+  ''
+  # mujoco applies a patch on top of abseil-cpp's sources
+  # https://github.com/google-deepmind/mujoco/blob/3.10.0/cmake/MujocoDependencies.cmake#L299-L300
+  + ''
+    cp -r ${pin.abseil-cpp} build/_deps/abseil-cpp-src
+    chmod -R +w build/_deps/abseil-cpp-src
   ''
   # cccd is patched by mujoco's cmake and thus needs to be writable
   # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L232-L235
@@ -141,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${pin.eigen3} build/_deps/eigen3-src
     ln -s ${pin.googletest} build/_deps/googletest-src
     ln -s ${pin.lodepng} build/_deps/lodepng-src
+    ln -s ${pin.miniz} build/_deps/miniz-src
   ''
   # qhull is patched by mujoco's cmake and thus needs to be writable
   # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L132-L135

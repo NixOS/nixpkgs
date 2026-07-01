@@ -1,14 +1,14 @@
 {
   lib,
   buildNpmPackage,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 buildNpmPackage rec {
   pname = "piped";
@@ -21,7 +21,7 @@ buildNpmPackage rec {
     hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm ];
   npmConfigHook = pnpmConfigHook;
 
   installPhase = ''
@@ -36,10 +36,10 @@ buildNpmPackage rec {
       pname
       version
       src
+      pnpm
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-IB/suR1I1hNip1qpIcUCP0YyUEDV2EwE5F2WXW8OhmU=";
+    fetcherVersion = 4;
+    hash = "sha256-o5NKMMIVPkKiPx++ALcZ+3oN80DMQHPwQqGT4f4q5P8=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -47,7 +47,7 @@ buildNpmPackage rec {
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     license = [ lib.licenses.agpl3Plus ];
   };
 

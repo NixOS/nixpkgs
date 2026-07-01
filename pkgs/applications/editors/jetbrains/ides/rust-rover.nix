@@ -18,20 +18,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.1.tar.gz";
-      hash = "sha256-UYljm43s/UOEvk0Peio2Crsdx0K5U5Seo57M34A1A1c=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.3.tar.gz";
+      hash = "sha256-0+v05zxvFqXV13c8oV9dTTwtO+shgywD75cwUiZAab0=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.1-aarch64.tar.gz";
-      hash = "sha256-FUDCF4pOtovjBKaNV0dEjc5PwsDLBXTTHnc3+oNDU7A=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-SZ4OkWgAGeSafFo1ml5dv5tN5su+HgzbEhQ5GzPqGdo=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.1.dmg";
-      hash = "sha256-DxrFdxSLiyH7/davL4QeAPxlKK3IA5JXzPetTYaMtck=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.3.dmg";
+      hash = "sha256-JA++mbKvRTvjHEblbgmjBzbWbxcV7ss3+W9M6i6ePu0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.1-aarch64.dmg";
-      hash = "sha256-K9Gwkudx+WV25fA1IRwfDlqcK8X0I/SzrL7S2iG7IfI=";
+      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.3-aarch64.dmg";
+      hash = "sha256-ndipMTztrYeUdo4MfOHjJHk3liHutWmMj+J6G8xjtWA=";
     };
   };
   # update-script-end: urls
@@ -45,8 +45,8 @@ in
   product = "RustRover";
 
   # update-script-start: version
-  version = "2026.1.1";
-  buildNumber = "261.23567.140";
+  version = "2026.1.3";
+  buildNumber = "261.25134.134";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

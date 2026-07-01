@@ -7,6 +7,9 @@
   pythonAtLeast,
   stdenv,
 
+  # native dependencies
+  openvino-native,
+
   # dependencies
   backports-strenum,
   flatbuffers,
@@ -45,6 +48,10 @@ buildPythonPackage {
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    openvino-native
+  ];
 
   dependencies = [
     backports-strenum

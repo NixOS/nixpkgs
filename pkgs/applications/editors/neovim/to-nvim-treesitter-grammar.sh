@@ -4,7 +4,11 @@ toNvimTreesitterGrammar() {
     echo "Executing toNvimTreesitterGrammar"
 
     mkdir -p "$out/parser"
-    ln -s "$origGrammar/parser" "$out/parser/$grammarName.so"
+    if [ -e "$origGrammar/parser.wasm" ]; then
+        ln -s "$origGrammar/parser.wasm" "$out/parser/$grammarName.wasm"
+    else
+        ln -s "$origGrammar/parser" "$out/parser/$grammarName.so"
+    fi
 
     if [ "$installQueries" != 1 ]; then
         echo "Installing queries is disabled: installQueries=$installQueries"

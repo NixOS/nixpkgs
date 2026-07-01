@@ -14,6 +14,7 @@
   clang-tools,
   useWildLinker,
   hello,
+  taplo,
 }:
 let
   # These wrappers are REQUIRED for the Wild test suite to pass
@@ -101,6 +102,10 @@ in
     checkInputs = [
       stdenv.cc.libc.out
       stdenv.cc.libc.static
+    ];
+
+    nativeCheckInputs = [
+      taplo
     ];
 
     # https://github.com/davidlattimore/wild/discussions/832#discussioncomment-14482948

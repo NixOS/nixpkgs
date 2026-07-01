@@ -12,7 +12,12 @@
     rustPlatform.buildRustPackage (
       {
         pname = name;
-        inherit (reaction) version src cargoHash;
+        inherit (reaction)
+          version
+          src
+          patches
+          cargoHash
+          ;
         buildAndTestSubdir = "plugins/${name}";
 
         meta = {

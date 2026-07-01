@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemu";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "nemuTUI";
     repo = "nemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QvyCBHZmahZPIghPX53HcL5HsOVvhsVwdMZosVQ9A5U=";
+    hash = "sha256-DGHrCQjaikjkANb+/H69JCIO3S4vgag28BLx1HcCnQ0=";
   };
 
   cmakeFlags = [

@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-history-service";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/history-service";
     rev = finalAttrs.version;
-    hash = "sha256-pcTYuumywTarW+ZciwwvmmBQQH6aq4+FdVjV62VzSZU=";
+    hash = "sha256-DZ6Ob0hMO3iOeNGP7tICeRMVxPl61FgHNPGk1T9HWuI=";
   };
 
   outputs = [

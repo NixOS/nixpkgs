@@ -96,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ davisrichard437 ];
+    maintainers = [ ];
   };
 })

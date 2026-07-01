@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     inherit (src.meta) homepage;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ethercrow ];
+    maintainers = [ ];
     mainProgram = "tcpkali";
   };
 }

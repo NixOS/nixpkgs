@@ -12,11 +12,8 @@
   sqlalchemy,
   pycrypto,
   cryptography,
-  isPy27,
   pytestCheckHook,
   setuptools,
-  funcsigs ? null,
-  pycryptopp ? null,
 }:
 
 buildPythonPackage rec {
@@ -38,10 +35,6 @@ buildPythonPackage rec {
     sqlalchemy
     pycrypto
     cryptography
-  ]
-  ++ lib.optionals isPy27 [
-    funcsigs
-    pycryptopp
   ];
 
   nativeCheckInputs = [

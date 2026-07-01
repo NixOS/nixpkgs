@@ -20,27 +20,15 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "12";
+          patch = "13";
           suffix = "";
         };
-        hash = "sha256-KoTNMd2Njqiq/3XeZvwbSwEn3VeZqlCmSumjE4hbRZM=";
+        hash = "sha256-Krkf9AF4PMymT3XRDIgulXvf1g4r9acvhCF5Nym3inE=";
       };
     };
 
   in
   {
-
-    python27 = callPackage ./cpython/2.7 {
-      self = __splicedPackages.python27;
-      sourceVersion = {
-        major = "2";
-        minor = "7";
-        patch = "18";
-        suffix = ".12"; # ActiveState's Python 2 extended support
-      };
-      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
-      inherit passthruFun;
-    };
 
     python311 = callPackage ./cpython {
       self = __splicedPackages.python311;
@@ -79,10 +67,10 @@
       sourceVersion = {
         major = "3";
         minor = "14";
-        patch = "3";
+        patch = "4";
         suffix = "";
       };
-      hash = "sha256-qX1VSemtgf4XFZ7QLGh3StXSZscvjZoLWpw3H+hdkCs=";
+      hash = "sha256-2SPFEwPjjiSRNvwb3zVo1W7LAyFO/e9IUWF209f6rvg=";
       inherit passthruFun;
     };
 
@@ -92,9 +80,9 @@
         major = "3";
         minor = "15";
         patch = "0";
-        suffix = "b1";
+        suffix = "b3";
       };
-      hash = "sha256-1NUsz6HXJ+9SNfu31w+h26zxC4s3YNtiKHXaBay+Q3w=";
+      hash = "sha256-apNa4jSmfmVJiUNzsM/rg2EYLQOyFEIyiulZirdCISc=";
       inherit passthruFun;
     };
 

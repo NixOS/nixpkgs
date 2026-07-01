@@ -1,26 +1,37 @@
-{ config, lib, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.timesyncd;
 in
 {
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "timesyncd"
+      "extraConfig"
+    ] "Use services.timesyncd.settings.Time instead.")
+  ];
+
   options = {
 
-    services.timesyncd = with types; {
-      enable = mkOption {
+    services.timesyncd = {
+      enable = lib.mkOption {
         default = !config.boot.isContainer;
-        defaultText = literalExpression "!config.boot.isContainer";
-        type = bool;
+        defaultText = lib.literalExpression "!config.boot.isContainer";
+        type = lib.types.bool;
         description = ''
           Enables the systemd NTP client daemon.
         '';
       };
-      servers = mkOption {
+      servers = lib.mkOption {
         default = null;
-        type = nullOr (listOf str);
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         description = ''
           The set of NTP servers from which to synchronise.
 
@@ -31,10 +42,10 @@ in
           See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
-      fallbackServers = mkOption {
+      fallbackServers = lib.mkOption {
         default = config.networking.timeServers;
-        defaultText = literalExpression "config.networking.timeServers";
-        type = nullOr (listOf str);
+        defaultText = lib.literalExpression "config.networking.timeServers";
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         description = ''
           The set of fallback NTP servers from which to synchronise.
 
@@ -45,21 +56,23 @@ in
           See {manpage}`timesyncd.conf(5)` for details.
         '';
       };
-      extraConfig = mkOption {
-        default = "";
-        type = lines;
-        example = ''
-          PollIntervalMaxSec=180
-        '';
+      settings.Time = lib.mkOption {
+        default = { };
+        type = lib.types.submodule {
+          freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+        };
+        example = {
+          PollIntervalMaxSec = 180;
+        };
         description = ''
-          Extra config options for systemd-timesyncd. See
-          {manpage}`timesyncd.conf(5)` for available options.
+          Settings for systemd-timesyncd. See {manpage}`timesyncd.conf(5)` for
+          available options.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
 
@@ -76,16 +89,17 @@ in
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
     };
 
-    environment.etc."systemd/timesyncd.conf".text = ''
-      [Time]
-    ''
-    + optionalString (cfg.servers != null) ''
-      NTP=${concatStringsSep " " cfg.servers}
-    ''
-    + optionalString (cfg.fallbackServers != null) ''
-      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-    ''
-    + cfg.extraConfig;
+    services.timesyncd.settings.Time = lib.mkMerge [
+      (lib.mkIf (cfg.servers != null) {
+        NTP = lib.mkDefault (lib.concatStringsSep " " cfg.servers);
+      })
+      (lib.mkIf (cfg.fallbackServers != null) {
+        FallbackNTP = lib.mkDefault (lib.concatStringsSep " " cfg.fallbackServers);
+      })
+    ];
+
+    environment.etc."systemd/timesyncd.conf".text =
+      utils.systemdUtils.lib.settingsToSections cfg.settings;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

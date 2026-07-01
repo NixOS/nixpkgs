@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.wm.uni-bayreuth.de/de/team/rambau_joerg/TOPCOM/index.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

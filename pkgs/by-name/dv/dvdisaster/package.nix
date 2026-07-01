@@ -14,13 +14,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "dvdisaster";
-  version = "0.79.10-pl5";
+  version = "0.79.10-pl6";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "dvdisaster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lWvZDB08lZb87l4oEbrdtc6Me4mWHiW3DFNXYoYR3a0=";
+    hash = "sha256-yQldvTvmbZgIOLKzdubd1zomSRKvAkTnS6hpEYWPr8A=";
   };
 
   nativeBuildInputs = [

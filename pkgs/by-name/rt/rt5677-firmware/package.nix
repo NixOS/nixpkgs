@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Firmware for Realtek rt5677 device";
+    homepage = "https://github.com/raphael/linux-samus";
     license = lib.licenses.unfreeRedistributableFirmware;
     maintainers = with lib.maintainers; [ zohl ];
     platforms = lib.platforms.linux;

@@ -1,6 +1,5 @@
 {
   stdenv,
-  comma,
   fetchFromGitHub,
   installShellFiles,
   fzy,
@@ -8,22 +7,24 @@
   nix-index-unwrapped,
   nix,
   rustPlatform,
-  testers,
+  versionCheckHook,
   buildPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
-  version = "2.3.3";
+  version = "2.4.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dNek1a8Yt3icWc8ZpVe1NGuG+eSoTDOmAAJbkYmMocU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XZB0zx4wyNzy0LggAmh2gT2aEWAqVI9NljRoOkeK0c8=";
   };
 
-  cargoHash = "sha256-SJBfWjOVrv2WMIh/cQbaFK8jn3oSbmJpdJM7pkJppDs=";
+  cargoHash = "sha256-lY5HwWZm9X0xusLcC6MciAgSWEskNElrjhe9fexR6g8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,30 +36,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"fzy"' '"${lib.getExe fzy}"'
   '';
 
-  postInstall = ''
-    ln -s $out/bin/comma $out/bin/,
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      ln -s $out/bin/comma $out/bin/,
 
-    mkdir -p $out/share/comma
+      mkdir -p $out/share/comma
 
-    cp $src/etc/command-not-found.sh $out/share/comma
-    cp $src/etc/command-not-found.nu $out/share/comma
-    cp $src/etc/command-not-found.fish $out/share/comma
+      cp $src/etc/command-not-found.sh $out/share/comma
+      cp $src/etc/command-not-found.nu $out/share/comma
+      cp $src/etc/command-not-found.fish $out/share/comma
 
-    patchShebangs $out/share/comma/command-not-found.sh
-    substituteInPlace \
-      "$out/share/comma/command-not-found.sh" \
-      "$out/share/comma/command-not-found.nu" \
-      "$out/share/comma/command-not-found.fish" \
-      --replace-fail "comma --ask" "$out/bin/comma --ask"
-  ''
-  + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    ${stdenv.hostPlatform.emulator buildPackages} "$out/bin/comma" --mangen > comma.1
-    installManPage comma.1
-  '';
+      patchShebangs $out/share/comma/command-not-found.sh
+      substituteInPlace \
+        "$out/share/comma/command-not-found.sh" \
+        "$out/share/comma/command-not-found.nu" \
+        "$out/share/comma/command-not-found.fish" \
+        --replace-fail "comma --ask" "$out/bin/comma --ask"
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${emulator} "$out/bin/comma" --mangen > comma.1
+      installManPage comma.1
 
-  passthru.tests = {
-    version = testers.testVersion { package = comma; };
-  };
+      installShellCompletion --cmd comma \
+        --bash <(${emulator} $out/bin/comma --print-completions bash) \
+        --fish <(${emulator} $out/bin/comma --print-completions fish) \
+        --zsh <(${emulator} $out/bin/comma --print-completions zsh)
+
+      # TODO: Add , to other shells too
+      cat >>$out/share/zsh/site-functions/_comma <<'EOF'
+        if [ "$funcstack[1]" = "_comma" ]; then
+            _comma "$@"
+        else
+            compdef _comma ,
+        fi
+      EOF
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/nix-community/comma";

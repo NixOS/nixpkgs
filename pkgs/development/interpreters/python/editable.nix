@@ -39,7 +39,7 @@ let
   # In editable mode build-system's are considered to be runtime dependencies.
   dependencies' = dependencies ++ build-system;
 
-  pyproject = {
+  pyprojectContents = {
     # PEP-621 project table
     project = {
       name = pname;
@@ -81,7 +81,7 @@ buildPythonPackage (
     pyproject = true;
 
     unpackPhase = ''
-      python -c "import json, tomli_w; print(tomli_w.dumps(json.load(open('$pyprojectContentsPath'))))" > pyproject.toml
+      python -c "import json, os, tomli_w; attrs = json.load(open(os.environ['NIX_ATTRS_JSON_FILE'], 'r')); print(tomli_w.dumps(attrs['pyprojectContents']))" > pyproject.toml
       echo 'import os.path, sys; sys.path.insert(0, os.path.expandvars("${root}"))' > _${pname}.pth
     '';
 
@@ -92,8 +92,8 @@ buildPythonPackage (
     # Note: Using formats.toml generates another intermediary derivation that needs to be built.
     # We inline the same functionality for better UX.
     nativeBuildInputs = (derivationArgs.nativeBuildInputs or [ ]) ++ [ tomli-w ];
-    pyprojectContents = builtins.toJSON pyproject;
-    passAsFile = [ "pyprojectContents" ];
+    inherit pyprojectContents;
     preferLocalBuild = true;
+    __structuredAttrs = true;
   }
 )

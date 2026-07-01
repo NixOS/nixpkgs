@@ -1,53 +1,54 @@
 {
   lib,
   stdenv,
-  qt5,
+  qt6,
   fetchFromGitLab,
   libGLU,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar";
-  version = "1.7.1";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
-    repo = "OSCAR-code";
+    repo = "oscar-sql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cOhbWihTHGkBxiMGZhBZ3ejo8kOxlWDctun3Mz5h7AQ=";
+    hash = "sha256-ivOEAP7/pc5yS6mhc/6ButbSjfFmOP4PM7c/S23oyYw=";
   };
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtserialport
+    qt6.qtbase
+    qt6.qttools
     libGLU
   ];
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-    qt5.qmake
+    qt6.wrapQtAppsHook
+    qt6.qmake
+    qt6.qtserialport
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postPatch = ''
-    substituteInPlace oscar/oscar.pro --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace oscar/oscar.pro \
+      --replace-fail "/bin/bash" "${stdenv.shell}" \
+      --replace-fail "\$\$[QT_INSTALL_BINS]/lrelease" "${qt6.qttools}/bin/lrelease"
   '';
 
   qmakeFlags = [ "OSCAR_QT.pro" ];
 
   installPhase = ''
     runHook preInstall
-    install -d $out/bin
-    install -d $out/share/OSCAR/Help
-    install -d $out/share/OSCAR/Html
-    install -d $out/share/OSCAR/Translations
-    install -d $out/share/icons/OSCAR
-    install -d $out/share/applications
-    install -T oscar/OSCAR $out/bin/OSCAR
+    install -D oscar/OSCAR20 -t $out/bin
     # help browser was removed 'temporarily' in https://gitlab.com/pholy/OSCAR-code/-/commit/57c3e4c33ccdd2d0eddedbc24c0e4f2969da3841
-    # install oscar/Help/* $out/share/OSCAR/Help
-    install oscar/Html/* $out/share/OSCAR/Html
-    install oscar/Translations/* $out/share/OSCAR/Translations
-    install -T Building/Linux/OSCAR.png $out/share/icons/OSCAR/OSCAR.png
-    install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
+    # install -D oscar/Help/* -t $out/share/OSCAR/Help
+    install -D oscar/Html/* -t $out/share/OSCAR/Html
+    install -D oscar/Translations/* -t $out/share/OSCAR/Translations
+    install -D Building/Linux/OSCAR.png -t $out/share/icons/hicolor/48x48/apps
+    install -D Building/Linux/OSCAR.svg -t $out/share/icons/hicolor/scalable/apps
+    install -D Building/Linux/OSCAR.desktop -t $out/share/applications
     runHook postInstall
   '';
 

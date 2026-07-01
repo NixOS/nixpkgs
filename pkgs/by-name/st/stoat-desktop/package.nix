@@ -11,24 +11,30 @@
   copyDesktopItems,
   pnpm_10,
   nodejs,
-  electron_38,
+  electron_42,
   zip,
+  nix-update-script,
 }:
 let
-  electron = electron_38;
+  electron = electron_42;
   stdenv = stdenvNoCC;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vMXnBniA0wyoK7Pe13h/yHtf8ky59ts4VQb9k7KuUCE=";
+    hash = "sha256-l4kxlPwohaxserVyNAb3Dp4f5XhnPUKeuRJwrOl9EWc=";
   };
+
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
 
   postPatch = ''
     # Disable auto-updates
@@ -53,10 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-m0EuM8qTCFLxxO0RNze5WgMkuHZXeIi+U/Jiuv91eCg=";
+    hash = "sha256-0v+MHYFgnIN4FvzFkv5D3Bqc7538763yCIWu05XR+fA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -138,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupNotify = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source user-first chat platform";

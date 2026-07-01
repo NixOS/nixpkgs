@@ -7,6 +7,7 @@
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
+  chromium-hsts-preload-list,
   cmake,
   ninja,
   pkg-config,
@@ -14,11 +15,13 @@
   libavif,
   angle, # libEGL
   libjxl,
+  libedit,
   libpulseaudio,
   libwebp,
   libxcrypt,
   mimalloc,
   openssl,
+  perl,
   python3,
   qt6Packages,
   woff2,
@@ -33,6 +36,8 @@
   skia,
   nixosTests,
   unstableGitUpdater,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
   libtommath,
   sdl3,
   icu78,
@@ -41,22 +46,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-05-04";
+  version = "0-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "90b790f8702a5d5c5a66ef02f8669da2838ca6e3";
-    hash = "sha256-BdJ24YtKMv8B6Vvequf9b5qr0S3FfFuphFo78mCIaN4=";
+    rev = "02b205361dd239e134f434e484b609d1fa5f1938";
+    hash = "sha256-+CVJjrL1kqT2A7r89F+riiHpMa39rcggqG9SByidUY4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-sbNYOdY56+waCVQHbGuvV5jT9EawV2IiGmL1e/O6ZRc=";
+    hash = "sha256-n0ACVH8NXwe7SIaGFoJ20WIGGR3XjcuLTwPSKGJpT5s=";
   };
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
+
+    perl -0pi -e \
+      's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
+      Meta/CMake/check_for_dependencies.cmake
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
@@ -80,12 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
+
+    mkdir build/Caches/HSTSPreload
+    cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
   '';
 
   nativeBuildInputs = [
     cargo
     cmake
     ninja
+    perl
     pkg-config
     python3
     rustPlatform.cargoSetupHook
@@ -103,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     angle # libEGL
     libjxl
+    libedit
     libwebp
     libxcrypt
     mimalloc
@@ -131,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu78
     simdjson
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
   ];
@@ -170,7 +184,25 @@ stdenv.mkDerivation (finalAttrs: {
     nixosTest = nixosTests.ladybird;
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript =
+    let
+      updateSource = unstableGitUpdater {
+        hardcodeZeroVersion = true;
+      };
+
+      updateCargoDeps = {
+        command = [
+          (lib.getExe' common-updater-scripts "update-source-version")
+          "ladybird"
+          "--ignore-same-version"
+          "--source-key=cargoDeps.vendorStaging"
+        ];
+      };
+    in
+    _experimental-update-script-combinators.sequence [
+      updateSource
+      updateCargoDeps
+    ];
 
   meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
@@ -179,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       fgaz
       jk
+      schembriaiden
     ];
     platforms = [
       "x86_64-linux"

@@ -3,9 +3,7 @@
   aiohttp,
   aioresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
-  cachetools,
   fetchFromGitHub,
   mashumaro,
   orjson,
@@ -14,6 +12,7 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
+  python-backoff,
   syrupy,
   typer,
   yarl,
@@ -22,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wled";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CUTuIQf6gj9teLicIOtu1FUsYiYXtKeLNuDbNh/21sc=";
+    hash = "sha256-1JLW3wze4W3Uva9xIeSAmYw8f9tDfGxe9rueixVedms=";
   };
 
   postPatch = ''
@@ -43,10 +42,9 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     awesomeversion
-    backoff
-    cachetools
     mashumaro
     orjson
+    python-backoff
     yarl
   ];
 
@@ -70,6 +68,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # wled release table rendering is inconsistent
     "test_releases_command"
+    # outdated snapshots
+    "test_device_version_fixture"
   ];
 
   pythonImportsCheck = [ "wled" ];

@@ -576,6 +576,7 @@ stdenv.mkDerivation (
                 ;
               debug = debugSymbols;
             };
+            meta.license = lib.licenses.mit;
           } ../hooks/qtbase-setup-hook.sh;
         in
         "${hook}/nix-support/setup-hook";
@@ -602,7 +603,6 @@ stdenv.mkDerivation (
         ];
         maintainers = with lib.maintainers; [
           qknight
-          ttuegel
           bkchr
         ];
         pkgConfigModules = [

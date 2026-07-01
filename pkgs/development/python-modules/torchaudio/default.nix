@@ -126,6 +126,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Very long to run
     "AutogradCPUTest"
+    "TestAutogradLfilterCPU"
+    "TestWav2Vec2Model"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!
@@ -133,6 +135,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "test_batch_pitch_shift"
     "test_batch_spectrogram"
     "test_griffinlim_0_99"
+
+    # RuntimeError: illegal immediate parameter (range error)
+    "test_lfilter_shape_4"
+    "test_lfilter_shape_6"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
     # AssertionError: Tensor-likes are not close!

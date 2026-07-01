@@ -48,6 +48,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.entrypoint = "lovelace-horizon-card.js";
+
   meta = {
     description = "Sun Card successor: Visualize the position of the Sun over the horizon";
     homepage = "https://github.com/rejuvenate/lovelace-horizon-card";

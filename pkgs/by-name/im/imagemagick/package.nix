@@ -41,7 +41,7 @@
   pango,
   libtiffSupport ? true,
   libtiff,
-  libultrahdrSupport ? true,
+  libultrahdrSupport ? lib.meta.availableOn stdenv.hostPlatform libultrahdr,
   libultrahdr,
   libxml2Support ? true,
   libxml2,
@@ -61,6 +61,7 @@
   nixos-icons,
   perlPackages,
   python3,
+  nix-update-script,
 }:
 
 assert libXtSupport -> libX11Support;
@@ -88,13 +89,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-19";
+  version = "7.1.2-24";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-4uASM+GRTe0ES6FdshUMMkVof4IlLV+CMm2l+v5qZN0=";
+    hash = "sha256-oSH0dsQ3cuFNYJIIr6LHbv82FbFxxcmkjQ5csTNsYCA=";
   };
 
   outputs = [
@@ -203,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       version = lib.head (lib.splitString "-" finalAttrs.version);
     };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://www.imagemagick.org/";

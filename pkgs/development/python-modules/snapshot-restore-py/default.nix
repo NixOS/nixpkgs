@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   setuptools,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "snapshot-restore-py";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";

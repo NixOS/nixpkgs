@@ -47,6 +47,9 @@ in
 
 {
   config = lib.mkIf (cfg.enable && nixPackage.pname == "lix") {
+    # Require the tun kernel module for pasta, can be disabled if pasta is not used.
+    boot.kernelModules.tun = lib.mkDefault true;
+
     environment.systemPackages = [
       nixPackage
       pkgs.nix-info

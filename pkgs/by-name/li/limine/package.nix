@@ -1,5 +1,6 @@
 # Derivation containing the Limine host tool and the compiled bootloader
 {
+  fetchpatch,
   fetchurl,
   lib,
   llvmPackages,
@@ -47,15 +48,25 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "12.2.0";
+  version = "12.3.3";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-24oRmHjP7q1jwKeCNsV3xAU5xXWUlpUOoO0yps9WeGU=";
+    hash = "sha256-8aUp2lzVClyje6WHMTOnuOclhLEn1zMf6U5VTl5gEvc=";
   };
+
+  patches = [
+    # Merged upstream in https://github.com/Limine-Bootloader/Limine/pull/599,
+    # remove on the next release.
+    (fetchpatch {
+      name = "align-linux-modules.patch";
+      url = "https://github.com/Limine-Bootloader/Limine/commit/6635ae4ff2321f9a3c85116a57a00e3b6edc100b.patch";
+      hash = "sha256-poAcZND5xwS8npHCytS9lwcQi9oCEcc4bR+6HKVXJ78=";
+    })
+  ];
 
   enableParallelBuilding = true;
 

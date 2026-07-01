@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.55.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1t0fHBYBBfG8oFbo1QPXb5y8+lyIPPve4bDtry+KF5Q=";
+    hash = "sha256-ge3epfB8xErF+2I1jW3OvHS+mHnGSSU6vOz2v/sSMW4=";
   };
 
-  cargoHash = "sha256-/a/KnZEXBeAtYS0yXCmI+07acol0/UBwauIKTi/QF1k=";
+  cargoHash = "sha256-iwd6GCbI3PiM1ksAxDEZglueGWYCkEbJ3N76wn13TPY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # needed for internal protobuf c wrapper library
     PROTOC = "${protobuf}/bin/protoc";
-    PROTOC_INCLUDE = "${protobuf}/include";
     RUSTONIG_SYSTEM_LIBONIG = true;
 
     TZDIR = "${tzdata}/share/zoneinfo";
@@ -86,6 +85,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
+
+  # https://github.com/vectordotdev/vector/pull/25406
+  postPatch = ''
+    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
+      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
+  '';
 
   doCheck = true;
   checkType = "debug";
@@ -152,9 +157,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) vector;
-    };
+    tests = nixosTests.vector;
     updateScript = nix-update-script { };
   };
 

@@ -49,6 +49,7 @@ in
 {
   combinedDir,
   touchedFilesJson,
+  baseBranch,
   ownersFile ? ../../OWNERS,
 }:
 let
@@ -172,6 +173,7 @@ let
       rebuildCountByKernel = lib.mapAttrs (
         kernel: kernelRebuilds: lib.length kernelRebuilds
       ) rebuildsByKernel;
+      rebuildNames = extractPackageNames diffAttrs.rebuilds;
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
@@ -188,7 +190,8 @@ let
             kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
           ) rebuildsByKernel
           // {
-            "10.rebuild-nixos-tests" = lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds);
+            "10.rebuild-nixos-tests" =
+              lib.elem "nixosTests.simple-container" rebuildNames || lib.elem "nixosTests.simple-vm" rebuildNames;
           };
       }
     );
@@ -236,33 +239,32 @@ runCommand "compare"
       jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
     } >> $out/step-summary.md
 
-    if jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
-      # Chunks have changed between revisions
-      # We cannot generate a performance comparison
-      {
-        echo
-        echo "# Performance comparison"
-        echo
-        echo "This compares the performance of this branch against its pull request base branch (e.g., 'master')"
-        echo
-        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
-        echo
-      } >> $out/step-summary.md
+    {
+      echo
+      echo "# Performance comparison"
+      echo
+      echo "This compares the performance of this branch against the \`${baseBranch}\` branch."
+      echo
+    } >> $out/step-summary.md
 
-      cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
-
-    else
-      # Package chunks are the same in both revisions
-      # We can use the to generate a performance comparison
+    # cmp-stats only compares the stats chunks present in both revisions, so the
+    # comparison is still produced when packages were added/removed. The paired
+    # chunks may cover different attrs in that case, so caveat the figures.
+    if ! jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
       {
+        echo "> [!NOTE]"
+        echo "> The package sets differ between the two revisions. This comparison only"
+        echo "> covers packages evaluated in both, so treat the figures as approximate."
         echo
-        echo "# Performance Comparison"
-        echo
-        echo "Performance stats were skipped because the package sets differ between the two revisions."
-        echo
-        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
       } >> $out/step-summary.md
     fi
+
+    {
+      echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
+      echo
+    } >> $out/step-summary.md
+
+    cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
 
     jq -r '.[]' "${touchedFilesJson}" > ./touched-files
     readarray -t touchedFiles < ./touched-files

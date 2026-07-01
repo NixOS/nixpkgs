@@ -6,6 +6,7 @@
   stdenv,
   zig_0_15,
   emacs,
+  xcbuild,
 }:
 
 let
@@ -13,13 +14,13 @@ let
 
   pname = "ghostel";
 
-  version = "0-unstable-2026-05-06";
+  version = "0.39.0-unstable-2026-06-26";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
-    rev = "5bce751687f3b33978a4244a1611648bbedb7124";
-    hash = "sha256-MAV3iQeriZhE9SGwVEnKs2rwebbEnPP1LiHuCAjlGE8=";
+    rev = "92bfcc57dc85f254ce95dcb51dbdd2411fea5f02";
+    hash = "sha256-havDs3fZENB/ozMWWKQkdsyHUIBIeewmrjL+3xJKM94=";
   };
 
   module = stdenv.mkDerivation (finalAttrs: {
@@ -28,12 +29,37 @@ let
     deps = zig.fetchDeps {
       inherit (finalAttrs) src pname version;
       fetchAll = true;
-      hash = "sha256-ghN/UMACgkFQQEr4nH5gbbJbt/+2bz6tL2bJpbw9mGE=";
+      hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
     };
 
-    nativeBuildInputs = [ zig ];
+    nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
+
+    dontSetZigDefaultFlags = true;
+
+    doCheck = true;
+
+    zigCheckFlags = [
+      "-Dcpu=baseline"
+      # See https://github.com/ghostty-org/ghostty/blob/main/PACKAGING.md#build-options
+      "-Doptimize=ReleaseFast"
+    ];
+
+    zigBuildFlags = finalAttrs.zigCheckFlags;
+
+    postPatch = ''
+      # https://github.com/dakra/ghostel/issues/446
+      substituteInPlace build.zig \
+        --replace-fail 'addInstallFile(version_file, "../ghostel-module.version")' \
+                       'addInstallFile(version_file, "ghostel-module.version")'
+
+      # remove copy_step
+      substituteInPlace build.zig \
+        --replace-fail 'b.getInstallStep().dependOn(&copy_step.step);' ' ' \
+        --replace-fail 'const copy_step = b.addInstallFile' \
+                       '_ = b.addInstallFile'
+    '';
 
     postConfigure = ''
       cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
@@ -47,11 +73,12 @@ melpaBuild {
   inherit pname version src;
 
   files = ''
-    (:defaults "etc" "ghostel-module${libExt}")
+    (:defaults "etc" "ghostel-module${libExt}" "ghostel-module.version")
   '';
 
   preBuild = ''
     install ${module}/lib/libghostel-module${libExt} ghostel-module${libExt}
+    install --mode=444 ${module}/ghostel-module.version ghostel-module.version
   '';
 
   passthru = {

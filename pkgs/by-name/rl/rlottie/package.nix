@@ -25,6 +25,11 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  patches = [
+    # rename format to run-clang-format to avoid conflict
+    ./rename_format_to_run-clang-format.patch
+  ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-U__ARM_NEON__";

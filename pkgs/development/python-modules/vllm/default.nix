@@ -305,7 +305,7 @@ let
 
   mergedCudaLibraries = with cudaPackages; [
     cuda_cudart # cuda_runtime.h, -lcudart
-    cuda_cccl
+    cccl
     libcurand # curand_kernel.h
     libcusparse # cusparse.h
     libcusolver # cusolverDn.h
@@ -603,6 +603,11 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       # find_isa Function invoked with incorrect arguments for function named:
       # find_isa
       "x86_64-darwin"
+    ];
+    knownVulnerabilities = [
+      "CVE-2026-27893"
+      "CVE-2026-44222"
+      "CVE-2026-44223"
     ];
   };
 })

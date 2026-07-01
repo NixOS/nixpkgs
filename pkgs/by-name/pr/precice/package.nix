@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PreCICE stands for Precise Code Interaction Coupling Environment";
     homepage = "https://precice.org/";
     license = with lib.licenses; [ lgpl3Only ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
     mainProgram = "precice-tools";
     platforms = lib.platforms.unix;
   };

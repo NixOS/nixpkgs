@@ -1,9 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   writeShellScript,
   dash,
+  gitMinimal,
   php,
   phpCfg ? null,
   withPostgreSQL ? true, # “strongly recommended” according to docs
@@ -45,22 +45,14 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TQ8PLmz9hn+OFfIF5cckv5gGhID7vuA5O1xVJ6PSPVA=";
+    hash = "sha256-2RWTx/mhMAi13v7BUfJmGvkPc4iqKdVR0B5rCbD5YaQ=";
   };
-
-  patches = [
-    # Removes debug var_dump that was accidentally left in
-    (fetchpatch2 {
-      url = "https://github.com/movim/movim/commit/239bd099711d196df574106155374f301f2c9531.patch";
-      hash = "sha256-tLWUOKTJDFE9obrnghG/S8FHJY0rcWlueWncHVdi0Jk=";
-    })
-  ];
 
   php = php.buildEnv (
     {
@@ -97,7 +89,26 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-iy869AKgn/ZL1jYFvqvYkfr4lv5J4l2W6glGqZvJLhE=";
+  # Composer ≥2.8 defaults preferred-install to
+  # dist only (not auto), which prevents fallback
+  # to git clone when dist downloads fail (such as
+  # MS GitHub’s codeload.* in the build sandbox).
+  composerVendor = php.mkComposerVendor {
+    inherit (finalAttrs)
+      pname
+      src
+      version
+      vendorHash
+      php
+      ;
+
+    postPatch = ''
+      composer config preferred-install auto
+    '';
+    nativeBuildInputs = [ gitMinimal ];
+  };
+
+  vendorHash = "sha256-hSXi1jKilsfhe5P7ElGydxu6uxOpYNeRhHlZGzgkUXw=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

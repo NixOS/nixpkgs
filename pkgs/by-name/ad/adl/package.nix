@@ -11,7 +11,7 @@
   trackma,
   ueberzug,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adl";
   version = "3.2.8";
 
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/bin
     cp $src/adl $out/bin
     wrapProgram $out/bin/adl \
-      --prefix PATH : ${lib.makeBinPath buildInputs}
+      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   meta = {
@@ -52,4 +52,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ weathercold ];
     mainProgram = "adl";
   };
-}
+})

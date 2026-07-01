@@ -32,6 +32,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Mopidy extension for playing music from SoundCloud";
+    homepage = "https://github.com/mopidy/mopidy-soundcloud";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

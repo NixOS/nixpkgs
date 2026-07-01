@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ucsmsdk";
-  version = "0.9.25";
+  version = "0.9.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CiscoUcs";
     repo = "ucsmsdk";
     tag = "v${version}";
-    hash = "sha256-hpGWaBlzfb5rcmgnmVQFGGH5T/EJRdilIH4Q83Ml8XQ=";
+    hash = "sha256-PX9SoUhFp0XlEXaKKEh1TA7+gNCUj+t0jOR5hgosu9c=";
   };
 
   build-system = [ setuptools ];

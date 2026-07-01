@@ -92,7 +92,7 @@ in
     settings = mkOption {
       description = ''
         Build veilid-server.conf with nix expression.
-        Check <link xlink:href="https://veilid.gitlab.io/developer-book/admin/config.html#configuration-keys">Configuration Keys</link>.
+        Check [Configuration Keys](https://veilid.gitlab.io/developer-book/admin/config.html#configuration-keys).
       '';
       type = types.submodule {
         freeformType = settingsFormat.type;

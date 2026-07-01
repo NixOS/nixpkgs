@@ -50,6 +50,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/nipunn1313/mypy-protobuf";
     license = lib.licenses.asl20;
     mainProgram = "protoc-gen-mypy";
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 })

@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication {
     pycairo
     pygobject3
     six
-    xlib
+    python-xlib
   ];
 
   postPatch = ''
@@ -85,6 +85,6 @@ python3Packages.buildPythonApplication {
     description = "Mute your microphone while typing";
     mainProgram = "hushboard";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ keysmashes ];
+    maintainers = [ ];
   };
 }

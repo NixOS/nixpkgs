@@ -126,6 +126,28 @@ let
     '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath)
   );
 
+  # openresty bundles the lua module and resty.core; stock nginx needs them added.
+  packageBundlesLua = p: lib.getName p == "openresty";
+  luaEnv = pkgs.luajit_openresty.withPackages (
+    ps:
+    lib.optional (cfg.lua.enable && !packageBundlesLua cfg.package) ps.lua-resty-core
+    ++ cfg.lua.extraPackages ps
+  );
+  luaVersion = pkgs.luajit_openresty.luaversion;
+  # Lua modules install under lib/lua or share/lua depending on the package; ;; keeps nginx's defaults.
+  luaConfig = ''
+    lua_package_path '${
+      lib.concatMapStringsSep ";" (s: "${luaEnv}/${s}") [
+        "lib/lua/${luaVersion}/?.lua"
+        "lib/lua/${luaVersion}/?/init.lua"
+        "share/lua/${luaVersion}/?.lua"
+        "share/lua/${luaVersion}/?/init.lua"
+      ]
+    };;';
+    lua_package_cpath '${luaEnv}/lib/lua/${luaVersion}/?.so;;';
+    lua_ssl_trusted_certificate ${config.security.pki.caBundle};
+  '';
+
   toUpstreamParameter =
     key: value:
     if builtins.isBool value then lib.optionalString value key else "${key}=${toString value}";
@@ -204,11 +226,6 @@ let
             ${optionalString (cfg.sslCiphers != null)
               "ssl_ciphers ${
                 if lib.isList cfg.sslCiphers then (lib.concatStringsSep ":" cfg.sslCiphers) else cfg.sslCiphers
-              };"
-            }
-            ${optionalString (cfg.sslDhparam != false)
-              "ssl_dhparam ${
-                if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
               };"
             }
 
@@ -299,6 +316,8 @@ let
             client_max_body_size ${cfg.clientMaxBodySize};
 
             server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+            ${optionalString cfg.lua.enable luaConfig}
 
             ${cfg.commonHttpConfig}
 
@@ -776,7 +795,11 @@ in
         apply =
           p:
           p.override {
-            modules = lib.unique (p.modules ++ cfg.additionalModules);
+            modules = lib.unique (
+              p.modules
+              ++ cfg.additionalModules
+              ++ lib.optional (cfg.lua.enable && !packageBundlesLua p) pkgs.nginxModules.lua
+            );
           };
         description = ''
           Nginx package to use. This defaults to the stable version. Note
@@ -794,6 +817,36 @@ in
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
+      };
+
+      lua = {
+        enable = mkEnableOption ''
+          Lua scripting in nginx via OpenResty's lua-nginx-module,
+          wiring up `lua_package_path`/`lua_package_cpath` for
+          {option}`services.nginx.lua.extraPackages`.
+
+          Use this to add Lua to a stock nginx. For the full OpenResty platform —
+          required by libraries that depend on its bundled lualib (for example
+          `lua-resty-openidc`, which needs `resty.string` and friends) — set
+          {option}`services.nginx.package` to `pkgs.openresty` instead; this option
+          then only sets up the search path and leaves OpenResty's built-in Lua
+          module in place
+        '';
+
+        extraPackages = mkOption {
+          type = types.functionTo (types.listOf types.package);
+          default = ps: [ ];
+          defaultText = literalExpression "ps: [ ]";
+          example = literalExpression ''
+            ps: with ps; [ lua-resty-openidc ]
+          '';
+          description = ''
+            Extra Lua packages to put on `lua_package_path` / `lua_package_cpath`,
+            for both stock nginx and `pkgs.openresty`. Packages are selected from
+            `pkgs.luajit_openresty.pkgs`. `lua-resty-core`, which the Lua module
+            requires to start, is added automatically.
+          '';
+        };
       };
 
       logError = mkOption {
@@ -981,9 +1034,6 @@ in
           "ECDHE-RSA-AES256-GCM-SHA384"
           "ECDHE-ECDSA-CHACHA20-POLY1305"
           "ECDHE-RSA-CHACHA20-POLY1305"
-          "DHE-RSA-AES128-GCM-SHA256"
-          "DHE-RSA-AES256-GCM-SHA384"
-          "DHE-RSA-CHACHA20-POLY1305"
         ];
         description = ''
           List of available cipher suites to choose from when negotiating TLS sessions.
@@ -1000,13 +1050,6 @@ in
         default = "TLSv1.2 TLSv1.3";
         example = "TLSv1.3";
         description = "Allowed TLS protocol versions.";
-      };
-
-      sslDhparam = mkOption {
-        type = types.either types.path types.bool;
-        default = false;
-        example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1308,6 +1351,13 @@ in
   };
 
   imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "sslDhparam" ] ''
+      DHE cipher suites have been removed from the default nginx cipher list.
+
+      No additional configuration is required as ECDHE is used by default already.
+
+      If you wish to use Hybrid PQ key exchange, you can set services.nginx.recommendedTlsSettings = true.
+    '')
     (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
@@ -1678,8 +1728,6 @@ in
       in
       listToAttrs acmePairs;
 
-    security.dhparams.params.nginx = lib.mkIf (cfg.sslDhparam == true) { };
-
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {
         group = cfg.group;
@@ -1709,4 +1757,8 @@ in
       postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
     };
   };
+  meta.maintainers = [
+    lib.maintainers.leona
+    lib.maintainers.ma27
+  ];
 }

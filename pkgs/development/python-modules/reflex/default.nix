@@ -72,7 +72,7 @@ let
     buildPythonPackage {
       inherit pname version src;
       pyproject = true;
-      sourceRoot = "${src.name}/packages/${pname}";
+      sourceRoot = workspace.sourceRoot or "${src.name}/packages/${pname}";
 
       build-system = [
         hatchling
@@ -98,14 +98,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.1";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YYy/K4AXeh9wS4Vodg3NOqwolPYHTgpP5/yWkutMsxo=";
+    hash = "sha256-CTW8p8cPSZnTMgXk9F6oHvbfIiTtgKZVvRygUZbccJw=";
   };
 
   build-system = [
@@ -193,18 +193,27 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError (mocked_open.call_count == 2)
     "test_delete_token_from_config"
+
+    # circular imports (reflex-docgen)
+    "test_compiling_docs_does_not_evaluate_upload"
+    "test_enterprise_parent_breadcrumb_uses_overview_route"
   ];
 
   disabledTestPaths = [
     "tests/benchmarks/"
     "tests/integration/"
 
+    # unable to import agent_files (should be in docs/app/agent_files/)
+    "docs/app/tests/test_agent_files.py"
+
     # circular imports (reflex-docgen)
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
+    "tests/units/docgen/test_reflex_transformer.py"
+    "docs/app/tests/test_doc_links.py"
     "docs/app/tests/test_docgen_double_eval.py"
 
-    # circular imports (reflex_site_shared)
+    # circular imports (reflex-site-shared)
     "docs/app/tests/test_routes.py"
   ];
 
@@ -257,7 +266,8 @@ buildPythonPackage (finalAttrs: {
         hatch-reflex-pyi.dependencies = [
           hatchling
         ];
-        integrations-docs.dependencies = [
+        reflex-integrations-docs.sourceRoot = "${finalAttrs.src.name}/packages/integrations-docs";
+        reflex-integrations-docs.dependencies = [
         ];
         reflex-base.dependencies = [
           packaging
@@ -364,7 +374,6 @@ buildPythonPackage (finalAttrs: {
           mistletoe
           pyyaml
           finalAttrs.finalPackage # reflex
-          typing-extensions
           typing-inspection
         ];
         reflex-hosting-cli.dependencies = [
@@ -394,6 +403,7 @@ buildPythonPackage (finalAttrs: {
           subPkgs.reflex-components-recharts
           subPkgs.reflex-components-sonner
           subPkgs.reflex-hosting-cli
+          subPkgs.reflex-integrations-docs
           ruff
           ruff-format
         ];

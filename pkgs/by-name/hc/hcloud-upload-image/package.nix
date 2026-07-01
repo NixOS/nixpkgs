@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "hcloud-upload-image";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "apricote";
     repo = "hcloud-upload-image";
     tag = "v${version}";
-    hash = "sha256-1u9tpzciYjB/EgBI81pg9w0kez7hHZON7+AHvfKW7k0=";
+    hash = "sha256-l2LFx1f7X4t8yELWqryJgLW8Mr5Wey9AbI2wCpA2GJ0=";
   };
 
-  vendorHash = "sha256-IdOAUBPg0CEuHd2rdc7jOlw0XtnAhr3PVPJbnFs2+x4=";
+  vendorHash = "sha256-hKsyweWmLZ0zH8VRX//YWYszbdmwrH5LCHn/SKeDbuk=";
 
   ldflags = [
     "-s"

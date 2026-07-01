@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   pnpmConfigHook,
   callPackage,
   testers,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lessc";
-  version = "4.6.3";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-udfqfjdIhQ6UGAeXCT5FbI+iXNqfkbQMqZnnIDUrQaQ=";
+    hash = "sha256-D/gPyPoxHeLjF7EU40Jw2Mb4ZRrnaLq8XnL+kL2yhic=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -32,16 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-ZdADm6WKPP48DK+ezk/jdzXVEBX161SqgYgU5fsCW2k=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-tlms2b0aodWkI+btdmCnwSDgsURekaBdiI8IZ/iMVnI=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     nodejs
   ];
 

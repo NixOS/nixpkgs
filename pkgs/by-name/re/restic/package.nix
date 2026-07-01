@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "restic";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lLinqZUOsZCPPybvVDB1f8o9Hl5qKYi0eHwJAaydsD8=";
+    hash = "sha256-9o67zhGDnWNuKGDun3OXtzZHKqw/vCzx5sLuQd/HzRY=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-4GVhG1sjFiuKyDUAgmSmFww5bDKIoCjejkkoSqkvU4E=";
+  vendorHash = "sha256-iJLnmxReBoHnt1xfewmmNs+fG3nqcNSpfJ1998wXKNU=";
 
   subPackages = [ "cmd/restic" ];
 

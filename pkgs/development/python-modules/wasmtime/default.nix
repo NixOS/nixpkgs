@@ -5,23 +5,27 @@
   python,
   pkgs,
   pycparser,
-  pytest-mypy,
   pytestCheckHook,
   setuptools-git-versioning,
   setuptools,
   writableTmpDirAsHomeHook,
+  stdenvNoCC,
 }:
-
+let
+  inherit (stdenvNoCC) targetPlatform;
+  systemDir = "${targetPlatform.parsed.kernel.name}-${targetPlatform.parsed.cpu.name}";
+  libExt = targetPlatform.extensions.sharedLibrary;
+in
 buildPythonPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "44.0.0";
+  version = "46.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime-py";
     tag = finalAttrs.version;
-    hash = "sha256-7K0j4jMsRB7/wNIj0pXxFTy0y7aN37wgCD1XKM92Ayw=";
+    hash = "sha256-PWMrmr9PPi98lQe5+KaY4bPLOYyJ5qYugMJwVwwnuwA=";
   };
 
   postPatch = ''
@@ -29,15 +33,19 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "setuptools-git-versioning>=2.0,<3" "setuptools-git-versioning" \
       --replace-fail 'build-backend = "backend"' 'build-backend = "setuptools.build_meta"'
 
-    substituteInPlace ci/cbindgen.py \
-      --replace-fail "'-D__builtin_va_list=int'," "'-D__builtin_va_list=int', '-Dnullptr_t=void*',"
+    # `wasmtime/_{extern,types,value}.py` erroneously report unreachable statements
+    substituteInPlace mypy.ini \
+      --replace-fail "warn_unreachable = True" "warn_unreachable = False"
+
+    # Don't run mypy via pytest-mypy (type checking breaks easily)
+    substituteInPlace pytest.ini \
+      --replace-fail 'addopts = --doctest-modules --mypy' 'addopts = --doctest-modules'
 
     sed -i '/^backend-path = \[/,/^\]/d' pyproject.toml
 
     # Use nixpkgs' wasmtime instead of downloading prebuilt C API artifacts.
-    mkdir -p wasmtime/linux-x86_64 wasmtime/linux-aarch64
-    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so wasmtime/linux-x86_64/_libwasmtime.so
-    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so wasmtime/linux-aarch64/_libwasmtime.so
+    mkdir -p wasmtime/${systemDir}
+    ln -s ${lib.getLib pkgs.wasmtime}/lib/libwasmtime${libExt} wasmtime/${systemDir}/_libwasmtime${libExt}
   '';
 
   build-system = [
@@ -49,21 +57,14 @@ buildPythonPackage (finalAttrs: {
 
   postInstall = ''
     # Ensure the installed module can find the shared library at runtime
-    mkdir -p "$out/${python.sitePackages}/wasmtime/linux-x86_64"
-    mkdir -p "$out/${python.sitePackages}/wasmtime/linux-aarch64"
-    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so "$out/${python.sitePackages}/wasmtime/linux-x86_64/_libwasmtime.so"
-    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime.so "$out/${python.sitePackages}/wasmtime/linux-aarch64/_libwasmtime.so"
+    mkdir -p "$out/${python.sitePackages}/wasmtime/${systemDir}"
+    ln -sf ${lib.getLib pkgs.wasmtime}/lib/libwasmtime${libExt} "$out/${python.sitePackages}/wasmtime/${systemDir}/_libwasmtime${libExt}"
   '';
 
   nativeCheckInputs = [
     pycparser
-    pytest-mypy
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ];
-
-  disabledTestPaths = [
-    "ci/cbindgen.py"
   ];
 
   pythonImportsCheck = [ "wasmtime" ];
@@ -71,13 +72,19 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     # cbindgen.py checks bindings against C headers during test collection.
     ln -s ${lib.getDev pkgs.wasmtime}/include wasmtime/include
+
+    # hardening options interfere with pycparser's CC call
+    export NIX_HARDENING_ENABLE=""
+
+    # $out is first in path which causes "import file mismatch"
+    export PYTHONPATH="$PWD:$PYTHONPATH"
   '';
 
   meta = {
     description = "Python WebAssembly runtime powered by Wasmtime";
     homepage = "https://github.com/bytecodealliance/wasmtime-py";
-    changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/{${finalAttrs.src.tag}}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/bytecodealliance/wasmtime-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
+    maintainers = [ lib.maintainers.fab ] ++ pkgs.wasmtime.meta.maintainers;
   };
 })

@@ -150,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-u0mBdWkxP4zI6NUhJ0LJrEDrbAAfTDi8IapsWWC9yWc=";
+    hash = "sha256-ttjLM1uBY8sL+jVcxdHUnHYlRFe5jGjnkgBLy17qGso=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-d4YA9fnDQyfyK675nP+tiTqJ1o2jqjwPHU1trXd8MCA=";
+    hash = "sha256-w8MuabpZ5ronQL3iaXbLErxPlTe1Mg8OsRb5foR59II=";
   };
 
   patches = [
@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # See:
     #
-    # * <https://github.com/LnL7/nix-darwin/issues/122>
+    # * <https://github.com/nix-darwin/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
 
@@ -404,10 +404,17 @@ stdenv.mkDerivation (finalAttrs: {
       fishConfig =
         let
           fishScript = writeText "test.fish" ''
-            set -x __fish_bin_dir ${finalAttrs.finalPackage}/bin
-            echo $__fish_bin_dir
-            cp -r ${finalAttrs.finalPackage}/share/fish/tools/web_config/* .
-            chmod -R +w *
+            # webconfig.py locates fish via $fish_bin_dir, which fish_config
+            # normally exports from the read-only $__fish_bin_dir.
+            set -x fish_bin_dir $__fish_bin_dir
+            echo $fish_bin_dir
+
+            # The web_config tool is embedded in the binary, so extract it.
+            for f in (status list-files tools/web_config)
+                mkdir -p (path dirname $f)
+                status get-file $f > $f
+            end
+            cd tools/web_config
 
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no

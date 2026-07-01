@@ -14,20 +14,19 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
     tag = version;
-    hash = "sha256-/5FJai6ad4ZQAK/IhiIuGv4yiBcT/iXFYcbZ+jeCoyI=";
+    hash = "sha256-Of/CSLcNnpTYHRm4toQK4/HXTWNcuEMkW6obWpg96Tc=";
   };
 
   postPatch = ''
-    substituteInPlace tox.ini \
-      --replace-fail "--doctest-modules" "" \
-      --replace-fail "--doctest-glob='tests/**/*.txt'" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<69" "setuptools"
   '';
 
   build-system = [ setuptools ];

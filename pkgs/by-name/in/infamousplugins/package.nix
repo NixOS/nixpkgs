@@ -10,7 +10,6 @@
   libxdmcp,
   libxft,
   ntk,
-  pcre,
   fftwFloat,
   zita-resampler,
 }:
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxft
     ntk
-    pcre
     fftwFloat
     zita-resampler
   ];

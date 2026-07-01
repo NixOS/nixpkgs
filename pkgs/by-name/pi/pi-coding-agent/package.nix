@@ -6,20 +6,22 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   ripgrep,
+  fd,
   makeBinaryWrapper,
+  stdenvNoCC,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
-  version = "0.73.0";
+  version = "0.80.2";
 
   src = fetchFromGitHub {
-    owner = "badlogic";
-    repo = "pi-mono";
+    owner = "earendil-works";
+    repo = "pi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oE4zMH5KEH185Vdp0CE221sa9rJJw35jFLlfhTa3Sg4=";
+    hash = "sha256-aKtgPc3rwHEp856jP3N7nImph0CSG+gsWq9OVci3hmE=";
   };
 
-  npmDepsHash = "sha256-rBlAzAnP9aif1tZ984AO4HftIJsDgLQ+02J3td4jcRg=";
+  npmDepsHash = "sha256-1EGs8lX8XoAnRtS+pw4lBRm24U/vtVB2loVRmZyd4Z8=";
 
   npmWorkspace = "packages/coding-agent";
 
@@ -52,9 +54,9 @@ buildNpmPackage (finalAttrs: {
     local nm="$out/lib/node_modules/pi-monorepo/node_modules"
 
     # Replace workspace deps needed at runtime with real copies
-    for ws in @mariozechner/pi-ai:packages/ai \
-              @mariozechner/pi-agent-core:packages/agent \
-              @mariozechner/pi-tui:packages/tui; do
+    for ws in @earendil-works/pi-ai:packages/ai \
+              @earendil-works/pi-agent-core:packages/agent \
+              @earendil-works/pi-tui:packages/tui; do
       IFS=: read -r pkg src <<< "$ws"
       rm "$nm/$pkg"
       cp -r "$src" "$nm/$pkg"
@@ -65,8 +67,25 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
+    # RPATHs with patchelf
+    rm -rf \
+      "$nm/@anthropic-ai/sandbox-runtime/dist/vendor/seccomp" \
+      "$nm/@anthropic-ai/sandbox-runtime/vendor/seccomp"
   '';
-  postFixup = "wrapProgram $out/bin/pi --prefix PATH : ${lib.makeBinPath [ ripgrep ]}";
+
+  postFixup = ''
+    wrapProgram $out/bin/pi --prefix PATH : ${
+      lib.makeBinPath [
+        ripgrep
+        fd
+      ]
+    } \
+      --set-default PI_SKIP_VERSION_CHECK 1 \
+      --set-default PI_TELEMETRY 0
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -82,8 +101,8 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Coding agent CLI with read, bash, edit, write tools and session management";
     homepage = "https://pi.dev/";
-    downloadPage = "https://www.npmjs.com/package/@mariozechner/pi-coding-agent";
-    changelog = "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md";
+    downloadPage = "https://www.npmjs.com/package/@earendil-works/pi-coding-agent";
+    changelog = "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ munksgaard ];
     mainProgram = "pi";

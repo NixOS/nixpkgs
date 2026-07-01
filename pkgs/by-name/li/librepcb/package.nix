@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "librepcb";
     repo = "librepcb";
     rev = version;
-    hash = "sha256-8hMPrpqwGNYXUTJGL/CMSP+Sjv5F6ZTkJHqauuOxwTw=";
+    hash = "sha256-UcX4r2TxinL2S3tPIiYRsPpYmKzdAx3Al0irkbXf5/g=";
     fetchSubmodules = true;
   };
 
@@ -38,13 +38,13 @@ stdenv.mkDerivation rec {
   cargoDeps1 = rustPlatform.fetchCargoVendor {
     inherit src;
     cargoRoot = "libs/librepcb/rust-core";
-    hash = "sha256-1td3WjxbDq2lX7c0trpYRhO82ChNAG/ZABBRsekYtq4=";
+    hash = "sha256-1wHk8ynP3VnkypwY/C7nikfMSF0qU0L+CbBKoVxjlEc=";
   };
 
   cargoDeps2 = rustPlatform.fetchCargoVendor {
     inherit src;
     cargoRoot = "libs/slint";
-    hash = "sha256-DYcKoaOXYFvAi5VyWdhli73s7qrypeXmzGJNhVzcWtY=";
+    hash = "sha256-UX/7a0hzFBmPZKufcDKcICrXEM+rKcvqEq2pg1riBxo=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     [source.crates-io]
     replace-with = "vendored-sources"
     [source.vendored-sources]
-    directory = "${cargoDeps1}"
+    directory = "${cargoDeps1}/source-registry-0"
     EOF
 
     # Set up cargo config for the second Rust library
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     [source.crates-io]
     replace-with = "vendored-sources"
     [source.vendored-sources]
-    directory = "${cargoDeps2}"
+    directory = "${cargoDeps2}/source-registry-0"
     EOF
   '';
 

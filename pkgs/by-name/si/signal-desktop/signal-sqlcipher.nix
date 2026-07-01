@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
   rustPlatform,
   cargo,
@@ -15,20 +16,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "3.2.1";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lkSQXiplkY5sBpHsAhW4odWe+MCalAo100EL7h4VKbg=";
+    hash = "sha256-RzuyUx0WEG8j8HwV5cepVJIeqYzJpNemFNtB+9NETto=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
-    fetcherVersion = 3;
-    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
+    fetcherVersion = 4;
+    hash = "sha256-HK3AetwGqFq/dhxX+aWgUww6eLCeQEkZIVsmmnYqdmM=";
   };
 
   cargoRoot = "deps/extension";
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     rustPlatform.cargoSetupHook
     cargo
@@ -53,21 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
-    pnpm run build
 
-    runHook postBuild
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
   '';
+
+  pnpmBuildScript = "build";
 
   installPhase = ''
     runHook preInstall
 
+    mkdir $out
     cp -r dist $out
     cp -r prebuilds $out
+    cp package.json $out
 
     runHook postInstall
   '';

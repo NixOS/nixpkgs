@@ -3,7 +3,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
 
   # runPythonCommand
   runCommand,
@@ -37,7 +36,6 @@
   fwupd-efi,
   gnutls,
   gusb,
-  libcbor,
   libdrm,
   libgudev,
   libjcat,
@@ -55,7 +53,6 @@
   tpm2-tss,
   valgrind,
   xz, # for liblzma
-  flashrom,
 
   # mesonFlags
   hwdata,
@@ -76,15 +73,11 @@
   nixosTests,
   nix-update-script,
 
-  enableFlashrom ? false,
   enablePassim ? false,
 }:
 
 let
   isx86 = stdenv.hostPlatform.isx86;
-
-  # Experimental
-  haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand =
     name: buildCommandPython:
@@ -129,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.1";
+  version = "2.1.5";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -147,39 +140,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-pb5BBA+3KTeZZ8WyNDaY9EKNTxp4MT/3G/MEgQ+Nysk=";
+    hash = "sha256-DzQ+N99ZmFRqZc2rN6PSqmoIMXUyrE8Kkn+KnT/AWPc=";
   };
 
   patches = [
-    # Install plug-ins and libfwupdplugin to $out output,
-    # they are not really part of the library.
     ./0001-Install-fwupdplugin-to-out.patch
-
-    # Installed tests are installed to different output
-    # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
     ./0002-Add-output-for-installed-tests.patch
-
-    # Since /etc is the domain of NixOS, not Nix,
-    # we cannot install files there.
-    # Let’s install the files to $prefix/etc
-    # while still reading them from /etc.
-    # NixOS module for fwupd will take take care of copying the files appropriately.
     ./0003-Add-option-for-installation-sysconfdir.patch
-
-    # EFI capsule is located in fwupd-efi now.
     ./0004-Get-the-efi-app-from-fwupd-efi.patch
-
-    # FIXME: remove patches that fix CI on aarch64 after next release
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/b3d721360faa4de7dd6960d8f9f8f13aa310715f.patch";
-      sha256 = "sha256-x37QCK7XBzUUjUj1m3jaNe1qvaqtszB9DGFyF8gC3Ig=";
-      name = "fix-mtdram-test-for-missing-kernel-module.patch";
-    })
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/commit/9ad8b76dc6c5af005a2c712ae3a6f352b51e9eea.patch";
-      sha256 = "sha256-h9zLTHeJbfDoamdfICKc0ohQ51yJC4I/CK0SQ4H6rRk=";
-      name = "fix-test_get_devices-on-non-x86-architectures.patch";
-    })
   ];
 
   postPatch = ''
@@ -207,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     ensureNewerSourcesForZipFilesHook # required for firmware zipping
     gettext
     gi-docgen
+    gnutls.bin
     gobject-introspection
+    libjcat.bin
     libxml2
     meson
     ninja
@@ -230,7 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     fwupd-efi
     gnutls
     gusb
-    libcbor
     libdrm
     libgudev
     libjcat
@@ -247,13 +216,9 @@ stdenv.mkDerivation (finalAttrs: {
     tpm2-tss
     valgrind
     xz # for liblzma
-  ]
-  ++ lib.optionals haveFlashrom [
-    flashrom
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "docs" true)
     # We are building the official releases.
     (lib.mesonEnable "supported_build" true)
     (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
@@ -262,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
-    (lib.mesonEnable "plugin_modem_manager" true)
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
     (lib.mesonEnable "hsi" isx86)
@@ -276,9 +240,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!enablePassim) [
     (lib.mesonEnable "passim" false)
-  ]
-  ++ lib.optionals (!haveFlashrom) [
-    (lib.mesonEnable "plugin_flashrom" false)
   ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
@@ -356,6 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/fwupd.conf"
+      "fwupd/remotes.d/lvfs-embargo.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"

@@ -91,9 +91,9 @@ let
       # files required to exist also won't be present, so missingok is forced.
       user=$(${pkgs.buildPackages.coreutils}/bin/id -un)
       group=$(${pkgs.buildPackages.coreutils}/bin/id -gn)
-      sed -e "s/\bsu\s.*/su $user $group/" \
-          -e "s/\b\(create\s\+[0-9]*\s*\|createolddir\s\+[0-9]*\s\+\).*/\1$user $group/" \
-          -e "1imissingok" -e "s/\bnomissingok\b//" \
+      sed -E -e "s/\bsu\s.*/su $user $group/" \
+             -e "s/\b((create|createolddir)\b(\s+[0-9]+)?).*/\1 $user $group/" \
+             -e "1imissingok" -e "s/\bnomissingok\b//" \
           $out > logrotate.conf
       # Since this makes for very verbose builds only show real error.
       # There is no way to control log level, but logrotate hardcodes

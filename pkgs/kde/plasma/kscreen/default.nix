@@ -3,8 +3,10 @@
   pkg-config,
   qtsensors,
   qtwayland,
-  dbus,
+  kitemmodels,
+  plasma5support,
   wayland-protocols,
+  dbus,
 }:
 mkKdeDerivation {
   pname = "kscreen";
@@ -14,6 +16,10 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsensors
     qtwayland
+
+    kitemmodels
+    plasma5support
+
     wayland-protocols
   ];
 

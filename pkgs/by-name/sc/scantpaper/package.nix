@@ -33,13 +33,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "scantpaper";
-  version = "3.0.7";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
-    rev = "v${version}";
-    hash = "sha256-CKD6hggVIHNPAft+DAsF4S+uZo+u/gbUStz9VaZtDBM=";
+    tag = "v${version}";
+    hash = "sha256-4YHC77Hgvl2A15klilJx0JdP9VWSpqBSj9q//faMNM8=";
   };
 
   pyproject = true;
@@ -104,7 +104,18 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath runtimeExecDeps)
   ];
 
+  postInstall = ''
+    install -Dm644 \
+      icons/hicolor/scalable/apps/scantpaper.svg \
+      $out/share/icons/hicolor/scalable/apps/scantpaper.svg
+
+    install -Dm444 \
+      org.scantpaper.desktop \
+      $out/share/applications/org.scantpaper.desktop
+  '';
+
   meta = with lib; {
+    changelog = "https://github.com/carygravel/scantpaper/blob/${src.tag}/changelog.md";
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://github.com/carygravel/scantpaper";
     license = licenses.gpl3Only;

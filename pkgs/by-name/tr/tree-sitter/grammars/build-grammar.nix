@@ -16,6 +16,11 @@
   ...
 }@args:
 
+let
+  isWasi = stdenv.hostPlatform.isWasi;
+  parserOutput = if isWasi then "parser.wasm" else "parser";
+  exportSymbol = "tree_sitter_${lib.replaceStrings [ "-" ] [ "_" ] language}";
+in
 stdenv.mkDerivation (
   {
     pname = "tree-sitter-${language}";
@@ -32,11 +37,18 @@ stdenv.mkDerivation (
 
     CFLAGS = [
       "-Isrc"
-      "-O2"
+      # Match upstream `tree-sitter build --wasm`
+      (if isWasi then "-Os" else "-O2")
+    ]
+    ++ lib.optionals isWasi [
+      "-fvisibility=hidden"
     ];
     CXXFLAGS = [
       "-Isrc"
-      "-O2"
+      (if isWasi then "-Os" else "-O2")
+    ]
+    ++ lib.optionals isWasi [
+      "-fvisibility=hidden"
     ];
 
     stripDebugList = [ "parser" ];
@@ -90,25 +102,44 @@ stdenv.mkDerivation (
       tree-sitter generate
     '';
 
-    # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
-    # different languages. Just randomly prefer C++ if that happens.
-    buildPhase = ''
-      runHook preBuild
-      if [[ -e src/scanner.cc ]]; then
-        $CXX -fPIC -c src/scanner.cc -o scanner.o $CXXFLAGS
-      elif [[ -e src/scanner.c ]]; then
-        $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
-      fi
-      $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
-      rm -rf parser
-      $CXX -shared -o parser *.o
-      runHook postBuild
-    '';
+    buildPhase =
+      if isWasi then
+        ''
+          runHook preBuild
+          if [[ -e src/scanner.cc || -e src/scanner.cpp ]]; then
+            nixErrorLog "tree-sitter wasm grammars only support C external scanners"
+            exit 1
+          fi
+          if [[ -e src/scanner.c ]]; then
+            $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
+          fi
+          $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
+          rm -rf parser.wasm
+          $CC -shared -o parser.wasm *.o \
+            -Wl,--export=${exportSymbol} \
+            -Wl,--allow-undefined \
+            -Wl,--no-entry \
+            -nostdlib
+          runHook postBuild
+        ''
+      else
+        ''
+          runHook preBuild
+          if [[ -e src/scanner.cc ]]; then
+            $CXX -fPIC -c src/scanner.cc -o scanner.o $CXXFLAGS
+          elif [[ -e src/scanner.c ]]; then
+            $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
+          fi
+          $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
+          rm -rf parser
+          $CXX -shared -o parser *.o
+          runHook postBuild
+        '';
 
     installPhase = ''
       runHook preInstall
       mkdir $out
-      mv parser $out/
+      mv ${parserOutput} $out/
       if [[ -f tree-sitter.json ]]; then
         cp tree-sitter.json $out/
       fi

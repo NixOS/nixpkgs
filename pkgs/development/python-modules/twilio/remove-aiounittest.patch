@@ -1,0 +1,120 @@
+From 62378b10ea8124435fbaf8c70f4c77f36f79ab7f Mon Sep 17 00:00:00 2001
+From: Santiago Arteta <santiagoarteta@gmail.com>
+Date: Tue, 21 Apr 2026 01:44:58 -0300
+Subject: [PATCH] tests: drop aiounittest in favor of stdlib
+ IsolatedAsyncioTestCase
+
+Fixes #916. aiounittest hasn't had a release since 2022 and doesn't
+support Python 3.14 (kwarunek/aiounittest#28), which was breaking the
+test suite build on 3.14.
+
+unittest.IsolatedAsyncioTestCase has been in the stdlib since Python 3.8
+and is a drop-in replacement for aiounittest.AsyncTestCase, so this is
+just an import swap.
+
+Changes:
+- tests/requirements.txt: remove aiounittest
+- tests/unit/http/test_async_http_client.py
+- tests/unit/rest/test_client.py
+- tests/unit/base/test_version.py
+
+Tested locally on Python 3.13 (Windows): 620 unit tests pass, including
+the 71 previously-async tests in the three files touched.
+---
+ tests/requirements.txt                    | 1 -
+ tests/unit/base/test_version.py           | 3 +--
+ tests/unit/http/test_async_http_client.py | 8 ++++----
+ tests/unit/rest/test_client.py            | 4 +---
+ 4 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/tests/requirements.txt b/tests/requirements.txt
+index 679f8e13d0..a6224c9827 100644
+--- a/tests/requirements.txt
++++ b/tests/requirements.txt
+@@ -2,7 +2,6 @@ Sphinx>=1.8.0
+ mock
+ pytest
+ pytest-cov
+-aiounittest
+ flake8
+ wheel>=0.22.0
+ cryptography
+diff --git a/tests/unit/base/test_version.py b/tests/unit/base/test_version.py
+index 94c0ad496f..85b9fdd16b 100644
+--- a/tests/unit/base/test_version.py
++++ b/tests/unit/base/test_version.py
+@@ -1,7 +1,6 @@
+ import unittest
+ from unittest.mock import Mock
+ 
+-import aiounittest
+ from tests import IntegrationTestCase
+ from tests.holodeck import Request
+ from twilio.base.version import Version
+@@ -791,7 +790,7 @@ def test_fetch_with_response_info_returns_tuple(self):
+         self.assertIsInstance(headers, dict)
+ 
+ 
+-class AsyncVersionTestCase(aiounittest.AsyncTestCase):
++class AsyncVersionTestCase(unittest.IsolatedAsyncioTestCase):
+     def setUp(self):
+         from tests.holodeck import AsyncHolodeck
+         from twilio.rest import Client
+diff --git a/tests/unit/http/test_async_http_client.py b/tests/unit/http/test_async_http_client.py
+index 23df35dc02..bbb89eda05 100644
+--- a/tests/unit/http/test_async_http_client.py
++++ b/tests/unit/http/test_async_http_client.py
+@@ -1,4 +1,4 @@
+-import aiounittest
++import unittest
+ 
+ from aiohttp import ClientSession
+ from mock import patch, AsyncMock
+@@ -20,7 +20,7 @@ async def text(self):
+         return self._text
+ 
+ 
+-class TestAsyncHttpClientRequest(aiounittest.AsyncTestCase):
++class TestAsyncHttpClientRequest(unittest.IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.session_mock = AsyncMock(wraps=ClientSession)
+         self.session_mock.request.return_value = MockResponse("test", 200)
+@@ -59,7 +59,7 @@ async def test_invalid_request_timeout_raises_exception(self):
+             await self.client.request("doesnt matter", "doesnt matter", timeout=-1)
+ 
+ 
+-class TestAsyncHttpClientRetries(aiounittest.AsyncTestCase):
++class TestAsyncHttpClientRetries(unittest.IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.session_mock = AsyncMock(wraps=ClientSession)
+         self.session_mock.request.side_effect = [
+@@ -92,7 +92,7 @@ async def test_request_retries_until_max(self):
+         self.assertEqual(response.text, "Error")
+ 
+ 
+-class TestAsyncHttpClientSession(aiounittest.AsyncTestCase):
++class TestAsyncHttpClientSession(unittest.IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.session_patcher = patch("twilio.http.async_http_client.ClientSession")
+         self.session_constructor_mock = self.session_patcher.start()
+diff --git a/tests/unit/rest/test_client.py b/tests/unit/rest/test_client.py
+index f2e2affc02..6053120f7b 100644
+--- a/tests/unit/rest/test_client.py
++++ b/tests/unit/rest/test_client.py
+@@ -1,7 +1,5 @@
+ import unittest
+ 
+-import aiounittest
+-
+ from mock import AsyncMock, Mock
+ 
+ from twilio.http.response import Response
+@@ -108,7 +106,7 @@ def test_set_user_agent_extensions(self):
+         self.assertEqual(user_agent_extensions, expected_user_agent_extensions)
+ 
+ 
+-class TestClientAsyncRequest(aiounittest.AsyncTestCase):
++class TestClientAsyncRequest(unittest.IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.mock_async_http_client = AsyncMock()
+         self.mock_async_http_client.request.return_value = Response(200, "test")

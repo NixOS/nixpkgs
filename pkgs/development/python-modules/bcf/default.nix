@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   appdirs,
   click,
   colorama,
@@ -13,24 +14,28 @@
   requests,
   schema,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bcf";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";
-    rev = "v${version}";
-    sha256 = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
-    sed -ri 's/@@VERSION@@/${version}/g' \
+    sed -ri 's/@@VERSION@@/${finalAttrs.version}/g' \
       bcf/__init__.py setup.py
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     click
     colorama
@@ -54,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

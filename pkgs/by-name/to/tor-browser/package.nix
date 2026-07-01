@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.13";
+  version = "15.0.17";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-v21pvipaEPj3WzDybQkDxHLefl14ZMCOJDQAvJatSSU=";
+      hash = "sha256-WJFDd+DVj4oKHjv7py3yVrttrrCHFcHJbyvLNOwCjhs=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-RPJUoRZlY1upYivnnDxSLJI2hoVII56PY7BeCN87lOc=";
+      hash = "sha256-pKmAKDWutSp7ptJ66PMiS59aV+pRs3Oz9pV64kRuebI=";
     };
   };
 
@@ -134,12 +134,6 @@ let
         version = "1.0";
         about = "Tor Browser for NixOS";
       };
-    }
-  );
-
-  policiesJson = writeText "policies.json" (
-    builtins.toJSON {
-      policies.DisableAppUpdate = true;
     }
   );
 in
@@ -213,8 +207,8 @@ stdenv.mkDerivation rec {
     # firefox is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv firefox.real firefox
 
-    # store state at `~/.tor browser` instead of relative to executable
-    touch "$TBB_IN_STORE/system-install"
+    # store state at `~/.tor project` instead of relative to executable
+    touch "$TBB_IN_STORE/is-packaged-app"
 
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
@@ -331,7 +325,6 @@ stdenv.mkDerivation rec {
 
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
-    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
 
     runHook postInstall
   '';
@@ -347,6 +340,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/raw/maint-${lib.versions.majorMinor version}/projects/browser/Bundle-Data/Docs-TBB/ChangeLog.txt";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [

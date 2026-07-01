@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "2W+JXyRTn5ZvV3srskia6E+CMpcKjQwGTkoAdHSne7s=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -46,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gi-docgen
   ];
 
   propagatedBuildInputs = [

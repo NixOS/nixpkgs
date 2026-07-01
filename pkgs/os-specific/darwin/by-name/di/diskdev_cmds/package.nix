@@ -3,30 +3,20 @@
   libutil,
   mkAppleDerivation,
   removefile,
-  pkgs,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
-  Libc = bootstrapSourceRelease "Libc";
-  xnu = bootstrapSourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "diskdev_cmds-deps-private-headers";
 
     buildCommand = ''
+      install -D -t "$out/include" \
+        '${Libc}/include/_bounds.h'
       for dir in arm i386 machine sys; do
         install -D -t "$out/include/$dir" '${xnu}'"/bsd/$dir/disklabel.h"
       done
@@ -58,7 +48,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-P2dg3B5pU2ayasMHIM5nI0iG+YDdYQNcEpnJzZxm1kw=";
+  xcodeHash = "sha256-qyQM+48PKKWUmdoBprpDf4DXIVAtd3EKCU+ZD/EhNXQ=";
 
   postPatch =
     # Fix incompatible pointer to integer conversion. The last parameter is size_t not a pointer.

@@ -17,13 +17,15 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sandbox-runtime";
-  version = "0.0.50";
+  version = "0.0.59";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "anthropic-experimental";
     repo = "sandbox-runtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L5MscAoXXaaUh0BgiDtVyjCdFneMP/w7jbE+1LVtRo0=";
+    hash = "sha256-aHjjIn1niFAEst6T35o4jGbCF1U/W12yh3BjO/lRTFM=";
   };
 
   postPatch =
@@ -35,7 +37,7 @@ buildNpmPackage (finalAttrs: {
 
   strictDeps = true;
 
-  npmDepsHash = "sha256-YAzekNE9lOEMRaaGqLdpXMXgqh4kfGp4CF54ShS3xwA=";
+  npmDepsHash = "sha256-k0tkb2GSuy6ZP94JGLmr2qQH1zAHZ5tLaRH3f3Mf/3E=";
 
   postFixup =
     let

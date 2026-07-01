@@ -14,7 +14,7 @@
   opt-einsum,
   typing-extensions,
 
-  # checks
+  # tests
   pyro-ppl,
   torch,
   pandas,
@@ -25,20 +25,19 @@
   requests,
   scipy,
   torchvision,
-
-  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "funsor";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "funsor";
-    tag = version;
-    hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
+    tag = finalAttrs.version;
+    hash = "sha256-0STJv1OOliJaHdmYUXdnOnocH3hVXceH/Uw5nILvT+U=";
   };
 
   patches = [
@@ -48,13 +47,6 @@ buildPythonPackage rec {
       hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
     })
   ];
-
-  # TypeError: clip() got an unexpected keyword argument 'a_max'
-  postPatch = ''
-    substituteInPlace funsor/jax/ops.py \
-      --replace-fail "a_max=" "max=" \
-      --replace-fail "a_min=" "min="
-  '';
 
   build-system = [ setuptools ];
 
@@ -87,24 +79,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funsor" ];
 
-  disabledTests = [
-    # `test_torch_save` got broken by the update of torch (2.3.1 -> 2.4.0):
-    # FutureWarning: You are using `torch.load` with `weights_only=False`...
-    # TODO: Try to re-enable this test at next release
-    "test_torch_save"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Failures related to JIT
-    # RuntimeError: required keyword attribute 'Subgraph' has the wrong type
-    "test_local_param_ok"
-    "test_plate_ok"
-  ];
-
   meta = {
     description = "Functional tensors for probabilistic programming";
     homepage = "https://funsor.pyro.ai";
-    changelog = "https://github.com/pyro-ppl/funsor/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/funsor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

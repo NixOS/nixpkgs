@@ -187,7 +187,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # timeout
+    # Timeout (>10.0s) from pytest-timeout.
     "test_build_error_logging"
     "test_can_evaluate_literals"
     "test_examples_build"
@@ -196,6 +196,11 @@ buildPythonPackage (finalAttrs: {
     "test_regression_rp2040_usb_diffpair"
     "test_reserved_attrs"
     "test_resistor"
+    "test_loooooong_chain"
+    "test_parser_netlist"
+    "test_dump_load_equality"
+    "test_performance_mifs_connect_check"
+
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"

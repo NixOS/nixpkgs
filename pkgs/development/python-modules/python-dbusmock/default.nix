@@ -73,7 +73,7 @@ buildPythonPackage rec {
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "harper";
     publisher = "elijah-potter";
     version = harper.version;
-    hash = "sha256-nK97C9ZYSI6dh4w1ntDP0mbmv6ez3pyAfv/4D30I2sA=";
+
+    # Because the binary is removed in favor of the harper package,
+    # it does not matter which binary is fetched. Using only a single
+    # hash makes this easier to maintain.
+    arch = "linux-x64";
+    hash = "sha256-/brjx/yY4JLLboI6dLwF/eyX7yhRyMlohhGNFGIrm54=";
   };
 
   nativeBuildInputs = [
@@ -23,8 +28,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."harper.path".default = "${harper}/bin/harper-ls"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."harper.path".default = "${lib.getExe harper}"' package.json | sponge package.json
+
+    rm ./bin/harper-ls
   '';
+
   passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
@@ -34,5 +42,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/automattic/harper";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ MasterEvarior ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

@@ -19,11 +19,7 @@ let
     }:
     makeTest {
       inherit name;
-      meta.maintainers = [
-        lib.maintainers.das_j
-        lib.maintainers.flokli
-        lib.maintainers.helsinki-Jo
-      ];
+      meta.maintainers = lib.teams.redis.members;
 
       nodes = {
         machine =

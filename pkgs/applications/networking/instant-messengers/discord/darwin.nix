@@ -65,14 +65,12 @@ let
   stageModules = writeShellScript "discord-stage-modules" ''
     store_modules="$1"
     modules_dir="$HOME/Library/Application Support/${configDirName}/${version}/modules"
-    if [ ! -f "$modules_dir/installed.json" ]; then
-      mkdir -p "$modules_dir"
-      for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
-        ln -sfn "$store_modules/$m" "$modules_dir/$m"
-      done
-      echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
-        > "$modules_dir/installed.json"
-    fi
+    mkdir -p "$modules_dir"
+    for m in ${lib.concatStringsSep " " (lib.attrNames moduleSrcs)}; do
+      ln -sfn "$store_modules/$m" "$modules_dir/$m"
+    done
+    echo '${builtins.toJSON (lib.mapAttrs (_: mod: { installedVersion = mod; }) moduleVersions)}' \
+      > "$modules_dir/installed.json"
   '';
 
   disableBreakingUpdates =
@@ -80,6 +78,7 @@ let
       {
         pythonInterpreter = "${python3.interpreter}";
         configDirName = lib.toLower binaryName;
+        skipModuleUpdate = lib.boolToString withOpenASAR;
         meta.mainProgram = "disable-breaking-updates.py";
       }
       ''
@@ -141,7 +140,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
       --run ${lib.getExe disableBreakingUpdates} \
-      --run "${stageModules} $out/Applications/${desktopName}.app/Contents/Resources/modules" \
+      --run "${stageModules} \"$out/Applications/${desktopName}.app/Contents/Resources/modules\"" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

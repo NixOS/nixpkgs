@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rutorrent";
-  version = "5.2.10";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "Novik";
     repo = "ruTorrent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g1CjwK0GLAdRLWbQeyF8H+OFaL8WgibGrQti9kHz2iM=";
+    hash = "sha256-UWXykIrpmnbjJZih+SAxmqjdu1+F/5ohBXxWLr5fa1c=";
   };
 
   installPhase = ''

@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-jsmath";
   version = "1.0.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

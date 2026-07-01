@@ -1,4 +1,5 @@
 {
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   idasen,
@@ -10,19 +11,22 @@
 
 buildPythonPackage rec {
   pname = "idasen-ha";
-  version = "2.6.5";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "idasen-ha";
     tag = version;
-    hash = "sha256-Ksckc4aayv33Xd4tmfzCUq8e5kWPnxw7xAlPKOIlmow=";
+    hash = "sha256-1BciJ3Hox9Ky1HuNw+8jWGaMX3amAhGNTGAXqwWEDX8=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ idasen ];
+  dependencies = [
+    bleak-retry-connector
+    idasen
+  ];
 
   pythonImportsCheck = [ "idasen_ha" ];
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   ninja,
   go-md2man,
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "lib"
     "dev"
+  ];
+
+  patches = [
+    # "tests: ignore EOPNOTSUPP in in fsverity tests" https://github.com/composefs/composefs/pull/415
+    (fetchpatch {
+      url = "https://github.com/composefs/composefs/commit/b3cb176a771386081c993e29ae42e77dabe5a577.patch";
+      hash = "sha256-nzUENLM24G6NezhPywVsRzRgWmL1VZdMfZTsXNorJl8=";
+    })
   ];
 
   postPatch =

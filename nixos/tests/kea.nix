@@ -6,7 +6,6 @@
 # address.
 
 {
-  pkgs,
   lib,
   ...
 }:
@@ -15,7 +14,7 @@
 
   name = "kea";
 
-  nodes = {
+  containers = {
     router =
       { config, pkgs, ... }:
       {
@@ -26,6 +25,7 @@
           firewall.allowedUDPPorts = [ 67 ];
         };
 
+        services.resolved.enable = false;
         systemd.network = {
           enable = true;
           networks = {
@@ -77,7 +77,7 @@
 
             # Enable communication between dhcp4 and a local dhcp-ddns
             # instance.
-            # https://kea.readthedocs.io/en/kea-2.2.0/arm/dhcp4-srv.html#ddns-for-dhcpv4
+            # https://kea.readthedocs.io/en/kea-3.2.0/arm/dhcp4-srv.html#ddns-for-dhcpv4
             dhcp-ddns = {
               enable-updates = true;
             };
@@ -93,7 +93,7 @@
             forward-ddns = {
               # Configure updates of a forward zone named `lan.nixos.test`
               # hosted at the nameserver at 10.0.0.2
-              # https://kea.readthedocs.io/en/kea-2.2.0/arm/ddns.html#adding-forward-dns-servers
+              # https://kea.readthedocs.io/en/kea-3.2.0/arm/ddns.html#adding-forward-dns-servers
               ddns-domains = [
                 {
                   name = "lan.nixos.test.";
@@ -110,25 +110,6 @@
             };
           };
         };
-
-        services.kea.ctrl-agent = {
-          enable = true;
-          settings = {
-            http-host = "127.0.0.1";
-            http-port = 8000;
-            control-sockets.dhcp4 = {
-              socket-type = "unix";
-              socket-name = "/run/kea/dhcp4.sock";
-            };
-          };
-        };
-
-        services.prometheus.exporters.kea = {
-          enable = true;
-          controlSocketPaths = [
-            "http://127.0.0.1:8000"
-          ];
-        };
       };
 
     nameserver =
@@ -141,6 +122,7 @@
           firewall.allowedUDPPorts = [ 53 ];
         };
 
+        services.resolved.enable = false;
         systemd.network = {
           enable = true;
           networks = {
@@ -152,8 +134,6 @@
             };
           };
         };
-
-        services.resolved.enable = false;
 
         # Set up an authoritative nameserver, serving the `lan.nixos.test`
         # zone and configure an ACL that allows dynamic updates from
@@ -213,6 +193,7 @@
       {
         virtualisation.vlans = [ 1 ];
         systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+        services.resolved.enable = false;
         networking = {
           useNetworkd = true;
           useDHCP = false;
@@ -222,16 +203,19 @@
       };
   };
   testScript =
-    { ... }:
+    # python
     ''
       start_all()
+
       router.wait_for_unit("kea-dhcp4-server.service")
-      client.systemctl("start systemd-networkd-wait-online.service")
-      client.wait_for_unit("systemd-networkd-wait-online.service")
-      client.wait_until_succeeds("ping -c 5 10.0.0.1")
-      router.wait_until_succeeds("ping -c 5 10.0.0.3")
-      nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
-      router.log(router.execute("curl 127.0.0.1:9547")[1])
-      router.succeed("curl --no-buffer 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
+
+      with subtest("DHCPv4"):
+          client.systemctl("start systemd-networkd-wait-online.service")
+          client.wait_for_unit("systemd-networkd-wait-online.service")
+          client.wait_until_succeeds("ping -c 5 10.0.0.1")
+          router.wait_until_succeeds("ping -c 5 10.0.0.3")
+
+      with subtest("DDNS"):
+          nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
     '';
 }

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "wagtail-factories";
     owner = "wagtail";
     tag = "v${version}";
-    hash = "sha256-IPUnRFsl2qzcuX2FNqQ1xBY7ou7CBWRhIfS/TmUGrpc=";
+    hash = "sha256-mVxLnP++j116bfJMJa7GoH1Rqvj7rdj0JsNFm7fJ7h0=";
   };
 
   build-system = [ setuptools ];

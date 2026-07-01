@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchzip,
+  fetchurl,
   pkg-config,
   versionCheckHook,
   openssl,
@@ -10,49 +10,26 @@
 
 let
   studioUiVersion = "v0.1.0";
-  studioUi = fetchzip {
+  studioUi = fetchurl {
     url = "https://github.com/solana-foundation/surfpool-web-ui/releases/download/${studioUiVersion}/studio-dist.zip";
-    hash = "sha256-uZZpaAIg7f+ji5yonwNbAxbxi+4x7g5V4xKWUXNn1UI=";
-    stripRoot = false;
+    hash = "sha256-DeWm2FzZbdaHXaEFA8W/YIIcJx4Z+uFkrxuajTM9n1M=";
   };
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfpool-cli";
-  version = "1.2.1";
+  version = "1.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solana-foundation";
     repo = "surfpool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oO6K8OJXj2HQOExhT/6auCjfCOpUrSkHJJncztCjRWU=";
+    hash = "sha256-6sE1YILQIrqtDzrNtc8ApGWESHurTEmUP7FE9IDBQ60=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-MLWXYVVmJXxUY6LRsi8LiVJbVAAvcA3wbT8eiz4pAaE=";
-
-  postPatch = ''
-    # instead of downloading the surfpool-web-ui at build time, we fetch it beforehand and use it
-    # https://github.com/solana-foundation/surfpool/pull/628
-    substituteInPlace crates/studio/build.rs \
-      --replace-fail \
-        'let url = match env::var("STUDIO_UI_VERSION") {' \
-        'if let Ok(dist_path) = env::var("STUDIO_UI_DIST") {
-            let src = std::path::Path::new(&dist_path);
-            fn copy_dir(s: &std::path::Path, d: &std::path::Path) {
-                std::fs::create_dir_all(d).unwrap();
-                for e in std::fs::read_dir(s).unwrap() {
-                    let e = e.unwrap();
-                    if e.file_type().unwrap().is_dir() { copy_dir(&e.path(), &d.join(e.file_name())); }
-                    else { std::fs::copy(e.path(), d.join(e.file_name())).unwrap(); }
-                }
-            }
-            copy_dir(src, &asset_dir);
-            return;
-        }
-        let url = match env::var("STUDIO_UI_VERSION") {'
-  '';
+  cargoHash = "sha256-nkeOO6Ix5FwhIT6M/LU8HwU00qOfAK43ELkBCK/KhEo=";
 
   env = {
     RUSTFLAGS = "-Aunused";

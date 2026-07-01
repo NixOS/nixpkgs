@@ -28,6 +28,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Utility to export messages, attachments and other data from Signal Desktop";
+    homepage = "https://github.com/tbvdm/sigtop";
     mainProgram = "sigtop";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;

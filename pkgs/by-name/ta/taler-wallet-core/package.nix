@@ -7,8 +7,8 @@
   fetchgit,
   srcOnly,
   removeReferencesTo,
-  nodejs_24,
-  pnpm_9,
+  nodejs-slim_24,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -17,8 +17,8 @@
   zip,
 }:
 let
-  nodeSources = srcOnly nodejs_24;
-  pnpm' = pnpm_9.override { nodejs = nodejs_24; };
+  nodeSources = srcOnly nodejs-slim_24;
+  pnpm' = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -55,13 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 3;
-    hash = "sha256-W5C2JVFbEccf4b+ppeEJ68au/2Tqfsry7ri6Qi1M50k=";
+    fetcherVersion = 4;
+    hash = "sha256-ZoxAZ5f3Szz2goGOE5yn/aCZ5fuhDt1owZ/o1kvX7d0=";
   };
 
   nativeBuildInputs = [
     customPython
-    nodejs_24
+    nodejs-slim_24
+    nodejs-slim_24.npm
     pnpmConfigHook
     pnpm'
     gitMinimal
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    nodejs_24
+    nodejs-slim_24
   ];
 
   # Make a fake git repo with a commit.

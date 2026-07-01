@@ -22,6 +22,8 @@
         };
 
         system.includeBuildDependencies = true;
+        # Needed so the offline build of the target config succeeds.
+        system.extraDependencies = [ pkgs.polkit-stdin-agent ];
 
         virtualisation = {
           cores = 2;
@@ -48,6 +50,11 @@
 
           users.users.alice.extraGroups = [ "wheel" ];
           users.users.bob.extraGroups = [ "wheel" ];
+
+          # Needed for --elevate=run0. NixOS's default polkit admin rule is
+          # `unix-group:wheel`, so bob (in wheel) can authenticate with his
+          # own password via polkit-stdin-agent.
+          system.tools.nixos-rebuild.enableRun0Elevation = true;
 
           # Disable sudo for root to ensure sudo isn't called without `--sudo`
           security.sudo.extraRules = lib.mkForce [
@@ -142,6 +149,7 @@
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")
       deployer.copy_from_host("${configFile "config-3-deployed"}", "/root/configuration-3.nix")
+      deployer.copy_from_host("${configFile "config-4-deployed"}", "/root/configuration-4.nix")
       deployer.copy_from_host("${targetNetworkJSON}", "/root/target-network.json")
       deployer.copy_from_host("${targetConfigJSON}", "/root/target-configuration.json")
 
@@ -167,6 +175,20 @@
         deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-3-deployed")
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
+
+      with subtest("Deploy to bob@target with run0 and password"):
+        # polkit-stdin-agent registers an agent for systemd-run on the
+        # target and answers the PAM conversation with the password we
+        # supply locally. The agent is resolved on the target from
+        # <toplevel>/sw/bin (see Run0Elevator._remote_agent_argv).
+        deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-4.nix --target-host bob@target --elevate=run0 --ask-elevate-password\n")
+        deployer.wait_until_tty_matches("1", "\\[run0\\] password for bob@target")
+        deployer.send_chars("${nodes.target.users.users.bob.password}\n")
+        deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-4-deployed")
+        target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
+        assert target_hostname == "config-4-deployed", f"{target_hostname=}"
+        # The target-arch agent is reachable at the stable sw/bin path.
+        target.succeed("test -x /run/current-system/sw/bin/polkit-stdin-agent")
 
       with subtest("Deploy works with very long TMPDIR"):
         tmp_dir = "/var/folder/veryveryveryveryverylongpathnamethatdoesnotworkwithcontrolpath"

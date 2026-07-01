@@ -34,7 +34,7 @@ body {
   }
 }
 
-.book .list-of-examples {
+.list-of-examples {
   display: none;
 }
 
@@ -392,8 +392,7 @@ div.appendix .toc dt {
   margin-top: 0;
 }
 
-div.book .list-of-examples dt,
-div.appendix .list-of-examples dt {
+.list-of-examples dt {
   margin-top: 0;
 }
 
@@ -450,6 +449,7 @@ div.appendix .variablelist .term {
 }
 
 :root {
+  --sidebar-width: 20rem;
   --background: #fff;
   --main-text-color: #000;
   --link-color: #405d99;
@@ -495,4 +495,69 @@ div.appendix .variablelist .term {
 
 .chapter {
   content-visibility: auto;
+}
+
+.navheader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--background);
+}
+
+nav.toc-sidebar {
+  height: 100%;
+  overflow-y: none;
+  padding: 0 1rem 2rem;
+  border-bottom: 0.0625rem solid #d8d8d8;
+}
+
+nav.toc-sidebar .toc {
+  margin-bottom: 0;
+}
+
+nav.toc-sidebar .toc dl {
+  margin: 0;
+}
+
+nav.toc-sidebar .toc dd {
+  margin-left: 1em;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    height: 100vh;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  body:has(> nav.toc-sidebar) {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
+
+  .navheader {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  nav.toc-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: none;
+    overflow-y: auto;
+    border-bottom: none;
+    border-right: 0.0625rem solid #d8d8d8;
+  }
+
+  main.content {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 0 1rem;
+  }
+
+  body:has(> nav.toc-sidebar) main.content {
+    grid-column: 2;
+  }
 }

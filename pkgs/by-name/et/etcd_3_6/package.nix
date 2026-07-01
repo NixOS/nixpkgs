@@ -9,11 +9,11 @@
 }:
 
 let
-  version = "3.6.11";
-  etcdSrcHash = "sha256-xn6PJin0xZXR/xoWhCxdEq7uVXSBqv+BapwbP1Pdv84=";
-  etcdCtlVendorHash = "sha256-+W8spn3T1vej4QD52ZxGXqTplwQBVG6Nuxf2P/u7nkQ=";
-  etcdUtlVendorHash = "sha256-s9/QFtbtRx7Jgd/S9pRx8/JMQWmi92Jz/H8YcRS9huk=";
-  etcdServerVendorHash = "sha256-nUangVgI4/62O7jhq2vNqrcJB/PtpZp+40X1W91+HOY=";
+  version = "3.6.12";
+  etcdSrcHash = "sha256-oUq/yRwSgJ2xZ6yoiEBYSSRH5NvHITXjMFuR7QZc4HU=";
+  etcdCtlVendorHash = "sha256-0ZlJiXFS7QxJ+dfstJf+ogLPL0kxrE/4ZTsKb0OOCqA=";
+  etcdUtlVendorHash = "sha256-o7TWg7RgeWZa92beumSGCpxvLcFMzqC1vgcKfi5K4dI=";
+  etcdServerVendorHash = "sha256-UzToh6FaAVyxzZdDoukrHez1W9+tifFGEM16UCcmm5U=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -31,10 +31,7 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [
-      dtomvan
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ dtomvan ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 

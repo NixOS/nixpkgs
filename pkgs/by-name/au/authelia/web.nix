@@ -3,12 +3,12 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   fetchFromGitHub,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname
@@ -62,4 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # (node:24500) Warning: File descriptor 19 closed but not opened in unmanaged mode
+  # (node:24500) Warning: File descriptor 19 opened in unmanaged mode twice
+  meta.broken = stdenv.hostPlatform.isDarwin;
 })

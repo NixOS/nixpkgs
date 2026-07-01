@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathicgb";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "mathicgb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zcHaYzznvbBkfeFXNxIxy9qlyD0esOvwUIOuEli4rwc=";
+    hash = "sha256-34ASkRPNH6d8TSJmyZmYZVOi1p02nHgMVXXWVJMNZ1c=";
   };
 
   buildInputs = [
@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Macaulay2/mathicgb";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ coolcuber ];
+    platforms = lib.platforms.unix;
   };
 })

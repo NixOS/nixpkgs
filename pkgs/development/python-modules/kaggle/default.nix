@@ -1,47 +1,48 @@
 {
   bleach,
   buildPythonPackage,
-  certifi,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
+  jupytext,
   kagglesdk,
   lib,
   packaging,
+  protobuf,
   python-dateutil,
+  python-dotenv,
   python-slugify,
+  pytestCheckHook,
   requests,
   six,
   tqdm,
   urllib3,
-  protobuf,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "kaggle";
-  version = "1.8.3";
+  version = "2.2.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MzXaV1KuKEPDqgUjt6ftkajdVQXBnLQDH51XZRw0YQY=";
+  src = fetchFromGitHub {
+    owner = "Kaggle";
+    repo = "kaggle-cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NvSR3kSncBtjj2zuwESGXRMbZofYcnRnXIglRJ3dsrQ=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRemoveDeps = [
-    "black"
-    "mypy"
-    "types-requests"
-    "types-tqdm"
-  ];
-
   dependencies = [
     bleach
-    certifi
+    jupytext
     kagglesdk
     packaging
     protobuf
     python-dateutil
+    python-dotenv
     python-slugify
     requests
     six
@@ -49,20 +50,26 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  # Tests try to access the network.
-  checkPhase = ''
-    export HOME="$TMP"
-    mkdir -p "$HOME/.kaggle/"
-    echo '{"username":"foobar","key":"00000000000000000000000000000000"}' > "$HOME/.kaggle/kaggle.json"
-    $out/bin/kaggle --help > /dev/null
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    # kaggle creates its config dir at import time; needs a writable HOME.
+    writableTmpDirAsHomeHook
+  ];
+
+  # kaggle authenticates at import time; fake creds for the offline checks.
+  env = {
+    KAGGLE_USERNAME = "nixos-test";
+    KAGGLE_KEY = "00000000000000000000000000000000";
+  };
+
   pythonImportsCheck = [ "kaggle" ];
 
   meta = {
-    description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
+    description = "Official Kaggle CLI";
     mainProgram = "kaggle";
-    homepage = "https://github.com/Kaggle/kaggle-api";
+    homepage = "https://github.com/Kaggle/kaggle-cli";
+    changelog = "https://github.com/Kaggle/kaggle-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

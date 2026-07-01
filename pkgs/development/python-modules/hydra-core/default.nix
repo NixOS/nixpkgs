@@ -26,14 +26,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hydra-core";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "hydra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
+    hash = "sha256-5+uD3AzkV9MVRUWhYoIPo7D0GozQasEjeCNl8tBAB8c=";
   };
 
   patches = [
@@ -81,8 +82,12 @@ buildPythonPackage (finalAttrs: {
     "test_bash_completion_with_dot_in_path"
     "test_install_uninstall"
     "test_config_search_path"
+
     # does not raise UserWarning
     "test_initialize_compat_version_base"
+
+    # AssertionError: Regex pattern did not match
+    "test_initialize_bad_version_base"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # AssertionError: Regex pattern did not match

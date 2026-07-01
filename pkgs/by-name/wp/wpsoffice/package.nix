@@ -19,7 +19,7 @@
   pango,
   runCommandLocal,
   curl,
-  libsForQt5,
+  qt5,
   coreutils,
   cacert,
   libjpeg,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     libtiff
     udev
     gtk3
-    libsForQt5.qt5.qtbase
+    qt5.qtbase
     libxdamage
     libxtst
     libxv

@@ -26,4 +26,6 @@ makeSetupHook {
   passthru = {
     inherit enableHook;
   };
+
+  meta.license = lib.licenses.mit;
 } ./auto-add-cuda-compat-runpath.sh

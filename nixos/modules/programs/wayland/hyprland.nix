@@ -81,7 +81,21 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment = {
+          systemPackages = [ cfg.package ];
+
+          # Allows lua stub file to be accessed from /run/current-system/sw/share/hypr
+          pathsToLink = [ "/share/hypr" ];
+        };
+
+        # Hyprland needs permissions to give itself SCHED_RR on startup:
+        # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
+        security.wrappers.Hyprland = {
+          owner = "root";
+          group = "root";
+          capabilities = "cap_sys_nice+ep";
+          source = lib.getExe cfg.package;
+        };
 
         xdg.portal = {
           enable = true;
@@ -93,9 +107,9 @@ in
         services.displayManager.sessionPackages = [ cfg.package ];
 
         systemd = lib.mkIf cfg.systemd.setPath.enable {
-          user.extraConfig = ''
-            DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
-          '';
+          user.settings.Manager = {
+            DefaultEnvironment = "PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH";
+          };
         };
       }
 

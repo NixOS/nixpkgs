@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "leanify";
-  version = "0-unstable-2025-12-12";
+  version = "0.4.3-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "d2ba1671056e022623e8445f5700670bc05204bf";
-    hash = "sha256-MXQnJyA6z01lodes6CINV7mzbRr6GnZaMAsjloGJzeg=";
+    rev = "dc557c4027fc8a7479c4a71506c75c98ea8829f9";
+    hash = "sha256-jyz0F0mY4z0lFA5a1ibJKHYKb35MvuVhFct2Him/my8=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

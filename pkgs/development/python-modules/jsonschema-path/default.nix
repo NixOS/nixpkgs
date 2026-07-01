@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-path";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
     tag = version;
-    hash = "sha256-xDNWQddw4ftq762EPvTjyXUEsyRfgs2ffeKVgbWVUs4=";
+    hash = "sha256-abAhWtBnZUeg1VGphfnvxPzSnPM6VjM/XKLPJVIrIXg=";
   };
 
   build-system = [ poetry-core ];

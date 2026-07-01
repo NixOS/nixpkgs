@@ -8,17 +8,17 @@
 }:
 
 maven.buildMavenPackage (finalAttrs: {
-  version = "13.4.2";
+  version = "13.6.0";
   pname = "checkstyle";
 
   src = fetchFromGitHub {
     owner = "checkstyle";
     repo = "checkstyle";
     tag = "checkstyle-${finalAttrs.version}";
-    hash = "sha256-0ENLO/hP/MXVU358Ys83cH1Adl8CTbT/zcG9/tOBIC8=";
+    hash = "sha256-5E3GTE4fPmJYoSm2lK4tW1Dcu+SuyQKL396JLg3J22E=";
   };
 
-  mvnHash = "sha256-eRNJOrSP9GcuF226kZi5ef3shm1PdTEsGvjpi46cfSw=";
+  mvnHash = "sha256-r0adD/80UguRCIznE6hGdhRifm29GxMhQRSmd2/nabc=";
 
   nativeBuildInputs = [
     maven

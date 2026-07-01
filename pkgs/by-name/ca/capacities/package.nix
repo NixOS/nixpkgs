@@ -7,11 +7,11 @@
 }:
 let
   pname = "capacities";
-  version = "1.57.24";
+  version = "1.65.13";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20260110164323/https://capacities-desktop-app.fra1.cdn.digitaloceanspaces.com/Capacities-1.57.24.AppImage";
-    hash = "sha256-BWan10ItF/hKEMGG/m32QgjySLReqJnrtq5z0k9oYcA=";
+    url = "https://web.archive.org/web/20260518194627/https://2vks4.upcloudobjects.com/capacities-desktop-app/Capacities-1.65.13.AppImage";
+    hash = "sha256-ATiX1h9hXmKMFtY6OEyZEoJ/SxJGgbj5/QZwFF1sfFQ=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -63,5 +63,6 @@ appimageTools.wrapType2 {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
     mainProgram = "capacities";
+    maintainers = [ lib.maintainers.keysmashes ];
   };
 }

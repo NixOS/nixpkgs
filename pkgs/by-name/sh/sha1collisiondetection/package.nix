@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       each file. It is very fast and takes less than twice the amount
       of time as regular SHA-1.
     '';
+    homepage = "https://github.com/cr-marcstevens/sha1collisiondetection";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     mainProgram = "sha1dcsum";

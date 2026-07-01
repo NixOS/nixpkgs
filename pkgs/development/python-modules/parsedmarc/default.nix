@@ -16,17 +16,10 @@
   elasticsearch-dsl,
   elasticsearch,
   expiringdict,
-  geoip2,
-  google-api-core,
-  google-api-python-client,
-  google-auth-httplib2,
-  google-auth-oauthlib,
-  google-auth,
-  imapclient,
-  kafka-python-ng,
+  kafka-python,
   lxml,
   mailsuite,
-  msgraph-core,
+  maxminddb,
   nixosTests,
   opensearch-py,
   publicsuffixlist,
@@ -38,7 +31,7 @@
   xmltodict,
 
   # test
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 let
@@ -49,14 +42,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "9.6.0";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = version;
-    hash = "sha256-ez7QMFsSvJzxhfCPA4G6oGQhqAzcgKBTJMiMogIJvNg=";
+    hash = "sha256-ed6t96CcemrUE6NtBmP1Am7l7dYmcNLGFN8slTSfgOM=";
   };
 
   postPatch = ''
@@ -82,17 +75,10 @@ buildPythonPackage rec {
     elasticsearch
     elasticsearch-dsl
     expiringdict
-    geoip2
-    google-api-core
-    google-api-python-client
-    google-auth
-    google-auth-httplib2
-    google-auth-oauthlib
-    imapclient
-    kafka-python-ng
+    kafka-python
     lxml
     mailsuite
-    msgraph-core
+    maxminddb
     opensearch-py
     publicsuffixlist
     pygelf
@@ -101,10 +87,17 @@ buildPythonPackage rec {
     tqdm
     urllib3
     xmltodict
-  ];
+  ]
+  ++ mailsuite.optional-dependencies.gmail
+  ++ mailsuite.optional-dependencies.msgraph;
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # contacts DNS servers at 1.1.1.1 and 8.8.8.8
+    "test_general_dns_settings_with_defaults"
   ];
 
   pythonImportsCheck = [ "parsedmarc" ];
@@ -121,7 +114,5 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
-    # https://github.com/domainaware/parsedmarc/issues/464
-    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

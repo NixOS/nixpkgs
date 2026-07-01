@@ -55,21 +55,20 @@ tar -xzf "$archive_path" -C "$tmpdir"
 extracted_dir=$(tar -tzf "$archive_path" | head -1 | cut -d/ -f1)
 source_dir="$tmpdir/$extracted_dir"
 
+# Compute the hash from the downloaded and unpacked archive
+echo "Computing source hash..." >&2
+new_hash=$(nix-hash --type sha256 --sri "$source_dir")
+if [ -z "$new_hash" ]; then
+  echo "Error: Failed to compute source hash" >&2
+  exit 1
+fi
+
 echo "Generating pubspec.lock..." >&2
 cd "$source_dir"
 dart pub get > /dev/null 2>&1
 
 echo "Converting to JSON..." >&2
 yq eval --output-format=json --prettyPrint pubspec.lock > "$tmpdir/pubspec.lock.json"
-
-# Compute the hash from the downloaded archive
-echo "Computing source hash..." >&2
-nix_hash=$(nix-hash --flat --base32 --type sha256 "$archive_path")
-if [ -z "$nix_hash" ]; then
-  echo "Error: Failed to compute source hash" >&2
-  exit 1
-fi
-new_hash="sha256-$(nix-hash --to-sri --type sha256 "$nix_hash")"
 
 cp "$tmpdir/pubspec.lock.json" "$script_dir/pubspec.lock.json"
 echo "Updated pubspec.lock.json" >&2

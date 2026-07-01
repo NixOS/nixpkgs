@@ -5,11 +5,12 @@
 }:
 
 let
-  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python3Packages;
+  inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
-  extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = map getComponentDeps [
+  extraCheckInputs = with home-assistant.python3Packages; {
+    alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
       "stream"
@@ -50,7 +51,7 @@ let
       pychromecast
     ];
     lutron_caseta = getComponentDeps "frontend";
-    mastodon = map getComponentDeps [
+    mastodon = concatMap getComponentDeps [
       "stream"
     ];
     miele = getComponentDeps "cloud";
@@ -125,17 +126,27 @@ let
       # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
     ];
-    ecovacs = [
-      # Translation not found for vacuum
-      "test_raise_segment_changed_issue"
-    ];
-    homeassistant_sky_connect = [
-      # 2026.5.0: after reload device is in loaded state instead of retry state
-      "test_usb_device_reactivity"
-    ];
     homeassistant_connect_zbt2 = [
-      # 2026.5.0: after reload device is in loaded state instead of retry state
+      # [2026.6.1] AssertionError: assert <ConfigEntryState.LOADED: 'loaded'> is <ConfigEntryState.SETUP_RETRY: 'setup_retry'>
       "test_usb_device_reactivity"
+    ];
+    homeassistant = [
+      # disabled via nixos-was-never-supported.patch
+      "test_deprecated_installation_issue_core"
+    ];
+    opendisplay = [
+      # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
+      # https://github.com/home-assistant/core/pull/172909
+      "test_upload_image_device_not_in_range"
+    ];
+    teslemetry = [
+      # [2026.6.4] http://github.com/home-assistant/core/commit/a33a92982af19e682a0d0fa7bec0cb16929c00d1
+      "test_sensors"
+      "test_sensors_streaming"
+    ];
+    yardian = [
+      # [2026.6.1] failing snapshot
+      "test_all_entities"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
@@ -156,7 +167,7 @@ lib.listToAttrs (
 
         nativeCheckInputs =
           old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ home-assistant.getPackages component home-assistant.python3Packages
           ++ extraCheckInputs.${component} or [ ];
 
         disabledTests = extraDisabledTests.${component} or [ ];

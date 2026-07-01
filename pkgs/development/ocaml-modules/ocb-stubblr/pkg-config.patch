@@ -1,6 +1,6 @@
---- a/src/ocb_stubblr.ml	1970-01-01 00:00:01.000000000 +0000
-+++ b/src/ocb_stubblr.ml	2016-12-04 11:10:10.000000000 +0000
-@@ -31,20 +31,9 @@
+--- a/src/ocb_stubblr.ml
++++ b/src/ocb_stubblr.ml
+@@ -31,21 +31,8 @@
  
    (* XXX Would be nice to move pkg-config results to a build artefact. *)
  
@@ -12,8 +12,10 @@
 -  let var = "PKG_CONFIG_PATH"
 -
 -  let path () =
--    Lazy.force opam_prefix / "lib" / "pkgconfig" ::
--      (try [Sys.getenv var] with Not_found -> []) |> String.concat ~sep:":"
+-    let opam = Lazy.force opam_prefix
+-    and rest = try [Sys.getenv var] with Not_found -> [] in
+-    opam/"lib"/"pkgconfig" :: opam/"share"/"pkgconfig" :: rest
+-      |> String.concat ~sep:":"
 -
    let run ~flags package =
 -    let cmd = strf "%s=%s pkg-config %s %s 2>/dev/null"
@@ -22,4 +24,3 @@
 +              package (String.concat ~sep:" " flags) in
      try `Res (run_and_read cmd) with Failure _ -> `Nonexistent
  end
- 

@@ -511,6 +511,31 @@ in
           };
         };
       };
+
+    empty_settings =
+      { ... }:
+      {
+        environment.etc."sing-box/config.json".text = builtins.toJSON {
+          inbounds = [
+            {
+              type = "mixed";
+              listen = "127.0.0.1";
+              listen_port = 1088;
+            }
+          ];
+          outbounds = [
+            {
+              type = "direct";
+              tag = "outbound:direct";
+            }
+          ];
+        };
+
+        services.sing-box = {
+          enable = true;
+          settings = { };
+        };
+      };
   };
 
   testScript = ''
@@ -558,6 +583,9 @@ in
       fakeip.wait_for_unit("sing-box.service")
       fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
       fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
+
+    with subtest("empty settings"):
+      empty_settings.wait_for_unit("sing-box.service")
   '';
 
 }

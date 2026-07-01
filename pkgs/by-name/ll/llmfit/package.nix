@@ -2,20 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmfit";
-  version = "0.9.23";
+  version = "0.9.33";
 
   src = fetchFromGitHub {
     owner = "AlexsJones";
     repo = "llmfit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KtmXNlKPz4W2hfLa1iTPUVrocEjXWfTcoMwcznV4ZEk=";
+    hash = "sha256-t78LXDadwqPhdD9s4aIq0ZKaynw+/rdC+ZL2Sk0lPTY=";
   };
 
-  cargoHash = "sha256-fx9/LVZrbwfGL03Xv53q4FaC6obKadZWesj4SfMvG78=";
+  cargoHash = "sha256-gn9hhD+ztudHnUiOSXQUk9QbsQtcdfZW9HMRHCWAl0k=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TUI to find LLM models right sized for the system's RAM, CPU, and GPU";

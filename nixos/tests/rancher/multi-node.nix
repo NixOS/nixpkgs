@@ -222,6 +222,11 @@ in
       # Also wait for our service account to show up; it takes a sec
       server.wait_until_succeeds("kubectl get serviceaccount default")
 
+      # Wait for all nodes to be ready
+      server.succeed("kubectl wait --timeout=-1s --for=condition=Ready node/server")
+      server.succeed("kubectl wait --timeout=-1s --for=condition=Ready node/server2")
+      server.succeed("kubectl wait --timeout=-1s --for=condition=Ready node/agent")
+
       # Now create a pod on each node via a daemonset and verify they can talk to each other.
       server.succeed("kubectl apply -f ${networkTestDaemonset}")
       server.wait_until_succeeds("kubectl rollout status daemonset test")

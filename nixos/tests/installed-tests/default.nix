@@ -107,7 +107,6 @@ in
   gsconnect = callInstalledTest ./gsconnect.nix { };
   json-glib = callInstalledTest ./json-glib.nix { };
   ibus = callInstalledTest ./ibus.nix { };
-  libgdata = callInstalledTest ./libgdata.nix { };
   glib-testing = callInstalledTest ./glib-testing.nix { };
   libjcat = callInstalledTest ./libjcat.nix { };
   libxmlb = callInstalledTest ./libxmlb.nix { };

@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.12.0";
+  version = "3.12.2";
 
   src = fetchurl {
     # Uses archive.org because the original site removes older versions.
-    url = "https://web.archive.org/web/20260503173638/https://algol68genie.nl/algol68g-3.12.0.tar.gz";
-    hash = "sha256-fYjuivr6AKRK4Nn45Q+oglpTMnp+PhO6KOkGZjwVKn0=";
+    url = "https://web.archive.org/web/20260515052918/https://algol68genie.nl/algol68g-3.12.2.tar.gz";
+    hash = "sha256-4fiubqpgoH3YOlCg1bJHQ3kOayKNulW3CYbOK1awE7k";
   };
 
   outputs = [

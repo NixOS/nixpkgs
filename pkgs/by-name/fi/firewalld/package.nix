@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoconf,
   automake,
   docbook_xml_dtd_42,
@@ -13,14 +12,12 @@
   intltool,
   ipset,
   iptables,
-  kdePackages,
   kmod,
   libnotify,
   librsvg,
   libxml2,
   libxslt,
   networkmanager,
-  networkmanagerapplet,
   pkg-config,
   python3,
   qt6,
@@ -46,13 +43,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.4.0";
+  version = "2.4.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P48qdgvcF3BQZ5h+HaylHb70ECa2bmEvYiAi9CeH0qs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-S7E0szAZ2MEttL4PdBkoOcDGFVCVrwsTKr9xe+DPPgM=";
   };
 
   patches = [
@@ -61,28 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./specify-localedir.patch
 
     ./gettext-0.25.patch
-
-    # CVE-2026-4948: https://github.com/NixOS/nixpkgs/issues/505280
-    (fetchpatch2 {
-      url = "https://github.com/Prince213/firewalld/commit/e621b4b54be7cd8d77ce549ec17c6f814f9bd337.patch?full_index=1";
-      hash = "sha256-8auXNPVYnNk1UI0jM82IEQrMBhG189/I+DbaXt0VEhc=";
-    })
-  ];
+  ]
+  ++ lib.optional withGui ./nm-connection-editor.patch;
 
   postPatch = ''
     substituteInPlace config/xmlschema/check.sh \
       --replace-fail /usr/bin/ ""
 
-    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in} \
-      config/firewall-{applet,config}.desktop.in; do
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in}; do
         substituteInPlace $file \
           --replace-fail /usr "$out"
     done
-  ''
-  + lib.optionalString withGui ''
-    substituteInPlace src/firewall-applet.in \
-      --replace-fail "/usr/bin/systemsettings" "${kdePackages.systemsettings}/bin/systemsettings" \
-      --replace-fail "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
@@ -91,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
     docbook-xsl-nons
     glib
+    gobject-introspection
     intltool
     libxml2
     libxslt
@@ -105,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    gobject-introspection
     ipset
     iptables
     kmod
@@ -143,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!withGui) ''
     rm $out/bin/firewall-{applet,config}
+    rm $out/etc/xdg/autostart/firewall-applet.desktop
+    rm $out/share/applications/firewall-config.desktop
+    rm $out/share/metainfo/org.firewalld.firewall-config.metainfo.xml
   '';
 
   dontWrapGApps = true;
@@ -162,8 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    firewalld = nixosTests.firewalld;
-    firewall-firewalld = nixosTests.firewall-firewalld;
+    inherit (nixosTests) firewalld firewall-firewalld;
   };
 
   meta = {

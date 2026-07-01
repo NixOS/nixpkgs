@@ -23,7 +23,7 @@ if minbootSupported then
           system = localSystem;
           inherit (config) rewriteURL;
         };
-        checkMeta = callPackage ../generic/check-meta.nix { hostPlatform = localSystem; };
+        checkMeta = callPackage ../generic/check-meta.nix { };
       }
     );
     compilerPackage =

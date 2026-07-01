@@ -10,15 +10,15 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2026.1.12458";
+  version = "2026.1.13757";
 
   src = dockerTools.exportImage {
     diskSize = 8192;
     fromImage = dockerTools.pullImage {
       imageName = "jetbrains/youtrack";
       arch = "amd64";
-      imageDigest = "sha256:64b9c6c0e409e9cb7e62558bbb2ca0208a85d1c40331b41430e290404b300e40";
-      hash = "sha256-7rlilHogqwxPXZlhAHv5Kk2+i8rMyGP6eZR1DdbhRDM=";
+      imageDigest = "sha256:56c4d6b6cb3781e21a369857943a366931b69f22dee76c16b2173de0fd56a0a9";
+      hash = "sha256-vWNe/1PTLX1rNR66iOZizubH2YVda8GTfXrQikWTML0=";
     };
   };
   unpackPhase = ''

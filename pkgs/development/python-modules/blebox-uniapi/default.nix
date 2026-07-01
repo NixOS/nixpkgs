@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blebox-uniapi";
-  version = "2.5.3";
+  version = "2.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
-    tag = "v${version}";
-    hash = "sha256-DBkd8o2jOVCH3KqJ2FZ4qhJsSMb1UwqBO1ZXoTLsqEY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmVCXzfs/LYn2lT3lqdRy4cJcieF1idljH5IPKeH4QA=";
   };
 
   postPatch = ''
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "blebox_uniapi" ];
 
   meta = {
-    changelog = "https://github.com/blebox/blebox_uniapi/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/blebox/blebox_uniapi/blob/${finalAttrs.src.tag}/HISTORY.rst";
     description = "Python API for accessing BleBox smart home devices";
     homepage = "https://github.com/blebox/blebox_uniapi";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

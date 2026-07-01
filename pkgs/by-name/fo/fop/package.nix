@@ -7,14 +7,16 @@
   stripJavaArchivesHook,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "fop";
   version = "2.11";
 
   src = fetchurl {
-    url = "https://dlcdn.apache.org/xmlgraphics/fop/source/fop-${version}-src.tar.gz";
+    url = "https://dlcdn.apache.org/xmlgraphics/fop/source/fop-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-uY6cUjmyuenfK3jAWvugsYa5qg8rbnvRZZ6qA/g2fZM=";
   };
+
+  patches = [ ./fix-maven-plugin-versions.patch ];
 
   mvnHash = "sha256-EaOIAy0+YPrF+yGsFKKqcA4bt90bq1Z86V57P9rMatE=";
 
@@ -73,4 +75,4 @@ maven.buildMavenPackage rec {
       binaryBytecode # source bundles dependencies as jars
     ];
   };
-}
+})

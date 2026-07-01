@@ -46,9 +46,7 @@ outer@{
   postInstall ? "",
   meta ? null,
   nginx-doc ? outer.nginx-doc,
-  passthru ? {
-    tests = { };
-  },
+  passthru ? { },
 }:
 
 let
@@ -281,25 +279,28 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit modules;
-    tests = {
-      inherit (nixosTests)
-        nginx
-        nginx-auth
-        nginx-etag
-        nginx-etag-compression
-        nginx-globalredirect
-        nginx-http3
-        nginx-proxyprotocol
-        nginx-pubhtml
-        nginx-sso
-        nginx-status-page
-        nginx-unix-socket
-        ;
-      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme.nginx;
-      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
-    }
-    // passthru.tests;
+    tests =
+      passthru.tests or {
+        inherit (nixosTests)
+          nginx
+          nginx-auth
+          nginx-etag
+          nginx-etag-compression
+          nginx-globalredirect
+          nginx-http3
+          nginx-proxyprotocol
+          nginx-pubhtml
+          nginx-sso
+          nginx-status-page
+          nginx-unix-socket
+          ;
+        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+        acme-integration = nixosTests.acme.nginx;
+        acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
+      };
+  }
+  // lib.optionalAttrs (passthru ? updateScript) {
+    inherit (passthru) updateScript;
   };
 
   meta =
@@ -309,15 +310,14 @@ stdenv.mkDerivation {
       {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
-        homepage = "http://nginx.org";
+        homepage = "https://nginx.org";
         license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
-          das_j
-          fpletz
           helsinki-Jo
-          raitobezarius
+          ma27
+          leona
         ];
       };
 }

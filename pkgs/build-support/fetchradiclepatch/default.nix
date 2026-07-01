@@ -12,9 +12,8 @@ lib.makeOverridable (
     ...
   }@args:
 
-  assert lib.assertMsg (
-    !args ? rev && !args ? tag
-  ) "fetchRadiclePatch does not accept `rev` or `tag` arguments.";
+  assert
+    (!args ? rev && !args ? tag) || throw "fetchRadiclePatch does not accept `rev` or `tag` arguments.";
 
   fetchFromRadicle (
     {

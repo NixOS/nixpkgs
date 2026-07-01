@@ -12,9 +12,9 @@
   libpthread-stubs,
   makeWrapper,
   nix-update-script,
-  pcre,
+  pcre2,
   pkg-config,
-  python312Packages,
+  python3,
   qt5,
   stdenv,
   vulkan-loader,
@@ -24,6 +24,9 @@
 }:
 
 let
+  # forked from swig v3 in 2017
+  # primarily to include https://github.com/swig/swig/pull/251
+  # (cherry-picked as https://github.com/swig/swig/commit/8d79491a329825ad24294509fc6a0b0a0b8947c4)
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -58,16 +61,36 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ];
+  swig_patches = [
+    # use PCRE2 instead of PCRE
+    (fetchpatch {
+      name = "renderdoc-swig-pcre2-1.patch";
+      url = "https://src.fedoraproject.org/rpms/renderdoc/raw/19ce666d120a229e5c1ab62fc142610ab3b21b3c/f/renderdoc-swig-pcre2-1.patch";
+      hash = "sha256-xuqHu72vAbxFELNTfJT5SbQOsnG/ee++MZgpuEGLT/w=";
+    })
+    (fetchpatch {
+      name = "renderdoc-swig-pcre2-2.patch";
+      url = "https://src.fedoraproject.org/rpms/renderdoc/raw/19ce666d120a229e5c1ab62fc142610ab3b21b3c/f/renderdoc-swig-pcre2-2.patch";
+      hash = "sha256-LUm5Ekmccy4x+hR+iK49zJc75VxuhDhpNw8rkVnn4rc=";
+    })
+  ];
+  postPatch = ''
+    pushd ../swig
+    prePatch="" postPatch="" patches="$swig_patches" runPhase patchPhase
+    popd
+  '';
 
   buildInputs = [
     libxdmcp
     libpthread-stubs
-    python312Packages.pyside2
-    python312Packages.pyside2-tools
-    python312Packages.shiboken2
     qt5.qtbase
     qt5.qtsvg
     vulkan-loader
+    # TODO: make sure pyrenderdoc is installed properly
+    # TODO: unbreak shiboken2 on python>3.12
+    # python312Packages.pyside2
+    # python312Packages.pyside2-tools
+    # python312Packages.shiboken2
   ]
   ++ lib.optionals waylandSupport [
     wayland
@@ -80,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     makeWrapper
-    pcre
+    pcre2
     pkg-config
-    python312Packages.python
+    python3
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -94,6 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
     (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
+    # TODO: build python bindings
+    # https://github.com/NixOS/nixpkgs/issues/525939
+    (lib.cmakeBool "ENABLE_PYRENDERDOC" false)
+    (lib.cmakeBool "QRENDERDOC_ENABLE_PYSIDE2" false)
   ];
 
   dontWrapQtApps = true;
@@ -101,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postUnpack = ''
-    cp -r ${custom_swig} swig
+    cp -r ${finalAttrs.passthru.custom_swig} swig
     chmod -R +w swig
     patchShebangs swig/autogen.sh
   '';
@@ -136,7 +163,10 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/librenderdoc.so
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit custom_swig;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://renderdoc.org/";

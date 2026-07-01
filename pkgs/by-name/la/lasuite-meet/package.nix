@@ -4,16 +4,15 @@
   fetchFromGitHub,
   nixosTests,
   python3,
-  stdenv,
 }:
 let
-  version = "1.15.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-18DcrrEvqWR6caEVZYxQlSnKcxItEpNE+bMhtS4Aa0M=";
+    hash = "sha256-pUCSdnTBj/qwc0cya3P96r89r2K1GNSGg4DeIhxUKwI=";
   };
 
   meta = {
@@ -21,7 +20,7 @@ let
     changelog = "https://github.com/suitenumerique/meet/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 
   mail = callPackage ./mail.nix { inherit src version meta; };
@@ -47,17 +46,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
-  ''
-  # Otherwise fails with:
-  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace impress/settings.py \
-      --replace-fail \
-        "gethostname()" \
-        "gethostname() + '.local'"
-  '');
-  __darwinAllowLocalNetworking = true;
+      --replace-fail "uv_build>=0.11.16,<0.12.0" "uv_build"
+  '';
 
   build-system = with python.pkgs; [ uv-build ];
 
@@ -95,6 +85,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       markdown
       mozilla-django-oidc
       nested-multipart-parser
+      phonenumbers
       psycopg
       pydantic
       pyjwt

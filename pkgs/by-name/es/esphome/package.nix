@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.4.5";
+  version = "2026.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-uMlkrHg4cZYsdSv8D8U57mEZnjwcRkJe2zKI8VFsTRk=";
+    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.47" "wheel"
+      --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -96,6 +96,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     pillow
     platformio
     puremagic
+    py7zr
     pyparsing
     pyserial
     pyyaml
@@ -151,6 +152,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
     "tests/integration"
+
+    # tries to dynamically patch platformio module
+    "tests/unit_tests/test_writer.py"
+    "tests/unit_tests/test_espidf_component.py"
   ];
 
   preCheck = ''
@@ -189,6 +194,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # Patched to run platformio without the esphome wrapper
     "test_run_platformio_cli_strips_win_long_path_prefix"
     "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
+    "test_patch_file_downloader_recovers_against_real_server"
   ];
 
   passthru = {

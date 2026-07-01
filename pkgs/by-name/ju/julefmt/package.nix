@@ -12,8 +12,8 @@ clangStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "julefmt";
-    rev = "6bd55e31ebba393c973017332502a548ea0f402c";
-    hash = "sha256-j8V5L4j4qaApJixsEo10Qv58IHcU54hnpL8uD+T0C0M=";
+    rev = "7ac9b383013d13a03bc06f90f0b86f4fca11a4a8";
+    hash = "sha256-q90B0rYaUN/gQ3TUNcPS+SqIQefam1Qmzx6jUBe+c0g=";
   };
 
   nativeBuildInputs = [ julec.hook ];

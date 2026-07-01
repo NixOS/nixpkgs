@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "olen";
   domain = "openplantbook";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "home-assistant-openplantbook";
     tag = "v${version}";
-    hash = "sha256-Ym7bt+0s7eqlL3oDtppIGenoW1XvrSjKkV2flE0TzUo=";
+    hash = "sha256-Lk+dyrBwTqRil64fVm28bhN+q57bA5U9FpX2wFf/g8I=";
   };
 
   ignoreVersionRequirement = [

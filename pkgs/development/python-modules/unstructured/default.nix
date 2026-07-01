@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  symlinkJoin,
 
   # build-system
   setuptools,
@@ -30,6 +31,7 @@
   joblib,
   # jsonpath-python,
   nltk,
+  nltk-data,
   olefile,
   orderly-set,
   python-dateutil,
@@ -117,7 +119,19 @@
   grpcio,
 }:
 let
-  version = "0.18.28";
+  version = "0.18.31";
+
+  # unstructured downloads these NLTK corpora at import time unless they are already on
+  # nltk.data.path, which fails in offline or read-only builds. Bundle them and register
+  # the directory in postPatch. It must be named "nltk_data": unstructured's resolver
+  # uses paths ending in "nltk_data" as-is and appends "/nltk_data" to any others.
+  nltkData = symlinkJoin {
+    name = "nltk_data";
+    paths = with nltk-data; [
+      averaged-perceptron-tagger-eng
+      punkt-tab
+    ];
+  };
 in
 buildPythonPackage rec {
   pname = "unstructured";
@@ -128,10 +142,15 @@ buildPythonPackage rec {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-zs7T52SkC9PDnx0O/XChHMfnRnPwbbOz8/8ea3jyjNA=";
+    hash = "sha256-2RGwuCVnoKkqYFVzW7nWuaB9B4IguKSfLO7u1qqAALk=";
   };
 
   build-system = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace unstructured/nlp/tokenize.py \
+      --replace-fail 'import nltk' 'import nltk; nltk.data.path.append("${nltkData}")'
+  '';
 
   dependencies = [
     # Base dependencies
@@ -257,10 +276,14 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [ "unstructured" ];
+  pythonImportsCheck = [
+    "unstructured"
+    # exercises the bundled NLTK corpora lookup, so the build catches an attempted download
+    "unstructured.nlp.tokenize"
+  ];
 
-  # test try to download punkt from nltk
-  # figure out how to make it available to enable the tests
+  # the import-time NLTK download is handled via nltkData above, but the test suite has
+  # further offline/data requirements that are not yet verified, so keep it disabled.
   doCheck = false;
 
   nativeCheckInputs = [

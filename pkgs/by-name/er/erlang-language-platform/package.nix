@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   autoPatchelfHook,
-  erlang,
+  beamPackages,
 }:
 let
   # erlang-language-platform supports multiple OTP versions.
@@ -15,7 +15,7 @@ let
       "elp-macos-${arch}-apple-darwin"
     else
       "elp-linux-${arch}-unknown-linux-gnu";
-  otp_version = "otp-${lib.versions.major erlang.version}";
+  otp_version = "otp-${lib.versions.major beamPackages.erlang.version}";
   release_major = "${platform}-${otp_version}";
 
   hashes = builtins.fromJSON (builtins.readFile ./hashes.json);

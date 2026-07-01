@@ -10,7 +10,7 @@
 
 #include <skalibs/stralloc.h>
 #include <skalibs/djbunix.h>
-#include <skalibs/strerr2.h>
+#include <skalibs/strerr.h>
 #include <skalibs/env.h>
 #include <skalibs/exec.h>
 

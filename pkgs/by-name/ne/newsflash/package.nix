@@ -13,9 +13,12 @@
   wrapGAppsHook4,
   gdk-pixbuf,
   clapper-unwrapped,
+  glycin-loaders,
   gtk4,
   gtksourceview5,
   libadwaita,
+  libglycin,
+  libseccomp,
   libxml2,
   openssl,
   sqlite,
@@ -28,18 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-y03N4Gqc8zmfT/zBQWyQ8Kptmwrw48PpurZCQ6Fxmm8=";
+    hash = "sha256-BfzrnTyMLFiM+aHtrppvl/j/fjB4TbEkbl/yHYOnXa8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Wij+RPtzaSqT4iwrRdqFjZd8kAfBbOGl4cPgrtBUOFI=";
+    hash = "sha256-4z2RGelDhi4RmVQ/+Ba340Pm05x4ruaRYAtJ1HuRHqA=";
   };
 
   postPatch = ''
@@ -56,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     cargo
     desktop-file-utils
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -70,9 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     clapper-unwrapped
+    glycin-loaders
     gtk4
     gtksourceview5
     libadwaita
+    libglycin
+    libseccomp
     libxml2
     openssl
     sqlite

@@ -111,6 +111,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-9YRWMV+1UT+EQd9Uq1+6enNzz+HDlSt3LTPM1BKJxiE=";
     })
 
+    # Compatibility with newer lomiri-api
+    # Remove when version > 0.5.0
+    (fetchpatch {
+      name = "0002-lomiri-Adjust-to-newer-lomiri-api.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/26cbfa458766df406ed7d2c351ec84522371b083.patch";
+      hash = "sha256-1mPDtitMpktuvLs3Zn+6pCaMGTwGvIglGBdrm4Y8QwA=";
+    })
+
     ./9901-lomiri-Disable-Wizard.patch
     (replaceVars ./9902-Layout-fallback-file.patch {
       nixosLayoutFile = "/etc/" + finalAttrs.finalPackage.passthru.etcLayoutsFile;

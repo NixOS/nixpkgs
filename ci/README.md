@@ -51,6 +51,16 @@ To ensure security and a focused utility, the bot adheres to specific limitation
   - opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
+- No [committer][@NixOS/nixpkgs-committers] has an outstanding "changes requested" review.
+  These block both the merge queue and auto-merge, so the bot refuses to merge until the review is addressed or dismissed.
+
+Once these constraints are met, the bot picks a merge strategy based on the `no PR failures` commit status:
+
+- CI passing: the PR is added to the merge queue.
+- CI unfinished (pending or missing status): the bot enables [Auto Merge], which queues the PR once required checks succeed.
+  Note that if CI later fails, nothing happens until it is fixed and passes.
+- CI already failing (`error`/`failure` status): the bot does not enable Auto Merge, because it would never trigger, and fixing CI requires a new push that invalidates the merge command.
+  A fresh `@NixOS/nixpkgs-merge-bot merge` comment is needed once CI is green again.
 
 ### Approving merge bot changes
 
@@ -104,3 +114,4 @@ This script can also be run locally to print basic test cases.
 [@NixOS/nixpkgs-ci]: https://github.com/orgs/NixOS/teams/nixpkgs-ci
 [@NixOS/nixpkgs-core]: https://github.com/orgs/NixOS/teams/nixpkgs-core
 [RFC 172]: https://github.com/NixOS/rfcs/pull/172
+[Auto Merge]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request

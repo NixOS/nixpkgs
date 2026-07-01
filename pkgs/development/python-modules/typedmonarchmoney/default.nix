@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "monarchmoneycommunity" ];
+
   dependencies = [
     monarchmoneycommunity
     rich

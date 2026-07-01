@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Exception interfaces and implementations";
-    homepage = "https://pypi.python.org/pypi/zope.exceptions";
+    homepage = "https://pypi.org/project/zope.exceptions/";
     changelog = "https://github.com/zopefoundation/zope.exceptions/blob/${version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ nickcao ];

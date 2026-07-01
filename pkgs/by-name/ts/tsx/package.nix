@@ -5,22 +5,23 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_22,
+  nodejs-slim_24,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
+  nodejs-slim = nodejs-slim_24;
+  pnpm' = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
-  version = "4.21.0";
+  version = "4.22.4";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlVRq637l84xi9Og0ryzYuu+1b/eBq13jQJIptY0u0o=";
+    hash = "sha256-hiUy3VQXHvzuCr+WjaRV/pUcnz3bq29lmpofqKZ/sv8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -31,17 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm';
     fetcherVersion = 3;
-    hash = "sha256-7JdL2qz663+y3tzeK0LLn57vSsQ0P0d+FofRimWVjrM=";
+    hash = "sha256-A0KaFJNBJaMDTG9g8dj3/qZPkqg5hnRgjP0lfTg/CQY=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs-slim
     pnpmConfigHook
     pnpm'
   ];
 
   buildInputs = [
-    nodejs_22
+    nodejs-slim
   ];
 
   patchPhase = ''
@@ -55,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     # because tsx uses semantic-release, the package.json has a placeholder
     #  version number. this patches it to match the version of the nix package,
     #  which in turn is the release version in github.
-    substituteInPlace package.json --replace-fail "0.0.0-semantic-release" "${finalAttrs.version}"
+    #
+    # also remove the prepare script, which is just used to generate LLM skills
+    substituteInPlace package.json \
+      --replace-fail "0.0.0-semantic-release" "${finalAttrs.version}" \
+      --replace-fail '"prepare": "skills-npm",' ""
 
     runHook postPatch
   '';

@@ -148,8 +148,14 @@ let
 
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
-        overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
-          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+        (overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
+          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+            ];
+          });
 
       # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
       azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {
@@ -250,16 +256,6 @@ let
       azure-mgmt-synapse =
         overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
           "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.web.v2024_11_01'
-      azure-mgmt-web = super.azure-mgmt-web.overridePythonAttrs (attrs: rec {
-        version = "9.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_web";
-          inherit version;
-          hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
-        };
-      });
 
       # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
       azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {

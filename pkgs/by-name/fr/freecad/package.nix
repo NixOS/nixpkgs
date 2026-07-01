@@ -146,6 +146,9 @@ freecad-utils.makeCustomizable (
       };
     };
 
+    # 6.9k object files, cuts down build time from 2-3 hours to 15 minutes
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = {
       homepage = "https://www.freecad.org";
       description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";

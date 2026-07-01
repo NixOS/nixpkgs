@@ -10,16 +10,16 @@
 
 maven.buildMavenPackage rec {
   pname = "filius";
-  version = "2.10.1";
+  version = "2.12.1";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
     tag = "v${version}";
-    hash = "sha256-q6A+S50n09DgwayylAWbUFQ/sqfCVEkIoWCRtZT80M8=";
+    hash = "sha256-sIcYjbWONg8Cq+dHpoBYj07cyHV7oX06Xh1zK0CHn64=";
   };
 
-  mvnHash = "sha256-R14EtImJJEC/DhKm7MKWzq9XEOqDGNPtLIaK3OKbyiQ=";
+  mvnHash = "sha256-/gA49V1Kjh4zJTzDCzFNwZF30ERwPk2lG6lw/jxM2Qo=";
   mvnParameters = "-Plinux";
 
   # tests want to create an X11 window which isn't often feasible

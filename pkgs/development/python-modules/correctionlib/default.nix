@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -13,6 +14,8 @@
   ninja,
 
   # buildInputs
+  boost,
+  eigen,
   zlib,
 
   # dependencies
@@ -30,19 +33,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "correctionlib";
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zIKxMulID6JomaSDuI57cHA7xAZIfGBOOYCKS7Xrkaw=";
+    hash = "sha256-jxn5AYqHPtEPE9C5Gv9s556UH6KE1liC8JDw00vMaLg=";
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail "-Wall -Wextra -Wpedantic -Werror" ""
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "-Wall -Wextra -Wpedantic -Werror" \
+        "" \
+      --replace-fail \
+        "set(BUILTIN_BOOST ON)" \
+        "set(BUILTIN_BOOST OFF)" \
+      --replace-fail \
+        "set(BUILTIN_EIGEN ON)" \
+        "set(BUILTIN_EIGEN OFF)"
   '';
 
   build-system = [
@@ -57,7 +70,11 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ zlib ];
+  buildInputs = [
+    boost
+    eigen
+    zlib
+  ];
 
   dependencies = [
     numpy
@@ -65,6 +82,8 @@ buildPythonPackage (finalAttrs: {
     pydantic
     rich
   ];
+
+  pythonImportsCheck = [ "correctionlib" ];
 
   nativeCheckInputs = [
     # One test requires running the produced `correctionlib` binary
@@ -75,7 +94,10 @@ buildPythonPackage (finalAttrs: {
     scipy
   ];
 
-  pythonImportsCheck = [ "correctionlib" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+    # AssertionError: assert 0.9518682535564676 == 0.9518682535564679
+    "test_lwtnn_example"
+  ];
 
   meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";

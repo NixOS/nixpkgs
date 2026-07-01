@@ -22,21 +22,29 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   libxcb-wm,
   xwayland,
+
+  enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.7";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-7lq/lcaYSc+mJOTkjtwF0LjOAg4Uck3BwAc+2RIntYo=";
+    hash = "sha256-JSs1Xys0+XAPbxLv5pR91K0/e78mu5xLKu0HGdFFCEM=";
   };
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "install_dir: systemd.get_variable('systemduserunitdir')" \
+                     "install_dir: '$out/lib/systemd/user'"
+  '';
 
   outputs = [
     "out"
@@ -67,14 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots_0_20
     libxcb-wm
     xwayland
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  mesonFlags = [ (lib.mesonEnable "xwayland" true) ];
+  mesonFlags = [
+    (lib.mesonEnable "xwayland" true)
+    (lib.mesonEnable "systemd-session" enableSystemd)
+  ];
 
   strictDeps = true;
 

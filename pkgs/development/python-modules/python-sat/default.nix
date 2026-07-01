@@ -13,10 +13,14 @@ let
     url = "https://github.com/arminbiere/kissat/archive/refs/tags/rel-4.0.4.tar.gz";
     hash = "sha256-v+k+qmMjtIAR5LH890s/LiD53lRHZ+coAJ5bIBgpYZM=";
   };
+  minisatepsrc = fetchurl {
+    url = "https://github.com/hchenqide/minisat/archive/90305f7b9ab9c9c9c560238f16b47c26506d0750.zip";
+    hash = "sha256-eS5+wPrcZ00DRZMaJp4yZOZ1uz72Auin6FK6G2SId64=";
+  };
 in
 buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.9.dev2";
+  version = "1.9.dev5";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -24,13 +28,14 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-JntHdC4xhDVt8uzZzMn7bmIkMFjrwlZWBs8z0E4WeeU=";
+    hash = "sha256-OxH2AQbusuv5aB/t85nrNOXAuyCfNFZRvMFMWFfmdhg=";
   };
 
   # The kissat source archive is not included in the repo and pysat attempts to
   # download it at build time. We therefore prefetch and link it.
   prePatch = ''
     ln -s ${kissat404src} solvers/kissat404.tar.gz
+    ln -s ${minisatepsrc} solvers/minisatep.zip
   '';
 
   preBuild = ''

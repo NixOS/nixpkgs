@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     homepage = "http://0pointer.de/lennart/projects/keyfuzz/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mboes ];
+    maintainers = [ ];
   };
 
   src = fetchurl {

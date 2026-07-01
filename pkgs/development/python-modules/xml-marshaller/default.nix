@@ -2,22 +2,27 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   lxml,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xml-marshaller";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "xml_marshaller";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
     six
   ];
@@ -30,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ mazurel ];
   };
-}
+})

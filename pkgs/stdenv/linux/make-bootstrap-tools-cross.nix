@@ -25,7 +25,7 @@ lib.mapAttrs (n: make) (
     # on how to request an upload.
     # Sort following the sorting in `./default.nix` `bootstrapFiles` argument.
 
-    armv5tel-unknown-linux-gnueabi = sheevaplug;
+    armv5tel-unknown-linux-gnueabi = armv5tel-multiplatform;
     armv6l-unknown-linux-gnueabihf = raspberryPi;
     armv7l-unknown-linux-gnueabihf = armv7l-hf-multiplatform;
     aarch64-unknown-linux-gnu = aarch64-multiplatform;

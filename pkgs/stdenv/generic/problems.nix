@@ -48,6 +48,8 @@ rec {
     groupBy
     subtractLists
     genAttrs
+    concatMap
+    unique
     ;
 
   handlers = rec {
@@ -70,66 +72,81 @@ rec {
     max = a: b: if lessThan a b then b else a;
   };
 
-  # TODO: Combine this and automaticProblems into a `{ removal = { manual = true; ... }; ... }` structure for less error-prone changes
-  kinds = rec {
-    # Automatic and manual problem kinds
-    known = map (problem: problem.kindName) automaticProblems ++ manual;
-    # Problem kinds that are currently allowed to be specified in `meta.problems`
-    manual = [
-      "removal"
-      "deprecated"
-      "broken"
-    ];
-    # Problem kinds that are currently only allowed to be specified once
-    unique = [
-      "removal"
-    ];
+  kinds = {
+    maintainerless = {
+      manualAllowed = false;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = {
+        condition =
+          # To get usable output, we want to avoid flagging "internal" derivations.
+          # Because we do not have a way to reliably decide between internal or
+          # external derivation, some heuristics are required to decide.
+          #
+          # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+          # If `description` is not defined, the derivation is probably not a package.
+          # Simply checking whether `meta` is defined is insufficient,
+          # as some fetchers and trivial builders do define meta.
+          config: attrs:
+          # Order of checks optimised for short-circuiting the common case of having maintainers
+          (attrs.meta.maintainers or [ ] == [ ])
+          && (attrs.meta.teams or [ ] == [ ])
+          && (!attrs ? outputHash)
+          && (attrs ? meta.description);
+        value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
+      };
+    };
+    broken = {
+      manualAllowed = true;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = true;
+      automatic = {
+        condition =
+          config:
+          let
+            # TODO: Consider deprecating this or making it generic for all problems
+            allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-    # Same thing but a set with null values (comes in handy at times)
-    manual' = genAttrs manual (k: null);
-    unique' = genAttrs unique (k: null);
-  };
-
-  automaticProblems = [
-    {
-      kindName = "maintainerless";
-      condition =
-        # To get usable output, we want to avoid flagging "internal" derivations.
-        # Because we do not have a way to reliably decide between internal or
-        # external derivation, some heuristics are required to decide.
-        #
-        # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
-        # If `description` is not defined, the derivation is probably not a package.
-        # Simply checking whether `meta` is defined is insufficient,
-        # as some fetchers and trivial builders do define meta.
-        config: attrs:
-        # Order of checks optimised for short-circuiting the common case of having maintainers
-        (attrs.meta.maintainers or [ ] == [ ])
-        && (attrs.meta.teams or [ ] == [ ])
-        && (!attrs ? outputHash)
-        && (attrs ? meta.description);
-      value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
-    }
-    {
-      kindName = "broken";
-      condition =
-        config:
-        let
-          # TODO: Consider deprecating this or making it generic for all problems
-          allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
-
-          allowBrokenPredicate =
-            if config ? allowBrokenPredicate then
+            allowBrokenPredicate =
               lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
                 "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
-                config.allowBrokenPredicate
-            else
-              x: false;
-        in
-        attrs: attrs.meta.broken or false && !allowBroken && !allowBrokenPredicate attrs;
-      value.message = "This package is broken.";
-    }
-  ];
+                config.allowBrokenPredicate;
+          in
+          if allowBroken then
+            attrs: false
+          else if config ? allowBrokenPredicate then
+            attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
+          else
+            attrs: attrs ? meta.broken && attrs.meta.broken;
+        value.message = "This package is broken.";
+      };
+    };
+    removal = {
+      manualAllowed = true;
+      isUnique = true;
+      nixpkgsInternalUseAllowed = false;
+      automatic = null;
+    };
+    deprecated = {
+      manualAllowed = true;
+      isUnique = false;
+      nixpkgsInternalUseAllowed = false;
+      automatic = null;
+    };
+  };
+
+  # Problem kinds that are currently allowed to be specified in `meta.problems`
+  manualKinds = lib.filterAttrs (name: value: value.manualAllowed) kinds;
+  # Problem kinds that are currently only allowed to be specified once
+  uniqueKinds = lib.filterAttrs (name: value: value.isUnique) kinds;
+
+  disallowNixpkgsInternalUseKinds = lib.filterAttrs (
+    name: value: !value.nixpkgsInternalUseAllowed
+  ) kinds;
+
+  automaticProblems = lib.mapAttrsToList (name: value: value.automatic // { kindName = name; }) (
+    lib.filterAttrs (name: value: value.automatic != null) kinds
+  );
 
   genAutomaticProblems =
     config: attrs:
@@ -144,7 +161,7 @@ rec {
     let
       types = lib.types;
       handlerType = types.enum handlers.levels;
-      problemKindType = types.enum kinds.known;
+      problemKindType = types.enum (attrNames kinds);
     in
     {
       handlers = lib.mkOption {
@@ -158,7 +175,7 @@ rec {
 
           Package names are taken from `lib.getName`, which looks at the `pname` first and falls back to extracting the "pname" part from the `name` attribute.
 
-          See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-ignore-problems">Installing packages with problems</link> in the NixOS manual.
+          See [Installing packages with problems](https://nixos.org/manual/nixpkgs/stable/#sec-ignore-problems) in the NixOS manual.
         '';
       };
 
@@ -238,7 +255,7 @@ rec {
   # The type for meta.problems
   problemsType =
     let
-      types = import ./meta-types.nix { inherit lib; };
+      types = import ../../../lib/meta-types.nix { inherit lib; };
       inherit (types)
         str
         listOf
@@ -246,7 +263,8 @@ rec {
         record
         enum
         ;
-      kindType = enum kinds.manual;
+      # While we should only allow manual kinds, we need to allow `meta.problems = otherPackage.meta.problems`, which includes automatic ones as well
+      kindType = enum (attrNames kinds);
       subRecord = record {
         kind = kindType;
         message = str;
@@ -266,7 +284,7 @@ rec {
             let
               kindGroups = groupBy (kind: kind) (mapAttrsToList (name: problem: problem.kind or name) v);
             in
-            all (kind: kinds.manual' ? ${kind} && (kinds.unique' ? ${kind} -> length kindGroups.${kind} == 1)) (
+            all (kind: kinds ? ${kind} && (uniqueKinds ? ${kind} -> length kindGroups.${kind} == 1)) (
               attrNames kindGroups
             )
           );
@@ -290,14 +308,14 @@ rec {
           ++ concatLists (
             mapAttrsToList (
               kind: kindGroup:
-              optionals (!kinds.manual' ? ${kind}) (
+              optionals (!kinds ? ${kind}) (
                 map (
                   el:
                   "${ctx}.${el.name}: Problem kind ${kind}, inferred from the problem name, is invalid; expected ${kindType.name}. You can specify an explicit problem kind with `${ctx}.${el.name}.kind`"
                 ) (filter (el: !el.explicit) kindGroup)
               )
               ++
-                optional (kinds.unique' ? ${kind} && length kindGroup > 1)
+                optional (uniqueKinds ? ${kind} && length kindGroup > 1)
                   "${ctx}: Problem kind ${kind} should be unique, but is used for these problems: ${
                     concatMapStringsSep ", " (el: el.name) kindGroup
                   }"
@@ -330,7 +348,10 @@ rec {
         };
       };
 
-    Returns both the structure itself for inspection and a function that can query it with very few allocations/lookups
+      Returns:
+      - the structure itself for inspection
+      - a function that can query the structure with very few allocations/lookups
+      - a list of problem kinds/names/packages that require handling
 
     This allows collapsing arbitrarily many problem handlers/matchers into a predictable structure that can be queried in a predictable and fast way
   */
@@ -351,6 +372,20 @@ rec {
             }) forPackage
           ) config.problems.handlers
         );
+
+      # Lookup table for all the kinds/names/packages that actually need to be
+      # handled
+      definedConstraints = listToAttrs (
+        map (ident: {
+          name = "${ident}s"; # plural
+          value = unique (
+            concatMap (
+              constraint:
+              optionals (constraint.${ident} != null && constraint.handler != "ignore") [ (constraint.${ident}) ]
+            ) constraints
+          );
+        }) identOrder
+      );
 
       getHandler =
         list:
@@ -410,26 +445,27 @@ rec {
       switch = doLevel 0 constraints;
     in
     {
-      inherit switch;
+      inherit switch definedConstraints;
       handlerForProblem =
         if isString switch then
-          pname: name: kind:
+          kind: name: pname:
           switch
         else
-          pname: name: kind:
+          kind:
           let
-            switch' = switch.kindSpecific.${kind} or switch.kindFallback;
+            kindSwitch = switch.kindSpecific.${kind} or switch.kindFallback;
           in
-          if isString switch' then
-            switch'
+          if isString kindSwitch then
+            name: pname: kindSwitch
           else
+            name:
             let
-              switch'' = switch'.nameSpecific.${name} or switch'.nameFallback;
+              nameSwitch = kindSwitch.nameSpecific.${name} or kindSwitch.nameFallback;
             in
-            if isString switch'' then
-              switch''
+            if isString nameSwitch then
+              pname: nameSwitch
             else
-              switch''.packageSpecific.${pname} or switch''.packageFallback;
+              pname: nameSwitch.packageSpecific.${pname} or nameSwitch.packageFallback;
     };
 
   genCheckProblems =
@@ -438,49 +474,61 @@ rec {
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
         handlerForProblem
+        definedConstraints
         ;
-      # Makes sure that automatic problems can cache with just config applied
-      automaticProblemsConfigCache = map (
-        problem: problem // { condition = problem.condition config; }
+
+      # All the problem kinds that actually need to be checked
+      configuredProblems = definedConstraints.kinds ++ definedConstraints.names;
+
+      # Filter out any problems that are always ignored in config.problems.
+      # Makes sure to cache the condition by appliny config, and the handler
+      # by applying the problem's kind and name
+      automaticProblemsConfigCache = concatMap (
+        problem:
+        optional (elem problem.kindName configuredProblems) {
+          condition = problem.condition config;
+          handler = handlerForProblem problem.kindName problem.kindName;
+        }
       ) automaticProblems;
     in
     attrs:
-    let
-      pname = getName attrs;
-      manualProblems = attrs.meta.problems or { };
-    in
     if
       # Fast path for when there's no problem that needs to be handled
-      # No automatic problems that needs handling
       all (
-        problem:
-        problem.condition attrs -> handlerForProblem pname problem.kindName problem.kindName == "ignore"
+        problem: problem.condition attrs -> problem.handler (getName attrs) == "ignore"
       ) automaticProblemsConfigCache
       && (
         # No manual problems
-        manualProblems == { }
+        !attrs ? meta.problems
         # Or all manual problems are ignored
-        || all (name: handlerForProblem pname name (manualProblems.${name}.kind or name) == "ignore") (
-          attrNames manualProblems
-        )
+        || all (
+          name: handlerForProblem (attrs.meta.problems.${name}.kind or name) name (getName attrs) == "ignore"
+        ) (attrNames attrs.meta.problems)
       )
     then
       null
     else
       # Slow path, only here we actually figure out which problems we need to handle
       let
+        pname = getName attrs;
         problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
             # Kind falls back to the name
             kind = problem.kind or name;
-            handler = handlerForProblem pname name kind;
+            handler = handlerForProblem kind name pname;
             inherit problem;
           }) problems
         );
       in
       processProblems pname problemsToHandle;
+
+  completeMetaProblems =
+    config: attrs:
+    mapAttrs (name: problem: { kind = name; } // problem) (
+      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+    );
 
   processProblems =
     pname: problemsToHandle:

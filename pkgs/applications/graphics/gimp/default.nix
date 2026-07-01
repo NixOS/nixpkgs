@@ -60,7 +60,7 @@
   gexiv2,
   harfbuzz,
   makeFontsConf,
-  mypaint-brushes1,
+  mypaint-brushes,
   libwebp,
   libheif,
   gjs,
@@ -71,7 +71,6 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  fetchpatch,
   qoi,
 }:
 
@@ -84,7 +83,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.8";
+  version = "3.2.4";
 
   outputs = [
     "out"
@@ -95,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/rSYrMAbJoJ8/x/5Wqj7gs3Wpg16v3c8/NGavq/KM4Y=";
+    hash = "sha256-cxK8U+nG0tAFbKe5PxxrmHB5Rt2TT3FMIbh0bstgFYg=";
   };
 
   patches = [
@@ -118,31 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
-
-    # Allow calling tests from other directories.
-    # Required for the next patch.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/fd58ab3bee7a79cb0a7870c6858f3b64c84a7917.patch";
-      hash = "sha256-fpysKWwt5rilqp7ukdWx7kutkDquL/6YhYjR1zQfu/Q=";
-    })
-
-    # Do not go through ui for save-and-export test.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/608ad0a528b5b31101c021d96aeb95558d207497.patch";
-      hash = "sha256-0oA5u+uAT0l3WT90fy0RGOR8xy/fGIHevBb69oUzfGs=";
-      excludes = [
-        # Other changes would prevent deletion, removing it from build is sufficient.
-        "app/tests/test-save-and-export.c"
-      ];
-    })
-
-    # Disable broken UI tests.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c34fe3e94f1019eafcb38edf1c07bff12a57431e.patch";
-      hash = "sha256-yVauEpoGEOIfCXnGnWMGWjXbIDizDhJ3hipeCy3XSBM=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -155,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt # for xsltproc
     gobject-introspection
     perl
+    python
     vala
 
     # for docs
@@ -216,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxmu
     glib-networking
     libmypaint
-    mypaint-brushes1
+    mypaint-brushes
     qoi
 
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
@@ -247,6 +222,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     gexiv2
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dbug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
@@ -285,19 +262,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GIMP is executed at build time so we need to fix this.
     # TODO: Look into if we can fix the interp thing.
-    chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+    chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
-      plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
-
-    # Use Python from environment not from Meson.
-    # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
-    substituteInPlace meson.build \
-      --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
-
-    # Broken test
-    # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
-    substituteInPlace app/tests/meson.build \
-      --replace-fail "{${"\n"}    'name': 'save-and-export',${"\n"}  }${"\n"}" ""
+      plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
   '';
 
   preBuild =
@@ -354,9 +321,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major finalAttrs.version}.0";
-    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
-    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
+    apiVersion = "${
+      toString (
+        lib.toInt (lib.versions.major finalAttrs.version)
+        + (if lib.versions.minor finalAttrs.version == "99" then 1 else 0)
+      )
+    }.0";
+    appVersion = lib.versions.majorMinor finalAttrs.version;
+    majorVersion = lib.warn "gimp.majorVersion is deprecated in favour of gimp.apiVersion and gimp.appVersion" finalAttrs.passthru.apiVersion;
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.apiVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.apiVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 
@@ -367,7 +341,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with lib.maintainers; [ jtojnar ];
+    donationPage = "https://www.gimp.org/donating/";
+    maintainers = with lib.maintainers; [
+      jtojnar
+      bddvlpr
+    ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)

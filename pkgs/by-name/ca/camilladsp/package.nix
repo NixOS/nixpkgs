@@ -50,8 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/HEnquist/camilladsp";
     changelog = "https://github.com/HEnquist/camilladsp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ paepcke ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      paepcke
+      stepbrobd
+    ];
     mainProgram = "camilladsp";
   };
 })

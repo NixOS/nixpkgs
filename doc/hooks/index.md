@@ -37,6 +37,7 @@ npm-install-hook.section.md
 patch-rc-path-hooks.section.md
 perl.section.md
 pkg-config.section.md
+pnpm.section.md
 postgresql-test-hook.section.md
 premake.section.md
 python.section.md
@@ -48,6 +49,7 @@ unzip.section.md
 validatePkgConfig.section.md
 versionCheckHook.section.md
 waf.section.md
+writable-tmpdir-as-home-hook.section.md
 zig.section.md
 xcbuild.section.md
 xfce4-dev-tools.section.md

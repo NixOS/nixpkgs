@@ -17,7 +17,6 @@
   libopus,
   libvpx,
   openal,
-  pcre,
   qrencode,
   qt6,
   sqlcipher,
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     libvpx
     openal
-    pcre
     qrencode
     qt6.qtbase
     qt6.qtsvg

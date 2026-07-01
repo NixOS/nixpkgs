@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  distutils,
   doxygen,
   draco,
   embree,
@@ -53,25 +52,19 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.05.01";
+  version = "26.03";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
+    hash = "sha256-Ijh7x63TqEkittO+r//sIkBu7I52/6C7a2n9Nq6Kt7g=";
   };
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   patches = [
-    (fetchpatch {
-      name = "port-to-embree-4.patch";
-      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
-      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
-    })
     (fetchpatch {
       # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
       name = "propagate-dependencies-opengl.patch";
@@ -142,7 +135,6 @@ buildPythonPackage rec {
     numpy
     opensubdiv
     pyopengl
-    distutils
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL

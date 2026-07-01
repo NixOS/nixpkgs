@@ -4,6 +4,9 @@
   python3Packages,
   atomicparsley,
   deno,
+  # Override jsRuntime with `nodejs`, `bun`, `quickjs`, or `quickjs-ng` if you want to use another default JS runtime.
+  # You still need to enable them in your yt-dlp config with `--js-runtimes [runtime]`.
+  jsRuntime ? deno,
   fetchFromGitHub,
   ffmpeg-headless,
   installShellFiles,
@@ -16,6 +19,12 @@
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
   nix-update-script,
+  # required for tests
+  yt-dlp,
+  nodejs,
+  bun,
+  quickjs,
+  quickjs-ng,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,27 +32,34 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2026.03.17";
+  version = "2026.06.09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "yt-dlp";
     tag = version;
-    hash = "sha256-A4LUCuKCjpVAOJ8jNoYaC3mRCiKH0/wtcsle0YfZyTA=";
+    hash = "sha256-ykqTDPzKKIWRGSQmw2esCRKyYqDZKXRYDeba888tkDU=";
   };
 
   postPatch = ''
     substituteInPlace yt_dlp/version.py \
       --replace-fail "UPDATE_HINT = None" 'UPDATE_HINT = "Nixpkgs/NixOS likely already contain an updated version.\n       To get it run nix-channel --update or nix flake update in your config directory."'
     ${lib.optionalString javascriptSupport ''
-      # deno is required for full YouTube support (since 2025.11.12).
-      # This makes yt-dlp find deno even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
-      # Crafted so people can replace deno with one of the other JS runtimes.
+      # A JavaScript runtime is required for full YouTube support (since 2025.11.12).
+      # This makes yt-dlp find `jsRuntime` even if it is used as a python dependency, i.e. in kodiPackages.sendtokodi.
+      # Crafted so people can replace the default deno with one of the other JS runtimes.
       substituteInPlace yt_dlp/utils/_jsruntime.py \
-        --replace-fail "path = _determine_runtime_path(self._path, '${deno.meta.mainProgram}')" "path = '${lib.getExe deno}'"
+        --replace-fail "path = _determine_runtime_path(self._path, '${jsRuntime.meta.mainProgram}')" "path = '${lib.getExe jsRuntime}'"
     ''}
   '';
+
+  __structuredAttrs = true;
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -128,7 +144,7 @@ python3Packages.buildPythonApplication rec {
       --fish completions/fish/yt-dlp.fish \
       --zsh completions/zsh/_yt-dlp
 
-    install -Dm644 Changelog.md README.md -t "$out/share/doc/yt_dlp"
+    install -Dm644 Changelog.md README.md -t "$doc/share/doc/yt_dlp"
   ''
   + lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
@@ -136,6 +152,15 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    # Try to build with each of the supported JS runtimes
+    tests = lib.genAttrs' [ nodejs bun quickjs quickjs-ng ] (
+      runtime:
+      lib.nameValuePair runtime.pname (
+        yt-dlp.override {
+          jsRuntime = runtime;
+        }
+      )
+    );
   };
 
   meta = {

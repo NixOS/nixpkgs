@@ -38,10 +38,10 @@ in
 let
   inherit (args') stripLen extraPrefix;
 in
-lib.throwIfNot (excludes == [ ] || includes == [ ])
-  "fetchpatch: cannot use excludes and includes simultaneously"
-  fetchurl
-  (
+if excludes != [ ] && includes != [ ] then
+  throw "fetchpatch: cannot use excludes and includes simultaneously"
+else
+  fetchurl (
     {
       nativeBuildInputs = [ patchutils ] ++ nativeBuildInputs;
       postFetch = ''

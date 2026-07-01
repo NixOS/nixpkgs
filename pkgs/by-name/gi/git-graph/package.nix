@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command line tool to show clear git graphs arranged for your branching model";
     homepage = "https://github.com/mlange-42/git-graph";
     license = lib.licenses.mit;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       cafkafk
       matthiasbeyer

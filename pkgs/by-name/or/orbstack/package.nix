@@ -3,18 +3,19 @@
   stdenvNoCC,
   fetchurl,
   _7zz,
+  installShellFiles,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.1.1-20026";
+  version = "2.2.1-20628";
   sourceData = {
     aarch64-darwin = {
       arch = "arm64";
-      hash = "sha256-GKQfdZlY4foJUWlrggtUeNPtc1P4ykhv6dAmoafZcgc=";
+      hash = "sha256-W8FxnDyYfExgxlvp/dZbRzCZDhaX7Byxwz5rujG/krU=";
     };
     x86_64-darwin = {
       arch = "amd64";
-      hash = "sha256-x+748PKaqsnQqeqWIgihNipjztCSZkWluomDXlJgUTw=";
+      hash = "sha256-8woVgREEpJT+IGaVsash/PruEuye+8uhKaADTrtoMZs=";
     };
   };
   sources = lib.mapAttrs (
@@ -41,7 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # These bogus files corrupt the .app bundle and prevent it from launching.
   unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
 
-  nativeBuildInputs = [ _7zz ];
+  nativeBuildInputs = [
+    _7zz
+    installShellFiles
+  ];
 
   sourceRoot = ".";
 
@@ -57,6 +61,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    installShellCompletion --bash "$out"/Applications/OrbStack.app/Contents/Resources/completions/bash/{docker,kubectl,orbctl}.bash
+    installShellCompletion --zsh "$out"/Applications/OrbStack.app/Contents/Resources/completions/zsh/{_docker,_kubectl,_orb,_orbctl}
+    installShellCompletion --fish "$out"/Applications/OrbStack.app/Contents/Resources/completions/fish/{docker,kubectl,orbctl}.fish
   '';
 
   passthru = {

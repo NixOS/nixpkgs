@@ -6,16 +6,16 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.31.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ghFVGbud3aKJPvjNchsgPUSioNAxg4TJlUIYMp9+cJo=";
+    hash = "sha256-toO+gVPHfc/drP9Xj0vJOJvOxsH/0VqXKSwfYvkZfnE=";
   };
 
-  cargoHash = "sha256-eyIO8lxmGdZKEDW+GSVARm5u3X0vx1RJLG8Ljbk0Zb8=";
+  cargoHash = "sha256-lbS67Hiv0ay0DzzoZsFRxc9EKl9sw+pYJwn9FmXquos=";
 
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -41,6 +41,17 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=version::tests::test_current_version"
     "--skip=test_protocol_version_has_git_info"
     "--skip=test_rcpd_protocol_version_has_git_info"
+    # these tests shell out to `getent` to resolve real user/group names, which isn't available in the sandbox
+    "--skip=chmod::tests::getent_real_resolves_root"
+    "--skip=chmod::tests::getent_real_option_like_name_fails_closed_no_injection"
+    "--skip=rejects_unknown_group"
+    # these tests change ownership and set setuid/setgid bits (fchown / chmod / chgrp),
+    # which the unprivileged sandbox build user isn't permitted to do (EPERM)
+    "--skip=safedir::tests::set_dir_metadata_fd_applies"
+    "--skip=safedir::tests::set_file_metadata_fd_ordering_preserves_setuid"
+    "--skip=applies_per_type_modes_recursively"
+    "--skip=group_change_preserves_setgid_across_chgrp"
+    "--skip=preserves_setgid_through_mode_change"
   ];
 
   meta = {

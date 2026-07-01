@@ -26,7 +26,6 @@
   libsysprof-capture,
   libthai,
   libxkbcommon,
-  pcre,
   pkg-config,
   python3,
   sqlite,
@@ -74,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     libthai
     libxkbcommon
-    pcre
     python3
     sqlite
     gcc-unwrapped

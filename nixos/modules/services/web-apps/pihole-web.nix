@@ -89,6 +89,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.etc."pihole/versions".text = "WEB_VERSION=${cfg.package.src.tag}";
+
     services.pihole-ftl.settings.webserver = {
       domain = cfg.hostName;
       port = cfg.ports;

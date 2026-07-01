@@ -117,7 +117,7 @@ gem 'openid_connect', '~> 2.3.0', feature_category: :system_access
 gem 'omniauth-salesforce', '~> 1.0.5', path: 'vendor/gems/omniauth-salesforce', feature_category: :system_access
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0', feature_category: :system_access
 gem 'rack-oauth2', '~> 2.2.1', feature_category: :system_access
-gem 'jwt', '~> 2.10.0', feature_category: :system_access
+gem 'jwt', '~> 2.10.3', feature_category: :system_access
 
 # Kerberos authentication. EE-only
 gem 'gssapi', '~> 1.3.1', group: :kerberos, feature_category: :system_access
@@ -362,6 +362,11 @@ gem 'loofah', '~> 2.25.0', feature_category: :shared # rubocop:todo Gemfile/Miss
 
 # Used to provide license templates
 gem 'licensee', '~> 9.16', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
+
+# Pinned below 1.8 so rugged.so links libgit2's old http-parser instead of
+# the bundled llhttp, which collides with llhttp-ffi symbols at runtime.
+# See https://gitlab.com/gitlab-org/gitlab/-/issues/598564
+gem 'rugged', '~> 1.7.2', require: false, feature_category: :gitaly
 
 # Detect and convert string character encoding
 gem 'charlock_holmes', '~> 0.7.9', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
@@ -697,7 +702,7 @@ gem 'valid_email', '~> 0.1', feature_category: :shared # rubocop:todo Gemfile/Mi
 gem 'jsonb_accessor', '~> 1.4', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 gem 'json', '~> 2.19.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 gem 'json_schemer', '~> 2.4.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
-gem 'oj', '~> 3.16.0', '>=3.16.16', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
+gem 'oj', '~> 3.17.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 gem 'oj-introspect', '~> 0.9', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 gem 'multi_json', '~> 1.17.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 gem 'yajl-ruby', '~> 1.4.3', require: 'yajl', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
@@ -760,3 +765,9 @@ gem "gitlab-cloud-connector", "~> 1.45", require: 'gitlab/cloud_connector', feat
 gem "gvltools", "~> 0.4.0", feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 
 gem 'gitlab_query_language', '~> 0.26.0', feature_category: :integrations
+
+# standard Gem, version increase to resolve vulnerabilities
+gem "zlib", "~> 3.2", ">= 3.2.3", feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/work_items/596593
+
+# standard Gem, pin version to resolve vulnerabilities
+gem "erb", "= 4.0.3.1", feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/work_items/596593

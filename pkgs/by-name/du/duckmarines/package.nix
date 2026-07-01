@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Duck-themed action puzzle video game";
+    homepage = "https://github.com/SimonLarsen/duckmarines";
     platforms = love.meta.platforms;
     hydraPlatforms = [ ];
     license = with lib.licenses; [

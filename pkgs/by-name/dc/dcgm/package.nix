@@ -37,7 +37,7 @@ let
   # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/scripts/0080_cuda.sh#L24-L39
   getCudaPackages =
     p: with p; [
-      cuda_cccl
+      cccl
       cuda_cudart
       cuda_nvcc
       cuda_nvml_dev

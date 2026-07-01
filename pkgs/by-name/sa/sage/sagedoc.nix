@@ -12,15 +12,31 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  nativeBuildInputs = with python3.pkgs; [
+    meson-python
+    cython
+    sphinx
+  ];
+
   unpackPhase = ''
     export SAGE_DOC_OVERRIDE="$PWD/share/doc/sage"
     export SAGE_DOC_SRC_OVERRIDE="$PWD/docsrc"
 
     cp -r "${src}/src/doc" "$SAGE_DOC_SRC_OVERRIDE"
     chmod -R 755 "$SAGE_DOC_SRC_OVERRIDE"
+
+    # Tools needed for meson to run the bootstrap script
+    cp -r "${src}/tools/bootstrap-docs.py" "$SAGE_DOC_SRC_OVERRIDE"
+    cp -r "${src}/build/sage_bootstrap" "$SAGE_DOC_SRC_OVERRIDE"
+    chmod -R 755 "$SAGE_DOC_SRC_OVERRIDE/sage_bootstrap/env.py"
+    sed "/assert/d" "${src}/build/sage_bootstrap/env.py" > "$SAGE_DOC_SRC_OVERRIDE/sage_bootstrap/env.py"
   '';
 
-  preBuild = ''
+  preConfigure = ''
+    cd docsrc
+  '';
+
+  buildPhase = ''
     export SAGE_ROOT="${sage-with-env.env.lib.src}"
     export PATH="${sage-with-env}/bin:$PATH"
     export HOME="$TMPDIR/sage_home"
@@ -32,10 +48,10 @@ stdenv.mkDerivation rec {
     # jupyter-sphinx calls the sagemath jupyter kernel during docbuild
     export JUPYTER_PATH=${jupyter-kernel-specs}
 
-    # the Makefile tries to guess SAGE_DOC, but in a buggy way (changed in 10.8)
-    export SAGE_DOC="$SAGE_DOC_OVERRIDE"
-
-    cd docsrc
+    meson setup $SAGE_DOC_OVERRIDE
+    meson compile -C $SAGE_DOC_OVERRIDE
+    sage -advanced > $SAGE_DOC_OVERRIDE/en/reference/repl/options.txt
+    meson compile -C $SAGE_DOC_OVERRIDE doc-html
   '';
 
   enableParallelBuilding = true;

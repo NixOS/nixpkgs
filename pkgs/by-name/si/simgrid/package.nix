@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-d5yzlR2uo//EcFtqhNUU2q/RCwBiXrRNUAMkEbA49ZQ=";
   };
 
+  patches = [
+    # https://framagit.org/simgrid/simgrid/-/commit/6159c067c29ac1a3c9a94b025c79cfa3fb109ccd
+    ./pybind11-3.0.2.patch
+  ];
+
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [
     cmake

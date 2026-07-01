@@ -42,7 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd git-absorb \
       --bash <($out/bin/git-absorb --gen-completions bash) \
       --fish <($out/bin/git-absorb --gen-completions fish) \
-      --zsh <($out/bin/git-absorb --gen-completions zsh)
+      --zsh <($out/bin/git-absorb --gen-completions zsh) \
+      --nushell <($out/bin/git-absorb --gen-completions nushell)
   '';
 
   meta = {
