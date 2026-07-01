@@ -16393,6 +16393,12 @@
     githubId = 30468956;
     name = "Lukas Heiligenbrunner";
   };
+  lukas-sgx = {
+    email = "lukas.soigneux@epitech.eu";
+    github = "lukas-sgx";
+    githubId = 68616614;
+    name = "Lukas Soigneux";
+  };
   lukaslihotzki = {
     email = "lukas@lihotzki.de";
     github = "lukaslihotzki";
