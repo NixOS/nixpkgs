@@ -6,7 +6,6 @@
   technitium-dns-server-library,
   libmsquic,
   nixosTests,
-  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server";
@@ -51,7 +50,7 @@ buildDotnetModule rec {
     inherit (nixosTests) technitium-dns-server;
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";
