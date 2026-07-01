@@ -480,13 +480,15 @@ let
       # BUNDLE_WIDEVINE_CDM build flag does work in the way we want though.
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
-      ./patches/widevine-disable-auto-download-allow-bundle.patch
+      ./patches/${lib.optionalString (chromiumVersionAtLeast "150") "chromium-150-"}widevine-disable-auto-download-allow-bundle.patch
     ]
-    ++ [
+    ++ lib.optionals (!chromiumVersionAtLeast "150") [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+    ]
+    ++ [
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
@@ -504,10 +506,15 @@ let
       # allowing us to use our rustc and our clang.
       ./patches/chromium-140-rust.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "141") [
+    ++ lib.optionals (versionRange "141" "150") [
       # Rebased variant of the patch above due to
       # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
       ./patches/chromium-141-rust.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "150") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7858711
+      ./patches/chromium-150-rust.patch
     ]
     ++ lib.optionals (!chromiumVersionAtLeast "145" && stdenv.hostPlatform.isAarch64) [
       # Reverts decommit pooled pages which causes random crashes of tabs on systems
@@ -675,6 +682,17 @@ let
         decode = "base64 -d";
         revert = true;
         hash = "sha256-7xg8IZ2gO+Wtnv7lWLVE3lLpcmMgvtDtcWwUuMBzkrE=";
+      })
+    ]
+    ++ lib.optionals (versionRange "150" "151") [
+      # ninja: Entering directory `out/Release'
+      # ninja: error: 'ar', needed by 'default_for_rust_host_build_tools/obj/build/rust/allocator/liballoc_error_handler_impl.a', missing and no known rule to make it
+      (fetchpatch {
+        name = "chromium-150-backport-build--Omit-ar-from-inputs-when-resolved-via--PATH.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7904982
+        url = "https://chromium.googlesource.com/chromium/src/+/60f987d8d5f7272793a40290d060b8f50933f825^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
       })
     ];
 
@@ -910,6 +928,12 @@ let
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
+      // lib.optionalAttrs (chromiumVersionAtLeast "150") {
+        # ERROR at //build/modules/BUILD.gn:80:23: Directory does not exist: /usr/include/
+        #     system_headers += expand_directory("${sysroot}/${root_include_dir}", true)
+        #                       ^------------------------------------------------------
+        use_unified_system_module = false;
+      }
       // {
         use_qt5 = false;
         use_qt6 = false;
@@ -986,24 +1010,34 @@ let
       runHook postConfigure
     '';
 
-    # Chromium expects nightly/bleeding edge rustc features to be available.
-    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
-    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
-    # enable those features in our stable builds.
-    env.RUSTC_BOOTSTRAP = 1;
-    # Mute some warnings that are enabled by default. This is useful because
-    # our Clang is always older than Chromium's and the build logs have a size
-    # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE =
-      "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow"
-      # warning: '_LIBCPP_HARDENING_MODE' macro redefined [-Wmacro-redefined]
-      # because of hardeningDisable = [ "strictflexarrays1" ];
-      + lib.optionalString (chromiumVersionAtLeast "149") " -Wno-macro-redefined";
-    env.BUILD_CC = "$CC_FOR_BUILD";
-    env.BUILD_CXX = "$CXX_FOR_BUILD";
-    env.BUILD_AR = "$AR_FOR_BUILD";
-    env.BUILD_NM = "$NM_FOR_BUILD";
-    env.BUILD_READELF = "$READELF_FOR_BUILD";
+    env = {
+      # Chromium expects nightly/bleeding edge rustc features to be available.
+      # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+      # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+      # enable those features in our stable builds.
+      RUSTC_BOOTSTRAP = 1;
+
+      # Mute some warnings that are enabled by default. This is useful because
+      # our Clang is always older than Chromium's and the build logs have a size
+      # of approx. 25 MB without this option (and this saves e.g. 66 %).
+      NIX_CFLAGS_COMPILE =
+        "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow"
+        # warning: '_LIBCPP_HARDENING_MODE' macro redefined [-Wmacro-redefined]
+        # because of hardeningDisable = [ "strictflexarrays1" ];
+        + lib.optionalString (chromiumVersionAtLeast "149") " -Wno-macro-redefined";
+
+      BUILD_CC = "$CC_FOR_BUILD";
+      BUILD_CXX = "$CXX_FOR_BUILD";
+      BUILD_AR = "$AR_FOR_BUILD";
+      BUILD_NM = "$NM_FOR_BUILD";
+      BUILD_READELF = "$READELF_FOR_BUILD";
+    }
+    // lib.optionalAttrs (chromiumVersionAtLeast "150") {
+      # [56385/56385] LINK ./chrome
+      # FAILED: [code=1] chrome
+      # /nix/store/[...]/bin/ld.lld: line 288: /nix/store/[...]/bin/ld.lld: Argument list too long
+      NIX_LD_USE_RESPONSE_FILE = 1;
+    };
 
     buildPhase =
       let

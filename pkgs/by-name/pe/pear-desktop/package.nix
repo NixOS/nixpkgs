@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  actool,
   electron,
   python3,
   copyDesktopItems,
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm_10
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ actool ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
