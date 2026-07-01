@@ -20,6 +20,7 @@
   scikit-learn,
   scipy,
   sympy,
+  tensorboard,
 
   # tests
   pyfakefs,
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   pname = "ax-platform";
   version = "1.2.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -67,6 +69,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sqlalchemy
     tabulate
+    tensorboard
   ];
 
   disabledTestPaths = [
