@@ -27,6 +27,7 @@ class VarsPrompt:
 
 @dataclass
 class VarsGeneratorBackend:
+	name: str
 	get: str
 	set: str
 	exists: str
@@ -35,8 +36,9 @@ class VarsGeneratorBackend:
 	deploy: str
 	deployLocal: str
 
-	def from_jsom(json: Any) -> Self:
+	def from_jsom(name: str, json: Any) -> Self:
 		return VarsGeneratorBackend(
+			name=name,
 			get=json["get"],
 			set=json["set"],
 			exists=json["exists"],
@@ -105,7 +107,7 @@ class VarsConfig:
 			result.generators[k] = VarsGenerator.from_jsom(k, v)
 
 		for k, v in json["generatorBackends"].items():
-			result.generatorBackends[k] = VarsGeneratorBackend.from_jsom(v)
+			result.generatorBackends[k] = VarsGeneratorBackend.from_jsom(k, v)
 
 		referencedPrompts: Set[str] = set()
 		referencedGenerators: Set[str] = set()

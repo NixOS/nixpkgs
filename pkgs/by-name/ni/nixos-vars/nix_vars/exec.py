@@ -31,7 +31,17 @@ def file_exists(
 		capture_output=True,
 		text=True,
 	)
-	return result.returncode == 0
+
+	if result.returncode == 42:
+		return False
+
+	try:
+		result.check_returncode()
+		return True
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error running the {backend.name}/exists script for {generator.name}/{file.name} [Exit code: {e.returncode}]:\n{e.stderr}"
+		)
 
 
 def get_secret(
@@ -39,13 +49,18 @@ def get_secret(
 ):
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.get)
-	subprocess.run(
-		[binary, generator.name, file.name],
-		capture_output=True,
-		text=True,
-		check=True,
-		env={"out": out},
-	)
+	try:
+		subprocess.run(
+			[binary, generator.name, file.name],
+			capture_output=True,
+			text=True,
+			check=True,
+			env={"out": out},
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error getting secret {generator.name}/{file.name} via the {backend.name} backend:\n{e.stderr}"
+		)
 
 
 def set_secret(
@@ -53,13 +68,18 @@ def set_secret(
 ):
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.set)
-	subprocess.run(
-		[binary, generator.name, file.name],
-		capture_output=True,
-		text=True,
-		check=True,
-		env={"in": at},
-	)
+	try:
+		subprocess.run(
+			[binary, generator.name, file.name],
+			capture_output=True,
+			text=True,
+			check=True,
+			env={"in": at},
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error setting secret {generator.name}/{file.name} via the {backend.name} backend:\n{e.stderr}"
+		)
 
 
 def execution_order(config: VarsConfig) -> List[str]:
