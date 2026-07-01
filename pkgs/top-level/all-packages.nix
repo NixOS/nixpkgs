@@ -8193,9 +8193,7 @@ with pkgs;
     ubootRaspberryPiAarch64
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
-    ubootRaspberryPi3_64bit
     ubootRaspberryPi4_32bit
-    ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
     ubootRock3C
     ubootRock4CPlus
