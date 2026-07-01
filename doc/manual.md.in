@@ -3,6 +3,7 @@
 
 ```{=include=} chapters
 preface.chapter.md
+first-package.chapter.md
 ```
 
 ```{=include=} parts
