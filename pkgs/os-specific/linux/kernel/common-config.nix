@@ -827,13 +827,15 @@ let
       # enable temporary caching of the last request_key() result
       KEYS_REQUEST_CACHE = yes;
       # randomized slab caches
-      RANDOM_KMALLOC_CACHES = whenAtLeast "6.6" yes;
+      RANDOM_KMALLOC_CACHES = whenBetween "6.6" "7.2" yes;
+      KMALLOC_PARTITION_CACHES = whenAtLeast "7.2" yes;
+      KMALLOC_PARTITION_RANDOM = whenAtLeast "7.2" yes;
 
       # NIST SP800-90A DRBG modes - enabled by most distributions
       #   and required by some out-of-tree modules (ShuffleCake)
       #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
-      CRYPTO_DRBG_HASH = yes;
-      CRYPTO_DRBG_CTR = yes;
+      CRYPTO_DRBG_HASH = whenOlder "7.2" yes;
+      CRYPTO_DRBG_CTR = whenOlder "7.2" yes;
 
       # Enable KFENCE
       # See: https://docs.kernel.org/dev-tools/kfence.html
