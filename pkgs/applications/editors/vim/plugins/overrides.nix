@@ -134,6 +134,7 @@
   tree-sitter,
   # fugit2-nvim
   gpgme,
+  writableTmpDirAsHomeHook,
 }:
 self: super:
 let
@@ -5346,6 +5347,32 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  vim-matchup = super.vim-matchup.overrideAttrs {
+    doCheck = true;
+
+    nativeCheckInputs = [
+      neovim-unwrapped
+    ];
+
+    checkInputs = [
+      self.vader-vim
+      writableTmpDirAsHomeHook
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+
+      export TESTS_ENABLE_TREESITTER=1
+      ln -s ${self.vader-vim} test/vader/vader.vim
+
+      for testdir in test/new/test-*; do
+        make -C "$testdir" MYVIM="nvim --headless"
+      done
+
+      runHook postCheck
+    '';
+  };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
     passthru = old.passthru // {
