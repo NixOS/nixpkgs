@@ -1165,6 +1165,11 @@ let
         useZstd = stdenv.buildPlatform.is64bit;
       in
       {
+        # Increase the default kernel log buffer size to 1 MiB. This
+        # prevents it from filling up with lines about loading X.509
+        # certificates when using single‐module certificates.
+        LOG_BUF_SHIFT = freeform "20";
+
         # The default target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
 
