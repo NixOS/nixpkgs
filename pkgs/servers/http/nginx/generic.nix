@@ -57,6 +57,10 @@ let
       or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported.")
   ) modules;
 
+  # Modules that are loaded at runtime via `load_module` instead of being
+  # compiled into the nginx binary. A module opts in with `dynamic = true`.
+  dynamicModules = lib.filter (mod: mod.dynamic or false) modules;
+
   mapModules =
     attrPath:
     lib.flip lib.concatMap modules (
@@ -171,8 +175,17 @@ stdenv.mkDerivation {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
+  ++ lib.optionals (dynamicModules != [ ]) [
+    # Dynamic modules need a binary-compatible ABI; only enabled when one is present.
+    "--with-compat"
+    # Pin the modules dir to an absolute path so the built .so lands in the
+    # same place regardless of the fork's prefix (openresty uses $out/nginx).
+    "--modules-path=${placeholder "out"}/modules"
+  ]
   ++ configureFlags
-  ++ map (mod: "--add-module=${mod.src}") modules;
+  ++ map (
+    mod: if mod.dynamic or false then "--add-dynamic-module=${mod.src}" else "--add-module=${mod.src}"
+  ) modules;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -274,16 +287,36 @@ stdenv.mkDerivation {
       noSourceRefs = lib.concatMapStrings (
         m: "remove-references-to -t ${m.src} $(readlink -fn $out/bin/nginx)\n"
       ) modules;
+      # Strip build-time source refs from the built .so files (so they pass
+      # disallowedReferences) and emit a config snippet with absolute
+      # load_module paths for the NixOS module to include.
+      dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
+        shopt -s nullglob
+        sofiles=("$out"/modules/*.so)
+        if (( ''${#sofiles[@]} == 0 )); then
+          echo "nginx: dynamic modules were requested but no .so was produced in $out/modules" >&2
+          exit 1
+        fi
+        mkdir -p "$out/etc/nginx"
+        : > "$out/etc/nginx/dynamic-modules.conf"
+        for so in "''${sofiles[@]}"; do
+          for src in ${lib.escapeShellArgs (map (m: m.src) dynamicModules)}; do
+            remove-references-to -t "$src" "$so"
+          done
+          echo "load_module $so;" >> "$out/etc/nginx/dynamic-modules.conf"
+        done
+      '';
     in
-    postInstall + noSourceRefs;
+    postInstall + noSourceRefs + dynamicPost;
 
   passthru = {
-    inherit modules;
+    inherit modules dynamicModules;
     tests =
       passthru.tests or {
         inherit (nixosTests)
           nginx
           nginx-auth
+          nginx-dynamic-modules
           nginx-etag
           nginx-etag-compression
           nginx-globalredirect
