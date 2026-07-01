@@ -11,10 +11,14 @@
   versionCheckHook,
   rolldown,
   installShellFiles,
-  version ? "2026.6.5",
+  version ? "2026.6.6",
 }:
 let
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+  # Keep fetchPnpmDeps and frozen offline install aligned on patchedDependencies.
+  stripPatchedDeps = ''
+    sed -i '/^patchedDependencies:/,/^[^ ]/{/^patchedDependencies:/d;/^  /d;}' pnpm-lock.yaml pnpm-workspace.yaml
+  '';
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -24,16 +28,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hiYbIhE13XMFIeB0zmb6AHlfw8le6vpJgCqN81YWGsE=";
+    hash = "sha256-sgLyNHQNnuEWZBaIxqJUz9o0x+P1EgNuLlUfy1iRunk=";
   };
 
-  pnpmDepsHash = "sha256-7RQJAVWqhauG8JrF8AD1VU1IJRM+SH05aHAfmFaXraU=";
+  pnpmDepsHash = "sha256-eADEHT4CW8ffCKwEfQjjrQ63oZQUYmRYymYQpMT8/gY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
     hash = finalAttrs.pnpmDepsHash;
+    prePnpmInstall = stripPatchedDeps;
   };
 
   buildInputs = [ rolldown ];
@@ -45,6 +50,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     installShellFiles
   ];
+
+  postPatch = stripPatchedDeps;
 
   buildPhase = ''
     runHook preBuild
