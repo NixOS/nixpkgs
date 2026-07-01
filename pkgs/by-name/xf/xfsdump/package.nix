@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxfs
     ncurses
   ];
+  # xfsdump doesn't use flexible array. The old dh_name[6] causes buffer
+  # overflow crash while strcpy() in various places.
+  hardeningDisable = [ "fortify" ];
 
   postPatch = ''
     substituteInPlace Makefile \
