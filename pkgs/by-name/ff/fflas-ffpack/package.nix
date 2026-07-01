@@ -52,15 +52,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     givaro
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     blas
     lapack
   ];
 
   configureFlags = [
+    "--without-archnative"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-blas-libs=-lcblas"
     "--with-lapack-libs=-llapacke"
-    "--without-archnative"
   ];
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    configureFlagsArray+=(--with-blas-libs="-framework Accelerate")
+  '';
+
   doCheck = true;
 
   meta = {
