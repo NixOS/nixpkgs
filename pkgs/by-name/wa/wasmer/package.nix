@@ -10,7 +10,7 @@
   curl,
   writeShellApplication,
   installShellFiles,
-  llvmPackages_21,
+  llvmPackages_22,
   libffi,
   libxml2,
   fixDarwinDylibNames,
@@ -20,26 +20,26 @@
 }:
 
 let
-  v8Version = "11.9.2";
+  v8Version = "11.9.7";
 
   # Prebuilt V8 from wasmerio's custom builds, only evaluated when withV8 = true.
 
   # Per-platform hashes, auto-updated via the general updateScript
   v8Hashes = {
-    "v8-linux-amd64.tar.xz" = "sha256-nTCVdBKtyVMb7lE+Db4RDsShKkLbG/0r980ejd+EAvo=";
-    "v8-linux-musl-amd64.tar.xz" = "sha256-XgRs3I46B2PG7Jrv5E+KSeuNfXLhgB7R66cAkA/Bvv8=";
-    "v8-darwin-arm64.tar.xz" = "sha256-xAG1PcAGw8a0A9k8d78/whTUXnqdfRZBz8yrg/+iz0M=";
+    "v8-linux-amd64.tar.xz" = "sha256-VOGZOKA07neIixDPJ3BLGeMX37/o9o16X4rYlo/nMbo=";
+    "v8-linux-musl.tar.xz" = "sha256-drD0YfCA56zej5PFR1olfdUMOOlgYo8LGbxWEJ1NusY=";
+    "v8-darwin-aarch64.tar.xz" = "sha256-Vk0ys6MjHSa8Gjd7XN0Jj4gyxORU0yP7hEmYk1ENeq4=";
   };
 
   v8Prebuilt =
     let
       assetName =
         if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl then
-          "v8-linux-musl-amd64.tar.xz"
+          "v8-linux-musl.tar.xz"
         else if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
           "v8-linux-amd64.tar.xz"
         else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-          "v8-darwin-arm64.tar.xz"
+          "v8-darwin-aarch64.tar.xz"
         else
           throw "withV8 = true is not supported on ${stdenv.hostPlatform.system}";
     in
@@ -61,7 +61,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmer";
-  version = "7.1.0";
+  version = "7.2.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -70,13 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wasmerio";
     repo = "wasmer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A1SkZY+iSR9xlu6R1p9uZYsGFPAOifuYTHtEXaEgves=";
+    hash = "sha256-HiMxBABLkX0i5jGowZU7dWhW46hvtcvbX7rskL3i+iY=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-wBEwGKjj9DdZESFlXS8T7B0Xdp7yMe08DYTGr4wnTVI=";
+    hash = "sha256-+O/JbgozCHF/QBABMtxqkGFQYtAQwu6OUDoD5EZZmXs=";
   };
 
   nativeBuildInputs = [
@@ -89,42 +89,34 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals withLLVM [
-    llvmPackages_21.llvm
+    llvmPackages_22.llvm
     libffi
     libxml2
   ];
 
   postPatch =
-    # In 7.1.0 there is no nice flag to toggle napi/v8 on or off,
-    # so we manually delete the Makefile entry when we don't want v8
-    # TODO: v7.2.0 pre-release has a flag, when updating to 7.2.0
-    #  add "ENABLE_NAPI_V8=${if withV8 then "1" else "0"}" to makeFlags
-    lib.optionalString (!withV8) ''
-      substituteInPlace Makefile \
-        --replace-fail '	build_wasmer_extra_features += napi-v8' ""
-    ''
-    +
-      lib.optionalString stdenv.hostPlatform.isDarwin
-        # `install -Dm644 /dev/stdin DEST` fails on darwin with
-        # "skipping file '/dev/stdin', as it was replaced while being copied".
-        (
-          ''
-            substituteInPlace Makefile \
-              --replace-fail 'echo "$$pc" | install -Dm644 /dev/stdin "$(DESTDIR)"/lib/pkgconfig/wasmer.pc;' \
-                             'mkdir -p "$(DESTDIR)/lib/pkgconfig" && printf "%s\n" "$$pc" > "$(DESTDIR)/lib/pkgconfig/wasmer.pc";'
-          ''
-          # install-capi-lib hardcodes libwasmer.so and a Linux SONAME symlink chain
-          # (also marked Linux only in the Makefile)
-          + ''
-            substituteInPlace Makefile \
-              --replace-fail 'install-capi-lib ' ""
-          ''
-        );
+    lib.optionalString stdenv.hostPlatform.isDarwin
+      # `install -Dm644 /dev/stdin DEST` fails on darwin with
+      # "skipping file '/dev/stdin', as it was replaced while being copied".
+      (
+        ''
+          substituteInPlace Makefile \
+            --replace-fail 'echo "$$pc" | install -Dm644 /dev/stdin "$(DESTDIR)"/lib/pkgconfig/wasmer.pc;' \
+                           'mkdir -p "$(DESTDIR)/lib/pkgconfig" && printf "%s\n" "$$pc" > "$(DESTDIR)/lib/pkgconfig/wasmer.pc";'
+        ''
+        # install-capi-lib hardcodes libwasmer.so and a Linux SONAME symlink chain
+        # (also marked Linux only in the Makefile)
+        + ''
+          substituteInPlace Makefile \
+            --replace-fail 'install-capi-lib ' ""
+        ''
+      );
 
   makeFlags = [
     "WASMER_INSTALL_PREFIX=${placeholder "out"}"
     "DESTDIR=${placeholder "out"}"
     "ENABLE_LLVM=${if withLLVM then "1" else "0"}"
+    "ENABLE_NAPI_V8=${if withV8 then "1" else "0"}"
   ];
 
   # Default all target includes headless C API which doesn't get installed
@@ -136,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     lib.optionalAttrs withLLVM {
-      LLVM_SYS_211_PREFIX = llvmPackages_21.llvm.dev;
+      LLVM_SYS_221_PREFIX = llvmPackages_22.llvm.dev;
     }
     // lib.optionalAttrs withV8 {
       # build.rs skips the download when these are set; see resolve_explicit_v8 in lib/napi/build.rs
