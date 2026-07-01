@@ -77,9 +77,9 @@ buildGoModule (finalAttrs: {
       if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
     }"/pdfcpu
     versionOutput="$($out/bin/pdfcpu version)"
-    for part in ${finalAttrs.version} $(cut -c1-8 COMMIT) $(cat SOURCE_DATE); do
+    for part in ${finalAttrs.version} "$(cut -c1-8 COMMIT)" "$(cat SOURCE_DATE)"; do
       if [[ ! "$versionOutput" =~ "$part" ]]; then
-          echo version output did not contain expected part $part . Output was:
+          echo version output did not contain expected part \"$part\" . Output was:
           echo "$versionOutput"
           exit 3
       fi
