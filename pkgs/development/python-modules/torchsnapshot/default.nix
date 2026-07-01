@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -72,6 +73,11 @@ buildPythonPackage (finalAttrs: {
     # torch.distributed.elastic.multiprocessing.errors.ChildFailedError:
     # AssertionError: "Socket Timeout" does not match "wait timeout after 5000ms
     "test_linear_barrier_timeout"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_tensor_copy"
   ];
 
   meta = {
