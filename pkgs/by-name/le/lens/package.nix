@@ -41,6 +41,8 @@ let
     platforms = builtins.attrNames sources;
   };
 
+  updateScript = ./update.sh;
+
 in
 if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
@@ -49,6 +51,7 @@ if stdenv.hostPlatform.isDarwin then
       version
       src
       meta
+      updateScript
       ;
   }
 else
@@ -58,5 +61,6 @@ else
       version
       src
       meta
+      updateScript
       ;
   }
