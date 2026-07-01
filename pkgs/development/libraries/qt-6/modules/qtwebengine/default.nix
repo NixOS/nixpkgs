@@ -158,6 +158,8 @@ qtModule {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    substituteInPlace cmake/QtToolchainHelpers.cmake \
+      --replace-fail 'clang_base_path="''${QWELibClang_BASE_PATH}"' 'clang_base_path="${stdenv.cc}"'
   '';
 
   cmakeFlags = [
@@ -189,7 +191,8 @@ qtModule {
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' stdenv.cc "clang++"}"
   ];
 
   propagatedBuildInputs = [
