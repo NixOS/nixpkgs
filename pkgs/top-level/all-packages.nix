@@ -8182,6 +8182,7 @@ with pkgs;
     ubootPine64LTS
     ubootPinebook
     ubootPinebookPro
+    ubootPinephonePro
     ubootQemuAarch64
     ubootQemuArm
     ubootQemuRiscv64Smode
