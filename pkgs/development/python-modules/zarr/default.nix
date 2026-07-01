@@ -31,20 +31,21 @@
   hypothesis,
   numpydoc,
   pytest-asyncio,
+  pytest-benchmark,
   pytestCheckHook,
   tomlkit,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "zarr";
-  version = "3.1.5";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
     repo = "zarr-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Kx8gN1JiaY4eHmwpdilvJ8+NdnzxhDvn7YZjphgtZw=";
+    hash = "sha256-WExQT/Je+esq0dv9HtPxGt7ioJgIwW8cGNuPwM+ANEc=";
   };
 
   build-system = [
@@ -84,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     numpydoc
     pytest-asyncio
+    pytest-benchmark
     pytestCheckHook
     tomlkit
   ]
