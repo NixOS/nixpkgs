@@ -1008,7 +1008,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               # pam_slurm_adopt must be the last module in the account stack.
               {
@@ -1217,11 +1217,11 @@ let
                       name = "unix-early";
                       enable = cfg.unixAuth;
                       control = "optional";
-                      modulePath = "${package}/lib/security/pam_unix.so";
+                      modulePath = config.security.pam.pam_unixModulePath;
                       settings = {
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
-                        likeauth = true;
+                        likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                       };
                     }
                     {
@@ -1315,11 +1315,11 @@ let
                   name = "unix";
                   enable = cfg.unixAuth;
                   control = "sufficient";
-                  modulePath = "${package}/lib/security/pam_unix.so";
+                  modulePath = config.security.pam.pam_unixModulePath;
                   settings = {
                     nullok = cfg.allowNullPassword;
                     inherit (cfg) nodelay;
-                    likeauth = true;
+                    likeauth = lib.mkIf config.security.pam.enableLegacySettings true;
                     try_first_pass = true;
                   };
                 }
@@ -1404,10 +1404,10 @@ let
               {
                 name = "unix";
                 control = "sufficient";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = true;
+                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1493,7 +1493,7 @@ let
               {
                 name = "unix";
                 control = "required";
-                modulePath = "${package}/lib/security/pam_unix.so";
+                modulePath = config.security.pam.pam_unixModulePath;
               }
               {
                 name = "loginuid";
@@ -1858,7 +1858,26 @@ in
 
   options = {
 
+    security.pam.enable = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+
+      description = ''
+        Whether to enable PAM, or entirely disable it.
+
+        Unless you're building a container image, you probably don't want to disable PAM.
+      '';
+    };
+
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
+
+    security.pam.pam_unixModulePath = lib.mkOption {
+      type = lib.types.pathInStore;
+      default = "${package}/lib/security/pam_unix.so";
+      defaultText = "\${config.security.pam.package}/lib/security/pam_unix.so";
+      description = "The pam_unix module to use in all the default pam services.";
+      internal = true;
+    };
 
     security.pam.loginLimits = lib.mkOption {
       default = [ ];
@@ -1901,6 +1920,19 @@ in
         e.g. {command}`login` or {command}`passwd`.
         Each attribute of this set defines a PAM service, with the attribute name
         defining the name of the service.
+      '';
+    };
+
+    security.pam.enableLegacySettings = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = ''
+        Alternative implementations of pam_unix may not support all legacy arguments.
+        This option will disable all known legacy settings.
+        ::: {.note}
+        Setting this option to false will omit arguments, such as `yescrypt`.
+        Doing so is only safe if the defaults used by pam_unix are sensible.
+        :::
       '';
     };
 
@@ -2218,6 +2250,30 @@ in
               '';
             };
 
+            prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for interactive mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.interactive` option.
+
+                Requires {option}`security.pam.u2f.settings.interactive` to be set to `true`.
+              '';
+            };
+
+            cue_prompt = lib.mkOption {
+              default = null;
+              type = with lib.types; nullOr str;
+              description = ''
+                Set individual prompt message for cue mode.
+                By setting this option, you can set a message to be shown by the
+                {option}`security.pam.u2f.settings.cue` option.
+
+                Requires {option}`security.pam.u2f.settings.cue` to be set to `true`.
+              '';
+            };
+
             cue = lib.mkOption {
               default = false;
               type = lib.types.bool;
@@ -2479,7 +2535,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = lib.mkIf config.security.pam.enable {
     assertions = [
       {
         assertion = config.users.motd == "" || config.users.motdFile == null;

@@ -142,6 +142,14 @@ runBuildTests {
     '';
   };
 
+  jsonNull = shouldPass {
+    format = formats.json { };
+    input = null;
+    expected = ''
+      null
+    '';
+  };
+
   yaml_1_1Atoms = shouldPass {
     format = formats.yaml_1_1 { };
     input = {
@@ -176,6 +184,15 @@ runBuildTests {
     '';
   };
 
+  yaml_1_1Null = shouldPass {
+    format = formats.yaml_1_1 { };
+    input = null;
+    expected = ''
+      null
+      ...
+    '';
+  };
+
   yaml_1_2Atoms = shouldPass {
     format = formats.yaml_1_2 { };
     input = {
@@ -207,6 +224,16 @@ runBuildTests {
       str: foo
       time: 22:30:00
       'true': true
+    '';
+  };
+
+  yaml_1_2Null = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = null;
+    # nixfmt insists on removing indentation, so force it with ${"  "}
+    expected = ''
+
+      ${"  "}null
     '';
   };
 
@@ -845,6 +872,11 @@ runBuildTests {
     '';
   };
 
+  tomlNull = shouldFail {
+    format = formats.toml { };
+    input = null;
+  };
+
   cdnAtoms = shouldPass {
     format = formats.cdn { };
     input = {
@@ -876,6 +908,14 @@ runBuildTests {
       "path": "${./testfile}"
       "str": "foo"
       "true": true
+    '';
+  };
+
+  cdnNull = shouldPass {
+    format = formats.cdn { };
+    input = null;
+    expected = ''
+      null: null
     '';
   };
 
@@ -989,6 +1029,14 @@ runBuildTests {
     '';
   };
 
+  luaNull = shouldPass {
+    format = formats.lua { };
+    input = null;
+    expected = ''
+      return nil
+    '';
+  };
+
   nixConfAtoms = shouldPass {
     format = formats.nixConf {
       package = pkgs.nix;
@@ -1012,6 +1060,15 @@ runBuildTests {
 
       ignore-try = false
     '';
+  };
+
+  nixConfNull = shouldFail {
+    format = formats.nixConf {
+      package = pkgs.nix;
+      version = pkgs.nix.version;
+      extraOptions = "ignore-try = false";
+    };
+    input = null;
   };
 
   phpAtoms = shouldPass rec {
@@ -1040,6 +1097,16 @@ runBuildTests {
       declare(strict_types=1);
       $config = ['attrs' => ['foo' => null], 'false' => false, 'float' => 3.141000, 'int' => 10, 'list' => [null, null], 'mixed' => [10, 3.141000, 'attrs' => ['foo' => null], 'str' => 'foo'], 'null' => null, 'raw' => random_function(), 'str' => 'foo', 'str_special' => 'foo
       testhello\'\'\'${"'"}, 'true' => true];
+    '';
+  };
+
+  phpNull = shouldPass {
+    format = formats.php { finalVariable = "config"; };
+    input = null;
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      $config = null;
     '';
   };
 
@@ -1100,6 +1167,11 @@ runBuildTests {
     }
   );
 
+  pythonVarsNull = shouldFail {
+    format = formats.pythonVars { };
+    input = null;
+  };
+
   phpReturn = shouldPass {
     format = formats.php { };
     input = {
@@ -1143,6 +1215,11 @@ runBuildTests {
         <nulltest></nulltest>
       </root>
     '';
+  };
+
+  xmlNull = shouldFail {
+    format = formats.xml { };
+    input = null;
   };
 
   PlistGenerate = shouldPass {
@@ -1217,6 +1294,17 @@ runBuildTests {
       ''\t<key>true</key>
       ''\t<true/>
       </dict>
+      </plist>'';
+  };
+
+  PlistNull = shouldPass {
+    format = formats.plist { };
+    input = null;
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+
       </plist>'';
   };
 

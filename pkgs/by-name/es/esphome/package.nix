@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.5.3";
+  version = "2026.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-laz+XNszkayfmEyrtFr3BHUWVV9eFhj130o4l99XElY=";
+    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
   };
 
   patches = [
@@ -96,6 +96,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     pillow
     platformio
     puremagic
+    py7zr
     pyparsing
     pyserial
     pyyaml
@@ -151,6 +152,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
     "tests/integration"
+
+    # tries to dynamically patch platformio module
+    "tests/unit_tests/test_writer.py"
+    "tests/unit_tests/test_espidf_component.py"
   ];
 
   preCheck = ''

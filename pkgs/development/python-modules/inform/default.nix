@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "inform";
-  version = "1.36";
+  version = "1.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x2xLEcywMaYhq/SWPVu48zTHJW3/MWujjr4y6/uEClU=";
+    hash = "sha256-Qj7znEKNFKUjHHGy1TCfO4YtYV3kJ4AzBSdzsJC6kpQ=";
   };
 
   build-system = [ flit-core ];

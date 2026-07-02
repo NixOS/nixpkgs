@@ -3,10 +3,6 @@
   pkgs,
 }:
 let
-  inherit (lib)
-    toJSON
-    ;
-
   inherit (lib.types)
     serializableValueWith
     ;
@@ -25,12 +21,12 @@ in
               (pkgs.python3.withPackages (ps: [ ps.configobj ]))
             ];
 
-            valuesJSON = toJSON value;
+            inherit value;
             __structuredAttrs = true;
             strictDeps = true;
           }
           ''
-            printf "%s" "$valuesJSON" | python3 ${./generate.py} > "$out"
+            python3 ${./generate.py} > "$out"
           '';
     };
 }

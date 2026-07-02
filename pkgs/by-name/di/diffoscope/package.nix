@@ -109,12 +109,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "321";
+  version = "323";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-M/rsyUGlJDpU3o1RMfaN9fNMpOn9Xpz2ydflPUXVhD4=";
+    hash = "sha256-TFSeCS7D2D496rUrosYAWP4kHsu6x386c8AJ5c4aKYs=";
   };
 
   outputs = [
@@ -124,8 +124,6 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    # Remove flags output from an OCaml test's diff, as it's Debian-specific
-    ./remove-flags-from-ocaml-diff.patch
   ];
 
   postPatch = ''
@@ -359,7 +357,6 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       danielfullmer
       mdaniels5757
-      raitobezarius
     ];
     platforms = lib.platforms.unix;
     mainProgram = "diffoscope";

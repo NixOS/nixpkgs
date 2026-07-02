@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "2.33.0";
+  version = "2.41.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-w2ejAJ+V7e4wYSQ/9+WdhO+XaYeSq8U/V5YXHSpn+rI=";
+    hash = "sha256-jSkBxZY5POlrznhBwFMR2NcL92uGRSYI6BDDC3C7RfU=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -129,6 +129,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.malo ];
-    mainProgram = "openai";
   };
 }

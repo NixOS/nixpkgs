@@ -30,7 +30,10 @@ buildPythonPackage rec {
     hash = "sha256-hX6HQQFOxQFfegCq+13Mu1Y3jvTB2lWoKNRLz1/zrNs=";
   };
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "reportlab"
+  ];
 
   outputs = [
     "out"

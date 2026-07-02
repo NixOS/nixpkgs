@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  actool,
   electron,
   python3,
   copyDesktopItems,
   nodejs,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeDesktopItem,
@@ -31,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-BHxieFMMUFbHJHWu8spz0z803kx+kwJ99oYkDpm6a58=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-BNvAGM9ECtptDwxWsmJVq82Bky1AxslYt51FyvOBEvs=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_10
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ actool ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

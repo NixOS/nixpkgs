@@ -10,6 +10,7 @@
   jellyfin-web,
   sqlite,
   versionCheckHook,
+  jq,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -22,6 +23,10 @@ buildDotnetModule (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-HCs4ZsutVoVH+bBZANjpPeMyV8e63Yemjg9DSr0R9zg=";
   };
+
+  nativeBuildInputs = [
+    jq
+  ];
 
   propagatedBuildInputs = [ sqlite ];
 
@@ -43,6 +48,17 @@ buildDotnetModule (finalAttrs: {
     "--add-flags"
     "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
+
+  # Impurity with time. Injects the build date into this file
+  postFixup = ''
+    timestamp="$(TZ=GMT date -d "@$SOURCE_DATE_EPOCH" '+%a, %d %b %Y %X GMT')"
+
+    cat "$out/lib/jellyfin/jellyfin.staticwebassets.endpoints.json" \
+      | jq --arg timestamp "$timestamp" '.Endpoints[].ResponseHeaders[] |= if (.Name == "Last-Modified") then .Value = $timestamp else . end' \
+      > jellyfin.staticwebassets.endpoints.json.new
+
+    mv "jellyfin.staticwebassets.endpoints.json.new" "$out/lib/jellyfin/jellyfin.staticwebassets.endpoints.json"
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

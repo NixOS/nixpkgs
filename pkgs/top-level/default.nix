@@ -214,7 +214,39 @@ let
       ;
   };
 
-  pkgs = boot stages;
+  fixedPoint = boot stages;
+
+  removeInternallyDisallowedAttrPaths =
+    let
+      # Same as `lib.removeAttrs`, but can remove nested attributes (and order of arguments is fixed)
+      # TODO: Consider moving to lib.attrpaths.removeAttrPaths
+      removeAttrPaths =
+        attrPathsToRemove: set:
+        let
+          split = lib.partition (
+            attrPath:
+            assert attrPath != [ ];
+            lib.length attrPath == 1
+          ) attrPathsToRemove;
+          nestedApplied =
+            set
+            // lib.mapAttrs (name: attrPaths: removeAttrPaths (lib.map lib.tail attrPaths) set.${name}) (
+              lib.groupBy (attrPath: lib.head attrPath) split.wrong
+            );
+        in
+        lib.removeAttrs nestedApplied (lib.map lib.head split.right);
+    in
+    removeAttrPaths (map (x: x.attrPath) config.attrPathsDisallowedForInternalUse);
+
+  pkgs =
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      fixedPoint
+    else
+      # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
+      # To prevent these attributes from causing CI failures we remove them entirely.
+      # These attrs are still evaluated but in a different way, see ci/eval/default.nix
+      removeInternallyDisallowedAttrPaths fixedPoint;
 
 in
 checked pkgs

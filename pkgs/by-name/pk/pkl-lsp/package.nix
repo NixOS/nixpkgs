@@ -7,23 +7,24 @@
   makeBinaryWrapper,
   nix-update-script,
   versionCheckHook,
-  zig_0_15,
+  zig_0_16,
 }:
 
 let
   jdk = jdk25_headless;
   gradle = gradle_9;
   gradleOverlay = gradle.override { java = jdk; };
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl-lsp";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-V6MrDpdh4jnSiXWD0UbF/XXpLa95smCbdj9/jT0Xb3w=";
+    hash = "sha256-r/wNI319BPbU48Mrteq0LdS4YKnyyhPcYxTAS0Mlrp8=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -43,32 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
   treeSitterPklSrc = fetchFromGitHub {
     owner = "apple";
     repo = "tree-sitter-pkl";
-    rev = "v0.20.0";
-    hash = "sha256-HfZ2NwO466Le2XFP1LZ2fLJgCq4Zq6hVpjChzsIoQgA=";
+    rev = "f9405e40597d7dac637a6b49e7d26c4515cb2a34";
+    hash = "sha256-U2e9RDAdVWPoZRoWQD0icBCHjH2TFyGD0TPwgn9Kg2A=";
   };
 
   postPatch = ''
     substituteInPlace buildSrc/src/main/kotlin/BuildInfo.kt \
-      --replace-fail 'val jdkVersion: Int = 22' \
-                     'val jdkVersion: Int = ${lib.versions.major jdk.version}' \
       --replace-fail 'val executable: Path get() = installDir.resolve(if (os.isWindows) "zig.exe" else "zig")' \
-                     'val executable: Path get() = java.nio.file.Path.of("${lib.getExe zig_0_15}")' \
+                     'val executable: Path get() = java.nio.file.Path.of("${lib.getExe zig}")' \
 
     substituteInPlace build.gradle.kts \
       --replace-fail 'dependsOn(setupTreeSitterRepo)' "" \
       --replace-fail 'dependsOn(setupTreeSitterPklRepo)' "" \
       --replace-fail 'dependsOn(tasks.named("installZig"))' ""
-
-    # Ensure all pkl-cli platform variants are cached
-    # Otherwise, deps.json only includes the current system's pkl-cli, and the tests fail
-    cat >> build.gradle.kts << 'GRADLE_PATCH'
-    val pklCliAllPlatforms by configurations.creating
-    dependencies {
-      for (platform in listOf("linux-amd64", "linux-aarch64", "macos-amd64", "macos-aarch64")) {
-        pklCliAllPlatforms("org.pkl-lang:pkl-cli-$platform:''${libs.versions.pkl.get()}")
-      }
-    }
-    GRADLE_PATCH
 
     mkdir -p build/repos/{tree-sitter,tree-sitter-pkl}
     cp -r $treeSitterSrc/* build/repos/tree-sitter/
@@ -79,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gradleOverlay
     makeBinaryWrapper
-    zig_0_15
+    zig
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -98,6 +86,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
+  '';
+
+  # - Ensure all pkl-cli platform variants are cached. Otherwise, deps.json only includes the current system's pkl-cli, and the tests fail.
+  # - Pin the Kotlin plugin's Bouncy Castle modules to a static version: it requests them as ranges but forbids dynamic versions (failOnNonReproducibleResolution), so fetchDeps' eager resolve fails.
+  preGradleUpdate = ''
+    cat >> build.gradle.kts << 'GRADLE_PATCH'
+    val pklCliAllPlatforms by configurations.creating
+    dependencies {
+      for (platform in listOf("linux-amd64", "linux-aarch64", "macos-amd64", "macos-aarch64")) {
+        pklCliAllPlatforms("org.pkl-lang:pkl-cli-$platform:''${libs.versions.pkl.get()}")
+      }
+    }
+    configurations.named("kotlinBouncyCastleConfiguration") {
+      resolutionStrategy.eachDependency {
+        if (requested.group == "org.bouncycastle") useVersion("1.80")
+      }
+    }
+    GRADLE_PATCH
   '';
 
   # running the checkPhase replaces the .jar produced by the buildPhase, and leads to this error:

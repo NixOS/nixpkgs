@@ -46,7 +46,6 @@ let
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [
           thefloweringash
-          teutat3s
         ];
       };
     };

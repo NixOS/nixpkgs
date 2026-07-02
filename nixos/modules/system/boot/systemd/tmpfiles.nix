@@ -317,6 +317,7 @@ in
         mkdir -p $out/lib/tmpfiles.d
         cd $out/lib/tmpfiles.d
 
+        ln -s "${systemd}/example/tmpfiles.d/credstore.conf"
         ln -s "${systemd}/example/tmpfiles.d/home.conf"
         ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
         ln -s "${systemd}/example/tmpfiles.d/portables.conf"

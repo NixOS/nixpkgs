@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fujprog";
     homepage = "https://github.com/kost/fujprog";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/kost/fujprog/releases/tag/v${finalAttrs.version}";
   };

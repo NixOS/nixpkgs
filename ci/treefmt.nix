@@ -118,8 +118,6 @@
           "--ignore=sema-unused-def-lambda-witharg-arg"
           "--ignore=sema-unused-def-lambda-witharg-formal"
           "--ignore=sema-unused-def-let"
-          # Keep this rule, because we have `lib.or`.
-          "--ignore=or-identifier"
           # TODO: remove after outstanding prelude diagnostics issues are fixed:
           # https://github.com/nix-community/nixd/issues/761
           # https://github.com/nix-community/nixd/issues/762

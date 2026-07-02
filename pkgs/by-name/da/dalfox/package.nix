@@ -1,34 +1,41 @@
 {
   lib,
-  buildGoModule,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dalfox";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "dalfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V+5/+UYj9Pd727olIOwXij/XUh2NMzGHQDuupTO9DMk=";
+    hash = "sha256-0amVlnLwwb7YAUbTce9gRmjv3W1FMgc2/XZQKCettTY=";
   };
 
-  vendorHash = null;
+  cargoHash = "sha256-pxlUEGCrJjoakAVpXFq2q73wEWiODsHvdax12quDlec=";
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  # Tests require network access
+  buildInputs = [ openssl ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # Many unit tests perform live HTTP requests / OOB interactsh lookups and
+  # fail in the sandbox.
   doCheck = false;
 
+  doInstallCheck = true;
+
   meta = {
-    description = "Tool for analysing parameter and XSS scanning";
+    description = "Tool for analyzing parameter and XSS scanning";
     homepage = "https://github.com/hahwul/dalfox";
-    changelog = "https://github.com/hahwul/dalfox/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/hahwul/dalfox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dalfox";

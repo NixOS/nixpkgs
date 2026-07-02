@@ -30,30 +30,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.3.9";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-fogNPPdbU8ikTxxaGDYsqR6GCcAsc2fS4qapVDkesAQ=";
+    hash = "sha256-t63DUejUyNnOD7gIPow/xsCo2TcmDaK3C5R+TkoBZo8=";
   };
 
-  # hide update feature
-  postPatch = ''
-    substituteInPlace src-tauri/src/lib.rs \
-      --replace-fail \
-        "let update =" \
-        "// let update =" \
-      --replace-fail \
-        "&update," \
-        "// &update," \
-  '';
+  patches = [
+    ./remove-updater.diff
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-xi6Clo8iHg3YFVcWNMFrN2422MZm2BhB9m/etFlyb/4=";
+  cargoHash = "sha256-Z7iyPEEPvUhVLma4n20faoz47CK+PHAIB6epNDF5sUo=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -100,6 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Official companion desktop app for Music Assistant";
+    changelog = "https://github.com/music-assistant/desktop-app/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/music-assistant/desktop-app";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];

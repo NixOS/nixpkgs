@@ -30,6 +30,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Skip YouTube sponsorships (and sometimes ads) on all local Google Cast devices";
     homepage = "https://github.com/gabe565/CastSponsorSkip";
+    mainProgram = "castsponsorskip";
     changelog = "https://github.com/gabe565/CastSponsorSkip/releases";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

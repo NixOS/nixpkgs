@@ -124,16 +124,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira

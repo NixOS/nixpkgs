@@ -174,6 +174,7 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
+  accountsservice = runTest ./accountsservice.nix;
   acl = pkgs.callPackage ./acl.nix { };
   acme = import ./acme/default.nix {
     inherit runTest;
@@ -303,7 +304,6 @@ in
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
-  botamusique = runTest ./botamusique.nix;
   bpf = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix;
   bpftune = runTest ./bpftune.nix;
   breitbandmessung = runTest ./breitbandmessung.nix;
@@ -446,6 +446,14 @@ in
   };
   coturn = runTest ./coturn.nix;
   couchdb = runTest ./couchdb.nix;
+  credentials-fwcfg = runTest {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "fw_cfg";
+  };
+  credentials-smbios = runTestOn [ "x86_64-linux" ] {
+    imports = [ ./credentials.nix ];
+    _module.args.mechanism = "smbios";
+  };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
   cross-seed = runTest ./cross-seed.nix;
@@ -554,6 +562,9 @@ in
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
   evcc = runTest ./evcc.nix;
+  extra-initrd = import ./extra-initrd.nix {
+    inherit runTest pkgs;
+  };
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;
@@ -612,6 +623,7 @@ in
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
   flap-alerted = runTest ./flap-alerted.nix;
   flaresolverr = runTest ./flaresolverr.nix;
+  flarum = runTest ./flarum.nix;
   flood = runTest ./flood.nix;
   fluent-bit = runTest ./fluent-bit.nix;
   fluentd = runTest ./fluentd.nix;
@@ -627,6 +639,9 @@ in
     forgejoPackage = pkgs.forgejo-lts;
   };
   freenet = runTest ./freenet.nix;
+  freescout = import ./freescout {
+    inherit runTest;
+  };
   freeswitch = runTest ./freeswitch.nix;
   freetube = discoverTests (import ./freetube.nix);
   freshrss = import ./freshrss { inherit runTest; };
@@ -688,6 +703,7 @@ in
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
   gocd-server = runTest ./gocd-server.nix;
+  gocron = runTest ./gocron.nix;
   gocryptfs = runTest ./gocryptfs.nix;
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
@@ -858,7 +874,7 @@ in
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
   kbd-update-search-paths-patch = runTest ./kbd-update-search-paths-patch.nix;
   kea = runTest ./kea.nix;
-  keepalived = runTest ./keepalived.nix;
+  keepalived = discoverTests (import ./keepalived.nix);
   keepassxc = runTest ./keepassxc.nix;
   kerberos = handleTest ./kerberos/default.nix { };
   kernel-generic = handleTest ./kernel-generic { };
@@ -875,6 +891,7 @@ in
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
+  koito = runTest ./web-apps/koito.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
   krb5 = discoverTests (import ./krb5);
@@ -940,6 +957,7 @@ in
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  login-nosuid = runTest ./login-nosuid.nix;
   logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
@@ -979,6 +997,7 @@ in
   matomo = runTest ./matomo.nix;
   matrix-alertmanager = runTest ./matrix/matrix-alertmanager.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
+  matrix-authentication-service = runTest ./matrix/matrix-authentication-service.nix;
   matrix-conduit = runTest ./matrix/conduit.nix;
   matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = runTest ./matrix/synapse.nix;
@@ -1124,6 +1143,7 @@ in
   nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
+  nginx-lua = runTest ./nginx-lua.nix;
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-modsecurity = runTest ./nginx-modsecurity.nix;
   nginx-moreheaders = runTest ./nginx-moreheaders.nix;
@@ -1414,14 +1434,6 @@ in
   pykms = runTest ./pykms.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
-  qemu-vm-credentials-fwcfg = runTest {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "fw_cfg";
-  };
-  qemu-vm-credentials-smbios = runTestOn [ "x86_64-linux" ] {
-    imports = [ ./qemu-vm-credentials.nix ];
-    _module.args.mechanism = "smbios";
-  };
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix { };
   qemu-vm-store = runTest ./qemu-vm-store.nix;
@@ -1611,6 +1623,16 @@ in
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  system-services-compliance = recurseIntoAttrs (
+    import ./system-services-compliance.nix {
+      inherit
+        pkgs
+        evalSystem
+        runTest
+        callTest
+        ;
+    }
+  );
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
@@ -1694,6 +1716,7 @@ in
   systemd-user-settings = runTest ./systemd-user-settings.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;
   systemd-userdbd = runTest ./systemd-userdbd.nix;
+  systemd-varlink = runTest ./systemd-varlink.nix;
   systemtap = handleTest ./systemtap.nix { };
   szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };

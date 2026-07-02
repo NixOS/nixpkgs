@@ -3,15 +3,14 @@
   stdenvNoCC,
   fetchurl,
   unzip,
-  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchurl {
-    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}-20260505.1.zip";
-    hash = "sha256-SswAG7V+7LbAbPcHwS4Kr+0TFg6XWhYTEK7lVC3lYCQ=";
+    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}-20260531.1.zip";
+    hash = "sha256-LqaelvCS5E2tqTpVvaHN2rMynFJ7vV8G4A37eOlTlgo=";
   };
   sourceRoot = ".";
 

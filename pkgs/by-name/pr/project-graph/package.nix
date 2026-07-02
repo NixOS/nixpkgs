@@ -16,11 +16,14 @@
   jq,
   versionCheckHook,
   nix-update-script,
+  libGL,
+  gst_all_1,
+  qt6,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "project-graph";
-  version = "3.0.7";
+  version = "3.0.8";
 
   __structuredAttrs = true;
 
@@ -28,17 +31,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "graphif";
     repo = "project-graph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QC1YTcyH7q+TJiGLF7zjKTe1OcfFd74fSFr+23iYMyQ=";
+    hash = "sha256-VI2elNYYDPJVLE0LIaUJHLeemUHokqHob5oB7jgQOL4=";
   };
 
-  cargoHash = "sha256-bsRX+iVo2jInWZvrX1fVE2oAqM8L/5zNzjRwtoviQN0=";
+  cargoHash = "sha256-RFYDFZ3NKr/7OxwgApexGnxR8ZQn09DFYNzhnqVYEzE=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-sTThym++UWKpKFZqhQJCewRKtdYe1tKNcESrxyxpLmY=";
+    hash = "sha256-6s5mv6hcpZUz/N5QNqUC8NamGT/B5Wv7DfY4Jte9jiQ=";
   };
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    )
+  '';
 
   postPatch = ''
     TAURI_CONFIG="app/src-tauri/tauri.conf.json"
@@ -53,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   preBuild = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags Qt6WebEngineWidgets)"
     pnpm run build
   '';
 
@@ -66,10 +77,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook4
   ];
 
+  dontWrapQtApps = true;
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     openssl
     webkitgtk_4_1
+    libGL
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    qt6.qtbase
+    qt6.qtwebengine
   ];
 
   cargoRoot = "app/src-tauri";

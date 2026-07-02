@@ -27,6 +27,7 @@
   symlinkJoin,
   udev,
   vulkan-loader,
+  wayland,
   wrapGAppsHook3,
   xrandr,
 
@@ -103,6 +104,7 @@ symlinkJoin {
         libxext
         libxrandr
         libxxf86vm
+        wayland
 
         udev # oshi
 

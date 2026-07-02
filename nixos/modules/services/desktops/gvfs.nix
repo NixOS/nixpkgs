@@ -40,6 +40,8 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    programs.fuse.enable = true;
+
     services.dbus.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];

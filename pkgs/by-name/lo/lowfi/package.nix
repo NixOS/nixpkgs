@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lowfi";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "lowfi";
     tag = finalAttrs.version;
-    hash = "sha256-t61R68cuAEAjyY5cR2rpTa+pSE3DDDct9G4p/aeTgsQ=";
+    hash = "sha256-/GU1e01AjeS4AVBvQUi/GZKeQ0X+hnmt+kyW3gp0jgg=";
   };
 
-  cargoHash = "sha256-ogoQWcS6htU515xjJW7jQYqpfHAQ48a8QaaBPvkGrXg=";
+  cargoHash = "sha256-iuC0YBhzK8mATJekTgBDMiXATRdThem35p5AyDXQNGo=";
 
   buildFeatures = [ "scrape" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
 

@@ -22,6 +22,8 @@
   };
 
   config = {
+    # FIXME this does not actually work because "/etc/xdg" is linked
+    # unconditionally in `nixos/modules/config/system-path.nix`
     environment.pathsToLink = lib.mkIf config.xdg.autostart.install [
       "/etc/xdg/autostart"
     ];

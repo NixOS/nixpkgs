@@ -671,10 +671,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0pbgnd9iavcfxqgh7n77f788a4l6myc9qwgwzbkskvrl9mvgmyq4";
+      sha256 = "1clkjg3n7c29c01cykjp6gbnvywjilfanzcrcrazhzf551ssndy6";
       type = "gem";
     };
-    version = "8.3.1";
+    version = "8.4.1";
   };
   childprocess = {
     dependencies = [ "logger" ];
@@ -741,10 +741,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1aymcakhzl83k77g2f2krz07bg1cbafbcd2ghvwr4lky3rz86mkb";
+      sha256 = "1c2i64xsd35vijnb50rxb70g508s0x674xi0qpyyb8jy7bncl4j4";
       type = "gem";
     };
-    version = "1.3.6";
+    version = "1.3.7";
   };
   connection_pool = {
     groups = [
@@ -1192,10 +1192,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1b930ag8nh99v8n9645ac1wcah9fx0mclbp323q4i1ly9acvkk3k";
+      sha256 = "0y7j6yzv07zggic6g0p2v1ivnvkzsbqjnfdl4215qqb6cxz290hq";
       type = "gem";
     };
-    version = "2.14.2";
+    version = "2.14.3";
   };
   faraday-follow_redirects = {
     dependencies = [ "faraday" ];
@@ -1647,10 +1647,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1994i044vdmzzkyr76g8rpl1fq1532wf0sb21xg5r1ilj5iphmr8";
+      sha256 = "0mbjg75bsnpf3mr5ad3425wi2ps9r809gvr8n0n8lv2f3zgcapjh";
       type = "gem";
     };
-    version = "1.14.8";
+    version = "1.15.1";
   };
   i18n-tasks = {
     dependencies = [
@@ -2408,10 +2408,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1s30b7h7qpyim30m8060xs415mbr3ci7i5hdg09chh1aqfx2qcbq";
+      sha256 = "1d9safb4dly6qmc2g06444l0zifby52yy6j1a5fa1g4j3ihm3jah";
       type = "gem";
     };
-    version = "1.19.3";
+    version = "1.19.4";
   };
   omniauth = {
     dependencies = [
@@ -2943,10 +2943,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "15j85zxs6c8ykis9770ii7m7rbbx5vxkqqk9shqicxamzd4wpafl";
+      sha256 = "174v7f6wjkhygpp6dr0vbka03v0h5kxdfkgsilbyi0pf4ihz112y";
       type = "gem";
     };
-    version = "2.14.26";
+    version = "2.14.27";
   };
   parallel = {
     groups = [

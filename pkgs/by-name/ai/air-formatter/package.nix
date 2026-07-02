@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  cargoBuildFlags = [ "-p air" ];
+  cargoBuildFlags = [ "--package=air" ];
 
   passthru = {
     updateScript = nix-update-script { };

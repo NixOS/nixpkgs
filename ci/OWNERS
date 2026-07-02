@@ -25,27 +25,27 @@
 /shell.nix @infinisil @NixOS/Security
 
 # Libraries
-/lib                        @infinisil @hsjobeki
-/lib/generators.nix         @infinisil @hsjobeki
-/lib/cli.nix                @infinisil @hsjobeki
-/lib/debug.nix              @infinisil @hsjobeki
-/lib/asserts.nix            @infinisil @hsjobeki
-/lib/path/*                 @infinisil @hsjobeki
-/lib/fileset                @infinisil @hsjobeki
-/maintainers/github-teams.json @infinisil
-/maintainers/computed-team-list.nix @infinisil
+/lib                        @infinisil @hsjobeki @llakala
+/lib/generators.nix         @infinisil @hsjobeki @llakala
+/lib/cli.nix                @infinisil @hsjobeki @llakala
+/lib/debug.nix              @infinisil @hsjobeki @llakala
+/lib/asserts.nix            @infinisil @hsjobeki @llakala
+/lib/path/*                 @infinisil @hsjobeki @llakala
+/lib/fileset                @infinisil @hsjobeki @llakala
+/maintainers/github-teams.json @infinisil @llakala
+/maintainers/computed-team-list.nix @infinisil @llakala
 ## Standard environment–related libraries
-/lib/customisation.nix      @alyssais @NixOS/stdenv
-/lib/derivations.nix        @NixOS/stdenv
-/lib/fetchers.nix           @alyssais @NixOS/stdenv
-/lib/meta.nix               @alyssais @NixOS/stdenv
-/lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv
-/lib/source-types.nix       @alyssais @NixOS/stdenv
-/lib/systems                @alyssais @NixOS/stdenv
+/lib/customisation.nix      @alyssais @NixOS/stdenv @llakala
+/lib/derivations.nix        @NixOS/stdenv @llakala
+/lib/fetchers.nix           @alyssais @NixOS/stdenv @llakala
+/lib/meta.nix               @alyssais @NixOS/stdenv @llakala
+/lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv @llakala
+/lib/source-types.nix       @alyssais @NixOS/stdenv @llakala
+/lib/systems                @alyssais @NixOS/stdenv @llakala
 ## Libraries / Module system
-/lib/modules.nix            @infinisil @roberth @hsjobeki
-/lib/types.nix              @infinisil @roberth @hsjobeki
-/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/modules.nix            @infinisil @roberth @hsjobeki @llakala
+/lib/types.nix              @infinisil @roberth @hsjobeki @llakala
+/lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
 
@@ -63,11 +63,11 @@
 /pkgs/top-level/packages-info.nix                @jopejoe1
 /pkgs/top-level/release-lib.nix                  @jopejoe1
 /pkgs/top-level/release.nix                      @jopejoe1
-/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
-/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
-/pkgs/stdenv/generic/problems.nix                @infinisil
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv @llakala
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv @llakala
+/pkgs/stdenv/generic/problems.nix                @infinisil @llakala
 /pkgs/test/problems                              @infinisil
-/pkgs/stdenv/generic/check-meta.nix              @infinisil @Ericson2314 @adisbladis @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @infinisil @Ericson2314 @adisbladis @NixOS/stdenv @llakala
 /pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
@@ -82,10 +82,6 @@
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus
 
-# Nixpkgs make-disk-image
-/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
-/nixos/lib/make-disk-image.nix                 @raitobezarius
-
 # Nix, the package manager
 # @raitobezarius is not "code owner", but is listed here to be notified of changes
 # pertaining to the Nix package manager.
@@ -99,16 +95,16 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /maintainers/scripts/doc @jtojnar @ryantm
 
 # Contributor documentation
-/CONTRIBUTING.md @infinisil
-/.github/PULL_REQUEST_TEMPLATE.md @infinisil
-/doc/contributing/ @infinisil
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @infinisil
-/lib/README.md @infinisil
-/doc/README.md @infinisil
-/nixos/README.md @infinisil
-/pkgs/README.md @infinisil
-/pkgs/by-name/README.md @infinisil
-/maintainers/README.md @infinisil
+/CONTRIBUTING.md
+/.github/PULL_REQUEST_TEMPLATE.md
+/doc/contributing/
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+/lib/README.md
+/doc/README.md
+/nixos/README.md
+/pkgs/README.md
+/pkgs/by-name/README.md
+/maintainers/README.md
 
 # User-facing development documentation
 /doc/development.md @infinisil
@@ -126,10 +122,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
 /doc/redirects.json                @GetPsyched
 /nixos/doc/manual/redirects.json   @GetPsyched
-
-# NixOS integration test driver
-/nixos/lib/test-driver  @tfc
-/nixos/lib/testing      @tfc
 
 # NixOS QEMU virtualisation
 /nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
@@ -238,14 +230,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 # C compilers
 /pkgs/development/compilers/gcc
 /pkgs/development/compilers/llvm @NixOS/llvm
-/pkgs/development/compilers/emscripten @raitobezarius
 /doc/toolchains/llvm.chapter.md @NixOS/llvm
-/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
-/nixos/modules/services/audio/botamusique.nix @mweinelt
 /nixos/modules/services/audio/snapserver.nix @mweinelt
-/nixos/tests/botamusique.nix @mweinelt
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
@@ -272,7 +260,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses @alyssais @emilazy @jopejoe1
+/lib/licenses @alyssais @emilazy @jopejoe1 @llakala
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000
@@ -334,9 +322,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
 # Web servers
-/doc/packages/nginx.section.md @raitobezarius
-/pkgs/servers/http/nginx/ @raitobezarius
-/nixos/modules/services/web-servers/nginx/ @raitobezarius
+/doc/packages/nginx.section.md @leona-ya @Ma27
+/pkgs/servers/http/nginx/ @helsinki-Jo @leona-ya @Ma27
+/nixos/modules/services/web-servers/nginx/ @leona-ya @Ma27
 
 # D
 /pkgs/build-support/dlang @jtbx @TomaSajt
@@ -376,7 +364,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/lua-modules         @NixOS/lua
 
 # Neovim
-/pkgs/applications/editors/neovim      @NixOS/neovim
+/pkgs/applications/editors/neovim           @NixOS/neovim
+/doc/languages-frameworks/neovim.section.md @NixOS/neovim
 
 # VimPlugins
 /pkgs/applications/editors/vim/plugins         @NixOS/neovim
@@ -531,3 +520,9 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
 
 # Zellij plugins
 /pkgs/by-name/ze/zellij/plugins/   @PerchunPak
+
+# Test-driver
+/nixos/lib/test-driver                                      @NixOS/test-driver
+/nixos/lib/testing                                          @NixOS/test-driver
+/nixos/tests/nixos-test-driver                              @NixOS/test-driver
+/nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver

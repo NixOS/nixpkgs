@@ -50,8 +50,8 @@ buildPythonPackage (finalAttrs: {
       .${stdenv.hostPlatform.system};
     hash =
       {
-        x86_64-linux = "sha256-MJUVRT9Zyq2Vv3bIvGScJLwOPRLQe68895K+CCq97js=";
-        aarch64-linux = "sha256-NqwxbFiKDgjrZPhoJwUmrco4VtS3CxN2C36bc76F0s8=";
+        x86_64-linux = "sha256-gG0f0pA4tqz1orKJ3WIZKr6pd+4mrvYOopWx0oojrPg=";
+        aarch64-linux = "sha256-tvLWZUjuHukQqDa1/j0Ou+HaBKYtD0aLpIIhiQNqMrM=";
       }
       .${stdenv.hostPlatform.system};
   };

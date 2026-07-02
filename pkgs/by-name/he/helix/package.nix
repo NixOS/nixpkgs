@@ -40,6 +40,12 @@
       tree-sitter-vue = prev.tree-sitter-vue.override {
         excludeBrokenTreeSitterJson = false;
       };
+      tree-sitter-wit = prev.tree-sitter-wit.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-yuck = prev.tree-sitter-yuck.override {
+        excludeBrokenTreeSitterJson = false;
+      };
     }
   ),
 }:

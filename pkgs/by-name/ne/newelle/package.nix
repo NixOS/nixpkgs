@@ -104,6 +104,8 @@ python3Packages.buildPythonApplication {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      michaelAllen
+    ];
   };
 }

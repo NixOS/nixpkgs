@@ -1551,6 +1551,18 @@ assertNoAdditions {
     ];
   };
 
+  fyler-nvim = super.fyler-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires setup
+      "fyler.extensions.trash"
+      "fyler.finder"
+      "fyler.integrations.icon"
+      "fyler.integrations.window_picker"
+      "fyler.schemes.file"
+      "fyler.state"
+    ];
+  };
+
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
     # This prevents it.

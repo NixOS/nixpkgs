@@ -133,6 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
   version = "2026.1-unstable-2026-06-16";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
@@ -157,8 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     gfortran
+    mpi
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
     fftw
@@ -191,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
+    cudaPackages.libcufft
     cudaPackages.libcublas
     cudaPackages.cuda_nvrtc
   ]

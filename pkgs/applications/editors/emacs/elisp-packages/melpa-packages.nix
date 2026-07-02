@@ -1536,6 +1536,8 @@ let
 
           org-change = ignoreCompilationError super.org-change; # elisp error
 
+          org-cite-overlay = ignoreCompilationError super.org-cite-overlay; # native-ice
+
           org-edit-latex = mkHome super.org-edit-latex;
 
           # https://github.com/GuiltyDolphin/org-evil/issues/24

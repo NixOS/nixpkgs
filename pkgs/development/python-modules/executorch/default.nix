@@ -111,12 +111,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # But the build script is sensitive to this env variable.
     # Fixes:
     #  Some binaries contain forbidden references to /build/. Check the error above!
-    CMAKE_ARGS = lib.concatStringsSep " " [
+    CMAKE_ARGS = toString [
       (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
 
       # For some cmake-tier reason, cmakeBool does not work here
       (lib.cmakeFeature "EXECUTORCH_BUILD_CUDA" (if cudaSupport then "ON" else "OFF"))
     ];
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
   };
 
   build-system = [
@@ -140,6 +143,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   buildInputs = lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
+    cudaPackages.libcurand
   ];
 
   pythonRemoveDeps = [

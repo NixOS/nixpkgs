@@ -7,10 +7,7 @@
     xanderio
   ];
 
-  node.pkgsReadOnly = false;
-
-  nodes.outline = {
-    virtualisation.memorySize = 2 * 1024;
+  containers.outline = {
     services.outline = {
       enable = true;
       forceHttps = false;

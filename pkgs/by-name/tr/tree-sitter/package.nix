@@ -10,6 +10,7 @@
   nix-update-script,
   which,
   rustPlatform,
+  runCommand,
   emscripten,
   openssl,
   pkg-config,
@@ -60,6 +61,7 @@ let
       fetchFromSourcehut
       fetchFromCodeberg
       fetchpatch
+      stdenv
       ;
   };
 
@@ -111,6 +113,8 @@ let
     );
 
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
+
+  isWasi = stdenv.hostPlatform.isWasi;
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -246,6 +250,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    }
+    // lib.optionalAttrs isWasi {
+      wasmGrammar =
+        let
+          grammar = builtGrammars.tree-sitter-nix;
+        in
+        runCommand "tree-sitter-wasm-grammar-test" { } ''
+          test -f ${grammar}/parser.wasm
+          # WebAssembly binaries start with "\0asm".
+          test "$(od -An -tx1 -N4 ${grammar}/parser.wasm | tr -d ' \n')" = "0061736d"
+          test ! -e ${grammar}/parser
+          touch $out
+        '';
     };
   };
 

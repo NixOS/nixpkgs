@@ -537,7 +537,7 @@ GEM
       thor (>= 0.19, < 2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
-    devfile (0.5.0)
+    devfile (0.5.2)
     device_detector (1.1.3)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -2678,7 +2678,7 @@ CHECKSUMS
   declarative_policy (2.1.0) sha256=f9ab705da726174bde97785c319311a4abf6143c07862f882bd8bc1b69361eea
   derailed_benchmarks (2.2.1) sha256=654280664fded41c9cd8fc27fc0fcfaf096023afab90eb4ac1185ba70c5d4439
   descendants_tracker (0.0.4) sha256=e9c41dd4cfbb85829a9301ea7e7c48c2a03b26f09319db230e6479ccdc780897
-  devfile (0.5.0) sha256=6a7e3be19e3e6b4b698b64ec4d6fd85b6653ce810c65cee611907d47ebb4cccf
+  devfile (0.5.2) sha256=2398cc38726f7bce03088eb74e4157f7839b353e36a488565e3fcc7739cd613d
   device_detector (1.1.3) sha256=c5fe3fe42cab2e8aa01f193b2074b8bb1510373ce47127206f28c7dea75a9c79
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
   devise-pbkdf2-encryptable (0.0.0)

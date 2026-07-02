@@ -2886,6 +2886,13 @@ with self;
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
       hash = "sha256-U7vTOeahHvygfGGaYVx8GIpouyvoSaHLfvw91Nmuha4=";
     };
+    patches = [
+      (fetchpatch {
+        name = "CVE-2026-11625.patch";
+        url = "https://security.metacpan.org/patches/B/Bytes-Random-Secure/0.29/CVE-2026-11625-r1.patch";
+        hash = "sha256-EDPFvFjqGtN5/TiJlarqKMrtH6kEQD6rOA7B2moBkiA=";
+      })
+    ];
     propagatedBuildInputs = [
       CryptRandomSeed
       MathRandomISAAC
@@ -2907,6 +2914,17 @@ with self;
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-Tiny-1.011.tar.gz";
       hash = "sha256-A9lntfgoRpCRN9WrmYSsVwrBCkQB4MYC89IgjEZayYI=";
     };
+    patches = [
+      (fetchpatch {
+        name = "CVE-2026-11702.patch";
+        url = "https://security.metacpan.org/patches/B/Bytes-Random-Secure-Tiny/1.011/CVE-2026-11702-r1.patch";
+        hash = "sha256-81wvVdtQsF5YeRhjAeaOFa7aE1cgdCni+G28LA7ZLqM=";
+      })
+    ];
+    preCheck = ''
+      # Remove test that CVE patch breaks: "Attempt to access disallowed key '_rng' in a restricted hash"
+      rm t/35-mrie-cover.t
+    '';
     meta = {
       description = "Tiny Perl extension to generate cryptographically-secure random bytes";
       license = with lib.licenses; [
@@ -16662,12 +16680,12 @@ with self;
     };
   };
 
-  HTTPDaemon = buildPerlPackage {
+  HTTPDaemon = buildPerlModule {
     pname = "HTTP-Daemon";
-    version = "6.16";
+    version = "6.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.16.tar.gz";
-      hash = "sha256-s40JJyXm+k4MTcKkfhVwcEkbr6Db4Wx4o1joBqp+Fz0=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.17.tar.gz";
+      hash = "sha256-FigVgMQOIxCNAoQ0aYtdfVNje/kEyd+CJIHiU8vskgw=";
     };
     buildInputs = [
       ModuleBuildTiny
@@ -22106,6 +22124,12 @@ with self;
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.02.tar.gz";
       hash = "sha256-nhFzm5zQi6LXWllzfx+yl/RYA/KJBjxcdZv8eP1Rbns=";
     };
+
+    # Fails with 'symlinks not listed in MANIFEST is not ignored for a non-local distribution'
+    postPatch = ''
+      rm -f t/analyse/manifest.t
+    '';
+
     propagatedBuildInputs = [
       ArchiveAnyLite
       ArrayDiff

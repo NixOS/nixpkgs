@@ -20,24 +20,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "incus-ui-canonical";
-  version = "0.19.9";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
     tag = "incus-${finalAttrs.version}";
-    hash = "sha256-HroAKFvmej3mOUMXwZuTXDV4UJAHkb+hLiKuqKgWRTc=";
+    hash = "sha256-fyeh7KX2Cvo2YmUNnmzeWkTGgGrJHhjbq39AmnwhgAs=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-08G3jYj7N9h6aBnqwGQQtpYOP/wP/k2VRY7dgmpxXZw=";
+    hash = "sha256-61z48VlhImykD/GJ5581Z95dIn7pv2ODZJfFKydGSPs=";
   };
-
-  patchPhase = ''
-    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
-  '';
 
   nativeBuildInputs = [
     nodejs
@@ -45,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn
     git
   ];
+
+  postPatch = ''
+    # run the canonical renames sed script
+    find -type f -name "*.ts" -o -name "*.tsx" -o -name "*.scss" | xargs sed -i -f ${renamesSed}
+
+    # fix missing git repository issue for Vite
+    substituteInPlace vite.config.ts \
+      --replace-fail "git rev-parse --short HEAD" "echo ${finalAttrs.version}"
+  '';
 
   configurePhase = ''
     runHook preConfigure

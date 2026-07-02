@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fonttools,
   pyclipper,
   defcon,
@@ -11,16 +11,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "booleanoperations";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "booleanOperations";
-    inherit version;
-    hash = "sha256-jPqCHDKtN0+hINay4LRE6+rFfJHmYxUoZF+hmsKigbg=";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "typemytype";
+    repo = "booleanOperations";
+    tag = finalAttrs.version;
+    hash = "sha256-IJyb6g2xwWj82Vm33Mtkqen1X/w0tSaP+Q/DtFc8Dd4=";
   };
 
   build-system = [
@@ -41,22 +41,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # started failing with fonttools update from 4.55.3 -> 4.56.0
-    "test_QTail_reversed_difference"
-    "test_QTail_reversed_intersection"
-    "test_QTail_reversed_union"
-    "test_QTail_reversed_xor"
-    "test_Q_difference"
-    "test_Q_intersection"
-    "test_Q_union"
-    "test_Q_xor"
-  ];
-
   meta = {
+    changelog = "https://github.com/typemytype/booleanOperations/releases/tag/${finalAttrs.src.tag}";
     description = "Boolean operations on paths";
     homepage = "https://github.com/typemytype/booleanOperations";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

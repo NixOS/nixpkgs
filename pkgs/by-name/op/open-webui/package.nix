@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.9.6";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-0d9GfBQY6YtsUbHeO6NTFPFHV6WE51D4fq+NfsM7J5g=";
+    hash = "sha256-ec/pmmjuFDYsL4MwHbTiw8PxG9iMHM/ntGfJIm3OpH8=";
   };
 
   frontend = buildNpmPackage rec {
@@ -23,14 +23,14 @@ let
     inherit version src;
 
     # the backend for run-on-client-browser python execution
-    # must match lock file in open-webui
+    # must match the version that is locked in package-lock.json
     pyodideVersion = "0.28.3";
     pyodide = fetchurl {
       hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-NhDsqfP95RAbSarM07OSII8vbPYWScRMxtWt+gRQ/4c=";
+    npmDepsHash = "sha256-hHBTbiEaZsyfZWpwiNNbGOJTt6Bor0FKClYrCY5mjzE=";
 
     npmFlags = [ "--force" ];
 
@@ -150,8 +150,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       openpyxl
       opensearch-py
       pandas
-      peewee
-      peewee-migrate
       pillow
       psutil
       psycopg

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.20.7";
+  version = "1.20.8";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/dQfgAGfe66bg6MYTYGv1jhCdGzdp+GbT8FwZnKlrtY=";
+    hash = "sha256-f0LRvpu+e2KaKyTVBO9yJD9LnXRom0w/Ck5oxjF4cBU=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { attrPath = "lagrange"; };
   };
 
   meta = {

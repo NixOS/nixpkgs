@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.2.7";
   pyproject = false;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";

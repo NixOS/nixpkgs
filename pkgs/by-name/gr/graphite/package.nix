@@ -12,7 +12,6 @@
   lld,
   pkg-config,
   binaryen,
-  wasm-pack,
   cargo-about,
   nodejs,
   wasm-bindgen-cli_0_2_121,
@@ -30,13 +29,13 @@
 }:
 
 let
-  version = "0-unstable-2026-06-15";
-  rev = "34e0fd77574c30749d00d775df87a7e9362e7ce8";
+  version = "0-unstable-2026-06-23";
+  rev = "ebbbb6bd1b0add39969717d18563808cc6306a63";
 
-  srcHash = "sha256-SyxteWavvyeRtKcGuJkOxojstJk1C2ndbNERuSM3Cng=";
+  srcHash = "sha256-8k30s/czdJ5uNHH75K4+XJo6Ncd1GA3NSlaa7yO4+mg=";
   shaderHash = "sha256-4lKBrGh1rfhTBczmCDvIF2KxLyEHzHdKVGgQ+jLd/Dw=";
-  cargoHash = "sha256-KktJj1c/OrJazNk40NND8irmNd30nzpZOxdwaTAqjIs=";
-  npmHash = "sha256-AX5Jqk2E+WyQJyHbgvvq74MRsYmWUju4bOkabhYoeig=";
+  cargoHash = "sha256-gpv4LZHEWKonQodW/uzdoAfkaxSRuCMKyX1SSit/gEQ=";
+  npmHash = "sha256-Rb0bLPk54QigNp7TkDkJJy/TEJXAhlXOCruckwvdXks=";
 
   brandingRev = "0d004aa61e6b48d316e8e5db6d59ccc4788f192d";
   brandingHash = "sha256-wAA6fR+NSxlCAqgwWmpiIAnji9k/jsMXpR0Vt04Ntmk=";
@@ -97,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     npmHooks.npmConfigHook
     binaryen
     wasm-bindgen-cli_0_2_121
-    wasm-pack
     nodejs
     cargo-about
     removeReferencesTo

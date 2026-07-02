@@ -13,10 +13,6 @@
   glib-networking,
   libadwaita,
 
-  # Test dependencies
-  xvfb-run,
-  dbus,
-
   # Optional dependencies
   enableJingle ? true,
   farstream,
@@ -25,7 +21,6 @@
   gst-libav,
   gst-plugins-good,
   libnice,
-  enableE2E ? true,
   enableSecrets ? true,
   libsecret,
   enableRST ? true,
@@ -41,16 +36,16 @@
   extraPythonPackages ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
-    tag = version;
-    hash = "sha256-QHfJ52uMDlE/rqqy7y2JIQLMOPaTp7eh4DEsPLBx6p8=";
+    tag = finalAttrs.version;
+    hash = "sha256-tZ1+DRVCzwaWeur9mwc/zE34H2xdqk96upqWfqNTl3g=";
   };
 
   pyproject = true;
@@ -115,44 +110,33 @@ python3.pkgs.buildPythonApplication rec {
       httpx
       h2
       truststore
+      pysequoia
     ]
     ++ httpx.optional-dependencies.socks
-    ++ lib.optionals enableE2E [
-      pycrypto
-      python-gnupg
-    ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [
-    xvfb-run
-    dbus
+    python3.pkgs.pytestCheckHook
   ];
-
-  checkPhase = ''
-    xvfb-run dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python3.interpreter} -m unittest discover -s test/gui -v
-    ${python3.interpreter} -m unittest discover -s test/common -v
-  '';
-
-  # test are broken in 1.7.3, 1.8.0
-  doCheck = false;
 
   # necessary for wrapGAppsHook3
   strictDeps = false;
 
   meta = {
     homepage = "http://gajim.org/";
-    description = "Jabber client written in PyGTK";
+    description = "XMPP chat client";
+    longDescription = "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.";
+    changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
       hlad
       vbgl
+      haansn08
     ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
     mainProgram = "gajim";
   };
-}
+})

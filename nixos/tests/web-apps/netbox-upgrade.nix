@@ -18,7 +18,6 @@ in
 
   meta.maintainers = with lib.maintainers; [
     minijackson
-    raitobezarius
   ];
 
   node.pkgsReadOnly = false;

@@ -410,6 +410,18 @@
     },
     "name": "GNOME"
   },
+  "gnome-circle": {
+    "description": "Maintain GNOME Circle applications.",
+    "id": 18234720,
+    "maintainers": {
+      "Aleksanaa": 42209822,
+      "Hythera": 87016780,
+      "getchoo": 48872998,
+      "michaelgrahamevans": 5932424
+    },
+    "members": {},
+    "name": "GNOME Circle"
+  },
   "golang": {
     "description": "Maintain Golang compilers",
     "id": 4020424,
@@ -556,8 +568,7 @@
     "members": {
       "Ericson2314": 1055245,
       "peterwaller-arm": 52030119,
-      "rrbutani": 7833358,
-      "sternenseemann": 3154475
+      "rrbutani": 7833358
     },
     "name": "LLVM"
   },
@@ -938,11 +949,11 @@
     "description": "Reviews changes to core packages for Nixpkgs security vulnerabilities: https://github.com/NixOS/nixpkgs/issues/494349",
     "id": 16430758,
     "maintainers": {
-      "balsoft": 18467667,
-      "infinisil": 20525370
+      "balsoft": 18467667
     },
     "members": {
       "andir": 638836,
+      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -996,6 +1007,17 @@
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "test-driver": {
+    "description": "Maintain the NixOS integration test driver.",
+    "id": 18201265,
+    "maintainers": {
+      "Ma27": 6025220,
+      "kmein": 10352507,
+      "tfc": 29044
+    },
+    "members": {},
+    "name": "test-driver"
   },
   "xen-project": {
     "description": "Maintain the Xen Project Hypervisor and the related tooling ecosystem. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",

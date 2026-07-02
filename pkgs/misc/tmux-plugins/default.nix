@@ -4,6 +4,7 @@
   pkgs,
   stdenv,
   config,
+  nix-update-script,
 }:
 
 let
@@ -45,6 +46,8 @@ let
 
             strictDeps = true;
             __structuredAttrs = true;
+
+            passthru.updateScript = nix-update-script { };
 
             inherit
               pluginName
@@ -235,12 +238,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.2.0";
+    version = "3.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
+      hash = "sha256-KHvBT8HjFZFwnpbWjW3LzXWUNOGbDgZTPncYvtIliD0=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -1206,13 +1209,13 @@ in
 
   t-smart-tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "t-smart-tmux-session-manager";
-    version = "2.8.0";
+    version = "2.11.1";
     rtpFilePath = "t-smart-tmux-session-manager.tmux";
     src = pkgs.fetchFromGitHub {
       owner = "joshmedeski";
       repo = "t-smart-tmux-session-manager";
       rev = "v${version}";
-      hash = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
+      hash = "sha256-iEiTF4NPUCVDp+bIfrbRx8HE1NrTJtxd667fTk0EfEA=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -1357,6 +1360,25 @@ in
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ szaffarano ];
+    };
+  };
+
+  tmux-tpad = mkTmuxPlugin {
+    pluginName = "tmux-tpad";
+    rtpFilePath = "tpad.tmux";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "Subbeh";
+      repo = "tmux-tpad";
+      rev = "v0.3.0";
+      hash = "sha256-w1eNg6n5JEWcKT7hCr3nFPe01kW3PwGBx8sdtfFojvk=";
+    };
+    meta = {
+      homepage = "https://github.com/Subbeh/tmux-tpad";
+      description = "Tmux scratchpad plugin";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ anned20 ];
     };
   };
 

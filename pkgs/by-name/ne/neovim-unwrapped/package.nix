@@ -22,12 +22,6 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
   wasmSupport ? false,
-
-  # now defaults to false because some tests can be flaky (clipboard etc), see
-  # also: https://github.com/neovim/neovim/issues/16233
-  nodejs ? null,
-  fish ? null,
-  python3 ? null,
 }:
 
 let
@@ -193,22 +187,6 @@ stdenv.mkDerivation (
       gettext
       pkg-config
     ];
-
-    # extra programs test via `make functionaltest`
-    nativeCheckInputs =
-      let
-        pyEnv = python3.withPackages (
-          ps: with ps; [
-            pynvim
-            msgpack
-          ]
-        );
-      in
-      [
-        fish
-        nodejs
-        pyEnv # for src/clint.py
-      ];
 
     postPatch =
       lib.optionalString wasmSupport ''

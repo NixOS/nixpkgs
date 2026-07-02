@@ -1,18 +1,15 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchgit,
   gnumake,
 }:
 let
   version = "1.2.3";
-  hash = "sha256-hyP85pYtXxucAliilUt9Y2qnrfPeSjeGsYEFJndJWyA=";
-  src = fetchFromGitea {
-    domain = "git.jakstys.lt";
-    owner = "motiejus";
-    repo = "undocker";
+  src = fetchgit {
+    url = "https://git.jakstys.lt/motiejus/undocker.git";
     rev = "v${version}";
-    hash = hash;
+    hash = "sha256-hyP85pYtXxucAliilUt9Y2qnrfPeSjeGsYEFJndJWyA=";
   };
 in
 buildGoModule {
@@ -21,7 +18,7 @@ buildGoModule {
 
   nativeBuildInputs = [ gnumake ];
 
-  buildPhase = "make VSN=v${version} VSNHASH=${hash} undocker";
+  buildPhase = "make VSN=v${version} VSNHASH=${src.rev} undocker";
 
   installPhase = "install -D undocker $out/bin/undocker";
 

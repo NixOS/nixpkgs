@@ -43,6 +43,19 @@ let
             server.serve_forever()
       '';
 
+  # Per-connection (Accept=yes) socket-activated service that requires the
+  # connection socket to be passed via socket activation and fails when started
+  # without one. It greets the client and stays alive for as long as the
+  # connection is held open.
+  acceptSocketTest = pkgs.writeShellScript "accept-socket-test.sh" ''
+    if [ "''${LISTEN_FDS:-0}" -lt 1 ]; then
+      echo "Expected exactly one socket, got 0" >&2
+      exit 4
+    fi
+    printf hello >&3
+    exec ${lib.getExe' pkgs.coreutils "cat"} <&3 >/dev/null
+  '';
+
 in
 {
   name = "switch-test";
@@ -506,6 +519,32 @@ in
               stopIfChanged = true;
               reloadTriggers = [ "test" ];
             };
+          };
+
+          accept-socket.configuration = {
+            systemd.sockets.accept-socket = {
+              wantedBy = [ "sockets.target" ];
+              listenStreams = [ "/run/accept-test.sock" ];
+              socketConfig = {
+                Accept = "yes";
+                SocketMode = "0777";
+              };
+            };
+            systemd.services."accept-socket@" = {
+              description = "A per-connection socket-activated service";
+              serviceConfig.ExecStart = acceptSocketTest;
+            };
+          };
+
+          accept-socket-service-modified.configuration = {
+            imports = [ accept-socket.configuration ];
+            systemd.services."accept-socket@".serviceConfig.X-Test = "test";
+          };
+
+          socket-activated-without-socket.configuration = {
+            imports = [ simple-socket.configuration ];
+            systemd.sockets.socket-activated.enable = false;
+            systemd.services.socket-activated.wantedBy = [ "multi-user.target" ];
           };
 
           mount.configuration = {
@@ -1586,6 +1625,49 @@ in
           # Socket-activation of the unit still works
           if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
               raise Exception("Socket was not properly activated after the service was restarted")
+
+          # A service transitioning to socket activation is not started directly,
+          # it's left for the newly started socket to activate on demand
+          switch_to_specialisation("${machine}", "socket-activated-without-socket")
+          machine.succeed("systemctl is-active socket-activated.service")
+          out = switch_to_specialisation("${machine}", "simple-socket-stop-if-changed")
+          assert_contains(out, "stopping the following units: socket-activated.service\n")
+          assert_lacks(out, "\nstarting the following units:")
+          assert_contains(out, "the following new units were started: socket-activated.socket\n")
+          machine.succeed("[ -S /run/test.sock ]")
+          if machine.succeed("socat - UNIX-CONNECT:/run/test.sock") != "hello":
+              raise Exception("Socket was not properly activated after the transition")
+
+      with subtest("socket-activated services with Accept=yes"):
+          # Socket-activated services don't get started, just the socket
+          machine.fail("[ -S /run/accept-test.sock ]")
+          out = switch_to_specialisation("${machine}", "accept-socket")
+          assert_contains(out, "the following new units were started: accept-socket.socket\n")
+          machine.succeed("[ -S /run/accept-test.sock ]")
+
+          # Hold a connection open so a per-connection instance keeps running
+          machine.succeed("socat EXEC:'sleep infinity' UNIX-CONNECT:/run/accept-test.sock >&2 &")
+          instance = machine.wait_until_succeeds(
+              "systemctl list-units --no-legend --state=running 'accept-socket@*.service' "
+              + "| grep -m1 -o 'accept-socket@[^ ]*\\.service'"
+          ).strip()
+
+          # Changing the templated service must stop the running instance and
+          # restart the socket instead of (re)starting the per-connection
+          # instance, which cannot be started without a connection socket
+          out = switch_to_specialisation("${machine}", "accept-socket-service-modified")
+          assert_contains(out, "stopping the following units:")
+          assert_contains(out, instance)
+          assert_contains(out, "accept-socket.socket")
+          assert_contains(out, "\nstarting the following units: accept-socket.socket\n")
+          assert_lacks(out, "NOT restarting the following changed units:")
+          assert_lacks(out, "\nrestarting the following units:")
+          # The per-connection instance must not be (re)started
+          starting = out[out.index("\nstarting the following units:") :]
+          assert instance not in starting, f"instance {instance} should not be (re)started"
+          # Socket-activation of the unit still works
+          if machine.succeed("socat - UNIX-CONNECT:/run/accept-test.sock </dev/null") != "hello":
+              raise Exception("Socket was not properly activated after the service was changed")
 
       with subtest("mounts"):
           switch_to_specialisation("${machine}", "mount")

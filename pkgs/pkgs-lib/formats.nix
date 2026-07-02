@@ -146,14 +146,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              value = toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
+            # NIX_ATTRS_JSON_FILE won't have `value` if it's null, but jq returns null for missing properties anyway
+            # jsonNull test keeps this in check
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              jq . "$valuePath" > $out
+              jq .value "$NIX_ATTRS_JSON_FILE" > $out
             ''
         ) { };
 
@@ -171,14 +171,16 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal_0_17 ];
-              value = toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2yaml "$valuePath" "$out"
+              json2yaml ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_1Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
             ''
         ) { };
 
@@ -196,14 +198,16 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              value = toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2yaml "$valuePath" "$out"
+              json2yaml ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_2Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
             ''
         ) { };
 
@@ -477,14 +481,12 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ json2x ];
-              value = builtins.toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2x toml "$valuePath" "$out"
+              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -960,8 +962,10 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = toJSON (value._imports or [ ]);
-              value = toJSON (removeAttrs value [ "_imports" ]);
+              imports = value._imports or [ ];
+              # value must be an attrset, type would verify that,
+              # otherwise removeAttrs will fail.
+              value = removeAttrs value [ "_imports" ];
               pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
@@ -984,26 +988,20 @@ optionalAttrs allowAliases aliases
                     else:
                         return repr(value)
 
-                with open(os.environ["importsPath"], "r") as f:
-                    imports = json.load(f)
-                    if imports is not None:
-                        for i in imports:
+                with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                    attrs = json.load(f)
+                    if attrs["imports"] is not None:
+                        for i in attrs["imports"]:
                             print(f"import {i}")
                         print()
 
-                with open(os.environ["valuePath"], "r") as f:
-                    for key, value in json.load(f).items():
+                    for key, value in attrs["value"].items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              export importsPath="$TMPDIR/imports"
-              printf "%s" "$imports" > "$importsPath"
-              export valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              cat "$valuePath"
               python3 "$pythonGen" > $out
               black $out
             ''
@@ -1017,7 +1015,13 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = serializableValueWith { typeName = "XML"; };
+        type =
+          attrsOf (serializableValueWith {
+            typeName = "XML";
+          })
+          // {
+            description = "XML value";
+          };
 
         generate =
           name: value:
@@ -1033,14 +1037,16 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                value = toJSON value;
+                inherit value;
                 pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
 
-                  with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${
+                  with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                      value = json.load(f).get("value")
+                      assert type(value) is dict, "value must be an attrset"
+                      print(xmltodict.unparse(value, full_document=${
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
@@ -1048,8 +1054,6 @@ optionalAttrs allowAliases aliases
                 __structuredAttrs = true;
               }
               ''
-                export valuePath="$TMPDIR/value"
-                printf "%s" "$value" > "$valuePath"
                 python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''

@@ -11,17 +11,17 @@
 
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "15.22.0";
+  version = "15.22.3";
   nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-5T6JTuKS/SvFUTabMGoH7okIkxwZOcxlDAEBGWZ4VyU=";
+    hash = "sha256-jj1cbJ/AlBDTDhIK/5J0XMn+8opZJ72o3O9JmB35RpE=";
   };
 
-  npmDepsHash = "sha256-hNe46VmfSQx7XwxYWaox+FF15AagRTJk7OjP8y8j8Jo=";
+  npmDepsHash = "sha256-31d0VqbM7vnKyKF7GxNr4V4Z3EqfsgdeKzWbXOOIHYU=";
 
   # No more package-lock.json in upstream src
   postPatch = ''

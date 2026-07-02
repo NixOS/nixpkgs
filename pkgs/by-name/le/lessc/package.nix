@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lessc";
-  version = "4.6.6";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-onTaVj69LYeYnywYXSC0I3ewF4rT0LAlRI61NEroLvc=";
+    hash = "sha256-D/gPyPoxHeLjF7EU40Jw2Mb4ZRrnaLq8XnL+kL2yhic=";
   };
 
   pnpmDeps = fetchPnpmDeps {

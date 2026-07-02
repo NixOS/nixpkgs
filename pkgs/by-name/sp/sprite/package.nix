@@ -5,10 +5,11 @@
   versionCheckHook,
   autoPatchelfHook,
   writableTmpDirAsHomeHook,
+  makeWrapper,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sprite";
-  version = "0.0.1-rc43";
+  version = "0.0.1-rc44";
 
   src = fetchurl {
     url = "https://sprites-binaries.t3.storage.dev/client/v${finalAttrs.version}/sprite-${
@@ -16,21 +17,22 @@ stdenv.mkDerivation (finalAttrs: {
     }-${if stdenv.hostPlatform.isx86_64 then "amd64" else "arm64"}.tar.gz";
     hash =
       {
-        aarch64-darwin = "sha256-6ztxc59b2H76+o7k7zMOvA/PAOib4m7WRXo1XsigL04=";
-        x86_64-darwin = "sha256-Ni779eJIFbZQ/zrAA3zQyYFFQ7ikEU9UYL9GeO1OcKA=";
-        aarch64-linux = "sha256-YTNHlVknlVkyUsiI422Quo04CyIMxCbrjhPvGADHw2s=";
-        x86_64-linux = "sha256-wEClvx4Kv7WK4uMYwNJqvsvjyQsonI01xlCo3z7CuwQ=";
+        aarch64-darwin = "sha256-XMr3JZxaFFpJh+CDxZYmbfOLrIhjgYj/mqOAA6qgyoo=";
+        x86_64-darwin = "sha256-KrBmA2auCp+gJ19Cmd7Kc6fDBkgxLIYV50/wWNhz4X0=";
+        aarch64-linux = "sha256-uiTQgChPRjo/OvvcQso52YxhaKjYJ5aU9nZRPUl5hgw=";
+        x86_64-linux = "sha256-cmffpuWg9XqFH2BcSC+gJG00kqHvV532XEDOs/u0dHs=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase = ''
     mkdir -p $out/bin
     install -m 755 sprite $out/bin/
+    wrapProgram $out/bin/sprite --set UPGRADE_CHECK false
   '';
 
   passthru.updateScript = ./update.sh;

@@ -3,6 +3,7 @@
   jdk11,
   jdk17,
   jdk21,
+  jdk25,
   nix-update-script,
 }:
 
@@ -371,9 +372,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.4.1";
-    hash = "sha256-KrKVjyoeURIMMmytbzhRU7sR7pOzwhbF/M6/37t+xss=";
-    defaultJava = jdk21;
+    version = "9.5.1";
+    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    defaultJava = jdk25;
     updateScriptMajorVersion = "9";
   };
   gradle_8 = mkGradle {

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "charasay";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "latipun7";
     repo = "charasay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VkDOdZt0Z/kuBwFm5utXYsxT59a1uapU9ouzB1ymmXs=";
+    hash = "sha256-8N3ToXpbDR+g19CT0q1J4QfQstBjS2QfX4IV2D7+ics=";
   };
 
-  cargoHash = "sha256-6AczT5VvOryOlcOMNFxcHqy8K1sm4tbhb6+LsCNHW14=";
+  cargoHash = "sha256-yByNgG8JAdT5jVxe3ijLbmjE1c8YybPkiwMHOvpZPTM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

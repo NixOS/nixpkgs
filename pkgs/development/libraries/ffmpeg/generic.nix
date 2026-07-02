@@ -467,7 +467,7 @@ stdenv.mkDerivation (
           hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
         })
       ]
-      ++ optionals (lib.versionOlder version "7.1.1") [
+      ++ optionals (lib.versionOlder version "7.1.1" && lib.versions.major version != "5") [
         (fetchpatch2 {
           name = "texinfo-7.1.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";

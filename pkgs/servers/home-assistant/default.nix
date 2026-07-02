@@ -324,6 +324,9 @@ python3Packages.buildPythonApplication rec {
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
+
+    # https://github.com/home-assistant/core/pull/172893
+    ./patches/pyjwt-2.13-compat.patch
   ];
 
   postPatch = ''

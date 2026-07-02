@@ -3,7 +3,7 @@
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10_29_2,
+  pnpm_10,
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -32,7 +32,7 @@ assert lib.warnIf (commandLineArgs != "")
   true;
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10_29_2;
+  pnpm = pnpm_10;
   electron = electron_42;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
