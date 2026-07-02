@@ -13,7 +13,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel cpp17-kernel'
 
 # Jupyter notebook:
-# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions = { cpp17 = cpp17-kernel; }; }'
+# nix shell --impure --expr 'with import <nixpkgs> {}; [ (jupyter.override { definitions = { cpp17 = cpp17-kernel; }; }) ]' -c jupyter-notebook
 
 let
   xeus-cling-unwrapped = callPackage ./xeus-cling.nix { };
