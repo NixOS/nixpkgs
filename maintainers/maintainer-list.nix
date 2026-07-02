@@ -10096,6 +10096,12 @@
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+  GitanElyon = {
+    email = "gitanelyon@gmail.com";
+    github = "GitanElyon";
+    githubId = 157924085;
+    name = "Gitan Elyon Mandell-Balogh";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
