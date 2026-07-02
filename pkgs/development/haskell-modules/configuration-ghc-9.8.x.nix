@@ -132,13 +132,16 @@ in
           self.retrie
           self.floskell
           self.markdown-unlit
+          self.stan
+          self.trial
         ] super.haskell-language-server;
         hls-plugin-api = super.hls-plugin-api;
         hlint = self.hlint_3_8;
         lsp-types = super.lsp-types;
-        ormolu = self.ormolu_0_7_4_0;
+        ormolu = doJailbreak self.ormolu_0_7_4_0;
         retrie = doJailbreak (unmarkBroken super.retrie);
-        stylish-haskell = self.stylish-haskell_0_14_6_0;
+        stan = super.stan;
+        stylish-haskell = doJailbreak self.stylish-haskell_0_14_6_0;
       }
     )
     apply-refact
@@ -151,6 +154,7 @@ in
     lsp-types
     ormolu
     retrie
+    stan
     stylish-haskell
     ;
 }
