@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -54,11 +55,13 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace src/pyhanko/version/__init__.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     asn1crypto
