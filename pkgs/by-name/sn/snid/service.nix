@@ -10,10 +10,8 @@
 }:
 let
   inherit (lib)
-    concatMap
     getExe
     mkOption
-    optional
     types
     ;
   cfg = config.snid;
@@ -141,22 +139,26 @@ in
 
     process.argv = [
       (getExe cfg.package)
-      "-mode"
-      cfg.mode
-    ]
-    ++ concatMap (l: [
-      "-listen"
-      l
-    ]) cfg.listen
-    ++ concatMap (c: [
-      "-backend-cidr"
-      c
-    ]) cfg.backendCidrs
-    ++ optional (cfg.defaultHostname != null) "-default-hostname=${cfg.defaultHostname}"
-    ++ optional (cfg.nat46Prefix != null) "-nat46-prefix=${cfg.nat46Prefix}"
-    ++ optional (cfg.backendPort != null) "-backend-port=${toString cfg.backendPort}"
-    ++ optional (cfg.unixDirectory != null) "-unix-directory=${cfg.unixDirectory}"
-    ++ optional cfg.proxyProto "-proxy-proto";
+    ];
+
+    process.flagFormat = flag: {
+      option = "-${flag}";
+      explicitBool = false;
+      sep = null;
+    };
+
+    process.flags = lib.mkMerge [
+      {
+        mode = cfg.mode;
+        default-hostname = cfg.defaultHostname;
+        nat46-prefix = cfg.nat46Prefix;
+        backend-port = cfg.backendPort;
+        unix-directory = cfg.unixDirectory;
+        proxy-proto = cfg.proxyProto;
+      }
+      (map (v: { listen = v; }) cfg.listen)
+      (map (v: { backend-cidr = v; }) cfg.backendCidrs)
+    ];
   }
   // lib.optionalAttrs (options ? systemd) {
     systemd.service = {
