@@ -601,7 +601,11 @@ rec {
         execFormat = elf;
         families = { };
       };
-      wasi = {
+      wasip1 = {
+        execFormat = wasm;
+        families = { };
+      };
+      wasip2 = {
         execFormat = wasm;
         families = { };
       };
@@ -640,6 +644,7 @@ rec {
       darwin = kernels.macos;
       watchos = kernels.ios;
       tvos = kernels.ios;
+      wasi = kernels.wasip1;
       win32 = kernels.windows;
     };
 
