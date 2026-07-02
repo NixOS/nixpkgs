@@ -110,15 +110,7 @@ in
             ]);
           options = {
             hwaccel = mkEnableOption "use hardware acceleration for rendering";
-            libseat = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Whether to use libseat for session management.
-                This is the default for kmscon newer than 10.0.0 and prevents
-                launching another GUI from kmscon by `kmscon-launch-gui`.
-              '';
-            };
+            libseat = mkEnableOption "use libseat for seat management";
           };
         };
       };
@@ -171,7 +163,7 @@ in
           "" # override upstream default with an empty ExecStart
           (builtins.concatStringsSep " " (
             [
-              "${cfg.package}/bin/kmscon"
+              (lib.getExe cfg.package)
               "--configdir"
               configDir
               "--vt=%I"
