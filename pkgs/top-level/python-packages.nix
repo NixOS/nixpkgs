@@ -2472,6 +2472,8 @@ self: super: with self; {
 
   caido-schema-proxy = callPackage ../development/python-modules/caido-schema-proxy { };
 
+  caido-sdk-client = callPackage ../development/python-modules/caido-sdk-client { };
+
   caido-server-auth = callPackage ../development/python-modules/caido-server-auth { };
 
   caio = callPackage ../development/python-modules/caio { };
