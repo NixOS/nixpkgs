@@ -17,7 +17,7 @@
   withNode ? true,
   version,
   hash,
-  knownVulnerabilities,
+  knownVulnerabilities ? [ ],
 }:
 let
   majorVersion = lib.versions.major version;
