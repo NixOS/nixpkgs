@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wizer";
-  version = "10.0.0";
+  version = "11.0.3";
 
   # the crate does not contain files which are necessary for the tests
   # see https://github.com/bytecodealliance/wizer/commit/3a95e27ce42f1fdaef07b52988e4699eaa221e04
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
     owner = "bytecodealliance";
     repo = "wizer";
     tag = "v${version}";
-    hash = "sha256-Vo6oD0UXGm4QtA3S5Qsc/DDfyfj9gJj01nnXXHw/+bM=";
+    hash = "sha256-gGO09/aHkSN8Q7EcKc7FO761YOkliHt9t7iXP4EB1Fc=";
   };
 
-  cargoHash = "sha256-WocaIib0IXlAWGVyRygOmHl1LBkrahbcCIHffRMX+J0=";
+  cargoHash = "sha256-4pH8bCTYaydgVRw6+hRN3326VGlRRMH9/5GhdPsr5Ok=";
 
   cargoBuildFlags = [
     "--bin"
@@ -27,8 +27,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildFeatures = [
-    "env_logger"
-    "structopt"
+    "cli"
   ];
 
   # Setting $HOME to a temporary directory is necessary to prevent checks from failing, as
