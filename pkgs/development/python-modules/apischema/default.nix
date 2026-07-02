@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.19.0"' 'version = "${version}"' \
       --replace-fail "setuptools==75.1.0" "setuptools" \
       --replace-fail "wheel~=0.44.0" "wheel"
   '';

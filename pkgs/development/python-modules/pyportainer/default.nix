@@ -27,6 +27,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-pQGObEYmj5Off573wwxLdU6p+kJsGqDyPVPzmD6vCc8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "1.0.37"' 'version = "${finalAttrs.version}"'
+  '';
+
   build-system = [ hatchling ];
 
   dependencies = [

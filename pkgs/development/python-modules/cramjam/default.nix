@@ -28,6 +28,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-evXYLbv+GwSBUJBb0upjQTFtMPdQbKka8KfJltMUmDs=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "2.12.0-rc1"' 'version = "${finalAttrs.version}"'
+  '';
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook

@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ancp-bids";
+  pname = "ancpbids";
   version = "0.3.1";
   pyproject = true;
 

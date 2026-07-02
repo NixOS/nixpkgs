@@ -18,6 +18,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-wzCuTnLOOeybhBPcyyPNPKWoJBHwaKkmARTzlg87wtU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.4.3"' 'version = "${finalAttrs.version}"'
+  '';
+
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];

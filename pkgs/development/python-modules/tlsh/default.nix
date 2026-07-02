@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-cYvXZrd+8ZC5LfucguFFNlEX8FR+AkchmCFButYoiMg=";
   };
 
+  postPatch = ''
+    substituteInPlace py_ext/setup.py \
+      --replace-fail "version = '4.5.0'" "version = '${version}'"
+  '';
+
   patches = [
     # https://github.com/trendmicro/tlsh/pull/152
     ./cmake-4-compat.patch

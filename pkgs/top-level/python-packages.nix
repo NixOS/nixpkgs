@@ -824,7 +824,7 @@ self: super: with self; {
 
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
-  ancp-bids = callPackage ../development/python-modules/ancp-bids { };
+  ancpbids = callPackage ../development/python-modules/ancpbids { };
 
   androguard = callPackage ../development/python-modules/androguard { };
 
@@ -1154,7 +1154,7 @@ self: super: with self; {
 
   aspectlib = callPackage ../development/python-modules/aspectlib { };
 
-  aspell-python = callPackage ../development/python-modules/aspell-python { };
+  aspell-python-py3 = callPackage ../development/python-modules/aspell-python-py3 { };
 
   assay = callPackage ../development/python-modules/assay { };
 
@@ -1327,8 +1327,6 @@ self: super: with self; {
       unzip
       ;
   };
-
-  augeas = callPackage ../development/python-modules/augeas { inherit (pkgs) augeas; };
 
   augmax = callPackage ../development/python-modules/augmax { };
 
@@ -3887,8 +3885,6 @@ self: super: with self; {
   dedupe = callPackage ../development/python-modules/dedupe { };
 
   dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
-
-  dedupe-pylbfgs = callPackage ../development/python-modules/dedupe-pylbfgs { };
 
   deebot-client = callPackage ../development/python-modules/deebot-client { };
 
@@ -10664,6 +10660,8 @@ self: super: with self; {
 
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
+  multiaddr = callPackage ../development/python-modules/multiaddr { };
+
   multidict = callPackage ../development/python-modules/multidict { };
 
   multimethod = callPackage ../development/python-modules/multimethod { };
@@ -13615,8 +13613,6 @@ self: super: with self; {
 
   py-moneyed = callPackage ../development/python-modules/py-moneyed { };
 
-  py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
-
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 
   py-multicodec = callPackage ../development/python-modules/py-multicodec { };
@@ -14593,6 +14589,8 @@ self: super: with self; {
   pylatexenc = callPackage ../development/python-modules/pylatexenc { };
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
+
+  pylbfgs = callPackage ../development/python-modules/pylbfgs { };
 
   pyld = callPackage ../development/python-modules/pyld { };
 
@@ -16042,6 +16040,8 @@ self: super: with self; {
   python-apt = callPackage ../development/python-modules/python-apt { };
 
   python-arango = callPackage ../development/python-modules/python-arango { };
+
+  python-augeas = callPackage ../development/python-modules/python-augeas { inherit (pkgs) augeas; };
 
   python-avatars = callPackage ../development/python-modules/python-avatars { };
 
@@ -21511,7 +21511,7 @@ self: super: with self; {
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
-  vncdo = callPackage ../development/python-modules/vncdo { };
+  vncdotool = callPackage ../development/python-modules/vncdotool { };
 
   vnoise = callPackage ../development/python-modules/vnoise { };
 

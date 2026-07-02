@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-OjIBgIOSJ65ryIF4D/UUUa1Oq0sPkKnaQEJeviimqhE=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.2.2"' 'version = "${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

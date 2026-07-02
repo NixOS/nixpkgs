@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-F0pvEg+Cns3czK/yI6M0hpgRpk67jUgRKqgzCBYmgUY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version      = "0.0.0"' 'version      = "${finalAttrs.version}"'
+  '';
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [

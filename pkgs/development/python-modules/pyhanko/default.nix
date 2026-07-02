@@ -146,6 +146,9 @@ buildPythonPackage (finalAttrs: {
       # Include the test pdf/xml files etc. in the build output
       postPatch = ''
         echo "graft src/pyhanko_testing_commons/test_data" > MANIFEST.in
+
+        substituteInPlace pyproject.toml \
+          --replace-fail 'version = "0.dev0"' 'version = "${finalAttrs.version}"'
       '';
 
       build-system = [ setuptools ];

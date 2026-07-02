@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-wRV/ZQ2T3Dlrmq6jY5IatrGr07uxPFWcVoMiJN+md88=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [ "orjson" ];

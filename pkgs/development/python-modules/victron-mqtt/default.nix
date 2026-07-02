@@ -22,6 +22,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-06+vn0HKvml3VRvPnQHz832OQnbvjd8tJEcnE6TIer8=";
   };
 
+  postPatch = ''
+    # the commit updating the version happens only after tagging
+    sed -i 's/version = ".*"/version = "${finalAttrs.version}"/' pyproject.toml
+  '';
+
   build-system = [
     hatchling
   ];

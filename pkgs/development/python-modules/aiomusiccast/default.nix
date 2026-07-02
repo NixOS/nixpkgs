@@ -19,8 +19,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"'
+    substituteInPlace aiomusiccast/__init__.py \
+      --replace-fail '__version__ = "0.0.0"' '__version__ = "${version}"'
   '';
 
   build-system = [ hatchling ];

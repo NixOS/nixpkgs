@@ -27,6 +27,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mOqHHgyx1Eevhr8BHkfFQa7g6x7vt9KJe4E72fr9HPg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

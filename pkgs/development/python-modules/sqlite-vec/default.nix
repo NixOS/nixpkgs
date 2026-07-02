@@ -51,6 +51,9 @@ buildPythonPackage rec {
     mv extra_init.py sqlite_vec/
     substituteInPlace sqlite_vec/__init__.py \
       --replace-fail "@libpath@" "${lib.getLib sqlite-vec-c}/lib/"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [

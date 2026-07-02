@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-Ut3iKc7Sr28uGgWCV3K3CS+gBta2icvbUPMjjo4fflU=";
   };
 
+  postPatch = ''
+    substituteInPlace minimock.py \
+      --replace-fail "__version__ = '1.2.10.dev0'" "__version__ = '${version}'"
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   # Module has no tests

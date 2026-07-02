@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  setuptools-scm,
+  setuptools,
   fetchFromGitLab,
 }:
 
@@ -13,11 +13,16 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "alelec";
     repo = "__version__";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bnpuFJSd4nBXJA75V61kiB+nU5pUzdEAIScfKx7aaGU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "__version__" ];
 
