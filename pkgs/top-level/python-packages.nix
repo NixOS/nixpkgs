@@ -12563,6 +12563,8 @@ self: super: with self; {
 
   patchpy = callPackage ../development/python-modules/patchpy { };
 
+  patchright = callPackage ../development/python-modules/patchright { };
+
   path = callPackage ../development/python-modules/path { };
 
   path-and-address = callPackage ../development/python-modules/path-and-address { };
