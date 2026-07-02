@@ -8,9 +8,6 @@
   version ? null,
 }:
 
-let
-  recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev";
-in
 (mkCoqDerivation {
   pname = "QuickChick";
   owner = "QuickChick";
@@ -37,8 +34,6 @@ in
         (case "8.9" lib.pred.true "1.1.0")
         (case "8.8" lib.pred.true "20190311")
         (case "8.7" (lib.versions.isLe "1.8") "1.0.0")
-        (case "8.6" lib.pred.true "20171102")
-        (case "8.5" lib.pred.true "20170512")
       ]
       null;
   release."2.1.1".hash = "sha256-tcZFpf8joEdVCgy1oKWdaM/9q3EMsF/jT+zz+kIsix8=";
@@ -56,23 +51,17 @@ in
   release."1.0.0".hash = "sha256:1gqy9a4yavd0sa7kgysf9gf2lq4p8dmn4h89y8081f2j8zli0w5y";
   release."20190311".rev = "22af9e9a223d0038f05638654422e637e863b355";
   release."20190311".hash = "sha256:00rnr19lg6lg0haq1sy4ld38p7imzand6fc52fvfq27gblxkp2aq";
-  release."20171102".rev = "0fdb769e1dc87a278383b44a9f5102cc7ccbafcf";
-  release."20171102".hash = "sha256:0fri4nih40vfb0fbr82dsi631ydkw48xszinq43lyinpknf54y17";
-  release."20170512".rev = "31eb050ae5ce57ab402db9726fb7cd945a0b4d03";
-  release."20170512".hash = "sha256:033ch10i5wmqyw8j6wnr0dlbnibgfpr1vr0c07q3yj6h23xkmqpg";
   releaseRev = v: "v${v}";
 
-  preConfigure = lib.optionalString recent "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
+  preConfigure = "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   useDuneifVersion = v: lib.versions.isGe "2.1" v || v == "dev";
   opam-name = "coq-quickchick";
 
   mlPlugin = true;
-  nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
+  nativeBuildInputs = [ coq.ocamlPackages.ocamlbuild ];
   propagatedBuildInputs = [
     mathcomp-boot
-  ]
-  ++ lib.optionals recent [
     ExtLib
     simple-io
   ];
