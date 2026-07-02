@@ -15,6 +15,7 @@ lib.extendMkDerivation {
     "core"
     "extraBuildInputs"
     "extraNativeBuildInputs"
+    "includeRetroArch"
     "libretroCore"
     "normalizeCore"
   ];
@@ -36,11 +37,13 @@ lib.extendMkDerivation {
       ## The core filename is derived from the core name
       ## Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
       normalizeCore ? true,
+      ## Whether to include a wrapper script which launches this core with RetroArch
+      includeRetroArch ? true,
       ...
     }:
     let
       d2u = if normalizeCore then (lib.replaceStrings [ "-" ] [ "_" ]) else (x: x);
-      coreDir = placeholder "out" + libretroCore;
+      coreDir = placeholder "lib" + libretroCore;
       coreFilename = "${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
       mainProgram = "retroarch-${core}";
     in
@@ -48,9 +51,19 @@ lib.extendMkDerivation {
       pname = "libretro-${core}";
 
       buildInputs = [ zlib ] ++ extraBuildInputs;
-      nativeBuildInputs = [ makeWrapper ] ++ extraNativeBuildInputs;
+      nativeBuildInputs = lib.optional finalAttrs.includeRetroArch makeWrapper ++ extraNativeBuildInputs;
 
-      inherit enableParallelBuilding makefile strictDeps;
+      outputs = [
+        "lib"
+        "out"
+      ];
+
+      inherit
+        enableParallelBuilding
+        includeRetroArch
+        makefile
+        strictDeps
+        ;
 
       makeFlags = [
         "platform=${
@@ -77,8 +90,12 @@ lib.extendMkDerivation {
         runHook preInstall
 
         install -Dt ${coreDir} ${coreFilename}
+      ''
+      + lib.optionalString finalAttrs.includeRetroArch ''
         makeWrapper ${retroarch-bare}/bin/retroarch $out/bin/${mainProgram} \
           --add-flags "-L ${coreDir}/${coreFilename}"
+      ''
+      + ''
 
         runHook postInstall
       '';
@@ -92,10 +109,10 @@ lib.extendMkDerivation {
       // passthru;
 
       meta = {
-        inherit mainProgram;
         inherit (retroarch-bare.meta) platforms;
         teams = [ lib.teams.libretro ];
       }
+      // lib.optionalAttrs finalAttrs.includeRetroArch { inherit mainProgram; }
       // meta;
     };
 }
