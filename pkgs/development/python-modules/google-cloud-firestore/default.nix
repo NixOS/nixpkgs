@@ -71,6 +71,11 @@ buildPythonPackage (finalAttrs: {
     # Test requires credentials
     "tests/system/test_pipeline_acceptance.py"
   ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/unit/v1/test_base_client.py::test_baseclient__emulator_channel"
+    "tests/unit/v1/test_bundle.py::TestAsyncBundle::test_async_query"
+  ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # RuntimeError: There is no current event loop in thread 'MainThread'
     # due to eliding aiounittest
