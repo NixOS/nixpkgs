@@ -3,6 +3,9 @@
   lib,
   fetchurl,
   buildFHSEnv,
+  symlinkJoin,
+  runCommand,
+  extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
   at-spi2-atk,
@@ -28,6 +31,7 @@
   libdrm,
   makeWrapper,
   libgbm,
+  libGL,
   noto-fonts-cjk-sans,
   nspr,
   nss,
@@ -64,9 +68,26 @@ let
   #
   # into `~/.local/share/fonts/`, otherwise the default template fonts, and
   # things like bullet points, will not look as expected.
+  #
+  # To make fonts packaged with Nix available to OnlyOffice, add the packages using the `extraFontPackages' attribute:
+  # (onlyoffice-desktopeditors.override { extraFontPackages = [ pkgs.font-bh-ttf ]; })
 
   # TODO: Find out which of these fonts we'd be allowed to distribute along
   #       with this package, or how to make this easier for users otherwise.
+
+  onlyoffice-fonts = symlinkJoin {
+    name = "onlyoffice-fonts";
+    paths = [ noto-fonts-cjk-sans ] ++ extraFontPackages;
+  };
+
+  fontsDir = runCommand "onlyoffice-fonts-dir" { } ''
+    font_regexp='.*\.\(ttf\|ttc\|otf\)?'
+    mkdir -p $out
+
+    find ${onlyoffice-fonts} -type l -regex "$font_regexp" -print0 | while IFS= read -r -d "" file; do
+      cp -L "$file" $out/
+    done
+  '';
 
   runtimeLibs = lib.makeLibraryPath [
     curl
@@ -78,11 +99,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "9.1.0";
+    version = "9.4.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      hash = "sha256-D36E7hYCTJ9Lw9XnB8nxMGMJDJRhM+K+bviuM9uuzhk=";
+      hash = "sha256-QnFDToG+QrFVn9mJ0kv21BNILyeNxqXjKCAqT8Ghhkk=";
     };
 
     nativeBuildInputs = [
@@ -172,14 +193,13 @@ in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
-# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
     derivation
-    noto-fonts-cjk-sans
+    libGL
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";
@@ -190,6 +210,11 @@ buildFHSEnv {
     cp -r ${derivation}/share/applications $out/share
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
         --replace-fail "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
+  '';
+
+  extraBuildCommands = ''
+    mkdir -p $out/usr/share/
+    ln -s ${fontsDir} $out/usr/share/fonts
   '';
 
   passthru.updateScript = ./update.sh;

@@ -23,6 +23,12 @@
   "module-hardware-facter-usage": [
     "index.html#module-hardware-facter-usage"
   ],
+  "module-programs-onlyoffice": [
+    "index.html#module-programs-onlyoffice"
+  ],
+  "module-programs-onlyoffice-quickstart": [
+    "index.html#module-programs-onlyoffice-quickstart"
+  ],
   "module-security-tpm2": [
     "index.html#module-security-tpm2"
   ],
