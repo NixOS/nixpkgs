@@ -7,16 +7,19 @@
   libxrandr,
   libxrender,
   xorgproto,
-  patches ? [ ],
+  config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evilwm";
   version = "1.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://www.6809.org.uk/evilwm/evilwm-${version}.tar.gz";
-    sha256 = "sha256-YQSFJBPm1QZpNh3K3aWiXTnisrDJWmOEAiyQWVeidA8=";
+    url = "https://www.6809.org.uk/evilwm/evilwm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-YQSFJBPm1QZpNh3K3aWiXTnisrDJWmOEAiyQWVeidA8=";
   };
 
   buildInputs = [
@@ -33,8 +36,8 @@ stdenv.mkDerivation rec {
       --replace "CC = gcc" "#CC = gcc"
   '';
 
-  # Allow users set their own list of patches
-  inherit patches;
+  # Allow users to set their own list of patches
+  patches = config.evilwm.patches or [ ];
 
   meta = {
     homepage = "http://www.6809.org.uk/evilwm/";
@@ -49,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "evilwm";
   };
-}
+})

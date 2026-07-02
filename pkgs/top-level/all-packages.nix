@@ -8508,9 +8508,7 @@ with pkgs;
 
   drawterm-wayland = callPackage ../by-name/dr/drawterm/package.nix { withWayland = true; };
 
-  evilwm = callPackage ../applications/window-managers/evilwm {
-    patches = config.evilwm.patches or [ ];
-  };
+  evilwm = callPackage ../applications/window-managers/evilwm { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
