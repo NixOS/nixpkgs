@@ -15253,6 +15253,8 @@ self: super: with self; {
 
   pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
 
+  pynauty = callPackage ../development/python-modules/pynauty { };
+
   pync = callPackage ../development/python-modules/pync { inherit (pkgs) which; };
 
   pynecil = callPackage ../development/python-modules/pynecil { };
