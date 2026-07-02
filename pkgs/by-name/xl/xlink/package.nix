@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   libusb1,
@@ -10,28 +9,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xlink";
-  version = "0-unstable-2025-14-03";
+  version = "0-unstable-2026-02-03";
 
   src = fetchFromGitHub {
     owner = "luxonis";
     repo = "XLink";
-    rev = "fe8b5450f545a2ebf26dbc093e98c0265d7f4029";
-    hash = "sha256-OTqJfTDudiNrdsDBe1Pg0T1dJcfneGXO/+AIbXpVfxk=";
+    rev = "f001d710be6a4010db913510da08caaa3a58466c";
+    hash = "sha256-5EJtspMCasIMeJGITiU4KRfH9rAYqWlyGm29fNnwGUI=";
   };
 
   outputs = [
     "out"
     "share"
-  ];
-
-  # Remove CMake Hunter package manager - needs network connection
-  patches = [
-    ./001-remove-hunter.patch
-    # Bump CMakeLists.txt to 3.10
-    (fetchpatch {
-      url = "https://github.com/luxonis/XLink/commit/160c6c918c07e28a6a8c5c080a257f7619223304.patch?full_index=1";
-      hash = "sha256-1VMCteJf/an20fI3UTT/X9cH96dCxPRQolfN+e+6jnU=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -68,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
 
     tests=(
-      "multiple_open_stream"
       "multithreading_search_test"
     )
 
@@ -86,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/luxonis/XLink";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ phodina ];
+    maintainers = with lib.maintainers; [
+      amronos
+      phodina
+    ];
   };
 })
