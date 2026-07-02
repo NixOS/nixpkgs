@@ -4,6 +4,7 @@
   fetchFromGitLab,
   cmake,
   doxygen,
+  gitUpdater,
   graphviz,
   arpa2common,
   arpa2cm,
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Memory pooling for ARPA2 projects";
