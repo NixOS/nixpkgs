@@ -5,10 +5,11 @@
   nodes.machine =
     { pkgs, ... }:
     {
-      # These tests need a little more juice
+      # These tests need a little more juice; the PEF raw thumbnail step OOMs
+      # at 2048 on immich 3.x.
       virtualisation = {
         cores = 2;
-        memorySize = 2048;
+        memorySize = 4096;
         diskSize = 4096;
       };
 
