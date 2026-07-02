@@ -11,20 +11,23 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signalslot";
   version = "0.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    pname = "signalslot";
+    inherit (finalAttrs) version;
     hash = "sha256-ZNodibNGfCOa8xd3myN+cRa28rY3/ynNUia1kwjTIOU=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--pep8 --cov" "" \
-      --replace "--cov-report html" ""
+      --replace-fail "--pep8 --cov" "" \
+      --replace-fail "--cov-report html" ""
   '';
 
   build-system = [ setuptools ];
@@ -53,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myaats ];
   };
-}
+})
