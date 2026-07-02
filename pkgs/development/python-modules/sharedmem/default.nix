@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   numpy,
 }:
 
@@ -9,14 +10,16 @@ buildPythonPackage rec {
 
   pname = "sharedmem";
   version = "0.3.8";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "c654a6bee2e2f35c82e6cc8b6c262fcabd378f5ba11ac9ef71530f8dabb8e2f7";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   meta = {
     homepage = "http://rainwoodman.github.io/sharedmem/";
