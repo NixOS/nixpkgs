@@ -25,6 +25,8 @@
   withAlsa ? false,
   alsa-lib,
   withOss ? false,
+  withPipewire ? false,
+  pipewire,
   withFlite ? true,
   flite,
   withEspeak ? true,
@@ -97,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withAlsa [
     alsa-lib
   ]
+  ++ lib.optionals withPipewire [
+    pipewire
+  ]
   ++ lib.optionals withEspeak [
     espeak
     sonic
@@ -116,9 +121,19 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--sysconfdir=/etc"
     # Audio method falls back from left to right.
-    "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ]
+  ++ [
+    ''--with-default-audio-method="${
+      lib.concatStringsSep "," (
+        lib.optional withLibao "libao"
+        ++ lib.optional withPulse "pulse"
+        ++ lib.optional withAlsa "alsa"
+        ++ lib.optional withPipewire "pipewire"
+        ++ lib.optional withOss "oss"
+      )
+    }"''
   ]
   ++ lib.optionals withPulse [
     "--with-pulse"
@@ -131,6 +146,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withOss [
     "--with-oss"
+  ]
+  ++ lib.optionals withPipewire [
+    "--with-pipewire"
   ]
   ++ lib.optionals withEspeak [
     "--with-espeak-ng"
