@@ -169,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxrender
     libxcursor
   ]
-  ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -219,6 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     gl2ps
   ]
+  ++ lib.optionals withQt6 [ qt6.qttools ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
@@ -319,7 +319,6 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
 
         nativeBuildInputs = lib.optionals withQt6 [
-          qt6.qttools
           qt6.wrapQtAppsHook
         ];
       };
