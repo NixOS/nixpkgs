@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
 
+    # https://github.com/sagemath/sage/issues/42473
+    ./patches/lower-sleep2-test-threshold.patch
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";
