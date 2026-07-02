@@ -665,6 +665,14 @@ in
         cfg.settings.config.crowdsec_service.acquisition_dir
         "${config_paths.config_dir}/console"
         "${config_paths.config_dir}/scenarios"
+        "${config_paths.config_dir}/parsers"
+        "${config_paths.config_dir}/parsers/s00-raw"
+        "${config_paths.config_dir}/parsers/s01-parse"
+        "${config_paths.config_dir}/parsers/s02-enrich"
+        "${config_paths.config_dir}/postoverflows"
+        "${config_paths.config_dir}/postoverflows/s00-enrich"
+        "${config_paths.config_dir}/postoverflows/s01-whitelist"
+        "${config_paths.config_dir}/contexts"
       ];
 
       setupScript = pkgs.writeShellApplication {
