@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "simple-di";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "simple_di";
@@ -17,7 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-GSuZne5M1PsRpdhhFlyq0C2PBhfA+Ab8Wwn5BfGgPKA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     setuptools
     typing-extensions
   ];
