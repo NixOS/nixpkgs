@@ -5903,7 +5903,7 @@ with pkgs;
       stdenv = clangStdenv;
     };
   };
-  factorPackages = factorPackages-0_100;
+  factorPackages = factorPackages-0_101;
 
   factor-lang-0_99 = factorPackages-0_99.factor-lang;
   factor-lang-0_100 = factorPackages-0_100.factor-lang;
