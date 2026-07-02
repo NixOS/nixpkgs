@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clamav";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/clamav-${finalAttrs.version}.tar.gz";
-    hash = "sha256-80AYzyLwW92dGhV0ygcZPj4DDKUgUMPlwiDiOjIxSWU=";
+    hash = "sha256-ia9XpFu/E95NyR7X8gtDU4jIhCjrfcMGOaArLw/C2tE=";
   };
 
   patches = [
