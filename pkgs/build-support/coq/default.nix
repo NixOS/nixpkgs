@@ -98,7 +98,6 @@ let
       "dropAttrs"
       "dropDerivationAttrs"
       "keepAttrs"
-      "enableParallelBuilding"
     ]
     ++ dropAttrs
   ) keepAttrs;
@@ -202,10 +201,7 @@ stdenv.mkDerivation (
         );
       buildInputs =
         args.overrideBuildInputs or ([ coq ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
-      enableParallelBuilding =
-        lib.warnIf (args ? enableParallelBuilding && args.enableParallelBuilding == true)
-          "mkCoqDerivation: enableParallelBuilding is enabled by default; remove the explicit setting"
-          enableParallelBuilding;
+      inherit enableParallelBuilding;
 
       meta =
         (
