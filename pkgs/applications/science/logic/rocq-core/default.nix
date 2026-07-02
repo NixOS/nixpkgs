@@ -44,8 +44,8 @@ let
       {
         inherit release releaseRev;
         location = {
-          owner = "coq";
-          repo = "coq";
+          owner = "rocq-prover";
+          repo = "rocq";
         };
       }
       args.version;
@@ -130,7 +130,11 @@ let
     };
 
     nativeBuildInputs = [ pkg-config ] ++ ocamlNativeBuildInputs;
-    buildInputs = [ ncurses ];
+    buildInputs = [
+      ncurses
+      ocamlPackages.camlzip
+      ocamlPackages.yojson
+    ];
 
     propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
@@ -157,22 +161,18 @@ let
 
     prefixKey = "-prefix ";
 
+    buildFlags = [ "world" ];
+
     enableParallelBuilding = true;
 
     createFindlibDestdir = true;
 
-    buildPhase = ''
-      runHook preBuild
-      make dunestrap
-      dune build -p rocq-runtime,rocq-core -j $NIX_BUILD_CORES
-      runHook postBuild
-    '';
-
     installPhase = ''
       runHook preInstall
-      dune install --prefix $out rocq-runtime rocq-core
+      dune install --prefix $out rocq-runtime rocq-core coqide-server
       ln -s $out/lib/rocq-runtime $OCAMLFIND_DESTDIR/rocq-runtime
       ln -s $out/lib/rocq-core $OCAMLFIND_DESTDIR/rocq-core
+      ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
       runHook postInstall
     '';
 
