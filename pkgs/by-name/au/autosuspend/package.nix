@@ -100,6 +100,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       bzizou
       anthonyroussel
+      adamcstephens
     ];
     mainProgram = "autosuspend";
     platforms = lib.platforms.linux;

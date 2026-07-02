@@ -246,6 +246,9 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ xlambein ];
+    maintainers = with maintainers; [
+      xlambein
+      adamcstephens
+    ];
   };
 }
