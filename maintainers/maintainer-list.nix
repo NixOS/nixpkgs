@@ -14472,6 +14472,11 @@
     githubId = 464625;
     name = "Enric Morales";
   };
+  kikos0 = {
+    github = "KiKoS0";
+    githubId = 22998716;
+    name = "Riadh Daghmoura";
+  };
   kilianar = {
     email = "mail@kilianar.de";
     github = "kilianar";
