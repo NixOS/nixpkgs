@@ -152,7 +152,7 @@ For example, if upstream documents that a plugin uses the Vim license but GitHub
 
 ## LuaRocks based plugins {#neovim-luarocks-based-plugins}
 
-In order to automatically handle plugin dependencies, several Neovim plugins
+To automatically handle plugin dependencies, several Neovim plugins
 upload their package to [LuaRocks](https://www.luarocks.org). This means less work for nixpkgs maintainers in the long term as dependencies get updated automatically.
 This means several Neovim plugins are first packaged as nixpkgs [lua
 packages](#packaging-a-library-on-luarocks), and converted via `buildNeovimPlugin` in

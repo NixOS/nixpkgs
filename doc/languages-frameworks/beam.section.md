@@ -255,7 +255,7 @@ Setup will require the following steps:
 
 #### Example of creating a service for an Elixir - Phoenix project {#example-of-creating-a-service-for-an-elixir---phoenix-project}
 
-In order to create a service with your release, you could add a `service.nix`
+To create a service with your release, you could add a `service.nix`
 in your project with the following
 
 ```nix

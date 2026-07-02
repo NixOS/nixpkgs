@@ -1614,7 +1614,7 @@ looked at how you can create environments in which specified packages are
 available.
 
 At some point you'll likely have multiple packages which you would
-like to be able to use in different projects. In order to minimise unnecessary
+like to be able to use in different projects. To minimise unnecessary
 duplication we now look at how you can maintain a repository with your
 own packages. The important functions here are `import` and `callPackage`.
 
@@ -1861,7 +1861,7 @@ pkgs.mkShell rec {
     pythonPackages.numpy
     pythonPackages.requests
 
-    # In this particular example, in order to compile any binary extensions they may
+    # In this particular example, to compile any binary extensions they may
     # require, the Python modules listed in the hypothetical requirements.txt need
     # the following packages to be installed locally:
     taglib
@@ -2092,7 +2092,7 @@ See also [contributing section](#contributing).
 ### Are Python interpreters built deterministically? {#deterministic-builds}
 
 The Python interpreters are now built deterministically. Minor modifications had
-to be made to the interpreters in order to generate deterministic bytecode. This
+to be made to the interpreters to generate deterministic bytecode. This
 has security implications and is relevant for those using Python in a
 `nix-shell`.
 
