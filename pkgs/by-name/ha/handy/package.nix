@@ -276,7 +276,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/cjpais/Handy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "handy";
-    maintainers = with lib.maintainers; [ philocalyst ];
+    maintainers = with lib.maintainers; [
+      faukah
+      philocalyst
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     badPlatforms = [ "x86_64-darwin" ]; # We weren't able to get hashes here
   };
