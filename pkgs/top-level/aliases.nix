@@ -1628,6 +1628,7 @@ mapAliases {
   nix-linter = throw "nix-linter has been removed as it was broken for 3 years and unmaintained upstream"; # Added 2025-09-06
   nix-plugin-pijul = throw "nix-plugin-pijul has been removed due to being discontinued"; # Added 2025-05-18
   nix_2_3 = throw "'nix_2_3' has been removed, because it was unmaintained and insecure."; # Converted to throw 2025-07-24
+  nixbang = throw "'nixbang' has been removed because it was unmaintained upstream. Use nix-shell shebang instead'"; # Added 2026-07-02
   nixfmt-classic =
     (
       if lib.oldestSupportedReleaseIsAtLeast 2605 then
