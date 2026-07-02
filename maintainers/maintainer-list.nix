@@ -19981,6 +19981,11 @@
     name = "Jakub Kądziołka";
     keys = [ { fingerprint = "E576 BFB2 CF6E B13D F571  33B9 E315 A758 4613 1564"; } ];
   };
+  nielmin = {
+    name = "Daniel Hwang";
+    github = "nielmin";
+    githubId = 81798555;
+  };
   nielsegberts = {
     email = "nix@nielsegberts.nl";
     github = "nielsegberts";
