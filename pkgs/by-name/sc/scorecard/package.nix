@@ -9,14 +9,14 @@
   gitMinimal,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scorecard";
   version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = "scorecard";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RfOunjr4QeMFlMHkOOhHB8vb5XDNLNEmdDe9KSL/kP8=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -84,19 +84,19 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/scorecard --help
-    $out/bin/scorecard version 2>&1 | grep "v${version}"
+    $out/bin/scorecard version 2>&1 | grep "v${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   passthru.tests.version = testers.testVersion {
     package = scorecard;
     command = "scorecard version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     homepage = "https://github.com/ossf/scorecard";
-    changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
+    changelog = "https://github.com/ossf/scorecard/releases/tag/v${finalAttrs.version}";
     description = "Security health metrics for Open Source";
     mainProgram = "scorecard";
     license = lib.licenses.asl20;
@@ -105,4 +105,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

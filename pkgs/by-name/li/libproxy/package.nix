@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.11";
+  version = "0.5.12";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
-    rev = finalAttrs.version;
-    hash = "sha256-CSI6GrTDBoYR6RFAQvgNjwzkMk8oXatEMpsv5FYB5eE=";
+    tag = finalAttrs.version;
+    hash = "sha256-pkvmeD7O2EUDzw59/e7YcgiHDf2vvIXmd11axGSwCEs=";
   };
 
   patches = [

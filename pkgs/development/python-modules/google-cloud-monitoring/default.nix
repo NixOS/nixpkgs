@@ -15,13 +15,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-monitoring";
-  version = "2.29.0";
+  version = "2.30.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_monitoring";
     inherit (finalAttrs) version;
-    hash = "sha256-7tuK/RxOgOjGJDXwXESOnmW+kHJQpm2B5q9ZCXeCZ7Y=";
+    hash = "sha256-qVMKqaokbEkIEN+nvjLWfoNA0ZEIrMmcvALR7UlPunY=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +32,8 @@ buildPythonPackage (finalAttrs: {
     protobuf
   ]
   ++ google-api-core.optional-dependencies.grpc;
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   optional-dependencies = {
     pandas = [ pandas ];

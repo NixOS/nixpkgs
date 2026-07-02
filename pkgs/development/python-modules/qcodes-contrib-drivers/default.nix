@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qcodes-contrib-drivers";
-  version = "0.23.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m2idBaQl2OVhrY5hcLTeXY6BycGf0ufa/ySgxaU2L/4=";
+    hash = "sha256-4ZVNd1cHqM3tuGcOxlBN8WX9i9u3XFlJ0zr06n7zpmI=";
   };
 
   build-system = [

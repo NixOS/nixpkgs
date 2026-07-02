@@ -1,16 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  crytic-compile,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # nativeBuildInputs
   makeWrapper,
+
+  # dependencies
+  crytic-compile,
   packaging,
   prettytable,
-  solc,
-  testers,
-  versionCheckHook,
   web3,
+
+  # tests
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+
+  # postFixup
+  solc,
+
   withSolc ? false,
 }:
 
@@ -37,16 +48,15 @@ buildPythonPackage (finalAttrs: {
     web3
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   postFixup = lib.optionalString withSolc ''
     wrapProgram $out/bin/slither \
       --prefix PATH : "${lib.makeBinPath [ solc ]}"
-  '';
-
-  # required for pythonImportsCheck
-  postInstall = ''
-    export HOME="$TEMP"
   '';
 
   pythonImportsCheck = [
@@ -65,8 +75,6 @@ buildPythonPackage (finalAttrs: {
     "slither.visitors"
     "slither.vyper_parsing"
   ];
-
-  doInstallCheck = true;
 
   meta = {
     description = "Static Analyzer for Solidity";

@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndconnect";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "LN-Zap";
     repo = "lndconnect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cuZkVeFUQq7+kQo/YjXCMPANUL5QooAWgegcoWo3M0c=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "lndconnect";
   };
-}
+})

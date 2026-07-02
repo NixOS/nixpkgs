@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wazero";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "tetratelabs";
     repo = "wazero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FYaWh1zfNcgtQ5S0flk0y6ehP4ZzCwIA+SZgLnha95U=";
+    hash = "sha256-wq6fj6NDKaJbd+8lhrC5tH9lyUL/2Rc/T4Y39LYADsk=";
   };
 
-  vendorHash = "sha256-5jAwOu4F3DLVKhnEfEs/IvKwfan7hv65d8OY7gcawNo=";
+  vendorHash = "sha256-jsMZWzuOMt9OAA39jr4or9Ljt2sRg7Mw/FScjQ+sulU=";
 
   subPackages = [
     "cmd/wazero"

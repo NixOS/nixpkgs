@@ -6,8 +6,8 @@
   autoreconfHook,
   util-macros,
   xorgproto,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   passthru = {

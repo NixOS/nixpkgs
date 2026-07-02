@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  libICE,
+  libice,
   libjpeg,
   libpng,
-  libX11,
-  libXext,
-  libXft,
+  libx11,
+  libxext,
+  libxft,
   pango,
   pkg-config,
 }:
@@ -22,12 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   propagatedBuildInputs = [
-    libICE
+    libice
     libjpeg
     libpng
-    libX11
-    libXext
-    libXft
+    libx11
+    libxext
+    libxft
     pango
   ];
 

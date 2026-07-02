@@ -7,13 +7,13 @@
   asLibrary ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "astyle";
-  version = "3.6.13";
+  version = "3.6.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-BIt0sUxuAff66OY7dn2jMwOrOdkCKv4zBVzkueVvFi0=";
+    url = "mirror://sourceforge/astyle/astyle-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-QU6dpM/e6zXY98Fw4V70OvX6AGbJ9ZKnRvcHHzVuzac=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ carlossless ];
     platforms = lib.platforms.unix;
   };
-}
+})

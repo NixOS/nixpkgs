@@ -22,16 +22,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "1.101.0";
+  version = "50.8.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
-    tag = "v${version}";
-    hash = "sha256-sDhnG6d77erHO9HS0fL4Fl5qHbeyuLz2TFeic5zLJIE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u10O0+Ty73ad4vB8BgQPsV1W8NJYvzU3wyAhqHtW9v0=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     dateparser
     ebooklib
     emoji
+    jxlpy
     keyring
     lxml
     natsort
@@ -106,11 +107,11 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       chuangzhu
       Gliczy
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

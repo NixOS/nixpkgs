@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "SpoofDPI";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "xvzc";
     repo = "SpoofDPI";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ybSrJzlC2lNAsUMS+3mwadGcrAN0YV0UF/Huua+2G68=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ s0me1newithhand7s ];
   };
-}
+})

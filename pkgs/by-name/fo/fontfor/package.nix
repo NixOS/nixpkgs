@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fontfor";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "7sDream";
     repo = "fontfor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gJl9SPL/KeYFzKIjwWPVR1iVy6h/W7OP7xE7krhYaY8=";
   };
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "fontfor";
   };
-}
+})

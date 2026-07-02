@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyannote-database";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-database";
     tag = version;
-    hash = "sha256-WDAkxoSI/IW2nIXCDoKa+p2ep1xcWW6WGNHCCZT51tY=";
+    hash = "sha256-72H1tVLtDSYHAgjHWmI7pPQhKGchHz5VP0eRU6NRj2g=";
   };
 
   build-system = [

@@ -59,7 +59,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
-      lucasew
     ];
     mainProgram = "flet";
   };

@@ -248,6 +248,10 @@ let
       BOUNCE = option yes;
     };
 
+    iommu = lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+      ARM_SMMU_V3_SVA = whenAtLeast "5.9" yes;
+    };
+
     memtest = {
       MEMTEST = yes;
     };
@@ -318,7 +322,6 @@ let
       IPV6_MROUTE = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2 = yes;
-      IPV6_FOU_TUNNEL = module;
       IPV6_SEG6_LWTUNNEL = yes;
       IPV6_SEG6_HMAC = yes;
       IPV6_SEG6_BPF = yes;
@@ -403,8 +406,8 @@ let
       MAC80211_DEBUGFS = yes;
 
       # HAM radio
-      HAMRADIO = yes;
-      AX25 = module;
+      HAMRADIO = whenOlder "7.1" yes;
+      AX25 = whenOlder "7.1" module;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
@@ -565,6 +568,9 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
+
+        # Enable RAS reporting via netlink
+        DRM_RAS = whenAtLeast "7.1" yes;
       }
       //
         lib.optionalAttrs
@@ -575,7 +581,7 @@ let
             # Enable Hyper-V Synthetic DRM Driver
             DRM_HYPERV = whenAtLeast "5.14" module;
             # And disable the legacy framebuffer driver when we have the new one
-            FB_HYPERV = whenAtLeast "5.14" no;
+            FB_HYPERV = whenBetween "5.14" "7.0" no;
           }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         # Intel GVT-g graphics virtualization supports 64-bit only
@@ -587,6 +593,8 @@ let
         DRM_VC4_HDMI_CEC = yes;
         # Enable HDMI out on platforms using the RK3588 lineup of SoCs.
         ROCKCHIP_DW_HDMI_QP = whenAtLeast "6.13" yes;
+        # Enable DSI out on platforms using the RK3588 lineup of SoCs.
+        ROCKCHIP_DW_MIPI_DSI2 = whenAtLeast "6.16" yes;
       };
 
     # Enable Rust and features that depend on it
@@ -600,6 +608,10 @@ let
       DRM_PANIC_SCREEN = whenAtLeast "6.12" (freeform "kmsg");
 
       DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
+
+      # Do not enable Nova drivers, which are still WIP. This is the Kconfig default.
+      NOVA_CORE = whenAtLeast "6.15" no;
+      DRM_NOVA = whenAtLeast "6.16" no;
     };
 
     sound = {
@@ -664,6 +676,10 @@ let
       USB_DWC3_DUAL_ROLE = yes;
 
       USB_XHCI_SIDEBAND = whenAtLeast "6.16" yes; # needed for audio offload
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA = lib.mkIf stdenv.hostPlatform.isAarch64 module;
     };
 
     usb-serial = {
@@ -678,6 +694,9 @@ let
     filesystem = {
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
+
+      # DAX requires 64BIT via ZONE_DEVICE and MEMORY_HOTPLUG.
+      FS_DAX = lib.mkIf stdenv.hostPlatform.is64bit yes;
 
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
@@ -696,6 +715,7 @@ let
       EXT4_FS_SECURITY = yes;
 
       NTFS_FS = whenBetween "5.15" "6.9" no;
+      NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -733,7 +753,9 @@ let
       NFS_FSCACHE = yes;
       NFS_SWAP = yes;
       NFS_V3_ACL = yes;
-      NFS_V4_1 = yes; # NFSv4.1 client support
+      # NFSv4.1 is enabled unconditionally on 7.0 and up
+      # see: https://github.com/torvalds/linux/commit/7537db24806fdc3d3ec4fef53babdc22c9219e75
+      NFS_V4_1 = whenOlder "7.0" yes;
       NFS_V4_2 = yes;
       NFS_V4_SECURITY_LABEL = yes;
       NFS_LOCALIO = whenAtLeast "6.12" yes;
@@ -758,6 +780,9 @@ let
       SQUASHFS_LZ4 = yes;
       SQUASHFS_ZSTD = yes;
 
+      EROFS_FS_ZIP_DEFLATE = whenAtLeast "6.6" yes;
+      EROFS_FS_ZIP_ZSTD = whenAtLeast "6.10" yes;
+
       # Native Language Support modules, needed by some filesystems
       NLS = yes;
       NLS_DEFAULT = freeform "utf8";
@@ -771,6 +796,10 @@ let
       DEVTMPFS = yes;
 
       UNICODE = yes; # Casefolding support for filesystems
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isPower {
+      # Needed to use the installation iso image formatted for tbxi booting (ISO9660 w/ hybrid HFS+ partition).
+      HFSPLUS_FS = yes;
     };
 
     security = {
@@ -781,7 +810,9 @@ let
       FORTIFY_SOURCE = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
-      DEBUG_LIST = yes;
+      DEBUG_LIST = whenOlder "6.6" yes;
+      # https://git.kernel.org/torvalds/c/aebc7b0d8d91bbc69e976909963046bc48bca4fd
+      LIST_HARDENED = whenAtLeast "6.6" yes;
 
       HARDENED_USERCOPY = yes;
       RANDOMIZE_BASE = option yes;
@@ -815,24 +846,30 @@ let
         whenOlder "6.2" yes
       ); # allow RDRAND to seed the RNG
       RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
+      # only when compiled as yes, TPM 2.0 will automatically seed the kernel RNG
+      HW_RANDOM = yes;
 
       MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = no;
 
+      IMA = yes;
+
       # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
       PERSISTENT_KEYRINGS = yes;
       # enable temporary caching of the last request_key() result
       KEYS_REQUEST_CACHE = yes;
       # randomized slab caches
-      RANDOM_KMALLOC_CACHES = whenAtLeast "6.6" yes;
+      RANDOM_KMALLOC_CACHES = whenBetween "6.6" "7.2" yes;
+      KMALLOC_PARTITION_CACHES = whenAtLeast "7.2" yes;
+      KMALLOC_PARTITION_RANDOM = whenAtLeast "7.2" yes;
 
       # NIST SP800-90A DRBG modes - enabled by most distributions
       #   and required by some out-of-tree modules (ShuffleCake)
       #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
-      CRYPTO_DRBG_HASH = yes;
-      CRYPTO_DRBG_CTR = yes;
+      CRYPTO_DRBG_HASH = whenOlder "7.2" yes;
+      CRYPTO_DRBG_CTR = whenOlder "7.2" yes;
 
       # Enable KFENCE
       # See: https://docs.kernel.org/dev-tools/kfence.html
@@ -844,6 +881,14 @@ let
       SHUFFLE_PAGE_ALLOCATOR = yes;
 
       INIT_ON_ALLOC_DEFAULT_ON = yes;
+
+      # Randomize kernel stack offset on syscall entry to make stack address dependent
+      # attacks harder, supported since 5.13.
+      # Only default enabled on AArch64 from 7.1 due to perf issues prior to that release
+      # that were resolved in "randomize_kstack: Maintain kstack_offset per task"
+      RANDOMIZE_KSTACK_OFFSET_DEFAULT = whenAtLeast (
+        if stdenv.hostPlatform.isAarch64 then "7.1" else "5.13"
+      ) yes;
 
       # Enable stack smashing protections in schedule()
       # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
@@ -988,6 +1033,9 @@ let
       XEN_PVHVM = option yes;
       XEN_SAVE_RESTORE = option yes;
 
+      # Disabled by default on POWER
+      VIRTIO_MENU = yes;
+
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
 
@@ -1088,7 +1136,7 @@ let
         useZstd = stdenv.buildPlatform.is64bit;
       in
       {
-        # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+        # The default target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
 
         KERNEL_XZ = lib.mkIf (
@@ -1157,7 +1205,7 @@ let
 
         ACCESSIBILITY = yes; # Accessibility support
         AUXDISPLAY = yes; # Auxiliary Display support
-        HIPPI = yes;
+        HIPPI = whenOlder "7.0" yes;
         MTD_COMPLEX_MAPPINGS = yes; # needed for many devices
 
         SCSI_LOWLEVEL = yes; # enable lots of SCSI devices
@@ -1213,6 +1261,8 @@ let
         EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" yes; # initrd kernel parameter for EFI
+        PSTORE = yes;
+        EFI_VARS_PSTORE = lib.mkIf (!stdenv.hostPlatform.isLoongArch64) yes;
 
         # Generic compression support for EFI payloads
         # Add new platforms only after they have been verified to build and boot.
@@ -1239,6 +1289,7 @@ let
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
+        LIVEUPDATE = whenAtLeast "6.19" (option yes);
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support
@@ -1338,6 +1389,10 @@ let
         HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
+        # Allos PCIe devices report errors with Advanced Error Reporting (AER).
+        PCIEAER = yes;
+        ACPI_APEI_PCIEAER = yes;
+
         # Enable all available thermal governors
         THERMAL_GOV_BANG_BANG = yes;
         THERMAL_GOV_FAIR_SHARE = yes;
@@ -1359,15 +1414,18 @@ let
         ) yes;
 
         # required for P2P DMABUF
-        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenBetween "6.6" "7.1" yes);
         # required for P2P transfers between accelerators
         HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
 
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
+        # We want to prefer PREEMPT_LAZY when available, and fall back on PREEMPT_VOLUNTARY.
+        # The version cutoff is arbitrary, the real cutoff is somewhere around 6.13 depending on target.
         PREEMPT = no;
-        PREEMPT_VOLUNTARY = yes;
+        PREEMPT_LAZY = whenAtLeast "6.18" yes;
+        PREEMPT_VOLUNTARY = whenOlder "6.18" yes;
 
         X86_AMD_PLATFORM_DEVICE = lib.mkIf stdenv.hostPlatform.isx86 yes;
         X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
@@ -1435,6 +1493,10 @@ let
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
+
+        # Disabled by default on POWER
+        ATA_BMDMA = yes;
+        ATA_SFF = yes;
       }
       //
         lib.optionalAttrs
@@ -1550,6 +1612,26 @@ let
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isPower64) {
+        # avoid driver/FS trouble arising from unusual page size
+        PPC_64K_PAGES = no;
+        PPC_4K_PAGES = yes;
+
+        # Does not get auto-loaded on relevant systems, makes fans stuck at max speed.
+        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=713943 (2014 :<)
+        # > This module ought to be auto-loaded where it's needed, but somehow that
+        # > has broken.  I asked Benjamin Herrenschmidt (upstream powerpc maintainer
+        # > and the last person to touch it) and he was aware of this but hadn't got
+        # > round to working out why.  The workaround is to build it in[…].
+        # > (It won't do any harm on non-Mac systems.)
+        I2C_POWERMAC = yes;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isPower {
+        # Needed for booting PowerMacs from disc
+        # (the only nice way that doesn't involve messing around with internal drives or in Open Firmware)
+        ATA = yes;
+        PATA_MACIO = yes;
       };
 
     accel = {

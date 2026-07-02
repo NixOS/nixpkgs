@@ -38,7 +38,6 @@ writeTextFile {
       directory.
     '';
     maintainers = with lib.maintainers; [
-      qyliss
       tfc
     ];
     mainProgram = "drawio";

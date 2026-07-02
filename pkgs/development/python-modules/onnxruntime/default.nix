@@ -6,10 +6,11 @@
   autoPatchelfHook,
 
   # buildInputs
-  oneDNN,
+  onednn,
   re2,
 
   # dependencies
+  openvino,
   coloredlogs,
   numpy,
   packaging,
@@ -53,7 +54,7 @@ buildPythonPackage {
 
   # Libraries are not linked correctly.
   buildInputs = [
-    oneDNN
+    onednn
     re2
     onnxruntime.protobuf
 
@@ -76,6 +77,7 @@ buildPythonPackage {
     ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
   );
 
   dependencies = [

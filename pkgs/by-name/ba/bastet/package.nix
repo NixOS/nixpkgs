@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bastet";
     homepage = "http://fph.altervista.org/prog/bastet.html";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloudhunter";
   version = "0.7.1";
   pyproject = false;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "belane";
     repo = "CloudHunter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7iT4vr0kcNXEyJJdBbJsllIcbZRGY3T5t/FjEONkuq0=";
   };
 
@@ -46,8 +46,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Cloud bucket scanner";
     mainProgram = "cloudhunter";
     homepage = "https://github.com/belane/CloudHunter";
-    changelog = "https://github.com/belane/CloudHunter/releases/tag/v${version}";
+    changelog = "https://github.com/belane/CloudHunter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,13 +9,13 @@
   libpng,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXfixes,
-  libXcursor,
-  libXft,
-  libXrender,
+  libx11,
+  libxext,
+  libxinerama,
+  libxfixes,
+  libxcursor,
+  libxft,
+  libxrender,
 
   withGL ? true,
   libGL,
@@ -91,13 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ]
   ++ lib.optionals withXorg [
-    libX11
-    libXext
-    libXinerama
-    libXfixes
-    libXcursor
-    libXft
-    libXrender
+    libx11
+    libxext
+    libxinerama
+    libxfixes
+    libxcursor
+    libxft
+    libxrender
   ]
   ++ lib.optionals withCairo [
     cairo

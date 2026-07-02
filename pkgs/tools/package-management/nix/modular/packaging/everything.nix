@@ -35,6 +35,8 @@
 
   nix-cli,
 
+  nix-nswrapper ? null,
+
   nix-functional-tests,
 
   nix-manual,
@@ -72,7 +74,11 @@ let
   }
   //
     lib.optionalAttrs
-      (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       {
         # Currently fails in static build
         inherit
@@ -145,7 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
     nix-functional-tests
   ]
   ++
-    lib.optionals (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    lib.optionals
+      (
+        (lib.versionOlder version "2.35pre")
+        && !stdenv.hostPlatform.isStatic
+        && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      )
       [
         # Perl currently fails in static build
         # TODO: Split out tests into a separate derivation?
@@ -177,6 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Forwarded outputs
       ln -sT ${nix-manual} $doc
       ln -sT ${nix-manual.man} $man
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && lib.versionAtLeast version "2.34pre") ''
+      lndir ${nix-nswrapper} $out
     '';
 
   passthru = {
@@ -224,11 +238,17 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "nix";
     description = "Nix package manager";
-    longDescription = nix-cli.meta.longDescription;
-    homepage = nix-cli.meta.homepage;
-    license = nix-cli.meta.license;
+    inherit (nix-cli.meta)
+      longDescription
+      homepage
+      donationPage
+      license
+      platforms
+      changelog
+      ;
+
     teams = teams;
-    platforms = nix-cli.meta.platforms;
+
     outputsToInstall = [
       "out"
       "man"
@@ -252,6 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

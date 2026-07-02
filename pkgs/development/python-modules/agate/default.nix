@@ -13,7 +13,6 @@
   pyicu,
   pytestCheckHook,
   python-slugify,
-  pythonOlder,
   pytimeparse,
   setuptools,
 }:
@@ -49,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Output is slightly different on macOS
     "test_cast_format_locale"
   ];

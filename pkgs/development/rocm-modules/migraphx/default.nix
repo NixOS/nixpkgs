@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   rocmUpdateScript,
   pkg-config,
@@ -21,9 +22,9 @@
   boost,
   msgpack-cxx,
   sqlite,
-  # TODO(@LunNova): Swap to `oneDNN` once v3 is supported
+  # TODO(@LunNova): Swap to `onednn` once v3 is supported
   # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
-  oneDNN_2,
+  onednn_2,
   blaze,
   texliveSmall,
   doxygen,
@@ -58,7 +59,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "7.1.1";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-s6w4bF7koK4wnf6leVKBzwIB4X2ROHa3EgX6XuJIAew=";
+    hash = "sha256-raYsrMZASdEIxSstk14b38q9dt5EOq3rKidoFvobnxk=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     msgpack-cxx
     sqlite
-    oneDNN_2
+    onednn_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMIGRAPHX_ENABLE_GPU=ON"
     "-DMIGRAPHX_ENABLE_CPU=ON"
     "-DMIGRAPHX_ENABLE_FPGA=ON"
-    "-DMIGRAPHX_ENABLE_MLIR=OFF" # LLVM or rocMLIR mismatch?
+    "-DMIGRAPHX_ENABLE_MLIR=ON"
     "-DCMAKE_C_COMPILER=amdclang"
     "-DCMAKE_CXX_COMPILER=amdclang++"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
@@ -183,11 +184,13 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+  passthru.impureTests = {
+    # NIXPKGS_ALLOW_UNFREE=1 bash $(nix-build -A rocmPackages.migraphx.impureTests.migraphx-driver)
+    migraphx-driver = callPackage ./test-migraphx-driver.nix {
+      migraphx = finalAttrs.finalPackage;
+    };
   };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "AMD's graph optimization engine";

@@ -7,9 +7,9 @@
   perl,
   kdePackages,
   libtoxcore,
-  libpthreadstubs,
-  libXdmcp,
-  libXScrnSaver,
+  libpthread-stubs,
+  libxdmcp,
+  libxscrnsaver,
   ffmpeg,
   filter-audio,
   libexif,
@@ -17,7 +17,6 @@
   libopus,
   libvpx,
   openal,
-  pcre,
   qrencode,
   qt6,
   sqlcipher,
@@ -37,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kdePackages.sonnet
     libtoxcore
-    libpthreadstubs
-    libXdmcp
-    libXScrnSaver
+    libpthread-stubs
+    libxdmcp
+    libxscrnsaver
     ffmpeg
     filter-audio
     libexif
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     libvpx
     openal
-    pcre
     qrencode
     qt6.qtbase
     qt6.qtsvg

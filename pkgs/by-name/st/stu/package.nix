@@ -6,14 +6,14 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stu";
   version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "stu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DLZQq/pLvRQizjTWbGHqDkOW1iKDICun54Ku1i+kOB0=";
   };
 
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Terminal file explorer for S3 buckets";
-    changelog = "https://github.com/lusingander/stu/releases/tag/v${version}";
+    changelog = "https://github.com/lusingander/stu/releases/tag/v${finalAttrs.version}";
     homepage = "https://lusingander.github.io/stu/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Nebucatnetzer ];
     mainProgram = "stu";
   };
-}
+})

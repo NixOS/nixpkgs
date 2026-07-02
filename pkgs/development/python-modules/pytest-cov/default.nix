@@ -4,23 +4,27 @@
   fetchPypi,
   pytest,
   coverage,
-  setuptools,
+  hatchling,
+  hatch-fancy-pypi-readme,
   toml,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "6.2.1";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_cov";
     inherit version;
-    hash = "sha256-JcxswKU1ggS4EI7O3FGptXs0zGuMlnzCwBpOANimfaI=";
+    hash = "sha256-MGdPK19jUaoJcCqcjDZPagHCeq4ME2augBYWDR78VrI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   buildInputs = [ pytest ];
 

@@ -7,7 +7,7 @@
   doc8,
   docutils,
   pygments,
-  subunit,
+  python-subunit,
   oslotest,
   stestr,
   testscenarios,
@@ -29,7 +29,7 @@ buildPythonPackage {
     doc8
     docutils
     pygments
-    subunit
+    python-subunit
     oslotest
     stestr
     testscenarios

@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "world-wall-clock";
   version = "0.1.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ddelabru";
     repo = "world-wall-clock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gwJvoXSq8H+sMTyBEA1N+KxnkGxyt5Ev+V3awCBiILg=";
   };
 
@@ -32,6 +32,11 @@ python3.pkgs.buildPythonApplication rec {
 
   enabledTestPaths = [ "tests/*" ];
 
+  disabledTests = [
+    # requires real tty
+    "test_run_app"
+  ];
+
   meta = {
     description = "TUI application that provides a multi-timezone graphical clock in a terminal environment";
     homepage = "https://github.com/ddelabru/world-wall-clock";
@@ -40,4 +45,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "wwclock";
     platforms = lib.platforms.all;
   };
-}
+})

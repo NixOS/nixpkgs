@@ -1,4 +1,5 @@
 {
+  callPackage,
   cargo,
   darwin,
   pkg-config,
@@ -13,18 +14,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";
-  version = "1.0.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "krunkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dsEZZiLgHyd6xeXZCdDd4zsxzwQeIhAK+lewY2ZfvpY=";
+    hash = "sha256-43XqNofzKi310nhxTNo/Gj5didVa/u/gV05hglecLtk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-i0cC3aOEqcvOcwTPbM6AazMzd8Q+QLwuhnvPGv3ntsc=";
+    hash = "sha256-Yb2jyK4UBJCeVXSKl4UABnlMj+7SKpOIi49tD/itHYo=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  postInstall = ''
+    install -Dm444 edk2/KRUN_EFI.silent.fd $out/share/krunkit/KRUN_EFI.silent.fd
+  '';
+
   # This is necessary in order for the binary to keep its entitlements
   dontStrip = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.boot = callPackage ./boot-test.nix {
+      krunkit = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Launch configurable virtual machines with libkrun";

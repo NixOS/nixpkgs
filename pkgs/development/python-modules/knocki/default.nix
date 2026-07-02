@@ -7,7 +7,6 @@
   mashumaro,
   orjson,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
   pytest-aiohttp,
   pytest-cov-stub,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "knocki";
   version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "swan-solutions";

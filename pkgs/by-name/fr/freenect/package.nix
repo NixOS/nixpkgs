@@ -8,8 +8,8 @@
   libglut,
   libGLU,
   libGL,
-  libXi,
-  libXmu,
+  libxi,
+  libxmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     libglut
     libGLU
     libGL
-    libXi
-    libXmu
+    libxi
+    libxmu
   ];
 
   nativeBuildInputs = [

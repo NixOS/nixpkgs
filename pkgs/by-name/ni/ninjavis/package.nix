@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ninjavis";
   version = "0.2.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chagui";
     repo = "ninjavis";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4MXU43noG0mKwiXWrLu1tW9YGkU1YjP/UoUKZzVer14=";
   };
 
@@ -36,9 +36,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Generate visualization from Ninja build logs";
     homepage = "https://github.com/chagui/ninjavis";
-    changelog = "https://github.com/chagui/ninjavis/releases/tag/v${version}";
+    changelog = "https://github.com/chagui/ninjavis/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "ninjavis";
   };
-}
+})

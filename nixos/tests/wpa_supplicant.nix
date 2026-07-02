@@ -137,7 +137,7 @@ let
       testScript = ''
         # save hostapd config file for manual inspection
         machine.wait_for_unit("hostapd.service")
-        machine.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
+        machine.copy_from_machine("/run/hostapd/wlan0.hostapd.conf")
 
         ${extraTestScript}
       '';
@@ -226,6 +226,19 @@ in
           machine.succeed(dbus_command)  # as root
           machine.succeed(f"sudo -g wpa_supplicant {dbus_command}")  # as wpa_supplicant group
 
+      with subtest("D-Bus auto-starting is working"):
+          # stop service
+          machine.systemctl("stop wpa_supplicant.service")
+          machine.require_unit_state("wpa_supplicant.service", "inactive")
+
+          # send wake up
+          dbus_command = "dbus-send --system --print-reply --dest=fi.w1.wpa_supplicant1 " \
+                         "/fi/w1/wpa_supplicant1 fi.w1.wpa_supplicant1.GetInterface string:wlan0"
+          machine.succeed(dbus_command)
+
+          # should be up again
+          machine.require_unit_state("wpa_supplicant.service", "active")
+
       # generated configuration file
       config_file = "/etc/static/wpa_supplicant/nixos.conf"
 
@@ -244,7 +257,7 @@ in
           machine.succeed("wpa_cli -i wlan0 list_networks | grep -q test2")
 
       # save file for manual inspection
-      machine.copy_from_vm(config_file)
+      machine.copy_from_machine(config_file)
 
       # check hardening options
       machine.succeed("systemd-analyze security wpa_supplicant >&2")
@@ -260,23 +273,32 @@ in
       # add a virtual wlan interface
       boot.kernelModules = [ "mac80211_hwsim" ];
 
+      users.users.alice = {
+        isNormalUser = true;
+        group = "users";
+      };
+
       # wireless client
       networking.wireless = {
         enable = lib.mkOverride 0 true;
         userControlled = true;
         allowAuxiliaryImperativeNetworks = true;
-        interfaces = [ "wlan1" ];
+        interfaces = [
+          "wlan0"
+          "wlan1"
+        ];
       };
     };
 
     testScript = ''
-      wpa_cli = "sudo -u nobody -g wpa_supplicant wpa_cli"
+      wpa_cli = "sudo -u alice -g wpa_supplicant wpa_cli"
 
-      with subtest("Daemon is running and accepting connections"):
-          machine.wait_for_unit("wpa_supplicant-wlan1.service")
-          status = machine.wait_until_succeeds(f"{wpa_cli} -i wlan1 status")
-          assert "Failed to connect" not in status, \
-                 "Failed to connect to the daemon"
+      with subtest("Daemons are running and accepting connections"):
+          for iface in ["wlan0", "wlan1"]:
+            machine.wait_for_unit(f"wpa_supplicant-{iface}.service")
+            status = machine.wait_until_succeeds(f"{wpa_cli} -i {iface} status")
+            assert "Failed to connect" not in status, \
+                   f"Failed to connect to the daemon for {iface}"
 
       with subtest("Daemon can be configured imperatively"):
           machine.succeed(f"{wpa_cli} -i wlan1 add_network")

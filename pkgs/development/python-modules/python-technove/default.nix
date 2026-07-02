@@ -11,22 +11,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "python-technove";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
     tag = "v${version}";
-    hash = "sha256-LgrydBgx68HP8yaywkMMeS71VqhilYGODppBZbdkssQ=";
+    hash = "sha256-TAB70EVrjxpl+vm3ncg45l2duaIXHjn7YKOURkS6k0k=";
   };
 
   build-system = [ poetry-core ];

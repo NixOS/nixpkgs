@@ -6,36 +6,44 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.4";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WtNnBw0/eAz/uO/dlD2yRZHW38CXIT8zhh4lZ3HaIFs=";
+    hash = "sha256-tY/GB6J8kr6Ni9ScOpKkDYLaLffvtaIxH8tXK24LHt8=";
   };
 
-  cargoHash = "sha256-8SLBsYtO6qVihc/C9R3ZptHCKgl2iXiQrOWqgDBXdTc=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
   patches = [
-    ./unbounded-shifts.patch
+    # Remove the `npm ci` call in build.rs as it fails.
+    ./skip-npm-ci.patch
   ];
 
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-SlkqNu6Vk1D9aU4GgyNDW9Or3z8KSbEjwCUK9w3Jyx0=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-H8G3GuEh4JXZV1zxTfo89tl6D6WA5hWGOF9i8qP0njw=";
+  };
+
+  npmRoot = "clash-dashboard";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
@@ -44,10 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires nightly features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
-    RUSTFLAGS = "--cfg tokio_unstable";
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # if_let_guard is stable since Rust 1.95.0, but some deps still carry
+    # the stale #![feature(if_let_guard)] attribute.
+    RUSTFLAGS = "-A stable-features";
   };
 
   buildFeatures = [ "plus" ];

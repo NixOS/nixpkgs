@@ -4,14 +4,14 @@
   rustPlatform,
   installShellFiles,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qrrs";
   version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "lenivaya";
     repo = "qrrs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lXfqKMJx9vtljQlYvbUAONFqMO3HKa4hx/29/YERw2U=";
   };
 
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Lenivaya/qrrs";
     mainProgram = "qrrs";
   };
-}
+})

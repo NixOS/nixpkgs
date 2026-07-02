@@ -48,6 +48,6 @@ stdenv.mkDerivation {
       gpl2Only
       asl20
     ];
-    maintainers = with lib.maintainers; [ squalus ];
+    maintainers = [ ];
   };
 }

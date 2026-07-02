@@ -1,31 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  html5lib,
   setuptools,
   tinycss2,
-  packaging,
   webencodings,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bleach";
   version = "6.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bzuRscCgK7mni1pFTJJQaqD98Zfh1eEU0uAMb2QwbSI=";
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "bleach";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a85gLy0Ix4cWvXY0s3m+ZD+ga7en6bYu1iAA22OaSwk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  pythonRelaxDeps = [
+    # Upstream views pins as known-good versions: https://github.com/mozilla/bleach/pull/741
+    "tinycss2"
+  ];
 
-  propagatedBuildInputs = [
-    html5lib
-    packaging
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
     webencodings
   ];
 
@@ -57,8 +59,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mozilla/bleach";
     downloadPage = "https://github.com/mozilla/bleach/releases";
-    changelog = "https://github.com/mozilla/bleach/blob/v${version}/CHANGES";
+    changelog = "https://github.com/mozilla/bleach/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prikhi ];
   };
-}
+})

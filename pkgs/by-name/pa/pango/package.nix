@@ -18,7 +18,7 @@
   python3,
   docutils,
   x11Support ? !stdenv.hostPlatform.isDarwin,
-  libXft,
+  libxft,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.57.0";
+  version = "1.57.1";
 
   outputs = [
     "bin"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iQZAyEHa530649j+iVN4S5MPokGxdCPmEgx7/fi4kec=";
+    hash = "sha256-5l1tEXCA3Drut9i0s7UY9zg6oubPziMRfGI81iR2TC8=";
   };
 
   depsBuildBuild = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ]
   ++ lib.optionals x11Support [
-    libXft
+    libxft
   ];
 
   mesonFlags = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 

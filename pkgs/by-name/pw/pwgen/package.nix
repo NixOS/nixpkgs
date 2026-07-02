@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   meta = {
     description = "Password generator which creates passwords which can be easily memorized by a human";
     homepage = "https://github.com/tytso/pwgen";

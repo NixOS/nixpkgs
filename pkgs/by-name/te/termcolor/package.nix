@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DTERMCOLOR_TESTS=ON" ];
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'uint8_t' has not been declared
     "-include cstdint"
   ];

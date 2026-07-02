@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "roon-tui";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "TheAppgineer";
     repo = "roon-tui";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ocPSqj9/xJ2metetn6OY+IEFWysbstPmh2N5Jd8NDPM=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ MichaelCDormann ];
     mainProgram = "roon-tui";
   };
-}
+})

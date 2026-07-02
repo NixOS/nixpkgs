@@ -6,14 +6,14 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "makima";
   version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "cyber-sushi";
     repo = "makima";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/+m6nWvZg5q3rPAu80xXImISmLzTpXiugu1m3M8QupQ=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "makima";
   };
-}
+})

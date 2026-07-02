@@ -5,14 +5,14 @@
   pkg-config,
   freetype,
   imlib2,
-  libSM,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libsm,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libsndfile,
   pango,
@@ -37,14 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     imlib2
-    libSM
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXrandr
+    libsm
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxrandr
     libpulseaudio
     libsndfile
     pango

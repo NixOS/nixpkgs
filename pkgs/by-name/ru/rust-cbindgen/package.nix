@@ -12,18 +12,18 @@
   mesa,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-cbindgen";
-  version = "0.29.2";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
-    rev = "v${version}";
-    hash = "sha256-P2A+XSLrcuYsI48gnZSNNs5qX+EatiuEJSEJbMvMSxg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-d0rY7Sk37s8HEZlQq9Sbjj1P+DgygD0Yjx8cXlFKEIA=";
   };
 
-  cargoHash = "sha256-DbmlpjiOraLWPh5RgJqCIGIYzE1h82MH2S6gpLH+CIQ=";
+  cargoHash = "sha256-UeierkQpfCiB5ES9ZW9hO+0AcI9Ip8qSJ/Nd+I1xrmQ=";
 
   nativeCheckInputs = [
     cmake
@@ -54,11 +54,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
+    changelog = "https://github.com/mozilla/cbindgen/blob/v${finalAttrs.version}/CHANGES";
     description = "Project for generating C bindings from Rust code";
     mainProgram = "cbindgen";
     homepage = "https://github.com/mozilla/cbindgen";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

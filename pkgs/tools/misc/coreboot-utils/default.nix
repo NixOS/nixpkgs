@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "25.12";
+  version = "26.06";
 
   commonMeta = {
     description = "Various coreboot-related tools";
@@ -47,7 +47,7 @@ let
         src = fetchgit {
           url = "https://review.coreboot.org/coreboot";
           rev = finalAttrs.version;
-          hash = "sha256-9/dwx944lSS8ARBi0vD5ht9u+Tdl5WPF0tjFL07QRps=";
+          hash = "sha256-rL9txaDXUzjkC2ioYmunoNq2+9rz9wpEJ7z3GZrqOH4=";
         };
 
         enableParallelBuilding = true;
@@ -110,6 +110,10 @@ let
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
       meta.mainProgram = "nvramtool";
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
     };
     superiotool = generic {
       pname = "superiotool";

@@ -59,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit hash;
   };
 
+  __structuredAttrs = true;
+
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches =
@@ -85,11 +87,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }
       // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.8") {
         resolver_service_account_token_path = "/etc/kanidm/token";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "1.9") {
+        server_migration_path = "/etc/kanidm/migrations.d";
       };
     in
     ''
       cp ${format profile} libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml
       substituteInPlace libs/profiles/${finalAttrs.env.KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
+    ''
+    + lib.optionalString (lib.versionAtLeast finalAttrs.version "1.9") ''
+      substituteInPlace Cargo.toml \
+        --replace-fail 'rust-version = "1.93"' 'rust-version = "1.91"'
     '';
 
   nativeBuildInputs = [
@@ -98,13 +107,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    openssl
     sqlite
     pam
     rust-jemalloc-sys
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "1.10") [
+    openssl
   ];
 
   # The UI needs to be in place before the tests are run.
@@ -125,6 +136,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--config"
     ''profile.release.lto="off"''
   ];
+
+  # A bunch of the tests break due to the sandboxing.
+  doCheck = false;
 
   preFixup = ''
     installShellCompletion \

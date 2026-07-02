@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     description = "Unpacker for ArC (FreeArc) archives ('ArC\\1' header)";
     homepage = "https://github.com/xredor/unarc";
     license = lib.licenses.unfree; # unknown
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     mainProgram = "unarc";
   };
 }

@@ -2,7 +2,6 @@
   stdenv,
   fetchurl,
   lib,
-  extra-cmake-modules,
   exiv2,
   ffmpeg,
   libvlc,
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     kdePackages.wrapQtAppsHook
   ];
 

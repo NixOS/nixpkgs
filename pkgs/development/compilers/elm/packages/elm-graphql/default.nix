@@ -43,7 +43,7 @@ buildNpmPackage (finalAttrs: {
     description = "Autogenerate type-safe GraphQL queries in Elm";
     homepage = "https://github.com/dillonkearns/elm-graphql";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-graphql";
   };
 })

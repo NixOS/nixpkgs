@@ -6,18 +6,18 @@
   dpkg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-deb";
-  version = "3.6.2";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "cargo-deb";
-    rev = "v${version}";
-    hash = "sha256-MzaZqympQXsqg6Jo8bHGQ3NaZFe+f1rveCH/Yqk0TVI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x/SUGHMW+MUpK+pFp3MfWc+2hgn5HDE0s12kp9Up1fY=";
   };
 
-  cargoHash = "sha256-drrSsrySzDHRKy/yYzNR75tTDuT3daJ0hu8mFUGKgrc=";
+  cargoHash = "sha256-Wd6Uj6fi4OtZJGz6QIzBNIdB5HnJzJWFMV53ucvr6Fw=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

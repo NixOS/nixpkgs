@@ -3,11 +3,11 @@
   lib,
   fetchurl,
   zlib,
-  libXext,
-  libX11,
-  libXrender,
-  libXtst,
-  libXi,
+  libxext,
+  libx11,
+  libxrender,
+  libxtst,
+  libxi,
   freetype,
   alsa-lib,
   jdk21,
@@ -80,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     zlib
-    libXext
-    libX11
-    libXrender
-    libXtst
-    libXi
+    libxext
+    libx11
+    libxrender
+    libxtst
+    libxi
     freetype
     alsa-lib
   ];

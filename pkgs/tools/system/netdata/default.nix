@@ -9,7 +9,7 @@
   curl,
   dlib,
   fetchFromGitHub,
-  fetchurl,
+  fetchzip,
   flex,
   freeipmi,
   go,
@@ -41,6 +41,7 @@
   rustPlatform,
   snappy,
   stdenv,
+  symlinkJoin,
   systemd,
   zlib,
 
@@ -66,13 +67,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.8.5";
+    version = "2.10.3";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-NO6KE2Gf09Y9Ff6uJQj5XAZ+05WMdvRV2iSBdWTs2CE=";
+      hash = "sha256-ryX+C3zuY7vONPeB4ocXDPttU5aSYbj1ThTosCSxmys=";
       fetchSubmodules = true;
     };
 
@@ -140,16 +141,19 @@ stdenv.mkDerivation (
       #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
       ./ndsudo-fix-path.patch
 
+      ./disable-binary-permission-check.patch
+
       ./use-local-corrosion.patch
       ./use-local-libbacktrace.patch
     ]
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 04/01/2025 04:45:14
-        dashboardTarball = fetchurl {
-          url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
+        # last update 12/10/2025 21:25:17
+        dashboardPath = fetchzip {
+          # The `if_` suffix is intentional, with out it the hash will vary depending on the region
+          url = "https://web.archive.org/web/20251210212517if_/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-8ovYkvt324l6f0YT6wTG+Y2u7VaVqotAdssnNTtHIEk=";
         };
       }
     );
@@ -244,10 +248,12 @@ stdenv.mkDerivation (
       (lib.cmakeBool "ENABLE_JEMALLOC" true)
       (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
       (lib.cmakeBool "ENABLE_ML" withML)
+      (lib.cmakeBool "ENABLE_NETDATA_JOURNAL_FILE_READER" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
       (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
       (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
       (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+      (lib.cmakeBool "ENABLE_PLUGIN_OTEL_SIGNAL_VIEWER" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
@@ -305,7 +311,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-AVNUbKCvO+Z3eKE+bJ/VFDo1tS9DdlmMw6M3OSdHiIU=";
+          vendorHash = "sha256-HRe1bcVIQVzwPZnGlAK5A8AO1VTcjFajkPwBVdl4UIA=";
           proxyVendor = true;
           doCheck = false;
 
@@ -348,11 +354,26 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs (withOtel || withSystemdJournal) {
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "${finalAttrs.pname}-nd-jf";
-      inherit (finalAttrs) version src cargoRoot;
-      hash = "sha256-HY6OtKHP75mO9X+F2a6H6e+3M0pgZBOIIaxAI9OhgkQ=";
+    cargoDeps = symlinkJoin {
+      name = "cargo-vendor-dir";
+      paths = [
+        (rustPlatform.fetchCargoVendor {
+          inherit (finalAttrs)
+            pname
+            version
+            src
+            cargoRoot
+            ;
+          hash = "sha256-mxFpT95e+NMqjJOIRqM+yKHGQHfpWmIFHqFNiiiqXOY=";
+        })
+        (rustPlatform.fetchCargoVendor {
+          pname = "${finalAttrs.pname}-nd-jf";
+          inherit (finalAttrs) version src;
+          cargoRoot = "${finalAttrs.cargoRoot}/jf";
+          hash = "sha256-6spr8WRt2G6tzaUQACxIcVMoDNKOFTg6rSPEOihMgLE=";
+        })
+      ];
     };
-    cargoRoot = "src/crates/jf";
+    cargoRoot = "src/crates";
   }
 )

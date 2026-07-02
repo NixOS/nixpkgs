@@ -1,32 +1,45 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
   makeBinaryWrapper,
   jre,
+  maven,
+  nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
-  version = "11.0.1";
+maven.buildMavenPackage (finalAttrs: {
+  version = "13.7.0";
   pname = "checkstyle";
 
-  src = fetchurl {
-    url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-e8ByK4En2zMguzvBFQR4RE9n9gA1ZIMdpLz7wJGXMpo=";
+  src = fetchFromGitHub {
+    owner = "checkstyle";
+    repo = "checkstyle";
+    tag = "checkstyle-${finalAttrs.version}";
+    hash = "sha256-BrgjkqkVnLYMlouyopUoCTby2z4YWZl4UK7m3Ktm5bE=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-  buildInputs = [ jre ];
+  mvnHash = "sha256-IKO61ugVjF03zA6pCwYKmwMVx/Ogy8hrt70ArOUm0NA=";
 
-  dontUnpack = true;
+  nativeBuildInputs = [
+    maven
+    makeBinaryWrapper
+  ];
+
+  mvnParameters = lib.escapeShellArgs [ "-Passembly,no-validations" ];
 
   installPhase = ''
     runHook preInstall
-    install -D $src $out/checkstyle/checkstyle-all.jar
+
+    mkdir -p $out/bin $out/share/checkstyle
+    install -Dm644 target/checkstyle-${finalAttrs.version}-all.jar $out/share/checkstyle/checkstyle-all.jar
+
     makeWrapper ${jre}/bin/java $out/bin/checkstyle \
-      --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
+      --add-flags "-jar $out/share/checkstyle/checkstyle-all.jar"
+
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Checks Java source against a coding standard";
@@ -37,10 +50,16 @@ stdenvNoCC.mkDerivation rec {
       Conventions, but is highly configurable.
     '';
     homepage = "https://checkstyle.org/";
-    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${finalAttrs.version}";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ pSub ];
-    platforms = jre.meta.platforms;
+    maintainers = with lib.maintainers; [
+      pSub
+      progrm_jarvis
+    ];
+    inherit (jre.meta) platforms;
   };
-}
+})

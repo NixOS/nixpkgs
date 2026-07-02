@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ipgrep";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "ipgrep";
-    rev = version;
-    hash = "sha256-NrhcUFQM+L66KaDRRpAoC+z5s54a+1fqEepTRXVZ5Qs=";
+    rev = finalAttrs.version;
+    hash = "sha256-4Fa0fqd8S6yZmUzHlgkUWgYZhAbf48zZhzq4Fx3MS5A=";
   };
 
   patchPhase = ''
@@ -39,7 +39,8 @@ python3Packages.buildPythonApplication rec {
       ipgrep extracts possibly obfuscated host names and IP addresses
       from text, resolves host names, and prints them, sorted by ASN.
     '';
+    homepage = "https://github.com/jedisct1/ipgrep";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

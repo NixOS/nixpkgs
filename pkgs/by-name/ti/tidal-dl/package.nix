@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tidal-dl";
   version = "2022.10.31.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-b2AAsiI3n2/v6HC37fMI/d8UcxZxsWM+fnWvdajHrOg=";
   };
 
@@ -24,4 +24,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "tidal-dl";
   };
-}
+})

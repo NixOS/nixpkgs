@@ -8,8 +8,8 @@
   libGLU,
   libjack2,
   liblo,
-  libX11,
-  libXv,
+  libx11,
+  libxv,
   pkg-config,
   portmidi,
   libxpm,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ffmpeg
     libjack2
-    libX11
+    libx11
     libxext
     libxpm
     # The following are recommended in the README, but are seemingly
@@ -46,8 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGLU
     liblo
-    libXv
     portmidi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxv
   ];
 
   meta = {
@@ -60,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://xjadeo.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mitchmindtree ];
   };
 })

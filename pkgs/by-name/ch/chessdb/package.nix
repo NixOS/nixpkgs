@@ -4,7 +4,7 @@
   fetchurl,
   tcl,
   tk,
-  libX11,
+  libx11,
   makeWrapper,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     tcl
     tk
-    libX11
+    libx11
   ];
 
   makeFlags = [
@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://chessdb.sourceforge.net/";
     description = "Free chess database";
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 })

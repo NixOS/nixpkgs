@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-sr48RGLYcMKuyH9p+5BhnR6QpKBvNOqqtRryw3+pbBk=";
   };
 
+  patches = [
+    ./0001-fix-invalid-function-signatures.patch
+  ];
+
   postPatch = ''
     sed -i '/AC_INIT/s/m4_esyscmd.*/${version}])/' configure.ac
   '';

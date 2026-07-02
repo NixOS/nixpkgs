@@ -2,34 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  poetry-core,
-  pytest,
-  pytestCheckHook,
+  hatchling,
   typing-extensions,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-fixture-classes";
-  version = "1.0.3";
-  format = "pyproject";
+  version = "1.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zmievsa";
     repo = "pytest-fixture-classes";
-    tag = version;
-    hash = "sha256-A3HsDhCGxoJnkl841tZ/7lIn8UyGy5NRjVWODZV7aOQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-we4Eax6wHlsbDoCzSUcbfwX+o2h3xCTaQZ3f5wStvZM=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "pytest_fixture_classes" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [
+    "pytest_fixture_classes"
+  ];
 
   meta = {
     description = "Fixtures as classes that work well with dependency injection, autocompletetion, type checkers, and language servers";
@@ -37,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ taranarmo ];
   };
-}
+})

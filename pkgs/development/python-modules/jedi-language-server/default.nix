@@ -37,6 +37,10 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  pythonRelaxDeps = [
+    "jedi"
+  ];
+
   dependencies = [
     docstring-to-markdown
     jedi

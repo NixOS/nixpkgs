@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  unstableGitUpdater,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -21,15 +21,15 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
-    version = "2025-02-15";
+    version = "0-unstable-2025-11-04";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "qogir-icon-theme";
-      rev = version;
-      hash = "sha256-Eh4TWoFfArFmpM/9tkrf2sChQ0zzOZJE9pElchu8DCM=";
+      rev = "c633057ba0d27a504b3255144071c9691ed0264a";
+      hash = "sha256-VJHhyKk1f/25CNkqNM7+WQqQRdqBNgWD3XrJ+whOcd0=";
     };
 
     nativeBuildInputs = [
@@ -44,6 +44,10 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
     # These fixup steps are slow and unnecessary.
     dontPatchELF = true;
     dontRewriteSymlinks = true;
+
+    patches = [
+      ./2026-03-20-missing-icons.patch
+    ];
 
     postPatch = ''
       patchShebangs install.sh
@@ -64,7 +68,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
     meta = {
       description = "Flat colorful design icon theme";

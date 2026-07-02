@@ -39,10 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/newsraft/newsraft";
     changelog = "https://codeberg.org/newsraft/newsraft/releases/tag/newsraft-${finalAttrs.version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      luftmensch-luftmensch
-    ];
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "newsraft";
     platforms = lib.platforms.all;
   };

@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "x86_64-linux" then
       (fetchurl {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-linux.tgz";
-        sha256 = "0f4q575yfm5dpg4a2wsnqn4l2zrar96p6rlsk0dw10ggyfwvsjlf";
+        hash = "sha256-jkq9ufPvgcAbmJpmc03KKn9BicVWc6HIu61U58spmDg=";
       })
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
       (fetchurl {
         url = "https://github.com/MLton/mlton/releases/download/on-${version}-release/${pname}-${version}-1.amd64-darwin.gmp-static.tgz";
-        sha256 = "1cw7yhw48qp12q0adwf8srpjzrgkp84kmlkqw3pz8vkxz4p9hbdv";
+        hash = "sha256-uy2YLvl9bvTv4HjSOgm68+Uvb9bI8aYAFuFiRDj0h7M=";
       })
     else
       throw "Architecture not supported";

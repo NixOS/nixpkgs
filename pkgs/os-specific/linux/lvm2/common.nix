@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
       moveToOutput bin/lvmdump $scripts
       moveToOutput bin/lvm_import_vdo $scripts
       moveToOutput bin/lvmpersist $scripts
-      moveToOutput libexec/lvresize_fs_helper $scripts/lib
+      moveToOutput libexec/lvresize_fs_helper $scripts
     ''
     + lib.optionalString (!enableCmdlib) ''
       moveToOutput lib/libdevmapper.so $lib

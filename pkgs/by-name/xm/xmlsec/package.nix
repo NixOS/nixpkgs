@@ -79,7 +79,7 @@ lib.fix (
     configureFlags = [ "--enable-soap" ];
 
     # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
-    NIX_LDFLAGS = "-lgcrypt";
+    env.NIX_LDFLAGS = "-lgcrypt";
 
     postInstall = ''
       moveToOutput "bin/xmlsec1-config" "$dev"

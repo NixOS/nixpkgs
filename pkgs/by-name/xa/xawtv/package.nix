@@ -4,19 +4,19 @@
   fetchurl,
   ncurses,
   libjpeg,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   alsa-lib,
   aalib,
-  libXft,
+  libxft,
   xorgproto,
   libv4l,
-  libFS,
-  libXaw,
-  libXpm,
-  libXext,
-  libSM,
-  libICE,
+  libfs,
+  libxaw,
+  libxpm,
+  libxext,
+  libsm,
+  libice,
   perl,
 }:
 
@@ -38,19 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
     libjpeg
-    libX11
-    libXt
-    libXft
+    libx11
+    libxt
+    libxft
     xorgproto
-    libFS
+    libfs
     perl
     alsa-lib
     aalib
-    libXaw
-    libXpm
-    libXext
-    libSM
-    libICE
+    libxaw
+    libxpm
+    libxext
+    libsm
+    libice
     libv4l
   ];
 

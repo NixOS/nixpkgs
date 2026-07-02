@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qrcp";
   version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OLoGM9kG5k8iyCBQ8PW0i8WiSOASkW9S8YI1iRSb0Ic=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/claudiodangelis/qrcp/version.version=${version}"
+    "-X github.com/claudiodangelis/qrcp/version.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "qrcp";
   };
-}
+})

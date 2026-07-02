@@ -6,14 +6,14 @@
   withSixel ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viu";
   version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "atanunq";
     repo = "viu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+6oo6cJ0L3XuMWZL/8DEKMk6PI7D5IcfoemqIQiOJto=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "viu";
   };
-}
+})

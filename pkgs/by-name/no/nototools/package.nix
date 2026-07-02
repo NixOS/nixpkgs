@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nototools";
   version = "0.3.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-0se0YcnhDwwMbt2C4hep0T/JEidHfFRUnm2Sy7qr2uk=";
   };
 
@@ -79,4 +79,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

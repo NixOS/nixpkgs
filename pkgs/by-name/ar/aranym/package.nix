@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   libGLU,
-  libX11,
+  libx11,
   pkg-config,
   stdenv,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
-    libX11
+    libx11
     SDL2
   ];
 

@@ -6,18 +6,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bzmenu";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "e-tho";
     repo = "bzmenu";
-    tag = "v${version}";
-    hash = "sha256-5Xb/7DhwZ3hLO1rAceMaR3ifgI36Sn+W+S7PN8EOdOQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O8SC/dfAo1fxnYuaXTTFJCHxOVQgU0sWNdF8lcxdrlU=";
   };
 
-  cargoHash = "sha256-zTwgWk5ix1TGTi8rZjznJqdHbgnRHjA42Ly7PQQiMZw=";
+  cargoHash = "sha256-uoemik9dkAXhpTZ2BBy1aGpwa/WjJ4smLIbtJ8DmNzk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vuimuich ];
   };
-}
+})

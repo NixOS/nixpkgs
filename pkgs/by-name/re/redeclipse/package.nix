@@ -8,7 +8,7 @@
   freetype,
   zlib,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   SDL2_image,
   SDL2_mixer,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    libX11
+    libx11
     freetype
     zlib
     SDL2

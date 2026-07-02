@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jaq";
-  version = "2.3.0";
+  version = "3.1.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZVTDbJ5RPgQeB4ntnNQcbbWquPFL7q4WYyQ5ihCVB64=";
+    hash = "sha256-cwHYsLp9uBb3/etH0bGYzNLOJJypeE4qED7jTBESHiE=";
   };
 
-  cargoHash = "sha256-hEILrjIJK/8CrQv5QcHu+AtPV7KcPdmw6422MyNoPwo=";
+  cargoHash = "sha256-9vLD5aYcnbdjQC+5FsTglLFYhbv/1lSqsfkD8oclwBs=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -26,7 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
+    };
     tests.simple =
       runCommand "jaq-test"
         {
@@ -67,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
-    changelog = "https://github.com/01mf02/jaq/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/01mf02/jaq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [

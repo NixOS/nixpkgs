@@ -6,14 +6,14 @@
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gox";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mitchellh";
     repo = "gox";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

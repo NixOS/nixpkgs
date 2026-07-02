@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translatepy";
   version = "2.3";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ agpl3Only ];
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

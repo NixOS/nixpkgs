@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pebble";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "pebble";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -37,4 +37,4 @@ buildGoModule rec {
     mainProgram = "pebble";
     teams = [ lib.teams.acme ];
   };
-}
+})

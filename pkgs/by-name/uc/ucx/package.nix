@@ -42,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.19.1";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-54yLejOFdCa2KYstZuo+hZ5lSQR8WTZMa7lS0prc5NY=";
+    hash = "sha256-CD8a7CoKAj5DuRa9C+Eef54qGcH3F0uNBXRlO0hneI4=";
   };
 
   outputs = [

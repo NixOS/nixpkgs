@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.0.5";
 
   src = fetchgit {
-    url = "https://git.taler.net/taldir.git";
+    url = "https://git-www.taler.net/taldir.git";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ZKNkMV0IV6E+yCQeabGXpIQclx1S4YEgFn4whGXTaks=";
   };
@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   meta = {
-    homepage = "https://git.taler.net/taldir.git";
+    homepage = "https://git-www.taler.net/taldir.git";
     description = "Directory service to resolve wallet mailboxes by messenger addresses";
     teams = with lib.teams; [ ngi ];
     # themadbit will maintain after being added to maintainers

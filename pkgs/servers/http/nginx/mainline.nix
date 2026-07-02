@@ -1,6 +1,6 @@
 { callPackage, ... }@args:
 
 callPackage ./generic.nix args {
-  version = "1.29.4";
-  hash = "sha256-Wn037uUFhm+6tYEPqfeCR9bV2RV6WVxOenIEMUHdqyU=";
+  version = "1.31.2";
+  hash = "sha256-ryqVfEHaY23cT4g+RSPG0UC0eE285CAAw2SuUJKqRzw=";
 }

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -48,6 +49,17 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/${pname}";
+
+  patches = [
+    # Upstream PR: https://github.com/quantumlib/Cirq/pull/7761
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/quantumlib/Cirq/commit/9aea3bad824cac77031c163d6d6f5cf3e01cfe80.patch";
+      stripLen = 1;
+      includes = [ "cirq/ops/linear_combinations_test.py" ];
+      hash = "sha256-Ggcaswrdx6mOfNOwlbWE2ix7aZWt3/Fljb4i1ow+lUU=";
+    })
+  ];
 
   pythonRelaxDeps = [ "matplotlib" ];
 

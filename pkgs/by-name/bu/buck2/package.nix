@@ -33,7 +33,7 @@
 #
 # from the root of the nixpkgs git repository, run:
 #
-#    nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package buck2
+#    nix-shell maintainers/scripts/update.nix --arg commit true --argstr package buck2
 
 let
 

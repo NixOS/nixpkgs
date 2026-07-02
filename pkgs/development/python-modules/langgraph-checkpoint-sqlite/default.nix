@@ -20,19 +20,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-sqlite";
-  version = "3.0.3";
+  version = "3.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointsqlite==${version}";
-    hash = "sha256-th9LJxaq2Xj6QwPXGL204QTDsnFNBuyjQpLilhcCKUY=";
+    tag = "checkpointsqlite==${finalAttrs.version}";
+    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
   };
 
-  sourceRoot = "${src.name}/libs/checkpoint-sqlite";
+  sourceRoot = "${finalAttrs.src.name}/libs/checkpoint-sqlite";
 
   build-system = [ hatchling ];
 
@@ -83,7 +84,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     description = "Library with a SQLite implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-sqlite";
     license = lib.licenses.mit;
@@ -91,4 +92,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

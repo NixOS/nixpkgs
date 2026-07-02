@@ -6,23 +6,23 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-nextest";
-  version = "0.9.124";
+  version = "0.9.138";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
-    tag = "cargo-nextest-${version}";
-    hash = "sha256-qvJ/dqbls2fVSPY++kYBIeiu14eDD8ORuvcD8dEtMZ8=";
+    tag = "cargo-nextest-${finalAttrs.version}";
+    hash = "sha256-4YD2NSRSqEJq/zDllpsrV7TlInAjTGsa2SKSAbsVPnc=";
   };
 
   # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-dtrace-macos.patch
   ];
 
-  cargoHash = "sha256-3fZSXBP6vMh7GN2eY2upsvV/mTuDOcSovdsbcZBQA4U=";
+  cargoHash = "sha256-MXl8tzTNhgs+Jfa8p6c51B0qHbTjEeXHD6otqr5qnvs=";
 
   cargoBuildFlags = [
     "-p"
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     description = "Next-generation test runner for Rust projects";
     mainProgram = "cargo-nextest";
     homepage = "https://github.com/nextest-rs/nextest";
-    changelog = "https://nexte.st/CHANGELOG.html";
+    changelog = "https://nexte.st/changelog/#${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       matthiasbeyer
       chrjabs
+      figsoda
     ];
   };
-}
+})

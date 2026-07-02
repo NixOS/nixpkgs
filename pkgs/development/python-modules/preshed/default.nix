@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.12";
+  version = "3.0.13";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tz+ai1TuHURSnMYBg1aJbP+T1I91XynBNHNNk3HA1oU=";
+    hash = "sha256-119xi7/ZfpkveCfg+n+vapG92cki1bqktQ1icxOWy4k=";
   };
 
   nativeBuildInputs = [ cython ];

@@ -27,7 +27,7 @@
 let
   boolToUpper = b: lib.toUpper (lib.boolToString b);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.8.10";
   pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "davix";
-    tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "R_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-n4NeHBgQwGwgHAFQzPc3oEP9k3F/sqrTmkI/zHW+Miw=";
   };
 
@@ -89,9 +89,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     homepage = "https://github.com/cern-fts/davix";
     changelog = "https://github.com/cern-fts/davix/blob/R_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/RELEASE-NOTES.md";
     maintainers = with lib.maintainers; [ adev ];
     platforms = lib.platforms.all;
   };
-}
+})

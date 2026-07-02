@@ -734,7 +734,80 @@ Some basic Bash options are set by default (`errexit`, `nounset`, and `pipefail`
 Extra arguments may be passed to `stdenv.mkDerivation` by setting `derivationArgs`; note that variables set in this manner will be set when the shell script is _built,_ not when it's run.
 Runtime environment variables can be set with the `runtimeEnv` argument.
 
-For example, the following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`:
+`writeShellApplication` has the following arguments:
+
+`name` (String)
+
+: The name of the script to write.
+
+`text` (String)
+
+: The shell script's text, not including a shebang.
+
+`runtimeInputs` (List of derivations or strings, _optional_)
+
+: Inputs to add to the shell script's `$PATH` at runtime.
+
+  Each elements can either be a normal derivation, or a string containing a path, in which case it will be suffixed with `/bin` to create a `PATH` expression (see [`lib.strings.makeBinPath`](#function-library-lib.strings.makeBinPath) for more information).
+
+`runtimeEnv` (Attribute set, _optional_)
+
+: Extra environment variables to set at runtime.
+
+`checkPhase` (String, _optional_)
+
+: The `checkPhase` to run.
+
+  The script path will be given as `$target` in the `checkPhase`
+
+  _Default behavior:_ run [`shellcheck`](https://github.com/koalaman/shellcheck) (on supported platforms) and `bash -n` (check syntax but don't execute commands).
+
+`excludeShellChecks` (List of strings, _optional_)
+
+: Checks to exclude when running `shellcheck`.
+
+  For example, `excludeShellChecks = [ "SC2016" ]` would prevent `shellcheck` from reporting `SC2016`, but would still detect any other problems.
+
+  See [the `shellcheck` wiki](https://www.shellcheck.net/wiki/) for a list of checks.
+
+`extraShellCheckFlags` (List of strings, _optional_)
+
+: Extra command-line flags to pass to `shellcheck`.
+
+`bashOptions` (List of strings, _optional_)
+
+: Bash options to activate with `set -o` at the start of the script
+
+  _Default:_ `[ "errexit" "nounset" "pipefail" ]`, which means:
+  1. A failing command inside of a command list or pipeline will make the script exit, except if used as a conditional (inside a `while`, `if`, `&&`, `||`, etc.);
+  2. Any attempt to expand an undefined variable will make the script exit.
+
+`inheritPath` (Bool, _optional_)
+
+: Whether the script will inherit the PATH from its parent environment.
+
+  _Default:_ `true`
+
+`meta` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`meta`](#chap-meta) argument
+
+`passthru` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`passthru`](#chap-passthru) argument
+
+`derivationArgs` (Attribute set, _optional_)
+
+: Extra arguments to pass to [`stdenv.mkDerivation`](#chap-stdenv)
+
+  ::: {.caution}
+  Certain derivation attributes are also set internally, so overriding those could cause problems.
+  :::
+
+::: {.example #ex-writeShellApplication}
+# Usage of `writeShellApplication`
+
+The following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`
 
 ```nix
 writeShellApplication {
@@ -750,6 +823,7 @@ writeShellApplication {
   '';
 }
 ```
+:::
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 

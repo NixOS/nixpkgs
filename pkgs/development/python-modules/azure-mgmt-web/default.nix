@@ -5,19 +5,20 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  msrest,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "9.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_web";
     inherit version;
-    hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
+    hash = "sha256-JtNZS74bMFibcpIsNYVbxbdMFR8CJBR6YNGnUjSFkiY=";
   };
 
   build-system = [ setuptools ];
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
     typing-extensions
   ];
 

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from subprocess import CompletedProcess
 from unittest.mock import ANY, Mock, call, patch
 
 from pytest import MonkeyPatch
@@ -12,8 +13,13 @@ from .helpers import get_qualified_name
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)
+@patch(get_qualified_name(n.nix.run_wrapper, n.nix), autospec=True)
 @patch(get_qualified_name(s.nix.build), autospec=True)
-def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -> None:
+def test_reexec(
+    mock_build: Mock, mock_run: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
+) -> None:
+    mock_run.return_value = CompletedProcess([], 0, stdout="")
+
     monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
     args, _ = n.parse_args(argv)

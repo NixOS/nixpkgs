@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/thejoshwolfe/wolfebin";
     description = "Quick and easy file sharing";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

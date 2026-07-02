@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fortran-language-server";
   version = "1.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
   };
 
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

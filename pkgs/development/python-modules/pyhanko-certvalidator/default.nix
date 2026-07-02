@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.29.0";
+  version = "0.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
     tag = "pyhanko-certvalidator/v${version}";
-    hash = "sha256-ZDHAcI2yoiVifYt05V85lz8mJmoyi10g4XoLQ+LhLHE=";
+    hash = "sha256-mZ9u3mQ8JZIq+G1iwNQST8r7/rCWi/UW0j1xfeV9zFM=";
   };
 
   sourceRoot = "${src.name}/pkgs/pyhanko-certvalidator";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-certvalidator";
-    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/pyhanko-certvalidator/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };

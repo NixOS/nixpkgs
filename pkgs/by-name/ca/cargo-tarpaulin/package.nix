@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-tarpaulin";
-  version = "0.35.1";
+  version = "0.35.5";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
     tag = finalAttrs.version;
-    hash = "sha256-l4Sn9EkIphBSEUfuRPhCRPtNENiGyP7lQcN4lx2Osks=";
+    hash = "sha256-m822/s9HBKIxAfzgQEBOZeHcHU57MPGOumqlTc55Ro8=";
   };
 
-  cargoHash = "sha256-lHYYDdlm+axyuGY2ulPmuLhVu6p5u6JAf2x6Xcpo8Dc=";
+  cargoHash = "sha256-Qo06iUy/1ElEe/gkH23JZLw7AKPkBPw6aLXnvx9Hv4g=";
 
   nativeBuildInputs = [
     pkg-config

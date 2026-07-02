@@ -36,6 +36,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # imports fixtures.test.helpers, but fixtures does not install tests anymore
+    # https://github.com/testing-cabal/fixtures/commit/349afbb1ec7dde2e472b4563025660a35e595153
+    "testresources/tests/test_test_resource.py"
+  ];
+
   env.PBR_VERSION = version;
 
   meta = {

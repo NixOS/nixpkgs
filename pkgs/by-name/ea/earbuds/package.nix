@@ -9,23 +9,18 @@
   dbus,
   libpulseaudio,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "earbuds";
-  version = "0.1.9-unstable-2024-06-28";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JojiiOfficial";
     repo = "LiveBudsCli";
-    rev = "df46706e44fa9e7de355b11eab4cc850efe968a3";
-    hash = "sha256-IEor7aZnwCA6Rg2gXIYSQ65hV/jJOKehujOSZnVzVis=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0PXOWj77VgJDPY4j+1PRg0M7+vIYSk+6yfj8s0UKx8=";
   };
 
-  # fix daemon autostart not working
-  patches = [
-    ./fix-daemon.patch
-  ];
-
-  cargoHash = "sha256-Y1pMmWxfXGcEFPj05/BpXQvd199O5l6hJmePNxMQc/Y=";
+  cargoHash = "sha256-N0/VtqulNRsuoiKcw1LMWTpYNLfX9IiU+hSDlm3ZP1Y=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -57,4 +52,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "earbuds";
     platforms = lib.platforms.linux;
   };
-}
+})

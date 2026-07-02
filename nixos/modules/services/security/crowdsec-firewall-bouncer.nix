@@ -231,7 +231,7 @@ in
           after = [ "crowdsec.service" ];
           wants = after;
           script = ''
-            cscli=/run/current-system/sw/bin/cscli
+            cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
             if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
               # Bouncer already registered. Verify the API key is still present
               if [ ! -f ${apiKeyFile} ]; then
@@ -257,12 +257,7 @@ in
             User = config.services.crowdsec.user;
             Group = config.services.crowdsec.group;
 
-            StateDirectory = "crowdsec-firewall-bouncer-register";
-
-            ReadWritePaths = [
-              # Needs write permissions to add the bouncer
-              "/var/lib/crowdsec"
-            ];
+            StateDirectory = "crowdsec-firewall-bouncer-register crowdsec";
 
             DynamicUser = true;
             LockPersonality = true;
@@ -306,17 +301,24 @@ in
               # Replace the api_key placeholder with the secret
               ${lib.getExe pkgs.replace-secret} '@API_KEY_FILE@' "$CREDENTIALS_DIRECTORY/API_KEY_FILE" ${final-config-file}
             '';
+
+            isIptables = (cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset");
+            isNftables = cfg.settings.mode == "nftables";
           in
           rec {
             description = "CrowdSec Firewall Bouncer";
             wantedBy = [ "multi-user.target" ];
-            after = [ "network.target" ] ++ (lib.optional config.services.crowdsec.enable "crowdsec.service");
+            partOf = lib.optional isNftables "nftables.service" ++ lib.optional isIptables "firewall.service";
+            after =
+              lib.optional isNftables "nftables.service"
+              ++ lib.optional isIptables "firewall.service"
+              ++ lib.optional config.services.crowdsec.enable "crowdsec.service";
             wants = after;
             requires = lib.optional cfg.registerBouncer.enable "crowdsec-firewall-bouncer-register.service";
 
             # When using iptables/ipset modes, the bouncer calls external binaries so they must be added to the path.
             # For nftables mode, it does not depend on external binaries.
-            path = lib.optionals ((cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset")) [
+            path = lib.optionals isIptables [
               pkgs.iptables
               pkgs.ipset
             ];
@@ -386,6 +388,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ nicomem ];
+    maintainers = with lib.maintainers; [
+      nicomem
+      tornax
+    ];
   };
 }

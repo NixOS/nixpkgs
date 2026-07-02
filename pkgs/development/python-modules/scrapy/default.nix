@@ -98,7 +98,7 @@ buildPythonPackage rec {
     uvloop
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   pytestFlags = [
     # DeprecationWarning: There is no current event loop

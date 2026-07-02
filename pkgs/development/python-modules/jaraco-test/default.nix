@@ -6,7 +6,7 @@
   jaraco-functools,
   jaraco-context,
   jaraco-collections,
-  pytestCheckHook,
+  pytest8_3CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     jaraco-collections
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "jaraco.test" ];
 

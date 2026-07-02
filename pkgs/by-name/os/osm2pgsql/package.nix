@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-ZKSyMNc+EHY4QBTLtUiWiTMEcmAAbrV1xqxmvNF96f8=";
+    hash = "sha256-+l74TWD2CJr0vj2uNuCCf5EHHTVysKBqEeWHInF4Ols=";
   };
 
   postPatch = ''

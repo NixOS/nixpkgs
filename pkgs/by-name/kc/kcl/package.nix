@@ -9,24 +9,24 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.12.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-vOdL+It8wY+U0Jt68KPAxMe3th0muaCXlEkuEphCVVY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jtAfFwgtIP2sJRH4RcGTgVn/S5yvA15q3u2xeWus/8s=";
   };
 
-  vendorHash = "sha256-NfRVgGtm8w/K0utb3/AlBfT71txpmJlOaFrdqGC8Dkg=";
+  vendorHash = "sha256-aKXfVDu3uTEeSzs4nVWQMUj+HaVkzk+iTr+lti+Yb6E=";
 
   subPackages = [ "cmd/kcl" ];
 
   ldflags = [
     "-w -s"
-    "-X=kcl-lang.io/cli/pkg/version.version=v${version}"
+    "-X=kcl-lang.io/cli/pkg/version.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildGoModule rec {
     runHook preInstallCheck
     set -o pipefail
     $out/bin/kcl --version | grep $version
-    $out/bin/kcl <(echo 'hello = "KCL"') | grep "hello: KCL"
+    $out/bin/kcl run <(echo 'hello = "KCL"') | grep "hello: KCL"
     runHook postInstallCheck
   '';
 
@@ -60,11 +60,11 @@ buildGoModule rec {
 
   doCheck = true;
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line interface for KCL programming language";
-    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
+    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
@@ -74,4 +74,4 @@ buildGoModule rec {
     mainProgram = "kcl";
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

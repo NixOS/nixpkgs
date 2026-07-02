@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubedock";
-  version = "0.20.2";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "joyrex2001";
     repo = "kubedock";
-    rev = version;
-    hash = "sha256-DoAvM+/yGr34qOjC9LevYtiUmhnkh7dR90kG2TPZxWg=";
+    rev = finalAttrs.version;
+    hash = "sha256-mxOvk2o2Ke8AEA9SyuyqHr+G9A2qpzlE9rqKG7INr4w=";
   };
 
-  vendorHash = "sha256-QLiu014QowDqebDCXSxOH2TPHUG2d+34mlnbo3NdafA=";
+  vendorHash = "sha256-SROlRbpokMsnTscxF71upxmjhZPqTbkk50n0Htwh1lc=";
 
   # config.Build not defined as it would break r-ryantm
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/joyrex2001/kubedock/internal/config.Version=${version}"
+    "-X github.com/joyrex2001/kubedock/internal/config.Version=${finalAttrs.version}"
   ];
 
   env.CGO_ENABLED = 0;
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "kubedock";
   };
-}
+})

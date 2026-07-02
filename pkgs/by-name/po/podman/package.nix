@@ -42,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "5.8.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
+    hash = "sha256-zhEtMZVKiv1L72EMlwgz8sHpmvhejGp98oW63aPj+rQ=";
   };
 
   patches = [
@@ -176,18 +176,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns # dns
+          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
+        ]
+        ++ extraRuntimes;
     };
   };
 
@@ -203,5 +204,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.unix;
   };
 })

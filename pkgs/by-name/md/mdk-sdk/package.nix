@@ -5,7 +5,7 @@
   autoPatchelfHook,
   alsa-lib,
   gcc-unwrapped,
-  libX11,
+  libx11,
   libcxx,
   libdrm,
   libgbm,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     gcc-unwrapped
-    libX11
+    libx11
     libcxx
     libdrm
     libgbm
@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
     libvdpau
     addDriverRunpath.driverLink
   ];
+
+  autoPatchelfIgnoreMissingDeps = [ "librockchip_mpp.so.1" ];
 
   installPhase = ''
     runHook preInstall

@@ -14,16 +14,16 @@
   xsel,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofimoji";
-  version = "6.7.0";
+  version = "6.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    tag = version;
-    hash = "sha256-8Y28jlmlKFyqT/OGn/jKjvivMc2U7TQvYmaTX1vCvXQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-KOWj/u5JxgHiUf/hPBu+PfPgSRd/HVivU3F8oWqzIv4=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +59,9 @@ python3Packages.buildPythonApplication rec {
     description = "Simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
-    changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fdw/rofimoji/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ justinlovinger ];
   };
-}
+})

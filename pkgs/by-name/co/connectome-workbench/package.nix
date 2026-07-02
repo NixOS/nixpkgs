@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
+  patches = [
+    # GCC 15 compatibility: add missing #include <cstdint>
+    ./gcc15-cstdint.patch
+  ];
+
   postPatch = ''
     substituteInPlace kloewe/{cpuinfo,dot}/CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   ''

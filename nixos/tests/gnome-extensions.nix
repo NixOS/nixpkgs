@@ -23,10 +23,9 @@
 
       # Configure GDM
       services.xserver.enable = true;
-      services.xserver.displayManager.gdm = {
+      services.displayManager.gdm = {
         enable = true;
         debug = true;
-        wayland = true;
       };
       services.displayManager.autoLogin = {
         enable = true;
@@ -38,7 +37,7 @@
       services.desktopManager.gnome.debug = true;
 
       systemd.user.services = {
-        "org.gnome.Shell@wayland" = {
+        "org.gnome.Shell@" = {
           serviceConfig = {
             ExecStart = [
               # Clear the list before overriding it.

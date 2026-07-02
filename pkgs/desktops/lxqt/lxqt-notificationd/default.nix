@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-notificationd";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-notificationd";
     rev = version;
-    hash = "sha256-TfTOuarMq2m5rAdcfiKqjyGeJzKyUSvhkJ2EoGUMTUQ=";
+    hash = "sha256-o+J7xg60T0WsznDOrfg7EjNlT9FQFbniNkvgkF12N0Q=";
   };
 
   nativeBuildInputs = [

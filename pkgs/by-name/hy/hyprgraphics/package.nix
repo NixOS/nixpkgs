@@ -8,6 +8,9 @@
   cairo,
   file,
   hyprutils,
+  lcms2,
+  libGL,
+  libdrm,
   libjpeg,
   libjxl,
   librsvg,
@@ -19,13 +22,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MRD+Jr2bY11MzNDfenENhiK6pvN+nHygxdHoHbZ1HtE=";
+    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +40,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     cairo
     file
     hyprutils
+    lcms2
+    libGL
+    libdrm
     libjpeg
     libjxl
     librsvg
@@ -59,6 +65,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprgraphics";
+    changelog = "https://github.com/hyprwm/hyprgraphics/releases/tag/${finalAttrs.src.tag}";
     description = "Cpp graphics library for Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

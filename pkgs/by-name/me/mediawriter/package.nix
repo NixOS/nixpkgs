@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediawriter";
-  version = "5.2.9";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "MediaWriter";
     tag = finalAttrs.version;
-    hash = "sha256-tZ0GzaEzhklD/FJocnRmet+dvBwZoNYVhJfF1NY6puE=";
+    hash = "sha256-INq07MdWLq5qwBNWrrBRmtIpxsmnHcqPEUyRkIl3Qa4=";
   };
 
   nativeBuildInputs = [

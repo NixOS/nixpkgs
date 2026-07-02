@@ -70,7 +70,7 @@ rec {
     # Type
 
     ```
-    assertOneOf :: String -> ComparableVal -> List ComparableVal -> Bool
+    assertOneOf :: String -> ComparableVal -> [ComparableVal] -> Bool
     ```
 
     # Examples
@@ -115,7 +115,7 @@ rec {
     # Type
 
     ```
-    assertEachOneOf :: String -> List ComparableVal -> List ComparableVal -> Bool
+    assertEachOneOf :: String -> [ComparableVal] -> [ComparableVal] -> Bool
     ```
 
     # Examples
@@ -164,7 +164,7 @@ rec {
     # Type
 
     ```
-    checkAssertWarn :: [ { assertion :: Bool; message :: String } ] -> [ String ] -> Any -> Any
+    checkAssertWarn :: [{ assertion :: Bool; message :: String; }] -> [String] -> a -> a
     ```
 
     # Examples

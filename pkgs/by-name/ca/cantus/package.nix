@@ -10,18 +10,18 @@
   libxkbcommon,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cantus";
-  version = "0.6.2";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "CodedNil";
     repo = "cantus";
-    tag = version;
-    hash = "sha256-dAMphU+voDUwFzlPuV6nCUg0RaVVyRJLoM6IwjUtvA4=";
+    tag = finalAttrs.version;
+    hash = "sha256-TRqWhoRlinNzLdxODs4bR5IgJR6ELKs4SOOpvtoFNFA=";
   };
 
-  cargoHash = "sha256-0RVjHKg2msoxY+0WZHOPOAXK2nNne7CA9owmNUf8x6I=";
+  cargoHash = "sha256-YUXEgeZn0UXh34RnCaqLhhK0QSPz3Y8XJuR2oMa4rIU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
   runtimeDependencies = [
     libxkbcommon
     vulkan-loader
+    wayland
   ];
 
   buildInputs = [
     stdenv.cc.cc.lib
-    wayland
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ CodedNil ];
     platforms = lib.platforms.linux;
   };
-}
+})

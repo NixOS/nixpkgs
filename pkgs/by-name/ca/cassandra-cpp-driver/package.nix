@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.17.1";
 
   src = fetchFromGitHub {
-    owner = "datastax";
-    repo = "cpp-driver";
+    owner = "apache";
+    repo = "cassandra-cpp-driver";
     tag = finalAttrs.version;
     sha256 = "sha256-GuvmKHJknudyn7ahrn/8+kKUA4NW5UjCfkYoX3aTE+Q=";
   };

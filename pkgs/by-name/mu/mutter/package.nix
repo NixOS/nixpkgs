@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -19,19 +20,19 @@
   libadwaita,
   libxcvt,
   libGL,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
-  libXrandr,
-  libXinerama,
-  libXau,
+  libxrandr,
+  libxinerama,
+  libxau,
   libinput,
   libdrm,
   libgbm,
@@ -49,13 +50,14 @@
   pipewire,
   libgudev,
   libwacom,
-  libSM,
+  libsm,
   xwayland,
   mesa-gl-headers,
   meson,
   gnome-settings-daemon,
-  xorgserver,
+  xorg-server,
   python3,
+  python3Packages,
   wayland-scanner,
   wrapGAppsHook4,
   gi-docgen,
@@ -71,7 +73,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "49.3";
+  version = "50.2";
 
   outputs = [
     "out"
@@ -82,8 +84,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nvH2HW/kAcyj/L5tmjsqT5tCY4y/hENzVmamGWSo8MM=";
+    hash = "sha256-/ejfinRlAMUfHJJbUeV8PdhwByM771Yweegx9Tv6O1Y=";
   };
+
+  patches = [
+    # mutter 50.2 spams logs, clutter_input_focus_set_cursor_location
+    # https://gitlab.gnome.org/GNOME/mutter/-/work_items/4840
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/f1570318ec3e9a38615eb91708bb71628ab8bcfd.patch";
+      hash = "sha256-73GI2DTgoEBUQGa7nTUIur/ZuDHgDu4SwjUWHBRCyuo=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -117,11 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    python3.pkgs.argcomplete # for register-python-argcomplete
+    python3Packages.argcomplete # for register-python-argcomplete
     wayland-scanner
     wrapGAppsHook4
     gi-docgen
-    xorgserver
+    xorg-server
     gobject-introspection
     udevCheckHook
   ];
@@ -149,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libstartup_notification
     libwacom
-    libSM
+    libsm
     colord
     lcms2
     pango
@@ -161,19 +172,19 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     # X11 client
     gtk4
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
     xkeyboard_config
     libxkbcommon
     libxcb
-    libXrandr
-    libXinerama
-    libXau
+    libxrandr
+    libxinerama
+    libxau
 
     # for gdctl and gnome-service-client shebangs
     (python3.withPackages (pp: [
@@ -206,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "17"; # bumped each dev cycle
+    libmutter_api_version = "18"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {

@@ -68,12 +68,8 @@ with lib.maintainers;
 
   bazel = {
     members = [
-      mboes
       cbley
-      olebedev
       groodt
-      aherrmann
-      ylecornec
       boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
@@ -225,7 +221,6 @@ with lib.maintainers;
     members = [
       mdarocha
       corngood
-      ggg
       raphaelr
       jamiemagee
       anpin
@@ -295,12 +290,12 @@ with lib.maintainers;
 
   gcc = {
     members = [
-      synthetica
       vcunat
       ericson2314
     ];
     scope = "Maintain GCC (GNU Compiler Collection) compilers";
     shortName = "GCC";
+    enableFeatureFreezePing = true;
   };
 
   geospatial = {
@@ -359,7 +354,6 @@ with lib.maintainers;
   home-assistant = {
     members = [
       dotlambda
-      fab
       hexa
     ];
     scope = "Maintain the Home Assistant ecosystem";
@@ -386,7 +380,6 @@ with lib.maintainers;
     members = [
       leona
       theCapypara
-      thiagokokada
       jamesward
     ];
     shortName = "Jetbrains";
@@ -438,6 +431,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      igorcafe
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -486,14 +480,7 @@ with lib.maintainers;
   };
 
   lxc = {
-    members = [
-      aanderse
-      adamcstephens
-      megheaiulian
-      mkg20001
-    ];
-    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
-    shortName = "lxc";
+    github = "lxc";
   };
 
   lxqt = {
@@ -519,12 +506,12 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      mguentner
-      dandellion
       nickcao
       teutat3s
+      transcaffeine
+      skowalak
     ];
-    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+    scope = "Maintain the foundational packages of the Matrix ecosystem.";
     shortName = "Matrix";
   };
 
@@ -574,11 +561,8 @@ with lib.maintainers;
     members = [
       eljamm
       ethancedwards8
-      fricklerhandwerk
-      OPNA2608
       phanirithvij
       prince213
-      wegank
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
@@ -673,7 +657,6 @@ with lib.maintainers;
   python = {
     members = [
       hexa
-      natsukium
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";
@@ -689,12 +672,21 @@ with lib.maintainers;
     members = [
       b-rodrigues
       bcdarwin
+      jamespeapen
       jbedo
       kupac
     ];
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";
     enableFeatureFreezePing = true;
+  };
+
+  radicle = {
+    github = "radicle";
+  };
+
+  redis = {
+    github = "redis";
   };
 
   rocm = {
@@ -721,6 +713,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  security-review = {
+    github = "security-review";
+  };
+
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
@@ -741,7 +737,6 @@ with lib.maintainers;
       dduan
       samasaur
       stephank
-      trepetti
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
@@ -752,10 +747,8 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  tests = {
-    members = [ tfc ];
-    scope = "Maintain the NixOS VM test runner.";
-    shortName = "NixOS tests";
+  test-driver = {
+    github = "test-driver";
     enableFeatureFreezePing = true;
   };
 

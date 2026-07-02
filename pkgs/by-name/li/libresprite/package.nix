@@ -14,7 +14,7 @@
   libpng,
   libwebp,
   libarchive,
-  libX11,
+  libx11,
   pixman,
   tinyxml-2,
   libxi,
@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # From https://github.com/LibreSprite/LibreSprite/pull/565
     ./cmake4.diff
+    # Remove Homebrew-specific brew invocation for libarchive on Darwin;
+    # Nix provides libarchive directly via buildInputs.
+    ./no-brew.patch
   ];
   nativeBuildInputs = [
     cmake
@@ -56,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libwebp
     libarchive
-    libX11
+    libx11
     pixman
     tinyxml-2
     zlib
@@ -110,7 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
-    # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

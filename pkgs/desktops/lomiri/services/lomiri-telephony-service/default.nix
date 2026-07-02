@@ -8,6 +8,7 @@
   ayatana-indicator-messages,
   bash,
   cmake,
+  ctestCheckHook,
   dbus,
   dbus-glib,
   dbus-test-runner,
@@ -111,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     dbus-test-runner
     dconf
     gnome-keyring
@@ -124,27 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     # These rely on libphonenumber reformatting inputs to certain results
     # Seem to be broken for a small amount of numbers, maybe libphonenumber version change?
     (lib.cmakeBool "SKIP_QML_TESTS" true)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Flaky, randomly failing to launch properly & stuck until test timeout
-            # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/70
-            "^HandlerTest"
-            "^OfonoAccountEntryTest"
-            "^TelepathyHelperSetupTest"
-            "^AuthHandlerTest"
-            "^ChatManagerTest"
-            "^AccountEntryTest"
-            "^AccountEntryFactoryTest"
-            "^PresenceRequestTest"
-            "^CallEntryTest"
-          ]
-        })")
-      ]
-    ))
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -157,6 +138,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Starts & talks to D-Bus services, breaks with parallelism
   enableParallelChecking = false;
+
+  disabledTests = [
+    # Flaky, randomly failing to launch properly & stuck until test timeout
+    # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/70
+    "AccountEntryTest"
+    "AccountEntryFactoryTest"
+    "AuthHandlerTest"
+    "CallEntryTest"
+    "ChatManagerTest"
+    "HandlerTest"
+    "OfonoAccountEntryTest"
+    "PresenceRequestTest"
+    "TelepathyHelperSetupTest"
+
+    # Failing most of the time since libnotify 0.8.8
+    # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/75
+    "ApproverTest"
+    "MessagingMenuTest"
+  ];
 
   preCheck = ''
     export QT_QPA_PLATFORM=minimal

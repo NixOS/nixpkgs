@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libschrift";
   version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "tomolt";
     repo = "libschrift";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     sha256 = "01hgvkcb46kr9jzc4ah0js0jy9kr0ll18j2k0c5zil55l3a9rqw1";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

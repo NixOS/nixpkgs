@@ -2,7 +2,7 @@
   stdenv,
   lib,
   libspnav,
-  libX11,
+  libx11,
   mesa_glu,
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   sourceRoot = "${libspnav.src.name}/examples/cube";
 
   buildInputs = [
-    libX11
+    libx11
     mesa_glu
     libspnav
   ];

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-workspaces";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "FieldofClay";
     repo = "hyprland-workspaces";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a5P99aSqhlZqClXAoaUNv/jmuM5duLDf+OzMeKGwDVI=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hyprland-workspaces";
   };
-}
+})

@@ -19,17 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.044";
-
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+  version = "5.048";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
+    hash = "sha256-xvqqgbW7L07+NBYzGN2KLhwir58ByShxo4VVPI3pgZk=";
   };
 
   enableParallelBuilding = true;
@@ -88,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
@@ -103,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      amiloradovsky
     ];
   };
 })

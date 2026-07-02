@@ -30,6 +30,7 @@
   runtimeShell,
 
   # tests
+  blockbuster,
   langchain-tests,
   pytest-asyncio,
   pytest-mock,
@@ -43,19 +44,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.2.7";
+  version = "1.3.11";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain==${version}";
-    hash = "sha256-vwd8FoXeMLQyFcEViXx/3LqpNieyp4HHevMAv2AxNVY=";
+    tag = "langchain==${finalAttrs.version}";
+    hash = "sha256-ARLnl+HNsaFW7glyT3CEsNWvp9quvVkCpQvMLxgS2eI=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain_v1";
+  sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
 
   postPatch = ''
     substituteInPlace langchain/agents/middleware/shell_tool.py \
@@ -63,14 +65,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
-    "tenacity"
-  ];
 
   dependencies = [
     langchain-core
@@ -98,6 +92,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     langchain-tests
     # langchain-openai -- causes recursion error
     pytest-asyncio
@@ -123,17 +118,24 @@ buildPythonPackage rec {
   disabledTests = [
     # Depends on shell's truncation style
     "test_truncation_indicator_present"
+    "test_truncation_by_bytes"
     # Depends on the sleep shell command
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
     # Timing sensitive tests
     "test_tool_retry_constant_backoff"
+    # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
+    # https://github.com/langchain-ai/langchain/issues/36312
+    "test_summarization_middleware_missing_profile"
   ];
 
   disabledTestPaths = [
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
+
+    # Timing sensitive tests
+    "tests/unit_tests/agents/middleware/implementations/test_model_retry.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
@@ -150,11 +152,11 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})

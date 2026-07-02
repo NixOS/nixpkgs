@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Z4kSec/Masky";
     changelog = "https://github.com/Z4kSec/Masky/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ elasticdog ];
+    maintainers = [ ];
   };
 }

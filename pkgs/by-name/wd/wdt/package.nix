@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2026-01-12";
+  version = "1.27.1612021-unstable-2026-06-09";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "024eafc69a7aa764a08162be842a89a98459e61a";
-    sha256 = "sha256-v0LCik5XgmUSPnBduKxhfCYy4rAalId5skEC8u3Jzq8=";
+    rev = "b3e21d71b2223fcecba58436f81a0ba7a56a6d6a";
+    hash = "sha256-H7/WJV5rvgdjwFAV2FCAbmkdsqO45LsDAfCroFbxTU4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -53,7 +53,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
+        "find_package(Boost COMPONENTS filesystem REQUIRED)"
   '';
 
   meta = {

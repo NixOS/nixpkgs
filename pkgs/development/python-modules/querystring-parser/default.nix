@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bernii/querystring-parser";
     changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

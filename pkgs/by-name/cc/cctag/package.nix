@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   cmake,
-  boost,
+  boost186,
   eigen,
   opencv,
   onetbb,
@@ -14,7 +14,7 @@
 let
   stdenv = clangStdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cctag";
   version = "1.0.4";
 
@@ -26,18 +26,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alicevision";
     repo = "CCTag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M35KGTTmwGwXefsFWB2UKAKveUQyZBW7V8ejgOAJpXk=";
   };
 
   cmakeFlags = [
     # Feel free to create a PR to add CUDA support
-    "-DCCTAG_WITH_CUDA=OFF"
+    (lib.cmakeBool "CCTAG_WITH_CUDA" false)
 
-    "-DCCTAG_ENABLE_SIMD_AVX2=${if avx2Support then "ON" else "OFF"}"
+    (lib.cmakeBool "CCTAG_ENABLE_SIMD_AVX2" avx2Support)
 
-    "-DCCTAG_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
-    "-DCCTAG_BUILD_APPS=OFF"
+    (lib.cmakeBool "CCTAG_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "CCTAG_BUILD_APPS" false)
   ];
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost186
     eigen
     opencv.cxxdev
   ];
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

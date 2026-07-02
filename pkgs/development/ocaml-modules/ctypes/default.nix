@@ -9,14 +9,14 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ctypes";
   version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-ctypes";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Wlpk+/MSWmnIRsJfVQMTCYDRixuqLzDpdFNpkQyscA8=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericbmerritt ];
   };
-}
+})

@@ -28,7 +28,6 @@ stdenvNoCC.mkDerivation {
     mainProgram = "bemoji";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      laurent-f1z1
       MrSom3body
     ];
   };

@@ -65,11 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 "Flying Carpet/src-tauri/icons/128x128@2x.png" "$out/share/icons/hicolor/256x256@2/apps/FlyingCarpet.png"
   '';
 
-  preFixup = ''
-    # https://github.com/tauri-apps/tauri/issues/9304
-    gappsWrapperArgs+=(--set WEBKIT_DISABLE_DMABUF_RENDERER 1)
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

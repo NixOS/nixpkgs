@@ -10,7 +10,7 @@
   pygobject3,
   gtk3,
   stdenv,
-  xlib,
+  python-xlib,
   libayatana-appindicator,
   pyobjc-framework-Quartz,
   xvfb-run,
@@ -55,10 +55,10 @@ buildPythonPackage rec {
     gtk3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xlib
+    python-xlib
     libayatana-appindicator
   ]
-  ++ lib.optionals stdenv.isDarwin [ pyobjc-framework-Quartz ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ pyobjc-framework-Quartz ];
 
   nativeCheckInputs = [ pytest ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ];
 

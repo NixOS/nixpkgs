@@ -1,7 +1,10 @@
+import sys
+
 import json
 import re
 from pathlib import Path
 from xmltodict import parse
+from subprocess import CalledProcessError
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
@@ -149,10 +152,22 @@ def maven_out_path(jb_root: Path, name: str) -> Path:
     return jb_root / "source" / f"{name}_maven_artefacts.json"
 
 
-def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
+def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     variant = ide.name.removesuffix("-oss")
-    intellij_hash, intellij_outpath = prefetch_intellij_community(variant, info.version)
-    android_hash = prefetch_android(variant, info.version)
+    try:
+        intellij_hash, intellij_outpath = prefetch_intellij_community(
+            variant, info.version
+        )
+        android_hash = prefetch_android(variant, info.version)
+    except CalledProcessError:
+        print(
+            f"[!] Unable to fetch sources for version {info.version}. "
+            f"This probably means, that JetBrains has not published a source release yet for this version. "
+            f"Check: https://github.com/JetBrains/intellij-community/releases and https://github.com/JetBrains/android/tags",
+            file=sys.stderr,
+        )
+        print(f"[!] Skipping update of {ide.name}.", file=sys.stderr)
+        return False
     jps_hash = generate_jps_hash(config, intellij_outpath)
     restarter_hash = generate_restarter_hash(config, intellij_outpath)
     repositories = jar_repositories(intellij_outpath)
@@ -192,8 +207,8 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
             ],
         )
     except Exception as e:
-        print(f"[!] Writing update info to file failed: {e}")
-        return
+        print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
+        return False
 
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
@@ -201,3 +216,4 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig):
         with open(maven_out_path(config.jetbrains_root, variant), "w") as f:
             json.dump(maven_hashes, f, indent=4)
             f.write("\n")
+    return True

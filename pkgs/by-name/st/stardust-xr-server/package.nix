@@ -15,14 +15,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-server";
   version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sCatpWDdy7NFWOWUARjN3fZMDVviX2iV79G0HTxfYZU=";
   };
 
@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage rec {
     libxfixes
   ];
 
-  CPM_SOURCE_CACHE = "./build";
+  env.CPM_SOURCE_CACHE = "./build";
 
   postPatch = ''
-    install -D ${cpm-cmake}/share/cpm/CPM.cmake $(echo $cargoDepsCopy/stereokit-sys-*/StereoKit)/build/cpm/CPM_0.32.2.cmake
+    install -D ${cpm-cmake}/share/cpm/CPM.cmake $(echo $cargoDepsCopy/*/stereokit-sys-*/StereoKit)/build/cpm/CPM_0.32.2.cmake
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -64,4 +64,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

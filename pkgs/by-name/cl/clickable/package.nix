@@ -9,16 +9,16 @@
   which,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "clickable";
-  version = "8.7.0";
+  version = "8.9.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
-    rev = "v${version}";
-    hash = "sha256-W6NPZ5uP7wGjgyA+Nv2vpmshKWny2CCSrn/Gaoi7Pr4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hrtAx/RKBlVf8cguPAGd55/m0D6YLu678f+aqeIzRos=";
   };
 
   __structuredAttrs = true;
@@ -81,10 +81,10 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "clickable";
     homepage = "https://clickable-ut.dev";
     changelog = "https://clickable-ut.dev/en/latest/changelog.html#changes-in-v${
-      lib.strings.replaceStrings [ "." ] [ "-" ] version
+      lib.strings.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ilyakooo0 ];
     teams = [ lib.teams.lomiri ];
   };
-}
+})

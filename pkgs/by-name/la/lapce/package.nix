@@ -37,14 +37,14 @@ let
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lapce";
   version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = "lapce";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-D5DEmMkCAkMiMMzYP8FoVIUeT2CDOepUWUlUqWSaUnM=";
   };
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
 
     # This variable is read by build script, so that Lapce editor knows its version
-    RELEASE_TAG_NAME = "v${version}";
+    RELEASE_TAG_NAME = "v${finalAttrs.version}";
   };
 
   postPatch = ''
@@ -106,8 +106,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
     homepage = "https://github.com/lapce/lapce";
-    changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
+    changelog = "https://github.com/lapce/lapce/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ asl20 ];
     mainProgram = "lapce";
   };
-}
+})

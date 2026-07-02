@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parallel-disk-usage";
   version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
     repo = "parallel-disk-usage";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-EYveK1p/OWvtY5Q0dDlZwFkVt7u/A0qY0BG/oLgwmfE=";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.peret ];
     mainProgram = "pdu";
   };
-}
+})

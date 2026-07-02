@@ -935,5 +935,8 @@ in
       };
     };
   };
-  meta.maintainers = teams.xen.members;
+  meta = {
+    doc = ./xen.md;
+    teams = [ teams.xen ];
+  };
 }

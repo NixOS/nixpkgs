@@ -29,7 +29,7 @@ flutter329.buildFlutterApplication rec {
 
   postInstall = ''
     install -D flatpak/com.mikeasoft.pied.desktop -t $out/share/applications
-    install -D flatpak/com.mikeasoft.pied.png -t $out/share/pixmaps
+    install -D flatpak/com.mikeasoft.pied.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = {

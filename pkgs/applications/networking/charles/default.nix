@@ -4,7 +4,7 @@
   makeWrapper,
   makeDesktopItem,
   fetchurl,
-  openjdk17-bootstrap,
+  jdk25,
   jdk11,
   jdk8,
   writeScript,
@@ -114,10 +114,10 @@ in
 {
   charles5 = (
     generic {
-      version = "5.0.3";
-      hash = "sha256-SiZ15ekuAW7AyXBHN5Zel4ZFL/4oNy1td64NQ0GNUhE=";
+      version = "5.1";
+      hash = "sha256-gExmuh1A21QGkfcmcwPPgk51Ag7Ced9kPTHha2ofbKg=";
       platform = "_x86_64";
-      jdk = openjdk17-bootstrap;
+      jdk = jdk25;
 
       updateScript = writeScript "update-charles" ''
         #!/usr/bin/env nix-shell

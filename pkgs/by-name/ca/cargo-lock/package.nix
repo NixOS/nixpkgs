@@ -4,16 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-lock";
-  version = "11.0.0";
+  version = "11.0.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-Gz459c2IWD19RGBg2TyHbI/VNCelha+R0FeNkAaHksU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-l8B98ycfC17vUY29BbFoucGeAn8mapchCvjdMCNhKqc=";
   };
 
-  cargoHash = "sha256-Kw1LWu/DYfeuf5aMaNslnDyEoaRj0J+yxWs7sKHyWlU=";
+  cargoHash = "sha256-l76udCsgloW5tZ8TgNMOT47un2Epun0B3UjaHCWdZjE=";
 
   buildFeatures = [ "cli" ];
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Self-contained Cargo.lock parser with graph analysis";
     mainProgram = "cargo-lock";
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
-    changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${version}/cargo-lock/CHANGELOG.md";
+    changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${finalAttrs.version}/cargo-lock/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

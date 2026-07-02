@@ -10,6 +10,7 @@
   qt5,
   makeDesktopItem,
   copyDesktopItems,
+  imagemagick,
   withCurses ? false,
   withGTK ? false,
   withQT ? false,
@@ -30,7 +31,7 @@ let
       categories = [ "Network" ];
     };
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "trackma";
   version = "0.9";
   pyproject = true;
@@ -38,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "Hov9qdVabu1k3SIoUmvcRtSK8TcETqGPXI2RqN/bei4=";
     fetchSubmodules = true; # for anime-relations submodule
   };
@@ -46,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     python3.pkgs.poetry-core
+    imagemagick
   ]
   ++ lib.optionals withGTK [
     wrapGAppsHook3
@@ -94,7 +96,8 @@ python3.pkgs.buildPythonApplication rec {
     );
 
   postInstall = ''
-    install -Dvm444 $src/trackma/data/icon.png $out/share/pixmaps/trackma.png
+    mkdir -p $out/share/icons/hicolor/64x64/apps
+    magick $src/trackma/data/icon.png -resize 64x64! $out/share/icons/hicolor/64x64/apps/trackma.png
   '';
 
   doCheck = false;
@@ -115,4 +118,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -24,7 +24,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   # Fixes installation path
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   meta = {
     homepage = "https://github.com/kira64xyz/yafetch";

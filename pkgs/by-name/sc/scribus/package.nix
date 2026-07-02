@@ -29,7 +29,7 @@
   libzmf,
   pixman,
   pkg-config,
-  podofo_0_10,
+  podofo,
   poppler,
   poppler_data,
   python3,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libzmf
     pixman
-    podofo_0_10
+    podofo
     poppler
     poppler_data
     (python3.withPackages (
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     description = "Desktop Publishing (DTP) and Layout program";
     mainProgram = "scribus";
     homepage = "https://www.scribus.net";

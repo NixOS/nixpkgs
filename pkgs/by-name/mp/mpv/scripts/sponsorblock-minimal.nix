@@ -31,6 +31,6 @@ buildLua {
     homepage = "https://codeberg.org/jouni/mpv_sponsorblock_minimal";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
   };
 }

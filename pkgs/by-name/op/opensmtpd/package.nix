@@ -14,9 +14,10 @@
   pam,
   libxcrypt,
   nixosTests,
+  binPath ? "/run/wrappers/bin",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd";
   version = "7.8.0p0";
 
@@ -37,17 +38,26 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/opensmtpd-${finalAttrs.version}.tar.gz";
     hash = "sha256-QDTeLpLGH6g+7a2x2Ni9/mXlfrUM6WeeAUCVDjTKSrc=";
   };
 
   patches = [
     ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
+    ./offline.patch
   ];
 
   postPatch = ''
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
+    substituteInPlace mk/smtpctl/Makefile.am \
+      --replace-fail "chgrp" "true" \
+      --replace "chmod 2555" "chmod 0555"
+    substituteInPlace mk/pathnames \
+      --replace-fail "-DPATH_SMTPCTL=\\\"\$(sbindir)" \
+                     "-DPATH_SMTPCTL=\\\"${binPath}" \
+      --replace-fail "-DPATH_MAKEMAP=\\\"\$(sbindir)" \
+                     "-DPATH_MAKEMAP=\\\"${binPath}"
+    substituteInPlace usr.sbin/smtpd/smtpd.c \
+      --replace-fail "@@PATH_SENDMAIL@@" "\"${binPath}/sendmail\""
   '';
 
   configureFlags = [
@@ -88,4 +98,4 @@ stdenv.mkDerivation rec {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
     rspamd-integration = nixosTests.opensmtpd-rspamd;
   };
-}
+})

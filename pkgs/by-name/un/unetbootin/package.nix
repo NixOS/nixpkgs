@@ -11,14 +11,14 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unetbootin";
   version = "702";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
+    owner = "unetbootin";
+    repo = "unetbootin";
+    rev = finalAttrs.version;
     sha256 = "sha256-psX15XicPXAsd36BhuvK0G3GQS8hV/hazzO0HByCqV4=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "unetbootin";
   };
-}
+})

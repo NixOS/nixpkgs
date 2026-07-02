@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build dependencies
   poetry-core,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "trakit";
   version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";

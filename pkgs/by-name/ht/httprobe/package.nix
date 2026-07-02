@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "httprobe";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
     repo = "httprobe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k/Ev+zpYF+DcnQvMbbRzoJ4co83q3pi/D9T4DhtGR/I=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "httprobe";
   };
-}
+})

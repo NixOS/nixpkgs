@@ -5,14 +5,14 @@
   buildDotnetModule,
   dotnetCorePackages,
   xz,
-  pcre,
+  pcre2,
   autoPatchelfHook,
   bintools,
   fixDarwinDylibNames,
   darwin,
   fontconfig,
   libgdiplus,
-  libXrandr,
+  libxrandr,
   glib,
   writeShellScriptBin,
   blender,
@@ -86,10 +86,10 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     xz
-    pcre
+    pcre2
     libgdiplus
     glib
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
@@ -116,7 +116,7 @@ buildDotnetModule rec {
 
   # add libraries not found by autopatchelf
   libPath = lib.makeLibraryPath [
-    pcre
+    pcre2
     xz
   ];
   makeWrapperArgs = [ "--prefix LD_LIBRARY_PATH : ${libPath}" ];

@@ -9,10 +9,10 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libnotify,
   libpng,
   libsecret,
@@ -27,19 +27,21 @@
   compat32 ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
+  withEGL ? true,
+  withPrivateFonts ? false,
   webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxwidgets";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-eYmZrh9lvDnJ3VAS+TllT21emtKBPAOhqIULw1dTPhk=";
+    hash = "sha256-UL1NuByKFGMQ/dhjuWRdnWTgdy4+1cD9pSls3e1mur8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -57,10 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gspell # wxTextCtrl spell checking
     gtk3
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
     libnotify # wxNotificationMessage backend
     libsecret # wxSecretStore backend
     libxkbcommon # proper key codes in key events
@@ -85,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     (if compat32 then "--enable-compat32" else "--disable-compat32")
   ]
   ++ lib.optional withMesa "--with-opengl"
+  ++ lib.optional (!withEGL) "--disable-glcanvasegl"
+  ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-macosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
     "--with-osx_cocoa"
@@ -99,9 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "${libGLU.out}/lib ${libGL.out}/lib";
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+    SEARCH_LIB = toString [
+      "${libGLU.out}/lib"
+      "${libGL.out}/lib"
+    ];
+  };
 
   postInstall = "
     pushd $out/include
@@ -112,7 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit compat30 compat32;
+    inherit
+      compat30
+      compat32
+      withEGL
+      withPrivateFonts
+      ;
   };
 
   meta = {

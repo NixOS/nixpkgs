@@ -20,21 +20,22 @@ buildNpmPackage rec {
     hash = "sha256-hBGsqOqKMHNy2SNw1kHCQq1lPDd2S36L5pdKgD2O8FA=";
   };
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   npmDepsHash = "sha256-FgOHuMMUX92VHF6hdznoi7bhO/27t6+l038kmpqjctQ=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
   postBuild = ''
-    cp -r ${electron.dist} electron-dist
-    chmod -R u+w electron-dist
+    electron_dist="$(mktemp -d)"
+    cp -r ${electron.dist}/. "$electron_dist"
+    chmod -R u+w "$electron_dist"
 
     npm exec electron-builder -- \
         --dir \
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
-        -c.electronDist=electron-dist \
+        -c.electronDist="$electron_dist" \
         -c.electronVersion=${electron.version}
   '';
 

@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bunster";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "yassinebenaid";
     repo = "bunster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HE5Wp5A0wc5jgs9kNkCH1f82Y+SkILHvOwlQAsC6DVU=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   meta = {
     description = "Compile shell scripts to static binaries";
     homepage = "https://github.com/yassinebenaid/bunster";
-    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v{version}";
+    changelog = "https://github.com/yassinebenaid/bunster/releases/tag/v{finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       yunz
@@ -39,4 +39,4 @@ buildGoModule rec {
     mainProgram = "bunster";
     platforms = lib.platforms.unix;
   };
-}
+})

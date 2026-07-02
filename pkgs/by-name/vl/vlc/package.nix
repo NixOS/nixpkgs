@@ -5,7 +5,6 @@
   avahi,
   bison,
   cairo,
-  curl,
   dbus,
   faad2,
   fetchFromGitLab,
@@ -21,11 +20,12 @@
   gnutls,
   harfbuzz,
   libGL,
-  libSM,
-  libXext,
-  libXinerama,
-  libXpm,
+  libsm,
+  libxext,
+  libxinerama,
+  libxpm,
   libarchive,
+  libaacs,
   libass,
   libbluray-full,
   libcaca,
@@ -82,10 +82,8 @@
   wayland-protocols,
   wayland-scanner,
   wrapGAppsHook3,
-  writeShellScript,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
-
   chromecastSupport ? true,
   jackSupport ? false,
   onlyLibVLC ? false,
@@ -150,8 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     harfbuzz
     libGL
-    libSM
+    libsm
     libarchive
+    libaacs
     libass
     libbluray-full
     libcaca
@@ -193,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     systemdLibs
     taglib_1
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
   ]
   ++ optionals (!onlyLibVLC) [ live555 ]
@@ -203,9 +202,9 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ optionals skins2Support [
-    libXext
-    libXinerama
-    libXpm
+    libxext
+    libxinerama
+    libxpm
   ]
   ++ optionals waylandSupport [
     wayland
@@ -220,15 +219,21 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   )
   ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+
   strictDeps = true;
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   env = {
     # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
-    BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
+    BUILDCC = lib.getExe pkgsBuildBuild.stdenv.cc;
     LIVE555_PREFIX = live555;
-  }
-  // lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   patches = [
@@ -246,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo "$version" > src/revision.txt
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
-      --replace \
+      --replace-fail \
         /usr/share/fonts/truetype/freefont \
         ${freefont_ttf}/share/fonts/truetype
   ''
@@ -255,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.lua.org/wshop13/Jericke.pdf#page=39
   + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
     substituteInPlace share/Makefile.am \
-      --replace $'.luac \\\n' $'.lua \\\n'
+      --replace-fail $'.luac \\\n' $'.lua \\\n'
   '';
 
   enableParallelBuilding = true;
@@ -299,6 +304,7 @@ stdenv.mkDerivation (finalAttrs: {
   # depends on a qt5.qttranslations that doesn't build, even though it
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup = ''
+    patchelf --add-rpath ${libaacs}/lib "$out/lib/vlc/plugins/access/liblibbluray_plugin.so"
     patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
     ${
@@ -314,8 +320,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Cross-platform media player and streaming server";
     homepage = "https://www.videolan.org/vlc/";
+    donationPage = "https://www.videolan.org/contribute.html#money";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ alois31 ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vlc";
   };

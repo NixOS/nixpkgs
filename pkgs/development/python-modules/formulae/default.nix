@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "formulae";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "formulae";
     tag = finalAttrs.version;
-    hash = "sha256-RrG0jkQAGq04cQ1MY5W0j76++tu7NerLC/HHpVVa5xQ=";
+    hash = "sha256-Q+oHt9euUBQs/D5TlJeeUN76HwQkmGHC1cTzmAQx+2M=";
   };
 
   build-system = [

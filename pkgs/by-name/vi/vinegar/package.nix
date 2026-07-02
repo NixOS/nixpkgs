@@ -25,18 +25,18 @@
   nix-update-script,
 }:
 let
-  # Based on wine 10.20
+  # Based on wine 11.0
   kombuchaPatches = fetchFromGitHub {
     name = "kombucha";
     owner = "vinegarhq";
     repo = "kombucha";
-    rev = "80f87fdbaae2a42bd66e41319054798fdf30fbe6";
-    hash = "sha256-ePBJj1YyHVdlDzyE6dLVl6FMImw3SJFw04vP2o1Tk6M=";
-    meta.license = lib.licenses.unfree; # No license
+    rev = "05927db95b427cc5e57856087325806cb20a0124";
+    hash = "sha256-gyyf/TVKrc6/cGP9fNKr5+qMo7ucg8l/VIklhVP8kLg=";
+    meta.license = lib.licenses.lgpl21Only;
   };
 
   wine =
-    (wine64Packages.unstable.override {
+    (wine64Packages.stable.override {
       dbusSupport = true;
       embedInstallers = true;
       pulseaudioSupport = true;
@@ -92,37 +92,13 @@ let
             "0017-winex11-Use-scancode-high-bit-to-set-KEYEVENTF_EXTEN.patch"
             "0018-winex11-Support-fixed-X11-keycode-to-scancode-conver.patch"
             "0019-winex11-Disable-keyboard-scancode-auto-detection-by-.patch"
-            "0020-win32u-Update-the-window-client-surface-even-with-no.patch"
-            "0021-wined3d-Create-release-the-window-DCs-with-the-swapc.patch"
-            "0022-win32u-Avoid-a-crash-when-drawable-fails-to-be-creat.patch"
-            "0023-win32u-Check-internal-drawables-before-trying-to-cre.patch"
-            "0024-win32u-Update-window-state-after-setting-internal-pi.patch"
-            "0025-win32u-Fix-clipping-out-of-vulkan-and-other-process-.patch"
-            "0026-win32u-Don-t-set-window-pixel-format-if-drawable-cre.patch"
-            "0027-win32u-Iterate-the-client-surfaces-rather-than-the-t.patch"
-            "0028-wined3d-Remove-now-unnecessary-pixel-format-restorat.patch"
-            "0029-wined3d-Do-not-set-context_gl-needs_set-in-wined3d_c.patch"
-            "0030-wined3d-Get-rid-of-the-restore_pf-field-from-struct-.patch"
-            "0031-win32u-Remove-unnecessary-drawable-flush-in-context_.patch"
-            "0032-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
-            "0033-winex11-Move-Xfixes-extension-query-to-process_attac.patch"
-            "0034-winex11-Add-Xwayland-check.patch"
-            "0035-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
-            "0036-winex11-Always-ignore-MotionNotify-event-after-SetCu.patch"
-            "0037-Revert-winecfg-Allow-configuring-default-MIDI-device.patch"
-            "0038-wined3d-Update-the-context-DC-from-its-swapchain-if-.patch"
-            "0039-wined3d-Only-invalidate-enabled-clip-planes.patch"
-            "0040-wined3d-gl-Only-check-GL-context-when-accessing-onsc.patch"
-            "0041-winex11-Request-drawable-presentation-explicitly-on-.patch"
-            "0042-wined3d-Add-some-missing-states-to-wined3d_statebloc.patch"
-            "0043-wined3d-Avoid-some-invalidation-when-the-vertex-decl.patch"
-            "0044-wined3d-Avoid-some-invalidation-when-the-viewport-is.patch"
-            "0045-wined3d-Avoid-some-invalidation-when-texture-states-.patch"
-            "0046-wined3d-Invalidate-fog-constants-only-when-the-VS-is.patch"
-            "0047-wined3d-Avoid-some-invalidation-when-render-states-a.patch"
-            "0048-wined3d-gl-Split-UBOs-to-separate-chunks.patch"
-            "0049-winedbg-Disable.patch"
-            "0050-wine.inf-Disable-unused-services.patch"
+            "0020-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
+            "0021-winex11-Move-Xfixes-extension-query-to-process_attac.patch"
+            "0022-winex11-Add-Xwayland-check.patch"
+            "0023-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
+            "0024-winex11-Always-ignore-MotionNotify-event-after-SetCu.patch"
+            "0025-winedbg-Disable.patch"
+            "0026-wine.inf-Disable-unused-services.patch"
           ];
       });
 in

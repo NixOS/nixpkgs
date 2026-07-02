@@ -17,11 +17,11 @@
   libGL,
   libjack2,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
   noriskclient-launcher-unwrapped,
   pipewire,
   stdenv,
@@ -54,11 +54,11 @@ symlinkJoin {
 
       # glfw
       libGL
-      libX11
-      libXcursor
-      libXext
-      libXrandr
-      libXxf86vm
+      libx11
+      libxcursor
+      libxext
+      libxrandr
+      libxxf86vm
 
       # narrator support
       flite

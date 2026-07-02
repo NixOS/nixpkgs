@@ -173,9 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with lib.maintainers; [
-      offline
-    ];
+    maintainers = [ ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 })

@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OSGeo/libgeotiff";
     changelog = "https://github.com/OSGeo/libgeotiff/blob/${finalAttrs.src.rev}/libgeotiff/NEWS";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux ++ darwin;
   };

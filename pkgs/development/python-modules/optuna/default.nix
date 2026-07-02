@@ -41,16 +41,17 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optuna";
-  version = "4.5.0";
+  version = "4.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    tag = "v${version}";
-    hash = "sha256-qaCOpqKRepm/a1Nh98PV6RcRkadLK5E429pn1zaWQDA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
   };
 
   build-system = [
@@ -105,7 +106,7 @@ buildPythonPackage rec {
     versionCheckHook
   ]
   ++ fakeredis.optional-dependencies.lua
-  ++ optional-dependencies.optional;
+  ++ finalAttrs.passthru.optional-dependencies.optional;
 
   disabledTests = [
     # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
@@ -118,9 +119,19 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ValueError: Failed to start Kaleido subprocess. Error stream
     # kaleido/executable/kaleido: line 5:  5956 Illegal instruction: 4  ./bin/kaleido $@
+    "test_edf_plot_no_trials"
+    "test_edf_plot_no_trials_studies"
     "test_get_optimization_history_plot"
+    "test_get_timeline_plot"
+    "test_plot_contour"
+    "test_plot_edf_with_multiple_studies"
+    "test_plot_edf_with_target"
+    "test_plot_edf_with_target_name"
     "test_plot_intermediate_values"
+    "test_plot_parallel_coordinate"
+    "test_plot_param_importances"
     "test_plot_rank"
+    "test_plot_slice"
     "test_plot_terminator_improvement"
   ];
 
@@ -143,9 +154,9 @@ buildPythonPackage rec {
   meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${src.tag}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";
   };
-}
+})

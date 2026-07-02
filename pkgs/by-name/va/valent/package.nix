@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libadwaita
     libglycin
+    glycin-loaders
     libpeas2
     libphonenumber
     libportal-gtk4
@@ -68,12 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
     tinysparql
   ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   passthru.updateScript = nix-update-script { };
 

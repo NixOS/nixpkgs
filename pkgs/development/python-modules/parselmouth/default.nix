@@ -9,11 +9,12 @@
   pytestCheckHook,
   scikit-build,
   setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "parselmouth";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     repo = "Parselmouth";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ish9FQWdDCJ54S3s3ELZa40ttCs3opTRtFAQNg9lEIM=";
+    hash = "sha256-gogNiKZVQaAzu/VeP4+bg61GtdptZeNkQatcJ/cjXFI=";
   };
 
   configurePhase = ''
@@ -38,6 +39,8 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [ numpy ];
+
+  doCheck = pythonOlder "3.13";
 
   nativeCheckInputs = [
     future

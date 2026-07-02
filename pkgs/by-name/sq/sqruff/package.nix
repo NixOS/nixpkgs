@@ -6,18 +6,18 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqruff";
-  version = "0.34.1";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
-    tag = "v${version}";
-    hash = "sha256-Yk4ejrIs8/8RVvXS2V2ZTBn6zawVO502Xeeb8rjU6e4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-khIP3CtrWcMWIuLcKwDOhwfnJ2FfpffQNqphNpWtzOs=";
   };
 
-  cargoHash = "sha256-4jB1chciQaR/RYhRTfwWOOUIZgePezl8lAngpfoSuJc=";
+  cargoHash = "sha256-9u8U7rWm6jOlxky8+y4ptPRnBBEBWWcg4QO0jbLAk5E=";
 
   # Disable the `python` feature which doesn't work on Nix yet
   buildNoDefaultFeatures = true;
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast SQL formatter/linter";
     homepage = "https://github.com/quarylabs/sqruff";
-    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${version}";
+    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sqruff";
     maintainers = with lib.maintainers; [
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
       pyrox0
     ];
   };
-}
+})

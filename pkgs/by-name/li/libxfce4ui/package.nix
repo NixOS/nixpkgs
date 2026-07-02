@@ -7,8 +7,8 @@
   pkg-config,
   xfce4-dev-tools,
   wrapGAppsHook3,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libepoxy,
   libgtop,
   libgudev,
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libICE
-    libSM
+    libice
+    libsm
     libepoxy
     libgtop
     libgudev

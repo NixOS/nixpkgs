@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certstream-server-go";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "d-Rickyy-b";
     repo = "certstream-server-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-06CoeGPOsJItqUuXbBo2Wxhn2KwqbjpCA8GE1Ng7978=";
   };
 
@@ -29,9 +29,9 @@ buildGoModule rec {
   meta = {
     description = "Drop-in replacement in Golang for the certstream server by Calidog";
     homepage = "https://github.com/d-Rickyy-b/certstream-server-go";
-    changelog = "https://github.com/d-Rickyy-b/certstream-server-go/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/d-Rickyy-b/certstream-server-go/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "certstream-server-go";
   };
-}
+})

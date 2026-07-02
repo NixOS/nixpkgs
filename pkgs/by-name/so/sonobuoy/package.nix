@@ -6,14 +6,14 @@
   sonobuoy,
 }:
 
-# SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
+# SHA of ${finalAttrs.version} for the tool's help output. Unfortunately this is needed in build flags.
 # The update script can update this automatically, the comment is used to find the line.
 let
-  rev = "a988242e8bbded3ef4602eda48addcfac24a1a91"; # update-commit-sha
+  rev = "09b10f4ef2c32b3ee04ec59821ccae492e1e140d"; # update-commit-sha
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sonobuoy";
-  version = "0.57.3"; # Do not forget to update `rev` above
+  version = "0.57.4"; # Do not forget to update `rev` above
 
   ldflags =
     let
@@ -21,7 +21,7 @@ buildGoModule rec {
     in
     [
       "-s"
-      "-X ${t}/pkg/buildinfo.Version=v${version}"
+      "-X ${t}/pkg/buildinfo.Version=v${finalAttrs.version}"
       "-X ${t}/pkg/buildinfo.GitSHA=${rev}"
       "-X ${t}/pkg/buildDate=unknown"
     ];
@@ -29,11 +29,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
-    rev = "v${version}";
-    hash = "sha256-YFItnwU08g4pVo4OOHscRmPRVXyr+R9YWYTxhSzd7iI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LFYn7Ym1RS8/Uysm6I2HbVD48fu542TsHdqybzvLgrw=";
   };
 
-  vendorHash = "sha256-QjVnC6CZXuw6qLNyX9ut2g1Ws1cYO1JuT043aqqeF0Q=";
+  vendorHash = "sha256-0PELYc2CK8FCDUvQomY6AkYd7VmhmTai64ITbpudMc4=";
 
   subPackages = [ "." ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = sonobuoy;
       command = "sonobuoy version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -55,7 +55,7 @@ buildGoModule rec {
     '';
 
     homepage = "https://sonobuoy.io";
-    changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${version}";
+    changelog = "https://github.com/vmware-tanzu/sonobuoy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sonobuoy";
     maintainers = with lib.maintainers; [
@@ -64,4 +64,4 @@ buildGoModule rec {
       wilsonehusin
     ];
   };
-}
+})

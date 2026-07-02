@@ -93,7 +93,10 @@ let
 
       # irrelevant stuff
       system.stateVersion = "25.05";
-      fileSystems."/".device = "/test/dummy";
+      fileSystems."/" = {
+        device = "/test/dummy";
+        fsType = "auto";
+      };
       boot.loader.grub.enable = false;
     }
   );

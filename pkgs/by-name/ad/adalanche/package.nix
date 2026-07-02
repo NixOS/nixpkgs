@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "adalanche";
   version = "2024.1.11";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = "adalanche";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SJa2PQCXTYdv5jMucpJOD2gC7Qk2dNdINHW4ZvLXSLw=";
   };
 
@@ -25,15 +25,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/lkarlslund/adalanche/modules/version.Version=${version}"
+    "-X=github.com/lkarlslund/adalanche/modules/version.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Active Directory ACL Visualizer and Explorer";
     homepage = "https://github.com/lkarlslund/adalanche";
-    changelog = "https://github.com/lkarlslund/Adalanche/releases/tag/v${version}";
+    changelog = "https://github.com/lkarlslund/Adalanche/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "adalanche";
   };
-}
+})

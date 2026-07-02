@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wofi";
-  version = "1.5.2";
+  version = "1.5.3";
 
   outputs = [
     "out"
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     repo = "wofi";
     owner = "~scoopta";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-j0KkmRfTRYpzfqHdIsOXk+pYHCrdzICD1Dm847C5ihs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rMvDWJx07Q19ieFlt0e3/zx2ZP0jJfURIwMiGFPmLis=";
     vc = "hg";
   };
 

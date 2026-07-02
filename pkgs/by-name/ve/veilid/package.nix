@@ -10,18 +10,18 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veilid";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = "veilid";
-    rev = "v${version}";
-    hash = "sha256-BND2Io3V5GtSqh9cTJ9SJ4jgfv6TZQGpYebO4f2YdMA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-14jRIs2iE5JH1ZmC/1DGcg6cejsnmhUTkquXNmOEuQA=";
   };
 
-  cargoHash = "sha256-glbrjue0d2bG1P3U5+nqfxvz2qlDd16bpvyQYpGuiyI=";
+  cargoHash = "sha256-xuIw/RRKydanStS7dw1jK96bgEH0U5TDbayaBZq/OCg=";
 
   nativeBuildInputs = [
     capnproto
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
       qbit
     ];
   };
-}
+})

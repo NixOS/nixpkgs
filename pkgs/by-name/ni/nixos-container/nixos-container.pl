@@ -55,6 +55,7 @@ Usage: nixos-container list
          [--config-file <path>]
          [--flake <flakeref>]
          [--nixos-path <path>]
+         [--refresh]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -122,6 +123,7 @@ GetOptions(
     "no-write-lock-file" => \&copyNixFlags0,
     "no-allow-dirty" => \&copyNixFlags0,
     "recreate-lock-file" => \&copyNixFlags0,
+    "refresh" => \&copyNixFlags0,
     ) or exit 1;
 
 push @nixFlags, @nixFlags2;

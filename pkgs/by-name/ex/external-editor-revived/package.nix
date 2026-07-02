@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "external-editor-revived";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "external-editor-revived";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-K5agRpFJ8iqvPnx3IIMTvrkObT/GB962EtdvWf7Eq4w=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mofrim ];
     mainProgram = "external-editor-revived";
   };
-}
+})

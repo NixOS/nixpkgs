@@ -12,12 +12,12 @@
   gtk3,
   lib,
   libGL,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libdatrie,
   libjack2,
   libpsl,
@@ -26,7 +26,6 @@
   libsysprof-capture,
   libthai,
   libxkbcommon,
-  pcre,
   pkg-config,
   python3,
   sqlite,
@@ -60,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     gtk3
     libGL
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     libdatrie
     libjack2
     libpsl
@@ -74,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     libthai
     libxkbcommon
-    pcre
     python3
     sqlite
     gcc-unwrapped

@@ -4,19 +4,19 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "10.1.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "10.1.1";
   pname = "oxipng";
 
   # do not use fetchCrate (only repository includes tests)
   src = fetchFromGitHub {
     owner = "shssoichiro";
     repo = "oxipng";
-    tag = "v${version}";
-    hash = "sha256-fPzdko8qcg9zcr79SrEakLqTFj9hDCakl6hTVpW9al8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G06GAlxEVOqt2xHq+JOLSYbsa++aArbu+sb0ypQn9u4=";
   };
 
-  cargoHash = "sha256-P8PT75TwdYeS9xJ7EEdIhlgHfd0VlIPUaLkM0SfRPq0=";
+  cargoHash = "sha256-gRWDpxZGy01lWgCIse4Tf7gjwxzosozONB3LD5pX5KQ=";
 
   # don't require qemu for aarch64-linux tests
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dywedir ];
     mainProgram = "oxipng";
   };
-}
+})

@@ -6,10 +6,8 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
-      fetchpatch2,
       lib,
       replaceVars,
-      writeShellScriptBin,
 
       # source specification
       hash,
@@ -45,9 +43,7 @@ let
       buildPackages,
       newScope,
       nixosTests,
-      postgresqlTestHook,
       self,
-      stdenvNoCC,
       testers,
 
       # Block size
@@ -87,7 +83,7 @@ let
         # Building with JIT in pkgsStatic fails like this:
         #   fatal error: 'stdio.h' file not found
         && !stdenv.hostPlatform.isStatic,
-      llvmPackages_20,
+      llvmPackages,
       nukeReferences,
       overrideCC,
 
@@ -162,14 +158,6 @@ let
       zstdEnabled = atLeast "15";
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
-
-      # Pin LLVM 20 until upstream has fully resolved:
-      # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
-      # Currently still a problem on aarch64.
-      # TODO: Remove with next minor releases
-      llvmPackages = lib.warnIf (
-        version == "17.8"
-      ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =
         if !stdenv.cc.isClang then
@@ -387,7 +375,9 @@ let
         ++ lib.optionals tclSupport [ "--with-tcl" ]
         ++ lib.optionals selinuxSupport [ "--with-selinux" ]
         ++ lib.optionals nlsSupport [ "--enable-nls" ]
-        ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
+        ++ lib.optionals bonjourSupport [ "--with-bonjour" ]
+        # Configure needs a little help to find `nm` when cross-compiling.
+        ++ lib.optionals (atLeast "19") [ "NM=${stdenv'.cc}/bin/${stdenv'.cc.targetPrefix}nm" ];
 
       patches = [
         (
@@ -563,64 +553,64 @@ let
           (withBlocksize == null && withWalBlocksize == null);
       installCheckTarget = "check-world";
 
-      passthru =
-        let
-          this = self.callPackage generic args;
-        in
-        {
-          inherit dlSuffix;
+      passthru = {
+        inherit dlSuffix;
 
-          psqlSchema = lib.versions.major version;
+        psqlSchema = lib.versions.major version;
 
-          withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
-          withoutJIT = this;
+        withJIT =
+          if jitSupport then
+            finalAttrs.finalPackage.withPackages (_: [ finalAttrs.finalPackage.jit ])
+          else
+            null;
+        withoutJIT = finalAttrs.finalPackage.withPackages (_: [ ]);
 
-          pkgs =
-            let
-              scope = {
-                inherit
-                  jitSupport
-                  pythonSupport
-                  perlSupport
-                  tclSupport
-                  ;
-                inherit (llvmPackages) llvm;
-                postgresql = this;
-                stdenv = stdenv';
-                postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
-                postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
-              };
-              newSelf = self // scope;
-              newSuper = {
-                callPackage = newScope (scope // this.pkgs);
-              };
-            in
-            import ./ext.nix newSelf newSuper;
-
-          withPackages = postgresqlWithPackages {
-            inherit buildEnv lib makeBinaryWrapper;
-            postgresql = this;
-          };
-
-          pg_config = buildPackages.callPackage ./pg_config.nix {
-            inherit (finalAttrs) finalPackage;
-            outputs = {
-              out = lib.getOutput "out" finalAttrs.finalPackage;
-              man = lib.getOutput "man" finalAttrs.finalPackage;
+        pkgs =
+          let
+            scope = {
+              inherit
+                jitSupport
+                pythonSupport
+                perlSupport
+                tclSupport
+                ;
+              inherit (llvmPackages) llvm;
+              postgresql = finalAttrs.finalPackage;
+              stdenv = stdenv';
+              postgresqlTestExtension = newSuper.callPackage ./postgresqlTestExtension.nix { };
+              postgresqlBuildExtension = newSuper.callPackage ./postgresqlBuildExtension.nix { };
             };
-          };
+            newSelf = self // scope;
+            newSuper = {
+              callPackage = newScope (scope // finalAttrs.finalPackage.pkgs);
+            };
+          in
+          import ./ext.nix newSelf newSuper;
 
-          tests = {
-            postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
-            postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
-            postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
-            postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
-            pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-          }
-          // lib.optionalAttrs jitSupport {
-            postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+        withPackages = postgresqlWithPackages {
+          inherit buildEnv lib makeBinaryWrapper;
+          postgresql = finalAttrs.finalPackage;
+        };
+
+        pg_config = buildPackages.callPackage ./pg_config.nix {
+          inherit (finalAttrs) finalPackage;
+          outputs = {
+            out = lib.getOutput "out" finalAttrs.finalPackage;
+            man = lib.getOutput "man" finalAttrs.finalPackage;
           };
         };
+
+        tests = {
+          postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+          postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
+          postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
+          postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
+          pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs jitSupport {
+          postgresql-jit = nixosTests.postgresql.postgresql-jit.passthru.override finalAttrs.finalPackage;
+        };
+      };
 
       meta = {
         homepage = "https://www.postgresql.org";
@@ -663,8 +653,17 @@ let
     f:
     let
       installedExtensions = f postgresql.pkgs;
+      recurse = postgresqlWithPackages {
+        inherit
+          buildEnv
+          lib
+          makeBinaryWrapper
+          postgresql
+          ;
+      };
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-and-plugins-${postgresql.version}";
+        pname = "${postgresql.pname}-and-plugins";
+        inherit (postgresql) version;
         paths = installedExtensions ++ [
           # consider keeping in-sync with `postBuild` below
           postgresql
@@ -680,21 +679,23 @@ let
           "/share/postgresql/tsearch_data"
         ];
 
-        nativeBuildInputs = [ makeBinaryWrapper ];
-        postBuild =
-          let
-            args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-          in
-          ''
-            wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-          '';
+        derivationArgs = {
+          strictDeps = true;
+          nativeBuildInputs = [ makeBinaryWrapper ];
+          postBuild =
+            let
+              args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+            in
+            ''
+              wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+            '';
+        };
 
         passthru = {
           inherit installedExtensions;
           inherit (postgresql)
             pkgs
             psqlSchema
-            version
             ;
 
           pg_config = postgresql.pg_config.override {
@@ -704,33 +705,10 @@ let
             };
           };
 
-          withJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: installedExtensions ++ [ postgresql.jit ]);
-          withoutJIT = postgresqlWithPackages {
-            inherit
-              buildEnv
-              lib
-              makeBinaryWrapper
-              postgresql
-              ;
-          } (_: lib.remove postgresql.jit installedExtensions);
+          withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
+          withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);
 
-          withPackages =
-            f':
-            postgresqlWithPackages {
-              inherit
-                buildEnv
-                lib
-                makeBinaryWrapper
-                postgresql
-                ;
-            } (ps: installedExtensions ++ f' ps);
+          withPackages = f': recurse (ps: installedExtensions ++ f' ps);
         };
       };
     in

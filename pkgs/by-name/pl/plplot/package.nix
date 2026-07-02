@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   enableWX ? false,
-  wxGTK32,
+  wxwidgets_3_2,
   enableXWin ? false,
   libx11,
   enablePNG ? false,
@@ -13,12 +13,12 @@
   pango,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plplot";
   version = "5.15.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}%20Source/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/plplot/plplot/${finalAttrs.version}%20Source/plplot-${finalAttrs.version}.tar.gz";
     sha256 = "0ywccb6bs1389zjfmc9zwdvdsvlpm7vg957whh6b5a96yvcf8bdr";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional enableWX wxGTK32
+    lib.optional enableWX wxwidgets_3_2
     ++ lib.optional enableXWin libx11
     ++ lib.optionals enablePNG [
       cairo
@@ -36,11 +36,13 @@ stdenv.mkDerivation rec {
     ];
 
   passthru = {
-    libX11 = libx11;
     inherit
       enableWX
       enableXWin
+      libx11
       ;
+    # backwards compat
+    libX11 = libx11;
   };
 
   cmakeFlags = [
@@ -57,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
   };
-}
+})

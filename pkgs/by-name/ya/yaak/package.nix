@@ -138,13 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       popd
     '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/yaak-app \
-      --inherit-argv0 \
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
-      --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

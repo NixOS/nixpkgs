@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fast-ssh";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "julien-r44";
     repo = "fast-ssh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Wn1kwuY1tRJVe9DJexyQ/h+Z1gNtluj78QpBYjeCbSE=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fast-ssh";
   };
-}
+})

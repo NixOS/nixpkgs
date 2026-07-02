@@ -3,26 +3,37 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeBinaryWrapper,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "crowdsec";
-  version = "1.7.6";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "crowdsec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qd5EHn7G7bTV+S4bVXfHytoCI5L/gHxAKB9emeKoSLc=";
+    hash = "sha256-2t9nxuqWNDAUOZHtfNkZ4ZFKXvv8k5LuvKrGNjpdGXc=";
   };
 
-  vendorHash = "sha256-txiZmUd/GQQu7XiI4iE25aCmOLe2sC0uQ8Gne76cw+Q=";
+  vendorHash = "sha256-RDkttsV4PNOfjWPr4v+uIwdkmXYH83vkYFQQIO3CYGE=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   subPackages = [
     "cmd/crowdsec"
     "cmd/crowdsec-cli"
+    "cmd/notification-dummy"
+    "cmd/notification-email"
+    "cmd/notification-file"
+    "cmd/notification-http"
+    "cmd/notification-sentinel"
+    "cmd/notification-slack"
+    "cmd/notification-splunk"
   ];
 
   ldflags = [
@@ -39,12 +50,11 @@ buildGoModule (finalAttrs: {
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";
 
   postInstall = ''
+    # so that `bin/crowdsec` is available for `cscli explain` for example
+    wrapProgram $out/bin/cscli --prefix PATH : $out/bin/
+
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
-
-    mkdir -p $out/lib/systemd/system
-    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
-      --replace-fail /usr/local $out
 
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
@@ -63,6 +73,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
+    mainProgram = "crowdsec";
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${finalAttrs.version}";
     description = "Free, open-source and collaborative IPS";
@@ -80,6 +91,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jk
+      tornax
     ];
   };
 })

@@ -11,7 +11,7 @@
   libxcb,
   libxml2,
   python3,
-  libX11,
+  libx11,
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
   xvfb,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.11.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-IV1dgGM8z44OQCQYQ5PiUUw/zAvG5IIxiBywYVw2ius=";
+    hash = "sha256-wUsxsM0xXTg7nbvFMXrrnHherOepj0YI77eferjRgJA=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     doxygen
   ]
-  ++ lib.optional stdenv.isLinux xvfb
+  ++ lib.optional stdenv.hostPlatform.isLinux xvfb
   ++ lib.optional withWaylandTools wayland-scanner;
 
   buildInputs = [
@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
-    "-Dx-locale-root=${libX11.out}/share/X11/locale"
+    "-Dx-locale-root=${libx11.out}/share/X11/locale"
     "-Denable-docs=true"
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 
-  doCheck = stdenv.isLinux; # TODO: disable just a part of the tests
+  doCheck = stdenv.hostPlatform.isLinux; # TODO: disable just a part of the tests
   preCheck = ''
     patchShebangs ../test/
   '';
@@ -96,8 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      ttuegel
+    maintainers = [
     ];
     mainProgram = "xkbcli";
     platforms = with lib.platforms; unix;

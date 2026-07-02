@@ -16,8 +16,6 @@
   libgee,
   libnotify,
   libpulseaudio,
-  libqtdbusmock,
-  libqtdbustest,
   libsForQt5,
   libxml2,
   lomiri,
@@ -30,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.5.2";
+  version = "24.5.3";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
     tag = finalAttrs.version;
-    hash = "sha256-qdvte+Mm64O/JhI0luJAGAWoCgukKCbPrp5k8SIDuwM=";
+    hash = "sha256-6KrBlAh8do6O7CGb3mO25y1188w2cVwRxplQe8TBlQ4=";
   };
 
   postPatch = ''
@@ -58,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       tests/volume-control-test.cc \
       --replace-quiet 'loop(50)' 'loop(500)' \
       --replace-quiet 'loop(100)' 'loop(1000)' \
-      --replace-quiet 'loop(500)' 'loop(5000)' \
+      --replace-quiet 'loop(500)' 'loop(5000)'
   '';
 
   strictDeps = true;
@@ -99,8 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-test-runner
     gtest
     libsForQt5.qtbase
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     lomiri.gmenuharness
   ];
 

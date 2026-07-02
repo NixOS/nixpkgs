@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dcrctl";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrctl";
-    rev = "release-v${version}";
+    rev = "release-v${finalAttrs.version}";
     hash = "sha256-Nm1r3hHTlW5ob2CLKUgMjVsdzR2gxlFuT6Q3j0pPDSg=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "dcrctl";
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromSourcehut,
   pkg-config,
   scdoc,
-  libX11,
+  libx11,
   cairo,
   pango,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     cairo
     pango
   ];

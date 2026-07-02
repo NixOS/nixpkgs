@@ -136,8 +136,8 @@
   },
   {
     "pname": "Spectre.Console",
-    "version": "0.49.2-preview.0.67",
-    "hash": "sha256-e1BrfX8ME8Ob7ZVKx8VYExKNvLzHHxNJ1R+Yv2lVE3A="
+    "version": "0.51.1",
+    "hash": "sha256-FQAK07dEwEsNYVI1T3S488LHv8AXJ+ZeA9N2hPpWBoo="
   },
   {
     "pname": "Spectre.Console.Analyzer",

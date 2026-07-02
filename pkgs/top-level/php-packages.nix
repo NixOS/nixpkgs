@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   config,
   callPackages,
   lib,
@@ -30,7 +29,6 @@
   nix-update-script,
   oniguruma,
   openldap,
-  openssl_1_1,
   openssl,
   pam,
   pcre2,
@@ -39,7 +37,7 @@
   readline,
   rsync,
   sqlite,
-  unixODBC,
+  unixodbc,
   uwimap,
   valgrind,
   zlib,
@@ -417,7 +415,10 @@ lib.makeScope pkgs.newScope (
           #
           # These will be passed as arguments to mkExtension above.
           extensionData = [
-            { name = "bcmath"; }
+            {
+              name = "bcmath";
+              env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+            }
             {
               name = "bz2";
               buildInputs = [ bzip2 ];
@@ -609,8 +610,8 @@ lib.makeScope pkgs.newScope (
             {
               name = "pdo_odbc";
               internalDeps = [ php.extensions.pdo ];
-              buildInputs = [ unixODBC ];
-              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+              buildInputs = [ unixodbc ];
+              configureFlags = [ "--with-pdo-odbc=unixODBC,${unixodbc}" ];
               doCheck = false;
             }
             {
@@ -717,7 +718,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];

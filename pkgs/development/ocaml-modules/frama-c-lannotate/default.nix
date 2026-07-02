@@ -8,11 +8,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "frama-c-lannotate";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchzip {
     url = "https://git.frama-c.com/pub/ltest/lannotate/-/archive/${finalAttrs.version}/lannotate-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JoD2M3R3/DcUMt33QOvwqHg4eToCgjB8riKc09TWdyc=";
+    hash = "sha256-S7/So+1HBdkeq4k7BisEe2gpzW4vHFi6x8J8evaPgRw=";
   };
 
   propagatedBuildInputs = [

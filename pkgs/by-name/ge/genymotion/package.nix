@@ -10,7 +10,7 @@
   libx11,
   libxkbcommon,
   xdg-utils,
-  libXrender,
+  libxrender,
   fontconfig,
   freetype,
   systemd,
@@ -20,9 +20,9 @@
   gtk3,
   pixman,
   # For glewinfo
-  libXmu,
-  libXi,
-  libXext,
+  libxmu,
+  libxi,
+  libxext,
 }:
 
 let
@@ -32,11 +32,11 @@ let
     glib
     libx11
     libxkbcommon
-    libXmu
-    libXi
-    libXext
+    libxmu
+    libxi
+    libxext
     libGL
-    libXrender
+    libxrender
     fontconfig
     freetype
     systemd

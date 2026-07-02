@@ -12,23 +12,23 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "symbolic";
-  version = "12.17.1";
+  version = "13.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolic";
-    tag = version;
+    tag = finalAttrs.version;
     # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
-    hash = "sha256-rO+bLg2TgSxWJ+ub3TLejKdWTlp9e5/++TEna73Y0Lk=";
+    hash = "sha256-YKq9fsFdv4uZa5FhK1CLeBo20AEJZ5mNgAY1HPH/abA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Us3xROXFKmlYOavXVyvxraMuY6p75AKjh9AOX49ui4Q=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-2Cz1J5YDsF9/tEPmBiYtaSIUPAyAiQh82a9DHjy2fxQ=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for dealing with symbol files and more";
     homepage = "https://github.com/getsentry/symbolic";
-    changelog = "https://github.com/getsentry/symbolic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/symbolic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

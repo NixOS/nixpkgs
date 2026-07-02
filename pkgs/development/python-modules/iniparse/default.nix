@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Accessing and Modifying INI files";
     homepage = "https://github.com/candlepin/python-iniparse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
   };
 }

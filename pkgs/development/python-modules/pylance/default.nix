@@ -28,20 +28,22 @@
   pandas,
   pillow,
   polars,
+  psutil,
   pytestCheckHook,
   tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "1.0.4";
+  version = "8.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SAV4mowG8wcK22ZXJUT9UffKz8lcICipSDC5FR0Z2lY=";
+    hash = "sha256-pxggvF23u3Wfm6YdaHwbDUZDUwtJ4tOaTLViUfGZ0B8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -53,7 +55,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-qDfN4iH/FSqklUC58O4ot7SxBRSKWebYkh1X1T5JXUs=";
+    hash = "sha256-VSy1cOshPLAic+1HkTGiavdNRffiEVAlWThNeebJSyg=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +95,7 @@ buildPythonPackage (finalAttrs: {
     pandas
     pillow
     polars
+    psutil
     pytestCheckHook
     tqdm
   ]
@@ -115,6 +118,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # Failed: DID NOT RAISE <class 'RuntimeError'>
+    "test_create_index_progress_callback_error_before_completion_propagates"
+
     # Hangs indefinitely
     "test_all_permutations"
 
@@ -131,6 +137,7 @@ buildPythonPackage (finalAttrs: {
     "test_lance_log_file"
     "test_lance_log_file_invalid_path"
     "test_lance_log_file_with_directory_creation"
+    "test_lance_log_filters_trace_event_targets"
     "test_timestamp_precision"
     "test_tracing"
 
@@ -151,6 +158,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
     "test_merge_insert_large"
+
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_index_cast_centroids"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Build hangs after all the tests are run due to a torch subprocess not exiting

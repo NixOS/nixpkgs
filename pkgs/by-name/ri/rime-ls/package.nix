@@ -5,14 +5,14 @@
   librime,
   rime-data,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rime-ls";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "wlh320";
     repo = "rime-ls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jDn41hSDcQQO1d4G0XV6B/JZkryHtuoHUOYpmdE1Kxo=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ definfo ];
     mainProgram = "rime_ls";
   };
-}
+})

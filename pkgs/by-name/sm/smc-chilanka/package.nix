@@ -44,6 +44,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Chilanka Malayalam Typeface";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ adtya ];
+    maintainers = [ ];
   };
 }

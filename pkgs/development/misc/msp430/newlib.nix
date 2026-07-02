@@ -6,7 +6,8 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "msp430-${newlib.name}";
+  pname = "msp430-${newlib.pname}";
+  inherit (newlib) version;
   inherit newlib;
   inherit msp430GccSupport;
 

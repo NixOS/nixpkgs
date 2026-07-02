@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "json2hcl";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "kvz";
     repo = "json2hcl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-h7DudYVWvDRCbjoIgOoCIudf7ZfUfWXp5OJ4ni0nm6c=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

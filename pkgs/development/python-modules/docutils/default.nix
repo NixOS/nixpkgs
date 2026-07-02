@@ -5,7 +5,6 @@
   flit-core,
   pillow,
   python,
-  pythonOlder,
 }:
 
 # Note: this package is used to build LLVM’s documentation, which is part of the Darwin stdenv.
@@ -14,12 +13,12 @@
 let
   self = buildPythonPackage rec {
     pname = "docutils";
-    version = "0.21.2";
+    version = "0.22.4";
     pyproject = true;
 
     src = fetchurl {
       url = "mirror://sourceforge/docutils/docutils-${version}.tar.gz";
-      hash = "sha256-OmsYcy7fGC2qPNEndbuzOM9WkUaPke7rEJ3v9uv6mG8=";
+      hash = "sha256-TbU7H96avsu3TZEjDTKrYm2U9rrfxXXW25GUpJ3ymWg=";
     };
 
     build-system = [ flit-core ];

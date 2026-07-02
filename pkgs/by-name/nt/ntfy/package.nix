@@ -11,7 +11,7 @@
   withDbus ? stdenv.hostPlatform.isLinux,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ntfy";
   version = "2.7.1";
 
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dschep";
     repo = "ntfy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EIhoZ2tFJQOc5PyRCazwRhldFxQb65y6h+vYPwV7ReE=";
   };
 
@@ -79,11 +79,11 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "ntfy" ];
 
   meta = {
-    changelog = "https://github.com/dschep/ntfy/releases/tag/${src.tag}";
+    changelog = "https://github.com/dschep/ntfy/releases/tag/${finalAttrs.src.tag}";
     description = "Utility for sending notifications, on demand and when commands finish";
     homepage = "https://ntfy.readthedocs.io/en/latest/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kamilchm ];
     mainProgram = "ntfy";
   };
-}
+})

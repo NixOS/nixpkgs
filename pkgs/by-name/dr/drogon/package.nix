@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.11";
+  version = "1.9.12";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eFOYmqfyb/yp83HRa0hWSMuROozR/nfnEp7k5yx8hj0=";
+    hash = "sha256-Rx6PpouEXW1J44oK+wCnnGQa0i+H5KSboLLATLMCBBg=";
     fetchSubmodules = true;
   };
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/drogonframework/drogon";
     description = "C++14/17 based HTTP web application framework";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

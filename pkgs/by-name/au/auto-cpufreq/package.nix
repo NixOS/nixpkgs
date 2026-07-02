@@ -5,6 +5,7 @@
   replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
+  gawk,
   gtk3,
   getent,
   nixosTests,
@@ -37,6 +38,8 @@ python3Packages.buildPythonPackage rec {
   postPatch = ''
     substituteInPlace auto_cpufreq/core.py \
       --replace-fail "/opt/auto-cpufreq/override.pickle" "/var/run/override.pickle"
+    substituteInPlace auto_cpufreq/core.py \
+      --replace-fail "/opt/auto-cpufreq/turbo-override.pickle" "/var/run/turbo-override.pickle"
     substituteInPlace scripts/org.auto-cpufreq.pkexec.policy \
       --replace-fail "/opt/auto-cpufreq/venv/bin/auto-cpufreq" "$out/bin/auto-cpufreq"
     substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py \
@@ -72,7 +75,10 @@ python3Packages.buildPythonPackage rec {
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ getent ];
+  propagatedBuildInputs = [
+    getent
+    gawk
+  ];
 
   postInstall =
     # copy script manually

@@ -25,22 +25,17 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.9.0";
+  version = "26.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = version;
-    hash = "sha256-ml5364D3qvd6VNhF2JyGoCzxbdO0DBkaBMoD38O5x8o=";
+    tag = finalAttrs.version;
+    hash = "sha256-o11Lq11btpIwzgZlPMcChHexNOZSFEFOsnaIv1n66uY=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-    "defusedxml"
-  ];
 
   build-system = [ setuptools ];
 
@@ -70,6 +65,10 @@ buildPythonPackage rec {
     responses
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   disabledTestPaths = [
     # Disable tests that requires network access
     "tests/io/"
@@ -84,6 +83,7 @@ buildPythonPackage rec {
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
+    "test_session_ssl_error"
     # https://github.com/tenable/pyTenable/issues/953
     "test_construct_query_str"
     "test_construct_query_stored_file"
@@ -98,8 +98,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -28,15 +28,14 @@ let
 in
 curPkgs
 // pkgs.mkShellNoCC {
-  inputsFrom = [
-    fmt.shell
-  ];
-  packages = with pkgs; [
+  packages = [
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
-    nixpkgs-reviewFull
+    pkgs.nixpkgs-reviewFull
     # Command-line utility for working with GitHub
     # Used by nixpkgs-review to fetch eval results
-    gh
+    pkgs.gh
+    # treefmt wrapper
+    fmt.pkg
   ];
 }

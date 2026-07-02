@@ -8,12 +8,12 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "raysession";
   version = "0.14.4";
 
   src = fetchurl {
-    url = "https://github.com/Houston4444/RaySession/releases/download/v${version}/RaySession-${version}-source.tar.gz";
+    url = "https://github.com/Houston4444/RaySession/releases/download/v${finalAttrs.version}/RaySession-${finalAttrs.version}-source.tar.gz";
     hash = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
   };
 
@@ -67,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

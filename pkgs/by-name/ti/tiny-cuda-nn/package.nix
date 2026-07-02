@@ -18,7 +18,7 @@ let
   cuda-common-redist = with cudaPackages; [
     (lib.getDev cuda_cudart) # cuda_runtime.h
     (lib.getLib cuda_cudart)
-    (lib.getDev cuda_cccl) # <nv/target>
+    (lib.getDev cccl) # <nv/target>
     (lib.getInclude cuda_nvrtc) # nvrtc.h
     (lib.getLib cuda_nvrtc)
     (lib.getInclude libcublas) # cublas_v2.h

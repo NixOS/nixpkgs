@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "mplhep-data";
-  version = "0.0.4";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mplhep_data";
     inherit version;
-    hash = "sha256-zR8606+dv/M67550BtITDWJKC9HVqllw/HE6ZCEWWk4=";
+    hash = "sha256-v5zcxlw6nOfY8OMHj/ZZ7z/P3hGeYloPcfIbBu2rxMk=";
   };
 
   nativeBuildInputs = [

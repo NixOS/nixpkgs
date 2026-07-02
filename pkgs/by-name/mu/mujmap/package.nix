@@ -5,14 +5,14 @@
   notmuch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mujmap";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "elizagamedev";
     repo = "mujmap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ elizagamedev ];
     mainProgram = "mujmap";
   };
-}
+})

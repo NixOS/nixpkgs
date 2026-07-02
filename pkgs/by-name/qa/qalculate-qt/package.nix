@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "5.9.0.1";
+  version = "5.11.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y/hAbdU/h5fRLmGESvgam2CeBInhD9ekZ1tiOFMbaZE=";
+    hash = "sha256-5u/YA5/k7JQclIqJUKvzGEenEhndo52m23XlFjkhw78=";
   };
 
   nativeBuildInputs = with qt6; [

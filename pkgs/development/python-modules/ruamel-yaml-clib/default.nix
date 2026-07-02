@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "ruamel-yaml-clib";
-  version = "0.2.14";
+  version = "0.2.15";
   pyproject = true;
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml-clib/code";
     rev = version;
-    hash = "sha256-fy+nzq/L3OKGujf6ExDowdxTWDnZGzVnDxL2e5t0Xcs=";
+    hash = "sha256-SnMELcG2L2ei3UjImljjG1sSCHHROhXYcLe5kAR6h8E=";
   };
 
   build-system = [ setuptools ];

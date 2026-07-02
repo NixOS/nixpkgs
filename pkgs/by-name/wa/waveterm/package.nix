@@ -11,12 +11,12 @@
   gtk3,
   pango,
   cairo,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libx11,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libgbm,
   expat,
   libxcb,
@@ -80,12 +80,12 @@ let
       gtk3
       pango
       cairo
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
       libgbm
       expat
       libxcb

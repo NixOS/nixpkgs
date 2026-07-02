@@ -80,6 +80,7 @@ let
       # https://mozilla.github.io/policy-templates/
       extraPolicies ? { },
       extraPoliciesFiles ? [ ],
+      extraAutoConfig ? "",
       libName ? browser.libName or applicationName, # Important for tor package or the like
       nixExtensions ? null,
       hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
@@ -165,36 +166,34 @@ let
           ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
-        policies = {
-          DisableAppUpdate = true;
-        }
-        // lib.optionalAttrs usesNixExtensions {
-          ExtensionSettings = {
-            "*" = {
-              blocked_install_message = "You can't have manual extension mixed with nix extensions";
-              installation_mode = "blocked";
-            };
-          }
-          // lib.foldr (
-            e: ret:
-            ret
-            // {
-              "${e.extid}" = {
-                installation_mode = "allowed";
+        policies =
+          lib.optionalAttrs usesNixExtensions {
+            ExtensionSettings = {
+              "*" = {
+                blocked_install_message = "You can't have manual extension mixed with nix extensions";
+                installation_mode = "blocked";
               };
             }
-          ) { } extensions;
+            // lib.foldr (
+              e: ret:
+              ret
+              // {
+                "${e.extid}" = {
+                  installation_mode = "allowed";
+                };
+              }
+            ) { } extensions;
 
-          Extensions = {
-            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
-          };
-        }
-        // lib.optionalAttrs smartcardSupport {
-          SecurityDevices = {
-            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
-          };
-        }
-        // extraPolicies;
+            Extensions = {
+              Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
+            };
+          }
+          // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+            };
+          }
+          // extraPolicies;
       };
 
       mozillaCfg = ''
@@ -229,7 +228,7 @@ let
           terminal = false;
         }
         // (
-          if libName == "thunderbird" then
+          if lib.strings.hasPrefix "thunderbird" libName then
             {
               genericName = "Email Client";
               comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
@@ -413,6 +412,9 @@ let
             ln -sfT "$target" "$out/$l"
           done
 
+          # Disable update checks
+          touch "$out/${libDir}/is-packaged-app"
+
           cd "$out"
 
         ''
@@ -423,10 +425,21 @@ let
           # Maybe related to how omni.ja file is mmapped into memory. See:
           # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
           #
-          # The *.dylib files are copied, otherwise some basic functionality, e.g. Crypto API, is broken.
-          for file in $(find . -name "omni.ja" -o -name "*.dylib"); do
+          # Mach-O shared libraries must be copied, not symlinked, otherwise some
+          # functionality like the Crypto API and audio decoding is broken.
+          find . -type l -print0 |
+          while IFS= read -r -d "" file; do
+            case "$(basename "$file")" in
+              omni.ja)
+                ;;
+              *)
+                # Copy if the symlink resolves to a Mach-O dylib
+                otool -l "$file" 2>/dev/null | grep -q 'LC_ID_DYLIB' || continue
+                ;;
+            esac
+
             rm "$file"
-            cp "${browser}/${appPath}/$file" "$file"
+            cp "${browser}/${appPath}/''${file#./}" "$file"
           done
 
           # Copy any embedded .app directories; plugin-container fails to start otherwise.
@@ -542,8 +555,11 @@ let
           prefsDir="$out/${prefsDir}"
           mkdir -p "$prefsDir"
 
-          echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
-          echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
+          cat > "$prefsDir/autoconfig.js" << EOF
+          pref("general.config.filename", "mozilla.cfg");
+          pref("general.config.obscure_value", 0);
+          ${extraAutoConfig}
+          EOF
 
           cat > "$libDir/mozilla.cfg" << EOF
           ${mozillaCfg}

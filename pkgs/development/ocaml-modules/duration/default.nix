@@ -1,23 +1,20 @@
 {
   lib,
   buildDunePackage,
-  ocaml,
   fetchurl,
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "duration";
-  version = "0.2.1";
-
-  duneVersion = "3";
+  version = "0.3.1";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/duration/releases/download/v${version}/duration-${version}.tbz";
-    hash = "sha256-xzjB84z7mYIMEhzT3fgZ3ksiKPDVDqy9HMPOmefHHis=";
+    url = "https://github.com/hannesm/duration/releases/download/v${finalAttrs.version}/duration-${finalAttrs.version}.tbz";
+    hash = "sha256-zYjaaTlR4SEuqD4kzhf3Z+laOanOKt2gZUsy11zmjBM=";
   };
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
   checkInputs = [ alcotest ];
 
   meta = {
@@ -27,4 +24,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

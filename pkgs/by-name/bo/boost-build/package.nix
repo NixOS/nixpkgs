@@ -78,6 +78,6 @@ stdenv.mkDerivation {
     homepage = "https://www.boost.org/build/";
     license = lib.licenses.boost;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ivan-tkatchev ];
+    maintainers = [ ];
   };
 }

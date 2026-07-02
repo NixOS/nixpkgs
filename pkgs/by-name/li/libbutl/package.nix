@@ -10,7 +10,7 @@
   enableStatic ? !enableShared,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbutl";
   version = "0.17.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
+    url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${finalAttrs.version}.tar.gz";
     hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "3.26.0";
+  version = "3.27.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "PDWJFSe8xEUwHcN10PUz6c5EWZLIrKTVqM0xExk9nJs=";
+      sha256 = "+va3wHlAfVtl3aK6+DVkN/EgpiMxwAGUyNywaWiKTJQ=";
     };
 
     buildInputs = [ erlang ];
@@ -48,6 +48,13 @@ let
       for i in _checkouts/* ; do
           ln -s $(pwd)/$i $(pwd)/_build/default/lib/
       done
+    ''
+    # OTP 29 tests fail on warnings, fixed in https://github.com/erlang/rebar3/pull/2996
+    + lib.optionalString ((lib.versions.major erlang.version) == "29") ''
+      substituteInPlace rebar.config --replace-fail 'nowarn_deprecated_catch' 'nowarn_deprecated_catch,nowarn_export_var_subexpr'
+
+      substituteInPlace apps/rebar/test/rebar_xref_SUITE.erl \
+        --replace-fail 'xref_test, xref_ignore_test,' 'xref_test,'
     '';
 
     buildPhase = ''
@@ -123,7 +130,7 @@ let
     }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
-      globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
+      globalPluginNames = lib.unique (map (p: p.pname) globalPlugins);
       rebar3Patched = (
         rebar3.overrideAttrs (old: {
 

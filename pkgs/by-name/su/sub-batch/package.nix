@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sub-batch";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "kl";
     repo = "sub-batch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TOcK+l65iKON1kgBE4DYV/BXACnvqPCshavnVdpnGH4=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sub-batch";
   };
-}
+})

@@ -14,14 +14,14 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbdev";
-  version = "2.4.14";
+  version = "3.0.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zXUbUFf08IncbDO6sHiZP6KFvhF3d+GsFLPp2EuAW3g=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-CSpEJr8IYUFa54VGdPy0p8erNh5qKrGBTsfNYvE3uIo=";
   };
 
   pythonRelaxDeps = [ "ipywidgets" ];
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nbdev" ];
 
   meta = {
-    homepage = "https://github.com/fastai/nbdev";
+    homepage = "https://github.com/AnswerDotAI/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
-    changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/AnswerDotAI/nbdev/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

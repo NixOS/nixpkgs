@@ -4,7 +4,7 @@
   fetchzip,
   SDL,
   pkg-config,
-  libSM,
+  libsm,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "synaesthesia";
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL
-    libSM
+    libsm
   ];
 
   meta = {

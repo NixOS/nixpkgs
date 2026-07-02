@@ -5,7 +5,7 @@
   autoreconfHook,
   intltool,
   pkg-config,
-  libX11,
+  libx11,
   gtk2,
   gtk3,
   libxslt,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     (if withGtk3 then gtk3 else gtk2)
   ];
 

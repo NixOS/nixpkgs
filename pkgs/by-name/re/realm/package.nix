@@ -1,4 +1,5 @@
 {
+  cmake,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -6,18 +7,23 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "realm";
-  version = "2.8.0";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
-    rev = "v${version}";
-    hash = "sha256-7hOy+bqWoVyI2xGJ0eY7GvyIYykr6VP8d3ZYtY/jGPI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gnsFqWhJOMKUaSWfRmHBksw3uWFP0smRhEbPLriEmlk=";
   };
 
-  cargoHash = "sha256-yR+ayseoUYpK9lUFRP0OLrp1+LUrtPnxiPRvjDFSNgo=";
+  cargoHash = "sha256-b/cG6fGoAdhvmZXSQv/QkY3QKiMT7YcfEGohZSbk0q8=";
+
+  nativeBuildInputs = [
+    cmake
+    rustPlatform.bindgenHook
+  ];
 
   env.RUSTC_BOOTSTRAP = 1;
 
@@ -33,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ocfox ];
   };
-}
+})

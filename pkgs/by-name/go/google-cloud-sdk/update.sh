@@ -6,7 +6,7 @@ BASE_URL="$CHANNEL_URL/downloads/google-cloud-sdk"
 
 PACKAGE_DIR=$(dirname -- "$0")
 
-VERSION=$(curl "https://storage.googleapis.com/storage/v1/b/cloud-sdk-release/o?delimiter=/&startOffset=google-cloud-sdk-${UPDATE_NIX_OLD_VERSION}&endOffset=google-cloud-sdk-9" | jq --raw-output '.items[-1].name | scan("\\d+\\.\\d+\\.\\d+")')
+VERSION=$(curl -s "$CHANNEL_URL/components-2.json" | jq -r '.version')
 
 function genMainSrc() {
     local url="${BASE_URL}-${VERSION}-${1}-${2}.tar.gz"
@@ -47,4 +47,10 @@ EOF
 
 } > "${PACKAGE_DIR}/data.nix"
 
-curl "${CHANNEL_URL}/components-v${VERSION}.json" -w "\n" > "${PACKAGE_DIR}/components.json"
+# nixpkgs uses its own Python wrapper; do not generate bundled Python components.
+curl -s "${CHANNEL_URL}/components-v${VERSION}.json" | jq '
+    .components |= map(
+      select(.id | startswith("bundled-python3") | not)
+      | .dependencies = ((.dependencies // []) | map(select(startswith("bundled-python3") | not)))
+    )
+' > "${PACKAGE_DIR}/components.json"

@@ -9,23 +9,48 @@
   gdk-pixbuf,
   glib,
   gobject-introspection,
-  askalono,
   borgbackup,
   writeText,
+  postgresqlTestHook,
+  postgresql,
+  redisTestHook,
+  fontconfig,
   nixosTests,
+
+  # runtime inputs
+  gitSVN,
+  subversion,
+
+  #optional runtime inputs
+  git-review,
+  tesseract,
+  licensee,
+  mercurial,
+  openssh,
 }:
 
 let
   python = python3.override {
-    packageOverrides = final: prev: {
-      django = prev.django_5;
+    self = python;
+    packageOverrides = _final: prev: {
+      django = prev.django_6;
+      pygobject = prev.pygobject3;
     };
   };
-in
-python.pkgs.buildPythonApplication rec {
-  pname = "weblate";
-  version = "5.15.2";
+  python3Packages = python.pkgs;
 
+  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
+    pango
+    harfbuzz
+    librsvg
+    gdk-pixbuf
+    glib
+    gobject-introspection
+  ];
+in
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "weblate";
+  version = "2026.6.1";
   pyproject = true;
 
   outputs = [
@@ -36,11 +61,18 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    tag = "weblate-${version}";
-    hash = "sha256-qNv3aaPyQ/bOrPbK7u9vtq8R1MFqXLJzvLUZfVgjMK0=";
+    tag = "weblate-${finalAttrs.version}";
+    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
   };
 
-  build-system = with python.pkgs; [ setuptools ];
+  postPatch = ''
+    sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
+
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+    sed -i 's/"translate-toolkit==.*"/"translate-toolkit"/' pyproject.toml
+  '';
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [ gettext ];
 
@@ -54,37 +86,50 @@ python.pkgs.buildPythonApplication rec {
         # So we don't need postgres dependencies
         DATABASES = {}
       '';
+      manage = "DJANGO_SETTINGS_MODULE='weblate.settings_static' ${python.pythonOnBuildForHost.interpreter} manage.py";
     in
     ''
       mkdir $static
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
-      export DJANGO_SETTINGS_MODULE="weblate.settings_static"
-      ${python.pythonOnBuildForHost.interpreter} manage.py compilemessages
-      ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
-      ${python.pythonOnBuildForHost.interpreter} manage.py compress
+      ${manage} compilemessages
+      ${manage} collectstatic --no-input
+      ${manage} compress
     '';
 
-  pythonRelaxDeps = [
-    "certifi"
-    "urllib3"
-  ];
+  # Upstream pins all dependencies, so their version constraints are mostly meanningless,
+  # except for a few packages maintained by themselfes.
+  # https://github.com/WeblateOrg/weblate/issues/20003#issuecomment-4691837274
+  pythonRelaxDeps =
+    let
+      # Dependencies owned by Weblate that should always be in the exact version specified
+      coreDeps = [
+        "weblate-fonts"
+        "weblate-schemas"
+        "weblate-language-data"
+        "translation-finder"
+        "translate-toolkit"
+      ];
+    in
+    lib.concatMap (
+      p: if !p ? "pname" || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
+    ) finalAttrs.passthru.dependencies;
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
-      aeidon
       ahocorasick-rs
       altcha
+      argon2-cffi-bindings
+      argon2-cffi
       (toPythonModule (borgbackup.override { python3 = python; }))
       celery
       certifi
+      cffi
       charset-normalizer
       confusable-homoglyphs
-      crispy-bootstrap3
       crispy-bootstrap5
       cryptography
       cssselect
-      cython
       cyrtranslit
       dateparser
       diff-match-patch
@@ -95,9 +140,9 @@ python.pkgs.buildPythonApplication rec {
       django-cors-headers
       django-crispy-forms
       django-filter
-      django-redis
-      django-otp
       django-otp-webauthn
+      django-otp
+      django-redis
       django
       djangorestframework-csv
       djangorestframework
@@ -106,29 +151,37 @@ python.pkgs.buildPythonApplication rec {
       drf-standardized-errors
       fedora-messaging
       filelock
-      fluent-syntax
       gitpython
       hiredis
       html2text
-      iniparse
       jsonschema
       lxml
       mistletoe
       nh3
       openpyxl
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-instrumentation-celery
+      opentelemetry-instrumentation-django
+      opentelemetry-instrumentation-psycopg
+      opentelemetry-instrumentation-redis
+      opentelemetry-instrumentation-requests
+      opentelemetry-sdk
       packaging
-      phply
       pillow
       pyaskalono
+      pyasn1
       pycairo
       pygments
-      pygobject3
+      pygobject
       pyicumessageformat
+      pyjwt
+      pyopenssl
       pyparsing
       python-dateutil
       qrcode
       rapidfuzz
       redis
+      regex
       requests
       ruamel-yaml
       sentry-sdk
@@ -138,9 +191,11 @@ python.pkgs.buildPythonApplication rec {
       tesserocr
       translate-toolkit
       translation-finder
+      twisted
       unidecode
       urllib3
       user-agents
+      weblate-fonts
       weblate-language-data
       weblate-schemas
     ]
@@ -148,24 +203,146 @@ python.pkgs.buildPythonApplication rec {
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ translate-toolkit.optional-dependencies.chardet
+    ++ translate-toolkit.optional-dependencies.fluent
+    ++ translate-toolkit.optional-dependencies.ini
+    ++ translate-toolkit.optional-dependencies.markdown
     ++ translate-toolkit.optional-dependencies.toml
+    ++ translate-toolkit.optional-dependencies.php
+    ++ translate-toolkit.optional-dependencies.rc
+    ++ translate-toolkit.optional-dependencies.subtitles
+    ++ translate-toolkit.optional-dependencies.yaml
     ++ urllib3.optional-dependencies.brotli
     ++ urllib3.optional-dependencies.zstd;
 
-  optional-dependencies = {
-    postgres = with python.pkgs; [ psycopg ];
+  # Commented entries are not packaged yet
+  optional-dependencies = with python3Packages; {
+    amazon = [ boto3 ];
+    # gelf = [ logging-gelf ];
+    # gerrit = [ git-review ];
+    google = [
+      google-cloud-storage
+      google-cloud-translate
+    ];
+    google-errors = [
+      google-cloud-error-reporting
+    ];
+    ldap = [ django-auth-ldap ];
+    # mercurial = [ mercurial ];
+    postgres = [ psycopg ];
+    rollbar = [ rollbar ];
+    saml = [
+      python3-saml
+      xmlsec
+    ];
+    # saml2idp = [ djangosaml2idp2 ];
+    sphinx = [ sphinx ];
+    # wllegal = [ wllegal ];
+    wsgi = [ granian ];
+    # zxcvbn = [ django-zxcvbn-password-validator ];
   };
 
   # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
-    pango
-    harfbuzz
-    librsvg
-    gdk-pixbuf
-    glib
-    gobject-introspection
-  ];
+  env = {
+    inherit GI_TYPELIB_PATH;
+  };
+
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
+
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      postgresqlTestHook
+      postgresql
+      redisTestHook
+      pytest-cov-stub
+      pytest-django
+      pytest-xdist
+      responses
+      selenium
+      standardwebhooks
+
+      gitSVN
+      subversion
+      gettext
+      fontconfig
+      borgbackup
+
+      #optional
+      git-review
+      tesseract
+      licensee
+      mercurial
+      openssh
+    ]
+    ++ social-auth-core.optional-dependencies.saml
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  env = {
+    CI_DATABASE = "postgresql";
+    DJANGO_SETTINGS_MODULE = "weblate.settings_test";
+
+    # Only needed to make weblate/settings_test.py happy
+    CI_DB_PORT = "";
+    CI_DB_PASSWORD = "";
+    CI_REDIS_HOST = "";
+    CI_REDIS_PORT = "";
+  };
+
+  # pytest-xdist wants to create an additional database per test group
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+
+  postgresqlTestSetupPost = ''
+    export CI_DB_HOST="$PGHOST"
+    export CI_DB_USER="$PGUSER"
+    export CI_DB_NAME="$PGDATABASE"
+
+    echo "CACHES[\"avatar\"][\"LOCATION\"] = \"unix://$NIX_BUILD_TOP/run/redis.sock\"" \
+      >> weblate/settings_test.py
+
+    ${python.pythonOnBuildForHost.interpreter} manage.py migrate --noinput
+    ${python.pythonOnBuildForHost.interpreter} manage.py check
+  '';
+
+  disabledTests = [
+    # Tries to download things from GitHub
+    "test_ocr"
+    "test_ocr_backend"
+  ];
+
+  disabledTestPaths = [
+    # Probably network access?
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_component_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_connection_error"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_invalid_response"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_project_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_site_wide_scope"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_translation_added"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_announcement"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_bulk_changes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_announcement"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_bulk_changes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_category_in_payload"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_component_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_connection_error"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_invalid_response"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_project_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_site_wide_scope"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_translation_added"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature_prefix"
+
+    # Tries to resolve DNS
+    "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+
+    # djangosaml2idp2 is not packaged yet
+    "weblate/utils/tests/test_djangosaml2idp.py"
+
+    # Don't understand why
+    "weblate/trans/tests/test_alert.py::WebsiteAlertSettingTest::test_website_alerts_enabled"
+  ];
 
   passthru = {
     inherit python;
@@ -179,7 +356,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${src.tag}";
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Plus
       mit
@@ -188,4 +365,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "weblate";
   };
-}
+})

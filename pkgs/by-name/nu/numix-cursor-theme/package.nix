@@ -37,6 +37,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://numixproject.github.io";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
   };
 }

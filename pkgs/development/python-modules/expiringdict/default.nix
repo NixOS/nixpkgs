@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Dictionary with auto-expiring values for caching purposes";
     homepage = "https://github.com/mailgun/expiringdict";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ gravndal ];
+    maintainers = [ ];
   };
 }

@@ -122,7 +122,7 @@ buildGoModule rec {
         fi
       '';
 
-  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --argstr commit true
+  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --arg commit true
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (gitUpdater {
       rev-prefix = "v";

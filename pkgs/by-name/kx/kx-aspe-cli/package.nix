@@ -6,7 +6,7 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kx-aspe-cli";
   version = "0-unstable-2024-04-06";
 
@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://codeberg.org/keyoxide/kx-aspe-cli";
-    changelog = "https://codeberg.org/keyoxide/kx-aspe-cli/src/commit/${src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/keyoxide/kx-aspe-cli/src/commit/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Keyoxide profile generator CLI using ASPE";
     mainProgram = "kx-aspe";
     platforms = lib.platforms.linux;
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.nobbz ];
   };
-}
+})

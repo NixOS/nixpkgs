@@ -11,7 +11,7 @@
   gsl,
   intltool,
   kdePackages,
-  ladspaH,
+  ladspa-header,
   libbs2b,
   libebur128,
   libmysofa,
@@ -33,9 +33,10 @@
   speexdsp,
   onetbb,
   webrtc-audio-processing,
+  x42-plugins,
   zam-plugins,
   zita-convolver,
-  wrapGAppsNoGuiHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -55,20 +56,19 @@ let
     kirigami-addons
     qqc2-desktop-style
     ;
+  speexdsp' = speexdsp.override { withFftw3 = false; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.0.9";
+  version = "8.2.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cFMbeJeEIDP7uiNi+rRKErgHtjP/PbPKASo+M2qogZQ=";
+    hash = "sha256-VyfLoQPBZAXurS1/HxTLNioo/OT1LsQLZZXu9kDeP5Y=";
   };
-
-  patches = [ ./qmlmodule-fix.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     ninja
     pkg-config
-    wrapGAppsNoGuiHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     kiconthemes
     kirigami
     kirigami-addons
-    ladspaH
+    ladspa-header
     qqc2-desktop-style
     libbs2b
     libebur128
@@ -111,10 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     onetbb
     webrtc-audio-processing
     zita-convolver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    x42-plugins
   ];
 
   preFixup =
@@ -124,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
         zam-plugins # maximizer
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        x42-plugins # autotune
       ];
 
       ladspaPlugins = [

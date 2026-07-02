@@ -1,74 +1,52 @@
 {
-  lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  sqlcipher,
+  rustPlatform,
   nodejs,
-  python3,
   yarn,
-  fixup-yarn-lock,
   fetchYarnDeps,
-  removeReferencesTo,
+  yarnConfigHook,
+  yarnBuildHook,
+  sqlcipher,
 }:
 
-let
-  pinData = lib.importJSON ./pin.json;
-
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seshat-node";
-  inherit (pinData) version cargoHash;
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
-    rev = version;
-    hash = pinData.srcHash;
+    tag = finalAttrs.version;
+    hash = "sha256-2v/qXMCD+r+CSQHtP/YT62p4GoApbGz33kcZfJAKbOU=";
   };
 
-  sourceRoot = "${src.name}/seshat-node/native";
+  sourceRoot = "${finalAttrs.src.name}/seshat-node";
+
+  cargoHash = "sha256-krSm1wy7HkCOLEHPPHCx6V9Mj+FiavyhO6bLOz2/3Qw=";
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/seshat-node/yarn.lock";
+    hash = "sha256-hh9n8By/dNdKS55rcZkzCxmJWwQa6Ovt+4M3YP3/hDs=";
+  };
 
   nativeBuildInputs = [
     nodejs
-    python3
     yarn
-    fixup-yarn-lock
+    yarnConfigHook
+    yarnBuildHook
   ];
+
   buildInputs = [ sqlcipher ];
-
-  npm_config_nodedir = nodejs;
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/seshat-node/yarn.lock";
-    sha256 = pinData.yarnHash;
-  };
-
-  buildPhase = ''
-    runHook preBuild
-    cd ..
-    chmod u+w . ./yarn.lock
-    export HOME=$PWD/tmp
-    mkdir -p $HOME
-    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-    node_modules/.bin/neon build --release -- --target ${stdenv.hostPlatform.rust.rustcTarget} -Z unstable-options --out-dir target/release
-    runHook postBuild
-  '';
-
-  doCheck = false;
 
   installPhase = ''
     runHook preInstall
-    shopt -s extglob
-    rm -rf native/!(index.node)
-    rm -rf node_modules $HOME
-    cp -r . $out
-    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $out/native/index.node
+
+    mkdir -p "$out"
+    mv "index."{node,js} "$out"
+
     runHook postInstall
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
-}
+})

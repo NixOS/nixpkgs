@@ -8,7 +8,7 @@
   libevdev,
   libinput,
   libxkbcommon,
-  xcbutilwm,
+  libxcb-wm,
   makeWrapper,
   meson,
   ninja,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libxkbcommon
-    xcbutilwm
+    libxcb-wm
     pango
     pixman
     systemd

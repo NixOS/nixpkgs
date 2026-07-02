@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-kiara";
   version = "0-unstable-2024-07-13";
 
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env = {
-    NIRI_CONFIG = "${src}/src/niri_config.kdl";
-    STARDUST_RES_PREFIXES = "${src}/res";
+    NIRI_CONFIG = "${finalAttrs.src}/src/niri_config.kdl";
+    STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
   };
 
   meta = {
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

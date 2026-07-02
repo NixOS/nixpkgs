@@ -8,7 +8,7 @@
   cairo,
   atk,
   gdk-pixbuf,
-  libX11,
+  libx11,
 }:
 
 # Arena is free software in the sense of "free beer" but not as in "free
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cairo
     atk
     gdk-pixbuf
-    libX11
+    libx11
     (lib.getLib stdenv.cc.cc)
   ];
 

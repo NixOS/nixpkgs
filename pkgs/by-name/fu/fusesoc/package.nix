@@ -8,15 +8,16 @@
   gitMinimal,
   openssh,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
-  version = "2.4.5";
+  version = "2.4.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VBjJ7wiEz441iVquLMGabtdYbK07+dtHY05x8QzdSL8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-d04DFtV71CkrvX51x19cl0KSn2yOCMmYWGRv3AED8Xw=";
   };
 
   build-system = with python3Packages; [
@@ -64,11 +65,13 @@ python3Packages.buildPythonApplication rec {
     }"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/olofk/fusesoc";
     description = "Package manager and build tools for HDL code";
-    maintainers = [ ];
-    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ VZstless ];
+    license = lib.licenses.bsd2;
     mainProgram = "fusesoc";
   };
-}
+})

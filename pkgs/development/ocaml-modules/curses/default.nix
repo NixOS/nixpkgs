@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "curses";
   version = "1.0.11";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "mbacarella";
     repo = "curses";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tjBOv7RARDzBShToNLL9LEaU/Syo95MfwZunFsyN4/Q=";
   };
 
@@ -29,7 +29,7 @@ buildDunePackage rec {
     description = "OCaml Bindings to curses/ncurses";
     homepage = "https://github.com/mbacarella/curses";
     license = lib.licenses.lgpl21Plus;
-    changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
+    changelog = "https://github.com/mbacarella/curses/raw/${finalAttrs.version}/CHANGES";
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

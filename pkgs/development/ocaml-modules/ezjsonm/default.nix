@@ -7,14 +7,14 @@
   sexplib0,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ezjsonm";
   version = "1.3.0";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ezjsonm/releases/download/v${version}/ezjsonm-${version}.tbz";
+    url = "https://github.com/mirage/ezjsonm/releases/download/v${finalAttrs.version}/ezjsonm-${finalAttrs.version}.tbz";
     hash = "sha256-CGM+Dw52eoroGTXKfnTxaTuFp5xFAtVo7t/1Fw8M13s=";
   };
 
@@ -30,4 +30,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

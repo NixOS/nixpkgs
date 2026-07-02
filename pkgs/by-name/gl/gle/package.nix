@@ -4,11 +4,11 @@
   fetchFromGitHub,
   autoreconfHook,
   libglut,
-  libX11,
-  libXt,
-  libXmu,
-  libXi,
-  libXext,
+  libx11,
+  libxt,
+  libxmu,
+  libxi,
+  libxext,
   libGL,
   libGLU,
 }:
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     libglut
-    libX11
-    libXt
-    libXmu
-    libXi
-    libXext
+    libx11
+    libxt
+    libxmu
+    libxi
+    libxext
   ];
 
   nativeBuildInputs = [

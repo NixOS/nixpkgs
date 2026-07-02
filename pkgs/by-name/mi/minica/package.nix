@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minica";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jsha";
     repo = "minica";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-YUeP3xBoZzonJYfEAOWZYCTFwOxFWySW7ezvpMLNZ1I=";
   };
 
@@ -32,8 +32,8 @@ buildGoModule rec {
       certificate.
     '';
     homepage = "https://github.com/jsha/minica/";
-    changelog = "https://github.com/jsha/minica/releases/tag/${src.rev}";
+    changelog = "https://github.com/jsha/minica/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ m1cr0man ];
   };
-}
+})

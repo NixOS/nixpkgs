@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dhcpig";
   version = "1.6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kamorin";
     repo = "DHCPig";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MquLChDuJe3DdkxxKV4W0o49IIt7Am+yuhdOqUqexS8=";
   };
 
@@ -35,4 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "dhcpig";
   };
-}
+})

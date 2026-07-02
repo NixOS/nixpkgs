@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  fetchpatch,
   nixosTests,
   fixDarwinDylibNames,
   meson,
@@ -28,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.44.4";
+  version = "2.44.6";
 
   outputs = [
     "out"
@@ -38,18 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withIntrospection "devdoc"
   ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
-  src =
-    let
-      inherit (finalAttrs) pname version;
-    in
-    fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-k6Gqw/FCeuc0Vzl1gqLDjQSWOKgBeIzL1fSMpge9vRc=";
-    };
+  src = fetchurl {
+    url = "mirror://gnome/sources/gdk-pixbuf/${lib.versions.majorMinor finalAttrs.version}/gdk-pixbuf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-FAwtC4mfz4U+6SsmNzydwijbzeCCCkJGaT9DKKJ0Zvo=";
+  };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+
+    # Fix loading of xpm module if built-in
+    # https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/267
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/62b8f9fd0bb3b862823cd34afce4b389fbd27569.patch";
+      hash = "sha256-ECEIt8lq/jBtDdBetErKpap2PWGav10vqCXKCpIQSyA=";
+    })
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -87,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/gdk-pixbuf2/-/work_items/13
+    "-Dlegacy_xpm=enabled"
     "-Dgio_sniffing=false"
     "-Dandroid=disabled"
     "-Dglycin=disabled"
@@ -155,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "gdk-pixbuf";
       versionPolicy = "odd-unstable";
     };
 

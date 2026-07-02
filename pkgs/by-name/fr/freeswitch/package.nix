@@ -12,7 +12,7 @@
   sqlite,
   libjpeg,
   speex,
-  pcre,
+  pcre2,
   libuuid,
   ldns,
   libedit,
@@ -109,12 +109,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeswitch";
-  version = "1.10.12";
+  version = "1.11.1";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "freeswitch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
+    hash = "sha256-uXn5MLEsGPfRzTQJ/v3Tq1yXVIWZQwNQIyvZulMxSqU=";
   };
 
   postPatch = ''
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     libjpeg
     sqlite
-    pcre
+    pcre2
     speex
     ldns
     libedit
@@ -159,17 +159,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error"
-    # https://github.com/signalwire/freeswitch/issues/2495
-    "-Wno-incompatible-pointer-types"
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error"
+      # https://github.com/signalwire/freeswitch/issues/2495
+      "-Wno-incompatible-pointer-types"
+    ];
 
-  # Using c++14 because of build error
-  # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
-  CXXFLAGS = "-std=c++14";
+    # Using c++14 because of build error
+    # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
+    CXXFLAGS = "-std=c++14";
 
-  CFLAGS = "-D_ANSI_SOURCE";
+    CFLAGS = "-D_ANSI_SOURCE";
+  };
 
   hardeningDisable = [ "format" ];
 

@@ -6,14 +6,14 @@
   fmt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "metrics";
   version = "0.5.0";
 
   minimalOCamlVersion = "4.04";
 
   src = fetchurl {
-    url = "https://github.com/mirage/metrics/releases/download/v${version}/metrics-${version}.tbz";
+    url = "https://github.com/mirage/metrics/releases/download/v${finalAttrs.version}/metrics-${finalAttrs.version}.tbz";
     sha256 = "sha256-3zVjgJCdBkYbzQl+9gY8qfPFE2X0dqeXwDZktTwFcV0=";
   };
 
@@ -30,4 +30,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

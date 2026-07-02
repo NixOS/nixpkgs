@@ -11,26 +11,20 @@
   ninja,
   openssl,
   pkg-config,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gittyup";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Murmele";
     repo = "Gittyup";
     rev = "gittyup_v${finalAttrs.version}";
-    hash = "sha256-anyjHSF0ZCBJTuqNdH49iwngt3zeJZat5XGDsKbiwPE=";
+    hash = "sha256-A4+t0glZC8vi+E3+WcTMZ0cdUhHaZZrcP2MGPk45X0g=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix GCC 14 build error (remove for next update)
-    # https://github.com/Murmele/Gittyup/pull/759
-    ./0001-Fix-incorrect-order-of-argument-to-calloc-345.patch
-  ];
 
   cmakeFlags =
     let
@@ -54,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmark
     ninja
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -64,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     libssh2
     lua5_4
     openssl
-    libsForQt5.qtbase
-    libsForQt5.qttools
+    qt6.qtbase
+    qt6.qttools
   ];
 
   postInstall = ''

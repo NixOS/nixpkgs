@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-ndk";
   version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "cargo-ndk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1LtjBbfrHKgfqcwz40l7d4+d9C4vY/BKI2P2Oshk+a0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

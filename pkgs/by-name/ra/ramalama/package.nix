@@ -7,21 +7,22 @@
   llama-cpp-vulkan,
   podman,
   withPodman ? true,
+  writableTmpDirAsHomeHook,
 
   # passthru
   ramalama,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.15.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
-    tag = "v${version}";
-    hash = "sha256-0R7y1PpAxXzSlhfOFHf3cWPzZ544fYVUL0w7jOFSuAU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k3VfZ9+ATu2Cwx531D0WVagjn1ZMIKR1i3yyq+3IGJ4=";
   };
 
   build-system = with python3Packages; [
@@ -31,8 +32,8 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     argcomplete
+    bcrypt
     pyyaml
-    jsonschema
     jinja2
   ];
 
@@ -42,6 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+    patchShebangs hack/markdown-preprocess
   '';
 
   preBuild = ''
@@ -69,8 +71,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
     podman
+    python3Packages.pytestCheckHook
+    python3Packages.requests
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
@@ -97,4 +101,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ booxter ];
     mainProgram = "ramalama";
   };
-}
+})

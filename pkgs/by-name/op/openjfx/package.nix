@@ -15,8 +15,8 @@
 
   gtk2,
   gtk3,
-  libXtst,
-  libXxf86vm,
+  libxtst,
+  libxxf86vm,
   glib,
   alsa-lib,
   ffmpeg_7,
@@ -107,8 +107,8 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk2
     gtk3
-    libXtst
-    libXxf86vm
+    libxtst
+    libxxf86vm
     glib
     alsa-lib
     (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)

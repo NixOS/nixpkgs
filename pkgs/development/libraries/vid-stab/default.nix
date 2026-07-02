@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     description = "Video stabilization library";
     homepage = "http://public.hronopik.de/vid.stab/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

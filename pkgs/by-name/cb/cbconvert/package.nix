@@ -11,14 +11,14 @@
   zlib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cbconvert";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gen2brain";
     repo = "cbconvert";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-C2Eox6fpKS0fPB7KFgBn62HKbWYacSVMJK0CkT6+FBU=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.appVersion=${version}"
+    "-X main.appVersion=${finalAttrs.version}"
   ];
 
   buildInputs = [
@@ -53,10 +53,10 @@ buildGoModule rec {
   meta = {
     description = "Comic Book converter";
     homepage = "https://github.com/gen2brain/cbconvert";
-    changelog = "https://github.com/gen2brain/cbconvert/releases/tag/v${version}";
+    changelog = "https://github.com/gen2brain/cbconvert/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "cbconvert";
   };
-}
+})

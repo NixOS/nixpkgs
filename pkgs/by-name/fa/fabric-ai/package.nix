@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fabric-ai";
-  version = "1.4.396";
+  version = "1.4.455";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "fabric";
-    tag = "v${version}";
-    hash = "sha256-ZclAxFZK/mvzTnr1gn/rczCCJ05LeOXrACJ9yqy9jcg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-folZ+Y5l76SKo65RJAK7kZX6DJ/AL+iLkcV8NX+1DTA=";
   };
 
-  vendorHash = "sha256-s7wm7RFbnh9yosWrK5hvrPECYY5nbu3QCdJVe67Sf3c=";
+  vendorHash = "sha256-DfI0SYMX1wfJ8V0tFYpjzCgqhR7H/0J1p5R3aNcrXTw=";
 
   # Fabric introduced plugin tests that fail in the nix build sandbox.
   doCheck = false;
@@ -45,4 +45,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jaredmontoya ];
     mainProgram = "fabric";
   };
-}
+})

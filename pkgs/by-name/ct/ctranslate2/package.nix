@@ -13,7 +13,7 @@
   # Enabling both withOneDNN and withOpenblas is broken
   # https://github.com/OpenNMT/CTranslate2/issues/1294
   withOneDNN ? false,
-  oneDNN,
+  onednn,
   withOpenblas ? true,
   openblas,
   withRuy ? true,
@@ -28,14 +28,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-aH2sm7GkHbjy0/KwgyCIpAFNHDmJURd4xyn+51MCr+Y=";
+    hash = "sha256-Z7Gq+kXIfMdZs48WeptRGXhXnLfehegAwTtQpTbPM4U=";
   };
 
   # Fix CMake 4 compatibility
@@ -84,7 +84,7 @@ stdenv'.mkDerivation (finalAttrs: {
       mkl
     ]
     ++ lib.optionals withCUDA [
-      cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
+      cudaPackages.cccl # <nv/target> required by the fp16 headers in cudart
       cudaPackages.cuda_cudart
       cudaPackages.libcublas
       cudaPackages.libcurand
@@ -93,7 +93,7 @@ stdenv'.mkDerivation (finalAttrs: {
       cudaPackages.cudnn
     ]
     ++ lib.optionals withOneDNN [
-      oneDNN
+      onednn
     ]
     ++ lib.optionals withOpenblas [
       openblas

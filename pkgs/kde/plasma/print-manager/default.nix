@@ -1,10 +1,14 @@
 {
   mkKdeDerivation,
+  kdeclarative,
   cups,
 }:
 mkKdeDerivation {
   pname = "print-manager";
 
   # FIXME: cups-smb?
-  extraBuildInputs = [ cups ];
+  extraBuildInputs = [
+    kdeclarative
+    cups
+  ];
 }

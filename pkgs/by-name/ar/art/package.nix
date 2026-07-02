@@ -12,13 +12,13 @@
   lerc,
   libxkbcommon,
   libepoxy,
-  libXtst,
+  libxtst,
   wrapGAppsHook3,
   pixman,
-  libpthreadstubs,
+  libpthread-stubs,
   gtkmm3,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   lcms2,
   libraw,
   libiptcdata,
@@ -33,20 +33,19 @@
   exiftool,
   mimalloc,
   openexr,
-  ilmbase,
   opencolorio,
   color-transformation-language,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "art";
-  version = "1.26.1";
+  version = "1.26.6";
 
   src = fetchFromGitHub {
-    owner = "artpixls";
+    owner = "artraweditor";
     repo = "ART";
     tag = finalAttrs.version;
-    hash = "sha256-Abh3Hj3wKdWNN7rdU61MgkZHmoa7ufYzZGKsrxplkj0=";
+    hash = "sha256-m5KQUY7loLKH7X2cDw5n7biH1GJTVONTbguILdjNWrI=";
   };
 
   # Fix the build with CMake 4.
@@ -72,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     lerc
     libxkbcommon
     libepoxy
-    libXtst
+    libxtst
     pixman
-    libpthreadstubs
+    libpthread-stubs
     gtkmm3
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
     lcms2
     libraw
     libiptcdata
@@ -92,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     mimalloc
     openexr
-    ilmbase
     opencolorio
     color-transformation-language
   ];
@@ -105,12 +103,18 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCTL_INCLUDE_DIR=${color-transformation-language}/include/CTL"
   ];
 
-  CMAKE_CXX_FLAGS = toString [
-    "-std=c++11"
-    "-Wno-deprecated-declarations"
-    "-Wno-unused-result"
-  ];
-  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
+  env = {
+    CMAKE_CXX_FLAGS = toString [
+      "-std=c++11"
+      "-Wno-deprecated-declarations"
+      "-Wno-unused-result"
+    ];
+    # needed at least with gcc13 on aarch64-linux
+    CXXFLAGS = toString [
+      "-include"
+      "cstdint"
+    ];
+  };
 
   meta = {
     description = "Raw converter based on RawTherapee";

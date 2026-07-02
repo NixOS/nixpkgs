@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.4.6";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DeFp76VwMGBAWOsI3S3jm1qNbPw554zJZfE7hotUedY=";
+    hash = "sha256-gOrfxFGNlxZWScfYEw7zfy7oVWhYEygYgP7mkO4cs/w=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ diogotcorreia ];
     inherit (undetected-chromedriver.meta) platforms;
   };
 })

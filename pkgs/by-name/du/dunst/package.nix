@@ -7,18 +7,18 @@
   which,
   perl,
   jq,
-  libXrandr,
+  libxrandr,
   coreutils,
   cairo,
   dbus,
   systemd,
   gdk-pixbuf,
   glib,
-  libX11,
-  libXScrnSaver,
+  libx11,
+  libxscrnsaver,
   wayland,
   wayland-protocols,
-  libXinerama,
+  libxinerama,
   libnotify,
   pango,
   xorgproto,
@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F7CONYJ95aKNZ+BpWNUerCBMflgJYgSaLAqp6XJ1G5k=";
+    hash = "sha256-Idh/moq+OjD3VpZKJ3blO1JAK7PPX42z15rQz/JZb84=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
   ]
   ++ lib.optionals withX11 [
-    libX11
-    libXScrnSaver
-    libXinerama
+    libx11
+    libxscrnsaver
+    libxinerama
     xorgproto
-    libXrandr
+    libxrandr
   ]
   ++ lib.optionals withWayland [
     wayland

@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.librechat;
+  meiliCfg = config.services.meilisearch;
   format = pkgs.formats.yaml { };
   configFile = format.generate "librechat.yaml" cfg.settings;
   exportCredentials = n: _: ''export ${n}="$(${pkgs.systemd}/bin/systemd-creds cat ${n}_FILE)"'';
@@ -84,6 +85,15 @@ in
             example = 2309;
             description = "The value that will be passed to the PORT environment variable, telling LibreChat what to listen on.";
           };
+          LIBRECHAT_LOG_DIR = lib.mkOption {
+            type = lib.types.str;
+            default = "${cfg.dataDir}/logs";
+            defaultText = lib.literalExpression "/var/lib/librechat/logs";
+            description = ''
+              Logs will be saved into this directory.
+              By default it is relative to `services.librechat.dataDir`.
+            '';
+          };
         };
       };
       example = {
@@ -119,9 +129,11 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
+      default = {
+        version = "1.2.1";
+      };
       example = {
-        version = "1.0.8";
+        version = "1.2.1";
         cache = true;
         interface = {
           privacyPolicy = {
@@ -155,6 +167,26 @@ in
     };
 
     enableLocalDB = lib.mkEnableOption "a local mongodb instance";
+
+    meilisearch = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            example = true;
+            description = ''
+              Whether to enable and configure Meilisearch locally for Librechat.
+              You will manually need to set `services.meilisearch.masterKeyFile`.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        See [LibreChat search feature](https://www.librechat.ai/docs/features/search).
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -178,6 +210,12 @@ in
           You can use https://www.librechat.ai/toolkit/creds_generator to generate these.
         '';
       }
+      {
+        assertion = cfg.meilisearch.enable -> meiliCfg.masterKeyFile != null;
+        message = ''
+          LibreChat's Meilisearch integration requires `services.meilisearch.masterKeyFile` to be set.
+        '';
+      }
     ];
 
     networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
@@ -192,7 +230,8 @@ in
       after = [
         "tmpfiles.target"
       ]
-      ++ lib.optional cfg.enableLocalDB "mongodb.service";
+      ++ lib.optional cfg.meilisearch.enable "meilisearch.service";
+      wants = lib.optional cfg.meilisearch.enable "meilisearch.service";
       description = "Open-source app for all your AI conversations, fully customizable and compatible with any AI provider";
       environment = cfg.env;
       script = # sh
@@ -249,6 +288,11 @@ in
 
     services.librechat.env.MONGO_URI = lib.mkIf cfg.enableLocalDB "mongodb://localhost:27017";
     services.mongodb.enable = lib.mkIf cfg.enableLocalDB true;
+
+    services.meilisearch.enable = lib.mkIf cfg.meilisearch.enable true;
+    services.librechat.env.SEARCH = lib.mkIf cfg.meilisearch.enable true;
+    services.librechat.env.MEILI_HOST = lib.mkIf cfg.meilisearch.enable "http://${meiliCfg.settings.http_addr}";
+    services.librechat.credentials.MEILI_MASTER_KEY = lib.mkIf cfg.meilisearch.enable meiliCfg.masterKeyFile;
   };
 
   meta.maintainers = with lib.maintainers; [

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libX11,
+  libx11,
   xorgproto,
 }:
 
@@ -17,10 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
   };
 
-  prePatch = "substituteInPlace ./Makefile --replace /usr $out";
+  prePatch = ''
+    substituteInPlace Makefile --replace-fail /usr $out
+    # gcc15
+    substituteInPlace main.c --replace-fail 'handler ()' 'handler (int sig)'
+  '';
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 
@@ -28,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny screen magnifier for X11";
     homepage = "https://gitlab.com/amiloradovsky/magnify";
     license = lib.licenses.mit; # or GPL2+, optionally
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     mainProgram = "magnify";
     platforms = lib.platforms.all;
   };

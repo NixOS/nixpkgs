@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "parlay";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "parlay";
-    rev = "v${version}";
-    hash = "sha256-x/piB2rjluIcqlSn+nwWd4J2Nu6Z/RtL54SPq23pZV0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bLukosGqyRnvQ4fwntE2lV7VbQNY5MDIfaX/WXBfTuA=";
   };
 
   vendorHash = "sha256-X/cgNdsUG0Ics/DCk1HOdzez9Ewwm1odFL1EiyFv1Sw=";
@@ -30,4 +30,4 @@ buildGoModule rec {
     mainProgram = "parlay";
     platforms = lib.platforms.unix;
   };
-}
+})

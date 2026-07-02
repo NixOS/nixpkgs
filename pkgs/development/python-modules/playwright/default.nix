@@ -2,32 +2,43 @@
   lib,
   stdenv,
   buildPythonPackage,
-  gitMinimal,
-  greenlet,
   fetchFromGitHub,
-  pyee,
-  python,
+
+  # patches
+  replaceVars,
+  nodejs,
+  playwright-driver,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  playwright-driver,
+
+  # nativeBuildInputs
+  gitMinimal,
+  writableTmpDirAsHomeHook,
+
+  # dependencies
+  greenlet,
+  pyee,
+
+  python,
   nixosTests,
-  nodejs,
 }:
 
 let
   driver = playwright-driver;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "playwright";
-  # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.57.0";
+  # run ./pkgs/development/web/playwright/update.sh to update
+  version = "1.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
-    tag = "v${version}";
-    hash = "sha256-LXTMVC6ytjo7l0QDkNPxtoMTYjmYMjCVqHz61BgAn6A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gbPWUmELw77Fw5M236et2TjkkGisMVVOJzmgq61/bg0=";
   };
 
   patches = [
@@ -36,42 +47,39 @@ buildPythonPackage rec {
     # - The setup script, which would try to download the driver package from
     #   a CDN and patch wheels so that they include it. We don't want this
     #   we have our own driver build.
-    ./driver-location.patch
+    (replaceVars ./driver-location.patch {
+      driver = "${driver}/cli.js";
+      nodejs = lib.getExe nodejs;
+    })
   ];
 
   postPatch = ''
-    # if setuptools_scm is not listing files via git almost all python files are excluded
-    export HOME=$(mktemp -d)
-    git init .
-    git add -A .
-    git config --global user.email "nixpkgs"
-    git config --global user.name "nixpkgs"
-    git commit -m "workaround setuptools-scm"
-
+    # Use sed with a regex instead of substituteInPlace so we don't have to
+    # bump pinned versions on every upstream release. grep -q precheck makes
+    # the build fail loudly if upstream restructures the requires list.
+    grep -q 'requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]' pyproject.toml
     sed -i -e 's/requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]/requires = ["setuptools", "setuptools-scm", "wheel"]/' pyproject.toml
 
     # setup.py downloads and extracts the driver.
     # This is done manually in postInstall instead.
     rm setup.py
-
-    # Set the correct driver path with the help of a patch in patches
-    substituteInPlace playwright/_impl/_driver.py \
-      --replace-fail "@node@" "${lib.getExe nodejs}" \
-      --replace-fail "@driver@" "${driver}/cli.js"
   '';
+
+  build-system = [
+    setuptools-scm
+    setuptools
+  ];
 
   nativeBuildInputs = [
     gitMinimal
-    setuptools-scm
-    setuptools
+    writableTmpDirAsHomeHook
   ];
 
   pythonRelaxDeps = [
     "greenlet"
     "pyee"
   ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     greenlet
     pyee
   ];
@@ -88,7 +96,7 @@ buildPythonPackage rec {
   passthru = {
     inherit driver;
     tests = {
-      driver = playwright-driver;
+      inherit driver;
       browsers = playwright-driver.browsers;
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -97,7 +105,6 @@ buildPythonPackage rec {
     # Package and playwright driver versions are tightly coupled.
     # Use the update script to ensure synchronized updates.
     skipBulkUpdate = true;
-    updateScript = ./update.sh;
   };
 
   meta = {
@@ -108,12 +115,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       techknowlogick
       yrd
-    ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
+      kalekseev
     ];
   };
-}
+})

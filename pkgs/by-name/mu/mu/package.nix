@@ -10,7 +10,6 @@
   cld2,
   cli11,
   fmt_11,
-  coreutils,
   emacs,
   glib,
   gmime3,
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.12.13";
+  version = "1.14.2";
 
   outputs = [
     "out"
@@ -31,16 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djcb";
     repo = "mu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rz0bxgJtz4qHrfHRjJhnvxtFFNM89A39YH9oJ2YGC5g=";
+    hash = "sha256-0svY7XhhimIgsYUbHcNT4OCmpmhE4otRxqoasABEIA4=";
   };
 
   postPatch = ''
-    substituteInPlace lib/utils/mu-utils-file.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/tests/bench-indexer.cc \
-      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
-    substituteInPlace lib/mu-maildir.cc \
-      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
     patchShebangs build-aux/date.py
   '';
 
@@ -76,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.strings.mesonEnable "guile" false)
+    (lib.strings.mesonEnable "scm" false)
     (lib.strings.mesonEnable "readline" false)
     (lib.strings.mesonEnable "tests" finalAttrs.doCheck)
     (lib.strings.mesonOption "lispdir" "${placeholder "mu4e"}/share/emacs/site-lisp")

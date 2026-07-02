@@ -27,17 +27,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.3";
+  version = "1.1.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-/Zzs2b51J0v9PavMr3MuNiFBprb7oJiSC+qDVvMTwEk=";
+    hash = "sha256-LfhFza0G85+fIuACMdwV50Okh5/46z8tLoJ9IvLqTgw=";
   };
 
-  cargoHash = "sha256-XY1ovI73O2jJdx1a5pUk/n6TUazklq7PA+bgva3xslo=";
+  cargoPatches = [
+    # A different reference to the `libcosmic` crate was added
+    # Remove this patch once upstream fixes their lockfile.
+    ./dedup-libcosmic.patch
+  ];
+
+  cargoHash = "sha256-rYjizOCcLJ4aq3UB5xEwWq5+KvrSi5PCUTIwUM/wegM=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake

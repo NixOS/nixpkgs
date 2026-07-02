@@ -17,7 +17,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.2.3";
+  version = "8.2.11";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -49,23 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
 
+  # Apple's LibreSSL tries to read this while running `mongod --version`
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (literal "/private/etc/ssl/openssl.cnf"))
+  '';
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-NjPVLSqm5CPaG9/yOL7wEWW2rwFYcgCqwIZNk/ObYI8=";
+        hash = "sha256-sqFkZ19eYZHQFwVX2zwaKaYXisvoqN25+8DFbyGU2H4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-oVgHrXLjbc7XBrBr8QtChGfyfs+hCot4Dt9I/Qf9X3E=";
+        hash = "sha256-5AX8pb1jInbQTuE0RqpqqcRXon6wKwdvoDCNDF70krE=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
-        hash = "sha256-2jjP+vPAct+dcAn6RQLKrDyAsKQxj4kL+3XlDXfT1cQ=";
+        hash = "sha256-BLIFrmToU8tFHdjAD+0q827cyeDHoYiXwtsds6e7NMA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-qUVQIeot2NO0ddrEW5jElu6HVyqiwTbR1S6KM2LJwV8=";
+        hash = "sha256-M3/x/d2rVKUmIZBQ9hVuT6W9ajZy/Ut5+8aDeXF+HwY=";
       };
     };
     updateScript =

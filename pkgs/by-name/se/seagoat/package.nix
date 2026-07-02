@@ -12,16 +12,16 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
-  version = "1.0.26";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
-    tag = "v${version}";
-    hash = "sha256-XXKLvm3sEYgfLojtYKI3i8o3HERdH4+FRSo28FBqONg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HdIvXXpMEynZV6J++kClNDubXuPORn6GEPHSD+UYBv0=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication rec {
     "chromadb"
     "psutil"
     "setuptools"
+    "stop-words"
     "ollama"
   ];
 
@@ -94,9 +95,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";
   };
-}
+})

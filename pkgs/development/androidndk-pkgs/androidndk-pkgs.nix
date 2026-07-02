@@ -30,6 +30,14 @@ let
       x86_64-unknown-linux-gnu = {
         double = "linux-x86_64";
       };
+      arm64-apple-darwin = {
+        # the difference in `arm64` attribute vs `x86_64` double is purposeful.
+        # the Android NDK contains a single Universal 2 Darwin binary
+        # which supports arm64 and x86. The NDK was never updated to differentiate
+        # or unify architecture with its folder structure, so the binary supporting both architectures
+        # is stored under a single directory indicating `x86_64` despite also supporting darwin arm64.
+        double = "darwin-x86_64";
+      };
     }
     .${stdenv.buildPlatform.config} or fallback;
 
@@ -90,8 +98,8 @@ else
       inherit (androidndk) version;
       nativeBuildInputs = [
         makeWrapper
-        autoPatchelfHook
-      ];
+      ]
+      ++ lib.optionals stdenv.buildPlatform.isLinux [ autoPatchelfHook ];
       propagatedBuildInputs = [ androidndk ];
       passthru = {
         inherit targetPrefix;
@@ -103,7 +111,7 @@ else
       dontStrip = true;
       dontConfigure = true;
       dontPatch = true;
-      autoPatchelfIgnoreMissingDeps = true;
+      autoPatchelfIgnoreMissingDeps = stdenv.buildPlatform.isLinux;
       installPhase = ''
         # https://developer.android.com/ndk/guides/other_build_systems
         mkdir -p $out

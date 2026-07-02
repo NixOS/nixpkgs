@@ -1,6 +1,6 @@
 {
   lib,
-  aioquic,
+  aioquic_1_2,
   argon2-cffi,
   asgiref,
   bcrypt,
@@ -24,6 +24,7 @@
   pyparsing,
   pyperclip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -39,29 +40,34 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.1";
+  version = "12.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
+    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
   };
 
   pythonRelaxDeps = [
-    "zstandard"
-
     # requested by maintainer
     "brotli"
     # just keep those
     "typing-extensions"
+
+    "urwid"
+    "asgiref"
+    "pyparsing"
+    "ruamel.yaml"
+    "tornado"
+    "wsproto"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic
+    aioquic_1_2
     argon2-cffi
     asgiref
     brotli
@@ -91,6 +97,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -98,6 +105,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)

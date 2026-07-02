@@ -30,6 +30,9 @@ stdenv.mkDerivation (
     patchFlags = [ "-p0" ];
 
     patches = [
+      # https://sourceware.org/cgit/bzip2/patch/?id=35d122a3df8b0cc4082a4d89fdc6ee99f375fe67
+      ./patches/CVE-2026-42250.patch
+
       ./patches/bzip2-1.0.6.2-autoconfiscated.patch
     ];
     # Fix up hardcoded version from the above patch, e.g. seen in bzip2.pc or libbz2.so.1.0.N
@@ -75,7 +78,7 @@ stdenv.mkDerivation (
       description = "High-quality data compression program";
       homepage = "https://www.sourceware.org/bzip2";
       changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
-      license = lib.licenses.bsdOriginal;
+      license = lib.licenses.bzip2;
       pkgConfigModules = [ "bzip2" ];
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ mic92 ];

@@ -8,7 +8,7 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "1.1";
   pname = "gen";
   minimalOCamlVersion = "4.03";
@@ -17,7 +17,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "gen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZytPPGhmt/uANaSgkgsUBOwyQ9ka5H4J+5CnJpEdrNk=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     description = "Simple, efficient iterators for OCaml";
     license = lib.licenses.bsd3;
   };
-}
+})

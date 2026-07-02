@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-util";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "font";
     repo = "util";
     tag = "font-util-${finalAttrs.version}";
-    hash = "sha256-cv6Whex1s4+J7Ue4IOHdO9WtrarTgSpLEghWpbUl+0o=";
+    hash = "sha256-tB6A5ezfHwzhL3HsWPZjX3/d53Zkm4hBFbxOnTUgNZc=";
   };
 
   nativeBuildInputs = [

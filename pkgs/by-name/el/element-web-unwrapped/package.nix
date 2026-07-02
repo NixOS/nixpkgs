@@ -2,16 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   jq,
-  yarnConfigHook,
   nodejs,
   jitsi-meet,
+  fetchPnpmDeps,
+  pnpm_11,
+  pnpmConfigHook,
+  faketty,
 }:
 
 let
-  pinData = import ./element-web-pin.nix;
-  inherit (pinData.hashes) webSrcHash webYarnHash webSharedComponentsYarnHash;
+  pnpm = pnpm_11;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -22,72 +23,63 @@ let
     meta = removeAttrs previousAttrs.meta [ "knownVulnerabilities" ];
   });
 in
-stdenv.mkDerivation (
-  finalAttrs:
-  removeAttrs pinData [ "hashes" ]
-  // {
-    pname = "element-web";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "element-web";
+  version = "1.12.22";
 
-    src = fetchFromGitHub {
-      owner = "element-hq";
-      repo = "element-web";
-      rev = "v${finalAttrs.version}";
-      hash = webSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "element-hq";
+    repo = "element-web";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TtC4KUnaKy/gmh5CbkPTWKCFjdeKvt8esFt3awdkA/g=";
+  };
 
-    # https://github.com/element-hq/element-web/commit/e883b05206129857aa00ca726252e10a0eb05cf9
-    # introduced a link: dependency that we need to fetch as well
-    offlineCacheSharedComponents = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/packages/shared-components/yarn.lock";
-      sha256 = webSharedComponentsYarnHash;
-    };
+  pnpmDeps = fetchPnpmDeps {
+    pname = "element";
+    inherit (finalAttrs) version src;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-Cxc2/NpOpkXavDvBgaU6Douud7AO06jt1KjuaLnZh8M=";
+  };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = webYarnHash;
-    };
+  nativeBuildInputs = [
+    jq
+    nodejs
+    pnpm
+    pnpmConfigHook
+    faketty
+  ];
 
-    nativeBuildInputs = [
-      yarnConfigHook
-      jq
-      nodejs
-    ];
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
+  buildPhase = ''
+    runHook preBuild
 
-    buildPhase = ''
-      runHook preBuild
+    cd apps/web
 
-      export VERSION=${finalAttrs.version}
+    export VERSION=${finalAttrs.version}
+    faketty pnpm run build
 
-      pushd packages/shared-components
-      yarnOfflineCache=${finalAttrs.offlineCacheSharedComponents} yarnConfigHook
-      popd
-      yarn --offline --cwd packages/shared-components prepare
+    runHook postBuild
+  '';
 
-      yarn --offline build:res
-      yarn --offline build:module_system
-      yarn --offline build:bundle
+  installPhase = ''
+    runHook preInstall
 
-      runHook postBuild
-    '';
+    cp -R webapp $out
+    cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
+    echo "${finalAttrs.version}" > "$out/version"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
-    installPhase = ''
-      runHook preInstall
+    runHook postInstall
+  '';
 
-      cp -R webapp $out
-      cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
-      echo "${finalAttrs.version}" > "$out/version"
-      jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Glossy Matrix collaboration client for the web";
-      homepage = "https://element.io/";
-      changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
-      teams = [ lib.teams.matrix ];
-      license = lib.licenses.agpl3Plus;
-      platforms = lib.platforms.all;
-    };
-  }
-)
+  meta = {
+    description = "Glossy Matrix collaboration client for the web";
+    homepage = "https://element.io/";
+    changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
+    teams = [ lib.teams.matrix ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.all;
+  };
+})

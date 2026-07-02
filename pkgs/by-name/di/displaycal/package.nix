@@ -13,14 +13,14 @@
   argyllcms,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
   version = "3.9.17";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "DisplayCAL";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
   };
 
@@ -29,7 +29,9 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     build
     certifi
     wxpython
@@ -76,4 +78,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ toastal ];
   };
-}
+})

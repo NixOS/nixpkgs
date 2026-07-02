@@ -6,7 +6,7 @@
   gtk2,
   cmake,
   pkg-config,
-  libXdamage,
+  libxdamage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gtk2
-    libXdamage
+    libxdamage
   ];
 
   postPatch = ''
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "X window switcher drawing a colourful grid";
+    homepage = "https://github.com/soulthreads/xwinmosaic";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

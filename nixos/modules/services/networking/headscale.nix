@@ -327,6 +327,15 @@ in
                 example = "tailnet.example.com";
               };
 
+              override_local_dns = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether to [override clients' DNS servers](https://tailscale.com/kb/1054/dns#override-dns-servers).
+                '';
+                example = false;
+              };
+
               nameservers = {
                 global = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
@@ -643,6 +652,10 @@ in
       {
         assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
         message = "dns.base_domain must be set when using MagicDNS";
+      }
+      {
+        assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
+        message = "dns.nameservers.global must be set when overriding local DNS";
       }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
       (assertRemovedOption [ "settings" "db_host" ] "Use `database.postgres.host` instead.")

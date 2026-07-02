@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "25.1";
+  version = "25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carltongibson";
     repo = "django-filter";
     tag = version;
-    hash = "sha256-ODbBlaJo6sgXkFxLNhqwGTXSHs2d6R6wGKyDz5qA7bs=";
+    hash = "sha256-hufqurodhd+cKs8UHvxbn62nfcZRg2Hcv2v/inkUoVg=";
   };
 
   build-system = [ flit-core ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carltongibson/django-filter";
     changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

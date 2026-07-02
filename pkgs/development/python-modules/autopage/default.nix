@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -28,6 +29,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ fixtures.optional-dependencies.streams;
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/zaneb/autopage/issues/7
+    "test_end_to_end"
+  ];
 
   pythonImportsCheck = [ "autopage" ];
 

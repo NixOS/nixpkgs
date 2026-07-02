@@ -8,14 +8,14 @@
   python3Packages,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitm-cache";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "chayleaf";
     repo = "mitm-cache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ chayleaf ];
     mainProgram = "mitm-cache";
   };
-}
+})

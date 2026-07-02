@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "python-magnumclient";
-  version = "4.9.0";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
     tag = version;
-    hash = "sha256-Ok211QgvsKqkotXrC4HwMyonLv7LzuCjs2hjruGDEvY=";
+    hash = "sha256-kOnx2Fsx6WK7Z3z7O6so1LOjjyPiEB0jDFzOl7WlMS0=";
   };
 
   env.PBR_VERSION = version;

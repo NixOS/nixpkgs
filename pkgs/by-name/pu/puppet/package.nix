@@ -24,7 +24,6 @@
   meta = {
     description = "Server automation framework and application";
     homepage = "https://github.com/puppetlabs/puppet";
-    changelog = "https://github.com/puppetlabs/puppet/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "puppet";
     maintainers = with lib.maintainers; [ baloo ];

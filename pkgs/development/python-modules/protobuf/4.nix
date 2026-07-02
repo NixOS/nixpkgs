@@ -51,23 +51,24 @@ buildPythonPackage {
     fi
   '';
 
-  # Remove the line in setup.py that forces compiling with C++14. Upstream's
-  # CMake build has been updated to support compiling with other versions of
-  # C++, but the Python build has not. Without this, we observe compile-time
-  # errors using GCC.
-  #
-  # Fedora appears to do the same, per this comment:
-  #
-  #   https://github.com/protocolbuffers/protobuf/issues/12104#issuecomment-1542543967
-  #
-  postPatch = ''
-    sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
-
+  postPatch =
+    # Remove the line in setup.py that forces compiling with C++14. Upstream's
+    # CMake build has been updated to support compiling with other versions of
+    # C++, but the Python build has not. Without this, we observe compile-time
+    # errors using GCC.
+    #
+    # Fedora appears to do the same, per this comment:
+    #
+    #   https://github.com/protocolbuffers/protobuf/issues/12104#issuecomment-1542543967
+    ''
+      sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
+    ''
     # The former function has been renamed into the latter in Python 3.12.
     # Does not apply to all protobuf versions, hence --replace-warn.
-    substituteInPlace google/protobuf/internal/json_format_test.py \
-      --replace-warn assertRaisesRegexp assertRaisesRegex
-  '';
+    + ''
+      substituteInPlace google/protobuf/internal/json_format_test.py \
+        --replace-warn assertRaisesRegexp assertRaisesRegex
+    '';
 
   nativeBuildInputs = lib.optional isPyPy tzdata;
 
@@ -85,21 +86,29 @@ buildPythonPackage {
   ]
   ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
 
-  disabledTests =
-    lib.optionals isPyPy [
-      # error message differs
-      "testInvalidTimestamp"
-      # requires tracemalloc which pypy does not implement
-      # https://foss.heptapod.net/pypy/pypy/-/issues/3048
-      "testUnknownFieldsNoMemoryLeak"
-      # assertion is not raised for some reason
-      "testStrictUtf8Check"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.is32bit [
-      # OverflowError: timestamp out of range for platform time_t
-      "testTimezoneAwareDatetimeConversionWhereTimestampLosesPrecision"
-      "testTimezoneNaiveDatetimeConversionWhereTimestampLosesPrecision"
-    ];
+  disabledTests = [
+    # TypeError: np.False_ has type <class 'numpy.bool'>,
+    # but expected one of: (<class 'bool'>, <class 'int'>)
+    "NumpyBoolProtoTest"
+  ]
+  ++ lib.optionals isPyPy [
+    # error message differs
+    "testInvalidTimestamp"
+    # requires tracemalloc which pypy does not implement
+    # https://foss.heptapod.net/pypy/pypy/-/issues/3048
+    "testUnknownFieldsNoMemoryLeak"
+    # assertion is not raised for some reason
+    "testStrictUtf8Check"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    # OverflowError: timestamp out of range for platform time_t
+    "testTimezoneAwareDatetimeConversionWhereTimestampLosesPrecision"
+    "testTimezoneNaiveDatetimeConversionWhereTimestampLosesPrecision"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError: "year (0 )?is out of range" does not match "year must be in 1..9999, not 0"
+    "testInvalidTimestamp"
+  ];
 
   disabledTestPaths =
     lib.optionals (lib.versionAtLeast protobuf.version "23") [
@@ -115,6 +124,9 @@ buildPythonPackage {
     ]
     ++ lib.optionals (lib.versionAtLeast protobuf.version "25") [
       "minimal_test.py" # ModuleNotFoundError: No module named 'google3'
+
+      # ImportError: cannot import name 'self_recursive_pb2' from 'google.protobuf.internal'
+      "google/protobuf/internal/message_test.py"
     ];
 
   pythonImportsCheck = [

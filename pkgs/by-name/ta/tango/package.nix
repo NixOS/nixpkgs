@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tango";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "masakichi";
     repo = "tango";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-e/M2iRm/UwfnRVnMo1PmQTkz4IGTxnsCXNSSUkhsiHk=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "tango";
   };
-}
+})

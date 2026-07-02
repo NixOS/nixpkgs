@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lunar";
-  version = "6.9.5";
+  version = "6.9.7";
 
   src = fetchurl {
     url = "https://github.com/alin23/Lunar/releases/download/v${finalAttrs.version}/Lunar-${finalAttrs.version}.dmg";
-    hash = "sha256-1Y0SFfGliGf1zf4k9iolotMzoAbBH27R0ablMmfeyDM=";
+    hash = "sha256-CqxhLUL/Vnt665xcZFaXg/MWywca6j/pr03oLoyofYQ=";
   };
 
   sourceRoot = ".";

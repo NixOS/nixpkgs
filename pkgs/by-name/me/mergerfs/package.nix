@@ -13,15 +13,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mergerfs";
-  version = "2.41.1";
+  version = "2.42.0";
 
   src = fetchFromGitHub {
     owner = "trapexit";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-pXge+/5Ti4+e0aSbWLg6roIcg+3foAvSHP/Obd0EiE4=";
+    repo = "mergerfs";
+    rev = finalAttrs.version;
+    sha256 = "sha256-FTkJpZkrU9ALMnmeqh1w9r46x4Waq30lA8yAHg3Y54s=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
   '';
 
   makeFlags = [
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

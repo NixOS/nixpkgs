@@ -1,7 +1,6 @@
 {
   buildDunePackage,
   posix-base,
-  unix-errno,
 }:
 
 buildDunePackage {
@@ -10,7 +9,6 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     posix-base
-    unix-errno
   ];
 
   meta = posix-base.meta // {

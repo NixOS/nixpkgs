@@ -19,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.10";
+  version = "1.21.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+G1Q+u48MfzsRUWYWocfgyNmx/tbd7YsSAidVuz0+NQ=";
+    inherit version;
+    pname = "drf_yasg";
+    hash = "sha256-74aDjE7xDc06wevyvmAcvgKXi5mWccqkNmf3yduWFGg=";
   };
 
   postPatch = ''
-    # https://github.com/axnsan12/drf-yasg/pull/710
-    sed -i "/packaging/d" requirements/base.txt
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm ~= 7.0" "setuptools-scm >= 7.0"
   '';
 
   build-system = [

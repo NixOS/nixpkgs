@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshed";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "trntv";
     repo = "sshed";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-y8IQzOGs78T44jLcNNjPlfopyptX3Mhv2LdawqS1T+U=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ocfox ];
     mainProgram = "sshed";
   };
-}
+})

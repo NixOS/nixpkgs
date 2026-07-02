@@ -61,6 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "mpvpaper";
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
   };
 })

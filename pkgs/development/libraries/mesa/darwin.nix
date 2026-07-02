@@ -3,8 +3,12 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  apple-sdk_26,
   bison,
+  darwinMinVersionHook,
   flex,
+  glslang,
+  libpng,
   libxml2,
   llvmPackages,
   meson,
@@ -15,8 +19,30 @@
   libxext,
   libx11,
   libxcb,
+  libxshmfence,
+  spirv-llvm-translator,
+  spirv-tools,
   zlib,
+  eglPlatforms ? [
+    "macos"
+    "x11"
+  ],
+  galliumDrivers ? [
+    "llvmpipe" # software renderer
+    "softpipe" # older software renderer
+  ],
+  vulkanDrivers ? [
+    "kosmickrisp" # Vulkan on Metal
+  ],
+  vulkanLayers ? [
+    "anti-lag"
+    "intel-nullhw"
+    "overlay"
+    "screenshot"
+    "vram-report-limit"
+  ],
 }:
+
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
@@ -28,6 +54,18 @@ stdenv.mkDerivation {
     meta
     ;
 
+  patches = [
+    # Required to build KosmicKrisp
+    ./opencl.patch
+  ];
+
+  postPatch = ''
+    # Darwin only installs `swrast_dri.so`. It is symlinked to `libdril_dri.dylib`, but the script never terminates
+    # checking for `swrast_dri.dylib`, which isn’t what will be created.
+    substituteInPlace bin/install_megadrivers.py \
+      --replace-fail "            while ext != '.' + args.libname_suffix" "            while ext != '.so'"
+  '';
+
   outputs = [
     "out"
     "dev"
@@ -36,6 +74,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     bison
     flex
+    # Use bin output from glslang to not propagate the dev output at
+    # the build time with the host glslang.
+    (lib.getBin glslang)
     meson
     ninja
     pkg-config
@@ -46,12 +87,21 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    apple-sdk_26 # KosmicKrisp requires Metal 4 to build, but …
+    (darwinMinVersionHook "15.0") # … it supports back to Metal 3.2, which requires macOS 15.
+    libpng
     libxml2 # should be propagated from libllvm
+    llvmPackages.libclang
+    llvmPackages.libclc
     llvmPackages.libllvm
+    python3Packages.python # for shebang
+    spirv-llvm-translator
+    spirv-tools
     libx11
     libxext
     libxfixes
     libxcb
+    libxshmfence
     zlib
   ];
 
@@ -60,9 +110,33 @@ stdenv.mkDerivation {
   mesonFlags = [
     "--sysconfdir=/etc"
     "--datadir=${placeholder "out"}/share"
+
+    # What to build
+    (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
+    (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
+    (lib.mesonOption "vulkan-drivers" (lib.concatStringsSep "," vulkanDrivers))
+    (lib.mesonOption "vulkan-layers" (lib.concatStringsSep "," vulkanLayers))
+
+    # Disable glvnd on Darwin
     (lib.mesonEnable "glvnd" false)
+    (lib.mesonEnable "gbm" false)
+    (lib.mesonBool "libgbm-external" false)
+
+    # Needed for KosmicKrisp
+    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.libclang}/lib")
     (lib.mesonEnable "llvm" true)
+    (lib.mesonEnable "shared-llvm" true)
+    (lib.mesonEnable "spirv-tools" true)
+
+    # Needed for Apple GLX support
+    (lib.mesonOption "glx" "dri")
   ];
+
+  mesonBuildType = "release";
+
+  postFixup = ''
+    install_name_tool -add_rpath "$out/lib" "$out/lib/libGL.dylib"
+  '';
 
   passthru = {
     # needed to pass evaluation of bad platforms

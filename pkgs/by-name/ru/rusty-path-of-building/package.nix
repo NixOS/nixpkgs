@@ -1,7 +1,6 @@
 {
   lib,
   rustPlatform,
-  fetchurl,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
@@ -17,18 +16,18 @@
   libxcursor,
   libx11,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
-  version = "0.2.10";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
-    rev = "v${version}";
-    hash = "sha256-odiiYWoBfcnPNfXsxj0gt/ra6Z3zeBQdWRjF7BazffY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9YHXTUtTJO3GPf+NqASEkxf+a94doBGTjLyYruuxRg4=";
   };
 
-  cargoHash = "sha256-OX4L8EmgMJVT6sFZRdhPl36ZUcXq2JEFpb/PJml2YE8=";
+  cargoHash = "sha256-8J1tZukp/Cchxj0QireOhu/eZd0N7uZa86XDLTBmHQk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,8 +45,8 @@ rustPlatform.buildRustPackage rec {
     # this is weird and vendored and should probably stay that way
     (luajit.pkgs.buildLuaPackage {
       pname = "lzip";
-      inherit version;
-      src = "${src}/lua/libs/lzip";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/lua/libs/lzip";
 
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ zlib ];
@@ -119,9 +118,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "A cross-platform runtime for Path of Building and Path of Building 2.";
     homepage = "https://github.com/meehl/rusty-path-of-building";
-    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ k900 ];
+    maintainers = with lib.maintainers; [
+      k900
+      cholli
+    ];
     mainProgram = "rusty-path-of-building";
   };
-}
+})

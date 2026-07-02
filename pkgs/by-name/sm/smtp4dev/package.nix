@@ -3,7 +3,7 @@
   stdenv,
   buildDotnetModule,
   fetchFromGitHub,
-  nodejs,
+  nodejs-slim,
   npmHooks,
   fetchNpmDeps,
   dotnetCorePackages,
@@ -23,8 +23,9 @@ buildDotnetModule (finalAttrs: {
   patches = [ ./smtp4dev-npm-packages.patch ];
 
   nativeBuildInputs = [
-    nodejs
-    nodejs.python
+    nodejs-slim
+    nodejs-slim.npm
+    nodejs-slim.python
     npmHooks.npmConfigHook
     stdenv.cc # c compiler is needed for compiling npm-deps
   ];

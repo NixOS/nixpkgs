@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -13,20 +14,13 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-bTlEXQeYNNspvnNdvQhJn6CNBrcSKYWuNWF/N6+3Vb0=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/opentype
-    mv *.otf $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://www.cooperhewitt.org/open-source-at-cooper-hewitt/cooper-hewitt-the-typeface-by-chester-jenkins/";
     description = "Contemporary sans serif, with characters composed of modified-geometric curves and arches";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
 }

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "id3";
-  version = "0.81";
+  version = "0.82";
 
   src = fetchFromGitHub {
     owner = "squell";
     repo = "id3";
     rev = finalAttrs.version;
-    hash = "sha256-+h1wwgTB7CpbjyUAK+9BNRhmy83D+1I+cZ70E1m3ENk=";
+    hash = "sha256-WwE+DotmA4Z5H4J5ShSWERk1K2QqvY01f8qnw0IRXR8=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];

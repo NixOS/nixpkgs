@@ -9,7 +9,7 @@
   lv2,
   jdk_headless,
   vamp-plugin-sdk,
-  ladspaH,
+  ladspa-header,
   meson,
   ninja,
 }:
@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
   };
 
+  patches = [
+    # Fix missing size_t definition when building with libc++ 21.
+    # Source: https://github.com/breakfastquay/rubberband/pull/126
+    ./0001-Fix-an-error-with-libcxx-21.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     meson
@@ -34,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     fftw
     vamp-plugin-sdk
-    ladspaH
+    ladspa-header
     lv2
   ];
   makeFlags = [ "AR:=$(AR)" ];
@@ -49,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

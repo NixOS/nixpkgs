@@ -431,7 +431,7 @@ Overall, the unifying theme here is that propagation shouldn’t be introducing 
 
 ##### `depsBuildBuild` {#var-stdenv-depsBuildBuild}
 
-A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc`, the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
+A list of dependencies whose host and target platforms are the new derivation’s build platform. These are programs and libraries used at build time that produce programs and libraries also used at build time. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it in `nativeBuildInputs` instead. The most common use of this `buildPackages.stdenv.cc` (the compiler for `buildPackages`, which means that it's from the package set `buildPackages.buildPackages = pkgsBuildBuild`), the default C compiler for this role. That example crops up more than one might think in old commonly used C libraries.
 
 Since these packages are able to be run at build-time, they are always added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -511,9 +511,33 @@ If set to `true`, `stdenv` will pass specific flags to `make` and other build to
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
+#### `__structuredAttrs` {#var-stdenv-__structuredAttrs}
+
+`__structuredAttrs` defines how derivation attributes are passed to the builder.
+
+If enabled, a shell script and a JSON representation of the derivation attributes are created.
+The environment variables {env}`NIX_ATTRS_SH_FILE` and {env}`NIX_ATTRS_JSON_FILE` point to the exact location of these files.
+
+Attributes intended to be _exported_ as environment variables must be defined in the `env` attribute.
+Attributes that are _local_ to the buildscript should be defined outside of `env`, to benefit from structured shell variables.
+
+::: {.important}
+`__structuredAttrs` is a complete replacement for the way attributes are handled currently, and is the preferred default.
+
+`passAsFile` is disabled when `__structuredAttrs` is enabled, since {env}`NIX_ATTRS_JSON_FILE` can be read from instead.
+
+All new top level packages must enable `__structuredAttrs`.
+
+:::
+
+See the upstream nix documentation for more detail:
+  - [Advanced Derivation Attributes](https://nix.dev/manual/nix/2.34/language/advanced-attributes.html#adv-attr-structuredAttrs)
+  - [Builder Execution](https://nix.dev/manual/nix/2.34/store/building.html#builder-execution)
+  - [Structured Attributes](https://nix.dev/manual/nix/2.34/store/derivation/#structured-attrs)
+
 ### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
-If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+If you pass a function to `mkDerivation`, it will call the function with an argument that represents the final state of the package: the return value of the function itself, with any overrides applied, as the function is reinvoked by any `overrideAttrs` calls. For example:
 
 ```nix
 mkDerivation (finalAttrs: {
@@ -1631,13 +1655,11 @@ Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the gener
 
 This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
 
-### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
 
-The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
 
-#### `nostrictaliasing` {#nostrictaliasing}
-
-This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
 
 #### `strictflexarrays1` {#strictflexarrays1}
 
@@ -1646,6 +1668,14 @@ This flag adds the `-fstrict-flex-arrays=1` compiler option, which reduces the c
 Enabling this flag on packages that still use length declarations of flexible arrays >1 may cause the package to fail to compile citing accesses beyond the bounds of an array or even crash at runtime by detecting an array access as an "overrun". Few projects still use length declarations of flexible arrays >1.
 
 Disabling `strictflexarrays1` implies disablement of `strictflexarrays3`.
+
+### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
+
+The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
+
+#### `nostrictaliasing` {#nostrictaliasing}
+
+This flag adds the `-fno-strict-aliasing` compiler option, which prevents the compiler from assuming code has been written strictly following the standard in regards to pointer aliasing and therefore performing optimizations that may be unsafe for code that has not followed these rules.
 
 #### `strictflexarrays3` {#strictflexarrays3}
 
@@ -1682,12 +1712,6 @@ sorry, unimplemented: __builtin_clear_padding not supported for variable length 
 Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
 
 These checks may have an impact on performance in some cases.
-
-#### `libcxxhardeningfast` {#libcxxhardeningfast}
-
-Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
-
-Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
 
 #### `libcxxhardeningextensive` {#libcxxhardeningextensive}
 

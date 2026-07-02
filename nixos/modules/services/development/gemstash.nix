@@ -36,6 +36,8 @@ in
       '';
     };
 
+    package = lib.mkPackageOption pkgs "gemstash" { };
+
     settings = lib.mkOption {
       default = { };
       description = ''
@@ -96,7 +98,7 @@ in
       after = [ "network.target" ];
       serviceConfig = lib.mkMerge [
         {
-          ExecStart = "${pkgs.gemstash}/bin/gemstash start --no-daemonize --config-file ${settingsFormat.generate "gemstash.yaml" (prefixColon cfg.settings)}";
+          ExecStart = "${lib.getExe cfg.package} start --no-daemonize --config-file ${settingsFormat.generate "gemstash.yaml" (prefixColon cfg.settings)}";
           NoNewPrivileges = true;
           User = "gemstash";
           Group = "gemstash";

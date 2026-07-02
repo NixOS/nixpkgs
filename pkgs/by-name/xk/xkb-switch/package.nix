@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   libxkbfile,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    libX11
+    libx11
     libxkbfile
   ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Switch your X keyboard layouts from the command line";
     homepage = "https://github.com/ierton/xkb-switch";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ smironov ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "xkb-switch";
   };

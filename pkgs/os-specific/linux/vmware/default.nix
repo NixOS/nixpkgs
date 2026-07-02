@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "vmware-modules";
-  version = "workstation-17.6.3-20250728-${kernel.version}";
+  version = "workstation-25h2-20251015-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "philipl";
     repo = "vmware-host-modules";
-    rev = "6797e552638a28d1fa1e9ebd7ab5d3c628671ba0";
-    hash = "sha256-KCLxAF6UtNIdKcDoANviln2RJuz1Ld8jq5QFW9ONghs=";
+    rev = "5c80f597017882f76e9c7ffd48a292a4b7c860fe";
+    hash = "sha256-EFOkzwul1QCaKUBwFqH8uIsIUcvtEmxYVaE/OdoHdZI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -46,7 +46,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/mkubecek/vmware-host-modules";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = (kernel.kernelOlder "5.5" && kernel.isHardened);
     maintainers = with lib.maintainers; [
       deinferno
       vifino

@@ -5,7 +5,7 @@
   nixosTests,
   cmake,
   pkg-config,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   xinput,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     xinput
@@ -62,6 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DENABLE_TEST:BOOL=ON"
   ];
+
+  # Mismatched arg counts in tests break under gcc 15's C23 default.
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   postInstall = ''
     mkdir -p $test/share

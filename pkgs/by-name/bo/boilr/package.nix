@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   postInstall = ''
     patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/boilr
     install -Dpm 0644 flatpak/io.github.philipk.boilr.desktop $out/share/applications/boilr.desktop
-    install -Dpm 0644 resources/io.github.philipk.boilr.png $out/share/pixmaps/io.github.philipk.boilr.png
+    install -Dpm 0644 resources/io.github.philipk.boilr.png -t $out/share/icons/hicolor/32x32/apps
   '';
 
   dontPatchELF = true;

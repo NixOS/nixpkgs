@@ -4,17 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "replacement";
   version = "0.4.4";
   pyproject = true;
 
-  disabled = python3Packages.isPy27;
-
   src = fetchFromGitHub {
     owner = "siriobalmelli";
     repo = "replacement";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0j4lvn3rx1kqvxcsd8nhc2lgk48jyyl7qffhlkvakhy60f9lymj3";
   };
 
@@ -50,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

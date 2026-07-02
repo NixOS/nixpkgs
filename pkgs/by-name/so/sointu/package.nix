@@ -15,15 +15,15 @@
   libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sointu";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vsariola";
     repo = "sointu";
-    tag = "v${version}";
-    hash = "sha256-xHKD+zArsdQVffwbbSOOdzC6o5sxpez8VLAwIzV5X4E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r/yNjod1yOT+CaOcyxhL0GuHK108CV2arVoqWE0kzco=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildGoModule rec {
   ];
 
   proxyVendor = true;
-  vendorHash = "sha256-gLDLKqu6k7/nwv6xHUE6MIYrbQFfVFAuUiMbLptcE5k=";
+  vendorHash = "sha256-GFLfUd8Y4TFfdej/zy3VkCUwme2S2uAP39TcfZEv1Bg=";
 
   subPackages = [
     "cmd/sointu-track"
@@ -60,4 +60,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ martinimoe ];
   };
-}
+})

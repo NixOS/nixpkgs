@@ -2,19 +2,23 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_39,
+  electron_41,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
 }:
 
 let
-  electron = electron_39;
-  version = "2026.1.3";
+  electron = electron_41;
+  version = "2026.5.1";
 in
 
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
   inherit version;
 
@@ -22,10 +26,10 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-9WhSQq3is2qucL1cGQIYPuLM9VkCFIWq2XVU2QioRMo=";
+    hash = "sha256-SJlTTVTZ/zGIK7Nf35cZ62tdhevXC95MsbiQJCLiVtk=";
   };
 
-  npmDepsHash = "sha256-2DNUTvZ6yFL9U8JKw4ZFR81a6Mv9rPXtRu/v/Il/Rhw=";
+  npmDepsHash = "sha256-2rjgKS1mIrjOg+YXuMaqKyEQt0utLA4DGxOs0oI4BaQ=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
@@ -75,7 +79,25 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "${finalAttrs.pname}-electron-updater";
+      runtimeInputs = [
+        nix
+        jq
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = toString ./package.nix;
+      };
+      text = ''
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
+        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+      '';
+    }))
+  ];
 
   meta = {
     description = "GUI inspector for the appium UI automation tool";
@@ -86,4 +108,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ marie ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -62,12 +62,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ftZACUf2lAHokcUXj45LRA7/3goOcIy521cGl6qhR98=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     distutils # required in python312 to call subcommands (see https://github.com/Ericsson/codechecker/issues/4350)
     lxml
     sqlalchemy
@@ -77,13 +76,9 @@ python3Packages.buildPythonApplication rec {
     multiprocess
     thrift
     gitpython
+    pyyaml
     types-pyyaml
     sarif-tools
-    pytest
-    pycodestyle
-    pylint
-    mkdocs
-    coverage
   ];
 
   pythonRelaxDeps = [

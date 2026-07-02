@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  xxHash,
+  pkgs,
   ctypes,
   ctypes-foreign,
   dune-configurator,
@@ -33,7 +33,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ctypes
     ctypes-foreign
-    xxHash
+    pkgs.xxhash
   ];
 
   doCheck = true;

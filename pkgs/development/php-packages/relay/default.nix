@@ -10,41 +10,42 @@
   lz4,
   autoPatchelfHook,
   writeShellScript,
+  runCommand,
   curl,
   common-updater-scripts,
 }:
 
 let
-  version = "0.20.0";
+  version = "0.30.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-v+28oH/7Dp7mSsIgC/IQAn3Pp0gZ43vBMHb/1xBhiVY=";
-        "8.2" = "sha256-OXWMn71XCECh5q1kPxKyo7v/dzCT2it7S8NIKbjBli8=";
-        "8.3" = "7mlpqSPI34DTMJe6gw+77aJGOr12CXHHw+kBmy/nBI4=";
-        "8.4" = "sha256-FpkzCsak8RZBOgOT90VA5iLcfp5FOxpaOqWQJoV0HEY=";
-        "8.5" = "bMHjDJf5/prqUjVR6xOTsHl9iFGrBTL6b42KxyogWbQ=";
+        "8.1" = "sha256-71TLrF9HvuocMLei89bGIibJIC1sD59RB9Vb6FBS49U=";
+        "8.2" = "sha256-WFrJ0+gun1qs77s3URFTha/tZA8gSeqlGLT26twnjko=";
+        "8.3" = "fiduW1NKScDDY3k3lvw98r8KqaD0jPR4En8dNvdglFA=";
+        "8.4" = "sha256-SQ9+/zD6n49e2/9nH6hotyIJ/xsQMX5A78hFTPK4/hg=";
+        "8.5" = "+n+fE5soEbruH+L35B+bapU/Z7rSjjOD/4BgRmr3MVc=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-Bbm+KURBJbzdyuV2RvnxYnLXLS6VN1osME6ZYCJLBhs=";
-        "8.2" = "sha256-niNBiZYOQVBg8CA/HCHkXdVJKBbbb/64Z1tjVo0m/2M=";
-        "8.3" = "sha256-CcuZ36K6nEFVIrdqHMQ5zp1zDDRXP55VKfqT3vx2+NA=";
-        "8.4" = "rvySgiePXFOctBBJqamBgn2XYQSQzeZAU2i1yCa5/lI=";
-        "8.5" = "4nkaXp2ArpndcG4BlPU7IlBrVrOEb/Tn7hSZ+0Vsm7k=";
+        "8.1" = "sha256-hetG8fEmMJccYWMQwPb3hml5thNeY2L6Y4gCDQmbDlo=";
+        "8.2" = "sha256-HufvcT4QSkuoxDcaCWD+hmG1fORyTUBh1Vsfnv7krng=";
+        "8.3" = "sha256-LV4coud7YNqB+s1sHoKXNVLAUrLjDMDpulS9fGVXDsg=";
+        "8.4" = "em1nZgGD1fAtvMxVeJBU4RZaA71/qMVLi0KCRAbilpM=";
+        "8.5" = "d0f3PzvZZn1KmXy1Gm0gm5f3f58kt+/LTc3yWZqto2I=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-1UJMs1lhXMVLbyxQIOIF8S+p9lMMx5WzMwdYUs3eN6U=";
-        "8.2" = "sha256-zg+LSZdm3qIJ6DoRPSGRSEmKkn5uNPErlC5kMUQhxmM=";
-        "8.3" = "sha256-kvE4MavRxqQgkWHjaSBwx87r336pmqEwsIpC9CYwPxI=";
-        "8.4" = "pvYJHfkKvdyIrSrvxezwX2QWQw3kj6nPe/sHlJKys+Q=";
-        "8.5" = "Aw3oQXYjVNaDHl/qffhTmNHLTWi5bTjF1r4SKyu8nC0=";
+        "8.1" = "sha256-La/TQDnQ0hqNhPMtLlwfw5cKtXCpjxBMTd6yvZM2O2M=";
+        "8.2" = "sha256-+FavbnliF071lWFU55rhFNq6X2wpW9mHSstwQQTbnwQ=";
+        "8.3" = "sha256-G6nfKMObVMtY45J7DaKg0LdHwV+lfCUa1Pkfp66+apY=";
+        "8.4" = "x9YXGxtqN3EL1lWCqAkIKKrO0b40BFalO6GExhF3p4c=";
+        "8.5" = "8hU5Ft9i3L6pf2XY7rRLmSbQmZ3z1wjI+7sjiq/GHUU=";
       };
     };
   };
@@ -83,26 +84,62 @@ stdenv.mkDerivation (finalAttrs: {
   internalDeps = [ php.extensions.session ];
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Temporary patch as relay isn't compatible with the latest version of hiredis out of
+    # the box.
+    patchelf \
+      --replace-needed libhiredis.so.1.1.0 libhiredis.so.1 \
+      --replace-needed libhiredis_ssl.so.1.1.0 libhiredis_ssl.so.1 \
+        relay.so
+  ''
+  + ''
     install -Dm755 relay.so -t $out/lib/php/extensions
   ''
   + (
     if stdenv.hostPlatform.isDarwin then
       let
         args =
-          lib.strings.concatMapStrings
-            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
+          lib.concatMapStrings
             (
-              with lib.attrsets;
-              [
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-              ]
-            );
+              v:
+              let
+                targetName = if v ? to then v.to else builtins.baseNameOf v.from;
+              in
+              " -change ${v.from} ${lib.strings.makeLibraryPath [ v.pkg ]}/${targetName}"
+            )
+            [
+              {
+                from = "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib";
+                pkg = libck;
+              }
+              {
+                from = "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib";
+                pkg = openssl;
+              }
+              {
+                from = "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib";
+                pkg = openssl;
+              }
+              {
+                from = "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib";
+                pkg = zstd;
+              }
+              {
+                from = "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib";
+                pkg = lz4;
+              }
+              {
+                from = "/opt/homebrew/opt/hiredis/lib/libhiredis.1.3.0.dylib";
+                pkg = hiredis;
+                to = "libhiredis.1.1.0.dylib";
+              }
+              {
+                from = "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.1.3.0.dylib";
+                pkg = hiredis;
+                to = "libhiredis_ssl.dylib.1.1.0";
+              }
+            ];
       in
       # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
       ''
@@ -120,6 +157,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.smokeTest = runCommand "php-relay-smoke-test" { } ''
+      ${lib.getExe php} \
+        -d extension=${finalAttrs.finalPackage}/lib/php/extensions/relay.so \
+        -r 'exit(extension_loaded("relay") ? 0 : 1);'
+      touch $out
+    '';
+
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
       export PATH="$PATH:${

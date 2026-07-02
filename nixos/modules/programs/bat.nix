@@ -5,9 +5,9 @@
   ...
 }:
 let
-  inherit (builtins) isList elem;
+  inherit (builtins) isList;
   inherit (lib)
-    getExe
+    concatMapStrings
     literalExpression
     maintainers
     mapAttrs'
@@ -16,7 +16,6 @@ let
     mkOption
     mkPackageOption
     nameValuePair
-    optionalString
     types
     isBool
     boolToString
@@ -36,33 +35,6 @@ let
       boolToString value
     else
       toString value;
-
-  initScript =
-    {
-      program,
-      shell,
-      flags ? [ ],
-    }:
-    if (shell != "fish") then
-      ''
-        eval "$(${getExe program} ${toString flags})"
-      ''
-    else
-      ''
-        ${getExe program} ${toString flags} | source
-      '';
-
-  shellInit =
-    shell:
-    optionalString (elem pkgs.bat-extras.batpipe cfg.extraPackages) (initScript {
-      program = pkgs.bat-extras.batpipe;
-      inherit shell;
-    })
-    + optionalString (elem pkgs.bat-extras.batman cfg.extraPackages) (initScript {
-      program = pkgs.bat-extras.batman;
-      inherit shell;
-      flags = [ "--export-env" ];
-    });
 in
 {
   options.programs.bat = {
@@ -112,17 +84,21 @@ in
       );
     };
 
-    programs = {
-      bash = mkIf (!config.programs.fish.enable) {
-        interactiveShellInit = shellInit "bash";
+    programs =
+      let
+        shellInit = shell: concatMapStrings (pkg: pkg.shellInit shell) cfg.extraPackages;
+      in
+      {
+        bash = mkIf (!config.programs.fish.enable) {
+          interactiveShellInit = shellInit "bash";
+        };
+        fish = mkIf config.programs.fish.enable {
+          interactiveShellInit = shellInit "fish";
+        };
+        zsh = mkIf (!config.programs.fish.enable && config.programs.zsh.enable) {
+          interactiveShellInit = shellInit "zsh";
+        };
       };
-      fish = mkIf config.programs.fish.enable {
-        interactiveShellInit = shellInit "fish";
-      };
-      zsh = mkIf (!config.programs.fish.enable && config.programs.zsh.enable) {
-        interactiveShellInit = shellInit "zsh";
-      };
-    };
   };
   meta.maintainers = with maintainers; [ sigmasquadron ];
 }

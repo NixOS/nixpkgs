@@ -37,6 +37,7 @@ let
 
   # Dependencies needed by specific checks
   dependenciesForChecks = {
+    "Ping" = [ pkgs.iputils ];
     "Smb" = pkgs.samba;
     "XIdleTime" = [
       pkgs.xprintidle
@@ -225,6 +226,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.checks != { };
+        message = "`services.autosuspend.checks` must contain at least one activity check.";
+      }
+    ];
+
     systemd.services.autosuspend = {
       description = "A daemon to suspend your server in case of inactivity";
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
@@ -233,16 +241,6 @@ in
       path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {
         ExecStart = "${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon";
-      };
-    };
-
-    systemd.services.autosuspend-detect-suspend = {
-      description = "Notifies autosuspend about suspension";
-      documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
-      wantedBy = [ "sleep.target" ];
-      after = [ "sleep.target" ];
-      serviceConfig = {
-        ExecStart = "${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} presuspend";
       };
     };
   };

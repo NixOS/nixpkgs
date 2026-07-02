@@ -14,12 +14,12 @@
   libappindicator-gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "indicator-application-gtk2";
   version = "12.10.0.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/indicator-application-gtk2/i-a-${version}/+download/indicator-application-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/indicator-application-gtk2/i-a-${finalAttrs.version}/+download/indicator-application-${finalAttrs.version}.tar.gz";
     sha256 = "1xqsb6c1pwawabw854f7aybjrgyhc2r1316i9lyjspci51zk5m7v";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
   };
-}
+})

@@ -18,16 +18,16 @@
   nix-update-script,
 }:
 
-python313Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
-  version = "1.2.0";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
-    tag = "v${version}";
-    hash = "sha256-KaUI0Sa2sYrwv6v8kVbBwaTLaeY/B6tnDMJNNGazn9M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uZkXpzRIDzn6wT3GmwNQbtf2/G9ddU13f7iMkj9Qopc=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ python313Packages.buildPythonApplication rec {
     pygobject3
     tidalapi
     requests
-    mpd2
+    python-mpd2
     pypresence
   ]);
 
@@ -83,4 +83,4 @@ python313Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

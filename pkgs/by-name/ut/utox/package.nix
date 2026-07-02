@@ -9,14 +9,14 @@
   filter-audio,
   dbus,
   libvpx,
-  libX11,
+  libx11,
   openal,
   freetype,
   libv4l,
-  libXrender,
+  libxrender,
   fontconfig,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   libsodium,
   libopus,
 }:
@@ -38,14 +38,14 @@ stdenv.mkDerivation rec {
     libtoxcore
     dbus
     libvpx
-    libX11
+    libx11
     openal
     freetype
     libv4l
-    libXrender
+    libxrender
     fontconfig
-    libXext
-    libXft
+    libxext
+    libxft
     filter-audio
     libsodium
     libopus

@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-python";
     name = "black-formatter";
-    version = "2025.2.0";
-    hash = "sha256-EPtxcp42KunVwVdT/xhVzuwvQ+5VswGNnOZpYXZOP04=";
+    version = "2026.6.0";
+    hash = "sha256-jTq5cpP3QwyAOF1VihAJA5ZYCpb3qbmeNIUPFr9Xph8=";
   };
 
   meta = {

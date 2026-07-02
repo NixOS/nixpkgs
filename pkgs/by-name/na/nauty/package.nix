@@ -3,13 +3,13 @@
   lib,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nauty";
   version = "2.9.3";
 
   src = fetchurl {
     url = "https://pallini.di.uniroma1.it/nauty${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
     sha256 = "sha256-n8TtrgT4ig9Yg5hb47Oc9/iY/WzJbpa57iVFJ0PMG1s=";
   };
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
     # The filename may change for future changelogs. Better than nothing in any case.
-    changelog = "https://pallini.di.uniroma1.it/changes24-2${lib.versions.minor version}.txt";
+    changelog = "https://pallini.di.uniroma1.it/changes24-2${lib.versions.minor finalAttrs.version}.txt";
     homepage = "https://pallini.di.uniroma1.it/";
   };
-}
+})

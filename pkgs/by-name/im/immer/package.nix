@@ -27,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # immer is a header only library
   dontBuild = true;
-  buildInputs = [ ];
   dontUseCmakeBuildDir = true;
 
   doCheck = false;

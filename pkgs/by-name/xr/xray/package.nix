@@ -2,29 +2,27 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  buildGoModule,
+  buildGo126Module,
   makeWrapper,
   nix-update-script,
-  v2ray-geoip,
-  v2ray-domain-list-community,
+  v2ray-rules-dat,
   assets ? [
-    v2ray-geoip
-    v2ray-domain-list-community
+    v2ray-rules-dat
   ],
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "xray";
-  version = "26.1.13";
+  version = "26.3.27";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
-    hash = "sha256-Sb9Q+HUDdvyDIMpKaNWvc4BipAxmITeGkOl09dPLs9k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tSSoaIKHgLf9ry6p0Y+BM1Nx8X+40BDDfJJYkABUoEc=";
   };
 
-  vendorHash = "sha256-mWZwzuEYbmNcrpRGvvZVJ7be7nRQLo7m2MM1OM3Lqzs=";
+  vendorHash = "sha256-kwvck6Eo/e6qgb1ENznhwZ/GPX75ssLUvR2u8Qm3UIM=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -64,4 +62,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mpl20 ];
     maintainers = with lib.maintainers; [ iopq ];
   };
-}
+})

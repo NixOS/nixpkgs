@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pnpm-shell-completion";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "pnpm-shell-completion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lwtRSl0/oqgvFUtCkgExAVTiUt+7PwAD/8ufl+1MIMY=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "pnpm-shell-completion";
   };
-}
+})

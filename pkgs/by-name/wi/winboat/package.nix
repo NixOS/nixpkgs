@@ -1,8 +1,7 @@
 {
   lib,
-  electron,
+  electron_40,
   zip,
-  nodejs_24,
   makeWrapper,
   udev,
   usbutils,
@@ -17,14 +16,17 @@
   nix-update-script,
 }:
 
-buildNpmPackage (final: {
+let
+  electron = electron_40;
+in
+buildNpmPackage (finalAttrs: {
   pname = "winboat";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "TibixDev";
     repo = "winboat";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DgH6CAZf+XIgBav2xd2FF2MGRgGIyOs/98vqWHA3XYw=";
   };
 
@@ -43,12 +45,11 @@ buildNpmPackage (final: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   npmDepsHash = "sha256-DLkI9a030uM2X1et94e4nd/HEyw5ugtK8NEAn/J8p9U=";
-  nodejs = nodejs_24;
   makeCacheWritable = true;
 
   guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix { };
   passthru = {
-    guest-server = final.guest-server;
+    guest-server = finalAttrs.guest-server;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -76,7 +77,7 @@ buildNpmPackage (final: {
     install -Dm444 icons/winboat_logo.svg $out/share/icons/hicolor/256x256/apps/winboat.svg
 
     # copy the the winboat-guest-server executable and generate the zip
-    cp ${lib.getExe final.guest-server} $out/share/winboat/resources/guest_server/winboat_guest_server.exe
+    cp ${lib.getExe finalAttrs.guest-server} $out/share/winboat/resources/guest_server/winboat_guest_server.exe
     (cd $out/share/winboat/resources/guest_server/ && zip -r winboat_guest_server.zip .)
 
     # symlink data/ and guest_server/ into parent folder
@@ -114,7 +115,7 @@ buildNpmPackage (final: {
     mainProgram = "winboat";
     description = "Run Windows apps on Linux with seamless integration";
     homepage = "https://github.com/TibixDev/winboat";
-    changelog = "https://github.com/TibixDev/winboat/releases/tag/v${final.version}";
+    changelog = "https://github.com/TibixDev/winboat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rexies

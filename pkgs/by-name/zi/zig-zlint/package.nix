@@ -3,24 +3,27 @@
   stdenv,
   fetchFromGitHub,
   callPackage,
-  zig_0_14,
+  zig_0_15,
   versionCheckHook,
 }:
 
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
-  version = "0.7.9";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
     owner = "DonIsaac";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qJPOFMBvkvF10ixE17pV9X5LX3EyCVzzhrMGx1omTzE=";
+    hash = "sha256-yjMgmO/kjLA9eBPXY+TgfVLyOLIpBtBigItJuon+t9k=";
   };
 
   nativeBuildInputs = [
-    zig_0_14
+    zig
   ];
 
   zigBuildFlags = [
@@ -50,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     mainProgram = "zlint";
-    inherit (zig_0_14.meta) platforms;
+    inherit (zig.meta) platforms;
   };
 })

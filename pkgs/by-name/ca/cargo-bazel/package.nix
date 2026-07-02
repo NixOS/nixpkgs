@@ -6,12 +6,12 @@
   libz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bazel";
   version = "0.17.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KWcxZxzDbiBfBpr37M6HoqHMCYXq6sTVxU9KR3PIiJc=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rickvanprim ];
   };
-}
+})

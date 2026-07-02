@@ -11,21 +11,21 @@
 }:
 
 let
-  version = "0.21.3";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
-    rev = "v${version}";
-    hash = "sha256-BKVq6d8CDmAOGULKoxXtlGbtgNu7wfsQnsyYV7PiFfc=";
+    tag = "v${version}";
+    hash = "sha256-BRkjVZaoxiMW8JltIkYDiCCE2kNGLDpRJd0iclQMcGY=";
   };
 
   goDeps =
     (buildGoModule {
       pname = "ktailctl-go-wrapper";
       inherit src version;
-      modRoot = "src/wrapper";
-      vendorHash = "sha256-RhVZ1yXm+gJHM993Iw1XM/w/O1YiG6Mt4YMK+0JqRpg=";
+      modRoot = "src/tailscale/wrapper";
+      vendorHash = "sha256-h2gf9igVOguNRroGK6qvinUlEkpeZ2YJTtKArvlMj88=";
     }).goModules;
 in
 stdenv.mkDerivation {
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   inherit version src;
 
   postPatch = ''
-    cp -r --reflink=auto ${goDeps} src/wrapper/vendor
+    cp -r --reflink=auto ${goDeps} src/tailscale/wrapper/vendor
   '';
 
   # needed for go build to work
@@ -74,6 +74,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GUI to monitor and manage Tailscale on your Linux desktop";
+    changelog = "https://github.com/f-koehler/KTailctl/releases/tag/${src.tag}";
     homepage = "https://github.com/f-koehler/KTailctl";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ k900 ];

@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ostui";
-  version = "1.0.4";
+  version = "1.3.3";
 
   src = fetchFromSourcehut {
     owner = "~ser";
     repo = "ostui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-efX19jkJnXyO4iuY2EZqhtLJZ7R/Q2JQZf72gyLgY8k=";
+    hash = "sha256-Zm7j4s+GLILLnH+CjF8JsJB4APYeWV7TyCUkKLW2SGQ=";
   };
 
-  vendorHash = "sha256-Vmjd0bbeR9+PZCjh1cczE5MWeH5PDVE6obJLmV0wCLQ=";
+  vendorHash = "sha256-yhoTwouYlv2VkCWmvwvvpbQmrFwzwpraf0EV2Tegq94=";
 
   nativeBuildInputs = [
     pkg-config

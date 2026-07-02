@@ -5,19 +5,18 @@
   git,
   lib,
   libffi,
-  llvmPackages_18,
+  llvmPackages_20,
   makeWrapper,
   ncurses,
   python3,
   zlib,
 
-  # *NOT* from LLVM 18!
-  # The compiler used to compile Cling may affect the runtime include and lib
-  # directories it expects to be run with. Cling builds against (a fork of) Clang,
-  # so we prefer to use Clang as the compiler as well for consistency.
-  # It would be cleanest to use LLVM 9's clang, but it errors. So, we use a later
-  # version of Clang to compile, but we check out the Cling fork of Clang 9 to
-  # build Cling against.
+  # The compiler used to *compile* Cling, independent of the LLVM/Clang that
+  # Cling is built against (the root-project/llvm-project fork checked out below)
+  # and of llvmPackages_20 (used only for the runtime wrapper flags). The compiler
+  # can affect the runtime include and lib directories Cling expects, and since
+  # Cling builds against a fork of Clang we use Clang as the compiler too for
+  # consistency.
   clangStdenv,
 
   # For runtime C++ standard library
@@ -34,13 +33,13 @@
 let
   stdenv = clangStdenv;
 
-  version = "1.2";
+  version = "1.3";
 
   clingSrc = fetchFromGitHub {
     owner = "root-project";
     repo = "cling";
     rev = "v${version}";
-    sha256 = "sha256-ay9FXANJmB/+AdnCR4WOKHuPm6P88wLqoOgiKJwJ8JM=";
+    sha256 = "sha256-/qCHd9KfPW4dMjktaSdnJG+VDD1lLSI4ZFllTcxWsmc=";
   };
 
   unwrapped = stdenv.mkDerivation {
@@ -50,18 +49,18 @@ let
     src = fetchFromGitHub {
       owner = "root-project";
       repo = "llvm-project";
-      rev = "cling-llvm18-20250721-01";
-      sha256 = "sha256-JGteapyujU5w81DsfPQfTq76cYHgk5PbAFbdYfYIDo4=";
+      rev = "cling-llvm20-20260119-01";
+      sha256 = "sha256-fv7nrpZ5Dhbf+nW0ED0pkc8NDBXeaBs9MV2TW6o7FGU=";
     };
 
     preConfigure = ''
       cp -r ${clingSrc} cling-source
 
-      # Patch a bug in version 1.2 by backporting a fix. See
-      # https://github.com/root-project/cling/issues/556
+      # cling 1.3 only builds the clingUserInterface library (which the cling
+      # driver always links) when CLING_INCLUDE_TESTS is on. Always build it.
       chmod -R u+w cling-source
       pushd cling-source
-      patch -p1 < ${./fix-new-parser.patch}
+      patch -p1 < ${./always-build-user-interface.patch}
       popd
 
       cd llvm
@@ -106,8 +105,6 @@ let
       cp -r ../../cling-source/tools/Jupyter/kernel $out/share/Jupyter
     '';
 
-    buildTargets = [ "cling" ];
-
     dontStrip = debug;
 
     meta = {
@@ -139,18 +136,18 @@ let
     "-nostdinc++"
 
     "-resource-dir"
-    "${llvmPackages_18.llvm.lib}/lib"
+    "${llvmPackages_20.llvm.lib}/lib"
 
     "-isystem"
-    "${lib.getLib unwrapped}/lib/clang/18/include"
+    "${lib.getLib unwrapped}/lib/clang/20/include"
   ]
   ++ lib.optionals useLLVMLibcxx [
     "-I"
-    "${lib.getDev llvmPackages_18.libcxx}/include/c++/v1"
+    "${lib.getDev llvmPackages_20.libcxx}/include/c++/v1"
     "-L"
-    "${llvmPackages_18.libcxx}/lib"
+    "${llvmPackages_20.libcxx}/lib"
     "-l"
-    "${llvmPackages_18.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "${llvmPackages_20.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
   ++ lib.optionals (!useLLVMLibcxx) [
     "-I"

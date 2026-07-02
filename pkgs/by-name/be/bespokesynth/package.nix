@@ -13,19 +13,19 @@
   freetype,
   jsoncpp,
   libusb1,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
-  libXScrnSaver,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxscrnsaver,
   libGL,
   libxcb,
   vst2-sdk,
-  xcbutil,
+  libxcb-util,
   libxkbcommon,
-  xcbutilkeysyms,
-  xcb-util-cursor,
+  libxcb-keysyms,
+  libxcb-cursor,
   gtk3,
   webkitgtk_4_1,
   python3,
@@ -95,12 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
-    libXScrnSaver
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
+    libxscrnsaver
     curl
     gtk3
     webkitgtk_4_1
@@ -112,10 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     zenity
     alsa-tools
     libxcb
-    xcbutil
+    libxcb-util
     libxkbcommon
-    xcbutilkeysyms
-    xcb-util-cursor
+    libxcb-keysyms
+    libxcb-cursor
     mount
   ];
 
@@ -145,12 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
     lib.makeLibraryPath [
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      libXScrnSaver
+      libx11
+      libxrandr
+      libxinerama
+      libxext
+      libxcursor
+      libxscrnsaver
     ]
   }";
 

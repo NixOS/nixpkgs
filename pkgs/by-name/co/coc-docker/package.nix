@@ -24,6 +24,6 @@ buildNpmPackage (finalAttrs: {
     description = "Docker language server extension using dockerfile-language-server-nodejs for coc.nvim";
     homepage = "https://github.com/josa42/coc-docker";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

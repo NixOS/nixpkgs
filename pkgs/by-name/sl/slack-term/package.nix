@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "slack-term";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "erroneousboat";
     repo = "slack-term";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
   };
   vendorHash = null;
@@ -23,4 +23,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "slack-term";
   };
-}
+})

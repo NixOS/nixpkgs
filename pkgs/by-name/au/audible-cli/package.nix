@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "audible-cli";
   version = "0.3.3";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ckI6nZUggIMvjJtN1zWXvTlVdiog0uJy6YR110A+JxM=";
   };
 
@@ -70,8 +70,8 @@ python3Packages.buildPythonApplication rec {
     description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mkb79/audible-cli";
-    changelog = "https://github.com/mkb79/audible-cli/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mkb79/audible-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ jvanbruegge ];
     mainProgram = "audible";
   };
-}
+})

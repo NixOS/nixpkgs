@@ -6,19 +6,17 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-let
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whisper-ctranslate2";
-  version = "0.5.6";
-in
-python3Packages.buildPythonApplication {
-  inherit pname version;
+  version = "0.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
-    tag = version;
-    hash = "sha256-IgHTSOlF6fBX0oLWejKO5510e9M7ZTQf4CiIlb2xalM=";
+    tag = finalAttrs.version;
+    hash = "sha256-fbdvbmrZWQoqri6iZMDbElXX/sfv6gu0NDjglviLxO4=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -51,9 +49,9 @@ python3Packages.buildPythonApplication {
   meta = {
     description = "Whisper command line client compatible with original OpenAI client based on CTranslate2";
     homepage = "https://github.com/Softcatala/whisper-ctranslate2";
-    changelog = "https://github.com/Softcatala/whisper-ctranslate2/releases/tag/${version}";
+    changelog = "https://github.com/Softcatala/whisper-ctranslate2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "whisper-ctranslate2";
   };
-}
+})

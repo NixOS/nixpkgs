@@ -8,6 +8,7 @@
   darwin,
   ninja,
   pkg-config,
+  python3,
   writableTmpDirAsHomeHook,
 
   # buildInputs
@@ -17,10 +18,10 @@
   fontconfig,
   freetype,
   libGL,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libepoxy,
   libjack2,
   libxkbcommon,
@@ -29,13 +30,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlcompressor";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLCompressor";
     tag = finalAttrs.version;
-    hash = "sha256-G7tgRenRB6aYpi+BSiQzwSsekvCw4JPUuy1iXVj7HN0=";
+    hash = "sha256-vSGadtUm6AEWEaNr3gCybEtc7NY3s3SQi8UVXoRsKCA=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    python3
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
@@ -57,34 +59,35 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libepoxy
     libjack2
     libxkbcommon
   ];
 
   # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isLinux (toString [
-    "-lX11"
-    "-lXext"
-    "-lXcursor"
-    "-lXinerama"
-    "-lXrandr"
-  ]);
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString clangStdenv.hostPlatform.isLinux (toString [
-    # juce, compiled in this build as part of a Git submodule, uses `-flto` as
-    # a Link Time Optimization flag, and instructs the plugin compiled here to
-    # use this flag to. This breaks the build for us. Using _fat_ LTO allows
-    # successful linking while still providing LTO benefits. If our build of
-    # `juce` was used as a dependency, we could have patched that `-flto` line
-    # in our juce's source, but that is not possible because it is used as a
-    # Git Submodule.
-    "-ffat-lto-objects"
-  ]);
+  env = lib.optionalAttrs clangStdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = toString [
+      "-lX11"
+      "-lXext"
+      "-lXcursor"
+      "-lXinerama"
+      "-lXrandr"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      # juce, compiled in this build as part of a Git submodule, uses `-flto` as
+      # a Link Time Optimization flag, and instructs the plugin compiled here to
+      # use this flag to. This breaks the build for us. Using _fat_ LTO allows
+      # successful linking while still providing LTO benefits. If our build of
+      # `juce` was used as a dependency, we could have patched that `-flto` line
+      # in our juce's source, but that is not possible because it is used as a
+      # Git Submodule.
+      "-ffat-lto-objects"
+    ];
+  };
 
   cmakeFlags = [
     # see: https://github.com/ZL-Audio/ZlEqualizer#clone-and-build
@@ -92,6 +95,20 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # Highway is vendored as a submodule and built in single-target static
+    # dispatch mode (HWY_COMPILE_ONLY_STATIC), so exactly one SIMD target must
+    # be picked at build time. Accepted values: SSE2 / SSE4 / AVX2 / NEON.
+    #
+    # We pick SSE2 on x86_64 because that's the only SIMD extension guaranteed
+    # by nixpkgs' baseline x86_64-linux platform.
+    # Users who know their CPU supports more can opt in per-package:
+    #
+    #   zlcompressor.overrideAttrs (old: {
+    #     cmakeFlags = (old.cmakeFlags or []) ++ [ "-DZL_HWY_STATIC_TARGET=AVX2" ];
+    #   })
+    (lib.cmakeFeature "ZL_HWY_STATIC_TARGET" (
+      if clangStdenv.hostPlatform.isAarch64 then "NEON" else "SSE2"
+    ))
     # set the version for in the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];

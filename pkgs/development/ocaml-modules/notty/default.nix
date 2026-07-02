@@ -8,14 +8,14 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   version = "0.2.3";
   pname = "notty";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
+    url = "https://github.com/pqwy/notty/releases/download/v${finalAttrs.version}/notty-${finalAttrs.version}.tbz";
     sha256 = "sha256-dGWfsUBz20Q4mJiRqyTyS++Bqkl9rBbZpn+aHJwgCCQ=";
   };
 
@@ -38,4 +38,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

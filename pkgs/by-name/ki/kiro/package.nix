@@ -5,6 +5,7 @@
   fetchurl,
   extraCommandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+  _7zz,
 }:
 
 let
@@ -14,12 +15,12 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = extraCommandLineArgs;
 
-  version = "0.8.140";
+  version = "0.12.333";
   pname = "kiro";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.103.2";
+  vscodeVersion = "1.107.1";
 
   executableName = "kiro";
   longName = "Kiro";
@@ -31,7 +32,16 @@ in
     url = sources.url;
     hash = sources.hash;
   };
-  sourceRoot = "Kiro";
+
+  # Kiro.dmg is APFS formatted, unpack with 7zz
+  extraNativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ _7zz ];
+
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "Kiro.app" else "Kiro";
+
+  sourceExecutableName = if stdenv.hostPlatform.isDarwin then "code" else "kiro";
+
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   patchVSCodePath = true;
 
   tests = { };

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ihcsdk";
-  version = "2.8.10";
+  version = "2.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dingusdk";
     repo = "PythonIhcSdk";
     tag = "v${version}";
-    hash = "sha256-mJHRnvG3bUd/KjGu55dZEx899blLT3WP0fTXCFHlRec=";
+    hash = "sha256-k1WKfW/qweRdcaczqf47iNlqeOe7ULa57kqsTF4W2Zs=";
   };
 
   build-system = [ setuptools ];

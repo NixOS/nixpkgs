@@ -13,21 +13,26 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slowapi";
-  version = "0.1.9";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = "slowapi";
-    tag = "v${version}";
-    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YNL/xfs8fmkAGagMhqJX3tXoltjHznZjUrF/a2RWCDs=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # https://github.com/laurentS/slowapi/pull/279
+    ./starlette-1.0-compat.patch
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     limits
     redis
   ];
@@ -52,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
-    changelog = "https://github.com/laurentS/slowapi/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/laurentS/slowapi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

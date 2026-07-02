@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/marcusbritanicus/QtGreet";
     changelog = "https://gitlab.com/marcusbritanicus/QtGreet/-/blob/${finalAttrs.src.rev}/Changelog";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     mainProgram = "qtgreet";
     platforms = lib.platforms.linux;
   };

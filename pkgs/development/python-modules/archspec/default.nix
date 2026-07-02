@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
   jsonschema,
   poetry-core,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependecies = [ click ];
-
   nativeCheckInputs = [
     pytestCheckHook
     jsonschema
@@ -40,7 +37,7 @@ buildPythonPackage rec {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     mainProgram = "archspec";
   };
 }

@@ -7,7 +7,7 @@
   libGL,
   libpng,
   libjpeg,
-  libX11,
+  libx11,
   SDL2_ttf,
   libvorbis,
   gettext,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     physfs
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
   ];
 
   dontPatchELF = true;

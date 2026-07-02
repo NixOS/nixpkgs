@@ -83,8 +83,14 @@ bootBash.runCommand "${pname}-${version}"
               coreutils
             ]
           );
+          passthru = (env.passthru or { }) // {
+            isFromMinBootstrap = true;
+          };
         }
-        // (removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env [
+          "nativeBuildInputs"
+          "passthru"
+        ])
       );
     passthru.tests.get-version =
       result:

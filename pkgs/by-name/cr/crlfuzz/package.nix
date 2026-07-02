@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crlfuzz";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
     repo = "crlfuzz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rqhdxOQmZCRtq+IZygKLleb5GoKP2akyEc3rbGcnZmw=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

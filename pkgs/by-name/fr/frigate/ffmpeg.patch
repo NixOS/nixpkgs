@@ -1,5 +1,5 @@
 diff --git a/frigate/config/camera/ffmpeg.py b/frigate/config/camera/ffmpeg.py
-index 04bbfac7..396bcc4b 100644
+index 2c1e4cdca..d1a1f7065 100644
 --- a/frigate/config/camera/ffmpeg.py
 +++ b/frigate/config/camera/ffmpeg.py
 @@ -1,4 +1,5 @@
@@ -8,7 +8,7 @@ index 04bbfac7..396bcc4b 100644
  from typing import Union
  
  from pydantic import Field, field_validator
-@@ -69,21 +70,11 @@ class FfmpegConfig(FrigateBaseModel):
+@@ -71,21 +72,11 @@ class FfmpegConfig(FrigateBaseModel):
  
      @property
      def ffmpeg_path(self) -> str:
@@ -33,10 +33,10 @@ index 04bbfac7..396bcc4b 100644
  
  class CameraRoleEnum(str, Enum):
 diff --git a/frigate/record/export.py b/frigate/record/export.py
-index 0d3f96da..463bcff4 100644
+index d4b49bb4b..bbcccff61 100644
 --- a/frigate/record/export.py
 +++ b/frigate/record/export.py
-@@ -126,7 +126,7 @@ class RecordingExporter(threading.Thread):
+@@ -127,7 +127,7 @@ class RecordingExporter(threading.Thread):
              minutes = int(diff / 60)
              seconds = int(diff % 60)
              ffmpeg_cmd = [

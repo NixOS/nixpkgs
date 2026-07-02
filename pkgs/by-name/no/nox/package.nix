@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nox";
   version = "0.0.6";
   pyproject = true;
 
   src = fetchurl {
-    url = "mirror://pypi/n/nix-nox/nix-nox-${version}.tar.gz";
+    url = "mirror://pypi/n/nix-nox/nix-nox-${finalAttrs.version}.tar.gz";
     sha256 = "1qcbhdnhdhhv7q6cqdgv0q55ic8fk18526zn2yb12x9r1s0lfp9z";
   };
 
@@ -42,4 +42,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   jdk11,
+  jdk17,
   gradle_8,
   metasploit,
   makeWrapper,
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    jdk11
+    jdk17
     gradle
     makeWrapper
     copyDesktopItems

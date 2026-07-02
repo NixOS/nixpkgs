@@ -306,8 +306,42 @@ let
       (builtins.concatStringsSep "")
     ]}
 
+    ${lib.optionalString cfg.qemu.forceAccel (
+      if hostPkgs.stdenv.hostPlatform.isLinux then
+        ''
+          # Check for hardware-accelerated virtualisation support (KVM)
+          if [ ! -e /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm does not exist." >&2
+            echo "Hardware-accelerated virtualisation (KVM) is not available on this system." >&2
+            exit 1
+          elif [ ! -r /dev/kvm ] || [ ! -w /dev/kvm ]; then
+            echo "forceAccel is enabled but /dev/kvm is not accessible (permission denied)." >&2
+            echo "Check that the nix build user is in the 'kvm' group or that /dev/kvm has the correct permissions." >&2
+            exit 1
+          fi
+        ''
+      else if hostPkgs.stdenv.hostPlatform.isDarwin then
+        ''
+          # Check for hardware-accelerated virtualisation support (HVF)
+          if ! sysctl -n kern.hv_support 2>/dev/null | grep -q 1; then
+            echo "forceAccel is enabled but Hypervisor.framework is not available on this system." >&2
+            exit 1
+          fi
+        ''
+      else
+        ''
+          echo "forceAccel is enabled but no known accelerator is available for this platform." >&2
+          exit 1
+        ''
+    )}
+
     # Start QEMU.
-    exec ${qemu-common.qemuBinary qemu} \
+    exec ${
+      qemu-common.qemuBinaryWith {
+        qemuPkg = qemu;
+        forceAccel = cfg.qemu.forceAccel;
+      }
+    } \
         -name ${config.system.name} \
         -m ${toString config.virtualisation.memorySize} \
         -smp ${toString config.virtualisation.cores} \
@@ -365,7 +399,7 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
-    ./guest-networking-options.nix
+    ./credentials-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -518,7 +552,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display.
+        The resolution of the virtual machine display (relevant only if virtualised machine uses grub bootloader).
       '';
     };
 
@@ -716,6 +750,8 @@ in
     };
 
     virtualisation.qemu = {
+      enableSharedMemory = mkEnableOption "shared memory";
+
       package = mkOption {
         type = types.package;
         default =
@@ -726,6 +762,17 @@ in
         defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
         example = literalExpression "pkgs.qemu_test";
         description = "QEMU package to use.";
+      };
+
+      forceAccel = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to force the use of hardware-accelerated virtualisation.
+          When enabled, QEMU will not fall back to the slower software
+          emulation (TCG) and will instead error out if the accelerator is not
+          available.
+        '';
       };
 
       options = mkOption {
@@ -1080,81 +1127,20 @@ in
     };
 
     virtualisation.credentials = mkOption {
-      description = ''
-        Credentials to pass to the VM using systemd's credential system.
-
-        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
-        information about systemd credentials.
-      '';
-      default = { };
-      example = {
-        database-password = {
-          text = "my-secret-password";
-        };
-        ssl-cert = {
-          source = "./cert.pem";
-        };
-        binary-key = {
-          mechanism = "fw_cfg";
-          source = "./private.der";
-        };
-        config-file = {
-          mechanism = "smbios";
-          text = ''
-            [database]
-            host=localhost
-            port=5432
-          '';
-        };
-      };
       type = types.attrsOf (
-        lib.types.submodule (
-          {
-            name,
-            options,
-            config,
-            ...
-          }:
-          {
-            options = {
-              mechanism = lib.mkOption {
-                type = lib.types.enum [
-                  "fw_cfg"
-                  "smbios"
-                ];
-                default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
-                defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
-                description = ''
-                  The mechanism used to pass the credential to the VM.
-                '';
-              };
-              source = lib.mkOption {
-                type = lib.types.nullOr (lib.types.pathWith { });
-                default = null;
-                description = ''
-                  Source file on the host containing the credential data.
-                '';
-              };
-              text = lib.mkOption {
-                default = null;
-                type = lib.types.nullOr lib.types.str;
-                description = ''
-                  Text content of the credential.
-
-                  For binary data or when the credential content should come from
-                  an existing file, use `source` instead.
-
-                  ::: {.warning}
-                  The text here is stored in the host's nix store as a file.
-                  :::
-                '';
-              };
-            };
-            config.source = lib.mkIf (config.text != null) (
-              lib.mkDerivedConfig options.text (pkgs.writeText name)
-            );
-          }
-        )
+        lib.types.submodule {
+          options.mechanism = lib.mkOption {
+            type = lib.types.enum [
+              "fw_cfg"
+              "smbios"
+            ];
+            default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
+            defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
+            description = ''
+              The mechanism used to pass the credential to the VM.
+            '';
+          };
+        }
       );
     };
 
@@ -1236,11 +1222,40 @@ in
     # allow `system.build.toplevel' to be included.  (If we had a direct
     # reference to ${regInfo} here, then we would get a cyclic
     # dependency.)
-    boot.postBootCommands = lib.mkIf config.nix.enable ''
-      if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
-        ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
-      fi
-    '';
+    systemd.services.register-nix-paths = lib.mkIf config.nix.enable {
+      # Run early during boot so the nix store DB is populated before any
+      # service (or test backdoor) tries to use nix commands.
+      # nix-store --load-db writes to the SQLite DB directly, so it does not
+      # need the nix-daemon.
+      unitConfig.DefaultDependencies = false;
+      wantedBy = [
+        "sysinit.target"
+      ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "nix-daemon.socket"
+        "nix-daemon.service"
+      ];
+      after = [
+        "local-fs.target"
+      ];
+      conflicts = [
+        "shutdown.target"
+      ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = lib.mkIf (config.nix.daemonUser != "root") config.nix.daemonUser;
+        Group = lib.mkIf (config.nix.daemonGroup != "root") config.nix.daemonGroup;
+      };
+      script = ''
+        if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
+          ${lib.getExe' config.nix.package.out "nix-store"} --load-db < "''${BASH_REMATCH[1]}"
+        fi
+      '';
+    };
 
     boot.initrd.availableKernelModules =
       optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
@@ -1288,7 +1303,7 @@ in
             + "${guest.address}:${toString guest.port},"
           else
             "'guestfwd=${proto}:${guest.address}:${toString guest.port}-"
-            + "cmd:${pkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
+            + "cmd:${hostPkgs.netcat}/bin/nc ${host.address} ${toString host.port}',"
         );
         restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
@@ -1306,10 +1321,13 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
+      ])
+      (mkIf cfg.qemu.enableSharedMemory [
+        "-object memory-backend-memfd,id=mem0,size=${toString config.virtualisation.memorySize}M,share=on"
+        "-machine memory-backend=mem0"
       ])
       (
         let
@@ -1453,6 +1471,7 @@ in
             else
               {
                 device = "/nix/.ro-store";
+                fsType = "none";
                 options = [ "bind" ];
               }
           );

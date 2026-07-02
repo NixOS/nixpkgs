@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.4.2";
   pname = "clips";
 
   src = fetchurl {
-    url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    url = "mirror://sourceforge/clipsrules/CLIPS/${finalAttrs.version}/clips_core_source_${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.tar.gz";
     hash = "sha256-YIoesvxunK/zDWPWhAlfC8pxCPIpTSHub1YXQnwQRVo=";
   };
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.league ];
     platforms = lib.platforms.unix;
   };
-}
+})

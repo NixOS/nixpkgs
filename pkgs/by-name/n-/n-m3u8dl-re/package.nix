@@ -4,18 +4,19 @@
   fetchFromGitHub,
   dotnetCorePackages,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "n-m3u8dl-re";
-  version = "0.3.0-beta";
+  version = "0.5.1-beta";
   src = fetchFromGitHub {
     owner = "nilaoda";
     repo = "N_m3u8DL-RE";
-    tag = "v${version}";
-    sha256 = "sha256-AVLO7pxD1LCoogsJPPN5aoOmVBIm3Y/EVsiQWdYI6QU=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-LLBlSalYqOEPTttEMK/pBoxwiHXeAxFIUm/yuLb1WRo=";
   };
+
   patches = [
+    # error: PublishTrimmed is implied by native compilation and cannot be disabled
     ./publish-fix.patch
-    ./reverse-arr.patch
   ];
 
   # from openutau/default.nix
@@ -36,11 +37,12 @@ buildDotnetModule rec {
   '';
 
   meta = {
+    changelog = "https://github.com/nilaoda/N_m3u8DL-RE/releases/tag/v{finalAttrs.version}";
     description = "Cross-Platform, modern and powerful stream downloader for MPD/M3U8/ISM";
     homepage = "https://github.com/nilaoda/N_m3u8DL-RE";
     license = lib.licenses.mit;
     mainProgram = "n-m3u8dl-re";
     maintainers = with lib.maintainers; [ phanirithvij ];
-    platforms = lib.platforms.linux ++ lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

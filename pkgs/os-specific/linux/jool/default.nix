@@ -12,8 +12,10 @@ let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
 
-stdenv.mkDerivation {
-  name = "jool-${sourceAttrs.version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "jool";
+  inherit (sourceAttrs) version;
 
   src = sourceAttrs.src;
 
@@ -49,4 +51,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

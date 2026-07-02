@@ -6,7 +6,7 @@
   pkg-config,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   zlib,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libjpeg
     libpng
-    libX11
+    libx11
     zlib
   ];
   nativeBuildInputs = [

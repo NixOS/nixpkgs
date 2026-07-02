@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "onecache";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "onecache";
     tag = version;
-    hash = "sha256-W+5AF5W7Unz5EnAum4WOrKRKet1efzwmEryB2WWlRKY=";
+    hash = "sha256-jhyszGKzmMdtPfnjc3VllfF6Zd0MkV66CpL6HiAof/A=";
   };
 
   build-system = [ poetry-core ];

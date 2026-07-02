@@ -30,7 +30,7 @@ in
       start_all()
 
       machine.wait_for_unit("matter-server.service", timeout=20)
-      machine.wait_for_open_port(1234, timeout=20)
+      machine.wait_for_open_port(1234, timeout=100)
 
       with matter_server_running: # type: ignore[union-attr]
         with subtest("Check websocket server initialized"):

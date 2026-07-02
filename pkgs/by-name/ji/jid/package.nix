@@ -6,23 +6,18 @@
   jid,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jid";
-  version = "0.7.6";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
-    rev = "v${version}";
-    hash = "sha256-fZzEbVNGsDNQ/FhII+meQvKeyrgxn3wtFW8VfNmJz5U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Zf1YIEhvmvO482wh8VqQhyvHp7Nz6MXQ1SG0RCG0lRI=";
   };
 
-  vendorHash = "sha256-Lq8ouTjPsGhqDwrCMpqkSU7FEGszYwAkwl92vAEZ68w=";
-
-  patches = [
-    # Run go mod tidy
-    ./go-mod.patch
-  ];
+  vendorHash = "sha256-ZqnIBmziPX45wqiEzD9mq4jLLW69mgGYhDSOTj20auQ=";
 
   ldflags = [
     "-s"
@@ -31,7 +26,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = jid;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -41,4 +36,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

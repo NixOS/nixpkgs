@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "woke";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "get-woke";
     repo = "woke";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X9fhExHhOLjPfpwrYPMqTJkgQL2ruHCGEocEoU7m6fM=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/get-woke/woke/cmd.Version=${version}"
-    "-X=github.com/get-woke/woke/cmd.Commit=${src.tag}"
+    "-X=github.com/get-woke/woke/cmd.Version=${finalAttrs.version}"
+    "-X=github.com/get-woke/woke/cmd.Commit=${finalAttrs.src.tag}"
     "-X=github.com/get-woke/woke/cmd.Date=1970-01-01T00:00:00Z"
   ];
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   versionCheckProgram = "${placeholder "out"}/bin/woke";
 
   meta = {
-    changelog = "https://github.com/get-woke/woke/releases/tag/${src.tag}";
+    changelog = "https://github.com/get-woke/woke/releases/tag/${finalAttrs.src.tag}";
     description = "Detect non-inclusive language in your source code";
     homepage = "https://github.com/get-woke/woke";
     license = lib.licenses.mit;
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

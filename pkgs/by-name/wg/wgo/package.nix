@@ -4,18 +4,15 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "wgo";
-  version = "0.6.2";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "bokwoon95";
     repo = "wgo";
-    rev = "v${version}";
-    hash = "sha256-Z3adi1PQ5v0BxcjkOJZWeUxwLlLXpNuJxrQztV2pCiA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C7gVlBkXRJsaUPSWj3OVWKNlT77yXXVyNlE4LZPryZU=";
   };
 
   vendorHash = "sha256-6ZJNXw/ahaIziQGVNgjbTbm53JiO3dYCqJtdB///cmo=";
@@ -40,4 +37,4 @@ buildGoModule {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

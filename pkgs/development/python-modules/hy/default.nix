@@ -7,25 +7,24 @@
   hy,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
   testers,
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
     tag = version;
-    hash = "sha256-uKkTH5vywJ5OrbbHIpHGLbTA/Px0/02JEXI8NIUvt/w=";
+    hash = "sha256-B8luwaIDUMdMZk/QZNKTM+ejCvJR8LoIcuQCCqsqu2k=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
-  HY_VERSION = version;
+  env.HY_VERSION = version;
 
   build-system = [ setuptools ];
 

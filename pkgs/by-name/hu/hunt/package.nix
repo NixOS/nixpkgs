@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hunt";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "LyonSyonII";
     repo = "hunt-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-aNU4Ik033+kl9ZPHFzaAXZ6Hs+b7m5s0lpr1oovmWm0=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simplified Find command made with Rust";
     homepage = "https://github.com/LyonSyonII/hunt-rs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "hunt";
   };
-}
+})

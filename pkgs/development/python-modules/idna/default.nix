@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "3.11";
+  version = "3.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kjd";
     repo = "idna";
     tag = "v${version}";
-    hash = "sha256-4mnWOit+lrZnVslVyfalt6lv7qSYpLlyvET553SplJU=";
+    hash = "sha256-D72KUEwiFA/LdU/xE3sN+Abc6NpAsIlGSdB07V1nk68=";
   };
 
   build-system = [ flit-core ];

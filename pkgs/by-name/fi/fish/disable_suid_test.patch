@@ -1,17 +1,37 @@
-diff --git a/tests/checks/path.fish b/tests/checks/path.fish
-index 62812571a..b0eebcd91 100644
---- a/tests/checks/path.fish
-+++ b/tests/checks/path.fish
-@@ -117,12 +117,6 @@ path filter --type file,dir --perm exec,write bin/fish .
+diff --git i/tests/checks/path.fish w/tests/checks/path.fish
+index 4bf14878e..4024c6d34 100644
+--- i/tests/checks/path.fish
++++ w/tests/checks/path.fish
+@@ -135,32 +135,6 @@ path filter --type file,dir --perm exec,write bin/fish .
  # So it passes.
  # CHECK: .
  
 -mkdir -p sbin
 -touch sbin/setuid-exe sbin/setgid-exe
--chmod u+s,a+x sbin/setuid-exe
--path filter --perm suid sbin/*
+-
+-# Without POSIX permission, there is no way to set the setuid bit, so fake
+-# the output.
+-if set -q noacl
+-    echo sbin/setuid-exe
+-else
+-    chmod u+s,a+x sbin/setuid-exe
+-    path filter --perm suid sbin/*
+-end
 -# CHECK: sbin/setuid-exe
 -
- # On at least FreeBSD on our CI this fails with "permission denied".
- # So we can't test it, and we fake the output instead.
- if chmod g+s,a+x sbin/setgid-exe 2>/dev/null
+-# Without POSIX permission, there is no way to set the setgid bit, so fake
+-# the result.
+-# And on at least FreeBSD on our CI this fails with "permission denied".
+-# So we can't test it, and we fake the output there too.
+-if set -q noacl
+-    echo sbin/setgid-exe
+-else if chmod g+s,a+x sbin/setgid-exe 2>/dev/null
+-    path filter --perm sgid sbin/*
+-else
+-    echo sbin/setgid-exe
+-end
+-# CHECK: sbin/setgid-exe
+-
+ mkdir stuff
+ touch stuff/{read,write,exec,readwrite,readexec,writeexec,all,none}
+ if set -q noacl

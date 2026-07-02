@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "2.1.1";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
-    tag = "v${version}";
-    hash = "sha256-ZScQ79z7SwjpI5ZnrwXhRNqOnYQTI9MayvPjv00hiyY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mWq9nnL4IGhUFkXJr8+t6BresOTDFS1caG8NuFqjrJg=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -26,10 +27,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    anthropic
     pytestCheckHook
     pytest-asyncio
-    python-dotenv
+    pytest-cov-stub
   ];
 
   disabledTestPaths = [
@@ -40,6 +40,9 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Requires network access
     "test_valid_channel"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_read_text_file"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];
@@ -47,9 +50,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "MCP server for NixOS";
     homepage = "https://github.com/utensils/mcp-nixos";
-    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${src.tag}";
+    changelog = "https://github.com/utensils/mcp-nixos/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
     mainProgram = "mcp-nixos";
   };
-}
+})

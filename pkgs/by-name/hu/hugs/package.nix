@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     mainProgram = "hugs";
     homepage = "https://www.haskell.org/hugs";
     description = "Haskell interpreter";
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

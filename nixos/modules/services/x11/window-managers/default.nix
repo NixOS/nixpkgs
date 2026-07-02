@@ -1,7 +1,7 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption;
   cfg = config.services.xserver.windowManager;
 in
 
@@ -34,7 +34,6 @@ in
     ./openbox.nix
     ./pekwm.nix
     ./notion.nix
-    ./ragnarwm.nix
     ./ratpoison.nix
     ./sawfish.nix
     ./smallwm.nix

@@ -1,50 +1,46 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
   bluez,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
+  buildPythonPackage,
   bumble,
   dbus-fast,
+  fetchFromGitHub,
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
-  typing-extensions,
-  async-timeout,
-
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bleak";
-  version = "2.0.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
-    tag = "v${version}";
-    hash = "sha256-UrKJoEyLa75HMCOgxmOqJi1z+32buMra+dwVe5qbBds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I+nN3/KKF0PC9TO8SULXX1oOGUokYa2tlPVfEJ/0mbY=";
   };
 
-  postPatch =
-    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace bleak/backends/bluezdbus/version.py \
-        --replace-fail \
-          '"bluetoothctl"' \
-          '"${lib.getExe' bluez "bluetoothctl"}"'
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build" \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
+  ''
+  # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace bleak/backends/bluezdbus/version.py \
+      --replace-fail \
+        '"bluetoothctl"' \
+        '"${lib.getExe' bluez "bluetoothctl"}"'
+  '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
 
   dependencies = [
   ]
@@ -55,12 +51,6 @@ buildPythonPackage rec {
     pyobjc-core
     pyobjc-framework-CoreBluetooth
     pyobjc-framework-libdispatch
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
-    typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -75,9 +65,9 @@ buildPythonPackage rec {
   meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
-    changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/hbldh/bleak/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
-}
+})

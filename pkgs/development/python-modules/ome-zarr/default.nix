@@ -10,27 +10,31 @@
   # dependencies
   aiohttp,
   dask,
+  deprecated,
   fsspec,
   numpy,
+  rangehttpserver,
   requests,
   scikit-image,
   toolz,
   zarr,
 
   # tests
+  ome-zarr-models,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ome-zarr";
-  version = "0.12.2";
+  version = "0.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
-    tag = "v${version}";
-    hash = "sha256-lwv6PHm41HFylt7b0d5LHCrCIXNWFNGg59VQvPXYtVc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hrk+F1a1yJzaIb7G80sGdqeMb2POIAD2gLOfK57A22A=";
   };
 
   build-system = [
@@ -38,11 +42,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "dask"
+  ];
   dependencies = [
     aiohttp
     dask
+    deprecated
     fsspec
     numpy
+    rangehttpserver
     requests
     scikit-image
     toolz
@@ -51,6 +60,7 @@ buildPythonPackage rec {
   ++ fsspec.optional-dependencies.s3;
 
   nativeCheckInputs = [
+    ome-zarr-models
     pytestCheckHook
   ];
 
@@ -104,9 +114,9 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
-    changelog = "https://github.com/ome/ome-zarr-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ome/ome-zarr-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "ome_zarr";
   };
-}
+})

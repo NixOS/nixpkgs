@@ -9,17 +9,17 @@
   lmdb,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tqsl";
-  version = "2.8.2";
+  version = "2.8.4";
 
   src = fetchurl {
-    url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HH78pTeT/wW9dZggxcqRiZ3OqShU7B2uPWa4ya59LfA=";
+    url = "https://www.arrl.org/files/file/LoTW%20Instructions/tqsl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-bnGXKrH2c0Ng/50Rbzg4z3M6D/EuJ0mkYIThoU94QPw=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     lmdb
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   meta = {
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
   version = "2.7.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vpKezG1nJVxQE4Qijf8feeRFD4hjy98HznVDXL+MBkE=";
   };
 
@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     "radixtarget"
     "regex"
     "tabulate"
+    "websockets"
   ];
 
   build-system = with python3.pkgs; [
@@ -69,7 +70,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "OSINT automation for hackers";
     homepage = "https://pypi.org/project/bbot/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      robsliwi
+    ];
     mainProgram = "bbot";
   };
-}
+})

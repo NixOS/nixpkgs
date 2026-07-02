@@ -3,13 +3,13 @@
   autoreconfHook,
   curl,
   fetchhg,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXtst,
-  libXv,
-  libXxf86vm,
+  libxext,
+  libxft,
+  libxi,
+  libxinerama,
+  libxtst,
+  libxv,
+  libxxf86vm,
   libjpeg,
   libpng,
   lirc,
@@ -49,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    libXext
-    libXft
-    libXi
-    libXinerama
-    libXtst
-    libXv
-    libXxf86vm
+    libxext
+    libxft
+    libxi
+    libxinerama
+    libxtst
+    libxv
+    libxxf86vm
     libjpeg
     libpng
     lirc
@@ -71,6 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     LIRC_CFLAGS = "-I${lib.getInclude lirc}/include";
     LIRC_LIBS = "-L ${lib.getLib lirc}/lib -llirc_client";
   };
+
+  postPatch = ''
+    substituteInPlace src/common/getopt.h \
+      --replace-fail 'extern int getopt ();' 'extern int getopt (int ___argc, char *const *___argv, const char *__shortopts);'
+  '';
 
   strictDeps = true;
 

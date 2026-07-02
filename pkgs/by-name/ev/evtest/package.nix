@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple tool for input event debugging";
+    homepage = "https://gitlab.freedesktop.org/libevdev/evtest";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];

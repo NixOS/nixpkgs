@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -27,6 +28,7 @@
   scipy,
   seaborn,
   svgutils,
+  sysctl,
   templateflow,
   traits,
   transforms3d,
@@ -38,7 +40,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niworkflows";
   version = "1.14.4";
   pyproject = true;
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AMUOiIL33kcJtlKT+L5QwcUh8mBBkf80uzOQZFKDauo=";
   };
 
@@ -82,13 +84,17 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-env
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Needed for tests that read the system memory usage on Darwin
+    sysctl
   ];
 
   enabledTestPaths = [ "niworkflows" ];
@@ -115,8 +121,8 @@ buildPythonPackage rec {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
     mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
-    changelog = "https://github.com/nipreps/niworkflows/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/nipreps/niworkflows/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

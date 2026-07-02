@@ -485,6 +485,7 @@ in
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
           };
           environment = env;
+          unitConfig.RequiresMountsFor = defaultServiceConfig.ReadWritePaths;
 
           preStart = ''
               # remove old papaerless-manage symlink
@@ -620,7 +621,7 @@ in
             PrivateNetwork = false;
           };
           environment = env // {
-            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
+            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src";
           };
           # Allow the web interface to access the private /tmp directory of the server.
           # This is required to support uploading files via the web interface.

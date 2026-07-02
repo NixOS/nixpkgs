@@ -29,6 +29,8 @@ buildPythonPackage rec {
     googleapis-common-protos
   ];
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [

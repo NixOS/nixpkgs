@@ -19,12 +19,12 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "languagetool";
   version = "6.6";
 
   src = fetchzip {
-    url = "https://www.languagetool.org/download/LanguageTool-${version}.zip";
+    url = "https://www.languagetool.org/download/LanguageTool-${finalAttrs.version}.zip";
     sha256 = "sha256-BNiUIk5h38oEM4IliHdy8rNmZY0frQ1RaFeJ7HI5nOI=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     description = "Proofreading program for English, French German, Polish, and more";
     mainProgram = "languagetool";
   };
-}
+})

@@ -52,7 +52,11 @@ buildGoModule rec {
     glibc
   ];
 
-  CGO_LDFLAGS = "-lpcap -lpthread -static";
+  env.CGO_LDFLAGS = toString [
+    "-lpcap"
+    "-lpthread"
+    "-static"
+  ];
 
   ldflags = [
     "-extldflags '-static'"

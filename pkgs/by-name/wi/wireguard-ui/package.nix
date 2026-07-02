@@ -9,14 +9,14 @@
   fetchpatch2,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wireguard-ui";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "wireguard-ui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fK7l9I2s0zSxG1g1oQ1KjJZUcypwS9DxnNN7lhVI+1s=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-ps/GtdtDKA3y5o1GZpRG+z08lSzk8d9zgxb95kjr/gc=";
   };
 
@@ -41,7 +41,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X main.appVersion=v${version}"
+    "-X main.appVersion=v${finalAttrs.version}"
   ];
 
   preConfigure = ''
@@ -71,11 +71,11 @@ buildGoModule rec {
 
   meta = {
     description = "Web user interface to manage your WireGuard setup";
-    changelog = "https://github.com/ngoduykhanh/wireguard-ui/releases/tag/v${version}";
+    changelog = "https://github.com/ngoduykhanh/wireguard-ui/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/ngoduykhanh/wireguard-ui";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "wireguard-ui";
   };
-}
+})

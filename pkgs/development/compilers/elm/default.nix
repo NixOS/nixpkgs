@@ -2,7 +2,7 @@
   pkgs,
   lib,
   makeWrapper,
-  nodejs ? pkgs.nodejs_20,
+  nodejs,
   config,
 }:
 
@@ -69,6 +69,8 @@ lib.makeScope pkgs.newScope (
       elm-xref = callPackage ./packages/elm-xref { };
 
       lamdera = callPackage ./packages/lamdera { };
+
+      elm-wrap = callPackage ./packages/elm-wrap { };
     }
     // lib.optionalAttrs config.allowAliases {
       create-elm-app = throw "'elmPackages.create-elm-app' has not had a release since December 2020, so it was removed."; # Added 2025-11-15

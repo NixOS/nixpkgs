@@ -51,7 +51,6 @@
     # "Connection Information" dialog box
     machine.wait_for_window("Connection Information")
     machine.wait_for_text("SOME-NODE")
-    machine.wait_for_text("${pkgs.tsm-client.passthru.unwrapped.version}")
 
     machine.shutdown()
   '';

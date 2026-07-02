@@ -5,7 +5,7 @@
   fetchpatch,
   qt5,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "labelImg";
   version = "1.8.6";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "HumanSignal";
     repo = "labelImg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RJxCtiDOePajlrjy9cpKETSKsWlH/Dlu1iFMj2aO4XU=";
   };
 
@@ -65,4 +65,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.cmcdragonkai ];
   };
-}
+})

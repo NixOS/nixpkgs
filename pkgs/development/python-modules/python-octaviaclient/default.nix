@@ -4,14 +4,11 @@
   cliff,
   fetchPypi,
   keystoneauth1,
-  makePythonPath,
   openstackdocstheme,
-  installer,
   osc-lib,
   oslo-serialization,
   oslo-utils,
   pbr,
-  python-neutronclient,
   requests,
   setuptools,
   sphinx,
@@ -21,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_octaviaclient";
     inherit version;
-    hash = "sha256-5brfxkpJQousEcXl0YerzYDjrfl0XyWV0RXPTz146Y4=";
+    hash = "sha256-Iq1TdXMUDqrE33V+yh8H7yYPIW01NVEa6cPqFPq4Yv4=";
   };
 
   # NOTE(vinetos): This explicit dependency is removed to avoid infinite recursion
@@ -47,7 +44,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     keystoneauth1
-    python-neutronclient
     osc-lib
     oslo-serialization
     oslo-utils

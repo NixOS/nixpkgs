@@ -920,14 +920,14 @@ respectively. Otherwise, the fetcher uses `fetchzip`.
 
 This is used with Radicle repositories. The arguments expected are similar to `fetchgit`.
 
-Requires a `seed` argument (e.g. `seed.radicle.xyz` or `rosa.radicle.xyz`) and a `repo` argument
+Requires a `seed` argument (e.g. `seed.radicle.dev` or `rosa.radicle.network`) and a `repo` argument
 (the repository id *without* the `rad:` prefix). Also accepts an optional `node` argument which
 contains the id of the node from which to fetch the specified ref. If `node` is `null` (the
 default), a canonical ref is fetched instead.
 
 ```nix
 fetchFromRadicle {
-  seed = "seed.radicle.xyz";
+  seed = "seed.radicle.dev";
   repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5"; # heartwood
   tag = "releases/1.3.0";
   hash = "sha256-4o88BWKGGOjCIQy7anvzbA/kPOO+ZsLMzXJhE61odjw=";
@@ -942,7 +942,7 @@ contains the full revision id of the Radicle patch to fetch.
 
 ```nix
 fetchRadiclePatch {
-  seed = "rosa.radicle.xyz";
+  seed = "rosa.radicle.network";
   repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5"; # radicle-explorer
   revision = "d97d872386c70607beda2fb3fc2e60449e0f4ce4"; # patch: d77e064
   hash = "sha256-ttnNqj0lhlSP6BGzEhhUOejKkkPruM9yMwA5p9Di4bk=";
@@ -1003,3 +1003,27 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+
+## `fetchItchIo` {#fetchitchio}
+
+`fetchItchIo` is a fetcher for downloading game assets from [itch.io](https://itch.io/). It accepts these arguments:
+
+- `gameUrl`: The store page URL of the game.
+- `upload`: The numerical ID of the asset to download. To find the upload ID of an asset, check the basename of the request URL when you download the asset using a browser.
+- `hash`.
+- `name` (optional): The derivation name, often the filename of the asset.
+- `extraMessage` (optional): Extra message printed if the API key is not provided or if the account did not purchase the game.
+
+For this fetcher to work, the environment variable `NIX_ITCHIO_API_KEY` must be set for the nix building process (which is nix-daemon in multi-user mode), and it must belong to an account that has bought the game if it is behind a paywall.
+To get your API key, go to the ["API key" section](https://itch.io/user/settings/api-keys) of your account settings on itch.io.
+
+```nix
+{ fetchItchIo }:
+
+fetchItchIo {
+  name = "DungeonDuelMonsters-linux-x64.zip";
+  hash = "sha256-gq2nGwpaStqaVI1pL63xygxOI/z53o+zLwiKizG98Ks=";
+  gameUrl = "https://mikaygo.itch.io/ddm";
+  upload = "13371354";
+}
+```

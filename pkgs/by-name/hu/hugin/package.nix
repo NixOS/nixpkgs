@@ -19,9 +19,9 @@
   libjpeg,
   libpng,
   libtiff,
-  libX11,
-  libXi,
-  libXmu,
+  libx11,
+  libxi,
+  libxmu,
   libGLU,
   libGL,
   openexr,
@@ -30,8 +30,8 @@
   sqlite,
   vigra,
   wrapGAppsHook3,
-  wxGTK32,
-  wxGTK' ? wxGTK32,
+  wxwidgets_3_2,
+  wxGTK' ? wxwidgets_3_2,
   zlib,
 }:
 
@@ -57,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libtiff
-    libX11
-    libXi
-    libXmu
+    libx11
+    libxi
+    libxmu
     libGLU
     libGL
     openexr

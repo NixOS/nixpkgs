@@ -9,17 +9,17 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "satellite";
-  version = "0.9.1";
+  version = "0.9.2";
 
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "tpikonen";
     repo = "satellite";
-    tag = version;
-    hash = "sha256-E/OKdVB+JDP/01ydEgA/B6+GMiVYB4jlPI70TW8HBDU=";
+    tag = finalAttrs.version;
+    hash = "sha256-DubLxsqJsvCbfFD9jNkKHGd2Ur/bT7Ea5bHLijciwtI=";
   };
 
   nativeBuildInputs = [
@@ -58,4 +58,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

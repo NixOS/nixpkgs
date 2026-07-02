@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-olRu5HacRKaAcNbQczA+UCbDxhySUOO7qH0KdWlSbT0=";
   };
 
+  patches = [
+    # https://github.com/python-ldap/python-ldap/pull/605
+    ./python-3.14.patch
+  ];
+
   postPatch = ''
     # unused in 3.4.5; https://github.com/python-ldap/python-ldap/pull/597
     sed -i "/setuptools-scm/d" pyproject.toml

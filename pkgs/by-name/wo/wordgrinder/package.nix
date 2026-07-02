@@ -5,7 +5,7 @@
   pkg-config,
   makeWrapper,
   lua52Packages,
-  libXft,
+  libxft,
   ncurses,
   ninja,
   readline,
@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libXft
+    libxft
   ];
 
   # To be able to find <Xft.h>
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libXft.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libxft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''

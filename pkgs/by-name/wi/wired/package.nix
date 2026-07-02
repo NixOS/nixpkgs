@@ -13,14 +13,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wired";
   version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "Toqozz";
     repo = "wired-notify";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AWIV/+vVwDZECZ4lFMSFyuyUKJc/gb72PiBJv6lbhnc=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "wired";
   };
-}
+})

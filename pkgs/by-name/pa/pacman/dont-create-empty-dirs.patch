@@ -1,8 +1,17 @@
 diff --git a/meson.build b/meson.build
-index c8ee42fd..610401ca 100644
+index 1e8bd8f8..86e68a75 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -414,15 +414,6 @@ install_data(
+@@ -433,8 +433,6 @@ configure_file(
+   configuration : substs,
+   install_dir : join_paths(SYSCONFDIR, 'makepkg.conf.d/'))
+ 
+-install_emptydir(join_paths(SYSCONFDIR, 'makepkg.d/'))
+-
+ configure_file(
+   input : 'etc/pacman.conf.in',
+   output : 'pacman.conf',
+@@ -448,15 +446,6 @@ install_data(
    'proto/proto.install',
    install_dir : join_paths(DATAROOTDIR, 'pacman'))
  

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.64.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/streamripper/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/streamripper/streamripper-${version}.tar.gz";
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 
@@ -34,6 +34,13 @@ stdenv.mkDerivation rec {
       debianRevision = "2";
       patch = "873964-http";
       hash = "sha256-D6koUCbnJHtRuq2zZy9VrxymuGXN1COacbQhphgB8qo=";
+    })
+    # fix build with gcc 15
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "4";
+      patch = "1097944-gcc15";
+      hash = "sha256-yBFDxd2sNlavQDmg/MCORFdpJY8p1Lzo131T4sBby5g=";
     })
     # fix SR_ERROR_INVALID_METADATA caused by HTTP chunking
     # (https://sourceforge.net/p/streamripper/bugs/193/#6a82)
@@ -57,5 +64,6 @@ stdenv.mkDerivation rec {
     description = "Application that lets you record streaming mp3 to your hard drive";
     license = lib.licenses.gpl2;
     mainProgram = "streamripper";
+    maintainers = with lib.maintainers; [ cybershadow ];
   };
 }

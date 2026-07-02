@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   mesonEmulatorHook,
   appstream,
@@ -21,7 +20,7 @@
   xapian,
   libxml2,
   libxmlb,
-  libyaml,
+  libfyaml,
   gobject-introspection,
   itstool,
   gperf,
@@ -31,6 +30,7 @@
   gdk-pixbuf,
   pango,
   librsvg,
+  bash-completion,
   systemd,
   nixosTests,
   testers,
@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.4";
+  version = "1.1.2";
 
   outputs = [
     "out"
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UnSJcXH0yWK/dPKgbOx9x3iJjKcKNYFkD2Qs5c3FtM8=";
+    sha256 = "sha256-tvdWWdL6PthffAZZnNZ3+17/eJdZFx8xFkqm7IvyPWE=";
   };
 
   patches = [
@@ -65,12 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    (fetchpatch {
-      name = "static.patch";
-      url = "https://github.com/ximion/appstream/commit/90675d8853188f65897d2453346cb0acd531b58f.patch";
-      hash = "sha256-d3h5h7B/MP3Sun5YwYCqMHcw4PMMwg1YS/S9vsMzkQ4=";
-    })
   ];
 
   strictDeps = true;
@@ -110,12 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
     xapian
     libxml2
     libxmlb
-    libyaml
+    libfyaml
     curl
     cairo
     gdk-pixbuf
     pango
     librsvg
+    bash-completion
   ]
   ++ lib.optionals withSystemd [
     systemd

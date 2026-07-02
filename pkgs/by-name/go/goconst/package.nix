@@ -4,17 +4,17 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goconst";
-  version = "1.8.2";
+  version = "1.10.2";
 
   excludedPackages = [ "tests" ];
 
   src = fetchFromGitHub {
     owner = "jgautheron";
     repo = "goconst";
-    rev = "v${version}";
-    sha256 = "sha256-srBUqWfiuMqpKH/O66gJEEKFOC/ifsu2xscEnp54cRY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-2u05GYOMHt9CtRRh68mV8heql0aCYQv2NORBF3vZkag=";
   };
 
   vendorHash = null;
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

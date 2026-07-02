@@ -9,11 +9,11 @@
   jq,
   glslang,
   libffi,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXrandr,
+  libxdmcp,
+  libxrandr,
   spirv-headers,
   spirv-tools,
   vulkan-headers,
@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-validation-layers";
-  version = "1.4.335.0";
+  version = "1.4.341.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-FRxr33epHe+HIH/7Y7ms+6E9L0yzaNnFzN3YnswZfRo=";
+    hash = "sha256-xUeMqtQ7bR3P50yQN5TXVzCO9Ugp9tUyFMtYnvc3g8s=";
   };
 
   strictDeps = true;
@@ -53,10 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-utility-libraries
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXau
-    libXdmcp
-    libXrandr
+    libx11
+    libxau
+    libxdmcp
+    libxrandr
     libffi
     libxcb
     wayland

@@ -7,14 +7,14 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fim-rs";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Achiefs";
     repo = "fim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xJzglrNB5rqaRQTgRFIl8/AXjeDwFPykIE5LJwJ3cX4=";
   };
 
@@ -55,9 +55,9 @@ rustPlatform.buildRustPackage rec {
       tools like ElasticSearch/OpenSearch.
     '';
     homepage = "https://github.com/Achiefs/fim";
-    changelog = "https://github.com/Achiefs/fim/releases/tag/v${version}";
+    changelog = "https://github.com/Achiefs/fim/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "fim";
   };
-}
+})

@@ -25,6 +25,28 @@
           };
         };
       };
+    autoStart =
+      { ... }:
+      {
+        virtualisation.vlans = [ 1 ];
+
+        networking.useNetworkd = true;
+
+        systemd.network.netdevs."20-dummy-test".netdevConfig = {
+          Name = "dummy-test";
+          Kind = "dummy";
+        };
+
+        containers.autoStart = {
+          autoStart = true;
+          privateNetwork = true;
+          interfaces = [ "dummy-test" ];
+
+          config = {
+            networking.firewall.enable = false;
+          };
+        };
+      };
     bridged =
       { ... }:
       {
@@ -116,6 +138,16 @@
         # The other tests will ping this container on its ip. Here we just check
         # that the device is present in the container.
         server.succeed("nixos-container run server -- ip a show dev eth1 >&2")
+
+    with subtest("Simple dummy interface is up, with autoStart enabled"):
+        autoStart.wait_for_unit("container@autoStart")
+
+        # Check if any dependency of container@autoStart.service timed out.
+        # If a non-existing .device dependency is set in Wants, systemd will
+        # wait until that unit times out, resulting a delay of the container.
+        autoStart.fail("journalctl _PID=1 | grep sys-subsystem-net-devices | grep 'timed out'")
+
+        autoStart.succeed("nixos-container run autoStart -- ip a show dev dummy-test >&2")
 
     with subtest("Physical device in bridge in container can ping server"):
         bridged.wait_for_unit("default.target")

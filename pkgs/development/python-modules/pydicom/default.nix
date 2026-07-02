@@ -14,6 +14,7 @@
   pyjpegls,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pyfakefs,
   writableTmpDirAsHomeHook,
 }:
 let
@@ -28,14 +29,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pydicom";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SvRevQehRaSp+vCtJRQVEJiC5noIJS+bGG1/q4p7/XU=";
+    hash = "sha256-d7fFsNKzUoGUDg9E6KVHq64g7p8QzIAAEIk3vLQ+rQ0=";
   };
 
   build-system = [ flit-core ];
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pyfakefs
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.pixeldata;

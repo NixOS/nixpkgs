@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "starsessions";
-  version = "2.2.1";
+  version = ".2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alex-oleshkevich";
     repo = "starsessions";
     tag = "v${version}";
-    hash = "sha256-JI044sn6LQI37PvSLdz2dooa3v5qdHmp6DZD0p7VzJU=";
+    hash = "sha256-CR8eMyYyr+iFf2l1QE0N762LdkxemOayn/s++mBZRqA=";
   };
 
   build-system = [ poetry-core ];

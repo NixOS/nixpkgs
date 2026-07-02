@@ -166,7 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
       fabianhjr
       wchresta
       mattpolzin
-      RossSmyth
     ];
     platforms = lib.platforms.all;
   };

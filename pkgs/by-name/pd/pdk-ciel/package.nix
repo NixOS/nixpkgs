@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ciel";
-  version = "2.4.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fossi-foundation";
     repo = "ciel";
-    tag = version;
-    hash = "sha256-AWbkHL0zO3tD0mE3dZIcj8mVND7o3imTxOpEfOtlRDI=";
+    tag = finalAttrs.version;
+    hash = "sha256-koN65VQLGXvVmVd8hNJvbDn7R/4EHg/sNaHvWDWW4DM=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gonsolo ];
     mainProgram = "ciel";
   };
-}
+})

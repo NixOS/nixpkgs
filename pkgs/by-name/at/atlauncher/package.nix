@@ -27,14 +27,20 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.40.2";
+  version = "3.4.41.0";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sV6eWIgx/0e+uUCbbRwAPPqNcFWUQWyuHnzrwcYJkqA=";
+    hash = "sha256-mowPK9wsX87LHLt17Wmn97H2TRICXuwGKC2p2MBXr4Y=";
   };
+
+  patches = [
+    # Launch4j does not publish the Linux workdir artifact selected on aarch64.
+    # Nixpkgs only needs the cross-platform jar, so remove the Windows exe task.
+    ./remove-launch4j.patch
+  ];
 
   nativeBuildInputs = [
     gradle
@@ -52,8 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jdk17_headless.home}"
-    "--exclude-task"
-    "createExe"
   ];
 
   installPhase =
@@ -92,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
       install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
       install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
-      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/icons/hicolor/128x128/apps
       install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
     '';
 

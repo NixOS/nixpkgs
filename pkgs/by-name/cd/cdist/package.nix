@@ -4,10 +4,11 @@
   fetchFromGitea,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cdist";
   version = "7.0.0";
-  format = "setuptools";
+  pyproject = true;
+
   outputs = [
     "out"
     "man"
@@ -18,9 +19,11 @@ python3Packages.buildPythonApplication rec {
     domain = "code.ungleich.ch";
     owner = "ungleich-public";
     repo = "cdist";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lIx0RtGQJdY2e00azI9yS6TV+5pCegpKOOD0dQmgMqA=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = with python3Packages; [
     six
@@ -57,11 +60,11 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Minimalistic configuration management system";
     homepage = "https://www.sdi.st";
-    changelog = "https://code.ungleich.ch/ungleich-public/cdist/src/tag/${version}/docs/changelog";
+    changelog = "https://code.ungleich.ch/ungleich-public/cdist/src/tag/${finalAttrs.version}/docs/changelog";
 
     # Mostly. There are still couple types that are gpl3-only.
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kaction ];
     platforms = lib.platforms.unix;
   };
-}
+})

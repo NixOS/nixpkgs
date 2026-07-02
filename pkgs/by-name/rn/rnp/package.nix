@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # tracked at https://github.com/rnpgp/rnp/pull/2381
+    ./0001-fix-build-with-Botan-3.11.patch
   ];
 
   cmakeFlags = [

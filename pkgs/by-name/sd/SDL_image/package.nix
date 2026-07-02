@@ -3,7 +3,7 @@
   SDL,
   fetchFromGitHub,
   giflib,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libtiff,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12-unstable-2025-11-06";
+  version = "1.2.12-unstable-2026-05-13";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_image";
-    rev = "7c6ea40bb75262740cd07f7658bc543f13c65b3c";
-    hash = "sha256-V8d9En6fJArslFLIaeCdfVD5YoHPbKjOpR79Va8w8js=";
+    rev = "822207ee09095b8f0a936f6f2d62e020f92a4c24";
+    hash = "sha256-a4WmLjsVC409UTbTVtMmRXaYuNN3fVwzz8F4XMV/cNI=";
   };
 
   configureFlags = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     giflib
-    libXpm
+    libxpm
     libjpeg
     libpng
     libtiff

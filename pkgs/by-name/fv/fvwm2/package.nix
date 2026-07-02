@@ -7,11 +7,11 @@
   fontconfig,
   freetype,
   fribidi,
-  libXcursor,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXt,
+  libxcursor,
+  libxft,
+  libxinerama,
+  libxpm,
+  libxt,
   libpng,
   librsvg,
   libstroke,
@@ -45,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     fribidi
-    libXcursor
-    libXft
-    libXinerama
-    libXpm
-    libXt
+    libxcursor
+    libxft
+    libxinerama
+    libxpm
+    libxt
     libpng
     librsvg
     libxslt

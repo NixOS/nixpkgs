@@ -24,7 +24,8 @@ buildNpmPackage (finalAttrs: {
   makeCacheWritable = true;
   dontNpmBuild = true;
   npmPackFlags = [ "--ignore-scripts" ];
-  NODE_OPTIONS = "--openssl-legacy-provider";
+
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

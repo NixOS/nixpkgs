@@ -15,15 +15,15 @@
   hicolor-icon-theme,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "diffuse";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "MightyCreak";
     repo = "diffuse";
-    rev = "v${version}";
-    sha256 = "Svt+llBwJKGXRJZ96dzzdzpL/5jrzXXM/FPZwA7Es8s=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "vQVtvQrs8oPevvrC75T2YcdYuT5XYDiAFDTduTkICBk=";
   };
 
   pyproject = false;
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # to avoid running gtk-update-icon-cache, update-desktop-database and glib-compile-schemas
-  DESTDIR = "/";
+  env.DESTDIR = "/";
 
   makeWrapperArgs = [
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
@@ -78,4 +78,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ k3a ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -34,7 +34,7 @@ in
           Environment variables to pass to Karakaeep. This is how most settings
           can be configured. Changing DATA_DIR is possible but not supported.
 
-          See <https://docs.karakeep.app/configuration/>
+          See <https://docs.karakeep.app/configuration/environment-variables>
         '';
         type = lib.types.attrsOf lib.types.str;
         default = { };
@@ -90,6 +90,22 @@ in
             required for text search.
           '';
         };
+
+        # TODO: remove when this is either handled by karakeep or becomes default
+        #       in services.meilisearch.
+        experimental_dumpless_upgrade = lib.mkOption {
+          default = true;
+          description = ''
+            Whether to enable (experimental) dumpless upgrade of the search index.
+            Allows upgrading Meilisearch without manually dumping and importing
+            the database.
+            {option}`services.meilisearch.settings.experimental_dumpless_upgrade`
+            overrides this option if set explicitly.
+
+            More information at <https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade>.
+          '';
+          type = lib.types.bool;
+        };
       };
     };
   };
@@ -103,8 +119,9 @@ in
       group = "karakeep";
     };
 
-    services.meilisearch = lib.mkIf cfg.meilisearch.enable {
-      enable = true;
+    services.meilisearch = {
+      enable = cfg.meilisearch.enable;
+      settings.experimental_dumpless_upgrade = lib.mkDefault cfg.meilisearch.experimental_dumpless_upgrade;
     };
 
     systemd.services.karakeep-init = {
@@ -169,11 +186,15 @@ in
         "karakeep-workers.service"
       ];
       partOf = [ "karakeep.service" ];
-      environment = karakeepEnv;
+      environment = {
+        NEXT_CACHE_DIR = "%C/karakeep";
+      }
+      // karakeepEnv;
       serviceConfig = {
         ExecStart = "${cfg.package}/lib/karakeep/start-web";
         User = "karakeep";
         Group = "karakeep";
+        CacheDirectory = "karakeep";
         StateDirectory = "karakeep";
         EnvironmentFile = environmentFiles;
         PrivateTmp = "yes";

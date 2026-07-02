@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlkit";
-  version = "4.7.18";
+  version = "4.7.21";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OACdbHwg3sEAVw+Fje0tWVHh7Xy6C/WdOQHfexOezlo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-c1GdM3K6dgY0EgHu01adBXwAxuMehRfo73Lo71couJ4=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     "mlkit"
     "mlkit_libs"
+    "smltojs"
+    "smltojs_basislibs"
+    "barry"
+  ];
+
+  installTargets = [
+    "install"
+    "install_smltojs"
+    "install_barry"
   ];
 
   doCheck = true;
@@ -39,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     make -C test_dev test
     echo ==== Running MLKit test suite: test_prof ====
     make -C test_dev test_prof
+    echo ==== Running Barry test suite ====
+    make -C test/barry
     runHook postCheck
   '';
 
@@ -47,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://elsman.com/mlkit/";
     changelog = "https://github.com/melsman/mlkit/blob/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [ athas ];
   };
 })

@@ -24,7 +24,14 @@ pub(super) struct Key {
 #[derive(Serialize, Deserialize)]
 pub(super) struct Metadata {
     pub(super) url: Url,
+    #[serde(rename = "reqHeaders", skip_serializing_if = "Option::is_none")]
+    pub(super) req_headers: Option<ReqHeaders>,
     pub(super) options: Options,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ReqHeaders {
+    pub accept: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -58,6 +65,7 @@ impl Cache {
         url: Url,
         data: &[u8],
         integrity: Option<String>,
+        req_headers: Option<ReqHeaders>,
     ) -> anyhow::Result<()> {
         let (algo, hash, integrity) = if let Some(integrity) = integrity {
             let (algo, hash) = integrity
@@ -115,13 +123,27 @@ impl Cache {
             size: data.len(),
             metadata: Metadata {
                 url,
+                req_headers,
                 options: Options { compress: true },
             },
         })?;
 
-        let mut file = File::options().append(true).create(true).open(index_path)?;
+        let mut file = File::options()
+            .append(true)
+            .create(true)
+            .open(&index_path)?;
 
-        write!(file, "{:x}\t{data}", Sha1::new().chain(&data).finalize())?;
+        // cacache format uses newline as entry separator (see cacache entry-index.js)
+        // Only add newline prefix if file already has content, to maintain backwards compatibility with previous versions of prefetch-npm-deps, which handled this case incorrectly.
+        let needs_newline = fs::metadata(&index_path)
+            .map(|m| m.len() > 0)
+            .unwrap_or(false);
+        let prefix = if needs_newline { "\n" } else { "" };
+        write!(
+            file,
+            "{prefix}{:x}\t{data}",
+            Sha1::new().chain(&data).finalize()
+        )?;
 
         Ok(())
     }

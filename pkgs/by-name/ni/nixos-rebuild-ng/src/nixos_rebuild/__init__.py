@@ -6,6 +6,7 @@ from typing import Final, assert_never
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
+from .elevate import NO_ELEVATOR, ElevatorKind
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -163,18 +164,32 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="JSON output, only implemented for 'list-generations' right now",
     )
     main_parser.add_argument(
-        "--ask-sudo-password",
-        "-S",
-        action="store_true",
-        help="Asks for sudo password for remote activation, implies --sudo",
+        "--elevate",
+        choices=ElevatorKind.choices(),
+        default=None,
+        help="Privilege-elevation method for activation commands",
     )
     main_parser.add_argument(
-        "--sudo", action="store_true", help="Prefixes activation commands with sudo"
+        "--ask-elevate-password",
+        "-S",
+        action="store_true",
+        help="Prompt locally for the password to feed to the elevation "
+        "method, implies --elevate=sudo if --elevate is not given",
+    )
+    main_parser.add_argument(
+        "--sudo",
+        action="store_true",
+        help="Alias for '--elevate=sudo'",
+    )
+    main_parser.add_argument(
+        "--ask-sudo-password",
+        action="store_true",
+        help="Alias for '--elevate=sudo --ask-elevate-password'",
     )
     main_parser.add_argument(
         "--use-remote-sudo",
         action="store_true",
-        help="Deprecated, use '--sudo' instead",
+        help="Deprecated, use '--elevate=sudo' instead",
     )
     main_parser.add_argument("--no-ssh-tty", action="store_true", help="Deprecated")
     main_parser.add_argument(
@@ -196,6 +211,12 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--image-variant",
         help="Selects an image variant to build from the "
         "config.system.build.images attribute of the given configuration",
+    )
+    main_parser.add_argument(
+        "--diff",
+        action="store_true",
+        help="prints out the diff between the current system "
+        "and the newly built one using nix store diff-closures",
     )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -239,15 +260,31 @@ def parse_args(
         args.action = Action.DRY_BUILD.value
 
     if args.ask_sudo_password:
-        args.sudo = True
+        args.ask_elevate_password = True
+
+    if args.use_remote_sudo:
+        parser_warn("--use-remote-sudo is deprecated, use --elevate=sudo instead")
+
+    # Map the elevate flags onto an Elevator. The password itself is
+    # attached later via Elevator.with_prompted_password() once the
+    # target host (used in the prompt) is known.
+    if args.elevate is not None:
+        args.elevator = ElevatorKind.from_name(args.elevate)
+    elif args.sudo or args.use_remote_sudo or args.ask_sudo_password:
+        args.elevator = ElevatorKind.SUDO.make()
+    elif args.ask_elevate_password:
+        # -S historically implied --sudo. Keep that for muscle memory
+        # but be explicit now that there is more than one backend.
+        parser_warn(
+            "--ask-elevate-password without --elevate, falling back to --elevate=sudo"
+        )
+        args.elevator = ElevatorKind.SUDO.make()
+    else:
+        args.elevator = NO_ELEVATOR
 
     if args.install_grub:
         parser_warn("--install-grub is deprecated, use --install-bootloader instead")
         args.install_bootloader = True
-
-    if args.use_remote_sudo:
-        parser_warn("--use-remote-sudo is deprecated, use --sudo instead")
-        args.sudo = True
 
     if args.fast:
         parser_warn("--fast is deprecated, use --no-reexec instead")
@@ -259,8 +296,21 @@ def parse_args(
     if args.no_build_nix:
         parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
+    if (
+        args.action
+        in (
+            Action.DRY_BUILD.value,  # --diff breaks dry-build
+            Action.EDIT.value,
+            Action.LIST_GENERATIONS.value,
+            Action.REPL.value,
+        )
+        and args.diff
+    ):
+        parser_warn(f"--diff is a no-op with '{args.action}'")
+        args.diff = False
+
     if args.action == Action.EDIT.value and (args.file or args.attr):
-        parser.error("--file and --attr are not supported with 'edit'")
+        parser.error(f"--file and --attr are not supported with '{args.action}'")
 
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
@@ -278,6 +328,10 @@ def parse_args(
 
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
+
+    if (args.file or args.attr) and args.flake is None:
+        # Disable flake auto-detection when --file or --attr is used
+        args.flake = False
 
     if args.store_path:
         if args.rollback:
@@ -302,7 +356,7 @@ def execute(argv: list[str]) -> None:
     args, grouped_nix_args = parse_args(argv)
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(args.upgrade_all, args.sudo)
+        nix.upgrade_channels(args.upgrade_all, args.elevator)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -318,10 +372,17 @@ def execute(argv: list[str]) -> None:
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    target_host = Remote.from_arg(args.target_host)
+    build_host = Remote.from_arg(args.build_host, validate_opts=False)
+    args.elevator = args.elevator.with_prompted_password(
+        ask=args.ask_elevate_password,
+        host_label=target_host.host if target_host else "localhost",
+    )
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
+
+    if flake and (args.upgrade or args.upgrade_all):
+        logger.warning("'--upgrade(-all)' flag has no effect for flake-based systems")
 
     if can_run and not flake and not args.store_path:
         services.write_version_suffix(grouped_nix_args)
@@ -376,20 +437,20 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(130)
     except CalledProcessError as ex:
-        _handle_called_process_error(ex)
-    except (Exception, KeyboardInterrupt) as ex:
+        sys.exit(_handle_called_process_error(ex))
+    except Exception as ex:
         if logger.isEnabledFor(logging.DEBUG):
             raise
         else:
             sys.exit(str(ex))
 
 
-def _handle_called_process_error(ex: CalledProcessError) -> None:
+def _handle_called_process_error(ex: CalledProcessError) -> int:
     if logger.isEnabledFor(logging.DEBUG):
-        import traceback
-
-        traceback.print_exception(ex)
+        sys.excepthook(*sys.exc_info())
     else:
         import shlex
 
@@ -410,4 +471,4 @@ def _handle_called_process_error(ex: CalledProcessError) -> None:
         print(str(ex), file=sys.stderr)
 
     # Exit with the error code of the process that failed
-    sys.exit(ex.returncode)
+    return ex.returncode

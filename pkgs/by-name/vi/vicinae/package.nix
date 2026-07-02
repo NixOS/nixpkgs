@@ -1,5 +1,4 @@
 {
-  abseil-cpp,
   cmake,
   cmark-gfm,
   coreutils,
@@ -14,31 +13,31 @@
   nodejs,
   npmHooks,
   pkg-config,
-  protobuf,
   qt6,
-  gcc15Stdenv,
+  stdenv,
   wayland,
   libxml2,
+  udevCheckHook,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.19.3";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x/WIhul+slaDhW8PvcHpa/FElraGCWfFvgT7Xgw1Hbo=";
+    hash = "sha256-f1d88cdqe1PfeuzY90JIRCoHKLV1Uuakc4TpSNvNBKA=";
   };
 
   apiDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
+    src = "${finalAttrs.src}/src/typescript/api";
+    hash = "sha256-Ki/l3PiBY3R0Bzd6leqx2OxA7c+jckjr+YD4GHHaSqI=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
-    src = "${finalAttrs.src}/typescript/extension-manager";
-    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
+    src = "${finalAttrs.src}/src/typescript/extension-manager";
+    hash = "sha256-6Kz7I8cGm1lnGPOI/gju3t5/imnbBFlDEKzWar5O770=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
@@ -60,20 +59,18 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
-    protobuf
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    abseil-cpp
     cmark-gfm
     glaze
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
+    kdePackages.syntax-highlighting
     libqalculate
     minizip
     nodejs
-    protobuf
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
@@ -82,10 +79,14 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Toggle telemetry from opt-out to opt-in
+    substituteInPlace extra/config.jsonc \
+      --replace-fail '"system_info": true' '"system_info": false'
+
     local postPatchHooks=()
     source ${npmHooks.npmConfigHook}/nix-support/setup-hook
-    npmRoot=typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
-    npmRoot=typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
+    npmRoot=src/typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
+    npmRoot=src/typescript/extension-manager npmDeps=${finalAttrs.extensionManagerDeps} npmConfigHook
   '';
 
   qtWrapperArgs = [
@@ -102,6 +103,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"\
       --replace-fail "ExecStart=vicinae" "ExecStart=$out/bin/vicinae"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ udevCheckHook ];
 
   passthru.updateScript = ./update.sh;
 

@@ -2,12 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  python3,
 }:
 
-let
-  python = python3.withPackages (p: [ p.pexpect ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   version = "0.10.0";
   pname = "reptyr";
@@ -24,15 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR=$(out)"
   ];
 
-  nativeCheckInputs = [ python ];
-
   # reptyr needs to do ptrace of a non-child process
   # It can be neither used nor tested if the kernel is not told to allow this
   doCheck = false;
-
-  checkFlags = [
-    "PYTHON_CMD=${python.interpreter}"
-  ];
 
   meta = {
     platforms = [

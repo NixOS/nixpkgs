@@ -3,12 +3,15 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   lib,
   shoko,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shoko-webui";
   version = "2.4.1";
@@ -27,6 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
     hash = "sha256-rTlem83dFptgvKUKUaHK8vi5B0FBehPFtkCUhOnUKd0=";
   };

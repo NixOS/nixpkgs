@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${lib.getInclude rtl-sdr}/include")
   ];
 
+  postPatch = ''
+    # match jsoncpp's c++17 ABI (string_view overloads); upstream pins c++11
+    substituteInPlace cmake/Modules/FindSIGC2.cmake \
+      --replace-fail '"--std=c++11"' '"--std=c++17"'
+  '';
+
   dontWrapQtApps = true;
 
   nativeBuildInputs = [

@@ -69,13 +69,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.0.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KKZDz0NTIEx1NpTjDtrZdZD2RLxtZYarwn54RbPPeCA=";
+    hash = "sha256-DfUjByBtDcOShExuBBLSHmgP9CPMSdkovw9QeGRDYaA=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-huQ3dq5tTLN53fOhj458aH00jFnt6CWZQhJ9MogktJM=";
+  cargoHash = "sha256-N0MUtL0HslJHEQUCB0iMbXGdD9hA6GRqcmdSjjhsu8E=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
-    "servo_allocator/use-system-allocator"
+    "servo-allocator/use-system-allocator"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -159,7 +159,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/resources
     cp -r ./resources $out/
 
-    wrapProgram $out/bin/servo \
+    wrapProgram $out/bin/servoshell \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
@@ -171,15 +171,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     # undefined libmozjs_sys symbols during linking
     broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/servo/servo/releases/tag/${finalAttrs.src.tag}";
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       hexa
-      supinie
     ];
     teams = with lib.teams; [ ngi ];
-    mainProgram = "servo";
+    mainProgram = "servoshell";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

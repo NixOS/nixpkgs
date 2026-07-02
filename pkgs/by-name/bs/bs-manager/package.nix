@@ -18,15 +18,15 @@
   steam-run-free,
 }:
 
-buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "Zagrios";
     repo = "bs-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YitQjhnadQrpdBOV2CUedRNm/RW7/rpXtS9PJTa9kUU=";
+    hash = "sha256-hx6ciEz772NYd9+7WjLqTzNNenWMoOq57IneqsDC1Qg=";
   };
 
   postPatch = ''
@@ -39,13 +39,13 @@ buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
     ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
   '';
 
-  npmDepsHash = "sha256-3NMqYD7S4wYjwYuGJOmq2/C82qtG1mImsR4crjFLe30=";
+  npmDepsHash = "sha256-wmPZv1lqGr31wBGaeLw7LL6ZMzq/x8lkoy/iMxU+M80=";
 
   extraNpmDeps = fetchNpmDeps {
     name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/release/app";
-    hash = "sha256-UWsxty1kfxMr5fybtykrN2G+yiQ9dw/bbMwfcVLJgp4=";
+    hash = "sha256-jE/M22QQzuTS0zgcB+tLEL8Ey61HE8MP7H1MTX060gY=";
   };
 
   makeCacheWritable = true;
@@ -62,6 +62,10 @@ buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
 
   buildInputs = [
     stdenv.cc.cc
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1" # musl-based node modules won't be used on glibc systems
   ];
 
   preBuild = ''

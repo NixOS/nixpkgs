@@ -50,7 +50,7 @@ buildPythonPackage rec {
   # Too sensitive for on Hydra.
   disabledTests = [ "perf" ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [ "tqdm" ];
 
@@ -60,5 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
     license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 }

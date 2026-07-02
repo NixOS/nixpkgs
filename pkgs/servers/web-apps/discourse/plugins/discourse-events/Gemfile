@@ -3,8 +3,12 @@
 source "https://rubygems.org"
 
 # gem "rails"
-gem "discourse_subscription_client", "0.1.11"
 gem "iso-639", "0.3.5"
 gem "ice_cube", "0.16.4"
 gem "icalendar", "2.8.0"
 gem "icalendar-recurrence", "1.1.3"
+gem "omnievent", "0.1.0.pre11"
+gem "omnievent-api", "0.1.0.pre5"
+gem "omnievent-icalendar", "0.1.0.pre9"
+gem "omnievent-google", "0.1.0.pre8"
+gem "omnievent-outlook", "0.1.0.pre11"

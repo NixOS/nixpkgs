@@ -44,7 +44,19 @@ in
     };
 
     environment = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf lib.types.str;
+        options = {
+          SKIP_SYSTEMD = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to disable systemd service monitoring.
+              Enabling this option will skip systemd tracking and its setup in NixOS.
+            '';
+          };
+        };
+      };
       default = { };
       description = ''
         Environment variables for configuring the beszel-agent service.
@@ -75,6 +87,36 @@ in
       KERNEL=="nvme[0-9]*", GROUP="disk", MODE="0660"
     '';
 
+    # Add D-Bus policy for systemd service monitoring following https://beszel.dev/guide/systemd#services-not-appearing
+    services.dbus.packages = lib.optionals (!cfg.environment.SKIP_SYSTEMD) [
+      (pkgs.writeTextDir "share/dbus-1/system.d/beszel-agent.conf" ''
+        <?xml version="1.0" encoding="UTF-8"?> <!-- -*- XML -*- -->
+
+        <!DOCTYPE busconfig PUBLIC
+                  "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+                  "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+
+        <busconfig>
+          <policy user="beszel-agent">
+            <allow
+              send_destination="org.freedesktop.systemd1"
+              send_type="method_call"
+              send_path="/org/freedesktop/systemd1"
+              send_interface="org.freedesktop.systemd1.Manager"
+              send_member="ListUnits"
+            />
+          </policy>
+        </busconfig>
+      '')
+    ];
+
+    users.users.beszel-agent = lib.mkIf (!cfg.environment.SKIP_SYSTEMD) {
+      isSystemUser = true;
+      group = "beszel-agent";
+    };
+
+    users.groups.beszel-agent = lib.mkIf (!cfg.environment.SKIP_SYSTEMD) { };
+
     systemd.services.beszel-agent = {
       description = "Beszel Server Monitoring Agent";
 
@@ -82,7 +124,10 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      environment = cfg.environment;
+      environment = lib.mapAttrs (
+        _: value: if lib.isBool value then (lib.boolToString value) else value
+      ) cfg.environment;
+
       path =
         cfg.extraPath
         ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
@@ -133,7 +178,7 @@ in
         NoNewPrivileges = !cfg.smartmon.enable;
         PrivateDevices = !cfg.smartmon.enable;
         PrivateTmp = true;
-        PrivateUsers = !cfg.smartmon.enable;
+        PrivateUsers = !cfg.smartmon.enable && !cfg.environment.SKIP_SYSTEMD;
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = "read-only";

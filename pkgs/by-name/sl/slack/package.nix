@@ -24,7 +24,6 @@ let
     maintainers = with lib.maintainers; [
       mmahut
       prince213
-      teutat3s
     ];
     platforms = [
       "x86_64-darwin"

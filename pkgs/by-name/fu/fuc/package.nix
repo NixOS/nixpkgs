@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fuc";
-  version = "3.1.1";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
     tag = finalAttrs.version;
-    hash = "sha256-fDSAqsKEx+th4tiJ3VlROqF4hhHzusqiw9enAmnOPlQ=";
+    hash = "sha256-LtS2+iqu4+z6K/PZeggLdo4S/F+5AtV5j9Q6hDAcEiQ=";
   };
 
-  cargoHash = "sha256-OoTWGeF96BpPDx1Y9AEVOIBK7kCz6pjw24pLiNcKmOc=";
+  cargoHash = "sha256-SSJg/Ns64+NgqrB4mJ5/xa40tZfGZ2VGdvNP7SSKv0E=";
 
   env.RUSTC_BOOTSTRAP = 1;
 
@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Modern, performance focused unix commands";
     homepage = "https://github.com/SUPERCILEX/fuc";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

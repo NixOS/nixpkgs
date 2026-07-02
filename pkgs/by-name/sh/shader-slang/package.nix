@@ -8,7 +8,7 @@
   miniz,
   lz4,
   libxml2,
-  libX11,
+  libx11,
   glslang,
   unordered_dense,
   versionCheckHook,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2026.1.1";
+  version = "2026.12";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QYnhFIp4516qrokdTXvE+owLVcCzPpAT9W0yUJRs5vM=";
+    hash = "sha256-TG7jb6zECiUU6T4LALw6mZaANtI38MtxANn67vyCgZ0=";
     fetchSubmodules = true;
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     unordered_dense
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SLANG_RHI_ENABLE_VULKAN" false)
     (lib.cmakeBool "SLANG_RHI_ENABLE_METAL" false)
     (lib.cmakeBool "SLANG_RHI_ENABLE_WGPU" false)
+    # Disable DXC (DirectX Compiler) for now; wiring up directx-shader-compiler
+    # as a proper dependency is left for a future PR
+    (lib.cmakeBool "SLANG_ENABLE_DXIL" false)
   ]
   ++ lib.optionals withGlslang [
     (lib.cmakeBool "SLANG_USE_SYSTEM_SPIRV_TOOLS" true)

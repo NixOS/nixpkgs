@@ -20,12 +20,12 @@ url_and_key_list=(
   "aarch64-darwin-311 $darwin_bucket/torchaudio-${version}-cp311-cp311-macosx_11_0_arm64.whl torchaudio-${version}-cp311-cp311-macosx_11_0_arm64.whl"
   "aarch64-darwin-312 $darwin_bucket/torchaudio-${version}-cp312-cp312-macosx_11_0_arm64.whl torchaudio-${version}-cp312-cp312-macosx_11_0_arm64.whl"
   "aarch64-darwin-313 $darwin_bucket/torchaudio-${version}-cp313-cp313-macosx_12_0_arm64.whl torchaudio-${version}-cp313-cp313-macosx_12_0_arm64.whl"
-  "aarch64-darwin-314 $darwin_bucket/torchaudio-${version}-cp314-cp314-macosx_11_0_arm64.whl torchaudio-${version}-cp314-cp314-macosx_11_0_arm64.whl"
-  "aarch64-linux-310 $linux_cpu_bucket/torchaudio-${version}-cp310-cp310-manylinux_2_28_aarch64.whl torchaudio-${version}-cp310-cp310-manylinux2014_aarch64.whl"
-  "aarch64-linux-311 $linux_cpu_bucket/torchaudio-${version}-cp311-cp311-manylinux_2_28_aarch64.whl torchaudio-${version}-cp311-cp311-manylinux2014_aarch64.whl"
-  "aarch64-linux-312 $linux_cpu_bucket/torchaudio-${version}-cp312-cp312-manylinux_2_28_aarch64.whl torchaudio-${version}-cp312-cp312-manylinux2014_aarch64.whl"
-  "aarch64-linux-313 $linux_cpu_bucket/torchaudio-${version}-cp313-cp313-manylinux_2_28_aarch64.whl torchaudio-${version}-cp313-cp313-manylinux2014_aarch64.whl"
-  "aarch64-linux-314 $linux_cpu_bucket/torchaudio-${version}-cp314-cp314-manylinux_2_28_aarch64.whl torchaudio-${version}-cp314-cp314-manylinux2014_aarch64.whl"
+  "aarch64-darwin-314 $darwin_bucket/torchaudio-${version}-cp314-cp314-macosx_12_0_arm64.whl torchaudio-${version}-cp314-cp314-macosx_12_0_arm64.whl"
+  "aarch64-linux-310 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp310-cp310-manylinux_2_28_aarch64.whl torchaudio-${version}-cp310-cp310-manylinux_2_28_aarch64.whl"
+  "aarch64-linux-311 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp311-cp311-manylinux_2_28_aarch64.whl torchaudio-${version}-cp311-cp311-manylinux_2_28_aarch64.whl"
+  "aarch64-linux-312 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp312-cp312-manylinux_2_28_aarch64.whl torchaudio-${version}-cp312-cp312-manylinux_2_28_aarch64.whl"
+  "aarch64-linux-313 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp313-cp313-manylinux_2_28_aarch64.whl torchaudio-${version}-cp313-cp313-manylinux_2_28_aarch64.whl"
+  "aarch64-linux-314 $linux_cpu_bucket/torchaudio-${version}%2Bcpu-cp314-cp314-manylinux_2_28_aarch64.whl torchaudio-${version}-cp314-cp314-manylinux_2_28_aarch64.whl"
 )
 
 hashfile=binary-hashes-"$version".nix

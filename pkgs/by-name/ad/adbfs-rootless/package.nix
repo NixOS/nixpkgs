@@ -7,7 +7,7 @@
   android-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adbfs-rootless";
   version = "0-unstable-2023-03-21";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # very ugly way of replacing the adb calls
     substituteInPlace adbfs.cpp \
-      --replace '"adb ' '"${android-tools}/bin/adb '
+      --replace-fail '"adb ' '"${android-tools}/bin/adb '
   '';
 
   installPhase = ''
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Mount Android phones on Linux with adb, no root required";
     mainProgram = "adbfs";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

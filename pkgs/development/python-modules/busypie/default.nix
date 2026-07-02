@@ -6,26 +6,25 @@
   pytest-timeout,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "busypie";
-  version = "0.5.2";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rockem";
     repo = "busypie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LaPgK36ieHKAbm9btx6t//dMdSGdzcaDJVou96D6J3U=";
+    hash = "sha256-MIwME5QM0BDpYP9frraJP/1v0lTZpPzgbqAawpGAcU0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest-runner" ""
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -7,7 +7,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lxd-image-server";
   version = "0.0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Avature";
     repo = "lxd-image-server";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
   };
 
@@ -61,4 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "lxd-image-server";
   };
-}
+})

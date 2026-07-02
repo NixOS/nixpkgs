@@ -52,6 +52,11 @@
 
 let
   inherit (vscode) executableName longName;
+  # The wrapped editor may override `iconName` (e.g. code-cursor, windsurf,
+  # kiro and antigravity-ide all set it to a name without the `vs` prefix). Read
+  # the real value from the package, falling back to the generic.nix default for
+  # editors built before `iconName` was exposed via passthru.
+  iconName = vscode.iconName or "vs${executableName}";
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
@@ -73,6 +78,8 @@ in
 
 runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
   {
+    pname = wrappedPkgName;
+    version = wrappedPkgVersion;
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ vscode ];
     dontPatchELF = true;
@@ -98,7 +105,12 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}"
         mkdir -p "$out/share/applications"
         mkdir -p "$out/share/pixmaps"
 
-        ln -sT "${vscode}/share/pixmaps/vs${executableName}.png" "$out/share/pixmaps/vs${executableName}.png"
+        ln -sT "${vscode}/share/pixmaps/${iconName}.png" "$out/share/pixmaps/${iconName}.png"
+        # Carry over the themed icons too; the .desktop entry's `Icon=` is
+        # resolved against the icon theme before falling back to pixmaps.
+        if [ -d "${vscode}/share/icons" ]; then
+          ln -sT "${vscode}/share/icons" "$out/share/icons"
+        fi
         ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
         ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
         makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}

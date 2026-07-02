@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
   imake,
   gccmakedep,
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ gccmakedep ];
   buildInputs = [
-    libX11
+    libx11
     imake
   ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "8ba52797ccbd131dce69b96288f525b0d55dee5de4008733f7a5a51deb831c10";
   };
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-implicit-int";
 
   preInstall = ''
     sed -i Makefile \

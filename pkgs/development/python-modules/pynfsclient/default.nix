@@ -1,29 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
+  fetchFromGitHub,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynfsclient";
-  version = "0.1.5";
+  version = "1.0.6";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
-
-  src = fetchPypi {
-    pname = "pyNfsClient";
-    inherit version;
-    hash = "sha256-xgZL08NlMCpSkALQwklh7Xq16bK2Sm2hAynbrIWsgaU=";
+  src = fetchFromGitHub {
+    owner = "Pennyw0rth";
+    repo = "NfsClient";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9PV/RpK/rOI9jpTDy0FmkXY2Cf54vve6j1kM5dcZgV8=";
   };
-
-  postPatch = ''
-    # HISTORY.md is missing
-    substituteInPlace setup.py \
-      --replace-fail "HISTORY.md" "README.rst"
-  '';
 
   build-system = [ setuptools ];
 
@@ -33,9 +25,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyNfsClient" ];
 
   meta = {
-    description = "Pure python NFS client";
-    homepage = "https://pypi.org/project/pyNfsClient/";
+    description = "Pure python library to simulate NFS client";
+    homepage = "https://github.com/Pennyw0rth/NfsClient";
+    changelog = "https://github.com/Pennyw0rth/NfsClient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      letgamer
+    ];
   };
-}
+})

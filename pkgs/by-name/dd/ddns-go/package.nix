@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ddns-go";
-  version = "6.15.0";
+  version = "6.17.1";
 
   src = fetchFromGitHub {
     owner = "jeessy2";
     repo = "ddns-go";
-    rev = "v${version}";
-    hash = "sha256-NDIevPRIbRqh97IWk4lCqmjobepVMeG5QFKUJdw9Lyo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F5QErTVE4wjNMyJHSQN3MFTiTLdgy5ADf+UUZ8acF14=";
   };
 
-  vendorHash = "sha256-EGhZyoitQ7l0sQZbono2pKhQZJEnGrennMz453Lrbek=";
+  vendorHash = "sha256-3jIWxjjPeEj02OQkXLvcqLJH+PjuEtL2zhfUAOtQJio=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # network required
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "ddns-go";
   };
-}
+})

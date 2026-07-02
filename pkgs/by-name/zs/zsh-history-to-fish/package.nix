@@ -4,13 +4,13 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "zsh-history-to-fish";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-expPuffZttyXNRreplPC5Ee/jfWAyOnmjTIMXONtrnw=";
   };
 
@@ -41,4 +41,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ alinnow ];
     mainProgram = "zsh-history-to-fish";
   };
-}
+})

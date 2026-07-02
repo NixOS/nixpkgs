@@ -2,29 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyparsing,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "grandalf";
-  version = "0.7";
-  format = "setuptools";
+  version = "0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdcht";
     repo = "grandalf";
-    rev = "v${version}";
-    hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
+    tag = "v${version}";
+    hash = "sha256-oKuzk/vsEkoiEPgt/fsaaurKfz5CElXPEJe88aFBLqU=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  patches = [ ./no-setup-requires-pytestrunner.patch ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [ pyparsing ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  patches = [ ./no-setup-requires-pytestrunner.patch ];
 
   pythonImportsCheck = [ "grandalf" ];
 

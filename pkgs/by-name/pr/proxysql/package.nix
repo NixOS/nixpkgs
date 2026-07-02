@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = finalAttrs.version;
+  env.GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 

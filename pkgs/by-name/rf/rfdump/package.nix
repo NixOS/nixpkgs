@@ -65,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "LIBS=-lexpat" ];
 
+  postInstall = ''
+    install -D $out/share/pixmaps/rfdump.png -t $out/share/icons/hicolor/128x128/apps
+    rm -r $out/share/pixmaps
+  '';
+
   meta = {
     description = "Tool to detect RFID-Tags and show their meta information";
     homepage = "https://www.rfdump.org/";

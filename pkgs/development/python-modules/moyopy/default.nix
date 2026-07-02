@@ -14,19 +14,20 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moyopy";
-  version = "0.7.4";
+  version = "0.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "moyo";
-    tag = "v${version}";
-    hash = "sha256-3NL2++a2OxasgoEZbyo9/bfKDxH7e1J/kaKiwvygAZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-obGrnXu1ldYAR5SL6ghaQAUFsNX68kXQJwGpskAriX4=";
   };
 
-  sourceRoot = "${src.name}/moyopy";
+  sourceRoot = "${finalAttrs.src.name}/moyopy";
   cargoRoot = "..";
 
   nativeBuildInputs = with rustPlatform; [
@@ -39,14 +40,14 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-nNKc+U3T6Iv8UqrkKlgCsehBGzjCjvEhTJMLRge27h4=";
+    hash = "sha256-7tdPpQ/BL5j1M+sAEyVBeIobto8csEO6lUmEhbQdZK8=";
   };
 
   build-system = [
@@ -73,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface of moyo, a fast and robust crystal symmetry finder";
     homepage = "https://spglib.github.io/moyo/python/";
-    changelog = "https://github.com/spglib/moyo/releases/tag/v${version}";
+    changelog = "https://github.com/spglib/moyo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   electron,
   makeWrapper,
@@ -17,18 +17,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.6";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHqaC0N+5grBDixP+wXAzKdOTgohgwP4HbAPEZEVXKQ=";
+    hash = "sha256-nai8lcimEts/E3bwUyQufLYIHhUK83IH431PUQFtQJI=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm
+    pnpm_10
     nodejs
     # we use a script wrapper here for environment variable expansion at runtime
     # https://github.com/NixOS/nixpkgs/issues/172583
@@ -47,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-D+GPJn3qpIax+YNcLqLX71bobDdfQXyGiJ6b5PiJqC4=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-a0FvNwEAEAltQltgUf4tX0IGSdcYHkSodx4b9v5QQcg=";
   };
 
   buildPhase = ''

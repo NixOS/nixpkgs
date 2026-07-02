@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   fetchurl,
-  pythonOlder,
   pythonAtLeast,
 
   # buildInputs
@@ -22,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchaudio";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "wheel";
 
   src =
@@ -34,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  disabled = pythonAtLeast "3.15";
 
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6
@@ -72,7 +71,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${finalAttrs.version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html

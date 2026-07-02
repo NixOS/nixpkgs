@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wishlist";
   version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "wishlist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-RulCoXPqfsZrxlDMTbyFNxqf/tdi26Ikq6wNUXCp86I=";
   };
 
@@ -22,15 +22,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Single entrypoint for multiple SSH endpoints";
     homepage = "https://github.com/charmbracelet/wishlist";
-    changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${version}";
+    changelog = "https://github.com/charmbracelet/wishlist/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ caarlos0 ];
     mainProgram = "wishlist";
   };
-}
+})

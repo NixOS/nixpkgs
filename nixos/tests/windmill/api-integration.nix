@@ -53,7 +53,7 @@
       # NOTE; Wait a couple of seconds for all windmill components to finalise their database migration flow. This prevents race conditions on schema constraints.
       time.sleep(10)  # seconds
       windmill.succeed("curl --silent --fail http://windmill:8001")
-      t.assertIn("v${pkgs.windmill.version}", machine.succeed("curl --silent --fail http://windmill:8001/api/version"), "Mismatched version response")
+      t.assertIn("v${pkgs.windmill.version}", windmill.succeed("curl --silent --fail http://windmill:8001/api/version"), "Mismatched version response")
 
     with subtest("Validation"):
       windmill.succeed("integration-test --language python3 --script ${./python3.script} --input ${./python3.input}")

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "octosuite";
   version = "3.1.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bellingcat";
     repo = "octosuite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bgTAGIJbxOa8q8lMsWa8dHwNZ/jXiWGQOp921sd2Vdo=";
   };
 
@@ -44,8 +44,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Advanced Github OSINT framework";
     mainProgram = "octosuite";
     homepage = "https://github.com/bellingcat/octosuite";
-    changelog = "https://github.com/bellingcat/octosuite/releases/tag/${version}";
+    changelog = "https://github.com/bellingcat/octosuite/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

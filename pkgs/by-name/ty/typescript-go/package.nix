@@ -1,26 +1,31 @@
 {
   lib,
-  buildGo125Module,
+  buildGo126Module,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
   nix-update-script,
+  writeShellApplication,
+  nix,
+  gnugrep,
+  gnused,
 }:
 
 let
-  buildGoModule = buildGo125Module;
+  buildGoModule = buildGo126Module;
 in
 buildGoModule {
   pname = "typescript-go";
-  version = "0-unstable-2026-01-28";
+  version = "0-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript-go";
-    rev = "463b6b461f23114073ccc0c4071a7f2a21477ac2";
-    hash = "sha256-ozCm3O8ObaecE7TN7vYyeyjA3gGD8FprB93aJcDwSw0=";
+    rev = "c080da62e73c5ea066b381303c74ae00b53368ac";
+    hash = "sha256-B8CktiQg+JJKE6Lb19LgpAluXI2+ubo5dikEhQQxDs8=";
     fetchSubmodules = false;
   };
 
-  vendorHash = "sha256-1uZemqPsDxiYRVjLlC/UUP4ZXVCjocIBCj9uCzQHmog=";
+  vendorHash = "sha256-RKlkRodWH6DaAi1CZziBgIOfzFLm8aih+a0kHNekf5U=";
 
   ldflags = [
     "-s"
@@ -44,9 +49,33 @@ buildGoModule {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version=branch"
+          "--src-only"
+        ];
+      })
+
+      (lib.getExe (writeShellApplication {
+        name = "typescript-go-go-version-updater";
+        runtimeInputs = [
+          nix
+          gnugrep
+          gnused
+        ];
+        text = ''
+          new_src="$(nix-build --attr 'pkgs.typescript-go.src' --no-out-link)"
+          new_go_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' "$new_src/go.mod")"
+          sed -i -E "s/buildGo[0-9]+Module/buildGo''${new_go_major_minor//./}Module/g" '${toString ./package.nix}'
+        '';
+      }))
+
+      # Update vendorHash
+      (nix-update-script {
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
   };
 
   meta = {

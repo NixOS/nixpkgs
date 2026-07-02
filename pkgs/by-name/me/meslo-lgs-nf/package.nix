@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenv.mkDerivation {
@@ -15,10 +16,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp $src/*.ttf $out/share/fonts/truetype
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Meslo Nerd Font patched for Powerlevel10k";

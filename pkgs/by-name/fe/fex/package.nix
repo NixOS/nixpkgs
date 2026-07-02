@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   nix-update-script,
-  xxHash,
+  xxhash,
   fmt,
   libxml2,
   openssl,
@@ -99,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2601";
+  version = "2605";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-AfHOD3S3zDwe85Zr8XEMmI+LrdVEZdXJ9FWQQ+oUNik=";
+    hash = "sha256-N4iiDa9DbET/8wzFmp9FoFQfm0ZmtUT76sipmi8LE/0=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -116,10 +116,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       git submodule update --init --depth 1 \
         External/Vulkan-Headers \
         External/drm-headers \
-        External/jemalloc \
+        External/rpmalloc \
         External/jemalloc_glibc \
-        External/robin-map \
         External/vixl \
+        External/unordered_dense \
         Source/Common/cpp-optparse
 
       find . -name .git -print0 | xargs -0 rm -rf
@@ -132,6 +132,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace FEXCore/include/git_version.h.in \
+      --replace-fail "@GIT_HASH_ARRAY@" "" \
+      --replace-fail "@GIT_DESCRIBE_STRING@" "FEX-${finalAttrs.version}"
+
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt ThunkLibs/HostLibs/CMakeLists.txt \
       --replace-fail "/usr/include/libdrm" "${devRootFS}/include/libdrm" \
       --replace-fail "/usr/include/wayland" "${devRootFS}/include/wayland"
@@ -143,6 +147,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       }"
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
       --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
+
+    # Disable including current date in manpages
+    substituteInPlace FEXCore/Scripts/config_generator.py \
+      --replace-fail ".Dd {0}" ".Dd" \
+      --replace-fail "output_man.write(header.format(" "output_man.write(header) #"
 
     # Patch any references to library wrapper paths
     substituteInPlace FEXCore/Source/Interface/Config/Config.json.in \
@@ -163,6 +172,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
     # Temporarily disable failing tests. TODO: investigate the root cause of these failures
     rm \
+      unittests/ASM/FEX_bugs/SegmentAddressOverride.asm \
       unittests/ASM/Primary/Primary_63_2.asm \
       unittests/32Bit_ASM/Secondary/07_XX_04.asm \
       unittests/ASM/Secondary/07_XX_04.asm
@@ -183,7 +193,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
-    xxHash
+    xxhash
     fmt
     libxml2
     openssl

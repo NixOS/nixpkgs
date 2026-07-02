@@ -7,21 +7,20 @@
   installShellFiles,
   versionCheckHook,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.47";
+  version = "4.0.10";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    tag = "v${version}";
-    hash = "sha256-tXGFCKkuK8PGdgVGNXO5qVWB1+XPz092ovmLdVMY+yQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RbTGgSnaRUZdj2RdyTHgPy/+AbvAecTmdUeaDubyCSg=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-1WmG+ffcwBCsAdBTXST0iZIcA8Mo0LRt317WDX2f/aM=";
+  vendorHash = "sha256-y17ZrVzeRVzODGuIFKV8nsMu2720d/I4HUfwdinwOg4=";
 
   subPackages = [ "." ];
 
@@ -35,7 +34,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${version}"
+    "-X=main.version=v${finalAttrs.version}"
+    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -72,7 +72,7 @@ buildGoModule rec {
   meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
-    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized
@@ -91,4 +91,4 @@ buildGoModule rec {
     ];
     mainProgram = "kubescape";
   };
-}
+})

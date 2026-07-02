@@ -6,18 +6,20 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-about";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
-    tag = version;
-    sha256 = "sha256-QbmZIbn/xPZUTXNpUjGuWTjoh8RpsMRuVIfJRO9M3xM=";
+    tag = finalAttrs.version;
+    hash = "sha256-0iY/kZmPYoMAQVU+Z/GWom7IgllYwUM34A80dgFYnXs=";
   };
 
-  cargoHash = "sha256-oO5Kp5A2v1w6EUwgcHhyagZDIK7a/2d9uTiCoXHuHhY=";
+  cargoHash = "sha256-Hp2PRwPpSUKdExOvF2szb8W5+juPv2HfK7cPBm1rm5Q=";
+
+  buildFeatures = [ "cli" ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-about";
-    changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
@@ -41,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-about";
   };
-}
+})

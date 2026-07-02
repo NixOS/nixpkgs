@@ -5,7 +5,7 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "marcel";
   version = "0.30.4";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "geophile";
     repo = "marcel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ER1Hr+sC55Qnp21qjCwc70Nho2VQ3FztzsLLlx3EtA8=";
   };
 
@@ -46,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ kud ];
     mainProgram = "marcel";
   };
-}
+})

@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "writefreely";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "writefreely";
     repo = "writefreely";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VM5TkQAohxGmtbQs9ZWxCqF4kJ/9wtihz+p1twd+W9E=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/writefreely/writefreely.softwareVer=${version}"
+    "-X github.com/writefreely/writefreely.softwareVer=${finalAttrs.version}"
   ];
 
   tags = [ "sqlite" ];
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ soopyc ];
     mainProgram = "writefreely";
   };
-}
+})

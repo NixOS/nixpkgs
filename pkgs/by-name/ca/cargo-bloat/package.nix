@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bloat";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = "cargo-bloat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B71VX7cJe1giOLmk3cQE8Zxr7fKGyQkoXRuM+NzBcb8=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "cargo-bloat";
   };
-}
+})

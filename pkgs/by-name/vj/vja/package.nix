@@ -4,16 +4,16 @@
   fetchFromGitLab,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vja";
-  version = "5.0.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ce72";
     repo = "vja";
-    tag = version;
-    hash = "sha256-ny0ZKsAwjHgN/8XBewYRiKt3YK3XyKshmJVQsKJrwog=";
+    tag = finalAttrs.version;
+    hash = "sha256-SLvr5e55XY+Yl3n5H6vvBV0nQ2DRcdIFaM8Wp0BGRrs=";
   };
 
   build-system = [
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     click-aliases
     parsedatetime
+    pyjwt
     python-dateutil
     requests
   ];
@@ -36,9 +37,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Command line interface for Vikunja";
     homepage = "https://gitlab.com/ce72/vja";
-    changelog = "https://gitlab.com/ce72/vja/-/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/ce72/vja/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "vja";
     maintainers = with lib.maintainers; [ iv-nn ];
   };
-}
+})

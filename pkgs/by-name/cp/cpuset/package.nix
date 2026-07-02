@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cpuset";
   version = "1.6.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lpechacek";
     repo = "cpuset";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fW0SXNI10pb6FTn/2TOqxP9qlys0KL/H9m//NjslUaY=";
   };
 
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ wykurz ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -68,19 +68,20 @@
   upower,
   wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "49.4";
+  version = "50.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Exl15f3dII86MPdmocZn+Ms/FbaJqGjShaZBojQgSwI=";
+    hash = "sha256-Bu67D9MFbE2NeLvTdUyWEI84HXC3YNpCPFAklGlEKHw=";
   };
 
   patches = [
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -161,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xorgserver # for Xvfb
+    xorg-server # for Xvfb
   ];
 
   doCheck = true;

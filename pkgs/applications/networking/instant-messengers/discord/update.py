@@ -1,29 +1,18 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p python3
 
+from dataclasses import asdict, dataclass, field
 from enum import StrEnum
-from typing import List, Tuple
-from subprocess import PIPE, Popen
+from typing import List
+import base64
 import json
 import urllib.request
-import re
 import os.path
-
-SRC_NAME = "source"
-
-VERSION_REGEX = re.compile(r"\/([\d.]+)\/")
 
 
 class Platform(StrEnum):
     LINUX = "linux"
     MACOS = "osx"
-
-    def format_type(self):
-        if self.value == Platform.LINUX.value:
-            return "tar.gz"
-        elif self.value == Platform.MACOS.value:
-            return "dmg"
-        raise RuntimeError("Invalid platform")
 
 
 class Branch(StrEnum):
@@ -33,73 +22,106 @@ class Branch(StrEnum):
     DEVELOPMENT = "development"
 
 
-Variant = Tuple[Platform, Branch]
+class Kind(StrEnum):
+    # Brotli-compressed host + module distros from the distributions API
+    DISTRO = "distro"
+
+
+@dataclass(frozen=True)
+class Variant:
+    platform: Platform
+    branch: Branch
+    kind: Kind
+
+
+# The distributions API rejects requests that don't send a Discord-Updater
+# User-Agent, so we can't identify ourselves as Nixpkgs here
+DISTRO_USER_AGENT = "Discord-Updater/1"
 
 
 def serialize_variant(variant: Variant) -> str:
-    platform, branch = variant
-    return f"{platform}-{branch}"
+    return f"{variant.platform}-{variant.branch}"
 
 
-def url_for_variant(variant: Variant) -> str:
-    platform, branch = variant
-
-    return f"https://discord.com/api/download/{branch.value}?platform={platform.value}&format={platform.format_type()}"
+def distro_manifest_url_for_variant(variant: Variant) -> str:
+    return f"https://updates.discord.com/distributions/app/manifests/latest?channel={variant.branch.value}&platform={variant.platform.value}&arch=x64"
 
 
-def fetch_redirect_url(url: str) -> str:
-    headers = {"user-agent": "Nixpkgs-Discord-Update-Script/0.0.0"}
-    # note that urllib follows redirects by default. So we can extract the final url from the response object
-    req = urllib.request.Request(url, headers=headers)
+@dataclass
+class DistroRef:
+    url: str
+    hash: str
+
+
+@dataclass
+class DistroModule:
+    version: int
+    url: str
+    hash: str
+
+
+@dataclass
+class DistroSource:
+    version: str
+    distro: DistroRef
+    modules: dict[str, DistroModule] = field(default_factory=dict)
+    kind: Kind = Kind.DISTRO
+
+
+def fetch_distro_manifest(variant: Variant) -> dict:
+    url = distro_manifest_url_for_variant(variant)
+    req = urllib.request.Request(url, headers={"User-Agent": DISTRO_USER_AGENT})
     with urllib.request.urlopen(req) as response:
-        return response.url
+        return json.loads(response.read())
 
 
-def version_from_url(url: str) -> str:
-    matches = VERSION_REGEX.search(url)
-    assert matches, f"Url {url} must contain version number"
-    version = matches.group(1)
-    assert version
-    return version
+def version_triple_to_str(triple: list) -> str:
+    return ".".join(str(x) for x in triple)
 
 
-def prefetch(url: str) -> str:
-    with Popen(["nix-prefetch-url", "--name", "source", url], stdout=PIPE) as p:
-        assert p.stdout
-        b32_hash = p.stdout.read().decode("utf-8").strip()
-    with Popen(
-        ["nix-hash", "--to-sri", "--type", "sha256", b32_hash], stdout=PIPE
-    ) as p:
-        assert p.stdout
-        sri_hash = p.stdout.read().decode("utf-8").strip()
-    return sri_hash
+def sri_from_sha256_hex(hex_hash: str) -> str:
+    return "sha256-" + base64.b64encode(bytes.fromhex(hex_hash)).decode("utf-8")
+
+
+def fetch_distro_source(variant: Variant) -> DistroSource:
+    manifest = fetch_distro_manifest(variant)
+
+    distro_url = manifest["full"]["url"]
+    modules = {
+        name: DistroModule(
+            version=mod["full"]["module_version"],
+            url=mod["full"]["url"],
+            hash=sri_from_sha256_hex(mod["full"]["package_sha256"]),
+        )
+        for name, mod in manifest["modules"].items()
+    }
+
+    return DistroSource(
+        version=version_triple_to_str(manifest["full"]["host_version"]),
+        distro=DistroRef(
+            url=distro_url,
+            hash=sri_from_sha256_hex(manifest["full"]["package_sha256"]),
+        ),
+        modules=modules,
+    )
 
 
 def main():
     variants: List[Variant] = [
-        (Platform.LINUX, Branch.STABLE),
-        (Platform.LINUX, Branch.PTB),
-        (Platform.LINUX, Branch.CANARY),
-        (Platform.LINUX, Branch.DEVELOPMENT),
-        (Platform.MACOS, Branch.STABLE),
-        (Platform.MACOS, Branch.PTB),
-        (Platform.MACOS, Branch.CANARY),
-        (Platform.MACOS, Branch.DEVELOPMENT),
+        Variant(Platform.LINUX, Branch.STABLE, Kind.DISTRO),
+        Variant(Platform.LINUX, Branch.PTB, Kind.DISTRO),
+        Variant(Platform.LINUX, Branch.CANARY, Kind.DISTRO),
+        Variant(Platform.LINUX, Branch.DEVELOPMENT, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.STABLE, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.PTB, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.CANARY, Kind.DISTRO),
+        Variant(Platform.MACOS, Branch.DEVELOPMENT, Kind.DISTRO),
     ]
 
     sources = {}
 
     for v in variants:
-        url = url_for_variant(v)
-        url = fetch_redirect_url(url)
-        version = version_from_url(url)
-        sri_hash = prefetch(url)
-
-        sources[serialize_variant(v)] = {
-            "url": url,
-            "version": version,
-            "hash": sri_hash,
-        }
+        sources[serialize_variant(v)] = asdict(fetch_distro_source(v))
 
     with open(os.path.join(os.path.dirname(__file__), "sources.json"), "w") as f:
         json.dump(sources, f, indent=2, sort_keys=True)

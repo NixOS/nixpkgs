@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   six,
   certauth,
 }:
@@ -9,7 +10,9 @@
 buildPythonPackage {
   pname = "wsgiprox";
   version = "1.5.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "webrecorder";
@@ -19,7 +22,9 @@ buildPythonPackage {
     hash = "sha256-EquddaNrVceyJHuQMCajKHGZX2Q7ebR0Zhvi2pl2WEw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
     certauth
   ];

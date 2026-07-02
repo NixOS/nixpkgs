@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tab-rs";
   version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "austinjones";
     repo = "tab-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1crj0caimin667f9kz34c0sm77892dmqaf1kxryqakqm75az5wfr";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "tab";
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13
   };
-}
+})

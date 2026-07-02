@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  withAi ? false,
 
   # nativeBuildInputs
   cmake,
@@ -27,7 +28,6 @@
   graphicsmagick,
   gtk3,
   icu,
-  ilmbase,
   isocodes,
   jasper,
   json-glib,
@@ -35,6 +35,7 @@
   lensfun,
   lerc,
   libaom,
+  libarchive,
   libavif,
   libdatrie,
   libepoxy,
@@ -54,12 +55,14 @@
   libwebp,
   libxml2,
   lua5_4,
+  onnxruntime,
   util-linux,
   openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
   portmidi,
+  potrace,
   pugixml,
   sqlite,
   # Linux only
@@ -67,10 +70,10 @@
   colord-gtk,
   libselinux,
   libsepol,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxkbcommon,
-  libXtst,
+  libxtst,
   ocl-icd,
   # Darwin only
   gtk-mac-integration,
@@ -82,12 +85,12 @@ let
   pugixml-shared = pugixml.override { shared = true; };
 in
 stdenv.mkDerivation rec {
-  version = "5.4.0";
+  version = "5.6.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-K/C66njSeUXPCcM9iATxeeA6g+4Z0ukn/WYOpGrKOxY=";
+    hash = "sha256-FX1tOEevivyr54lERUeG9zqIbgilBLS9YRTCBl/gBuQ=";
   };
 
   nativeBuildInputs = [
@@ -114,7 +117,6 @@ stdenv.mkDerivation rec {
     graphicsmagick
     gtk3
     icu
-    ilmbase
     isocodes
     jasper
     json-glib
@@ -122,7 +124,7 @@ stdenv.mkDerivation rec {
     lensfun
     lerc
     libaom
-    #libavif # TODO re-enable once cmake files are fixed (#425306)
+    libavif
     libdatrie
     libepoxy
     libexif
@@ -146,8 +148,13 @@ stdenv.mkDerivation rec {
     osm-gps-map
     pcre2
     portmidi
+    potrace
     pugixml-shared
     sqlite
+  ]
+  ++ lib.optionals withAi [
+    libarchive
+    onnxruntime
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -155,10 +162,10 @@ stdenv.mkDerivation rec {
     colord-gtk
     libselinux
     libsepol
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxkbcommon
-    libXtst
+    libxtst
     ocl-icd
     util-linux
   ]
@@ -167,6 +174,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
+  ]
+  ++ lib.optionals withAi [
+    (lib.cmakeBool "USE_AI" true)
+    (lib.cmakeBool "ONNXRUNTIME_OFFLINE" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DUSE_COLORD=OFF"
@@ -181,7 +192,9 @@ stdenv.mkDerivation rec {
     let
       libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       libPathPrefix =
-        "$out/lib/darktable" + lib.optionalString stdenv.hostPlatform.isLinux ":${ocl-icd}/lib";
+        "$out/lib/darktable"
+        + lib.optionalString (withAi && stdenv.hostPlatform.isLinux) ":${lib.getLib onnxruntime}/lib"
+        + lib.optionalString stdenv.hostPlatform.isLinux ":${ocl-icd}/lib";
     in
     ''
       for f in $out/share/darktable/kernels/*.cl; do

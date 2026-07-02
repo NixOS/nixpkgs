@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 get_download_info() {
     xh --json \
-        https://update.equinox.io/check \
+        https://update.ngrok-agent.com/check \
         'Accept:application/json; q=1; version=1; charset=utf-8' \
         'Content-Type:application/json; charset=utf-8' \
         app_id=app_c3U4eZcDbjV \

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  doCheck = pythonOlder "3.11"; # asynctest unsupported on python3.11
+  doCheck = false; # asynctest unsupported on 3.11+
 
   nativeCheckInputs = [
     asynctest

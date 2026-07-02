@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libssh";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor finalAttrs.version}/libssh-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fYoTYbsJTsP1EZZOeKWk26aJtZhuESr6vk9NDWxhJcM=";
+    hash = "sha256-Gmr0JNgyfl7t705f5/W5JCJt1hesnz3oDyF9gqNqcSE=";
   };
 
   outputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Don’t build examples, which are not installed and require additional dependencies not
-  # included in `buildInputs` such as libX11.
+  # included in `buildInputs` such as libx11.
   cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
   buildInputs = [

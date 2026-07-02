@@ -23,15 +23,15 @@ let
     };
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nixos-facter";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
-    tag = "v${version}";
-    hash = "sha256-bbF16siqAqokXOHwLmBL61p/C7YiDGqBJhhJiF08pHk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w4tFIouJQLf/JeY7wvvSLbxQv73Bbs11a8EAu6iXwKU=";
   };
 
   vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
@@ -59,7 +59,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X git.numtide.com/numtide/nixos-facter/build.Name=nixos-facter"
-    "-X git.numtide.com/numtide/nixos-facter/build.Version=v${version}"
+    "-X git.numtide.com/numtide/nixos-facter/build.Version=v${finalAttrs.version}"
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
 
@@ -77,4 +77,4 @@ buildGoModule rec {
     mainProgram = "nixos-facter";
     platforms = lib.platforms.linux;
   };
-}
+})

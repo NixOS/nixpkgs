@@ -82,6 +82,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ asamonik ];
-    mainProgram = pname;
+    mainProgram = "expresslrs-configurator";
   };
 }

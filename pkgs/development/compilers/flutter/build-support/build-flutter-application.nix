@@ -14,33 +14,63 @@
 
 # absolutely no mac support for now
 
-{
-  pubGetScript ? null,
-  flutterBuildFlags ? [ ],
-  targetFlutterPlatform ? "linux",
-  extraWrapProgramArgs ? "",
-  flutterMode ? null,
-  ...
-}@args:
-
-let
-  hasEngine = flutter ? engine && flutter.engine != null && flutter.engine.meta.available;
-  flutterMode = args.flutterMode or (if hasEngine then flutter.engine.runtimeMode else "release");
-
-  flutterFlags = lib.optional hasEngine "--local-engine host_${flutterMode}${
-    lib.optionalString (!flutter.engine.isOptimized) "_unopt"
-  }";
-
-  flutterBuildFlags = [
-    "--${flutterMode}"
-  ]
-  ++ (args.flutterBuildFlags or [ ])
-  ++ flutterFlags;
-
-  builderArgs =
+lib.extendMkDerivation {
+  constructDrv =
+    argsFn:
     let
+      evalArgs = lib.fix argsFn;
+      targetFlutterPlatform = evalArgs.targetFlutterPlatform or "linux";
+
+      minimalFlutter = flutter.override {
+        supportedTargetFlutterPlatforms = [
+          "universal"
+          targetFlutterPlatform
+        ];
+      };
+
+      buildAppWith = flutter: buildDartApplication.override { dart = flutter; };
+    in
+    buildAppWith minimalFlutter (
+      finalAttrs:
+      let
+        args = argsFn finalAttrs;
+      in
+      args
+      // {
+        passthru = (args.passthru or { }) // {
+          multiShell = buildAppWith flutter args;
+        };
+      }
+    );
+
+  extendDrvArgs =
+    finalAttrs:
+    args@{
+      pubGetScript ? null,
+      flutterBuildFlags ? [ ],
+      targetFlutterPlatform ? "linux",
+      extraWrapProgramArgs ? "",
+      flutterMode ? null,
+      ...
+    }:
+    let
+      hasEngine = flutter ? engine && flutter.engine != null && flutter.engine.meta.available;
+      flutterMode' = args.flutterMode or (if hasEngine then flutter.engine.runtimeMode else "release");
+
+      flutterFlags = lib.optional hasEngine "--local-engine host_${flutterMode'}${
+        lib.optionalString (!flutter.engine.isOptimized) "_unopt"
+      }";
+
+      flutterBuildFlags' = [
+        "--${flutterMode'}"
+      ]
+      ++ (args.flutterBuildFlags or [ ])
+      ++ flutterFlags;
+
       universal = args // {
-        inherit flutterMode flutterFlags flutterBuildFlags;
+        flutterMode = flutterMode';
+        flutterFlags = flutterFlags;
+        flutterBuildFlags = flutterBuildFlags';
 
         sdkSetupScript = ''
           # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
@@ -128,8 +158,6 @@ let
       };
     in
     {
-      inherit universal;
-
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];
 
@@ -225,21 +253,4 @@ let
       };
     }
     .${targetFlutterPlatform} or (throw "Unsupported Flutter host platform: ${targetFlutterPlatform}");
-
-  minimalFlutter = flutter.override {
-    supportedTargetFlutterPlatforms = [
-      "universal"
-      targetFlutterPlatform
-    ];
-  };
-
-  buildAppWith = flutter: buildDartApplication.override { dart = flutter; };
-in
-buildAppWith minimalFlutter (
-  builderArgs
-  // {
-    passthru = builderArgs.passthru or { } // {
-      multiShell = buildAppWith flutter builderArgs;
-    };
-  }
-)
+}

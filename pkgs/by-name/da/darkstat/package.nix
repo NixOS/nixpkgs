@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "darkstat";
-  version = "3.0.721";
+  version = "3.0.722";
 
   src = fetchFromGitHub {
     owner = "emikulic";
     repo = "darkstat";
     tag = finalAttrs.version;
-    hash = "sha256-kKj4fCgphoe3lojJfARwpITxQh7E6ehUew9FVEW63uQ=";
+    hash = "sha256-WJjunJx9WjzRky1FL0k25h84Ypv273KXR5qT5YhHmbs=";
   };
 
   patches = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/emikulic/darkstat/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ tbutter ];
     mainProgram = "darkstat";
   };
 })

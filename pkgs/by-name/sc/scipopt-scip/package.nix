@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-scip";
-  version = "10.0.0";
+  version = "10.0.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KW7N2ORspzkaR/gdU//p38BV4GyuhoSIVb6q9RTrCYQ=";
+    hash = "sha256-8R9/6dTsTIcvp2pYWXlTh7WuzlotJb+y5hJpzY+r1pc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
+    maintainers = with lib.maintainers; [ pmeinhold ];
     changelog = "https://scipopt.org/doc-${finalAttrs.version}/html/RN${lib.versions.major finalAttrs.version}.php";
     description = "Solving Constraint Integer Programs";
     license = lib.licenses.asl20;

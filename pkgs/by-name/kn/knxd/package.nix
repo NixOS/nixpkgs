@@ -8,7 +8,7 @@
   indent,
   perl,
   argp-standalone,
-  fmt_9,
+  fmt,
   libev,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.73";
+  version = "0.14.75";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
     tag = finalAttrs.version;
-    hash = "sha256-rBYvwNJ8rIXGv9Hz0xTn+4cUdptdoddCCv6JvF4f1+M=";
+    hash = "sha256-3C88YfUfqTbxL2/SflJ1sIv/R9lLLMyfFZkRRvV59qg=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fmt_9
+    fmt
     libev
   ]
   ++ lib.optional withSystemd systemd
@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+    mainProgram = "knxd";
   };
 })

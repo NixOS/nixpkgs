@@ -3,14 +3,12 @@
   autoPatchelfHook,
   lib,
   makeWrapper,
-  requireFile,
-  runCommand,
   stdenv,
   symlinkJoin,
   # arguments from default.nix
   lang,
   meta,
-  name,
+  pname,
   src,
   version,
   # dependencies
@@ -41,9 +39,9 @@
   openssl,
   pciutils,
   tre,
-  unixODBC,
-  xcbutilimage,
-  xcbutilkeysyms,
+  unixodbc,
+  libxcb-image,
+  libxcb-keysyms,
   xkeyboard_config,
   libxtst,
   libxscrnsaver,
@@ -89,10 +87,14 @@ in
 stdenv.mkDerivation {
   inherit
     meta
-    name
+    pname
     src
-    version
     ;
+
+  version =
+    version # a comment to trick nixfmt
+    + lib.optionalString cudaSupport "-cuda"
+    + lib.optionalString (lang != "en") "-${lang}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -126,9 +128,9 @@ stdenv.mkDerivation {
     openssl
     pciutils
     tre
-    unixODBC
-    xcbutilimage
-    xcbutilkeysyms
+    unixodbc
+    libxcb-image
+    libxcb-keysyms
     xkeyboard_config
     libice
     libsm

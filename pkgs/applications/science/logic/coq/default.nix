@@ -19,6 +19,7 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   rocqPackages, # for versions >= 9.0 that are transition shims on top of Rocq
   ncurses,
   buildIde ? null, # default is true for Coq < 8.14 and false for Coq >= 8.14
@@ -73,6 +74,8 @@ let
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
     "9.0.1".sha256 = "sha256-gRgQhFiYvGR/Z46TmTl1bgN9O32nifxQGdrzfw0WHrk=";
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
+    "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
+    "9.2.0".sha256 = "sha256-rVhv2GLImdVPgRwwTQ+wiWNtRUflMrES0ElIrdTIN1s=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -97,10 +100,7 @@ let
   coq-version =
     args.coq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
   coqAtLeast = v: coq-version == "dev" || lib.versionAtLeast coq-version v;
-  buildIde = args.buildIde or (!coqAtLeast "8.14");
-  ideFlags = lib.optionalString (
-    buildIde && !coqAtLeast "8.10"
-  ) "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
+  buildIde = args.buildIde or (coqAtLeast "8.10" && !coqAtLeast "8.14");
   csdpPatch = lib.optionalString (csdp != null) ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
@@ -111,7 +111,7 @@ let
     else
       lib.switch coq-version [
         {
-          case = lib.versions.range "8.16" "8.18";
+          case = lib.versions.range "8.16" "9.1";
           out = ocamlPackages_4_14;
         }
         {
@@ -126,7 +126,7 @@ let
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
         }
-      ] ocamlPackages_4_14;
+      ] ocamlPackages_5_4;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
@@ -244,17 +244,9 @@ let
       addEnvHooks "$targetOffset" addCoqPath
     '';
 
-    preConfigure =
-      if coqAtLeast "8.10" then
-        ''
-          patchShebangs dev/tools/
-        ''
-      else
-        ''
-          configureFlagsArray=(
-            ${ideFlags}
-          )
-        '';
+    preConfigure = lib.optionalString (coqAtLeast "8.10") ''
+      patchShebangs dev/tools/
+    '';
 
     prefixKey = "-prefix ";
 

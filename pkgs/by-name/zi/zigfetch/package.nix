@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig,
+  zig_0_15,
   pciutils,
   apple-sdk,
   replaceVars,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    zig
+    zig_0_15
   ];
 
   buildInputs = [
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "zigfetch";
-    inherit (zig.meta) platforms;
+    inherit (zig_0_15.meta) platforms;
   };
 })

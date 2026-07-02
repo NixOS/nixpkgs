@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   xorgproto,
-  libX11,
-  libXft,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXinerama,
+  libx11,
+  libxft,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxinerama,
   libjpeg,
   giflib,
   pkg-config,
@@ -29,12 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXft
-    libXcomposite
-    libXdamage
-    libXext
-    libXinerama
+    libx11
+    libxft
+    libxcomposite
+    libxdamage
+    libxext
+    libxinerama
     libjpeg
     giflib
   ];

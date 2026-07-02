@@ -4,7 +4,7 @@
   fetchFromGitLab,
   sane-backends,
   sane-frontends,
-  libX11,
+  libx11,
   gtk2,
   pkg-config,
   libpng,
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb-compat-0_1
     sane-backends
     sane-frontends
-    libX11
+    libx11
     gtk2
   ]
   ++ lib.optional gimpSupport gimp;

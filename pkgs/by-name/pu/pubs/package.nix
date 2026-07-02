@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pubs";
   version = "0.9.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
@@ -76,10 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line bibliography manager";
     mainProgram = "pubs";
     homepage = "https://github.com/pubs/pubs";
-    changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
+    changelog = "https://github.com/pubs/pubs/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       dotlambda
     ];
   };
-}
+})

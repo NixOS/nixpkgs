@@ -7,14 +7,14 @@
   pkg-config,
   python3,
 }:
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "termpaint";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "termpaint";
     repo = "termpaint";
-    rev = final.version;
+    rev = finalAttrs.version;
     hash = "sha256-7mfGTC5vJ4806bDbrPMSVthtW05a+M3vgUlHGbtaI4Q=";
   };
 

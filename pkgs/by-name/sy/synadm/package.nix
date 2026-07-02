@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "synadm";
   version = "0.49.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromCodeberg {
     owner = "synadm";
     repo = "synadm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Nh4pzOXBXwbhq49Hq8vmPi6AS6N/tRqDBjIVKH3Gh6s=";
   };
 
@@ -46,10 +46,10 @@ python3Packages.buildPythonApplication rec {
       conveniently issue commands available via its admin API's
       (element-hq/synapse@master/docs/admin_api)
     '';
-    changelog = "https://codeberg.org/synadm/synadm/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/synadm/synadm/releases/tag/${finalAttrs.src.tag}";
     downloadPage = "https://codeberg.org/synadm/synadm";
     homepage = "https://synadm.readthedocs.io/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

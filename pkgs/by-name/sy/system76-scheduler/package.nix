@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
     pipewire
   ];
 
-  EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
+  env.EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
 
   # tests don't build
   doCheck = false;

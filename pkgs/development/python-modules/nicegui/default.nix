@@ -12,6 +12,8 @@
   itsdangerous,
   jinja2,
   libsass,
+  lxml-html-clean,
+  lxml,
   markdown2,
   matplotlib,
   orjson,
@@ -26,12 +28,14 @@
   pytest-asyncio,
   pytest-selenium,
   pytestCheckHook,
+  python-dotenv,
   python-multipart,
   python-socketio,
   pywebview,
   redis,
   requests,
   setuptools,
+  tinycss2,
   typing-extensions,
   urllib3,
   uvicorn,
@@ -43,17 +47,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "3.6.1";
+  version = "3.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-umM2ffkiXWJVU2i17fbtnd+ghEt0uVzop9fNhaRTCWM=";
+    hash = "sha256-pm8jUDdpRvPDVwHXHGwuqPogpE/HMS19uJ5beWch7TE=";
   };
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "idna"
+    "lxml"
+    "orjson"
+    "python-multipart"
+    "requests"
+  ];
 
   build-system = [
     poetry-core
@@ -71,12 +81,16 @@ buildPythonPackage (finalAttrs: {
     ifaddr
     itsdangerous
     jinja2
+    lxml
+    lxml-html-clean
     markdown2
     orjson
     pygments
+    python-dotenv
     python-multipart
     python-socketio
     requests
+    tinycss2
     typing-extensions
     urllib3
     uvicorn

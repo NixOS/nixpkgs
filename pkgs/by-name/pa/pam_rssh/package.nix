@@ -10,19 +10,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pam_rssh";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
-    tag = "v${version}";
-    hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yHB6tEQuUFYve6GgAW6VuLSw49q0l0VzgH1vIquPNMQ=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-4DoMRtyT2t4degi8oOyVTStb0AU0P/7XeYk15JLRrqg=";
+  cargoHash = "sha256-d/N7ec8/Khv9oWwEXapc6Nb+j/7XTDxBLeFHO9nqHLk=";
 
   postPatch = ''
     substituteInPlace src/auth_keys.rs \
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
       xyenon
     ];
   };
-}
+})

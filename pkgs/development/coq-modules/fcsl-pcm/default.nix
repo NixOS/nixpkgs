@@ -29,7 +29,7 @@ mkCoqDerivation {
         (case (range "9.0" "9.1") (range "2.4.0" "2.5.0") "2.2.0")
       ]
       null;
-  release."2.2.0".sha256 = "sha256-VnfK+RHWiq27hxEJ9stpVp609/dMiPH6UHFhzaHdAnM=";
+  release."2.2.0".hash = "sha256-VnfK+RHWiq27hxEJ9stpVp609/dMiPH6UHFhzaHdAnM=";
   releaseRev = v: "v${v}";
 
   propagatedBuildInputs = [

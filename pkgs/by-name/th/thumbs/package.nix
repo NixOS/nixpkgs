@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thumbs";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "fcsonline";
     repo = "tmux-thumbs";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-XMz1ZOTz2q1Dt4QdxG83re9PIsgvxTTkytESkgKxhGM=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ghostbuster91 ];
   };
-}
+})

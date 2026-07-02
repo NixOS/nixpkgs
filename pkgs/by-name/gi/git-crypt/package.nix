@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # https://github.com/AGWA/git-crypt/issues/232
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DOPENSSL_API_COMPAT=0x30000000L"
   ];
 

@@ -10,6 +10,20 @@ let
   format = pkgs.formats.yaml { };
   settings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
 
+  optionalPort = (lib.types.ints.between (-1) 65535);
+
+  normalisePort =
+    defaultPort: configValue:
+    if configValue == -1 then
+      null
+    else if configValue == 0 then
+      defaultPort
+    else
+      configValue;
+
+  actualRTMPPort = normalisePort 1935 cfg.settings.rtmp_port;
+  actualWHIPPort = normalisePort 8080 cfg.settings.whip_port;
+
   isLocallyDistributed = config.services.livekit.enable;
 in
 {
@@ -43,15 +57,15 @@ in
         freeformType = format.type;
         options = {
           rtmp_port = lib.mkOption {
-            type = lib.types.port;
+            type = optionalPort;
             default = 1935;
-            description = "TCP port for RTMP connections";
+            description = "TCP port for RTMP connections. -1 to disable";
           };
 
           whip_port = lib.mkOption {
-            type = lib.types.port;
+            type = optionalPort;
             default = 8080;
-            description = "TCP port for WHIP connections";
+            description = "TCP port for WHIP connections. -1 to disable";
           };
 
           redis = {
@@ -120,10 +134,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.openFirewall.rtmp -> actualRTMPPort != null;
+        message = "services.livekit-ingress: configured to open RTMP port, but the RTMP service is disabled";
+      }
+      {
+        assertion = cfg.openFirewall.whip -> actualWHIPPort != null;
+        message = "services.livekit-ingress: configured to open WHIP port, but the WHIP service is disabled";
+      }
+    ];
+
     networking.firewall = {
       allowedTCPPorts = lib.mkMerge [
-        (lib.mkIf cfg.openFirewall.rtmp [ cfg.settings.rtmp_port ])
-        (lib.mkIf cfg.openFirewall.whip [ cfg.settings.whip_port ])
+        (lib.mkIf cfg.openFirewall.rtmp [ actualRTMPPort ])
+        (lib.mkIf cfg.openFirewall.whip [ actualWHIPPort ])
       ];
       allowedUDPPortRanges = lib.mkIf cfg.openFirewall.rtc [
         {

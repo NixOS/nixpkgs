@@ -2,18 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   pygame,
   pyglet,
   pysdl2,
+
+  # tests
   pytestCheckHook,
-  setuptools-scm,
 }:
 
 buildPythonPackage {
   pname = "pytmx";
   version = "3.32";
-
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bitcraft";
@@ -52,6 +58,6 @@ buildPythonPackage {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

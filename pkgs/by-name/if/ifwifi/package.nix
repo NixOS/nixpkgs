@@ -8,14 +8,14 @@
   iw,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ifwifi";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "araujobsd";
     repo = "ifwifi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     # even though the `wifiscanner` crate would work
     platforms = with lib.platforms; linux; # ++ darwin;
   };
-}
+})

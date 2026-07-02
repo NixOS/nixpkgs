@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "durationpy";
-  version = "0.9";
+  version = "0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icholy";
     repo = "durationpy";
-    rev = version;
-    hash = "sha256-R/cZPnUUlosGHCOcqwRJ0GJlcB6Lu5a3e5h1CQ6fysA=";
+    tag = version;
+    hash = "sha256-tJ3zOCROkwFWzTgIKx+0H7J1rNkwy5XJPh8Zec7jJ5g=";
   };
 
   build-system = [ setuptools ];

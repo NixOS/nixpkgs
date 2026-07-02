@@ -49,7 +49,7 @@ buildGoModule rec {
     "-X github.com/trezor/blockbook/common.buildDate=unknown"
   ];
 
-  CGO_LDFLAGS = [
+  env.CGO_LDFLAGS = toString [
     "-L${lib.getLib stdenv.cc.cc}/lib"
     "-lrocksdb"
     "-lz"

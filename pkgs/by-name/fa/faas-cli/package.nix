@@ -22,15 +22,15 @@ let
     }
     .${cpuName} or cpuName;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.18.0";
+  version = "0.18.10";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = version;
-    sha256 = "sha256-ggDfHqGu17nSxRNZESBLn8MYrvSU+ItQubNdUCAFK1c=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-MctMhuaXJpm25VKqlhaAPG2QzSDQ//Ei8B1lRCKdz68=";
   };
 
   vendorHash = null;
@@ -42,8 +42,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
-    "-X github.com/openfaas/faas-cli/version.Version=${version}"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/openfaas/faas-cli/version.Version=${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
@@ -76,4 +76,4 @@ buildGoModule rec {
       techknowlogick
     ];
   };
-}
+})

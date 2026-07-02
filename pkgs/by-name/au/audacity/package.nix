@@ -40,16 +40,16 @@
   at-spi2-core,
   dbus,
   libepoxy,
-  libXdmcp,
-  libXtst,
-  libpthreadstubs,
+  libxdmcp,
+  libxtst,
+  libpthread-stubs,
   libsbsms_2_3_0,
   libselinux,
   libsepol,
   libxkbcommon,
   util-linux,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   libpng,
   libjpeg,
@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.7";
+  version = "3.7.8";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-UyQffN9vOSD3uDk4jpYGsjH577pU4V7FpFAu0xdsXUA=";
+    hash = "sha256-Vp3Nx3LuNu5fqeLF6dvZ9/hhkoUCu0eCAdIEDtS1IwU=";
   };
 
   patches = [
@@ -129,16 +129,16 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     portaudio
     wavpack
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
     libepoxy
-    libXdmcp
-    libXtst
-    libpthreadstubs
+    libxdmcp
+    libxtst
+    libpthread-stubs
     libxkbcommon
     libselinux
     libsepol

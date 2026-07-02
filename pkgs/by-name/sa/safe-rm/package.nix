@@ -6,13 +6,13 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "safe-rm";
   version = "1.1.0";
 
   src = fetchgit {
     url = "https://git.launchpad.net/safe-rm";
-    tag = "${pname}-${version}";
+    tag = "safe-rm-${finalAttrs.version}";
     sha256 = "sha256-7+4XwsjzLBCQmHDYNwhlN4Yg3eL43GUEbq8ROtuP2Kw=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "safe-rm";
   };
-}
+})

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hcxdumptool";
-  version = "7.1.0";
+  version = "7.1.2";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxdumptool";
     tag = finalAttrs.version;
-    hash = "sha256-54gKvOcmNxMND1iXJCgwtwT+PYntukVKtdT4dLwOOpI=";
+    hash = "sha256-dEmjzduVN5QhFRhj2bs2KTGH4e8DIiDSrs4vwznvkRA=";
   };
 
   buildInputs = [

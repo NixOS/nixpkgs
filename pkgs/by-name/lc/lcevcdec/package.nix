@@ -1,4 +1,5 @@
 {
+  cctools,
   cmake,
   fetchFromGitHub,
   git,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "4.0.4";
+  version = "4.2.0";
 
   outputs = [
     "out"
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-49ZDTYdsgv/RxUZlhIDrqJ3a3QCYA4pGG0QgOpKxzrI=";
+    hash = "sha256-EVp+ucydbBWlMMXbldkwDEbFlM88UIts8f/PspIqqSY=";
   };
 
   postPatch = ''
@@ -46,6 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     git
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   buildInputs = [

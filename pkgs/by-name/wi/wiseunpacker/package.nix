@@ -4,17 +4,15 @@
   dotnetCorePackages,
   lib,
 }:
-let
-  version = "1.3.3";
+
+buildDotnetModule (finalAttrs: {
   pname = "WiseUnpacker";
-in
-buildDotnetModule {
-  inherit version pname;
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "mnadareski";
     repo = "WiseUnpacker";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
   };
 
@@ -38,4 +36,4 @@ buildDotnetModule {
     maintainers = [ lib.maintainers.gigahawk ];
     license = lib.licenses.mit;
   };
-}
+})

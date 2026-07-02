@@ -23,29 +23,29 @@
   libshumate,
   wrapGAppsHook4,
   blueprint-compiler,
-  bubblewrap,
   sqlite,
   xdg-desktop-portal,
   libseccomp,
+  libglycin-gtk4,
   glycin-loaders,
   libwebp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fractal";
-  version = "13";
+  version = "14";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = finalAttrs.version;
-    hash = "sha256-zIB04OIhMSm6OWHalnLO9Ng87dsvsmYurrro3hKwoYU=";
+    hash = "sha256-pgu+O9fRyZiRYkxRTlPgnd5jaGPL1nN0agMR+x6+oGg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-5wI74sKytewbRs0T/IQZFEaRTgJcF6HyDEK0mpjy0LU=";
+    hash = "sha256-Fsw0hIAYiF+31PNuC5a9SatRatY7A8OwABhlyHIl1Lc=";
   };
 
   patches = [
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/meson.build --replace-fail \
       "target_dir / rust_target / meson.project_name()" \
       "target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+
+    patchShebangs ./build-aux/compile-blueprints.sh
   '';
 
   nativeBuildInputs = [
@@ -79,10 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    glycin-loaders
     gtk4
     gtksourceview5
     lcms2
     libadwaita
+    libglycin-gtk4
     openssl
     pipewire
     libshumate
@@ -98,13 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-rs
   ]);
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
-    )
-  '';
 
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 

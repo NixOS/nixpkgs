@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dismap";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "zhzyker";
     repo = "dismap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-YjjiS6iLIQvrPS378v2nyrgwWBJ9YtDeNTPz0ze05mU=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

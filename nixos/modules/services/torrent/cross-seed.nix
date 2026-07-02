@@ -105,7 +105,7 @@ in
           };
 
           outputDir = mkOption {
-            type = types.path;
+            type = types.nullOr types.path;
             default = "${cfg.configDir}/output";
             defaultText = "\${cfg.configDir}/output";
             description = "Directory where cross-seed will place torrent files it finds.";
@@ -193,7 +193,8 @@ in
           inherit (cfg) group user;
           mode = "700";
         };
-
+      }
+      // lib.optionalAttrs (cfg.settings.outputDir != null) {
         ${cfg.settings.outputDir}.d = {
           inherit (cfg) group user;
           mode = "750";
@@ -222,7 +223,7 @@ in
           LoadCredential = lib.mkIf (cfg.settingsFile != null) "secretSettingsFile:${cfg.settingsFile}";
 
           StateDirectory = "cross-seed";
-          ReadWritePaths = [ cfg.settings.outputDir ];
+          ReadWritePaths = lib.optional (cfg.settings.outputDir != null) cfg.settings.outputDir;
           ReadOnlyPaths = lib.optional (cfg.settings.torrentDir != null) cfg.settings.torrentDir;
         };
 
@@ -231,7 +232,7 @@ in
           RequiresMountsFor = lib.flatten [
             cfg.settings.dataDirs
             cfg.settings.linkDirs
-            cfg.settings.outputDir
+            (lib.optional (cfg.settings.outputDir != null) cfg.settings.outputDir)
           ];
         };
       };

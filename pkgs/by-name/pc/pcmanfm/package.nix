@@ -6,7 +6,7 @@
   glib,
   intltool,
   libfm,
-  libX11,
+  libx11,
   pango,
   pkg-config,
   wrapGAppsHook3,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk
     libfm'
-    libX11
+    libx11
     pango
     adwaita-icon-theme
   ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
     license = lib.licenses.gpl2Plus;
     description = "File manager with GTK interface";
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "pcmanfm";
   };

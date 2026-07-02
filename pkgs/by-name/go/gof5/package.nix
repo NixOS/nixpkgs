@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gof5";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "kayrus";
     repo = "gof5";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tvahwd/UBKGYOXIgGwN98P4udcf6Bqrsy9mZ/3YVkvM=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ leixb ];
     mainProgram = "gof5";
   };
-}
+})

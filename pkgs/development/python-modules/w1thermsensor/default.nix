@@ -5,11 +5,9 @@
   setuptools,
   aiofiles,
   click,
-  tomli,
   pytest-mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +40,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "w1thermsensor" ];

@@ -27,7 +27,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.11";
+  version = "2.1.12";
   pname = "pyglet";
   pyproject = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "pyglet";
     repo = "pyglet";
     tag = "v${version}";
-    hash = "sha256-aGMEjC7Huykdwx4JW9Uoo8a7diJ85iaXM9XCbbyQXk8=";
+    hash = "sha256-stzz7sxPH6cduhG2ySw/Zg+wdTE/Y0ZeBU90D0Aa2oU=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       cat > pyglet/lib.py <<EOF
       import ctypes
       def load_library(*names, **kwargs):
@@ -95,7 +95,7 @@ buildPythonPackage rec {
           raise Exception("Could not load library {}".format(names))
       EOF
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       cat > pyglet/lib.py <<EOF
       import os
       import ctypes
@@ -133,7 +133,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = # libEGL only available on Linux (despite meta.platforms on libGL)
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       export PYGLET_HEADLESS=True
     '';
 

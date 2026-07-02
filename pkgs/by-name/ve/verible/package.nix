@@ -19,15 +19,21 @@ let
     rev = "3f863a3f35f31b61982d813835d8637b3d93d87a";
     hash = "sha256-BsxP3GrS98ubIAkFx/c4pB1i97ZZL2TijS+2ORnooww=";
   };
-in
-buildBazelPackage rec {
-  pname = "verible";
-
-  # These environment variables are read in bazel/build-version.py to create
-  # a build string shown in the tools --version output.
-  # If env variables not set, it would attempt to extract it from .git/.
   GIT_DATE = "2025-08-29";
   GIT_VERSION = "v0.0-4023-gc1271a00";
+in
+buildBazelPackage {
+  pname = "verible";
+
+  env = {
+    # These environment variables are read in bazel/build-version.py to create
+    # a build string shown in the tools --version output.
+    # If env variables not set, it would attempt to extract it from .git/.
+    inherit GIT_DATE GIT_VERSION;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -49,10 +55,13 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    '';
     hash =
       {
-        aarch64-linux = "sha256-SUURIZF3mlFRFKpxdHrgYAbJQ4rkkzCeqcC/1vxmreo=";
-        x86_64-linux = "sha256-p7h2L1aLzmMeWWxXC//Qau8/F4HbnUFY6aV8u7zfjRk=";
+        aarch64-linux = "sha256-KsXrwRIiCft/WaT0uj28gOj5ahhTKxcaiosbY7Mo3JY=";
+        x86_64-linux = "sha256-X7/W2iOTXruRO2wx9J5tGYvy2IuZ6mXiRAmUI5Eq9Vc=";
         aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
       }
       .${system} or (throw "No hash for system: ${system}");
@@ -64,7 +73,6 @@ buildBazelPackage rec {
     flex # .. to compile with newer glibc
     python3
   ];
-  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
   postPatch = ''
     patchShebangs \

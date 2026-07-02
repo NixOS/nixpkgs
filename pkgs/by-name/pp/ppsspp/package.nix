@@ -9,7 +9,7 @@
   libffi,
   libsForQt5,
   libzip,
-  libX11,
+  libx11,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableQt "-qt"
     + lib.optionalString (!enableQt) "-sdl"
     + lib.optionalString forceWayland "-wayland";
-  version = "1.19.3";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-71oIjUXYGFNyhcXQP65Bd2gYF6golrPR4USwS7bTxFQ=";
+    hash = "sha256-SWGlclmKXLLMYMmdfXyp4/g/mB4KKSIJdB5M9GW9HzI=";
   };
 
   patches = lib.optionals useSystemFfmpeg [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    libX11
+    libx11
     glew
     libzip
     zlib

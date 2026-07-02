@@ -13,14 +13,19 @@
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   withSixel ? true,
+  versionCheckHook,
+  common-updater-scripts,
+  writeShellScript,
+  curl,
+  jq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.6a";
+  version = "3.7";
 
   outputs = [
     "out"
@@ -30,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = finalAttrs.version;
-    hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
+    tag = finalAttrs.version;
+    hash = "sha256-dgqI1jZjnluN/F/AjngzcaMy3TgudmkvDT336YlhGZM=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
   passthru = {
     terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (
       if stdenv.hostPlatform.isDarwin then
@@ -81,10 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
+    updateScript = writeShellScript "update-tmux" ''
+      latest=$(${lib.getExe curl} --silent ''${GITHUB_TOKEN:+--header "Authorization: Bearer $GITHUB_TOKEN"} https://api.github.com/repos/tmux/tmux/releases/latest | ${lib.getExe jq} -r .tag_name)
+      ${lib.getExe' common-updater-scripts "update-source-version"} tmux "$latest"
+    '';
   };
 
   meta = {
     homepage = "https://tmux.github.io/";
+    downloadPage = "https://github.com/tmux/tmux";
     description = "Terminal multiplexer";
     longDescription = ''
       tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
@@ -103,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
+      ethancedwards8
       fpletz
     ];
   };

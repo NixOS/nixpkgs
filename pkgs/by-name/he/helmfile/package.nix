@@ -8,18 +8,18 @@
   pluginsDir ? null,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helmfile";
-  version = "1.1.9";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
-    rev = "v${version}";
-    hash = "sha256-WatJSiNi/rUaoBGgIdRjczpMiXAwRQ21ck/ATVKyZe0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fSFx4N8wN+gNITf8Ebthb3I3aDzpPY7MaljOBC3BUBM=";
   };
 
-  vendorHash = "sha256-HTs176YgrQX8s+IrOqV4BQVZfhhFkNp+T3HbmmBFdTg=";
+  vendorHash = "sha256-YGFLOlev/sX/LA9+9Y3+lsMLsLtMr7xm+uqUuV4xCaY=";
 
   proxyVendor = true; # darwin/linux hash mismatch
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X go.szostok.io/version.version=v${version}"
+    "-X go.szostok.io/version.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (pluginsDir != null) makeWrapper;
@@ -57,8 +57,7 @@ buildGoModule rec {
     homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      pneumaticat
       yurrriq
     ];
   };
-}
+})

@@ -4,17 +4,17 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xcaddy";
-  version = "0.4.5";
+  version = "0.4.6";
 
   subPackages = [ "cmd/xcaddy" ];
 
   src = fetchFromGitHub {
     owner = "caddyserver";
     repo = "xcaddy";
-    rev = "v${version}";
-    hash = "sha256-2cP0bkG16bRdLycLx7gpnQuALgO8hDowp/4cRBO4KuM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SXCOKrGaTwcdrVhPenQGjdBaDl8/bUGmm1B3spk8eUA=";
   };
 
   patches = [
@@ -25,10 +25,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/caddyserver/xcaddy/cmd.customVersion=v${version}"
+    "-X github.com/caddyserver/xcaddy/cmd.customVersion=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-2OZoSOUCkt94uG+54Dx/1di/RZxZ2UOsmTC6YDA5cKo=";
+  vendorHash = "sha256-K5+Gj4Lqla6q9vx95BtCS67mZMWkMjgIHVYpBUdx/Wc=";
 
   meta = {
     homepage = "https://github.com/caddyserver/xcaddy";
@@ -36,4 +36,4 @@ buildGoModule rec {
     mainProgram = "xcaddy";
     license = lib.licenses.asl20;
   };
-}
+})

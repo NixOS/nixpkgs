@@ -22,7 +22,7 @@
   cx-oracle,
   mariadb,
   mypy,
-  mysql-connector,
+  mysql-connector-python,
   mysqlclient,
   oracledb,
   pg8000,
@@ -41,16 +41,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.45";
+  version = "2.0.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ZAiRR456KkSdXkCiy+TXjdeOJwrLlmVxJfl1x8/XHIs=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-+6g9TONKwCQWmWXHjpIDPDh96ng4lwLc1C009/l769Q=";
   };
 
   postPatch = ''
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     mssql_pymysql = [ pymssql ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
-    mysql_connector = [ mysql-connector ];
+    mysql_connector = [ mysql-connector-python ];
     mariadb_connector = [ mariadb ];
     oracle = [ cx-oracle ];
     oracle_oracledb = [ oracledb ];
@@ -115,11 +115,9 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag}";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
     license = lib.licenses.mit;
   };
-}
+})

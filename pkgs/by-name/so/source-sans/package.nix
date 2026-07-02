@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Sans serif font family for user interface environments";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }

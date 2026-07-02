@@ -5,10 +5,10 @@
   alsa-lib,
   fetchurl,
   gcc-unwrapped,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
+  libice,
+  libsm,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     alsa-lib
     gcc-unwrapped
-    libICE
-    libSM
-    libX11
-    libXext
+    libice
+    libsm
+    libx11
+    libxext
   ];
 
   postFixup = ''

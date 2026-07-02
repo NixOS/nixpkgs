@@ -29,9 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     audit
-    gperf
     libcap
   ];
 
@@ -41,7 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
     getent
+    gperf
   ];
+
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Daudit=disabled"
+    "-Dlibcap=disabled"
+  ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+    NIX_LDFLAGS = "--undefined-version";
+  };
 
   preConfigure = ''
     pushd src/basic
@@ -56,6 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "basuctl";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goat-cli";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     repo = "goat";
     owner = "studio-b12";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7inoRBVR7zmt0jUFAGYjoYT2cdda0qgzyXLL+GiBFMg=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/studio-b12/goat/internal/version.Version=${version}"
-    "-X github.com/studio-b12/goat/internal/version.CommitHash=${src.rev}"
+    "-X github.com/studio-b12/goat/internal/version.Version=${finalAttrs.version}"
+    "-X github.com/studio-b12/goat/internal/version.CommitHash=${finalAttrs.src.rev}"
   ];
 
   patches = [
@@ -39,4 +39,4 @@ buildGoModule rec {
     mainProgram = "goat";
   };
 
-}
+})

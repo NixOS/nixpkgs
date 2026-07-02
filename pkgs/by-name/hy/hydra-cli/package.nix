@@ -8,7 +8,7 @@
   hydra-cli,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-cli";
   version = "0.3.0-unstable-2023-12-20";
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6L+5rkXzjXH9JtLsrJkuV8ZMsm64Q+kcb+2pr1coBK4=";
   };
 
-  sourceRoot = "${src.name}/hydra-cli";
+  sourceRoot = "${finalAttrs.src.name}/hydra-cli";
 
   cargoHash = "sha256-JnfonNdy87Ol6j8x3270RrVv/13vNLEa1n+/aeEbc7U=";
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
       aleksana
     ];
   };
-}
+})

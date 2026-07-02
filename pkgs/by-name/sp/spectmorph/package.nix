@@ -13,11 +13,11 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectmorph";
   version = "0.6.1";
   src = fetchurl {
-    url = "https://github.com/swesterfeld/spectmorph/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/swesterfeld/spectmorph/releases/download/${finalAttrs.version}/spectmorph-${finalAttrs.version}.tar.bz2";
     hash = "sha256-H/PaczAkjxeu2Q6S/jazZ0PU9oCmhBzsLgbGLusxXm8=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

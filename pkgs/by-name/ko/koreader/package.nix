@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   makeWrapper,
   fetchFromGitHub,
   dpkg,
@@ -10,26 +11,39 @@
   gtk3-x11,
   luajit,
   sdcv,
-  SDL2,
+  sdl3,
   openssl,
   writeScript,
 }:
-let
-  luajit_lua52 = luajit.override { enable52Compat = true; };
 
-  version = "2025.10";
+let
+  version = "2026.03";
+
+  # LuaJIT with table.pack/unpack support for KOReader
+  # https://github.com/koreader/koreader-base/tree/master/thirdparty/luajit
+  luajit_koreader = luajit.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/koreader/koreader-base/master/thirdparty/luajit/koreader-luajit-enable-table_pack.patch";
+        hash = "sha256-tvx7eRoSwnumqK6H7+2RCAKRDFJtaRY/2mRPjy30fJA=";
+      })
+    ];
+  });
 
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-uYKN5fgIdCVH+pXU2lmsGu7HxZbDld5EJVO9o7Tk8BA=";
+    hash = "sha256-KWpWlFoBEAhVDuRTiF7yj1wlKLzYmvcngI9iWqsDuQY=";
   };
 in
 stdenv.mkDerivation {
   pname = "koreader";
   inherit version;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     let
@@ -43,25 +57,26 @@ stdenv.mkDerivation {
       };
     in
     fetchurl {
-      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-${arch}.deb";
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader_${version}-1_${arch}.deb";
       hash = selectSystem {
-        aarch64-linux = "sha256-z92sguFe5qcPmHk+Orm8vHJycVeZY3cYGByU6xIcrkA=";
-        armv7l-linux = "sha256-kVO+eUwGMULJZwbxZwbeooqRDF8oZPiuo47a7lNsl3I=";
-        x86_64-linux = "sha256-OYzMOUFzUzkYvcjjMX0FZBkZs//9ie3025lhhFOrt9M=";
+        aarch64-linux = "sha256-4ulpMXYcICQ5/9Q0GGn9lkbW0ntzIfUHQ5woTAhyXLU=";
+        armv7l-linux = "sha256-diMWFhL0D5bWPQFc9vvZZRPMfNxlxchGyT8Lz/TLHPs=";
+        x86_64-linux = "sha256-OhBu3oj9IqNmK5ngCkXvucVQq5aJohObgENtjdDcQcE=";
       };
     };
 
   nativeBuildInputs = [
-    makeWrapper
     dpkg
+    makeWrapper
   ];
+
   buildInputs = [
     glib
     gnutar
     gtk3-x11
-    luajit_lua52
+    luajit_koreader
     sdcv
-    SDL2
+    sdl3
     openssl
   ];
 
@@ -72,18 +87,19 @@ stdenv.mkDerivation {
   ''
   # Link required binaries
   + ''
-    ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
+    ln -sf ${luajit_koreader}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
   ''
   # Link SSL/network libraries
   + ''
-    ln -sf ${openssl.out}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
-    ln -sf ${openssl.out}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
+    ln -sf ${lib.getLib openssl}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
+    ln -sf ${lib.getLib openssl}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
+    ln -sf ${lib.getLib sdl3}/lib/libSDL3.so.0 $out/lib/koreader/libs/libSDL3.so.0
   ''
   # Copy fonts
   + ''
-    find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
+    cp -r ${src_repo}/resources/fonts/* $out/lib/koreader/fonts/
   ''
   # Remove broken symlinks
   + ''
@@ -93,7 +109,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : $out/lib/koreader/libs:${
       lib.makeLibraryPath [
         gtk3-x11
-        SDL2
+        sdl3
         glib
         stdenv.cc.cc
         openssl.out
@@ -104,7 +120,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit src_repo;
+    inherit src_repo luajit_koreader;
     updateScript = writeScript "update-koreader" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix curl jq nix-update common-updater-scripts

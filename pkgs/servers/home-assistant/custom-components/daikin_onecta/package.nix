@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "jwillemsen";
   domain = "daikin_onecta";
-  version = "4.4.6";
+  version = "4.6.8";
 
   src = fetchFromGitHub {
     owner = "jwillemsen";
     repo = "daikin_onecta";
     tag = "v${version}";
-    hash = "sha256-EKDl60Zna+VWoJ80YmE3eXaIppvaJiYmjN0YrM7Y8+A=";
+    hash = "sha256-+bkzzJ/8O0rwHV4qNvsCFeB3ku88zBeDGwSFvGPbtos=";
   };
 
   meta = {

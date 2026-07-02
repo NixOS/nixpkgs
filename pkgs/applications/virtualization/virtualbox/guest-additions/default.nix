@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.4";
+  virtualboxVersion = "7.2.10";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "d281ec981b5f580211a0cedd1b75a1adcb0fbfcbb768d8c2bf4429f4763e8bbd";
+  virtualboxSha256 = "203a02e3c33ed02fdd75211a58bc9e77c9a8042ad4fa91ddc2914afbd2d67125";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -76,12 +76,17 @@ stdenv.mkDerivation {
   src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
-
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=implicit-function-declaration"
+    ];
+
+    KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  };
 
   nativeBuildInputs = [
     patchelf

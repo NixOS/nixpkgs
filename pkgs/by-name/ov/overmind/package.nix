@@ -7,7 +7,7 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "overmind";
   version = "2.5.1";
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DarthSim";
     repo = "overmind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wX29nFmzmbxbaXtwIWZNvueXFv9SKIOqexkc5pEITpw=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})

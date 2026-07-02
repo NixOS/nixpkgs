@@ -6,7 +6,7 @@
   whatweb,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "luminaut";
   version = "0.13.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "luminaut-org";
     repo = "luminaut";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TPb/Rk1cLCwItfsv/R2qyixCXA8aNnltiGePjdpO6GM=";
   };
 
@@ -58,9 +58,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to detect exposure of resources deployed in AWS";
     homepage = "https://github.com/luminaut-org/luminaut";
-    changelog = "https://github.com/luminaut-org/luminaut/releases/tag/${src.tag}";
+    changelog = "https://github.com/luminaut-org/luminaut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "luminaut";
   };
-}
+})

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # https://github.com/clMathLibraries/clFFT/issues/237
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   meta = {
     description = "Library containing FFT functions written in OpenCL";

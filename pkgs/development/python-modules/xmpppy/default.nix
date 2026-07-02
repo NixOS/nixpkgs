@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xmpppy";
-  version = "0.7.2";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xmpppy";
     repo = "xmpppy";
     tag = version;
-    hash = "sha256-lemHFPb1oQGL3O5lHOBsyEqTAzKmZ0khBHL73gXh8PA=";
+    hash = "sha256-wg7mxNHQ1+cFDLmHNafwQ2+45Jiqy36uZh28Ksu0k7Y=";
   };
 
   dependencies = [ six ];

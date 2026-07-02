@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   aiohttp,
   aioresponses,
   aiosqlite,
-  async-timeout,
   attrs,
   buildPythonPackage,
   crccheck,
@@ -14,32 +12,31 @@
   freezegun,
   frozendict,
   jsonschema,
-  pyserial-asyncio-fast,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  serialx,
   setuptools,
   typing-extensions,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "0.90.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    tag = version;
-    hash = "sha256-HTQ9azIXnNkNM+s7w0oerDf9+RcCO8DF9+kL9Uzevyk=";
+    tag = finalAttrs.version;
+    hash = "sha256-AbVVv/3a/FZuk+VWLereCF7NEwu4u8HjZrsXsfarSZA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -52,17 +49,16 @@ buildPythonPackage rec {
     cryptography
     frozendict
     jsonschema
-    pyserial-asyncio-fast
+    serialx
     typing-extensions
     voluptuous
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aioresponses
     filelock
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
@@ -91,9 +87,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
-    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

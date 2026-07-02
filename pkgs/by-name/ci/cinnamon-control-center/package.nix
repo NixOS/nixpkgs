@@ -18,7 +18,7 @@
   libwacom,
   wrapGAppsHook3,
   libnma,
-  libXi,
+  libxi,
   modemmanager,
   xorgproto,
   meson,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwacom
     networkmanager
     libnma
-    libXi
+    libxi
     modemmanager
     xorgproto
     upower

@@ -12,14 +12,14 @@
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "szyszka";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "szyszka";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-LkXGKDFKaY+mg53ZEO4h2br/4eRle/QbSQJTVEMpAoY=";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "szyszka";
   };
-}
+})

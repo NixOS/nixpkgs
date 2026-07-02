@@ -229,20 +229,16 @@ in
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file.
 
+
+        Snippet of HedgeDoc config containing a secret:
         ```
-          # snippet of HedgeDoc-related config
-          services.hedgedoc.settings.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
-          services.hedgedoc.settings.minio.secretKey = "$MINIO_SECRET_KEY";
+        services.hedgedoc.settings.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
         ```
 
-        ```
-          # content of the environment file
+        and the content of this environment file:
+        ````
           DB_PASSWORD=verysecretdbpassword
-          MINIO_SECRET_KEY=verysecretminiokey
         ```
-
-        Note that this file needs to be available on the host on which
-        `HedgeDoc` is running.
       '';
     };
   };

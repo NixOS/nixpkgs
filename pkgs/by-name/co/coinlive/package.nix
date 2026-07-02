@@ -7,18 +7,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coinlive";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "mayeranalytics";
     repo = "coinlive";
-    tag = "v${version}";
-    hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FQAxY0ZiC8bkp1s2CIpQeC6ZBNKm5/qmaebPuDcHtd4=";
   };
 
-  cargoHash = "sha256-OswilwabVfoKIeHxo7sxCvgGH5dRfyTmnKED+TcxSV8=";
+  cargoHash = "sha256-1mzfuH5988PDKBsbKl0R1v/3/3Hk3LJtklqMA83tEOY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,9 +38,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Live cryptocurrency prices CLI";
     homepage = "https://github.com/mayeranalytics/coinlive";
-    changelog = "https://github.com/mayeranalytics/coinlive/releases/tag/v${version}";
+    changelog = "https://github.com/mayeranalytics/coinlive/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "coinlive";
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   cairo,
   lv2,
   fluidsynth,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fluidsynth
-    libX11
+    libx11
     lv2
   ];
 

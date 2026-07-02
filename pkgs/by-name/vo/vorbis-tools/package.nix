@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.3";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${finalAttrs.version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/vorbis/vorbis-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-of493Gd3vc6/a3l+ft/gQ3lUskdW/8yMa4FrY+BGDd4=";
   };
 
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     flac
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
 
   meta = {
     description = "Extra tools for Ogg-Vorbis audio codec";

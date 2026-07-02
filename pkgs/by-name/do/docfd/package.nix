@@ -3,6 +3,7 @@
   ocamlPackages,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   dune,
   makeWrapper,
@@ -14,7 +15,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "12.2.0";
+  version = "12.3.2";
 
   minimalOCamlVersion = "5.1";
 
@@ -22,11 +23,19 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-0URs7X94/2D0WLpVBXjYZ3zDR3uGXSVG+WLdsAqVKBg=";
+    hash = "sha256-d7c72jXadwBtUqarfdGnEDo9yFwCAeEX0GGVqCe70Ak=";
   };
 
-  # Compatibility with nottui ≥ 0.4
-  patches = [ ./nottui-unix.patch ];
+  patches = [
+    # Compatibility with nottui ≥ 0.4
+    ./nottui-unix.patch
+    # Compatibility with lwd ≥ 0.5
+    (fetchpatch {
+      url = "https://github.com/darrenldl/docfd/commit/439ff57e80778f684cf8526b3b33c745a02da2a7.patch";
+      includes = [ "*.ml" ];
+      hash = "sha256-bB+zta2VcrDd42FUD9ExBui787LmtN3PMyb/MJQO7u0=";
+    })
+  ];
 
   nativeBuildInputs = [
     python3
@@ -44,7 +53,7 @@ ocamlPackages.buildDunePackage rec {
     lwd
     nottui
     nottui-unix
-    notty
+    notty-community
     ocaml_sqlite3
     ocolor
     oseq
@@ -79,7 +88,7 @@ ocamlPackages.buildDunePackage rec {
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "docfd";
   };

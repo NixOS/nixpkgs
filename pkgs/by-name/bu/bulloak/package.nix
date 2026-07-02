@@ -29,14 +29,14 @@ let
     };
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulloak";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "alexfertel";
     repo = "bulloak";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Qp8ceafAkw7Tush/dvBl27q5oNDzbOqyvSLXhjf4fo=";
   };
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   # provide the list of solc versions to the `svm-rs-builds` dependency
-  SVM_RELEASES_LIST_JSON =
+  env.SVM_RELEASES_LIST_JSON =
     solc-versions.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bulloak";
     maintainers = with lib.maintainers; [ beeb ];
   };
-}
+})

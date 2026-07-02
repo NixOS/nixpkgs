@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsClock";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "valebes";
     repo = "rsClock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-l5750zP90KnB+OIg1WOikQ6OgQZK4iwVvGBN3jegjGc=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ valebes ];
     mainProgram = "rsclock";
   };
-}
+})

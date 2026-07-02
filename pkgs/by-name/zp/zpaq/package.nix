@@ -20,14 +20,20 @@ stdenv.mkDerivation (finalAttrs: {
     perl # for pod2man
   ];
 
-  CPPFLAGS = [
-    "-Dunix"
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DNOJIT";
-  CXXFLAGS = [
-    "-O3"
-    "-DNDEBUG"
-  ];
+  env = {
+    CPPFLAGS = toString (
+      [
+        "-Dunix"
+      ]
+      ++ lib.optionals (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) [
+        "-DNOJIT"
+      ]
+    );
+    CXXFLAGS = toString [
+      "-O3"
+      "-DNDEBUG"
+    ];
+  };
 
   enableParallelBuilding = true;
 

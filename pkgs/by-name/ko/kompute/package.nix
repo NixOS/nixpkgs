@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://kompute.cc/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

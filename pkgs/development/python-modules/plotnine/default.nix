@@ -21,16 +21,17 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotnine";
-  version = "0.15.2";
+  version = "0.15.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
-    tag = "v${version}";
-    hash = "sha256-JjSBcPRMmxAIoQsr8ESfgcf+EWBLsq1H+q56iyD3X84=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7yM7NeUqaZvp/UUXbfpFb1V+9Z0Gz3MUBq1JydJeyDE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -114,8 +115,8 @@ buildPythonPackage rec {
   meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
-    changelog = "https://github.com/has2k1/plotnine/releases/tag/${src.tag}";
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

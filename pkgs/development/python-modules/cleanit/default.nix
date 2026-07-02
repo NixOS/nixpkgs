@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build dependencies
   poetry-core,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "cleanit";
   version = "0.4.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";

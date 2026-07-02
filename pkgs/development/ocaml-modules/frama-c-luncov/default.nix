@@ -2,7 +2,7 @@
   lib,
   buildDunePackage,
   dune-site,
-  fetchzip,
+  fetchFromGitLab,
   frama-c,
   menhir,
   unionFind,
@@ -11,11 +11,15 @@
 
 buildDunePackage (finalAttrs: {
   pname = "frama-c-luncov";
-  version = "0.2.4";
+  version = "0.2.4-unstable-2025-11-24";
 
-  src = fetchzip {
-    url = "https://git.frama-c.com/pub/ltest/luncov/-/archive/${finalAttrs.version}/luncov-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-E7zzm9qs34V+sRHElpe1JKHjeyXGALXVj1DNMVzlWn0=";
+  src = fetchFromGitLab {
+    group = "pub";
+    owner = "ltest";
+    repo = "luncov";
+    domain = "git.frama-c.com";
+    rev = "76b14a41ae9e5eacb90649cb1401a75e37a61d52"; # latest commit from stable/germanium branch
+    hash = "sha256-dp693isevR4N4V/3FZ1lnbw0xjR+CuAK8BD/Bwvny0E";
   };
 
   nativeBuildInputs = [

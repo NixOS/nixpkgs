@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitra";
-  version = "4.16.1";
+  version = "5.0.0";
 
   src = fetchFromCodeberg {
     owner = "silverpill";
     repo = "mitra";
-    rev = "v${version}";
-    hash = "sha256-nQhzU3LMEyqa2CciNTX5/+ViMqjmwDt3QrMZnbt/tBU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Chn3SONSg6yhwwHcry/cO2L7/ihEco35gpRlMlQVXz8=";
   };
 
-  cargoHash = "sha256-aWBJ3PDHcqm73P4oOpuSlalT5LxRgSqhuC0f0/sL+lg=";
+  cargoHash = "sha256-0lXwOphoUQqe1O0KbAOl98ZbMKyG8ZZOl7NhXYwSvvQ=";
 
   # require running database
   doCheck = false;
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "mitra";
   };
-}
+})

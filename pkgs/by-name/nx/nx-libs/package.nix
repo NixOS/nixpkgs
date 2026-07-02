@@ -75,8 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtirpc
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = toString [ "-ltirpc" ];
+  };
 
   postPatch = ''
     patchShebangs .
@@ -90,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
-  PREFIX = ""; # Don't install to $out/usr/local
+  env.PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
     # See:

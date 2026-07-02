@@ -41,6 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "yalc";
     homepage = "https://github.com/wclr/yalc";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

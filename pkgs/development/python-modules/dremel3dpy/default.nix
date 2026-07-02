@@ -13,13 +13,13 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dremel3dpy";
   version = "2.1.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ioZwvbdPhO2kY10TqGR427mRUJBUZ5bmpiWVOV92OkI=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

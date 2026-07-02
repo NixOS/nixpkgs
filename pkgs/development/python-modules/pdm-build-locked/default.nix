@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
-  tomli,
   build,
   hatchling,
   pkginfo,
@@ -30,8 +28,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ pdm-backend ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pdm_build_locked" ];
 

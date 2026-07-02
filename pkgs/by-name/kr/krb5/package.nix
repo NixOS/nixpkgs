@@ -32,18 +32,22 @@
   staticOnly ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "krb5";
-  version = "1.22.1";
+  version = "1.22.2";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    hash = "sha256-GogyuMrZI+u/E5T2fi789B46SfRgKFpm41reyPoAU68=";
+    url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor finalAttrs.version}/krb5-${finalAttrs.version}.tar.gz";
+    hash = "sha256-MkP/vI6k1Kwi3cfdKh3FTFeHTEBki2D/lwCXY1VOrxM=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
+  patches = [
+    # https://github.com/krb5/krb5/pull/1506
+    ./CVE-2026-40355-and-CVE-2026-40356.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     (fetchpatch {
       name = "fix-missing-ENODATA.patch";
       url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
@@ -114,7 +118,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withLibedit [ libedit ]
   ++ lib.optionals withVerto [ libverto ];
 
-  sourceRoot = "krb5-${version}/src";
+  sourceRoot = "krb5-${finalAttrs.version}/src";
 
   postPatch = ''
     substituteInPlace config/shlib.conf \
@@ -170,6 +174,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    changelog = "https://web.mit.edu/Kerberos/krb5-${lib.versions.majorMinor finalAttrs.version}/";
     description = "MIT Kerberos 5";
     homepage = "http://web.mit.edu/kerberos/";
     license = lib.licenses.mit;
@@ -187,4 +192,4 @@ stdenv.mkDerivation rec {
       postgresql = postgresql.override { gssSupport = true; };
     };
   };
-}
+})

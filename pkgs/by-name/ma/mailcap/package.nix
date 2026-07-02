@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Helper application and MIME type associations for file types";
     homepage = "https://pagure.io/mailcap";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

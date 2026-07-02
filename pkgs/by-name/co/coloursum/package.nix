@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "coloursum";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "ticky";
     repo = "coloursum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zA2JhSnlFccSY01WMGsgF4AmrF/3BRUCcSMfoEbEPgA=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

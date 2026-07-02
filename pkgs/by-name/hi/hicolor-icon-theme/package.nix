@@ -26,6 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   setupHook = ./setup-hook.sh;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

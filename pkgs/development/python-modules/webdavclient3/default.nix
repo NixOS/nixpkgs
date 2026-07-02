@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "webdavclient3";
-  version = "3.14.6";
+  version = "3.14.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ezhov-evgeny";
     repo = "webdav-client-python-3";
     tag = "v${version}";
-    hash = "sha256-vtZTBfq3PVrapv3ivYc18+71y7SPpJ+Mwk5qGe/DdTM=";
+    hash = "sha256-On2vCV3iLxqLYKaiUkwry/lZFjhzlAlU2OYYq/7rrcE=";
   };
 
   build-system = [ setuptools ];

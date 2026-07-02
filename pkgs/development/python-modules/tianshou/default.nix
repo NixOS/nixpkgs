@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -47,16 +46,14 @@
 
 buildPythonPackage rec {
   pname = "tianshou";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "thu-ml";
     repo = "tianshou";
     tag = "v${version}";
-    hash = "sha256-lJAxjE+GMwssov1r4jOCOTf5Aonu+q6FSz5oWvZpuQQ=";
+    hash = "sha256-loE2klM989yZbPZ3Uun3xnGsDHrEZhzk1R0/PcH/1nM=";
   };
 
   pythonRelaxDeps = [

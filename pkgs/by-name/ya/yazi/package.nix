@@ -9,7 +9,7 @@
     jq
     poppler-utils
     _7zz
-    ffmpeg
+    ffmpeg-headless
     fd
     ripgrep
     fzf
@@ -27,7 +27,7 @@
   jq,
   poppler-utils,
   _7zz,
-  ffmpeg,
+  ffmpeg-headless,
   fd,
   ripgrep,
   fzf,
@@ -93,7 +93,18 @@ let
 in
 runCommand yazi-unwrapped.name
   {
-    inherit (yazi-unwrapped) pname version meta;
+    inherit (yazi-unwrapped) pname version;
+
+    meta = {
+      inherit (yazi-unwrapped.meta)
+        description
+        homepage
+        license
+        maintainers
+        mainProgram
+        changelog
+        ;
+    };
 
     nativeBuildInputs = [ makeWrapper ];
   }

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fanbox-dl";
   version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "hareku";
     repo = "fanbox-dl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vXKiShP8RdIT8pRhDkO5K3fBVHQZ9nXv5GAhZaEXj8E=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.moni ];
   };
-}
+})

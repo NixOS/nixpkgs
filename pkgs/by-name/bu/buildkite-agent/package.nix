@@ -12,18 +12,18 @@
   gitUpdater,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkite-agent";
-  version = "3.89.0";
+  version = "3.129.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
-    rev = "v${version}";
-    hash = "sha256-5COo5vXecXLhYAy3bcaYvmluFdfEKGgiTbhat8T3AV8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k1q/7KRaIv5SE7CYFAzV8JB+czmX/bvwBp8JY9t77tI=";
   };
 
-  vendorHash = "sha256-iYc/TWiUFdlgoGB4r/L28yhwQG7g+tBG8usB77JJncM=";
+  vendorHash = "sha256-lRh5cAbg2yr+nvIaSRg3tG0tLvl7aDjyIoIjS1BvXNM=";
 
   postPatch = ''
     substituteInPlace clicommand/agent_start.go --replace /bin/bash ${bash}/bin/bash
@@ -59,9 +59,6 @@ buildGoModule rec {
 
   passthru = {
     tests.smoke-test = nixosTests.buildkite-agents;
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
   };
 
   meta = {
@@ -80,7 +77,8 @@ buildGoModule rec {
       zimbatm
       jsoo1
       techknowlogick
+      cbrxyz
     ];
     platforms = with lib.platforms; unix ++ darwin;
   };
-}
+})

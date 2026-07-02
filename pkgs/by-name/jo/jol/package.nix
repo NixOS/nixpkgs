@@ -6,14 +6,14 @@
   makeWrapper,
   nix-update-script,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jol";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "OpenJDK";
     repo = "jol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZJFuY2QYB8eUS3y3VRMGGwklCS93HHVkNe/dhyIx0SY=";
   };
 
@@ -46,7 +46,7 @@ maven.buildMavenPackage rec {
       This makes JOL much more accurate than other tools relying on heap dumps, specification assumptions, etc.
     '';
     homepage = "https://openjdk.org/projects/code-tools/jol/";
-    changelog = "https://github.com/openjdk/jol/releases/tag/${version}";
+    changelog = "https://github.com/openjdk/jol/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2Plus
       classpathException20
@@ -62,4 +62,4 @@ maven.buildMavenPackage rec {
     ];
     inherit (jre_minimal.meta) platforms;
   };
-}
+})

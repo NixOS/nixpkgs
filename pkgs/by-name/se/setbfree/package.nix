@@ -6,7 +6,7 @@
   freetype,
   ftgl,
   libjack2,
-  libX11,
+  libx11,
   lv2,
   libGLU,
   libGL,
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     freetype
     ftgl
     libjack2
-    libX11
+    libx11
     lv2
     libGLU
     libGL

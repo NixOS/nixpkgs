@@ -4,6 +4,7 @@
   fetchFromGitHub,
   qt5,
   john,
+  imagemagick,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     qt5.wrapQtAppsHook
     qt5.qmake
+    imagemagick
   ];
 
   installPhase = ''
@@ -37,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ john ]}
     install -D README $out/share/doc/johnny/README
     install -D LICENSE $out/share/licenses/johnny/LICENSE
-    install -D resources/icons/johnny_128.png $out/share/pixmaps/johnny.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick resources/icons/johnny.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/johnny.png
+    install -D resources/icons/johnny_128.png $out/share/icons/hicolor/128x128/apps/johnny.png
     runHook postInstall
   '';
 

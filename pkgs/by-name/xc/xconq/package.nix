@@ -4,13 +4,13 @@
   fetchurl,
   cpio,
   xorgproto,
-  libX11,
-  libXmu,
-  libXaw,
-  libXt,
+  libx11,
+  libxmu,
+  libxaw,
+  libxt,
   tcl,
   tk,
-  libXext,
+  libxext,
   fontconfig,
   makeWrapper,
 }:
@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cpio
     xorgproto
-    libX11
-    libXmu
-    libXaw
-    libXt
+    libx11
+    libxmu
+    libxaw
+    libxt
     tcl
     tk
-    libXext
+    libxext
     fontconfig
   ];
 

@@ -9,7 +9,6 @@
   fetchFromGitHub,
   gnome-keyring,
   jq,
-  llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -22,24 +21,18 @@
 }:
 
 let
-  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_39;
-
-  # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-  };
 in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2025.12.1";
+  version = "2026.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "desktop-v${version}";
-    hash = "sha256-yER9LDFwTQkOdjB84UhEiWUDE+5Qa2vlRzq1/Qc/soY=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-JIIis3wW0cU33ovRQfJi3HlB2YdLZ5IPvueq1dGFbas=";
   };
 
   patches = [
@@ -79,29 +72,23 @@ buildNpmPackage' rec {
     "--legacy-peer-deps"
   ];
 
-  npmRebuildFlags = [
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    "--ignore-scripts"
-  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-hczwOG30ad5oaTU7APPrW+a7LmjPch+P4dZSb7B+2eU=";
+  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-mvFLZwWwIv4PbUwfTWvwZ9JyRoHJSwAA0cT4RXD0/YU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       cargoRoot
       patches
       ;
-    hash = "sha256-NaomkYqkRW5ir6DI5t0JqoewN8QZtSibGKW93MwsqPQ=";
+    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # make electron-builder not attempt to codesign the app on darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   nativeBuildInputs = [
     cargo
@@ -134,7 +121,7 @@ buildNpmPackage' rec {
     patchShebangs apps/desktop/node_modules
 
     pushd apps/desktop/desktop_native/napi
-    npm run build
+    npm run build -- --release
     popd
 
     pushd apps/desktop/desktop_native/proxy
@@ -152,7 +139,8 @@ buildNpmPackage' rec {
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     popd
   '';
@@ -165,14 +153,18 @@ buildNpmPackage' rec {
   ];
 
   checkFlags = [
+    # fails in zbus
     "--skip=password::password::tests::test"
+    # requires some debug feature to be enabled
+    "--skip=storage::serialization::tests::test_keydata_from_corrupted_bytes"
+    "--skip=storage::serialization::tests::test_keydata_from_empty_bytes"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=clipboard::tests::test_write_read"
   ];
 
   preCheck = ''
-    pushd ${cargoRoot}
+    pushd ${finalAttrs.cargoRoot}
     cargoCheckType=release
     HOME=$(mktemp -d)
   '';
@@ -196,6 +188,7 @@ buildNpmPackage' rec {
     cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+      --run "ulimit -c 0" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
@@ -225,7 +218,7 @@ buildNpmPackage' rec {
       name = "bitwarden";
       exec = "bitwarden %U";
       inherit icon;
-      comment = description;
+      comment = finalAttrs.meta.description;
       desktopName = "Bitwarden";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/bitwarden" ];
@@ -242,11 +235,14 @@ buildNpmPackage' rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    inherit description;
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ amarshall ];
+    maintainers = with lib.maintainers; [
+      tree-sapii
+      amarshall
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -255,4 +251,4 @@ buildNpmPackage' rec {
     ];
     mainProgram = "bitwarden";
   };
-}
+})

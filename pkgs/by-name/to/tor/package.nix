@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.22";
+  version = "0.4.9.11";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yIYg2SeKJ549In/2CXW4SqQTWSEfjs/2hgGZI7mSkzI=";
+    hash = "sha256-LmwXIBGMgSrPAHn9R8+Rtr+rpddmwyHE09KijWoRqO0=";
   };
 
   outputs = [
@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       # cross compiles correctly but needs the following
       lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_LINK = "-lgcc_s";
+  };
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -126,11 +128,13 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 
   meta = {
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     description = "Anonymizing overlay network";
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a
@@ -148,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tor";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
       prusnak
     ];
     platforms = lib.platforms.unix;

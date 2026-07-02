@@ -4,7 +4,7 @@
   buildPythonPackage,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # native
   beets-minimal,
@@ -20,18 +20,18 @@
 
 buildPythonPackage rec {
   pname = "beets-audible";
-  version = "1.1.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neurrone";
     repo = "beets-audible";
-    rev = "v${version}";
-    hash = "sha256-Hi/hI+zfAHwRLt8JhzL5RXEIHnSBX8oO/zuuq1HxT2s=";
+    tag = "v${version}";
+    hash = "sha256-u4EbUmUsaCs22QBGaKWzPjz0nzxH/zQBIQ8vsyVHBoE=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   nativeBuildInputs = [

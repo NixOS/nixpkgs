@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  pythonOlder,
   buildPythonPackage,
   pyvisa,
   pyyaml,

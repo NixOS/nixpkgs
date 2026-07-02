@@ -7,14 +7,14 @@
   mirage-runtime,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mirage-unix";
   version = "5.0.1";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/mirage/mirage-unix/releases/download/v${finalAttrs.version}/mirage-unix-${finalAttrs.version}.tbz";
     hash = "sha256-U1oLznUDBcJLcVygfSiyl5qRLDM27cm/WrjT0vSGhPg=";
   };
 
@@ -31,4 +31,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

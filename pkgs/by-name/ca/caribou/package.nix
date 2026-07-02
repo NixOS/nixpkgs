@@ -12,7 +12,7 @@
   python3,
   libxml2,
   libxklavier,
-  libXtst,
+  libxtst,
   gtk2,
   intltool,
   libxslt,
@@ -26,12 +26,12 @@
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caribou";
   version = "0.4.21";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor version}/caribou-${version}.tar.xz";
+    url = "mirror://gnome/sources/caribou/${lib.versions.majorMinor finalAttrs.version}/caribou-${finalAttrs.version}.tar.xz";
     hash = "sha256-nEPZ9L0w9P6n94DU6LFPdYkQfFLpy2vSAr0NHCBk3lU=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     dbus
     pythonEnv
     python3.pkgs.pygobject3
-    libXtst
+    libxtst
     gtk2
   ];
 
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
     # configure: error: no suitable Python interpreter found
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

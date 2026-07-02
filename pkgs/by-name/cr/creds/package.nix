@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "creds";
   version = "0.5.3";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihebski";
     repo = "DefaultCreds-cheat-sheet";
-    tag = "creds-v${version}";
+    tag = "creds-v${finalAttrs.version}";
     hash = "sha256-nATmzEUwvJwzPZs+bO+/6ZHIrGgvjApaEwVpMyCXmik=";
   };
 
@@ -42,8 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to search a collection of default credentials";
     mainProgram = "creds";
     homepage = "https://github.com/ihebski/DefaultCreds-cheat-sheet";
-    changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/${src.tag}";
+    changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

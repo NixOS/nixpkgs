@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "zeno";
-  version = "2.0.19";
+  version = "2.0.24";
 
   src = fetchFromGitHub {
     owner = "internetarchive";
     repo = "Zeno";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Or+DREyqljXTUJn5+NrFH2YktOUafHMx5jAL02Tm+4=";
+    hash = "sha256-v8LAT9e1as2zuoBhaEn8M5lILdo0kF2lGa6u+rSUPFs=";
   };
 
-  vendorHash = "sha256-J9ufthZuIULHXkgHj80fDa68fiFJkGSXkhyiPpDYPJU=";
+  vendorHash = "sha256-f+N1eTl6hdWt1GOTWFW9KBk/1dGTq30IJSwU+c5R6V8=";
 
   env.CGO_ENABLED = true;
   ldFlags = [
@@ -36,6 +36,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/internetarchive/Zeno/releases/tag/v${finalAttrs.version}";
     mainProgram = "Zeno";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.RossSmyth ];
+    maintainers = [ ];
   };
 })

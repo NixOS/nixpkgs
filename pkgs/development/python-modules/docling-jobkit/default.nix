@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "docling-jobkit";
-  version = "1.5.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-jobkit";
     tag = "v${version}";
-    hash = "sha256-/rFMP5KiWHBsGaA2LVOWP2TkJLVeguIlrmO+JL610hQ=";
+    hash = "sha256-9DzQY/XMmx/8XP1bMYZYl+Bp7AVcYfuv3MtO6lvQ/24=";
   };
 
   build-system = [

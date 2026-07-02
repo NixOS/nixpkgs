@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiodns,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   version = "0.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
@@ -37,6 +34,8 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
+
+  pythonRelaxDeps = [ "pycountry" ];
 
   build-system = [
     poetry-core

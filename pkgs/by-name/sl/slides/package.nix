@@ -6,14 +6,14 @@
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "slides";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-K8VsqaNUPxh3/Yddy6DFiOyjRuZ6r6bU456Pm31A1og=";
   };
 
@@ -27,15 +27,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Terminal based presentation tool";
     homepage = "https://github.com/maaslalani/slides";
-    changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
+    changelog = "https://github.com/maaslalani/slides/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slides";
   };
-}
+})

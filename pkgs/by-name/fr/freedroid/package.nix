@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     touch NEWS
   '';
 
+  # DOes not build on -std=c23 due to `bool` collision.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/32x32/apps
     convert graphics/paraicon.bmp $out/share/icons/hicolor/32x32/apps/freedroid.png

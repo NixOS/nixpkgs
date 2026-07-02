@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-dotenv,
   pythonAtLeast,
-  pythonOlder,
   pytimeparse,
   pyyaml,
   setuptools,

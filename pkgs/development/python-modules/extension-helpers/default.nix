@@ -7,10 +7,8 @@
   findutils,
   pip,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
-  tomli,
   wheel,
 }:
 
@@ -31,7 +29,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [ setuptools ];
 
   nativeCheckInputs = [
     build
@@ -49,6 +47,8 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/astropy/extension-helpers/issues/43
     "test_write_if_different"
+    # ValueError: Unrecognized abi version for limited API: invalid
+    "test_limited_api_invalid_abi"
   ];
 
   meta = {

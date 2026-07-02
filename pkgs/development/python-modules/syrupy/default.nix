@@ -1,8 +1,10 @@
 {
   lib,
+  attrs,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pydantic,
   pytest,
   pytest-xdist,
   invoke,
@@ -10,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${version}";
-    hash = "sha256-TRwU9+2RvZB2gbVm82DzLge8QoDflxjavcRdYZUgVfs=";
+    hash = "sha256-oogH5Q+0leZsfu/7r3tZmB2rxjcUOmGAsn4Z50oSlH8=";
   };
 
   build-system = [ poetry-core ];
@@ -25,7 +27,9 @@ buildPythonPackage rec {
   buildInputs = [ pytest ];
 
   nativeCheckInputs = [
+    attrs
     invoke
+    pydantic
     pytest
     pytest-xdist
   ];

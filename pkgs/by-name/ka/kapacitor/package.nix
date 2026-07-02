@@ -54,16 +54,18 @@ let
       Cflags: -I/out/include
       Libs: -L/out/lib -lflux -lpthread
     '';
-    passAsFile = [ "pkgcfg" ];
     postInstall = ''
       mkdir -p $out/include $out/pkgconfig
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+      printf "%s" "$pkgcfg" > $out/pkgconfig/flux.pc
+      substituteInPlace $out/pkgconfig/flux.pc \
         --replace-fail /out $out
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
+
+    __structuredAttrs = true;
   };
 in
 buildGoModule rec {
@@ -81,7 +83,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  PKG_CONFIG_PATH = "${flux}/pkgconfig";
+  env.PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
   # Check that libflux is at the right version
   preBuild = ''
@@ -121,7 +123,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     changelog = "https://github.com/influxdata/kapacitor/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [
-      offline
       totoroot
     ];
   };

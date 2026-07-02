@@ -52,6 +52,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprsunset";
+    changelog = "https://github.com/hyprwm/hyprsunset/releases/tag/${finalAttrs.src.tag}";
     description = "Application to enable a blue-light filter on Hyprland";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

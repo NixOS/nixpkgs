@@ -4,9 +4,13 @@
 readonly zigDefaultCpuFlag=@zig_default_cpu_flag@
 readonly zigDefaultOptimizeFlag=@zig_default_optimize_flag@
 
-function zigSetGlobalCacheDir {
+function zigConfigurePhase {
+  runHook preConfigure
+
   ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
   export ZIG_GLOBAL_CACHE_DIR
+
+  runHook postConfigure
 }
 
 function zigBuildPhase {
@@ -97,8 +101,9 @@ function zigInstallPhase {
   runHook postInstall
 }
 
-# shellcheck disable=SC2154
-addEnvHooks "$hostOffset" zigSetGlobalCacheDir
+if [ -z "${dontUseZigConfigure-}" ] && [ -z "${configurePhase-}" ]; then
+  configurePhase=zigConfigurePhase
+fi
 
 if [ -z "${dontUseZigBuild-}" ] && [ -z "${buildPhase-}" ]; then
   buildPhase=zigBuildPhase

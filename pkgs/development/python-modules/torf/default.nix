@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torf";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "torf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vJapB4Tbn3tLLUIH9LemU9kTqG7TsByiotkWM52lsno=";
+    hash = "sha256-6R3DF2pj9zotU/z/OKMbeG5tD7tBYuzSEi/f18NgHOo=";
   };
 
   build-system = [

@@ -14,7 +14,7 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "metronome";
   version = "1.3.0";
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "metronome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Sn2Ua/XxPnJjcQvWeOPkphl+BE7/BdOrUIpf+tLt20U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "metronome-${version}";
+    inherit (finalAttrs) src;
+    name = "metronome-${finalAttrs.version}";
     hash = "sha256-T/x5LpODpKWGA40W1je6jw1DS9attVUK4ZjAnRAyf6k=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

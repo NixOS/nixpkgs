@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
-  version = "1.47";
+  version = "1.48";
 
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-X9Q0m8vJurmkb4z3fR9DQpanoFLIdECglPY/z2KljiA=";
+    hash = "sha256-OYA2rA62SEmC3b3n/4aEjXUyMfnN7q6YPwa1KUZiWqE=";
   };
 
   postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''

@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gosec";
-  version = "2.22.11";
+  version = "2.27.1";
 
   src = fetchFromGitHub {
     owner = "securego";
     repo = "gosec";
-    rev = "v${version}";
-    hash = "sha256-xCCZUM88z6sSFEo2XQJNx0fTh6KBer7oBSnBEZr3xk0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-k4zroP/kqOJe8xdbOSC26cfHGqUoXlJY66MP5s/Saq0=";
   };
 
-  vendorHash = "sha256-n5ORSfEcXOc2bUDArEzwlTiDo2ILu8aGte3pPOou+6c=";
+  vendorHash = "sha256-lkaIDS7jrRIXxIvE2/EfM3tTP0cAb58AnzCsrBO955A=";
 
   subPackages = [
     "cmd/gosec"
@@ -24,8 +24,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.GitTag=${src.rev}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.GitTag=${finalAttrs.src.rev}"
     "-X main.BuildDate=unknown"
   ];
 
@@ -39,4 +39,4 @@ buildGoModule rec {
       nilp0inter
     ];
   };
-}
+})

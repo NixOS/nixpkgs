@@ -12,7 +12,7 @@ mkCoqDerivation {
 
   defaultVersion = if lib.versions.range "8.8" "8.9" coq.coq-version then "0.5" else null;
 
-  release."0.5".sha256 = "sha256-mSD/xSweeK9WMxWDdX/vzN96iXo74RkufjuNvtzsP9o=";
+  release."0.5".hash = "sha256-mSD/xSweeK9WMxWDdX/vzN96iXo74RkufjuNvtzsP9o=";
 
   setSourceRoot = "sourceRoot=$(echo */coq)";
 

@@ -7,11 +7,11 @@
 
 let
   pname = "altair";
-  version = "8.5.0";
+  version = "8.5.3";
 
   src = fetchurl {
     url = "https://github.com/altair-graphql/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-ImcnV+Z1J+6wGs3HmlCpXmLb/BbyEcunY+IZ2cbD8Ns=";
+    sha256 = "sha256-XPw4NCtkInCes471as0Vtvr/SMRaJS6MNBGg0oo/Dro=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -22,12 +22,12 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/altair \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/altair.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/altair.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=altair'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

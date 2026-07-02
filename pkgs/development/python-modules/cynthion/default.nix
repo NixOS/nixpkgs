@@ -27,14 +27,14 @@
 }:
 buildPythonPackage rec {
   pname = "cynthion";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-ebd2L7o6GO57TpwJ7+MOhVSb+I/E8kD7d7DqPj4B3FM=";
+    hash = "sha256-Ju01eqBVZ7CD0pw4nIFML4LcCPXzC78dLpQru3a+5bU=";
   };
 
   sourceRoot = "${src.name}/cynthion/python";
@@ -50,6 +50,8 @@ buildPythonPackage rec {
   build-system = [
     setuptools
   ];
+
+  pythonRelaxDeps = [ "pygreat" ];
 
   pythonRemoveDeps = [ "future" ];
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ fasm-bin ];
 
   buildPhase = ''
-    fasm source/Linux${lib.optionalString isx86_64 "/x64"}/fasm.asm fasm
+    fasm source/linux${lib.optionalString isx86_64 "/x64"}/fasm.asm fasm
     for tool in listing prepsrc symbols; do
       fasm tools/libc/$tool.asm
       cc -o tools/libc/fasm-$tool tools/libc/$tool.o
@@ -33,4 +33,6 @@ stdenv.mkDerivation {
     cp -r examples/ *.txt tools/fas.txt $docs
     cp tools/readme.txt $docs/tools.txt
   '';
+
+  passthru.updateScript = fasm-bin.updateScript;
 }

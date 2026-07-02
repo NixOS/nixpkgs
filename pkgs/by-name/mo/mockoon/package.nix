@@ -6,11 +6,11 @@
 
 let
   pname = "mockoon";
-  version = "9.4.0";
+  version = "9.6.1";
 
   src = fetchurl {
     url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
-    hash = "sha256-BnzeCJIuVvbrdS5X6Or2t2QjwE+S9/jZOfgsjbtBoZU=";
+    hash = "sha256-Y6DmoWGvNp0cvRYgDDMHul5K6CzhiWxMxVTR+W9PE5E=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -39,7 +39,7 @@ appimageTools.wrapType2 {
     homepage = "https://mockoon.com";
     changelog = "https://github.com/mockoon/mockoon/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "mockoon";
     platforms = [ "x86_64-linux" ];
   };

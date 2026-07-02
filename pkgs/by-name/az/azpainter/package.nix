@@ -8,10 +8,10 @@
   ninja,
   pkg-config,
   libiconv,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
   freetype,
   fontconfig,
   libjpeg,
@@ -41,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXext
-    libXi
+    libx11
+    libxcursor
+    libxext
+    libxi
     freetype
     fontconfig
     libjpeg

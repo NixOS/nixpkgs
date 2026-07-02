@@ -16,7 +16,7 @@
   libvorbis,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   SDL2,
   zlib,
   cctools,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtheora
       libvorbis
       SDL2
-      libX11
+      libx11
       zlib
     ];
 

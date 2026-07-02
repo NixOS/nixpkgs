@@ -8,22 +8,22 @@
   puredata-with-plugins,
   jack-example-tools,
 }:
-stdenv.mkDerivation rec {
+let
+  plugins = [
+    helmholtz
+  ];
+  pitchTracker = puredata-with-plugins plugins;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "VoiceOfFaust";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "VoiceOfFaust";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     sha256 = "sha256-wsc4yzytK2hPVBQwMhdhjnH1pDtpkNCFJnItyzszEs0=";
   };
-
-  plugins = [
-    helmholtz
-  ];
-
-  pitchTracker = puredata-with-plugins plugins;
 
   nativeBuildInputs = [
     faust2jack
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

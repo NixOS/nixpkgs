@@ -1,62 +1,75 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  systemd,
   boost,
-  libsodium,
+  cargo,
+  fetchurl,
+  fstrm,
+  lib,
+  libbpf,
+  libcap,
   libedit,
-  re2,
-  net-snmp,
+  libsodium,
   lua,
-  protobuf,
-  openssl,
-  zlib,
-  h2o,
+  net-snmp,
   nghttp2,
   nixosTests,
+  openssl,
+  pkg-config,
+  protobuf,
+  python3,
+  re2,
+  rustPlatform,
+  stdenv,
+  systemd,
+  xdp-tools,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "1.9.10";
+  version = "2.0.7";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-An3b3uaVxaWXKAV7/EHFsaaR+hx6XokniwnzVTJfvtY=";
+    url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
+    hash = "sha256-WGgPeAUXt4fmT+5M1NzFf0Ob5gcIT4nuRpl4nX1iaHU=";
   };
 
-  patches = [
-    # Disable tests requiring networking:
-    # "Error connecting to new server with address 192.0.2.1:53: connecting socket to 192.0.2.1:53: Network is unreachable"
-    ./disable-network-tests.patch
-  ];
-
   nativeBuildInputs = [
+    cargo
     pkg-config
     protobuf
+    python3
+    python3.pkgs.pyyaml
+    rustPlatform.cargoSetupHook
   ];
+
   buildInputs = [
-    systemd
     boost
-    libsodium
+    fstrm # Required for DNSTAP
+    libbpf
+    libcap
     libedit
-    re2
-    net-snmp
+    libsodium
     lua
-    openssl
-    zlib
-    h2o
+    net-snmp
     nghttp2
+    openssl
+    re2
+    systemd
+    xdp-tools # AF_XDP support
+    zlib
   ];
 
   configureFlags = [
     "--with-libsodium"
     "--with-re2"
     "--enable-dnscrypt"
+    "--enable-dnstap"
     "--enable-dns-over-tls"
     "--enable-dns-over-https"
+    "--enable-yaml"
+    "--with-ebpf"
+    "--with-xsk"
+    "--with-libcap"
     "--with-protobuf=yes"
     "--with-net-snmp"
     "--disable-dependency-tracking"
@@ -65,15 +78,21 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-boost=${boost.dev}"
   ];
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) cargoRoot src;
+    hash = "sha256-xFh+cywfNWalzRfCtM2pPtPfq8/RAlTC1EdZYYEiwxA=";
+  };
+
+  cargoRoot = "dnsdist-rust-lib/rust";
+
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (nixosTests) dnsdist;
-  };
+  passthru.tests = nixosTests.dnsdist;
 
   meta = {
+    changelog = "https://www.dnsdist.org/changelog.html";
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";

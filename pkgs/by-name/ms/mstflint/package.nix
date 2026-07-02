@@ -7,6 +7,7 @@
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
-  version = "4.34.1-2";
+  version = "4.36.0-1";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jYZoP0tJG3HmLojJAWSgMFqlyP9hX8v1R0HL1lwR4Eg=";
+    hash = "sha256-H4NMSjSOSmkM9lDcbsEBOB6AM5GBRKUoCDWm5QbaS3g=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat

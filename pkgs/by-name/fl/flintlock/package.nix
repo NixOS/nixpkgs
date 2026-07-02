@@ -9,14 +9,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flintlock";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flintlock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kbk94sqj0aPsVonPsiu8kbjhIOURB1kX9Lt3NURL+jk=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/weaveworks/flintlock/internal/version.Version=v${version}"
+    "-X github.com/weaveworks/flintlock/internal/version.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -64,4 +64,4 @@ buildGoModule rec {
     ];
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

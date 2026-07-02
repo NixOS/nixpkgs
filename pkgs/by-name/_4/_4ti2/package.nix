@@ -5,18 +5,25 @@
   autoreconfHook,
   glpk,
   gmp,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "4ti2";
-  version = "1.6.14";
+  version = "1.6.15";
 
   src = fetchFromGitHub {
     owner = "4ti2";
     repo = "4ti2";
     tag = "Release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-bFvq90hLLGty7p6NLxOARVvKdizg3bp2NkP9nZpVFzQ=";
+    hash = "sha256-6X8zNp68KlKxplg1rdcotmXyIZE27POJs9/3n2BZLZE=";
   };
+
+  postPatch = ''
+    substituteInPlace src/{groebner/script.template.in,zsolve/{graver,hilbert}.template} \
+      --replace-fail 'SCRIPT=$(realpath $(which "$0"))' \
+                     'SCRIPT=$(realpath $(${lib.getExe which} "$0"))'
+  '';
 
   nativeBuildInputs = [
     autoreconfHook

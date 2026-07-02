@@ -6,7 +6,7 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pwalarmd";
   version = "0.1.0";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amyipdev";
     repo = "pwalarmd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xoC1PtDQjkvoWb9x8A43ITo6xyYOv9hxH2pxiZBBvKI=";
   };
 
@@ -29,10 +29,11 @@ rustPlatform.buildRustPackage rec {
       It has extensive configuration and personalization, PulseAudio
       and PipeWire support, and supports live configuration changes.
     '';
+    homepage = "https://github.com/amyipdev/pwalarmd";
     mainProgram = "pwalarmd";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ amyipdev ];
   };
-}
+})

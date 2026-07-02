@@ -16,18 +16,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termusic";
-  version = "0.12.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
-    rev = "v${version}";
-    hash = "sha256-e+D7ykqGX2UprakCZc9Gmaxct+b19DMfTRMkeIANXqg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GAbUvxRWKy5tDjf+G5cKXgwNs9Rm52h7mICyDFlrCoo=";
   };
 
-  cargoHash = "sha256-0JVKY3A3W3vJgDtlZE6gtrXQa2e+4YA6R6mFUYhuQkk=";
+  cargoHash = "sha256-xFQObWhONoRBAdEZblBDQeQtq/KmaCWWnCwv3XEmG2k=";
 
   useNextest = true;
 
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "termusic";
   };
-}
+})

@@ -8,14 +8,14 @@
   parallel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "last";
   version = "1651";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TAc9prYydX5XO31f6p5DD7XMxVbNOW9ROtB7Agd7t8c=";
   };
 
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/mcfrith/last";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jbedo ];
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.x86_64 ++ [ "aarch64-darwin" ];
   };
-}
+})

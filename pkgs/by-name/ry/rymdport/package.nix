@@ -13,14 +13,14 @@
   libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rymdport";
   version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5INmb8zMFUB8ibA+ACNWoL54tOhWYHF85MZzRNRmJow=";
   };
 
@@ -53,10 +53,10 @@ buildGoModule rec {
   meta = {
     description = "Easy encrypted file, folder, and text sharing between devices";
     homepage = "https://github.com/Jacalz/rymdport";
-    changelog = "https://github.com/Jacalz/rymdport/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Jacalz/rymdport/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "rymdport";
   };
-}
+})

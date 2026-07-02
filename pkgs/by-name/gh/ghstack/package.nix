@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghstack";
   version = "0.13.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ezyang";
     repo = "ghstack";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cRdwX5BVdpGjLPR0tpFYo62HYu/lmUzJE+vyxI9A4O8=";
   };
 
@@ -44,4 +44,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "ghstack";
   };
-}
+})

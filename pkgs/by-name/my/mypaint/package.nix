@@ -27,7 +27,7 @@ let
     buildPythonApplication
     ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "mypaint";
   version = "2.0.1";
   pyproject = false;
@@ -35,7 +35,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
@@ -168,4 +168,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jtojnar ];
   };
-}
+})

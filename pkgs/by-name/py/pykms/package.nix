@@ -34,7 +34,7 @@ let
   '';
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "pykms";
   version = "0-unstable-2024-07-06";
 
@@ -45,7 +45,7 @@ pypkgs.buildPythonApplication rec {
     hash = "sha256-/XbMbcBcZPO7joHyaprJ29Cq4gNpuuzTzj2x1XDIyj8=";
   };
 
-  sourceRoot = "${src.name}/py-kms";
+  sourceRoot = "${finalAttrs.src.name}/py-kms";
 
   propagatedBuildInputs = with pypkgs; [
     systemd-python
@@ -101,4 +101,4 @@ pypkgs.buildPythonApplication rec {
       zopieux
     ];
   };
-}
+})

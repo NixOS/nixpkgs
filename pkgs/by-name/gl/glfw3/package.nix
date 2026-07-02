@@ -6,13 +6,13 @@
   pkg-config,
   libGL,
   vulkan-loader,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libX11,
-  libXi,
-  libXext,
-  libXxf86vm,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libx11,
+  libxi,
+  libxext,
+  libxxf86vm,
   fixDarwinDylibNames,
   wayland,
   wayland-scanner,
@@ -33,6 +33,11 @@ in
 stdenv.mkDerivation {
   pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
   inherit version;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "glfw";
@@ -60,13 +65,13 @@ stdenv.mkDerivation {
     wayland
     wayland-protocols
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
-    libXxf86vm
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+    libxxf86vm
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -103,7 +108,6 @@ stdenv.mkDerivation {
     homepage = "https://www.glfw.org/";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
-      marcweber
       Scrumplex
       twey
     ];

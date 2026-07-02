@@ -727,6 +727,10 @@ in
   };
 
   config = mkIf config.boot.initrd.enable {
+    warnings = lib.optional (!config.boot.initrd.systemd.enable) ''
+      Scripted initrd is deprecated and scheduled for removal in 26.11. See the NixOS 26.05 release notes.
+    '';
+
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
@@ -786,6 +790,5 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 }

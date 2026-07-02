@@ -7,7 +7,6 @@
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   setuptools,
@@ -16,16 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "homematicip";
-  version = "2.5.0";
+  version = "2.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     tag = finalAttrs.version;
-    hash = "sha256-UdVOYJyWLtqJaZgiRa3M9JL+gPzZeecZwElBXqrAdFM=";
+    hash = "sha256-gOpdmsLsF73m1da027hfU6IK8DfV67p0JXI/inIsvd4=";
   };
 
   build-system = [

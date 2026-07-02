@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniz";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "richgel999";
     repo = "miniz";
     rev = finalAttrs.version;
-    hash = "sha256-DQbXz1ehBNGFhuaW5Nz509njpPe73QpMHyKDbpqX0aI=";
+    hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
   };
   passthru.updateScript = nix-update-script { };
 

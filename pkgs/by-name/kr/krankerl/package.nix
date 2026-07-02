@@ -10,14 +10,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krankerl";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "ChristophWurst";
     repo = "krankerl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fFtjQFkNB5vn9nlFJI6nRdqxB9PmOGl3ySZ5LG2tgPg=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

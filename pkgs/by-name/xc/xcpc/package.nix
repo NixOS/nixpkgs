@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   postInstall = ''
+    install -D $out/share/pixmaps/xcpc.png -t $out/share/icons/hicolor/64x64/apps
+    rm -r $out/share/pixmaps
     substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
       "$out/bin/" ""
     substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \

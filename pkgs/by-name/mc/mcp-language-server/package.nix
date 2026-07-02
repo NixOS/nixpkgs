@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mcp-language-server";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "isaacphi";
     repo = "mcp-language-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T0wuPSShJqVW+CcQHQuZnh3JOwqUxAKv1OCHwZMr7KM=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
       fayash
     ];
   };
-}
+})

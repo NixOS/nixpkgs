@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.10";
+  version = "4.11";
   pname = "quota";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-oEoMr8opwVvotqxmDgYYi8y4AsGe/i58Ge1/PWZ+z14=";
+    hash = "sha256-ClG4+SAlTY6Dw0pMMIK30kH11v1lGIr63ymFnVIj73g=";
   };
 
   outputs = [
@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/linuxquota/";
     license = lib.licenses.gpl2Plus; # With some files being BSD as an exception
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
   };
 })

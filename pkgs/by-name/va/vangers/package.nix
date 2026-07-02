@@ -9,7 +9,7 @@
   SDL2_net,
   libogg,
   libvorbis,
-  ffmpeg,
+  ffmpeg_7,
   zlib,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     SDL2_net
     libogg
     libvorbis
-    ffmpeg
+    ffmpeg_7
     clunk
     zlib
   ];

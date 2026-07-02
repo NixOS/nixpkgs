@@ -40,6 +40,7 @@ def write_expression():
         "upstream_version"
     )
     os.system(f'update-source-version microsoft-edge "{version}"')
+    os.system(f'update-source-version msedgedriver "{version}"')
 
 
 write_expression()

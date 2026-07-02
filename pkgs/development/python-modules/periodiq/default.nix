@@ -29,6 +29,8 @@ buildPythonPackage rec {
       --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';
 
+  pythonRelaxDeps = [ "dramatiq" ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [

@@ -3,7 +3,7 @@
   python3,
   fetchFromGitHub,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xorex";
   version = "0.3.0";
   pyproject = false;
@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Neo23x0";
     repo = "xorex";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "rBsOSXWnHRhpLmq20XBuGx8gGBM8ouMyOISkbzUcvE4=";
   };
 
@@ -37,4 +37,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

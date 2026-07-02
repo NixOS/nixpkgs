@@ -14,7 +14,7 @@
   libpng,
   librealsense,
   libxml2,
-  libX11,
+  libx11,
   nlohmann_json,
   #ogre,
   openblas,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     librealsense
-    libX11
+    libx11
     libxml2
     nlohmann_json
     #ogre

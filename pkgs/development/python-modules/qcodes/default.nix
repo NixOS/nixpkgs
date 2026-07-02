@@ -59,21 +59,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qcodes";
-  version = "0.54.4";
+  version = "0.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xiD/Iy/5FVadOc9/AxUbGgpOlyli2g6/hwpY1J3/urE=";
+    hash = "sha256-7J1vKMG1/d/8O+j+RmUtVpjFdZB4w0BVoGrIONbr/e4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail \
         'default-version = "0.54.0dev+Unknown"' \
-        'default-version = "${finalAttrs.version}"'
+        'default-version = "${finalAttrs.version}"' \
+      --replace-fail \
+        "'ignore:Model_336 is deprecated:qcodes.utils.deprecate.QCoDeSDeprecationWarning'," \
+        ""
   '';
 
   build-system = [
@@ -172,6 +175,8 @@ buildPythonPackage (finalAttrs: {
     "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
     "tests/dataset/test_dataset_basic.py"
+    # qcodes.utils.deprecate.QCoDeSDeprecationWarning: Model_336 is deprecated
+    "tests/drivers/test_lakeshore_336_legacy.py"
   ];
 
   disabledTestMarks = [

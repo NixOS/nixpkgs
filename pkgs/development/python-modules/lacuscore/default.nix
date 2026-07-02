@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   defang,
   dnspython,
@@ -9,22 +8,21 @@
   playwrightcapture,
   poetry-core,
   pydantic,
-  pythonOlder,
   redis,
   requests,
   ua-parser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lacuscore";
-  version = "1.21.1";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
-    tag = "v${version}";
-    hash = "sha256-I6Qh7AzcTYDxNmvgTNVVPSenLfAbdLawdiN8JrrF25s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gCNu0piYtyqXFIYhPhjrVk6qcPPVOsXDcFB3BG/g9G8=";
   };
 
   pythonRelaxDeps = [
@@ -49,8 +47,7 @@ buildPythonPackage rec {
   ]
   ++ playwrightcapture.optional-dependencies.recaptcha
   ++ redis.optional-dependencies.hiredis
-  ++ ua-parser.optional-dependencies.regex
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ++ ua-parser.optional-dependencies.regex;
 
   # Module has no tests
   doCheck = false;
@@ -60,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
-    changelog = "https://github.com/ail-project/LacusCore/releases/tag/${src.tag}";
+    changelog = "https://github.com/ail-project/LacusCore/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

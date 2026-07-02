@@ -8,11 +8,12 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
+  imagemagick,
 }:
 
 let
   pname = "flclash";
-  version = "0.8.91";
+  version = "0.8.92";
 
   src = fetchFromGitHub {
     owner = "chen08209";
@@ -23,7 +24,7 @@ let
       export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
       export GIT_CONFIG_VALUE_0=git@github.com:
     '';
-    hash = "sha256-jQ0phrTWlZZj5sVvnHAuC5h1nbJCcr/0wKw61mZMtes=";
+    hash = "sha256-bPz2QNwhlCZBmjU0ZpRTwNk0TKVTIHH4E6ZJ5+rtaTk=";
     fetchSubmodules = true;
   };
 
@@ -31,7 +32,7 @@ let
     description = "Proxy client based on ClashMeta, simple and easy to use";
     homepage = "https://github.com/chen08209/FlClash";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
   };
 
   core = buildGoModule {
@@ -40,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-/natNGWXF6be7kyLYF2fHg0o0C1zkBAg1k8BAH5Dl9E=";
+    vendorHash = "sha256-/p/Z5vIstuerR5jA0vXXLURSoPqS7IDEIXCa/SFCrLc=";
 
     env.CGO_ENABLED = 0;
 
@@ -64,6 +65,7 @@ flutter335.buildFlutterApplication {
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
+    imagemagick
   ];
 
   buildInputs = [
@@ -96,7 +98,8 @@ flutter335.buildFlutterApplication {
   '';
 
   postInstall = ''
-    install -D --mode=0644 assets/images/icon.png $out/share/pixmaps/flclash.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick assets/images/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/flclash.png
   '';
 
   passthru = {

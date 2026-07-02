@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusti-cal";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "arthurhenrique";
     repo = "rusti-cal";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pdsP2nuJh30BzqIyxSQXak/rceA4hI9jBYy1dDVEIvI=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.detegr ];
   };
-}
+})

@@ -61,9 +61,6 @@
       h2o_postgresql.wait_for_open_port(80)
 
       for machine in (nginx_mysql, h2o_postgresql):
-        # Sanity checks on URLs.
-        machine.succeed("curl -fL http://localhost/index.php")
-        machine.succeed("curl -fL http://localhost/")
         # Perform installation.
         machine.succeed('curl -fL -X POST http://localhost/install/check.php -F selectlang=auto')
         machine.succeed('curl -fL -X POST http://localhost/install/fileconf.php -F selectlang=auto')

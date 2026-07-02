@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dapper";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "dapper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
   vendorHash = null;
 
   patchPhase = ''
-    substituteInPlace main.go --replace 0.0.0 ${version}
+    substituteInPlace main.go --replace 0.0.0 ${finalAttrs.version}
   '';
 
   meta = {
@@ -28,4 +28,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kuznero ];
   };
-}
+})

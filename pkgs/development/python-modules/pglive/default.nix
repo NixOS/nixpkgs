@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "pyqtgraph"
   ];
 
   passthru.optional-dependencies = {

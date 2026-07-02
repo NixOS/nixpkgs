@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   rustPlatform,
   replaceVars,
   cargo,
@@ -19,32 +18,28 @@
   gtk4,
   libadwaita,
   libsecret,
+  openssl,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.7.5";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
-    tag = "v${version}";
-    hash = "sha256-J5EsCanKEczPXw8QsNlp3mxh0MyJyJ+WulaZJ+c6hBA=";
+    tag = version;
+    hash = "sha256-oM59t0oJzW7EyvcGoEwrokhxk+inxMLznf4Z2IEg3ig=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-JjqtThxjMb+HDdPt50X7yXDxqouQliSlNvT14roZLYk=";
+    hash = "sha256-CWyZYnurIWiGzfUpa7OgmLU/CVRiAGbgFM0+frRfi9c=";
   };
 
   patches = [
-    # https://gitlab.gnome.org/World/pika-backup/-/issues/643
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/pika-backup/-/commit/842d93d65a342985bf6d7d8cacd5b38ea508df2e.patch";
-      hash = "sha256-HtGuEi8ghiMwzBEsvo/DTfVAExgmHpd0xp5bpWRn9Fs=";
-    })
     (replaceVars ./borg-path.patch {
       borg = lib.getExe borgbackup;
     })
@@ -72,6 +67,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+    openssl
   ];
 
   passthru = {

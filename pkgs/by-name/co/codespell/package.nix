@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "codespell";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
-    tag = "v${version}";
-    sha256 = "sha256-9hr/QZcBESLukujzNKNjWGG3nXx+wkvQvoUYmYgtXv0=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-OMnkTXt6ok3ll9ocZMY4jdpYl3PlI2ZZtLuiMYrCRNI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -53,4 +53,4 @@ python3.pkgs.buildPythonApplication rec {
       SuperSandro2000
     ];
   };
-}
+})

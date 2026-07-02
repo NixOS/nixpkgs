@@ -10,8 +10,8 @@
   freetype,
   fontconfig,
   alsa-lib,
-  libXrender,
-  libXinerama,
+  libxrender,
+  libxinerama,
   nix-update-script,
 }:
 
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     alsa-lib
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sphair/ClanLib";
     description = "Cross platform toolkit library with a primary focus on game creation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nixinator ];
+    maintainers = [ ];
     platforms = with lib.platforms; lib.intersectLists linux (x86 ++ arm ++ aarch64 ++ riscv);
   };
 })

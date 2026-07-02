@@ -65,15 +65,15 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.06.0";
+  version = "10.07.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }/ghostscript-${version}.tar.xz";
-    hash = "sha256-ZDUmSMLAgcip+xoS3Bll4B6tfFf1i3LRtU9u8c7zxWE=";
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }/ghostscript-${finalAttrs.version}.tar.xz";
+    hash = "sha256-HNt2bejbjx5YnIF/CcWFXqX2XfyFQORlpprBTBhBYCU=";
   };
 
   patches = [
@@ -84,13 +84,6 @@ stdenv.mkDerivation rec {
     (fetchpatch2 {
       url = "https://salsa.debian.org/debian/ghostscript/-/raw/01e895fea033cc35054d1b68010de9818fa4a8fc/debian/patches/2010_add_build_timestamp_setting.patch";
       hash = "sha256-XTKkFKzMR2QpcS1YqoxzJnyuGk/l/Y2jdevsmbMtCXA=";
-    })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.is32bit [
-    # 32 bit compat. conditional as to not cause rebuilds
-    (fetchpatch2 {
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/3c0be6e4fcffa63e4a5a1b0aec057cebc4d2562f.patch?full_index=1";
-      hash = "sha256-NrL4lI19x+OHaSIwV93Op/I9k2MWXxSWgbkwSGU7R6A=";
     })
   ];
 
@@ -165,6 +158,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "CFLAGS=-std=gnu17"
     "--with-system-libtiff"
     "--without-tesseract"
   ]
@@ -194,7 +188,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s gsc "$out"/bin/gs
 
-    cp -r Resource "$out/share/ghostscript/${version}"
+    cp -r Resource "$out/share/ghostscript/${finalAttrs.version}"
 
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
@@ -239,6 +233,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.ghostscript.com/";
+    changelog = "https://ghostscript.readthedocs.io/en/gs${finalAttrs.version}/News.html";
     description = "PostScript interpreter (mainline version)";
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
@@ -253,4 +248,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tobim ];
     mainProgram = "gs";
   };
-}
+})

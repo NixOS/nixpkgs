@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   build,
   hatchling,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     hatchling
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     build

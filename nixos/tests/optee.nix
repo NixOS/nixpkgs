@@ -2,8 +2,9 @@
 {
   name = "optee";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ jmbaur ];
+  meta = {
+    maintainers = with lib.maintainers; [ jmbaur ];
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
   };
 
   nodes.machine =

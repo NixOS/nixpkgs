@@ -33,17 +33,17 @@ let
     wimlib
   ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distrobuilder";
-  version = "3.2";
+  version = "3.3.1";
 
-  vendorHash = "sha256-nlqapWxuSZlbt22F3Y9X1uXFxJHvEoUBZDl078x8ZnA=";
+  vendorHash = "sha256-7dYfY6u8URJDMADY6yTW2SjOeSiRwqIh7oxUup6BHMg=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
-    tag = "distrobuilder-${version}";
-    sha256 = "sha256-aDCx2WGAKdTNf0uMzwxG0AUmbuuWBFPYzNyycKklYOY=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-l9HtpeG4BSN9saDsNaF9uyOJbHGyLN0PwJ728IJfN/s=";
   };
 
   buildInputs = bins;
@@ -57,6 +57,12 @@ buildGoModule rec {
   ]
   ++ bins;
 
+  # upstream only supports make targets due to GOFLAGS, but none of the targets work for us
+  # this could be fragile, but the alternative is copying them here
+  preBuild = ''
+    export GOFLAGS="$(grep 'export GOFLAGS' Makefile | sed 's/export GOFLAGS=//') -trimpath"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
@@ -66,7 +72,7 @@ buildGoModule rec {
       incus-lts = nixosTests.incus-lts.container;
     };
 
-    generator = callPackage ./generator.nix { inherit src version; };
+    generator = callPackage ./generator.nix { inherit (finalAttrs) src version; };
 
     updateScript = nix-update-script { };
   };
@@ -74,9 +80,10 @@ buildGoModule rec {
   meta = {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
+    changelog = "https://github.com/lxc/distrobuilder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };
-}
+})

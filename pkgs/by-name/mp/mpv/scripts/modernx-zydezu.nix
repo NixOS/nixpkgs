@@ -2,25 +2,24 @@
   lib,
   buildLua,
   fetchFromGitHub,
+  installFonts,
   makeFontsConf,
   nix-update-script,
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
-  version = "0.4.4";
+  version = "0.4.6";
 
   scriptPath = "modernx.lua";
   src = fetchFromGitHub {
     owner = "zydezu";
     repo = "ModernX";
     rev = finalAttrs.version;
-    hash = "sha256-s+TEHh4Oy6aWcmo4uc/vfVSVmBEA6fbKDqytsTrgqgQ=";
+    hash = "sha256-jK35LmihSCF789AJhKlySg6fXurAe5uuHNsgFjt0+iY=";
   };
 
-  postInstall = ''
-    mkdir -p $out/share/fonts
-    cp -r *.ttf $out/share/fonts
-  '';
+  nativeBuildInputs = [ installFonts ];
+
   passthru.extraWrapperArgs = [
     "--set"
     "FONTCONFIG_FILE"

@@ -10,7 +10,6 @@ let
     # keep-sorted start
     "coc-basedpyright"
     "coc-clangd"
-    "coc-cmake"
     "coc-css"
     "coc-diagnostic"
     "coc-docker"
@@ -39,7 +38,6 @@ let
     "coc-spell-checker"
     "coc-sqlfluff"
     "coc-stylelint"
-    "coc-sumneko-lua"
     "coc-tabnine"
     "coc-texlab"
     "coc-toml"

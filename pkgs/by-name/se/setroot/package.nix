@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   imlib2,
   pkg-config,
   fetchpatch,
   enableXinerama ? true,
-  libXinerama,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,10 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
+    libx11
     imlib2
   ]
-  ++ lib.optionals enableXinerama [ libXinerama ];
+  ++ lib.optionals enableXinerama [ libxinerama ];
 
   buildFlags = [ (if enableXinerama then "xinerama=1" else "xinerama=0") ];
 

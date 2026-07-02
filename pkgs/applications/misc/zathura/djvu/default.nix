@@ -13,17 +13,18 @@
   desktop-file-utils,
   appstream,
   appstream-glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-djvu";
-  version = "0.2.11";
+  version = "2026.05.10";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-djvu";
     tag = finalAttrs.version;
-    hash = "sha256-TehD0uTQguH8f6pdOSIyhr1m87jB3F0WTUNtUM0fPu4=";
+    hash = "sha256-LW5gQhqV4vwXj1BRlNK1ZfTdQcqt4rJtHckFLvUvPI8=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     homepage = "https://pwmt.org/projects/zathura-djvu/";
     description = "Zathura DJVU plugin";
@@ -54,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

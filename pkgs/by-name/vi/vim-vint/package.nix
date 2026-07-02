@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vim-vint";
   version = "0.3.21";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Vimjas";
     repo = "vint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A0yXDkB/b9kEEXSoLeqVdmdm4p2PYL2QHqbF4FgAn30=";
   };
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     # UserWarning: pkg_resources is deprecated as an API.
     # This leads the `test/acceptance/test_cli.py::TestCLI::*` tests to fail
     (replaceVars ./remove-pkg-resources.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.2.3";
+  version = "9.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
     tag = version;
-    hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
+    hash = "sha256-YVDFYxxKMKOrHyymewLTTkmBgg6YVqWou4hTKHJmbOg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -29,7 +29,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "md_toc/tests/*.py" ];
+  # Only run the real unit-test module; the over-broad glob also collected
+  # md_toc/tests/fuzzer.py, which imports the unpackaged `atheris` engine.
+  # https://github.com/frnmst/md-toc/blob/9.0.0/md_toc/tests/fuzzer.py#L22
+  enabledTestPaths = [ "md_toc/tests/tests.py" ];
 
   pythonImportsCheck = [ "md_toc" ];
 

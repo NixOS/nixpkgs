@@ -7,18 +7,18 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "juledoc";
-  version = "0.0.0-unstable-2025-09-09";
+  version = "0.0.0-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "juledoc";
-    rev = "3461147f4630104999bb895bdd8e60f40ca23aaf";
-    hash = "sha256-0HuMWdoDoq2SgQhOnn6UnWXe2Js7/466cP2XpjvO5dw=";
+    rev = "8504254a30d04a403c1b3ac788b62491233421e5";
+    hash = "sha256-L8Oh2u35hraJYHimxJbBqro7iVh1a7MbVuqtujgb7c8=";
   };
 
   nativeBuildInputs = [ julec.hook ];
 
-  JULE_OUT_NAME = "juledoc";
+  env.JULE_OUT_NAME = "juledoc";
 
   meta = {
     description = "Official documentation generator for the Jule programming language";

@@ -6,22 +6,22 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zensical";
-  version = "0.0.19";
+  version = "0.0.46";
   pyproject = true;
 
   # We fetch from PyPi, because GitHub repo does not contain all sources.
   # The publish process also copies in assets from zensical/ui.
   # We could combine sources, but then nix-update won't work.
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xCQQ+j9nOOIiOGN8dMugCID1nbRuPpOU9UToh8cu5LY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-PsIfT7HnjNfA1rB64zawR3Die6Ag2rxFeyeQ5dNPGXg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-r0ToUJPCrZFwqjbHCsnGS7WHdEcmOqpoBQvqWbnUuPU=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-RNd7C6dRfH59ah2rbwYuwJGU+mDZKqXUwFX8+NfLkgY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -32,10 +32,12 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     click
     deepmerge
+    jinja2
     markdown
     pygments
     pymdown-extensions
     pyyaml
+    tomli
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
@@ -51,9 +53,9 @@ python3Packages.buildPythonApplication rec {
       use, with powerful customization options.
     '';
     homepage = "https://zensical.org";
-    changelog = "https://github.com/zensical/zensical/releases/tag/v${version}";
+    changelog = "https://github.com/zensical/zensical/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aljazerzen ];
     mainProgram = "zensical";
   };
-}
+})

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx Autodoc for C";
     homepage = "https://jnikula.github.io/hawkmoth/";
-    changelog = "https://github.com/jnikula/hawkmoth/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jnikula/hawkmoth/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.cynerd ];
   };

@@ -10,18 +10,23 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "copacetic";
-  version = "0.11.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "project-copacetic";
     repo = "copacetic";
-    tag = "v${version}";
-    hash = "sha256-kgFT+IK6zCGoGK8L/lwXyiUXCWYG7ElziPs0Q1cq+fw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pD6AdJ9GfTPVgI/e4zRW4oJjOzpEk9uY4kdEm5yLDrw=";
   };
 
-  vendorHash = "sha256-qe2VJHXSYtZJlMd5R2J1NXWcXb8+cbTiDBQeN20fbEE=";
+  vendorHash = "sha256-RKqaIwGDZj91lfbEJHcnG8RhIrixtR0VtieCfZD/rns=";
+
+  excludedPackages = [
+    "integration/..."
+    "test/..."
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,9 +42,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/project-copacetic/copacetic/pkg/version.GitVersion=${version}"
-    "-X=main.version=${version}"
+    "-X=github.com/project-copacetic/copacetic/pkg/version.GitVersion=${finalAttrs.version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
@@ -52,13 +59,23 @@ buildGoModule rec {
         "TestPushToRegistry"
         "TestMultiPlatformPluginPatch"
         "TestPodmanLoader_Load_Success"
+        "TestMultiArchBulkPatching"
+        "TestComprehensiveBulkPatching"
+        "TestTrivyParserParseWithNodeJS/OS_and_Node.js_packages"
+        "TestLocalImageDescriptor"
+        "TestGetImageDescriptor"
+        "TestDotNetSDKImagePatching"
+        "TestGenerateWithoutReport"
+        "TestGenerateToStdout"
+        "TestCustomBuildPatching"
+        "TestNodeJSPatching"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   doInstallCheck = true;
 
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     mv $out/bin/copacetic $out/bin/copa
@@ -75,9 +92,9 @@ buildGoModule rec {
   meta = {
     description = "Tool for directly patching vulnerabilities in container images";
     homepage = "https://project-copacetic.github.io/copacetic/";
-    changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${src.tag}";
+    changelog = "https://github.com/project-copacetic/copacetic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "copa";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
   };
-}
+})

@@ -5,6 +5,7 @@
   SDL2_ttf,
   boost,
   cmake,
+  gettext,
   fetchFromGitHub,
   ffmpeg,
   fuzzylite,
@@ -24,21 +25,33 @@
   versionCheckHook,
   xz,
   zlib,
+  enableMMAI ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.1";
+  version = "1.7.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-3XZQyq6urCTI/A6tCSHgzPgOvzH8ckXvDRamWvVgeVY=";
+    # Disable git background maintenance for the whole prefetch, including submodule clones.
+    # Upstream nix-prefetch-git only disables it on the outer repo (NixOS/nixpkgs#524215), so
+    # submodule clones can still race with their own maintenance and break `.git` cleanup.
+    preFetch = ''
+      export GIT_CONFIG_GLOBAL="$TMPDIR/gitconfig"
+      printf '[maintenance]\n\tauto = false\n' > "$GIT_CONFIG_GLOBAL"
+    '';
+    hash = "sha256-iV1twkoOJyUsUkq17mdTYk1YvfmUtLHdtR3H77BoNJk=";
   };
 
   nativeBuildInputs = [
     cmake
+    gettext # msgfmt
     ninja
     pkg-config
     python3
@@ -62,7 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     xz
     zlib
-  ];
+  ]
+  ++ lib.optional enableMMAI onnxruntime;
+
+  # GCC 15 ICE in -Wmismatched-tags diagnostic during template specialisation lookup
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-mismatched-tags";
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_CLIENT" true)
@@ -71,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_GOLDMASTER" true)
     (lib.cmakeBool "ENABLE_TEST" false) # Requires nonfree data files.
     (lib.cmakeBool "ENABLE_PCH" false)
+    (lib.cmakeBool "ENABLE_DISCORD" false)
+    (lib.cmakeBool "ENABLE_MMAI" enableMMAI)
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "$out/lib/vcmi")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
@@ -91,13 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/vcmiclient";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [
     "XDG_CACHE_HOME"
     "XDG_CONFIG_HOME"
     "XDG_DATA_HOME"
   ];
   preVersionCheck = ''
+    cd $(mktemp -d)
     export \
       XDG_CACHE_HOME="$TMPDIR" \
       XDG_CONFIG_HOME="$TMPDIR" \

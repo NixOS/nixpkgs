@@ -22,11 +22,11 @@ let
   notWindows = !isWindows;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openocd";
   version = "0.12.0";
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/openocd/openocd/${finalAttrs.version}/openocd-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-ryVHiL6Yhh8r2RA/5uYKd07Jaow3R0Tu+Rl/YEMHWvo=";
   };
 
@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     mainProgram = "openocd";
@@ -102,4 +105,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

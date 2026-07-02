@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiddlywiki";
-  version = "5.3.8";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "tiddlywiki";
     repo = "tiddlywiki5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nBBjD9JB4tliRJ5N1aK3pc9PzCHG1fByj7vWtKnNEzI=";
+    hash = "sha256-MvX10TwSRQxB8qqLtnlxCelDL6CDlSHGWccv4Xh630I=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Self-contained JavaScript wiki for the browser, Node.js, AWS Lambda etc";
     homepage = "https://tiddlywiki.com";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "tiddlywiki";
   };
 })

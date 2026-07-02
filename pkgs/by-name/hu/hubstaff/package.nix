@@ -4,20 +4,20 @@
   fetchurl,
   unzip,
   makeWrapper,
-  libX11,
+  libx11,
   zlib,
-  libSM,
-  libICE,
-  libXext,
+  libsm,
+  libice,
+  libxext,
   freetype,
-  libXrender,
+  libxrender,
   fontconfig,
-  libXft,
-  libXinerama,
-  libXcursor,
+  libxft,
+  libxinerama,
+  libxcursor,
   cairo,
-  libXfixes,
-  libXScrnSaver,
+  libxfixes,
+  libxscrnsaver,
   libnotify,
   glib,
   gtk3,
@@ -36,25 +36,25 @@ let
   sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
 
   rpath = lib.makeLibraryPath [
-    libX11
+    libx11
     zlib
-    libSM
-    libICE
-    libXext
+    libsm
+    libice
+    libxext
     freetype
-    libXrender
+    libxrender
     fontconfig
-    libXft
-    libXinerama
+    libxft
+    libxinerama
     stdenv.cc.cc
     libnotify
     glib
     gtk3
     libappindicator-gtk3
     curl
-    libXfixes
-    libXScrnSaver
-    libXcursor
+    libxfixes
+    libxscrnsaver
+    libxcursor
     cairo
   ];
 

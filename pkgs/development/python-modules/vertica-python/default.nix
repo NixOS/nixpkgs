@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vertica/vertica-python";
     changelog = "https://github.com/vertica/vertica-python/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ arnoldfarkas ];
+    maintainers = [ ];
   };
 }

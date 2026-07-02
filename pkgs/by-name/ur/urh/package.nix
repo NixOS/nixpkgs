@@ -17,7 +17,7 @@
   uhd,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "urh";
   version = "2.9.8-unstable-2025-07-31";
   pyproject = true;
@@ -80,12 +80,12 @@ python3Packages.buildPythonApplication rec {
         "Network"
         "HamRadio"
       ];
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
     })
   ];
 
   postInstall = ''
-    install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
+    install -Dm644 data/icons/appicon.png $out/share/icons/hicolor/512x512/apps/urh.png
   '';
 
   meta = {
@@ -95,4 +95,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

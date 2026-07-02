@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-google-weather-api";
-  version = "0.0.4";
+  version = "0.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "python-google-weather-api";
     tag = "v${version}";
-    hash = "sha256-5ljKaIwG78oufb0iRaqTY46wxelAiuQUvhmRbZWo5Fk=";
+    hash = "sha256-Vbiw2fbSGBIBmM8siRSTSjt64ZM7k/HFv/V66dzY6B0=";
   };
 
   build-system = [ setuptools ];

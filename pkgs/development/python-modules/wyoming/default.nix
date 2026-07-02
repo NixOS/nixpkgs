@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "wyoming";
     tag = "v${version}";
-    hash = "sha256-s1wYGqoTIsKj3u99/9KdKZmzUGzGeYq1TJHOkOVwkHQ=";
+    hash = "sha256-yeLw/dW4NPG0TfoM7zcOK6Y/9F4KETm3W7dfiAqaiJg=";
   };
 
   build-system = [ setuptools ];

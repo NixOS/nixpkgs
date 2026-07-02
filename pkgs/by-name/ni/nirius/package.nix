@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nirius";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "nirius";
-    rev = "nirius-${version}";
-    hash = "sha256-KAh45AcNB9Y4ahxamtI6/z3l1xg6yf17h4rnZl3w89I=";
+    rev = "nirius-${finalAttrs.version}";
+    hash = "sha256-H6geI5RkM0SXJyqXNai9vyc0cdTq2hHGpee8Tx2XDIU=";
   };
 
-  cargoHash = "sha256-p123QvlB/j0b5kFjICcTI/5ZKL8pzGfIvH80doAhqFA=";
+  cargoHash = "sha256-qsY0OXsCn6g/vIBkHtkG2Dvv2RjiOrhT1O8AvzyBiV0=";
 
   meta = {
     description = "Utility commands for the niri wayland compositor";
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tylerjl ];
     platforms = lib.platforms.linux;
   };
-}
+})

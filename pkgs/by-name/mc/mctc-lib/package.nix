@@ -50,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (buildType == "cmake") cmake;
 
-  buildInputs = [
+  propagatedBuildInputs = [
+    # jonquil (and the toml-f it propagates) appears in mctc-lib.pc's Requires.private, so it must
+    # be propagated for pkg-config consumers (e.g. dftd4) to resolve mctc-lib
     jonquil
   ];
 

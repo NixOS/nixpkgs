@@ -3,6 +3,8 @@
   qtwebchannel,
   qtwebengine,
   qttools,
+  kitemmodels,
+  kquickcharts,
   libpcap,
   libnl,
   lm_sensors,
@@ -21,5 +23,10 @@ mkKdeDerivation {
     libpcap
     libnl
     lm_sensors
+  ];
+
+  extraPropagatedBuildInputs = [
+    kitemmodels
+    kquickcharts
   ];
 }

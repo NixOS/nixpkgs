@@ -7,16 +7,16 @@
   zabbix-cli,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zabbix-cli";
-  version = "3.6.2";
+  version = "3.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
-    tag = version;
-    hash = "sha256-Y4IR/le+7X3MYmrVnZMr+Gu59LkCB5UfMJ2s9ovSjLM=";
+    tag = finalAttrs.version;
+    hash = "sha256-FbLKU8pjnKpVLE85zkxOmvc6rbhc3x6JdKiI7SdSn1w=";
   };
 
   build-system = with python3Packages; [
@@ -83,4 +83,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "zabbix-cli";
     maintainers = [ lib.maintainers.anthonyroussel ];
   };
-}
+})

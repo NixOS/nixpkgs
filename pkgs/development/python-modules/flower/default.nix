@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ arnoldfarkas ];
+    maintainers = [ ];
   };
 }

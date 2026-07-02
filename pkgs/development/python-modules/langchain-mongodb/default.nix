@@ -38,6 +38,7 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
   version = "0.11.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -85,6 +86,7 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
     "-Wignore::DeprecationWarning"
+    "-Wignore::PendingDeprecationWarning"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14

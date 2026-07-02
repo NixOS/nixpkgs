@@ -16,6 +16,11 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "CC=g++" "CC=c++"
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm555 {blobpack,blobunpack} -t $out/bin

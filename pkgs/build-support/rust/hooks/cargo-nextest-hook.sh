@@ -12,6 +12,7 @@ cargoNextestHook() {
     local flagsArray=(
         "--target" "@rustcTargetSpec@"
         "--offline"
+        "--show-progress=none"
     )
 
     if [[ -z ${dontUseCargoParallelTests-} ]]; then

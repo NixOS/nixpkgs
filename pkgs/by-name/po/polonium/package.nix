@@ -2,26 +2,24 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  libsForQt5,
+  kdePackages,
 }:
 
-# how to update:
-# 1. check out the tag for the version in question
-# 2. run `prefetch-npm-deps package-lock.json`
-# 3. update npmDepsHash with the output of the previous step
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "polonium";
-  version = "1.0rc";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
     repo = "polonium";
-    rev = "v" + version;
-    hash = "sha256-AdMeIUI7ZdctpG/kblGdk1DBy31nDyolPVcTvLEHnNs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R50Br8GGVVkA/AtXvYazgBWSEax0KEvWwyFQv3zqWqU=";
+    fetchSubmodules = true;
   };
 
-  npmDepsHash = "sha256-kaT3Uyq+/JkmebakG9xQuR4Kjo7vk6BzI1/LffOj/eo=";
+  npmDepsHash = "sha256-T8dW+ctRlN8fIJtPKy0niWcCuQTd3GV5MbmaZf8CqZk=";
+
+  __structuredAttrs = true;
 
   dontConfigure = true;
 
@@ -32,8 +30,6 @@ buildNpmPackage rec {
     "src"
   ];
 
-  nativeBuildInputs = with libsForQt5; [ plasma-framework ];
-
   dontNpmBuild = true;
 
   dontWrapQtApps = true;
@@ -41,19 +37,22 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    plasmapkg2 --install pkg --packageroot $out/share/kwin/scripts
+    mkdir -p $out/share/kwin/scripts/polonium
+    cp -a pkg/. $out/share/kwin/scripts/polonium
 
     runHook postInstall
   '';
 
   meta = {
     description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
+    homepage = "https://polonium.vaughanm.xyz/";
+    downloadPage = "https://github.com/zeroxoneafour/polonium/releases";
+    changelog = "https://github.com/zeroxoneafour/polonium/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      peterhoeg
-      kotatsuyaki
+      nelind
       HeitorAugustoLN
     ];
-    inherit (libsForQt5.plasma-framework.meta) platforms;
+    inherit (kdePackages.kwin.meta) platforms;
   };
-}
+})

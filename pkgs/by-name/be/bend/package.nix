@@ -6,14 +6,14 @@
   hvm,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "Bend";
   version = "0.2.37";
 
   src = fetchFromGitHub {
     owner = "HigherOrderCO";
     repo = "Bend";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8uBEI9GKUETk8t6Oanb0OECe3MlJ486QnccOuhIxPuY=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ k3yss ];
     platforms = lib.platforms.unix;
   };
-}
+})

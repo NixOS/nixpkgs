@@ -9,15 +9,15 @@
   which,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-absorb";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
-    tag = version;
-    hash = "sha256-O9bJMYhIyCtztswvL0JQ4ZtsAAI9TlHzWDeGdTHEmP4=";
+    tag = finalAttrs.version;
+    hash = "sha256-jAR+Vq6SZZXkseOxZVJSjsQOStIip8ThiaLroaJcIfc=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     which # used by Documentation/Makefile
   ];
 
-  cargoHash = "sha256-QBZItmKH9b2KwHR88MotyIT2krZl5QQFLvUmPmbxl4U=";
+  cargoHash = "sha256-8uCXk5bXn/x4QXbGOROGlWYMSqIv+/7dBGZKbYkLfF4=";
 
   nativeCheckInputs = [
     gitMinimal
@@ -42,7 +42,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd git-absorb \
       --bash <($out/bin/git-absorb --gen-completions bash) \
       --fish <($out/bin/git-absorb --gen-completions fish) \
-      --zsh <($out/bin/git-absorb --gen-completions zsh)
+      --zsh <($out/bin/git-absorb --gen-completions zsh) \
+      --nushell <($out/bin/git-absorb --gen-completions nushell)
   '';
 
   meta = {
@@ -54,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-absorb";
   };
-}
+})

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-core";
-  version = "5.8.1";
+  version = "5.9.1";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "jupyter";
     repo = "jupyter_core";
     tag = "v${version}";
-    hash = "sha256-opTFYVDqzkjeFC+9IZXPRCoV2QCTm1ze6ldrOZN0aUc=";
+    hash = "sha256-mAvfyiN8Fdm9U3Ar7xicwOinKfTqk9qrfq/SGiaxNvU=";
   };
 
   patches = [ ./tests_respect_pythonpath.patch ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
-    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };

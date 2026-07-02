@@ -2,28 +2,29 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  versionCheckHook,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyhanko-cli";
-  version = "0.2.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyhanko";
-    tag = "pyhanko-cli/v${version}";
-    hash = "sha256-ZDHAcI2yoiVifYt05V85lz8mJmoyi10g4XoLQ+LhLHE=";
+    tag = "pyhanko-cli/v${finalAttrs.version}";
+    hash = "sha256-huOy04wY7xP1gZ5azsZYnMXLZ4MwMkLGujlgXTtjLy4=";
   };
 
-  sourceRoot = "${src.name}/pkgs/pyhanko-cli";
+  sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko-cli";
 
   postPatch = ''
     substituteInPlace src/pyhanko/cli/version.py \
-      --replace-fail "0.0.0.dev1" "${version}" \
-      --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${version}\".split(\".\"))"
+      --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
+      --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${version}"
+      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ python3Packages.setuptools ];
@@ -40,13 +41,22 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.concatAttrValues pyhanko.optional-dependencies;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
     pytestCheckHook
+    pytest-asyncio
     pyhanko.testData
     requests-mock
     freezegun
     certomancer
     aiohttp
+  ]);
+
+  disabledTestPaths = [
+    # ImportError: cannot import name 'SOFTHSM' from 'test_utils.signing_commons'
+    "tests/test_cli_signing_pkcs11.py"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -59,8 +69,8 @@ python3Packages.buildPythonApplication rec {
     description = "Sign and stamp PDF files";
     mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-cli";
-    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/pyhanko-cli/${src.tag}/docs/changelog.rst#pyhanko-cli";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko-cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
   };
-}
+})

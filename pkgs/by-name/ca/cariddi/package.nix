@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cariddi";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "cariddi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ULeG+TmpRbHT+GsEuEsSSCzlOwRzDzUZmPZNN7KZdrA=";
+    hash = "sha256-+nVZmifJvsNbYJ0TYTSQfYB/B0NJaU3wPn/e/2A3j60=";
   };
 
-  vendorHash = "sha256-DgyDRMDYBC4GVuffJCrNpoDsqtpZ/LH++q5zXdkC1YE=";
+  vendorHash = "sha256-/xnnkzoS1+fow5audoa4SllSzGMwrxvbjCjCHzOguYU=";
 
   ldflags = [
     "-w"

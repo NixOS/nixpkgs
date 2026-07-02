@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipmiutil";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ipmiutil/ipmiutil-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-BIEbLmV/+YzTHkS5GnAMnzPEyd2To2yPyYfeH0fCQCQ=";
+    sha256 = "sha256-N/m8jmsYwRVeTV6jjIe4OQi3rMekT7xeOvST8m74t2c=";
   };
 
   buildInputs = [ openssl ];

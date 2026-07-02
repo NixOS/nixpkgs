@@ -9,31 +9,37 @@
   enableInterop ? true,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glaze";
-  version = "7.0.0";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
-    tag = "v${final.version}";
-    hash = "sha256-bYXXQmrVnrBTW/r+fgRBPYfKGPtHvEDw0Sk6BYTMm/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WqtaZ3AVDs1oIfAVQuU63eg+0753LoYfv/pRyG9OMnM=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals enableSSL [ openssl ];
+  propagatedBuildInputs = lib.optionals enableSSL [ openssl ];
 
   # https://github.com/stephenberry/glaze/blob/main/CMakeLists.txt
   cmakeFlags = [
     (lib.cmakeBool "glaze_DISABLE_SIMD_WHEN_SUPPORTED" (!enableSIMD))
     (lib.cmakeBool "glaze_ENABLE_SSL" enableSSL)
     (lib.cmakeBool "glaze_BUILD_INTEROP" enableInterop)
+    (lib.cmakeBool "glaze_ENABLE_FUZZING" (!stdenv.hostPlatform.isMusl))
   ];
 
   meta = {
+    homepage = "https://stephenberry.github.io/glaze/";
+    changelog = "https://github.com/stephenberry/glaze/releases/tag/v${finalAttrs.version}";
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ moni ];
+    maintainers = with lib.maintainers; [
+      moni
+      miniharinn
+    ];
     license = lib.licenses.mit;
   };
 })

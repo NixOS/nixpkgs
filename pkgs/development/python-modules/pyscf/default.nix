@@ -5,6 +5,8 @@
 
   # build-sysetm
   cmake,
+  setuptools,
+  wheel,
 
   # build inputs
   blas,
@@ -13,29 +15,40 @@
   xcfun,
 
   # dependencies
-  cppe,
   h5py,
   numpy,
   scipy,
+
+  # optional-dependencies
+  cppe,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyscf";
-  version = "2.12.0";
-  format = "setuptools";
+  version = "2.13.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
-    tag = "v${version}";
-    hash = "sha256-/C8BKUNtp8QoSjbcSZGH2Si4JjygIygW04wtL8vGXLk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IEgbm7sZqxKxI+VPE9IoH+BAHkNgasGmRsdDykUFCeM=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
-  build-system = [ cmake ];
+  build-system = [
+    setuptools
+    wheel
+    cmake
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "cmake<4.0" "cmake"
+  '';
   dontUseCmakeConfigure = true;
   preConfigure = ''
     export CMAKE_CONFIGURE_ARGS="-DBUILD_LIBCINT=0 -DBUILD_LIBXC=0 -DBUILD_XCFUN=0"
@@ -50,13 +63,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    cppe
     h5py
     numpy
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    cppe = [ cppe ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cppe;
   pythonImportsCheck = [ "pyscf" ];
   preCheck = ''
     # Set config used by tests to ensure reproducibility
@@ -89,6 +108,7 @@ buildPythonPackage rec {
     "test_finite_diff_roks_grad"
     "test_finite_diff_df_roks_grad"
     "test_frac_particles"
+    "test_gwac_pade_frozen"
     "test_nosymm_sa4_newton"
     "test_pipek"
     "test_n3_cis_ewald"
@@ -96,6 +116,7 @@ buildPythonPackage rec {
     "test_collinear_kgks_gga"
     "test_libxc_gga_deriv4"
     "test_sacasscf_grad"
+    "test_sparse_dot"
   ];
 
   disabledTestPaths = [
@@ -116,4 +137,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

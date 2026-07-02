@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tyson";
   version = "0.1.1-unstable-2024-04-10";
 
@@ -39,8 +39,8 @@ buildGoModule rec {
     description = "TypeScript as a configuration language";
     mainProgram = "tyson";
     homepage = "https://github.com/jetify-com/tyson";
-    changelog = "https://github.com/jetify-com/tyson/releases/tag/${src.rev}";
+    changelog = "https://github.com/jetify-com/tyson/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

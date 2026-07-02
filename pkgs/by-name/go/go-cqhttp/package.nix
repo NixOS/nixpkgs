@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-cqhttp";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Mrs4s";
     repo = "go-cqhttp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mKenmsGdVg60zjVMTfbEtqtPcJdJo60Nz6IUQ9RB7j0=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ Anillc ];
   };
-}
+})

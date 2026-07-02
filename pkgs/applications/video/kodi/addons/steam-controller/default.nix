@@ -20,7 +20,9 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "Binary addon for steam controller";
+    homepage = "https://github.com/kodi-game/peripheral.steamcontroller";
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];
+    license = lib.licenses.gpl2Only;
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydeps";
-  version = "3.0.2";
+  version = "3.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thebjorn";
     repo = "pydeps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZHD8ux3GLm5OsTkaEZfix5zgsdbLHpIxVtwKByduEzk=";
+    hash = "sha256-/Ie75jQWG3t4cGMRMVPJ7r6aBdm4hC7/CgwmuOUk4BA=";
   };
 
   build-system = [ setuptools ];

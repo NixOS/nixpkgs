@@ -105,5 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
     mainProgram = "domoticz";
+    knownVulnerabilities = [
+      "CVE-2026-1001"
+    ];
   };
 })

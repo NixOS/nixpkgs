@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Amend systemd-repart definiton files.
+"""Amend systemd-repart definition files.
 
 In order to avoid Import-From-Derivation (IFD) when building images with
 systemd-repart, the definition files created by Nix need to be amended with the
@@ -67,7 +67,7 @@ def main() -> None:
     """Amend the provided repart definitions by adding CopyFiles= instructions.
 
     For each file specified in the `contents` field of a partition in the
-    partiton config file, a `CopyFiles=` instruction is added to the
+    partition config file, a `CopyFiles=` instruction is added to the
     corresponding definition file.
 
     The same is done for every store path of the `closure` field.

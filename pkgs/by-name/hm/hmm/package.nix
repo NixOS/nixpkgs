@@ -6,13 +6,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hmm";
   version = "0.6.0";
 
   src = fetchCrate {
     pname = "hmmcli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-WPePzqZ2iGeJ7kzTj8eg7q1JEjw91WY7gViJJ46SLRY=";
   };
 
@@ -29,8 +29,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Small command-line note-taking app";
     homepage = "https://github.com/samwho/hmm";
-    changelog = "https://github.com/samwho/hmm/releases/tag/v${version}";
+    changelog = "https://github.com/samwho/hmm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

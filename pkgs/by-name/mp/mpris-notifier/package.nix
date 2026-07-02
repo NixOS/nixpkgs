@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpris-notifier";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "l1na-forever";
     repo = "mpris-notifier";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JDABuxINYxpxxDPSIdN+GeHU8FqBS6m4dsPDTxRc1Zw=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ leixb ];
     mainProgram = "mpris-notifier";
   };
-}
+})

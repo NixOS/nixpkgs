@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "joe";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/joe-editor/${pname}-${version}.tar.gz";
-    sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
+    url = "mirror://sourceforge/joe-editor/joe-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-aZWyjuINzbvLWkWkwRBkLcltZ3SK6idFDHTNtN0HzCA=";
   };
 
   patches = [ ./macos-fix.patch ];
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

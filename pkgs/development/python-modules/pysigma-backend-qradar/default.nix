@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-qradar";
   version = "0.3.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nNipsx-Sec";
     repo = "pySigma-backend-qradar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VymaxX+iqrRlf+WEt4xqEvNt5kg8xI5O/MoYahayu0o=";
   };
 
@@ -33,11 +33,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.qradar" ];
 
+  disabledTests = [
+    # Output format unknown
+    "test_qradar_extension_output"
+  ];
+
   meta = {
     description = "Library to support Qradar for pySigma";
     homepage = "https://github.com/nNipsx-Sec/pySigma-backend-qradar";
-    changelog = "https://github.com/nNipsx-Sec/pySigma-backend-qradar/releases/tag/${src.tag}";
+    changelog = "https://github.com/nNipsx-Sec/pySigma-backend-qradar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

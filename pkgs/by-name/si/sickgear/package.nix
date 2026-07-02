@@ -17,18 +17,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sickgear";
-  version = "3.33.2";
+  version = "3.34.13";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-8cynBaVbFDI1hNwP03crkOf8Av+NCWr0xJLsZJpHLGs=";
+    tag = "release_${finalAttrs.version}";
+    hash = "sha256-jOQktr7KG/C/ap/cLGMCwWnceirGo3TuwxXNewE5I78=";
   };
-
-  patches = [
-    ./patches/override-python-version-check.patch
-  ];
 
   dontBuild = true;
   doCheck = false;

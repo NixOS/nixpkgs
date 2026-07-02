@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXinerama,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxinerama,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
   nixosTests,
 }:
 
@@ -14,19 +14,22 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bspwm";
   version = "0.9.12";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "bspwm";
     tag = finalAttrs.version;
-    sha256 = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
+    hash = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
   };
 
   buildInputs = [
     libxcb
-    libXinerama
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxinerama
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

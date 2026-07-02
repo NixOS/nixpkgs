@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/roddhjav/pass-update";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      lovek323
       fpletz
       tadfisher
     ];

@@ -10,12 +10,12 @@
 
   # dependencies
   filecheck,
+  numpy,
   psutil,
   rich,
-  torch,
-  tqdm,
-  triton,
+  scikit-learn,
   typing-extensions,
+  torch,
 
   # tests
   pytestCheckHook,
@@ -23,16 +23,16 @@
   helion,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "helion";
-  version = "0.2.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "helion";
-    tag = "v${version}";
-    hash = "sha256-JuuVPz8FPKtaGxbJM4omUzIjY9chtGZFGXwEMX34/Y0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3Iam+1FUg9I9kKmkQBZp9/FTZpEjf4Ba+cKRo5eLEzw=";
   };
 
   build-system = [
@@ -42,12 +42,15 @@ buildPythonPackage rec {
 
   dependencies = [
     filecheck
+    numpy
     psutil
     rich
-    torch
-    tqdm
-    triton
+    scikit-learn
     typing-extensions
+
+    # torch is not listed as a dependency, but is actually required at import time
+    # https://github.com/pytorch/helion/blob/v1.0.0/helion/_compat.py#L13
+    torch
   ];
 
   pythonImportsCheck = [ "helion" ];
@@ -65,20 +68,18 @@ buildPythonPackage rec {
 
   # Tests require GPU access
   doCheck = false;
-  passthru.gpuChecks = {
-    pytest = helion.overridePythonAttrs {
-      doCheck = true;
-      requiredSystemFeatures = [ "cuda" ];
-    };
+  passthru.gpuCheck = helion.overridePythonAttrs {
+    doCheck = true;
+    requiredSystemFeatures = [ "cuda" ];
   };
 
   meta = {
     description = "Python-embedded DSL that makes it easy to write fast, scalable ML kernels with minimal boilerplate";
     homepage = "https://github.com/pytorch/helion";
-    changelog = "https://github.com/pytorch/helion/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/helion/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # This package explicitly requires CUDA-enabled pytorch
     broken = !config.cudaSupport;
   };
-}
+})

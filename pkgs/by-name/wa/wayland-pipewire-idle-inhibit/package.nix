@@ -7,18 +7,18 @@
   wayland,
   wayland-protocols,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayland-pipewire-idle-inhibit";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "rafaelrc7";
     repo = "wayland-pipewire-idle-inhibit";
-    rev = "v${version}";
-    hash = "sha256-s5dXr6fray+ipbmupjTNFq1x9Znx2vu6lfHLo8d9op8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AIj8Ib66ej35UNlbvGh0zW2lpGQfsh2aJbnxgBNaWAY=";
   };
 
-  cargoHash = "sha256-pei5VSKIRMuqCEeL1aJ394ycjuUtxq9Cu/dZc3zAk6Y=";
+  cargoHash = "sha256-MFNtEyBmrkq2ZpKtGA5GEnJilHpZZvG3j2XcF6kNP9k=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ rafameou ];
     mainProgram = "wayland-pipewire-idle-inhibit";
   };
-}
+})

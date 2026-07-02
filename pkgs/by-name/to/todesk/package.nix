@@ -11,23 +11,23 @@
   systemdMinimal,
   glib,
   pulseaudio,
-  libXext,
-  libX11,
-  libXrandr,
+  libxext,
+  libx11,
+  libxrandr,
   glibc,
   cairo,
   libva,
   libdrm,
   coreutils,
-  libXi,
+  libxi,
   libGL,
   bash,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libXtst,
+  libxcomposite,
+  libxdamage,
+  libxfixes,
+  libxtst,
   nss,
-  libXxf86vm,
+  libxxf86vm,
   gtk3,
   gdk-pixbuf,
   pango,
@@ -78,26 +78,26 @@ buildFHSEnv {
     pulseaudio
     nspr
     kmod
-    libXi
+    libxi
     systemdMinimal
     glib
     libz
     bash
     coreutils
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
     glibc
     libdrm
     libGL
     procps
     cairo
-    libXcomposite
-    libXdamage
-    libXfixes
-    libXtst
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxtst
     nss
-    libXxf86vm
+    libxxf86vm
     gtk3
     gdk-pixbuf
     pango

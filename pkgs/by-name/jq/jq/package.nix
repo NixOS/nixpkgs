@@ -32,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./musl.patch
+    ./CVE-2026-32316.patch
+    ./CVE-2026-33947.patch
+    ./CVE-2026-33948.patch
+    ./CVE-2026-39979.patch
+    ./CVE-2026-40164.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [
     # needed because epoch conversion test here is right at the end of 32 bit integer space
@@ -134,5 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "jq";
+    identifiers.purlParts = {
+      type = "github";
+      spec = "jqlang/jq@jq-${finalAttrs.version}";
+    };
   };
 })

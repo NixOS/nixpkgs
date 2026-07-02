@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jansson";
-  version = "2.14.1";
+  version = "2.15.0";
 
   outputs = [
     "dev"
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "akheron";
     repo = "jansson";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ct/EzRDrHkZrCcm98XGCbjbOM2h3AAMldPoTWA5+dAE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s7g1QvJjl9LsWw+VZsTQHCoEgw2Ad9+8V0b2NFml5rw=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C library for encoding, decoding and manipulating JSON data";
     homepage = "https://github.com/akheron/jansson";
-    changelog = "https://github.com/akheron/jansson/raw/${finalAttrs.src.rev}/CHANGES";
+    changelog = "https://github.com/akheron/jansson/raw/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     platforms = lib.platforms.all;

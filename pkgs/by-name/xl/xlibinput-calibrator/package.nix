@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXi,
-  libXrandr,
+  libx11,
+  libxi,
+  libxrandr,
   txt2man,
 }:
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXi
-    libXrandr
+    libx11
+    libxi
+    libxrandr
   ];
 
   installFlags = [ "prefix=$(out)" ];

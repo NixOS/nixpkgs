@@ -7,14 +7,14 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-clip-persist";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Linus789";
     repo = "wl-clip-persist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MEH8ADsFst/CgTc9QW4x0dBXJ5ssQDVa55qPcsALJRg=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wl-clip-persist";
     maintainers = with lib.maintainers; [ name-snrl ];
   };
-}
+})

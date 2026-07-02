@@ -30,18 +30,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typesetter";
-  version = "0.9.1";
+  version = "0.13.5";
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "haydn";
     repo = "typesetter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ryte4znAa+4K0r0WfvQP7RPZFykbvoPmpYTRiAWOF/c=";
+    hash = "sha256-sJUuc7Ado0NFbLrnO3WVxgMA2l5Uh7X0uLvJVhgwwPA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FCZFKn0RhyvFPpmRMNojSU6djg6pOJCIgjzRD6Wbn4M=";
+    hash = "sha256-E2ADu5jo8ulXGIw+vd9m4oFcxMMvo85oIetsIJy9ql4=";
   };
 
   strictDeps = true;

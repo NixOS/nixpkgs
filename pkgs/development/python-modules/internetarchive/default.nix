@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "internetarchive";
-  version = "5.7.2";
+  version = "5.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eBTUKJs3j8LmQJSIBKAlDOjUglLHrjwtGx5O9Wn5C8Y=";
+    hash = "sha256-K8JBDc0hbEIfxCihamfm4Vmt+QqmmJ02fyLOKRnKXmw=";
   };
 
   build-system = [ setuptools ];

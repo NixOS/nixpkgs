@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   # Disable Cython tests
-  TINYCSS_SKIP_SPEEDUPS_TESTS = true;
+  env.TINYCSS_SKIP_SPEEDUPS_TESTS = true;
 
   pythonImportsCheck = [ "tinycss" ];
 

@@ -8,19 +8,19 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "rescrobbled";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "InputUsername";
     repo = "rescrobbled";
-    rev = "v${version}";
-    hash = "sha256-+5BkM4L2eB54idZ6X2ESw6ERMhG5CM4AF4BMEJm3xLU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-q8zxv4fSk+rUG4zQkZFNgkqSU3+FqgTzJzzjeSHy3Io=";
   };
 
-  cargoHash = "sha256-ZawdZdP87X7xMdSdZ1VJDJxz7dBGVYo+8jR8qb2Jgq8=";
+  cargoHash = "sha256-pWdA48WqcNd9/daZE7gyoGTkH01i3MBv1SMGdfE2ZS0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ negatethis ];
   };
-}
+})

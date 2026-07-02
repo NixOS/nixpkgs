@@ -1,25 +1,29 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromGitHub,
   libredirect,
   iana-etc,
   versionCheckHook,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "scip";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l68xhOMgwt+ySChk7BCyklcuC6r51GgobAg3lRLvOCU=";
+    hash = "sha256-lpzGrTvWUXUFfmyn5z4rsqJEcAOA8D1qfN1assRAdn4=";
   };
 
-  vendorHash = "sha256-8HgeG/SXkM7ptOwKSi/PUH3VySxFqqoIpXI7bZtbO4A=";
+  vendorHash = "sha256-ARfsSW/d2bb4Lp6hedSmMerr3LrkuTfUCi569hI6eYY=";
+
+  subPackages = [ "cmd/scip" ];
+
+  env.GOWORK = "off";
 
   ldflags = [
     "-s"
@@ -27,15 +31,6 @@ buildGo124Module (finalAttrs: {
   ];
 
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
-
-  checkFlags =
-    let
-      skippedTests = [
-        "TestParseCompat" # could not locate sample indexes directory starting from parents of working directory
-        "TestParseSymbol_ZeroAllocationsIfMemoryAvailable"
-      ];
-    in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   __darwinAllowLocalNetworking = true;
 

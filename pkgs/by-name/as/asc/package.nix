@@ -12,7 +12,7 @@
   expat,
   freetype,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   lua,
   perl,
   pkg-config,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     expat
     freetype
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     lua
     perl
     zlib

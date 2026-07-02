@@ -2,16 +2,19 @@
   lib,
   stdenv,
   substitute,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libamplsolver";
-  version = "20211109";
+  version = "1.0.1";
 
-  src = fetchurl {
-    url = "https://ampl.com/netlib/ampl/solvers.tgz";
-    sha256 = "sha256-LVmScuIvxmZzywPSBl9T9YcUBJP7UFAa3eWs9r4q3JM=";
+  src = fetchFromGitHub {
+    owner = "ampl";
+    repo = "asl";
+    rootDir = "src/solvers";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D1hB5z6r4n6+u1oWclhIst1mXDvObmOsh1j0uocairQ=";
   };
 
   patches = [
@@ -24,6 +27,10 @@ stdenv.mkDerivation {
       ];
     })
   ];
+
+  preConfigure = ''
+    chmod u+x configure configurehere
+  '';
 
   env = {
     # For non-trapping FP architectures like loongarch64 and riscv64
@@ -59,4 +66,4 @@ stdenv.mkDerivation {
     # generates header at compile time
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

@@ -2,22 +2,23 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
   callPackage,
+  fetchFromGitHub,
+  iana-etc,
   installShellFiles,
+  libredirect,
   versionCheckHook,
-  fuse,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.1.10";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+B3ea0LvzpRll9HpfEU6RkSgnQtVprSlrO+Tq07T0eQ=";
+    hash = "sha256-MxoF+hpzn/44knjVeaINo4/1T4ia7HG8mm+tbvJEsfQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,11 +34,19 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-xUTTVejCDDMfzWdmtXiWcc0/hzhniZJcNzPFFFiNnJk=";
+  vendorHash = "sha256-ScPfry0PtSlABdyG+7egMAndG7D3iz1+ceAAhLQPtkM=";
 
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libredirect.hook;
 
   tags = [ "jsoniter" ];
+
+  subPackages = [
+    "."
+    "pkg/gowebdav/cmd/gowebdav"
+  ];
 
   ldflags = [
     "-s"
@@ -54,6 +63,10 @@ buildGoModule (finalAttrs: {
   preBuild = ''
     ldflags+=" -X \"github.com/OpenListTeam/OpenList/v4/internal/conf.BuiltAt=$(<SOURCE_DATE_EPOCH)\""
     ldflags+=" -X github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$(<COMMIT)"
+  '';
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
 
   checkFlags =
@@ -74,8 +87,6 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd OpenList \
       --bash <($out/bin/OpenList completion bash) \
@@ -86,9 +97,9 @@ buildGoModule (finalAttrs: {
     $out/bin/OpenList completion powershell > $out/share/powershell/OpenList.Completion.ps1
   '';
 
-  doInstallCheck = true;
+  # panic: open /etc/protocols: operation not permitted
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/OpenList";
   versionCheckProgramArg = "version";
 
   passthru.updateScript = lib.getExe (callPackage ./update.nix { });

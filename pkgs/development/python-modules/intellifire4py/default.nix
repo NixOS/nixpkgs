@@ -13,16 +13,16 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "intellifire4py";
-  version = "4.2.1";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "intellifire4py";
-    tag = "v${version}";
-    hash = "sha256-kCZkIR8SmrLTm86M87juV7oQ+O01AA4pzkBMnKCnbNA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MBuKYBKV0376j048tfbqMD9p2Gh1wlC188SGOMSMSm8=";
   };
 
   build-system = [ hatchling ];
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   meta = {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
-    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${src.tag}";
+    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "intellifire4py";
 
   };
-}
+})

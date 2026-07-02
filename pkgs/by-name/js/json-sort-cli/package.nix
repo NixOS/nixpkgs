@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "json-sort-cli";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "tillig";
     repo = "json-sort-cli";
     tag = "v${version}";
-    hash = "sha256-KJCT1QwjXAmAlsLxAgNV7XXtpSytlCEbPTZYFoEZgww=";
+    hash = "sha256-wUuVQmmcevGfcoYq5tPzEFRyPMMtbW/CeE5vNoCKFXQ=";
   };
 
-  npmDepsHash = "sha256-V+uKK3y3ImTHT6HSCmzlQUB+BqGYHyQyIB35uiIRNmg=";
+  npmDepsHash = "sha256-4sjP3ri52CunwLcbIJF6+qGgciiPmZKsrLnm50HX0PQ=";
   dontNpmBuild = true;
 
   doCheck = true;

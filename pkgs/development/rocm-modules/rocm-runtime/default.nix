@@ -8,6 +8,7 @@
   cmake,
   xxd,
   rocm-device-libs,
+  rocprofiler-register,
   elfutils,
   libdrm,
   numactl,
@@ -16,14 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.1.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "ROCR-Runtime";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-gqe1trGc/Cu1XFA4aYjOzFurUgebLbdTHEJi4iw2+kk=";
+    sparseCheckout = [
+      "projects/rocr-runtime"
+      "shared"
+    ];
+    hash = "sha256-hcyjOLMtoBX/p6r6R9Bl9635DuvI6rTn1KziHMeyYM0=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocr-runtime";
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
@@ -43,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
     libdrm
     numactl
+    rocprofiler-register
   ];
 
   cmakeFlags = [
@@ -58,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./queue-failure.patch
     (fetchpatch {
       # [PATCH] rocr: Extend HIP ISA compatibility check
-      sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
-      url = "https://github.com/GZGavinZhao/rocm-systems/commit/c13cd118fcc8e0bc9ae8de62897542dca7352b71.patch";
+      hash = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/dcef23cf896f4dcbc7ed81abeaa4ec2208dcdd8c.patch";
       relative = "projects/rocr-runtime";
     })
     (fetchpatch {
@@ -89,15 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Platform runtime for ROCm";
-    homepage = "https://github.com/ROCm/ROCR-Runtime";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-runtime";
     license = with lib.licenses; [ ncsa ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

@@ -14,8 +14,6 @@
   pandas,
   plotly,
   scikit-learn,
-  pythonOlder,
-  tomli,
 
   # tests
   pytestCheckHook,
@@ -49,8 +47,7 @@ buildPythonPackage rec {
     pandas
     plotly
     scikit-learn
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase

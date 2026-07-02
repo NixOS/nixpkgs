@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate pretty HTML diffs from unified and git diff output in your terminal";
     homepage = "https://diff2html.xyz#cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "diff2html";
   };
 })

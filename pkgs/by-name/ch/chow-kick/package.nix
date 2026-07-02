@@ -7,10 +7,10 @@
   freetype,
   lib,
   libGL,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libjack2,
   libxkbcommon,
   lv2,
@@ -40,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     freetype
     libGL
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libjack2
     libxkbcommon
     lv2

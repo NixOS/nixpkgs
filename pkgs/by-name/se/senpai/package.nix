@@ -5,23 +5,28 @@
   installShellFiles,
   scdoc,
   nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "senpai";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~delthas";
     repo = "senpai";
-    rev = "v${version}";
-    sha256 = "sha256-lwfhRnaHGOIp6NyugPEu6P+3WXkVgQEWaz7DUfHiJrQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-VjXgKdy4IpBhAP6uw/NtlexPki7nJzQi/HuY/+5lE/o=";
   };
 
-  vendorHash = "sha256-6glslBPjJr0TmrAkDGbOQ4sDzvODlavVeTugs6RXsCU=";
+  vendorHash = "sha256-4Ax9YVa9z1Unk3Z2iy9ZEqKjNmdgK0aF4GrD9ucXtjk=";
 
   subPackages = [
     "cmd/senpai"
+  ];
+
+  ldflags = [
+    "-X git.sr.ht/~delthas/senpai.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -39,14 +44,17 @@ buildGoModule rec {
     install -D -m 444 res/icon.svg $out/share/icons/hicolor/scalable/apps/senpai.svg
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Your everyday IRC student";
     mainProgram = "senpai";
     homepage = "https://sr.ht/~delthas/senpai/";
-    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
+    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ malte-v ];
   };
-}
+})

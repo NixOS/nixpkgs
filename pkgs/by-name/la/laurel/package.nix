@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "laurel";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4LIv9rdYTPPERgMT8mF6Ymdur9f4tzNkkkMHBePtAH0=";
   };
 
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
-    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${src.tag}";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ emilylange ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "2.4.6";
 
   src = fetchurl {
-    url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/blueman-project/blueman/releases/download/${version}/blueman-${version}.tar.xz";
     sha256 = "sha256-xxKnN/mFWQZoTAdNFm1PEMfxZTeK+WYSgYu//Pv45WY=";
   };
 
@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/blueman-project/blueman";
     description = "GTK-based Bluetooth Manager";
+    mainProgram = "blueman-manager";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";

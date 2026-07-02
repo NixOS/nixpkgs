@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
@@ -14,12 +13,15 @@ let
     elem
     isList
     literalExpression
+    mapAttrs'
+    mapAttrsToList
     mkIf
     mkMerge
     mkOption
     mkOrder
     mkRenamedOptionModule
     mkRemovedOptionModule
+    nameValuePair
     optionalAttrs
     types
     ;
@@ -132,6 +134,27 @@ in
         };
       };
 
+      dnsDelegates = mkOption {
+        description = ''
+          dns-delegate files to be created.
+          See {manpage}`systemd.dns-delegate(5)` for more info.
+        '';
+        default = { };
+        type = types.attrsOf (
+          types.submodule {
+            options.Delegate = mkOption {
+              description = ''
+                Settings option for systemd dns-delegate files.
+                See {manpage}`systemd.dns-delegate(5)` for all available options.
+              '';
+              type = types.submodule {
+                freeformType = types.attrsOf unitOption;
+              };
+            };
+          }
+        );
+      };
+
     };
 
     boot.initrd.services.resolved.enable = mkOption {
@@ -162,12 +185,21 @@ in
       # added with order 501 to allow modules to go before with mkBefore
       system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
 
-      systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-resolved.service"
+        "systemd-resolved-monitor.socket"
+        "systemd-resolved-varlink.socket"
+      ];
 
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
         aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-        reloadTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+        reloadTriggers = [
+          config.environment.etc."systemd/resolved.conf".source
+        ]
+        ++ mapAttrsToList (
+          name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
+        ) cfg.dnsDelegates;
         stopIfChanged = false;
       };
 
@@ -180,11 +212,21 @@ in
       }
       // optionalAttrs dnsmasqResolve {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-      };
+      }
+      // mapAttrs' (
+        name: value:
+        nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
+          text = settingsToSections (transformSettings value);
+        }
+      ) cfg.dnsDelegates;
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
+      # Since we explicitly provide a resolv.conf, disable resolvconf
+      networking.resolvconf.enable = false;
+
+      # ... but we still set the package for correct compatibility.
       networking.resolvconf.package = config.systemd.package;
 
       nix.firewall.extraNftablesRules = [
@@ -210,7 +252,12 @@ in
         tmpfiles.settings.systemd-resolved-stub."/etc/resolv.conf".L.argument =
           "/run/systemd/resolve/stub-resolv.conf";
 
-        additionalUpstreamUnits = [ "systemd-resolved.service" ];
+        additionalUpstreamUnits = [
+          "systemd-resolved.service"
+          "systemd-resolved-monitor.socket"
+          "systemd-resolved-varlink.socket"
+        ];
+
         users.systemd-resolve = { };
         groups.systemd-resolve = { };
         storePaths = [ "${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved" ];

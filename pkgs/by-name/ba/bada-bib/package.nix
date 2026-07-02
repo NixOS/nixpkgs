@@ -18,7 +18,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bada-bib";
   version = "0.8.1";
   pyproject = false;
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-8lpkmQCVh94+qhFJijAIVyYeJRFz2u/OYR1C5E+gtOE=";
   };
 
@@ -79,4 +79,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.Cogitri ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

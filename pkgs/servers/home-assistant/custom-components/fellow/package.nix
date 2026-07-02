@@ -8,15 +8,15 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "NewsGuyTor";
+  owner = "kristofferR";
   domain = "fellow";
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
-    owner = "NewsGuyTor";
+    owner = "kristofferR";
     repo = "FellowAiden-HomeAssistant";
     tag = "v${version}";
-    hash = "sha256-cGyGobR0lMNReWCxK7RzeqsnYJZQNRPjYqirLHjeCFI=";
+    hash = "sha256-n1D/kP1vxc+/kgZGwl+5nLD6IzERmMXeiQjSKZGiqvc=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -27,9 +27,9 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/NewsGuyTor/FellowAiden-HomeAssistant/releases/tag/${src.tag}";
+    changelog = "https://github.com/kristofferR/FellowAiden-HomeAssistant/releases/tag/${src.tag}";
     description = "Home Assistant integration for Fellow Aiden coffee brewer";
-    homepage = "https://github.com/NewsGuyTor/FellowAiden-HomeAssistant";
+    homepage = "https://github.com/kristofferR/FellowAiden-HomeAssistant";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };

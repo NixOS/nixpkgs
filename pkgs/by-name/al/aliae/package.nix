@@ -6,27 +6,27 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aliae";
   version = "0.26.6";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "aliae";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W/jj2YQc6M0ro4groCynly2stjv2FLAMvIopnQYCngY=";
   };
 
   vendorHash = "sha256-8YTyhjF0p2l76sowq92ts5TjjcARToOfJN9nlFu19L4=";
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -48,8 +48,8 @@ buildGoModule rec {
     description = "Cross shell and platform alias management";
     mainProgram = "aliae";
     homepage = "https://aliae.dev";
-    changelog = "https://github.com/JanDeDobbeleer/aliae/releases/tag/v${version}";
+    changelog = "https://github.com/JanDeDobbeleer/aliae/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vedantmgoyal9 ];
   };
-}
+})

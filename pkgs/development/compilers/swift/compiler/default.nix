@@ -348,6 +348,17 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i $TMPDIR/swift-separate-lib.patch
 
     patch -p1 -d llvm-project/llvm -i ${./patches/llvm-module-cache.patch}
+    for root in llvm-project/llvm swift/stdlib; do
+      patch -p1 -d $root -i ${
+        (fetchpatch {
+          name = "fix-SmallVector-compile-error.patch";
+          url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+          stripLen = 1;
+          hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+        })
+      }
+    done
+    patch -p2 -d llvm-project/llvm -i ${./patches/llvm-fix-X86MCTargetDesc-compile-error.patch}
 
     for lldbPatch in ${
       lib.escapeShellArgs [
@@ -362,6 +373,12 @@ stdenv.mkDerivation {
           url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
           stripLen = 1;
           hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+        })
+        (fetchpatch {
+          name = "LLDB-Add-cstdint-to-AddressableBits-102110.patch";
+          url = "https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314.patch";
+          stripLen = 1;
+          hash = "sha256-+CcmZRxCaozFe1Kuf2HX+kGKuh/PDuoFBEFA/t7tL9A=";
         })
       ]
     }; do

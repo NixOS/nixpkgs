@@ -51,7 +51,6 @@ let
     filter
     filterAttrs
     fix
-    fold
     foldAttrs
     foldl
     foldl'
@@ -558,6 +557,10 @@ runTests {
       "c"
     ];
     expected = "a\nb\nc\n";
+  };
+  testConcatLinesEmpty = {
+    expr = concatLines [ ];
+    expected = "";
   };
 
   testMakeIncludePathWithPkgs = {
@@ -2161,6 +2164,21 @@ runTests {
     };
   };
 
+  testConcatMapAttrsDuplicates = {
+    expr =
+      concatMapAttrs
+        (name: value: {
+          final = value;
+        })
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = {
+      final = 2;
+    };
+  };
+
   testFilterAttrs = {
     expr = filterAttrs (n: v: n != "a" && (v.hello or false) == true) {
       a.hello = true;
@@ -3390,6 +3408,44 @@ runTests {
         "foo"
         "bar"
       ]
+    ];
+  };
+
+  testEmptyValueOption = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options = {
+              "empty-value" = lib.mkOption {
+                type = lib.mkOptionType {
+                  name = "propagate-empty-value-to-default";
+                  emptyValue.value = 2;
+                };
+              };
+            };
+          };
+        eval = evalModules {
+          modules = [ module ];
+        };
+      in
+      filter (o: o.name == "empty-value") (optionAttrSetToDocList eval.options);
+    expected = [
+      {
+        declarations = [ ];
+        default = {
+          _type = "literalExpression";
+          text = "2";
+        };
+        description = null;
+        internal = false;
+        loc = [ "empty-value" ];
+        name = "empty-value";
+        readOnly = false;
+        type = "propagate-empty-value-to-default";
+        visible = true;
+      }
     ];
   };
 
@@ -4752,7 +4808,7 @@ runTests {
   # for sub-directories
   testPackagesFromDirectoryNestedScopes =
     let
-      inherit (lib) makeScope recurseIntoAttrs;
+      inherit (lib) makeScope;
       emptyScope = makeScope lib.callPackageWith (_: { });
     in
     {
@@ -4786,6 +4842,58 @@ runTests {
             h = "h";
           };
         };
+      };
+    };
+
+  # Check that makeScope provides a default callPackage
+  testMakeScopeDefaultCallPackage =
+    let
+      scope = lib.makeScope lib.callPackageWith (self: {
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value";
+    };
+
+  # Check that callPackage can be overridden by the scope function
+  testMakeScopeOverrideCallPackage =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value-custom";
+    };
+
+  # Check that overriding callPackage persists through overrideScope
+  testMakeScopeOverrideCallPackagePersistsThroughOverrideScope =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+      overridden = scope.overrideScope (
+        _final: _prev: {
+          bar = scope.callPackage ({ }: "bar-value") { };
+        }
+      );
+    in
+    {
+      expr = { inherit (overridden) foo bar; };
+      expected = {
+        foo = "foo-value-custom";
+        bar = "bar-value-custom";
       };
     };
 
@@ -4922,4 +5030,195 @@ runTests {
   testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
 
   testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
+
+  testIsFree = {
+    expr = lib.licenses.isFree (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testIsUnfree = {
+    expr = lib.licenses.isFree (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [ lib.licenses.unfree ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
+
+  testIsRedistributable = {
+    expr = lib.licenses.isRedistributable (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testIsUnredistributable = {
+    expr = lib.licenses.isRedistributable (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [ lib.licenses.unfree ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
+
+  testContainsLicenses = {
+    expr = lib.licenses.containsLicenses [ lib.licenses.mit ] (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = true;
+  };
+
+  testToSPDX = {
+    expr = lib.licenses.toSPDX (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = "MIT AND (LicenseRef-nixos-free OR LicenseRef-nixos-unfree) AND (Apache-2.0 WITH LLVM-exception) AND EUPL-1.1+";
+  };
+
+  testEvaluateProperty = {
+    expr = lib.licenses.evaluateProperty (x: x.deprecated) true (
+      lib.licenses.AND [
+        (lib.licenses.mit)
+        (lib.licenses.OR [
+          lib.licenses.free
+          lib.licenses.unfree
+        ])
+        (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        (lib.licenses.PLUS lib.licenses.eupl11)
+      ]
+    );
+    expected = false;
+  };
+
+  # mapDefinitionValue
+
+  testMapDefinitionValuePlain = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) 5;
+    expected = 6;
+  };
+
+  testMapDefinitionValueMkForce = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkForce 5);
+    expected = lib.mkForce 6;
+  };
+
+  testMapDefinitionValueMkDefault = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkDefault 5);
+    expected = lib.mkDefault 6;
+  };
+
+  testMapDefinitionValueMkOrder = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkOrder 500 5);
+    expected = lib.mkOrder 500 6;
+  };
+
+  testMapDefinitionValueMkOverrideNested = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkForce (lib.mkOrder 500 5));
+    expected = lib.mkForce (lib.mkOrder 500 6);
+  };
+
+  testMapDefinitionValueMkIf = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkIf true 5);
+    expected = lib.mkIf true 6;
+  };
+
+  testMapDefinitionValueMkMerge = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkMerge [
+        5
+        10
+      ]
+    );
+    expected = lib.mkMerge [
+      6
+      11
+    ];
+  };
+
+  testMapDefinitionValueMkDefinition = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkDefinition {
+        file = "test";
+        value = 5;
+      }
+    );
+    expected = lib.mkDefinition {
+      file = "test";
+      value = 6;
+    };
+  };
+
+  testMapDefinitionValueDeep = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkIf true (lib.mkForce (lib.mkOrder 500 5)));
+    expected = lib.mkIf true (lib.mkForce (lib.mkOrder 500 6));
+  };
+
+  testMapDefinitionValueAllNested = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkMerge [
+        (lib.mkIf true (
+          lib.mkForce (
+            lib.mkOrder 500 (
+              lib.mkDefinition {
+                file = "test";
+                value = lib.mkBefore 5;
+              }
+            )
+          )
+        ))
+      ]
+    );
+    expected = lib.mkMerge [
+      (lib.mkIf true (
+        lib.mkForce (
+          lib.mkOrder 500 (
+            lib.mkDefinition {
+              file = "test";
+              value = lib.mkBefore 6;
+            }
+          )
+        )
+      ))
+    ];
+  };
 }

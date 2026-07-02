@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.2.0-alpha";
 
   src = fetchFromGitHub {
-    owner = "CobbCoding1";
+    owner = "Cano-Projects";
     repo = "Cano";
     tag = "v${finalAttrs.version}";
     hash = "sha256-OaWj0AKw3+sEhcAbIjgOLfxwCKRG6O1k+zSp0GnnFn8=";
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Text Editor Written In C Using ncurses";
-    homepage = "https://github.com/CobbCoding1/Cano";
+    homepage = "https://github.com/Cano-Projects/Cano";
     license = lib.licenses.asl20;
     mainProgram = "Cano";
     maintainers = with lib.maintainers; [ sigmanificient ];

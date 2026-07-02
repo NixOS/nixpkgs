@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -27,18 +26,16 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nox";
-  version = "2025.11.12";
+  version = "2026.04.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "wntrblm";
     repo = "nox";
-    tag = version;
-    hash = "sha256-GYVCM4AX18ryODx0GSm0hRwr1wdluqllsc+iEmLTl6U=";
+    tag = finalAttrs.version;
+    hash = "sha256-ArSA9I86hTKM+fkTdzOeheYVxpdjweMs2I0mUwR14sQ=";
   };
 
   build-system = [ hatchling ];
@@ -51,13 +48,10 @@ buildPythonPackage rec {
     humanize
     packaging
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   optional-dependencies = {
-    tox_to_nox = [
+    tox-to-nox = [
       jinja2
       tox
     ];
@@ -68,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nox" ];
 
@@ -89,11 +83,11 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible test automation for Python";
     homepage = "https://nox.thea.codes/";
-    changelog = "https://github.com/wntrblm/nox/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/wntrblm/nox/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       doronbehar
       fab
     ];
   };
-}
+})

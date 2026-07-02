@@ -705,7 +705,7 @@ in
           # convert rrd files when the oneMinutePolling option is changed
           OLD_ENABLED=$(cat ${cfg.dataDir}/one_minute_enabled)
           if [[ $OLD_ENABLED != "${lib.boolToString cfg.enableOneMinutePolling}" ]]; then
-            ${package}/scripts/rrdstep.php -h all
+            ${artisanWrapper}/bin/librenms-artisan maintenance:rrd-step all
             echo "${lib.boolToString cfg.enableOneMinutePolling}" > ${cfg.dataDir}/one_minute_enabled
           fi
 
@@ -734,8 +734,6 @@ in
           ${artisanWrapper}/bin/librenms-artisan config:cache
         '';
     };
-
-    programs.mtr.enable = true;
 
     services.logrotate = {
       enable = true;

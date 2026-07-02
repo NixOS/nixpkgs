@@ -8,15 +8,12 @@
   flit-core,
   lxml,
   pyjwt,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "skodaconnect";
   version = "1.3.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "lendy007";

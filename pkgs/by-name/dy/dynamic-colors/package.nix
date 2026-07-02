@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-jSdwq9WwYZP8MK6z7zJa0q93xfanr6iuvAt8YQkQxxE=";
   };
 
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   postPatch = ''
     substituteInPlace bin/dynamic-colors \

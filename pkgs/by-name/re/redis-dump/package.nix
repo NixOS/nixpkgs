@@ -19,7 +19,6 @@ bundlerApp {
     homepage = "https://delanotes.com/redis-dump/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      offline
       nicknovitski
     ];
     platforms = lib.platforms.unix;

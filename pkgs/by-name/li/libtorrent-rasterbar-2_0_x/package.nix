@@ -17,14 +17,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-iph42iFEwP+lCWNPiOJJOejISFF6iwkGLY9Qg8J4tyo=";
+    hash = "sha256-JbNOKzB830VQkZjC8ZAmzbu/7nkAgyD8cOr22uYbIGQ=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   patches = [
-    # provide distutils alternative for python 3.12
-    ./distutils.patch
+    ./python-destdir.patch
   ];
 
   # https://github.com/arvidn/libtorrent/issues/6865

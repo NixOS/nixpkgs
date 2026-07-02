@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xavs.sourceforge.net/";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
   };
 })

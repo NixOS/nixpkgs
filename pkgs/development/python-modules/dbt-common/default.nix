@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.37.2-unstable-2026-01-22";
+  version = "1.37.3-unstable-2026-03-27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    rev = "5b331b9c50ca5fee959a9e4fa9ecca964549930c"; # They don't tag releases
-    hash = "sha256-OF4zKmKVHa9SdiQ1WRLvNoqQd3FWCUr5hK9ZYls9EsY=";
+    rev = "db4a7b70486b5337bf0e387260211a418ac36936"; # They don't tag releases
+    hash = "sha256-FcnCg05z9yalhAU1eueZ0x+YEuAfCeYSUlecoEQvS6k=";
   };
 
   build-system = [ hatchling ];
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
+    "protobuf"
   ];
 
   dependencies = [

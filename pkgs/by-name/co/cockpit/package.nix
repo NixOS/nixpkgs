@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  asciidoctor,
   autoreconfHook,
   bashInteractive,
   cacert,
@@ -33,7 +34,7 @@
   pam,
   pkg-config,
   polkit,
-  python3Packages,
+  python312Packages,
   sscg,
   systemd,
   udev,
@@ -44,19 +45,26 @@
   nixos-icons,
 }:
 
+let
+  # Pinned to 3.12 due to cockpit-zfs dependency py-libzfs not being compatible
+  # with 3.13+
+  python3Packages = python312Packages;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "353.1";
+  version = "364";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-uJBrBsNCYkdq+13UGJ6nPr55HPD4R0BTugWCKrycaIY=";
+    hash = "sha256-TAX0N6ZQWGr17GpyJS23Q5ES3USU2hxSiI867n6G17I=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    asciidoctor
     autoreconfHook
     makeWrapper
     docbook_xml_dtd_43
@@ -97,11 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/tls/cockpit-certificate-helper.in \
       --replace-fail 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
-    substituteInPlace src/tls/cockpit-certificate-ensure.c \
-      --replace-fail '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
-
-    substituteInPlace src/common/cockpitconf.c \
-      --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+    substituteInPlace src/Makefile.am \
+      --replace-fail '-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"' '-DPACKAGE_SYSCONF_DIR=\""/etc"\"'
 
     substituteInPlace src/**/*.c \
       --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
@@ -270,6 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit python3Packages;
     tests = { inherit (nixosTests) cockpit; };
     updateScript = nix-update-script { };
     cockpitPath = [

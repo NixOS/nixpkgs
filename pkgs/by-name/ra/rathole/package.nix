@@ -9,7 +9,7 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rathole";
   version = "0.5.0-unstable-2025-07-29";
 
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rathole-org";
     repo = "rathole";
     rev = "5a9dd6d939744859af322aeff7fd60f7483a68bc";
-    hash = "sha256-C0/G4JOZ4pTAvcKZhRHsGvlLlwAyWBQ0rMScLvaLSuA=";
+    hash = "sha256-jSwqEJcRv2PwBEY7dV20x9d0GjPb/eZ0w7j1e4YlYH8=";
   };
 
   # Get rid of git dependency on vergen. No reason to require libgit2-sys as
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     VERGEN_BUILD_TIMESTAMP = "0";
-    VERGEN_BUILD_SEMVER = version;
+    VERGEN_BUILD_SEMVER = finalAttrs.version;
     VERGEN_GIT_COMMIT_TIMESTAMP = "0";
     VERGEN_GIT_BRANCH = "main";
     VERGEN_RUSTC_SEMVER = rustc.version;
@@ -71,8 +71,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "rathole";
     maintainers = with lib.maintainers; [
-      dit7ya
       xokdvium
     ];
   };
-}
+})

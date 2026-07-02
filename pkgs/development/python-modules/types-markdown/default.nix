@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-markdown";
-  version = "3.10.0.20251106";
+  version = "3.10.2.20260211";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_markdown";
-    inherit version;
-    hash = "sha256-EoNvf8vXIh24uusNOi+CC5UFDQgkv6lmXGe00UShr6E=";
+    inherit (finalAttrs) version;
+    hash = "sha256-ZhZDEPiMEaWMbHBglMb4xTfEGONSXTO3Ynal+9ZrAc4=";
   };
 
   build-system = [ setuptools ];
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

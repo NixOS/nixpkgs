@@ -20,7 +20,7 @@
   gsettings-desktop-schemas,
   librsvg,
   libwebp,
-  libX11,
+  libx11,
   lcms2,
   bison,
   flex,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libtiff
     libwebp
-    libX11
+    libx11
     xapp
   ];
 

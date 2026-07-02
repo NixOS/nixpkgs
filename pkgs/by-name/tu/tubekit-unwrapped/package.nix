@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tubekit";
   version = "5";
 
   src = fetchFromGitHub {
     owner = "reconquest";
     repo = "tubekit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fUe5bMFF569A9Xdx3bfQH2DzbQDRfZ+ewlDL+gK2gWw=";
   };
 
@@ -23,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/reconquest/tubekit";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
   };
-}
+})

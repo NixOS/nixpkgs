@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mtr-exporter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mgumz";
     repo = "mtr-exporter";
-    rev = version;
-    hash = "sha256-GkTkL72ZdxeCMG24rjGx8vWt5GQqrTXNxTDpQ81ite8=";
+    rev = finalAttrs.version;
+    hash = "sha256-X765/f6dnnu10dti22wXMr74MIGqOraTVVcOeQBAqeA=";
   };
 
   vendorHash = null;
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jakubgs ];
     mainProgram = "mtr-exporter";
   };
-}
+})

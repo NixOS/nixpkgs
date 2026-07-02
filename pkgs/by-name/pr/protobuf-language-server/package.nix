@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "protobuf-language-server";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "lasorda";
     repo = "protobuf-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bDsvByXa2kH3DnvQpAq79XvwFg4gfhtOP2BpqA1LCI0=";
+    hash = "sha256-xaWcQMoahOVm6pAP8Y01fkSOuvuwS+aRFEb5ztbL3pk=";
   };
 
-  vendorHash = "sha256-dRria1zm5Jk7ScXh0HXeU686EmZcRrz5ZgnF0ca9aUQ=";
+  vendorHash = "sha256-4nTpKBe7ekJsfQf+P6edT/9Vp2SBYbKz1ITawD3bhkI=";
 
   # TestMethodsGen overwrites go-lsp/lsp/methods_gen.go with missing imports.
   # This causes other tests to break.

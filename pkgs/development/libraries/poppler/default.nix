@@ -39,7 +39,6 @@
   gdal,
   gegl,
   inkscape,
-  pdfslicer,
   scribus,
   vips,
   testers,
@@ -168,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       inherit
         gegl
-        pdfslicer
         vips
         ;
       gdal = gdal.override { usePoppler = true; };
@@ -190,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
     pkgConfigModules = [
       "poppler"

@@ -20,18 +20,18 @@
   jq,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.2.1";
+  version = "2026.6.13";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
-    rev = "v${version}";
-    hash = "sha256-7TsSK3mk6tSxvWPNYq8Viyc8x4BYmR/QrqRT/sfetz4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/HE/2bHUz1gPpyLZnKZO5ZqT5oxOn+SZ0J4vyj67Ohs=";
   };
 
-  cargoHash = "sha256-/gltCohAPGdCpcCvou7HBG0yioiOaGjnIF60FQzkB+s=";
+  cargoHash = "sha256-p7PCqwS0bI7kXvGYZm4bWpYhz1kkqILDCPGlEq32Cqo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
@@ -73,9 +75,12 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
+    # Nix's build sandbox strips setuid bits, so this round-trip assertion
+    # fails on both Linux and Darwin (cf. apko's TestSpecialModeBits).
+    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # started failing mid-April 2025
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
     "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
   ];
@@ -83,6 +88,9 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -104,7 +112,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         # Ignore subcrate releases (fox, aqua-registry)
-        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9]+)$"
       ];
     };
     tests = {
@@ -137,9 +145,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://mise.jdx.dev";
     description = "Front-end to your dev env";
-    changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "mise";
   };
-}
+})

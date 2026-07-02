@@ -5,14 +5,14 @@
   git,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-license-detector";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "go-enry";
     repo = "go-license-detector";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-S9LKXjn5dL5FETOOAk+bs7bIVdu2x7MIhfjpZuXzuLo=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "license-detector";
   };
-}
+})

@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "High-level cross platform tty library";
     homepage = "https://github.com/jkwill87/teletype";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ urlordjames ];
+    maintainers = [ ];
   };
 }

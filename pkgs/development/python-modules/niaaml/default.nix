@@ -11,18 +11,20 @@
   scikit-learn,
   toml-adapt,
   typer,
+  typing-extensions,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
     tag = version;
-    hash = "sha256-AUQhdJc2nSuggV6zNOMihVJIbHAQX6EXsnhn97Tp35A=";
+    hash = "sha256-j3vnslVvktfhtRsR1hw+WfLGbhmjdUzhY+HLR9EWD7o=";
   };
 
   pythonRelaxDeps = [
@@ -43,6 +45,7 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     typer
+    typing-extensions
   ];
 
   # create scikit-learn and niapy deps version consistent
@@ -51,7 +54,10 @@ buildPythonPackage rec {
     toml-adapt -path pyproject.toml -a change -dep niapy -ver X
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "niaaml" ];
 

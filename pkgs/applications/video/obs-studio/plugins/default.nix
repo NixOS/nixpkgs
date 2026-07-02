@@ -52,7 +52,7 @@
 
   obs-markdown = callPackage ./obs-markdown.nix { };
 
-  obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
+  obs-media-controls = qt6Packages.callPackage ./obs-media-controls { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
@@ -107,6 +107,8 @@
   };
 
   obs-vnc = callPackage ./obs-vnc.nix { };
+
+  obs-wayland-hotkeys = qt6Packages.callPackage ./obs-wayland-hotkeys { };
 
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 

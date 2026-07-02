@@ -23,8 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  env = lib.optionalAttrs stdenv.hostPlatform.isRiscV {
+    # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
+    NIX_LDFLAGS = "-latomic";
+  };
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Some x86 tests are interrupted by signal 10

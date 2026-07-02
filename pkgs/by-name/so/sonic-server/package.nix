@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage rec {
       --replace-fail "./config.cfg" "$out/etc/sonic/config.cfg"
   '';
 
+  # Fix GCC 15 compatibility
+  # error: unknown type name 'uint32_t'
+  env.CXXFLAGS = "-include cstdint";
+
   postInstall = ''
     install -Dm444 -t $out/etc/sonic config.cfg
     install -Dm444 -t $out/lib/systemd/system debian/sonic.service
@@ -61,9 +65,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     mainProgram = "sonic";
-    maintainers = with lib.maintainers; [
-      pleshevskiy
-      anthonyroussel
-    ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

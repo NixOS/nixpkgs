@@ -12,7 +12,7 @@
   wrapGAppsHook3,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   lua,
   wxsqlite3,
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "money-manager-ex";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-U8DvJPJwShbuKlKsWylH9kUEEw8/SY8KnYWNyInhE9k=";
+    hash = "sha256-DE235wSfq20X3qh2L0KfFLk/54CW6l4Qn1K5r9nePQg=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     lua
     wxsqlite3

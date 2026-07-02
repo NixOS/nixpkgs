@@ -2,45 +2,59 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   callPackage,
+  pkg-config,
 
   # Linux deps
   libGL,
+  libxcursor,
   libxext,
+  libxi,
   libx11,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
 
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2025.3";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YGtjoRBGOqkcHaiZNPVFOoeLitJTG/M0I08EPZVCfj0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kqKOf0zrHyqRTs+57owHR5sORZgNIgGghtjUtSaFjZw=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "cmake-fix.patch";
-      url = "https://github.com/aardappel/lobster/commit/a5f46ed65cad43ea70c8a6af5ea2fd5a018c8941.patch?full_index=1";
-      hash = "sha256-91pmoTPLD2Fo2SuCKngdRxXFUty5lOyA4oX8zaJ0ON0=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
-
-  nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # TODO devendor sdl3 and remove these
     libGL
+    libxcursor
     libx11
     libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
   ];
 
   preConfigure = ''
     cd dev
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  # The test suite expects the executable to be in any of a number of locations
+  # that do not include the bin directory.
+  preCheck = ''
+    ln -s ../../bin/lobster lobster
   '';
 
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };

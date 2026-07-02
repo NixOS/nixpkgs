@@ -7,25 +7,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-verge-service-ipc";
-  version = "2.0.21";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service-ipc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9c9fM1l31NbY//Ri50Ql60BWWgISjMWj72ABixRaXvM=";
+    # upstream uses branch
+    rev = "21e661fa141e5ad3c705ee4cdb86efff8df6f769";
+    hash = "sha256-XavlZWxuZKCTyIYpuXRvXpXCdakWhbLhOMmOrGBgDRo=";
   };
 
-  postPatch = ''
-    # set socket path for service and test respectively
-    substituteInPlace src/lib.rs \
-      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock" \
-      --replace-fail "/tmp/verge/clash-verge-service-test.sock" "$sourceRoot/clash-verge-service-test.sock"
-    substituteInPlace tests/test_start_permissions.rs \
-      --replace-fail "owner_perm | group_perm | other_perm" "0o0755"
-  '';
+  patches = [
+    # 1. Don't SetGID because the path is managed by systemd in NixOS, and we
+    #    use different IPC path for sidecar mode. We can keep RestrictSUIDSGID
+    #    in systemd serviceConfig.
+    # 2. Set IPC socket path
+    ./patch-service-directory.patch
+  ];
 
-  cargoHash = "sha256-UbNN3uFu5anQV+3KMFPNnGrCDQTGb4uC9K83YghfQgY=";
+  cargoHash = "sha256-WhH2o5wN5vYW8jZl+hWbnk1xqHu61ibAr4+/CI3YKHg=";
 
   buildFeatures = [
     "standalone"
@@ -34,9 +34,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     procps
   ];
-  # build mock_binary for tests
+  # build test helper binaries for tests
   preCheck = ''
-    cargo build --features=test
+    cargo build --features=standalone,test
   '';
   checkFeatures = [
     "standalone"

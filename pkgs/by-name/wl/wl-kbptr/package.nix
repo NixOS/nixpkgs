@@ -14,16 +14,14 @@
   wayland-protocols,
   wayland-scanner,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-kbptr";
   version = "0.4.1";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "moverest";
     repo = "wl-kbptr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z0ECLxkJChGe2ggwFRuKJj+J6+KcTAlZclqdvBzZDzs=";
   };
 
@@ -56,7 +54,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/moverest/wl-kbptr";
     description = "Control the mouse pointer with the keyboard on Wayland";
-    changelog = "https://github.com/moverest/wl-kbptr/releases/tag/v${version}";
+    changelog = "https://github.com/moverest/wl-kbptr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     mainProgram = "wl-kbptr";
     maintainers = [
@@ -65,4 +63,4 @@ stdenv.mkDerivation {
     ];
     inherit (wayland.meta) platforms;
   };
-}
+})

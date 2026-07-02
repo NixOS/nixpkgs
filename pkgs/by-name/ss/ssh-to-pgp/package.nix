@@ -5,14 +5,14 @@
   gnupg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssh-to-pgp";
   version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-pgp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-h1/KWkbHpROkMRJ3pMN42/9+thlfY8BtWoOvqt7rxII=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  nix-update-script,
   fetchFromGitHub,
   setuptools,
   urllib3,
@@ -10,19 +11,27 @@
   etcd_3_4,
   mock,
   pyopenssl,
+  python,
 }:
 
 buildPythonPackage {
   pname = "python-etcd";
-  version = "0.5.0-unstable-2023-10-31";
+  version = "0.4.5-unstable-2024-08-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jplana";
     repo = "python-etcd";
-    rev = "5aea0fd4461bd05dd96e4ad637f6be7bceb1cee5";
-    hash = "sha256-eVirStLOPTbf860jfkNMWtGf+r0VygLZRjRDjBMCVKg=";
+    rev = "d2889f7b23feee8797657b19c404f0d4034dd03c";
+    hash = "sha256-osiSeBdZBT3w9pJUBxD7cI9/2T7eiyj6M6+87T8bTj0=";
   };
+
+  patches = [
+    ./remove-getheader-usage.patch
+  ]
+  ++ lib.optionals (python.pythonAtLeast "3.14") [
+    ./Fix-multiprocessing-errors-for-python-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -58,6 +67,10 @@ buildPythonPackage {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Python client for Etcd";

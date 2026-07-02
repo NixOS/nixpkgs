@@ -4,10 +4,11 @@
 }:
 
 {
-  name ? "",
-  owner ? "",
-  repo ? "",
-  page ? "releases",
+  finalAttrs ? { },
+  name ? finalAttrs.pname,
+  owner ? finalAttrs.src.owner,
+  repo ? finalAttrs.src.repo,
+  page ? "releases?per_page=10",
   # input: array of [ { tag_name: "rocm-6.x.x", }, ... ]. some entries may have bad names like rocm-test-date we want to skip
   # output: first tag_name/name that's a proper version if any
   filter ? "map(.tag_name // .name) | map(select(test(\"^rocm-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\"))) | first | ltrimstr(\"rocm-\")",
@@ -34,7 +35,7 @@ let
     find_valid_version() {
       local releases="$1"
       >&2 echo "$releases"
-      # Wrap in array if not already an array to make handline specific release or tags page the same
+      # Wrap in array if not already an array to make handling specific release or tags page the same
       >&2 echo jq -r 'if type == "array" then . else [.] end | ${filter}'
       echo "$releases" | jq -r 'if type == "array" then . else [.] end | ${filter}'
     }

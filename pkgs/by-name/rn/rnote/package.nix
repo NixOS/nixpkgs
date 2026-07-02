@@ -17,7 +17,6 @@
   meson,
   ninja,
   pkg-config,
-  poppler,
   python3,
   rustPlatform,
   rustc,
@@ -25,20 +24,20 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnote";
-  version = "0.13.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    tag = "v${version}";
-    hash = "sha256-EMxA5QqmIae/d3nUpwKjgURo0nOyaNbma8poB5mcQW0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uuLoc1nWlb3Xm/WSrvjCit1G8kUZA3+HIW8akFXPGi4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-fr1bDTzTKx7TLBqw94CyaB0/Jo2x1BzZcM6dcen1PHc=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-eDKyA8LaH+nvDcCG74ucWYSJc8qLmps1xz3WPHoOJ0w=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libxml2
-    poppler
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -88,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${finalAttrs.src.tag}";
     description = "Simple drawing application to create handwritten notes";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -98,4 +96,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

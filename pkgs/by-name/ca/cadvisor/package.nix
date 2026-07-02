@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cadvisor";
   version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UBQvFlO0pb5mDUrrUTaEsuQcKX7qKQrAMub2knUZWGA=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/cadvisor/version.Version=${version}"
+    "-X github.com/google/cadvisor/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -38,7 +38,7 @@ buildGoModule rec {
     mainProgram = "cadvisor";
     homepage = "https://github.com/google/cadvisor";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

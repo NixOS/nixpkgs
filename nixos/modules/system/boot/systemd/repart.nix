@@ -157,6 +157,12 @@ in
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"
+        # Varlink APIs
+        # NOTE: compared to stage 2 where the IPC is enabled in the global location, initrd
+        # might be optimized to keep away the repart binary.
+        # As a result, we enable repart IPC in the initrd only if repart is enabled in the initrd.
+        "systemd-repart.socket"
+        "systemd-repart@.service"
       ];
 
       storePaths = [

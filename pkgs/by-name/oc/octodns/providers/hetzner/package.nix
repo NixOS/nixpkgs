@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hcloud,
   octodns,
   pytestCheckHook,
   requests,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-hetzner";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-hetzner";
     tag = "v${version}";
-    hash = "sha256-JYVztSO38y4F+p0glgtT9/QRdt9uDnOziMFXxBikzLg=";
+    hash = "sha256-aWWT/LShHxWOfNhBr7vCeG9bA6yXEutO2NJic18szL8=";
   };
 
   build-system = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   dependencies = [
     octodns
     requests
+    hcloud
   ];
 
   pythonImportsCheck = [ "octodns_hetzner" ];

@@ -8,14 +8,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "s3rs";
   version = "0.4.19";
 
   src = fetchFromGitHub {
     owner = "yanganto";
     repo = "s3rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mJ1bMfv/HY74TknpRvu8RIs1d2VlNreEVtHCtQSHQw8=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ yanganto ];
     mainProgram = "s3rs";
   };
-}
+})

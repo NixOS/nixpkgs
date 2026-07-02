@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -15,16 +16,17 @@
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gliner";
-  version = "0.2.24";
+  version = "0.2.27";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "urchade";
     repo = "GLiNER";
-    tag = "v${version}";
-    hash = "sha256-6kSt+c2UT0rvJDFHzRPTDffBG9X/2Mxs7RSZVgWG7jo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pM2JenMxBvCiDQyj9VFMYJGRckWJWna3gCdAlhBGR1U=";
   };
 
   build-system = [
@@ -43,7 +45,15 @@ buildPythonPackage rec {
     transformers
   ];
 
-  pythonImportsCheck = [ "gliner" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip the import check
+  pythonImportsCheck =
+    lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64))
+      [
+        "gliner"
+      ];
 
   # All tests require internet
   doCheck = false;
@@ -51,13 +61,13 @@ buildPythonPackage rec {
   meta = {
     description = "Generalist and Lightweight Model for Named Entity Recognition";
     homepage = "https://github.com/urchade/GLiNER";
-    changelog = "https://github.com/urchade/GLiNER/releases/tag/${src.tag}";
+    changelog = "https://github.com/urchade/GLiNER/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
       # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
       # Attempt to use DefaultLogger but none has been registered.
-      "aarch64-linux"
+      # "aarch64-linux"
     ];
   };
-}
+})

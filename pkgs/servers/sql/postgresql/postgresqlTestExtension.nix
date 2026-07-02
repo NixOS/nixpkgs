@@ -22,7 +22,6 @@ stdenvNoCC.mkDerivation (
       (postgresql.withPackages (ps: [ finalPackage ] ++ (map (p: ps."${p}") withPackages)))
     ];
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    passAsFile = [ "sql" ];
     sql =
       sql
       + lib.concatMapStrings (
@@ -39,10 +38,13 @@ stdenvNoCC.mkDerivation (
       ) asserts;
     checkPhase = ''
       runHook preCheck
+      sqlPath=$TMPDIR/test.sql
+      printf "%s" "$sql" > $sqlPath
       psql -a -v ON_ERROR_STOP=1 -f "$sqlPath"
       runHook postCheck
     '';
     installPhase = "touch $out";
+    __structuredAttrs = true;
   }
   // lib.removeAttrs extraArgs [
     "asserts"

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "walk";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "walk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yvycd+Ob/C2MRR7k7Ip9xySnsXUg/znMr6+ocIN4WKU=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     ];
     mainProgram = "walk";
   };
-}
+})

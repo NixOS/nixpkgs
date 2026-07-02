@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   pkgs,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   click,
   joblib,
   regex,
+  setuptools,
   tqdm,
 
   # preInstallCheck
@@ -19,15 +21,25 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nltk";
-  version = "3.9.2";
-  format = "setuptools";
+  version = "3.9.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-D0CemwacpBd8GQPD6EPu+Qx+kpkvpJMa5gfabeSeFBk=";
+  src = fetchFromGitHub {
+    owner = "nltk";
+    repo = "nltk";
+    tag = finalAttrs.version;
+    hash = "sha256-kDfMiqXgLq91zzDjv/qDn0XwQkYRn2sITI6E4pgWe/8=";
   };
+
+  postPatch = ''
+    # In the nix store we trust
+    substituteInPlace nltk/pathsec.py \
+      --replace-fail 'if not (target == scoped_root or target.is_relative_to(scoped_root)):' 'if not (target == scoped_root or target.is_relative_to(scoped_root) or target.is_relative_to("/nix/store")):'
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -89,6 +101,11 @@ buildPythonPackage rec {
     "nltk/test/unit/test_downloader.py" # Touches network
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # ModuleNotFoundError: No module named '_tkinter'
+    "test_chartparser_app_uses_pickle_load_not_pickle_load_standard"
+  ];
+
   pythonImportsCheck = [ "nltk" ];
 
   passthru = {
@@ -103,4 +120,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

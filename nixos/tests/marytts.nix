@@ -80,6 +80,6 @@ in
         'LOCALE': 'en_US',
       })
       machine.succeed(f"curl 'localhost:${toString port}/process?{query}' -o ./audio.wav")
-      machine.copy_from_vm("./audio.wav")
+      machine.copy_from_machine("./audio.wav")
   '';
 }

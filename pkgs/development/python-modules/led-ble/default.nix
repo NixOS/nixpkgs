@@ -8,21 +8,18 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "1.1.7";
+  version = "1.1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "led-ble";
     tag = "v${version}";
-    hash = "sha256-6vQPsZvBvoLlxzgfnvjnUdkN24tpBZHr62AFcy3s4gE=";
+    hash = "sha256-YPOjbmHR6WpmAEpYFl/ajzojgiIYEk+6H5LFjl1yo1c=";
   };
 
   build-system = [ poetry-core ];

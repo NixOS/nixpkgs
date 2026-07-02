@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "epilys-bb";
   version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "epilys";
     repo = "bb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-szeEBiolg2rVD2XZoNrncUYnA8KPhWwhQPYsjuxp904=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "bb";
   };
-}
+})

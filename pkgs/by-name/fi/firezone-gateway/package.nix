@@ -4,18 +4,18 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firezone-gateway";
   version = "1.4.18";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
-    tag = "gateway-${version}";
+    tag = "gateway-${finalAttrs.version}";
     hash = "sha256-vxOFca6yO9AvgIJwizhaNlOjOvV00+ckQfXIJ17ASq4=";
   };
 
   cargoHash = "sha256-8YftVt72JpmxWB/WvOPpduE0/QgYvQhSuFRmsFth2iU=";
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "gateway";
   env.RUSTFLAGS = "--cfg system_certs";
 
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "firezone-gateway";
     platforms = lib.platforms.linux;
   };
-}
+})

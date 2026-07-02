@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   uthash,
-  xcbutil,
-  xcbutilkeysyms,
+  libxcb-util,
+  libxcb-keysyms,
   xorgproto,
 }:
 
@@ -25,14 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     xorgproto
     uthash
   ];
 
   buildInputs = [
-    xcbutil
-    xcbutilkeysyms
+    kdePackages.extra-cmake-modules
+    libxcb-util
+    libxcb-keysyms
   ];
 
   meta = {

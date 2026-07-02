@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shellharden";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "anordal";
     repo = "shellharden";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-aBX3RXfDhlXVMV8aPO0pu3527nDoYrUDUbH6crWO/W8=";
   };
 
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/anordal/shellharden";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
-}
+})

@@ -11,11 +11,11 @@
   nix-update-script,
   testers,
   matrix-tuwunel,
-  enableBlurhashing ? true,
   # upstream tuwunel enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
+  enableLdap ? true,
   liburing,
   nixosTests,
   writeTextFile,
@@ -88,16 +88,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.4.9.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hm0k6N8nSj3nRsppqledtXOKlnWBwG1SjpB4IE5R4vk=";
+    hash = "sha256-KbcijWL4PwEUycE9pxdJjnBP0pxK6ywuf7wpuy2eA60=";
   };
 
-  cargoHash = "sha256-uXZyAXajWstZ8+fm9BC5ru2BVAXx+vYoe1GXivCOY/8=";
+  cargoHash = "sha256-RsZWk+cm9JJ6+8xsWXNyN2QcHSMFOD3CikNm84DhXWU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -126,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   # See https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
   # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
+  # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
   buildFeatures = [
     "brotli_compression"
@@ -139,17 +139,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
   ]
-  ++ lib.optional enableLiburing "io_uring";
+  ++ lib.optional enableLiburing "io_uring"
+  ++ lib.optional enableLdap "ldap";
 
   nativeCheckInputs = [
     libredirect.hook
   ];
 
+  # Make sure tuwunel doesn't try to write to arbitrary
+  # directories or have DNS timeouts during `cargo test`.
   preCheck =
     let
       fakeResolvConf = writeTextFile {
@@ -163,7 +165,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       export NIX_REDIRECTS="/etc/resolv.conf=${fakeResolvConf}"
       export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
     '';
+
   doCheck = true;
+
+  # 2026-06-24: Tuwunel has 16 integration tests. Cargo turns each of these
+  # into a separate binary that links in all 110 MB worth of tuwunel.  Linking
+  # 16 big binaries like this takes a really long time and was causing Hydra
+  # to time out the build during `checkPhase`.  So, we run the checks in the
+  # "debug" profile.  This reduces the build+test time on my machine from
+  # 44min to 12min.
+  checkType = "debug";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)

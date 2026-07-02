@@ -3,27 +3,33 @@
   stdenv,
   fetchurl,
   gettext,
+  meson,
+  ninja,
   python3,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iso-codes";
-  version = "4.19.0";
+  version = "4.20.1";
 
   src = fetchurl {
     url =
       with finalAttrs;
-      "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
-    hash = "sha256-SxQ6iR/rfRu2TkT+PvJT7za6EYXR0SnBQlM43G5G4n0=";
+      "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/iso-codes-v${version}.tar.gz";
+    hash = "sha256-LX2fYISrnObFNM5xo91RRLbkdPPJdhZFmoj3P0SmS/8=";
   };
+
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   nativeBuildInputs = [
     gettext
+    meson
+    ninja
     python3
   ];
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {

@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromSourcehut,
-  fetchpatch,
   gobject-introspection,
   gst_all_1,
   poppler-utils,
@@ -11,41 +10,20 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = final: prev: {
-      celery = prev.celery.overridePythonAttrs {
-        doCheck = false;
-      };
+  python = python3;
 
-      kombu = prev.kombu.overridePythonAttrs {
-        # avoid conflicts with test only dependencies
-        doCheck = false;
-      };
-
-      sqlalchemy = prev.sqlalchemy_1_4;
-    };
-  };
-
-  version = "0.14.0";
+  version = "0.15.0";
   src = fetchFromSourcehut {
     owner = "~mediagoblin";
     repo = "mediagoblin";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Y1VnXLHEl6TR8nt+vKSfoCwleQ+oA2WPMN9q4fW9R3s=";
+    hash = "sha256-9zfSRFyf9Sw+r7ATlZVl2dymWjOO2JQZGsBLQPYT0rs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://git.sr.ht/~mediagoblin/mediagoblin/commit/95a591bb2ffdeed059b926059155fd0802e6b1e6.patch";
-      excludes = [ "docs/source/siteadmin/relnotes.rst" ];
-      hash = "sha256-Coff02bewl6E9bHeMy/6tA2dngKcw/c33xk9nmMl/Bk=";
-    })
-  ];
 
   extlib = buildNpmPackage {
     name = "mediagoblin-extlib";
-    inherit src patches;
+    inherit src;
 
     npmDepsHash = "sha256-wtk5MgsWEpuz3V/EcozEAMOa8UeCgdjhR5wxaiaMugY=";
 
@@ -60,7 +38,7 @@ in
 python.pkgs.buildPythonApplication rec {
   format = "setuptools";
   pname = "mediagoblin";
-  inherit version src patches;
+  inherit version src;
 
   postPatch = ''
     # https://git.sr.ht/~mediagoblin/mediagoblin/tree/bf61d38df21748aadb480c53fdd928647285e35f/item/.guix/modules/mediagoblin-package.scm#L60-62
@@ -87,6 +65,7 @@ python.pkgs.buildPythonApplication rec {
     alembic
     babel
     bcrypt
+    bleach
     celery
     certifi
     configobj
@@ -96,7 +75,6 @@ python.pkgs.buildPythonApplication rec {
     itsdangerous
     jinja2
     jsonschema
-    lxml-html-clean
     markdown
     oauthlib
     pastescript
