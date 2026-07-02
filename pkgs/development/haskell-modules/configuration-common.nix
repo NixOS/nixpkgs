@@ -1394,6 +1394,14 @@ with haskellLib;
       hash = "sha256-cwNH5+7YY8UbA9zHhTRfVaqtIMowZGfFT5Kj+wSlapA=";
       relative = "dhall-lsp-server";
     })
+    # Add support for lsp 2.8
+    (pkgs.fetchpatch {
+      name = "dhall-lsp-server-lsp-2.8.patch";
+      url = "https://github.com/dhall-lang/dhall-haskell/commit/1b54c6a0968b7ee989d239819a4938b7fd3a951e.patch";
+      sha256 = "sha256-4wqiYeBQDloGi5uSC0GdsQjSfN7t5FZBmVFlQbCFgFs=";
+      relative = "dhall-lsp-server";
+    })
+
   ] super.dhall-lsp-server;
 
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
