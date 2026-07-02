@@ -185,6 +185,7 @@ customStdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
+  separateDebugInfo = !debug;
   strictDeps = true;
 
   cmakeFlags = mapAttrsToList cmakeBool {
