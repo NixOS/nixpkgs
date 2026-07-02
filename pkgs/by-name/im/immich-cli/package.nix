@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (immich) version src pnpmDeps;
 
   postPatch = ''
-    local -r cli_version="$(jq -r .version cli/package.json)"
+    local -r cli_version="$(jq -r .version packages/cli/package.json)"
     test "$cli_version" = ${finalAttrs.version} \
       || (echo "error: update immich-cli version to $cli_version" && exit 1)
   '';
