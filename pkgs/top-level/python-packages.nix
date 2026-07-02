@@ -2470,6 +2470,8 @@ self: super: with self; {
     }
   );
 
+  caido-schema-proxy = callPackage ../development/python-modules/caido-schema-proxy { };
+
   caido-server-auth = callPackage ../development/python-modules/caido-server-auth { };
 
   caio = callPackage ../development/python-modules/caio { };
