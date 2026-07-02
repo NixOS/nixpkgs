@@ -1606,6 +1606,10 @@ with haskellLib;
   yaya-quickcheck = doJailbreak super.yaya-quickcheck;
   yaya-unsafe = doJailbreak super.yaya-unsafe;
 
+  # 2026-07-02: allow doctest 0.25
+  # https://github.com/sellout/no-recursion/issues/46
+  no-recursion = doJailbreak super.no-recursion;
+
   # https://github.com/ghcjs/jsaddle/pull/165
   jsaddle-warp = appendPatch (fetchpatch {
     name = "add-threaded-flag";
