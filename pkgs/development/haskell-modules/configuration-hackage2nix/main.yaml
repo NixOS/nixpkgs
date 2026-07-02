@@ -383,7 +383,6 @@ package-maintainers:
     - Agda
     - agda2hs
     - irc-client
-    - lambdabot
     - shake
   nomeata:
     - cabal-plan-bounds
