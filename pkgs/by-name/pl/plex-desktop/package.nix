@@ -6,6 +6,7 @@
   extraEnv ? { },
   fetchurl,
   ffmpeg_6-headless,
+  intel-gmmlib,
   lib,
   libdrm,
   libedit,
@@ -130,6 +131,9 @@ let
       rm $out/lib/libdrm.so*
       rm $out/lib/libdrm*
 
+      # remove bundled gmmlib
+      rm $out/lib/libigdgmm.so*
+
       # Keep dependencies where the version from nixpkgs is higher.
       cp usr/lib/x86_64-linux-gnu/libasound.so.2 $out/lib/libasound.so.2
       cp usr/lib/x86_64-linux-gnu/libjbig.so.0 $out/lib/libjbig.so.0
@@ -150,6 +154,7 @@ buildFHSEnv {
   inherit pname version meta;
   targetPkgs = pkgs: [
     alsa-lib
+    intel-gmmlib
     libdrm
     xkeyboard_config
   ];
