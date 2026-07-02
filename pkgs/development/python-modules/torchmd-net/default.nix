@@ -42,6 +42,13 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # NotImplementedError: The operator 'torchmdnet::warp_neighbor_brute_fwd' is not currently implemented for the MPS device.
+    # As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op.
+    # WARNING: this will be slower than running natively on MPS.
+    PYTORCH_ENABLE_MPS_FALLBACK = true;
+  };
+
   pythonRemoveDeps = [
     # Not a runtime dependency
     "setuptools"
