@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchurl,
@@ -11,6 +10,7 @@
   zlib,
   zstd,
   icu,
+  libdeflate,
   pytestCheckHook,
   setuptools,
   cffi,
@@ -39,7 +39,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace 'src/rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
+    substituteInPlace 'src/rpy2/rinterface_lib/embedded.py' \
+      --replace-fail '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
   '';
 
   buildInputs = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     zlib
     zstd
     icu
+    libdeflate
   ]
   ++ rWrapper.recommendedPackages;
 
@@ -55,9 +57,12 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
   ];
 
-  propagatedBuildInputs = [
-    cffi
+  build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    cffi
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
