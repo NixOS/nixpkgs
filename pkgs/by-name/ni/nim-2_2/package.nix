@@ -7,7 +7,6 @@
   darwin,
   makeWrapper,
   openssl,
-  pcre,
   nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
 }:
 
@@ -93,7 +92,6 @@ let
         "--prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
             openssl
-            pcre
           ]
         }"
         # These libraries may be referred to by the standard library.
