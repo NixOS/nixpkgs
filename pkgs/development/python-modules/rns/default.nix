@@ -10,6 +10,8 @@
   replaceVars,
   setuptools,
   versionCheckHook,
+  rns,
+  lxmf,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -44,6 +46,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ versionCheckHook ];
 
   versionCheckProgram = "${placeholder "out"}/bin/rncp";
+
+  passthru.withLxmf = rns.overridePythonAttrs (old: {
+    dependencies = (old.dependencies or [ ]) ++ [ lxmf.withoutRns ];
+  });
 
   meta = {
     description = "Cryptography-based networking stack for wide-area networks";
