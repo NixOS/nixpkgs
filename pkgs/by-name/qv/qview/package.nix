@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtimageformats
     qt6.qtsvg
+  ]
+  ++ lib.optional (lib.elem stdenv.hostPlatform.system kdePackages.kimageformats.meta.platforms) [
+    # Not supported on all platforms, e.g. Darwin.
     kdePackages.kimageformats
   ];
 
