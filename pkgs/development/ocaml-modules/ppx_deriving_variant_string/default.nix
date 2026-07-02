@@ -8,11 +8,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_variant_string";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/ahrefs/ppx_deriving_variant_string/releases/download/${finalAttrs.version}/ppx_deriving_variant_string-${finalAttrs.version}.tbz";
-    hash = "sha256-nSU9LEwPOOQuCpNAVQgBGucHuk5wjJ3dDIj708djLwc=";
+    hash = "sha256-24m53iwGHbRfTzxiAN055CJ3zLzZ4Syl2Wi28UDlTBQ=";
   };
 
   propagatedBuildInputs = [
