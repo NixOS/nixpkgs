@@ -49,6 +49,9 @@ buildNpmPackage rec {
     homepage = "https://nodered.org/";
     license = lib.licenses.asl20;
     mainProgram = "node-red";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      matthewcroughan
+    ];
   };
 }
