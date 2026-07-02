@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  patches,
+  config,
   libxcb,
   libxcb-keysyms,
   libxcb-wm,
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
   };
 
-  # Allow users set their own list of patches
-  inherit patches;
+  # Allow users to set their own list of patches
+  patches = config."2bwm".patches or [ ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
