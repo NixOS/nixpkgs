@@ -7,14 +7,16 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nagstamon";
-  version = "3.16.2";
+  version = "3.18.2";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HenriWahl";
     repo = "Nagstamon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9w8ux+AeSg0vDhnk28/2eCE2zYLvAjD7mB0pJBMFs2I=";
+    hash = "sha256-ZA6gxV9zLKZ0g5v8CvnAuiYPhEDByz17kC54Idk9CYM=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -46,6 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
     requests-kerberos
     setuptools
+    tzlocal
   ];
 
   nativeCheckInputs = with python3Packages; [
