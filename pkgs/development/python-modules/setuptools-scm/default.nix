@@ -8,8 +8,7 @@
   setuptools,
 
   # dependencies
-  packaging,
-  typing-extensions,
+  vcs-versioning,
 
   # optional-dependencies
   rich,
@@ -17,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "9.2.2";
+  version = "10.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-HGdKtGZWhqCIfX4kwDqyXyQgHCE+guponS8+Fp7371c=";
+    hash = "sha256-u7qP51RRbN79AX9EVnIXdebvlmK9eIf7Uq4mgT1IOMM=";
   };
 
   postPatch = null;
@@ -31,9 +30,8 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    packaging
     setuptools
-    typing-extensions
+    vcs-versioning
   ];
 
   optional-dependencies = {

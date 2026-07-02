@@ -327,7 +327,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=70.1.0,<80.0" "setuptools"
+      --replace-fail "setuptools>=70.1.0,<82" "setuptools"
+    substituteInPlace setup.py \
+      --replace-fail "setuptools<82" setuptools
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'

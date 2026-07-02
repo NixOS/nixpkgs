@@ -28,7 +28,8 @@ rec {
       baseDrv = derivation (
         {
           inherit (buildPlatform) system;
-          inherit (meta) name;
+          # redefining from meta to avoid forcing the thunk until it's used
+          name = attrs.name or "${attrs.pname}-${attrs.version}";
         }
         // maybeContentAddressed
         // (removeAttrs attrs [

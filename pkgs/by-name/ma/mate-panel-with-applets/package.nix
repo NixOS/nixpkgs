@@ -34,12 +34,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "${mate-panel.pname}-with-applets";
-  inherit (mate-panel) version;
+  inherit (mate-panel) version outputs;
 
   src = null;
 
   paths = [
-    mate-panel
+    mate-panel.out
+    mate-panel.man
   ]
   ++ selectedApplets;
 
@@ -84,13 +85,5 @@ stdenv.mkDerivation {
 
   __structuredAttrs = true;
 
-  meta = {
-    inherit (mate-panel.meta)
-      description
-      homepage
-      license
-      teams
-      platforms
-      ;
-  };
+  inherit (mate-panel) meta;
 }

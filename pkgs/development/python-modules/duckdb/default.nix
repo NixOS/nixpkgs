@@ -18,6 +18,7 @@
   pytz,
   scikit-build-core,
   setuptools-scm,
+  typing-extensions,
   pytest-reraise,
   pytestCheckHook,
 }:
@@ -71,6 +72,10 @@ buildPythonPackage rec {
     openssl
   ];
 
+  dependencies = [
+    typing-extensions
+  ];
+
   optional-dependencies = {
     all = [
       # FIXME package adbc_driver_manager
@@ -104,7 +109,10 @@ buildPythonPackage rec {
   ++ optional-dependencies.all;
 
   # test flags from .github/workflows/Python.yml
-  pytestFlags = [ "--verbose" ];
+  pytestFlags = [
+    "--verbose"
+    "-Wignore::DeprecationWarning"
+  ];
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [

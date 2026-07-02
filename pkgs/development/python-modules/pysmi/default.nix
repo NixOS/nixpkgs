@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   jinja2,
-  ply,
+  lark,
   pysmi,
   pysnmp,
   pytestCheckHook,
@@ -13,21 +13,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysmi";
-  version = "1.6.3";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TpDrsBGym07JPIcnytyWI7Ebx9RR+7Ia36zOzWMWqPM=";
+    hash = "sha256-ft8R73eUgb+pnr35ZVc2Br3BGHhUDHEcQ9k/K6tjYBk=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
-    ply
     jinja2
+    lark
     requests
   ];
 

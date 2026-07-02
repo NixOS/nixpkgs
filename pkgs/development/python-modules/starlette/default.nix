@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
     hash = "sha256-9iQXlpA1VDGw1c7X1zJPmJ3Dub46PwqrVIX1+fWOZ7M=";
@@ -56,12 +56,6 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-    "-Wignore::trio.TrioDeprecationWarning"
-    "-Wignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
-
   pythonImportsCheck = [ "starlette" ];
 
   passthru.tests = {
@@ -69,8 +63,8 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
     homepage = "https://www.starlette.io/";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;

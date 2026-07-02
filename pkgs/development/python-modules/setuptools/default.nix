@@ -7,16 +7,16 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools";
-  version = "80.10.1";
+  version = "82.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
-    tag = "v${version}";
-    hash = "sha256-s/gfJc3yxvCE6cjP03vtIZqNFmoZKR3d7+4gTPk1hQg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M4fB+R4UNla2VlcWNhfDLvExQMpjLkPkgVsU4vg6ImU=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
     # Substitute version for reproducible builds
     substituteInPlace setuptools/version.py \
-      --replace-fail '@version@' '${version}'
+      --replace-fail '@version@' '${finalAttrs.version}'
   '';
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -47,10 +47,10 @@ buildPythonPackage rec {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://github.com/pypa/setuptools";
     changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceString "." "-" finalAttrs.version
     }";
     license = with lib.licenses; [ mit ];
     platforms = python.meta.platforms;
     teams = [ lib.teams.python ];
   };
-}
+})

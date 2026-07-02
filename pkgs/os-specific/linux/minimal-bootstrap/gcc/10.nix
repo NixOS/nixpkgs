@@ -48,12 +48,6 @@ let
     url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
     hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
   };
-
-  islVersion = "0.24";
-  isl = fetchurl {
-    url = "https://gcc.gnu.org/pub/gcc/infrastructure/isl-${islVersion}.tar.bz2";
-    hash = "sha256-/PeN2WVsEOuM+fvV9ZoLawE4YgX+GTSzsoegoYmBRcA=";
-  };
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -112,13 +106,11 @@ bash.runCommand "${pname}-${version}"
     tar xf ${gmp}
     tar xf ${mpfr}
     tar xf ${mpc}
-    tar xf ${isl}
     cd gcc-${version}
 
     ln -s ../gmp-${gmpVersion} gmp
     ln -s ../mpfr-${mpfrVersion} mpfr
     ln -s ../mpc-${mpcVersion} mpc
-    ln -s ../isl-${islVersion} isl
 
     # Patch
     # doesn't recognise musl
@@ -127,7 +119,10 @@ bash.runCommand "${pname}-${version}"
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
     export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
-    export CFLAGS_FOR_TARGET="-Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CFLAGS="-O1"
+    export CXXFLAGS="-O1"
+    export CFLAGS_FOR_TARGET="-O0 -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CXXFLAGS_FOR_TARGET="$CFLAGS_FOR_TARGET"
     export C_INCLUDE_PATH="${musl}/include"
     export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
     export LIBRARY_PATH="${musl}/lib"
@@ -154,7 +149,10 @@ bash.runCommand "${pname}-${version}"
       --disable-lto \
       --disable-multilib \
       --disable-nls \
-      --disable-plugin
+      --disable-plugin \
+      --without-isl \
+      --disable-libstdcxx-filesystem-ts \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES

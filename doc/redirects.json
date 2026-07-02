@@ -1109,6 +1109,9 @@
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
   ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
+  ],
   "zip-files": [
     "index.html#zip-files"
   ],
@@ -2895,6 +2898,9 @@
   ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
+  ],
+  "setup-hook-omp-check": [
+    "index.html#setup-hook-omp-check"
   ],
   "ninja": [
     "index.html#ninja"

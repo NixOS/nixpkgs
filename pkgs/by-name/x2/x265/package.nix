@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x265";
-  version = "4.1";
+  version = "4.2";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   # whether we fetch a source tarball or a tag from the git repo
   src = fetchurl {
     url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${finalAttrs.version}.tar.gz";
-    hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
+    hash = "sha256-QLHqBFPgMJ8OupNODd9TP49ilZZmeeiJTo8cHI1eEhA=";
   };
 
   patches = [
@@ -55,26 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     # fix compilation with gcc15
     # https://bitbucket.org/multicoreware/x265_git/pull-requests/36
     ./gcc15-fixes.patch
-
-    # Fix the build with CMake 4.
-    (fetchpatch {
-      name = "x265-fix-cmake-4-1.patch";
-      url = "https://bitbucket.org/multicoreware/x265_git/commits/b354c009a60bcd6d7fc04014e200a1ee9c45c167/raw";
-      stripLen = 1;
-      hash = "sha256-kS+hYZb5dnIlNoZ8ABmNkLkPx+NqCPy+DonXktBzJAE=";
-    })
-    (fetchpatch {
-      name = "x265-fix-cmake-4-2.patch";
-      url = "https://bitbucket.org/multicoreware/x265_git/commits/51ae8e922bcc4586ad4710812072289af91492a8/raw";
-      stripLen = 1;
-      hash = "sha256-ZrpyfSnijUgdyVscW73K48iEXa9k85ftNaQdr0HWSYg=";
-    })
-    (fetchpatch {
-      name = "x265-fix-cmake-4-3.patch";
-      url = "https://bitbucket.org/multicoreware/x265_git/commits/78e5ac35c13c5cbccc5933083edceb0d3eaeaa21/raw";
-      stripLen = 1;
-      hash = "sha256-qEihgUKGEdthbKz67s+/hS/qdpzl+3tEB3gx2tarax4=";
-    })
+    # fix i686-linux build
+    # https://bitbucket.org/multicoreware/x265_git/issues/1030
+    ./fix-plt-rel.patch
   ]
   # TODO: remove after update to version 4.2
   ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [

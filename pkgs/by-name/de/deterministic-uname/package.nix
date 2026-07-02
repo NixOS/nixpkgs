@@ -46,6 +46,9 @@ replaceVarsWith {
     modDirVersion = if modDirVersion != "" then modDirVersion else "unknown";
   };
 
+  # coreutils uname is in initialPath, so ordinarily appears in PATH before packages in nativeBuildInputs.
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "Print certain system information (hardcoded with lib/system values)";
     mainProgram = "uname";

@@ -9,7 +9,7 @@
   pytest-tornado,
   pytest8_3CheckHook,
   pytz,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
   tornado,
   twisted,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 

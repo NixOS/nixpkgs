@@ -34,10 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Uses a hacky python setup run by cmake, which is hard to get running
   doCheck = false;
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Library for Green’s function based electronic structure theory calculations";
     license = [ lib.licenses.asl20 ];

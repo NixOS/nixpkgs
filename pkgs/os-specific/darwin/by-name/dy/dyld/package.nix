@@ -10,6 +10,7 @@
   pkgsBuildHost,
   sourceRelease,
   stdenvNoCC,
+  xnuHeaders,
 }:
 
 let
@@ -34,13 +35,8 @@ let
         '${Libc}/include/_bounds.h'
 
       mkdir -p "$out/include/System"
-      for dir in arm i386 machine; do
-        mkdir -p "$out/include/$dir"
-        for file in '${xnu}/osfmk/'$dir/*; do
-          name=$(basename "$file")
-          # Skip copying `endian.h` because it conflicts with the SDK, breaking the build on x86_64-darwin.
-          test "$name" != endian.h && cp -r "$file" "$out/include/$dir/$name"
-        done
+      for dir in arm machine; do
+        cp -r '${xnu}/osfmk/'$dir "$out/include/$dir"
         ln -s "$out/include/$dir" "$out/include/System/$dir"
       done
 
@@ -70,18 +66,19 @@ let
 
       install -D -m644 -t "$out/include/os" \
         '${xnu}/libsyscall/os/tsd.h' \
-        '${xnu}/libkern/os/atomic_private.h' \
-        '${xnu}/libkern/os/atomic_private_arch.h' \
-        '${xnu}/libkern/os/atomic_private_impl.h' \
-        '${xnu}/libkern/os/base_private.h' \
+        '${xnuHeaders}/Library/Frameworks/Kernel.framework/Versions/A/PrivateHeaders/os/atomic_private.h' \
+        '${xnuHeaders}/Library/Frameworks/Kernel.framework/Versions/A/PrivateHeaders/os/atomic_private_arch.h' \
+        '${xnuHeaders}/Library/Frameworks/Kernel.framework/Versions/A/PrivateHeaders/os/atomic_private_impl.h' \
+        '${xnuHeaders}/Library/Frameworks/Kernel.framework/Versions/A/PrivateHeaders/os/base_private.h' \
         '${libplatform}/private/os/lock_private.h'
 
       substituteInPlace "$out/include/os/lock_private.h" \
         --replace-fail ', bridgeos(4.0)' ""
 
       install -D -m644 -t "$out/include/sys" \
-        '${xnu}/bsd/sys/kern_memorystatus.h' \
-        '${xnu}/bsd/sys/reason.h'
+        '${xnuHeaders}/include/sys/commpage_private.h' \
+        '${xnuHeaders}/include/sys/kern_memorystatus.h' \
+        '${xnuHeaders}/include/sys/reason.h'
 
       # This file is part of ld-prime, which is unhelpfully not included in the dyld source release.
       # Fortunately, nothing in it is actually needed to build `dyld_info` and `dsc_extractor`.
@@ -100,7 +97,7 @@ mkAppleDerivation {
 
   propagatedBuildOutputs = [ ];
 
-  xcodeHash = "sha256-F/V1XzBP1qEDpUDTz+jyp5dbcfqdQp8s9NW2OBoU5x0=";
+  xcodeHash = "sha256-eECKavCwz8NDqPOgW1YZ4ldQQHSUdBvAGRtYcVgEX/w=";
 
   patches = [
     # Disable use of private kdebug API
@@ -134,7 +131,8 @@ mkAppleDerivation {
       --replace-fail '__API_UNAVAILABLE(ios, tvos, watchos) __API_UNAVAILABLE(bridgeos)' ""
 
     substituteInPlace include/mach-o/utils_priv.h \
-      --replace-fail 'SPI_AVAILABLE(macos(15.0), ios(18.0), tvos(18.0), watchos(11.0))' ""
+      --replace-fail 'SPI_AVAILABLE' "__SPI_AVAILABLE" \
+      --replace-fail '____SPI_AVAILABLE' "__SPI_AVAILABLE"
 
     substituteInPlace libdyld/utils.cpp \
       --replace-fail 'DYLD_EXCLAVEKIT_UNAVAILABLE' ""
@@ -145,6 +143,9 @@ mkAppleDerivation {
         __attribute__((section("__DATA," CRASHREPORTER_ANNOTATIONS_SECTION)))
         = { CRASHREPORTER_ANNOTATIONS_VERSION, 0, 0, 0, 0, 0, 0 };
     EOF
+
+    substituteInPlace other-tools/Tool.cpp \
+      --replace-fail 'bridgeOS 6,' ""
 
     # Fix header includes
     substituteInPlace libdyld_introspection/dyld_introspection.cpp \

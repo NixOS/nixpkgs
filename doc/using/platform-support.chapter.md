@@ -29,8 +29,7 @@ Platform Tiers [4 through 7](https://github.com/NixOS/rfcs/blob/master/rfcs/0046
 | `x86_64-unknown-linux-musl`           | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | Limited        | ❌             | ✔️                 | ✔️                      |
 | `aarch64-unknown-linux-musl`          | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | Limited        | ❌             | ✔️                 | ✔️                      |
 | `x86_64-unknown-unknown-freebsd`      | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | ❌             | ❌             | ✔️                 | ✔️                      |
-| `arm64-apple-darwin`                  | [Tier 2](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-2) | Some | ✔️            | ✔️            | ✔️                 | ❌\*                     |
-| `x86_64-apple-darwin`                 | [Tier 2](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-2) | Some | ✔️            | ✔️            | ✔️                 | ❌\*                     |
+| `arm64-apple-darwin`                  | [Tier 2](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-2) | Some | ✔️            | ✔️            | ✔️                 | ❌                       |
 | `i686-unknown-linux-gnu`              | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | Limited        | ❌             | ✔️                 | ✔️                      |
 | `riscv32-unknown-linux-gnu`           | [Tier 4](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-4) | None | ❌             | ❌             | ❌                  | ✔️                      |
 | `riscv64-unknown-linux-gnu`           | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | ❌             | ❌             | ✔️                 | ✔️                      |
@@ -45,5 +44,3 @@ Platform Tiers [4 through 7](https://github.com/NixOS/rfcs/blob/master/rfcs/0046
 | `powerpc64-unknown-linux-gnuabielfv2` | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | ❌             | ❌             | ✔️                 | ✔️                      |
 | `powerpc64le-unknown-linux-gnu`       | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | ❌             | ❌             | ✔️                 | ✔️                      |
 | `s390x-unknown-linux-gnu`             | [Tier 3](https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#tier-3) | None | ❌             | ❌             | ✔️                 | ✔️                      |
-
-\* - Cross compiling is only supported on Darwin hosts.

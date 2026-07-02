@@ -40,13 +40,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YGvagagGcG6Jiy5VppnfdZ03Sb5+5dYU6NV+RS/KnHY=";
+    hash = "sha256-rH/bG0pYO4VKfrnkXLXy/67hjaz6i3R0YoYdsGBqPsU=";
   };
 
   outputs = [

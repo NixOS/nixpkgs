@@ -167,7 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.buildPlatform.canExecute stdenv.hostPlatform
     && !stdenv.hostPlatform.isDarwin
     # Tests rely on mocking, which can't work with static libs.
-    && !stdenv.hostPlatform.isStatic;
+    && !stdenv.hostPlatform.isStatic
+    # swtpm does not build on 32-bit targets
+    && !stdenv.hostPlatform.is32bit;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase

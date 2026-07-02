@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = with python3Packages; [
     sphinxHook
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 

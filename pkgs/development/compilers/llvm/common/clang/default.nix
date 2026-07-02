@@ -16,6 +16,7 @@
   fixDarwinDylibNames,
   enableManpages ? false,
   enableClangToolsExtra ? true,
+  extraPatches ? [ ],
   devExtraCmakeFlags ? [ ],
   replaceVars,
   getVersionFile,
@@ -73,7 +74,8 @@ stdenv.mkDerivation (
       ];
       stripLen = 1;
       hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-    });
+    })
+    ++ extraPatches;
 
     nativeBuildInputs = [
       cmake
@@ -189,6 +191,8 @@ stdenv.mkDerivation (
     passthru = {
       inherit libllvm;
       isClang = true;
+      langC = true;
+      langCC = true;
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]

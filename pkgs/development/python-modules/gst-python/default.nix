@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.26.11";
+  version = "1.28.4";
 
   pyproject = false;
 
@@ -32,14 +32,13 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
-    hash = "sha256-ETFrp2m1bSbYsUZMcZipkkyurkgTT321kXH68ac9xDY=";
+    hash = "sha256-xOs4JyC0RD+4AaU0GN/wvUzXR4cW1c7Uk1BKZ1tNCf0=";
   };
 
-  # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
-  postPatch = ''
-    substituteInPlace testsuite/meson.build \
-      --replace-fail "['gstinit', 'test_gst_init.py']," ""
-  '';
+  patches = [
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9918#note_3530752
+    ./fix-test-plugin-imports.patch
+  ];
 
   # Python 2.x is not supported.
   disabled = !isPy3k;
@@ -96,13 +95,13 @@ buildPythonPackage rec {
   '';
 
   passthru = {
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = lib.licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

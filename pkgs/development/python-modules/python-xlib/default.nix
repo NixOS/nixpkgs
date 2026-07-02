@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   six,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
   libx11,
   xvfb,
@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.33";
   pyproject = true;
 
-  build-system = [ setuptools ];
-
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
@@ -28,11 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    (setuptools-scm.override { setuptools = setuptools_80; })
+  ];
 
   buildInputs = [ libx11 ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [ six ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

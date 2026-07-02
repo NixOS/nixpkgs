@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
     tag = version;
-    hash = "sha256-py6sspmhQ2vjXEEn+X6kx1+fTiS1M0P8z+kbgVItW/k=";
+    hash = "sha256-RyHoZniVLtunqz42tuVeAoiUm/e5JvvwX2MMCAJBhy8=";
   };
 
   build-system = [ setuptools ];

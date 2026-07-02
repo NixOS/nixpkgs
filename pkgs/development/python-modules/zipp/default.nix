@@ -11,14 +11,14 @@
 let
   zipp = buildPythonPackage rec {
     pname = "zipp";
-    version = "3.23.1";
+    version = "4.0.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jaraco";
       repo = "zipp";
       tag = "v${version}";
-      hash = "sha256-SC5aMiQsAPLNjCdOHDAMYX2iDSwZltjXxAJJgZnPlJ0=";
+      hash = "sha256-JkU35S+BpDvWca1+BP61z3W5oyxf/RI21WXZ9fZ65SQ=";
     };
 
     postPatch = ''

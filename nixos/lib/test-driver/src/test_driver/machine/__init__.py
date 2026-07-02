@@ -22,6 +22,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine.ocr import (
@@ -192,6 +193,7 @@ class QemuStartCommand:
     def build_environment(
         state_dir: Path,
         shared_dir: Path,
+        efi_vars_path: Path | None = None,
     ) -> dict:
         # We make a copy to not update the current environment
         env = dict(os.environ)
@@ -202,6 +204,13 @@ class QemuStartCommand:
                 "USE_TMPDIR": "1",
             }
         )
+        if efi_vars_path is not None:
+            env.update(
+                {
+                    "NIX_EFI_VARS": str(efi_vars_path),
+                }
+            )
+
         return env
 
     def run(
@@ -212,6 +221,7 @@ class QemuStartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
+        efi_vars_path: Path | None = None,
         vsock_guest: Path | None = None,
     ) -> subprocess.Popen:
         return subprocess.Popen(
@@ -227,7 +237,9 @@ class QemuStartCommand:
             stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
-            env=self.build_environment(state_dir, shared_dir),
+            env=self.build_environment(
+                state_dir, shared_dir, efi_vars_path=efi_vars_path
+            ),
         )
 
 
@@ -750,6 +762,9 @@ class QemuMachine(BaseMachine):
     # Store all console output for full log retrieval
     full_console_log: list[str]
 
+    efi_vars_path: Path
+    efi_vars: EfiVars
+
     def __init__(
         self,
         out_dir: Path,
@@ -790,6 +805,9 @@ class QemuMachine(BaseMachine):
 
         self.booted = False
         self.connected = False
+
+        self.efi_vars_path = self.state_dir / f"{self.name}-efi-vars.fd"
+        self.efi_vars = EfiVars(self.efi_vars_path, self)
 
     def ssh_backdoor_command(self) -> str:
         assert self.vsock_host is not None
@@ -1168,24 +1186,25 @@ class QemuMachine(BaseMachine):
         # to match multiline regexes.
         console = io.StringIO()
 
-        def console_matches(_last_try: bool) -> bool:
+        def console_matches(_last_try: bool, block: bool = False) -> bool:
             nonlocal console
             try:
-                # This will return as soon as possible and
-                # sleep 1 second.
-                console.write(self.last_lines.get(block=False))
+                while True:
+                    # This will return as soon as possible and
+                    # sleep 1 second.
+                    console.write(self.last_lines.get(block=block))
+                    console.seek(0)
+                    matches = re.search(regex, console.read())
+                    if matches is not None:
+                        return True
             except queue.Empty:
-                pass
-            console.seek(0)
-            matches = re.search(regex, console.read())
-            return matches is not None
+                return False
 
         with self.nested(f"waiting for {regex} to appear on console"):
             if timeout is not None:
                 retry(console_matches, timeout)
             else:
-                while not console_matches(False):
-                    pass
+                console_matches(False, block=True)
 
     def get_console_log(self) -> str:
         """
@@ -1252,6 +1271,7 @@ class QemuMachine(BaseMachine):
             self.qmp_path,
             self.shell_path,
             allow_reboot,
+            self.efi_vars_path,
             self.vsock_guest,
         )
 
@@ -1435,6 +1455,28 @@ class QemuMachine(BaseMachine):
         )
         self.connected = False
         self.connect()
+
+    def dump_efi_vars(self) -> None:
+        for var in self.read_efi_vars():
+            var.print()
+
+    def read_efi_vars(self) -> list[EfiVariable]:
+        config = self.efi_vars.read_content()
+        if not config:
+            return []
+
+        out = []
+        for vendor, variables in config.items():
+            for name, v in variables.items():
+                out.append(v)
+
+        return out
+
+    def create_efi_vars(self) -> None:
+        self.efi_vars.create_empty()
+
+    def write_efi_vars(self, add: list[EfiVariable]) -> None:
+        self.efi_vars.write(add)
 
 
 class NspawnMachine(BaseMachine):

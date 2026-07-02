@@ -7,7 +7,7 @@
   toPythonModule,
 
   # build-system
-  libclang,
+  clang,
   pipcl,
   psutil,
   setuptools,
@@ -75,7 +75,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    libclang
+    clang
     pipcl
     swig
     setuptools

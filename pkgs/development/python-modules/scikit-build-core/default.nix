@@ -28,26 +28,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-build-core";
-  version = "0.11.6";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-build";
     repo = "scikit-build-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zBTDacTkeclz+/X0SUl1xkxLz4zsfeLOD4Ew0V1Y1iU=";
+    hash = "sha256-JE6z44u1FLfI+Gguhd2rVUvY8tyEoo/WviGJmPRT8kc=";
   };
 
   patches = [
-    # Backport an upstream commit to fix the tests on Darwin.
     (fetchpatch {
-      url = "https://github.com/scikit-build/scikit-build-core/commit/c30f52a3b2bd01dc05f23d3b89332c213006afe0.patch";
-      excludes = [ ".github/workflows/ci.yml" ];
-      hash = "sha256-5E9QfF5UcSNY1wzHzieEEHEPYzPjUTb66CKCodYb9vo=";
+      name = "setuptools-scm-10-compat.patch";
+      url = "https://github.com/scikit-build/scikit-build-core/commit/1b870c538bf7ca679fc4a6e0cbba301c98d9ac35.patch";
+      hash = "sha256-JUxBvKiAHpDlIIFkvU+CflTNA6m/auxW5wd5cVYpvcM=";
     })
   ];
-
-  postPatch = "";
 
   build-system = [
     hatch-vcs
@@ -82,6 +79,11 @@ buildPythonPackage (finalAttrs: {
   disabledTestMarks = [
     "isolated"
     "network"
+  ];
+
+  disabledTests = [
+    # wheel tags generated with wrong system name/version
+    "test_wheel_tag"
   ];
 
   disabledTestPaths = [

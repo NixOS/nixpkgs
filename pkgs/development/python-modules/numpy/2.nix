@@ -19,6 +19,8 @@
   coreutils,
   lapack,
 
+  openmpCheckPhaseHook,
+
   # Reverse dependency
   sage,
 
@@ -30,11 +32,12 @@
   typing-extensions,
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+# Verify these are compatible
+assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.4.4";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,15 +45,8 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-LAGXw4vFpjZjZ2s/dXdzXHDm6Ah3pronjScqK02wivY=";
+    hash = "sha256-RiC1dLoDamK5B2VzHBL0V//K/Vix25q11wNGcl3Witk=";
   };
-
-  patches = lib.optionals python.hasDistutilsCxxPatch [
-    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
-    # Patching of numpy.distutils is needed to prevent it from undoing the
-    # patch to distutils.
-    ./numpy-distutils-C++.patch
-  ];
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel
@@ -62,7 +58,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
-  mesonFlags = lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
+  mesonFlags = [
+    # See https://numpy.org/devdocs/building/blas_lapack.html
+    "-Duse-ilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLoongArch64) [
     # This is required to support CPUs with feature-sets earlier than x86-64-v2
     # (before 2009). This will still build optimizations for newer features, but
     # allow for importing with older machines. See:
@@ -86,14 +86,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  # we default openblas to build with 64 threads
-  # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
-  preConfigure = ''
-    sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
   buildInputs = [
     blas
     lapack
@@ -111,6 +103,18 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     setuptools
     typing-extensions
+  ];
+
+  # Enables any dependent package to easily find numpy.pc via standard
+  # pkg-config call. The `$out/include` symlink matches what's written in the
+  # numpy.pc file.
+  postInstall = ''
+    ln -s $out/${python.sitePackages}/numpy/_core/lib/pkgconfig $out/lib/pkgconfig
+    ln -s ${placeholder "out"}/${finalAttrs.passthru.coreIncludeInnerDir} $out/include
+  '';
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
   ];
 
   preCheck = ''
@@ -192,7 +196,11 @@ buildPythonPackage (finalAttrs: {
       name = "site.cfg";
       text = lib.generators.toINI { } finalAttrs.finalPackage.buildConfig;
     };
-    coreIncludeDir = "${finalAttrs.finalPackage}/${python.sitePackages}/numpy/_core/include";
+    # Need to be defined with two variables for postInstall to use `placeholder
+    # "out"` where here we have to use `${finalAttrs.finalPackage}`, that would
+    # cause infinite recursion if used in postInstall too.
+    coreIncludeInnerDir = "${python.sitePackages}/numpy/_core/include";
+    coreIncludeDir = "${finalAttrs.finalPackage}/${finalAttrs.finalPackage.passthru.coreIncludeInnerDir}";
     tests = {
       inherit sage;
     };

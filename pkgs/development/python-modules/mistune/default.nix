@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "3.2.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "mistune";
     tag = "v${version}";
-    hash = "sha256-8AEEh/SWAk/Esq0jAoZGLw1FIQUw6C5Xq8CgnI2fjv0=";
+    hash = "sha256-uyOJFtDvVn0Y3VypphOXsSW3pX5XVCcfQ7dtFiL/5qY=";
   };
 
   build-system = [ setuptools ];

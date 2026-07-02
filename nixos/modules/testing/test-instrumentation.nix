@@ -78,6 +78,8 @@ let
     # Allow very slow start
     DefaultTimeoutStartSec = 300;
     DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in

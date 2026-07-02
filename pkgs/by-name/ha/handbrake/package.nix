@@ -10,7 +10,10 @@
 {
   stdenv,
   lib,
+  applyPatches,
   fetchFromGitHub,
+  fetchFromGitLab,
+  fetchpatch2,
   # For tests
   testers,
   runCommand,
@@ -26,7 +29,7 @@
   numactl,
   writeText,
   # Processing, video codecs, containers
-  ffmpeg_7-full,
+  ffmpeg_8-full,
   nv-codec-headers,
   libogg,
   x264,
@@ -85,14 +88,35 @@
 }:
 
 let
-  version = "1.10.2";
+  version = "1.11.1";
 
-  src = fetchFromGitHub {
-    owner = "HandBrake";
-    repo = "HandBrake";
-    # uses version commit for logic in version.txt
-    rev = "dddf75f756e56d2b8dbb0609175bc12047a4841d";
-    hash = "sha256-CIMpJDJ0IIz95f3/zxeQqpCFpHWEmdgA+VaaUDY516A=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "HandBrake";
+      repo = "HandBrake";
+      # uses version commit for logic in version.txt
+      rev = "4ce99a885cde39b3511016efdb5124726819defb";
+      hash = "sha256-oWXNiRK0wbmINnjM3GrOIawcSULTuy3yANfgW8li9F0=";
+    };
+
+    patches = [
+      # Only needed so the subsequent patch applies
+      (fetchpatch2 {
+        url = "https://github.com/HandBrake/HandBrake/commit/c8e16778a330881af36fa32004f887bd73874d15.patch";
+        hash = "sha256-i3/X9opDzsZIO7bjLHHZltuQH93uENRF0t7FP7DDdBM=";
+      })
+      # Update x265 submodule to v4.2, drop in next release
+      (fetchpatch2 {
+        url = "https://github.com/HandBrake/HandBrake/commit/432514bf839e7280511e4a7afc35fb4868ef4d0b.patch";
+        excludes = [
+          "contrib/x265/module.defs"
+          "contrib/x265_8bit/module.defs"
+          "contrib/x265_10bit/module.defs"
+          "contrib/x265_12bit/module.defs"
+        ];
+        hash = "sha256-xwIY1pO9mKbrQFjQCENuvntIoiZTHeUVg8axrl3zxxo=";
+      })
+    ];
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -100,70 +124,67 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.1.1";
-  ffmpeg-hb =
-    (ffmpeg_7-full.override {
-      version = ffmpeg-version;
-      hash = "sha256-GyS8imOqfOUPxXrzCiQtzCQIIH6bvWmQAB0fKUcRsW4=";
-    }).overrideAttrs
-      (old: {
-        patches = (old.patches or [ ]) ++ [
-          "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
-          "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
-          "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
-          "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-          "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
-          "${src}/contrib/ffmpeg/A06-dvdsubdec-fix-processing-of-partial-packets.patch"
-          "${src}/contrib/ffmpeg/A07-dvdsubdec-return-number-of-bytes-used.patch"
-          "${src}/contrib/ffmpeg/A08-dvdsubdec-use-pts-of-initial-packet.patch"
-          "${src}/contrib/ffmpeg/A09-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
-          "${src}/contrib/ffmpeg/A10-ccaption_dec-fix-pts-in-real_time-mode.patch"
-          "${src}/contrib/ffmpeg/A11-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
-          "${src}/contrib/ffmpeg/A12-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
-
-          # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
-          # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
-          # "${src}/contrib/ffmpeg/A13-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
-
-          "${src}/contrib/ffmpeg/A14-hevc_mp4toannexb.c-fix-qsv-decode-of-10bit-hdr.patch"
-          "${src}/contrib/ffmpeg/A15-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
-          "${src}/contrib/ffmpeg/A16-avcodec-amfenc-Add-support-for-on-demand-key-frames.patch"
-          "${src}/contrib/ffmpeg/A17-avcodec-amfenc-properly-set-primaries-transfer-and-m.patch"
-          "${src}/contrib/ffmpeg/A18-libavcodec-qsvenc-update-has_b_frames-value.patch"
-          "${src}/contrib/ffmpeg/A19-libavcodec-qsv-enable-av1-scc.patch"
-          "${src}/contrib/ffmpeg/A20-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
-          "${src}/contrib/ffmpeg/A21-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
-          "${src}/contrib/ffmpeg/A22-avformat-mov-read-and-write-additional-iTunes-style-.patch"
-          "${src}/contrib/ffmpeg/A23-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
-          "${src}/contrib/ffmpeg/A24-AV1-videotoolbox.patch"
-          "${src}/contrib/ffmpeg/A25-videotoolbox-speedup-decoding.patch"
-          "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
-          "${src}/contrib/ffmpeg/A30-qsv-fixed-BT2020-BT709-conversion.patch"
-          "${src}/contrib/ffmpeg/A31-Parse-EAC3-Atmos-ComplexityIndex-for-MP4-remuxing.patch"
-        ];
-      });
+  ffmpeg-hb = ffmpeg_8-full.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
+      "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
+      "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
+      "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
+      "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
+      "${src}/contrib/ffmpeg/A06-avformat-mov-read-and-write-additional-iTunes-style-.patch"
+      "${src}/contrib/ffmpeg/A07-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
+      "${src}/contrib/ffmpeg/A08-dvdsubdec-fix-processing-of-partial-packets.patch"
+      "${src}/contrib/ffmpeg/A09-dvdsubdec-return-number-of-bytes-used.patch"
+      "${src}/contrib/ffmpeg/A10-dvdsubdec-use-pts-of-initial-packet.patch"
+      "${src}/contrib/ffmpeg/A11-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
+      "${src}/contrib/ffmpeg/A12-ccaption_dec-fix-pts-in-real_time-mode.patch"
+      "${src}/contrib/ffmpeg/A13-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
+      "${src}/contrib/ffmpeg/A14-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
+      "${src}/contrib/ffmpeg/A15-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+      "${src}/contrib/ffmpeg/A16-libavcodec-qsvenc.c-update-has_b_frames-value-after-.patch"
+      "${src}/contrib/ffmpeg/A17-qsv-enable-av1-scc.patch"
+      "${src}/contrib/ffmpeg/A18-fixed-BT2020-BT709-conversion-via-VPP.patch"
+      "${src}/contrib/ffmpeg/A19-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
+      "${src}/contrib/ffmpeg/A20-videotoolbox-speedup-decoding.patch"
+      "${src}/contrib/ffmpeg/A21-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+      "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
+      "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
+      "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
+    ];
+  });
 
   x265-hb = x265.overrideAttrs (old: {
-    version = "4.1";
-    sourceRoot = "x265_4.1/source";
+    version = "4.2";
+    sourceRoot = "x265_4.2/source";
     src = fetchurl {
-      url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.1.tar.gz";
-      hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
+      url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.2.tar.gz";
+      hash = "sha256-QLHqBFPgMJ8OupNODd9TP49ilZZmeeiJTo8cHI1eEhA=";
     };
     # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
     # are written with respect to the parent directory instead of that source directory.
     # patches which don't cleanly apply are commented out.
     postPatch = (old.postPatch or "") + ''
       pushd ..
-      patch -p1 < ${src}/contrib/x265/A01-Do-not-set-thread-priority-on-Windows.patch
-      patch -p1 < ${src}/contrib/x265/A02-Apple-Silicon-tuning.patch
-      patch -p1 < ${src}/contrib/x265/A03-Implement-ambient-viewing-environment-sei.patch
-      patch -p1 < ${src}/contrib/x265/A04-add-new-matrix-coefficients-from-H.273-v3.patch
-      patch -p1 < ${src}/contrib/x265/A05-Fix-Dolby-Vision-RPU-memory-management.patch
-      # patch -p1 < ${src}/contrib/x265/A06-Update-version-strings.patch
-      patch -p1 < ${src}/contrib/x265/A07-Fix-macOS-cross-compilation.patch
-      # patch -p1 < ${src}/contrib/x265/A08-Fix-inconsistent-bitrate-in-second-pass.patch
-      patch -p1 < ${src}/contrib/x265/A09-Ensuring-the-mvdLX-is-compliant.patch
+        for p in ${src}/contrib/x265/*.patch; do
+          patch -p1 < "$p"
+        done
+      popd
+    '';
+  });
+
+  svt-av1-hb = svt-av1.overrideAttrs (old: rec {
+    version = "4.0.1";
+    src = fetchFromGitLab {
+      owner = "AOMediaCodec";
+      repo = "SVT-AV1";
+      rev = "v${version}";
+      hash = "sha256-7krVkLZxgolqPTkuyKAx07BekAPacftcGZ44lQTQFZQ=";
+    };
+    postPatch = (old.postPatch or "") + ''
+      pushd ..
+        for p in ${src}/contrib/svt-av1/*.patch; do
+          patch -p1 < "$p"
+        done
       popd
     '';
   });
@@ -268,7 +289,7 @@ let
       libvpx
       libxml2
       speex
-      svt-av1
+      svt-av1-hb
       x264
       x265-hb
       xz

@@ -4,10 +4,10 @@
   fetchurl,
   meson,
   ninja,
-  file,
-  docbook-xsl-nons,
-  gtk-doc ? null,
-  buildDevDoc ? gtk-doc != null,
+  # FIXME: hotdoc errors out due to issues discovering libclang paths
+  # See https://github.com/NixOS/nixpkgs/issues/514723
+  hotdoc,
+  buildDevDoc ? false,
 
   # for passthru.tests
   gnuradio,
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orc";
-  version = "0.4.41";
+  version = "0.4.42";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yxv9T2VSic05vARkLVl76d5UJ2I/CGHB/BnAjZhGf6I=";
+    hash = "sha256-fskSq1mvPMl4dMRWpWqK4e7FIMOF7ER+ihArK9EiyQw=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
-    (lib.mesonEnable "gtk_doc" buildDevDoc)
+    (lib.mesonEnable "examples" false)
+    (lib.mesonEnable "benchmarks" false)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "hotdoc" buildDevDoc)
   ];
 
   nativeBuildInputs = [
@@ -46,9 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ]
   ++ lib.optionals buildDevDoc [
-    gtk-doc
-    file
-    docbook-xsl-nons
+    hotdoc
   ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
@@ -77,6 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
     ];
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

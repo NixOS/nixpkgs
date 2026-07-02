@@ -6,6 +6,8 @@
   bison,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   buildPackages,
+  zstd,
+  fetchpatch,
 
   # apparmor deps
   libapparmor,
@@ -23,16 +25,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
+
+    substituteInPlace init/rc.apparmor.functions \
+      --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" \
+      --replace-fail "/usr/sbin/aa-status" "${lib.getExe' apparmor-bin-utils "aa-status"}"
+    sed -i init/rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
+
     cd parser
 
     substituteInPlace Makefile \
       --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
-    substituteInPlace rc.apparmor.functions \
-      --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" # FIXME
-    substituteInPlace rc.apparmor.functions \
-      --replace-fail "/usr/sbin/aa-status" "${lib.getExe' apparmor-bin-utils "aa-status"}"
-    sed -i rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
   '';
+
+  patches = [
+    (fetchpatch {
+      # https://gitlab.com/apparmor/apparmor/-/merge_requests/2133
+      # Patches generated yacc parser code to compile with format-security
+      url = "https://gitlab.com/apparmor/apparmor/-/commit/6bdec74d5e74660b97e00b4b8fafc014b05907b7.diff";
+      hash = "sha256-7c5EFByrGIDj2lc31bRttyeybwndDm4iS4qdPMVaG/I=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
@@ -42,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libapparmor
+    zstd
     runtimeShellPackage
   ];
 

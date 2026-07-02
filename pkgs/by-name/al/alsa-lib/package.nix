@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.15.3";
+  version = "1.2.16";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ewedYU1YLK3nq42yNk5lJx0Id6N9+HV6xKwMiXC+hh4=";
+    hash = "sha256-EiseMWbVX+GbzeZWU116NvKrEOZscsatL0PyD/3tCpY=";
   };
 
   patches = [
@@ -24,11 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     # "libs" field to declare locations for both native and 32bit plugins, in
     # order to support apps with 32bit sound running on x86_64 architecture.
     ./alsa-plugin-conf-multilib.patch
-    (fetchpatch {
-      name = "CVE-2026-25068.patch";
-      url = "https://github.com/alsa-project/alsa-lib/commit/5f7fe33002d2d98d84f72e381ec2cccc0d5d3d40.patch";
-      hash = "sha256-4memtcg+FDOctX6wgiCdmnlG+IUS+5rL1f3LcsWS5lw=";
-    })
   ];
 
   enableParallelBuilding = true;
@@ -66,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       "alsa-topology"
     ];
     platforms = with lib.platforms; linux ++ freebsd;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

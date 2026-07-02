@@ -14,7 +14,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-+hC3yJwwwXr01Aa47K5dv4gL0+IlTQZU9YYgygXkTSI=";
+  xcodeHash = "sha256-SdeF6Jp+KuVTUawJdvpw53qr3gIPEhVzqgQxAau19C0=";
 
   postPatch = ''
     # Avoid a conflict with the definition in SDK’s headers.

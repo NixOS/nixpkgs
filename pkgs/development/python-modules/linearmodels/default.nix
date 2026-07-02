@@ -67,8 +67,6 @@ buildPythonPackage (finalAttrs: {
 
   preCheck = ''
     rm linearmodels/__init__.py
-
-    export OMP_NUM_THREADS=1
   '';
 
   disabledTestPaths = [

@@ -15,7 +15,7 @@
   m4,
   perl,
   pkg-config,
-  python3,
+  python313,
   rust-cbindgen,
   rustPlatform,
   rustc,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     m4
     perl
     pkg-config
-    python3
+    python313
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
