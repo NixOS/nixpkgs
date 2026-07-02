@@ -2,8 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
   pkg-config,
   openssl,
+  fzf,
+  mdcat,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,9 +29,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # use the non-vendored openssl
   env.OPENSSL_NO_VENDOR = 1;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = [ openssl ];
+
+  postFixup = ''
+    wrapProgram $out/bin/lumen --prefix PATH : ${
+      lib.makeBinPath [
+        fzf
+        mdcat
+      ]
+    }
+  '';
 
   # tests that require a git repository to run
   checkFlags = [

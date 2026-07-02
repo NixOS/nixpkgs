@@ -7,3 +7,4 @@ version=$(curl ${GITLAB_TOKEN:+-H "Private-Token: $GITLAB_TOKEN"} -sL https://gi
 
 nix-update --version="$version" glitchtip
 nix-update --version="$version" glitchtip.frontend
+nix-update glitchtip.glitchtip-rust

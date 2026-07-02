@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "govc";
-  version = "0.53.1";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "govmomi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-egyXzA+0xobHcq3dGOYou4sPCHRDv2l8QWo8ZLWofKU=";
+    hash = "sha256-wz0+x0abPEScOYdwm94YW7KxGX6SANh0nf2TpgcyHmk=";
   };
 
-  vendorHash = "sha256-xRhjAOQKX6CU9BmdNZonDMwmnEvFXWOaP73j7wPIexk=";
+  vendorHash = "sha256-pPni473N8W3hrAITQ2hhIfcRiKZu1XvDzJH9rOrSxt8=";
 
   sourceRoot = "${finalAttrs.src.name}/govc";
 

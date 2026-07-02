@@ -10,16 +10,16 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "squix";
-  version = "0.4.0-beta";
+  version = "0.5.0-beta";
 
   src = fetchFromGitHub {
     owner = "eduardofuncao";
     repo = "squix";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lJOXzBgVgRdUi+btu/eOlYXDLhS2FLEnJQ/UjGk5jF4=";
+    hash = "sha256-R/y1fl4MehZ+VDWBtSL3EDzVBsAdCeR5nS687vwk1IM=";
   };
 
-  vendorHash = "sha256-JRmNajvCb57dMo8eggOD1m4N01p2RSK8r49pmBB56Z0=";
+  vendorHash = "sha256-kSv3VAQi+qdT29gZAjLmHauItaMFd9NG7bdRtQE1MZo=";
 
   ldflags = [
     "-s"

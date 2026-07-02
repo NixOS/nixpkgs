@@ -1,0 +1,11 @@
+--- a/build.gradle
++++ b/build.gradle
+@@ -32,7 +32,7 @@ ext {
+     umpleMajorVersionFile = new File("${rootProject.projectDir.toString()}/build/umpleversion.txt")
+     umpleLastVersion = new org.yaml.snakeyaml.Yaml().load(rootProject.ext.umpleLastVersionFile.newInputStream()).version
+     umpleMajorVersion = new org.yaml.snakeyaml.Yaml().load(rootProject.ext.umpleMajorVersionFile.newInputStream()).version
+-    umpleCurrentVersion = "${rootProject.ext.umpleMajorVersion}.${runGit(['rev-list', '--count', 'master'], 'x')}.${runGit(['rev-parse', '--short', 'master'], 'dev')}"
++    umpleCurrentVersion = "@UMPLE_VERSION@"
+     umpleCurrentJarBase = "umple-${rootProject.ext.umpleCurrentVersion}"
+     umpleCurrentJar = "${rootProject.projectDir.toString()}/dist/gradle/libs/${rootProject.ext.umpleCurrentJarBase}.jar"
+     umpleJarRemoteSource = "https://cruise.umple.org/umpleonline/scripts/umple.jar"

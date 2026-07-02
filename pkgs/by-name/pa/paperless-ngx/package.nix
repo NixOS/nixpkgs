@@ -3,12 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
-  node-gyp,
-  nodejs,
+  callPackage,
   nixosTests,
   gettext,
   python3,
-  giflib,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -16,50 +14,40 @@
   pngquant,
   qpdf,
   tesseract5,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  pnpm_10,
   poppler-utils,
   liberation_ttf,
-  xcbuild,
-  pango,
-  pkg-config,
   symlinkJoin,
   nltk-data,
   lndir,
+  nix-update-script,
+  extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  pnpm = pnpm_10;
+  defaultPythonPackageOverrides = final: prev: {
+    django = prev.django_5;
 
-  version = "2.20.15";
+    fido2 = prev.fido2.overridePythonAttrs {
+      version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "paperless-ngx";
-    repo = "paperless-ngx";
-    tag = "v${version}";
-    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
+      src = fetchPypi {
+        pname = "fido2";
+        version = "1.2.0";
+        hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+      };
+
+      pytestFlags = [ ];
+    };
+
+    # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
+    ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
   };
 
   python = python3.override {
     self = python;
-    packageOverrides = final: prev: {
-      django = prev.django_5;
-
-      fido2 = prev.fido2.overridePythonAttrs {
-        version = "1.2.0";
-
-        src = fetchPypi {
-          pname = "fido2";
-          version = "1.2.0";
-          hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
-        };
-
-        pytestFlags = [ ];
-      };
-
-      # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
-      ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
-    };
+    packageOverrides = lib.composeManyExtensions [
+      defaultPythonPackageOverrides
+      extraPythonPackageOverrides
+    ];
   };
 
   path = lib.makeBinPath [
@@ -73,73 +61,6 @@ let
     poppler-utils
   ];
 
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "paperless-ngx-frontend";
-    inherit version;
-
-    src = src + "/src-ui";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit pnpm;
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 3;
-      hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
-    };
-
-    nativeBuildInputs = [
-      node-gyp
-      nodejs
-      pkg-config
-      pnpmConfigHook
-      pnpm
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
-
-    buildInputs = [
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-    ];
-
-    CYPRESS_INSTALL_BINARY = "0";
-    NG_CLI_ANALYTICS = "false";
-
-    buildPhase = ''
-      runHook preBuild
-
-      pushd node_modules/canvas
-      node-gyp rebuild
-      popd
-
-      # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
-      pnpm run build --configuration production | cat
-
-      runHook postBuild
-    '';
-
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
-
-      pnpm run test | cat
-
-      runHook postCheck
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/lib/paperless-ui
-      mv ../src/documents/static/frontend $out/lib/paperless-ui/
-
-      runHook postInstall
-    '';
-  });
-
   nltkDataDir = symlinkJoin {
     name = "paperless_ngx_nltk_data";
     paths = with nltk-data; [
@@ -149,11 +70,18 @@ let
     ];
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
   pyproject = true;
 
-  inherit version src;
+  version = "2.20.15";
+
+  src = fetchFromGitHub {
+    owner = "paperless-ngx";
+    repo = "paperless-ngx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
+  };
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
@@ -266,14 +194,14 @@ python.pkgs.buildPythonApplication rec {
 
   installPhase =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       runHook preInstall
 
       mkdir -p $out/lib/paperless-ngx/static/frontend
       cp -r {src,static,LICENSE} $out/lib/paperless-ngx
-      lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
+      lndir -silent ${finalAttrs.passthru.frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
       chmod +x $out/lib/paperless-ngx/src/manage.py
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
@@ -319,7 +247,7 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-    export PAPERLESS_NLTK_DIR=${passthru.nltkDataDir}
+    export PAPERLESS_NLTK_DIR=${finalAttrs.passthru.nltkDataDir}
     # Limit threads per worker based on NIX_BUILD_CORES, capped at 256
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
@@ -351,20 +279,29 @@ python.pkgs.buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
+    frontend = callPackage ./frontend.nix {
+      inherit (finalAttrs) src version;
+      meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
+    };
     inherit
-      frontend
       nltkDataDir
       path
       python
       tesseract5
       ;
     tests = { inherit (nixosTests) paperless; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
@@ -374,4 +311,4 @@ python.pkgs.buildPythonApplication rec {
       erikarvstedt
     ];
   };
-}
+})
