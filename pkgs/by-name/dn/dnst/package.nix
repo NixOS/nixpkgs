@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage doc/manual/build/man/*.1
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=unstable" ];
+  };
 
   meta = {
     description = "Toolset to assist DNS operators with zone and nameserver maintenance";
