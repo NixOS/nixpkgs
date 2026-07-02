@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "clusternet";
-  version = "0.18.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "clusternet";
     repo = "clusternet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MtiQM2msHv2gLaVpYoSrzJMZWwA0vMBIklwAQi+lG4g=";
+    hash = "sha256-Nrnk3Ru4DTOagc7iTC4ZGyYhqhQwLIgs3fu67l0stEs=";
   };
 
-  vendorHash = "sha256-vG+k9ttXp/QqhbVKgwn2uo5kEk8OD+LBvJi5lBQfUk4=";
+  vendorHash = "sha256-mMXtiCz4Y5pL77c24RnZ2Uoq5Fh2pkrkApAdkd/xyyw=";
 
   ldFlags = [
     "-s"
