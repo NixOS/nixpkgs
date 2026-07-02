@@ -950,6 +950,7 @@ in
   litestream = runTest ./litestream.nix;
   livebook-service = runTest ./livebook-service.nix;
   livekit = runTest ./networking/livekit.nix;
+  lix = runTest ./lix.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
@@ -1165,6 +1166,7 @@ in
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-daemon-unprivileged = runTest ./nix-daemon-unprivileged.nix;
   nix-ld = runTest ./nix-ld.nix;
+  nix-local-store = runTest ./nix-local-store.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;

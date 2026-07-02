@@ -91,6 +91,25 @@ let
       "nix.conf"
       cfg.settings;
 
+  makeNixBuildUser = nr: {
+    name = "nixbld${toString nr}";
+    value = {
+      description = "Nix build user ${toString nr}";
+
+      /*
+        For consistency with the setgid(2), setuid(2), and setgroups(2)
+        calls in `libstore/build.cc', don't add any supplementary group
+        here except "nixbld".
+      */
+      uid = builtins.add config.ids.uids.nixbld nr;
+      isSystemUser = true;
+      group = "nixbld";
+      extraGroups = [ "nixbld" ];
+    };
+  };
+
+  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
+
 in
 {
   imports = [
@@ -135,6 +154,24 @@ in
 
   options = {
     nix = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable Nix.
+          Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
+        '';
+      };
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.nix;
+        defaultText = lib.literalExpression "pkgs.nix";
+        description = ''
+          This option specifies the Nix package instance to use throughout the system.
+        '';
+      };
+
       checkConfig = mkOption {
         type = types.bool;
         default = true;
@@ -159,6 +196,16 @@ in
           keep-derivations = true
         '';
         description = "Additional text appended to {file}`nix.conf`.";
+      };
+
+      nrBuildUsers = lib.mkOption {
+        type = lib.types.int;
+        description = ''
+          Number of `nixbld` user accounts created to
+          perform secure concurrent builds.  If you receive an error
+          message saying that “all build users are currently in use”,
+          you should increase this value.
+        '';
       };
 
       settings = mkOption {
@@ -366,6 +413,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      nixPackage
+      pkgs.nix-info
+    ]
+    ++ lib.optional config.programs.bash.completion.enable pkgs.nix-bash-completions;
+
+    systemd.tmpfiles.rules = [
+      "d  /nix/var                           0755 root root - -"
+      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
+      # Boot-time cleanup
+      "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
+      "R! /nix/var/nix/temproots             -    -    -    - -"
+    ];
+
     environment.etc."nix/nix.conf".source = nixConf;
     nix.settings = {
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
@@ -373,5 +434,16 @@ in
       substituters = mkAfter [ "https://cache.nixos.org/" ];
       system-features = defaultSystemFeatures;
     };
+
+    nix.nrBuildUsers = lib.mkDefault (
+      if cfg.settings.auto-allocate-uids or false then
+        0
+      else
+        lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+    );
+
+    users.users = nixbldUsers;
+
+    services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
   };
 }
