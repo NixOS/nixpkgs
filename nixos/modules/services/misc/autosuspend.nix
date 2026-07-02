@@ -240,7 +240,7 @@ in
       after = [ "network.target" ];
       path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
       serviceConfig = {
-        ExecStart = "${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon";
+        ExecStart = "${autosuspend}/bin/autosuspend --logging ${autosuspend}/etc/autosuspend-logging.conf daemon --config ${autosuspend-conf}";
       };
     };
   };
