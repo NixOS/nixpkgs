@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 
   # nativeBuildInputs
   pkg-config,
@@ -93,7 +93,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+    };
   };
 
   meta = {
