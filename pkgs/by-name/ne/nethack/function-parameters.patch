@@ -1,0 +1,86 @@
+diff --git a/include/system.h b/include/system.h
+index a2cb51f..9f40fdd 100644
+--- a/include/system.h
++++ b/include/system.h
+@@ -60,17 +60,17 @@ typedef long off_t;
+ #endif
+ #ifndef SIG_RET_TYPE
+ #if defined(NHSTDC) || defined(POSIX_TYPES) || defined(OS2) || defined(__DECC)
+-#define SIG_RET_TYPE void (*)()
++#define SIG_RET_TYPE void (*)(int)
+ #endif
+ #endif
+ #ifndef SIG_RET_TYPE
+ #if defined(ULTRIX) || defined(SUNOS4) || defined(SVR3) || defined(SVR4)
+ /* SVR3 is defined automatically by some systems */
+-#define SIG_RET_TYPE void (*)()
++#define SIG_RET_TYPE void (*)(int)
+ #endif
+ #endif
+ #ifndef SIG_RET_TYPE /* BSD, SIII, SVR2 and earlier, Sun3.5 and earlier */
+-#define SIG_RET_TYPE int (*)()
++#define SIG_RET_TYPE int (*)(int)
+ #endif
+ 
+ #if !defined(__cplusplus) && !defined(__GO32__)
+@@ -96,7 +96,7 @@ E long NDECL(lrand48);
+ E void FDECL(srand48, (long));
+ #else
+ E long lrand48();
+-E void srand48();
++E void srand48(long);
+ #endif /* MACOSX */
+ #endif /* BSD || ULTRIX || RANDOM */
+ 
+@@ -352,10 +352,10 @@ E char *FDECL(memset, (char *, int, int));
+ #endif /* MICRO */
+ 
+ #if defined(BSD) && defined(ultrix) /* i.e., old versions of Ultrix */
+-E void sleep();
++E void sleep(unsigned);
+ #endif
+ #if defined(ULTRIX) || defined(SYSV)
+-E unsigned sleep();
++E unsigned sleep(unsigned);
+ #endif
+ #if defined(HPUX)
+ E unsigned int FDECL(sleep, (unsigned int));
+@@ -519,7 +519,7 @@ E char *FDECL(tgoto, (const char *, int, int));
+ #else
+ #if !(defined(HPUX) && defined(_POSIX_SOURCE))
+ E int FDECL(tgetent, (char *, const char *));
+-E void FDECL(tputs, (const char *, int, int (*)()));
++E void FDECL(tputs, (const char *, int, int (*)(int)));
+ #endif
+ E int FDECL(tgetnum, (const char *));
+ E int FDECL(tgetflag, (const char *));
+diff --git a/include/winX.h b/include/winX.h
+index a1a5605..1d6b84b 100644
+--- a/include/winX.h
++++ b/include/winX.h
+@@ -279,7 +279,7 @@ typedef struct {
+ } AppResources;
+ 
+ E AppResources appResources;
+-E void (*input_func)();
++E void (*input_func)(Widget, XEvent *, String *, Cardinal *);
+ 
+ extern struct window_procs X11_procs;
+ 
+diff --git a/include/xwindow.h b/include/xwindow.h
+index 8b9cfa0..8307c25 100644
+--- a/include/xwindow.h
++++ b/include/xwindow.h
+@@ -76,8 +76,10 @@
+ #define XtNexposeCallback "exposeCallback"
+ #define XtNresizeCallback "resizeCallback"
+ 
+-extern XFontStruct *WindowFontStruct(/* Widget */);
+-extern Font WindowFont(/* Widget */);
++struct Widget;
++
++extern XFontStruct *WindowFontStruct(Widget);
++extern Font WindowFont(Widget);
+ 
+ #define XtCWindowResource "WindowResource"
+ #define XtCRows "Rows"

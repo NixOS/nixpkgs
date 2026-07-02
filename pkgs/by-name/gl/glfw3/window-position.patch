@@ -1,0 +1,37 @@
+Dismiss warnings about window position being unavailable on Wayland.
+
+In addition to the other glfw patches, this one is required on certain
+compositors such as niri and waywall to be able to launch Minecraft at
+all.
+
+This patch expands the suppression to setting positions. This
+prevents Minecraft Forge environments from crashing on Wayland when
+strict error callbacks are used.
+
+Original get-position fix by: uku <hi@uku.moe>
+Expanded to include set-position, inspired by Prior5151's fix on AUR.
+https://aur.archlinux.org/packages/glfw-wayland-minecraft-cursorfix#comment-1013099
+
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2236,16 +2236,16 @@ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
+     // A Wayland client is not aware of its position, so just warn and leave it
+     // as (0, 0)
+ 
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not provide the window position");
++    fprintf(stderr,
++                    "[GLFW] Wayland: The platform does not provide the window position\n");
+ }
+ 
+ void _glfwSetWindowPosWayland(_GLFWwindow* window, int xpos, int ypos)
+ {
+     // A Wayland client can not set its position, so just warn
+ 
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not support setting the window position");
++    fprintf(stderr,
++                    "[GLFW] Wayland: The platform does not support setting the window position\n");
+ }
+ 
+ void _glfwGetWindowSizeWayland(_GLFWwindow* window, int* width, int* height)

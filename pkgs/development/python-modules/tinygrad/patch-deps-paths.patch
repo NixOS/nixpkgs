@@ -1,0 +1,39 @@
+diff --git a/tinygrad/runtime/autogen/libclang.py b/tinygrad/runtime/autogen/libclang.py
+index dbf22b6f5..4a5a097dc 100644
+--- a/tinygrad/runtime/autogen/libclang.py
++++ b/tinygrad/runtime/autogen/libclang.py
+@@ -1,7 +1,7 @@
+ # mypy: ignore-errors
+ import ctypes
+ from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+-dll = DLL('libclang', ['clang-20', 'clang'])
++dll = DLL('libclang', '@libclang@')
+ CXIndex = ctypes.c_void_p
+ class struct_CXTargetInfoImpl(Struct): pass
+ CXTargetInfo = ctypes.POINTER(struct_CXTargetInfoImpl)
+diff --git a/tinygrad/runtime/autogen/llvm.py b/tinygrad/runtime/autogen/llvm.py
+index 7d05224e7..54204f563 100644
+--- a/tinygrad/runtime/autogen/llvm.py
++++ b/tinygrad/runtime/autogen/llvm.py
+@@ -2,7 +2,7 @@
+ import ctypes
+ from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+ from tinygrad.helpers import WIN, OSX
+-dll = DLL('llvm', 'C:\\Program Files\\LLVM\\bin\\LLVM-C.dll' if WIN else '/opt/homebrew/opt/llvm@20/lib/libLLVM.dylib' if OSX else ['LLVM', 'LLVM-21', 'LLVM-20', 'LLVM-19', 'LLVM-18', 'LLVM-17', 'LLVM-16', 'LLVM-15', 'LLVM-14'])
++dll = DLL('llvm', '@libllvm@')
+ intmax_t = ctypes.c_int64
+ try: (imaxabs:=dll.imaxabs).restype, imaxabs.argtypes = intmax_t, [intmax_t]
+ except AttributeError: pass
+diff --git a/tinygrad/runtime/support/compiler_cpu.py b/tinygrad/runtime/support/compiler_cpu.py
+index 8b11f3af8..d8190fac3 100644
+--- a/tinygrad/runtime/support/compiler_cpu.py
++++ b/tinygrad/runtime/support/compiler_cpu.py
+@@ -15,7 +15,7 @@ class ClangJITCompiler(Compiler):
+     arch = {'x86_64': '-march=native', 'AMD64': '-march=native', 'riscv64': '-march=rv64g'}.get(platform.machine(), "-mcpu=native")
+     args = [arch, f'--target={target}-none-unknown-elf', '-O2', '-fPIC', '-ffreestanding', '-fno-math-errno', '-nostdlib', '-fno-ident']
+     arch_args = ['-ffixed-x18'] if target == 'arm64' else []
+-    obj = subprocess.check_output([getenv("CC", 'clang'), '-c', '-x', 'c', *args, *arch_args, '-', '-o', '-'], input=src.encode('utf-8'))
++    obj = subprocess.check_output(["@clang@", '-c', '-x', 'c', *args, *arch_args, '-', '-o', '-'], input=src.encode('utf-8'))
+     return jit_loader(obj)
+ 
+   def disassemble(self, lib:bytes): return capstone_flatdump(lib)

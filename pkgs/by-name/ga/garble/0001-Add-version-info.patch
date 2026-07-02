@@ -1,0 +1,21 @@
+--- a/main.go
++++ b/main.go
+@@ -370,6 +370,7 @@
+ 			mod = mod.Replace
+ 		}
+ 
++		mod.Version = "@version@"
+ 		fmt.Printf("%s %s\n\n", mod.Path, mod.Version)
+ 		fmt.Printf("Build settings:\n")
+ 		for _, setting := range info.Settings {
+--- a/testdata/script/help.txtar
++++ b/testdata/script/help.txtar
+@@ -88,7 +88,7 @@
+ # Test the version command. Note that test binaries exclude VCS build info,
+ # and we reuse the test binary for garble itself, so that's missing.
+ exec garble version
+-stdout -count=1 'mvdan.cc/garble \(devel\)'
++stdout -count=1 'mvdan.cc/garble @version@'
+ stdout -count=1 'Build settings'
+ stdout -count=3 '-compiler|GOOS|GOARCH'
+ ! stdout 'vcs'

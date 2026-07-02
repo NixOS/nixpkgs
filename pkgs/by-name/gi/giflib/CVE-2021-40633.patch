@@ -1,0 +1,26 @@
+From ccbc956432650734c91acb3fc88837f7b81267ff Mon Sep 17 00:00:00 2001
+From: "Eric S. Raymond" <esr@thyrsus.com>
+Date: Wed, 21 Feb 2024 18:55:00 -0500
+Subject: [PATCH] Clean up memory better at end of run (CVE-2021-40633)
+
+---
+ gif2rgb.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/gif2rgb.c b/gif2rgb.c
+index d51226d..fc2e683 100644
+--- a/gif2rgb.c
++++ b/gif2rgb.c
+@@ -517,6 +517,9 @@ static void GIF2RGB(int NumFiles, char *FileName, bool OneFileFlag,
+ 	DumpScreen2RGB(OutFileName, OneFileFlag, ColorMap, ScreenBuffer,
+ 	               GifFile->SWidth, GifFile->SHeight);
+ 
++	for (i = 0; i < GifFile->SHeight; i++) {
++        	(void)free(ScreenBuffer[i]);
++	}
+ 	(void)free(ScreenBuffer);
+ 
+ 	{
+-- 
+2.44.0
+

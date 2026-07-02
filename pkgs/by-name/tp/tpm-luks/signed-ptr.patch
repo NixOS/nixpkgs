@@ -1,0 +1,15 @@
+diff --git a/swtpm-utils/getcapability.c b/swtpm-utils/getcapability.c
+index 7359ba3..17b4324 100644
+--- a/swtpm-utils/getcapability.c
++++ b/swtpm-utils/getcapability.c
+@@ -480,7 +480,8 @@ int main(int argc, char *argv[])
+ 				  }
+ 
+ 				  if (c) {
+-				      char pcrmap[4], *pf;
++				      char pcrmap[4];
++				      unsigned char *pf;
+ 
+ 				      memcpy(pcrmap, ndp.pcrInfoRead.pcrSelection.pcrSelect,
+ 					     ndp.pcrInfoRead.pcrSelection.sizeOfSelect);
+

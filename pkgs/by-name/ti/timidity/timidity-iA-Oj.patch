@@ -1,0 +1,14 @@
+Without this timidity -iA -Oj prints "Couldn't start JACK device (`j')"
+and does not play MIDI.
+
+--- a/timidity/jack_a.c
++++ b/timidity/jack_a.c
+@@ -513,6 +513,8 @@ static int actl_jack(int request, void *arg)
+ 		ringbuf_clear(&ctx->rbuf);
+ 		return 0;
+ 
++	case PM_REQ_PLAY_START:
++		return 0;
+ 	}
+ 	return -1;
+ }

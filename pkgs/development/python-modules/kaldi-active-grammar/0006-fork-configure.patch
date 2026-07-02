@@ -1,0 +1,26 @@
+diff --git a/src/configure b/src/configure
+index 1186c6d12..4ad355e64 100755
+--- a/src/configure
++++ b/src/configure
+@@ -1045,9 +1045,6 @@ echo "AS = $AS" >> kaldi.mk
+ echo "RANLIB = $RANLIB" >> kaldi.mk
+ echo >> kaldi.mk
+ 
+-echo "Checking compiler $CXX ..."
+-check_compiler $CXX
+-
+ echo "# Base configuration" >> kaldi.mk
+ echo >> kaldi.mk
+ if $dynamic_kaldi ; then
+@@ -1066,11 +1063,6 @@ if [ ! -f $FSTROOT/include/fst/fst.h  ]; then
+   failure "Could not find file $FSTROOT/include/fst/fst.h:
+   you may not have installed OpenFst. See ../tools/INSTALL"
+ fi
+-OPENFST_VER=${OPENFST_VER:-$(grep 'PACKAGE_VERSION' $FSTROOT/Makefile | sed -e 's:.*= ::')}
+-OPENFST_VER_NUM=$(echo $OPENFST_VER | sed 's/\./ /g' | xargs printf "%d%02d%02d")
+-if [ $OPENFST_VER_NUM -lt 10600 ]; then
+-  failure "OpenFst-$OPENFST_VER is not supported. You need OpenFst >= 1.6.0.)"
+-fi
+ echo "OPENFSTINC = $FSTROOT/include" >> kaldi.mk
+ if $static_fst ; then
+   OPENFSTLIBS="$FSTROOT/lib/libfst.a"

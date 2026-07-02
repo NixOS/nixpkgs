@@ -1,0 +1,19 @@
+diff --git a/__init__.py b/__init__.py
+deleted file mode 100644
+index e69de29b..00000000
+diff --git a/pyproject.toml b/pyproject.toml
+index eb8ef0a0..dbb9f619 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -97,6 +97,11 @@ dev = [
+ ]
+ 
+ [tool.uv.build-backend]
++module-name = [
++    "core",
++    "demo",
++    "impress"
++]
+ module-root = ""
+ source-exclude = [
+     "**/tests/**",

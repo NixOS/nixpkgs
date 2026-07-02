@@ -1,0 +1,235 @@
+{
+  lib,
+  stdenv,
+  mkRustcDepArgs,
+  mkRustcFeatureArgs,
+  needUnstableCLI,
+  rustc,
+}:
+
+{
+  crateName,
+  dependencies,
+  crateFeatures,
+  crateRenames,
+  libName,
+  release,
+  libPath,
+  crateType,
+  metadata,
+  crateBin,
+  hasCrateBin,
+  extraRustcOpts,
+  verbose,
+  colors,
+  buildTests,
+  codegenUnits,
+  capLints,
+}:
+
+let
+  baseRustcOpts = [
+    (if release then "-C opt-level=3" else "-C debuginfo=2")
+    "-C codegen-units=${toString codegenUnits}"
+    "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    # When the rust-src component is present (common with rust-overlay
+    # toolchains), rustc unvirtualises libstd source paths. Panic
+    # locations from monomorphised generic std code then embed the
+    # toolchain store path in .rodata, pulling the entire toolchain into
+    # the closure. Remap to a stable placeholder to break the reference.
+    "--remap-path-prefix=${rustc}=/rustc"
+    (mkRustcDepArgs dependencies crateRenames)
+    (mkRustcFeatureArgs crateFeatures)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--target"
+    stdenv.hostPlatform.rust.rustcTargetSpec
+  ]
+  ++ lib.optionals (needUnstableCLI dependencies) [
+    "-Z"
+    "unstable-options"
+  ]
+  ++ extraRustcOpts
+  # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
+  # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
+  ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
+  ++
+    lib.optional (stdenv.hostPlatform.linker == "lld" && rustc ? llvmPackages.lld) # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
+      "-C linker=${rustc.llvmPackages.lld}/bin/lld"
+  ++ lib.optional (
+    stdenv.hasCC && stdenv.hostPlatform.linker != "lld"
+  ) "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
+
+  # build the final rustc arguments that can be different between different
+  # crates
+  libRustcOpts = lib.concatStringsSep " " (
+    baseRustcOpts ++ [ rustcMeta ] ++ (map (x: "--crate-type ${x}") crateType)
+  );
+
+  binRustcOpts = lib.concatStringsSep " " baseRustcOpts;
+
+  build_bin = if buildTests then "build_bin_test" else "build_bin";
+
+  # Shell snippet that builds a binary target to target/cargo-bin-exe/
+  # so integration tests can exec it via CARGO_BIN_EXE_<name>.
+  buildBinForTests = bin: ''
+    mkdir -p target/cargo-bin-exe
+    BIN_NAME='${bin.name or crateName}'
+    ${
+      if !bin ? path then
+        ''
+          BIN_PATH=""
+          search_for_bin_path "$BIN_NAME"
+        ''
+      else
+        ''
+          BIN_PATH='${bin.path}'
+        ''
+    }
+    build_bin "$BIN_NAME" "$BIN_PATH" target/cargo-bin-exe
+  '';
+in
+''
+  runHook preBuild
+
+  # configure & source common build functions
+  LIB_RUSTC_OPTS="${libRustcOpts}"
+  BIN_RUSTC_OPTS="${binRustcOpts}"
+  LIB_EXT="${stdenv.hostPlatform.extensions.library}"
+  LIB_PATH="${libPath}"
+  LIB_NAME="${libName}"
+  CAP_LINTS="${capLints}"
+
+  CRATE_NAME='${lib.replaceStrings [ "-" ] [ "_" ] libName}'
+
+  setup_link_paths
+
+  if [[ -e "$LIB_PATH" ]]; then
+     build_lib "$LIB_PATH"
+  elif [[ -e src/lib.rs ]]; then
+     build_lib src/lib.rs
+  fi
+
+  ${
+    # When building tests, first build the real (non-test) binaries so
+    # integration tests can exec them via CARGO_BIN_EXE_<name>. They go
+    # to target/cargo-bin-exe/ to avoid colliding with the --test
+    # harnesses written to target/bin/. After building, populate the
+    # CARGO_BIN_EXE_ENV array so subsequent rustc invocations see the
+    # env vars (via `env` prefix in lib.sh, which unlike bash `export`
+    # accepts hyphenated names).
+    lib.optionalString buildTests (
+      lib.concatMapStringsSep "\n" (
+        bin:
+        let
+          haveRequiredFeature =
+            if bin ? requiredFeatures then
+              lib.intersectLists bin.requiredFeatures crateFeatures == bin.requiredFeatures
+            else
+              true;
+        in
+        lib.optionalString haveRequiredFeature (buildBinForTests bin)
+      ) crateBin
+      + lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+        if [[ -e src/main.rs ]]; then
+          mkdir -p target/cargo-bin-exe
+          build_bin ${crateName} src/main.rs target/cargo-bin-exe
+        fi
+        for i in src/bin/*.rs; do
+          [ -e "$i" ] || continue
+          mkdir -p target/cargo-bin-exe
+          build_bin "$(basename $i .rs)" "$i" target/cargo-bin-exe
+        done
+      ''
+      + ''
+        if [ -d target/cargo-bin-exe ]; then
+          for b in target/cargo-bin-exe/*; do
+            [ -x "$b" ] || continue
+            name=$(basename "$b")
+            CARGO_BIN_EXE_ENV+=("CARGO_BIN_EXE_$name=$out/bin/$name")
+          done
+        fi
+      ''
+    )
+  }
+
+  ${lib.optionalString buildTests ''
+    if [[ -e "$LIB_PATH" ]]; then
+       build_lib_test "$LIB_PATH"
+    elif [[ -e src/lib.rs ]]; then
+       build_lib_test src/lib.rs
+    fi
+  ''}
+
+  ${lib.optionalString (lib.length crateBin > 0) (
+    lib.concatMapStringsSep "\n" (
+      bin:
+      let
+        haveRequiredFeature =
+          if bin ? requiredFeatures then
+            # Check that all element in requiredFeatures are also present in crateFeatures
+            lib.intersectLists bin.requiredFeatures crateFeatures == bin.requiredFeatures
+          else
+            true;
+      in
+      if haveRequiredFeature then
+        ''
+          mkdir -p target/bin
+          BIN_NAME='${bin.name or crateName}'
+          ${
+            if !bin ? path then
+              ''
+                BIN_PATH=""
+                search_for_bin_path "$BIN_NAME"
+              ''
+            else
+              ''
+                BIN_PATH='${bin.path}'
+              ''
+          }
+            ${build_bin} "$BIN_NAME" "$BIN_PATH"
+        ''
+      else
+        ''
+          echo Binary ${bin.name or crateName} not compiled due to not having all of the required features -- ${lib.escapeShellArg (builtins.toJSON bin.requiredFeatures)} -- enabled.
+        ''
+    ) crateBin
+  )}
+
+  ${lib.optionalString buildTests ''
+    # When tests are enabled build all the files in the `tests` directory as
+    # test binaries.
+    if [ -d tests ]; then
+      # find all the .rs files (or symlinks to those) in the tests directory, no subdirectories
+      find tests -maxdepth 1 \( -type f -o -type l \) -a -name '*.rs' -print0 | while IFS= read -r -d ''' file; do
+        mkdir -p target/bin
+        build_bin_test_file "$file"
+      done
+
+      # find all the subdirectories of tests/ that contain a main.rs file as
+      # that is also a test according to cargo
+      find tests/ -mindepth 1 -maxdepth 2 \( -type f -o -type l \) -a -name 'main.rs' -print0 | while IFS= read -r -d ''' file; do
+        mkdir -p target/bin
+        build_bin_test_file "$file"
+      done
+
+    fi
+  ''}
+
+  # If crateBin is empty and hasCrateBin is not set then we must try to
+  # detect some kind of bin target based on some files that might exist.
+  ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+    if [[ -e src/main.rs ]]; then
+      mkdir -p target/bin
+      ${build_bin} ${crateName} src/main.rs
+    fi
+    for i in src/bin/*.rs; do #*/
+      mkdir -p target/bin
+      ${build_bin} "$(basename $i .rs)" "$i"
+    done
+  ''}
+  # Remove object files to avoid "wrong ELF type"
+  find target -type f -name "*.o" -print0 | xargs -0 rm -f
+  runHook postBuild
+''

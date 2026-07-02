@@ -1,0 +1,13 @@
+diff --git i/slugify/tests.py w/slugify/tests.py
+index 4c9fa1c..3e14328 100644
+--- i/slugify/tests.py
++++ w/slugify/tests.py
+@@ -57,7 +57,7 @@ class PredefinedSlugifyTestCase(unittest.TestCase):
+         self.assertEqual(slugify_url('The Über article'), 'uber-article')
+ 
+     def test_slugify_filename(self):
+-        self.assertEqual(slugify_filename(u'Дrаft №2.txt'), u'Draft_2.txt')
++        self.assertEqual(slugify_filename(u'Дrаft №2.txt'), u'Draft_No._2.txt')
+ 
+ 
+ class ToLowerTestCase(unittest.TestCase):

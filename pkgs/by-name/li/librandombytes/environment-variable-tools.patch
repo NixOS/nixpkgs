@@ -1,0 +1,34 @@
+diff --git a/configure b/configure
+index 36fcf67..39612f3 100755
+--- a/configure
++++ b/configure
+@@ -143,6 +143,16 @@ firstcompiler = None
+ with open('compilers/default') as f:
+   for c in f.readlines():
+     c = c.strip()
++    if env_cc := os.getenv('CC'):
++      c_as_list= c.split()
++      # check if the compiler we're testing has the name inside the last
++      # part of the CC env var
++      # i.e. gcc == x86_64-linux-unknown-gnu-gcc
++      # or gcc == gcc
++      if c_as_list[0] == env_cc.split("-")[-1]:
++        c_as_list[0] = env_cc
++      c = ' '.join(c_as_list)
++      log('patched command as %s' % c)   
+     cv = compilerversion(c)
+     if cv == None:
+       log('skipping default compiler %s' % c)
+diff --git a/scripts-build/staticlib b/scripts-build/staticlib
+index 7b2fc92..a6bbe41 100755
+--- a/scripts-build/staticlib
++++ b/scripts-build/staticlib
+@@ -4,6 +4,6 @@ lib="$1"
+ shift
+ 
+ rm -f package/lib/"$lib".a
+-ar cr package/lib/"$lib".a "$@"
+-ranlib package/lib/"$lib".a || :
++${AR:-ar} cr package/lib/"$lib".a "$@"
++${RANLIB:-ranlib} package/lib/"$lib".a || :
+ chmod 644 package/lib/"$lib".a

@@ -1,0 +1,85 @@
+From 6328bc3ddd491f0589e943deeabdfa4dda40f4c7 Mon Sep 17 00:00:00 2001
+From: David Wronek <david.wronek@mainlining.org>
+Date: Thu, 12 Feb 2026 18:11:37 +0100
+Subject: [PATCH 2/2] Do not change directory
+
+Signed-off-by: David Wronek <david.wronek@mainlining.org>
+---
+ cleanup.sh   | 4 ++--
+ repackimg.sh | 4 ++--
+ unpackimg.sh | 8 ++------
+ 3 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/cleanup.sh b/cleanup.sh
+index b262c73..d7a3188 100755
+--- a/cleanup.sh
++++ b/cleanup.sh
+@@ -3,7 +3,7 @@
+ # osm0sis @ xda-developers
+ 
+ case $1 in
+-  --help) echo "usage: cleanup.sh [--local] [--quiet]"; exit 1;
++  --help) echo "usage: cleanup.sh [--quiet]"; exit 1;
+ esac;
+ 
+ case $(uname -s) in
+@@ -20,7 +20,7 @@ bin="$aik/bin";
+ 
+ case $1 in
+   --local) shift;;
+-  *) cd "$aik";;
++  *) ;;
+ esac;
+ 
+ if [ -d ramdisk ] && [ "$(stat $statarg ramdisk | head -n 1)" = "root" -o ! "$(find ramdisk 2>&1 | cpio -o >/dev/null 2>&1; echo $?)" -eq "0" ]; then
+diff --git a/repackimg.sh b/repackimg.sh
+index d5e7bc4..15374c4 100755
+--- a/repackimg.sh
++++ b/repackimg.sh
+@@ -5,7 +5,7 @@
+ abort() { echo "Error!"; }
+ 
+ case $1 in
+-  --help) echo "usage: repackimg.sh [--local] [--original] [--origsize] [--level <0-9>] [--avbkey <name>] [--forceelf]"; exit 1;
++  --help) echo "usage: repackimg.sh [--original] [--origsize] [--level <0-9>] [--avbkey <name>] [--forceelf]"; exit 1;
+ esac;
+ 
+ case $(uname -s) in
+@@ -47,7 +47,7 @@ esac;
+ 
+ case $1 in
+   --local) shift;;
+-  *) cd "$aik";;
++  *) ;;
+ esac;
+ 
+ if [ -z "$(ls split_img/* 2>/dev/null)" -o ! -e ramdisk ]; then
+diff --git a/unpackimg.sh b/unpackimg.sh
+index a81eaf0..e330766 100755
+--- a/unpackimg.sh
++++ b/unpackimg.sh
+@@ -6,8 +6,8 @@ cleanup() { "$aik/cleanup.sh" $local --quiet; }
+ abort() { echo "Error!"; }
+ 
+ case $1 in
+-  --help) echo "usage: unpackimg.sh [--local] [--nosudo] <file>"; exit 1;;
+-  --local) local="--local"; shift;;
++  --help) echo "usage: unpackimg.sh [--nosudo] <file>"; exit 1;;
++  --local) shift;;
+ esac;
+ case $1 in
+   --nosudo) nosudo=1; shift;;
+@@ -50,10 +50,6 @@ case $plat in
+   ;;
+ esac;
+ 
+-if [ ! "$local" ]; then
+-  cd "$aik";
+-fi;
+-
+ img="$1";
+ [ -f "$cur/$1" ] && img="$cur/$1";
+ if [ ! "$img" ]; then
+-- 
+2.52.0
+

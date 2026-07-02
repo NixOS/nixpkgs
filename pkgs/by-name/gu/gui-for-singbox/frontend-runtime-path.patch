@@ -1,0 +1,91 @@
+diff -ruN a/src/constant/kernel.ts b/src/constant/kernel.ts
+--- a/src/constant/kernel.ts
++++ b/src/constant/kernel.ts
+@@ -300,9 +300,9 @@
+       'run',
+       '--disable-color',
+       '-c',
+-      '$APP_BASE_PATH/$CORE_BASE_PATH/config.json',
++      '$CORE_BASE_PATH/config.json',
+       '-D',
+-      '$APP_BASE_PATH/$CORE_BASE_PATH',
++      '$CORE_BASE_PATH',
+     ],
+   }
+ }
+diff -ruN a/src/stores/env.ts b/src/stores/env.ts
+--- a/src/stores/env.ts
++++ b/src/stores/env.ts
+@@ -15,6 +15,7 @@
+     appName: '',
+     appVersion: '',
+     basePath: '',
++    configPath: '',
+     appPath: '',
+     os: '' as OS,
+     arch: '',
+diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
+--- a/src/stores/kernelApi.ts
++++ b/src/stores/kernelApi.ts
+@@ -248,8 +248,12 @@
+   const runCoreProcess = (isAlpha: boolean) => {
+     return new Promise<number | void>((resolve, reject) => {
+       let output: string
++      const coreWorkingDirectory =
++        envStore.env.os === 'linux' && envStore.env.configPath
++          ? `${envStore.env.configPath}/${CoreWorkingDirectory}`
++          : CoreWorkingDirectory
+       const pid = ExecBackground(
+-        CoreWorkingDirectory + '/' + getKernelFileName(isAlpha),
++        coreWorkingDirectory + '/' + getKernelFileName(isAlpha),
+         getKernelRuntimeArgs(isAlpha),
+         (out) => {
+           output = out
+@@ -263,8 +267,9 @@
+           reject(output)
+         },
+         {
+-          PidFile: CorePidFilePath,
++          PidFile: coreWorkingDirectory + '/pid.txt',
+           StopOutputKeyword: CoreStopOutputKeyword,
++          WorkingDirectory: envStore.env.configPath || envStore.env.basePath,
+           Env: getKernelRuntimeEnv(isAlpha),
+         },
+       ).catch((e) => reject(e))
+diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
+--- a/src/types/app.d.ts
++++ b/src/types/app.d.ts
+@@ -19,6 +19,7 @@
+   appName: string
+   appVersion: string
+   basePath: string
++  configPath: string
+   appPath: string
+   os: OS
+   arch: string
+diff -ruN a/src/utils/helper.ts b/src/utils/helper.ts
+--- a/src/utils/helper.ts
++++ b/src/utils/helper.ts
+@@ -822,9 +822,21 @@
+ export const processMagicVariables = (str: string) => {
+   const { env } = useEnvStore()
+   let result = str
++  const coreBasePath =
++    env.os === 'linux' && env.configPath
++      ? `${env.configPath}/${CoreWorkingDirectory}`
++      : CoreWorkingDirectory
++
++  if (env.os === 'linux') {
++    result = result.replaceAll('$APP_BASE_PATH/$CORE_BASE_PATH', coreBasePath)
++    result = result.replaceAll(
++      `${env.basePath}/${CoreWorkingDirectory}`,
++      coreBasePath,
++    )
++  }
+   Object.entries({
+     $APP_BASE_PATH: env.basePath,
+-    $CORE_BASE_PATH: CoreWorkingDirectory,
++    $CORE_BASE_PATH: coreBasePath,
+   }).forEach(([source, target]) => {
+     result = result.replaceAll(source, target)
+   })

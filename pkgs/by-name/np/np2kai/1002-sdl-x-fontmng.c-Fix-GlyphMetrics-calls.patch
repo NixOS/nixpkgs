@@ -1,0 +1,72 @@
+From a6b3a5d71c9c31b690f8045ba2fd6d9c529da92c Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 23 Feb 2026 17:18:58 +0100
+Subject: [PATCH 2/3] {sdl,x}/fontmng.c: Fix GlyphMetrics calls
+
+/build/source/sdl/fontmng.c:503:58: error: passing argument 2 of 'TTF_GlyphMetrics' makes integer from pointer without a cast [-Wint-conversion]
+In file included from /build/source/sdl/fontmng.c:20:
+<SDL2_ttf>/include/SDL2/SDL_ttf.h:800:69: note: expected 'Uint16' {aka 'short unsigned int'} but argument is of type 'SDL_Surface *'
+---
+ sdl/fontmng.c | 8 ++++----
+ x/fontmng.c   | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/sdl/fontmng.c b/sdl/fontmng.c
+index 487e563..27b7a47 100644
+--- a/sdl/fontmng.c
++++ b/sdl/fontmng.c
+@@ -498,9 +498,9 @@ static void TTFGetFont1(FNTMNG _this, FNTDAT fdat, UINT16 c)
+ 		{
+ #if !defined(_WINDOWS)
+ #if USE_SDL_VERSION >= 3
+-			TTF_GetGlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GetGlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #else
+-			TTF_GlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #endif
+ #endif
+ 			for (y = 0; y < fdat->height; y++)
+@@ -532,9 +532,9 @@ static void TTFGetFont1(FNTMNG _this, FNTDAT fdat, UINT16 c)
+ 		{
+ #if !defined(_WINDOWS)
+ #if USE_SDL_VERSION >= 3
+-			TTF_GetGlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GetGlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #else
+-			TTF_GlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #endif
+ #endif
+ 			for (y = 0; y < fdat->height; y++)
+diff --git a/x/fontmng.c b/x/fontmng.c
+index a284ba6..01ed817 100755
+--- a/x/fontmng.c
++++ b/x/fontmng.c
+@@ -484,9 +484,9 @@ static void TTFGetFont1(FNTMNG _this, FNTDAT fdat, UINT16 c)
+ 		if (_this->fonttype & FDAT_ALIAS)
+ 		{
+ #if USE_SDL_VERSION >= 3
+-			TTF_GetGlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GetGlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #else
+-			TTF_GlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #endif
+ 			for (y = 0; y < fdat->height; y++)
+ 			{
+@@ -510,9 +510,9 @@ static void TTFGetFont1(FNTMNG _this, FNTDAT fdat, UINT16 c)
+ 		else
+ 		{
+ #if USE_SDL_VERSION >= 3
+-			TTF_GetGlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GetGlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #else
+-			TTF_GlyphMetrics(_this->ttf_font,s,&minx,NULL,NULL,&maxy,&advance);
++			TTF_GlyphMetrics(_this->ttf_font,c,&minx,NULL,NULL,&maxy,&advance);
+ #endif
+ 			for (y = 0; y < fdat->height; y++)
+ 			{
+-- 
+2.52.0
+

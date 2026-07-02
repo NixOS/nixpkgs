@@ -1,0 +1,40 @@
+diff --git a/libnemo-private/nemo-module.c b/libnemo-private/nemo-module.c
+index 92bcff5..ecadcd8 100644
+--- a/libnemo-private/nemo-module.c
++++ b/libnemo-private/nemo-module.c
+@@ -209,11 +209,16 @@ void
+ nemo_module_setup (void)
+ {
+ 	static gboolean initialized = FALSE;
++	const gchar *extensiondir = NULL;
+ 
+ 	if (!initialized) {
+ 		initialized = TRUE;
+ 		
+-		load_module_dir (NEMO_EXTENSIONDIR);
++		extensiondir = g_getenv ("NEMO_EXTENSION_DIR");
++		if (extensiondir == NULL) {
++			extensiondir = NEMO_EXTENSIONDIR;
++		}
++		load_module_dir (extensiondir);
+ 
+ 		eel_debug_call_at_shutdown (free_module_objects);
+ 	}
+diff --git a/src/nemo-extensions-list.c b/src/nemo-extensions-list.c
+index 944fc5f..983c396 100644
+--- a/src/nemo-extensions-list.c
++++ b/src/nemo-extensions-list.c
+@@ -129,7 +129,12 @@ module_get_extensions_for_type (GType type)
+ int
+ main (int argc, char *argv[])
+ {
+-    populate_from_directory (NEMO_EXTENSIONDIR);
++    const gchar *extensiondir = NULL;
++    extensiondir = g_getenv ("NEMO_EXTENSION_DIR");
++    if (extensiondir == NULL) {
++        extensiondir = NEMO_EXTENSIONDIR;
++    }
++    populate_from_directory (extensiondir);
+ 
+     GList *nd_providers;
+     GList *l;

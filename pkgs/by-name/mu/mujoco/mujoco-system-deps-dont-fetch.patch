@@ -1,0 +1,208 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6c1747f3..ab69cf5e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -158,7 +158,7 @@ target_link_libraries(
+           lodepng
+           qhullstatic_r
+           tinyobjloader
+-          tinyxml2
++          tinyxml2::tinyxml2
+ )
+ 
+ set_target_properties(
+diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
+index d2404bc1..5c7ddaf6 100644
+--- a/cmake/MujocoDependencies.cmake
++++ b/cmake/MujocoDependencies.cmake
+@@ -87,8 +87,6 @@ set(BUILD_SHARED_LIBS
+ if(NOT TARGET lodepng)
+   FetchContent_Declare(
+     lodepng
+-    GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
+   )
+ 
+   FetchContent_GetProperties(lodepng)
+@@ -111,8 +109,6 @@ endif()
+ if(NOT TARGET marchingcubecpp)
+   FetchContent_Declare(
+     marchingcubecpp
+-    GIT_REPOSITORY https://github.com/aparis69/MarchingCubeCpp.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_MarchingCubeCpp}
+   )
+ 
+   FetchContent_GetProperties(marchingcubecpp)
+@@ -132,13 +128,9 @@ findorfetch(
+   USE_SYSTEM_PACKAGE
+   OFF
+   PACKAGE_NAME
+-  qhull
++  Qhull
+   LIBRARY_NAME
+   qhull
+-  GIT_REPO
+-  https://github.com/qhull/qhull.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_qhull}
+   TARGETS
+   qhull
+   EXCLUDE_FROM_ALL
+@@ -160,12 +152,8 @@ findorfetch(
+   tinyxml2
+   LIBRARY_NAME
+   tinyxml2
+-  GIT_REPO
+-  https://github.com/leethomason/tinyxml2.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyxml2}
+   TARGETS
+-  tinyxml2
++  tinyxml2::tinyxml2
+   EXCLUDE_FROM_ALL
+ )
+ target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
+@@ -183,10 +171,6 @@ findorfetch(
+   tinyobjloader
+   LIBRARY_NAME
+   tinyobjloader
+-  GIT_REPO
+-  https://github.com/tinyobjloader/tinyobjloader.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyobjloader}
+   TARGETS
+   tinyobjloader
+   EXCLUDE_FROM_ALL
+@@ -216,10 +200,6 @@ findorfetch(
+   ccd
+   LIBRARY_NAME
+   ccd
+-  GIT_REPO
+-  https://github.com/danfis/libccd.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_ccd}
+   TARGETS
+   ccd
+   EXCLUDE_FROM_ALL
+@@ -261,10 +241,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
+     absl
+     LIBRARY_NAME
+     abseil-cpp
+-    GIT_REPO
+-    https://github.com/abseil/abseil-cpp.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_abseil}
+     TARGETS
+     absl::core_headers
+     EXCLUDE_FROM_ALL
+@@ -291,14 +267,9 @@ if(MUJOCO_BUILD_TESTS)
+     GTest
+     LIBRARY_NAME
+     googletest
+-    GIT_REPO
+-    https://github.com/google/googletest.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_gtest}
+     TARGETS
+-    gtest
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+     EXCLUDE_FROM_ALL
+   )
+ 
+@@ -323,10 +294,6 @@ if(MUJOCO_BUILD_TESTS)
+     benchmark
+     LIBRARY_NAME
+     benchmark
+-    GIT_REPO
+-    https://github.com/google/benchmark.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_benchmark}
+     TARGETS
+     benchmark::benchmark
+     benchmark::benchmark_main
+@@ -337,14 +304,12 @@ endif()
+ 
+ if(MUJOCO_TEST_PYTHON_UTIL)
+   add_compile_definitions(EIGEN_MPL2_ONLY)
+-  if(NOT TARGET eigen)
++  if(NOT TARGET Eigen3::Eigen)
+     # Support new IN_LIST if() operator.
+     set(CMAKE_POLICY_DEFAULT_CMP0057 NEW)
+ 
+     FetchContent_Declare(
+       Eigen3
+-      GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-      GIT_TAG ${MUJOCO_DEP_VERSION_Eigen3}
+     )
+ 
+     FetchContent_GetProperties(Eigen3)
+diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
+index 666a3725..8f4ce043 100644
+--- a/python/mujoco/util/CMakeLists.txt
++++ b/python/mujoco/util/CMakeLists.txt
+@@ -63,8 +63,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     array_traits_test
+     array_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET array_traits_test SOURCES array_traits_test.cc)
+ 
+@@ -72,8 +72,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_traits_test
+     func_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_traits_test SOURCES func_traits_test.cc)
+ 
+@@ -81,8 +81,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_wrap_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_wrap_test SOURCES func_wrap_test.cc)
+ 
+diff --git a/simulate/cmake/SimulateDependencies.cmake b/simulate/cmake/SimulateDependencies.cmake
+index 7885f5f9..97b8b783 100644
+--- a/simulate/cmake/SimulateDependencies.cmake
++++ b/simulate/cmake/SimulateDependencies.cmake
+@@ -81,10 +81,6 @@ findorfetch(
+   glfw3
+   LIBRARY_NAME
+   glfw3
+-  GIT_REPO
+-  https://github.com/glfw/glfw.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_glfw3}
+   TARGETS
+   glfw
+   EXCLUDE_FROM_ALL
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index f459a6ca..6830509d 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -82,8 +82,8 @@ target_link_libraries(
+          absl::synchronization
+          absl::flat_hash_map
+          absl::flat_hash_set
+-         gtest
+-         gmock
++         GTest::gmock
++         GTest::gtest_main
+          mujoco::mujoco
+ )
+ target_include_directories(fixture PRIVATE ${mujoco_SOURCE_DIR}/include gmock)

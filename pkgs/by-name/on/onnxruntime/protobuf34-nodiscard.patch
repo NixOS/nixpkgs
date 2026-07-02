@@ -1,0 +1,203 @@
+diff --git a/onnxruntime/core/framework/graph_partitioner.cc b/onnxruntime/core/framework/graph_partitioner.cc
+index 9cb2111670..8a3ec5bab9 100644
+--- a/onnxruntime/core/framework/graph_partitioner.cc
++++ b/onnxruntime/core/framework/graph_partitioner.cc
+@@ -966,7 +966,7 @@ static Status CreateEpContextModel(const ExecutionProviders& execution_providers
+ 
+     AllocatorPtr allocator = output_buffer_holder->buffer_allocator;
+     IAllocatorUniquePtr<void> buffer = IAllocator::MakeUniquePtr<void>(allocator, buffer_size);
+-    model_proto.SerializeToArray(buffer.get(), static_cast<int>(buffer_size));
++    ORT_RETURN_IF_NOT(model_proto.SerializeToArray(buffer.get(), static_cast<int>(buffer_size)), "Failed to serialize to array");
+ 
+     *output_buffer_holder->buffer_size_ptr = buffer_size;
+     *output_buffer_holder->buffer_ptr = buffer.release();
+@@ -979,7 +979,7 @@ static Status CreateEpContextModel(const ExecutionProviders& execution_providers
+     auto out_stream_buf = std::make_unique<epctx::OutStreamBuf>(*output_write_func_holder);
+     std::ostream out_stream(out_stream_buf.get());
+ 
+-    model_proto.SerializeToOstream(&out_stream);
++    ORT_RETURN_IF_NOT(model_proto.SerializeToOstream(&out_stream), "Failed to serialize to out stream");
+     out_stream.flush();
+     ORT_RETURN_IF_ERROR(out_stream_buf->GetStatus());
+   } else {
+diff --git a/onnxruntime/python/onnxruntime_pybind_schema.cc b/onnxruntime/python/onnxruntime_pybind_schema.cc
+index 8cb617fe52..254fc1abf9 100644
+--- a/onnxruntime/python/onnxruntime_pybind_schema.cc
++++ b/onnxruntime/python/onnxruntime_pybind_schema.cc
+@@ -163,7 +163,7 @@ void addOpSchemaSubmodule(py::module& m) {
+           "_default_value",
+           [](ONNX_NAMESPACE::OpSchema::Attribute* attr) -> py::bytes {
+             std::string out;
+-            attr->default_value.SerializeToString(&out);
++            (void)attr->default_value.SerializeToString(&out);
+             return out;
+           })
+       .def_readonly("required", &ONNX_NAMESPACE::OpSchema::Attribute::required);
+diff --git a/onnxruntime/test/ep_graph/test_ep_graph.cc b/onnxruntime/test/ep_graph/test_ep_graph.cc
+index 055b255132..3925db8ac7 100644
+--- a/onnxruntime/test/ep_graph/test_ep_graph.cc
++++ b/onnxruntime/test/ep_graph/test_ep_graph.cc
+@@ -261,7 +261,7 @@ TEST(EpGraphTest, SerializeToProto_InputModelHasExternalIni) {
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -395,7 +395,7 @@ TEST(EpGraphTest, SerializeToProto_Mnist) {
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -525,7 +525,7 @@ TEST(EpGraphTest, SerializeToProto_ConstantOfShape) {
+                                                         handle_initializer_data));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+@@ -590,7 +590,7 @@ TEST(EpGraphTest, SerializeToProto_3LayerSubgraphs) {
+     ASSERT_CXX_ORTSTATUS_OK(OrtEpUtils::OrtGraphToProto(test_graph->GetOrtGraph(), model_proto));
+ 
+     std::ofstream ofs(serialized_model_path, std::ios::binary);
+-    model_proto.SerializeToOstream(&ofs);
++    ASSERT_TRUE(model_proto.SerializeToOstream(&ofs));
+     ofs.flush();
+ 
+     ASSERT_TRUE(std::filesystem::exists(serialized_model_path));
+diff --git a/onnxruntime/test/framework/inference_session_test.cc b/onnxruntime/test/framework/inference_session_test.cc
+index 1c4e7800b7..8ceb05f0f6 100644
+--- a/onnxruntime/test/framework/inference_session_test.cc
++++ b/onnxruntime/test/framework/inference_session_test.cc
+@@ -1045,7 +1045,7 @@ static void TestBindHelper(const std::string& log_str,
+   CreateMatMulModel(p_model, run_provider_type);
+ 
+   std::string s1;
+-  p_model->ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
+   std::stringstream sstr(s1);
+   ASSERT_STATUS_OK(session_object.Load(sstr));
+   ASSERT_STATUS_OK(session_object.Initialize());
+@@ -1078,7 +1078,7 @@ TEST(InferenceSessionTests, TestIOBindingReuse) {
+   CreateMatMulModel(p_model, kCpuExecutionProvider);
+ 
+   std::string s1;
+-  p_model->ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
+   std::stringstream sstr(s1);
+   ASSERT_TRUE(session_object.Load(sstr).IsOK());
+   ASSERT_STATUS_OK(session_object.Initialize());
+diff --git a/onnxruntime/test/ir/graph_test.cc b/onnxruntime/test/ir/graph_test.cc
+index 4d80cb7047..c69ac46c05 100644
+--- a/onnxruntime/test/ir/graph_test.cc
++++ b/onnxruntime/test/ir/graph_test.cc
+@@ -1244,7 +1244,7 @@ TEST_F(GraphTest, GraphConstruction_CheckGraphInputOutputOrderMaintained) {
+   auto proto = model.ToProto();
+   std::string s1;
+   // std::stringstream s1;
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+ 
+   ModelProto model_proto;
+   //  const bool result = model_proto.ParseFromIstream(&s1);
+@@ -1313,7 +1313,7 @@ TEST_F(GraphTest, UnusedInitializerAndNodeArgsAreIgnored) {
+   auto proto = model.ToProto();
+   std::string s1;
+   // std::stringstream s1;
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+ 
+   ModelProto model_proto;
+   const bool result = model_proto.ParseFromString(s1);
+@@ -1342,7 +1342,7 @@ TEST_F(GraphTest, UnusedSparseInitializerIsIgnored) {
+     ConstructASimpleAddGraph(*m_graph, nullptr);
+     auto* m_sparse_initializer = m_graph->add_sparse_initializer();
+     ConstructSparseTensor("unused_sparse_initializer", *m_sparse_initializer);
+-    model_proto.SerializeToString(&s1);
++    ASSERT_TRUE(model_proto.SerializeToString(&s1));
+   }
+ 
+   ModelProto model_proto_1;
+@@ -1940,7 +1940,7 @@ TEST_F(GraphTest, SparseInitializerHandling) {
+     ConstructASimpleAddGraph(*m_graph, nullptr);
+     auto* m_sparse_initializer = m_graph->add_sparse_initializer();
+     ConstructSparseTensor(input_initializer_name, *m_sparse_initializer);
+-    model_proto.SerializeToString(&s1);
++    ASSERT_TRUE(model_proto.SerializeToString(&s1));
+   }
+ 
+   ModelProto model_proto_sparse;
+diff --git a/onnxruntime/test/optimizer/nchwc_optimizer_test.cc b/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
+index fc0ba86c7f..b086040212 100644
+--- a/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
++++ b/onnxruntime/test/optimizer/nchwc_optimizer_test.cc
+@@ -185,7 +185,7 @@ void NchwcOptimizerTester(const std::function<void(NchwcTestHelper& helper)>& bu
+ 
+   // Serialize the model to a string.
+   std::string model_data;
+-  model.ToProto().SerializeToString(&model_data);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&model_data));
+ 
+   auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches) {
+     SessionOptions session_options;
+diff --git a/onnxruntime/test/providers/compare_provider_test_utils.cc b/onnxruntime/test/providers/compare_provider_test_utils.cc
+index 6312014387..578d72cb09 100644
+--- a/onnxruntime/test/providers/compare_provider_test_utils.cc
++++ b/onnxruntime/test/providers/compare_provider_test_utils.cc
+@@ -83,7 +83,7 @@ void CompareOpTester::CompareWithCPU(const std::string& target_provider_type,
+ 
+   // first run with cpu
+   std::string s1;
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+   std::istringstream model_proto_str(s1);
+ 
+   ASSERT_STATUS_OK(cpu_session_object.Load(model_proto_str));
+@@ -104,7 +104,7 @@ void CompareOpTester::CompareWithCPU(const std::string& target_provider_type,
+   ASSERT_STATUS_OK(target_session_object.RegisterExecutionProvider(std::move(target_execution_provider)));
+ 
+   std::string s2;
+-  tp_model.ToProto().SerializeToString(&s2);
++  ASSERT_TRUE(tp_model.ToProto().SerializeToString(&s2));
+   std::istringstream model_proto_str1(s2);
+   ASSERT_STATUS_OK(target_session_object.Load(model_proto_str1));
+ 
+@@ -159,7 +159,7 @@ void CompareOpTester::CompareEPs(const std::shared_ptr<IExecutionProvider>& sour
+ 
+   // first run with source provider
+   std::string s1;
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+   std::istringstream model_proto_str(s1);
+ 
+   ASSERT_STATUS_OK(source_session_object.Load(model_proto_str));
+@@ -181,7 +181,7 @@ void CompareOpTester::CompareEPs(const std::shared_ptr<IExecutionProvider>& sour
+     ASSERT_STATUS_OK(target_session_object.RegisterExecutionProvider(target_execution_provider));
+ 
+     std::string s2;
+-    tp_model.ToProto().SerializeToString(&s2);
++    ASSERT_TRUE(tp_model.ToProto().SerializeToString(&s2));
+     std::istringstream model_proto_str1(s2);
+     ASSERT_STATUS_OK(target_session_object.Load(model_proto_str1));
+ 
+diff --git a/onnxruntime/test/unittest_util/graph_transform_test_builder.cc b/onnxruntime/test/unittest_util/graph_transform_test_builder.cc
+index 5caafa0f37..327463c615 100644
+--- a/onnxruntime/test/unittest_util/graph_transform_test_builder.cc
++++ b/onnxruntime/test/unittest_util/graph_transform_test_builder.cc
+@@ -158,7 +158,7 @@ void TransformerTester(const std::function<void(ModelTestBuilder& helper)>& buil
+ 
+   // Serialize the model to a string.
+   std::string model_data;
+-  model.ToProto().SerializeToString(&model_data);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&model_data));
+   std::shared_ptr<IExecutionProvider> ep_shared = ep ? std::move(ep) : nullptr;
+ 
+   auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches,
