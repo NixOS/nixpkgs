@@ -99,6 +99,14 @@ stdenv.mkDerivation (
 
       ./fix-x64-abi.patch
 
+      # Read a per-DSO library resolution cache (the .note.nixos.ldcache
+      # PT_NOTE written by `patchelf --build-resolution-cache`) so the loader
+      # resolves DT_NEEDED entries directly, without searching every
+      # DT_RUNPATH directory for every soname. This removes the storm of
+      # failing openat()/stat() syscalls that slows /nix/store startup.
+      # See https://github.com/NixOS/nixpkgs/issues/481620.
+      ./ldcache.patch
+
       # https://github.com/NixOS/nixpkgs/pull/137601
       ./nix-nss-open-files.patch
 

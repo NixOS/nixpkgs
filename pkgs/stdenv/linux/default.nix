@@ -705,6 +705,10 @@ in
           prevStage.patchelf
           # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
           prevStage.updateAutotoolsGnuConfigScriptsHook
+          # Write the .note.nixos.ldcache resolution cache into every output's
+          # ELF files (read by the patched glibc). Only in the final stdenv so
+          # the hook and its patchelf are built by the previous stage.
+          prevStage.generateLdCacheHook
         ];
 
         cc = prevStage.gcc;
@@ -815,6 +819,9 @@ in
           ++ [
             prevStage.updateAutotoolsGnuConfigScriptsHook
             prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
+            # The resolution-cache fixup hook; the patchelf it runs is already
+            # in the closure via prevStage.patchelf.
+            prevStage.generateLdCacheHook
           ]
           ++ [
             gcc-unwrapped.gmp
