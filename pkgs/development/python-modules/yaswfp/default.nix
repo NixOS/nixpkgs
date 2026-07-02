@@ -6,9 +6,9 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "yaswfp";
-  version = "unstable-20210331";
+  version = "0.9.3-unstable-20210331";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -28,9 +28,9 @@ buildPythonPackage {
 
   meta = {
     description = "Python SWF Parser";
-    mainProgram = "swfparser";
     homepage = "https://github.com/facundobatista/yaswfp";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "swfparser";
   };
-}
+})

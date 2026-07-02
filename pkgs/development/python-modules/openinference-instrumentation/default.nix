@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openinference-instrumentation";
-  version = "0.1.53";
+  version = "0.1.54";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Arize-ai";
     repo = "openinference";
     tag = "python-openinference-instrumentation-v${finalAttrs.version}";
-    hash = "sha256-1FzAiO3Vxt2o9YCzwPfHOn4hwvOLDt9Luv3zQTJ6J2Q=";
+    hash = "sha256-6GWZmgb9ZcT/yx7MvGUQlht5fljQGCKMHMpJWZQKpPI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/${finalAttrs.pname}";
