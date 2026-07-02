@@ -19,8 +19,8 @@ in
   };
 
   vtk_9_6 = mkVtk {
-    version = "9.6.0";
-    sourceSha256 = "sha256-130YBpT6r9yBZXi5pTZR9nkOeZYVgRv7uRAYZho7uPI=";
+    version = "9.6.2";
+    sourceSha256 = "sha256-rtEs7BKpYJF5v2YykHAmZifKZCRKEIVqRSsqF/+wSh0=";
     patches = [
       (fetchpatch {
         name = "fix-gdal-3.13-const-conversion.patch";
