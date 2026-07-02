@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frei0r-plugins";
-  version = "2.5.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3gUWvO5izOrJt+XwcNBNiLfu+iMqo4nuPbx++TYzao0=";
+    hash = "sha256-D00sxSTnv4oqxhKYKayJPs5uWYW4HosEp2StuCVmGFY=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvcc
+  ];
+
+  cmakeFlags = [
+    "-DWITHOUT_GAVL=ON"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
