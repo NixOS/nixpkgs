@@ -23,7 +23,8 @@ See [recursive-sets](https://nix.dev/manual/nix/stable/language/syntax#recursive
 
 ## Define a build helper with `lib.extendMkDerivation` {#sec-build-helper-extendMkDerivation}
 
-Use [`lib.customisation.extendMkDerivation`](#function-library-lib.customisation.extendMkDerivation) to define a build helper with fixed-point support from an existing one. It takes an attribute overlay similar to [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
+Use [`lib.customisation.extendMkDerivation`](#function-library-lib.customisation.extendMkDerivation) to define a build helper with fixed-point support from an existing one.
+Its argument `extendDrvArgs` takes an attribute overlay similar to [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 Besides overriding, `lib.extendMkDerivation` also supports `excludeDrvArgNames` to optionally exclude some arguments in the input fixed-point arguments from passing down to the base build helper (specified as `constructDrv`).
 
