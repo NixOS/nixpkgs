@@ -84,7 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "_rc";
+  };
 
   meta = {
     description = "Alpine Linux build tools";
