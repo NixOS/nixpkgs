@@ -18,6 +18,7 @@
   util-linux,
   wrapGAppsHook3,
   withGui ? false,
+  nix-update-script,
 }:
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
   };
 
@@ -42,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-715X+R2BcQIaUV76hoO+EXPfNheOfw4OIHsqSoruIUI=";
     })
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -67,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     python3.pkgs.pygobject3
   ]
-  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     elfutils
   ];
 
@@ -91,9 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
+    changelog = "https://github.com/sahib/rmlint/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
