@@ -7,27 +7,68 @@
 
 let
   inherit (lib)
+    elem
+    filterAttrs
+    flip
     getExe
+    join
+    lowerChars
     maintainers
+    mapAttrs'
     mkEnableOption
+    mkForce
     mkIf
+    mkMerge
     mkOption
     mkPackageOption
+    mkRenamedOptionModule
+    nameValuePair
+    pipe
+    splitStringBy
+    toList
+    toUpper
+    upperChars
     ;
+  inherit (lib.generators) mkValueStringDefault;
   inherit (lib.types)
+    attrsOf
     bool
-    path
+    externalPath
+    int
+    listOf
+    nullOr
+    oneOf
     port
     str
     submodule
     ;
+
   cfg = config.services.qui;
 
-  stateDir = "/var/lib/qui";
-  configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "qui.toml" cfg.settings;
+  envName = flip pipe [
+    (splitStringBy (prev: curr: elem prev lowerChars && elem curr upperChars) true)
+    (map toUpper)
+    (join "_")
+    (s: "QUI__${s}")
+  ];
+  envValue = flip pipe [
+    toList
+    (map (mkValueStringDefault { }))
+    (join ",")
+  ];
+  toEnv = flip pipe [
+    (filterAttrs (_: v: v != null))
+    (mapAttrs' (n: v: nameValuePair (envName n) (envValue v)))
+  ];
 in
 {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "qui" "secretFile" ]
+      [ "services" "qui" "settings" "sessionSecretFile" ]
+    )
+  ];
+
   options = {
     services.qui = {
       enable = mkEnableOption "qui";
@@ -53,15 +94,6 @@ in
         description = "Whether or not to open ports in the firewall for qui.";
       };
 
-      secretFile = mkOption {
-        type = path;
-        example = "/run/secrets/qui-session.txt";
-        description = ''
-          Path to a file that contains the session secret. The session secret
-          can be generated with `openssl rand -hex 32`.
-        '';
-      };
-
       settings = mkOption {
         default = { };
         example = {
@@ -70,7 +102,12 @@ in
           metricsEnabled = true;
         };
         type = submodule {
-          freeformType = configFormat.type;
+          freeformType = attrsOf (oneOf [
+            bool
+            int
+            str
+            (listOf str)
+          ]);
           options = {
             host = mkOption {
               type = str;
@@ -82,6 +119,18 @@ in
               type = port;
               default = 7476;
               description = "The port qui listens on.";
+            };
+
+            sessionSecretFile = mkOption {
+              type = nullOr externalPath;
+              example = "/run/secrets/qui-session.txt";
+              default = null;
+              description = ''
+                Path to a file that contains the session secret.
+                The session secret can be generated with `openssl rand -hex 32`.
+
+                When null, qui generates and persists its own secret.
+              '';
             };
           };
         };
@@ -103,89 +152,93 @@ in
       {
         assertion = !(cfg.settings ? sessionSecret);
         message = ''
-          Session secrets should not be passed via settings, as
-          these are stored in the world-readable nix store.
-
-          Use the secretFile option instead.'';
+          `services.qui.settings.sessionSecret` must not be set,
+          as it is written to the world-readable nix store.
+          Use `services.qui.settings.sessionSecretFile` instead.
+        '';
       }
     ];
 
-    systemd.services.qui = {
-      description = "qui: alternative qBittorrent webUI";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.qui = mkMerge [
+      {
+        description = "qui: alternative qBittorrent webUI";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
+        environment = toEnv cfg.settings;
 
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
-        Environment = [ "QUI__SESSION_SECRET_FILE=%d/sessionSecret" ];
-        StateDirectory = "qui";
+        serviceConfig = {
+          Type = "exec";
+          User = cfg.user;
+          Group = cfg.group;
 
-        ExecStartPre = ''
-          ${pkgs.coreutils}/bin/install -m 600 '${configFile}' '%S/qui/config.toml'
-        '';
-        ExecStart = "${getExe cfg.package} serve --config-dir %S/qui";
-        Restart = "on-failure";
+          StateDirectory = "%N";
+          StateDirectoryMode = "0700";
 
-        # Based on qbittorrent and nemorosa hardening settings
-        # Similar to what systemd hardening helper suggests
-        CapabilityBoundingSet = "";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateNetwork = false;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = "yes";
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        # This should allow for hardlinking to torrent client files
-        ProtectSystem = "full";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" ];
-      };
-    };
+          ExecStartPre = "${getExe cfg.package} generate-config --config-dir %S/%N";
+          ExecStart = "${getExe cfg.package} serve --config-dir %S/%N";
+          Restart = "on-failure";
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.port ];
-    };
+          # Based on qbittorrent and nemorosa hardening settings
+          # Similar to what systemd hardening helper suggests
+          CapabilityBoundingSet = "";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateNetwork = false;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = "yes";
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          # This should allow for hardlinking to torrent client files
+          ProtectSystem = "full";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" ];
+        };
+      }
+
+      (mkIf (cfg.settings.sessionSecretFile != null) {
+        environment.${envName "sessionSecretFile"} = mkForce "%d/sessionSecretFile";
+        serviceConfig.LoadCredential = "sessionSecretFile:${cfg.settings.sessionSecretFile}";
+      })
+    ];
+
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
 
     users = {
       users = mkIf (cfg.user == "qui") {
         qui = {
-          group = cfg.group;
+          inherit (cfg) group;
           description = "qui user";
           isSystemUser = true;
-          home = stateDir;
         };
       };
 
-      groups = mkIf (cfg.group == "qui") {
-        qui = { };
-      };
+      groups = mkIf (cfg.group == "qui") { qui = { }; };
     };
   };
 
-  meta.maintainers = with maintainers; [ undefined-landmark ];
+  meta.maintainers = with maintainers; [
+    connor-grady
+    undefined-landmark
+  ];
 }
