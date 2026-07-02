@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
   cmakeFlags = [
+    # GCC 16 warns that various uses of `fmt` in value.hpp are used
+    # uninitialized. This may be a true failure, but it does not seem like a
+    # major concern, so we silence it for now.
+    # https://github.com/ToruNiina/toml11/issues/313
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=maybe-uninitialized")
     (lib.cmakeBool "TOML11_BUILD_TOML_TESTS" finalAttrs.finalPackage.doCheck)
   ];
   checkInputs = [
