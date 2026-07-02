@@ -28,10 +28,10 @@ let
     with cfg.settings;
     pkgs.writeText "aesmd.conf" (
       concatStringsSep "\n" (
-        optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}"
+        optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
+        ++ optional (qplLogLevel != null) "qpl log level = ${qplLogLevel}"
         ++ optional (proxy != null) "aesm proxy = ${proxy}"
         ++ optional (proxyType != null) "proxy type = ${proxyType}"
-        ++ optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
         ++
           # Newline at end of file
           [ "" ]
@@ -70,12 +70,6 @@ in
       description = "AESM configuration";
       default = { };
       type = types.submodule {
-        options.whitelistUrl = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = "URL to retrieve authorized Intel SGX enclave signers.";
-        };
         options.proxy = mkOption {
           type = with types; nullOr str;
           default = null;
@@ -103,16 +97,22 @@ in
           '';
         };
         options.defaultQuotingType = mkOption {
-          type =
-            with types;
-            nullOr (enum [
-              "ecdsa_256"
-              "epid_linkable"
-              "epid_unlinkable"
-            ]);
+          # sgx-psw 2.28 removed EPID attestation
+          type = with types; nullOr (enum [ "ecdsa_256" ]);
           default = null;
           example = "ecdsa_256";
           description = "Attestation quote type.";
+        };
+        options.qplLogLevel = mkOption {
+          type =
+            with types;
+            nullOr (enum [
+              "info"
+              "error"
+            ]);
+          default = null;
+          example = "error";
+          description = "Log level for the default quote provider library.";
         };
       };
     };
@@ -131,8 +131,6 @@ in
     systemd.services.aesmd =
       let
         storeAesmFolder = "${sgx-psw}/aesm";
-        # Hardcoded path AESM_DATA_FOLDER in psw/ae/aesm_service/source/oal/linux/aesm_util.cpp
-        aesmDataFolder = "/var/opt/aesmd/data";
       in
       {
         description = "Intel Architectural Enclave Service Manager";
@@ -154,13 +152,8 @@ in
         unitConfig.AssertPathExists = [ "/dev/sgx_enclave" ];
 
         serviceConfig = {
-          # Run with elevated privileges to create /var/opt/aesmd/... before
-          # dropping to DynamicUser.
-          ExecStartPre = ''
-            +${lib.getExe' pkgs.coreutils "install"} -m 644 -D \
-                "${storeAesmFolder}/data/white_list_cert_to_be_verify.bin" \
-                "${aesmDataFolder}/white_list_cert_to_be_verify.bin"
-          '';
+          # Hardcoded path AESM_DATA_FOLDER in psw/ae/aesm_service/source/oal/linux/aesm_util.cpp
+          ExecStartPre = "+${lib.getExe' pkgs.coreutils "mkdir"} -p -m 755 /var/opt/aesmd/data";
           ExecStart = "${sgx-psw}/bin/aesm_service --no-daemon";
           ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
 

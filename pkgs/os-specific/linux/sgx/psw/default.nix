@@ -20,15 +20,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-psw";
   # Version as given in se_version.h
-  version = "2.27.100.1";
+  version = "2.29.100.1";
   # Version as used in the Git tag
-  versionTag = "2.27";
+  versionTag = "2.29";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "linux-sgx";
+    repo = "confidential-computing.sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-hNmh4IgNJDNqt2xF8zBnD/x+saMyMk5hZLA3aOqzqEA=";
+    hash = "sha256-zNSL03Mx3VaTXh/VIDlhHnaWmnooKkPxWHoYMhf6WcU=";
     fetchSubmodules = true;
   };
 
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
       # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
       # and pre-built sgxssl.
       dcap = rec {
-        version = "1.24";
+        version = "1.26";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-sc/eYIPdhwAyDk2Zh1HU6yuFlobqVy/4++m5OnQE3Bc=";
+          hash = "sha256-TXQ8xh0q9RKPyKqjMvxoQtIH2lxbhCiwpV+HvQxACaw=";
         };
       };
     in
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
       tar -xzvf ${optlib.prebuilt} -C $sourceRoot/
 
       # Make sure we use the correct version of prebuilt DCAP
-      grep -q 'ae_file_name=${dcap.filename}' "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
+      grep -qE '(dcap_version=${dcap.version}|ae_file_name=${dcap.filename})' \
+        "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
 
       tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source prebuilt/
@@ -91,11 +92,7 @@ stdenv.mkDerivation rec {
     # build because the embedded zip file contents have different modified times.
     ./cppmicroservices-no-mtime.patch
 
-    # CppMicroServices is failing to build with CMake 4 and GCC 15
-    # PR: <https://github.com/intel/confidential-computing.sgx/pull/1098>
-    # - CMake 4 dropped support for <3.5 and warns on <3.10, so bump the
-    #   `cmake_minimum_required` to 3.10
-    # - Various header files now need `#include <cstdint>` to compile
+    # Add `#include <cstdint>` to CppMicroServices headers that GCC 15 needs
     ./cppmicroservices-compat.patch
   ];
 
@@ -270,7 +267,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
-    homepage = "https://github.com/intel/linux-sgx";
+    homepage = "https://github.com/intel/confidential-computing.sgx";
     maintainers = with lib.maintainers; [
       phlip9
       veehaitch
