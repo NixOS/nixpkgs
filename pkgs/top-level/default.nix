@@ -220,27 +220,37 @@ let
 
   fixedPoint = boot stages;
 
+  removeInternallyDisallowedAttrPaths =
+    let
+      # Same as `lib.removeAttrs`, but can remove nested attributes (and order of arguments is fixed)
+      # TODO: Consider moving to lib.attrpaths.removeAttrPaths
+      removeAttrPaths =
+        attrPathsToRemove: set:
+        let
+          split = lib.partition (
+            attrPath:
+            assert attrPath != [ ];
+            lib.length attrPath == 1
+          ) attrPathsToRemove;
+          nestedApplied =
+            set
+            // lib.mapAttrs (name: attrPaths: removeAttrPaths (lib.map lib.tail attrPaths) set.${name}) (
+              lib.groupBy (attrPath: lib.head attrPath) split.wrong
+            );
+        in
+        lib.removeAttrs nestedApplied (lib.map lib.head split.right);
+    in
+    removeAttrPaths (map (x: x.attrPath) config.attrPathsDisallowedForInternalUse);
+
   pkgs =
     # Generally only set by CI, don't want to cause a performance hit for users
     if config.attrPathsDisallowedForInternalUse == [ ] then
       fixedPoint
     else
       # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
-      # We replace these attribute paths with their original derivations again,
-      # because CI would just error out from the aborting attributes themselves.
-      # Internally all packages still see the aborting attributes if used as dependencies,
-      # because we do this here after the fixed-point is calculated.
-      # Note that we don't want to remove the attributes entirely like what aliases.nix does,
-      # because unlike aliases, CI still needs to check the packages to evaluate at all,
-      # which it wouldn't if they're removed entirely.
-      lib.updateManyAttrsByPath
-        (map (attrs: {
-          path = attrs.attrPath;
-          update =
-            _:
-            lib.getAttrFromPath attrs.attrPath fixedPoint.__internalBeforeInternallyDisallowedAttrPathsOverlay;
-        }) config.attrPathsDisallowedForInternalUse)
-        (removeAttrs fixedPoint [ "__internalBeforeInternallyDisallowedAttrPathsOverlay" ]);
+      # To prevent these attributes from causing CI failures we remove them entirely.
+      # These attrs are still evaluated but in a different way, see ci/eval/default.nix
+      removeInternallyDisallowedAttrPaths fixedPoint;
 
 in
 checked pkgs

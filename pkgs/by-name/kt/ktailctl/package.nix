@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
-    rev = "v${version}";
-    hash = "sha256-20hR/N3m1BsbMGiaWVV/SH/OHgfk7ZC1+WWhYqQpIls=";
+    tag = "v${version}";
+    hash = "sha256-BRkjVZaoxiMW8JltIkYDiCCE2kNGLDpRJd0iclQMcGY=";
   };
 
   goDeps =
@@ -74,6 +74,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GUI to monitor and manage Tailscale on your Linux desktop";
+    changelog = "https://github.com/f-koehler/KTailctl/releases/tag/${src.tag}";
     homepage = "https://github.com/f-koehler/KTailctl";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ k900 ];

@@ -25297,6 +25297,13 @@
     githubId = 35622998;
     name = "Suwon Park";
   };
+  sepointon = {
+    email = "sampointon@gmail.com";
+    github = "sepointon";
+    githubId = 209542026;
+    matrix = "sampointon:matrix.org";
+    name = "Sam Pointon";
+  };
   seppeljordan = {
     email = "sebastian.jordan.mail@googlemail.com";
     github = "seppeljordan";

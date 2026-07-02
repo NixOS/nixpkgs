@@ -179,11 +179,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "149.0.7827.200";
+    version = "150.0.7871.46";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-HDCPrhH44nKTr6Fzm9SqAV/Vdmtyx1znIZXsPkGmEqg=";
+      hash = "sha256-abQBOftzoCGnSfMvzeCFP7F4G286izyvFzrY9nR/qnw=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
