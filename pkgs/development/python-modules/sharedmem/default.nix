@@ -6,20 +6,23 @@
   numpy,
 }:
 
-buildPythonPackage rec {
-
+buildPythonPackage (finalAttrs: {
   pname = "sharedmem";
   version = "0.3.8";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c654a6bee2e2f35c82e6cc8b6c262fcabd378f5ba11ac9ef71530f8dabb8e2f7";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xlSmvuLi81yC5syLbCYvyr03j1uhGsnvcVMPjau44vc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
+
+  pythonImportsCheck = [ "sharedmem" ];
 
   meta = {
     homepage = "http://rainwoodman.github.io/sharedmem/";
@@ -27,4 +30,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3;
   };
-}
+})
