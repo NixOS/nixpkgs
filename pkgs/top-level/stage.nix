@@ -317,20 +317,16 @@ let
   };
 
   # Replaces the attributes in config.attrPathsDisallowedForInternalUse with aborts.
+  # Not warnings because those wouldn't give a backtrace, which is important for debugging
   # Not throws because those would be ignored by nix-env, which is what CI uses to evaluate everything
-  # See also ./default.nix, where these attributes are added back again so they're still checked by CI
+  # See also ./default.nix, which removes these attributes entirely from the end result
   internallyDisallowedAttrPathsOverlay =
     final: prev:
     # Generally only set by CI, don't want to cause a performance hit for users
     if config.attrPathsDisallowedForInternalUse == [ ] then
       { }
     else
-      {
-        # So that ./default.nix can add them back again outside the fixed point
-        # Don't use this in packages!
-        __internalBeforeInternallyDisallowedAttrPathsOverlay = prev;
-      }
-      // lib.updateManyAttrsByPath (map (
+      lib.updateManyAttrsByPath (map (
         { attrPath, reason }:
         {
           path = attrPath;

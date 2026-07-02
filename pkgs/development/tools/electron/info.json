@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-fLk+Vs7u/mZFb4mLmytRPez4Fur5e0QugmuD58fulIs=",
+                    "hash": "sha256-egb/uS76XrADbEtnzEVzym47qrNYwIOby1/3J537Vuw=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v40.10.3"
+                    "tag": "v40.10.5"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1343,7 +1343,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-GPTl9cT6CLfwQx5u7egDiSCGG6hikRDinPuijp97dHE=",
+            "hash": "sha256-JYMafgdlxleQS+kvWs6CGo8y+yGGPBtxw1AK5jklejU=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -1387,7 +1387,7 @@
         },
         "modules": "143",
         "node": "24.15.0",
-        "version": "40.10.3"
+        "version": "40.10.5"
     },
     "41": {
         "chrome": "146.0.7680.216",
@@ -1446,10 +1446,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-Bvm6S7otVUmGjRWOA53ua/7EdyIImHJMbDtVH3Xa4wo=",
+                    "hash": "sha256-n7Ev30z9CSqMUifcjrInlk66WH0sfb1jFPcA0/vJOd4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v41.7.2"
+                    "tag": "v41.9.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1783,10 +1783,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-Y4FP+AstENp1uTYBo8HeTRDwvKClTdrZ4RztLeHNP3k=",
+                    "hash": "sha256-LUV3ieY+bQ6qhft+xeTSxPuTlnmpbxkRIcIVBz86Aco=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.15.0"
+                    "tag": "v24.17.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2749,7 +2749,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-Ry8gzsdaR61djEgF+MpXAYGK00lRD5ZLq3cLUV1prFs=",
+            "hash": "sha256-KNbWANdqpF3rypdyGKgj9ykGXQ/+VtkE5L/XR1lqbps=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2792,11 +2792,11 @@
             }
         },
         "modules": "145",
-        "node": "24.15.0",
-        "version": "41.7.2"
+        "node": "24.17.0",
+        "version": "41.9.1"
     },
     "42": {
-        "chrome": "148.0.7778.254",
+        "chrome": "148.0.7778.271",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2805,15 +2805,15 @@
                     "version": "0-unstable-2026-04-01"
                 }
             },
-            "version": "148.0.7778.254"
+            "version": "148.0.7778.271"
         },
         "chromium_npm_hash": "sha256-JuVcY8iFRDWcPcP4Pg+qm5rnTXkiVfNsqSkXbDWqsE8=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-anHfDRQGlmW1CsH4T1KSLoGdoYvSBJBNBXebMxdXMHE=",
+                    "hash": "sha256-RdJGQjP6IxEdtPMfF7HdmreurRoah7G90pjF8RSOyNg=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "148.0.7778.254",
+                    "tag": "148.0.7778.271",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2852,10 +2852,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-ce/7NTD85RlZtuuYNiuvECxtcLyPHNXAzWwHVdJEqP8=",
+                    "hash": "sha256-OI1/fMv5PTfph7n01dcX3zGYcg6Uov2J2TQBSskqZ4I=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v42.4.0"
+                    "tag": "v42.5.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2885,8 +2885,8 @@
             },
             "src/third_party/angle": {
                 "args": {
-                    "hash": "sha256-P5KpTB/jaUR8MjrEccc1di5u9dvD/YiVw8/QlkdKZcE=",
-                    "rev": "007b92d82773d7a868a6dce85359232921903959",
+                    "hash": "sha256-UC8XJES8ObArvvKZ55KVvKlgUTjqM9Znx5u5BMQXekA=",
+                    "rev": "03e01c80b2176b32bdd2b2181cdd583410242e1c",
                     "url": "https://chromium.googlesource.com/angle/angle.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3085,8 +3085,8 @@
             },
             "src/third_party/dawn": {
                 "args": {
-                    "hash": "sha256-LM5Z57mbH1u7XFnHF/p4fN/D9mO6504S0k8gqO6z3HI=",
-                    "rev": "c7de5291f0edba5398383d5592adcc78ba745bff",
+                    "hash": "sha256-vZHlPC5rlk1ii98M9ALn2qqa/M6ItbqjaAILjJOIAO8=",
+                    "rev": "5fdf5521a2f59e5794fef5085eeef711b760de4f",
                     "url": "https://dawn.googlesource.com/dawn.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3205,10 +3205,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-LE2x6lkDk2r977zRRApdTTWId/vXql2uOob7aEsnncI=",
+                    "hash": "sha256-LUV3ieY+bQ6qhft+xeTSxPuTlnmpbxkRIcIVBz86Aco=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.16.0"
+                    "tag": "v24.17.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3263,8 +3263,8 @@
             },
             "src/third_party/ffmpeg": {
                 "args": {
-                    "hash": "sha256-JHAicFKBvtkwmZPRBKYPT6JVqYqF8hyXxU0H7kfgCBs=",
-                    "rev": "b5e18fb9da84e26ceef30d4e4886696bf59337c0",
+                    "hash": "sha256-fsZSqmG6vFOPJYuBgG6OSWkzRu27B3mv/PqAP8s4ARk=",
+                    "rev": "f45bab87ce4c5fafc67fd53fcde777578d01bfa0",
                     "url": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3583,8 +3583,8 @@
             },
             "src/third_party/libvpx/source/libvpx": {
                 "args": {
-                    "hash": "sha256-RyYnkLYafiS6kQKeOmzohtxFRXudDzgEmQkG+qKHozc=",
-                    "rev": "47ac1ec7f3de7d7cb3d070844c427c8f1fa9d6fc",
+                    "hash": "sha256-WpvbgyCocBm7BCL46kr+Mo7lZIOKSbLK6bog1T+HhQY=",
+                    "rev": "286281b987e08757b9d0e6e23f38f8b0f1b601ce",
                     "url": "https://chromium.googlesource.com/webm/libvpx.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3607,8 +3607,8 @@
             },
             "src/third_party/libyuv": {
                 "args": {
-                    "hash": "sha256-ZONwYhTD5/tPk5cm9Dmz59QB+rVxv1l/7lOhBOCMCf4=",
-                    "rev": "957f295ea946cbbd13fcfc46e7066f2efa801233",
+                    "hash": "sha256-DW7PuRqA1x0K8/uJbxBJ4Cn9YEPFhZ9vhuGVVyGKK98=",
+                    "rev": "30809ff64a9ca5e45f86439c0d474c2d3eef3d05",
                     "url": "https://chromium.googlesource.com/libyuv/libyuv.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3840,8 +3840,8 @@
             },
             "src/third_party/skia": {
                 "args": {
-                    "hash": "sha256-3yGenYm9OO63FP53odWv6vfy0fOKsXNpygb4vT8HRQM=",
-                    "rev": "2ac66cfda097720cd8d3e481c45b68b4ba096ef7",
+                    "hash": "sha256-2Xu45E9seJ0KfX5cmP07ZFAk8ffZp5RmuUscIqZlwJg=",
+                    "rev": "3a90f6662a2c30a7d270c7738cc70e5980974b02",
                     "url": "https://skia.googlesource.com/skia.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4115,8 +4115,8 @@
             },
             "src/third_party/webrtc": {
                 "args": {
-                    "hash": "sha256-n39HENOXmatsZLF6jdYRsb+wl2cM0i6ngT4Zbyu5ayE=",
-                    "rev": "e3ee86921c57b9f8921045e77f098604803cb66c",
+                    "hash": "sha256-GZU7eUSMuWUDswEDlEUNgjpQU5lWRJBmn3mw0Aunefo=",
+                    "rev": "419855526c87360c0352e28ebacc4bf0905b9d3f",
                     "url": "https://webrtc.googlesource.com/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4155,15 +4155,15 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-5wkfQsD5pWMAgsXSGTzMYwBADqJpWqSoJEfIyGYkAno=",
-                    "rev": "0b1a7b33935f88a225ca32de62a13478f329b625",
+                    "hash": "sha256-4FU9K9EHtkeK9FLkYRHF7jiJcwS69jcGgpnrRXIhM5o=",
+                    "rev": "30ffa551746d451373b9869d658251b2c21343e9",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-EIVoXfA3O0v+NgBap129bOm2yl9zFuDx78OLYj0Q/o8=",
+            "hash": "sha256-hBJkcohC8tvCIjQgZYeH9tTY6zxa+HCiLQJsgX1HCe4=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -4206,7 +4206,7 @@
             }
         },
         "modules": "146",
-        "node": "24.16.0",
-        "version": "42.4.0"
+        "node": "24.17.0",
+        "version": "42.5.1"
     }
 }
