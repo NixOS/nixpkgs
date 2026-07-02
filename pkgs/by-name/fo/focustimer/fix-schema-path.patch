@@ -1,0 +1,24 @@
+diff --git a/data/meson.build b/data/meson.build
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -96,7 +96,7 @@
+ 
+ # Run required post-install steps
+ gnome.post_install(
+-  glib_compile_schemas: true,
++  glib_compile_schemas: false,
+   gtk_update_icon_cache: true,
+   update_desktop_database: true,
+ )
+diff --git a/meson.build b/meson.build
+--- a/meson.build
++++ b/meson.build
+@@ -121,7 +121,7 @@
+ package_donate_url = 'https://liberapay.com/kamilprusko'
+ package_datadir = get_option('prefix') / get_option('datadir') / meson.project_name()
+ package_localedir = get_option('prefix') / get_option('datadir') / 'locale'
+-gschema_dir = get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
++gschema_dir = get_option('prefix') / get_option('datadir') / 'gsettings-schemas' / '@pname@-@version@' / 'glib-2.0' / 'schemas'
+ gettext_package = package_name
+ 
+ # Change app id for development builds

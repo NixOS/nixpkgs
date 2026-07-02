@@ -6,31 +6,36 @@
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   desktop-file-utils,
-  libcanberra,
   gst_all_1,
   vala,
-  gtk3,
+  gtk4,
+  libadwaita,
+  graphene,
+  pango,
   gom,
   sqlite,
   libxml2,
   glib,
   gobject-introspection,
   json-glib,
-  libpeas,
+  libpeas2,
   gsettings-desktop-schemas,
   gettext,
 }:
 stdenv.mkDerivation rec {
-  pname = "gnome-pomodoro";
-  version = "0.28.1";
+  pname = "focustimer";
+  version = "1.1.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "gnome-pomodoro";
-    repo = "gnome-pomodoro";
-    rev = version;
-    hash = "sha256-1G0Sv6uR4rE+/TZqEM57mCdBaXoJNpC0cznY4pnPEa4=";
+    owner = "focustimerhq";
+    repo = "FocusTimer";
+    tag = version;
+    hash = "sha256-ZtHyOsxRDEGwnfwyNGlIVebDayvIobePTOOs3xyw/VM=";
   };
 
   patches = [
@@ -56,7 +61,7 @@ stdenv.mkDerivation rec {
     libxml2
     pkg-config
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
@@ -67,17 +72,23 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
-    gtk3
+    gtk4
+    libadwaita
+    graphene
+    pango
     json-glib
-    libcanberra
-    libpeas
+    libpeas2
     sqlite
   ];
+
+  postInstall = ''
+    ln -s $out/bin/focus-timer $out/bin/gnome-pomodoro
+  '';
 
   meta = {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
-    mainProgram = "gnome-pomodoro";
+    mainProgram = "focus-timer";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
