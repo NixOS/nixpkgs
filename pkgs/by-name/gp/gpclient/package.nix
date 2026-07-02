@@ -41,10 +41,14 @@ rustPlatform.buildRustPackage {
   # nixpkgs-update: no auto update
   inherit (gpauth)
     cargoHash
-    meta
     src
     version
     ;
+
+  meta = gpauth.meta // {
+    # Re-anchor meta.position here so nixpkgs-update sees the opt-out above.
+    inherit (gpauth.meta) description;
+  };
 
   buildAndTestSubdir = "apps/gpclient";
 
