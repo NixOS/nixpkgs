@@ -418693,7 +418693,6 @@ self: {
       description = "Lambdabot is a development tool and advanced IRC bot";
       license = "GPL";
       mainProgram = "lambdabot";
-      maintainers = [ lib.maintainers.ncfavier ];
     }
   ) { };
 
