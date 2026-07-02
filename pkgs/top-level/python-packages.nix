@@ -19455,6 +19455,8 @@ self: super: with self; {
 
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
 
+  swi-tools = callPackage ../development/python-modules/swi-tools { };
+
   swift = callPackage ../development/python-modules/swift { };
 
   swifter = callPackage ../development/python-modules/swifter { };
