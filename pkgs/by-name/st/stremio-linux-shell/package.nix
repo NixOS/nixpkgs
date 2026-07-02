@@ -26,7 +26,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
-  version = "1.0.2";
+  version = "1.1.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -35,17 +35,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Stremio";
     repo = "stremio-linux-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NbzUAv/L8xzdepqn677nlROumjlliZIHzPXIToHHeTU=";
+    hash = "sha256-L4axAO+Ky0QKC/WiGvpvSAsqld60znknxbSnSDCxPnY=";
   };
 
-  cargoHash = "sha256-yafkD7D0E+lbFV7MlLwQM4iWC8Glo/Tn2F+TFff6GoM=";
+  cargoHash = "sha256-fI3HplELOl0EG8JIZYnPi9Nm0K1F7eA13gIsP3AKTjQ=";
+
+  patches = [
+    ./out-path.patch
+  ];
 
   postPatch = ''
-    substituteInPlace data/com.stremio.Stremio.service \
-      --replace-fail "Exec=/app/bin/stremio" "Exec=$out/bin/stremio"
-
-    substituteInPlace data/stremio.sh \
-      --replace-fail "/app/libexec/stremio/stremio" "$out/libexec/stremio/stremio"
+    substituteInPlace data/com.stremio.Stremio.service data/stremio.sh build.rs \
+      --subst-var out
   '';
 
   nativeBuildInputs = [
