@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matomo";
-  version = "5.10.0";
+  version = "5.10.1";
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-i7nRQRY2gAzMQmRNGaksq4B516MsQuXQZbzlEUWEsQw=";
+    hash = "sha256-TP1gQ3OAhdg2IEskocvP6VhBkHUEXFdq5+PvomjUnXA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
