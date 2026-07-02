@@ -231,16 +231,20 @@ in
     allow_runtime_configurable_key_storage = true;
     enable_cet_shadow_stack = false;
     is_cfi = false;
-    v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
-    dawn_use_built_dxc = false;
+    enable_dangling_raw_ptr_feature_flag = false;
     v8_enable_private_mapping_fork_optimization = true;
     v8_expose_public_symbols = true;
-    enable_dangling_raw_ptr_feature_flag = false;
-    clang_unsafe_buffers_paths = "";
-    enterprise_cloud_content_analysis = false;
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
+  }
+  // lib.optionalAttrs (lib.versionOlder info.version "43") {
+    enterprise_cloud_content_analysis = false;
+  }
+  // lib.optionalAttrs (lib.versionAtLeast info.version "43") {
+    node_openssl_path = "//third_party/boringssl";
+  }
+  // {
 
     # other
     enable_widevine = false;
