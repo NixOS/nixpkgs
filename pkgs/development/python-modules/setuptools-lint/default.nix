@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pylint,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-lint";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "16a1ac5n7k7sx15cnk03gw3fmslab3a7m74dc45rgpldgiff3577";
   };
 
-  propagatedBuildInputs = [ pylint ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pylint ];
 
   meta = {
     description = "Package to expose pylint as a lint command into setup.py";
