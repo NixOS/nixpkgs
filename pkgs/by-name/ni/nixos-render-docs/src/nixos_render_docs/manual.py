@@ -264,6 +264,7 @@ class HTMLParameters(NamedTuple):
     # structural depth of the navigation sidebar tree
     sidebar_depth: int
     media_dir: Path
+    sidebar_open: frozenset[str] = frozenset()
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -367,6 +368,20 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 file.write(self._redirects.get_redirect_script(toc.target.path))
             scripts.append(f'./{redirects_name}')
 
+        # Register a close handler
+        # Without this the popover can still be closed by clicking outside of it
+        # It handles auto-closing when the user clicks a href.
+        close_menu_js = """
+            document.addEventListener("DOMContentLoaded", () => {
+                const nav = document.getElementById("manual-toc");
+                nav?.addEventListener("click", (e) => {
+                    if (e.target.closest("a[href]") && nav.matches(":popover-open")) {
+                        nav.hidePopover();
+                    }
+                });
+            });
+        """
+
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
@@ -380,13 +395,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                      for style in self._html_params.stylesheets)),
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in scripts)),
+            f"<script>{close_menu_js}</script>",
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
+            # See: https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+            # Supported by most browsers since 2023, full support since Jan 2025
+            ('  <button type="button" class="toc-toggle" popovertarget="manual-toc"'
+             ' popovertargetaction="toggle" aria-label="Toggle table of contents">'
+             '☰</button>') if sidebar else "",
             nav_html,
-            f'  <nav class="toc-sidebar">{sidebar}</nav>' if sidebar else "",
+            f'  <nav id="manual-toc" class="toc-sidebar" popover="auto">{sidebar}</nav>' if sidebar else "",
             '  <main class="content">',
         ])
 
@@ -450,9 +471,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 link = f'<a href="{e.target.href()}">{e.target.toc_html}</a>'
                 cls = html.escape(e.kind, True)
                 if children:
+                    open_attr = " open" if e.target.id in self._html_params.sidebar_open else ""
                     items.append(
                         f'<li class="{cls}">'
-                        f'<details open><summary>{link}</summary>{children}</details>'
+                        f'<details{open_attr}><summary>{link}</summary>{children}</details>'
                         '</li>'
                     )
                 else:
@@ -729,6 +751,9 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
     p.add_argument('--sidebar-depth', default=2, type=int)
+    # nav metadata (JSON): {"open": ["anchor-id", ...]} selects which sidebar
+    # entries render expanded; omitted or absent means everything is collapsed.
+    p.add_argument('--nav', type=Path)
     # Deprecated flags,
     p.add_argument('--toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
     p.add_argument('--chunk-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
@@ -738,6 +763,10 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('outfile', type=Path)
 
 def _run_cli_html(args: argparse.Namespace) -> None:
+    sidebar_open: frozenset[str] = frozenset()
+    if args.nav:
+        with open(args.nav) as nav_file:
+            sidebar_open = frozenset(json.load(nav_file).get("open", []))
     with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
         redirects = None
         if args.redirects:
@@ -747,7 +776,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script,
-                           args.sidebar_depth, args.media_dir),
+                           args.sidebar_depth, args.media_dir, sidebar_open),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
