@@ -6,10 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Updating helix source to the latest stable..."
-nix-update helix-unwrapped
+nix-update helix.helix-unwrapped
 
 echo "Fetching updated helixSource..."
-HELIX_SRC=$(nix-instantiate --eval -A "helix-unwrapped.src.outPath" --raw)
+HELIX_SRC=$(nix-build --no-out-link -A "helix.helix-unwrapped.src")
 
 echo "Generating grammars.json..."
 "$SCRIPT_DIR/generate_grammars.py" \
