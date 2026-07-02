@@ -578,6 +578,7 @@ mapAliases {
   coreth = throw "'coreth' has been moved to 'avalanchego' by upstream"; # Added 2026-01-15
   cosmic-tasks = throw "'cosmic-tasks' has been renamed to/replaced by 'tasks'"; # Converted to throw 2025-10-27
   cotton = throw "'cotton' has been removed since it is vulnerable to CVE-2025-62518 and upstream is unmaintained"; # Added 2025-10-26
+  cpp2a-kernel = cpp20-kernel; # Added 2026-06-30, xeus-cling removed in favour of xeus-cpp
   cpp-ipfs-api = throw "'cpp-ipfs-api' has been renamed to/replaced by 'cpp-ipfs-http-client'"; # Converted to throw 2025-10-27
   cpr = warnAlias "'cpr' has been renamed to/replaced by 'libcpr'" libcpr; # Added 2025-11-17
   cqrlog = throw "'cqrlog' was removed due to lack of maintenance and relying on gtk2"; # Added 2025-12-02
@@ -2410,6 +2411,7 @@ mapAliases {
     use the reference implementation 'xdg-terminal-exec' instead.
   " xdg-terminal-exec; # Added 2026-01-14
   xdragon = throw "'xdragon' has been renamed to/replaced by 'dragon-drop'"; # Converted to throw 2025-10-27
+  xeus-cling = throw "'xeus-cling' has been removed: it is unmaintained upstream. Use 'xeus-cpp' (a clang-repl/CppInterOp-based successor) instead"; # Added 2026-06-30
   xf86-input-cmt = throw "'xf86-input-cmt' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-09
   xf86_input_cmt = xf86-input-cmt; # Added 2025-12-12
   xf86_input_wacom = xf86-input-wacom; # Added 2025-12-12
