@@ -11,19 +11,22 @@
   xcbutilxrm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3";
   pname = "2bwm";
 
   src = fetchFromGitHub {
     owner = "venam";
     repo = "2bwm";
-    rev = "v${version}";
-    sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p1GnSQbNNQ+eeriXQ8r1l7aEJpM2FurTy2RDJYJZkfc=";
   };
 
   # Allow users to set their own list of patches
   patches = config."2bwm".patches or [ ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
@@ -45,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
   };
-}
+})
