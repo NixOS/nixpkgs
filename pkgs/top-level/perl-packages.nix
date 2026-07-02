@@ -38791,6 +38791,11 @@ with self;
       ]
     );
     patches = [
+      (fetchpatch {
+        name = "CVE-2026-8177.patch";
+        url = "https://github.com/cpan-authors/XML-LibXML/commit/15652bd905a6c9dda59a81b14d4766adbbae2ea8.patch";
+        hash = "sha256-YGKpWfbsoeHKrhUyPyPQZ2cMUWKj2+tfo71naMAhCvc=";
+      })
       # https://github.com/shlomif/perl-XML-LibXML/pull/87
       ../development/perl-modules/XML-LibXML-fix-tests-libxml-2.13.0.patch
     ];
