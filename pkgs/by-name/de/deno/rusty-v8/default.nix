@@ -4,12 +4,9 @@
   fetchpatch,
   rustPlatform,
   rustc,
-  rustc-unwrapped,
   rust-bindgen,
-  rust-analyzer,
   rustfmt,
   cargo,
-  clippy,
   llvmPackages ? rustc.llvmPackages,
   pkg-config,
   stdenv,
@@ -30,20 +27,24 @@ let
     name = "rusty-v8-rust-toolchain";
     paths = [
       rustc
-      rustc-unwrapped
       rust-bindgen
-      rust-analyzer
       rustfmt
       cargo
-      clippy
       llvmPackages.libclang.lib
+      # To provide about the same tools as the upstream rust toolchain, the following inputs are also needed.
+      # But they are not actually needed, and to avoid unnecessary rebuilds, we are not adding them.
+      #rustc-unwrapped
+      #rust-analyzer
+      #clippy
     ];
-    postBuild = ''
-      mkdir -p "$out/lib/rustlib/src/rust"
-      cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
-      chmod u+w "$out/lib/rustlib/src/rust/library/"
-      ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
-    '';
+    /*
+      postBuild = ''
+        mkdir -p "$out/lib/rustlib/src/rust"
+        cp -r '${rustPlatform.rustcSrc}'/* "$out/lib/rustlib/src/rust/"
+        chmod u+w "$out/lib/rustlib/src/rust/library/"
+        ln -s '${rustPlatform.rustVendorSrc}' "$out/lib/rustlib/src/rust/library/vendor"
+      '';
+    */
   };
 
   clangBasePath = symlinkJoin {
