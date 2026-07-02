@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/maxcountryman/flask-login/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/maxcountryman/flask-login/blob/${src.rev}/CHANGES.md";
     description = "User session management for Flask";
     homepage = "https://github.com/maxcountryman/flask-login";
     license = lib.licenses.mit;
