@@ -28,6 +28,8 @@ in
         '';
       };
 
+      mcpServer.enable = lib.mkEnableOption "the 1Password Environments local MCP server";
+
       package =
         lib.mkPackageOption pkgs "1Password GUI" {
           default = [ "_1password-gui" ];
@@ -45,12 +47,22 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     users.groups.onepassword.gid = config.ids.gids.onepassword;
+    users.groups.onepassword-mcp = lib.mkIf cfg.mcpServer.enable {
+      gid = config.ids.gids.onepassword-mcp;
+    };
 
     security.wrappers = {
       "1Password-BrowserSupport" = {
         source = "${cfg.package}/share/1password/1Password-BrowserSupport";
         owner = "root";
         group = "onepassword";
+        setuid = false;
+        setgid = true;
+      };
+      "onepassword-mcp" = lib.mkIf cfg.mcpServer.enable {
+        source = "${cfg.package}/share/1password/onepassword-mcp";
+        owner = "root";
+        group = "onepassword-mcp";
         setuid = false;
         setgid = true;
       };
