@@ -2409,7 +2409,6 @@ broken-packages:
   - HackMail # failure in job https://hydra.nixos.org/build/233215224 at 2023-09-02
   - hactor # failure in job https://hydra.nixos.org/build/233254977 at 2023-09-02
   - hactors # failure in job https://hydra.nixos.org/build/233218599 at 2023-09-02
-  - haddock-api # failure in job https://hydra.nixos.org/build/233216515 at 2023-09-02
   - haddock-leksah # failure in job https://hydra.nixos.org/build/233206878 at 2023-09-02
   - haddock-test # failure in job https://hydra.nixos.org/build/233246641 at 2023-09-02
   - hadoop-formats # failure in job https://hydra.nixos.org/build/233224647 at 2023-09-02
@@ -2628,7 +2627,6 @@ broken-packages:
   - hasql-explain-tests # failure in job https://hydra.nixos.org/build/233247034 at 2023-09-02
   - hasql-generate # failure in job https://hydra.nixos.org/build/324107360 at 2026-03-15
   - hasql-generic # failure in job https://hydra.nixos.org/build/233204654 at 2023-09-02
-  - hasql-mapping # failure in job https://hydra.nixos.org/build/324107379 at 2026-03-15
   - hasql-migration # failure in job https://hydra.nixos.org/build/295094132 at 2025-04-22
   - hasql-mover # failure in job https://hydra.nixos.org/build/295094128 at 2025-04-22
   - hasql-pipes # failure in job https://hydra.nixos.org/build/295094119 at 2025-04-22
@@ -2773,7 +2771,6 @@ broken-packages:
   - hGelf # failure in job https://hydra.nixos.org/build/233203909 at 2023-09-02
   - hgeometric # failure in job https://hydra.nixos.org/build/233197856 at 2023-09-02
   - hgis # failure in job https://hydra.nixos.org/build/233200418 at 2023-09-02
-  - hgmp # failure in job https://hydra.nixos.org/build/307519217 at 2025-09-19
   - hgom # failure in job https://hydra.nixos.org/build/233255569 at 2023-09-02
   - hgopher # failure in job https://hydra.nixos.org/build/233222066 at 2023-09-02
   - HGraphStorage # failure in job https://hydra.nixos.org/build/233217988 at 2023-09-02
@@ -3296,7 +3293,6 @@ broken-packages:
   - ihaskell-parsec # failure in job https://hydra.nixos.org/build/233244271 at 2023-09-02
   - ihaskell-plot # failure in job https://hydra.nixos.org/build/233255936 at 2023-09-02
   - ihaskell-widgets # failure in job https://hydra.nixos.org/build/265955663 at 2024-07-14
-  - ihp-pglistener # failure in job https://hydra.nixos.org/build/325267877 at 2026-04-12
   - illuminate # failure in job https://hydra.nixos.org/build/233219478 at 2023-09-02
   - image-type # failure in job https://hydra.nixos.org/build/233251466 at 2023-09-02
   - imagemagick # failure in job https://hydra.nixos.org/build/233598237 at 2023-09-02
@@ -4979,7 +4975,6 @@ broken-packages:
   - postgresql-simple-interval # failure in job https://hydra.nixos.org/build/307611243 at 2025-09-19
   - postgresql-simple-named # failure in job https://hydra.nixos.org/build/233202481 at 2023-09-02
   - postgresql-simple-opts # failure in job https://hydra.nixos.org/build/252718901 at 2024-03-16
-  - postgresql-simple-postgresql-types # failure in job https://hydra.nixos.org/build/327522032 at 2026-04-30
   - postgresql-simple-sop # failure in job https://hydra.nixos.org/build/233249757 at 2023-09-02
   - postgresql-simple-url # failure in job https://hydra.nixos.org/build/295096191 at 2025-04-22
   - postgresql-tx # failure in job https://hydra.nixos.org/build/252717914 at 2024-03-16
@@ -7445,7 +7440,6 @@ broken-packages:
   - yesod-links # failure in job https://hydra.nixos.org/build/233257763 at 2023-09-02
   - yesod-lucid # failure in job https://hydra.nixos.org/build/233231687 at 2023-09-02
   - yesod-media-simple # failure in job https://hydra.nixos.org/build/307611606 at 2025-09-19
-  - yesod-middleware-csp # failure in job https://hydra.nixos.org/build/295098382 at 2025-04-22
   - yesod-paginate # failure in job https://hydra.nixos.org/build/233218563 at 2023-09-02
   - yesod-pagination # failure in job https://hydra.nixos.org/build/233204022 at 2023-09-02
   - yesod-pnotify # failure in job https://hydra.nixos.org/build/233258047 at 2023-09-02

@@ -130,6 +130,10 @@ builtins.intersectAttrs super {
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
 
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
@@ -1139,13 +1143,6 @@ builtins.intersectAttrs super {
     ];
   }) super.lsp-test;
 
-  lsp_2_8_0_0 = doDistribute (
-    super.lsp_2_8_0_0.override {
-      lsp-types = self.lsp-types_2_4_0_0;
-    }
-  );
-  lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
-
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
@@ -1285,6 +1282,8 @@ builtins.intersectAttrs super {
           ln -sf git-annex git-remote-annex
           ln -sf git-annex git-remote-tor-annex
           PATH+=":$PWD"
+
+          checkFlagsArray+=("-J$NIX_BUILD_CORES")
 
           echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
 
@@ -1670,6 +1669,15 @@ builtins.intersectAttrs super {
     # Is correctness good enough since 0.5?
     (disableCabalFlag "icu")
   ];
+
+  # Tests spawn ghc with -fplugin and need this package's in-place package db.
+  # The trailing colon keeps GHC's default package db in the package path.
+  # https://hydra.nixos.org/build/329190094
+  ghc-typelits-natnormalise = overrideCabal (drv: {
+    preCheck = (drv.preCheck or "") + ''
+      export NIX_GHC_PACKAGE_PATH_FOR_TEST=$PWD/dist/package.conf.inplace/:$packageConfDir:
+    '';
+  }) super.ghc-typelits-natnormalise;
 
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {

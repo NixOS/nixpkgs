@@ -49,14 +49,21 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_1_0;
   Win32 = null;
 
   # Becomes a core package in GHC >= 9.8
-  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+  semaphore-compat = doDistribute self.semaphore-compat_2_0_0;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_10;
+  os-string = doDistribute self.os-string_2_0_11;
+
+  # Become core packages in GHC >= 9.12
+  haddock-library = doDistribute (doJailbreak self.haddock-library_1_11_0);
+  haddock-api = doDistribute (doJailbreak self.haddock-api_2_27_0);
+
+  # Becomes a core package in GHC >= 9.12, but needs unix >= 2.8
+  file-io = null;
 
   # Become core packages in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-experimental = null;
@@ -138,7 +145,6 @@ self: super: {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
-  haddock-library = doJailbreak super.haddock-library;
   path = self.path_0_9_5;
 
   haskell-language-server =

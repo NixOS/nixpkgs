@@ -65,6 +65,13 @@ in
   xhtml = null;
   Win32 = null;
 
+  # Become core packages in GHC >= 9.12
+  file-io = doDistribute self.file-io_0_2_0;
+  haddock-api = markBroken self.haddock-api_2_29_1; # no compatible release available
+  haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
+
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_10_0_0;
+
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);
 
@@ -104,7 +111,7 @@ in
               ];
           in
           {
-            pantry = upgradeCabal ssuper.pantry_0_11_2;
+            pantry = upgradeCabal ssuper.pantry;
             rio-prettyprint = upgradeCabal ssuper.rio-prettyprint;
             hackage-security = upgradeCabal ssuper.hackage-security;
             hpack = upgradeCabal sself.hpack_0_39_1;
@@ -124,10 +131,6 @@ in
   # Jailbreaks
   #
   floskell = doJailbreak super.floskell; # base <4.20
-  # 2025-04-09: filepath <1.5
-  haddock-library =
-    assert super.haddock-library.version == "1.11.0";
-    doJailbreak super.haddock-library;
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
 
   #

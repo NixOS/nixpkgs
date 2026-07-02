@@ -27,19 +27,16 @@
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   - clash-lib-hedgehog < 1.9 # needs to match clash-lib from Stackage
-  # 2026-01-23: dataframe >= 0.3.3.7 uses random-1.3, which breaks dependency coherence on 25.11, whose default version is random-1.2
-  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
-  - dataframe == 0.3.3.6
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2026-06-29: needs to match futhark-0.26.3
+  - futhark-manifest == 1.8.0.0
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
-  # 2026-02-04: as requested by ghcide >= 2.13
-  - hie-bios < 0.18.0
-  - hiedb < 0.8.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
+  # Note: When removing this, also remove hnix-store-core from maintainers/scripts/haskell/update-stackage.sh
   - hnix-store-core < 0.7
   - hnix-store-remote < 0.7
   # 2025-08-03: need to match stackage version of hosc
@@ -51,10 +48,6 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
-  # 2025-03-07: HLS and many other pkgs don't support lsp >= 2.8 (yet)
-  - lsp < 2.8
-  - lsp-test < 0.18
-  - lsp-types < 2.4
   # Needs to match microlens == 0.4.* in Stackage LTS 24
   - microlens-pro < 0.2.0.4
   # 2026-04-06: 4.0.10 merely adjusts to dependencies that are incompatible with our LTS
@@ -64,6 +57,8 @@ default-package-overrides:
   - pandoc-crossref == 0.3.21
   # 2025-12-19: Needs to match Stackage version of rhine
   - rhine-bayes < 1.6
+  # 2026-06-24: compatibility with mighttpd2-4.0.9
+  - wai-app-file-cgi < 3.2
   # 2026-02-08: compatibility with crypton-x509* in Stackage LTS 24
   - x509-ocsp < 0.4.1.0
 # keep-sorted end
@@ -77,6 +72,7 @@ extra-packages:
   - Cabal == 3.14.*
   - Cabal == 3.16.*                     # version required for cabal-install and other packages
   - cabal-add == 0.1                    # 2025-09-09: Only needed for hls 2.11 can be removed once we are past it.
+  - Cabal-syntax == 3.6.*               # required for the GHC 9.0.2 package set
   - Cabal-syntax == 3.10.*
   - Cabal-syntax == 3.12.*
   - Cabal-syntax == 3.14.*
@@ -89,7 +85,7 @@ extra-packages:
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
-  - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
+  - ghc-exactprint == 1.10.*            # 2024-08-27: needed for GHC == 9.10
   - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.4
   - ghc-lib == 9.8.*                    # 2025-12-11: preserve for GHC 9.6, 9.8
@@ -100,7 +96,7 @@ extra-packages:
   - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
-  - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
+  - haddock-api == 2.27.*               # 2026-05-22: latest version compatible with GHC 9.4
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
   - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
@@ -112,21 +108,25 @@ extra-packages:
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - hpack == 0.39.1                     # 2026-03-15: to match upstream stack-3.9.3
+  - insert-ordered-containers < 0.3     # 2026-05-25: Needed for building postgrest
   - language-javascript == 0.7.0.0      # required by purescript
+  - lawful-conversions < 0.2            # 2026-05-25: Needed for building postgrest
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
-  - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
+  - ShellCheck == 0.10.0                # 2026-05-30: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
+  - swagger2 < 2.9                      # 2026-05-25: Needed for building postgrest
   - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
   - text-builder < 1                    # 2025-08-27: Needed for building postgrest
   - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
+  - validation == 1.1.5                 # 2026-06-10: Needed for building geojson 4.1
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no
@@ -141,11 +141,14 @@ package-maintainers:
     - basic-sop
     - commutative-semigroups
     - generics-sop
+    - ghcide
     - ghcjs-base
     - ghcjs-dom
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haskell-debugger
+    - hie-bios
+    - hiedb
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
@@ -156,6 +159,9 @@ package-maintainers:
     - large-records
     - lens-sop
     - linux-namespaces
+    - lsp
+    - lsp-test
+    - lsp-types
     - monoidal-containers
     - proto-lens-arbitrary
     - proto3-suite

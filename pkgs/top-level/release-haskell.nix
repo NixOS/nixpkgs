@@ -67,7 +67,7 @@ let
     ghc967
     ghc984
     ghc9103
-    ghc9123
+    ghc9125
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -526,7 +526,7 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9123
+        compilerNames.ghc9125
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
@@ -534,14 +534,24 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      # haddock-{api,library} are core packages as of GHC >= 9.12
+      haddock-api = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        # No version compatible with 9.8 nor 9.10 released to Hackage
+      ];
+      haddock-library = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        compilerNames.ghc98
+        compilerNames.ghc910
+      ];
       haskell-debugger = [
         compilerNames.ghc9141
       ];
       haskell-language-server = released;
       hoogle = released;
-      hlint = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
+      hlint = released;
       hpack = released;
       hsdns = released;
       iserv-proxy = released;
@@ -552,12 +562,8 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
-      ghc-tags = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
+      ghc-source-gen = released;
+      ghc-tags = released;
       hashable = released;
       primitive = released;
       scrod = [
@@ -568,9 +574,7 @@ let
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
-      weeder = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
+      weeder = released;
 
       # MicroHs core packages
       ghc-compat = [
