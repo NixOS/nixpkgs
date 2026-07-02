@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  cmake,
+  buildCMakePackage,
   cctools,
   fetchFromGitHub,
   git,
@@ -14,22 +14,14 @@
   enableMimalloc ? true,
   perl,
   testers,
+  nix-update-script,
 }:
 let
   cadical' = cadical.override { version = "2.1.3"; };
 in
-stdenv.mkDerivation (finalAttrs: {
+buildCMakePackage (finalAttrs: {
   pname = "lean4";
   version = "4.30.0";
-
-  # Using a vendored version rather than nixpkgs' version to match the exact version required by
-  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
-  mimalloc-src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.3";
-    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
-  };
 
   src = fetchFromGitHub {
     owner = "leanprover";
@@ -38,36 +30,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
   };
 
-  postPatch =
-    let
-      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
-    in
-    ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
+  # SRI of cmakeDeps FOD (includes .git from upstream clone; update when GIT_TAG moves).
+  # From nixpkgs-review: specified a//wKx… mismatched; got:
+  cmakeDepsHash = "sha256-oPEvqS064urqo0s0+EMo3RWE0rewNeSBXn33Xo9/fFU=";
 
-      # Remove tests that fails in sandbox.
-      # It expects `sourceRoot` to be a git repository.
-      rm -rf src/lake/examples/git/
-    ''
-    + (lib.optionalString enableMimalloc ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
-      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
-        substituteInPlace "$file" \
-          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-      done
-    '');
+  externalTargets = lib.optionals enableMimalloc [ "mimalloc" ];
+
+  # ExternalProject still needs SOURCE_DIR (git update ignores a pre-seeded tree).
+  contentGitRepositories = lib.optionalAttrs enableMimalloc {
+    mimalloc = "https://github.com/microsoft/mimalloc";
+  };
+
+  cmakeDepsBuildInputs = [
+    gmp
+    libuv
+  ];
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
+
+    rm -rf src/lake/examples/git/
+  '';
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
   '';
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     makeWrapper
-    leangz # Provides leantar
+    leangz
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
@@ -87,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  patches = [ ./mimalloc.patch ];
-
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
@@ -96,11 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = "v${finalAttrs.version}";
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
