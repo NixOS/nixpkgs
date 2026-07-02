@@ -1571,6 +1571,10 @@ with haskellLib;
   # https://codeberg.org/daniel-casanueva/graphviz/issues/7
   graphviz = doJailbreak super.graphviz;
 
+  # 2026-07-02: allow QuickCheck 2.16
+  # https://github.com/maralorn/haskell-taskwarrior/issues/14
+  taskwarrior = doJailbreak super.taskwarrior;
+
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
   lzma = doJailbreak super.lzma;
