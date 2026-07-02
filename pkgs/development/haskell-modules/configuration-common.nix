@@ -1693,6 +1693,10 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-multipart/pull/77
   servant-multipart-client = doJailbreak super.servant-multipart-client;
 
+  # 2026-07-02: allow ghc-events 0.21, optparse-applicative 0.19
+  # https://github.com/mpickering/eventlog2html/issues/195
+  eventlog2html = doJailbreak super.eventlog2html;
+
   # Disable test cases that were broken by insignificant changes in icu 76
   # https://github.com/haskell/text-icu/issues/108
   text-icu = overrideCabal (drv: {
