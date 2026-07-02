@@ -18,6 +18,9 @@
   gnutar,
   p7zip,
   xz,
+  nix-update-script,
+
+  # Backend options
   withTTYX ? true,
   libx11,
   withGUI ? true,
@@ -44,13 +47,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.8.0";
+  version = "2.9.0-unstable-27-08-2026";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    tag = "v_${version}";
-    hash = "sha256-LP+agJrYxjH6vLAg6cJTU4/9jYGF9iaZzxA7hozDKNY=";
+    rev = "59354e96e366e0bf3a2fcd9d76c45cf5ec6d0c30";
+    hash = "sha256-9mSi3gqZ2jpgUawD3Jr2Pmn1shLpySuFCh4iOZe7CO8=";
   };
 
   nativeBuildInputs = [
@@ -125,6 +128,8 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = "--version=branch=master"; };
 
   meta = {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
