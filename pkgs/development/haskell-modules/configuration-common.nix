@@ -1701,6 +1701,10 @@ with haskellLib;
   # https://github.com/mpickering/eventlog2html/issues/195
   eventlog2html = doJailbreak super.eventlog2html;
 
+  # 2026-07-02: allow ghc-events 0.21, transformers 0.6.3
+  # https://github.com/haskell/ThreadScope/issues/148
+  threadscope = doJailbreak super.threadscope;
+
   # 2026-07-02: allow base 4.21 and template-haskell 2.23
   # https://github.com/luke-clifton/shh/issues/85
   shh = doJailbreak super.shh;
