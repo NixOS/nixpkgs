@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "1.22.4";
+  version = "1.22.6";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-Npfoqa6A1YSNSxV3zcIQL6prlht47dVaZYpq9+Dx9LY=";
+    hash = "sha256-hN0DU7MFlG8+TVQ2pWRRIVIDlmmHE54Dv/PqFAwwECs=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
 
     substituteInPlace faugus/path_manager.py \
-      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
-
-    substituteInPlace faugus/launcher.py faugus/shortcut.py \
+      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
       --replace-fail "/usr/lib/extensions/vulkan/lsfgvk/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so" \
       --replace-fail "/usr/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so"
   '';
