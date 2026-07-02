@@ -3,6 +3,10 @@
 `stdenv.mkDerivation` also accepts a [fixed-point function](#function-library-lib.fixedPoints.fix) instead of a plain attribute set:
 
 ```nix
+{
+  stdenv,
+  fetchurl,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hello";
   version = "2.12";
@@ -37,6 +41,10 @@ Define a build helper named `mkLocalDerivation` that builds locally without usin
 Use `lib.extendMkDerivation`:
 
 ```nix
+{
+  lib,
+  stdenv,
+}:
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
   excludeDrvArgNames = [
