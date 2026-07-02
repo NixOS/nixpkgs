@@ -72,6 +72,7 @@ buildGoModule (finalAttrs: {
       equirosa
       SuperSandro2000
       ryan4yin
+      kaynetik
     ];
     mainProgram = "croc";
   };
