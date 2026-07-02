@@ -16,6 +16,7 @@
   bzip2,
   gnutar,
   xz,
+  nix-update-script,
 
   # Backend options
   withTTYX ? true,
@@ -84,22 +85,14 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.8.0";
+  version = "2.8.0-unstable-12-07-2026";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    tag = "v_${version}";
-    hash = "sha256-LP+agJrYxjH6vLAg6cJTU4/9jYGF9iaZzxA7hozDKNY=";
+    rev = "bcfe026fe1d0631a59631bca9d48da38ee23f222";
+    hash = "sha256-x0XblY613XrGDUz/HZ7bWGp8ZJ/HYr8vmZKDhGAFNfE=";
   };
-
-  patches = [
-    # Fix sudo helper stealing TTY input in mortal mode, see https://github.com/elfmz/far2l/issues/3425
-    (fetchpatch {
-      url = "https://github.com/elfmz/far2l/commit/d9f96544adf36d93de813f2f918b78a6f37c61e4.patch";
-      sha256 = "sha256-hkFunNxey7A47va8Rm0ZOknM0jPuuT9AL5nfXdssE8s=";
-    })
-  ];
 
   postPatch = ''
     chmod +x far2l/bootstrap/*.sh
@@ -243,6 +236,8 @@ stdenv.mkDerivation rec {
       ln -sf "$file" "$out/lib/far2l/Plugins/arclite/plug/"
     done
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = "--version=branch=master"; };
 
   meta = {
     description = "Linux port of FAR Manager v2 with enhanced plugin support";
