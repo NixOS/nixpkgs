@@ -2,13 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-
+  writableTmpDirAsHomeHook,
   nix-update-script,
   versionCheckHook,
 }:
 
-# fails with go 1.25, downgrade to 1.24
-# error tls.ConnectionState: struct field count mismatch: 17 vs 16
 buildGoModule (finalAttrs: {
   pname = "warp-plus";
   version = "1.2.6-unstable-2025-11-17";
@@ -20,7 +18,24 @@ buildGoModule (finalAttrs: {
     hash = "sha256-5H0iF+dc+3qQrFCPiaBxHMSoHsmciKvwX1SJX7TMjeE=";
   };
 
-  vendorHash = "sha256-FqyNjnCoeOCraVv9WhQIw+PxrJVfOu2dAnINi++nsW4=";
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+
+  # Replaced `psiphon-tls` with release-branch.go1.26
+  postPatch = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH=$TMPDIR/go
+    export GOSUMDB=off
+    go mod edit -replace github.com/Psiphon-Labs/psiphon-tls=github.com/Psiphon-Labs/psiphon-tls@v0.0.0-20260429174135-190516348878
+    if [ -n "$goModules" ]; then
+      export GOPROXY="file://$goModules"
+    fi
+    #only built on windows
+    rm wireguard/ipc/namedpipe/namedpipe_test.go
+    go mod tidy
+  '';
+
+  proxyVendor = true;
+  vendorHash = "sha256-mPIffXUHS4lnnJPlOfuQaGA/1oiQpdKVV3wkrlIH3nE=";
 
   ldflags = [
     "-s"
@@ -57,6 +72,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "warp-plus";
-    broken = true;
   };
 })
