@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
-  version = "1.6.0";
+  version = "1.6.7";
 
   src = fetchzip {
     url = "https://github.com/aonez/Keka/releases/download/v${finalAttrs.version}/Keka-${finalAttrs.version}.zip";
-    hash = "sha256-E0KvDgjx86myZk5+QsydonDaT31CS+B1QGOUXCOaJxY=";
+    hash = "sha256-6zC8lQLkJ/Qppyo3XwK6fy4f/bLsIg0L+4GwFfiVlvg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
