@@ -3,9 +3,10 @@
   lib,
   replaceVars,
   pkg-config,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   testers,
+  nix-update-script,
   python3Packages,
   gettext,
   itstool,
@@ -43,9 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
   version = "0.12.1";
 
-  src = fetchurl {
-    url = "https://github.com/brailcom/speechd/releases/download/${finalAttrs.version}/speech-dispatcher-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-sUpSONKH0tzOTdQrvWbKZfoijn5oNwgmf3s0A297pLQ=";
+  src = fetchFromGitHub {
+    repo = "speechd";
+    owner = "brailcom";
+    tag = finalAttrs.version;
+    sha256 = "sha256-+DgbL5n4G5Hjwk5ymITwfVlSbBfI1hLjtcuRBZDGNTg=";
   };
 
   patches = [
@@ -153,6 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
