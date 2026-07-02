@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   lib,
   setuptools,
   numpy,
@@ -13,9 +13,11 @@ buildPythonPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-xlSmvuLi81yC5syLbCYvyr03j1uhGsnvcVMPjau44vc=";
+  src = fetchFromGitHub {
+    owner = "rainwoodman";
+    repo = "sharedmem";
+    tag = finalAttrs.version;
+    hash = "sha256-sQYSIMLXhChBDKlb8x7kRo1ZKKXEdWSjvxp0SZGKems=";
   };
 
   build-system = [ setuptools ];
