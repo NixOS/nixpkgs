@@ -10617,7 +10617,7 @@ with pkgs;
     ];
   };
 
-  ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
+  ultrastar-creator = callPackage ../tools/misc/ultrastar-creator { };
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
