@@ -59,8 +59,6 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   dependencies = [
     packaging
     pydantic
