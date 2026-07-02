@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   colorama,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "simber";
   version = "0.2.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-kHoFZD7nhVxJu9MqePLkL7KTG2saPecY9238c/oeEco=";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  build-system = [ setuptools ];
+
+  dependencies = [ colorama ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
