@@ -51,7 +51,7 @@ let
 
 in
 rec {
-  inherit pkgs fmt;
+  inherit pkgs docPkgs fmt;
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations
