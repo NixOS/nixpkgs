@@ -1,0 +1,19 @@
+diff --git a/Makefile b/Makefile
+index e571d0f2bf..3bbb081a55 100644
+--- a/Makefile
++++ b/Makefile
+@@ -714,12 +714,8 @@
+ # otherwise try to rebuild all targets depending on it whenever we build
+ # something else. We thus depend on the meson.build file instead.
+ ${DEPENDENCY_DIR}/git-%/meson.build: ${DEPENDENCY_DIR}/git-%.version
+-	${Q}${GIT} -c init.defaultBranch=master init ${GIT_QUIET} "${@D}"
+-	${Q}${GIT} -C "${@D}" config remote.origin.url ${GIT_REPO_URL}
+-	${Q}${GIT} -C "${@D}" config remote.origin.tagOpt --no-tags
+-	${Q}${GIT} -C "${@D}" fetch --depth 1 ${GIT_QUIET} origin ${GIT_VERSION}
+-	${Q}${GIT} -C "${@D}" reset --hard
+-	${Q}${GIT} -C "${@D}" checkout ${GIT_QUIET} --detach FETCH_HEAD
++	cp -r ${GIT_REPO_PATH} "${@D}"
++	chmod -R oga+rw "${@D}"
+ 	@ # We're doing a shallow clone without any tags, so Git's default way to figure out the version via git-describe(1)
+ 	@ # will fail. We thus have to help Git a bit: if we're asked to build from a commit directly we extract the
+ 	@ # current version of Git from "GIT-VERSION-GEN" and append the first 8 characters of the commit ID to it.

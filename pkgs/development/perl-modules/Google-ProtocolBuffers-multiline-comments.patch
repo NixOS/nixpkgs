@@ -1,0 +1,12 @@
+diff -Naur Google-ProtocolBuffers-0.08-orig/lib/Google/ProtocolBuffers/Compiler.pm Google-ProtocolBuffers-0.08/lib/Google/ProtocolBuffers/Compiler.pm
+--- Google-ProtocolBuffers-0.08-orig/lib/Google/ProtocolBuffers/Compiler.pm	2008-10-23 13:46:01.000000000 -0400
++++ Google-ProtocolBuffers-0.08/lib/Google/ProtocolBuffers/Compiler.pm	2013-01-16 13:52:09.855063997 -0500
+@@ -16,7 +16,7 @@
+ 
+ my $grammar = <<'END_OF_GRAMMAR';
+ 
+-proto       :   <skip: qr!  (?: //.*\n | \s+ )*  !x>
++proto       :   <skip: qr!  (?: //.*?\n | \s+ | /\*.*?\*/\s* )*  !xs>
+                 ## list of top level declarations. 
+                 ## Skip empty declarations and ";".
+                 (message | extend | enum | import | package | option | service | syntax | ";")(s) /\Z/

@@ -1,0 +1,746 @@
+diff --git a/bolt/CMakeLists.txt b/bolt/CMakeLists.txt
+index 5c7d51e1e398..9158552fa09b 100644
+--- a/bolt/CMakeLists.txt
++++ b/bolt/CMakeLists.txt
+@@ -55,9 +55,9 @@ if(BOLT_BUILT_STANDALONE)
+   include_directories(${LLVM_INCLUDE_DIRS})
+   link_directories("${LLVM_LIBRARY_DIR}")
+ 
+-  set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_INSTALL_BINDIR}" )
+-  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_INSTALL_LIBDIR}/${LLVM_LIBDIR_SUFFIX}" )
+-  set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_INSTALL_LIBDIR}/${LLVM_LIBDIR_SUFFIX}")
++  set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" )
++  set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX}" )
++  set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX}")
+ endif() # standalone
+ 
+ # Determine default set of targets to build -- the intersection of
+diff --git a/bolt/runtime/CMakeLists.txt b/bolt/runtime/CMakeLists.txt
+index 63f178bd263c..55c582313e47 100644
+--- a/bolt/runtime/CMakeLists.txt
++++ b/bolt/runtime/CMakeLists.txt
+@@ -64,8 +64,8 @@ target_include_directories(bolt_rt_instr PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+ target_compile_options(bolt_rt_hugify PRIVATE ${BOLT_RT_FLAGS})
+ target_include_directories(bolt_rt_hugify PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+ 
+-install(TARGETS bolt_rt_instr DESTINATION "lib${LLVM_LIBDIR_SUFFIX}")
+-install(TARGETS bolt_rt_hugify DESTINATION "lib${LLVM_LIBDIR_SUFFIX}")
++install(TARGETS bolt_rt_instr DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(TARGETS bolt_rt_hugify DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+ if (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" AND CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+   add_library(bolt_rt_instr_osx STATIC
+@@ -77,7 +77,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang.*" AND CMAKE_SYSTEM_NAME STREQUAL "Da
+   target_compile_options(bolt_rt_instr_osx PRIVATE
+     -target x86_64-apple-darwin19.6.0
+     ${BOLT_RT_FLAGS})
+-  install(TARGETS bolt_rt_instr_osx DESTINATION "lib${LLVM_LIBDIR_SUFFIX}")
++  install(TARGETS bolt_rt_instr_osx DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+   if(NOT BOLT_BUILT_STANDALONE)
+     add_custom_command(TARGET bolt_rt_instr_osx POST_BUILD
+diff --git a/clang/cmake/caches/CrossWinToARMLinux.cmake b/clang/cmake/caches/CrossWinToARMLinux.cmake
+index c47c4ac3bb73..721eb2cfd302 100644
+--- a/clang/cmake/caches/CrossWinToARMLinux.cmake
++++ b/clang/cmake/caches/CrossWinToARMLinux.cmake
+@@ -152,7 +152,7 @@ endif()
+ # Set up RPATH for the target runtime/builtin libraries.
+ # See some details here: https://reviews.llvm.org/D91099
+ if (NOT DEFINED RUNTIMES_INSTALL_RPATH)
+-  set(RUNTIMES_INSTALL_RPATH                "\$ORIGIN/../lib;${CMAKE_INSTALL_PREFIX}/lib")
++  set(RUNTIMES_INSTALL_RPATH                "\$ORIGIN/../lib;${CMAKE_INSTALL_FULL_LIBDIR}")
+ endif()
+ 
+ set(LLVM_BUILTIN_TARGETS                    "${TOOLCHAIN_TARGET_TRIPLE}" CACHE STRING "")
+diff --git a/clang/cmake/modules/AddClang.cmake b/clang/cmake/modules/AddClang.cmake
+index 4059fc3e986c..2b2500ad655c 100644
+--- a/clang/cmake/modules/AddClang.cmake
++++ b/clang/cmake/modules/AddClang.cmake
+@@ -134,8 +134,8 @@ macro(add_clang_library name)
+         install(TARGETS ${lib}
+           COMPONENT ${lib}
+           ${export_to_clangtargets}
+-          LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-          ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+           RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+         if (NOT LLVM_ENABLE_IDE)
+diff --git a/clang/tools/scan-build-py/CMakeLists.txt b/clang/tools/scan-build-py/CMakeLists.txt
+index 9273eb5ed977..8251d75bc52e 100644
+--- a/clang/tools/scan-build-py/CMakeLists.txt
++++ b/clang/tools/scan-build-py/CMakeLists.txt
+@@ -88,7 +88,7 @@ foreach(lib ${LibScanbuild})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/${lib})
+   install(FILES lib/libscanbuild/${lib}
+-          DESTINATION lib/libscanbuild
++          DESTINATION ${CMAKE_INSTALL_LIBDIR}/libscanbuild
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -106,7 +106,7 @@ foreach(resource ${LibScanbuildResources})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libscanbuild/resources/${resource})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libscanbuild/resources/${resource})
+   install(FILES lib/libscanbuild/resources/${resource}
+-          DESTINATION lib/libscanbuild/resources
++          DESTINATION ${CMAKE_INSTALL_LIBDIR}/libscanbuild/resources
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+@@ -122,7 +122,7 @@ foreach(lib ${LibEar})
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lib/libear/${lib})
+   list(APPEND Depends ${CMAKE_BINARY_DIR}/lib/libear/${lib})
+   install(FILES lib/libear/${lib}
+-          DESTINATION lib/libear
++          DESTINATION ${CMAKE_INSTALL_LIBDIR}/libear
+           COMPONENT scan-build-py)
+ endforeach()
+ 
+diff --git a/cmake/Modules/GNUInstallPackageDir.cmake b/cmake/Modules/GNUInstallPackageDir.cmake
+index e4a058e68f4f..e4e84b6fc057 100644
+--- a/cmake/Modules/GNUInstallPackageDir.cmake
++++ b/cmake/Modules/GNUInstallPackageDir.cmake
+@@ -29,5 +29,5 @@ macro(_GNUInstallPackageDir_cache_path var default description)
+   _GNUInstallPackageDir_cache_convert_to_path("${var}" "${description}")
+ endmacro()
+ 
+-_GNUInstallPackageDir_cache_path(CMAKE_INSTALL_PACKAGEDIR "lib${LLVM_LIBDIR_SUFFIX}/cmake"
++_GNUInstallPackageDir_cache_path(CMAKE_INSTALL_PACKAGEDIR "${CMAKE_INSTALL_LIBDIR}/cmake"
+   "Directories containing installed CMake modules (lib/cmake)")
+diff --git a/cmake/Modules/GetClangResourceDir.cmake b/cmake/Modules/GetClangResourceDir.cmake
+index 518220188f96..d8b046fdca4c 100644
+--- a/cmake/Modules/GetClangResourceDir.cmake
++++ b/cmake/Modules/GetClangResourceDir.cmake
+@@ -16,7 +16,7 @@ function(get_clang_resource_dir out_var)
+     if (NOT CLANG_VERSION_MAJOR)
+       string(REGEX MATCH "^[0-9]+" CLANG_VERSION_MAJOR ${PACKAGE_VERSION})
+     endif()
+-    set(ret_dir lib${LLVM_LIBDIR_SUFFIX}/clang/${CLANG_VERSION_MAJOR})
++    set(ret_dir ${CMAKE_INSTALL_LIBDIR}/clang/${CLANG_VERSION_MAJOR})
+   endif()
+ 
+   if(ARG_PREFIX)
+diff --git a/compiler-rt/cmake/Modules/CompilerRTAIXUtils.cmake b/compiler-rt/cmake/Modules/CompilerRTAIXUtils.cmake
+index 20400014869e..a4fe2fafe616 100644
+--- a/compiler-rt/cmake/Modules/CompilerRTAIXUtils.cmake
++++ b/compiler-rt/cmake/Modules/CompilerRTAIXUtils.cmake
+@@ -53,7 +53,7 @@ macro(archive_aix_libatomic name libname)
+     # setting _install_rpath on AIX for reference.
+     if(LLVM_LIBRARY_OUTPUT_INTDIR AND CMAKE_INSTALL_PREFIX)
+       set(output_dir "${LLVM_LIBRARY_OUTPUT_INTDIR}")
+-      set(install_dir "${CMAKE_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX}")
++      set(install_dir "${CMAKE_INSTALL_FULL_LIBDIR}")
+     else()
+       get_compiler_rt_output_dir(${COMPILER_RT_DEFAULT_TARGET_ARCH} output_dir)
+       get_compiler_rt_install_dir(${COMPILER_RT_DEFAULT_TARGET_ARCH} install_dir)
+diff --git a/flang/cmake/modules/AddFlang.cmake b/flang/cmake/modules/AddFlang.cmake
+index ca233103ccdb..3e4dd9a58c5f 100644
+--- a/flang/cmake/modules/AddFlang.cmake
++++ b/flang/cmake/modules/AddFlang.cmake
+@@ -81,8 +81,8 @@ function(add_flang_library name)
+       install(TARGETS ${name}
+         COMPONENT ${name}
+         ${export_to_flangtargets}
+-        LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-        ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+       if (NOT LLVM_ENABLE_IDE)
+diff --git a/libclc/libclc.pc.in b/libclc/libclc.pc.in
+index 3a9e58b3ef0c..60f8c0fdf75d 100644
+--- a/libclc/libclc.pc.in
++++ b/libclc/libclc.pc.in
+@@ -1,4 +1,4 @@
+-libexecdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_DATADIR@/clc
++libexecdir=@CMAKE_INSTALL_FULL_DATAROOTDIR@/clc
+ 
+ Name: libclc
+ Description: Library requirements of the OpenCL C programming language
+diff --git a/libcxx/test/configs/armv7m-picolibc-libc++.cfg.in b/libcxx/test/configs/armv7m-picolibc-libc++.cfg.in
+index f0782c28ce3e..32fc542db557 100644
+--- a/libcxx/test/configs/armv7m-picolibc-libc++.cfg.in
++++ b/libcxx/test/configs/armv7m-picolibc-libc++.cfg.in
+@@ -1,6 +1,6 @@
+ lit_config.load_config(config, '@CMAKE_CURRENT_BINARY_DIR@/cmake-bridge.cfg')
+ 
+-libc_linker_script = '@CMAKE_INSTALL_PREFIX@/lib/picolibcpp.ld'
++libc_linker_script = '@CMAKE_INSTALL_FULL_LIBDIR@/picolibcpp.ld'
+ 
+ config.substitutions.append(('%{flags}', '--sysroot=@CMAKE_INSTALL_PREFIX@'))
+ 
+diff --git a/libcxxabi/test/configs/armv7m-picolibc-libc++abi.cfg.in b/libcxxabi/test/configs/armv7m-picolibc-libc++abi.cfg.in
+index e61efbb303fc..a73c58584567 100644
+--- a/libcxxabi/test/configs/armv7m-picolibc-libc++abi.cfg.in
++++ b/libcxxabi/test/configs/armv7m-picolibc-libc++abi.cfg.in
+@@ -1,6 +1,6 @@
+ lit_config.load_config(config, '@CMAKE_CURRENT_BINARY_DIR@/cmake-bridge.cfg')
+ 
+-libc_linker_script = '@CMAKE_INSTALL_PREFIX@/lib/picolibcpp.ld'
++libc_linker_script = '@CMAKE_INSTALL_FULL_LIBDIR@/picolibcpp.ld'
+ 
+ config.substitutions.append(('%{flags}', '--sysroot=@CMAKE_INSTALL_PREFIX@'))
+ 
+diff --git a/libdevice/cmake/modules/SYCLLibdevice.cmake b/libdevice/cmake/modules/SYCLLibdevice.cmake
+index 21989df43c00..36aee071dd96 100644
+--- a/libdevice/cmake/modules/SYCLLibdevice.cmake
++++ b/libdevice/cmake/modules/SYCLLibdevice.cmake
+@@ -12,16 +12,16 @@ else()
+   set(obj-suffix o)
+   set(obj-new-offload-suffix new.o)
+   set(spv_binary_dir "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+-  set(install_dest_spv lib${LLVM_LIBDIR_SUFFIX})
++  set(install_dest_spv ${CMAKE_INSTALL_LIBDIR})
+   set(devicelib_host_static_obj libsycl-devicelib-host.a)
+   set(devicelib_host_static_obj-new-offload libsycl-devicelib-host.new.a)
+ endif()
+ set(spv-suffix spv)
+ set(bc-suffix bc)
+ set(bc_binary_dir "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+-set(install_dest_obj lib${LLVM_LIBDIR_SUFFIX})
+-set(install_dest_obj-new-offload lib${LLVM_LIBDIR_SUFFIX})
+-set(install_dest_bc lib${LLVM_LIBDIR_SUFFIX})
++set(install_dest_obj ${CMAKE_INSTALL_LIBDIR})
++set(install_dest_obj-new-offload ${CMAKE_INSTALL_LIBDIR})
++set(install_dest_bc ${CMAKE_INSTALL_LIBDIR})
+ 
+ string(CONCAT sycl_targets_opt
+   "-fsycl-targets="
+diff --git a/libunwind/test/configs/armv7m-picolibc-libunwind.cfg.in b/libunwind/test/configs/armv7m-picolibc-libunwind.cfg.in
+index 6ffdd70c6177..fadb6b3cb02f 100644
+--- a/libunwind/test/configs/armv7m-picolibc-libunwind.cfg.in
++++ b/libunwind/test/configs/armv7m-picolibc-libunwind.cfg.in
+@@ -1,6 +1,6 @@
+ lit_config.load_config(config, '@CMAKE_CURRENT_BINARY_DIR@/cmake-bridge.cfg')
+ 
+-libc_linker_script = '@CMAKE_INSTALL_PREFIX@/lib/picolibcpp.ld'
++libc_linker_script = '@CMAKE_INSTALL_FULL_LIBDIR@/picolibcpp.ld'
+ 
+ config.substitutions.append(('%{flags}', '--sysroot=@CMAKE_INSTALL_PREFIX@'))
+ 
+diff --git a/lld/cmake/modules/AddLLD.cmake b/lld/cmake/modules/AddLLD.cmake
+index 37f73afa915f..1f70cfe4fc05 100644
+--- a/lld/cmake/modules/AddLLD.cmake
++++ b/lld/cmake/modules/AddLLD.cmake
+@@ -17,8 +17,8 @@ macro(add_lld_library name)
+     install(TARGETS ${name}
+       COMPONENT ${name}
+       ${export_to_lldtargets}
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ 
+     if (NOT CMAKE_CONFIGURATION_TYPES)
+diff --git a/lldb/cmake/modules/AddLLDB.cmake b/lldb/cmake/modules/AddLLDB.cmake
+index 5d58abf237f5..fd2edc4e3a66 100644
+--- a/lldb/cmake/modules/AddLLDB.cmake
++++ b/lldb/cmake/modules/AddLLDB.cmake
+@@ -106,7 +106,7 @@ function(add_lldb_library name)
+   endif()
+ 
+   if(PARAM_SHARED)
+-    set(install_dest lib${LLVM_LIBDIR_SUFFIX})
++    set(install_dest ${CMAKE_INSTALL_LIBDIR})
+     if(PARAM_INSTALL_PREFIX)
+       set(install_dest ${PARAM_INSTALL_PREFIX})
+     endif()
+diff --git a/lldb/tools/intel-features/CMakeLists.txt b/lldb/tools/intel-features/CMakeLists.txt
+index 7d48491ec89a..cb5f751a80ca 100644
+--- a/lldb/tools/intel-features/CMakeLists.txt
++++ b/lldb/tools/intel-features/CMakeLists.txt
+@@ -30,4 +30,4 @@ add_lldb_library(lldbIntelFeatures SHARED
+   )
+ 
+ install(TARGETS lldbIntelFeatures
+-  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff --git a/llvm-spirv/LLVMSPIRVLib.pc.in b/llvm-spirv/LLVMSPIRVLib.pc.in
+index 814c59251611..7188084e8061 100644
+--- a/llvm-spirv/LLVMSPIRVLib.pc.in
++++ b/llvm-spirv/LLVMSPIRVLib.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/lib@LLVM_LIBDIR_SUFFIX@
+-includedir=${prefix}/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: LLVMSPIRVLib
+ Description: LLVM/SPIR-V bi-directional translator
+diff --git a/llvm/CMakeLists.txt b/llvm/CMakeLists.txt
+index 9bbd39abd558..78b8da693007 100644
+--- a/llvm/CMakeLists.txt
++++ b/llvm/CMakeLists.txt
+@@ -1207,9 +1207,9 @@ if (NOT TENSORFLOW_AOT_PATH STREQUAL "")
+   add_subdirectory(${TENSORFLOW_AOT_PATH}/xla_aot_runtime_src
+     ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/tf_runtime)
+   install(TARGETS tf_xla_runtime EXPORT LLVMExports
+-    ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT tf_xla_runtime)
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT tf_xla_runtime)
+   install(TARGETS tf_xla_runtime EXPORT LLVMDevelopmentExports
+-    ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT tf_xla_runtime)
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT tf_xla_runtime)
+   set_property(GLOBAL APPEND PROPERTY LLVM_EXPORTS tf_xla_runtime)
+   # Once we add more modules, we should handle this more automatically.
+   if (DEFINED LLVM_OVERRIDE_MODEL_HEADER_INLINERSIZEMODEL)
+diff --git a/llvm/cmake/modules/AddLLVM.cmake b/llvm/cmake/modules/AddLLVM.cmake
+index 7d40d309d538..5844f0f2a2fa 100644
+--- a/llvm/cmake/modules/AddLLVM.cmake
++++ b/llvm/cmake/modules/AddLLVM.cmake
+@@ -974,8 +974,8 @@ macro(add_llvm_library name)
+       endif()
+       install(TARGETS ${name}
+               ${export_to_llvmexports}
+-              LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
+-              ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
++              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${name}
++              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ${name}
+               RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT ${name})
+ 
+       if (NOT LLVM_ENABLE_IDE)
+@@ -2284,7 +2284,7 @@ function(llvm_install_library_symlink name dest type)
+     set(LLVM_LINK_OR_COPY copy)
+   endif()
+ 
+-  set(output_dir lib${LLVM_LIBDIR_SUFFIX})
++  set(output_dir ${CMAKE_INSTALL_LIBDIR})
+   if((WIN32 OR CYGWIN) AND "${type}" STREQUAL "SHARED")
+     set(output_dir "${CMAKE_INSTALL_BINDIR}")
+   endif()
+@@ -2566,10 +2566,10 @@ function(llvm_setup_rpath name)
+     # Since BUILD_SHARED_LIBS is only recommended for use by developers,
+     # hardcode the rpath to build/install lib dir first in this mode.
+     # FIXME: update this when there is better solution.
+-    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
++    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_FULL_LIBDIR}" ${extra_libdir})
+   elseif(UNIX)
+-    set(_build_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+-    set(_install_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}")
++    set(_build_rpath "${CMAKE_INSTALL_FULL_LIBDIR}" ${extra_libdir})
++    set(_install_rpath "${CMAKE_INSTALL_FULL_LIBDIR}")
+     if("${CMAKE_SYSTEM_NAME}" MATCHES "(FreeBSD|DragonFly)")
+       set_property(TARGET ${name} APPEND_STRING PROPERTY
+                    LINK_FLAGS " -Wl,-z,origin ")
+diff --git a/llvm/cmake/modules/AddOCaml.cmake b/llvm/cmake/modules/AddOCaml.cmake
+index 2d9116b08a52..076649279eb2 100644
+--- a/llvm/cmake/modules/AddOCaml.cmake
++++ b/llvm/cmake/modules/AddOCaml.cmake
+@@ -147,9 +147,9 @@ function(add_ocaml_library name)
+   endforeach()
+ 
+   if( APPLE )
+-    set(ocaml_rpath "@executable_path/../../../lib${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "@executable_path/../../../${CMAKE_INSTALL_LIBDIR}")
+   elseif( UNIX )
+-    set(ocaml_rpath "\\$ORIGIN/../../../lib${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "\\$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}")
+   endif()
+   list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
+ 
+diff --git a/llvm/cmake/modules/CMakeLists.txt b/llvm/cmake/modules/CMakeLists.txt
+index ef4cfa3acdb5..2ab47d564f76 100644
+--- a/llvm/cmake/modules/CMakeLists.txt
++++ b/llvm/cmake/modules/CMakeLists.txt
+@@ -130,7 +130,7 @@ set(LLVM_CONFIG_INCLUDE_DIRS
+   )
+ list(REMOVE_DUPLICATES LLVM_CONFIG_INCLUDE_DIRS)
+ 
+-extend_path(LLVM_CONFIG_LIBRARY_DIR "\${LLVM_INSTALL_PREFIX}" "lib\${LLVM_LIBDIR_SUFFIX}")
++extend_path(LLVM_CONFIG_LIBRARY_DIR "\${LLVM_INSTALL_PREFIX}" "${CMAKE_INSTALL_LIBDIR}")
+ set(LLVM_CONFIG_LIBRARY_DIRS
+   "${LLVM_CONFIG_LIBRARY_DIR}"
+   # FIXME: Should there be other entries here?
+diff --git a/llvm/include/llvm/SYCLLowerIR/CMakeLists.txt b/llvm/include/llvm/SYCLLowerIR/CMakeLists.txt
+index fee74421f102..99c7f2920a9b 100644
+--- a/llvm/include/llvm/SYCLLowerIR/CMakeLists.txt
++++ b/llvm/include/llvm/SYCLLowerIR/CMakeLists.txt
+@@ -8,5 +8,5 @@ tablegen(LLVM DeviceConfigFile.inc -gen-dynamic-tables)
+ add_public_tablegen_target(DeviceConfigFile)
+ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/DeviceConfigFile.hpp"
+               "${CMAKE_CURRENT_BINARY_DIR}/DeviceConfigFile.inc"
+-        DESTINATION include/llvm/SYCLLowerIR
++        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/llvm/SYCLLowerIR
+         COMPONENT DeviceConfigFile)
+diff --git a/llvm/lib/ExecutionEngine/Interpreter/CMakeLists.txt b/llvm/lib/ExecutionEngine/Interpreter/CMakeLists.txt
+index 8046bca2b1a4..997bd51e2b10 100644
+--- a/llvm/lib/ExecutionEngine/Interpreter/CMakeLists.txt
++++ b/llvm/lib/ExecutionEngine/Interpreter/CMakeLists.txt
+@@ -21,4 +21,4 @@ configure_file(
+   Interpreter.h
+   ${LLVM_BINARY_DIR}/include/llvm/ExecutionEngine/Interpreter/Interpreter.h)
+ 
+-install(FILES Interpreter.h DESTINATION include/llvm/ExecutionEngine/Interpreter)
++install(FILES Interpreter.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/llvm/ExecutionEngine/Interpreter)
+diff --git a/llvm/tools/llvm-config/BuildVariables.inc.in b/llvm/tools/llvm-config/BuildVariables.inc.in
+index e4e1d449bf4d..890e1f164d97 100644
+--- a/llvm/tools/llvm-config/BuildVariables.inc.in
++++ b/llvm/tools/llvm-config/BuildVariables.inc.in
+@@ -23,6 +23,7 @@
+ #define LLVM_CXXFLAGS "@LLVM_CXXFLAGS@"
+ #define LLVM_BUILDMODE "@LLVM_BUILDMODE@"
+ #define LLVM_LIBDIR_SUFFIX "@LLVM_LIBDIR_SUFFIX@"
++#define LLVM_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@"
+ #define LLVM_INSTALL_INCLUDEDIR "@CMAKE_INSTALL_INCLUDEDIR@"
+ #define LLVM_INSTALL_PACKAGE_DIR "@LLVM_INSTALL_PACKAGE_DIR@"
+ #define LLVM_TARGETS_BUILT "@LLVM_TARGETS_BUILT@"
+diff --git a/llvm/tools/llvm-config/llvm-config.cpp b/llvm/tools/llvm-config/llvm-config.cpp
+index 020b1b5e093d..bfb58ce73a2b 100644
+--- a/llvm/tools/llvm-config/llvm-config.cpp
++++ b/llvm/tools/llvm-config/llvm-config.cpp
+@@ -364,7 +364,7 @@ int main(int argc, char **argv) {
+       sys::path::make_absolute(ActivePrefix, Path);
+       ActiveBinDir = std::string(Path);
+     }
+-    ActiveLibDir = ActivePrefix + "/lib" + LLVM_LIBDIR_SUFFIX;
++    ActiveLibDir = LLVM_INSTALL_FULL_LIBDIR;
+     {
+       SmallString<256> Path(LLVM_INSTALL_PACKAGE_DIR);
+       sys::path::make_absolute(ActivePrefix, Path);
+diff --git a/mlir/cmake/modules/AddMLIR.cmake b/mlir/cmake/modules/AddMLIR.cmake
+index 6589458ab789..9bff1af30631 100644
+--- a/mlir/cmake/modules/AddMLIR.cmake
++++ b/mlir/cmake/modules/AddMLIR.cmake
+@@ -638,13 +638,13 @@ function(add_mlir_library_install name)
+     install(TARGETS ${name}
+       COMPONENT ${name}
+       ${export_to_mlirtargets}
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+       # Note that CMake will create a directory like:
+       #   objects-${CMAKE_BUILD_TYPE}/obj.LibName
+       # and put object files there.
+-      OBJECTS DESTINATION lib${LLVM_LIBDIR_SUFFIX}
++      OBJECTS DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     )
+ 
+     if (NOT LLVM_ENABLE_IDE)
+diff --git a/mlir/cmake/modules/AddMLIRPython.cmake b/mlir/cmake/modules/AddMLIRPython.cmake
+index fa6aec8a603a..4e1b61ff12fe 100644
+--- a/mlir/cmake/modules/AddMLIRPython.cmake
++++ b/mlir/cmake/modules/AddMLIRPython.cmake
+@@ -567,7 +567,7 @@ function(mlir_python_setup_extension_rpath target)
+     set_property(TARGET ${target} APPEND PROPERTY
+       BUILD_RPATH "${_real_lib_dir}")
+     set_property(TARGET ${target} APPEND PROPERTY
+-      INSTALL_RPATH "${_origin_prefix}/${ARG_RELATIVE_INSTALL_ROOT}/lib${LLVM_LIBDIR_SUFFIX}")
++      INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+   endif()
+ endfunction()
+ 
+diff --git a/offload/liboffload/CMakeLists.txt b/offload/liboffload/CMakeLists.txt
+index 62480dad1cac..d6f0a0282c47 100644
+--- a/offload/liboffload/CMakeLists.txt
++++ b/offload/liboffload/CMakeLists.txt
+@@ -45,5 +45,5 @@ set_target_properties(LLVMOffload PROPERTIES
+                       BUILD_RPATH "$ORIGIN:${CMAKE_CURRENT_BINARY_DIR}/..")
+ install(TARGETS LLVMOffload LIBRARY COMPONENT LLVMOffload DESTINATION "${OFFLOAD_INSTALL_LIBDIR}")
+ 
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/API/OffloadAPI.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/offload)
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/API/OffloadPrint.hpp DESTINATION ${CMAKE_INSTALL_PREFIX}/include/offload)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/API/OffloadAPI.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/offload)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/API/OffloadPrint.hpp DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/offload)
+diff --git a/openmp/libompd/gdb-plugin/CMakeLists.txt b/openmp/libompd/gdb-plugin/CMakeLists.txt
+index 20cb4680e4cb..66a77274f9c8 100644
+--- a/openmp/libompd/gdb-plugin/CMakeLists.txt
++++ b/openmp/libompd/gdb-plugin/CMakeLists.txt
+@@ -36,5 +36,5 @@ target_link_libraries (ompdModule ${CMAKE_DL_LIBS})
+ set_target_properties (ompdModule PROPERTIES PREFIX "")
+ set_target_properties (ompdModule PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/python-module/ompd/")
+ 
+-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python-module/ompd DESTINATION share/gdb/python/ PATTERN ompdModule.so PERMISSIONS OWNER_READ WORLD_READ GROUP_READ OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE)
++install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python-module/ompd DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/gdb/python/ PATTERN ompdModule.so PERMISSIONS OWNER_READ WORLD_READ GROUP_READ OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE)
+ 
+diff --git a/polly/cmake/polly_macros.cmake b/polly/cmake/polly_macros.cmake
+index 9bd7b0b0ea59..1232f5f0d748 100644
+--- a/polly/cmake/polly_macros.cmake
++++ b/polly/cmake/polly_macros.cmake
+@@ -46,8 +46,8 @@ macro(add_polly_library name)
+     install(TARGETS ${name}
+       COMPONENT ${name}
+       ${exports}
+-      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+-      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX})
++      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+     add_llvm_install_targets(install-${name}
+       COMPONENT ${name})
+   endif()
+diff --git a/sycl/CMakeLists.txt b/sycl/CMakeLists.txt
+index cb2220e9fbc1..eec767d4f874 100644
+--- a/sycl/CMakeLists.txt
++++ b/sycl/CMakeLists.txt
+@@ -362,13 +362,13 @@ if (NOT WIN32)
+   install(FILES
+     "${CMAKE_CURRENT_SOURCE_DIR}/gdb/libsycl.so-gdb.py"
+     RENAME "libsycl.so.${SYCL_VERSION_STRING}-gdb.py"
+-    DESTINATION "lib${LLVM_LIBDIR_SUFFIX}/"
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/
+     COMPONENT sycl-headers-extras)
+   if (SYCL_ENABLE_MAJOR_RELEASE_PREVIEW_LIB)
+     install(FILES
+       "${CMAKE_CURRENT_SOURCE_DIR}/gdb/libsycl.so-gdb.py"
+       RENAME "libsycl-preview.so.${SYCL_VERSION_STRING}-gdb.py"
+-      DESTINATION "lib${LLVM_LIBDIR_SUFFIX}/"
++      DESTINATION ${CMAKE_INSTALL_LIBDIR}/
+       COMPONENT sycl-headers-extras)
+   endif()
+ endif()
+diff --git a/sycl/cmake/modules/BuildUnifiedRuntime.cmake b/sycl/cmake/modules/BuildUnifiedRuntime.cmake
+index 73e52e59f2be..aa0eac5c1dee 100644
+--- a/sycl/cmake/modules/BuildUnifiedRuntime.cmake
++++ b/sycl/cmake/modules/BuildUnifiedRuntime.cmake
+@@ -108,9 +108,9 @@ find_package(Threads REQUIRED)
+ if(TARGET UnifiedRuntimeLoader)
+   # Install the UR loader.
+   install(TARGETS ur_loader
+-    LIBRARY DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT unified-runtime-loader
+-    ARCHIVE DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT unified-runtime-loader
+-    RUNTIME DESTINATION "bin" COMPONENT unified-runtime-loader
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT unified-runtime-loader
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT unified-runtime-loader
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT unified-runtime-loader
+   )
+ endif()
+ 
+@@ -120,8 +120,8 @@ function(add_sycl_ur_adapter NAME)
+   add_dependencies(UnifiedRuntimeAdapters ur_adapter_${NAME})
+ 
+   install(TARGETS ur_adapter_${NAME}
+-    LIBRARY DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT ur_adapter_${NAME}
+-    RUNTIME DESTINATION "bin" COMPONENT ur_adapter_${NAME})
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT ur_adapter_${NAME}
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ur_adapter_${NAME})
+ 
+   set(manifest_file
+     ${CMAKE_CURRENT_BINARY_DIR}/install_manifest_ur_adapter_${NAME}.txt)
+@@ -274,24 +274,24 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
+   # Add the debug UR runtime libraries to the parent install.
+   install(
+     FILES ${URD_INSTALL_DIR}/bin/ur_loaderd.dll
+-    DESTINATION "bin" COMPONENT unified-runtime-loader)
++    DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT unified-runtime-loader)
+   foreach(adapter ${SYCL_ENABLE_BACKENDS})
+     install(
+       FILES ${URD_INSTALL_DIR}/bin/ur_adapter_${adapter}d.dll
+-      DESTINATION "bin" COMPONENT ur_adapter_${adapter})
++      DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ur_adapter_${adapter})
+     add_dependencies(install-sycl-ur-adapter-${adapter} unified-runtimed)
+   endforeach()
+   if(UMF_BUILD_SHARED_LIBRARY)
+     # Also install umfd.dll
+     install(
+       FILES ${URD_INSTALL_DIR}/bin/umfd.dll
+-      DESTINATION "bin" COMPONENT unified-memory-framework)
++      DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT unified-memory-framework)
+   endif()
+ endif()
+ 
+ if(TARGET umf)
+   install(TARGETS umf
+-    LIBRARY DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT unified-memory-framework
+-    ARCHIVE DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT unified-memory-framework
+-    RUNTIME DESTINATION "bin" COMPONENT unified-memory-framework)
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT unified-memory-framework
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT unified-memory-framework
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT unified-memory-framework)
+ endif()
+diff --git a/sycl/cmake/modules/SYCLUtils.cmake b/sycl/cmake/modules/SYCLUtils.cmake
+index f469b2604760..a8728bdfb5b1 100644
+--- a/sycl/cmake/modules/SYCLUtils.cmake
++++ b/sycl/cmake/modules/SYCLUtils.cmake
+@@ -13,7 +13,7 @@ macro(add_stripped_pdb ARG_TARGET_NAME)
+     target_link_options(${ARG_TARGET_NAME}
+                         PRIVATE "LINKER:/PDBSTRIPPED:${ARG_TARGET_NAME}.stripped.pdb")
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${ARG_TARGET_NAME}.stripped.pdb"
+-            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
++            DESTINATION ${CMAKE_INSTALL_BINDIR}
+             RENAME "${ARG_TARGET_NAME}.pdb"
+             COMPONENT ${ARG_TARGET_NAME}
+             OPTIONAL)
+diff --git a/sycl/source/CMakeLists.txt b/sycl/source/CMakeLists.txt
+index be262a28d809..36da90e63179 100644
+--- a/sycl/source/CMakeLists.txt
++++ b/sycl/source/CMakeLists.txt
+@@ -191,7 +191,7 @@ function(add_sycl_rt_library LIB_NAME LIB_OBJ_NAME)
+         COMMENT "Creating version-agnostic copy of the import library.")
+       install(
+         FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${ARG_IMPLIB_NAME}.lib
+-        DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT sycl)
++        DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT sycl)
+     endif()
+   endif()
+ 
+@@ -430,6 +430,6 @@ if (WIN32)
+ endif()
+ 
+ install(TARGETS ${SYCL_RT_LIBS}
+-  ARCHIVE DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT sycl
+-  LIBRARY DESTINATION "lib${LLVM_LIBDIR_SUFFIX}" COMPONENT sycl
+-  RUNTIME DESTINATION "bin" COMPONENT sycl)
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT sycl
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT sycl
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT sycl)
+diff --git a/sycl/test/CMakeLists.txt b/sycl/test/CMakeLists.txt
+index 4e7607e74931..d400c6b11d89 100644
+--- a/sycl/test/CMakeLists.txt
++++ b/sycl/test/CMakeLists.txt
+@@ -8,7 +8,7 @@ set(LLVM_BUILD_BINARY_DIRS "${LLVM_BINARY_DIR}/bin/")
+ set(LLVM_BUILD_LIBRARY_DIRS "${LLVM_BINARY_DIR}/lib/")
+ 
+ set(RT_TEST_ARGS ${RT_TEST_ARGS} "-v")
+-set(DEPLOY_RT_TEST_ARGS ${DEPLOY_RT_TEST_ARGS} "-v -D SYCL_TOOLS_DIR=${CMAKE_INSTALL_PREFIX}/bin -D SYCL_LIBS_DIR=${CMAKE_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX} -D SYCL_INCLUDE=${CMAKE_INSTALL_PREFIX}/${SYCL_INCLUDE_DIR}")
++set(DEPLOY_RT_TEST_ARGS ${DEPLOY_RT_TEST_ARGS} "-v -D SYCL_TOOLS_DIR=${CMAKE_INSTALL_FULL_BINDIR} -D SYCL_LIBS_DIR=${CMAKE_INSTALL_FULL_LIBDIR} -D SYCL_INCLUDE=${CMAKE_INSTALL_PREFIX}/${SYCL_INCLUDE_DIR}")
+ 
+ find_package(Threads REQUIRED)
+ set(SYCL_THREADS_LIB ${CMAKE_THREAD_LIBS_INIT})
+diff --git a/sycl/tools/sycl-ls/CMakeLists.txt b/sycl/tools/sycl-ls/CMakeLists.txt
+index a1cb33c6553b..7d93fbb79144 100644
+--- a/sycl/tools/sycl-ls/CMakeLists.txt
++++ b/sycl/tools/sycl-ls/CMakeLists.txt
+@@ -26,4 +26,4 @@ if (WIN32)
+   target_link_options(sycl-ls PRIVATE LINKER:/DEPENDENTLOADFLAG:0x900)
+ endif()
+ install(TARGETS sycl-ls
+-  RUNTIME DESTINATION "bin" COMPONENT sycl-ls)
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT sycl-ls)
+diff --git a/sycl/tools/syclbin-dump/CMakeLists.txt b/sycl/tools/syclbin-dump/CMakeLists.txt
+index d1eb71823f64..9bf370bdcbe4 100644
+--- a/sycl/tools/syclbin-dump/CMakeLists.txt
++++ b/sycl/tools/syclbin-dump/CMakeLists.txt
+@@ -22,4 +22,4 @@ endif()
+ add_dependencies(sycl-toolchain syclbin-dump)
+ 
+ install(TARGETS syclbin-dump
+-  RUNTIME DESTINATION "bin" COMPONENT syclbin-dump)
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT syclbin-dump)
+diff --git a/sycl/ur_win_proxy_loader/CMakeLists.txt b/sycl/ur_win_proxy_loader/CMakeLists.txt
+index 940fcd28299e..eac609967521 100644
+--- a/sycl/ur_win_proxy_loader/CMakeLists.txt
++++ b/sycl/ur_win_proxy_loader/CMakeLists.txt
+@@ -14,7 +14,7 @@ configure_file(../../llvm/resources/windows_version_resource.rc ${CMAKE_CURRENT_
+ add_library(ur_win_proxy_loader SHARED  ur_win_proxy_loader.cpp  ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+ add_dependencies(ur_win_proxy_loader UnifiedRuntimeLoader)
+ install(TARGETS ur_win_proxy_loader
+-  RUNTIME DESTINATION "bin" COMPONENT ur_win_proxy_loader
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ur_win_proxy_loader
+ )
+ 
+ if (MSVC)
+@@ -65,5 +65,5 @@ if (MSVC)
+   target_link_options(ur_win_proxy_loaderd PRIVATE LINKER:/DEPENDENTLOADFLAG:0x2000)
+   target_link_options(ur_win_proxy_loader PRIVATE LINKER:/DEPENDENTLOADFLAG:0x2000)
+   install(TARGETS ur_win_proxy_loaderd
+-    RUNTIME DESTINATION "bin" COMPONENT ur_win_proxy_loader)
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ur_win_proxy_loader)
+ endif()
+diff --git a/unified-runtime/CMakeLists.txt b/unified-runtime/CMakeLists.txt
+index 9115f52617c4..d23fd880ab99 100644
+--- a/unified-runtime/CMakeLists.txt
++++ b/unified-runtime/CMakeLists.txt
+@@ -361,7 +361,7 @@ target_include_directories(ur_headers INTERFACE
+ # Add the include directory and the headers target to the install.
+ install(
+     DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
+-    DESTINATION include COMPONENT ur_headers)
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT ur_headers)
+ install(
+     TARGETS ur_headers
+     EXPORT ${PROJECT_NAME}-targets)
+@@ -384,7 +384,7 @@ install(
+     EXPORT ${PROJECT_NAME}-targets
+     FILE ${PROJECT_NAME}-targets.cmake
+     NAMESPACE ${PROJECT_NAME}::
+-    DESTINATION lib/cmake/${PROJECT_NAME})
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+ 
+ # Configure the package versions file for use in find_package when installed.
+ write_basic_package_version_file(
+@@ -395,14 +395,14 @@ write_basic_package_version_file(
+ configure_package_config_file(
+     ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in
+     ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake
+-    INSTALL_DESTINATION lib/cmake/${PROJECT_NAME})
++    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+ 
+ # Add the package files to the install.
+ install(
+     FILES
+         ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake
+         ${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config-version.cmake
+-    DESTINATION lib/cmake/${PROJECT_NAME})
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+ 
+ set(API_JSON_FILE ${PROJECT_BINARY_DIR}/unified_runtime.json)
+ 
+diff --git a/unified-runtime/source/loader/libur_loader.pc.in b/unified-runtime/source/loader/libur_loader.pc.in
+index d79c3a9da8bd..6aac2abcd9ea 100644
+--- a/unified-runtime/source/loader/libur_loader.pc.in
++++ b/unified-runtime/source/loader/libur_loader.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/include
+-libdir=${prefix}/lib
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ 
+ Name: Unified Runtime Loader
+diff --git a/xpti/src/CMakeLists.txt b/xpti/src/CMakeLists.txt
+index 1d7e371e98a1..8d3e1a8b4ec3 100644
+--- a/xpti/src/CMakeLists.txt
++++ b/xpti/src/CMakeLists.txt
+@@ -11,9 +11,9 @@ macro(add_xpti_lib target_name)
+ 
+   # Set the location of the library installation
+   install(TARGETS ${target_name}
+-    RUNTIME DESTINATION bin COMPONENT xpti
+-    LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT xpti
+-    ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT xpti
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT xpti
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT xpti
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT xpti
+   )
+ endmacro()
+ 
+diff --git a/xptifw/CMakeLists.txt b/xptifw/CMakeLists.txt
+index 00a9c71ba289..dd590e688b8f 100644
+--- a/xptifw/CMakeLists.txt
++++ b/xptifw/CMakeLists.txt
+@@ -13,9 +13,9 @@ set(SAMPLES_DIR ${CMAKE_CURRENT_LIST_DIR}/samples)
+ if (NOT DEFINED XPTI_DIR) # don't overwrite if already set
+   if (NOT DEFINED XPTI_SOURCE_DIR)
+     # If XPTI_SOURCE_DIR is not provided then assume that xpti is in-tree and not external.
+-    set(XPTI_DIR ${CMAKE_CURRENT_LIST_DIR}/../xpti)
++    get_filename_component(XPTI_DIR ${CMAKE_CURRENT_LIST_DIR}/../xpti ABSOLUTE)
+   else()
+-    set(XPTI_DIR ${XPTI_SOURCE_DIR}/../xpti)
++    get_filename_component(XPTI_DIR ${XPTI_SOURCE_DIR}/../xpti ABSOLUTE)
+   endif()
+ endif()
+ 
+diff --git a/xptifw/src/CMakeLists.txt b/xptifw/src/CMakeLists.txt
+index 1026bc505f4e..5816b3a75cf5 100644
+--- a/xptifw/src/CMakeLists.txt
++++ b/xptifw/src/CMakeLists.txt
+@@ -81,9 +81,9 @@ function(add_xpti_library LIB_NAME)
+   # Set the location of the library installation
+   include(GNUInstallDirs)
+   install(TARGETS ${LIB_NAME}
+-    RUNTIME DESTINATION bin COMPONENT xptifw
+-    LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT xptifw
+-    ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT xptifw
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT xptifw
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT xptifw
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT xptifw
+   )
+ endfunction(add_xpti_library)
+ 

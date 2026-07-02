@@ -1,0 +1,108 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gperf,
+  glib,
+  cairo,
+  sqlite,
+  libsoup_3,
+  gtk4,
+  libsysprof-capture,
+  json-glib,
+  protobufc,
+  xvfb-run,
+  gnome,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libshumate";
+  version = "1.6.2";
+
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
+  outputBin = "devdoc"; # demo app
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
+    hash = "sha256-IjZLuY+LUgM0M2q4IkAZagljSJuGpbODKOG+orZPOp4=";
+  };
+
+  depsBuildBuild = [
+    # required to find native gi-docgen when cross compiling
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    gi-docgen
+    meson
+    ninja
+    pkg-config
+    vala
+    gobject-introspection
+    gperf
+  ];
+
+  buildInputs = [
+    glib
+    cairo
+    sqlite
+    libsoup_3
+    gtk4
+    libsysprof-capture
+    json-glib
+    protobufc
+  ];
+
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  mesonFlags = [
+    "-Ddemos=true"
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkPhase = ''
+    runHook preCheck
+
+    env \
+      HOME="$TMPDIR" \
+      GTK_A11Y=none \
+      xvfb-run meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libshumate-1.0 "$devdoc"
+  '';
+
+  strictDeps = true;
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "libshumate";
+    };
+  };
+
+  meta = {
+    description = "GTK toolkit providing widgets for embedded maps";
+    mainProgram = "shumate-demo";
+    homepage = "https://gitlab.gnome.org/GNOME/libshumate";
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
+  };
+})

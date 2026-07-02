@@ -1,0 +1,79 @@
+diff --git a/pyogg/flac.py b/pyogg/flac.py
+index 37cc788..9fb7e95 100644
+--- a/pyogg/flac.py
++++ b/pyogg/flac.py
+@@ -49,7 +49,7 @@ __here = os.getcwd()
+ libflac = None
+ 
+ try:
+-    libflac = ExternalLibrary.load("FLAC", tests = [lambda lib: hasattr(lib, "FLAC__EntropyCodingMethodTypeString")])
++    libflac = ctypes.CDLL('@flacLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+diff --git a/pyogg/ogg.py b/pyogg/ogg.py
+index 7264774..2702e24 100644
+--- a/pyogg/ogg.py
++++ b/pyogg/ogg.py
+@@ -54,7 +54,7 @@ __here = os.getcwd()
+ libogg = None
+ 
+ try:
+-    libogg = ExternalLibrary.load("ogg", tests = [lambda lib: hasattr(lib, "oggpack_writeinit")])
++    libogg = ctypes.CDLL('@oggLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+diff --git a/pyogg/opus.py b/pyogg/opus.py
+index 81e73da..640e59c 100644
+--- a/pyogg/opus.py
++++ b/pyogg/opus.py
+@@ -130,7 +130,7 @@ __here = os.getcwd()
+ libopus = None
+ 
+ try:
+-    libopus = ExternalLibrary.load("opus", tests = [lambda lib: hasattr(lib, "opus_encoder_get_size")])
++    libopus = ctypes.CDLL('@opusLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+@@ -139,7 +139,7 @@ except:
+ libopusfile = None
+ 
+ try:
+-    libopusfile = ExternalLibrary.load("opusfile", tests = [lambda lib: hasattr(lib, "opus_head_parse")])
++    libopusfile = ctypes.CDLL('@opusFileLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+diff --git a/pyogg/vorbis.py b/pyogg/vorbis.py
+index a8e4792..6f44d2d 100644
+--- a/pyogg/vorbis.py
++++ b/pyogg/vorbis.py
+@@ -52,7 +52,7 @@ __here = os.getcwd()
+ libvorbis = None
+ 
+ try:
+-    libvorbis = ExternalLibrary.load("vorbis", tests = [lambda lib: hasattr(lib, "vorbis_info_init")])
++    libvorbis = ctypes.CDLL('@vorbisLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+@@ -61,7 +61,7 @@ except:
+ libvorbisfile = None
+ 
+ try:
+-    libvorbisfile = ExternalLibrary.load("vorbisfile", tests = [lambda lib: hasattr(lib, "ov_clear")])
++    libvorbisfile = ctypes.CDLL('@vorbisFileLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:
+@@ -70,7 +70,7 @@ except:
+ libvorbisenc = None
+ 
+ try:
+-    libvorbisenc = ExternalLibrary.load("vorbisenc", tests = [lambda lib: hasattr(lib, "vorbis_encode_init")])
++    libvorbisenc = ctypes.CDLL('@vorbisEncLibPath@')
+ except ExternalLibraryError:
+     pass
+ except:

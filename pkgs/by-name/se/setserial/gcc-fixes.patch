@@ -1,0 +1,31 @@
+diff --git a/setserial.c b/setserial.c
+index fef6532768..b7cde26ac2 100644
+--- a/setserial.c
++++ b/setserial.c
+@@ -10,11 +10,14 @@
+  * Last modified: [tytso:19940520.0036EDT]
+  */
+ 
++#include <errno.h>
++#include <fcntl.h>
+ #include <stdio.h>
+-#include <fcntl.h>
++#include <stdlib.h>
++#include <string.h>
+ #include <termios.h>
+-#include <string.h>
+-#include <errno.h>
++#include <unistd.h>
++#include <sys/ioctl.h>
+ 
+ #ifdef HAVE_ASM_IOCTLS_H
+ #include <asm/ioctls.h>
+@@ -714,7 +717,7 @@
+ 	exit(1);
+ }
+ 
+-main(int argc, char **argv)
++int main(int argc, char **argv)
+ {
+ 	int	get_flag = 0, wild_intr_flag = 0;
+ 	int	c;

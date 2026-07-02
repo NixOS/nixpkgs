@@ -1,0 +1,10 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 2f1090a..205d90d 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1,3 +1,5 @@
++#![recursion_limit = "256"]
++
+ mod bar_items;
+ mod commands;
+ mod completions;

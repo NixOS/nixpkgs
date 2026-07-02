@@ -1,0 +1,12 @@
+--- app/node_modules/electron-updater/out/AppUpdater.js
++++ app/node_modules/electron-updater/out/AppUpdater.js
+@@ -211,6 +211,9 @@
+      * Asks the server whether there is an update.
+      */
+     checkForUpdates() {
++        this.emit("update-not-available", null);
++        return true;
++
+         if (!this.isUpdaterActive()) {
+             return Promise.resolve(null);
+         }

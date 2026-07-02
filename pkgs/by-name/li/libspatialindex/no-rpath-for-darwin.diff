@@ -1,0 +1,11 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -248,7 +248,7 @@ if(HAVE_BCOPY)
+ endif()
+ 
+ 
+-if(APPLE)
++if(FALSE)
+   set(MACOSX_RPATH ON)
+   set_target_properties(spatialindex spatialindex_c
+                         PROPERTIES INSTALL_NAME_DIR "@rpath")
