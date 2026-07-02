@@ -272,15 +272,16 @@ in
     consoleMode = mkOption {
       default = "keep";
 
-      type = types.enum [
-        "0"
-        "1"
-        "2"
-        "5"
-        "auto"
-        "max"
-        "keep"
-      ];
+      type =
+        with types;
+        either (enum [
+          "0"
+          "1"
+          "2"
+          "auto"
+          "max"
+          "keep"
+        ]) ints.unsigned;
 
       description = ''
         The resolution of the console. The following values are valid:
@@ -288,10 +289,15 @@ in
         - `"0"`: Standard UEFI 80x25 mode
         - `"1"`: 80x50 mode, not supported by all devices
         - `"2"`: The first non-standard mode provided by the device firmware, if any
-        - `"5"`: Applicable for SteamDeck where this mode represent horizontal mode
         - `"auto"`: Pick a suitable mode automatically using heuristics
         - `"max"`: Pick the highest-numbered available mode
         - `"keep"`: Keep the mode selected by firmware (the default)
+
+        Alternatively, an integer can be provided to select a specific mode,
+        with non-standard modes starting at 2.
+
+        Pressing "r" in systemd-boot will cycle through (and save) modes at runtime.
+        Pressing "R" will reset to the mode from the configuration.
       '';
     };
 
