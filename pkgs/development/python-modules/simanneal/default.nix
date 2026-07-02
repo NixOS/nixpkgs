@@ -2,13 +2,14 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   pytest,
 }:
 
 buildPythonPackage rec {
   pname = "simanneal";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "perrygeo";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytest ];
   checkPhase = "pytest tests";
