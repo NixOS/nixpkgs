@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   contexter,
   eventlet,
   mock,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "signalslot";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -26,7 +27,9 @@ buildPythonPackage rec {
       --replace "--cov-report html" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     contexter
     six
   ];
