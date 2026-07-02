@@ -3,15 +3,16 @@
   stdenv,
   rocqPackages,
   rocq-core,
+  coq,
   which,
   fetchzip,
   fetchurl,
   dune,
-}@args:
+}@args0:
 
 let
   lib = import ./extra-lib.nix {
-    inherit (args) lib;
+    inherit (args0) lib;
   };
 
   inherit (lib)
@@ -66,6 +67,8 @@ in
   useDuneifVersion ? (x: false),
   useDune ? false,
   opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
+  useCoq ? false,
+  useCoqifVersion ? (x: false),
   ...
 }@args:
 let
@@ -99,11 +102,13 @@ let
       "dropDerivationAttrs"
       "keepAttrs"
       "env"
+      "useCoq"
+      "useCoqifVersion"
     ]
     ++ dropAttrs
   ) keepAttrs;
   fetch =
-    import ../coq/meta-fetch/default.nix
+    import ../rocq/meta-fetch/default.nix
       {
         inherit
           lib
@@ -158,6 +163,8 @@ let
   append-version = p: n: p + display-pkg n "" rocqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
   useDune = args.useDune or (useDuneifVersion fetched.version);
+  useCoq = args.useCoq or (useCoqifVersion fetched.version);
+  rocq-core = if useCoq then coq // { rocq-version = coq.coq-version; } else args0.rocq-core;
   rocqlib-flags = [
     "COQLIBINSTALL=$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib"
     "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
@@ -190,9 +197,10 @@ stdenv.mkDerivation (
       inherit enableParallelBuilding;
 
       env =
-        optionalAttrs setROCQBIN {
+        optionalAttrs (setROCQBIN && !useCoq) {
           ROCQBIN = "${rocq-core}/bin/";
         }
+        // optionalAttrs (setROCQBIN && useCoq) { COQBIN = "${rocq-core}/bin/"; }
         // optionalAttrs (args ? useMelquiondRemake) {
           inherit COQUSERCONTRIB;
         }

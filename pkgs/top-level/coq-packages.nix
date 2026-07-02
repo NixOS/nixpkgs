@@ -27,14 +27,14 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-      coqPackages = self // {
+      rocqPackages = self // {
         recurseForDerivations = false;
       };
     in
     {
-      inherit coqPackages lib;
+      inherit rocqPackages lib;
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
@@ -42,7 +42,16 @@ let
           fetchurl
           ;
       };
-      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkCoqDerivation =
+        args:
+        self.mkRocqDerivation (
+          {
+            useCoq = true;
+            namePrefix = [ "coq" ];
+          }
+          // args
+        );
 
       coq = coq.overrideAttrs (oldAttrs: {
         passthru = (oldAttrs.passthru or { }) // {
@@ -286,7 +295,7 @@ let
         let
           v = set.${name} or null;
         in
-        lib.optional (!v.meta.coqFilter or false) (
+        lib.optional (!v.meta.rocqFilter or false) (
           lib.nameValuePair name (
             if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
           )
