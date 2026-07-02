@@ -8,7 +8,7 @@
   nixosTests,
   gettext,
   # tests fail and eventually lock up on 3.14
-  python313,
+  python313Packages,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -42,27 +42,12 @@ let
 
     # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
     ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
-
-    # these are broken on 3.13
-    google-cloud-firestore = null;
-    google-cloud-iam = null;
-    google-cloud-kms = null;
-    google-cloud-monitoring = null;
-    google-cloud-pubsub = null;
-    google-cloud-storage = null;
-
-    # these depend on google-cloud stuff in tests
-    celery = prev.celery.overridePythonAttrs { doCheck = false; };
-    kombu = prev.kombu.overridePythonAttrs { doCheck = false; };
   };
 
-  python = python313.override {
-    self = python;
-    packageOverrides = lib.composeManyExtensions [
-      defaultPythonPackageOverrides
-      extraPythonPackageOverrides
-    ];
-  };
+  pythonPackages = python313Packages.overrideScope (
+    final: prev:
+    lib.composeManyExtensions [ defaultPythonPackageOverrides extraPythonPackageOverrides ] final prev
+  );
 
   path = lib.makeBinPath [
     ghostscript_headless
@@ -84,7 +69,7 @@ let
     ];
   };
 in
-python.pkgs.buildPythonApplication (finalAttrs: {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
   pyproject = true;
 
@@ -116,7 +101,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
   nativeBuildInputs = [
     gettext
@@ -141,7 +126,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       babel
       bleach
@@ -207,18 +192,18 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
   installPhase =
     let
-      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
+      pythonPath = pythonPackages.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       runHook preInstall
@@ -230,7 +215,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
         --prefix PATH : "${path}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+      makeWrapper ${lib.getExe pythonPackages.celery} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
         --prefix PATH : "${path}"
 
@@ -242,7 +227,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     find $out/lib/paperless-ngx -type d -name tests -exec rm -rv {} +
   '';
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with pythonPackages; [
     daphne
     factory-boy
     imagehash
@@ -310,9 +295,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     inherit
       nltkDataDir
       path
-      python
       tesseract5
       ;
+    inherit (pythonPackages) python;
     tests = { inherit (nixosTests) paperless; };
     updateScript = nix-update-script {
       extraArgs = [
