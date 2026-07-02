@@ -387,15 +387,6 @@ div.appendix dt {
   margin-top: 1em;
 }
 
-div.book .toc dt,
-div.appendix .toc dt {
-  margin-top: 0;
-}
-
-.list-of-examples dt {
-  margin-top: 0;
-}
-
 div.book code,
 div.appendix code {
   padding: 0;
@@ -406,17 +397,6 @@ div.appendix code {
   -webkit-hyphens: none;
   -moz-hyphens: none;
   hyphens: none;
-}
-
-div.book div.toc,
-div.appendix div.toc {
-  margin-bottom: 3em;
-  border-bottom: 0.0625rem solid #d8d8d8;
-}
-
-div.book div.toc dd,
-div.appendix div.toc dd {
-  margin-left: 2em;
 }
 
 div.book span.command,
@@ -515,12 +495,23 @@ nav.toc-sidebar .toc {
   margin-bottom: 0;
 }
 
-nav.toc-sidebar .toc dl {
+nav.toc-sidebar ol.toc,
+nav.toc-sidebar ol.toc ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+nav.toc-sidebar ol.toc ol {
+  padding-left: 1em;
+}
+
+nav.toc-sidebar li {
   margin: 0;
 }
 
-nav.toc-sidebar .toc dd {
-  margin-left: 1em;
+nav.toc-sidebar summary {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {

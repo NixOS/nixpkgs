@@ -116,8 +116,7 @@ stdenvNoCC.mkDerivation (
         --script ./highlightjs/loader.js \
         --script ./anchor.min.js \
         --script ./anchor-use.js \
-        --toc-depth 1 \
-        --section-toc-depth 1 \
+        --sidebar-depth 3 \
         manual.md \
         out/index.html
 
