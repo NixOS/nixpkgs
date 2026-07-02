@@ -6,7 +6,6 @@
   fetchurl,
   boehmgc,
   openssl,
-  pcre,
   readline,
   sqlite,
   darwin,
@@ -24,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boehmgc
     openssl
-    pcre
     readline
     sqlite
   ];
