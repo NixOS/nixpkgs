@@ -41,7 +41,7 @@ in
   pname,
   version ? null,
   fetcher ? null,
-  owner ? "coq-community",
+  owner ? "rocq-community",
   domain ? "github.com",
   repo ? pname,
   defaultVersion ? null,
