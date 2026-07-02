@@ -4,6 +4,10 @@
   fetchFromGitLab,
   setuptools,
   setuptools-scm,
+  tuiSupport ? false,
+  urwid,
+  urwid-readline,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +27,25 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  propagatedBuildInputs =
+    [ ]
+    ++ lib.optionals tuiSupport [
+      pygments
+      urwid
+      urwid-readline
+    ];
+
+  # Make sure all binaries have their necessary inputs
+  checkPhase = ''
+    for bin in $out/bin/*; do
+      $bin --help
+    done
+  '';
   pythonImportsCheck = [ "qemu.qmp" ];
+
+  preFixup = lib.optionalString (!tuiSupport) ''
+    rm $out/bin/qmp-tui
+  '';
 
   meta = {
     description = "Asyncio library for communicating with QEMU Monitor Protocol (“QMP”) servers";
