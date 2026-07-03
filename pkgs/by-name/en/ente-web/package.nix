@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.36";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [
       "rust"
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     wasm-pack
   ];
 
-  # See: https://github.com/ente-io/ente/blob/main/web/apps/photos/.env
+  # See: https://github.com/ente/ente/blob/main/web/apps/photos/.env
   env = extraBuildEnv;
 
   postPatch =
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Ente application web frontends";
     homepage = "https://ente.io/";
-    changelog = "https://github.com/ente-io/ente/releases";
+    changelog = "https://github.com/ente/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
