@@ -57,8 +57,8 @@ let
       };
       kvm = mkOption {
         type = types.bool;
-        default = isLinux;
-        defaultText = lib.literalMD "`true` if built to run on Linux.";
+        default = isLinux && nodes != { };
+        defaultText = lib.literalMD "`true` if built to run on Linux and any virtual machines are specified.";
         description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
       };
       apple-virt = mkOption {
