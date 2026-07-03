@@ -159,10 +159,24 @@ qtModule {
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cmake/QtToolchainHelpers.cmake \
-        --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    '';
+    + lib.optionalString stdenv.hostPlatform.isDarwin (
+      ''
+        substituteInPlace cmake/QtToolchainHelpers.cmake \
+          --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+      ''
+      # Chromium's mac toolchain invokes `$clang_base_path/bin/clang++` directly,
+      # bypassing the cc-wrapper. Since the build uses the system libc++
+      # (use_custom_libcxx=false, use_libcxx=true), the raw clang cannot find the
+      # libc++ headers, which in nixpkgs live in a separate package and are only
+      # added by the wrapper. Point clang_base_path at the wrapped compiler so
+      # `-isystem .../c++/v1` is injected, matching livekit-libwebrtc.
+      + ''
+        substituteInPlace cmake/QtToolchainHelpers.cmake \
+          --replace-fail \
+            'clang_base_path="''${QWELibClang_BASE_PATH}"' \
+            'clang_base_path="${stdenv.cc}"'
+      ''
+    );
 
   cmakeFlags = [
     (lib.cmakeBool "QT_FEATURE_qtpdf_build" true)
