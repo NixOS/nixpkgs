@@ -49,6 +49,11 @@ let
   } (builtins.readFile ./fetch-cargo-vendor-util.py);
 in
 
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+
+  extendDrvArgs =
+    finalAttrs:
 {
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
@@ -57,9 +62,6 @@ in
 }@args:
 
 # TODO: add asserts about pname version and name
-
-let
-  vendorStaging = stdenvNoCC.mkDerivation (
     {
       name = "${name}-vendor-staging";
 
@@ -94,10 +96,11 @@ let
       outputHashMode = "recursive";
     }
     # Trick to avoid repetitive `{ <attrname> = args.<attrname> or ...; }`
-    // removeAttrs args priorityArgs
-  );
-in
-runCommand "${name}-vendor"
+    // removeAttrs args priorityArgs;
+
+  transformDrv =
+    vendorStaging:
+runCommand "${lib.removeSuffix "-staging" vendorStaging.name}"
   {
     inherit vendorStaging;
     nativeBuildInputs = [
@@ -108,4 +111,5 @@ runCommand "${name}-vendor"
   }
   ''
     fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
-  ''
+  '';
+}
