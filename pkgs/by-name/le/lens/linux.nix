@@ -3,6 +3,7 @@
   version,
   src,
   meta,
+  updateScript,
   appimageTools,
   makeWrapper,
 }:
@@ -20,6 +21,8 @@ appimageTools.wrapType2 {
     src
     meta
     ;
+
+  passthru = { inherit updateScript; };
 
   nativeBuildInputs = [ makeWrapper ];
 
