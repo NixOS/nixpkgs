@@ -20,29 +20,6 @@
   pnpmConfigHook,
   pnpmBuildHook,
   cacert,
-  enableAzureDevOps ? false,
-  azure-cli,
-  azure-cli-extensions,
-  enableBitbucket ? false,
-  bitbucket-cli,
-  enableClaude ? false,
-  claude-code,
-  enableCodex ? true,
-  codex,
-  enableCursor ? false,
-  code-cursor,
-  enableCursorCli ? false,
-  cursor-cli,
-  enableGitHub ? true,
-  gh,
-  enableGit ? true,
-  git,
-  enableGitLab ? false,
-  glab,
-  enableJujutsu ? false,
-  jujutsu,
-  enableOpencode ? false,
-  opencode,
 }:
 
 stdenv.mkDerivation (
@@ -57,29 +34,9 @@ stdenv.mkDerivation (
       else
         "assets/prod/black-universal-1024.png";
 
-    runtimePackages =
-      lib.optionals enableAzureDevOps [
-        azure-cli.withExtensions
-        [ azure-cli-extensions.azure-devops ]
-      ]
-      ++ lib.optionals enableBitbucket [ bitbucket-cli ]
-      ++ lib.optionals enableClaude [ claude-code ]
-      ++ lib.optionals enableCodex [ codex ]
-      ++ lib.optionals enableCursor [ code-cursor ]
-      ++ lib.optionals enableCursorCli [ cursor-cli ]
-      ++ lib.optionals enableGitHub [ gh ]
-      ++ lib.optionals enableGit [ git ]
-      ++ lib.optionals enableGitLab [ glab ]
-      ++ lib.optionals enableJujutsu [ jujutsu ]
-      ++ lib.optionals enableOpencode [ opencode ];
-
-    runtimePathWrapperArgs = lib.optionalString (runtimePackages != [ ]) ''
-      \
-        --prefix PATH : ${lib.makeBinPath runtimePackages}
-    '';
   in
   {
-    pname = "t3code";
+    pname = "t3code-unwrapped";
     version = "0.0.28";
     strictDeps = true;
     __structuredAttrs = true;
@@ -182,11 +139,11 @@ stdenv.mkDerivation (
       find "$out"/libexec/t3code -xtype l -delete
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3 \
-        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs ${runtimePathWrapperArgs}
+        --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs
 
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0 ${runtimePathWrapperArgs}
+        --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
@@ -236,7 +193,10 @@ stdenv.mkDerivation (
     ];
 
     passthru = {
-      updateScript = nix-update-script { };
+      updateScript = nix-update-script {
+        attrPath = "t3code.unwrapped";
+        extraArgs = [ "--use-github-releases" ];
+      };
     };
 
     meta = {
