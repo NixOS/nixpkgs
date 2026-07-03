@@ -29,7 +29,8 @@ let
     git-lfs = null;
   };
 
-  removedArgs = [
+  # Arguments not overwritten by `args`
+  priorityArgs = [
     "name"
     "nativeBuildInputs"
   ];
@@ -92,7 +93,8 @@ let
       outputHash = if hash == "" then lib.fakeHash else hash;
       outputHashMode = "recursive";
     }
-    // removeAttrs args removedArgs
+    # Trick to avoid repetitive `{ <attrname> = args.<attrname> or ...; }`
+    // removeAttrs args priorityArgs
   );
 in
 runCommand "${name}-vendor"
