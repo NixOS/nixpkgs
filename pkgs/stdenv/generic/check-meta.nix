@@ -495,7 +495,7 @@ let
     let
       values = attrValues cpeParts;
     in
-    (length values == 11) && !any isNull values;
+    (length values == 11) && !any (v: v == null) values;
   makeCPE =
     {
       part,
@@ -687,7 +687,7 @@ let
     }:
     let
       withError =
-        if isNull error then
+        if error == null then
           true
         else
           let
@@ -725,15 +725,15 @@ let
       invalid = checkValidity' attrs;
       problems = checkProblems attrs;
     in
-    if isNull invalid then
-      if isNull problems then
+    if invalid == null then
+      if problems == null then
         {
           valid = "yes";
           handled = true;
         }
       else
         {
-          valid = if isNull problems.error then "warn" else "no";
+          valid = if problems.error == null then "warn" else "no";
           handled = handle {
             inherit attrs meta;
             inherit (problems) error warnings;
