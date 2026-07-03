@@ -3,6 +3,7 @@
   stdenv,
   fetchpatch,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   cmake,
   qt6,
@@ -72,4 +73,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "seafile-applet";
   };
+  passthru.updateScript = nix-update-script { };
 })
