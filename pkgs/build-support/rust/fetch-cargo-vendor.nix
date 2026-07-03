@@ -55,7 +55,7 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
 {
-  name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
+  name ? if finalAttrs ? pname && finalAttrs ? version then "${finalAttrs.pname}-${finalAttrs.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
   ...
@@ -100,7 +100,8 @@ lib.extendMkDerivation {
 
   transformDrv =
     vendorStaging:
-runCommand "${lib.removeSuffix "-staging" vendorStaging.name}"
+    (
+runCommand "${lib.replaceString "-vendor-staging" "-vendor" vendorStaging.name}"
   {
     inherit vendorStaging;
     nativeBuildInputs = [
@@ -111,5 +112,12 @@ runCommand "${lib.removeSuffix "-staging" vendorStaging.name}"
   }
   ''
     fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
-  '';
+  ''
+    # TODO(@ShamrockLee): Remove after converting to stdenvNoCC.mkDerivation
+    ).overrideAttrs (
+      finalAttrs: previousAttrs:
+      {
+        name = lib.replaceString "-vendor-staging" "-vendor" finalAttrs.vendorStaging.name;
+      }
+    );
 }
