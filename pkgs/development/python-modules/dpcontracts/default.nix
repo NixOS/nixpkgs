@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -19,12 +20,25 @@ buildPythonPackage {
     hash = "sha256-FygJPXo7lZ9tlfqY6KmPJ3PLIilMGLBr3013uj9hCEs=";
   };
 
+  # Replacements in README.rst are necessary to check it with doctest
+  postPatch = ''
+    substituteInPlace README.rst \
+      --replace-fail " PreconditionError" " dpcontracts.PreconditionError" \
+      --replace-fail " PostconditionError" " dpcontracts.PostconditionError" \
+      --replace-fail ">>> class Counter:" $'>>> from dpcontracts import preserve\n    >>> class Counter:'
+  '';
+
   build-system = [
     setuptools
   ];
 
-  # package does not have any tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "README.rst"
+  ];
 
   pythonImportsCheck = [ "dpcontracts" ];
 
