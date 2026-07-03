@@ -1,14 +1,18 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  kubernetes-helm,
   lib,
   nix-update-script,
+  runCommand,
+  wrapHelm,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   version = "1.1.1";
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "helm-unittest";
   inherit version;
 
@@ -46,6 +50,26 @@ buildGoModule {
   '';
 
   passthru = {
+    tests.smoke =
+      let
+        helm = wrapHelm kubernetes-helm {
+          plugins = [ finalAttrs.finalPackage ];
+        };
+      in
+      runCommand "helm-unittest-plugin-smoke"
+        {
+          nativeBuildInputs = [
+            helm
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          cp -r ${./tests/helm-unittest/smoke} chart
+          chmod -R u+w chart
+          helm unittest chart
+          touch $out
+        '';
+
     updateScript = nix-update-script { };
   };
 
@@ -58,4 +82,4 @@ buildGoModule {
       yurrriq
     ];
   };
-}
+})
