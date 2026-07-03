@@ -22,10 +22,10 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool for handling machine-in-the-middle tasks";
-    mainProgram = "pretender";
     homepage = "https://github.com/RedTeamPentesting/pretender";
-    changelog = "https://github.com/RedTeamPentesting/pretender/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/RedTeamPentesting/pretender/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pretender";
   };
 })
