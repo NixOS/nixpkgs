@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs-slim,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
@@ -29,13 +29,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint";
-  version = "15.2.1";
+  version = "15.7.1";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xjtmYz+O+Sn697OrBkPddv1Ma5UsOkO5v4SGlhsaYWA=";
+    hash = "sha256-Dt0AprnI/ixezMwU6JG6WhfJTU1xTRu2M4xwbY4uOko=";
   };
 
   patches = [
@@ -57,16 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-TYMhAcmfWHbj/0yLNYiJXWd1GiYb+zqBLj2/83cGbzg=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-dWcLm8cTo8LC6IqMEe1zDxVJ7ioytKigEwYna6hiO8A=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs-slim
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildPhase = ''
