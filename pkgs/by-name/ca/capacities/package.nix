@@ -6,13 +6,11 @@
   lib,
 }:
 let
-  pname = "capacities";
-  version = "1.65.13";
+  inherit (lib.importJSON ./version.json) version url sha256;
 
-  src = fetchurl {
-    url = "https://web.archive.org/web/20260518194627/https://2vks4.upcloudobjects.com/capacities-desktop-app/Capacities-1.65.13.AppImage";
-    hash = "sha256-ATiX1h9hXmKMFtY6OEyZEoJ/SxJGgbj5/QZwFF1sfFQ=";
-  };
+  pname = "capacities";
+
+  src = fetchurl { inherit url sha256; };
 
   appimageContents = appimageTools.extract {
     inherit
@@ -55,6 +53,8 @@ appimageTools.wrapType2 {
       install -m 444 -D capacities_512.png $out/share/icons/hicolor/512x512/apps/capacities.png
     fi
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Calm place to make sense of the world and create amazing things";
