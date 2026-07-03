@@ -5,6 +5,7 @@
   dpkg,
   autoPatchelfHook,
   makeWrapper,
+  wrapGAppsHook3,
 
   # Required dependencies for autoPatchelfHook
   alsa-lib,
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
     makeWrapper
+    wrapGAppsHook3 # enables GSettings lookup
   ];
 
   buildInputs = [
@@ -56,6 +58,11 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/lib/cider/Cider
 
+    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
+      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
+      --add-flags "--no-sandbox --disable-gpu-sandbox" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
+
     runHook postInstall
   '';
 
@@ -70,11 +77,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
-      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
-      --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
-
     mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace-warn 'Exec=cider' 'Exec=${pname}' \
