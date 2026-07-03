@@ -21352,6 +21352,8 @@ self: super: with self; {
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
 
+  valhallaapi = callPackage ../development/python-modules/valhallaapi { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validator-collection = callPackage ../development/python-modules/validator-collection { };
