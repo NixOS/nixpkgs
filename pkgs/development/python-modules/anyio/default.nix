@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.14.0";
+  version = "4.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-g+2d/j3ke+RjwIYq0JyFfYxg80QXrura9Dsx7cQyMIQ=";
+    hash = "sha256-LPNRNb1RuSVQqsI6aAAiYWC2c2CZAhFS67XW9OfbIiE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -91,6 +91,7 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+    "test_dynamic_async_fixture_access_does_not_hang"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
 

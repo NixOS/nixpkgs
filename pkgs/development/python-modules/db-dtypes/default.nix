@@ -45,6 +45,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "db_dtypes" ];
 
   meta = {

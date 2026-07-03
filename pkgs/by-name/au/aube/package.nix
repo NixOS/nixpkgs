@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.9.1";
 
   src = fetchFromGitHub {
-    owner = "endevco";
+    owner = "jdx";
     repo = "aube";
     tag = "v${finalAttrs.version}";
     hash = "sha256-uwOEou6DH+bePNupYKmTc82xQV9T08bDmSPG9RU9yBk=";
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Fast Node.js package manager";
-    homepage = "https://github.com/endevco/aube";
-    changelog = "https://github.com/endevco/aube/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/jdx/aube";
+    changelog = "https://github.com/jdx/aube/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chillcicada ];
     mainProgram = "aube";

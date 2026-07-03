@@ -44,7 +44,6 @@
   pytest-rerunfailures,
   pytestCheckHook,
   torchaudio,
-  torchtune,
   transformers,
   writableTmpDirAsHomeHook,
   yaspin,
@@ -192,7 +191,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     pytest-rerunfailures
     pytestCheckHook
     torchaudio
-    torchtune
     transformers
     writableTmpDirAsHomeHook
     yaspin
@@ -205,6 +203,16 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Try to download models from HuggingFace hub
     "extension/llm/tokenizers/test/test_hf_tokenizer.py"
+
+    # Required unmaintained and removed `torchtune`
+    "examples/models/llama3_2_vision/preprocess/test_preprocess.py"
+    "examples/models/llama3_2_vision/text_decoder/test/test_text_decoder.py"
+    "examples/models/llama3_2_vision/vision_encoder/test/test_vision_encoder.py"
+    "exir/tests/test_memory_format_ops_pass.py"
+    "extension/llm/modules/test/test_attention.py"
+    "extension/llm/modules/test/test_kv_cache.py"
+    "extension/llm/modules/test/test_position_embeddings.py"
+    "extension/llm/modules/test/test_turboquant_kv_cache.py"
   ];
 
   disabledTests = [

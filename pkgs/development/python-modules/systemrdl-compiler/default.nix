@@ -8,6 +8,7 @@
   markdown,
   setuptools,
   setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
     antlr4-python3-runtime
     colorama
     markdown
+    typing-extensions
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

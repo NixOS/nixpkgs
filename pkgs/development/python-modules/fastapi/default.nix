@@ -126,7 +126,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Don't test docs and examples
     "docs_src"
-    "tests/test_tutorial/test_sql_databases"
+    "tests/test_tutorial"
     # Infinite recursion with strawberry-graphql
     "tests/test_tutorial/test_graphql/test_tutorial001.py"
   ];

@@ -51,6 +51,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix PATH : "${makeBinPath [ pciutils ]}")
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   meta = {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";

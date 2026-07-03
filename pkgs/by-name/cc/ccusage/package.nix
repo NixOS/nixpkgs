@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "20.0.6";
 
   src = fetchFromGitHub {
-    owner = "ryoppippi";
+    owner = "ccusage";
     repo = "ccusage";
     tag = "v${finalAttrs.version}";
     hash = "sha256-uf/FlPprxx4jh74YwjmYMtoIHpTkKrWTLetbNoYiFv4=";
@@ -98,8 +98,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Analyze coding agent CLI token usage and costs from local data";
-    homepage = "https://github.com/ryoppippi/ccusage";
-    changelog = "https://github.com/ryoppippi/ccusage/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/ccusage/ccusage";
+    changelog = "https://github.com/ccusage/ccusage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thrix ];
     mainProgram = "ccusage";

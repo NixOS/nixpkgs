@@ -25,6 +25,7 @@
 
   # tests
   opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -79,6 +80,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     opentelemetry-sdk
+    pytest-asyncio
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
@@ -87,6 +89,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
     "TestOtelTracing"
+    # '062f2cad7f1fee8c3e409b73d431e71b' not found in '00-e5d29cde482d5d796428c10d13e86060-468fe44f7efdb086-01'
+    "test_propagates_sampled_active_span"
   ];
 
   meta = {
