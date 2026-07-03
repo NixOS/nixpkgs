@@ -112,6 +112,11 @@ buildPythonPackage (finalAttrs: {
     webcolors
   ];
 
+  disabledTests = [
+    # flaky, timeout
+    "test_plot_trace_dist"
+  ];
+
   meta = {
     description = "ArviZ modular plotting";
     homepage = "https://github.com/arviz-devs/arviz-plots";

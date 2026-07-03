@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    inherit rustPlatform;
   };
 
   meta = {

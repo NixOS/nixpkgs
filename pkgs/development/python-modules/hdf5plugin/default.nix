@@ -28,14 +28,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LW6rY+zLta4hENBbTll+1amf9TYJiuAumwzgpk1LZ3M=";
+    hash = "sha256-wi5EITlRI8tgAXUV5u/CA3eiWjNAVs5ynT+PUsqcqVA=";
   };
 
   build-system = [
@@ -57,11 +57,21 @@ buildPythonPackage (finalAttrs: {
     zstd
   ];
 
+  # devendor
+  postPatch = ''
+    rm -rf lib/c-blosc
+    rm -rf lib/c-blosc2
+    rm -rf lib/bzip2
+    rm -rf lib/charls
+    rm -rf lib/zfp
+    rm -rf lib/zstd
+  '';
+
   # opt-in to use use system libs instead
   env.HDF5PLUGIN_SYSTEM_LIBRARIES = lib.concatStringsSep "," [
     "blosc"
     "blosc2"
-    "bz2"
+    "bzip2"
     "charls"
     "lz4"
     # "sperr" # not packaged?
@@ -90,17 +100,17 @@ buildPythonPackage (finalAttrs: {
     mkdir src/hdf5plugin/plugins
 
     mkdir -p pkg-config
-    ln -s ${lib.getDev bzip2}/lib/pkgconfig/bzip2.pc pkg-config/bz2.pc
-    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
-    {
-      echo "includedir=${lib.getDev zfp'}/include"
-      echo "Name: zfp"
-      echo "Version: ${zfp'.version}"
-      echo "Description: zfp"
-      echo "Libs: -L${lib.getLib zfp'}/lib -lzfp"
-      echo "Cflags: -I${lib.getDev zfp'}/include"
-    } > pkg-config/zfp.pc
     export PKG_CONFIG_PATH="$PWD/pkg-config''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+
+    # zfp ships only a CMake config; synthesise the pkg-config module hdf5plugin probes for
+    cat >pkg-config/zfp.pc <<EOF
+    includedir=${lib.getDev zfp'}/include
+    Name: zfp
+    Version: ${zfp'.version}
+    Description: zfp
+    Libs: -L${lib.getLib zfp'}/lib -lzfp
+    Cflags: -I${lib.getDev zfp'}/include
+    EOF
   '';
 
   meta = {

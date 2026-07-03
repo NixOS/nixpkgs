@@ -7901,6 +7901,12 @@
     name = "Edward Kimber";
     githubId = 99987;
   };
+  ekisu = {
+    email = "dts.ramon@gmail.com";
+    github = "ekisu";
+    name = "Ramon Dantas";
+    githubId = 5082637;
+  };
   eklairs = {
     name = "Eklairs";
     email = "eklairs@proton.me";
@@ -11129,6 +11135,12 @@
     email = "holger.peters@posteo.de";
     github = "HolgerPeters";
     githubId = 4097049;
+  };
+  Holiu0618 = {
+    email = "zvttt9db@anonaddy.me";
+    github = "Holiu0618";
+    githubId = 165534185;
+    name = "Holiu";
   };
   hollowman6 = {
     email = "hollowman@hollowman.ml";
@@ -14459,6 +14471,11 @@
     github = "kiike";
     githubId = 464625;
     name = "Enric Morales";
+  };
+  kikos0 = {
+    github = "KiKoS0";
+    githubId = 22998716;
+    name = "Riadh Daghmoura";
   };
   kilianar = {
     email = "mail@kilianar.de";
@@ -23376,6 +23393,11 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+  redhood = {
+    name = "Alice Liddell";
+    github = "petalmaya";
+    githubId = 258934709;
+  };
   redianthus = {
     github = "redianthus";
     githubId = 16472988;
@@ -28840,6 +28862,12 @@
     name = "Tyberius Prime";
     github = "TyberiusPrime";
     githubId = 1257580;
+  };
+  tyceherrman = {
+    email = "Tyce.Herrman@pm.me";
+    github = "TyceHerrman";
+    githubId = 22066434;
+    name = "Tyce Herrman";
   };
   tye-exe = {
     name = "Tye";

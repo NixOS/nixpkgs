@@ -1950,8 +1950,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.13";
-          hash = "sha256-tvs35GA3bZ4jExiAe0NeHx/vQV/+2zio2Q0813/MAMU=";
+          version = "1.18.14";
+          hash = "sha256-i/J5inu6iJ3CPgoBf+pMFuM33Ex/0KqhfzfRl/BIe7Y=";
         };
 
         meta = {
@@ -2346,8 +2346,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.82";
-          hash = "sha256-xSSvWi/7Glx+V9I9CjHNFXpoR2PuJgT7ln4fxpJv8fE=";
+          version = "1.1.84";
+          hash = "sha256-NijfD83LfEAsYsZtKwj/sBVqzpXht6pvtVZCQUUdfq0=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -3513,8 +3513,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.27.1";
-          hash = "sha256-rCUIqxhR4AYteLKUGcpPuCV/NqV+tzjYU/TrPOcECdg=";
+          version = "1.27.4";
+          hash = "sha256-VmxvSryOkZTKb4AfH/zBdVilPNHroDh/ORicPi5Mfxo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";

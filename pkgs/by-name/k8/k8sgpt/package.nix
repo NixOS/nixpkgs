@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "k8sgpt";
-  version = "0.4.34";
+  version = "0.4.35";
 
   nativeBuildInputs = [
     installShellFiles
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EmbNlvZh6Vk4qnmOjMN0F8sqVyNF3WXSme/F4fHGHYs=";
+    hash = "sha256-JqoBjCxw2Zx/E3mXYApODUiJiC3XNpaYLXPCie5GOVA=";
   };
 
   vendorHash = "sha256-tkS38PK86jp2uEWiB8eh4jQGWPirAilmgIqt1TOAPL8=";

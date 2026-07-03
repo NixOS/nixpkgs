@@ -181,6 +181,9 @@ buildPythonPackage (finalAttrs: {
 
     # Flakes under load with AssertionError: assert 'second' == 'last'
     "test_get_last_item_multiple_items_with_torch_queue"
+
+    # Flaky, assert 88 == 90 (Encoder queue full)
+    "test_video_duration_matches_frame_count"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!

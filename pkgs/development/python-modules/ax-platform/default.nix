@@ -22,22 +22,26 @@
   sympy,
 
   # tests
+  jax,
+  numpyro,
   pyfakefs,
   pytestCheckHook,
   sqlalchemy,
   tabulate,
+  tensorboard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ax-platform";
-  version = "1.2.4";
+  version = "1.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     tag = finalAttrs.version;
-    hash = "sha256-ZeYoLOPF2D1bk89V5/WO/v0UCtDisbAOOL/Su9sB2Fg=";
+    hash = "sha256-8Q/p74rzMAciNUjaTJtf6duslc3TXT7MIjcHt2sffqI=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -63,10 +67,13 @@ buildPythonPackage (finalAttrs: {
   ++ botorch.optional-dependencies.pymoo;
 
   nativeCheckInputs = [
+    jax
+    numpyro
     pyfakefs
     pytestCheckHook
     sqlalchemy
     tabulate
+    tensorboard
   ];
 
   disabledTestPaths = [

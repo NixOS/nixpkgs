@@ -90,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiro.dev";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.jamesward ];
+    maintainers = with lib.maintainers; [
+      jamesward
+      pmw
+    ];
     mainProgram = "kiro-cli";
     platforms = [
       "x86_64-linux"

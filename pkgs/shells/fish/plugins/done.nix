@@ -5,15 +5,14 @@
   fishtape,
   jq,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "done";
   version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GZ1ZpcaEfbcex6XvxOFJDJqoD9C5out0W4bkkn768r0=";
   };
 
@@ -37,4 +36,4 @@ buildFishPlugin rec {
       rexies
     ];
   };
-}
+})

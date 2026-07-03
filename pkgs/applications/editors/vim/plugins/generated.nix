@@ -6737,14 +6737,13 @@ final: prev: {
 
   gitportal-nvim = buildVimPlugin {
     pname = "gitportal.nvim";
-    version = "0-unstable-2025-12-21";
-    src = fetchFromGitHub {
-      owner = "trevorhauter";
-      repo = "gitportal.nvim";
-      rev = "0c3e1c1d518c9e42e61e8df35ea0c0582a278a65";
-      hash = "sha256-ag7t+G5TKRajLNc4ZrNuMufJSxqJQXPpWINZSFwEmx4=";
+    version = "0-unstable-2026-06-26";
+    src = fetchgit {
+      url = "https://codeberg.org/trevorhauter/gitportal.nvim";
+      rev = "ee5446aa17738a419e855e2e4c01cb65e378e4cb";
+      hash = "sha256-nt+4FjY+9IEBbUMNk0FpTwNfFu0/3k7DKeops+cGlxk=";
     };
-    meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
+    meta.homepage = "https://codeberg.org/trevorhauter/gitportal.nvim";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
@@ -13663,12 +13662,12 @@ final: prev: {
 
   nvim-test = buildVimPlugin {
     pname = "nvim-test";
-    version = "1.4.1";
+    version = "1.4.1-unstable-2026-7-2";
     src = fetchFromGitHub {
       owner = "klen";
       repo = "nvim-test";
-      tag = "1.4.1";
-      hash = "sha256-mMi07UbMWmC75DFfW1b+sR2uRPxizibFwS2qcN9rpLI=";
+      rev = "feb834cbc806029239479f501e8492c01a2bea65";
+      hash = "sha256-DTns8LG3PFFKYG6Ayt90Brf2lbZjNfDLLKUDxsqMisk=";
     };
     meta.homepage = "https://github.com/klen/nvim-test/";
     meta.license = getLicenseFromSpdxId "MIT";

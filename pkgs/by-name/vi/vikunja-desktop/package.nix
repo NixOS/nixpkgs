@@ -4,7 +4,7 @@
   makeWrapper,
   makeDesktopItem,
   darwin,
-  pnpm_10_29_2,
+  pnpm_10,
   pnpmConfigHook,
   nodejs,
   electron,
@@ -37,11 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      patches
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-phvNUUYh858CDt0O8GCWkgO402C0wiYtzEorOIV789M=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-2jyb5BYEkopZCbS19flUgCopiJWngyFxkXsyMuOpJEU=";
   };
+
+  patches = [
+    # pnpm 10.29.3 changed `pnpm ls --json`; older electron-builder omits runtime deps.
+    # This patch was generated from the v2.3.0 lockfile with pnpm_10, using the
+    # electron-builder 26.15.3 version already present in upstream main.
+    ./electron-builder-26.15.3.patch
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -50,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10_29_2
+    pnpm_10
     pnpmConfigHook
     vikunja.passthru.frontend
   ]

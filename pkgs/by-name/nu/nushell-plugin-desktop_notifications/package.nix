@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/FMotalleb/nu_plugin_desktop_notifications";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timon ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

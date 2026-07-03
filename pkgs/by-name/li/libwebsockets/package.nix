@@ -59,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace lib/CMakeLists.txt \
       --replace-fail '=\''${exec_prefix}/''${LWS_INSTALL_LIB_DIR}' '=''${CMAKE_INSTALL_FULL_LIBDIR}' \
       --replace-fail '=\''${prefix}/''${LWS_INSTALL_INCLUDE_DIR}' '=''${CMAKE_INSTALL_FULL_INCLUDEDIR}'
+
+    substituteInPlace cmake/lws_config.h.in \
+      --replace-fail '"''${CMAKE_INSTALL_PREFIX}/''${LWS_INSTALL_LIB_DIR}"' '"''${CMAKE_INSTALL_FULL_LIBDIR}"'
   ''
   # Remove after https://github.com/warmcat/libwebsockets/pull/3567 has been merged or otherwise addressed
   + lib.optionalString stdenv.hostPlatform.isStatic ''

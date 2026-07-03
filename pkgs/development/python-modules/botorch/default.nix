@@ -12,8 +12,8 @@
   gpytorch,
   linear-operator,
   multipledispatch,
+  ninja,
   pyre-extensions,
-  pyro-ppl,
   scipy,
   threadpoolctl,
   torch,
@@ -23,20 +23,23 @@
   pymoo,
 
   # tests
+  jax,
+  numpyro,
   pytestCheckHook,
   pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "botorch";
-  version = "0.17.2";
+  version = "0.18.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "botorch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KWkRdgOAhWoVRoBn0XvKhTQX3KPHJrzqWoiaKrYzi7o=";
+    hash = "sha256-tUTtImqPlbS8g1oLoTTCCWQbeLwLop13qPjFrQeMtb8=";
   };
 
   build-system = [
@@ -48,8 +51,8 @@ buildPythonPackage (finalAttrs: {
     gpytorch
     linear-operator
     multipledispatch
+    ninja
     pyre-extensions
-    pyro-ppl
     scipy
     threadpoolctl
     torch
@@ -63,6 +66,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    jax
+    numpyro
     pytestCheckHook
   ];
 

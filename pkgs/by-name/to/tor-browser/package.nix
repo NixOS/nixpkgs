@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "torbrowser";
+      name = "tor-browser";
       exec = "tor-browser %U";
       icon = "tor-browser";
       desktopName = "Tor Browser";

@@ -626,6 +626,15 @@
   "chap-overrides": [
     "index.html#chap-overrides"
   ],
+  "sec-packer": [
+    "index.html#sec-packer"
+  ],
+  "sec-packer-list-plugins": [
+    "index.html#sec-packer-list-plugins"
+  ],
+  "sec-packer-with-plugins": [
+    "index.html#sec-packer-with-plugins"
+  ],
   "sec-pkg-override": [
     "index.html#sec-pkg-override"
   ],
