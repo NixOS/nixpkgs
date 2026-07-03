@@ -29,7 +29,10 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ABumeksE8Bvtdb6g4vJ2jA9BLlYHnXU86VAuKJhBPoY=";
   };
 
-  cmakeBuildType = if debug then "Debug" else "Release";
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+
+  dontStrip = debug;
+  separateDebugInfo = !debug;
 
   nativeBuildInputs = [
     cmake

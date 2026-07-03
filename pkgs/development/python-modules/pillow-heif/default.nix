@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     tag = "v${version}";
-    hash = "sha256-+SlDxNCbuqPqjgJx62snInsWQXWQwnO/sI4mll0Uu4Y=";
+    hash = "sha256-EaislmA4v2qKCDQ87I85Pn8IlS4VJWyNXkITipKSBC8=";
   };
 
   postPatch = ''
@@ -77,17 +77,6 @@ buildPythonPackage rec {
   disabledTests = [
     # Time sensitive speed test, not reproducible
     "test_decode_threads"
-    # Tests failing with libheif 1.22.0. To be removed in the next release
-    # https://github.com/bigcat88/pillow_heif/issues/424
-    # these check what happens when the ispe is not valid
-    "test_numpy_array_invalid_ispe"
-    "test_allow_incorrect_headers"
-    "test_invalid_ispe_ok"
-    "test_invalid_ispe_allow"
-    "test_invalid_ispe_stride"
-    "test_invalid_ispe_stride_pillow"
-    # disable version check for libheif
-    "test_libheif_info"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/bigcat88/pillow_heif/issues/89

@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
+  separateDebugInfo = !debug;
 
   dontWrapQtApps = true;
 
