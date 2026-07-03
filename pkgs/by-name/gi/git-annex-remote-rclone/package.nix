@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.8";
 
   src = fetchFromGitHub {
-    owner = "DanielDent";
+    owner = "git-annex-remote-rclone";
     repo = "git-annex-remote-rclone";
     rev = "v${version}";
     sha256 = "sha256-B6x67XXE4BHd3x7a8pQlqPPmpy0c62ziDAldB4QpqQ4=";
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
+    homepage = "https://github.com/git-annex-remote-rclone/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
