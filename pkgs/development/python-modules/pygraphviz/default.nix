@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   replaceVars,
   graphviz,
   coreutils,
@@ -12,16 +11,16 @@
   pytest,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pygraphviz";
-  version = "1.14-unstable-2026-05-07";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
-    rev = "6b9efcd1a76a97836de79d1380c0d003c6f834e7";
-    hash = "sha256-ghtnwOevSnecshMBoASCZircgOsPF7+l+Cer+J+yEqM=";
+    tag = "pygraphviz-${finalAttrs.version}";
+    hash = "sha256-AxiaKEmVjofAi6LV1ozOPERqZyOhmBWMLV3GYlhSuNo=";
   };
 
   patches = [
@@ -37,13 +36,6 @@ buildPythonPackage {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "swig>4.1.0"' ""
-
-    # https://github.com/pygraphviz/pygraphviz/pull/573
-    substituteInPlace pygraphviz/graphviz.i \
-      --replace-fail '%cstring_output_allocate_size(char **result, unsigned int* size, free(*$1));' \
-                     '%cstring_output_allocate_size(char **result, size_t* size, free(*$1));' \
-      --replace-fail 'int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, unsigned int *size);' \
-                     'int gvRenderData(GVC_t *gvc, Agraph_t* g, char *format, char **result, size_t *size);'
   '';
 
   env.GRAPHVIZ_PREFIX = graphviz;
@@ -53,6 +45,7 @@ buildPythonPackage {
   ];
 
   nativeBuildInputs = [
+    graphviz # for dot
     pkg-config
     swig
   ];
@@ -70,6 +63,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "pygraphviz" ];
 
   meta = {
+    changelog = "https://github.com/pygraphviz/pygraphviz/releases/tag/pygraphviz-${finalAttrs.version}";
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
     license = lib.licenses.bsd3;
@@ -78,4 +72,4 @@ buildPythonPackage {
       dotlambda
     ];
   };
-}
+})
