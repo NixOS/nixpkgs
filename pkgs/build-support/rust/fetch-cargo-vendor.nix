@@ -54,14 +54,18 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-{
-  name ? if finalAttrs ? pname && finalAttrs ? version then "${finalAttrs.pname}-${finalAttrs.version}" else "cargo-deps",
-  hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
-  nativeBuildInputs ? [ ],
-  ...
-}@args:
+    {
+      name ?
+        if finalAttrs ? pname && finalAttrs ? version then
+          "${finalAttrs.pname}-${finalAttrs.version}"
+        else
+          "cargo-deps",
+      hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
+      nativeBuildInputs ? [ ],
+      ...
+    }@args:
 
-# TODO: add asserts about pname version and name
+    # TODO: add asserts about pname version and name
     {
       inherit
         hash
@@ -104,24 +108,23 @@ lib.extendMkDerivation {
 
   transformDrv =
     vendorStaging:
-    (
-runCommand "${lib.replaceString "-vendor-staging" "-vendor" vendorStaging.name}"
-  {
-    inherit vendorStaging;
-    nativeBuildInputs = [
-      fetchCargoVendorUtil
-      cargo
-      replaceWorkspaceValues
-    ];
-  }
-  ''
-    fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
-  ''
-    # TODO(@ShamrockLee): Remove after converting to stdenvNoCC.mkDerivation
-    ).overrideAttrs (
-      finalAttrs: previousAttrs:
+    (runCommand "${lib.replaceString "-vendor-staging" "-vendor" vendorStaging.name}"
       {
-        name = lib.replaceString "-vendor-staging" "-vendor" finalAttrs.vendorStaging.name;
+        inherit vendorStaging;
+        nativeBuildInputs = [
+          fetchCargoVendorUtil
+          cargo
+          replaceWorkspaceValues
+        ];
       }
-    );
+      ''
+        fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
+      ''
+      # TODO(@ShamrockLee): Remove after converting to stdenvNoCC.mkDerivation
+    ).overrideAttrs
+      (
+        finalAttrs: previousAttrs: {
+          name = lib.replaceString "-vendor-staging" "-vendor" finalAttrs.vendorStaging.name;
+        }
+      );
 }
