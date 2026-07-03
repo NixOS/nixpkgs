@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       philiptaron
       willbush
     ];
+    teams = [ lib.teams.ci ];
   };
 })

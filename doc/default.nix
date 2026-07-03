@@ -1,5 +1,5 @@
 {
-  pkgs ? (import ../ci { }).pkgs,
+  pkgs ? (import ../ci { }).docPkgs,
   nixpkgs ? { },
 }:
 
