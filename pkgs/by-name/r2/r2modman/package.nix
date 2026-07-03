@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.17";
+  version = "3.2.18";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DXGgTezCcMl37Vu7R+2dwWJmuqsXXtlWRYMX9gqm7+w=";
+    hash = "sha256-QGs3kF2GkHlISmRb0cIYOKts1b1RvBj5qkc2cUPawwE=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches missingHashes;
-    hash = "sha256-RAQgaxcQl15JqZsLA9ISfOiGgob4yYuc4bhjZFzW8xk=";
+    hash = "sha256-6CwayFhy0ZwdL1ZOZVtCJLlchCv5raX7WF1V4TvVpq4=";
   };
 
   patches = [
