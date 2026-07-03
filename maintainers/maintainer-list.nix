@@ -14247,6 +14247,12 @@
     githubId = 48174247;
     name = "Aleksandar Nesovic";
   };
+  kayoubi13 = {
+    email = "nix@foss-daily.org";
+    github = "kayoubi13";
+    githubId = 299534864;
+    name = "Kayoubi13";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
