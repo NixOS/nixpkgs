@@ -16,6 +16,10 @@ in
     tag = "v${version}";
     hash = "sha256-3aPiR4BJrR/5UFKRbrK8IbyW6HN9wC6oTSYKH4Ak4EU=";
   };
+  buildFfplay = false; # requires SDL2 which gets disabled
+  buildFfprobe = true; # required by various programs like Immich
+  withSamba = false; # samba is rather big and unused
+  withSdl2 = false;
 }).overrideAttrs
   (old: {
     pname = "jellyfin-ffmpeg";
