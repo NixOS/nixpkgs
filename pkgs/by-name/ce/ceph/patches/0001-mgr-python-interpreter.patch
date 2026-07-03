@@ -1,0 +1,89 @@
+From 20df261e92fd8502398b35456f53761a9bb5ef73 Mon Sep 17 00:00:00 2001
+From: benaryorg <binary@benary.org>
+Date: Fri, 20 Mar 2026 02:46:58 +0000
+Subject: [PATCH 1/2] mgr: python interpreter path fix
+
+The macro actually created a wide string with the *name* of the constant, not its content.
+Thus Python failed to find its interpreter instead using `stat(2)` on every element in *PATH* such as `/usr/bin/MGR_PYTHON_EXECUTABLE`.
+As Python also offers a direct way to hand over the C-string, we can let Python handle the conversion directly, getting rid of the macro entirely.
+
+Signed-off-by: benaryorg <binary@benary.org>
+---
+ src/mgr/PyModuleRegistry.cc | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/mgr/PyModuleRegistry.cc b/src/mgr/PyModuleRegistry.cc
+index b340fc64e374929f720eb9ac5d4e7f274707add8..51ab641bf7f7097d0c97ad554880a9cfb1ebd3f2 100644
+--- a/src/mgr/PyModuleRegistry.cc
++++ b/src/mgr/PyModuleRegistry.cc
+@@ -47,7 +47,6 @@ void PyModuleRegistry::init()
+   std::lock_guard locker(lock);
+ 
+   // Set up global python interpreter
+-#define WCHAR(s) L ## #s
+   PyConfig py_config;
+   // do not enable isolated mode, otherwise we would not be able to have access
+   // to the site packages. since we cannot import any module before initializing
+@@ -68,7 +67,8 @@ void PyModuleRegistry::init()
+   py_config.pathconfig_warnings = 0;
+ 
+   PyStatus status;
+-  status = PyConfig_SetString(&py_config, &py_config.program_name, WCHAR(MGR_PYTHON_EXECUTABLE));
++  status = PyConfig_SetBytesString(&py_config, &py_config.program_name, MGR_PYTHON_EXECUTABLE);
++  dout(10) << "set PyConfig program_name to " << std::quoted(MGR_PYTHON_EXECUTABLE) << dendl;
+   ceph_assertf(!PyStatus_Exception(status), "PyConfig_SetString: %s:%s", status.func, status.err_msg);
+   // Some python modules do not cope with an unpopulated argv, so lets
+   // fake one.  This step also picks up site-packages into sys.path.
+@@ -91,7 +91,6 @@ void PyModuleRegistry::init()
+   dout(10) << "set PYTHONPATH to " << std::quoted(pythonpath_env) << dendl;
+   status = Py_InitializeFromConfig(&py_config);
+   ceph_assertf(!PyStatus_Exception(status), "Py_InitializeFromConfig: %s:%s", status.func, status.err_msg);
+-#undef WCHAR
+ 
+   // Drop the GIL and remember the main thread state (current
+   // thread state becomes NULL)
+-- 
+2.53.0
+
+
+From 344d422033cdae87b2bd7768f6bd725b94b2f3bd Mon Sep 17 00:00:00 2001
+From: benaryorg <binary@benary.org>
+Date: Fri, 20 Mar 2026 02:49:12 +0000
+Subject: [PATCH 2/2] cryptotools: use correct interpreter
+
+Python has support for multiple installed versions and has had so for a long time.
+The Python version that *ceph-mgr* (for instance) was compiled against may not be the default *python3* from *PATH*.
+This is the case when testing against a different version, but it is also the case on systems which do not have Python installed globally, or ship the Python version used by Ceph separately (to avoid compatibility issues for instance).
+
+Luckily *ceph-mgr* has access to the exact Python version and interpreter via CMake already, and it passes this through to Python via the *program_name* setting.
+This sets the interpreter appropriately and allows us to use that instead.
+
+Signed-off-by: benaryorg <binary@benary.org>
+---
+ src/python-common/ceph/cryptotools/remote.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/python-common/ceph/cryptotools/remote.py b/src/python-common/ceph/cryptotools/remote.py
+index 2574b4ecdac215624e43312a799564dfed81d4fe..e4efe56466fe1b7e1a786eda2041180aca6186ed 100644
+--- a/src/python-common/ceph/cryptotools/remote.py
++++ b/src/python-common/ceph/cryptotools/remote.py
+@@ -23,6 +23,7 @@ from typing import List, Union, Dict, Any, Optional, Tuple
+ import json
+ import logging
+ import subprocess
++import sys
+ 
+ from .caller import CryptoCaller, CryptoCallError
+ 
+@@ -62,7 +63,7 @@ class ProcessCryptoCaller(CryptoCaller):
+             _input = None
+         else:
+             _input = input_data.encode()
+-        cmd = ['python3', '-m', _ctmodule] + list(args)
++        cmd = [sys.executable, '-m', _ctmodule] + list(args)
+         logger.warning('CryptoCaller will run: %r', cmd)
+         try:
+             return subprocess.run(
+-- 
+2.53.0
+

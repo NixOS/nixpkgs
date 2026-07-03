@@ -1,0 +1,42 @@
+diff -Naur Maelstrom-3.0.7/buttonlist.h Maelstrom-3.0.7-patched/buttonlist.h
+--- Maelstrom-3.0.7/buttonlist.h	2000-01-25 11:41:32.000000000 -0500
++++ Maelstrom-3.0.7-patched/buttonlist.h	2021-02-22 08:34:01.000000000 -0500
+@@ -16,7 +16,7 @@
+ 
+ 	void Add_Button(Uint16 x, Uint16 y, Uint16 width, Uint16 height, 
+ 						void (*callback)(void)) {
+-		struct button *belem;
++        button *belem;
+ 		
+ 		for ( belem=&button_list; belem->next; belem=belem->next );
+ 		belem->next = new button;
+@@ -30,7 +30,7 @@
+ 	}
+ 
+ 	void Activate_Button(Uint16 x, Uint16 y) {
+-		struct button *belem;
++        button *belem;
+ 
+ 		for ( belem=button_list.next; belem; belem=belem->next ) {
+ 			if ( (x >= belem->x1) && (x <= belem->x2) &&
+@@ -42,7 +42,7 @@
+ 	}
+ 
+ 	void Delete_Buttons(void) {
+-		struct button *belem, *btemp;
++        button *belem, *btemp;
+ 
+ 		for ( belem=button_list.next; belem; ) {
+ 			btemp = belem;
+diff -Naur Maelstrom-3.0.7/main.cpp Maelstrom-3.0.7-patched/main.cpp
+--- Maelstrom-3.0.7/main.cpp	2021-02-04 11:50:27.000000000 -0500
++++ Maelstrom-3.0.7-patched/main.cpp	2021-02-22 08:34:34.000000000 -0500
+@@ -153,7 +153,7 @@
+ 	error("or\n");
+ 	error("Usage: %s <options>\n\n", progname);
+ 	error("Where <options> can be any of:\n\n"
+-"	-fullscreen		# Run Maelstrom in full-screen mode\n"
++"	-windowed		# Run Maelstrom in windowed mode\n"
+ "	-gamma [0-8]		# Set the gamma correction\n"
+ "	-volume [0-8]		# Set the sound volume\n"
+ "	-netscores		# Use the world-wide network score server\n"

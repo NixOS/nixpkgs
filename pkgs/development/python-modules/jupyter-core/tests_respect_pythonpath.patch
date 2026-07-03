@@ -1,0 +1,22 @@
+diff --git a/tests/test_command.py b/tests/test_command.py
+index a0833c1..67c2110 100644
+--- a/tests/test_command.py
++++ b/tests/test_command.py
+@@ -191,7 +191,7 @@ def test_not_on_path(tmpdir):
+     witness_src = "#!{}\n{}\n".format(sys.executable, 'print("WITNESS ME")')
+     write_executable(witness, witness_src)
+ 
+-    env = {"PATH": ""}
++    env = {"PATH": "", "PYTHONPATH": os.environ["PYTHONPATH"]}
+     if "SYSTEMROOT" in os.environ:  # Windows http://bugs.python.org/issue20614
+         env["SYSTEMROOT"] = os.environ["SYSTEMROOT"]
+     if sys.platform == "win32":
+@@ -216,7 +216,7 @@ def test_path_priority(tmpdir):
+     witness_b_src = "#!{}\n{}\n".format(sys.executable, 'print("WITNESS B")')
+     write_executable(witness_b, witness_b_src)
+ 
+-    env = {"PATH": str(b)}
++    env = {"PATH": str(b), "PYTHONPATH": os.environ["PYTHONPATH"]}
+     if "SYSTEMROOT" in os.environ:  # Windows http://bugs.python.org/issue20614
+         env["SYSTEMROOT"] = os.environ["SYSTEMROOT"]
+     if sys.platform == "win32":

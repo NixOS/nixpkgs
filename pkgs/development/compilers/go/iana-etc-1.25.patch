@@ -1,0 +1,26 @@
+diff --git a/src/net/lookup_unix.go b/src/net/lookup_unix.go
+index 7416cb01f8..62722cab14 100644
+--- a/src/net/lookup_unix.go
++++ b/src/net/lookup_unix.go
+@@ -15,7 +15,7 @@ import (
+ // readProtocolsOnce loads contents of /etc/protocols into protocols map
+ // for quick access.
+ var readProtocolsOnce = sync.OnceFunc(func() {
+-	file, err := open("/etc/protocols")
++	file, err := open("@iana@/etc/protocols")
+ 	if err != nil {
+ 		return
+ 	}
+diff --git a/src/net/port_unix.go b/src/net/port_unix.go
+index df73dbabb3..a5dcf2ca1c 100644
+--- a/src/net/port_unix.go
++++ b/src/net/port_unix.go
+@@ -16,7 +16,7 @@ import (
+ var onceReadServices sync.Once
+ 
+ func readServices() {
+-	file, err := open("/etc/services")
++	file, err := open("@iana@/etc/services")
+ 	if err != nil {
+ 		return
+ 	}

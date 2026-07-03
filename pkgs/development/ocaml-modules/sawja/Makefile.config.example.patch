@@ -1,0 +1,9 @@
+--- sawja-1.5-orig/Makefile.config.example	2013-10-30 08:35:29.000000000 +0100
++++ sawja-1.5/Makefile.config.example	2014-07-05 18:54:37.902423482 +0200
+@@ -1,6 +1,3 @@
+-export OCAMLFIND_DESTDIR=$(LOCALDEST)
+-export OCAMLPATH=$(LOCALDEST)
+-
+ RECODE=-charset utf-8
+ DOCDIR = doc/api
+ 

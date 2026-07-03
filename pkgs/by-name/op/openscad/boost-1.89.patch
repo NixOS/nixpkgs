@@ -1,0 +1,65 @@
+diff --git a/features/boost.prf b/features/boost.prf
+index 518d08b8f..4e092f6e7 100644
+--- a/features/boost.prf
++++ b/features/boost.prf
+@@ -17,7 +17,7 @@ CONFIG(mingw-cross-env)|CONFIG(mingw-cross-env-shared) {
+     DEFINES += BOOST_STATIC
+     DEFINES += Boost_USE_STATIC_LIBS
+   }
+-  BOOST_LINK_FLAGS = -lboost_thread_win32-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt -lboost_regex-mt -lboost_chrono-mt
++  BOOST_LINK_FLAGS = -lboost_thread_win32-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_regex-mt -lboost_chrono-mt
+ }
+ 
+ # MSYS2
+@@ -25,7 +25,7 @@ isEmpty(BOOST_LINK_FLAGS):win32-g++ {
+   DEFINES += BOOST_STATIC
+   DEFINES += BOOST_THREAD_USE_LIB
+   DEFINES += Boost_USE_STATIC_LIBS
+-  BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt -lboost_regex-mt
++  BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_regex-mt
+ } 
+ 
+ # check for OPENSCAD_LIBDIR + multithread
+@@ -33,10 +33,10 @@ isEmpty(BOOST_LINK_FLAGS) {
+   OPENSCAD_LIBDIR = $$(OPENSCAD_LIBRARIES)
+   !isEmpty(OPENSCAD_LIBDIR) {
+     exists($$OPENSCAD_LIBDIR/lib/libboost*thread-mt*) {
+-      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt -lboost_regex-mt
++      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_regex-mt
+     } else {
+       exists($$OPENSCAD_LIBDIR/lib/libboost*thread*) {
+-        BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_system -lboost_regex
++        BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_regex
+       }
+     }
+   }
+@@ -47,10 +47,10 @@ isEmpty(BOOST_LINK_FLAGS) {
+   BOOST_DIR = $$(BOOSTDIR)
+   !isEmpty(BOOST_DIR) {
+     exists($$BOOST_DIR/lib/libboost*thread-mt*) {
+-      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt -lboost_regex-mt
++      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_regex-mt
+     } else {
+       exists($$BOOST_DIR/lib/libboost*thread*) {
+-        BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_system -lboost_regex
++        BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_regex
+       }
+     }
+   }
+@@ -64,14 +64,14 @@ isEmpty(BOOST_LINK_FLAGS) {
+     BMT_TEST4 = /usr/local/lib/libboost*thread-mt* # homebrew
+     BMT_TEST5 = /opt/local/lib/libboost*thread-mt* # macports
+     exists($$BMT_TEST1)|exists($$BMT_TEST2)|exists($$BMT_TEST3)|exists($$BMT_TEST4)|exists($$BMT_TEST5) {
+-      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt -lboost_regex-mt
++      BOOST_LINK_FLAGS = -lboost_thread-mt -lboost_program_options-mt -lboost_filesystem-mt -lboost_regex-mt
+     }
+   }
+ }
+ 
+ isEmpty(BOOST_LINK_FLAGS) {
+   unix|macx {
+-    BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_system -lboost_regex
++    BOOST_LINK_FLAGS = -lboost_thread -lboost_program_options -lboost_filesystem -lboost_regex
+   }
+ }
+ 

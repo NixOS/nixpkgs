@@ -1,0 +1,349 @@
+From dc7156d8951242231cfd9142b3d5628815dc6589 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Wed, 31 Mar 2021 14:30:01 +0200
+Subject: [PATCH] Revert "Merge pull request #12225 from
+ chrisroberts/resolution-isolation"
+
+This reverts commit 8a69d0c4dae035a4b1aa789bc4ec3db69c210df2, reversing
+changes made to 5dd0a8c8acc36b654c13a5102e4327eedf1858f2.
+
+-----
+
+Rationale: NixOS-specific patch. The changes in here break our current
+implementation of declarative plugins (only `vagrant-libvirt` atm).
+---
+ bin/vagrant                       | 28 +--------------
+ lib/vagrant.rb                    |  2 +-
+ lib/vagrant/bundler.rb            | 17 +++------
+ lib/vagrant/errors.rb             | 12 -------
+ lib/vagrant/plugin/manager.rb     | 22 ++----------
+ templates/locales/en.yml          | 23 ++----------
+ test/unit/bin/vagrant_test.rb     |  1 -
+ test/unit/vagrant/bundler_test.rb | 58 ++++++++++++++-----------------
+ 8 files changed, 39 insertions(+), 124 deletions(-)
+
+diff --git a/bin/vagrant b/bin/vagrant
+index c019f30ff..ba7e40076 100755
+--- a/bin/vagrant
++++ b/bin/vagrant
+@@ -23,9 +23,9 @@ if idx = argv.index("--")
+   argv = argv.slice(0, idx)
+ end
+ 
+-require_relative "../lib/vagrant/version"
+ # Fast path the version of Vagrant
+ if argv.include?("-v") || argv.include?("--version")
++  require_relative "../lib/vagrant/version"
+   puts "Vagrant #{Vagrant::VERSION}"
+   exit 0
+ end
+@@ -82,29 +82,6 @@ end
+ $stdout.sync = true
+ $stderr.sync = true
+ 
+-# Before we start activate all our dependencies
+-# so we can provide correct resolutions later
+-builtin_specs = []
+-
+-vagrant_spec = Gem::Specification.find_all_by_name("vagrant").detect do |spec|
+-  spec.version == Gem::Version.new(Vagrant::VERSION)
+-end
+-
+-dep_activator = proc do |spec|
+-  spec.runtime_dependencies.each do |dep|
+-    gem(dep.name, *dep.requirement.as_list)
+-    dep_spec = Gem::Specification.find_all_by_name(dep.name).detect(&:activated?)
+-    if dep_spec
+-      builtin_specs << dep_spec
+-      dep_activator.call(dep_spec)
+-    end
+-  end
+-end
+-
+-if vagrant_spec
+-  dep_activator.call(vagrant_spec)
+-end
+-
+ env = nil
+ begin
+   require 'vagrant'
+@@ -113,9 +90,6 @@ begin
+   require 'vagrant/util/platform'
+   require 'vagrant/util/experimental'
+ 
+-  # Set our list of builtin specs
+-  Vagrant::Bundler.instance.builtin_specs = builtin_specs
+-
+   # Schedule the cleanup of things
+   at_exit(&Vagrant::Bundler.instance.method(:deinit))
+ 
+diff --git a/lib/vagrant.rb b/lib/vagrant.rb
+index f790039d3..97e67e3b8 100644
+--- a/lib/vagrant.rb
++++ b/lib/vagrant.rb
+@@ -64,7 +64,7 @@ require "vagrant/plugin/manager"
+ # See https://github.com/rest-client/rest-client/issues/34#issuecomment-290858
+ # for more information
+ class VagrantLogger < Log4r::Logger
+-  def << msg
++  def << (msg)
+     debug(msg.strip)
+   end
+ end
+diff --git a/lib/vagrant/bundler.rb b/lib/vagrant/bundler.rb
+index eb2caabb0..d75f54362 100644
+--- a/lib/vagrant/bundler.rb
++++ b/lib/vagrant/bundler.rb
+@@ -192,11 +192,8 @@
+     attr_reader :env_plugin_gem_path
+     # @return [Pathname] Vagrant environment data path
+     attr_reader :environment_data_path
+-    # @return [Array<Gem::Specification>, nil] List of builtin specs
+-    attr_accessor :builtin_specs
+ 
+     def initialize
+-      @builtin_specs = []
+       @plugin_gem_path = Vagrant.user_data_path.join("gems", RUBY_VERSION).freeze
+       @logger = Log4r::Logger.new("vagrant::bundler")
+     end
+@@ -298,6 +295,7 @@
+         # Never allow dependencies to be remotely satisfied during init
+         request_set.remote = false
+ 
++        repair_result = nil
+         begin
+           @logger.debug("resolving solution from available specification set")
+           # Resolve the request set to ensure proper activation order
+@@ -672,6 +670,7 @@
+         self_spec.activate
+         @logger.info("Activated vagrant specification version - #{self_spec.version}")
+       end
++      self_spec.runtime_dependencies.each { |d| gem d.name, *d.requirement.as_list }
+       # discover all the gems we have available
+       list = {}
+       if Gem.respond_to?(:default_specifications_dir)
+@@ -680,16 +679,10 @@
+         spec_dir = Gem::Specification.default_specifications_dir
+       end
+       directories = [spec_dir]
+-      if Vagrant.in_bundler?
+-        Gem::Specification.find_all{true}.each do |spec|
+-          list[spec.name] = spec
+-        end
+-      else
+-        builtin_specs.each do |spec|
+-          list[spec.name] = spec
+-        end
++      Gem::Specification.find_all{true}.each do |spec|
++        list[spec.name] = spec
+       end
+-      if Vagrant.in_installer?
++      if(!Object.const_defined?(:Bundler))
+         directories += Gem::Specification.dirs.find_all do |path|
+           !path.start_with?(Gem.user_dir)
+         end
+diff --git a/lib/vagrant/errors.rb b/lib/vagrant/errors.rb
+index 5cb861c06..782615bc4 100644
+--- a/lib/vagrant/errors.rb
++++ b/lib/vagrant/errors.rb
+@@ -691,18 +691,6 @@ module Vagrant
+       error_key(:provisioner_winrm_unsupported)
+     end
+ 
+-    class PluginNeedsDeveloperTools < VagrantError
+-      error_key(:plugin_needs_developer_tools)
+-    end
+-
+-    class PluginMissingLibrary < VagrantError
+-      error_key(:plugin_missing_library)
+-    end
+-
+-    class PluginMissingRubyDev < VagrantError
+-      error_key(:plugin_missing_ruby_dev)
+-    end
+-
+     class PluginGemNotFound < VagrantError
+       error_key(:plugin_gem_not_found)
+     end
+diff --git a/lib/vagrant/plugin/manager.rb b/lib/vagrant/plugin/manager.rb
+index b73f07f9c..9058e68b3 100644
+--- a/lib/vagrant/plugin/manager.rb
++++ b/lib/vagrant/plugin/manager.rb
+@@ -182,26 +182,8 @@ module Vagrant
+         result
+       rescue Gem::GemNotFoundException
+         raise Errors::PluginGemNotFound, name: name
+-      rescue Gem::Exception => err
+-        @logger.warn("Failed to install plugin: #{err}")
+-        @logger.debug("#{err.class}: #{err}\n#{err.backtrace.join("\n")}")
+-        # Try and determine a cause for the failure
+-        case err.message
+-        when /install development tools first/
+-          raise Errors::PluginNeedsDeveloperTools
+-        when /library not found in default locations/
+-          lib = err.message.match(/(\w+) library not found in default locations/)
+-          if lib.nil?
+-            raise Errors::BundlerError, message: err.message
+-          end
+-          raise Errors::PluginMissingLibrary,
+-            library: lib.captures.first,
+-            name: name
+-        when /find header files for ruby/
+-          raise Errors::PluginMissingRubyDev
+-        else
+-          raise Errors::BundlerError, message: err.message
+-        end
++      rescue Gem::Exception => e
++        raise Errors::BundlerError, message: e.to_s
+       end
+ 
+       # Uninstalls the plugin with the given name.
+diff --git a/templates/locales/en.yml b/templates/locales/en.yml
+index edae9b477..782904f49 100644
+--- a/templates/locales/en.yml
++++ b/templates/locales/en.yml
+@@ -875,9 +875,9 @@ en:
+         matching this provider. For example, if you're using VirtualBox,
+         the clone environment must also be using VirtualBox.
+       cloud_init_not_found: |-
+-        cloud-init is not found. Please ensure that cloud-init is installed and
++        cloud-init is not found. Please ensure that cloud-init is installed and 
+         available on path for guest '%{guest_name}'.
+-      cloud_init_command_failed: |-
++      cloud_init_command_failed: |- 
+         cloud init command '%{cmd}' failed on guest '%{guest_name}'.
+       command_deprecated: |-
+         The command 'vagrant %{name}' has been deprecated and is no longer functional
+@@ -1347,30 +1347,6 @@ en:
+         following command:
+ 
+           vagrant plugin install --local
+-      plugin_needs_developer_tools: |-
+-        Vagrant failed to install the requested plugin because development tools
+-        are required for installation but are not currently installed on this
+-        machine. Please install development tools and then try this command
+-        again.
+-      plugin_missing_library: |-
+-        Vagrant failed to install the requested plugin because it depends
+-        on development files for a library which is not currently installed
+-        on this system. The following library is required by the '%{name}'
+-        plugin:
+-
+-          %{library}
+-
+-        If a package manager is used on this system, please install the development
+-        package for the library. The name of the package will be similar to:
+-
+-          %{library}-dev or %{library}-devel
+-
+-        After the library and development files have been installed, please
+-        run the command again.
+-      plugin_missing_ruby_dev: |-
+-        Vagrant failed to install the requested plugin because the Ruby header
+-        files could not be found. Install the ruby development package for your
+-        system and then run this command again.
+       powershell_not_found: |-
+         Failed to locate the powershell executable on the available PATH. Please
+         ensure powershell is installed and available on the local PATH, then
+@@ -3183,7 +3159,7 @@ en:
+     pushes:
+       file:
+         no_destination: "File destination must be specified."
+-
++    
+     autocomplete:
+       installed: |-
+         Autocomplete installed at paths:
+diff --git a/test/unit/bin/vagrant_test.rb b/test/unit/bin/vagrant_test.rb
+index dbbd52112..bc11309aa 100644
+--- a/test/unit/bin/vagrant_test.rb
++++ b/test/unit/bin/vagrant_test.rb
+@@ -33,7 +33,6 @@ describe "vagrant bin" do
+     allow(Kernel).to receive(:exit)
+     allow(Vagrant::Environment).to receive(:new).and_return(env)
+     allow(Vagrant).to receive(:in_installer?).and_return(true)
+-    allow(self).to receive(:require_relative)
+   end
+ 
+   after { expect(run_vagrant).to eq(exit_code) }
+diff --git a/test/unit/vagrant/bundler_test.rb b/test/unit/vagrant/bundler_test.rb
+index 69f425c66..00cedc021 100644
+--- a/test/unit/vagrant/bundler_test.rb
++++ b/test/unit/vagrant/bundler_test.rb
+@@ -809,46 +809,42 @@ describe Vagrant::Bundler do
+       end
+     end
+ 
+-    context "when bundler is not defined" do
+-      before { expect(Vagrant).to receive(:in_bundler?).and_return(false) }
+-
+-      context "when running inside the installer" do
+-        before { expect(Vagrant).to receive(:in_installer?).and_return(true) }
++    context "when run time dependencies are defined" do
++      let(:vagrant_dep_specs) { [double("spec", name: "vagrant-dep", requirement: double("spec-req", as_list: []))] }
+ 
+-        it "should load gem specification directories" do
+-          expect(Gem::Specification).to receive(:dirs).and_return(spec_dirs)
+-          subject.send(:vagrant_internal_specs)
+-        end
++      it "should call #gem to activate the dependencies" do
++        expect(subject).to receive(:gem).with("vagrant-dep", any_args)
++        subject.send(:vagrant_internal_specs)
++      end
++    end
+ 
+-        context "when checking paths" do
+-          let(:spec_dirs) { [double("spec-dir", start_with?: in_user_dir)] }
+-          let(:in_user_dir) { true }
+-          let(:user_dir) { double("user-dir") }
++    context "when bundler is not defined" do
++      before { expect(Object).to receive(:const_defined?).with(:Bundler).and_return(false) }
+ 
+-          before { allow(Gem).to receive(:user_dir).and_return(user_dir) }
++      it "should load gem specification directories" do
++        expect(Gem::Specification).to receive(:dirs).and_return(spec_dirs)
++        subject.send(:vagrant_internal_specs)
++      end
+ 
+-          it "should check if path is within local user directory" do
+-            expect(spec_dirs.first).to receive(:start_with?).with(user_dir).and_return(false)
+-            subject.send(:vagrant_internal_specs)
+-          end
++      context "when checking paths" do
++        let(:spec_dirs) { [double("spec-dir", start_with?: in_user_dir)] }
++        let(:in_user_dir) { true }
++        let(:user_dir) { double("user-dir") }
+ 
+-          context "when path is not within user directory" do
+-            let(:in_user_dir) { false }
++        before { allow(Gem).to receive(:user_dir).and_return(user_dir) }
+ 
+-            it "should use path when loading specs" do
+-              expect(Gem::Specification).to receive(:each_spec) { |arg| expect(arg).to include(spec_dirs.first) }
+-              subject.send(:vagrant_internal_specs)
+-            end
+-          end
++        it "should check if path is within local user directory" do
++          expect(spec_dirs.first).to receive(:start_with?).with(user_dir).and_return(false)
++          subject.send(:vagrant_internal_specs)
+         end
+-      end
+ 
+-      context "when running outside the installer" do
+-        before { expect(Vagrant).to receive(:in_installer?).and_return(false) }
++        context "when path is not within user directory" do
++          let(:in_user_dir) { false }
+ 
+-        it "should not load gem specification directories" do
+-          expect(Gem::Specification).not_to receive(:dirs)
+-          subject.send(:vagrant_internal_specs)
++          it "should use path when loading specs" do
++            expect(Gem::Specification).to receive(:each_spec) { |arg| expect(arg).to include(spec_dirs.first) }
++            subject.send(:vagrant_internal_specs)
++          end
+         end
+       end
+     end
+-- 
+2.29.3
+
