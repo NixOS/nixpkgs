@@ -2791,7 +2791,7 @@
   };
 
   toml = {
-    version = "0.5.1-unstable-2024-12-03";
+    version = "0.7.0-unstable-2024-12-03";
     url = "github:tree-sitter-grammars/tree-sitter-toml";
     rev = "64b56832c2cffe41758f28e05c756a3a98d16f41";
     hash = "sha256-m9RlGkHiOL/PNENrdEPqtPlahSqGymsx7gZrCoN/Lsk=";
