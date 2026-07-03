@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "7.0.0";
 
   src = fetchFromGitHub {
-    owner = "oknozor";
+    owner = "cocogitto";
     repo = "cocogitto";
     tag = finalAttrs.version;
     hash = "sha256-Z+SXB6bDxyR+Bt3Pz6uF9+sZLjbiFNYeECVFZbx40h8=";

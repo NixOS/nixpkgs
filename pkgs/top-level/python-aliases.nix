@@ -632,6 +632,7 @@ mapAliases {
   threadpool = throw "'threadpool' has been removed, since it is obsolete"; # Added 2026-01-09
   tikzplotlib = throw "tikzplotlib was removed because it is incompatible with recent versions of matplotlib and webcolors"; # added 2025-11-11
   torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
+  torchtrune = throw "'torchtune' weas removed because it is unmaintained"; # added 2026-07-02
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
   tracing = throw "'tracing' has been removed because its source code has been removed"; # Added 2025-12-17
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
