@@ -17,15 +17,13 @@
   ohex,
 }:
 
-buildDunePackage rec {
-  minimalOCamlVersion = "4.08";
-
+buildDunePackage (finalAttrs: {
   pname = "x509";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-${version}.tbz";
-    hash = "sha256-BYQ74iwQ9MoOzyStOasALolWD1PMIhKKw9FHReFr+n0=";
+    url = "https://github.com/mirleft/ocaml-x509/releases/download/v${finalAttrs.version}/x509-${finalAttrs.version}.tbz";
+    hash = "sha256-trFZ3Fa6RcNzAn8g5gd5te+Nb7eFTotCio3Zr+FAylU=";
   };
 
   checkInputs = [ alcotest ];
@@ -50,6 +48,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mirleft/ocaml-x509";
     description = "X509 (RFC5280) handling in OCaml";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ vbgl ];
+    maintainers = [ ];
   };
-}
+})
