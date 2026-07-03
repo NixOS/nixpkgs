@@ -1,8 +1,8 @@
 # Nixpkgs Reference Manual {#nixpkgs-manual}
 ## Version @MANUAL_VERSION@
 
-```{=include=} chapters
-preface.chapter.md
+```{=include=} preface
+preface.md
 ```
 
 ```{=include=} parts
