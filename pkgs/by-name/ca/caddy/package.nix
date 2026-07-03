@@ -3,6 +3,7 @@
   buildGoModule,
   callPackage,
   fetchFromGitHub,
+  testers,
   nixosTests,
   caddy,
   installShellFiles,
@@ -21,6 +22,7 @@ buildGoModule (finalAttrs: {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${finalAttrs.version}";
+    # remember to update hashes for `dist` and `plugins` test!
     hash = "sha256-wzk8KRZfDCbbjRlBwkoKAoMjOhV4xF3yuXUueqtl1xM=";
   };
 
@@ -85,6 +87,7 @@ buildGoModule (finalAttrs: {
 
     tests = {
       inherit (nixosTests) caddy;
+      plugins = testers.runNixOSTest ./plugins.test.nix;
       acme-integration = nixosTests.acme.caddy;
     };
   };
