@@ -10,18 +10,12 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
-let
-  version = "2.11.4";
-  dist = fetchFromGitHub {
-    owner = "caddyserver";
-    repo = "dist";
-    tag = "v${version}";
-    hash = "sha256-oRQfQH1GKjAjVMj+dZo1f1+HOaOdJIyEfod0iGLYcc8=";
-  };
-in
+
 buildGoModule (finalAttrs: {
   pname = "caddy";
-  inherit version;
+  version = "2.11.4";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "caddyserver";
@@ -52,7 +46,7 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   postInstall = ''
-    install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
+    install -Dm644 ${finalAttrs.passthru.dist}/init/caddy.service ${finalAttrs.passthru.dist}/init/caddy-api.service -t $out/lib/systemd/system
 
     substituteInPlace $out/lib/systemd/system/caddy.service \
       --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
@@ -72,20 +66,28 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/caddy completion zsh)
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) caddy;
-      acme-integration = nixosTests.acme.caddy;
-    };
-    withPlugins = callPackage ./plugins.nix { inherit caddy; };
-  };
-
+  doInstallCheck = true;
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
-  doInstallCheck = true;
+
+  passthru = {
+    withPlugins = callPackage ./plugins.nix { inherit caddy; };
+
+    dist = fetchFromGitHub {
+      owner = "caddyserver";
+      repo = "dist";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-oRQfQH1GKjAjVMj+dZo1f1+HOaOdJIyEfod0iGLYcc8=";
+    };
+
+    tests = {
+      inherit (nixosTests) caddy;
+      acme-integration = nixosTests.acme.caddy;
+    };
+  };
 
   meta = {
     homepage = "https://caddyserver.com";
