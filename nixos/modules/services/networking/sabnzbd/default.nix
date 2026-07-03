@@ -117,6 +117,28 @@ in
         default = [ ];
       };
 
+      secretValues = mkOption {
+        type = with types; attrsOf path;
+        description = ''
+          Attrset of patterns in the settings that should be replaced at
+          runtime, just before the service starts, with values read from the
+          given files. The files must be readable by the service user.
+
+          Compared to the secretFiles option, secretValues allows having the
+          full settings structure in Nix, and only externalizing the secret
+          values themselves.
+        '';
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "@my_server_password@" = "/run/secrets/my_server_password";
+            "@my_server_username@" = "/run/secrets/my_server_username";
+            "@sabnzbd_api_key@" = "/run/secrets/sabnzbd_api_key";
+            "@sabnzbd_nzb_key@" = "/run/secrets/sabnzbd_nzb_key";
+          }
+        '';
+      };
+
       allowConfigWrite = mkOption {
         type = types.bool;
         description = ''
@@ -500,6 +522,12 @@ in
             ${./config_merge.py} \
             "''${files[@]}" \
             > "$tmpfile"
+
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (n: v: ''
+              "${lib.getExe pkgs.replace-secret}" "${n}" "${v}" "$tmpfile"
+            '') cfg.secretValues
+          )}
 
           install -D \
             -m ${if cfg.allowConfigWrite then "600" else "400"} \
