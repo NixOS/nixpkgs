@@ -193,7 +193,7 @@ in
       # Route system traffic via service for specified ports.
       (lib.mkIf cfg.configureFirewall (
         let
-          udpPorts = lib.concatStringsSep "," cfg.udpPorts;
+          udpPorts = lib.concatStringsSep "," (builtins.map (builtins.replaceStrings [":"] ["-"]) cfg.udpPorts);
         in
         lib.mkMerge [
           (lib.mkIf config.networking.nftables.enable {
