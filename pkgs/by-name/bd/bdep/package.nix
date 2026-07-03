@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bdep";
-  version = "0.17.0";
+  version = "0.18.0";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+2Hl5kanxWJmOpfePAvvSBSmG3kZLQv/kYIkT4J+kaQ=";
+    hash = "sha256-7pfGiIelaHQydpZqd6KiF7gwCqC9oJspig87BrKz6QU=";
   };
 
   strictDeps = true;

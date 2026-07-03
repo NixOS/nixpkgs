@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Dj-Codeman";
-    repo = "doge";
+    repo = "dog_community";
     rev = "v${finalAttrs.version}";
     hash = "sha256-SeC/GZ1AeEqRzxWc4oJ6JOvXfn3/LRcQz9uWXXqdTqU=";
   };
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Reviving a command-line DNS client";
-    homepage = "https://github.com/Dj-Codeman/doge";
+    homepage = "https://github.com/Dj-Codeman/dog_community";
     license = lib.licenses.eupl12;
     mainProgram = "doge";
     maintainers = with lib.maintainers; [ aktaboot ];

@@ -34,6 +34,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   meta = {
     homepage = "https://github.com/hyprwm/hyprlang";
     description = "Official implementation library for the hypr config language";

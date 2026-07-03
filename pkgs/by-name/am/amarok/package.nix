@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amarok";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/amarok/${finalAttrs.version}/amarok-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OW8uqToH25XI+762gNeAai5ZVKUgxSwFZIXBHeYznAE=";
+    hash = "sha256-aOnoPX2MDL3UcJWOdogV9XPWHzzjK+e8G4f7VtYiQ24=";
   };
 
   outputs = [

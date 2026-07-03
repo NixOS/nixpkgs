@@ -14,7 +14,7 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "3.35-unstable-2025-06-24";
+  version = "3.35-unstable-2026-04-21";
   pname = "i3pystatus";
   pyproject = true;
   build-system = [ python3Packages.setuptools ];
@@ -22,8 +22,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "i3pystatus";
-    rev = "e8e03934d95658c85fa9f594987dac0481ca26c9";
-    hash = "sha256-uAt6jxNAUR9txyPtHS4BRtu8Z5QaP6uqFg0sROf356c=";
+    rev = "045d5f09220ccec1146a220619ff80b1077206a4";
+    hash = "sha256-K6sCII8qw0JLcMw5QVCY0RCu0O55MlEKFQXDY96V3NM=";
   };
 
   patches = [
@@ -44,12 +44,20 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
+    python3Packages.mock
     writableTmpDirAsHomeHook
   ];
 
-  checkInputs = [ python3Packages.requests ];
+  # Upstream tests construct ElementCall via __new__ without Module.__init__, so
+  # output/_output is never set (AttributeError on .output after run()).
+  disabledTests = [
+    "test_active_output"
+    "test_empty_output"
+    "test_error_output"
+    "test_format_includes_room_alias"
+  ];
 
-  propagatedBuildInputs =
+  dependencies =
     with python3Packages;
     [
       keyring
@@ -58,6 +66,8 @@ python3Packages.buildPythonApplication rec {
       psutil
       basiciw
       pygobject3
+      requests
+      dbus-python
     ]
     ++ extraLibs;
 
