@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Fuzzy string matching for Python";
     homepage = "https://github.com/seatgeek/fuzzywuzzy";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 })
