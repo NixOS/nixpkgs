@@ -67,7 +67,7 @@ in
 
   name = "matrix-authentication-service-upstream";
   meta = {
-    teams = [ lib.teams.matrix ];
+    maintainers = lib.teams.matrix.members;
   };
 
   nodes = {
@@ -237,7 +237,7 @@ in
               {
                 id = masULID;
                 client_id = oidcClientID;
-                client_secret = oidcClientSecret;
+                client_secret_file = "\${CREDENTIALS_DIRECTORY}/oidc_client_secret";
                 issuer = "https://${dexDomain}:5556";
                 scope = "openid email profile";
                 token_endpoint_auth_method = "client_secret_post";
@@ -245,6 +245,9 @@ in
             ];
           };
         };
+        systemd.services.matrix-authentication-service.serviceConfig.SetCredential = [
+          "oidc_client_secret:${oidcClientSecret}"
+        ];
         services.postgresql.authentication = pkgs.lib.mkOverride 10 ''
           local all all trust
           host  all all 127.0.0.1/32 trust

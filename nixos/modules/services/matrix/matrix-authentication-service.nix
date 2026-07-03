@@ -67,7 +67,19 @@ in
         [configuration reference](https://element-hq.github.io/matrix-authentication-service/usage/configuration.html)
         for possible values.
 
-        Secrets should be passed in by using the `extraConfigFiles` option.
+        Secrets can be injected as follows:
+
+        ```
+        systemd.services.matrix-authentication-service.serviceConfig.LoadCredential = [
+          "oidc_client_secret:/path/to/my/secret"
+        ];
+        services.matrix-authentication-service.settings.upstream_oauth2.providers = [{
+          client_secret_file = "\''${CREDENTIALS_DIRECTORY}/oidc_client_secret";
+        }];
+        ```
+        `
+        If there's no file-based option for a secret inside matrix-authentication-service,
+        use [](#opt-services.matrix-authentication-service.extraConfigFiles) instead.
       '';
       type = types.submodule {
         freeformType = format.type;
@@ -387,16 +399,18 @@ in
     systemd.services.matrix-authentication-service = rec {
       after = optional cfg.createDatabase "postgresql.service" ++ cfg.serviceDependencies;
       wants = after;
+      path = [ pkgs.envsubst ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
-        ExecStartPre = ''
-          ${getExe cfg.package} config check \
-            ${concatMapStringsSep " " (x: "--config ${x}") ([ configFile ] ++ cfg.extraConfigFiles)}
+        ExecStartPre = pkgs.writeShellScript "mas-prepare" ''
+          envsubst -i ${configFile} > /run/matrix-authentication-service/config.yaml
+          ${getExe cfg.package} config check --config /run/matrix-authentication-service/config.yaml \
+            ${concatMapStringsSep " " (x: "--config ${x}") cfg.extraConfigFiles}
         '';
         ExecStart = ''
-          ${getExe cfg.package} server \
-            ${concatMapStringsSep " " (x: "--config ${x}") ([ configFile ] ++ cfg.extraConfigFiles)}
+          ${getExe cfg.package} server --config /run/matrix-authentication-service/config.yaml \
+            ${concatMapStringsSep " " (x: "--config ${x}") cfg.extraConfigFiles}
         '';
         Restart = "on-failure";
         RestartSec = "1s";
@@ -438,6 +452,7 @@ in
         # Working and state directories
         StateDirectory = "matrix-authentication-service";
         StateDirectoryMode = "0700";
+        RuntimeDirectory = "matrix-authentication-service";
         WorkingDirectory = "/var/lib/matrix-authentication-service";
       };
     };
