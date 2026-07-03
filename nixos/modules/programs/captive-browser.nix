@@ -28,11 +28,20 @@ let
       "${chromium}/bin/chromium"
       "--user-data-dir=\${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive"
       ''--proxy-server="socks5://$PROXY"''
-      ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
+      ''--proxy-bypass-list="<-loopback>"''
       "--no-first-run"
       "--new-window"
       "--incognito"
       "-no-default-browser-check"
+      "--no-crash-upload"
+      "--disable-extensions"
+      "--disable-sync"
+      "--disable-background-networking"
+      "--disable-client-side-phishing-detection"
+      "--disable-component-update"
+      "--disable-translate"
+      "--disable-web-resources"
+      "--safebrowsing-disable-auto-update"
       "http://cache.nixos.org/"
     ];
 
