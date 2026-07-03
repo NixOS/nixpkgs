@@ -1409,11 +1409,11 @@
     "vendorHash": null
   },
   "ubiquiti-community_unifi": {
-    "hash": "sha256-7lmT0ZCRfu3nL1FXAdxMxvQURtNcZiz9GY+0d7HI2N0=",
+    "hash": "sha256-wqR9XIuH9QzzacdOd8Z+QcfTXwjjnTQA8SbEHcLYhig=",
     "homepage": "https://registry.terraform.io/providers/ubiquiti-community/unifi",
     "owner": "ubiquiti-community",
     "repo": "terraform-provider-unifi",
-    "rev": "v0.53.0",
+    "rev": "v0.54.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-XPEH1zya7e/3N/HxBPN/vZxFU5GOOXfBPTrnZEUzdpw="
   },
