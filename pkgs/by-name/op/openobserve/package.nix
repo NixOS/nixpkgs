@@ -12,6 +12,7 @@
   xz,
   zlib,
   zstd,
+  versionCheckHook,
   buildNpmPackage,
   gitUpdater,
 }:
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage (
 
       sourceRoot = "${finalAttrs.src.name}/web";
 
-      npmDepsHash = "sha256-UNdFqUJI/pdHJjjA5Aebnvq1T7oITJ1R96rEQOBxTug=";
+      npmDepsHash = "sha256-te8uABzndzLRb6GQVSn33aaleQau2U/xo8LnMynTtx0=";
 
       preBuild = ''
         # Patch vite config to not open the browser to visualize plugin composition
@@ -49,13 +50,13 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "openobserve";
-    version = "0.50.3";
+    version = "0.91.1";
 
     src = fetchFromGitHub {
       owner = "openobserve";
       repo = "openobserve";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-eL1Qvl6M8idBHXSNHHQsTsu6g/CbTOt8NUTTaNZuB8M=";
+      hash = "sha256-4Oe1YRblkJg9aNG/aLvP89zrHIysA67GP7GN7oCTdd8=";
     };
 
     patches = [
@@ -67,7 +68,7 @@ rustPlatform.buildRustPackage (
       cp -r ${web}/share/openobserve-ui web/dist
     '';
 
-    cargoHash = "sha256-d67ZeAth0Q8h8xXJZl+2Z2/+M54Ef4xFlsPT9CnrwK4=";
+    cargoHash = "sha256-PIhHHEP9kJmliOGtom1gDf7wt5C4RicWKgQe0hkW+4M=";
 
     nativeBuildInputs = [
       pkg-config
@@ -129,17 +130,26 @@ rustPlatform.buildRustPackage (
 
     # requires network access or filesystem mutations
     checkFlags = [
+      "--skip=cli::basic::http::tests::test_node_operations_network_failure"
+      "--skip=cli::basic::http::tests::test_query_valid_time_range"
+      "--skip=common::meta::telemetry::test_telemetry::test_telemetry_send_track_event_without_base_info_or_zo_data"
       "--skip=handler::http::router::tests::test_get_proxy_routes"
       "--skip=tests::e2e_test"
       "--skip=tests::test_setup_logs"
       "--skip=handler::http::router::middlewares::compress::Compress"
+      "--skip=service::alerts::destinations::tests::test_alert_destination_requires_template"
+      "--skip=service::enrichment_table::url_processor"
       "--skip=service::github"
+      "--skip=service::sourcemaps"
       # Tests are not threadsafe. Most likely can only run one test at a time,
       # due to altering shared database state.
       # This option already in upstream code: https://github.com/openobserve/openobserve/pull/7084
       # Also see: https://github.com/NixOS/nixpkgs/pull/457421
       "--test-threads=1"
     ];
+
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
 
     passthru.updateScript = gitUpdater {
       rev-prefix = "v";
@@ -153,6 +163,7 @@ rustPlatform.buildRustPackage (
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [ happysalada ];
       mainProgram = "openobserve";
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   }
 )
