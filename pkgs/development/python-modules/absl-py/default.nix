@@ -6,14 +6,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "absl-py";
-  version = "2.3.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U8doys7SoOhtUkF0dsCFKnM9ItOoi5a6cK6zGOe/U8s=";
+    hash = "sha256-BnR9QnZ5AaSlboQuQnX4UKGjAVVpyzMLZ68Do3VZrE0=";
   };
 
   build-system = [ hatchling ];
