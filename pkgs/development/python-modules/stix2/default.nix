@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "stix2";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-python-stix2";
     tag = "v${version}";
-    hash = "sha256-1bILZUZgPOWmFWRu4p/fmgi4QPEE1lFQH9mxoWd/saI=";
+    hash = "sha256-qm6VFufD9A4rSBHaDkqeYqOLRvE97SY0++o4ND0l3I0=";
   };
 
   build-system = [ setuptools ];
