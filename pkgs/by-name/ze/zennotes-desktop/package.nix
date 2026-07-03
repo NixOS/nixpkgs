@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.8.0";
-  npmDepsHash = "sha256-4YEBo/8HIMcvlj36ACv5r9iN995/QX2mc6vwTZh4AV8=";
+  version = "2.10.0";
+  npmDepsHash = "sha256-YjY62Gko3lrxVe4ZPe/zcSaNOwhqql8M+33IdpY+//M=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cVFiL1SNMmLZQyce83hNbE7NLuTPIQqNhDaeiUkK+mo=";
+    hash = "sha256-xkrFZK5go56BibSuyhtD2A/rURzOgtCa2X5KxoVLG0A=";
   };
 
   npmWorkspace = "apps/desktop";
@@ -51,7 +51,7 @@ buildNpmPackage (finalAttrs: {
       --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop"
 
     ${lib.optionalString installCli ''
-      makeWrapper ${electron_41}/libexec/electron/electron $out/bin/zen \
+      makeWrapper ${electron_41}/libexec/electron/electron $out/bin/zn \
         --set ELECTRON_RUN_AS_NODE 1 \
         --add-flags "$out/lib/node_modules/zennotes-monorepo/apps/desktop/out/main/cli.js"
     ''}
@@ -89,6 +89,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       justkrysteq
       Br1ght0ne
+      ad030
     ];
     mainProgram = "zennotes-desktop";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
