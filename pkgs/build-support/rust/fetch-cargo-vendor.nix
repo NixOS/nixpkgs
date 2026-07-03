@@ -63,6 +63,10 @@ lib.extendMkDerivation {
 
 # TODO: add asserts about pname version and name
     {
+      inherit
+        hash
+        ;
+
       name = "${name}-vendor-staging";
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
@@ -92,7 +96,7 @@ lib.extendMkDerivation {
       dontInstall = true;
       dontFixup = true;
 
-      outputHash = if hash == "" then lib.fakeHash else hash;
+      outputHash = if finalAttrs.hash == "" then lib.fakeHash else finalAttrs.hash;
       outputHashMode = "recursive";
     }
     # Trick to avoid repetitive `{ <attrname> = args.<attrname> or ...; }`
