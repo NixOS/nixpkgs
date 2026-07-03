@@ -14,22 +14,58 @@
   enableMimalloc ? true,
   perl,
   testers,
+  gitUpdater,
+  nix,
+  nix-prefetch-git,
+  nix-prefetch-github,
+  cacert,
+  gnumake,
+  writers,
+  _experimental-update-script-combinators,
 }:
 let
-  cadical' = cadical.override { version = "2.1.3"; };
+  contentSpecs = lib.importJSON ./cmake-content.json;
+  content = lib.mapAttrs (
+    _name: spec:
+    fetchFromGitHub {
+      inherit (spec)
+        owner
+        repo
+        tag
+        hash
+        ;
+    }
+  ) contentSpecs;
+
+  cadical' = cadical.override {
+    version = builtins.replaceStrings [ "rel-" ] [ "" ] contentSpecs.cadical.tag;
+  };
+
+  updateCMakeContent = writers.writePython3 "lean4-update-cmake-content" {
+    flakeIgnore = [ "E501" ];
+    makeWrapperArgs = [
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [
+        nix
+        nix-prefetch-git
+        nix-prefetch-github
+        cmake
+        git
+        cacert
+        gnumake
+        stdenv.cc
+        pkg-config
+        gmp
+        cadical'
+      ])
+    ];
+  } ./update-cmake-content.py;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
   version = "4.30.0";
-
-  # Using a vendored version rather than nixpkgs' version to match the exact version required by
-  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
-  mimalloc-src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.3";
-    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
-  };
 
   src = fetchFromGitHub {
     owner = "leanprover";
@@ -40,24 +76,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
+      mimallocPathPattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
     in
     ''
       substituteInPlace src/CMakeLists.txt \
         --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
 
-      # Remove tests that fails in sandbox.
-      # It expects `sourceRoot` to be a git repository.
       rm -rf src/lake/examples/git/
     ''
-    + (lib.optionalString enableMimalloc ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
+    + lib.optionalString (enableMimalloc && content ? mimalloc) ''
+      # ExternalProject (Lean ≤4.30): pin SOURCE_DIR. FetchContent (≥4.31): cmakeFlags only.
+      if grep -qE 'ExternalProject_Add[[:space:]]*\([[:space:]]*mimalloc' CMakeLists.txt; then
+        substituteInPlace CMakeLists.txt \
+          --replace-fail 'GIT_REPOSITORY https://github.com/${contentSpecs.mimalloc.owner}/${contentSpecs.mimalloc.repo}' \
+                         'SOURCE_DIR "${content.mimalloc}"' \
+          --replace-fail 'GIT_TAG ${contentSpecs.mimalloc.tag}' ""
+      fi
+
       for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
         substituteInPlace "$file" \
-          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+          --replace-fail '${mimallocPathPattern}' '${content.mimalloc}'
       done
-    '');
+    '';
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
@@ -67,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     makeWrapper
-    leangz # Provides leantar
+    leangz
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
@@ -87,20 +127,35 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  patches = [ ./mimalloc.patch ];
-
   cmakeFlags = [
     "-DUSE_GITHASH=OFF"
     "-DINSTALL_LICENSE=OFF"
     "-DINSTALL_CADICAL=OFF"
     "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+  ]
+  ++ lib.optionals (enableMimalloc && content ? mimalloc) [
+    "-DFETCHCONTENT_SOURCE_DIR_MIMALLOC=${content.mimalloc}"
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
+  passthru = {
+    inherit content;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = "v${finalAttrs.version}";
+      };
     };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater {
+        rev-prefix = "v";
+        ignoredVersions = "-rc";
+      })
+      {
+        command = [ updateCMakeContent ];
+        supportedFeatures = [ "silent" ];
+      }
+    ];
   };
 
   meta = {
