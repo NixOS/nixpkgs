@@ -30426,6 +30426,13 @@
     github = "x807x";
     githubId = 86676478;
   };
+  xaltsc = {
+    email = "hey+dev@xaltsc.dev";
+    matrix = "@xaltsc:matrix.org";
+    name = "xaltsc";
+    github = "xaltsc";
+    githubId = 41400742;
+  };
   xanderio = {
     name = "Alexander Sieg";
     email = "alex@xanderio.de";
