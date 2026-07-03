@@ -24,6 +24,7 @@
   pyannote-pipeline,
   pyannoteai-sdk,
   pytorch-metric-learning,
+  pyyaml,
   safetensors,
   speechbrain,
   tensorboardx,
@@ -61,11 +62,6 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
-  pythonRelaxDeps = [
-    "torch"
-    "torchaudio"
-    "torchcodec"
-  ];
   dependencies = [
     asteroid-filterbanks
     einops
@@ -81,6 +77,7 @@ buildPythonPackage (finalAttrs: {
     pyannote-pipeline
     pyannoteai-sdk
     pytorch-metric-learning
+    pyyaml
     safetensors
     speechbrain
     tensorboardx
