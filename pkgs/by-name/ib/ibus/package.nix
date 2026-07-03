@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-python=${python3BuildEnv.interpreter}"
     (lib.enableFeature (!libOnly && dconf != null) "dconf")
     (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
+    "--disable-python2"
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
     (lib.enableFeature (!libOnly) "gtk3")
