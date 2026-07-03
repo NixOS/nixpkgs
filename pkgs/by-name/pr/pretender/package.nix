@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pretender";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "pretender";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c8uXN7UMj6UZPVt2aNSg6mRex8w+u7J5I7TAB7MzEWg=";
+    hash = "sha256-NwGjW0WvMuoG4NxBL3ygGbZF5b8dLXJPbYMadLodR8s=";
   };
 
-  vendorHash = "sha256-UzKprzkxqG7FOPWcFQGuZtn+gHMeMy4jqCLUSdyO2l0=";
+  vendorHash = "sha256-pzyattaJQIzEgCheYBx6qJ95br6ApEk9RfBfAqrPkjI=";
 
   # Tests require network access
   doCheck = false;
