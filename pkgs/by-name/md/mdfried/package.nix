@@ -59,8 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
-  CFLAGS_aarch64_apple_darwin = lib.optionalString stdenv.hostPlatform.isDarwin "-UTARGET_OS_MAC";
-  CXXFLAGS_aarch64_apple_darwin = lib.optionalString stdenv.hostPlatform.isDarwin "-UTARGET_OS_MAC";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS_aarch64_apple_darwin = "-UTARGET_OS_MAC";
+    CXXFLAGS_aarch64_apple_darwin = "-UTARGET_OS_MAC";
+  };
 
   doCheck = true;
 
