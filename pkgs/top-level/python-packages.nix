@@ -2010,6 +2010,8 @@ self: super: with self; {
 
   beancount-periodic = callPackage ../development/python-modules/beancount-periodic { };
 
+  beancount-plugin-tax-uk = callPackage ../development/python-modules/beancount-plugin-tax-uk { };
+
   beancount-plugin-utils = callPackage ../development/python-modules/beancount-plugin-utils { };
 
   beancount_2 = callPackage ../development/python-modules/beancount/2.nix { };
