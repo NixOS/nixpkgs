@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     ./include-stdarg.patch
   ];
 
+  doCheck = true;
+
   meta = {
     homepage = "https://liquidsdr.org/";
     description = "Digital signal processing library for software-defined radios";
