@@ -95,7 +95,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.21.1/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.31.1/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -115,8 +115,8 @@ let
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b9509";
-    hash = "sha256-bO1ucb/+vidj/EYzNCssotjte9NlVLdjC794jToNNeM=";
+    tag = "b9840";
+    hash = "sha256-SlcBqlUSeXgGltk7fz1blp4DobypzkT8cw8a7dkVGiU=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.30.7";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pS6Wd//g+Q1Oqw32+mr2h5ag7C2HNwf/8ZVrTKOvdWE=";
+    hash = "sha256-p4saQimdOVRWcJyrYcCuex7NViKC/u0tHUnLRZh6hwg=";
   };
 
   vendorHash = "sha256-lZdGzGb9xRjTm1Rm7/wHjqM490gLznLEndmb4mNbCX0=";
@@ -322,7 +322,7 @@ goBuild (finalAttrs: {
   '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.21.1/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.31.1/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
