@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Findomain/Findomain";
     changelog = "https://github.com/Findomain/Findomain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findomain";
   };
 })
