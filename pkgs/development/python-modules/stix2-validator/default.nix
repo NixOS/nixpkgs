@@ -12,7 +12,7 @@
   stix2-patterns,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stix2-validator";
   version = "3.3.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-stix-validator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w9SlRspt5tRLdqqEr6UJ+cmq3KM08cN9BqMvdSYay0Y=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Validator for STIX 2.0 JSON normative requirements and best practices";
     homepage = "https://github.com/oasis-open/cti-stix-validator/";
-    changelog = "https://github.com/oasis-open/cti-stix-validator/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/oasis-open/cti-stix-validator/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
