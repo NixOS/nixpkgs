@@ -17,7 +17,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "aeneas";
-  version = "2026.06.22";
+  inherit (charon) version;
   __structuredAttrs = true;
 
   minimalOCamlVersion = "5.1";
@@ -26,7 +26,7 @@ buildDunePackage (finalAttrs: {
     owner = "AeneasVerif";
     repo = "aeneas";
     tag = "nightly-${finalAttrs.version}";
-    hash = "sha256-T/wiTajDKCG4lFcHtdQvO0AhEzX9F+vT6ij2VBBnvdU=";
+    hash = "sha256-uQAGj3moRftf1OWIuzfRoFsO/tv0Hhx3X/8qRU0yOqk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
