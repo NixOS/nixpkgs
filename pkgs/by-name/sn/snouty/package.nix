@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  # Tests use wiremock, which needs to bind to a local port.
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     podman
