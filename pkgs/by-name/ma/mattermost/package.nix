@@ -35,6 +35,11 @@
   ...
 }:
 
+assert lib.warnIf (latestVersionInfo != null && (removeUserLimit || removeFreeBadge)) ''
+  The user limit and free badge patches are not tested with this Mattermost version
+  (${latestVersionInfo.version}).
+'' true;
+
 let
   /*
     Helper function that sets the `withTests` and `withoutTests` passthru correctly,
