@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.3-unstable-2025-09-11"; # cmake does not install correctly on tagged release
 
   src = fetchFromGitHub {
-    owner = "francescmm";
+    owner = "francescmaestre";
     repo = "gitqlient";
     rev = "faa3e2c19205123944bb88427a569c6f1b4366a1";
     fetchSubmodules = true;
