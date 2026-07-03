@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seafile-client";
-  version = "9.0.15";
+  version = "9.0.20";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BV1+9/+ryZB1BQyRJ5JaIU6bbOi4h8vt+V+FQIfUJp8=";
+    hash = "sha256-0idZCoTsuC32DolSLFDknQjvGWHGd4DQPCUyqocuuKA=";
   };
 
   patches = [
