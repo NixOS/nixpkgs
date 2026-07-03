@@ -350,21 +350,33 @@ div.appendix .important > :last-child {
 }
 
 div.book .note,
-div.book .tip,
-div.book .important,
-div.appendix .note,
-div.appendix .tip,
-div.appendix .important {
+div.appendix .note {
   color: var(--note-text-color);
   background: var(--note-background);
 }
 
+div.book .tip,
+div.appendix .tip {
+  color: var(--tip-text-color);
+  background: var(--tip-background);
+}
+
+div.book .important,
+div.appendix .important {
+  color: var(--important-text-color);
+  background: var(--important-background);
+}
+
 div.book .warning,
-div.book .caution,
-div.appendix .warning,
-div.appendix .caution {
+div.appendix .warning {
   color: var(--warning-text-color);
-  background-color: var(--warning-background);
+  background: var(--warning-background);
+}
+
+div.book .caution,
+div.appendix .caution {
+  color: var(--caution-text-color);
+  background: var(--caution-background);
 }
 
 div.book .section,
@@ -461,10 +473,21 @@ div.appendix .variablelist .term {
   --link-color: #405d99;
   --heading-color: #6586c8;
   --small-heading-color: #6a6a6a;
-  --note-text-color: #5277c3;
-  --note-background: #f2f8fd;
-  --warning-text-color: #cc3900;
-  --warning-background: #fff5e1;
+  /* NOTE */
+  --note-text-color: #0065d2;
+  --note-background: #e4f5ff;
+  /* TIP */
+  --tip-text-color: #188000;
+  --tip-background: #e8fae3;
+  /* IMPORTANT */
+  --important-text-color: #8a3db8;
+  --important-background: #fbedff;
+  /* WARNING */
+  --warning-text-color: #aa4a00;
+  --warning-background: #fff0db;
+  /* CAUTION */
+  --caution-text-color: #be222a;
+  --caution-background: #ffebe8;
   --codeblock-background: #f2f8fd;
   --codeblock-text-color: #000;
 }
@@ -475,18 +498,33 @@ div.appendix .variablelist .term {
     --main-text-color: #fff;
     --link-color: #6586c8;
     --small-heading-color: #fff;
-    --note-background: none;
-    --warning-background: none;
+    /* NOTE */
+    --note-text-color: #66c6ff;
+    --note-background: #1e2f44;
+    /* TIP */
+    --tip-text-color: #80e05f;
+    --tip-background: #22331d;
+    /* IMPORTANT */
+    --important-text-color: #ea9dff;
+    --important-background: #35273f;
+    /* WARNING */
+    --warning-text-color: #ffaa00;
+    --warning-background: #3c2a13;
+    /* CAUTION */
+    --caution-text-color: #ff8c84;
+    --caution-background: #422522;
     --codeblock-background: #393939;
     --codeblock-text-color: #fff;
   }
 
   div.book .note,
   div.book .tip,
-  div.appendix .note,
-  div.appendix .tip,
+  div.book .important,
   div.book .warning,
   div.book .caution,
+  div.appendix .note,
+  div.appendix .tip,
+  div.appendix .important,
   div.appendix .warning,
   div.appendix .caution {
     border: 2px solid;
