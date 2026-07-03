@@ -21,8 +21,6 @@ let
     types
     ;
 
-  requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
-
   browserDefault =
     chromium:
     concatStringsSep " " [
@@ -144,12 +142,5 @@ in
         else
           throw "programs.captive-browser.dhcp-dns must be set"
       );
-
-    security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_net_raw+p";
-      source = "${captive-browser-configured}/bin/captive-browser";
-    };
   };
 }
