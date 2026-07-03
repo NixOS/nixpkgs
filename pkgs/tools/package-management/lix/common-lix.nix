@@ -473,8 +473,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    flagsArray=($mesonInstallCheckFlags "''${mesonInstallCheckFlagsArray[@]}")
-    meson test --no-rebuild "''${flagsArray[@]}"
+
+    (
+      unset -v preCheck preCheckHooks postCheck postCheckHooks
+      mesonCheckFlags=("''${mesonInstallCheckFlags[@]}")
+      mesonCheckPhase
+    )
+
     runHook postInstallCheck
   '';
   hardeningDisable = [
