@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "unrar_wrapper";
-    rev = "unrar_wrapper-${finalAttrs.version}";
+    tag = "unrar_wrapper-${finalAttrs.version}";
     sha256 = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
   };
 
