@@ -5,6 +5,7 @@
   fetchurl,
   nixosTests,
   buildMozillaMach,
+  firefox-unwrapped,
 }:
 
 buildMozillaMach rec {
@@ -47,7 +48,8 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox-devedition;
   };
-  updateScript = callPackage ../update.nix {
+
+  updateScript = callPackage firefox-unwrapped.updateScriptModule {
     attrPath = "firefox-devedition-unwrapped";
     versionSuffix = "b[0-9]*";
     baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
