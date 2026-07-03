@@ -21134,6 +21134,8 @@ self: super: with self; {
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
+  unclecode-litellm = callPackage ../development/python-modules/unclecode-litellm { };
+
   uncompresspy = callPackage ../development/python-modules/uncompresspy { };
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
