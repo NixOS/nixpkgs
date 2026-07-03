@@ -14,13 +14,11 @@ let
     isAttrs
     isList
     mapAttrs
-    mkDefault
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
     optional
-    optionalAttrs
     types
     ;
 
