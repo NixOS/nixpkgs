@@ -51,7 +51,7 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
   * if it is a string of the form `owner:branch` then it tries to download the `branch` of owner `owner` for a project of the same name using the same vcs, and the `version` attribute of the resulting derivation is set to `"dev"`, additionally if the owner is not provided (i.e. if the `owner:` prefix is missing), it defaults to the original owner of the package (see below),
   * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
 * `defaultVersion` (optional). Rocq libraries may be compatible with some specific versions of Rocq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `rocq-core` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `rocqPackages` attribute set.
-* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `hash` attribute (you may put the empty string `""` in order to automatically insert a fake hash, this will trigger an error which will allow you to find the correct hash), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev`, `artifact` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
+* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `hash` attribute (you may put the empty string `""` to automatically insert a fake hash, this will trigger an error which will allow you to find the correct hash), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev`, `artifact` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
 * `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `hash` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
 * `owner` (optional, defaults to `"rocq-community"`).
@@ -153,7 +153,7 @@ For example, assuming you have a special `mathcomp` dependency you want to use, 
 multinomials.override { mathcomp = my-special-mathcomp; }
 ```
 
-In Nixpkgs, all Rocq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
+In Nixpkgs, all Rocq derivations take a `version` argument.  This can be overridden to easily use a different version:
 
 ```nix
 rocqPackages.multinomials.override { version = "1.5.1"; }

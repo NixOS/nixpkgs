@@ -37,6 +37,18 @@ in
       "ollama"
       "acceleration"
     ] "Set `services.ollama.package` to one of `pkgs.ollama[,-vulkan,-rocm,-cuda,-cpu]` instead.")
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "ollama"
+        "models"
+      ]
+      [
+        "services"
+        "ollama"
+        "modelsDir"
+      ]
+    )
   ];
 
   options = {
@@ -91,7 +103,7 @@ in
           The home directory that the ollama service is started in.
         '';
       };
-      models = lib.mkOption {
+      modelsDir = lib.mkOption {
         type = types.str;
         default = "${cfg.home}/models";
         defaultText = "\${config.services.ollama.home}/models";
@@ -207,7 +219,7 @@ in
         cfg.environmentVariables
         // {
           HOME = cfg.home;
-          OLLAMA_MODELS = cfg.models;
+          OLLAMA_MODELS = cfg.modelsDir;
           OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
         }
         // lib.optionalAttrs (cfg.rocmOverrideGfx != null) {
@@ -226,7 +238,7 @@ in
           StateDirectory = [ "ollama" ];
           ReadWritePaths = [
             cfg.home
-            cfg.models
+            cfg.modelsDir
           ];
 
           CapabilityBoundingSet = [ "" ];

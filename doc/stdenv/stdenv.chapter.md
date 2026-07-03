@@ -776,7 +776,7 @@ By default, the flag `--disable-dependency-tracking` is added to the configure f
 
 ##### `dontFixLibtool` {#var-stdenv-dontFixLibtool}
 
-By default, the configure phase applies some special hackery to all files called `ltmain.sh` before running the configure script in order to improve the purity of Libtool-based packages [^footnote-stdenv-sys-lib-search-path] . If this is undesirable, set this variable to true.
+By default, the configure phase applies some special hackery to all files called `ltmain.sh` before running the configure script to improve the purity of Libtool-based packages [^footnote-stdenv-sys-lib-search-path] . If this is undesirable, set this variable to true.
 
 ##### `dontDisableStatic` {#var-stdenv-dontDisableStatic}
 
@@ -939,7 +939,7 @@ The fixup phase performs (Nix-specific) post-processing actions on the files ins
 
 - It moves the `man/`, `doc/` and `info/` subdirectories of `$out` to `share/`.
 - It strips libraries and executables of debug information.
-- On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` in order to prevent unnecessary runtime dependencies.
+- On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` to prevent unnecessary runtime dependencies.
 - It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`. See [](#patch-shebangs.sh) for details.
 
 #### Variables controlling the fixup phase {#variables-controlling-the-fixup-phase}
@@ -1345,7 +1345,7 @@ $ echo $configureFlags
 
 Nix itself considers a build-time dependency as merely something that should previously be built and accessible at build time—packages themselves are on their own to perform any additional setup. In most cases, that is fine, and the downstream derivation can deal with its own dependencies. But for a few common tasks, that would result in almost every package doing the same sort of setup work—depending not on the package itself, but entirely on which dependencies were used.
 
-In order to alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
+To alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
 The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
 
