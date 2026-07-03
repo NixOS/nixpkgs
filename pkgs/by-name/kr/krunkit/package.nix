@@ -1,4 +1,5 @@
 {
+  callPackage,
   cargo,
   darwin,
   pkg-config,
@@ -43,10 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  postInstall = ''
+    install -Dm444 edk2/KRUN_EFI.silent.fd $out/share/krunkit/KRUN_EFI.silent.fd
+  '';
+
   # This is necessary in order for the binary to keep its entitlements
   dontStrip = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.boot = callPackage ./boot-test.nix {
+      krunkit = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Launch configurable virtual machines with libkrun";
