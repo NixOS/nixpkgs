@@ -14,6 +14,7 @@ let
     ;
 
   inherit (lib.trivial)
+    isFunction
     warn
     ;
 
@@ -274,10 +275,8 @@ in
     drv
     // genAttrs paths (name: warn msg drv.${name})
     // genAttrs (drv.outputs or [ ]) (name: warnOnInstantiate msg drv.${name})
-    // (
-      if drv ? overrideAttrs && builtins.isFunction drv.overrideAttrs then
-        { overrideAttrs = x: lib.derivations.warnOnInstantiate msg (drv.overrideAttrs x); }
-      else
-        { }
-    );
+    // {
+      ${if isFunction (drv.overrideAttrs or null) then "overrideAttrs" else null} =
+        args: warnOnInstantiate msg (drv.overrideAttrs args);
+    };
 }
