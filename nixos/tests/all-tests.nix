@@ -1339,6 +1339,7 @@ in
   ntpd-rs = runTest ./ntpd-rs.nix;
   nullmailer = runTest ./nullmailer.nix;
   nushell = runTest ./nushell.nix;
+  nvbroadcast = runTest ./nvbroadcast.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvme-rs = runTest ./nvme-rs.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
