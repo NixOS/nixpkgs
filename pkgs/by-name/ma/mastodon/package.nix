@@ -187,7 +187,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
-      happy-river
       erictapen
       izorkin
       ghuntley
