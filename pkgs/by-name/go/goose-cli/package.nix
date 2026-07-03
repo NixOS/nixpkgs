@@ -15,7 +15,7 @@
   versionCheckHook,
   llvmPackages,
   makeWrapper,
-  buildRustyV8,
+  rusty-v8_145,
 
   # Extension(s) Dependencies
   python3,
@@ -31,17 +31,7 @@
 }:
 
 let
-  librusty_v8 = buildRustyV8 rec {
-    version = "145.0.0";
-    src = fetchFromGitHub {
-      owner = "denoland";
-      repo = "rusty_v8";
-      tag = "v${version}";
-      fetchSubmodules = true;
-      hash = "sha256-uFB5Ao92c4tTTpEli5se8I9fvBrNHrDV3sbxJDokp/M=";
-    };
-    cargoHash = "sha256-YlEn1fUmIELz+80EMM4fc2BWG0y/700SIiNs8GIOtoY=";
-  };
+  librusty_v8 = rusty-v8_145;
   gpt-4o-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
     hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";

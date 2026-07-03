@@ -113,6 +113,8 @@ let
 
     inherit src cargoHash;
 
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       llvmPackages.clang
       python3

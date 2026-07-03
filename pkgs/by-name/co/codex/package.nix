@@ -10,7 +10,7 @@
   gitMinimal,
   libcap,
   libclang,
-  buildRustyV8,
+  rusty-v8_146,
   livekit-libwebrtc,
   lld,
   makeBinaryWrapper,
@@ -22,17 +22,7 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  librusty_v8 = buildRustyV8 rec {
-    version = "146.4.0";
-    src = fetchFromGitHub {
-      owner = "denoland";
-      repo = "rusty_v8";
-      tag = "v${version}";
-      fetchSubmodules = true;
-      hash = "sha256-ABlfRtfkxyOCs8dpsSBx3UMYYRz9rUAb7N6CpQgZdMU=";
-    };
-    cargoHash = "sha256-R629/gy46x5pXR9Ig0XCcv42nGHhq0e+n/QaNDCAvXs=";
-  };
+  librusty_v8 = rusty-v8_146;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
