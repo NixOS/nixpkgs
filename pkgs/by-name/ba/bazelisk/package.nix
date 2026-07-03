@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazelisk";
-  version = "1.28.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazelisk";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-iKU8B8yOT8cPvZhuor8ZVRsHQDoXq1ja1mr60XqHoEs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NijRYjJyWOqSkfDKOdki3nrc1OIhfooKLhusuiMY/Js=";
   };
 
-  vendorHash = "sha256-PWqKq/2DFopeiecUL0iWnut8Kd/52U32sNSVGj3Ae5g=";
+  vendorHash = "sha256-oycCqzUAn/lNFjeLjM+PQfYNscaTi5E9D7Pnv8jrO8M=";
 
   ldflags = [
     "-s"
@@ -30,8 +30,10 @@ buildGoModule (finalAttrs: {
       BEWARE: This package does not work on NixOS.
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
-    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      hythera
+    ];
   };
 })
