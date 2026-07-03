@@ -25212,6 +25212,12 @@
     githubId = 47693;
     name = "Jens Krause";
   };
+  sed4906 = {
+    email = "sed4906birdie@gmail.com";
+    github = "SED4906";
+    githubId = 37986786;
+    name = "Ron Ben Aroya";
+  };
   sedlund = {
     email = "scott+nixpkgs@teraton.com";
     github = "sedlund";
