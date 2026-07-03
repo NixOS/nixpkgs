@@ -60,14 +60,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ogo+Xuz7yBz9POVKfLofnxwIQavkApPzTIdp/Phu/UU=";
+    hash = "sha256-NJvJAQfkacMjMIirAoOND/G1GaXeMcNleiGQKoe+654=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
