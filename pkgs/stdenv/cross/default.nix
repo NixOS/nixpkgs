@@ -67,8 +67,17 @@ lib.init bootStages
           hasCC = false;
 
           extraNativeBuildInputs =
-            old.extraNativeBuildInputs
+            # The resolution-cache hook is only useful when the host runs the
+            # patched glibc loader: drop a copy inherited from a glibc-Linux
+            # build platform's stdenv (dead weight for musl/static hosts) and
+            # add the hook for glibc hosts regardless of build platform (a
+            # darwin-built cross stdenv never inherited it).  The name match
+            # is the hook's makeSetupHook name in all-packages.nix.
+            lib.filter (p: (p.name or "") != "generate-ld-cache-hook") old.extraNativeBuildInputs
             ++ lib.optionals (hostPlatform.isLinux && !buildPlatform.isLinux) [ buildPackages.patchelf ]
+            ++ lib.optionals (hostPlatform.isLinux && hostPlatform.libc == "glibc") [
+              buildPackages.generateLdCacheHook
+            ]
             ++ lib.optional (
               let
                 f =
