@@ -5,6 +5,8 @@
   dpkg,
   autoPatchelfHook,
   makeWrapper,
+  gsettings-desktop-schemas,
+  dconf,
 
   # Required dependencies for autoPatchelfHook
   alsa-lib,
@@ -53,15 +55,21 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/lib/cider/Cider
 
+    # The prefixes that follow LD_LIBRARY_PATH are typically injected via wrapGAppsHook3.
+    # We append them manually instead to avoid a double-wrapping.
+    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
+      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
+      --add-flags "--no-sandbox --disable-gpu-sandbox" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+      --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
-      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
-      --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
-
     mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace-warn 'Exec=cider' 'Exec=${pname}' \
@@ -70,7 +78,7 @@ stdenv.mkDerivation rec {
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
 
-    rm -r $out/share/pixmaps
+    rm -r $out/share/{pixmaps,lintian}
   '';
 
   passthru.updateScript = ./updater.sh;
