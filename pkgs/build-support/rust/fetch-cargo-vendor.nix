@@ -31,10 +31,7 @@ let
 
   removedArgs = [
     "name"
-    "pname"
-    "version"
     "nativeBuildInputs"
-    "hash"
   ];
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
