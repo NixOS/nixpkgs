@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "stix2-validator";
-  version = "3.2.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-stix-validator";
     tag = "v${version}";
-    hash = "sha256-OI1SXILyCRGl1ZsoyYDl+/RsBhTP24eqECtW3uazS2k=";
+    hash = "sha256-w9SlRspt5tRLdqqEr6UJ+cmq3KM08cN9BqMvdSYay0Y=";
   };
 
   build-system = [ setuptools ];
