@@ -1543,7 +1543,7 @@
   };
 
   lua = {
-    version = "0.0.19-unstable-2026-02-26";
+    version = "0.5.0-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-lua";
     rev = "10fe0054734eec83049514ea2e718b2a56acd0c9";
     hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
