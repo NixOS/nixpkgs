@@ -8678,8 +8678,6 @@ with pkgs;
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
-  firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
-
   firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
     nameSuffix = "-esr";
     wmClass = "firefox-esr";
