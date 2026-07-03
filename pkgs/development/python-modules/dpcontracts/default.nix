@@ -2,12 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "dpcontracts";
-  version = "unstable-2018-11-20";
-  format = "setuptools";
+  version = "0.6.0-unstable-2018-11-20";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deadpixi";
@@ -16,8 +20,25 @@ buildPythonPackage {
     hash = "sha256-FygJPXo7lZ9tlfqY6KmPJ3PLIilMGLBr3013uj9hCEs=";
   };
 
-  # package does not have any tests
-  doCheck = false;
+  # Replacements in README.rst are necessary to check it with doctest
+  postPatch = ''
+    substituteInPlace README.rst \
+      --replace-fail " PreconditionError" " dpcontracts.PreconditionError" \
+      --replace-fail " PostconditionError" " dpcontracts.PostconditionError" \
+      --replace-fail ">>> class Counter:" $'>>> from dpcontracts import preserve\n    >>> class Counter:'
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "README.rst"
+  ];
 
   pythonImportsCheck = [ "dpcontracts" ];
 

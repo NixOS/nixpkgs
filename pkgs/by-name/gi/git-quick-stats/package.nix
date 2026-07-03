@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     repo = "git-quick-stats";
-    owner = "arzzen";
+    owner = "git-quick-stats";
     rev = finalAttrs.version;
     sha256 = "sha256-YVvlrlNRDDci7fH9LW4NxZcIkakVgvKe9FhJ2gCfoXg=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    homepage = "https://github.com/arzzen/git-quick-stats";
+    homepage = "https://github.com/git-quick-stats/git-quick-stats";
     description = "Simple and efficient way to access various statistics in git repository";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kmein ];

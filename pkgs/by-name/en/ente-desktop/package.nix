@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7.24";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     fetchSubmodules = true;
     sparseCheckout = [
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/ente-io/ente/blob/main/desktop/electron-builder.yml
+  # https://github.com/ente/ente/blob/main/desktop/electron-builder.yml
   desktopItems = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (makeDesktopItem {
       name = "ente-desktop";

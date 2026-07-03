@@ -45,7 +45,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "murmure";
-  version = "1.9.0";
+  version = "1.10.0";
 
   __structuredAttrs = true;
 
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Kieirra";
     repo = "murmure";
     tag = finalAttrs.version;
-    hash = "sha256-Yh1XWpwTKrYIPhbOqi0XGfqV+kVB/QVXX4y7Hb+iqrM=";
+    hash = "sha256-zJ9OvpAfREyDWDISKYKCUyQSWdkQlVrSzX+wvwKk6Yk=";
   };
 
   # The libappindicator_sys crate loads these libraries at runtime
@@ -71,13 +71,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-Jtd+sxpievLyNozMJW6JAHQEKA6UVPvgLEB/3Q2Pl/s=";
+    hash = "sha256-BPukv+nFcXncEwRvBd5JEmUNsX3JIXYldbaOGXakhJA=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-PRp04YHkifhFY9W03IQDu9Dd8y05zd4d9o8CDySf+Nw=";
+  cargoHash = "sha256-wV0drkKgn58Yxjy+Mv2QLTQXTDwWk6/uEfk76HaMuow=";
 
   env.OPENSSL_NO_VENDOR = true;
 

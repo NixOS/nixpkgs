@@ -7,6 +7,7 @@
   coreutils,
   devShellTools,
   e2fsprogs,
+  pkgsBuildBuild,
   proot,
   fakeNss,
   fakeroot,
@@ -1246,7 +1247,7 @@ rec {
               # take images can know in advance how the image is supposed to be used.
               isExe = true;
             };
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ pkgsBuildBuild.makeWrapper ];
             inherit meta;
           }
           ''
