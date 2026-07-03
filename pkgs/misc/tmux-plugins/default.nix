@@ -914,7 +914,7 @@ in
 
   sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
-    version = "unstable-2017-12-03";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sessionist";
