@@ -13,19 +13,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysail";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lakehq";
     repo = "sail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EX8cDed32uF7NSreViKBn7RQeWIG7C7sI6O0c+hVf4M=";
+    hash = "sha256-pCxlGCOLxupgxCtRfUSLbA88dFIWvO16fgibLmydNBQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-ouNXKPpwKTLfI+Gcp393r7oHZAjUFQL9225+AuFzdoo=";
+    hash = "sha256-V3FS28H+lGORTFYWaMNeLdz0s+Bv4bo3By5VlIOWiOc=";
   };
 
   # The `generate-import-lib` PyO3 feature only matters when building Windows
