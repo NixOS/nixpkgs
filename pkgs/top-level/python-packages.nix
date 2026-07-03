@@ -15538,8 +15538,6 @@ self: super: with self; {
 
   pysmart = callPackage ../development/python-modules/pysmart { };
 
-  pysmartapp = callPackage ../development/python-modules/pysmartapp { };
-
   pysmartdl = callPackage ../development/python-modules/pysmartdl { };
 
   pysmartthings = callPackage ../development/python-modules/pysmartthings { };

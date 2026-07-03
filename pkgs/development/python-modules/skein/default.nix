@@ -10,7 +10,7 @@
   grpcio-tools,
   hadoop,
   pytestCheckHook,
-  setuptools,
+  setuptools_80,
   versioneer,
 }:
 
@@ -27,12 +27,17 @@ buildPythonPackage rec {
   jarHash = "sha256-x2KH6tnoG7sogtjrJvUaxy0PCEA8q/zneuI969oBOKo=";
   skeinJar = callPackage ./skeinjar.nix { inherit pname version jarHash; };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools_80
+    versioneer
+  ];
+
+  dependencies = [
     cryptography
     grpcio
     pyyaml
-  ]
-  ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
+  ];
+
   buildInputs = [ grpcio-tools ];
 
   preBuild = ''
@@ -51,8 +56,6 @@ buildPythonPackage rec {
     substituteInPlace skein/utils.py \
       --replace-fail "distutils" "setuptools._distutils"
   '';
-
-  build-system = [ versioneer ];
 
   pythonImportsCheck = [ "skein" ];
 

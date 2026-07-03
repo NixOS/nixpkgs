@@ -16,15 +16,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-rq";
-  version = "4.1";
+  version = "4.1-unstable-2026-05-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "django-rq";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-c/elbEi+m3WVGl8137ct1PsxRM397uZNPy9X54b8fmg=";
+    rev = "39539ab680cf6a23073f4907b5e7332226494784";
+    hash = "sha256-Yrc0HQmCsrdTs66RZwwmZQraxB5/eJG8dOPcVn53rjA=";
   };
+
+  patches = [
+    ./redis-py-8.0-compat.patch
+  ];
 
   build-system = [ hatchling ];
 
@@ -61,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";
-    changelog = "https://github.com/rq/django-rq/releases/tag/${finalAttrs.src.tag}";
+    # changelog = "https://github.com/rq/django-rq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

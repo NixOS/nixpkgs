@@ -489,6 +489,7 @@ mapAliases {
   pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
   pysidesix-frameless-window = throw "pysidesix-frameless-window has been removed, since it is unmaintained"; # added 2025-08-20
   pysmart-smartx = throw "'pysmart-smartx' has been renamed to/replaced by 'pysmart'"; # Converted to throw 2025-10-29
+  pysmartapp = throw "'pysmartapp' has been removed since it is deprecated and archived upstream."; # Added 2026-06-03
   pySmartDL = throw "'pySmartDL' has been renamed to/replaced by 'pysmartdl'"; # Converted to throw 2025-10-29
   pysmi-lextudio = throw "'pysmi-lextudio' has been renamed to/replaced by 'pysmi'"; # Converted to throw 2025-10-29
   pysnmp-lextudio = throw "'pysnmp-lextudio' has been renamed to/replaced by 'pysnmp'"; # Converted to throw 2025-10-29
