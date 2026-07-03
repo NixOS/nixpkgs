@@ -5,6 +5,7 @@
   fetchurl,
   nixosTests,
   buildMozillaMach,
+  firefox-unwrapped,
 }:
 
 buildMozillaMach rec {
@@ -32,7 +33,8 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox-esr-140;
   };
-  updateScript = callPackage ../update.nix {
+
+  updateScript = callPackage firefox-unwrapped.updateScriptModule {
     attrPath = "firefox-esr-140-unwrapped";
     versionPrefix = "140";
     versionSuffix = "esr";
