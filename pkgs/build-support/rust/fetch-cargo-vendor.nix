@@ -92,8 +92,7 @@ let
       dontInstall = true;
       dontFixup = true;
 
-      outputHash = hash;
-      outputHashAlgo = if hash == "" then "sha256" else null;
+      outputHash = if hash == "" then lib.fakeHash else hash;
       outputHashMode = "recursive";
     }
     // removeAttrs args removedArgs
