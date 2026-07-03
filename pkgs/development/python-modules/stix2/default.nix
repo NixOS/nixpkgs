@@ -14,7 +14,7 @@
   taxii2-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stix2";
   version = "3.0.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-python-stix2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qm6VFufD9A4rSBHaDkqeYqOLRvE97SY0++o4ND0l3I0=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Produce and consume STIX 2 JSON content";
     homepage = "https://stix2.readthedocs.io/en/latest/";
-    changelog = "https://github.com/oasis-open/cti-python-stix2/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/oasis-open/cti-python-stix2/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
-}
+})
