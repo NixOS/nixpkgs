@@ -8672,16 +8672,6 @@ with pkgs;
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
 
-  firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
-    inherit
-      stdenv
-      lib
-      callPackage
-      fetchurl
-      nixosTests
-      buildMozillaMach
-      ;
-  };
   firefox-devedition-unwrapped =
     import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix
       {
@@ -9761,7 +9751,7 @@ with pkgs;
 
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
 
-  wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
+  wrapFirefox = callPackage ../by-name/fi/firefox-unwrapped/wrapper.nix { };
 
   wrapThunderbird = callPackage ../applications/networking/mailreaders/thunderbird/wrapper.nix { };
 
