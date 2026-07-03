@@ -5,6 +5,7 @@
   fetchurl,
   nixosTests,
   buildMozillaMach,
+  firefox-unwrapped,
 }:
 
 buildMozillaMach rec {
@@ -12,6 +13,7 @@ buildMozillaMach rec {
   binaryName = "firefox-beta";
   version = "152.0b10";
   applicationName = "Firefox Beta";
+
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
     sha512 = "531117225f690736e529d654766136878e3c719ec500860fcd578d9bf93f2e46f2887f0c4ba21dd17884cc41bda37fbd735c998091a0e1b0eb72d5d43f4f2339";
@@ -30,10 +32,12 @@ buildMozillaMach rec {
     license = lib.licenses.mpl20;
     mainProgram = binaryName;
   };
+
   tests = {
     inherit (nixosTests) firefox-beta;
   };
-  updateScript = callPackage ../update.nix {
+
+  updateScript = callPackage firefox-unwrapped.updateScriptModule {
     attrPath = "firefox-beta-unwrapped";
     versionSuffix = "b[0-9]*";
   };
