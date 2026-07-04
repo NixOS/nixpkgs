@@ -8674,7 +8674,6 @@ with pkgs;
 
   firefox-esr-140-unwrapped = firefox-esr-unwrapped;
 
-  firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
