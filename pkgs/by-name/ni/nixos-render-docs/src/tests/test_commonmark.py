@@ -27,6 +27,10 @@ def test_indented_fence() -> None:
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })
     assert c._render(sample1) == """\
+**Note:** This is a *GFM* note\\.
+
+**Caution:** This is a **nested** GFM alert\\.
+
 **Warning:** foo
 
 **Note:** nested
