@@ -96,5 +96,8 @@ buildPythonPackage {
       # elftools.common.exceptions.ELFError: Magic number does not match
       lib.systems.inspect.patterns.isDarwin
     ];
+    # Incompatible with the openvino currently shipped in nixpkgs:
+    #   auto-patchelf could not satisfy dependency libopenvino.so.2620
+    broken = true;
   };
 }
