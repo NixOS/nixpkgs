@@ -29,6 +29,9 @@
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
   webkitgtk_4_1,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 let
   catch = fetchFromGitHub {
@@ -56,7 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mYMUW3FnFkKHDQXb/k9UosSiWCPW7OQn+/orwq4Q95k=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -114,12 +121,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    SEARCH_LIB = toString [
-      "${libGLU.out}/lib"
-      "${libGL.out}/lib"
-    ];
-  };
+  env =
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      SEARCH_LIB = toString [
+        "${libGLU.out}/lib"
+        "${libGL.out}/lib"
+      ];
+    }
+    # TODO: Clean up on `staging`.
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    };
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/
