@@ -125,6 +125,13 @@ buildNpmPackage (finalAttrs: {
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
+    longDescription = ''
+      Some functionalities (e.g. lyrics window) are broken when lx-music-desktop
+      runs using a Wayland ozone platform due to Electron's lack of support
+      for Wayland. If you do need these features, please consider unsetting
+      `NIXOS_OZONE_WL` and passing `--ozone-platform=x11` from the command line
+      to restore the expected behavior.
+    '';
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
