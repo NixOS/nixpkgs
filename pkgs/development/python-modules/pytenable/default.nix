@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "26.5.1";
+  version = "26.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = finalAttrs.version;
-    hash = "sha256-o11Lq11btpIwzgZlPMcChHexNOZSFEFOsnaIv1n66uY=";
+    hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
 
   build-system = [ setuptools ];
