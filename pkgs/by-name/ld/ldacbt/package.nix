@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ldacBT";
+  pname = "ldacbt";
   version = "2.0.72";
 
   src = fetchFromGitHub {
