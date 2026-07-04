@@ -3465,6 +3465,8 @@ self: super: with self; {
 
   comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
 
+  comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
