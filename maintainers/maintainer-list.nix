@@ -263,7 +263,7 @@
   };
   _4evy = {
     name = "_4evy";
-    email = "github@flameflag.dev";
+    email = "git@ps1.sh";
     github = "_4evy";
     githubId = 57304299;
     matrix = "@donteatoreo:matrix.org";
