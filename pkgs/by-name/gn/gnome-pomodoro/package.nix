@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   version = "0.28.1";
 
   src = fetchFromGitHub {
-    owner = "gnome-pomodoro";
-    repo = "gnome-pomodoro";
+    owner = "focustimerhq";
+    repo = "FocusTimer";
     rev = version;
     hash = "sha256-1G0Sv6uR4rE+/TZqEM57mCdBaXoJNpC0cznY4pnPEa4=";
   };
