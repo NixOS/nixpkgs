@@ -8685,10 +8685,6 @@ with pkgs;
   };
   firefox-esr = firefox-esr-140;
 
-  firefox-bin = wrapFirefox firefox-bin-unwrapped {
-    pname = "firefox-bin";
-  };
-
   firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
 
   librewolf = wrapFirefox librewolf-unwrapped {
