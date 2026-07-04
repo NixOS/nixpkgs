@@ -68,9 +68,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 data/icons/com.stremio.Stremio.svg $out/share/icons/hicolor/scalable/apps/com.stremio.Stremio.svg
     install -Dm644 data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
+    install -Dm644 data/com.stremio.Stremio.metainfo.xml $out/share/metainfo/com.stremio.Stremio.metainfo.xml
     install -Dm644 data/com.stremio.Stremio.service $out/share/dbus-1/services/com.stremio.Stremio.service
     install -Dm644 data/server.js $out/libexec/stremio/server.js
     install -Dm755 data/stremio.sh $out/bin/stremio
+    install -Dm644 LICENSE $out/share/licenses/stremio/LICENSE
 
     mv $out/bin/stremio-linux-shell $out/libexec/stremio/stremio
   '';
