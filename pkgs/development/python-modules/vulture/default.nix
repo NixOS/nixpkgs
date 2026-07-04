@@ -9,13 +9,13 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vulture";
   version = "2.16";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+Nn24q8DARZko8bCQMl2Wz85KRfTE1/dym1qaNNZ9xc=";
   };
 
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   meta = {
     description = "Finds unused code in Python programs";
     homepage = "https://github.com/jendrikseipp/vulture";
-    changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
+    changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mcwitt ];
     mainProgram = "vulture";
   };
-}
+})
