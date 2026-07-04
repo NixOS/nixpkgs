@@ -76,6 +76,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
 
+  pythonImportsCheck = [ "nibabel" ];
+
   meta = {
     homepage = "https://nipy.org/nibabel";
     changelog = "https://github.com/nipy/nibabel/blob/${finalAttrs.version}/Changelog";
