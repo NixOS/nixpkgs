@@ -8,7 +8,6 @@
   urllib3,
   certifi,
   wrapt,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scout_apm";
     inherit version;
-    hash = "sha256-ZsGyw7WnvmepG7FbfTQm6NawBWB9b4ZHRjoaRhXaUj4=";
+    hash = "sha256-VOV16V9fmpjAlZigkuwD/I11dpB8U8XiBjKj8F4QNHk=";
   };
 
   build-system = [ setuptools ];
@@ -32,11 +31,8 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    "tests/integration"
-  ];
+  # The PyPI sdist doesn't ship a tests/ directory at all.
+  doCheck = false;
 
   pythonImportsCheck = [ "scout_apm" ];
 
