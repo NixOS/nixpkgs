@@ -56,10 +56,16 @@ buildGoModule (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
 
   buildPhase = ''
+    runHook preBuild
+
     make COMMIT=${finalAttrs.src.rev}
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install out/minikube -Dt $out/bin
 
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
@@ -68,6 +74,8 @@ buildGoModule (finalAttrs: {
       $out/bin/minikube completion $shell > minikube.$shell
       installShellCompletion minikube.$shell
     done
+
+    runHook postInstall
   '';
 
   meta = {
