@@ -77,6 +77,47 @@ def test_indented_fence() -> None:
 > > nested GFM\
 """,
         ),
+        (
+            nrd.types.AdmonitionStyle.PANDOC,
+            """\
+::: {.warning}
+
+foo
+
+:::: {.note}
+
+nested
+
+::::
+
+:::
+
+::: {.important}
+
+nested GFM
+
+:::
+
+:::
+
+::: {.caution}
+
+GFM caution
+
+:::: {.important}
+
+nested fenced
+
+::::
+
+:::: {.note}
+
+nested GFM
+
+::::
+
+:::""",
+        ),
     ],
 )
 def test_admonition_styles(

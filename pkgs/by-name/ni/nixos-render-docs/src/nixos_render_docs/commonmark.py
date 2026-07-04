@@ -22,6 +22,7 @@ class CommonMarkRenderer(Renderer):
     __output__ = "commonmark"
 
     _admonition_style: AdmonitionStyle
+    _div_fence_sizes: list[int]
     _parstack: list[Par]
     _link_stack: list[str]
     _list_stack: list[List]
@@ -29,6 +30,7 @@ class CommonMarkRenderer(Renderer):
     def __init__(self, manpage_urls: Mapping[str, str], admonition_style: AdmonitionStyle = AdmonitionStyle.PLAIN):
         super().__init__(manpage_urls)
         self._admonition_style = admonition_style
+        self._div_fence_sizes = [ ]
         self._parstack = [ Par("") ]
         self._link_stack = []
         self._list_stack = []
@@ -46,6 +48,24 @@ class CommonMarkRenderer(Renderer):
         self._parstack[-1].continuing = True
         return result
 
+    def _fenced_div_open(self, classes: Sequence[str] = ()) -> str:
+        fence_size = (
+            self._div_fence_sizes[-1] + 1
+            if self._div_fence_sizes
+            else 3
+        )
+        fence = ":" * fence_size
+        class_refs = [f".{c}" for c in classes]
+        annotation = (" {" + " ".join(class_refs) + "}") if classes else ""
+        pbreak = self._maybe_parbreak()
+        self._div_fence_sizes.append(fence_size)
+        return f"{pbreak}{fence}{annotation}"
+    def _fenced_div_close(self) -> str:
+        fence_size = self._div_fence_sizes.pop()
+        fence = ":" * fence_size
+        pbreak = self._maybe_parbreak()
+        return f"{pbreak}{fence}"
+
     def _admonition_open(self, kind: str) -> str:
         match self._admonition_style:
             case AdmonitionStyle.PLAIN:
@@ -57,6 +77,8 @@ class CommonMarkRenderer(Renderer):
                 lbreak = self._break()
                 self._enter_block("> ")
                 return f"{pbreak}> [!{kind}]{lbreak}> "
+            case AdmonitionStyle.PANDOC:
+                return self._fenced_div_open(classes=[kind.lower()])
 
     def _admonition_close(self) -> str:
         match self._admonition_style:
@@ -64,6 +86,8 @@ class CommonMarkRenderer(Renderer):
                 self._leave_block()
             case AdmonitionStyle.GFM:
                 self._leave_block()
+            case AdmonitionStyle.PANDOC:
+                return self._fenced_div_close()
         return ""
 
     def _indent_raw(self, s: str) -> str:

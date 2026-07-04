@@ -20,4 +20,5 @@ class AnchorStyle(Enum):
 
 class AdmonitionStyle(Enum):
     PLAIN = "plain"
+    PANDOC = "pandoc"
     GFM = "gfm"

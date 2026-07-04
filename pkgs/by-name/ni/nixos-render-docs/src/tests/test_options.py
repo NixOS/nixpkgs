@@ -47,6 +47,8 @@ def test_options_commonmark_legacy_anchors() -> None:
          "tests/sample_options_admonition_plain.md"),
         (nixos_render_docs.types.AdmonitionStyle.GFM,
          "tests/sample_options_admonition_gfm.md"),
+        (nixos_render_docs.types.AdmonitionStyle.PANDOC,
+         "tests/sample_options_admonition_pandoc.md"),
     ],
 )
 def test_options_commonmark_admonition_style(style, expected_file):
