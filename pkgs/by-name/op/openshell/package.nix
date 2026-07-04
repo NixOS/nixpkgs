@@ -10,30 +10,14 @@ let
   version = "0.0.76";
   baseUrl = "https://github.com/${repo}/releases/download/v${version}";
 
-  # ── Checksums ──────────────────────────────────────────────────────────
-  # Update these from the release checksum files:
-  #   openshell-checksums-sha256.txt
-  #   openshell-gateway-checksums-sha256.txt
-  #   openshell-sandbox-checksums-sha256.txt
+  versionsData = builtins.fromJSON (builtins.readFile ./versions.json);
+  versionData = versionsData.${version} or (throw "No checksums found for version ${version}");
+
   checksums = {
-    main = {
-      x86_64-linux = "dacdc2a0dcc31b5006276b2d810399bd8482f87fecef47f2fee882e280ae11c4";
-      aarch64-linux = "174b2b8291b8c2825a4fbc6c9c6e9cf7f428ec566fcab5f34d4eca78012e052d";
-      aarch64-darwin = "f4a95d117569f515363fb61337d108cde4cae84e0f6b32bfc8821796d8979e3b";
-    };
-    gateway = {
-      x86_64-linux = "9de752d60bc3b2a5076c8378794f5921769708b27f2a026f6d9314379039a73d";
-      aarch64-linux = "e6d11b6dc3396bd97eaebbfd5a362573d0618fc24c64113e9e5ae6b7ab7e8e56";
-    };
-    sandbox = {
-      x86_64-linux = "fe199994d94e19bebe055168446ad674d8396465aa2e880aaa8ecf5c3db0a24c";
-      aarch64-linux = "c678fd85c7671ee9a2be1b1b74e9284e6f8b545b735db63b4747f49a5d204e11";
-    };
-    driver = {
-      x86_64-linux = "7be64f2009c2989b48a5ba515fec99f6bdd781a207303bf2025fb310807bf6e0";
-      aarch64-linux = "e3ff330edbeef1dc89d49c92548ba35b4599846a76ce6c2fbae1b6d2da4dfbd5";
-      aarch64-darwin = "c3326a40f11353d2cb908b8f0db1ffdf67804c66ae549405bfb96965446a5e56";
-    };
+    main = versionData.main or (throw "No main checksums for version ${version}");
+    gateway = versionData.gateway or { };
+    sandbox = versionData.sandbox or { };
+    driver = versionData.driver or (throw "No driver checksums for version ${version}");
   };
 
   # ── Architecture / platform mapping ────────────────────────────────────
@@ -124,6 +108,7 @@ in
 stdenv.mkDerivation {
   pname = "openshell";
   inherit version;
+  strictDeps = true;
 
   # No source needed — everything is fetched via fetchurl above.
   # We use a dummy file and override unpackPhase to skip extraction.
@@ -141,7 +126,6 @@ stdenv.mkDerivation {
   meta = {
     changelog = "https://github.com/${repo}/releases/tag/v${version}";
     description = "Safe, private runtime for autonomous AI agents";
-    homepage = "https://docs.nvidia.com/openshell/index.html";
     longDescription = ''
       NVIDIA OpenShell is an open source runtime to build and deploy autonomous,
       self-evolving agents more safely. OpenShell sits between your agent and
@@ -149,6 +133,7 @@ stdenv.mkDerivation {
       see and do, and where inference goes. It enables claws to run in isolated
       sandboxes, with fine-grained control over privacy and security.
     '';
+    homepage = "https://docs.nvidia.com/openshell/index.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       wishstudio
