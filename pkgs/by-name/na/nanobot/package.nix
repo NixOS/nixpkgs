@@ -44,7 +44,6 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
-  __structuredAttrs = true;
   pyproject = true;
 
   build-system = with python3Packages; [ hatchling ];
@@ -58,15 +57,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "boto3"
+    "anthropic"
     "chardet"
     "ddgs"
     "dulwich"
     "json-repair"
+    "mcp"
     "pillow"
     "pypdf"
     "rapidfuzz"
     "rich"
     "sigstore"
+    "websockets"
   ];
 
   dependencies = with python3Packages; [
