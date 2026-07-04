@@ -8,6 +8,7 @@
   python-dateutil,
   tzdata,
   hypothesis,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
 }:
 
@@ -23,10 +24,8 @@ buildPythonPackage rec {
     hash = "sha256-0NKNbWigZ3BOfKBM8Q+XrOdoFBOF5Lu4XujJcYCMuMw=";
   };
 
-  patches = [
-    (replaceVars ./no-dynamic-version.patch {
-      inherit version;
-    })
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
   build-system = [
