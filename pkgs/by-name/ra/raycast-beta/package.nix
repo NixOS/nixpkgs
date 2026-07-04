@@ -73,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "raycast-beta";
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       Br1ght0ne
     ];
     platforms = [ "aarch64-darwin" ];

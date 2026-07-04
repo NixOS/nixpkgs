@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
-      FlameFlag
+      _4evy
     ];
   };
 })

@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://alt-tab.app";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       emilytrau
       Br1ght0ne
     ];

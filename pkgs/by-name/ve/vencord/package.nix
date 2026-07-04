@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       FlafyDev
       Gliczy
       NotAShelf
