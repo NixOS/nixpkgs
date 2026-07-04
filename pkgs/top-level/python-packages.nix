@@ -1260,8 +1260,6 @@ self: super: with self; {
 
   atc-ble = callPackage ../development/python-modules/atc-ble { };
 
-  atenpdu = callPackage ../development/python-modules/atenpdu { };
-
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
