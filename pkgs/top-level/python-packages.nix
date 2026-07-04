@@ -12028,6 +12028,10 @@ self: super: with self; {
     callPackage ../development/python-modules/nvidia-cutlass-dsl-libs-base
       { };
 
+  nvidia-cutlass-dsl-libs-core =
+    callPackage ../development/python-modules/nvidia-cutlass-dsl-libs-core
+      { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };

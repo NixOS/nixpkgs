@@ -2,17 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  nvidia-cutlass-dsl-libs-base,
 
   # dependencies
   cuda-bindings,
   numpy,
-  nvidia-cutlass-dsl-libs-base,
   protobuf,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "nvidia-cutlass-dsl";
+  pname = "nvidia-cutlass-dsl-libs-core";
   inherit (nvidia-cutlass-dsl-libs-base) version;
   format = "wheel";
   __structuredAttrs = true;
@@ -35,15 +35,15 @@ buildPythonPackage (finalAttrs: {
     # just a wrapper for cudaPackages.cuda_nvdisasm
     "nvidia-cuda-nvdisasm"
   ];
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
   dependencies = [
     cuda-bindings
     numpy
-    nvidia-cutlass-dsl-libs-base
     protobuf
     typing-extensions
   ];
-
-  # pythonImportsCheck = [ "cutlass" ];
 
   # No tests in the Pypi archive
   doCheck = false;

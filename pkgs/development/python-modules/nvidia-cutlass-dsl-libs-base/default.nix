@@ -12,6 +12,7 @@
   # dependencies
   cuda-bindings,
   numpy,
+  nvidia-cutlass-dsl-libs-core,
   protobuf,
   typing-extensions,
 }:
@@ -29,23 +30,24 @@ let
 
   hashes = {
     x86_64-linux = {
-      cp311 = "sha256-IYsM/q+MMYSTNjUDL1icbBkFE/Pv4LIysFtp0LW+XEs=";
-      cp312 = "sha256-oz2DkFz8p6LbIDSi9liUECR1XXXBtQDJOqy+YWTsAwA=";
-      cp313 = "sha256-Gd4Dm7NJa6qAbPIsimi5id2ZihKYR9PYu4MNNLp3fwg=";
-      cp314 = "sha256-Xj3sJ4B7XSQ0eeWX8shGtWC4m4DXfyUmiWOeZzcxPRA=";
+      cp311 = "sha256-XJ/6O3Z94/CYcBjeikOPoDRMusQfbS5+haP5wJwfsZQ=";
+      cp312 = "sha256-DuPKQnpDvTGQ/ErAb7oV+nqSMkGhzJKNPitKb0gNvTk=";
+      cp313 = "sha256-miKupg5UmqJRSLx9Vw5SYWGy6ZAxs5DPErFteTi8lbQ=";
+      cp314 = "sha256-F/mhzISIosVwgskn41cbHRXbUi//2L0vk1HJqrpYyJ4=";
     };
     aarch64-linux = {
-      cp311 = "sha256-0I/rlCm9hyAi0B/XkKapze1XoU9OorJSXtYu5KMvX38=";
-      cp312 = "sha256-l2g+5iMexXxPe/0s5TFx1/o4Bc+PMH3dI47XVwdEbNs=";
-      cp313 = "sha256-/ikvI1LniluT91AYEaA199iUX8GYZCawvozueoy7Lh8=";
-      cp314 = "sha256-M/2vaRZTr0UgbH5BFK1T6/8mCxqDdAHlSXdc2dDMJo8=";
+      cp311 = "sha256-/sAjdWLFrW4M0cZqwpuABYN0oubswBkjuQGmFH1EnHg=";
+      cp312 = "sha256-yN/c5uVc2Fb9Os5HuIHEHo9x++05bM3reHDRk1bxavc=";
+      cp313 = "sha256-v+/dVRIS4QcW9akCvoQ3roBkRVjw0gp8z6mQNz6Wxzk=";
+      cp314 = "sha256-Vq6JVU2Hz6vIMwwLCHERJh9NzrC3ByCwHf/wPJFvMIQ=";
     };
   };
 in
 buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass-dsl-libs-base";
-  version = "4.6.0.dev0";
+  version = "4.7.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "nvidia_cutlass_dsl_libs_base";
@@ -63,6 +65,9 @@ buildPythonPackage (finalAttrs: {
   pythonRemoveDeps = [
     # Only cuda-bindings is needed
     "cuda-python"
+
+    # just a wrapper for cudaPackages.cuda_nvdisasm
+    "nvidia-cuda-nvdisasm"
   ];
   pythonRelaxDeps = [
     "protobuf"
@@ -70,6 +75,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     cuda-bindings
     numpy
+    nvidia-cutlass-dsl-libs-core
     protobuf
     typing-extensions
   ];
