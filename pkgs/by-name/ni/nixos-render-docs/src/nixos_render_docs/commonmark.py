@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import cast, Optional
 
 from .md import md_escape, md_make_code, Renderer
+from .types import AdmonitionStyle
 
 from markdown_it.token import Token
 
@@ -20,12 +21,14 @@ class Par:
 class CommonMarkRenderer(Renderer):
     __output__ = "commonmark"
 
+    _admonition_style: AdmonitionStyle
     _parstack: list[Par]
     _link_stack: list[str]
     _list_stack: list[List]
 
-    def __init__(self, manpage_urls: Mapping[str, str]):
+    def __init__(self, manpage_urls: Mapping[str, str], admonition_style: AdmonitionStyle = AdmonitionStyle.PLAIN):
         super().__init__(manpage_urls)
+        self._admonition_style = admonition_style
         self._parstack = [ Par("") ]
         self._link_stack = []
         self._list_stack = []
@@ -44,11 +47,23 @@ class CommonMarkRenderer(Renderer):
         return result
 
     def _admonition_open(self, kind: str) -> str:
-        pbreak = self._maybe_parbreak()
-        self._enter_block("")
-        return f"{pbreak}**{kind}:** "
+        match self._admonition_style:
+            case AdmonitionStyle.PLAIN:
+                pbreak = self._maybe_parbreak()
+                self._enter_block("")
+                return f"{pbreak}**{kind}:** "
+            case AdmonitionStyle.GFM:
+                pbreak = self._maybe_parbreak()
+                lbreak = self._break()
+                self._enter_block("> ")
+                return f"{pbreak}> [!{kind}]{lbreak}> "
+
     def _admonition_close(self) -> str:
-        self._leave_block()
+        match self._admonition_style:
+            case AdmonitionStyle.PLAIN:
+                self._leave_block()
+            case AdmonitionStyle.GFM:
+                self._leave_block()
         return ""
 
     def _indent_raw(self, s: str) -> str:

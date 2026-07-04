@@ -17,3 +17,7 @@ RenderFn = Callable[[Token, Sequence[Token], int], str]
 class AnchorStyle(Enum):
     NONE = "none"
     LEGACY = "legacy"
+
+class AdmonitionStyle(Enum):
+    PLAIN = "plain"
+    GFM = "gfm"
