@@ -37,8 +37,6 @@
       cudaSupport = true;
       inHydra = true;
     };
-
-    __allowFileset = false;
   },
   # We only build the full package set on infrequently releasing channels.
   full ? false,

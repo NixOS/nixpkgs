@@ -83,8 +83,6 @@ let
             inHydra = true;
           }
           // extraNixpkgsConfig;
-
-          __allowFileset = false;
         };
       };
 

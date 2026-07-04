@@ -49,8 +49,6 @@
         "kanidmWithSecretProvisioning_1_8-1.8.6"
       ];
     };
-
-    __allowFileset = false;
   },
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`

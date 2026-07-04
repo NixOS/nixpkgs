@@ -16,8 +16,6 @@
       allowUnfree = false;
       inHydra = true;
     };
-
-    __allowFileset = false;
   },
 }:
 
