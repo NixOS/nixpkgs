@@ -72,6 +72,7 @@ buildGoModule (finalAttrs: {
     installBin out/minikube
 
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
+    ln -sv $out/bin/minikube $out/bin/kubectl
 
     for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
