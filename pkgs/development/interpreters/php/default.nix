@@ -69,8 +69,8 @@ let
 in
 {
   php82 = mkPhp {
-    version = "8.2.31";
-    hash = "sha256-lIGD+gTPJhybk2PAL0KJd7nd+MC/3/jo4fuoFu1XCAM=";
+    version = "8.2.32";
+    hash = "sha256-jyHpiMpN1eFN2fuImIRIeENWbkhygAJ8Tvq2yTGIotE=";
   };
   php83 = mkPhp {
     version = "8.3.31";
