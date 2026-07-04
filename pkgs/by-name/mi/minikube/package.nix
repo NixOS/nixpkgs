@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1unwbu2pJviHXukQKalJLgrkHpjf0sRR2nCm2gKv2VU=";
+    hash = "sha256-1unwbu2pJviHXukQKalJLgrkHpjf0sRR2nCm2gKv2VU=";
   };
   postPatch = ''
     substituteInPlace Makefile \
