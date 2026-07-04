@@ -65,7 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      danth
       Frostman
       da157
       sigmasquadron
