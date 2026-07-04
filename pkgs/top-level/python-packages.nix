@@ -3463,6 +3463,8 @@ self: super: with self; {
 
   comfy-kitchen = callPackage ../development/python-modules/comfy-kitchen { };
 
+  comfyui-embedded-docs = callPackage ../development/python-modules/comfyui-embedded-docs { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
