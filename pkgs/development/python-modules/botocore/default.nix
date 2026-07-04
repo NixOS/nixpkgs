@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt botocore/cacert.pem
+    ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt botocore/cacert.pem
   '';
 
   build-system = [
