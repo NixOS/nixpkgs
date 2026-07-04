@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -19,7 +18,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xclock";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -27,16 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xclock";
     tag = "xclock-${finalAttrs.version}";
-    hash = "sha256-ZgUb+iVO45Az/C+2YJ1TXxcTLk3zQjM1GGv2E69WNfo=";
+    hash = "sha256-sytAl9vXBdxjTM0NnAgRNK34yqn/6zJeCQ/9bH3xaOc=";
   };
-
-  patches = [
-    # meson build system patch
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xorg/app/xclock/-/commit/28e10bd26ac7e02fe8a4fb8016bb115f8d664032.patch";
-      hash = "sha256-KdrS7VneJqwVPB+TRJoMmtR03Ju3PvvUMYfXz5tII6k=";
-    })
-  ];
 
   strictDeps = true;
 
