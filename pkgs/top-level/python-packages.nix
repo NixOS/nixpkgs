@@ -2066,6 +2066,8 @@ self: super: with self; {
     disableAllPlugins = true;
   };
 
+  beets-ytimport = callPackage ../development/python-modules/beets-ytimport { };
+
   beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
 
   before-after = callPackage ../development/python-modules/before-after { };
