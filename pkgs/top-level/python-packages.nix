@@ -6513,8 +6513,6 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
-  gitterpy = callPackage ../development/python-modules/gitterpy { };
-
   giturlparse = callPackage ../development/python-modules/giturlparse { };
 
   glad = callPackage ../development/python-modules/glad { };
