@@ -778,6 +778,8 @@ self: super: with self; {
 
   alphaessopenapi = callPackage ../development/python-modules/alphaessopenapi { };
 
+  alphashape = callPackage ../development/python-modules/alphashape { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   altcha = callPackage ../development/python-modules/altcha { };
@@ -3402,6 +3404,8 @@ self: super: with self; {
 
   crate = callPackage ../development/python-modules/crate { };
 
+  crawl4ai = callPackage ../development/python-modules/crawl4ai { };
+
   crayons = callPackage ../development/python-modules/crayons { };
 
   crc = callPackage ../development/python-modules/crc { };
@@ -5504,6 +5508,8 @@ self: super: with self; {
       };
     };
   };
+
+  fake-http-header = callPackage ../development/python-modules/fake-http-header { };
 
   fake-useragent = callPackage ../development/python-modules/fake-useragent { };
 
@@ -12566,6 +12572,8 @@ self: super: with self; {
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
   patchpy = callPackage ../development/python-modules/patchpy { };
+
+  patchright = callPackage ../development/python-modules/patchright { };
 
   path = callPackage ../development/python-modules/path { };
 
@@ -19890,6 +19898,8 @@ self: super: with self; {
 
   tf-keras = callPackage ../development/python-modules/tf-keras { };
 
+  tf-playwright-stealth = callPackage ../development/python-modules/tf-playwright-stealth { };
+
   tf2onnx = callPackage ../development/python-modules/tf2onnx { };
 
   tflearn = callPackage ../development/python-modules/tflearn { };
@@ -21141,6 +21151,8 @@ self: super: with self; {
   uncalled-for = callPackage ../development/python-modules/uncalled-for { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
+
+  unclecode-litellm = callPackage ../development/python-modules/unclecode-litellm { };
 
   uncompresspy = callPackage ../development/python-modules/uncompresspy { };
 
