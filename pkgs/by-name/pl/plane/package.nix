@@ -108,7 +108,7 @@ let
         pnpmWorkspaces
         ;
       fetcherVersion = 3;
-      hash = lib.fakeHash;
+      hash = "sha256-BQNxYWnHlYwwS+JemJPFLLWAgSiEMZIBZ2LIrZjMy88=";
     };
 
     nativeBuildInputs = [
@@ -119,7 +119,11 @@ let
 
     buildPhase = ''
       runHook preBuild
-      pnpm --filter=web --filter=admin --filter=space --filter=live build
+      # The "..." suffix pulls in each app's workspace dependencies (e.g.
+      # @plane/utils, @plane/types) so their own build scripts run first —
+      # without it those internal packages' package.json exports point at
+      # dist files that were never generated.
+      pnpm --reporter=append-only --filter=web... --filter=admin... --filter=space... --filter=live... build
       runHook postBuild
     '';
 
@@ -136,14 +140,18 @@ let
       cp -r apps/web/build/client/. $out/share/plane/web/
       cp -r apps/admin/build/client/. $out/share/plane/admin/
 
-      # space: SSR — keep full build + node_modules for react-router-serve
+      # space: SSR — keep full build + node_modules for react-router-serve.
+      # pnpm's node_modules is a symlink farm into the workspace-root
+      # .pnpm store; -L/--dereference resolves those into real files so
+      # $out is self-contained (a plain cp -r left dangling symlinks
+      # pointing outside $out at the un-copied central store).
       cp -r apps/space/build/. $out/share/plane/space/build/
-      cp -r apps/space/node_modules $out/share/plane/space/
+      cp -rL apps/space/node_modules $out/share/plane/space/
 
       # live: Node.js collaboration server
       cp -r apps/live/dist/. $out/share/plane/live/
       cp apps/live/package.json $out/share/plane/live/
-      cp -r apps/live/node_modules $out/share/plane/live/
+      cp -rL apps/live/node_modules $out/share/plane/live/
 
       runHook postInstall
     '';
