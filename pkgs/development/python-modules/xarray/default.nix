@@ -39,7 +39,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xarray";
-  version = "2026.04.0";
+  # 2026.04.0 is broken with numpy 2.5, no tagged release yet.
+  version = "unstable-2026-07-03";
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "2026.04.0";
   pyproject = true;
   # Needed mainly for pytestFlags with spaces
   __structuredAttrs = true;
@@ -47,8 +49,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
+    rev = "030c9298839a6b69b5d7a76817c49699a4209e8f";
+    hash = "sha256-0F53lNbiwzZZqLdgN3itzhF7urOSRj78K8rKsWewM2k=";
   };
 
   postPatch = ''
@@ -129,7 +131,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "xarray" ];
 
   meta = {
-    changelog = "https://github.com/pydata/xarray/blob/${finalAttrs.src.tag}/doc/whats-new.rst";
+    changelog = "https://github.com/pydata/xarray/blob/${finalAttrs.src.rev}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
     license = lib.licenses.asl20;
