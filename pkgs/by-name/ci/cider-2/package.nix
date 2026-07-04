@@ -8,13 +8,11 @@
 
   # Required dependencies for autoPatchelfHook
   alsa-lib,
-  asar,
   gtk3,
   libgbm,
   libGL,
   nspr,
   nss,
-  widevine-cdm,
 }:
 stdenv.mkDerivation rec {
   pname = "cider-2";
@@ -26,7 +24,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    asar
     dpkg
     autoPatchelfHook
     makeWrapper
@@ -57,16 +54,6 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/cider/Cider
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    ${lib.getExe asar} extract $out/lib/cider/resources/app.asar ./cider-build
-
-    ${lib.getExe asar} pack ./cider-build $out/lib/cider/resources/app.asar
-    rm -rf ./cider-build
-
-    # Install Widevine CDM for DRM support
-    ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/lib/cider/
   '';
 
   postFixup = ''
