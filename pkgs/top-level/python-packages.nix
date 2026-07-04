@@ -14061,6 +14061,8 @@ self: super: with self; {
 
   pydeconz = callPackage ../development/python-modules/pydeconz { };
 
+  pydeep2 = callPackage ../development/python-modules/pydeep2 { inherit (pkgs) ssdeep; };
+
   pydelijn = callPackage ../development/python-modules/pydelijn { };
 
   pydemumble = callPackage ../development/python-modules/pydemumble { };
@@ -14770,6 +14772,8 @@ self: super: with self; {
   pymilter = callPackage ../development/python-modules/pymilter { };
 
   pymilvus = callPackage ../development/python-modules/pymilvus { };
+
+  pymisp = callPackage ../development/python-modules/pymisp { };
 
   pymitsubishi = callPackage ../development/python-modules/pymitsubishi { };
 
@@ -21355,6 +21359,8 @@ self: super: with self; {
   vacuum-map-parser-roborock =
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
+
+  valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
