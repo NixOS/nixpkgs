@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-abr-drop-support-for-dynamic-loading-libldac.patch
+
+    # Darwin doesn’t have `<endian.h>`; use the predefined GCC/Clang
+    # macros instead.
+    ./make-byte-order-checks-portable.patch
   ];
 
   nativeBuildInputs = [
