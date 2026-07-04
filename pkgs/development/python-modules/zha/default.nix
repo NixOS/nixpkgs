@@ -5,6 +5,7 @@
   fetchFromGitHub,
   freezegun,
   looptime,
+  pyprojectVersionPatchHook,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio_0,
@@ -37,9 +38,12 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<3"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+      --replace-fail '"setuptools-git-versioning<3"' ""
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     setuptools
