@@ -2,7 +2,7 @@ diff --git a/compiler/modulegraphs.nim b/compiler/modulegraphs.nim
 index 77762d23a..59dd8903a 100644
 --- a/compiler/modulegraphs.nim
 +++ b/compiler/modulegraphs.nim
-@@ -503,7 +503,11 @@ proc uniqueModuleName*(conf: ConfigRef; m: PSym): string =
+@@ -506,7 +506,11 @@ proc uniqueModuleName*(conf: ConfigRef; m: PSym): string =
    for i in 0..<trunc:
      let c = rel[i]
      case c
@@ -19,9 +19,9 @@ diff --git a/compiler/modulepaths.nim b/compiler/modulepaths.nim
 index c9e6060e5..2b349f27c 100644
 --- a/compiler/modulepaths.nim
 +++ b/compiler/modulepaths.nim
-@@ -79,6 +79,17 @@ proc checkModuleName*(conf: ConfigRef; n: PNode; doLocalError=true): FileIndex =
-   else:
-     result = fileInfoIdx(conf, fullPath)
+@@ -83,6 +83,17 @@ type
+   SelectedBase = enum
+     FromProject, FromSearchPath, FromNimblePath
  
 +proc rot13(result: var string) =
 +  # don't mangle .nim
@@ -37,16 +37,16 @@ index c9e6060e5..2b349f27c 100644
  proc mangleModuleName*(conf: ConfigRef; path: AbsoluteFile): string =
    ## Mangle a relative module path to avoid path and symbol collisions.
    ##
-@@ -87,9 +98,11 @@ proc mangleModuleName*(conf: ConfigRef; path: AbsoluteFile): string =
-   ##
-   ## Example:
-   ## `foo-#head/../bar` becomes `@foo-@hhead@s..@sbar`
--  "@m" & relativeTo(path, conf.projectPath).string.multiReplace(
-+  result = "@m" & relativeTo(path, conf.projectPath).string.multiReplace(
+@@ -109,9 +120,11 @@ proc mangleModuleName*(conf: ConfigRef; path: AbsoluteFile): string =
+     of FromSearchPath: "@p"
+     of FromNimblePath: "@n"
+ 
+-  prefix & best.multiReplace(
++  result = prefix & best.multiReplace(
      {$os.DirSep: "@s", $os.AltSep: "@s", "#": "@h", "@": "@@", ":": "@c"})
 +  rot13(result)
  
  proc demangleModuleName*(path: string): string =
    ## Demangle a relative module path.
-   result = path.multiReplace({"@@": "@", "@h": "#", "@s": "/", "@m": "", "@c": ":"})
+   result = path.multiReplace({"@@": "@", "@h": "#", "@s": "/", "@m": "", "@p": "", "@n": "", "@c": ":"})
 +  rot13(result)

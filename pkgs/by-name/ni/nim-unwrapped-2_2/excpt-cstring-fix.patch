@@ -1,0 +1,17 @@
+diff --git a/lib/system/excpt.nim b/lib/system/excpt.nim
+index 85ea17a..2b51f5a 100644
+--- a/lib/system/excpt.nim
++++ b/lib/system/excpt.nim
+@@ -212,10 +212,10 @@ when defined(nativeStacktrace) and nativeStackTraceSupported:
+       if enabled:
+         if dlresult != 0:
+           var oldLen = s.len
+-          add(s, tempDlInfo.dli_fname)
++          add(s, cstrToStrBuiltin(tempDlInfo.dli_fname))
+           if tempDlInfo.dli_sname != nil:
+             for k in 1..max(1, 25-(s.len-oldLen)): add(s, ' ')
+-            add(s, tempDlInfo.dli_sname)
++            add(s, cstrToStrBuiltin(tempDlInfo.dli_sname))
+         else:
+           add(s, '?')
+           add(s, "\n")

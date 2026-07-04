@@ -13,12 +13,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.4";
+  version = "2.2.10";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+CtBl1D8zlYfP4l6BIaxgBhoRddvtdmfJIzhZhCBicc=";
+    hash = "sha256-eVe37QBCBrzxC8xPO0dEFTh45i8kMVUqmo6dP0Do1dU=";
   };
 
   buildInputs = [
@@ -38,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./extra-mangling-2.patch
     # Mangle store paths of modules to prevent runtime dependence.
+
+    ./excpt-cstring-fix.patch
+    # Fix type mismatch: cstring should be converted to string with $
 
     ./openssl.patch
     # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
