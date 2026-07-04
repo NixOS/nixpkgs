@@ -16093,8 +16093,6 @@ self: super: with self; {
 
   python-citybikes = callPackage ../development/python-modules/python-citybikes { };
 
-  python-clementine-remote = callPackage ../development/python-modules/python-clementine-remote { };
-
   python-code-minimap = callPackage ../development/python-modules/python-code-minimap { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };

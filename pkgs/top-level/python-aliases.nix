@@ -512,6 +512,7 @@ mapAliases {
   pytestquickcheck = throw "'pytestquickcheck' has been renamed to/replaced by 'pytest-quickcheck'"; # Converted to throw 2025-10-29
   pytestrunner = throw "'pytestrunner' has been renamed to/replaced by 'pytest-runner'"; # Converted to throw 2025-10-29
   python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
+  python-clementine-remote = throw "'python-clementine-remote' was removed because Home Assistant droppped the integration"; # Added 2026-06-04
   python-ethtool = throw "'python-ethtool' has been renamed to/replaced by 'ethtool'"; # Converted to throw 2025-10-29
   python-igraph = throw "'python-igraph' has been renamed to/replaced by 'igraph'"; # Converted to throw 2025-10-29
   python-jsonrpc-server = throw "python-jsonrpc-server has been removed because it was no longer used by anything"; # added 2025-11-11
