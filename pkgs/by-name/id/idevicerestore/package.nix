@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nh2 ];
+    maintainers = with lib.maintainers; [
+      flokli
+      nh2
+    ];
     mainProgram = "idevicerestore";
   };
 })
