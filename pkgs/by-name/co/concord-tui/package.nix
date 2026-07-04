@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.2.7";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WSZsN1+ZhFWTHl9BvKERrr0lQj06N392Jo2nYjNm5QY=";
+    hash = "sha256-oohoQIShX6zZC4fEPQnkvJVqhJSmU21ZrbfN9bDTnQI=";
   };
 
-  cargoHash = "sha256-LJnwO9507nLptKARCih58+wKrHzLGu+qQ/guf1oezX8=";
+  cargoHash = "sha256-TFjph7qSc3dHaMRUC7kUwvblfB8zdyvcMT16aHFm8wo=";
 
   buildInputs = [
     opus
@@ -40,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Feature-rich TUI client for Discord, written in Rust";
     homepage = "https://github.com/chojs23/concord";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Simon-Weij ];
+    maintainers = with lib.maintainers; [
+      Simon-Weij
+      neo
+    ];
     mainProgram = "concord";
   };
 })

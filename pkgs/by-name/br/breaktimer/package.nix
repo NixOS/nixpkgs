@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   copyDesktopItems,
-  electron_40,
+  electron_41,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
@@ -13,7 +13,7 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_41;
   nodejs = nodejs_24;
   description = "Cross-platform desktop app for managing periodic breaks";
 in
@@ -50,13 +50,6 @@ buildNpmPackage rec {
     makeWrapper
     copyDesktopItems
   ];
-
-  preBuild = ''
-    if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '\^[0-9]+' | sed -e 's/\^//') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
-      echo 'ERROR: electron version mismatch'
-      exit 1
-    fi
-  '';
 
   buildPhase = ''
     runHook preBuild

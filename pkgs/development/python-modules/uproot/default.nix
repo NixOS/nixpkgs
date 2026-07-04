@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.7.4";
+  version = "5.7.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "uproot5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OUvU54mgQl8SjgxwGHXr5/w+X9hbTL3vzflsP7UlxlA=";
+    hash = "sha256-Ox+PfMlO1ijkSyUM78g9YthdjUo+l0+Idd0jy+a83wE=";
   };
 
   build-system = [

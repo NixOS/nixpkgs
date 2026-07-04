@@ -124,11 +124,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = lib.optional stdenvNoCC.hostPlatform.isLinux (makeDesktopItem {
-    name = "opencode-desktop";
+    name = "ai.opencode.desktop";
     desktopName = "OpenCode";
     exec = "opencode-desktop %U";
     icon = "opencode-desktop";
-    startupWMClass = "OpenCode";
+    startupWMClass = "ai.opencode.desktop";
     categories = [ "Development" ];
     mimeTypes = [ "x-scheme-handler/opencode" ];
   });
