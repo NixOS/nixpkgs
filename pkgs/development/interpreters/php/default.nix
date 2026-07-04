@@ -73,8 +73,8 @@ in
     hash = "sha256-lIGD+gTPJhybk2PAL0KJd7nd+MC/3/jo4fuoFu1XCAM=";
   };
   php83 = mkPhp {
-    version = "8.3.31";
-    hash = "sha256-5phrH9N+slQCEn/kpyeKPgO3+QJbt6S9KSonG9+TD7k=";
+    version = "8.3.32";
+    hash = "sha256-93fKJGYZZvlLMfaEDNrUN88wUBU324uHKxt6HCRLjQI=";
   };
   php84 = mkPhp {
     version = "8.4.22";
