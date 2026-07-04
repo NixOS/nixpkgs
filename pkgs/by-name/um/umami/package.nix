@@ -47,12 +47,12 @@ let
   # to guarantee compatibility.
   prisma-engines' = prisma-engines_7.overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "7.6.0";
+      version = "7.8.0";
       src = fetchFromGitHub {
         owner = "prisma";
         repo = "prisma-engines";
         tag = finalAttrs.version;
-        hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
+        hash = "sha256-nquIcOmFz+ikD0x/YEPZ5NVKCFPCdR5MSCHldn+b9jI=";
       };
       cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
@@ -66,23 +66,23 @@ let
   );
   prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "7.6.0";
+      version = "7.8.0";
       src = fetchFromGitHub {
         owner = "prisma";
         repo = "prisma";
         tag = finalAttrs.version;
-        hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
+        hash = "sha256-89q5433z54h3oGX+lEYDQykN2mNltGz4+LWlYSE75/E=";
       };
       pnpmDeps = prevAttrs.pnpmDeps.override {
         inherit (finalAttrs) src version;
-        hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
+        hash = "sha256-mrFU5SAF4QuTBJj5TP8tUkYDG4zchttjcQMLtx6OBnI=";
       };
     }
   );
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.1.0";
+  version = "3.2.0";
 
   nativeBuildInputs = [
     makeWrapper
@@ -96,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EH3ebwTbajcNasn25ets2w068ZmCQRYUY2XON39J5HA=";
+    hash = "sha256-0nfCcaST06cTg43Rz1rCV8GYYDjQLP+6TrVRJF2/Yuk=";
   };
 
   # Umami uses next/font/google, which tries to download from Google Fonts at build time.
@@ -116,11 +116,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
+    fetcherVersion = 4;
+    hash = "sha256-6ho5xoVdqZdihThL5q8+RhVPfaSwu1y3+p9d8DnfO3o=";
   };
 
-  env.CYPRESS_INSTALL_BINARY = "0";
   env.NODE_ENV = "production";
   env.NEXT_TELEMETRY_DISABLED = "1";
 
@@ -144,7 +143,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    pnpm test
+    # Tests fail if NODE_ENV=production
+    NODE_ENV=development pnpm test
 
     runHook postCheck
   '';

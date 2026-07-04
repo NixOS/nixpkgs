@@ -23,8 +23,6 @@
   sentencepiece,
   soundfile,
   unidecode,
-  # linux-only:
-  fairseq,
 
   # passthru
   torchaudio,
@@ -114,9 +112,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     librosa
     requests
     soundfile
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    fairseq
   ];
 
   disabledTestPaths = [

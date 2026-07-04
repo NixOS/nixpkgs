@@ -84,7 +84,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-4N4KuJBF/RFZwpp3dIgXntxSEfKHyfvrShKQoUqY5bE=";
+  mvnHash = "sha256-eZuwBt+emThf4mxVaphFgBWNqP64Cs9WIKW+GPvHll4=";
   manualMvnArtifacts = [
     "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1"
     # added to saticfy protobuf compiler plugin dependency resolving
