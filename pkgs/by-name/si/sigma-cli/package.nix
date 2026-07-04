@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
     tag = "v${version}";
-    hash = "sha256-46M/WD2BIPMpABai4WZBmxjgI+skwcaRJwPFGXje5y4=";
+    hash = "sha256-7zPB2eb+PeJ0xKygf/oRGZfntHiHHkk9L5Pr7oUfvkY=";
   };
 
   pythonRelaxDeps = [ "click" ];
