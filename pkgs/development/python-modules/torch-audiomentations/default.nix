@@ -16,6 +16,7 @@
   # tests
   pytest-cov-stub,
   pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -45,6 +46,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+    pyyaml
   ];
 
   pythonImportsCheck = [ "torch_audiomentations" ];
