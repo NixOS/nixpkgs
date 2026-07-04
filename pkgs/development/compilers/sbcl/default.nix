@@ -7,7 +7,9 @@
   coreutils,
   fetchurl,
   ps,
+  sbclPackages, # for passthru.tests
   strace,
+  stumpwm, # for passthru.tests
   texinfo,
   which,
   writableTmpDirAsHomeHook,
@@ -307,6 +309,11 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit stumpwm;
+    inherit (sbclPackages) iolib;
+  };
 
   meta = {
     # Broken since 2025-09-05 https://hydra.nixos.org/job/nixpkgs/staging-next/sbcl.x86_64-darwin
