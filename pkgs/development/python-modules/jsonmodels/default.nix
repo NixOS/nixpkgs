@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   python-dateutil,
   pytestCheckHook,
 }:
@@ -14,14 +14,18 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C6QWm1wCAPVQUolM+g/Nr5L7MqY+eL7pSHnu88lHVa0=";
+    hash = "sha256-nDeuWPBBclK3Q+4fqF/JN9lpbhZSCCT2siHxn2Lwj5w=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ python-dateutil ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # test_project.py is dev/release tooling (imports `invoke`, an
+  # unpackaged task runner), not a test of the library itself.
+  disabledTestPaths = [ "tests/test_project.py" ];
 
   pythonImportsCheck = [ "jsonmodels" ];
 
