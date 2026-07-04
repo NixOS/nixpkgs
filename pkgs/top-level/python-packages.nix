@@ -3467,6 +3467,10 @@ self: super: with self; {
 
   comfyui-frontend-package = callPackage ../development/python-modules/comfyui-frontend-package { };
 
+  comfyui-workflow-templates =
+    callPackage ../development/python-modules/comfyui-workflow-templates
+      { };
+
   comfyui-workflow-templates-core =
     callPackage ../development/python-modules/comfyui-workflow-templates-core
       { };
