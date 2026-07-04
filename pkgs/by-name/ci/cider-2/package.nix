@@ -72,8 +72,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-warn 'Exec=cider' 'Exec=${pname}' \
-      --replace-warn 'Exec=/usr/lib/cider/Cider' 'Exec=${pname}'
+      --replace-fail Exec=cider Exec=${pname}
 
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
