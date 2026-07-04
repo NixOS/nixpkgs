@@ -12250,6 +12250,8 @@ self: super: with self; {
 
   opuslib = callPackage ../development/python-modules/opuslib { };
 
+  opuslib-next = callPackage ../development/python-modules/opuslib-next { };
+
   opytimark = callPackage ../development/python-modules/opytimark { };
 
   oracledb = callPackage ../development/python-modules/oracledb { };
