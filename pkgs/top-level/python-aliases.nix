@@ -666,6 +666,7 @@ mapAliases {
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
+  unifiled = throw "'unifiled' has been removed because Home Assistant dropped the integration"; # Added 2026-06-04
   unittest-data-provider = throw "'unittest-data-provider' has been removed as it was unused, unmaintained, and upstream suggests 'pytest parameterize' instead."; # Added 2026-05-22
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
   uranium = throw "'uranium' has been removed, as it was unmaintained in nixpkgs"; # Added 2026-05-22

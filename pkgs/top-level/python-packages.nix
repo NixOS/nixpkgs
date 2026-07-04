@@ -21195,8 +21195,6 @@ self: super: with self; {
 
   unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
 
-  unifiled = callPackage ../development/python-modules/unifiled { };
-
   unify = callPackage ../development/python-modules/unify { };
 
   unique-log-filter = callPackage ../development/python-modules/unique-log-filter { };
