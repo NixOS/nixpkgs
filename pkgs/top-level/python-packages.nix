@@ -3461,6 +3461,8 @@ self: super: with self; {
 
   comfy-angle = callPackage ../development/python-modules/comfy-angle { };
 
+  comfy-kitchen = callPackage ../development/python-modules/comfy-kitchen { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
