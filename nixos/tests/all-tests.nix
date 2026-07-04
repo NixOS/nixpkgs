@@ -1125,6 +1125,7 @@ in
   mysql-secure-root = handleTest ./mysql/mysql-secure-root.nix { };
   n8n = runTest ./n8n.nix;
   nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
+  nanobot = runTest ./nanobot.nix;
   nar-serve = runTest ./nar-serve.nix;
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.nftables.firewall = handleTest ./nat.nix {
