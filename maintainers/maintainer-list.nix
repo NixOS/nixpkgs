@@ -1416,6 +1416,11 @@
       }
     ];
   };
+  ali-abrar = {
+    name = "Ali Abrar";
+    github = "ali-abrar";
+    githubId = 7432518;
+  };
   alinnow = {
     name = "Alin";
     email = "alin@alin.ovh";
