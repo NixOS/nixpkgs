@@ -237,13 +237,14 @@ in
               {
                 id = masULID;
                 client_id = oidcClientID;
-                client_secret = oidcClientSecret;
+                client_secret_file = "\${CREDENTIALS_DIRECTORY}/oidc_client_secret";
                 issuer = "https://${dexDomain}:5556";
                 scope = "openid email profile";
                 token_endpoint_auth_method = "client_secret_post";
               }
             ];
           };
+          credentials.oidc_client_secret = "${pkgs.writeText "oidc-client-secret" oidcClientSecret}";
         };
         services.postgresql.authentication = pkgs.lib.mkOverride 10 ''
           local all all trust
