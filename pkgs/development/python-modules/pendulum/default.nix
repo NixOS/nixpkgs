@@ -7,9 +7,6 @@
   # build-system
   rustPlatform,
 
-  # native dependencies
-  iconv,
-
   # dependencies
   python-dateutil,
   tzdata,
@@ -31,6 +28,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-zpBymeYhCy+yu6RPhOuN5xOVk6928hd3+oRsfiBPPuY=";
   };
 
+  patches = [
+    # Fix the build on Darwin.
+    #
+    # <https://github.com/python-pendulum/pendulum/pull/979>
+    ./delete-obsolete-cargo-toml.patch
+  ];
+
   cargoRoot = "rust";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
@@ -42,8 +46,6 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
   dependencies = [
     python-dateutil
