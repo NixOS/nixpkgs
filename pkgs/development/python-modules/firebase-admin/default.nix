@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "firebase-admin";
-  version = "7.4.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-admin-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RaoBR9NVFdpIXuSVQScAySWpUOumV+flkfKMBGOFs6w=";
+    hash = "sha256-jjCUk20RWB2Qc2qBh4CIGtUGsdCSqsbtmKKamSLCwQw=";
   };
 
   build-system = [ setuptools ];
