@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2026.01.0";
+  version = "2026.7.0";
   pyproject = true;
 
   src = fetchPypi {
