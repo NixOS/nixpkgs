@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "2.1.3";
+  version = "2.1.4";
 in
 {
   inherit version;
@@ -13,7 +13,7 @@ in
     owner = "lima-vm";
     repo = "lima";
     tag = "v${version}";
-    hash = "sha256-7hr89PApcxi/qoYZK8xPuGbhG95RfiYjkyVvZYIflyw=";
+    hash = "sha256-3vn557inLuV1DF0x8Fzc+OtLRAYKa7oE7s6x2S4gKSY=";
   };
 
   vendorHash = "sha256-8AksUgle1SlWuALi553TlpZ2qwO+jMA1kZQke91fimU=";

@@ -49,6 +49,7 @@ buildGoModule (finalAttrs: {
 
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
     install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
+    install -Dm755 "$GOPATH/bin/elasticsearch" -T $out/bin/temporal-elasticsearch-tool
     install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
     install -Dm755 "$GOPATH/bin/tdbg" -T $out/bin/tdbg
 

@@ -62,12 +62,6 @@ buildPythonPackage (finalAttrs: {
     "test_variance"
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Otherwise, torch will fail to include `omp.h`:
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error OpenMP support not found
-    llvmPackages.openmp
-  ];
-
   meta = {
     description = "Modular framework for neural networks with Euclidean symmetry";
     homepage = "https://github.com/e3nn/e3nn";

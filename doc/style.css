@@ -34,10 +34,6 @@ body {
   }
 }
 
-.list-of-examples {
-  display: none;
-}
-
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -130,6 +126,32 @@ body {
   body {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  /*
+  See: https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+
+  - :popover-open pseudo-class matches a popover element when it is in the showing state
+  - ::backdrop full-screen element placed directly behind popover
+  */
+  nav.toc-sidebar:popover-open {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(20rem, 85vw);
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--background);
+    border: 0;
+    border-right: 0.0625rem solid #d8d8d8;
+    box-shadow: 0 0 1.5rem rgb(0 0 0 / 0.35);
+  }
+
+  nav.toc-sidebar::backdrop {
+    background: rgb(0 0 0 / 0.5);
   }
 }
 
@@ -387,15 +409,6 @@ div.appendix dt {
   margin-top: 1em;
 }
 
-div.book .toc dt,
-div.appendix .toc dt {
-  margin-top: 0;
-}
-
-.list-of-examples dt {
-  margin-top: 0;
-}
-
 div.book code,
 div.appendix code {
   padding: 0;
@@ -406,17 +419,6 @@ div.appendix code {
   -webkit-hyphens: none;
   -moz-hyphens: none;
   hyphens: none;
-}
-
-div.book div.toc,
-div.appendix div.toc {
-  margin-bottom: 3em;
-  border-bottom: 0.0625rem solid #d8d8d8;
-}
-
-div.book div.toc dd,
-div.appendix div.toc dd {
-  margin-left: 2em;
 }
 
 div.book span.command,
@@ -506,21 +508,48 @@ div.appendix .variablelist .term {
 
 nav.toc-sidebar {
   height: 100%;
-  overflow-y: none;
   padding: 0 1rem 2rem;
-  border-bottom: 0.0625rem solid #d8d8d8;
+}
+
+/* menu button, shown on mobile, hidden on desktop */
+.toc-toggle {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.75rem 0 0;
+  padding: 0.4rem 0.8rem;
+  border: 0.0625rem solid #d8d8d8;
+  border-radius: 0.25rem;
+  background: var(--background);
+  color: var(--main-text-color);
+  font: inherit;
+  cursor: pointer;
+  position: fixed;
+  top: 0.5rem;
+  left: 0.8rem;
+  z-index: 2;
 }
 
 nav.toc-sidebar .toc {
   margin-bottom: 0;
 }
 
-nav.toc-sidebar .toc dl {
+nav.toc-sidebar ol.toc,
+nav.toc-sidebar ol.toc ol {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+nav.toc-sidebar ol.toc ol {
+  padding-left: 1em;
+}
+
+nav.toc-sidebar li {
   margin: 0;
 }
 
-nav.toc-sidebar .toc dd {
-  margin-left: 1em;
+nav.toc-sidebar summary {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
@@ -542,12 +571,23 @@ nav.toc-sidebar .toc dd {
   }
 
   nav.toc-sidebar {
+    /* un-pop the drawer */
+    display: block;
+    position: static;
+    inset: auto;
+    /*  */
+    margin: 0;
     grid-column: 1;
     grid-row: 2;
     max-height: none;
     overflow-y: auto;
-    border-bottom: none;
+    border: none;
     border-right: 0.0625rem solid #d8d8d8;
+  }
+
+  /* Hide the toggle button on desktop */
+  .toc-toggle {
+    display: none;
   }
 
   main.content {

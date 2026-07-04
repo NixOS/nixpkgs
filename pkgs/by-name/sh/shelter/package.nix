@@ -6,7 +6,7 @@
   nix-update-script,
   nodejs,
   pnpmConfigHook,
-  pnpm_9,
+  pnpm_10,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shelter";
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   __structuredAttrs = true;
@@ -29,9 +29,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-tYeV62IZes8O5rN9uvpx0K72B88gftqpL2VXrOUxI8s=";
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
+    hash = "sha256-d8GGz/2aCv2YV6CIxs1vkUfjYrhzsc8LyJX2sXgelig=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
   };
 
   buildPhase = ''

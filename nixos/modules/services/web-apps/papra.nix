@@ -80,8 +80,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Restart = "on-failure";
-        ExecStartPre = "${lib.getExe pkgs.tsx} ${cfg.package}/lib/src/scripts/migrate-up.script.ts";
-        ExecStart = "${cfg.package}/bin/papra";
+        ExecStartPre = "${lib.getExe' cfg.package "papra-migrate-up"}";
+        ExecStart = "${lib.getExe' cfg.package "papra"}";
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "papra";

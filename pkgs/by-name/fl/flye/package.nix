@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "fenderglass";
+    owner = "mikolmogorov";
     repo = "flye";
     tag = finalAttrs.version;
     hash = "sha256-ZdrAxPKY3+HJ388tGCdpDcvW70mJ5wd4uOUkuufyqK8=";

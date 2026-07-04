@@ -4,20 +4,28 @@ import html
 import json
 import re
 import xml.sax.saxutils as xml
-
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, cast, ClassVar, Generic, get_args, NamedTuple
+from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
 from markdown_it.token import Token
 
 from . import md, options
 from .html import HTMLRenderer, UnresolvedXrefError
-from .manual_structure import check_structure, FragmentType, is_include, make_xml_id, TocEntry, TocEntryType, XrefTarget
+from .manual_structure import (
+    FragmentType,
+    TocEntry,
+    TocEntryType,
+    XrefTarget,
+    check_structure,
+    is_include,
+    make_xml_id,
+)
 from .md import Converter, Renderer
 from .redirects import Redirects
 from .src_error import SrcError
+
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -253,13 +261,10 @@ class HTMLParameters(NamedTuple):
     generator: str
     stylesheets: Sequence[str]
     scripts: Sequence[str]
-    # number of levels in the rendered table of contents. tables are prepended to
-    # the content they apply to (entire document / document chunk / top-level section
-    # of a chapter), setting a depth of 0 omits the respective table.
-    toc_depth: int
-    chunk_toc_depth: int
-    section_toc_depth: int
+    # structural depth of the navigation sidebar tree
+    sidebar_depth: int
     media_dir: Path
+    sidebar_open: frozenset[str] = frozenset()
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -289,14 +294,13 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         target_path.write_bytes(content)
         return f"./{self._html_params.media_dir}/{target_name}"
 
-    def _push(self, tag: str, hlevel_offset: int) -> Any:
-        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir)
-        self._hlevel_offset += hlevel_offset
+    def _push(self, tag: str) -> Any:
+        result = (self._toplevel_tag, self._headings, self._attrspans, self._in_dir)
         self._toplevel_tag, self._headings, self._attrspans = tag, [], []
         return result
 
     def _pop(self, state: Any) -> None:
-        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir) = state
+        (self._toplevel_tag, self._headings, self._attrspans, self._in_dir) = state
 
     def _render_book(self, tokens: Sequence[Token]) -> str:
         assert tokens[4].children
@@ -307,7 +311,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
         toc = TocEntry.of(tokens[0])
         return "\n".join([
-            self._file_header(toc, sidebar=self._build_toc(tokens, 0)),
+            self._file_header(toc, sidebar=self._build_sidebar(toc)),
             ' <div class="book">',
             '  <div class="titlepage">',
             '   <div>',
@@ -364,6 +368,20 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 file.write(self._redirects.get_redirect_script(toc.target.path))
             scripts.append(f'./{redirects_name}')
 
+        # Register a close handler
+        # Without this the popover can still be closed by clicking outside of it
+        # It handles auto-closing when the user clicks a href.
+        close_menu_js = """
+            document.addEventListener("DOMContentLoaded", () => {
+                const nav = document.getElementById("manual-toc");
+                nav?.addEventListener("click", (e) => {
+                    if (e.target.closest("a[href]") && nav.matches(":popover-open")) {
+                        nav.hidePopover();
+                    }
+                });
+            });
+        """
+
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
@@ -377,13 +395,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                      for style in self._html_params.stylesheets)),
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in scripts)),
+            f"<script>{close_menu_js}</script>",
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
+            # See: https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
+            # Supported by most browsers since 2023, full support since Jan 2025
+            ('  <button type="button" class="toc-toggle" popovertarget="manual-toc"'
+             ' popovertargetaction="toggle" aria-label="Toggle table of contents">'
+             '☰</button>') if sidebar else "",
             nav_html,
-            f'  <nav class="toc-sidebar">{sidebar}</nav>' if sidebar else "",
+            f'  <nav id="manual-toc" class="toc-sidebar" popover="auto">{sidebar}</nav>' if sidebar else "",
             '  <main class="content">',
         ])
 
@@ -434,103 +458,59 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if token.tag == 'h1':
             return self._toplevel_tag
         return super()._heading_tag(token, tokens, i)
-    def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
-        toc = TocEntry.of(tokens[i])
-        if toc.kind == 'section' and self._html_params.section_toc_depth < 1:
-            return ""
-        def walk_and_emit(toc: TocEntry, depth: int) -> list[str]:
-            if depth <= 0:
-                return []
-            result = []
-            for child in toc.children:
-                result.append(
-                    f'<dt>'
-                    f' <span class="{html.escape(child.kind, True)}">'
-                    f'  <a href="{child.target.href()}">{child.target.toc_html}</a>'
-                    f' </span>'
-                    f'</dt>'
-                )
-                # we want to look straight through parts because docbook-xsl did too, but it
-                # also makes for more uesful top-level tocs.
-                next_level = walk_and_emit(child, depth - (0 if child.kind == 'part' else 1))
-                if next_level:
-                    result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
-            return result
+    def _build_sidebar(self, toc: TocEntry) -> str:
+        root = toc.root
+        def render_entries(entries: Sequence[TocEntry], budget: int) -> str:
+            items: list[str] = []
+            for e in entries:
+                # 'part' are structural containers we look straight through, so
+                # they do not consume a depth level
+                child_budget = budget if e.kind == 'part' else budget - 1
+                children = (render_entries(e.children, child_budget)
+                            if e.children and child_budget > 0 else "")
+                link = f'<a href="{e.target.href()}">{e.target.toc_html}</a>'
+                cls = html.escape(e.kind, True)
+                if children:
+                    open_attr = " open" if e.target.id in self._html_params.sidebar_open else ""
+                    items.append(
+                        f'<li class="{cls}">'
+                        f'<details{open_attr}><summary>{link}</summary>{children}</details>'
+                        '</li>'
+                    )
+                else:
+                    items.append(f'<li class="{cls}">{link}</li>')
+            return f'<ol class="toc">{"".join(items)}</ol>' if items else ""
         def build_list(kind: str, id: str, lst: Sequence[TocEntry]) -> str:
             if not lst:
                 return ""
-            entries = [
-                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
-                for i, e in enumerate(lst, start=1)
-            ]
+            entries = "".join(
+                f'<li><a href="{e.target.href()}">{e.target.toc_html}</a></li>'
+                for e in lst
+            )
             return (
                 f'<div class="{id}">'
                 f'<p><strong>List of {kind}</strong></p>'
-                f'<dl>{"".join(entries)}</dl>'
+                f'<ol class="toc">{entries}</ol>'
                 '</div>'
             )
-        # we don't want to generate the "Title of Contents" header for sections,
-        # docbook didn't and it's only distracting clutter unless it's the main table.
-        # we also want to generate tocs only for a top-level section (ie, one that is
-        # not itself contained in another section)
-        print_title = toc.kind != 'section'
-        if toc.kind == 'section':
-            if toc.parent and toc.parent.kind == 'section':
-                toc_depth = 0
-            else:
-                toc_depth = self._html_params.section_toc_depth
-        elif toc.starts_new_chunk and toc.kind != 'book':
-            toc_depth = self._html_params.chunk_toc_depth
-        else:
-            toc_depth = self._html_params.toc_depth
-        if not (items := walk_and_emit(toc, toc_depth)):
-            return ""
-        figures = build_list("Figures", "list-of-figures", toc.figures)
-        examples = build_list("Examples", "list-of-examples", toc.examples)
-        return "".join([
-            f'<div class="toc">',
-            ' <p><strong>Table of Contents</strong></p>' if print_title else "",
-            f' <dl class="toc">'
-            f'  {"".join(items)}'
-            f' </dl>'
-            f'</div>'
-            f'{figures}'
-            f'{examples}'
-        ])
+        nav = render_entries(root.children, self._html_params.sidebar_depth)
+        return f'{nav}'
 
     def _make_hN(self, level: int) -> tuple[str, str]:
-        # for some reason chapters didn't increase the hN nesting count in docbook xslts.
-        # originally this was duplicated here for consistency with docbook rendering, but
-        # it could be reevaluated and changed now that docbook is gone.
-        if self._toplevel_tag == 'chapter':
-            level -= 1
-        # this style setting is also for docbook compatibility only and could well go away.
-        style = ""
-        if level + self._hlevel_offset < 3 \
-           and (self._toplevel_tag == 'section' or (self._toplevel_tag == 'chapter' and level > 0)):
-            style = "clear: both"
-        tag, hstyle = super()._make_hN(max(1, level))
-        return tag, style
+        # book heading := h1
+        # Everything else is h2 ... h6
+        return super()._make_hN(level + 1)
 
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         outer, inner = [], []
-        # since books have no non-include content the toplevel book wrapper will not count
-        # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. chapters give a -1 to included sections
-        # mirroring the special handing in _make_hN. sigh.
-        hoffset = (
-            0 if not self._headings
-            else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
-            else self._headings[-1].level
-        )
         outer.append(self._maybe_close_partintro())
         into = token.meta['include-args'].get('into-file')
         fragments = token.meta['included']
-        state = self._push(tag, hoffset)
+        state = self._push(tag)
         if into:
             toc = TocEntry.of(fragments[0][0][0])
-            inner.append(self._file_header(toc))
-            # we do not set _hlevel_offset=0 because docbook didn't either.
+            # chunk pages carry the same whole-book sidebar as the main page.
+            inner.append(self._file_header(toc, sidebar=self._build_sidebar(toc)))
         else:
             inner = outer
         in_dir = self._in_dir
@@ -755,21 +735,36 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 server_redirects_file.write("\n".join(formatted_server_redirects))
 
 
+class _DeprecatedDepthFlag(argparse.Action):
+    def __call__(self, parser: argparse.ArgumentParser, namespace: argparse.Namespace,
+                 values: Any, option_string: str | None = None) -> None:
+        parser.error(f"{option_string} has been removed, use --sidebar-depth instead")
+
 def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
     p.add_argument('--generator', default='nixos-render-docs')
     p.add_argument('--stylesheet', default=[], action='append')
     p.add_argument('--script', default=[], action='append')
-    p.add_argument('--toc-depth', default=1, type=int)
-    p.add_argument('--chunk-toc-depth', default=1, type=int)
-    p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
+    p.add_argument('--sidebar-depth', default=2, type=int)
+    # nav metadata (JSON): {"open": ["anchor-id", ...]} selects which sidebar
+    # entries render expanded; omitted or absent means everything is collapsed.
+    p.add_argument('--nav', type=Path)
+    # Deprecated flags,
+    p.add_argument('--toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
+    p.add_argument('--chunk-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
+    p.add_argument('--section-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
+    # Positional
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
 def _run_cli_html(args: argparse.Namespace) -> None:
+    sidebar_open: frozenset[str] = frozenset()
+    if args.nav:
+        with open(args.nav) as nav_file:
+            sidebar_open = frozenset(json.load(nav_file).get("open", []))
     with open(args.manpage_urls) as manpage_urls, open(Path(__file__).parent / "redirects.js") as redirects_script:
         redirects = None
         if args.redirects:
@@ -778,8 +773,8 @@ def _run_cli_html(args: argparse.Namespace) -> None:
 
         md = HTMLConverter(
             args.revision,
-            HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
+            HTMLParameters(args.generator, args.stylesheet, args.script,
+                           args.sidebar_depth, args.media_dir, sidebar_open),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 

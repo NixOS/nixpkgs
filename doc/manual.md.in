@@ -3,6 +3,7 @@
 
 ```{=include=} chapters
 preface.chapter.md
+first-package.chapter.md
 ```
 
 ```{=include=} parts
@@ -15,6 +16,10 @@ modules/index.md
 development.md
 contributing.md
 interoperability.md
+```
+
+```{=include=} chapters
+languages-frameworks/index.md
 ```
 
 ```{=include=} appendix html:into-file=//release-notes.html
