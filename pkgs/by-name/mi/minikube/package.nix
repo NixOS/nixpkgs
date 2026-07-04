@@ -10,6 +10,7 @@
   withQemu ? false,
   qemu,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   OVMF,
 }:
 
@@ -49,6 +50,7 @@ buildGoModule (finalAttrs: {
     pkg-config
     which
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
@@ -61,7 +63,6 @@ buildGoModule (finalAttrs: {
     install out/minikube -Dt $out/bin
 
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
-    export HOME=$PWD
 
     for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
