@@ -14824,8 +14824,6 @@ self: super: with self; {
 
   pymssql = callPackage ../development/python-modules/pymssql { krb5-c = pkgs.krb5; };
 
-  pymsteams = callPackage ../development/python-modules/pymsteams { };
-
   pymumble = callPackage ../development/python-modules/pymumble { };
 
   pymunk = callPackage ../development/python-modules/pymunk { };
