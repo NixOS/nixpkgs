@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.14";
+  version = "2.16";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y4J3kCoRON7qt5bsW+9wdqbgJIyjYHo/Pe4LbZ6bhBU=";
+    hash = "sha256-+Nn24q8DARZko8bCQMl2Wz85KRfTE1/dym1qaNNZ9xc=";
   };
 
   build-system = [ setuptools ];
@@ -26,11 +26,6 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     toml
-  ];
-
-  disabledTestPaths = [
-    # missing pytype package/executable
-    "tests/test_pytype.py"
   ];
 
   pythonImportsCheck = [ "vulture" ];
