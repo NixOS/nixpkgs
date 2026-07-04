@@ -3944,6 +3944,12 @@
     githubId = 1743184;
     name = "Boris Babić";
   };
+  bornav = {
+    email = "borna.vincek1@gmail.com";
+    github = "bornav";
+    githubId = 51048565;
+    name = "Borna Vincek";
+  };
   bosu = {
     email = "boriss@gmail.com";
     github = "bosu";
