@@ -38,6 +38,10 @@ buildPythonPackage rec {
     hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
   };
 
+  patches = [
+    ./darwin-fix-test.patch
+  ];
+
   build-system = [
     hatchling
     hatch-vcs
