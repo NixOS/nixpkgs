@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
   pname = "torch-audiomentations";
   version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "asteroid-team";
