@@ -1,13 +1,22 @@
 diff --git a/build.rs b/build.rs
-index aa2bec5..f37a94d 100644
+index aa2bec5..d512a42 100644
 --- a/build.rs
 +++ b/build.rs
+@@ -26,7 +26,7 @@ fn setup_po() -> Result<()> {
+             && extension == "po"
+             && let Some(po_lang) = path.file_stem()
+         {
+-            let mo_dir = po_dir.join(po_lang).join("LC_MESSAGES");
++            let mo_dir = Path::new("@out@/share/locale").join(po_lang).join("LC_MESSAGES");
+ 
+             fs::create_dir_all(&mo_dir)?;
+ 
 @@ -46,7 +46,7 @@ fn setup_po() -> Result<()> {
  fn setup_schemas(filename: &str) -> Result<()> {
      println!("cargo:rerun-if-changed={DATA_DIR}");
  
 -    let out_dir = dirs::data_dir().expect("Failed to get data dir");
-+    let out_dir = std::path::PathBuf::from("@out@/share");
++    let out_dir = Path::new("@out@/share");
      let out_dir = out_dir.join("glib-2.0/schemas");
  
      fs::create_dir_all(&out_dir)?;
