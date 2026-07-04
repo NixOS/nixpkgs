@@ -21,13 +21,16 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.1.8";
+  version = "8.2.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ei7MgEyHDJyLXnjI8mT7S7pLno+pTmFWZHc6oEZaTcM=";
+    hash = "sha256-huyuaCWJ3w1KHCcQFjH2ZcofPjqwjLpLt+dg6auD/dQ=";
   };
 
   outputs = [
@@ -40,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-fQ0FyBPZ3v3lCSoWYz1ccbOSrfgnzwQvOyE7Dp3ZGRY=";
+    hash = "sha256-qrx8JtIAmn0JEsFwptrHlOL0IaYPJPLzjuDWNs7XFfc=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq
     pnpmConfigHook
     pnpm_10
+    nodejs_24
     which
   ];
 
@@ -69,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export HOME=$PWD
-
     # Build PeerTube server
     npm run build:server
 
@@ -79,22 +81,22 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Build PeerTube cli
     npm run build:peertube-cli
-    patchShebangs ~/apps/peertube-cli/dist/peertube.mjs
+    patchShebangs ./apps/peertube-cli/dist/peertube.mjs
 
     # Build PeerTube runner
     npm run build:peertube-runner
-    patchShebangs ~/apps/peertube-runner/dist/peertube-runner.mjs
+    patchShebangs ./apps/peertube-runner/dist/peertube-runner.mjs
 
     # Clean up declaration files
     find \
-      ~/dist/ \
-      ~/packages/core-utils/dist/ \
-      ~/packages/ffmpeg/dist/ \
-      ~/packages/models/dist/ \
-      ~/packages/node-utils/dist/ \
-      ~/packages/server-commands/dist/ \
-      ~/packages/transcription/dist/ \
-      ~/packages/typescript-utils/dist/ \
+      ./dist/ \
+      ./packages/core-utils/dist/ \
+      ./packages/ffmpeg/dist/ \
+      ./packages/models/dist/ \
+      ./packages/node-utils/dist/ \
+      ./packages/server-commands/dist/ \
+      ./packages/transcription/dist/ \
+      ./packages/typescript-utils/dist/ \
       \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
 
     runHook postBuild
@@ -104,21 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/dist
-    mv ~/dist $out
-    mv ~/node_modules $out/node_modules
+    mv ./dist $out
+    mv ./node_modules $out/node_modules
 
     mkdir $out/client
-    mv ~/client/{dist,node_modules,package.json} $out/client
+    mv ./client/{dist,node_modules,package.json} $out/client
 
     mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,transcription,typescript-utils}
-    mv ~/packages/core-utils/{dist,package.json} $out/packages/core-utils
-    mv ~/packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
-    mv ~/packages/models/{dist,package.json} $out/packages/models
-    mv ~/packages/node-utils/{dist,package.json} $out/packages/node-utils
-    mv ~/packages/server-commands/{dist,package.json} $out/packages/server-commands
-    mv ~/packages/transcription/{dist,package.json} $out/packages/transcription
-    mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
-    mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
+    mv ./packages/core-utils/{dist,package.json} $out/packages/core-utils
+    mv ./packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
+    mv ./packages/models/{dist,package.json} $out/packages/models
+    mv ./packages/node-utils/{dist,package.json} $out/packages/node-utils
+    mv ./packages/server-commands/{dist,package.json} $out/packages/server-commands
+    mv ./packages/transcription/{dist,package.json} $out/packages/transcription
+    mv ./packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
+    mv ./{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,pnpm-lock.yaml} $out
 
     # Remove broken symlinks in node_modules from workspace packages that aren't needed
     # by the built artifact. If any new packages break the check for broken symlinks,
@@ -129,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/client/node_modules/@peertube/player
 
     mkdir -p $cli/bin
-    mv ~/apps/peertube-cli/{dist,node_modules,package.json} $cli
+    mv ./apps/peertube-cli/{dist,node_modules,package.json} $cli
     ln -s $cli/dist/peertube.mjs $cli/bin/peertube-cli
 
     mkdir -p $runner/bin
-    mv ~/apps/peertube-runner/{dist,node_modules,package.json} $runner
+    mv ./apps/peertube-runner/{dist,node_modules,package.json} $runner
     ln -s $runner/dist/peertube-runner.mjs $runner/bin/peertube-runner
 
     # Create static gzip and brotli files
