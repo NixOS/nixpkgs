@@ -7671,6 +7671,8 @@ self: super: with self; {
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
 
+  httplib2shim = callPackage ../development/python-modules/httplib2shim { };
+
   httpretty = callPackage ../development/python-modules/httpretty { };
 
   httpserver = callPackage ../development/python-modules/httpserver { };
