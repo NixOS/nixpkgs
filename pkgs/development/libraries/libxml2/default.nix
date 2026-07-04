@@ -37,6 +37,13 @@ let
         # Based on https://gitlab.gnome.org/GNOME/libxml2/-/commit/19549c61590c1873468c53e0026a2fbffae428ef.patch
         # There are only whitespace differences from upstream.
         ./2.13-CVE-2026-0989.patch
+
+        (fetchpatch {
+          name = "CVE-2026-11979.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/c2e233fc1b341685fc99621b2768b503f777a72e.patch";
+          hash = "sha256-DcPZl6rOuP6aycK+1EHUgPX4YWDAH+ctAZtOI48QO2Q=";
+          excludes = [ "test/catalogs/test.sh" ];
+        })
       ];
       freezeUpdateScript = true;
       extraMeta = {
