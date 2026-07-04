@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sony LDAC Bluetooth decoder library (from AOSP via open-vela)";
     homepage = "https://github.com/open-vela/external_libldac";
     license = lib.licenses.asl20;
-    # LDAC bitstream format assumes LE; source has endian checks
+    # libldac code detects & #error's out on non-LE byte order
     platforms = lib.platforms.littleEndian;
     maintainers = with lib.maintainers; [ qweered ];
   };
