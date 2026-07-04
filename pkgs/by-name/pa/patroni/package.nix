@@ -12,7 +12,6 @@
 
     # distributed configuration stores
     "consul"
-    "etcd"
     "etcd3"
     "exhibitor"
     "kubernetes"
@@ -55,8 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   optional-dependencies = with python3Packages; {
     aws = [ boto3 ];
     consul = [ consul ];
-    etcd = [ python-etcd ];
-    etcd3 = [ python-etcd ];
+    etcd3 = [ ];
     exhibitor = [ kazoo ];
     jsonlogger = [ python-json-logger ];
     kubernetes = [ ];

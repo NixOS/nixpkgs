@@ -5286,10 +5286,6 @@ self: super: with self; {
 
   et-xmlfile = callPackage ../development/python-modules/et-xmlfile { };
 
-  etcd = callPackage ../development/python-modules/etcd { };
-
-  etcd3 = callPackage ../development/python-modules/etcd3 { inherit (pkgs) etcd; };
-
   ete3 = callPackage ../development/python-modules/ete3 { };
 
   etebase = callPackage ../development/python-modules/etebase { };
@@ -16155,8 +16151,6 @@ self: super: with self; {
   python-engineio-v3 = callPackage ../development/python-modules/python-engineio-v3 { };
 
   python-escpos = callPackage ../development/python-modules/python-escpos { };
-
-  python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-etherscan-api = callPackage ../development/python-modules/python-etherscan-api { };
 
