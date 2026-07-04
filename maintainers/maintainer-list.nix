@@ -3390,6 +3390,13 @@
     githubId = 4313548;
     name = "Ben Sparks";
   };
+  benhaskins = {
+    name = "Ben Haskins";
+    email = "ben.haskins@spang.co.uk";
+    github = "benhaskins";
+    githubId = 179679961;
+    keys = [ { fingerprint = "bnYZE0VGodlVwh/eUlqGQsAHeSE0hBPbo2EN2LrGu0M"; } ];
+  };
   benhiemer = {
     name = "Benedikt Hiemer";
     email = "ben.email@posteo.de";
@@ -6997,6 +7004,11 @@
     github = "Dietr1ch";
     githubId = 2096594;
     email = "Dietrich@Daroch.me";
+  };
+  different-error = {
+    name = "Sanfer D'souza";
+    github = "different-error";
+    githubId = 9338001;
   };
   different-name = {
     name = "different-name";
@@ -14235,6 +14247,12 @@
     githubId = 48174247;
     name = "Aleksandar Nesovic";
   };
+  kayoubi13 = {
+    email = "nix@foss-daily.org";
+    github = "kayoubi13";
+    githubId = 299534864;
+    name = "Kayoubi13";
+  };
   kazcw = {
     email = "kaz@lambdaverse.org";
     github = "kazcw";
@@ -20852,6 +20870,11 @@
     github = "oidro";
     githubId = 31112680;
     name = "oidro";
+  };
+  ojii3 = {
+    github = "OJII3";
+    githubId = 84656786;
+    name = "OJII3";
   };
   ojsef39 = {
     name = "Josef Hofer";

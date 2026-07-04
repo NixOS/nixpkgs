@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qmake
     qt6.qttools
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
         "QMAKE_APPLE_DEVICE_ARCHS = ${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"}"
   '';
 
-  desktopItems = [ "xdg/xaos.desktop" ];
+  desktopItems = [ "xdg/io.github.xaos_project.XaoS.desktop" ];
 
   postInstall = ''
     mkdir -p "${datapath}"

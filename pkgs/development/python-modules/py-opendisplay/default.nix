@@ -36,6 +36,8 @@ buildPythonPackage (finalAttrs: {
     pillow
   ];
 
+  pythonRelaxDeps = [ "epaper-dithering" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
