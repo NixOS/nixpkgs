@@ -30,8 +30,11 @@ buildNpmPackage rec {
     ln -s ${playwright-test}/lib/node_modules/playwright "$pkg_dir/node_modules/playwright"
     ln -s ${playwright-test}/lib/node_modules/playwright-core "$pkg_dir/node_modules/playwright-core"
 
+    # playwright-mcp creates browser profile dirs (mcp-<browser>-<hash>) inside
+    # PLAYWRIGHT_BROWSERS_PATH at runtime, so redirect them to a writable cache dir.
     wrapProgram $out/bin/playwright-mcp \
       --set PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers} \
+      --run 'export PWMCP_PROFILES_DIR_FOR_TEST="''${PWMCP_PROFILES_DIR_FOR_TEST:-''${XDG_CACHE_HOME:-$HOME/.cache}/playwright-mcp-profiles}"' \
       --set-default PLAYWRIGHT_MCP_BROWSER chromium
   '';
 
