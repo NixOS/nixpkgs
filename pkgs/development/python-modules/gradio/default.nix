@@ -21,14 +21,13 @@
   pnpmConfigHook,
 
   # dependencies
-  aiofiles,
   anyio,
   audioop-lts,
   brotli,
   fastapi,
-  ffmpy,
   gradio-client,
   groovy,
+  hf-gradio,
   httpx,
   huggingface-hub,
   jinja2,
@@ -82,17 +81,23 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.9.0";
+  version = "6.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-iGaUiJto/tquCSa6D/wbkNyVtK/2kZB/hz62STfwLOY=";
+    hash = "sha256-9vO+cuxpXERD/rH8wMuNWBNSH6Mu+yZLQMxLoiUTKtk=";
   };
 
   patches = [
+    # Upstream's after_build.js runs `npm install --production` to vendor http-proxy into the server
+    # build output, which fails offline.
+    # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
+    ./dont-npm-install-http-proxy.patch
+
     ./fix-transformers-pipelines-imports.patch
   ];
 
@@ -103,8 +108,12 @@ buildPythonPackage (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-pZCYtWFNlrcRFomx6HbO0zySOyifO3n/ffzx59pS/A8=";
+    fetcherVersion = 4;
+    hash = "sha256-xCxr/jnp9emeB6THGt4cumvApw6fSZQwG2NGOcvR0yQ=";
+  };
+
+  env = {
+    CI = "true";
   };
 
   nativeBuildInputs = [
@@ -121,19 +130,13 @@ buildPythonPackage (finalAttrs: {
     hatch-fancy-pypi-readme
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "tomlkit"
-  ];
-
   dependencies = [
-    aiofiles
     anyio
     brotli
     fastapi
-    ffmpy
     gradio-client
     groovy
+    hf-gradio
     httpx
     huggingface-hub
     jinja2
@@ -397,13 +400,25 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "gradio" ];
 
+  __darwinAllowLocalNetworking = true;
+
   # Cyclic dependencies are fun!
-  # This is gradio without gradio-client and gradio-pdf
+  # This is gradio without gradio-client and hf-gradio
   passthru = {
     sans-reverse-dependencies =
       (gradio.override {
         gradio-client = null;
         gradio-pdf = null;
+        # gradio imports hf_gradio at module load (gradio/routes.py), so we must keep it for the
+        # import to succeed.
+        # hf-gradio depends on gradio-client, whose test suite pulls in
+        # gradio.sans-reverse-dependencies, which would create a build cycle.
+        # Break it by giving hf-gradio a checkless gradio-client.
+        hf-gradio = hf-gradio.override {
+          gradio-client = gradio-client.overridePythonAttrs {
+            doCheck = false;
+          };
+        };
       }).overridePythonAttrs
         (old: {
           pname = old.pname + "-sans-reverse-dependencies";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_15,
+  zig_0_16,
   pciutils,
   apple-sdk,
   replaceVars,
@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "zigfetch";
-  version = "0.25.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "utox39";
     repo = "zigfetch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-n5bVIkg/jMVLixIfMp1ah4iJJLv59MoH4/acvFye4vQ=";
+    hash = "sha256-A8DZ8O7WghvN9+74FGapLl/7SfGc3n+FlyI6jRKX/yk=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    zig_0_15
+    zig_0_16
   ];
 
   buildInputs = [
@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "zigfetch";
-    inherit (zig_0_15.meta) platforms;
+    inherit (zig_0_16.meta) platforms;
   };
 })
