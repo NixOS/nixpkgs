@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
+  clang-tools,
   cmake,
   fetchFromGitHub,
   hypothesis,
@@ -63,6 +65,13 @@ buildPythonPackage rec {
     nanobind
     ninja
     scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
 
   dontUseCmakeConfigure = true;
