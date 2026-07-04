@@ -20029,6 +20029,8 @@ self: super: with self; {
 
   tinygrad = callPackage ../development/python-modules/tinygrad { };
 
+  tinyhtml = callPackage ../development/python-modules/tinyhtml { };
+
   tinyhtml5 = callPackage ../development/python-modules/tinyhtml5 { };
 
   tinyio = callPackage ../development/python-modules/tinyio { };
