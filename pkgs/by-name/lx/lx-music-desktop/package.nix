@@ -10,12 +10,12 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_40,
+  electron_42,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_40;
+  electron = electron_42;
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
@@ -56,6 +56,13 @@ buildNpmPackage (finalAttrs: {
     (replaceVars ./electron-builder.patch {
       electron_version = electron.version;
     })
+
+    # the upstream repository hasn't released a version with a newer
+    # electron yet, so we patch `package.json` and the lock file to use
+    # electron 42. updating better-sqlite3 is also required due to the
+    # ABI incompatibility between the original one with electron 42, see
+    # https://github.com/WiseLibs/better-sqlite3/issues/1474
+    ./npm-deps.patch
   ];
 
   nativeBuildInputs = [
@@ -63,7 +70,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-iIymnYIAE8rFEa8I2nVt2JrMyRiZL5nBS+HfNoDN1Hk=";
+  npmDepsHash = "sha256-1gizfbnkdG84VxB2MaoGoIEQoydiVHbGeWmy2A03FCI=";
 
   makeCacheWritable = true;
 
