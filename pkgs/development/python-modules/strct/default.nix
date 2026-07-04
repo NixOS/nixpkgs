@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   buildPythonPackage,
-  setuptools,
+  setuptools_80,
   pytestCheckHook,
   pytest-cov-stub,
   sortedcontainers,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # don't append .dev0 to version
   env.RELEASING_PROCESS = "1";
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ setuptools_80 ];
 
   nativeCheckInputs = [
     pytestCheckHook

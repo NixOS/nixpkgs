@@ -8,6 +8,7 @@
   numpy,
   pulsectl-asyncio,
   pychromecast,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   qrcode,
@@ -29,10 +30,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-B375jsOik0IdLtozH3t3hZKqoO+dtqkzX2bk5YuoO9Y=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 

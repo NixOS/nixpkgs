@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -39,17 +40,18 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-veX6MZSqEQb+tEqZTEgdCObLdaVPJEdTFW5Ivmb0TNQ=";
   };
 
-  # https://github.com/Sendspin/aiosendspin/blob/5.3.0/pyproject.toml#L27
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-
     # too narrow timeouts, so remove pytest-timeout
     sed -i "/addopts/d" pyproject.toml
   '';
 
   build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    # https://github.com/Sendspin/aiosendspin/blob/5.3.0/pyproject.toml#L27
+    pyprojectVersionPatchHook
   ];
 
   dependencies = [

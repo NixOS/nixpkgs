@@ -75,6 +75,7 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.52' 'prompt-toolkit>=3.0.24' \
       --replace-fail 'ruamel_yaml>=0.15.0,<=0.19.1' 'ruamel_yaml>=0.15.0' \
       --replace-fail 'ruamel_yaml_clib>=0.2.0,<=0.2.15' 'ruamel_yaml_clib>=0.2.0' \
+      --replace-fail 'urllib3>=1.25.4,<=2.6.3' 'urllib3>=1.25.4' \
       --replace-fail 'wcwidth<0.3.0' 'wcwidth>=0.3.0'
 
     substituteInPlace requirements-base.txt \
@@ -85,7 +86,7 @@ py.pkgs.buildPythonApplication rec {
     # through PYTHONPATH
     sed -i '/pip>=/d' requirements/bootstrap.txt
 
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt awscli/botocore/cacert.pem
+    ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt awscli/botocore/cacert.pem
   '';
 
   nativeBuildInputs = [

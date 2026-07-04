@@ -130,6 +130,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
     # Require unpackaged `grain`
     "keras/src/layers/preprocessing/data_layer_test.py"
     "keras/src/layers/preprocessing/discretization_test.py"

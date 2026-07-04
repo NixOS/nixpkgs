@@ -212,11 +212,7 @@ h3 {
   color: var(--heading-color);
 }
 
-.note h3,
-.tip h3,
-.warning h3,
-.caution h3,
-.important h3 {
+:is(.note, .tip, .warning, .caution, .important) h3 {
   font-size: 120%;
 }
 
@@ -286,16 +282,7 @@ div.appendix .programlisting {
   color: var(--codeblock-text-color);
 }
 
-div.book .note,
-div.book .tip,
-div.book .warning,
-div.book .caution,
-div.book .important,
-div.appendix .note,
-div.appendix .tip,
-div.appendix .warning,
-div.appendix .caution,
-div.appendix .important {
+:is(.note, .tip, .warning, .caution, .important) {
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   padding: 1.5rem;
@@ -303,64 +290,44 @@ div.appendix .important {
   background: #f4f4f4;
 }
 
-div.book .note > .title,
-div.book .tip > .title,
-div.book .warning > .title,
-div.book .caution > .title,
-div.book .important > .title,
-div.appendix .note > .title,
-div.appendix .tip > .title,
-div.appendix .warning > .title,
-div.appendix .caution > .title,
-div.appendix .important > .title {
+:is(.note, .tip, .warning, .caution, .important) > .title {
   font-weight: 800;
   line-height: 110%;
   color: inherit;
   margin-bottom: 0;
 }
 
-div.book .note > :first-child,
-div.book .tip > :first-child,
-div.book .warning > :first-child,
-div.book .caution > :first-child,
-div.book .important > :first-child,
-div.appendix .note > :first-child,
-div.appendix .tip > :first-child,
-div.appendix .warning > :first-child,
-div.appendix .caution > :first-child,
-div.appendix .important > :first-child {
+:is(.note, .tip, .warning, .caution, .important) > :first-child {
   margin-top: 0;
 }
 
-div.book .note > :last-child,
-div.book .tip > :last-child,
-div.book .warning > :last-child,
-div.book .caution > :last-child,
-div.book .important > :last-child,
-div.appendix .note > :last-child,
-div.appendix .tip > :last-child,
-div.appendix .warning > :last-child,
-div.appendix .caution > :last-child,
-div.appendix .important > :last-child {
+:is(.note, .tip, .warning, .caution, .important) > :last-child {
   margin-bottom: 0;
 }
 
-div.book .note,
-div.book .tip,
-div.book .important,
-div.appendix .note,
-div.appendix .tip,
-div.appendix .important {
+.note {
   color: var(--note-text-color);
   background: var(--note-background);
 }
 
-div.book .warning,
-div.book .caution,
-div.appendix .warning,
-div.appendix .caution {
+.tip {
+  color: var(--tip-text-color);
+  background: var(--tip-background);
+}
+
+.important {
+  color: var(--important-text-color);
+  background: var(--important-background);
+}
+
+.warning {
   color: var(--warning-text-color);
-  background-color: var(--warning-background);
+  background: var(--warning-background);
+}
+
+.caution {
+  color: var(--caution-text-color);
+  background: var(--caution-background);
 }
 
 div.book .section,
@@ -457,10 +424,21 @@ div.appendix .variablelist .term {
   --link-color: #405d99;
   --heading-color: #6586c8;
   --small-heading-color: #6a6a6a;
-  --note-text-color: #5277c3;
-  --note-background: #f2f8fd;
-  --warning-text-color: #cc3900;
-  --warning-background: #fff5e1;
+  /* NOTE */
+  --note-text-color: #0065d2;
+  --note-background: #e4f5ff;
+  /* TIP */
+  --tip-text-color: #188000;
+  --tip-background: #e8fae3;
+  /* IMPORTANT */
+  --important-text-color: #8a3db8;
+  --important-background: #fbedff;
+  /* WARNING */
+  --warning-text-color: #aa4a00;
+  --warning-background: #fff0db;
+  /* CAUTION */
+  --caution-text-color: #be222a;
+  --caution-background: #ffebe8;
   --codeblock-background: #f2f8fd;
   --codeblock-text-color: #000;
 }
@@ -471,20 +449,26 @@ div.appendix .variablelist .term {
     --main-text-color: #fff;
     --link-color: #6586c8;
     --small-heading-color: #fff;
-    --note-background: none;
-    --warning-background: none;
+    /* NOTE */
+    --note-text-color: #66c6ff;
+    --note-background: #1e2f44;
+    /* TIP */
+    --tip-text-color: #80e05f;
+    --tip-background: #22331d;
+    /* IMPORTANT */
+    --important-text-color: #ea9dff;
+    --important-background: #35273f;
+    /* WARNING */
+    --warning-text-color: #ffaa00;
+    --warning-background: #3c2a13;
+    /* CAUTION */
+    --caution-text-color: #ff8c84;
+    --caution-background: #422522;
     --codeblock-background: #393939;
     --codeblock-text-color: #fff;
   }
 
-  div.book .note,
-  div.book .tip,
-  div.appendix .note,
-  div.appendix .tip,
-  div.book .warning,
-  div.book .caution,
-  div.appendix .warning,
-  div.appendix .caution {
+  :is(.note, .tip, .warning, .caution, .important) {
     border: 2px solid;
     font-weight: 400;
   }
