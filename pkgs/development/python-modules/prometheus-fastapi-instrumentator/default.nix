@@ -14,14 +14,15 @@
   # tests
   devtools,
   fastapi,
-  httpx,
+  httpx2,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "prometheus-fastapi-instrumentator";
-  version = "7.1.0";
+  version = "8.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-54h/kwIdzFzxdYglwcEBPkLYno1YH2iWklg35qY2b00=";
+    hash = "sha256-fTJjAM1jUZXfhjLo9xqlu45LaoqZ330ogOA6x7aByqw=";
   };
 
   build-system = [
@@ -44,13 +45,22 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     devtools
     fastapi
-    httpx
+    httpx2
+    pytest-asyncio
     pytestCheckHook
     requests
   ];
 
   # numerous test failures on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # TODO: Cleanup when https://github.com/NixOS/nixpkgs/pull/538958 reaches
+  # `master`...
+  disabledTests = lib.optionals (lib.versionOlder fastapi.version "0.137") [
+    # Asserts that instrumentation works with fastapi 0.137+,
+    # fails on nixpkgs with fastapi 0.136.
+    "test_mount_inside_included_router_resolves_path"
+  ];
 
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
