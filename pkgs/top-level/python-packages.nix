@@ -3526,6 +3526,8 @@ self: super: with self; {
 
   cuda-bindings = callPackage ../development/python-modules/cuda-bindings { };
 
+  cuda-core = callPackage ../development/python-modules/cuda-core { };
+
   cuda-pathfinder = callPackage ../development/python-modules/cuda-pathfinder { };
 
   cuda-tile = callPackage ../development/python-modules/cuda-tile { };
