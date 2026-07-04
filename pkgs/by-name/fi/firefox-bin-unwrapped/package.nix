@@ -14,7 +14,6 @@
   pciutils,
   pipewire,
   adwaita-icon-theme,
-  generated,
   writeScript,
   writeText,
   xidel,
@@ -26,10 +25,13 @@
   systemLocale ? config.i18n.defaultLocale or "en_US",
   patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   applicationName ? "Firefox",
+  firefox-unwrapped,
   undmg,
+  callPackage,
 }:
 
 let
+  generated = import ./release_sources.nix;
 
   inherit (generated) version sources;
 
@@ -138,7 +140,8 @@ stdenv.mkDerivation {
 
     # update with:
     # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
-    updateScript = import ./update.nix {
+
+    updateScript = callPackage firefox-unwrapped.updateScriptModule {
       inherit
         pname
         writeScript

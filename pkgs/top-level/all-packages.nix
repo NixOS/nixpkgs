@@ -8685,11 +8685,6 @@ with pkgs;
   };
   firefox-esr = firefox-esr-140;
 
-  firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    inherit (firefox-unwrapped.passthru) applicationName;
-    generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
-  };
-
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     pname = "firefox-bin";
   };
