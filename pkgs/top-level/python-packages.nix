@@ -5731,8 +5731,6 @@ self: super: with self; {
 
   fints = callPackage ../development/python-modules/fints { };
 
-  fints_4 = callPackage ../development/python-modules/fints/4.nix { };
-
   finvizfinance = callPackage ../development/python-modules/finvizfinance { };
 
   fiona = callPackage ../development/python-modules/fiona { };
