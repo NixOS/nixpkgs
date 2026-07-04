@@ -8633,6 +8633,8 @@ self: super: with self; {
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
+  knx-telegram-store = callPackage ../development/python-modules/knx-telegram-store { };
+
   kokoro = callPackage ../development/python-modules/kokoro { };
 
   kombu = callPackage ../development/python-modules/kombu { };
