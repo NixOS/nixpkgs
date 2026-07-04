@@ -19,6 +19,7 @@
   ale-py,
   pytestCheckHook,
   rich,
+  tensorboard,
   tqdm,
 }:
 buildPythonPackage (finalAttrs: {
@@ -52,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     ale-py
     pytestCheckHook
     rich
+    tensorboard
     tqdm
   ];
 
