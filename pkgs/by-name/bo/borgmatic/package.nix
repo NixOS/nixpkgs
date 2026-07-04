@@ -102,6 +102,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
+    changelog = "https://projects.torsion.org/borgmatic-collective/borgmatic/src/tag/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     mainProgram = "borgmatic";
