@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  versionCheckHook,
   wrapWithXFileSearchPathHook,
   libx11,
   libxaw,
@@ -52,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "appdefaultdir" "${placeholder "out"}/share/X11/app-defaults")
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=xclock-(.*)" ]; };
 
