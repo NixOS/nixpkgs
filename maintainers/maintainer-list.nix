@@ -21383,6 +21383,12 @@
     email = "panakotta00@gmail.com";
     keys = [ { fingerprint = "ABF8 D539 0F8C F623 8F49  7338 BA6C E8AC 4B73 53B9"; } ];
   };
+  panasenco = {
+    email = "nix@panasen.co";
+    github = "panasenco";
+    githubId = 5506411;
+    name = "Aram Panasenco";
+  };
   pancaek = {
     github = "pancaek";
     githubId = 20342389;
