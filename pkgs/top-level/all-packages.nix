@@ -8674,12 +8674,7 @@ with pkgs;
 
   firefox-esr-140-unwrapped = firefox-esr-unwrapped;
 
-  firefox-esr-140 = wrapFirefox firefox-esr-140-unwrapped {
-    nameSuffix = "-esr";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr = firefox-esr-140;
+  firefox-esr-140 = firefox-esr;
 
   firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
 
