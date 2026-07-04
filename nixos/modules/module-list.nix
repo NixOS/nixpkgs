@@ -500,6 +500,7 @@
   ./services/cluster/patroni/default.nix
   ./services/cluster/rancher/default.nix
   ./services/cluster/spark/default.nix
+  ./services/cluster/temporal-ui/default.nix
   ./services/cluster/temporal/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
