@@ -1,0 +1,26 @@
+diff --git a/src/core/server.rs b/src/core/server.rs
+index 45570ea..d459b3e 100644
+--- a/src/core/server.rs
++++ b/src/core/server.rs
+@@ -123,7 +123,7 @@ async fn make_ipc_dir() -> Result<()> {
+         // on macOS or the primary group on Linux) to manage the socket's lifecycle. This prevents
+         // permission denied errors when the GUI process, running with non-root privileges,
+         // attempts to recreate the socket during service initialization or sidecar fallbacks.
+-        fs::set_permissions(dir_path, Permissions::from_mode(0o2770)).await?;
++        fs::set_permissions(dir_path, Permissions::from_mode(0o770)).await?;
+     }
+     #[cfg(windows)]
+     {
+diff --git a/src/lib.rs b/src/lib.rs
+index a21f89b..81175fc 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -12,7 +12,7 @@ pub use core::{run_ipc_server, stop_ipc_server};
+ pub use client::*;
+ 
+ #[cfg(all(unix, not(feature = "test")))]
+-pub static IPC_PATH: &str = "/tmp/verge/clash-verge-service.sock";
++pub static IPC_PATH: &str = "/run/clash-verge-rev/service.sock";
+ #[cfg(all(windows, not(feature = "test")))]
+ pub static IPC_PATH: &str = r"\\.\pipe\clash-verge-service";
+ 

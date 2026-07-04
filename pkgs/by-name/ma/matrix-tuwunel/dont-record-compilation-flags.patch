@@ -1,0 +1,21 @@
+commit be2b9e1992f5a7048fe011f4d48591dfcec927a8
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Mon Nov 17 12:00:00 2025 +0000
+
+    make the macro recording conpilation flags a noop
+    
+    it records references to rustc which increases the size of the closure of tuwunel by 1.5 GB.
+
+diff --git a/src/macros/mod.rs b/src/macros/mod.rs
+index b5c5b67d..86f4755b 100644
+--- a/src/macros/mod.rs
++++ b/src/macros/mod.rs
+@@ -39,7 +39,7 @@ pub fn recursion_depth(args: TokenStream, input: TokenStream) -> TokenStream {
+ }
+ 
+ #[proc_macro]
+-pub fn rustc_flags_capture(args: TokenStream) -> TokenStream { rustc::flags_capture(args) }
++pub fn rustc_flags_capture(_args: TokenStream) -> TokenStream { TokenStream::default() }
+ 
+ #[proc_macro]
+ pub fn rustc_version(args: TokenStream) -> TokenStream { rustc::version(args) }

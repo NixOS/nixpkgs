@@ -1,0 +1,37 @@
+diff --git a/src/common/common/DefinesFile.cpp b/src/common/common/DefinesFile.cpp
+index 6ad803d..022797a 100644
+--- a/src/common/common/DefinesFile.cpp
++++ b/src/common/common/DefinesFile.cpp
+@@ -36,6 +36,17 @@
+ #include <unistd.h>
+ #endif
+ 
++namespace {
++    bool fileCanBeStated(const std::string &file)
++    {
++        struct stat buf;
++        memset(&buf, 0, sizeof(buf));
++        int result = stat(file.c_str(), &buf );
++
++        return result == 0;
++    }
++}
++
+ std::string S3D::getHomeDir()
+ {
+ #ifdef _WIN32
+@@ -74,12 +85,12 @@ bool S3D::dirMake(const std::string &file)
+ 
+ bool S3D::fileExists(const std::string &file)
+ {
+-	return (S3D::fileModTime(file) != 0);
++	return fileCanBeStated(file);
+ }
+ 
+ bool S3D::dirExists(const std::string &file)
+ {
+-	return (S3D::fileModTime(file) != 0);
++	return fileCanBeStated(file);
+ }
+ 
+ time_t S3D::fileModTime(const std::string &file)

@@ -1,0 +1,25 @@
+--- a/src/third_party/mozjs/SConscript
++++ b/src/third_party/mozjs/SConscript
+@@ -145,8 +145,7 @@ sources = [
+ ]
+ 
+ if env['TARGET_ARCH'] == 'x86_64' and not env.TargetOSIs('windows'):
+-    env.Append(CCFLAGS=['-mavx2'])
+-    sources.extend(["extract/mozglue/misc/SIMD_avx2.cpp", "extract/mozglue/misc/SSE.cpp"])
++    sources.extend(["extract/mozglue/misc/SSE.cpp"])
+ 
+ if env.TargetOSIs('windows'):
+     sources.extend([
+diff --git a/src/third_party/mozjs/extract/mozglue/misc/SIMD.cpp b/src/third_party/mozjs/extract/mozglue/misc/SIMD.cpp
+index 3893de57b32..4ea0a657fbb 100644
+--- a/src/third_party/mozjs/extract/mozglue/misc/SIMD.cpp
++++ b/src/third_party/mozjs/extract/mozglue/misc/SIMD.cpp
+@@ -448,7 +448,7 @@ const char* SIMD::memchr8SSE2(const char* ptr, char value, size_t length) {
+ // assertion failure. Accordingly, we just don't allow that to happen. We
+ // are not particularly concerned about ensuring that newer 32 bit processors
+ // get access to the AVX2 functions exposed here.
+-#  if defined(MOZILLA_MAY_SUPPORT_AVX2) && defined(__x86_64__)
++#  if 0
+ 
+ bool SupportsAVX2() { return supports_avx2(); }
+ 

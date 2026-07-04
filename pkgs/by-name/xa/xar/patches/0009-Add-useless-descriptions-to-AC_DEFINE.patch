@@ -1,0 +1,113 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Andrew Childs <andrew.childs@bibo.com.ph>
+Date: Sun, 15 Nov 2020 19:12:33 +0900
+Subject: [PATCH 09/19] Add useless descriptions to AC_DEFINE
+
+Removes autoheader warnings from autoreconfHook.
+---
+ xar/configure.ac | 46 +++++++++++++++++++++++-----------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index 3d8e5de..0cc04dd 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -219,48 +219,48 @@ AC_CHECK_MEMBERS([struct stat.st_flags])
+ 
+ AC_CHECK_SIZEOF(uid_t)
+ if test $ac_cv_sizeof_uid_t = "4"; then
+-AC_DEFINE(UID_STRING, RId32)
+-AC_DEFINE(UID_CAST, (uint32_t))
++AC_DEFINE([UID_STRING], RId32, [UID_STRING])
++AC_DEFINE([UID_CAST], (uint32_t), [UID_CAST])
+ elif test $ac_cv_sizeof_uid_t = "8"; then
+-AC_DEFINE(UID_STRING, PRId64)
+-AC_DEFINE(UID_CAST, (uint64_t))
++AC_DEFINE([UID_STRING], PRId64, [UID_STRING])
++AC_DEFINE([UID_CAST], (uint64_t), [UID_CAST])
+ else
+ AC_ERROR(can not detect the size of your system's uid_t type)
+ fi
+ 
+ AC_CHECK_SIZEOF(gid_t)
+ if test $ac_cv_sizeof_gid_t = "4"; then
+-AC_DEFINE(GID_STRING, PRId32)
+-AC_DEFINE(GID_CAST, (uint32_t))
++AC_DEFINE([GID_STRING], PRId32, [GID_STRING])
++AC_DEFINE([GID_CAST], (uint32_t), [GID_CAST])
+ elif test $ac_cv_sizeof_gid_t = "8"; then
+-AC_DEFINE(GID_STRING, PRId64)
+-AC_DEFINE(GID_CAST, (uint64_t))
++AC_DEFINE([GID_STRING], PRId64, [GID_STRING])
++AC_DEFINE([GID_CAST], (uint64_t), [GID_CAST])
+ else
+ AC_ERROR(can not detect the size of your system's gid_t type)
+ fi
+ 
+ AC_CHECK_SIZEOF(ino_t)
+ if test $ac_cv_sizeof_ino_t = "4"; then
+-AC_DEFINE(INO_STRING, PRId32)
+-AC_DEFINE(INO_HEXSTRING, PRIx32)
+-AC_DEFINE(INO_CAST, (uint32_t))
++AC_DEFINE([INO_STRING], PRId32, [INO_STRING])
++AC_DEFINE([INO_HEXSTRING], PRIx32, [INO_HEXSTRING])
++AC_DEFINE([INO_CAST], (uint32_t), [INO_CAST])
+ elif test $ac_cv_sizeof_ino_t = "8"; then
+-AC_DEFINE(INO_STRING, PRId64)
+-AC_DEFINE(INO_HEXSTRING, PRIx64)
+-AC_DEFINE(INO_CAST, (uint64_t))
++AC_DEFINE([INO_STRING], PRId64, [INO_STRING])
++AC_DEFINE([INO_HEXSTRING], PRIx64, [INO_HEXSTRING])
++AC_DEFINE([INO_CAST], (uint64_t), [INO_CAST])
+ else
+ AC_ERROR(can not detect the size of your system's ino_t type)
+ fi
+ 
+ AC_CHECK_SIZEOF(dev_t)
+ if test $ac_cv_sizeof_dev_t = "4"; then
+-AC_DEFINE(DEV_STRING, PRId32)
+-AC_DEFINE(DEV_HEXSTRING, PRIx32)
+-AC_DEFINE(DEV_CAST, (uint32_t))
++AC_DEFINE([DEV_STRING], PRId32, [DEV_STRING])
++AC_DEFINE([DEV_HEXSTRING], PRIx32, [DEV_HEXSTRING])
++AC_DEFINE([DEV_CAST], (uint32_t), [DEV_CAST])
+ elif test $ac_cv_sizeof_dev_t = "8"; then
+-AC_DEFINE(DEV_STRING, PRId64)
+-AC_DEFINE(DEV_HEXSTRING, PRIx64)
+-AC_DEFINE(DEV_CAST, (uint64_t))
++AC_DEFINE([DEV_STRING], PRId64, [DEV_STRING])
++AC_DEFINE([DEV_HEXSTRING], PRIx64, [DEV_HEXSTRING])
++AC_DEFINE([DEV_CAST], (uint64_t), [DEV_CAST])
+ else
+ AC_ERROR(can not detect the size of your system's dev_t type)
+ fi
+@@ -270,7 +270,7 @@ AC_CHECK_LIB(acl, acl_get_file)
+ dnl Check for paths
+ AC_PREFIX_DEFAULT(/usr/local)
+ 
+-AC_CHECK_FUNC([asprintf], AC_DEFINE([HAVE_ASPRINTF]))
++AC_CHECK_FUNC([asprintf], AC_DEFINE([HAVE_ASPRINTF], [], [HAVE_ASPRINTF]))
+ 
+ dnl 
+ dnl Configure libxml2.
+@@ -350,7 +350,7 @@ have_libbz2="1"
+ AC_CHECK_HEADERS([bzlib.h], , [have_libbz2="0"])
+ AC_CHECK_LIB([bz2], [BZ2_bzCompress], , [have_libbz2="0"])
+ if test "x${have_libbz2}" = "x1" ; then
+-  AC_DEFINE([HAVE_LIBBZ2])
++  AC_DEFINE([HAVE_LIBBZ2], [], [HAVE_LIBBZ2])
+ fi
+ 
+ dnl 
+@@ -360,7 +360,7 @@ have_libpthread="1"
+ AC_CHECK_HEADERS([pthread.h], , [have_pthread="0"])
+ AC_CHECK_LIB([pthread], [pthread_mutex_lock], , [have_pthread="0"])
+ if test "x${have_pthread}" = "x1" ; then
+-  AC_DEFINE([HAVE_PTHREAD])
++  AC_DEFINE([HAVE_PTHREAD], [], [HAVE_PTHREAD])
+ fi
+ 
+ dnl 
+-- 
+2.44.1
+

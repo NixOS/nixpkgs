@@ -1,0 +1,31 @@
+From 3d41c84cb5f5daf10b5b5ecffcb53aeed7f0584b Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Fri, 11 Jul 2025 15:59:16 +0900
+Subject: [PATCH] Skip formatting Python code
+
+This otherwise fails the nixpkgs build
+---
+ pylib/tools/hookslib.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/pylib/tools/hookslib.py b/pylib/tools/hookslib.py
+index 99f08fa1e..2bb4b3f26 100644
+--- a/pylib/tools/hookslib.py
++++ b/pylib/tools/hookslib.py
+@@ -82,7 +82,7 @@ class Hook:
+         code = f"""\
+ class {self.classname()}:
+ {classdoc}{self.list_code()}
+-    
++
+     def append(self, callback: {self.callable()}) -> None:
+         '''{appenddoc}'''
+         self._hooks.append(callback)
+@@ -205,4 +205,3 @@ def write_file(path: str, hooks: list[Hook], prefix: str, suffix: str):
+ 
+     with open(path, "wb") as file:
+         file.write(code.encode("utf8"))
+-    subprocess.run([sys.executable, "-m", "ruff", "format", "-q", path], check=True)
+-- 
+2.49.0
+

@@ -1,0 +1,10 @@
+--- a/src/fmpy/sundials/libraries.py
++++ b/src/fmpy/sundials/libraries.py
+@@ -9,6 +9,7 @@ if platform_tuple == 'aarch64_darwin':
+     library_dir = library_dir / 'x86_64-darwin'
+ else:
+     library_dir = library_dir / platform_tuple
++library_dir = Path("@cvode@") / 'lib'
+
+ # load SUNDIALS shared libraries
+ sundials_nvecserial     = cdll.LoadLibrary(str(library_dir / f'sundials_nvecserial{sharedLibraryExtension}'))

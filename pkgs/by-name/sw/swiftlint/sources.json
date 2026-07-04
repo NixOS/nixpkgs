@@ -1,0 +1,21 @@
+{
+  "version": "0.65.0",
+  "platforms": {
+    "aarch64-linux": {
+      "filename": "swiftlint_linux_arm64.zip",
+      "hash": "sha256-EtO4S8W2muE6maWlx5kE+c4lhn8Jn2No0AN4VPnubCY="
+    },
+    "x86_64-linux": {
+      "filename": "swiftlint_linux_amd64.zip",
+      "hash": "sha256-eTBqNOXHzFWiIM0QjLuGHcrV8QE43N8mHiYkrosKSGs="
+    },
+    "x86_64-darwin": {
+      "filename": "portable_swiftlint.zip",
+      "hash": "sha256-1ssKp6L18e8wb8nje8tU3Jom+syPd4SsDD3T7M9ca6Y="
+    },
+    "aarch64-darwin": {
+      "filename": "portable_swiftlint.zip",
+      "hash": "sha256-1ssKp6L18e8wb8nje8tU3Jom+syPd4SsDD3T7M9ca6Y="
+    }
+  }
+}

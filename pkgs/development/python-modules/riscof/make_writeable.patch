@@ -1,0 +1,25 @@
+diff --git a/riscof/cli.py b/riscof/cli.py
+index 26af62e..9d0ddbf 100644
+--- a/riscof/cli.py
++++ b/riscof/cli.py
+@@ -502,6 +502,7 @@ def setup(dutname,refname,work_dir):
+         src = os.path.join(constants.root, "Templates/setup/model/")
+         dest = os.path.join(cwd, dutname)
+         distutils.dir_util.copy_tree(src, dest)
++        os.system(f"chmod +w -R '{dest}'")
+ 
+         os.rename(cwd+'/'+dutname+'/model_isa.yaml',
+                 cwd+'/'+dutname+'/'+dutname+'_isa.yaml')
+@@ -525,10 +526,12 @@ def setup(dutname,refname,work_dir):
+             src = os.path.join(constants.root, "Templates/setup/sail_cSim/")
+             dest = os.path.join(cwd, refname)
+             distutils.dir_util.copy_tree(src, dest)
++            os.system(f"chmod +w -R '{dest}'")
+         else:
+             src = os.path.join(constants.root, "Templates/setup/reference/")
+             dest = os.path.join(cwd, refname)
+             distutils.dir_util.copy_tree(src, dest)
++            os.system(f"chmod +w -R '{dest}'")
+             os.rename(cwd+'/'+refname+'/riscof_model.py',
+                 cwd+'/'+refname+'/riscof_'+refname+'.py')
+             with open(cwd+'/'+refname+'/riscof_'+refname+'.py', 'r') as file :

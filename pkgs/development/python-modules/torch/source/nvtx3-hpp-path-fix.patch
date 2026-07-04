@@ -1,0 +1,23 @@
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index ef5c2fd4e97..6591296b704 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -952,15 +952,16 @@ endif()
+ 
+ # ---[ nvtx
+ if(USE_SYSTEM_NVTX)
+-  find_path(nvtx3_dir NAMES nvtx3 PATHS ${CUDA_INCLUDE_DIRS})
++  find_path(nvtx3_dir NAMES nvtx3/nvtx3.hpp PATHS ${CUDA_INCLUDE_DIRS})
+ else()
+-  find_path(nvtx3_dir NAMES nvtx3 PATHS "${PROJECT_SOURCE_DIR}/third_party/NVTX/c/include" NO_DEFAULT_PATH)
++  find_path(nvtx3_dir NAMES nvtx3/nvtx3.hpp PATHS "${PROJECT_SOURCE_DIR}/third_party/NVTX/c/include" NO_DEFAULT_PATH)
+ endif()
+ find_package_handle_standard_args(nvtx3 DEFAULT_MSG nvtx3_dir)
+ if(nvtx3_FOUND)
+   add_library(torch::nvtx3 INTERFACE IMPORTED)
+   target_include_directories(torch::nvtx3 INTERFACE "${nvtx3_dir}")
+   target_compile_definitions(torch::nvtx3 INTERFACE TORCH_CUDA_USE_NVTX3)
++  message(STATUS "Using NVTX3 include directory: ${nvtx3_dir}")
+ else()
+   message(WARNING "Cannot find NVTX3, find old NVTX instead")
+   add_library(torch::nvtoolsext INTERFACE IMPORTED)

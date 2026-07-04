@@ -1,0 +1,131 @@
+diff --git a/package-lock.json b/package-lock.json
+index cc8b8bd..cb5b207 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -2354,6 +2354,7 @@
+       "version": "0.2.13",
+       "resolved": "https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.13.tgz",
+       "integrity": "sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI=",
++      "dev": true,
+       "engines": {
+         "node": "*"
+       }
+@@ -5014,14 +5015,6 @@
+         "node": ">=0.4.0"
+       }
+     },
+-    "node_modules/fd-slicer": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.1.0.tgz",
+-      "integrity": "sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=",
+-      "dependencies": {
+-        "pend": "~1.2.0"
+-      }
+-    },
+     "node_modules/figures": {
+       "version": "5.0.0",
+       "resolved": "https://registry.npmjs.org/figures/-/figures-5.0.0.tgz",
+@@ -9118,7 +9111,8 @@
+     "node_modules/pend": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz",
+-      "integrity": "sha1-elfrVQpng/kRUzH89GY9XI4AelA="
++      "integrity": "sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==",
++      "license": "MIT"
+     },
+     "node_modules/picomatch": {
+       "version": "2.3.1",
+@@ -12371,12 +12365,15 @@
+       }
+     },
+     "node_modules/yauzl": {
+-      "version": "2.10.0",
+-      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-2.10.0.tgz",
+-      "integrity": "sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=",
++      "version": "3.4.0",
++      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-3.4.0.tgz",
++      "integrity": "sha512-jIH9yLR9wqr0wOS0TpBvo/g/2UgZH5qePVbjgRliiF0BYvOZyaBknKsF+x9Iht0O6sqgnB93rCICdOZFecJuDw==",
++      "license": "MIT",
+       "dependencies": {
+-        "buffer-crc32": "~0.2.3",
+-        "fd-slicer": "~1.1.0"
++        "pend": "~1.2.0"
++      },
++      "engines": {
++        "node": ">=12"
+       }
+     },
+     "node_modules/yocto-queue": {
+@@ -14109,7 +14106,8 @@
+     "buffer-crc32": {
+       "version": "0.2.13",
+       "resolved": "https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.2.13.tgz",
+-      "integrity": "sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI="
++      "integrity": "sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI=",
++      "dev": true
+     },
+     "buildcheck": {
+       "version": "0.0.6",
+@@ -16094,7 +16092,7 @@
+         "@types/yauzl": "^2.9.1",
+         "debug": "^4.1.1",
+         "get-stream": "^5.1.0",
+-        "yauzl": "^2.10.0"
++        "yauzl": "^3.3.1"
+       }
+     },
+     "fast-deep-equal": {
+@@ -16152,14 +16150,6 @@
+         "websocket-driver": ">=0.5.1"
+       }
+     },
+-    "fd-slicer": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/fd-slicer/-/fd-slicer-1.1.0.tgz",
+-      "integrity": "sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=",
+-      "requires": {
+-        "pend": "~1.2.0"
+-      }
+-    },
+     "figures": {
+       "version": "5.0.0",
+       "resolved": "https://registry.npmjs.org/figures/-/figures-5.0.0.tgz",
+@@ -19260,7 +19250,7 @@
+     "pend": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz",
+-      "integrity": "sha1-elfrVQpng/kRUzH89GY9XI4AelA="
++      "integrity": "sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg=="
+     },
+     "picomatch": {
+       "version": "2.3.1",
+@@ -21718,12 +21708,11 @@
+       "integrity": "sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w=="
+     },
+     "yauzl": {
+-      "version": "2.10.0",
+-      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-2.10.0.tgz",
+-      "integrity": "sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=",
++      "version": "3.4.0",
++      "resolved": "https://registry.npmjs.org/yauzl/-/yauzl-3.4.0.tgz",
++      "integrity": "sha512-jIH9yLR9wqr0wOS0TpBvo/g/2UgZH5qePVbjgRliiF0BYvOZyaBknKsF+x9Iht0O6sqgnB93rCICdOZFecJuDw==",
+       "requires": {
+-        "buffer-crc32": "~0.2.3",
+-        "fd-slicer": "~1.1.0"
++        "pend": "~1.2.0"
+       }
+     },
+     "yocto-queue": {
+diff --git a/package.json b/package.json
+index 4a9025f..76f4407 100644
+--- a/package.json
++++ b/package.json
+@@ -48,5 +48,8 @@
+     "spectron": "^19.0.0",
+     "temp": "^0.9.4",
+     "ws": "^8.13.0"
++  },
++  "overrides": {
++    "yauzl": "^3.3.1"
+   }
+ }

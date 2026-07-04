@@ -1,0 +1,5 @@
+<Project>
+  <Target Name="PatchNpmPackages" AfterTargets="RestoreNpmPackages">
+    <Exec Command="source '$(RepoRoot)/patch-shebangs.sh' &amp;&amp; patchShebangs %24(find '$(RepoRoot)' -name node_modules -type d) 2>&amp;1"/>
+  </Target>
+</Project>

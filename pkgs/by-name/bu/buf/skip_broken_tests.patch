@@ -1,0 +1,15 @@
+diff --git a/private/buf/buftesting/buftesting.go b/private/buf/buftesting/buftesting.go
+index 1b5557d..cec5736 100644
+--- a/private/buf/buftesting/buftesting.go
++++ b/private/buf/buftesting/buftesting.go
+@@ -100,6 +100,10 @@ func RunActualProtoc(
+ 
+ // GetGoogleapisDirPath gets the path to a clone of googleapis.
+ func GetGoogleapisDirPath(tb testing.TB, buftestingDirPath string) string {
++	// Requires network access, which is not available during
++	// the nixpkgs sandboxed build
++	tb.Skip()
++
+ 	googleapisDirPath := filepath.Join(buftestingDirPath, testGoogleapisDirPath)
+ 	require.NoError(
+ 		tb,
