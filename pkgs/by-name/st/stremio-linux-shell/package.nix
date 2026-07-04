@@ -116,7 +116,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fromSource
       obfuscatedCode # server.js
     ];
-    maintainers = with lib.maintainers; [ thunze ];
+    maintainers = with lib.maintainers; [
+      thunze
+      fazzi
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "stremio";
   };
