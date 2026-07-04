@@ -1,30 +1,32 @@
 {
   lib,
+  attrs,
   bellows,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  frozendict,
   looptime,
   pyprojectVersionPatchHook,
-  pyserial,
-  pyserial-asyncio-fast,
   pytest-asyncio_0,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  zha-quirks,
   zigpy,
   zigpy-deconz,
   zigpy-xbee,
   zigpy-zigate,
+  zigpy-ziggurat,
   zigpy-znp,
+  zha,
+  zha-quirks,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "zha";
-  version = "1.4.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -33,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "zigpy";
     repo = "zha";
     tag = finalAttrs.version;
-    hash = "sha256-Jf8k/4z7eERiV2jwDzhV990sLBebasEKe5/0WbX1hYc=";
+    hash = "sha256-cLE30i+3dqmtasHZKgW16zThMwWbZ8wh/GFtrgWmpfE=";
   };
 
   postPatch = ''
@@ -50,14 +52,14 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    attrs
     bellows
-    pyserial
-    pyserial-asyncio-fast
-    zha-quirks
+    frozendict
     zigpy
     zigpy-deconz
     zigpy-xbee
     zigpy-zigate
+    zigpy-ziggurat
     zigpy-znp
   ];
 
@@ -68,9 +70,12 @@ buildPythonPackage (finalAttrs: {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
+    zha-quirks
   ];
 
   pythonImportsCheck = [ "zha" ];
+
+  doCheck = false; # infinite recursion with zhaquirks
 
   disabledTests = [
     # Tests are long-running and often keep hanging
@@ -99,6 +104,10 @@ buildPythonPackage (finalAttrs: {
     "test_background"
     "test_gateway_startup_failure" # Failed first attempt, passed second, flaky
   ];
+
+  passthru.tests = {
+    pytest = zha.overridePythonAttrs { doCheck = true; };
+  };
 
   meta = {
     description = "Zigbee Home Automation";
