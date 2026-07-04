@@ -385,7 +385,7 @@ in
         For example :
         services.matrix-authentication-service.credentials."synapse-secret" = "/run/agenix/synapse-shared";
         services.matrix-authentication-service.settings.matrix.secret_file =
-          "''${CREDENTIALS_DIRECTORY}/synapse-secret";
+          "\''${CREDENTIALS_DIRECTORY}/synapse-secret";
       '';
     };
   };
