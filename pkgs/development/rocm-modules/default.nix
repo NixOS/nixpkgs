@@ -157,6 +157,8 @@ let
 
       hipblaslt = self.callPackage ./hipblaslt { };
 
+      hipsparselt = self.callPackage ./hipsparselt { };
+
       # hipTensor - Only supports GFX9
 
       composable_kernel_base = self.callPackage ./composable_kernel/base.nix { };
