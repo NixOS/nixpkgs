@@ -1397,8 +1397,6 @@ self: super: with self; {
 
   avidtools = callPackage ../development/python-modules/avidtools { };
 
-  avion = callPackage ../development/python-modules/avion { };
-
   avro = callPackage ../development/python-modules/avro { };
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
