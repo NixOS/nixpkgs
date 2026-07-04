@@ -9,16 +9,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "dopamine";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "digimezzo";
     repo = "dopamine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HTPWejm5Wi6yGJyS/f1RhjIluTz01ue8lAsnAcQY3IY=";
+    hash = "sha256-zYuf5BIQaxTqHBXWX1PLghGR5WmwtnSxTYrNosVFebc=";
   };
 
-  npmDepsHash = "sha256-JkGS0YmjsdUiOD48HcGXy/fPTP33JQAtJui0mQWicmc=";
+  npmDepsHash = "sha256-Rw4i/VCG4OaT+E/hTpUCTCznmAT5oCh0wVg9FNVjoPw=";
 
   patches = [
     # register-scheme contains install scripts, but has no lockfile
