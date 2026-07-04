@@ -89,6 +89,9 @@
   # options
   qttranslations ? null,
   fetchpatch,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 let
@@ -197,7 +200,11 @@ stdenv.mkDerivation {
     cmake
     ninja
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moveBuildTree
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
+  ];
 
   propagatedNativeBuildInputs = [
     lndir
@@ -312,6 +319,8 @@ stdenv.mkDerivation {
     # When this variable is not set, cmake tries to execute xcodebuild
     # to query the version.
     "-DQT_INTERNAL_XCODE_VERSION=0.1"
+    # TODO: Clean up on `staging`.
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ]
   ++ lib.optionals isCrossBuild [
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
