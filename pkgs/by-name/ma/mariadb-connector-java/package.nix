@@ -16,7 +16,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-ScdrBSJKbVyD/omPrxiZvuaa5uOo2d3SqX/ozalMWHk=";
   };
 
-  mvnHash = "sha256-pQYLMsxNVdby4WkO/dznIqqeu2dTtiBjrpJ/A3MuJ5Y=";
+  mvnHash = "sha256-CiUXHrabVX+ragocKbd4erIWr7J4kuWYcKYCDycpIrs=";
 
   doCheck = false; # Requires networking
 

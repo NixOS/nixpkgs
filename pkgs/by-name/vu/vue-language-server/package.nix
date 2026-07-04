@@ -4,30 +4,40 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10_34_0,
+  pnpm_11,
   nodejs,
   nix-update-script,
   makeBinaryWrapper,
 }:
 let
-  pnpm = pnpm_10_34_0;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.2.9";
+  version = "3.3.6";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-q/5erEPVtXdpsyGnxuq+QySsZKibvKLvniDI1glIP0s=";
+    hash = "sha256-uiYhVVRiHyq+0S8czBY082vsqtCPqj29K9DjH0f+8u4=";
   };
 
+  patches = [ ./add-pkg-pr-new-integrities.patch ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-qm2hDQbOoC04c47w8KSwkdigND6UrkRUGp7YfkRu4as=";
+    fetcherVersion = 4;
+    prePnpmInstall = ''
+      pnpm config set --location project --json trustPolicyExclude '["volar-service-pug@0.0.71"]'
+    '';
+    hash = "sha256-6xu+z7rrI+YfmpcL5ycwjjeSAfDkkhSgeKBZO34p9Dw=";
   };
 
   nativeBuildInputs = [

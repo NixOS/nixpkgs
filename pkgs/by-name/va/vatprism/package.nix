@@ -71,9 +71,9 @@ maven.buildMavenPackage rec {
 
   mvnHash = # OpenJFX artifacts are platform dependent
     if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-      "sha256-gerjxTj8UQEVthMO3unWPEG7SPseMt5JPPureC/wUsw="
+      "sha256-GeSO6aFXeWLVOF9DVvFZ4FNv//NYhF68Nd6rxgeBO70="
     else
-      "sha256-LoOiLisqc99gIGClpVe8tq5/2prmyyOzLDkpmuSgwVo=";
+      "sha256-j7SaDQKGMcXGdOKzv8zBFHpsqqFZzZzITW7I/ZXs+dI=";
 
   installPhase = ''
     runHook preInstall
