@@ -34,8 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Multi-threaded TUI malware analysis tool";
     homepage = "https://github.com/Rhacknarok/hacksguard";
     changelog = "https://github.com/Rhacknarok/hacksguard/releases/tag/${finalAttrs.src.tag}";
-    # https://github.com/Rhacknarok/hacksguard/issues/1
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hacksguard";
   };
