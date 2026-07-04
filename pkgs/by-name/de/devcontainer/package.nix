@@ -16,18 +16,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.87.0";
+  version = "0.88.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bTJoMQnjmiFzUuaz+dukZ5NP9RznCNvvjmkTTY/Frwc=";
+    hash = "sha256-CaRZ565e+DczlEPlD0SeHg4lCMTey3anga75L79anN0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-AgwXCWogxVDaeiv8dUBvbsLLxLDrkYqb0HPFORd3ieQ=";
+    hash = "sha256-Rw6zzg09z4p6mAczrwWCoEQwPd8MLJsGS81stE/RNdY=";
   };
 
   nativeBuildInputs = [
