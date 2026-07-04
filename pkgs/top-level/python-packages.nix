@@ -22297,6 +22297,8 @@ self: super: with self; {
 
   zigpy-zigate = callPackage ../development/python-modules/zigpy-zigate { };
 
+  zigpy-ziggurat = callPackage ../development/python-modules/zigpy-ziggurat { };
+
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
   zimports = callPackage ../development/python-modules/zimports { };
