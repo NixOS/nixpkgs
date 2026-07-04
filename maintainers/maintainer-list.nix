@@ -17920,6 +17920,14 @@
     github = "Mephistophiles";
     githubId = 4850908;
   };
+  Merded = {
+    name = "Sergey";
+    github = "Merded";
+    githubId = 41290484;
+    email = "merdedok@gmail.com";
+    matrix = "@merededdo:matrix.org";
+    keys = [ { fingerprint = "86F3 EBA7 B264 E805 9E42  8B52 8C44 1853 4EC1 2580"; } ];
+  };
   Merikei = {
     name = "Merikei";
     github = "Merikei";
