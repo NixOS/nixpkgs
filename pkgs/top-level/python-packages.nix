@@ -17954,8 +17954,6 @@ self: super: with self; {
 
   scs = callPackage ../development/python-modules/scs { };
 
-  scsgate = callPackage ../development/python-modules/scsgate { };
-
   scspell = callPackage ../development/python-modules/scspell { };
 
   scverse-misc = callPackage ../development/python-modules/scverse-misc { };
