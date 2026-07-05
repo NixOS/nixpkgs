@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "seanime";
-  version = "3.8.7";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4UNGx63le0xLXraop7IsYezwAIQiBJKCrRps9L7rUw8=";
+    hash = "sha256-S2r2YqHhLSHMBKMiWK2S9SUqP0IRAgCCmrnGehRqD4Y=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     npmRoot = "seanime-web";
     npmDeps = fetchNpmDeps {
       src = "${finalAttrs.src}/seanime-web";
-      hash = "sha256-toqfrMi6bz4XWSF/EuPVpygnQMCGAAzgLoSnEpkKpl4=";
+      hash = "sha256-RqmuPGYnCRVX427y7fHabINSeGN4fokmGHp7jMFmwN0=";
     };
   };
 
