@@ -37,31 +37,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plotly";
-  version = "6.7.0";
+  version = "6.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gykhl1aBgKCkJVv507UJk4xdYaruV/aU+JLYmvyFYbY=";
+    hash = "sha256-bXMFCRieoWNQZZA9eDTcZqO1vu71CMIk4+TlL0R9+5A=";
   };
-
-  patches = [
-    # https://numpy.org/devdocs/release/2.4.0-notes.html#removed-numpy-in1d
-    # Upstream PR: https://github.com/plotly/plotly.py/pull/5522
-    ./numpy-2.4-in1d.patch
-  ];
-
-  postPatch = ''
-    # `pytest_ignore_collect` takes only `collection_path` starting with
-    # pytest 9. Most of the paths referenced in `plotly/conftest.py`
-    # don't exist anymore and wouldn't be collected anyway, so we can just
-    # remove the file.
-    # https://docs.pytest.org/en/latest/deprecations.html#py-path-local-arguments-for-hooks-replaced-with-pathlib-path
-    # Upstream PR: https://github.com/plotly/plotly.py/pull/5521
-    rm plotly/conftest.py
-  '';
 
   env.SKIP_NPM = true;
 

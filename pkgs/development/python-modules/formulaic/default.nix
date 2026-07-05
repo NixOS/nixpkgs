@@ -29,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-C4IUuyxBbW2DUxF4at8/736ZMmVZrFRRp+RxrJfmLkY=";
   };
 
+  # project uses a version-file that is not present in tagged releases
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   build-system = [
