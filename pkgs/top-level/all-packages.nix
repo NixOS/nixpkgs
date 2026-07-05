@@ -1065,8 +1065,6 @@ with pkgs;
 
   git-protonmail = callPackage ../by-name/gi/git-credential-email/git-protonmail { };
 
-  gitRepo = git-repo;
-
   svn-all-fast-export =
     libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
       { };
