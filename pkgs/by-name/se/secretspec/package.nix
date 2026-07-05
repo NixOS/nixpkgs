@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.12.2";
+  version = "0.13.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Oj1CaiL0uGhlyrJK+xfKLH3f9wYDQTIiDTxop3BTnNs=";
+    hash = "sha256-pOlfDWFjhndp+Wq/UzL/bYcgQHkWTrnuUd7w2WiqJog=";
   };
 
-  cargoHash = "sha256-5VKiagAQnUIL1i36hQ+zUgScfBkg0uwKG3FMQdrlIq4=";
+  cargoHash = "sha256-ITv4MGpg11mnp5YbfUd/xd7dLl2ll21ybGCyTO4UAx4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
