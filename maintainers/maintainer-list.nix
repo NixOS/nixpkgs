@@ -6240,6 +6240,11 @@
     github = "darkyzhou";
     githubId = 7220778;
   };
+  darnir = {
+    name = "darnir";
+    github = "darnir";
+    githubId = 1660085;
+  };
   daru-san = {
     name = "Daru";
     email = "zadarumaka@proton.me";
