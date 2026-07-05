@@ -26,9 +26,7 @@ rustPlatform.buildRustPackage {
       command = "atmosphere --version";
       version = "stardust-xr-atmosphere 0.4.0";
     };
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
