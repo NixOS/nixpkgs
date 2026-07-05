@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    rustPlatform.bindgenHook
   ];
 
   dontUseCmakeConfigure = true;

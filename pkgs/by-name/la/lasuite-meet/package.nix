@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-pUCSdnTBj/qwc0cya3P96r89r2K1GNSGg4DeIhxUKwI=";
+    hash = "sha256-w2Lw5K62Iaqzqa/ckxK36o5ZHFLXUpHnGGGl5PYGjaI=";
   };
 
   meta = {
@@ -86,6 +86,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       mozilla-django-oidc
       nested-multipart-parser
       phonenumbers
+      posthog
       psycopg
       pydantic
       pyjwt

@@ -2301,9 +2301,13 @@ self: super: with self; {
 
   beets-filetote = callPackage ../development/python-modules/beets-filetote { };
 
+  beets-importreplace = callPackage ../development/python-modules/beets-importreplace { };
+
   beets-minimal = beets.override {
     disableAllPlugins = true;
   };
+
+  beets-ytimport = callPackage ../development/python-modules/beets-ytimport { };
 
   before-after = callPackage ../development/python-modules/before-after { };
 
