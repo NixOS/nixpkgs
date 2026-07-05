@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-oM4nQUEc3iq1x4uRp8Kw5WtE/L5b6VlLOfElMT9Tk98=";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
