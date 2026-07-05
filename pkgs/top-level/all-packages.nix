@@ -10898,8 +10898,6 @@ with pkgs;
 
   vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins { });
 
-  vimb = wrapFirefox vimb-unwrapped { };
-
   vivisect =
     with python3Packages;
     toPythonApplication (
