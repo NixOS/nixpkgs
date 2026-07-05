@@ -26,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pytorch-pfn-extras";
   version = "0.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
