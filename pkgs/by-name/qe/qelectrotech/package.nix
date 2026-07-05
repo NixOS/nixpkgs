@@ -63,6 +63,15 @@ stdenv.mkDerivation rec {
     pugixml
   ];
 
+  qtWrapperArgs = [
+    "--add-flags"
+    "--common-elements-dir=${placeholder "out"}/share/qelectrotech/elements"
+    "--add-flags"
+    "--common-tbt-dir=${placeholder "out"}/share/qelectrotech/titleblocks"
+    "--add-flags"
+    "--lang-dir=${placeholder "out"}/share/qelectrotech/lang"
+  ];
+
   installPhase = ''
     runHook preInstall
 
