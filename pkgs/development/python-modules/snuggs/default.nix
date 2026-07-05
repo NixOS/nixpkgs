@@ -5,6 +5,7 @@
   fetchpatch,
   click,
   numpy,
+  setuptools,
   pyparsing,
   pytestCheckHook,
   hypothesis,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "snuggs";
   version = "1.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
@@ -22,6 +23,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1p3lh9s2ylsnrzbs931y2vn7mp2y2xskgqmh767c9l1a33shfgwf";
   };
+
+  build-system = [ setuptools ];
 
   patches = [
     # Use non-strict xfail for failing tests
@@ -32,7 +35,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     numpy
     pyparsing
