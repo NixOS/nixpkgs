@@ -17,7 +17,8 @@
   SDL2_mixer,
   unzip,
   zlib,
-  withRemix ? true,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -37,6 +38,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openomf";
   version = "0.8.6";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "omf2097";
@@ -89,17 +93,32 @@ stdenv.mkDerivation (finalAttrs: {
 
     unzip -p ${icons} omf-logo/omf-256x256.png > $out/share/icons/hicolor/256x256/apps/org.openomf.OpenOMF.png
     install -Dm644 $src/resources/flatpak/org.openomf.OpenOMF.desktop $out/share/applications/org.openomf.OpenOMF.desktop
-  ''
-  + lib.optionalString withRemix ''
-    ln -s ${remix} $out/share/games/openomf/ARENA2.ogg
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/resources
-    ln -s $out/share/games/openomf/* $out/resources
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "One Must Fall 2097 Remake";
+    longDescription = ''
+      OpenOMF is an open-source remake of the 1994 DOS fighting game One Must
+      Fall 2097 by Diversions Entertainment. It reimplements the original
+      engine from scratch, uses the original (now freeware) game assets, and
+      adds modern conveniences such as online netplay.
+
+      Includes remixed music mod. To add other mods: drop its .zip file
+      into the user mods directory as-is; it does not need to be extracted.
+
+      The user mods directory is <state>/mods, where <state> is resolved at
+      launch in the following order.
+
+        1. $OPENOMF_STATE_PATH, if set
+        2. $XDG_STATE_HOME, if set
+           (e.g. ~/.local/state, giving ~/.local/state/mods)
+        3. SDL's preference path, ~/.local/share/OpenOMF/mods
+    '';
     homepage = "https://www.openomf.org";
     changelog = "https://github.com/omf2097/openomf/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
