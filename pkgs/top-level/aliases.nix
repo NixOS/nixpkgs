@@ -2114,6 +2114,10 @@ mapAliases {
   stacer = throw "'stacer' has been removed because it was abandoned upstream and relied upon vulnerable software"; # Added 2025-11-08
   stalwart = warnAlias "`stalwart` is currently pinned to `0.15.5`. If `0.16.x` is needed, it is available as `stalwart_0_16`. Note: `stalwart_0_16` is not compatible with `services.stalwart` at this time." stalwart_0_15;
   stalwart-mail = warnAlias "'stalwart-mail' has been renamed to/replaced by 'stalwart'" stalwart; # Added 2026-01-19
+  stardust-xr-kiara = throw "" "'stardust-xr-kiara' has been removed as it is no longer compatible with the latest versions of the Stardust XR server"; # Added 2026-07-04
+  stardust-xr-magnetar = throw "" "'stardust-xr-magnetar' has been removed as it is no longer compatible with the latest versions of the Stardust XR server"; # Added 2026-07-04
+  stardust-xr-phobetor = throw "" "'stardust-xr-phobetor' has been removed as it is no longer compatible with the latest versions of the Stardust XR server"; # Added 2026-07-04
+  stardust-xr-sphereland = throw "" "'stardust-xr-sphereland' has been removed as it is no longer compatible with the latest versions of the Stardust XR server"; # Added 2026-07-04
   starpls-bin = throw "'starpls-bin' has been renamed to/replaced by 'starpls'"; # Converted to throw 2025-10-27
   station = throw "station has been removed from nixpkgs, as there were no committers among its maintainers to unblock security issues"; # Added 2025-06-16
   steam-run-native = throw "'steam-run-native' has been renamed to/replaced by 'steam-run'"; # Converted to throw 2025-10-27
