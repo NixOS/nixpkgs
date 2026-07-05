@@ -1362,8 +1362,6 @@ with pkgs;
   androidndkPkgs_28 = (callPackage ../development/androidndk-pkgs { })."28";
   androidndkPkgs_29 = (callPackage ../development/androidndk-pkgs { })."29";
 
-  androidsdk = androidenv.androidPkgs.androidsdk;
-
   webos = recurseIntoAttrs {
     cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
 
