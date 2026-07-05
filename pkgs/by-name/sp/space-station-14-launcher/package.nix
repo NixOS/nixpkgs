@@ -2,6 +2,7 @@
   lib,
   stdenv,
   config,
+  nix-update-script,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -132,6 +133,8 @@ buildDotnetModule rec {
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico ${pname} $out
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
