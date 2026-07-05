@@ -31,6 +31,8 @@
   systemd ? null,
   # optionally support DNS-over-HTTPS as a server
   withDoH ? false,
+  # optionally support DNS-over-QUIC as a server
+  withDoQ ? false,
   withECS ? false,
   withDNSCrypt ? false,
   withDNSTAP ? false,
@@ -38,7 +40,7 @@
   withRedis ? false,
   # Avoid .lib depending on lib.getLib openssl
   # The build gets a little hacky, so in some cases we disable this approach.
-  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP,
+  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP && !withDoQ,
   # enable support for python plugins in unbound: note this is distinct from pyunbound
   # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
   withPythonModule ? false,
@@ -47,6 +49,7 @@
   withLto ? !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW,
   withMakeWrapper ? !stdenv.hostPlatform.isMinGW,
   libnghttp2,
+  ngtcp2,
 
   # for passthru.updateScript
   nix-update-script,
@@ -55,6 +58,9 @@
   versionCheckHook,
 }:
 
+assert lib.assertMsg (
+  !withDoQ || lib.versionAtLeast openssl.version "3.5.0"
+) "unbound: withDoQ requires OpenSSL with QUIC support (OpenSSL >= 3.5)";
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
   version = "1.25.1";
@@ -90,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals withDoH [ libnghttp2 ]
+  ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
 
   enableParallelBuilding = true;
@@ -119,6 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
+  ]
+  ++ lib.optionals withDoQ [
+    "--with-libngtcp2=${ngtcp2.dev}"
   ]
   ++ lib.optionals withECS [
     "--enable-subnet"

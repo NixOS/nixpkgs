@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ldacBT";
+  pname = "ldacbt";
   version = "2.0.72";
 
   src = fetchFromGitHub {
@@ -22,96 +24,38 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-abr-drop-support-for-dynamic-loading-libldac.patch
+
+    # Darwin doesn’t have `<endian.h>`; use the predefined GCC/Clang
+    # macros instead.
+    ./make-byte-order-checks-portable.patch
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-O2 -fPIC -fno-merge-constants -Wall -Iinc -Isrc -Iabr/inc";
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
-  # Verify finalAttrs.version matches LDACBT_LIB_VER_* in upstream source.
-  # Guards against silent version drift when the pinned commit changes.
-  preBuild = ''
+  mesonBuildType = "release";
+
+  # The upstream build system is tied to AOSP, so we use our own Meson
+  # definitions to replace it.
+  postPatch = ''
+    ln -s ${./meson.build} meson.build
+
     awk -v want=${finalAttrs.version} '
       /^#define LDACBT_LIB_VER_/ { v = v sep ($3+0); sep = "." }
       END {
         if (v != want) { print "version mismatch: package says " want ", source reports " v > "/dev/stderr"; exit 1 }
+        print v
       }
-    ' src/ldacBT_api.c
-  '';
-
-  # Upstream ships AOSP build files and a gcc/ makefile that only knows
-  # about the in-tree layout. Compile and link directly; the entire
-  # library is two umbrella translation units.
-  buildPhase = ''
-    runHook preBuild
-
-    soname=libldacBT.so.${lib.versions.major finalAttrs.version}
-    sofile=libldacBT.so.${finalAttrs.version}
-
-    $CC -shared -Wl,-soname,$soname src/ldaclib.c src/ldacBT.c abr/src/ldacBT_abr.c -lm -o $sofile
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 -t $out/lib $sofile
-    ln -s $sofile $out/lib/$soname
-    ln -s $sofile $out/lib/libldacBT.so
-
-    install -Dm644 inc/ldacBT.h $dev/include/ldac/ldacBT.h
-    install -Dm644 abr/inc/ldacBT_abr.h $dev/include/ldac/ldacBT_abr.h
-
-    mkdir -p $dev/lib/pkgconfig
-    cat > $dev/lib/pkgconfig/ldacBT-dec.pc <<EOF
-    prefix=$out
-    exec_prefix=\''${prefix}
-    libdir=$out/lib
-    includedir=$dev/include/ldac
-
-    Name: ldacBT-dec
-    Description: LDAC Bluetooth decoder
-    Version: ${finalAttrs.version}
-    Libs: -L\''${libdir} -lldacBT
-    Libs.private: -lm
-    Cflags: -I\''${includedir}
-    EOF
-
-    cat > $dev/lib/pkgconfig/ldacBT-enc.pc <<EOF
-    prefix=$out
-    exec_prefix=\''${prefix}
-    libdir=$out/lib
-    includedir=$dev/include/ldac
-
-    Name: ldacBT-enc
-    Description: LDAC Bluetooth encoder
-    Version: ${finalAttrs.version}
-    Libs: -L\''${libdir} -lldacBT
-    Libs.private: -lm
-    Cflags: -I\''${includedir}
-    EOF
-
-    cat > $dev/lib/pkgconfig/ldacBT-abr.pc <<EOF
-    prefix=$out
-    exec_prefix=\''${prefix}
-    libdir=$out/lib
-    includedir=$dev/include/ldac
-
-    Name: ldacBT-abr
-    Description: LDAC Bluetooth ABR library
-    Version: ${finalAttrs.version}
-    Libs: -L\''${libdir} -lldacBT
-    Libs.private: -lm
-    Cflags: -I\''${includedir}
-    EOF
-
-    runHook postInstall
+    ' src/ldacBT_api.c > VERSION
   '';
 
   meta = {
     description = "Sony LDAC Bluetooth decoder library (from AOSP via open-vela)";
     homepage = "https://github.com/open-vela/external_libldac";
     license = lib.licenses.asl20;
-    # LDAC bitstream format assumes LE; source has endian checks
+    # libldac code detects & #error's out on non-LE byte order
     platforms = lib.platforms.littleEndian;
     maintainers = with lib.maintainers; [ qweered ];
   };

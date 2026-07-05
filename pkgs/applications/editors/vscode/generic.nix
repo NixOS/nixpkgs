@@ -308,11 +308,6 @@ stdenv.mkDerivation (
     dontConfigure = true;
     noDumpEnvVars = true;
 
-    stripExclude = lib.optional hasVsceSign [
-      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
-      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
-    ];
-
     installPhase = ''
       runHook preInstall
     ''
@@ -474,9 +469,11 @@ stdenv.mkDerivation (
           --add-needed ${libglvnd}/lib/libEGL.so.1 \
           $out/lib/${libraryName}/${executableName}
       ''
+      # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
+        cp -r ./resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign "$out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
         patchelf \
-          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
           $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
       '')
     );

@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zoxide";
-  version = "0.9.9";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2scJ5/+A3ZSpIdce5GLYqxjc0so9sVsYiXNULmjMzLY=";
+    hash = "sha256-BLGjsmljY2UZSWmbRX+Xf5sIgSBrDviKGzXjyGmB+2w=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoHash = "sha256-4BXZ5NnwY2izzJFkPkECKvpuyFWfZ2CguybDDk0GDU0=";
+  cargoHash = "sha256-5Be/eIMn3JurFIhoPK6B5L054lLPek9CR93zTJzJS6w=";
 
   passthru = {
     tests = {

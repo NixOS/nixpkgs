@@ -135,6 +135,11 @@ let
           # so we don't have to account for that scenario.
           "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
         ];
+
+        # TODO: Clean up on `staging`.
+        env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+          NIX_LDFLAGS = "-headerpad_max_install_names";
+        };
       }
     );
 

@@ -2,20 +2,23 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  gitMinimal,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "snip";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "edouard-claude";
     repo = "snip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pRYxTHNdR2NGiE+RdThcmz3zVP5rKVRbt+IEILIgavk=";
+    hash = "sha256-u6Jc9U4tb5Y/evtWR/Nw535xVh09ChcKN0Dm+l3bjvA=";
   };
 
   vendorHash = "sha256-2MxFZqjNuLzcuu+bsLyOyHIakCxh7j0FUx8LsjZRhrY=";
+
+  nativeCheckInputs = [ gitMinimal ];
 
   ldflags = [
     "-s"

@@ -5,6 +5,10 @@
   useSwiftDriver ? true,
   swift-driver,
   clang,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
+  writeShellScriptBin,
 }:
 
 stdenv.mkDerivation (
@@ -90,6 +94,15 @@ stdenv.mkDerivation (
           cp "$input" "$out/nix-support/$(basename "$input")"
         done
       fi
+    ''
+    # TODO: Clean up on `staging`.
+    + lib.optionalString stdenv.targetPlatform.isDarwin ''
+      printf "NIX_SWIFTFLAGS_COMPILE+=' -use-ld=lld -tools-directory %s'\n" \
+        ${writeShellScriptBin "ld" ''
+          exec ${lib.getExe' llvmPackages.lld "ld64.lld"} "$@"
+        ''}/bin \
+        >> $out/nix-support/setup-hook
+      printf '%s\n' ${lib.getBin llvmPackages.lld} >> $out/nix-support/propagated-build-inputs
     '';
 
     passthru = {
