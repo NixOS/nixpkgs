@@ -1590,6 +1590,7 @@ mapAliases {
   mx-puppet-discord = throw "mx-puppet-discord was removed since the packaging was unmaintained and was the sole user of sha1 hashes in nixpkgs"; # Added 2025-07-24
   mysql80 = throw "'mysql80' reached end of life on 2026-04-30 and has been removed."; # Added 2026-04-08
   mysql-client = throw "mysql-client has been replaced by mariadb.client"; # Converted to throw 2025-10-26
+  mysql-shell = mysql-shell_8; # Added 2026-07-05
   n98-magerun = throw "n98-magerun doesn't support new PHP newer than 8.1"; # Added 2025-10-03
   nagiosPluginsOfficial = throw "'nagiosPluginsOfficial' has been renamed to/replaced by 'monitoring-plugins'"; # Converted to throw 2025-10-27
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25

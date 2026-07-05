@@ -454,8 +454,6 @@ with pkgs;
 
   magika = with python3Packages; toPythonApplication magika;
 
-  mysql-shell = mysql-shell_8;
-
   inherit
     ({
       mysql-shell_8 = callPackage ../development/tools/mysql-shell/8.nix {
