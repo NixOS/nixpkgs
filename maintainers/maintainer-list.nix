@@ -30887,5 +30887,16 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  dariof4 = {
+    email = "dazedtank@gmail.com";
+    github = "dariof4";
+    githubId = 9992814;
+  };
+  danrobi11 = {
+    name = "Dan Robi";
+    email = "danielrobidoux49@yahoo.ca";
+    github = "danrobi11";
+    githubId = 48020114;
+  };
   # keep-sorted end
 }
