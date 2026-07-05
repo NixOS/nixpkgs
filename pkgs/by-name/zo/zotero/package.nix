@@ -12,7 +12,7 @@
   xz,
   gawk,
   rsync,
-  firefox-esr-140-unwrapped,
+  firefox-esr-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
   libGL,
