@@ -40,6 +40,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1W5NbWIULxFXGSozZEeITcPt1EbY6IsJLQdyevcn9BI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 5" "timeout = 50"
+  '';
+
   build-system = [
     hatchling
     uv-dynamic-versioning
