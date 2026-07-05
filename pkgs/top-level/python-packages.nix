@@ -21456,6 +21456,8 @@ self: super: with self; {
 
   viaggiatreno-ha = callPackage ../development/python-modules/viaggiatreno-ha { };
 
+  vicinity = callPackage ../development/python-modules/vicinity { };
+
   victron-ble = callPackage ../development/python-modules/victron-ble { };
 
   victron-ble-ha-parser = callPackage ../development/python-modules/victron-ble-ha-parser { };
