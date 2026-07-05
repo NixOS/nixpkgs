@@ -77,7 +77,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
-      };
+      }
+  // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+    CARGO_PROFILE_RELEASE_LTO = "thin";
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "16";
+  };
 
   depsBuildBuild = [
     pkg-config
