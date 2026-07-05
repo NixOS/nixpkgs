@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gawk common-updater-scripts coreutils jq squashfsTools
+#!nix-shell -i bash -p gawk common-updater-scripts coreutils jq squashfs-tools
 
 set -eu -o pipefail
 
