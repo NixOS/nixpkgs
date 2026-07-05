@@ -1,57 +1,72 @@
 {
   lib,
+  cachetools,
+  frozendict,
+  lxml,
   buildPythonPackage,
   fetchFromGitHub,
   python,
   requests,
+  setuptools,
 }:
 
 let
 
   json-ld = fetchFromGitHub {
-    owner = "json-ld";
-    repo = "json-ld.org";
-    rev = "843a70e4523d7cd2a4d3f5325586e726eb1b123f";
-    sha256 = "05j0nq6vafclyypxjj30iw898ig0m32nvz0rjdlslx6lawkiwb2a";
+    owner = "w3c";
+    repo = "json-ld-api";
+    rev = "8ad03db5477e24b70a4ded898a1b2e18d6ab684b";
+    hash = "sha256-M/Vr9muxSHQTHcgFXhg7kiQtIMGnpbl3QXIAE5KBv8k=";
+  };
+
+  json-ld-framing = fetchFromGitHub {
+    owner = "w3c";
+    repo = "json-ld-framing";
+    rev = "dfda94cfdfb360d5b64ac047bdb8ef86ec7ea0f1";
+    hash = "sha256-awn4cPF//wSe7kQ358bPwJY1HwcE25XhGbo5NrqkNXk=";
   };
 
   normalization = fetchFromGitHub {
     owner = "json-ld";
     repo = "normalization";
-    rev = "aceeaf224b64d6880189d795bd99c3ffadb5d79e";
-    sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
+    rev = "fbcfce5730bf2726c131a84d06ffb686a190a969";
+    hash = "sha256-a44vLPbWnbbR4kZa/jklCBvrPQwsllixsg0yZclhKls=";
   };
 in
 
 buildPythonPackage rec {
   pname = "pyld";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "2.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
     repo = "pyld";
-    rev = version;
-    sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
+    tag = "v${version}";
+    hash = "sha256-XKPAGOLuLk2VOnvdICo2sNPdeoQok+oGScWXeuYmi4o=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # Unfortunately PyLD does not pass all testcases in the JSON-LD corpus. We
-  # check for at least a minimum amount of successful tests so we know it's not
-  # getting worse, at least.
+  dependencies = [
+    cachetools
+    frozendict
+    lxml
+    requests
+  ];
+
   checkPhase = ''
-    ok_min=401
+    runHook preCheck
 
-    if ! ${python.interpreter} tests/runtests.py -d ${json-ld}/test-suite 2>&1 | tee test.out; then
-      ok_count=$(grep -F '... ok' test.out | wc -l)
-      if [[ $ok_count -lt $ok_min ]]; then
-        echo "Less than $ok_min tests passed ($ok_count). Failing the build."
-        exit 1
-      fi
-    fi
+    cp -r --no-preserve=all ${json-ld}/tests json-ld-tests
+    # We have no internet access
+    substituteInPlace json-ld-tests/manifest.jsonld \
+      --replace-fail '"remote-doc-manifest.jsonld",' ""
+    patch -p1 <${./disable-tests-where-pyld-is-not-strict-enough.diff}
 
-    ${python.interpreter} tests/runtests.py -d ${normalization}/tests
+    ${python.interpreter} tests/runtests.py ${normalization}/tests ${json-ld-framing}/tests json-ld-tests
+
+    runHook postCheck
   '';
 
   meta = {

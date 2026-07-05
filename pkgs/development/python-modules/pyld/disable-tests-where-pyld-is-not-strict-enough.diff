@@ -1,0 +1,109 @@
+diff --git a/tests/compact-manifest.jsonld b/tests/compact-manifest.jsonld
+index b8a4023..615fbf2 100644
+--- a/json-ld-tests/compact-manifest.jsonld
++++ b/json-ld-tests/compact-manifest.jsonld
+@@ -1048,7 +1048,7 @@
+       "input": "compact/c013-in.jsonld",
+       "context": "compact/c013-context.jsonld",
+       "expect": "compact/c013-out.jsonld",
+-      "option": {"specVersion": "json-ld-1.1"}    
++      "option": {"specVersion": "json-ld-1.1"}
+     }, {
+       "@id": "#tc014",
+       "@type": ["jld:PositiveEvaluationTest", "jld:CompactTest"],
+@@ -1175,15 +1175,6 @@
+       "context": "compact/c027-context.jsonld",
+       "expect": "compact/c027-out.jsonld",
+       "option": {"specVersion": "json-ld-1.1"}
+-    }, {
+-      "@id": "#tc028",
+-      "@type": ["jld:PositiveEvaluationTest", "jld:CompactTest"],
+-      "name": "Empty-property scoped context does not affect term selection.",
+-      "purpose": "Adding a minimal/empty property-scoped context should not affect the using terms defined in outer context.",
+-      "input": "compact/c028-in.jsonld",
+-      "context": "compact/c028-context.jsonld",
+-      "expect": "compact/c028-out.jsonld",
+-      "option": {"specVersion": "json-ld-1.1"}
+     }, {
+       "@id": "#tdi01",
+       "@type": [ "jld:PositiveEvaluationTest", "jld:CompactTest" ],
+diff --git a/tests/expand-manifest.jsonld b/tests/expand-manifest.jsonld
+index f4a5978..b4be431 100644
+--- a/json-ld-tests/expand-manifest.jsonld
++++ b/json-ld-tests/expand-manifest.jsonld
+@@ -1258,14 +1258,6 @@
+       "input": "expand/c035-in.jsonld",
+       "expect": "expand/c035-out.jsonld",
+       "option": {"specVersion": "json-ld-1.1"}
+-    }, {
+-      "@id": "#tc036",
+-      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
+-      "name": "Expansion with empty property-scoped context.",
+-      "purpose": "Adding a minimal/empty property-scoped context should not affect expansion of terms defined in the outer scope.",
+-      "input": "expand/c036-in.jsonld",
+-      "expect": "expand/c036-out.jsonld",
+-      "option": {"specVersion": "json-ld-1.1"}
+     }, {
+       "@id": "#tdi01",
+       "@type": [ "jld:PositiveEvaluationTest", "jld:ExpandTest" ],
+@@ -1780,13 +1772,6 @@
+      "purpose": "Verifies that an exception is raised on expansion when a context contains an invalid @prefix value",
+      "input": "expand/er53-in.jsonld",
+      "expectErrorCode": "invalid @prefix value"
+-    }, {
+-     "@id": "#ter54",
+-     "@type": [ "jld:NegativeEvaluationTest", "jld:ExpandTest" ],
+-     "name": "Invalid value object, multiple values for @type.",
+-     "purpose": "The value of @type in a value object MUST be a string or null.",
+-     "input": "expand/er54-in.jsonld",
+-     "expectErrorCode": "invalid typed value"
+     }, {
+      "@id": "#ter55",
+      "@type": [ "jld:NegativeEvaluationTest", "jld:ExpandTest" ],
+diff --git a/tests/toRdf-manifest.jsonld b/tests/toRdf-manifest.jsonld
+index 7ca7d08..3b25cb9 100644
+--- a/json-ld-tests/toRdf-manifest.jsonld
++++ b/json-ld-tests/toRdf-manifest.jsonld
+@@ -676,14 +676,6 @@
+       "input": "toRdf/c035-in.jsonld",
+       "expect": "toRdf/c035-out.nq",
+       "option": {"specVersion": "json-ld-1.1"}
+-    }, {
+-      "@id": "#tc036",
+-      "@type": ["jld:PositiveEvaluationTest", "jld:ToRDFTest"],
+-      "name": "Expansion with empty property-scoped context.",
+-      "purpose": "Adding a minimal/empty property-scoped context should not affect expansion of terms defined in the outer scope.",
+-      "input": "toRdf/c036-in.jsonld",
+-      "expect": "toRdf/c036-out.nq",
+-      "option": {"specVersion": "json-ld-1.1"}
+     }, {
+       "@id": "#tdi01",
+       "@type": [ "jld:PositiveEvaluationTest", "jld:ToRDFTest" ],
+@@ -1158,13 +1150,6 @@
+       "purpose": "RDF version of expand-0053",
+       "input": "toRdf/e053-in.jsonld",
+       "expect": "toRdf/e053-out.nq"
+-    }, {
+-      "@id": "#te054",
+-      "@type": ["jld:PositiveEvaluationTest", "jld:ToRDFTest"],
+-      "name": "Expand term with @type: @vocab",
+-      "purpose": "RDF version of expand-0054",
+-      "input": "toRdf/e054-in.jsonld",
+-      "expect": "toRdf/e054-out.nq"
+     }, {
+       "@id": "#te055",
+       "@type": ["jld:PositiveEvaluationTest", "jld:ToRDFTest"],
+@@ -2206,13 +2191,6 @@
+       "purpose": "Verifies that an exception is raised on expansion when a context contains an invalid @prefix value",
+       "input": "toRdf/er53-in.jsonld",
+       "expectErrorCode": "invalid @prefix value"
+-    }, {
+-     "@id": "#ter54",
+-     "@type": [ "jld:NegativeEvaluationTest", "jld:ToRDFTest" ],
+-     "name": "Invalid value object, multiple values for @type.",
+-     "purpose": "The value of @type in a value object MUST be a string or null.",
+-     "input": "toRdf/er54-in.jsonld",
+-     "expectErrorCode": "invalid typed value"
+     }, {
+      "@id": "#ter55",
+      "@type": [ "jld:NegativeEvaluationTest", "jld:ToRDFTest" ],
