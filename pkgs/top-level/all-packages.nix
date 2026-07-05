@@ -1385,12 +1385,6 @@ with pkgs;
     packetbeat7
     ;
 
-  auditbeat = auditbeat7;
-  filebeat = filebeat7;
-  heartbeat = heartbeat7;
-  metricbeat = metricbeat7;
-  packetbeat = packetbeat7;
-
   biliass = with python3.pkgs; toPythonApplication biliass;
 
   charles = charles5;
