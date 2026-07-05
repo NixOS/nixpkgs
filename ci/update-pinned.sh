@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -E 'with import ../. {}; mkShell { packages = [ npins ]; }'
+#!nix-shell -i bash -p npins -I nixpkgs=../
 
 set -euo pipefail
 

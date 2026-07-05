@@ -70,7 +70,7 @@ rec {
   };
   parse = pkgs.lib.recurseIntoAttrs {
     nix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
-    stable = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.stable; };
+    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
     lix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.lixPackageSets.latest.lix; };
   };
