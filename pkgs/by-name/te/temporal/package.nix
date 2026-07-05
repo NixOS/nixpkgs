@@ -11,23 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.30.5";
+  version = "1.31.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uw1E1GcLtIo1XZea/tb1TnbIk9O4Mf2NaCpDwUIfSak=";
+    hash = "sha256-NOmIEVBWA91oU7+yp1ySF7dyGlnQHgor1gKvvGg80BE=";
   };
 
-  vendorHash = "sha256-5++ETJgWDVveUxb2QZL5AUQG8/8QNVx5iS/NBjoacCY=";
-
-  overrideModAttrs = old: {
-    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  vendorHash = "sha256-KZKlARki/AXGhfsQsOixHjx+t1H9htd9oBx3wsiebY0=";
 
   excludedPackages = [ "./build" ];
 
