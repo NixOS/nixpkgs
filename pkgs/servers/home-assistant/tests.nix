@@ -182,36 +182,34 @@ let
     ];
   };
 in
-lib.listToAttrs (
-  map (
-    component:
-    lib.nameValuePair component (
-      home-assistant.overridePythonAttrs (old: {
-        pname = "homeassistant-test-${component}";
-        pyproject = false;
+lib.genAttrs home-assistant.supportedComponentsWithTests (
+  component:
+  home-assistant.overridePythonAttrs (old: {
+    pname = "homeassistant-test-${component}";
+    pyproject = false;
 
-        dontBuild = true;
-        dontInstall = true;
+    dontBuild = true;
+    dontInstall = true;
 
-        nativeCheckInputs =
-          old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python3Packages
-          ++ extraCheckInputs.${component} or [ ];
+    nativeCheckInputs =
+      old.requirementsTest
+      ++ home-assistant.getPackages component home-assistant.python3Packages
+      ++ extraCheckInputs.${component} or [ ];
 
-        disabledTests = extraDisabledTests.${component} or [ ];
-        disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
+    disabledTests = extraDisabledTests.${component} or [ ];
+    disabledTestPaths = extraDisabledTestPaths.${component} or [ ];
 
-        # components are more often racy than the core
-        dontUsePytestXdist = true;
+    # components are more often racy than the core
+    dontUsePytestXdist = true;
 
-        enabledTestPaths = [ "tests/components/${component}" ];
+    enabledTestPaths = [ "tests/components/${component}" ];
 
-        meta = old.meta // {
-          broken = lib.elem component [ ];
-          # upstream only tests on Linux, so do we.
-          platforms = lib.platforms.linux;
-        };
-      })
-    )
-  ) home-assistant.supportedComponentsWithTests
+    pytestFlags = [ "-vvv" ];
+
+    meta = old.meta // {
+      broken = lib.elem component [ ];
+      # upstream only tests on Linux, so do we.
+      platforms = lib.platforms.linux;
+    };
+  })
 )
