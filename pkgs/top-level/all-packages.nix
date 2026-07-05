@@ -7670,6 +7670,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  silicate = callPackage ../tools/security/silicate { };
+
   scalene = with python3Packages; toPythonApplication scalene;
 
   shairport-sync-airplay2 = shairport-sync.override {

@@ -22776,6 +22776,12 @@
     githubId = 101905225;
     name = "David Schneider";
   };
+  pure-sagacity = {
+    email = "khokharmaaz@gmail.com";
+    github = "pure-sagacity";
+    githubId = 74312880;
+    name = "Maaz Khokhar";
+  };
   purrpurrn = {
     email = "scrcpynovideoaudiocodecraw+nixpkgs@gmail.com";
     github = "purrpurrn";
