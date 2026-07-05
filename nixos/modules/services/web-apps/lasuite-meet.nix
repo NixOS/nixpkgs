@@ -415,6 +415,24 @@ in
       commonSystemdConfig
     ];
 
+    systemd.services.lasuite-meet-clean-pending-files = lib.mkMerge [
+      {
+        description = "Scheduled job to clean up pending uploads from LaSuite Meet";
+        startAt = "daily";
+        serviceConfig.ExecStart = "${getExe cfg.package} clean_pending_files";
+      }
+      commonSystemdConfig
+    ];
+
+    systemd.services.lasuite-meet-purge-deleted-files = lib.mkMerge [
+      {
+        description = "Scheduled job to purge deleted files from LaSuite Meet";
+        startAt = "daily";
+        serviceConfig.ExecStart = "${getExe cfg.package} purge_deleted_files";
+      }
+      commonSystemdConfig
+    ];
+
     services.postgresql = mkIf cfg.postgresql.createLocally {
       enable = true;
       ensureDatabases = [ "lasuite-meet" ];
