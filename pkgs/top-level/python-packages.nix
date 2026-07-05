@@ -5519,6 +5519,10 @@ self: super: with self; {
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
+  esphome-device-builder-frontend =
+    callPackage ../development/python-modules/esphome-device-builder-frontend
+      { };
+
   esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
 
   esprima = callPackage ../development/python-modules/esprima { };
