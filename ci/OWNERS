@@ -506,7 +506,7 @@ pkgs/by-name/oc/octodns/ @anthonyroussel
 pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
-pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 
 # Nim
 /doc/languages-frameworks/nim.section.md  @NixOS/nim
