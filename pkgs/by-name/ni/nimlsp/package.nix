@@ -15,13 +15,13 @@ let
 in
 buildNimPackage' (finalAttrs: {
   pname = "nimlsp";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MCtpCx8jMQp0VXuMowh69d1DQreU5cDftBf0lww7PUM=";
+    hash = "sha256-jUNW+tukZXv41HTWP2F2BdEn7nesFXVg2TffKPWfSss=";
   };
 
   lockFile = ./lock.json;
