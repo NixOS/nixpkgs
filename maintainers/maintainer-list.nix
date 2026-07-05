@@ -24093,6 +24093,12 @@
     githubId = 64620440;
     name = "RoGreat";
   };
+  rohan-datar = {
+    email = "me@rohandatar.com";
+    github = "rohan-datar";
+    githubId = 37545071;
+    name = "Rohan Datar";
+  };
   rohanssrao = {
     email = "rohanssrao@gmail.com";
     github = "rohanssrao";
