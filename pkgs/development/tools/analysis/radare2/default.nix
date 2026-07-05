@@ -25,6 +25,7 @@
   vte,
   xxhash,
   zlib,
+  callPackage,
   useX11 ? false,
   rubyBindings ? false,
   luaBindings ? false,
@@ -138,7 +139,22 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
-  passthru.updateScript = ./update.sh;
+  passthru = rec {
+    updateScript = ./update.sh;
+
+    plugins = {
+      r2ghidra = callPackage ./r2ghidra.nix {
+        radare2 = finalAttrs.finalPackage;
+      };
+    };
+
+    withPlugins =
+      filter:
+      callPackage ./wrapper.nix {
+        radare2 = finalAttrs.finalPackage;
+        plugins = filter plugins;
+      };
+  };
 
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
