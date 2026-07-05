@@ -5346,6 +5346,8 @@ with pkgs;
     // (config.radare or { })
   );
 
+  radarePlugins = recurseIntoAttrs radare2.plugins;
+
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
