@@ -6,6 +6,7 @@
   testers,
   temporal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -62,10 +63,18 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) temporal;
-    version = testers.testVersion {
-      package = temporal;
+  passthru = {
+    tests = {
+      inherit (nixosTests) temporal;
+      version = testers.testVersion {
+        package = temporal;
+      };
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--use-github-releases"
+      ];
     };
   };
 
