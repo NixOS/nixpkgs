@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";
-    homepage = "https://github.com/fenderglass/Flye";
+    homepage = "https://github.com/mikolmogorov/Flye";
     license = lib.licenses.bsd3;
     mainProgram = "flye";
     maintainers = with lib.maintainers; [ assistant ];
