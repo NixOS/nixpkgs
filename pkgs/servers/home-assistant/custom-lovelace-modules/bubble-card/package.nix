@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "bubble-card";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "Clooos";
     repo = "Bubble-Card";
     rev = "v${version}";
-    hash = "sha256-X6Oh+0VcVSvr2JydMqWVzYFonxdsewi0lrrFVXtb/BA=";
+    hash = "sha256-ofGIq6DLA2VQj5Gm/Dc+DZfwWZI3frAFzXO7MJDM610=";
   };
 
   npmDepsHash = "sha256-jyw8U99R7M3JJwu30ADefAitm4lWWVHEwq108gWZpfg=";

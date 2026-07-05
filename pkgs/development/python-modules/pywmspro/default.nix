@@ -4,19 +4,20 @@
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
+  aiofiles,
   aiohttp,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pywmspro";
-  version = "0.3.5";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mback2k";
     repo = "pywmspro";
     tag = finalAttrs.version;
-    hash = "sha256-01jXkSZfmBIzrz0B/4/KLcAU4jUQGDfle4sE4saraJo=";
+    hash = "sha256-gpAAGrM/dLSD7rCbYM9O3hVCvDb0QA0joZG7h+jTfCg=";
   };
 
   build-system = [
@@ -24,7 +25,10 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiofiles
+    aiohttp
+  ];
 
   # Package has no tests
   doCheck = false;
