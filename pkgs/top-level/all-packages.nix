@@ -367,8 +367,6 @@ with pkgs;
 
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
-  octodns-providers = octodns.providers;
-
   oletools = with python3.pkgs; toPythonApplication oletools;
 
   ollama-cpu = callPackage ../by-name/ol/ollama/package.nix { acceleration = false; };
