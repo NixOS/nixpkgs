@@ -328,7 +328,7 @@ class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
         self._anchor_prefix = anchor_prefix
 
     def _parallel_render_prepare(self) -> Any:
-        return (self._renderer._manpage_urls, self._revision)
+        return (self._renderer._manpage_urls, self._revision, self._anchor_style, self._anchor_prefix)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> CommonMarkConverter:
         return cls(*a)
