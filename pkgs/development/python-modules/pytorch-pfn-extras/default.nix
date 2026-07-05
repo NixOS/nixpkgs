@@ -18,6 +18,7 @@
   onnx,
   pyparsing,
   pytestCheckHook,
+  pyyaml,
   torchvision,
 }:
 
@@ -44,8 +45,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     onnx
-    pytestCheckHook
     pyparsing
+    pytestCheckHook
+    pyyaml
     torchvision
   ];
 
