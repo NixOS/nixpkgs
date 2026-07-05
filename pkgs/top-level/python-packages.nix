@@ -1142,8 +1142,6 @@ self: super: with self; {
 
   asks = callPackage ../development/python-modules/asks { };
 
-  asmog = callPackage ../development/python-modules/asmog { };
-
   asn1 = callPackage ../development/python-modules/asn1 { };
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
@@ -1261,8 +1259,6 @@ self: super: with self; {
   asysocks = callPackage ../development/python-modules/asysocks { };
 
   atc-ble = callPackage ../development/python-modules/atc-ble { };
-
-  atenpdu = callPackage ../development/python-modules/atenpdu { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
@@ -1398,8 +1394,6 @@ self: super: with self; {
   avea = callPackage ../development/python-modules/avea { };
 
   avidtools = callPackage ../development/python-modules/avidtools { };
-
-  avion = callPackage ../development/python-modules/avion { };
 
   avro = callPackage ../development/python-modules/avro { };
 
@@ -2065,8 +2059,6 @@ self: super: with self; {
   beets-minimal = beets.override {
     disableAllPlugins = true;
   };
-
-  beewi-smartclim = callPackage ../development/python-modules/beewi-smartclim { };
 
   before-after = callPackage ../development/python-modules/before-after { };
 
@@ -5141,8 +5133,6 @@ self: super: with self; {
 
   eliot = callPackage ../development/python-modules/eliot { };
 
-  eliqonline = callPackage ../development/python-modules/eliqonline { };
-
   elkm1-lib = callPackage ../development/python-modules/elkm1-lib { };
 
   elkoep-aio-mqtt = callPackage ../development/python-modules/elkoep-aio-mqtt { };
@@ -6523,8 +6513,6 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
-  gitterpy = callPackage ../development/python-modules/gitterpy { };
-
   giturlparse = callPackage ../development/python-modules/giturlparse { };
 
   glad = callPackage ../development/python-modules/glad { };
@@ -6930,8 +6918,6 @@ self: super: with self; {
   greenlet = if isPyPy then null else callPackage ../development/python-modules/greenlet { };
 
   greenplanet-energy-api = callPackage ../development/python-modules/greenplanet-energy-api { };
-
-  greenwavereality = callPackage ../development/python-modules/greenwavereality { };
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
@@ -8632,6 +8618,8 @@ self: super: with self; {
   knowit = callPackage ../development/python-modules/knowit { };
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
+
+  knx-telegram-store = callPackage ../development/python-modules/knx-telegram-store { };
 
   kokoro = callPackage ../development/python-modules/kokoro { };
 
@@ -12250,6 +12238,8 @@ self: super: with self; {
 
   opuslib = callPackage ../development/python-modules/opuslib { };
 
+  opuslib-next = callPackage ../development/python-modules/opuslib-next { };
+
   opytimark = callPackage ../development/python-modules/opytimark { };
 
   oracledb = callPackage ../development/python-modules/oracledb { };
@@ -14834,8 +14824,6 @@ self: super: with self; {
 
   pymssql = callPackage ../development/python-modules/pymssql { krb5-c = pkgs.krb5; };
 
-  pymsteams = callPackage ../development/python-modules/pymsteams { };
-
   pymumble = callPackage ../development/python-modules/pymumble { };
 
   pymunk = callPackage ../development/python-modules/pymunk { };
@@ -16096,8 +16084,6 @@ self: super: with self; {
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
 
   python-citybikes = callPackage ../development/python-modules/python-citybikes { };
-
-  python-clementine-remote = callPackage ../development/python-modules/python-clementine-remote { };
 
   python-code-minimap = callPackage ../development/python-modules/python-code-minimap { };
 
@@ -17967,8 +17953,6 @@ self: super: with self; {
   scrypt = callPackage ../development/python-modules/scrypt { };
 
   scs = callPackage ../development/python-modules/scs { };
-
-  scsgate = callPackage ../development/python-modules/scsgate { };
 
   scspell = callPackage ../development/python-modules/scspell { };
 
@@ -19967,8 +19951,6 @@ self: super: with self; {
 
   tika-client = callPackage ../development/python-modules/tika-client { };
 
-  tikteck = callPackage ../development/python-modules/tikteck { };
-
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
   tiledb = callPackage ../development/python-modules/tiledb { inherit (pkgs) tiledb; };
@@ -20028,6 +20010,8 @@ self: super: with self; {
   tinydb = callPackage ../development/python-modules/tinydb { };
 
   tinygrad = callPackage ../development/python-modules/tinygrad { };
+
+  tinyhtml = callPackage ../development/python-modules/tinyhtml { };
 
   tinyhtml5 = callPackage ../development/python-modules/tinyhtml5 { };
 
@@ -21211,8 +21195,6 @@ self: super: with self; {
 
   unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
 
-  unifiled = callPackage ../development/python-modules/unifiled { };
-
   unify = callPackage ../development/python-modules/unify { };
 
   unique-log-filter = callPackage ../development/python-modules/unique-log-filter { };
@@ -22292,6 +22274,8 @@ self: super: with self; {
   zigpy-zboss = callPackage ../development/python-modules/zigpy-zboss { };
 
   zigpy-zigate = callPackage ../development/python-modules/zigpy-zigate { };
+
+  zigpy-ziggurat = callPackage ../development/python-modules/zigpy-ziggurat { };
 
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
