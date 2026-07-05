@@ -14,7 +14,6 @@
   patchelf,
   pkg-config,
   python3Packages,
-  shellcheck,
 
   # runtime
   flatbuffers,
@@ -85,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python
     scons'
-    shellcheck
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
