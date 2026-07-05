@@ -39,9 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=xdg::test_render_svg_to_png"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Prototype application launchers for Stardust XR";

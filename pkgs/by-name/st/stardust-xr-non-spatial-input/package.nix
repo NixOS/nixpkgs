@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utilities that allow using non-spatial (e.g. keyboard and mouse) inputs in Stardust";
