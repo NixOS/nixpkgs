@@ -2,17 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   trezor,
   libagent,
-  setuptools,
-  pinentry,
+  keyrings-alt,
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "trezor-agent";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
@@ -23,24 +23,25 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/agents/trezor";
 
-  propagatedBuildInputs = [
-    setuptools
-    trezor
+  build-system = [ setuptools ];
+
+  dependencies = [
     libagent
-    pinentry
+    trezor
+    keyrings-alt
   ];
 
   doCheck = false;
-  pythonImportsCheck = [ "libagent" ];
+  pythonImportsCheck = [ "trezor_agent" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=trezor/(.*)" ];
   };
 
   meta = {
-    description = "Using Trezor as hardware SSH agent";
+    description = "Using Trezor as hardware SSH/GPG/age agent";
     homepage = "https://github.com/romanz/trezor-agent";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       hkjn
       np
