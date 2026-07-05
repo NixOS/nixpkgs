@@ -9919,6 +9919,12 @@
     githubId = 67570424;
     name = "gibbert";
   };
+  gid-commit = {
+    name = "Gid van der Ven";
+    email = "ggv@veo.co";
+    github = "gid-commit";
+    githubId = 152498859;
+  };
   gigahawk = {
     email = "Jasper Chan";
     name = "jasperchan515@gmail.com";
