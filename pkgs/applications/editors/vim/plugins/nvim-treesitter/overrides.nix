@@ -4,6 +4,7 @@
   symlinkJoin,
   vimUtils,
   tree-sitter,
+  tree-sitter-grammars,
   neovim,
   neovimUtils,
   runCommand,
@@ -127,7 +128,7 @@ let
   withPlugins =
     f:
     let
-      selectedGrammars = f (tree-sitter.builtGrammars // builtGrammars);
+      selectedGrammars = f (tree-sitter-grammars.derivations // builtGrammars);
 
       grammarPlugins = map grammarToPlugin selectedGrammars;
 
