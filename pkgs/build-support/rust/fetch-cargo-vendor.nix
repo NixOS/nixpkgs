@@ -34,7 +34,6 @@ let
     "pname"
     "version"
     "nativeBuildInputs"
-    "hash"
   ];
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
@@ -51,17 +50,18 @@ let
   } (builtins.readFile ./fetch-cargo-vendor-util.py);
 in
 
-{
-  name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
-  hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
-  nativeBuildInputs ? [ ],
-  ...
-}@args:
-
 # TODO: add asserts about pname version and name
 
-let
-  vendorStaging = stdenvNoCC.mkDerivation (
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+  excludeDrvArgNames = removedArgs;
+  extendDrvArgs =
+    finalAttrs:
+    {
+      name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
+      nativeBuildInputs ? [ ],
+      ...
+    }@args:
     {
       name = "${name}-vendor-staging";
 
@@ -92,22 +92,23 @@ let
       dontInstall = true;
       dontFixup = true;
 
-      outputHash = hash;
-      outputHashAlgo = if hash == "" then "sha256" else null;
+      outputHash = finalAttrs.hash or "";
+      outputHashAlgo = if finalAttrs.outputHash == "" then "sha256" else null;
       outputHashMode = "recursive";
-    }
-    // removeAttrs args removedArgs
-  );
-in
-runCommand "${name}-vendor"
-  {
-    inherit vendorStaging;
-    nativeBuildInputs = [
-      fetchCargoVendorUtil
-      cargo
-      replaceWorkspaceValues
-    ];
-  }
-  ''
-    fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
-  ''
+    };
+
+  transformDrv =
+    vendorStaging:
+    runCommand "${lib.removeSuffix "-vendor-staging" vendorStaging.name}-vendor"
+      {
+        inherit vendorStaging;
+        nativeBuildInputs = [
+          fetchCargoVendorUtil
+          cargo
+          replaceWorkspaceValues
+        ];
+      }
+      ''
+        fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
+      '';
+}
