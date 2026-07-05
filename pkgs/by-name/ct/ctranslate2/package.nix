@@ -30,6 +30,9 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
   version = "4.8.1";
 
+  __strutcturedAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
