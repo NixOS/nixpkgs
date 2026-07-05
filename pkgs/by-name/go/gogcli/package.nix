@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   version = "0.29.0";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
     hash = "sha256-JunPpEzbNp00uEiJ7AzouXyzFwyNLehLU7mwL3eh4bM=";
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
-    homepage = "https://github.com/steipete/gogcli";
+    homepage = "https://github.com/openclaw/gogcli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ macalinao ];
     mainProgram = "gog";

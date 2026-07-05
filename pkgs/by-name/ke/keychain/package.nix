@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.9.8";
 
   src = fetchFromGitHub {
-    owner = "funtoo";
+    owner = "danielrobbins";
     repo = "keychain";
     rev = finalAttrs.version;
     sha256 = "sha256-xk3ooFhBkgv93Po5oC4TZRmMhJJXDv7yekoE102FQd8=";
