@@ -1013,13 +1013,13 @@
     "vendorHash": "sha256-/4mktOn7qjWIkpyqeEW4vzY0w0pG+0qx7KRYBkE1IkQ="
   },
   "okta_okta": {
-    "hash": "sha256-EuGhOCJKjhttlWVfrpBjBAVOtbFfRHl2gk7zev2w9TY=",
+    "hash": "sha256-Qpdinb4ZJRjZG4lMv5EFkicBcYU+OiLz9on3ZaQQu8s=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v6.12.0",
+    "rev": "v6.13.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/IbzilmyVTZh7qWogtXd+/Y7UJdjsQaf7Yjhi1fU1Vc="
+    "vendorHash": "sha256-z13CKv4d+C2VsdUfiArzLLaXExq8k4Y5Y9GEidqqGb0="
   },
   "oktadeveloper_oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",
