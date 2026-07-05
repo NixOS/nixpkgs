@@ -16,6 +16,7 @@
     ./firmware.nix
     ./graphics
     ./keyboard.nix
+    ./laptop.nix
     ./networking
     ./system.nix
     ./virtualisation.nix
