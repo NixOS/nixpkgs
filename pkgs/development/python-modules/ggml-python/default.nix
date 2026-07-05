@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
-  version = "0.0.44";
+  version = "0.0.45";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # ggml-python expects an older version of ggml than pkgs.ggml's
     fetchSubmodules = true;
-    hash = "sha256-Pjc91nKBAdmEg8TmirWdD1AcKlY+BCDAoHzL6mTE2SM=";
+    hash = "sha256-rPbYp6if9bCiQGfM7ZC84hkJKadE2mwC9N3elgVfQBc=";
   };
 
   build-system = [

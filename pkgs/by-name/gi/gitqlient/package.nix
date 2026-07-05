@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # QCheckBox::stateChanged is deprecated
 
   meta = {
-    homepage = "https://github.com/francescmm/GitQlient";
+    homepage = "https://github.com/francescmaestre/GitQlient";
     description = "Multi-platform Git client written with Qt";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
