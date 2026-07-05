@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix coreutils curl jq nix-prefetch-git prefetch-npm-deps
+#!nix-shell -i bash -p nix coreutils curl jq nix-prefetch-git
 
 set -euo pipefail
 
@@ -22,10 +22,12 @@ if [[ "$UPDATE_NIX_OLD_VERSION" == "$TARGET_VERSION" ]]; then
     exit 0
 fi
 
-extractVendorHash() {
-    original="${1?original hash missing}"
-    result="$(nix-build -A prometheus.goModules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
-    [ -z "$result" ] && { echo "$original"; } || { echo "$result"; }
+FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+
+extractHash() {
+    attr="${1?attr missing}"
+    result="$(nix-build -A "$attr" 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+    [ -z "$result" ] && { echo "$FAKE_HASH"; } || { echo "$result"; }
 }
 
 TMP=$(mktemp -d)
@@ -37,28 +39,24 @@ SOURCE_NIX="$NIXPKGS_PROMETHEUS_PATH/source.nix"
 PREFETCH_JSON=$TMP/prefetch.json
 nix-prefetch-git --rev "$TARGET_TAG" --url "https://github.com/$OWNER/$REPO" > "$PREFETCH_JSON"
 PREFETCH_HASH="$(jq '.hash' -r < "$PREFETCH_JSON")"
-PREFETCH_PATH="$(jq '.path' -r < "$PREFETCH_JSON")"
-NPM_DEPS_HASH="$(prefetch-npm-deps "$PREFETCH_PATH/web/ui/package-lock.json")"
-
-FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
 cat > "$SOURCE_NIX" <<-EOF
 {
   version = "$TARGET_VERSION";
   hash = "$PREFETCH_HASH";
-  npmDepsHash = "$NPM_DEPS_HASH";
+  pnpmDepsHash = "$FAKE_HASH";
   vendorHash = "$FAKE_HASH";
 }
 EOF
 
-GO_HASH="$(nix-instantiate --eval -A prometheus.vendorHash | tr -d '"')"
-VENDOR_HASH=$(extractVendorHash "$GO_HASH")
+VENDOR_HASH=$(extractHash prometheus.goModules)
+PNPM_DEPS_HASH=$(extractHash prometheus.assets.pnpmDeps)
 
 cat > "$SOURCE_NIX" <<-EOF
 {
   version = "$TARGET_VERSION";
   hash = "$PREFETCH_HASH";
-  npmDepsHash = "$NPM_DEPS_HASH";
+  pnpmDepsHash = "$PNPM_DEPS_HASH";
   vendorHash = "$VENDOR_HASH";
 }
 EOF
