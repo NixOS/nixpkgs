@@ -38,7 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Bumps the gupnp_igd_dep version requested to 1.6
     # https://gitlab.freedesktop.org/libnice/libnice/-/merge_requests/255
     ./gupnp-igd-bump.patch
-
+  ]
+  # TODO: investigate what's wrong
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (fetchpatch {
       name = "freebsd.patch";
       url = "https://gitlab.freedesktop.org/libnice/libnice/-/commit/479f0813a571ff035bf00de679db452a0441125b.patch";
