@@ -6,13 +6,13 @@
   lazr-uri,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wadllib";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-acYKGIycYpoOlH36/Yms3It9jUBKa16wrSWP7yk2JQE=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})
