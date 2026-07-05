@@ -29,6 +29,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-S4tYL/fq7wMjq81WRftZ1A+RVxs7kGpaM/TfVBNBgaI=";
   };
 
+  patches = [
+    ./bluetooth-adapters-2.4.0-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=75.8.2" setuptools
