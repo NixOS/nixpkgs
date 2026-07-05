@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prmers";
-  version = "4.19.00-alpha";
+  version = "4.20.14-alpha-vtrace-memsafe-v63";
 
   src = fetchFromGitHub {
     owner = "cherubrock-seb";
     repo = "PrMers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zG9JLBqIqQjiz8+QNogk/rFeoj1/irmhfbVVe9HTq6A=";
+    hash = "sha256-QnQTAwsReKY7Rqm8spXmHZwfrw5VCsOOAtvhzE4GmHg=";
   };
 
   enableParallelBuilding = true;
