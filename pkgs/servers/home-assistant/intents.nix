@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "intents-package";
-    # https://github.com/OHF-Voice/intents-package/issues/14
     tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-fuVS+s3l/oStgrRdeLzHrzCr9cmFesq6sYV8EgNNsIo=";
