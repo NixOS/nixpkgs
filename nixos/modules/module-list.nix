@@ -729,6 +729,7 @@
   ./services/hardware/vdr.nix
   ./services/home-automation/deye-dummycloud.nix
   ./services/home-automation/ebusd.nix
+  ./services/home-automation/esphome-device-builder.nix
   ./services/home-automation/esphome.nix
   ./services/home-automation/evcc.nix
   ./services/home-automation/govee2mqtt.nix
