@@ -60,6 +60,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  disabledTests = [
+    # aiohttp api breakage, remove when bumping to 9.2.8 or newer
+    "test__raise_response_exceptions"
+  ];
+
   pythonImportsCheck = [ "yalexs" ];
 
   meta = {
