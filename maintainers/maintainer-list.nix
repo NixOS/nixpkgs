@@ -10138,6 +10138,12 @@
     github = "gkleen";
     githubId = 20089782;
   };
+  glamberson = {
+    email = "greg@lamco.io";
+    github = "glamberson";
+    githubId = 700962;
+    name = "Greg Lamberson";
+  };
   gleber = {
     email = "gleber.p@gmail.com";
     github = "gleber";
