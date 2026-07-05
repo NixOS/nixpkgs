@@ -1219,7 +1219,6 @@ with pkgs;
     ammonite_2_13
     ammonite_3_3
     ;
-  ammonite = ammonite_3_3;
 
   android-tools = lowPrio (callPackage ../tools/misc/android-tools { });
 
