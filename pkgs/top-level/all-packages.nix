@@ -8676,16 +8676,6 @@ with pkgs;
 
   firefox-esr-140 = firefox-esr;
 
-  librewolf-bin = wrapFirefox librewolf-bin-unwrapped {
-    pname = "librewolf-bin";
-    extraPrefsFiles = [
-      "${librewolf-bin-unwrapped}/lib/librewolf-bin-${librewolf-bin-unwrapped.version}/librewolf.cfg"
-    ];
-    extraPoliciesFiles = [
-      "${librewolf-bin-unwrapped}/lib/librewolf-bin-${librewolf-bin-unwrapped.version}/distribution/extra-policies.json"
-    ];
-  };
-
   floorp-bin = wrapFirefox floorp-bin-unwrapped {
     pname = "floorp-bin";
   };
