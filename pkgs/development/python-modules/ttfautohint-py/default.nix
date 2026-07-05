@@ -36,10 +36,6 @@ buildPythonPackage rec {
     distutils
   ];
 
-  dependencies = [
-    setuptools # for pkg_resources
-  ];
-
   buildInputs = [ ttfautohint ];
 
   nativeCheckInputs = [
