@@ -40,7 +40,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2eDu2Fqd6K/ZxWSl/pXSN284z7UquNb+zwkHYe9ZWBw=";
+    hash = "sha256-PODG/SQsZsixBz/j+k8ALBhXS1fPg3v/o6TXkTyzSIQ=";
   };
 
   build-system = with python3Packages; [
@@ -130,6 +130,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       requests
       rich
       rpds-py
+      sentry-sdk
       six
       smmap
       sounddevice
