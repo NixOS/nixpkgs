@@ -41,6 +41,8 @@ buildPythonPackage (finalAttrs: {
     npm run build
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/esphome/esphome-device-builder-frontend/releases/tag/${finalAttrs.src.tag}";
     description = "Frontend for the ESPHome Device Builder";
