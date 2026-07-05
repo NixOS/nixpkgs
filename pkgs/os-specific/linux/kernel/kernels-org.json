@@ -5,43 +5,38 @@
         "lts": false
     },
     "6.1": {
-        "version": "6.1.176",
-        "hash": "sha256:1xj4ms4gd8ghd0l0dzsyi762dgpdrmqhc3f0arrp7sa0p8npf6da",
+        "version": "6.1.177",
+        "hash": "sha256:0c0ayz4nygcmz4865r7mcgmh7hic4fi7zysnj6vdlyj53bz9nlpn",
         "lts": true
     },
     "5.15": {
-        "version": "5.15.210",
-        "hash": "sha256:008a55av0x9fa3fspcz43sycik143gqxg2agcalrax2yw5ma82wi",
+        "version": "5.15.211",
+        "hash": "sha256:0qfry534wl5sbm6b4hf6fxqrr6mzf1k9pa2435sqp4hp6vjm9fdy",
         "lts": true
     },
     "5.10": {
-        "version": "5.10.259",
-        "hash": "sha256:02dn8rf9p0afkl8kbdv28ijq974zfnv8zdsqcqbmapjm19c8wpma",
+        "version": "5.10.260",
+        "hash": "sha256:113bka32apz5pfqjfnv97k9hf9arkn5asfcd6cw7snsh65qjka27",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.143",
-        "hash": "sha256:0ci9b6kjp7r2xwqifs2963l9ihk2rllk4zpl2kgzbny0r66izkns",
+        "version": "6.6.144",
+        "hash": "sha256:1hzcax2ypzhrjzmq4b0jyqyc4al0ncyfcj9pq36phl29gcqbh6gc",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.94",
-        "hash": "sha256:1ln83ljmc7wr1nrjjq1hp1m1vx54j7i6i15m3hqb73a1p4ra5679",
+        "version": "6.12.95",
+        "hash": "sha256:1xmrsi0kimirky4cailnkkrbd72pp9n8irfx6lfmss8yrcgwbs59",
         "lts": true
     },
     "6.18": {
-        "version": "6.18.37",
-        "hash": "sha256:0maj2ap1m09bxl6a3g9wc65h9sdr6y8rwc5qcqlbavb4wq0d4g58",
+        "version": "6.18.38",
+        "hash": "sha256:0igh9xy1lk2hv2jni00dqyy27j4zqh86waw7i65ryvnmmc4fa9mc",
         "lts": true
     },
-    "7.0": {
-        "version": "7.0.14",
-        "hash": "sha256:160ggaq9rh50a39gz02fpia8maq85bwxhqlwsc03yafjhjvrk6fy",
-        "lts": false
-    },
     "7.1": {
-        "version": "7.1.2",
-        "hash": "sha256:0gw8nnq6nix9xk2dhb1jwmhnqjayrn3bn2akzg4lgqkvfa9qq69p",
+        "version": "7.1.3",
+        "hash": "sha256:1p6iknvzmd04alrf49zn8mxw863v0yzgznyckfhl4llgx1lc0hdy",
         "lts": false
     }
 }
