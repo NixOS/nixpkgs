@@ -4,13 +4,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
+  setuptools,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "socialscan";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iojw";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-4JJVhB6x1NGagtfzE03Jae2GOr25hh+4l7gQ23zc7Ck=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     colorama
     tqdm
