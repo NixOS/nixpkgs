@@ -8676,8 +8676,6 @@ with pkgs;
 
   firefox-esr-140 = firefox-esr;
 
-  firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
-
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
     libName = "librewolf";
