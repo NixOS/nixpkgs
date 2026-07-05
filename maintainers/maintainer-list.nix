@@ -11502,12 +11502,6 @@
     githubId = 12761234;
     name = "Ida Bzowska";
   };
-  idlip = {
-    name = "Dilip";
-    email = "igoldlip@gmail.com";
-    github = "idlip";
-    githubId = 117019901;
-  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
@@ -22756,6 +22750,12 @@
     github = "purcell";
     githubId = 5636;
     name = "Steve Purcell";
+  };
+  pure-sagacity = {
+    name = "Maaz Khokhar";
+    email = "khokharmaaz@gmail.com";
+    github = "pure-sagacity";
+    githubId = 74312880;
   };
   purpole = {
     email = "mail@purpole.io";
