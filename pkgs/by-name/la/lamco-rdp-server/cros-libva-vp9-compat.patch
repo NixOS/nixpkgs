@@ -1,0 +1,12 @@
+--- a/vendor/cros-libva/src/buffer/vp9.rs
++++ b/vendor/cros-libva/src/buffer/vp9.rs
+@@ -434,7 +434,8 @@
+             skip_frame_flag,
+             number_skip_frames,
+             skip_frames_size,
+-            va_reserved: Default::default(),
++            va_reserved: Default::default(),
++            ..Default::default()
+         }))
+     }
+
