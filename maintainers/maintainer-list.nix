@@ -11502,6 +11502,12 @@
     githubId = 12761234;
     name = "Ida Bzowska";
   };
+  idlip = {
+    name = "Dilip";
+    email = "igoldlip@gmail.com";
+    github = "idlip";
+    githubId = 117019901;
+  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
