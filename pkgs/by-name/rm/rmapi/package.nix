@@ -27,6 +27,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       nickhu
       boltzmannrain
+      wamserma
     ];
     mainProgram = "rmapi";
   };
