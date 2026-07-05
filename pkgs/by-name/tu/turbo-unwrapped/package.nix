@@ -6,7 +6,6 @@
   fetchFromGitHub,
   installShellFiles,
   llvmPackages,
-  nix-update-script,
   protobuf,
   rustPlatform,
   xcbuild,
@@ -83,11 +82,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--use-github-releases"
-      ];
-    };
+    inherit ghostty-src ghostty-deps;
+    updateScript = ./update.sh;
   };
 
   meta = {
