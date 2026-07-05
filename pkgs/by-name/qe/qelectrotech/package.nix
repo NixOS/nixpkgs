@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   patches = [
     # stripped down version of https://codeberg.org/gentoo/gentoo/src/branch/master/sci-electronics/qelectrotech/files/qelectrotech-0.90_pre20250820-cmake.patch
     ./system-pugixml.patch
+    # Manual 0.100-compatible backport of the Qt-only color widget fallback from
+    # https://github.com/qelectrotech/qelectrotech-source-mirror/pull/533.
+    ./qt-color-widgets.patch
   ];
 
   # fix wrong cmake conditional
@@ -65,16 +68,16 @@ stdenv.mkDerivation rec {
 
     install -Dm555 qelectrotech $out/bin/qelectrotech
 
-    install -Dm444 -t $out/share/applications misc/qelectrotech.desktop
+    install -Dm444 -t $out/share/applications ../misc/org.qelectrotech.qelectrotech.desktop
 
     mkdir -p $out/share/qelectrotech
-    cp -r elements $out/share/qelectrotech
-    cp -r titleblocks $out/share/qelectrotech
-    cp -r lang $out/share/qelectrotech
-    cp -r examples $out/share/qelectrotech
+    cp -r ../elements $out/share/qelectrotech
+    cp -r ../titleblocks $out/share/qelectrotech
+    cp -r ../lang $out/share/qelectrotech
+    cp -r ../examples $out/share/qelectrotech
 
     mkdir -p $out/share/icons/hicolor
-    cp -r ico $out/share/icons/hicolor
+    cp -r ../ico $out/share/icons/hicolor
 
     runHook postInstall
   '';
