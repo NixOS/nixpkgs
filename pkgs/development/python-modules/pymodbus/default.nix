@@ -2,10 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  prompt-toolkit,
-  pygments,
   pymodbus-repl,
   pyserial,
   pytest-asyncio,
@@ -16,7 +13,6 @@
   setuptools,
   sqlalchemy,
   twisted,
-  typer,
 }:
 
 buildPythonPackage (finalAttrs: {
