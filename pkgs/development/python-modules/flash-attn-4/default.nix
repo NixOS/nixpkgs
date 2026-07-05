@@ -36,8 +36,6 @@ buildPythonPackage (finalAttrs: {
   # The top-level setup.py builds the classic compiled flash-attn and excludes flash_attn.cute.
   sourceRoot = "${finalAttrs.src.name}/flash_attn/cute";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   build-system = [
     setuptools
     setuptools-scm

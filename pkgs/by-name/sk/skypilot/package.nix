@@ -46,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace sky/setup_files/dependencies.py --replace-fail 'casbin' 'pycasbin'
     substituteInPlace pyproject.toml --replace-fail 'buildkite-test-collector' ""
