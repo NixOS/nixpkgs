@@ -311,8 +311,8 @@ in
       "sha256-CavBKgp+dEMR2poR+bG2PgZb+wX1zlNmuOyJsV3LfVM=";
 
   mypy-boto3-cognito-idp =
-    buildMypyBoto3Package "cognito-idp" "1.43.33"
-      "sha256-tNZluhU3Ano5b9ZYs4Zyut3WJrKyJgkCFc0ceM/NtmQ=";
+    buildMypyBoto3Package "cognito-idp" "1.43.40"
+      "sha256-Md4qwl+XC5zbtQFp2zteE+gWPyGEUaK8EyNcAlEQyj0=";
 
   mypy-boto3-cognito-sync =
     buildMypyBoto3Package "cognito-sync" "1.43.0"
@@ -331,8 +331,8 @@ in
       "sha256-Y+cDD5dq7C8tiGW37YheNcHTMxFyYCX6P6JPSjN7ttA=";
 
   mypy-boto3-config =
-    buildMypyBoto3Package "config" "1.43.23"
-      "sha256-6FyB/VCGsMYDBFUu0VzWpge94lASfg6CVewhkmpxycQ=";
+    buildMypyBoto3Package "config" "1.43.40"
+      "sha256-fnCKbH54gAMo/XqzCFyHhZMnV431ldlDE5kbej+yzsU=";
 
   mypy-boto3-connect =
     buildMypyBoto3Package "connect" "1.43.39"
@@ -363,8 +363,8 @@ in
       "sha256-pi0hMLpgYGrNU0/infONBg2WmES6NV0tfPgTjuRtWXk=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.43.17"
-      "sha256-+/r5ocaFv/4ZF0PpJMSoGeZtiE3nkqaMLzG+sECyNss=";
+    buildMypyBoto3Package "customer-profiles" "1.43.40"
+      "sha256-3eL2AWChh+ct7DwLMNlnXyA95vovQ6QO9zlDGB1gII4=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.43.0"
@@ -886,8 +886,8 @@ in
       "sha256-8K0Xm6PMo+daS6xt4kBqaVvO2/LruFV7PVvugI7sNDU=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.43.4"
-      "sha256-HZuUYGeTGlBaEbBrm31HRV1Xtaw8+nAQL1nBpiwRur4=";
+    buildMypyBoto3Package "mediatailor" "1.43.40"
+      "sha256-Khj9f1GD4q8Bjk5LsI2yJQvtKm910epVlJMz5WxgPpw=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.43.4"
@@ -990,8 +990,8 @@ in
       "sha256-0rAEnU+3VsESGKlu8OTnY//rzwRqvROhRFga+vnwd1k=";
 
   mypy-boto3-outposts =
-    buildMypyBoto3Package "outposts" "1.43.31"
-      "sha256-pCoCP49nPBy/qhPn4gYGiDdQSp4/4e6WlUCKv6q7uog=";
+    buildMypyBoto3Package "outposts" "1.43.40"
+      "sha256-f+z9dYLo4uhsRvaCUcR+dbYpEv7xmlfgvUR1+eM+NeU=";
 
   mypy-boto3-panorama =
     buildMypyBoto3Package "panorama" "1.43.0"
