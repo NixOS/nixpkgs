@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9XJ+nnvpTzr/3ii9dFkfZDex/++W5Mq9k0bh2Y6tueA=";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   checkFlags = [
     # ---- xdg::test_get_desktop_files stdout ----
     # thread 'xdg::test_get_desktop_files' panicked at protostar/src/xdg.rs:98:5:

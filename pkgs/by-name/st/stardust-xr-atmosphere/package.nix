@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-eQjRbavmUW2iw0OEC/DPk2FflTc4QCn0K/c4Og+sGW4=";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   passthru = {
     tests.versionTest = testers.testVersion {
       package = stardust-xr-atmosphere;
