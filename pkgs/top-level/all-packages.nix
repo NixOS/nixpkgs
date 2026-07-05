@@ -8676,10 +8676,6 @@ with pkgs;
 
   firefox-esr-140 = firefox-esr;
 
-  floorp-bin = wrapFirefox floorp-bin-unwrapped {
-    pname = "floorp-bin";
-  };
-
   inherit
     ({
       freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
