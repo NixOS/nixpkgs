@@ -1346,11 +1346,11 @@
     "vendorHash": "sha256-SF11E60OQiRdf+Pf6XyJg60yGRnGOcSzhrYccrWaeYE="
   },
   "terraform-lxd_lxd": {
-    "hash": "sha256-vrrQxld9Ymu2RcSRlkUzknTIBJteVeb9Jqr19CV3XzM=",
+    "hash": "sha256-fGiXnP8neze47FQXVCFlScya9ih67/5TQW5xKEBnI+Y=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
     "owner": "terraform-lxd",
     "repo": "terraform-provider-lxd",
-    "rev": "v3.0.1",
+    "rev": "v3.0.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-jOZw/va3dA0DYmnYSKbASHvyL7levjf1Bk6WelLga+Q="
   },
