@@ -10459,6 +10459,8 @@ self: super: with self; {
 
   model-signing = callPackage ../development/python-modules/model-signing { };
 
+  model2vec = callPackage ../development/python-modules/model2vec { };
+
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modelscope = callPackage ../development/python-modules/modelscope { };
