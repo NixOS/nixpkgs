@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   autoPatchelfHook,
   copyDesktopItems,
   alsa-lib,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
-    squashfsTools
+    squashfs-tools
     wrapGAppsHook3
   ];
 

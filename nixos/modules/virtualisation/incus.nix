@@ -61,7 +61,7 @@ let
       rsync
       skopeo
       squashfs-tools-ng
-      squashfsTools
+      squashfs-tools
       sshfs
       swtpm
       systemd

@@ -6,7 +6,7 @@
   gawk,
   libarchive,
   pv,
-  squashfsTools,
+  squashfs-tools,
   buildFHSEnv,
   replaceVarsWith,
   runtimeShell,
@@ -27,7 +27,7 @@ rec {
         gawk
         libarchive
         pv
-        squashfsTools
+        squashfs-tools
       ];
     };
   };

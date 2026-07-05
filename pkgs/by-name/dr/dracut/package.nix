@@ -22,7 +22,7 @@
   gzip,
   lz4,
   lzop,
-  squashfsTools,
+  squashfs-tools,
   util-linux,
   xz,
   zstd,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         gzip
         lz4
         lzop
-        squashfsTools
+        squashfs-tools
         util-linux
         xz
         zstd

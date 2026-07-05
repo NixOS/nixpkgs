@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  squashfsTools,
+  squashfs-tools,
   python3,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    squashfsTools
+    squashfs-tools
     python3
   ];
 

@@ -14,8 +14,10 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "squashfs";
+  pname = "squashfs-tools";
   version = "4.7.5";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "plougher";
