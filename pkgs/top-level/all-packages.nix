@@ -1008,8 +1008,6 @@ with pkgs;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
-  winbox = winbox4;
-
   ### APPLICATIONS/VERSION-MANAGEMENT
 
   # The full-featured Git.
