@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   version = "unstable-2021-03-11";
 
   src = fetchFromGitHub {
-    owner = "bontibon";
+    owner = "layeh";
     repo = "kjv";
     rev = "108595dcbb9bb12d40e0309f029b6fb3ccd81309";
     hash = "sha256-Z6myd9Xn23pYizG+IZVDrP988pYU06QIcpqXtWTcPiw=";
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Bible, King James Version";
-    homepage = "https://github.com/bontibon/kjv";
+    homepage = "https://github.com/layeh/kjv";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [
       jtobin
