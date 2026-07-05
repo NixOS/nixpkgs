@@ -11,7 +11,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snuggs";
   version = "1.4.7";
   pyproject = true;
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "snuggs";
-    rev = version;
-    sha256 = "1p3lh9s2ylsnrzbs931y2vn7mp2y2xskgqmh767c9l1a33shfgwf";
+    tag = finalAttrs.version;
+    hash = "sha256-jj8H9Rgq0MSOObDiN3UXXtx67BY+jKTXz1ZTL3SCdNw=";
   };
 
   build-system = [ setuptools ];
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mapbox/snuggs";
     maintainers = [ ];
   };
-}
+})
