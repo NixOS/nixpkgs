@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swaytreesave";
-  version = "0.4.0";
+  version = "0.4.2";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "fabienjuif";
     repo = "swaytreesave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aAJBbauOiFERABF13hMhxyvRBzcx5c1F+vbm/U+JS8o=";
+    hash = "sha256-CEhtO7gjuuQ58kWsQKJTDqSqqw2lF7EUsO/i8d0NIiU=";
   };
 
-  cargoHash = "sha256-5nI7YJyCu7kZTa+Gsp0LCQXNjwVhUqOAxLC7XGtfKVk=";
+  cargoHash = "sha256-gbcVgdGvKxQioL6aQcMoajsJo2rTPDNqEhsywFPCQ0s=";
 
   meta = {
     description = "CLI to save and load your compositors tree/layout";
