@@ -7,6 +7,7 @@
   setuptools,
   pytestCheckHook,
   pyvirtualdisplay,
+  writableTmpDirAsHomeHook,
   xvfb,
 }:
 
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyvirtualdisplay
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     xvfb
