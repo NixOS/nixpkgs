@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-gravity";
-  version = "0-unstable-2024-12-29";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "gravity";
-    rev = "eca5e835cd3abee69984ce6312610644801457a9";
+    tag = finalAttrs.version;
     hash = "sha256-upw0MjGccSI1B10wabKPMGrEo7ATfg4a7Hzaucbf99w=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage {
     teams = with lib.teams; [ stardust-xr ];
     platforms = lib.platforms.unix;
   };
-}
+})
