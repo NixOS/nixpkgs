@@ -82,6 +82,8 @@ buildPythonPackage rec {
     "test_forward_remote"
     # Seems weirdly filesystem specific
     "test_put_name_too_long"
+    # SFTP copy ends up with an empty file on ZFS
+    "test_copy_max_requests"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];
