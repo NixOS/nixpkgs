@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-UhEpq5f/FT5DmtzQBe/Si414mOq+D4glikgRNK60GKQ=";
   };
 
+  patches = [ ./0001-fix-march-x86-64-v4.patch ];
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   nativeBuildInputs = [

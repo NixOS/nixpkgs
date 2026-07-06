@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "attr";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "mirror://savannah/attr/attr-${version}.tar.gz";
-    sha256 = "sha256-Ob9nRS+kHQlIwhl2AQU/SLPXigKTiXNDMqYwmmgMbIc=";
+    hash = "sha256-1C+jdFExgLtIyxGkZpb0iCQOUST/HmrYiwq/9waYVhI=";
   };
 
   outputs = [
@@ -28,11 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ gettext ];
-
-  # tools/attr.c: Add missing libgen.h include for basename(3)
-  # Fixes compilation issue with musl and modern C99 compilers.
-  # See: https://bugs.gentoo.org/926294
-  patches = [ ./musl.patch ];
 
   postPatch = ''
     for script in install-sh include/install-sh; do
