@@ -27,7 +27,7 @@
 
   # optional-dependencies
   fastapi-cli,
-  httpx,
+  httpx2,
   jinja2,
   itsdangerous,
   python-multipart,
@@ -38,16 +38,18 @@
   pydantic-extra-types,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastapi";
-  version = "0.136.3";
+  version = "0.139.0";
   pyproject = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
-    tag = version;
-    hash = "sha256-lfmk8ZveKPukEEfwWq2mKtWmOHAtVzGuE5BsOskDzh0=";
+    tag = finalAttrs.version;
+    hash = "sha256-c4balkkmBv7zKRQnYRpRohVjP23m0HvtdiVrJtgNKYo=";
   };
 
   build-system = [ pdm-backend ];
@@ -63,7 +65,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     all = [
       fastapi-cli
-      httpx
+      httpx2
       jinja2
       python-multipart
       itsdangerous
@@ -78,7 +80,7 @@ buildPythonPackage rec {
     standard = [
       fastapi-cli
       # FIXME package fastar
-      httpx
+      httpx2
       jinja2
       python-multipart
       email-validator
@@ -90,7 +92,7 @@ buildPythonPackage rec {
     ++ uvicorn.optional-dependencies.standard;
     standard-no-fastapi-cloud-cli = [
       fastapi-cli
-      httpx
+      httpx2
       jinja2
       python-multipart
       email-validator
@@ -116,7 +118,7 @@ buildPythonPackage rec {
     pytest-timeout
   ]
   ++ anyio.optional-dependencies.trio
-  ++ optional-dependencies.all;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Coverage test
@@ -134,10 +136,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastapi" ];
 
   meta = {
-    changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${finalAttrs.src.tag}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wd15 ];
   };
-}
+})
