@@ -6,21 +6,26 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "subcat";
-  version = "1.4.0-unstable-2025-05-13";
+  version = "1.6.0-unstable-2026-06-28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "duty1g";
     repo = "subcat";
-    rev = "1b3d015b064f244bfbc05114e4d30ab17861fb46";
-    hash = "sha256-Jft+3ZM9+luvRwO/pL3iTYkz+322TQ/HTD38MttJjQU=";
+    # https://github.com/duty1g/subcat/issues/10
+    rev = "19535a896f60573a234d5b266d08cc6e78d8a525";
+    hash = "sha256-E6gK5CHuFyu3GPyofHErlu92RAgl6jBPfWbTTX3aNtA=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
+    aiohttp
+    dnspython
+    playwright
     pyyaml
     requests
+    rich
     urllib3
   ];
 
