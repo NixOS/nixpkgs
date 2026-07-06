@@ -247,6 +247,11 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/interactive-1.0.0b1-py2.py3-none-any.whl";
     hash = "sha256-COvHDhvsigEEMYlMQ2hHFKzjX7WwdkwfT9id6z+Sj7w=";
     description = "Microsoft Azure Command-Line Interactive Shell";
+    # The wheel contains Requires-Dist entries for both spellings.
+    pythonRelaxDeps = [
+      "prompt_toolkit"
+      "prompt-toolkit"
+    ];
     propagatedBuildInputs = with python3Packages; [
       prompt-toolkit
     ];
