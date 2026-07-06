@@ -1168,15 +1168,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "haskell-tools.nvim";
-      version = "10.0.0-1";
+      version = "10.0.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/haskell-tools.nvim-10.0.0-1.rockspec";
-          sha256 = "1jh1g10nhjx8vj1xpsacq09bs78cygxmf0yipgdkh9ry5cfmf8pm";
+          url = "mirror://luarocks/haskell-tools.nvim-10.0.1-1.rockspec";
+          sha256 = "1rxcz077s19w61z8kcxg3zf68ng8gm8h66229jj6ypmd6vi35143";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v10.0.0.zip";
-        sha256 = "0r2h42d7fsf08cl7lkp3wm0qj22r4vd68l33q7lr9jzsw8bls2pk";
+        url = "https://github.com/mrcjkb/haskell-tools.nvim/archive/v10.0.1.zip";
+        sha256 = "1sdqkayvhwaj5aasnzzfx7gp8mrnqyfp7k6infkaqyp6r69qp8xg";
       };
 
       disabled = luaOlder "5.1";
