@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
     # verilator --gdbbt uses /bin/sh to test if gdb works.
     substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/flexfix --replace-fail 'platform.system() == "Darwin"' 'False'
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
