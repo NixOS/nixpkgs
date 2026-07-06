@@ -9,19 +9,17 @@
 
 buildPythonPackage rec {
   pname = "py-aosmith";
-  version = "1.0.17";
+  version = "1.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdr99";
     repo = "py-aosmith";
     tag = version;
-    hash = "sha256-qBnHe4w59QW18osEf+9Y46eEx/W/GzARkwJlJ+9wPr0=";
+    hash = "sha256-sR7yUl97MlxdJHLrA8IjODNk7LJhVxqraaUkPljuMZg=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [ "tenacity" ];
 
   dependencies = [
     aiohttp

@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/apenwarr/redo/pull/47
     substituteInPlace minimal/do \
       --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
+
+    # the tests refer to /etc/passwd (as an arbitrarily-chosen absolute-path file that won't change),
+    # but that fails under sandboxing. Replace it with another arbrarily-chosen file that won't change:
+    substituteInPlace t/105-sympath/all.do \
+      --replace-fail "/etc/passwd" "${coreutils}/bin/pwd"
   '';
 
   inherit doCheck;
@@ -66,11 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [
-      beautifulsoup4
-      markdown
-    ])
     which
+    python3.pkgs.beautifulsoup4
+    python3.pkgs.markdown
     installShellFiles
     gnumake42 # fails with make 4.4
   ];

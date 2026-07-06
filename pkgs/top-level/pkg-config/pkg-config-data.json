@@ -566,11 +566,6 @@
         "libsodium"
       ]
     },
-    "libsoup-gnome-2.4": {
-      "attrPath": [
-        "libsoup_2_4"
-      ]
-    },
     "libssh2": {
       "attrPath": [
         "libssh2"

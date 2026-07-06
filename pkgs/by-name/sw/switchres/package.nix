@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "antonioginer";
     repo = "switchres";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4OTnq46lvYoxB5Q2CkYNcMbsNdy7kg4rbovbVXJUMs=";
+    hash = "sha256-jHMZuROSmRhCKb0AV3t1WUJZMOnB4ahx+ZcrWRFmTrM=";
   };
 
   nativeBuildInputs = [

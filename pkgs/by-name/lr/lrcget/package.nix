@@ -22,27 +22,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "1.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     tag = version;
-    hash = "sha256-4XeOIOV8QyJheVN98u/jo8H+n9AIzvVJITCk9d+kpFA=";
+    hash = "sha256-cxQpCuyFsJeujcL2TPMH7n+Q6l4h+P1HvsrMoFmbWMI=";
   };
 
   patches = [
     # needed to not attempt codesigning on darwin
     ./remove-signing-identity.patch
-
-    # Update NPM package versions to fix https://github.com/tranxuanthang/lrcget/issues/309
-    ./fix-tauri-version-mismatch.patch
   ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-EjciD794MqUnp3CVloOPugbSfcxgfy7TdCUOlK6P+sk=";
+  cargoHash = "sha256-9vyvRJsR4o7kWSLJyGIoiM/13ABWWTrRXVdyU2HfJ+E=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts
   # but has no lockfile, which is something that will probably break.
@@ -51,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   npmDeps = fetchNpmDeps {
     name = "lrcget-${version}-npm-deps";
     inherit src forceGitDeps patches;
-    hash = "sha256-iaxNrZLcb9qM5EPRtzoXw6izZBeS/rqgGaZpA2A2oho=";
+    hash = "sha256-yXRbQ6xM23VrVaS8Hb5sxPPic1yawKtFi2rCGkplgw4=";
   };
 
   nativeBuildInputs = [

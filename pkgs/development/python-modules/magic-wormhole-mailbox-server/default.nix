@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-mailbox-server";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole-mailbox-server";
     tag = finalAttrs.version;
-    hash = "sha256-Ckwkvw4pMEGUTarfzg1GOodHMwM5hVix2bPCZTI6hxU=";
+    hash = "sha256-P1Pyz4uOoFeTc7Fd8DxeHW/Cig8i2QS3wh6vOSzaDKg=";
   };
 
   build-system = [ setuptools ];

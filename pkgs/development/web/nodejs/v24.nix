@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.14.0";
-  sha256 = "9fe025ef4028aba95d16e7810518bf4a5e8abfb0bdc07d8a3fdbb0afd538d77f";
+  version = "24.16.0";
+  sha256 = "2ff84a6de70b6165290111b0fc656ded1ad207a799816fe720cc7c31232df30f";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -57,11 +57,11 @@ buildNodejs {
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
 
-      # TODO: remove this when included in a next release
+      # Patch for nghttp2 1.69 support
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a5e534c21af49ae1b34854846b6913daa7df0808.patch?full_index=1";
-        hash = "sha256-4cr94fsJrq5iCAHOf60wJQQkP/K2YWYY5W7GHs8Sbxg=";
-        includes = [ "test/*" ];
+        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
+        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
+        excludes = [ "tools/nix/*" ];
       })
     ]
     ++ gypPatches
@@ -73,13 +73,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # TODO: remove once included in an future upstream release
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/f13d7bf69a7f1642fb5b1b624eff1a50ceb71849.patch?full_index=1";
-        hash = "sha256-4PZq1gG/K+FwAM06VIXYoSNJeOYe37kfKW0jqczeXbc=";
-      })
     ];
 }

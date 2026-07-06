@@ -1,8 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   wrapGAppsHook3,
   alsa-lib,
@@ -17,33 +17,39 @@
   nodejs,
   openssl,
   pkg-config,
+  pnpm_11,
   webkitgtk_4_1,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sone";
-  version = "0.14.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "lullabyX";
     repo = "sone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8vdpEjo2UP3vh/PL8+lhLPDfuHeI9kI2/AQvVsWlR1w=";
+    hash = "sha256-dVAVMcEr9cUPJetcVj9y9Lkj6LevJH0M7WYui43IjnY=";
   };
 
-  cargoHash = "sha256-zsEO/YnipPNm7TSWcM3tQ+oOF8M5VK5BiUMhsvPcGwQ=";
+  cargoHash = "sha256-gsg/aKy+RpJFF6Q2P5O7btoeY4Q/A9D/w3s1nLvnp1Q=";
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
-    inherit (finalAttrs) src;
-    hash = "sha256-EOmoryKKWCttpOpIAOpdIz7yOA5hm/Hg1WFbcXWr5tc=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-vOfDSTu7AnZINejVwnIXdZJYlmHSljJpddRRQqlI7ko=";
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
-    npmHooks.npmConfigHook
     pkg-config
+    pnpm
+    pnpmConfigHook
     wrapGAppsHook3
   ];
 

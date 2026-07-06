@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jamulus";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "jamulussoftware";
     repo = "jamulus";
     tag = "r${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-YxXSSVm3n96YzE51cXpWf4z2nQBSguvcEp/kU0a6iBA=";
+    hash = "sha256-GWbk556oggBgh+fX0oKu3hBZ3pU7vTj0ohuNHrN+fks=";
   };
 
   nativeBuildInputs = [

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-youtube";
-  version = "0.9.8";
+  version = "0.9.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sns-sdks";
     repo = "python-youtube";
     tag = "v${version}";
-    hash = "sha256-8Ozfga6gPLzPG770hluAgxIYI2TEX5uAe6BeMzIp+z4=";
+    hash = "sha256-80iGKxz3rwxuYB1bqEEMxMKogiiNK43tNrVnOiVPwWU=";
   };
 
   pythonRelaxDeps = [

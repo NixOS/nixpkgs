@@ -19,6 +19,8 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
+      patchShebangs .
+
       npm --workspace=gemini-cli-vscode-ide-companion run prepackage
 
       # the bundled vsce is broken, using our packaged version

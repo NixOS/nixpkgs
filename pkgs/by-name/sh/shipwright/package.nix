@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-hQxYKZi6YJPittwes3sUZySChPBdGTz0GADbqgfjP5M=";
+    hash = "sha256-jTKhvyFaP59+T85CI7IteMABggOt6WVvQJ1vbSz1ops=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''

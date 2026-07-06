@@ -13,13 +13,13 @@ let
             mkHyprlandPlugin,
           }:
           let
-            version = "0.53.0";
+            version = "0.55.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               tag = "v${version}";
-              hash = "sha256-BSRT1Uu1ot4WfMfZc6KW0nwpmt2xl9wpUqmH/JoMTfk=";
+              hash = "sha256-WMUJ7tyw/9QbKUyRzLndEQSqX05fQLmFlRdMAmPD7tI=";
             };
           in
           mkHyprlandPlugin {
@@ -41,12 +41,7 @@ let
         borders-plus-plus = "multiple borders";
         csgo-vulkan-fix = "CS:GO/CS2 Vulkan fix";
         hyprbars = "window title";
-        hyprexpo = "workspaces overview";
         hyprfocus = "flashfocus";
-        hyprscrolling = "scrolling layout";
-        hyprtrails = "smooth trails behind moving windows";
-        hyprwinwrap = "xwinwrap-like";
-        xtra-dispatchers = "extra dispatchers";
       };
 in
 hyprland-plugins

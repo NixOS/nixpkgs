@@ -16,13 +16,13 @@
 
 flutter341.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.3.2";
+  version = "7.3.3";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
-    hash = "sha256-UN3wWM3wa4c+qv5czn1z0bWlJPc4nUIPgF0HHi+9Muc=";
+    hash = "sha256-PB16QOD84i564LufF++tSdutuqUfKms6mTZW1knXTJk=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

@@ -25,11 +25,11 @@ assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
-  version = "5.3.2";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
-    hash = "sha256-+MNIZQnecFGSE4sA7ywAu73Q6Eww1cB9I/xzqdxMycw=";
+    hash = "sha256-PdQw8M07RCjGw/avwCG5zTwfjJP3pojcJoykKKkLSsE=";
   };
 
   # When we do build separate interactive version, it makes sense to always include man.

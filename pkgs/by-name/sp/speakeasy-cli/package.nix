@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "speakeasy-cli";
-  version = "1.636.3";
+  version = "1.786.1";
 
   sourceRoot = ".";
   src =
@@ -33,19 +33,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_darwin_amd64.zip";
-        hash = "sha256-Q1m4g5XBNAaxJZyYz6cD/7asTUGZMa493XVVJ9s0byE=";
+        hash = "sha256-87s2NTkbPEHVKv5zV0FWxkyjF9KtOtThI3KdEl/fJiY=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_amd64.zip";
-        hash = "sha256-H1c+b4/fBWudc3tAHTNdWwa9aoe8HpffRaLRU7OOWs4=";
+        hash = "sha256-T+e279QDXJH1H2XZLnW5n0GqgFkJmvL1KZdNGaQ88jA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_darwin_arm64.zip";
-        hash = "sha256-xO9S9gjiMel2ZB8Dq2nN5O+zIB/4qf5Z2xeXS0wiprc=";
+        hash = "sha256-FHkNermrMcYw3G91t88sOZroaS95ztp9sTZuvZpWzAQ=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/speakeasy-api/speakeasy/releases/download/v${finalAttrs.version}/speakeasy_linux_arm64.zip";
-        hash = "sha256-zH/HyA6MrrCh9j53hoqfVSiRqIoL6IOCV/nsAwRlgjg=";
+        hash = "sha256-pAt18QB7wjli+JN1oHckki4QdQTcWwxGkC72QJ5fnn0=";
       };
     };
     updateScript = writeShellScript "update-speakeasy" ''
@@ -57,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
           common-updater-scripts
         ]
       }"
-
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/speakeasy-api/speakeasy/releases/latest | jq '.tag_name' | ltrimstr("v") --raw-output)
-      if [[ ${finalAttrs.version} = "$NEW_VERSION"]]; then
+      NEW_VERSION=$(curl --silent https://api.github.com/repos/speakeasy-api/speakeasy/releases/latest | jq --raw-output '.tag_name | ltrimstr("v")')
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
         echo "The new version is the same as old"
         exit 0
       fi
-      for platfrom in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+      for platform in ${lib.escapeShellArgs (builtins.attrNames finalAttrs.passthru.sources)}; do
         update-source-version "speakeasy-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
     '';
   };
 

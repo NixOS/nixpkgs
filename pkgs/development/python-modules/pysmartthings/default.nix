@@ -1,13 +1,12 @@
 {
   lib,
   aiohttp,
-  aiohttp-sse-client2,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,25 +15,24 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmartthings";
-  version = "3.7.3";
+  version = "4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pysmartthings";
-    tag = "v${version}";
-    hash = "sha256-Z3E+7z/4P08OI/pgMe0g5vnzfNLLTd712jFdUqgBFXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yxGrtEMWMargZ9i0b4DqxSh/x3pbK1J8unL7goGnURY=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
-    aiohttp-sse-client2
     mashumaro
     orjson
     yarl
@@ -53,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
-    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${src.tag}";
+    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

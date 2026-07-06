@@ -67,6 +67,7 @@ postgresqlBuildExtension (finalAttrs: {
 
   configureFlags = [
     (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+    "CFLAGS=-std=gnu17"
   ];
 
   postInstall = ''

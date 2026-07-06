@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
     description = "Static checker for GitHub Actions workflow files";
     changelog = "https://github.com/rhysd/actionlint/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "actionlint";
   };
 })

@@ -7,6 +7,8 @@
 
   # nativeBuildInputs
   gitMinimal,
+  # cuda-only:
+  autoPatchelfHook,
 
   # build-system
   certifi,
@@ -42,15 +44,18 @@
   pytest-rerunfailures,
   pytestCheckHook,
   torchaudio,
-  torchtune,
   transformers,
   writableTmpDirAsHomeHook,
   yaspin,
+
+  cudaSupport ? torch.cudaSupport,
+  cudaPackages,
 }:
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
@@ -62,7 +67,7 @@ buildPythonPackage (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-Rkw6+keOygQaf6iOCpGoW9JgXiCimgx8gsxLEH3bxME=";
+    hash = "sha256-UyMPY+qYTHYZDeftj4YVqzO2ibTswzd+HWW5JeXHW0Q=";
   };
 
   postPatch =
@@ -70,8 +75,8 @@ buildPythonPackage (finalAttrs: {
     ''
       substituteInPlace exir/_serialize/_flatbuffer.py \
         --replace-fail \
-          'flatc_path = "flatc"' \
-          'flatc_path = "${lib.getExe pkgs.flatbuffers}"'
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "flatc")' \
+          '_flatc_cached_path = os.getenv("FLATC_EXECUTABLE", "${lib.getExe pkgs.flatbuffers}")'
     ''
     # Relax build-system dependencies
     + ''
@@ -105,9 +110,15 @@ buildPythonPackage (finalAttrs: {
     # But the build script is sensitive to this env variable.
     # Fixes:
     #  Some binaries contain forbidden references to /build/. Check the error above!
-    CMAKE_ARGS = lib.concatStringsSep " " [
+    CMAKE_ARGS = toString [
       (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+
+      # For some cmake-tier reason, cmakeBool does not work here
+      (lib.cmakeFeature "EXECUTORCH_BUILD_CUDA" (if cudaSupport then "ON" else "OFF"))
     ];
+  }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
   };
 
   build-system = [
@@ -122,6 +133,16 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     gitMinimal
+  ]
+  ++ lib.optionals cudaSupport [
+    autoPatchelfHook
+    cudaPackages.cuda_nvcc
+  ];
+
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvrtc
+    cudaPackages.libcurand
   ];
 
   pythonRemoveDeps = [
@@ -135,6 +156,7 @@ buildPythonPackage (finalAttrs: {
     "pytest-xdist"
   ];
   pythonRelaxDeps = [
+    "mpmath"
     "scikit-learn"
     "torchao"
   ];
@@ -169,7 +191,6 @@ buildPythonPackage (finalAttrs: {
     pytest-rerunfailures
     pytestCheckHook
     torchaudio
-    torchtune
     transformers
     writableTmpDirAsHomeHook
     yaspin
@@ -182,6 +203,16 @@ buildPythonPackage (finalAttrs: {
 
     # Try to download models from HuggingFace hub
     "extension/llm/tokenizers/test/test_hf_tokenizer.py"
+
+    # Required unmaintained and removed `torchtune`
+    "examples/models/llama3_2_vision/preprocess/test_preprocess.py"
+    "examples/models/llama3_2_vision/text_decoder/test/test_text_decoder.py"
+    "examples/models/llama3_2_vision/vision_encoder/test/test_vision_encoder.py"
+    "exir/tests/test_memory_format_ops_pass.py"
+    "extension/llm/modules/test/test_attention.py"
+    "extension/llm/modules/test/test_kv_cache.py"
+    "extension/llm/modules/test/test_position_embeddings.py"
+    "extension/llm/modules/test/test_turboquant_kv_cache.py"
   ];
 
   disabledTests = [

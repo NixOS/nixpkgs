@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "8.0.0";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N89wYj7PMkdMTNYWSCeuff9HU62n+e/HBeiIOhAPi7I=";
+    hash = "sha256-PHjOx8Wkq7SQmlJS1mq5PpswayGthmV+LCA8eLUiQx8=";
   };
 
   postPatch = ''

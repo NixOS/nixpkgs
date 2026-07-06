@@ -2,7 +2,6 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
-  isPy27,
   pythonOlder,
   lib,
   cryptography,
@@ -11,7 +10,6 @@
   grpcio-tools,
   hadoop,
   pytestCheckHook,
-  python,
   setuptools,
   versioneer,
 }:
@@ -77,8 +75,5 @@ buildPythonPackage rec {
       alexbiehl
       illustris
     ];
-    problems = lib.optionalAttrs isPy27 {
-      broken.message = "${pname} not supported on ${python.executable}";
-    };
   };
 }

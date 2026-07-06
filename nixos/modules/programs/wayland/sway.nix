@@ -116,7 +116,7 @@ in
         with pkgs; [ brightnessctl foot grim pulseaudio swayidle swaylock wmenu ];
       '';
       example = lib.literalExpression ''
-        with pkgs; [ i3status i3status-rust termite rofi light ]
+        with pkgs; [ i3status i3status-rust alacritty rofi light ]
       '';
       description = ''
         Extra packages to be installed system wide. See

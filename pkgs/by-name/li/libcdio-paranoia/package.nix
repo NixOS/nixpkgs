@@ -30,7 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
-  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-ld-version-script" ];
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+  ];
 
   meta = {
     description = "CD paranoia on top of libcdio";

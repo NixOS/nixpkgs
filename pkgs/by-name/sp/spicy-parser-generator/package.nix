@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spicy";
-  version = "1.15.0";
+  version = "1.16.0";
 
   strictDeps = true;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zeek";
     repo = "spicy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vZSqUcJoFleZM9sqLdc/g2M+UQrns3kys4eHOfs4Cvk=";
+    hash = "sha256-LD1r1IhKKPB+eTNgEjchx42cP/DYX8HVaSefeoU9T4c=";
     fetchSubmodules = true;
   };
 

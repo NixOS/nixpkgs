@@ -3,6 +3,7 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   lib,
   mashumaro,
@@ -16,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.35";
+  version = "1.0.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W4zO4fwVJ6cvTeZgak2bOUTTgmGpfVc/EDiOvlkSR2Y=";
+    hash = "sha256-pQGObEYmj5Off573wwxLdU6p+kJsGqDyPVPzmD6vCc8=";
   };
 
   build-system = [ hatchling ];
@@ -40,6 +41,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aresponses
+    freezegun
     pytest-cov-stub
     pytestCheckHook
     syrupy

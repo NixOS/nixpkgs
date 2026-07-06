@@ -6,27 +6,23 @@
   writableTmpDirAsHomeHook,
   stdenv,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.6.2";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tTPm/2ftCz0G6ytkzsyzQiJDWp48f9nzzY/J2Z1TZjo=";
+    hash = "sha256-HlG/zBfyd120ENERqdpfPuHPwu84bWijzoE4tEOsOeE=";
   };
 
-  vendorHash = "sha256-/3c1J0i0hr309G7iEmtnc24reqH17Q9E5dxOPufmYQc=";
+  vendorHash = "sha256-GI+rLSCwBRcZytbJsxqCL1+3p5/UbCvTxUHn2ele3+c=";
 
-  overrideModAttrs = old: {
-    # https://gitlab.com/cznic/libc/-/merge_requests/10
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,13 +33,16 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/temporalio/cli/temporalcli.Version=${finalAttrs.version}"
+    "-X github.com/temporalio/cli/internal/temporalcli.Version=${finalAttrs.version}"
   ];
 
   # Tests fail with x86 on macOS Rosetta 2
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd temporal \
@@ -65,7 +64,10 @@ buildGoModule (finalAttrs: {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
     homepage = "https://docs.temporal.io/cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [
+      aaronjheng
+      jlesquembre
+    ];
     mainProgram = "temporal";
   };
 })

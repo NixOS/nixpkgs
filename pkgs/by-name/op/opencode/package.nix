@@ -16,13 +16,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.4.11";
+  version = "1.17.13";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jlxR2BODV8wk0sP4Kkyza7Zr5I+Q003gldCfp2eYOt8=";
+    hash = "sha256-WE8+O+Od8M71fKoOOhE9CbTsJ0JMAi0ZajmYd//VG2k=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -44,12 +47,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
       bun install \
         --cpu="*" \
         --frozen-lockfile \
+        --filter ./ \
         --filter ./packages/app \
         --filter ./packages/desktop \
         --filter ./packages/opencode \
+        --filter ./packages/shared \
         --ignore-scripts \
         --no-progress \
         --os="*"
@@ -72,7 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-rF+l0Hho0QEvMS5jaImhMlhKjjf1R66X20R6lEZcZeg=";
+    outputHash = "sha256-SUNfdHtASPh1mpxKvIKJ2GrDHAxmv7Gu7B7vr3PX5W4=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -82,7 +88,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
     installShellFiles
     makeBinaryWrapper
-    models-dev
     writableTmpDirAsHomeHook
   ];
 
@@ -132,7 +137,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
            sysctl
          ]
        )
-     }
+     } \
+    --set OPENCODE_DISABLE_AUTOUPDATE true
 
     install -Dm644 config.json $out/share/opencode/config.json
     install -Dm644 tui.json $out/share/opencode/tui.json
@@ -178,20 +184,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       delafthi
       DuskyElf
       graham33
-      superherointj
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "opencode";
-    badPlatforms = [
-      # Broken as 2026-04-23, errors as:
-      # CPU lacks AVX support, strange crashes may occur. Reinstall Bun
-      "x86_64-darwin"
-    ];
   };
 })

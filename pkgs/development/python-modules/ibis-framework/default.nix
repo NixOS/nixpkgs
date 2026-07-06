@@ -448,7 +448,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${finalAttrs.src.tag}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud

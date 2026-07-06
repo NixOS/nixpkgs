@@ -10,7 +10,7 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/web";
 
-  npmDepsHash = "sha256-4+raDJ7+w+RpdeZs2PJL10IWzfoT5B3EpOxsLUnlrRc=";
+  npmDepsHash = "sha256-mwi93ZgXxb3xQnPPQHesR8YxQOxH8YaKBLGi/nEM8D4=";
 
   installPhase = ''
     runHook preInstall

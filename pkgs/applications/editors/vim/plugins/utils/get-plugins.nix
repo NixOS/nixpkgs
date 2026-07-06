@@ -17,6 +17,7 @@ let
   parse = _name: value: {
     inherit (value) pname version;
     homePage = value.meta.homepage;
+    license = value.meta.license.spdxId or null;
     checksum =
       if hasChecksum value then
         {

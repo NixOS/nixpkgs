@@ -47,7 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xsetroot";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xsetroot";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
   };
 })

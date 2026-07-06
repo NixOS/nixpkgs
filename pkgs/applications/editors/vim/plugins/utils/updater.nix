@@ -43,7 +43,7 @@ buildPythonApplication {
         neovim-unwrapped
         nurl
       ]
-    }" --prefix PYTHONPATH : "${./.}" )
+    }" --prefix PYTHONPATH : "${lib.sources.sourceByGlobs ./. [ "**/*.py" ]}" )
     wrapPythonPrograms
   '';
 

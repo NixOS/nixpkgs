@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
             net-tools
           ]
         )
-      }" \
+      }"
   '';
 
   meta = {

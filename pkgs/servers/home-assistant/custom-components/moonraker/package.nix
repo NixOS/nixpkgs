@@ -32,7 +32,7 @@ buildHomeAssistantComponent rec {
     pytest-cov-stub
     pytestCheckHook
   ]
-  ++ home-assistant.getPackages "camera" home-assistant.python.pkgs;
+  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
 
   disabledTests = [
     # tests try to open sockets

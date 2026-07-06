@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 1;
-    hash = "sha256-WXsS5/J08n/dWV5MbyX4vK7j1mfiUoLdzwmzyqoX3FA=";
+    fetcherVersion = 3;
+    hash = "sha256-uxeZnYZzwyNOZN1x1f6tzcYgPbJhSc3gTdsfaE+967w=";
   };
 
   preBuild = ''

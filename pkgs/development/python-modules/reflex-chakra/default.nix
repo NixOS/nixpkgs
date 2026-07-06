@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/reflex-dev/reflex-chakra/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    broken = true; # ImportError: cannot import name '_issubclass' from 'reflex.utils.types'
   };
 })

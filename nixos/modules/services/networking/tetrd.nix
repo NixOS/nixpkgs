@@ -14,6 +14,9 @@
       etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
     };
 
+    # Our resolv.conf will override resolvconf's version.
+    networking.resolvconf.enable = false;
+
     systemd = {
       tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
 
@@ -86,17 +89,14 @@
 
           BindPaths = [
             "/etc/tetrd/resolv.conf:/etc/resolv.conf"
-            "/run"
-            "/var/log"
+            "/run/tetrd:/run"
           ];
 
           CapabilityBoundingSet = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
 
           AmbientCapabilities = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
         };

@@ -25,16 +25,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motrix-next";
-  version = "3.6.8";
+  version = "3.9.6";
 
   src = fetchFromGitHub {
     owner = "AnInsomniacy";
     repo = "motrix-next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nn1YivQ7UCRpWnWa2w0F06n6bQrMJ1d8Gb84hY6K5WE=";
+    hash = "sha256-ynLi+biCdjU7EOq556YuFonghWaxDV7UtHWiKImq7WE=";
   };
 
-  cargoHash = "sha256-mrzyIvHlfs3epOm3ZKPetmJOCKpZdHlfosOP7iLlu1k=";
+  cargoHash = "sha256-c17GTD9Wcy9LYLfBcwECNS1Tek5hTWPmie2lXtrbtFc=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       ;
     inherit pnpm;
-    hash = "sha256-WvcN4LLRKiOxYEjImZ7VerwHFj33ELJvDKyP3F2UYG8=";
+    hash = "sha256-WAuHoLAnFLP6i+rJSegt/hI6sb1SDhm7LWgsup70o9E=";
     fetcherVersion = 3;
   };
 
@@ -73,7 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "--skip=commands::protocol::tests::macos_tests::get_default_handler_bundle_id_returns_some_for_https";
+  # Some tests on macOS attempt to retrieve system settings, such as the default browser and system proxy.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # Deactivate the upstream update mechanism
   postPatch = ''
@@ -98,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
       # Tricky way to make the protocol handler desktop file point to the wrapper
-      --set-default APPIMAGE $out/bin/motrix-next
+      --set-default APPIMAGE motrix-next
     )
     wrapGApp $out/bin/motrix-next
   '';

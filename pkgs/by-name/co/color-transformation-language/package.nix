@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.5";
 
   src = fetchFromGitHub {
-    owner = "ampas";
+    owner = "aces-aswf";
     repo = "CTL";
     rev = "ctl-${finalAttrs.version}";
     hash = "sha256-X6W6IXZUMBTZJTzpAk7FmoEhSPELTmhYv68dZmqUJ2g=";
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Programming language for digital color management";
-    homepage = "https://github.com/ampas/CTL";
-    changelog = "https://github.com/ampas/CTL/blob/${finalAttrs.src.rev}/CHANGELOG";
+    homepage = "https://github.com/aces-aswf/CTL";
+    changelog = "https://github.com/aces-aswf/CTL/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.ampas;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "ctl";

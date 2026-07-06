@@ -1,7 +1,15 @@
 { lib }:
 let
-  inherit (lib) lists;
+  inherit (lib)
+    lists
+    splitString
+    ;
   inherit (lib.systems) parse;
+  inherit (parse)
+    mkSystemFromSkeleton
+    mkSkeletonFromList
+    doubleFromSystem
+    ;
   inherit (lib.systems.inspect) predicates;
   inherit (lib.attrsets) matchAttrs;
 
@@ -40,6 +48,7 @@ let
     "i686-linux"
     "loongarch64-linux"
     "m68k-linux"
+    "sh4-linux"
     "microblaze-linux"
     "microblazeel-linux"
     "mips-linux"
@@ -116,9 +125,17 @@ let
     "x86_64-uefi"
   ];
 
-  allParsed = map parse.mkSystemFromString all;
+  uncheckedSystemFromString =
+    let
+      systemType = {
+        _type = "system";
+      };
+    in
+    s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s)) // systemType;
 
-  filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
+  allParsed = map uncheckedSystemFromString all;
+
+  filterDoubles = f: map doubleFromSystem (lists.filter f allParsed);
 
 in
 {
@@ -145,6 +162,7 @@ in
   or1k = filterDoubles predicates.isOr1k;
   m68k = filterDoubles predicates.isM68k;
   arc = filterDoubles predicates.isArc;
+  sh4 = filterDoubles predicates.isSh4;
   s390 = filterDoubles predicates.isS390;
   s390x = filterDoubles predicates.isS390x;
   loongarch64 = filterDoubles predicates.isLoongArch64;

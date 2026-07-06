@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "golines";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
-    owner = "segmentio";
+    owner = "golangci";
     repo = "golines";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Y4q3xpGw8bAi87zJ48+LVbdgOc7HB1lRdYhlsF1YcVA=";
+    sha256 = "sha256-gjm76dGbFTisQdiM0GAQJRcAreQUWIBuqYbLU2ruCNk=";
   };
 
-  vendorHash = "sha256-94IXh9iBAE0jJXovaElY8oFdXE6hxYg0Ww0ZEHLnEwc=";
+  vendorHash = "sha256-cLzCpjifb0lc6UaDW2JZBQABixz98EJ4syLapX7I8y8=";
 
   subPackages = [
     "."
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Golang formatter that fixes long lines";
-    homepage = "https://github.com/segmentio/golines";
+    homepage = "https://github.com/golangci/golines";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ meain ];
     mainProgram = "golines";

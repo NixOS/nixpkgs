@@ -15,7 +15,7 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
     description = "Copy file paths with line numbers, code snippets, and GitHub permalinks in multiple formats";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=yoshi47.selection-path-copier";
     homepage = "https://github.com/yoshi47/selection-path-copier";
-    changelog = "https://github.com/yoshi47/selection-path-copier/releases/tag/release/v${finalAttrs.version}";
+    changelog = "https://github.com/yoshi47/selection-path-copier/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aduh95 ];
   };

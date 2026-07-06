@@ -1,24 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
+  subprocess4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coq-tools";
-  version = "0.0.42";
+  version = "0.0.44";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "coq_tools";
-    inherit version;
-    hash = "sha256-d+SAGmZKUQo2ZKuC91r/2RHDvi5GCIKGTxcuau1kN0U=";
+  src = fetchFromGitHub {
+    owner = "JasonGross";
+    repo = "coq-tools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2WMxJkLGfMtXu4ZpIuS1wIXMvgJbCMy2eY8qz5+v9LI=";
   };
 
   build-system = [ setuptools ];
 
+  dependencies = [ subprocess4 ];
+
   pythonImportsCheck = [ "coq_tools" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Tools for working with Coq proof assistant";
@@ -27,4 +34,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

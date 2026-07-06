@@ -65,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.12.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-9F+D7qZKwnP1U0zJbvzy0f7dQSKkfgJrewDJ4p+Svgk=";
+    hash = "sha256-f4abHqZ8ojNU4dVw1hkfEJC4asE/NamhYmOQyy368eI=";
   };
 
   patches = [

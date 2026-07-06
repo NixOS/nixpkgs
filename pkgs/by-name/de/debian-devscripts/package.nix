@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   xz,
   dpkg,
   libxslt,
@@ -20,6 +19,9 @@
   help2man,
   nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
+  runCommand,
+  coreutils,
+  util-linux,
 }:
 
 let
@@ -30,25 +32,29 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.26.7";
+  version = "2.26.8";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "devscripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x9qr5NC2Mu/TlO3cJ4qxItU6l7XazgWuziVfRFpM9xA=";
+    hash = "sha256-MlBofpMoNQffZXUQnaqv0blRwHOIhmVuHWYsttoPP5M=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "hardening-check-obey-binutils-env-vars.patch";
-      url = "https://github.com/Debian/devscripts/pull/2/commits/c6a018e0ef50a1b0cb4962a2f96dae7c6f21f1d4.patch";
-      hash = "sha256-UpS239JiAM1IYxNuJLdILq2h0xlR5t0Tzhj47xiMHww=";
-    })
+    # hardening-check: obey READELF, LDD & OBJDUMP env vars for tool names
+    # https://github.com/Debian/devscripts/pull/2
+    ./hardening-check-obey-binutils-env-vars.patch
+
+    # Write to stdout and exit 0 for --help, --version
+    # https://salsa.debian.org/debian/devscripts/-/merge_requests/637
+    ./write-to-stdout-and-exit-0.patch
   ];
 
   postPatch = ''
+    substituteInPlace scripts/annotate-output.sh \
+      --replace-fail '/usr/bin/printf' '${lib.getExe' coreutils "printf"}'
     substituteInPlace scripts/debrebuild.pl \
       --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
@@ -63,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -92,7 +99,18 @@ stdenv.mkDerivation (finalAttrs: {
     FileDirList
     FileTouch
     IOString
+    StringShellQuote
+    YAMLLibYAML
   ]);
+
+  pythonPath = with python3Packages; [
+    junit-xml
+    magic
+    python-apt
+    python-debian
+    requests
+    unidiff
+  ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -123,17 +141,29 @@ stdenv.mkDerivation (finalAttrs: {
     "PERLMOD_DIR=/share/devscripts"
   ];
 
-  postInstall = ''
+  preFixup = ''
+    buildPythonPath "$out ''${pythonPath[*]}"
+    patchPythonScript "$out/bin/deb-check-file-conflicts"
+    patchPythonScript "$out/bin/deb-janitor"
+    patchPythonScript "$out/bin/debbisect"
+    patchPythonScript "$out/bin/debdiff-apply"
+    patchPythonScript "$out/bin/debftbfs"
+    patchPythonScript "$out/bin/debootsnap"
+    patchPythonScript "$out/bin/reproducible-check"
+    patchPythonScript "$out/bin/sadt"
+    patchPythonScript "$out/bin/suspicious-source"
+    patchPythonScript "$out/bin/wrap-and-sort"
     sed -re 's@(^|[ !`"])/bin/bash@\1${stdenv.shell}@g' -i "$out/bin"/*
-    for i in "$out/bin"/*; do
-      wrapProgram "$i" \
+    ln -s debchange $out/bin/dch
+    ln -s deb2apptainer $out/bin/deb2singularity
+    ln -s pts-subscribe $out/bin/pts-unsubscribe
+    mv "$out/bin" "$out/.bin-wrapped"
+    for i in "$out/.bin-wrapped"/*; do
+      makeWrapper "$i" "$out/bin/''${i#$out/.bin-wrapped/}" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/${python.sitePackages}" \
-        --prefix PATH : "${dpkg}/bin"
+        --prefix PATH : "${curl}/bin:${dpkg}/bin:${gnupg}/bin:${util-linux}/bin"
     done
-    ln -s debchange $out/bin/dch
-    ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
   passthru.updateScript = nix-update-script {
@@ -143,8 +173,92 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  passthru.tests.helpVersion =
+    runCommand "debian-devscripts-test-help-version"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      }
+      ''
+        export HOME=/tmp
+
+        for cmd in ${finalAttrs.finalPackage}/bin/*; do
+            echo "Running $cmd"
+
+            case "''${cmd##*/}" in
+
+            # Fails with an error from python-apt
+            debootsnap | \
+            mk-origtargz | \
+            reproducible-check)
+                ;;
+
+            # Supports neither -h, --help, nor --version
+            add-patch | \
+            archpath | \
+            debrsign | \
+            dscextract | \
+            edit-patch | \
+            list-unreleased | \
+            namecheck | \
+            salsa | \
+            svnpath)
+                ;;
+
+            # Supports -h but neither --help nor --version
+            deb2apptainer | \
+            deb2docker | \
+            deb2singularity)
+               "$cmd" -h
+               ;;
+
+            # Supports --help but not --version
+            annotate-output | \
+            dd-list | \
+            deb-check-file-conflicts | \
+            deb-janitor | \
+            debbisect | \
+            debcheckout | \
+            debdiff-apply | \
+            debftbfs | \
+            debrebuild | \
+            debrepro | \
+            hardening-check | \
+            ltnu | \
+            origtargz | \
+            sadt | \
+            suspicious-source | \
+            who-permits-upload | \
+            wrap-and-sort)
+                "$cmd" --help
+                ;;
+
+            # Everything else supports --help and --version
+            *)
+                "$cmd" --help
+                output=$("$cmd" --version)
+                case "$output" in
+                *'version ${finalAttrs.version}
+        '* | *'version ${finalAttrs.version}.
+        '* | *'version
+        ${finalAttrs.version} '* | *'v. ${finalAttrs.version}
+        '* | *'devscripts ${finalAttrs.version}.'* | *'(devscripts ${finalAttrs.version})'*)
+                    ;;
+                *)
+                    echo "$cmd --version did not output the expected version ${finalAttrs.version}:" >&2
+                    "$cmd" --version
+                    false
+                esac
+                ;;
+
+            esac
+        done
+
+        : >"$out"
+      '';
+
   meta = {
     description = "Debian package maintenance scripts";
+    homepage = "https://salsa.debian.org/debian/devscripts";
     license = lib.licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;

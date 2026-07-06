@@ -7,12 +7,15 @@
   testers,
   versionCheckHook,
   hello,
+  gettext,
   gnulib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hello";
   version = "2.12.3";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
@@ -27,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-liconv";
   };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [
+    gettext
+  ];
 
   doCheck = true;
 

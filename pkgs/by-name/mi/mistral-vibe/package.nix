@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # tests
+  gitMinimal,
   uv,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -22,20 +23,32 @@ let
           hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
         };
       });
+      opentelemetry-exporter-otlp-proto-http =
+        prev.opentelemetry-exporter-otlp-proto-http.overridePythonAttrs
+          (old: {
+            disabledTests =
+              (old.disabledTests or [ ])
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                # AssertionError: False is not true
+                # self.assertTrue(0.75 < after - before < 1.25)
+                "test_retry_timeout"
+              ];
+          });
     };
   };
   python3Packages = python.pkgs;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.7.3";
+  version = "2.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XRBrBd7X8HewrUJ7K8wQMcVJz3ITPKzyKpyCi7detsE=";
+    hash = "sha256-PODG/SQsZsixBz/j+k8ALBhXS1fPg3v/o6TXkTyzSIQ=";
   };
 
   build-system = with python3Packages; [
@@ -44,62 +57,118 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "agent-client-protocol"
-    "cryptography"
-    "gitpython"
-    "mistralai"
-    "opentelemetry-exporter-otlp-proto-http"
-    "opentelemetry-sdk"
-    "opentelemetry-semantic-conventions"
-    "pydantic-settings"
-    "zstandard"
-  ];
-  dependencies = with python3Packages; [
-    agent-client-protocol
-    anyio
-    cachetools
-    cryptography
-    gitpython
-    giturlparse
-    google-auth
-    httpx
-    keyring
-    markdownify
-    mcp
-    mistralai
-    opentelemetry-api
-    opentelemetry-exporter-otlp-proto-http
-    opentelemetry-sdk
-    opentelemetry-semantic-conventions
-    packaging
-    pexpect
-    pydantic
-    pydantic-settings
-    pyperclip
-    python-dotenv
-    pyyaml
-    requests
-    rich
-    sounddevice
-    textual
-    textual-speedups
-    tomli-w
-    tree-sitter
-    tree-sitter-bash
-    watchfiles
-    websockets
-    zstandard
-  ];
+  pythonRelaxDeps = true;
+  dependencies =
+    with python3Packages;
+    [
+      agent-client-protocol
+      annotated-types
+      anyio
+      attrs
+      beautifulsoup4
+      cachetools
+      certifi
+      cffi
+      charset-normalizer
+      click
+      cryptography
+      eval-type-backport
+      gitdb
+      gitpython
+      giturlparse
+      google-auth
+      googleapis-common-protos
+      h11
+      httpcore
+      httpx
+      httpx-sse
+      humanize
+      idna
+      importlib-metadata
+      jaraco-classes
+      jaraco-context
+      jaraco-functools
+      jsonpatch
+      jsonpath-python
+      jsonpointer
+      jsonschema
+      jsonschema-specifications
+      keyring
+      linkify-it-py
+      markdown-it-py
+      markdownify
+      mcp
+      mdit-py-plugins
+      mdurl
+      mistralai
+      more-itertools
+      opentelemetry-api
+      opentelemetry-exporter-otlp-proto-common
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-proto
+      opentelemetry-sdk
+      opentelemetry-semantic-conventions
+      packaging
+      pexpect
+      platformdirs
+      protobuf
+      ptyprocess
+      pyasn1
+      pyasn1-modules
+      pycparser
+      pydantic
+      pydantic-core
+      pydantic-settings
+      pygments
+      pyjwt
+      pyperclip
+      python-dateutil
+      python-dotenv
+      python-multipart
+      pyyaml
+      referencing
+      requests
+      rich
+      rpds-py
+      sentry-sdk
+      six
+      smmap
+      sounddevice
+      soupsieve
+      sse-starlette
+      starlette
+      textual
+      textual-speedups
+      tomli-w
+      tree-sitter
+      tree-sitter-bash
+      truststore
+      typing-extensions
+      typing-inspection
+      uc-micro-py
+      urllib3
+      uvicorn
+      watchfiles
+      websockets
+      zipp
+      zstandard
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      jeepney
+      secretstorage
+    ];
 
   pythonImportsCheck = [ "vibe" ];
 
   nativeCheckInputs = [
+    # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
+    gitMinimal
     python3Packages.pytest-asyncio
     python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
     python3Packages.pytestCheckHook
     python3Packages.respx
+    python3Packages.tomlkit
     uv
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -107,6 +176,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
+    # vibe is spawned in a sub-process and fails to import `mcp`
+    # ModuleNotFoundError: No module named 'mcp'
+    "TestMCPConnectionPoolIntegration"
+
+    # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
+    "test_changes_when_file_changes"
+
+    # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
+    # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
+    "test_generic_backend_streaming_uses_ssl_cert_file"
+
+    # AssertionError: assert 0 == 1
+    "test_preserves_accents_when_matching_latin1_encoded_file"
+
     # Fail in the sandbox
     # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
     "test_audio_stream_yields_chunks"
@@ -160,6 +243,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # This tests the install_script and fails. This is not relevant for nixpkgs.
+    "tests/test_install_script.py"
+
     # All snapshot tests fail with AssertionError
     "tests/snapshots/"
 
@@ -170,6 +256,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/acp/test_acp.py"
     "tests/acp/test_acp_entrypoint_smoke.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Minimal CLI coding agent by Mistral";

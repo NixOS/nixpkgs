@@ -10,7 +10,7 @@
 
   # dependencies
   alsa-lib,
-  eigen,
+  eigen_5,
   gtest,
   kissfft,
   nlohmann_json,
@@ -111,13 +111,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
-  version = "1.12.38";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "k2-fsa";
     repo = "sherpa-onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lzcquKwP68KOem50b4X0+nZ3s2IthiYB76IxfvmJo54=";
+    hash = "sha256-xwu45dJOT1yUdU0P6Vjr8XexSeGOOfQ/zt1lhcASm/8=";
   };
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "python" ];
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SHERPA_ONNX_ENABLE_GPU" cudaSupport)
     # Use nixpkgs sources instead of vendored downloads where possible.
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "${eigen.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_EIGEN" "${eigen_5.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_KISSFFT" "${kissfft.src}")
     "-Wno-dev"

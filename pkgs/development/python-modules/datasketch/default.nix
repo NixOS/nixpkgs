@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datasketch";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ekzhu";
     repo = "datasketch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ijBkbY6OioK5RP8zAeCnwlbrwE0OHa4tbEnCOabLTqs=";
+    hash = "sha256-PSSu+ymAFWSsNRaAByGuUjoDSqzkiC0mwHpuD5YVFjA=";
   };
 
   postPatch = ''

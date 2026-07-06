@@ -4,9 +4,9 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   fetchFromGitHub,
-  buildGo125Module,
+  buildGo126Module,
   installShellFiles,
   callPackage,
   nixosTests,
@@ -15,14 +15,16 @@
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
-      pnpm
+      pnpm_11
       fetchFromGitHub
       ;
   },
 }:
 
 let
-  buildGoModule = buildGo125Module;
+  pnpm = pnpm_11;
+
+  buildGoModule = buildGo126Module;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname
@@ -63,11 +65,6 @@ buildGoModule (finalAttrs: {
       "-X ${p}.BuildBranch=v${finalAttrs.version}"
       "-X ${p}.BuildExtra=nixpkgs"
     ];
-
-  # It is required to set this to avoid a change in the
-  # handling of sync map in go 1.24+
-  # Upstream issue: https://github.com/authelia/authelia/issues/8980
-  env.GOEXPERIMENT = "nosynchashtriemap";
 
   # several tests with networking and several that want chromium
   doCheck = false;
@@ -116,7 +113,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
-      dit7ya
       nicomem
     ];
     mainProgram = "authelia";

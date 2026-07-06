@@ -12,7 +12,6 @@ let
     mkIf
     mkOption
     mkPackageOption
-    optionalString
     types
     ;
 

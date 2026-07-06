@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
+  nix,
+  writeShellApplication,
+  _experimental-update-script-combinators,
   cmake,
   glib,
   libmt32emu,
@@ -10,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-smf2wav";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "mt32emu_smf2wav_${lib.replaceString "." "_" finalAttrs.version}";
-    sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
+    sha256 = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   postPatch =
@@ -26,13 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace CMakeLists.txt \
         --replace-fail 'add_subdirectory(mt32emu)' "" \
         --replace-fail 'add_dependencies(mt32emu-smf2wav mt32emu)' ""
-    ''
-    # Bump CMake minimum to something our CMake supports
-    # Fixed treewide in https://github.com/munt/munt/commit/e6af0c7e5d63680716ab350467207c938054a0df
-    # Remove when version > 1.9.0
-    + ''
-      substituteInPlace {./,mt32emu_smf2wav/,mt32emu_smf2wav/libsmf/}CMakeLists.txt \
-        --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 2.8.12...3.27)'
     '';
 
   nativeBuildInputs = [
@@ -49,6 +46,58 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "munt_WITH_MT32EMU_QT" false)
     (lib.cmakeBool "munt_WITH_MT32EMU_SMF2WAV" true)
   ];
+
+  passthru = {
+    # Otherwise x.y.z in version != x_y_z in tag, and bump to same version is attempted
+    unfixVersionScript = writeShellApplication {
+      name = "unfix-mt32emu-smf2wav-version";
+
+      runtimeInputs = [
+        nix
+      ];
+
+      text = ''
+        export UPDATE_NIX_ATTR_PATH="''${UPDATE_NIX_ATTR_PATH:-mt32emu-smf2wav}"
+
+        preUpdateScriptVersion="$(nix-instantiate . --eval --strict -A "$UPDATE_NIX_ATTR_PATH.version" | cut -d'"' -f2)"
+        unfixedVersion="''${preUpdateScriptVersion//\./_}"
+
+        pkgFile="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" $UPDATE_NIX_ATTR_PATH).file" | cut -d'"' -f2)"
+
+        sed -i -e "s/version = \"$preUpdateScriptVersion\"/version = \"$unfixedVersion\"/g" "$pkgFile"
+      '';
+    };
+
+    updateTagScript = gitUpdater {
+      rev-prefix = "mt32emu_smf2wav_";
+    };
+
+    # gitUpdater lacks an option for modifying new tag
+    fixVersionScript = writeShellApplication {
+      name = "fix-mt32emu-smf2wav-version";
+
+      runtimeInputs = [
+        nix
+      ];
+
+      text = ''
+        export UPDATE_NIX_ATTR_PATH="''${UPDATE_NIX_ATTR_PATH:-mt32emu-smf2wav}"
+
+        postUpdateScriptVersion="$(nix-instantiate . --eval --strict -A "$UPDATE_NIX_ATTR_PATH.version" | cut -d'"' -f2)"
+        fixedVersion="''${postUpdateScriptVersion//_/.}"
+
+        pkgFile="$(nix-instantiate --eval -E "with import ./. {}; (builtins.unsafeGetAttrPos \"version\" $UPDATE_NIX_ATTR_PATH).file" | cut -d'"' -f2)"
+
+        sed -i -e "s/version = \"$postUpdateScriptVersion\"/version = \"$fixedVersion\"/g" "$pkgFile"
+      '';
+    };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (lib.getExe finalAttrs.passthru.unfixVersionScript)
+      (finalAttrs.passthru.updateTagScript.command)
+      (lib.getExe finalAttrs.passthru.fixVersionScript)
+    ];
+  };
 
   meta = {
     homepage = "https://munt.sourceforge.net/";

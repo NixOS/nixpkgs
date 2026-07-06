@@ -21,16 +21,16 @@ let
 in
 buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "24.1.3";
+  version = "25.1.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-omx6nGHoo0yfmSTe4ikVQZ4zWU0drDzuM3gEKZo4G+k=";
+    hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
   };
 
-  npmDepsHash = "sha256-sCQgzXUuJtM5CfHb2czvdn7ZoyME3dWz96wmvJopsCk=";
+  npmDepsHash = "sha256-HAOZlCRcPjX0u9GBLaYR03Jb+bvg679MqcGGHkQ2FPM=";
 
   makeCacheWritable = true;
 
@@ -71,7 +71,6 @@ buildNpmPackage' rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };

@@ -12,11 +12,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
-  version = "4.26";
+  version = "4.27";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    hash = "sha256-iK4h7YS8+W2nr3Bbmai4Ervt0YWYKgkQaZ5IH7Q9HkE=";
+    hash = "sha256-DivCF3yCHmGyps7PTU1xKcdG+oBegD/ntMst9rOr0TU=";
   };
 
   postPatch = ''
@@ -35,9 +35,13 @@ tcl.mkTclDerivation rec {
     zlib
   ];
 
+  addTclConfigureFlags = false;
   configureFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "SHAREDIR=${placeholder "out"}/share"
+    "--with-tcl=${tcl}/lib"
+    "--with-tclinclude=${tcl}/include"
+    "--exec-prefix=${placeholder "out"}"
   ];
 
   postInstall = ''

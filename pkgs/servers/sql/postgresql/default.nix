@@ -14,6 +14,7 @@ let
     postgresql_16 = ./16.nix;
     postgresql_17 = ./17.nix;
     postgresql_18 = ./18.nix;
+    postgresql_19 = ./19.nix;
   };
 
   mkAttributes =
@@ -23,7 +24,7 @@ let
       let
         attrName = if jitSupport then "${version}_jit" else version;
         postgresql = import path { inherit self; };
-        attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
+        attrValue = if jitSupport then postgresql.withJIT else postgresql;
       in
       self.lib.nameValuePair attrName attrValue
     ) versions;

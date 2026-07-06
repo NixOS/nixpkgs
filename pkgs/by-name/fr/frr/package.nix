@@ -31,7 +31,8 @@
   readline,
   rtrlib,
   protobufc,
-  zeromq,
+  sqlite,
+  lua53Packages,
 
   # tests
   net-tools,
@@ -45,6 +46,7 @@
   cumulusSupport ? false,
   irdpSupport ? true,
   mgmtdSupport ? true,
+  scriptingSupport ? true,
   # Experimental as of 10.1, reconsider if upstream changes defaults
   grpcSupport ? false,
 
@@ -80,13 +82,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.5.3";
+  version = "10.6.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-nVXoRApW8EZtP1HiGJ5JBJaoQXVISfPK2k+xmCtdVH0=";
+    hash = "sha256-sSvw9tfVNUyQjEOELoUAIQkEvXg765MsWvVKM0gsYUc=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp
@@ -119,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     readline
     rtrlib
-    zeromq
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
@@ -133,11 +135,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals grpcSupport [
     grpc
     protobuf
+  ]
+  ++ lib.optionals scriptingSupport [
+    lua53Packages.lua
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
   depsBuildBuild = [
     buildPackages.python3
+  ]
+  ++ lib.optionals scriptingSupport [
+    buildPackages.lua53Packages.lua
   ];
 
   # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
@@ -148,11 +156,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   configureFlags = [
+    "--disable-zeromq"
     "--disable-silent-rules"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
     "--enable-multipath=${toString numMultipath}"
+    "--enable-config-rollbacks"
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/var"
@@ -166,6 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature irdpSupport "irdp")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
     (lib.strings.enableFeature grpcSupport "grpc")
+    (lib.strings.enableFeature scriptingSupport "scripting")
 
     # routing protocols
     (lib.strings.enableFeature bgpdSupport "bgpd")

@@ -8,7 +8,7 @@
   docutils,
   ell,
   enableExperimental ? false,
-  fetchurl,
+  fetchpatch2,
   glib,
   json_c,
   libical,
@@ -32,11 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (bluez-headers) version src;
 
   patches = [
-    (fetchurl {
-      name = "static.patch";
-      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
-      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
+    # https://github.com/bluez/bluez/issues/1896
+    # Remove the following 2 in the next release
+    (fetchpatch2 {
+      name = "fix-btctl-noninteractive-regression";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=b33e923b55e4d0e9d78a83cfcb541fd1f687ef54";
+      hash = "sha256-q7eN4ktw7DtdwMHHi7GU7fbvHAdMttKF1kDSWzZqa6A=";
     })
+    (fetchpatch2 {
+      name = "fix-btctl-noninteractive-regression-2";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=21e13976f2e375d701b8b7032ba5c1b2e56c305f";
+      hash = "sha256-JrdmYiC+U0KeMP8oVg12Z8CvkMEKWBVgiiUACx0E7dY=";
+    })
+    ./lreadline.patch
   ];
 
   buildInputs = [

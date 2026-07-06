@@ -10,17 +10,20 @@
   wrapGAppsHook4,
   libadwaita,
   libportal-gtk4,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "netpeek";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = false;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SFY/bUUS4AOniOGjngH/fUHrYiq+dMWxHYvoSkhfnkA=";
+    hash = "sha256-Cc8x9diBeKIk1G5fU1WHtgmUwCCbAwIrw8zEQScKlZ4=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +51,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern network scanner for GNOME";

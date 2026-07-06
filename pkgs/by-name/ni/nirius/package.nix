@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nirius";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "nirius";
     rev = "nirius-${finalAttrs.version}";
-    hash = "sha256-+OPJODiZs3+d3W8vnLCbza4axgIu6WBeC2j+JLN/Zgg=";
+    hash = "sha256-H6geI5RkM0SXJyqXNai9vyc0cdTq2hHGpee8Tx2XDIU=";
   };
 
-  cargoHash = "sha256-lxyChCuo6ZtZ6Sd50xn2KyY7JTf3KCobZnI0AsM3CUE=";
+  cargoHash = "sha256-qsY0OXsCn6g/vIBkHtkG2Dvv2RjiOrhT1O8AvzyBiV0=";
 
   meta = {
     description = "Utility commands for the niri wayland compositor";

@@ -4,30 +4,44 @@
   fetchurl,
   ncurses,
   gettext,
-  fetchpatch,
+  pkg-config,
+  check,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcal";
-  version = "4.1";
+  version = "4.2.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gcal/gcal-${finalAttrs.version}.tar.xz";
-    sha256 = "1av11zkfirbixn05hyq4xvilin0ncddfjqzc4zd9pviyp506rdci";
+    url = "https://www.alteholz.dev/gnu/gcal-${finalAttrs.version}.tar.xz";
+    hash = "sha256-2L0tdBHnglHWcGSqDxymClI7+FbuPm2J0H2FoSM0eNw=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gcal/raw/master/f/gcal-glibc-no-libio.patch";
-      sha256 = "0l4nw9kgzsay32rsdwvs75pbp4fhx6pfm85paynfbd20cdm2n2kv";
-    })
+    ./add-missing-include.patch
+    ./fix-gnulib-link.patch
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+    # For check_gcal
+    NIX_LDFLAGS = "-lm";
+  };
 
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+
+  nativeBuildInputs = [
+    pkg-config
+    check
+  ];
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Program for calculating and printing calendars";

@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchurl,
-  extra-cmake-modules,
   boost,
+  cmake,
   kdePackages,
 }:
 
@@ -17,7 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    extra-cmake-modules
+    cmake
+    kdePackages.extra-cmake-modules
     kdePackages.kdoctools
     kdePackages.wrapQtAppsHook
   ];

@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kas";
-  version = "5.2";
+  version = "5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = "kas";
     tag = finalAttrs.version;
-    hash = "sha256-lEhgEotQE5ceH1NEBlTzD33W09NQjzo4bCpZi9rcQE0=";
+    hash = "sha256-wETe3VgG5ZEQjWXgcC/u42ZzzPIMqrBEcZmaDcK5yRY=";
   };
 
   patches = [ ./pass-terminfo-env.patch ];

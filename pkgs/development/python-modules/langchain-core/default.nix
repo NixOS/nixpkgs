@@ -9,6 +9,7 @@
 
   # dependencies
   jsonpatch,
+  langchain-protocol,
   langsmith,
   packaging,
   pydantic,
@@ -36,14 +37,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-core";
-  version = "1.2.27";
+  version = "1.4.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${finalAttrs.version}";
-    hash = "sha256-WdC43SUVgteNQLNMD+yEkD8TyyCFGXkYTi5moZMEmVo=";
+    hash = "sha256-fJKr1NlpCujGoVxxqjaEXGOVZO5NH9+71dWHyMuQ2jw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/core";
@@ -52,6 +54,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     jsonpatch
+    langchain-protocol
     langsmith
     packaging
     pydantic

@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "6.1.1.10360";
+  version = "6.2.1.10461";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Radarr";
       repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-AtvuZFAF+KJmEp46KWrA9qHv3+IejSXxUyol2W8BWdk=";
+      hash = "sha256-gDEMahF0uhwlOisD0gWzY3M17mXftKBm9gN5Uaatqsk=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
@@ -67,7 +67,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-Ng7ZsUfGBKtNktJeuI4Q6+tMN2ZPj+pVSQ+0Ssy5gRc=";
+    hash = "sha256-FrYvTYSxUDP68a4n0isEaHxRNFL25N3LNQJVFBOLdyE=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' servarr-ffmpeg "ffprobe");

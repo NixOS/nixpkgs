@@ -53,6 +53,11 @@ buildPythonPackage (finalAttrs: {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
+  disabledTests = [
+    # ValueError: Job ID must only contain letters, numbers, underscores and dashes
+    "test_scheduled_jobs"
+  ];
+
   meta = {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";

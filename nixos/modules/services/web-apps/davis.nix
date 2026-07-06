@@ -189,7 +189,7 @@ in
       name = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = "davis";
-        description = "Database name, only used when the databse is created locally.";
+        description = "Database name, only used when the database is created locally.";
       };
       createLocally = lib.mkOption {
         type = lib.types.bool;

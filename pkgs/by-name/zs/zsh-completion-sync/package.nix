@@ -2,17 +2,18 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-completion-sync";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "BronzeDeer";
     repo = "zsh-completion-sync";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GTW4nLVW1/09aXNnZJuKs12CoalzWGKB79VsQ2a2Av4=";
+    sha256 = "sha256-GMZ0W8d0Qd5EhrwA/SkeOqDzoUchxDermcTR0iKYP8M=";
   };
 
   strictDeps = true;
@@ -22,6 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     install -D zsh-completion-sync.plugin.zsh  $out/share/zsh-completion-sync/zsh-completion-sync.plugin.zsh
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Automatically loads completions added dynamically to FPATH or XDG_DATA_DIRS";

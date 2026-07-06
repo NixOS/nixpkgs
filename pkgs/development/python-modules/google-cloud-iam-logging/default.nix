@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-iam-logging";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_iam_logging";
     inherit (finalAttrs) version;
-    hash = "sha256-p0PEXDzdq+DX88rW7mN9FBK7Nkhi01xubH+qeECr1d4=";
+    hash = "sha256-SOugq2vFHefdkFsc4haDahmOjioWSZtL4iUfQlgqwCg=";
   };
 
   build-system = [ setuptools ];

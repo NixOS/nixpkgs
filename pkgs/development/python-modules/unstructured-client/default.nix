@@ -1,13 +1,11 @@
 {
   aiofiles,
   buildPythonPackage,
-  cryptography,
   deepdiff,
   fetchFromGitHub,
   httpcore,
   httpx,
   lib,
-  poetry-core,
   pydantic,
   pypdf,
   pypdfium2,
@@ -15,33 +13,29 @@
   pytestCheckHook,
   python,
   requests-toolbelt,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "unstructured-client";
-  version = "0.42.12";
+  version = "0.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xuaGvQEu1QpLn33AUgdWW120pVVNVPL08U/SCA7kGvc=";
+    hash = "sha256-K4+k1wKFvT2JYElt2SdBFKJGpFdC15Bu8Aa+M/c7JSQ=";
   };
 
   preBuild = ''
     ${python.interpreter} scripts/prepare_readme.py
   '';
 
-  build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiofiles
-    cryptography
     httpcore
     httpx
     pydantic

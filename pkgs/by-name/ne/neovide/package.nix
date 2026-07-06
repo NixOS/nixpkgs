@@ -106,7 +106,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
       # library skia embeds the path to its sources
       remove-references-to -t "$SKIA_SOURCE_DIR" \
         $out/bin/neovide
-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/neovide \
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';

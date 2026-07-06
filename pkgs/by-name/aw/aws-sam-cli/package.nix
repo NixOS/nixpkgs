@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch2,
   git,
   testers,
   aws-sam-cli,
@@ -12,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.154.0";
+  version = "1.160.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-wy6LZbWmK5rb0foFttPOvDOsFtrQNFc8mGBP9WTzVyw=";
+    hash = "sha256-IBxnBIgTSpPUNb/4yx3OqA7WFzudzRKgkKCFsJeyx08=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -30,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     "boto3"
     "boto3-stubs"
     "cfn-lint"
+    "click"
     "cookiecutter"
     "docker"
     "jsonschema"
@@ -58,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
       flask
       jsonschema
       pyopenssl
+      python-dotenv
       pyyaml
       requests
       rich
@@ -67,36 +68,25 @@ python3.pkgs.buildPythonApplication rec {
       tzlocal
       watchdog
     ]
-    ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
-      apigateway
-      cloudformation
-      ecr
-      iam
-      kinesis
-      lambda
-      s3
-      schemas
-      secretsmanager
-      signer
-      sqs
-      stepfunctions
-      sts
-      xray
-    ]);
-
-  patches = [
-    # Remove after aws-sam-cli > 1.154.0
-    (fetchpatch2 {
-      url = "https://github.com/aws/aws-sam-cli/commit/1e1664faae8ff799cbb03fe16ef1650689803587.patch";
-      hash = "sha256-HnOBrKkE/sIGZrgRq8G+ef1wnGvtALV4wma8J5eZfLc=";
-    })
-  ];
-
-  # Remove after upstream bumps click > 8.1.8
-  postPatch = ''
-    substituteInPlace requirements/base.txt --replace-fail \
-      'click==8.1.8' 'click==${python3.pkgs.click.version}'
-  '';
+    ++ (
+      with python3.pkgs.boto3-stubs.optional-dependencies;
+      lib.concatLists [
+        apigateway
+        cloudformation
+        ecr
+        iam
+        kinesis
+        lambda
+        s3
+        schemas
+        secretsmanager
+        signer
+        sqs
+        stepfunctions
+        sts
+        xray
+      ]
+    );
 
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
@@ -126,9 +116,7 @@ python3.pkgs.buildPythonApplication rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  enabledTestPaths = [
-    "tests"
-  ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = [
     # Disable tests that requires networking or complex setup
@@ -155,6 +143,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_delete_deployment"
     "test_request_with_no_data"
     "test_import_should_succeed_for_a_defined_hidden_package_540_pkg_resources_py2_warn"
+    "test_updates_imageuri_when_pointing_to_local_archive"
+    "test_subcommand_help_0_invoke"
   ];
 
   pythonImportsCheck = [ "samcli" ];

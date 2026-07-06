@@ -7,7 +7,7 @@
   bison,
   texinfo,
   openjdk8_headless,
-  erlang,
+  beamPackages,
   makeWrapper,
   readline,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     bison
     texinfo
     openjdk8_headless
-    erlang
+    beamPackages.erlang
     readline
   ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/$e \
         --prefix PATH ":" "${gcc}/bin" \
         --prefix PATH ":" "${openjdk8_headless}/bin" \
-        --prefix PATH ":" "${erlang}/bin"
+        --prefix PATH ":" "${beamPackages.erlang}/bin"
     done
   '';
 

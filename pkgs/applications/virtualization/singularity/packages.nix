@@ -9,19 +9,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.4.5";
+        version = "1.5.0";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-J8q/dUW5OPbMXpeZfRP3C2nseimH+HBhkSLoIAE6NlI=";
+          hash = "sha256-zx3NPuwz3ZNJeYw4CG1/q8uwbGpA7G1/hvw6VmoCNkg=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-47Ri7Jdy31rIp+lon6kkpa5e7pgPevU8ajsIa/RVScY=";
+        vendorHash = "sha256-ZyYGCGZHHy1YYE7O9fN1qFQbLshsRFBSrNLt1GXNyU8=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";

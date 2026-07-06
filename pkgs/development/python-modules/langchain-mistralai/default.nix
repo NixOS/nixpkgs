@@ -22,19 +22,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
-  version = "1.1.2";
+  version = "1.1.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-mistralai==${version}";
-    hash = "sha256-vCYdBBN9vU8gWedCxKXnzLzZ5C7pYl3KyECBNAQggto=";
+    tag = "langchain-mistralai==${finalAttrs.version}";
+    hash = "sha256-lWhFFPEGNKUVmYC48MtyNZjgujfQRwUKR4bzZEvr5DQ=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/mistralai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/mistralai";
 
   build-system = [ hatchling ];
 
@@ -75,7 +76,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;
@@ -83,4 +84,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

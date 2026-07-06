@@ -145,6 +145,7 @@ in
         RuntimeDirectoryMode = "0750";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ReadWritePaths = [ stateDir ];
+        ExecPaths = [ stateDir ];
 
         # Hardening
         CapabilityBoundingSet = "";

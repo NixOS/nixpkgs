@@ -1,9 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
   fetchPypi,
-  fetchpatch,
   nodejs,
   npmHooks,
   python3,
@@ -26,7 +26,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "lektor";
-  version = "3.4.0b12";
+  version = "3.4.0b14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -37,22 +37,12 @@ python.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm -f $out/tests/demo-project/content/icc-profile-test/{LICENSE,license}.txt
     '';
-    hash = "sha256-y0/fYuiIB/O5tsYKjzOPnCafOIZCn4Z5OITPMcnHd/M=";
+    hash = "sha256-Wr3MhUGihqlPyUlWM8KT+sb/FtHH/NfRNDT9QCKJj5k=";
   };
-
-  patches = [
-    # Fixes test_thumbnail.py with Pillow 11.0
-    # see lektor/lektor #1202
-    (fetchpatch {
-      name = "lektor-pillow-11.patch";
-      url = "https://github.com/lektor/lektor/commit/af99ea4265e05227d7452977949475196a58edfa.patch";
-      hash = "sha256-PmSmX9Ku5rAzN2FzLwvXYeUqN683opLRt9J35w56cfg=";
-    })
-  ];
 
   npmDeps = fetchNpmDeps {
     src = "${src}/${npmRoot}";
-    hash = "sha256-LXe5/u4nAGig8RSu6r8Qsr3p3Od8eoMxukW8Z4HkJ44=";
+    hash = "sha256-zcvfVVLhHPas4ulyQ9HDG3f5Bofco1A6pDx9TmREOIk=";
   };
 
   npmRoot = "frontend";
@@ -100,6 +90,17 @@ python.pkgs.buildPythonApplication rec {
     # Tests require network access
     "test_path_installed_plugin_is_none"
     "test_VirtualEnv_run_pip_install"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This is a bit weird, but for some reason fs watch tests fail with sandbox
+    "test_sees_created_file"
+    "test_sees_deleted_file"
+    "test_sees_modified_file"
+    "test_sees_file_moved_in"
+    "test_sees_file_moved_out"
+    "test_sees_deleted_directory"
+    "test_sees_file_in_directory_moved_in"
+    "test_sees_directory_moved_out"
   ];
 
   postCheck = ''

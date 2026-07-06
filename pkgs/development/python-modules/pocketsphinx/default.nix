@@ -44,11 +44,13 @@ buildPythonPackage rec {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
     changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${version}/NEWS";
-    license = with lib.licenses; [
-      bsd2
-      bsd3
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        bsd3
+        mit
+      ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

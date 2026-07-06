@@ -1,6 +1,5 @@
 {
   callPackage,
-  fetchurl,
   lib,
   stdenv,
   discord,
@@ -75,7 +74,7 @@ let
     mainProgram = "discord";
     maintainers = with lib.maintainers; [
       artturin
-      FlameFlag
+      _4evy
       infinidoge
       jopejoe1
       Scrumplex
@@ -101,13 +100,7 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
   callPackage package (
     args
     // {
-      inherit pname;
-      inherit (source) version;
-
-      src = fetchurl {
-        inherit (source) url hash;
-      };
-
+      inherit pname source;
       meta = meta // {
         mainProgram = args.binaryName;
       };

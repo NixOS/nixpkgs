@@ -15,8 +15,8 @@ buildPgrxExtension (finalAttrs: {
   version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = "tensorchord";
-    repo = "vectorchord";
+    owner = "supervc-stack";
+    repo = "VectorChord";
     tag = finalAttrs.version;
     hash = "sha256-QL9XGSQFOcrpww03Y5F0JuDbpo0v8oidUqucLxggkqE=";
   };
@@ -24,7 +24,7 @@ buildPgrxExtension (finalAttrs: {
   cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
   # Include upgrade scripts in the final package
-  # https://github.com/tensorchord/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
+  # https://github.com/supervc-stack/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
   postInstall = ''
     cp sql/upgrade/* $out/share/postgresql/extension/
   '';
@@ -89,9 +89,15 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/supervc-stack/VectorChord/issues/464
+    # Check after next package update.
+    broken = lib.warnIf (
+      finalAttrs.version != "1.1.1"
+    ) "Is postgresql19Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "19");
+    changelog = "https://github.com/supervc-stack/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
-    homepage = "https://github.com/tensorchord/VectorChord";
+    homepage = "https://github.com/supervc-stack/VectorChord";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
       lib.licenses.elastic20

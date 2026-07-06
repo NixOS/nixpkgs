@@ -13,7 +13,6 @@
   numpy,
   optax,
   orbax-checkpoint,
-  orbax-export,
   pyyaml,
   rich,
   tensorstore,
@@ -36,15 +35,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.6";
+  version = "0.12.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rIDfF9W8cxF0njH4e4uhqURQ0C4N8Boe76u6meMgC34=";
+    hash = "sha256-a78KiTsCCARWZvbxz9QKdUKnjkDJGXcPVVJu5rU4m/U=";
   };
+
+  # DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
+  postPatch = ''
+    substituteInPlace tests/nnx/transforms_test.py \
+      --replace-fail \
+        "with mesh:" \
+        "with jax.set_mesh(mesh):"
+  '';
 
   build-system = [
     setuptools
@@ -58,7 +66,6 @@ buildPythonPackage (finalAttrs: {
     numpy
     optax
     orbax-checkpoint
-    orbax-export
     pyyaml
     rich
     tensorstore
@@ -76,11 +83,6 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     sphinx
     tensorflow
-  ];
-
-  pytestFlags = [
-    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
-    "-Wignore::FutureWarning"
   ];
 
   disabledTestPaths = [

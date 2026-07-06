@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "In-circuit debug and programming for ST-Link devices";
+    homepage = "https://github.com/stlink-org/stlink";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;

@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
+    homepage = "https://salsa.debian.org/reproducible-builds/disorderfs";
     mainProgram = "disorderfs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

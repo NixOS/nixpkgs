@@ -5,11 +5,13 @@
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
+  glib-networking,
   nodejs,
   pkg-config,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  wrapGAppsHook3,
   wails,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -18,26 +20,28 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.21.0";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-IGsH8QHoj2CvrSEc9eIisxySXQkjPSDBXsCPOXqANVM=";
+    hash = "sha256-+2MdFF1iufbPJvf5XGrM9t9vaY7BNdIu/vSWgAKcbvQ=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ vollate ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    patches = [ ./frontend-runtime-path.patch ];
 
     nativeBuildInputs = [
       nodejs
@@ -53,8 +57,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_10;
-      fetcherVersion = 2;
-      hash = "sha256-dWqwEnXPT+5N+36szm4AF1ChM9M6UJltct+EtQAofGQ=";
+      fetcherVersion = 3;
+      hash = "sha256-BrDO9xdMuMnhXPAd9QvtU4R1W1WacnsVcGde+WFjvGA=";
     };
 
     buildPhase = ''
@@ -85,22 +89,20 @@ buildGo126Module {
 
   patches = [ ./xdg-path-and-restart-patch.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
-  postPatch = ''
-    substituteInPlace bridge/bridge.go \
-      --subst-var out
-  '';
-
-  vendorHash = "sha256-EeIxt0BzSaZh1F38btUXN9kAvj12nlqEerVgWVGkiuk=";
+  vendorHash = "sha256-Xi/EgMLex25p2tmRHEldCv6hgUKIpLJTmrMpHPGLY5M=";
 
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
     pkg-config
     wails
+    wrapGAppsHook3
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist

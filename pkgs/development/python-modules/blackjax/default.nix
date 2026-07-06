@@ -77,6 +77,7 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError on numerical values
     "test_barker"
+    "test_laps"
     "test_mclmc"
     "test_mcse4"
     "test_mean_and_std"

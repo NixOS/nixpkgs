@@ -19,6 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EVxDUEuxCnMiqqsKFs9JpRVJ86d9hW22K4a4we8eoJA=";
   };
 
+  patches = [
+    # Remove this when updating since upstream migrated to pnpm
+    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L59
+    ./yarn-4.14-support.patch
+  ];
+
   nativeBuildInputs = [
     nodejs
     yarn-berry_4.yarnBerryConfigHook
@@ -30,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-WTxUoRPooea4CqpKnnrmvoWXoglCivVet+bUh0YG7gU=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-RTgdHicbfbJbToif51TchLCfdIPZynvT0n/KwrydLYU=";
   };
 
   buildPhase = ''

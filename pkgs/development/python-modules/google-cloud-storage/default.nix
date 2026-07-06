@@ -2,13 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  google-api-core,
   google-auth,
   google-cloud-core,
   google-cloud-iam,
   google-cloud-kms,
   google-cloud-testutils,
+  google-crc32c,
   google-resumable-media,
+  grpc-google-iam-v1,
+  grpcio,
+  grpcio-status,
   mock,
+  opentelemetry-api,
+  proto-plus,
   protobuf,
   pytestCheckHook,
   pytest-asyncio,
@@ -18,29 +25,39 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.8.0";
+  version = "3.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-storage";
     tag = "v${version}";
-    hash = "sha256-CHku6tiELE3deP6ZCRx/ekn60FmF3gO51cOAF1DkQrI=";
+    hash = "sha256-pKy1A9RNyRlAn4bXclcdvbfW4kZOP9Z4HqKWwcrDePo=";
   };
-
-  pythonRelaxDeps = [ "google-auth" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
+    google-api-core
     google-auth
     google-cloud-core
+    google-crc32c
     google-resumable-media
     requests
   ];
 
   optional-dependencies = {
+    grpc = [
+      google-api-core
+      grpc-google-iam-v1
+      grpcio
+      grpcio-status
+      proto-plus
+      protobuf
+    ]
+    ++ google-api-core.optional-dependencies.grpc;
     protobuf = [ protobuf ];
+    tracing = [ opentelemetry-api ];
   };
 
   nativeCheckInputs = [

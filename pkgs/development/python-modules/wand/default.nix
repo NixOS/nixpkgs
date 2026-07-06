@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "wand";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emcconville";
     repo = "wand";
     tag = version;
-    hash = "sha256-U4qxtOC72YSgo74OZdFmMG8W2s4wFI0ohJ7uJ4caabA=";
+    hash = "sha256-1ZkvJxlv47rQ2BOBnEWPczcjIM2muywemrxwY2ZN2UA=";
   };
 
   postPatch = ''

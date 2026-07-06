@@ -22,6 +22,8 @@
   mcp,
   google-auth,
   requests,
+  websockets,
+  opentelemetry-exporter-otlp-proto-http,
 
   # tests
   opentelemetry-sdk,
@@ -30,14 +32,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.3.2";
+  version = "2.5.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aqKM85gBvOyfAsps29u6okuQFJ+GzS2AGFgY1H4Tkmw=";
+    hash = "sha256-skcg4fa9WUNqQs3rqfwVovpQ65hCXqhDDyeJa7kAwNA=";
   };
 
   preBuild = ''
@@ -72,20 +75,30 @@ buildPythonPackage (finalAttrs: {
       google-auth
       requests
     ];
+    realtime = [
+      websockets
+    ];
+    telemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
-    opentelemetry-sdk
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
-  ++ finalAttrs.passthru.optional-dependencies.gcp;
+  ++ finalAttrs.passthru.optional-dependencies.gcp
+  ++ finalAttrs.passthru.optional-dependencies.realtime
+  ++ finalAttrs.passthru.optional-dependencies.telemetry;
 
-  disabledTests = [
-    # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
-    "TestOtelTracing"
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'opentelemetry.instrumentation'
+    "src/mistralai/extra/tests/test_otel_tracing.py"
+    # ModuleNotFoundError: No module named 'msgpack'
+    "src/mistralai/extra/tests/test_workflow_encoding.py"
   ];
 
   meta = {

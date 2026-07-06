@@ -102,6 +102,7 @@ runCommand yazi-unwrapped.name
         license
         maintainers
         mainProgram
+        changelog
         ;
     };
 

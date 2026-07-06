@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "colcon-core";
-  version = "0.20.1";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-core";
     tag = version;
-    hash = "sha256-FV/G2FcnBgr7mUY/Jr+bVAdEfhHL9qAnpc92hpTfy7Y=";
+    hash = "sha256-yERPJD2LYmBrLchyX/axQ+8h5/hRXsjvzF3DkR8CsCs=";
   };
 
   # Upstream tracking issue: https://github.com/ros2/ros2/issues/1738
@@ -66,6 +66,8 @@ buildPythonPackage rec {
   pythonRemoveDeps = [
     # We use pytest-cov-stub instead (and it is not a runtime dependency anyways)
     "pytest-cov"
+    # Upper bound on setuptools is too strict for nixpkgs
+    "setuptools"
   ];
 
   meta = {

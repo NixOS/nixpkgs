@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatStringsSep
     flip
-    literalMD
     literalExpression
     optionalAttrs
     optionals
@@ -19,7 +18,6 @@ let
     mkIf
     mkOption
     types
-    versionAtLeast
     ;
 
   cfg = config.services.cassandra;

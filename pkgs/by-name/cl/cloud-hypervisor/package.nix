@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "51.1";
+  version = "52.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H+sfuatB/7cAMwJcT8SKbTyISUdNyp8eSvvyvkKrjho=";
+    hash = "sha256-OGyvmedSaWPsyH6mdHhgXN7MvTnK1HzdfTKUhJRlq8I=";
   };
 
-  cargoHash = "sha256-E32SLJNQ9ssn7GwFpvpKot5nay+cr3rSZcKovjA5oJE=";
+  cargoHash = "sha256-ZNj1H3Iq+IUSe0McHJjrwPOoR+YRB+rsSmZHMhXsHy0=";
 
   separateDebugInfo = true;
 
@@ -38,6 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+    "--"
+    # io_uring syscalls are blocked by the Lix sandbox
+    "--skip=io_uring"
+    "--skip=qcow_async::unit_tests::"
+    # fallocate(PUNCH_HOLE) reported size depends on the host filesystem
+    "--skip=test_query_device_size_sparse_file_punch_hole"
   ];
 
   nativeInstallCheckInputs = [

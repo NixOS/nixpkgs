@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maciej-gol/tenant-schemas-celery";
     changelog = "https://github.com/maciej-gol/tenant-schemas-celery/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

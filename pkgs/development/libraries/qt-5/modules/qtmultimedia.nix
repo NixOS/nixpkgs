@@ -36,5 +36,7 @@ qtModule {
     "out"
   ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
-  NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin) "-lobjc";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    NIX_LDFLAGS = "-lobjc";
+  };
 }

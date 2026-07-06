@@ -4,8 +4,10 @@
   patches,
 }:
 {
+  autoreconfHook,
   stdenv,
   lib,
+  buildPackages,
   fetchzip,
   flex,
   bison,
@@ -53,7 +55,20 @@
   withLua ? false,
   lua5_3,
 }:
-
+let
+  # The `nativeBuildInputs` version of `mysql_config` emits headers and libraries for
+  # the build platform, not the host platform; `pkg-config` emits the correct versions.
+  fake_mysql_config = buildPackages.writeShellScriptBin "mysql_config" ''
+    if [ "$1" == "--include" ]; then
+      "$PKG_CONFIG" --cflags mysqlclient
+    elif [ "$1" == "--libs" ]; then
+      "$PKG_CONFIG" --libs mysqlclient
+    else
+      echo "fake_mysql_config: unsupported option: $1" >&2
+      exit 1
+    fi
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot";
   inherit version;
@@ -64,7 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ autoreconfHook ]
+  ++ lib.optional (withMySQL && lib.versionOlder version "2.4") fake_mysql_config;
 
   buildInputs = [
     openssl
@@ -137,11 +154,19 @@ stdenv.mkDerivation (finalAttrs: {
   )
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure.ac \
+    --replace-fail \
+      'NOPLUGIN_LDFLAGS="-no-undefined"' \
+      'NOPLUGIN_LDFLAGS="-undefined dynamic_lookup"'
   '';
 
-  preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
-  '';
+  preBuild =
+    lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.hostPlatform.isDarwin)
+      ''
+        export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
+      '';
 
   # We need this for sysconfdir, see remark below.
   installFlags = [ "DESTDIR=$(out)" ];

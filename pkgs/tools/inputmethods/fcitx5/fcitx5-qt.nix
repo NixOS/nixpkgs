@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   fcitx5,
   gettext,
   qtbase,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     wrapQtAppsHook
   ];

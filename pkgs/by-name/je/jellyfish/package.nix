@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "jellyfish";
   version = "0-unstable-2024-05-27";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codereport";

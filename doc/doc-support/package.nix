@@ -73,6 +73,7 @@ stdenvNoCC.mkDerivation (
             ../anchor.min.js
             ../manpage-urls.json
             ../redirects.json
+            ../nav.json
           ]
         );
     };
@@ -116,8 +117,8 @@ stdenvNoCC.mkDerivation (
         --script ./highlightjs/loader.js \
         --script ./anchor.min.js \
         --script ./anchor-use.js \
-        --toc-depth 1 \
-        --section-toc-depth 1 \
+        --sidebar-depth 3 \
+        --nav ./nav.json \
         manual.md \
         out/index.html
 

@@ -1,4 +1,5 @@
 // @ts-check
+const { classify } = require('../supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details')
 
 /**
@@ -7,9 +8,13 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details')
  *  context: import('@actions/github/lib/context').Context,
  *  core: import('@actions/core'),
  *  repoPath?: string,
+ *  dry: boolean,
  * }} CheckManualFileEditsProps
  */
-async function checkManualFileEdits({ github, context, core, repoPath }) {
+async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
+  const { dismissReviews, postReview } = require('./reviews.js')
+  const reviewKey = 'manual-file-edits'
+
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.info('This is not a pull request. Skipping checks.')
@@ -28,6 +33,27 @@ async function checkManualFileEdits({ github, context, core, repoPath }) {
     return
   }
 
+  const baseBranchType = classify(
+    pr.base.ref.replace(/^refs\/heads\//, ''),
+  ).type
+  const headBranchType = classify(
+    pr.head.ref.replace(/^refs\/heads\//, ''),
+  ).type
+
+  if (
+    baseBranchType.includes('development') &&
+    headBranchType.includes('development') &&
+    pr.base.repo.id === pr.head.repo?.id
+  ) {
+    // This matches, for example, PRs from NixOS:staging-next to NixOS:master, or vice versa.
+    // Ignore them: we should only care about PRs introducing *new* commits.
+    // We still want to run on PRs from, e.g., Someone:master to NixOS:master, though.
+    core.info(
+      'This PR is from one development branch to another. Skipping checks.',
+    )
+    return
+  }
+
   const details = await getCommitDetailsForPR({ core, pr, repoPath })
 
   if (
@@ -35,8 +61,13 @@ async function checkManualFileEdits({ github, context, core, repoPath }) {
       changedPaths.includes('maintainers/github-teams.json'),
     )
   ) {
-    core.setFailed(
-      [
+    postReview({
+      github,
+      context,
+      core,
+      dry,
+      event: 'REQUEST_CHANGES',
+      body: [
         'maintainers/github-teams.json is supposed to accurately reflect the state of the teams in GitHub.\n',
         'Therefore, it should not be edited manually.\n',
         'All changes to teams listed in maintainers/github-teams.json should be performed in GitHub by a team maintainer.\n',
@@ -48,7 +79,16 @@ async function checkManualFileEdits({ github, context, core, repoPath }) {
         (prev, curr) => prev + (!prev || prev.endsWith('\n') ? '' : ' ') + curr,
         '',
       ),
-    )
+      reviewKey,
+    })
+  } else {
+    dismissReviews({
+      github,
+      context,
+      core,
+      dry,
+      reviewKey,
+    })
   }
 }
 

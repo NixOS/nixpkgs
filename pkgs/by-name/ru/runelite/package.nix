@@ -23,7 +23,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
+  mvnHash = "sha256-OI+m2xJZPnyPXM/HlAsaBJ/z/NCcRSP7+PW5CQOsPiY=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";

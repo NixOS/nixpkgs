@@ -2,20 +2,25 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yamlordereddictloader";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Nq8vYhD8/12k/EwS4dgV+XPc60EETnleHwYRXWNLyhM=";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyyaml ];
 
   # no tests
   doCheck = false;
@@ -28,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

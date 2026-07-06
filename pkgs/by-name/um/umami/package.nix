@@ -9,7 +9,8 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpmBuildHook,
+  pnpm_10,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -20,6 +21,8 @@
   basePath ? "",
 }:
 let
+  pnpm = pnpm_10;
+
   sources = lib.importJSON ./sources.json;
 
   geocities = stdenvNoCC.mkDerivation {
@@ -42,45 +45,50 @@ let
 
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
-  prisma-engines' = prisma-engines_7.overrideAttrs (old: rec {
-    version = "7.6.0";
-    src = fetchFromGitHub {
-      owner = "prisma";
-      repo = "prisma-engines";
-      tag = version;
-      hash = "sha256-NMoAaiTa68i51lR6iMCyHyCAsFuuhPx2+tHFSSoqWqA=";
-    };
-    cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
+  prisma-engines' = prisma-engines_7.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "7.8.0";
+      src = fetchFromGitHub {
+        owner = "prisma";
+        repo = "prisma-engines";
+        tag = finalAttrs.version;
+        hash = "sha256-nquIcOmFz+ikD0x/YEPZ5NVKCFPCdR5MSCHldn+b9jI=";
+      };
+      cargoHash = "sha256-uiFvzxwVJXCW9LUDFRC6ZkzSa7LQk+9ZJcaJw8mrBX4=";
 
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit (old) pname;
-      inherit src version;
-      patches = old.cargoDeps.vendorStaging.patches or [ ];
-      hash = cargoHash;
-    };
-  });
-  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (old: rec {
-    version = "7.6.0";
-    src = fetchFromGitHub {
-      owner = "prisma";
-      repo = "prisma";
-      tag = version;
-      hash = "sha256-BesX2ySfgew6+9Q6fnhZ8gMnnxh4D4fefaA5BhehlHE=";
-    };
-    pnpmDeps = old.pnpmDeps.override {
-      inherit src version;
-      hash = "sha256-ZOpNt+W5b1troicfkCi4wCCDtwhTB4VlPgxYMZetcs0=";
-    };
-  });
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (prevAttrs) pname;
+        inherit (finalAttrs) src version;
+        patches = prevAttrs.cargoDeps.vendorStaging.patches or [ ];
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+  prisma' = (prisma_7.override { prisma-engines_7 = prisma-engines'; }).overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "7.8.0";
+      src = fetchFromGitHub {
+        owner = "prisma";
+        repo = "prisma";
+        tag = finalAttrs.version;
+        hash = "sha256-89q5433z54h3oGX+lEYDQykN2mNltGz4+LWlYSE75/E=";
+      };
+      pnpmDeps = prevAttrs.pnpmDeps.override {
+        inherit (finalAttrs) src version;
+        hash = "sha256-mrFU5SAF4QuTBJj5TP8tUkYDG4zchttjcQMLtx6OBnI=";
+      };
+    }
+  );
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.1.0";
+  version = "3.2.0";
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
   ];
 
@@ -88,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EH3ebwTbajcNasn25ets2w068ZmCQRYUY2XON39J5HA=";
+    hash = "sha256-0nfCcaST06cTg43Rz1rCV8GYYDjQLP+6TrVRJF2/Yuk=";
   };
 
   # Umami uses next/font/google, which tries to download from Google Fonts at build time.
@@ -107,11 +115,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 3;
-    hash = "sha256-QNWmCsVFh8xpsO4ZPTaKGszwuRaxTrWLMVh/6VV5oIw=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-6ho5xoVdqZdihThL5q8+RhVPfaSwu1y3+p9d8DnfO3o=";
   };
 
-  env.CYPRESS_INSTALL_BINARY = "0";
   env.NODE_ENV = "production";
   env.NEXT_TELEMETRY_DISABLED = "1";
 
@@ -132,18 +140,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.PRISMA_QUERY_ENGINE_LIBRARY = "${finalAttrs.passthru.prisma-engines}/lib/libquery_engine.node";
   env.PRISMA_SCHEMA_ENGINE_BINARY = "${finalAttrs.passthru.prisma-engines}/bin/schema-engine";
 
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm build
-
-    runHook postBuild
-  '';
-
   checkPhase = ''
     runHook preCheck
 
-    pnpm test
+    # Tests fail if NODE_ENV=production
+    NODE_ENV=development pnpm test
 
     runHook postCheck
   '';

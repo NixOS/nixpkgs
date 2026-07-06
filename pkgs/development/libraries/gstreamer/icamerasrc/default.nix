@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     apple-sdk_gstreamer
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error"
     # gstcameradeinterlace.cpp:55:10: fatal error: gst/video/video.h: No such file or directory
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"

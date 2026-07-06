@@ -137,6 +137,17 @@ rec {
       "avx512"
       "fma"
     ];
+    rocketlake = [
+      "sse3"
+      "ssse3"
+      "sse4_1"
+      "sse4_2"
+      "aes"
+      "avx"
+      "avx2"
+      "avx512"
+      "fma"
+    ];
     cascadelake = [
       "sse3"
       "ssse3"
@@ -419,6 +430,7 @@ rec {
       sapphirerapids = [ "tigerlake" ] ++ inferiors.tigerlake;
       emeraldrapids = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
+      rocketlake = [ "x86-64-v4" ] ++ inferiors.x86-64-v4;
       alderlake = [ "skylake" ] ++ inferiors.skylake;
       sierraforest = [ "alderlake" ] ++ inferiors.alderlake;
 

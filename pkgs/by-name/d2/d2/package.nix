@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   git,
   testers,
   d2,
+  libdrm,
   libgbm,
   makeWrapper,
   playwright-driver,
@@ -37,7 +39,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
     libgbm
     playwright-driver.browsers
   ];
@@ -46,10 +48,11 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     installManPage ci/release/template/man/d2.1
-
-      # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-      wrapProgram $out/bin/d2 \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
+  ''
+  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
+  + lib.optionalString (finalAttrs.buildInputs != [ ]) ''
+    wrapProgram $out/bin/d2 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
   '';
 
   preCheck = ''
@@ -69,7 +72,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/terrastruct/d2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

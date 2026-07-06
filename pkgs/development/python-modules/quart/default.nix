@@ -71,7 +71,7 @@ buildPythonPackage rec {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

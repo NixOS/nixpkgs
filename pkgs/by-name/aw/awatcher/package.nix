@@ -4,24 +4,28 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
+  libxkbcommon,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awatcher";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "2e3s";
     repo = "awatcher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bxFc6oM+evIQTjrsWmb7dXOUlSjurjc4CzHpxB+667c=";
+    hash = "sha256-wxnbyWkfRFN+aWa7rrSIv5PdNHNU/D/w7y/VIwzxxaI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    libxkbcommon
+  ];
   doCheck = false;
 
-  cargoHash = "sha256-pUqwg7jblSWRLPcsUDqkir/asSM8zY0jrvrre4OIeZc=";
+  cargoHash = "sha256-/dI0gaTRElAQnZNRo2sKMUc33fphubcG/fXOflPHXWs=";
 
   meta = {
     description = "Activity and idle watchers";

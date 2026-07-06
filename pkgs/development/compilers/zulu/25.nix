@@ -6,7 +6,8 @@
 
 let
   # For Zulu 25, FX and non-FX versions can differ
-  zuluVersion = if enableJavaFX then "25.28.85" else "25.28.85";
+  zuluVersion = if enableJavaFX then "25.34.17" else "25.34.17";
+  jdkVersion = "25.0.3";
 in
 callPackage ./common.nix (
   {
@@ -14,43 +15,39 @@ callPackage ./common.nix (
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-5Hhob86uCxrrdrFEvNaqPaQEaGrF47jpgUibKkNs1AQ="
+            "sha256-gL7WgJFifVy3wYYqLFE13c7GZ6YMi3BVWhL+1+yTFN8="
           else
-            "sha256-Fk2QHlokC4wYUW9atVvBH8lomrboKQRa6oRnNW3Ns0A=";
+            "sha256-OpMjX05bMTIyZHkWIZ6R3FzKC5g1ybUqQEuljENXFpc=";
       };
 
       aarch64-linux = {
-        inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-HmfKOh0X2jcLrEMmKV81nQebtOOJjzpHWe1Ca+qIFYI="
+            "sha256-K/vR9QBMbtW3KBePsoyIas9l64s6hf/uMuhAm53himE="
           else
-            "sha256-tg651UyXukFZVHg0qYzF0BYoHdKz5g50dcukkRMkvLQ=";
+            "sha256-JhDlxk35TO5ftZHXAYPFv4Uy2OHTlMdU6LoGdRvM6xs=";
       };
 
       x86_64-darwin = {
-        inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-J5Akv28y3XoJgw5q2Rh4xHv1AV1I33jnPslhxDrTc0E="
+            "sha256-jOSgISihoNoGa5x8kBUpudCQi7Vj3O3H3jOG3W3UujA="
           else
-            "sha256-ws3h0xPZBLeTw3YCFO76IH7Mp98E58QISr3x9rvrwno=";
+            "sha256-7MAFv3sSnANTeeDem+v9ZnvpMJj18eMpzUmMRnaRZ64=";
       };
 
       aarch64-darwin = {
-        inherit zuluVersion;
-        jdkVersion = "25.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-urxxVoayeNW0g0g80eefmG+FMVzVBaBvmMKj+S3URNE="
+            "sha256-/aWoDAXxCtXhGcsZCDjJe+hvIwHANZSw8NkBbjpgklk="
           else
-            "sha256-c/ZPa618PfMfunQPvLu+98Glzt7/u13zht15vHKrqbY=";
+            "sha256-dIR+eskwrRQ5UGB0Id1sCnzLPRy72LFmXySrYri33kI=";
       };
     };
   }

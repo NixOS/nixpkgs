@@ -34,6 +34,7 @@
 let
   inherit (lib)
     cmakeBool
+    cmakeFeature
     getLib
     ;
 
@@ -55,24 +56,28 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino";
-  version = "2026.1.0";
+  version = "2026.2.1";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ss6U4D1QyJM9hbauRBgNIrU09k6xMX0SUeleOXIDU6U=";
+    hash = "sha256-66g+v+L0BPNW6HvmWMHAHoNEFn9SUPrmZDyDjES6K1I=";
   };
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "python"
   ];
 
   nativeBuildInputs = [
-    addDriverRunpath
+    # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
+    addDriverRunpath
+
     cmake
     git
     libarchive
@@ -86,6 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.cuda_nvcc
   ];
 
+  patches = [
+    # https://aur.archlinux.org/cgit/aur.git/tree/010-openvino-change-install-paths.patch?h=openvino
+    ./cmake-install-paths.patch
+  ];
+
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -97,6 +107,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOpenCV_DIR=${getLib opencv}/lib/cmake/opencv4/"
     "-DProtobuf_LIBRARIES=${getLib protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DPython_EXECUTABLE=${python.interpreter}"
+
+    # OV_CPACK_* variables are normally set by packaging macros that only run
+    # when CPACK_GENERATOR matches a known type to upstream.
+    # Without one, all vars remain undefined and install() destinations are empty,
+    # putting files in $out/ root or producing absolute paths. Set them directly
+    # here so the build produces a standard layout.
+    (cmakeFeature "OV_CPACK_LIBRARYDIR" "lib")
+    (cmakeFeature "OV_CPACK_RUNTIMEDIR" "lib")
+    (cmakeFeature "OV_CPACK_ARCHIVEDIR" "lib")
+    (cmakeFeature "OV_CPACK_INCLUDEDIR" "include")
+    (cmakeFeature "OV_CPACK_OPENVINO_CMAKEDIR" "lib/cmake/OpenVINO")
+    (cmakeFeature "OV_CPACK_PYTHONDIR" "python")
+    (cmakeFeature "OV_CPACK_PLUGINSDIR" "lib")
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (cmakeBool "NCC_SYLE" false)
@@ -147,16 +170,14 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $python
-    mv $out/python/* $python/
-    rmdir $out/python
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
   '';
 
   postFixup = ''
-    # Link to OpenCL
-    find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addDriverRunpath "$lib"
-    done
+    substituteInPlace $dev/lib/pkgconfig/openvino.pc \
+      --replace-fail "include_prefix=\''${prefix}/" "include_prefix=" \
+      --replace-fail "exec_prefix=\''${prefix}/" "exec_prefix="
   '';
 
   meta = {

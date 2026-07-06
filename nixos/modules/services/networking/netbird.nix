@@ -340,7 +340,8 @@ in
                         substitute ${cfg.ui.package}/share/applications/netbird.desktop \
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
                           --replace-fail 'Name=Netbird' "Name=NetBird @ ${client.service.name}" \
-                          --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/pixmaps/netbird.png"
+                          --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/icons/hicolor/256x256/apps/netbird.png" \
+                          --replace-fail 'Exec=netbird-ui' "Exec=${mkBin "netbird-ui"}"
                       '')
                     ];
                   };
@@ -591,7 +592,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          path = optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
+          path = [ pkgs.shadow ] ++ optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
             ExecStart = "${getExe client.wrapper} service run";

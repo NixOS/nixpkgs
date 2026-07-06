@@ -170,6 +170,8 @@ in
 
   php = recurseIntoAttrs (callPackages ./php { });
 
+  pnpm = recurseIntoAttrs (callPackages ./pnpm { });
+
   go = recurseIntoAttrs (callPackage ../build-support/go/tests.nix { });
 
   lake = callPackage ../build-support/lake/test { };
@@ -184,6 +186,8 @@ in
   nixos-functions = callPackage ./nixos-functions { };
 
   nixosOptionsDoc = recurseIntoAttrs (callPackage ../../nixos/lib/make-options-doc/tests.nix { });
+
+  buildenv = callPackage ./buildenv.nix { };
 
   overriding = callPackage ./overriding.nix { };
 

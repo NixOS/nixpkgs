@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.roguetemple.com/z/hyper/";
     changelog = "https://github.com/zenorogue/hyperrogue/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyperrogue";
-    maintainers = with lib.maintainers; [ rardiol ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };

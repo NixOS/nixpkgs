@@ -1,51 +1,60 @@
 {
   lib,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
+  fetchPnpmDeps,
   fetchzip,
 
   nodejs,
-  pnpm_9,
-  fetchPnpmDeps,
+  openlistPnpm ? pnpm_11,
   pnpmConfigHook,
+  pnpm_11,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "openlist-frontend";
-  version = "4.1.10";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList-Frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V8nfQsGLhd7eERF0/ly3sRdGmffYa9r6GhtjciOXxMU=";
+    hash = "sha256-RLuAGjiYELy+roip2TtvUXGOw6Vk+GkczT1LSI0Vx+8=";
   };
 
   i18n = fetchzip {
     url = "https://github.com/OpenListTeam/OpenList-Frontend/releases/download/v${finalAttrs.version}/i18n.tar.gz";
-    hash = "sha256-VdNqXdLXs2n/ikUDm1YQRNAXqYqFjMWRGLPRpmJVoaI=";
+    hash = "sha256-ZO/ozyRNqh2W4/acQmGHoEMpjpf2jph7Gn/kOlwVSFs=";
     stripRoot = false;
   };
 
+  postPatch = ''
+    cp -r ${finalAttrs.i18n}/* src/lang/
+  '';
+
   nativeBuildInputs = [
     nodejs
-    pnpmConfigHook
-    pnpm_9
+    openlistPnpm
   ];
 
+  npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-xylF+Z7Fkx/bFYPlzqfGrl051ZLKzPgdlF7U8vKtQq8=";
+    pnpm = openlistPnpm;
+    fetcherVersion = 4;
+    hash = "sha256-ujsCuQexnKPNwoJzaWmhu3+4xMkZ0jR04m2exG674dI=";
   };
 
-  buildPhase = ''
-    runHook preBuild
+  npmConfigHook = pnpmConfigHook;
 
-    cp -r ${finalAttrs.i18n}/* src/lang/
-    pnpm build
+  # [plugin vite:legacy-generate-polyfill-chunk]
+  # Error: getaddrinfo ENOTFOUND localhost
+  __darwinAllowLocalNetworking = true;
 
-    runHook postBuild
+  preBuild = ''
+    rm -rf node_modules/mpegts.js
+    cp -R ${finalAttrs.passthru.mpegts-js}/lib/node_modules/mpegts.js node_modules/mpegts.js
+    chmod -R u+w node_modules/mpegts.js
+    test -f node_modules/mpegts.js/dist/mpegts.js
   '';
 
   installPhase = ''
@@ -57,10 +66,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    # OpenList depends on a forked mpegts.js git package whose source does not include the generated dist/
+    mpegts-js = buildNpmPackage {
+      pname = "mpegts-js-openlist";
+      version = "1.8.1-unstable-2026-05-16";
+
+      src = fetchFromGitHub {
+        owner = "OpenListTeam";
+        repo = "mpegts.js";
+        rev = "1e51e0f6f918cf08e05dfae9c7bfcf658d6b4ac2";
+        hash = "sha256-z+S3iSYqrMuxFRGa5JZIfGMyi7IErpnluwZUVLxqz2o=";
+      };
+
+      npmDepsHash = "sha256-UDI0iPK/ouVgpzscGrQXNnVUseLWYmR0W9THpBm4WqA=";
+
+      meta.license = lib.licenses.asl20;
+    };
+  };
+
   meta = {
     description = "Frontend of OpenList";
     homepage = "https://github.com/OpenListTeam/OpenList-Frontend";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
+    inherit (nodejs.meta) platforms;
   };
 })

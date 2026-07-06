@@ -18,26 +18,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://tango.freedesktop.org/releases/tango-icon-theme-${finalAttrs.version}.tar.gz";
-    sha256 = "13n8cpml71w6zfm2jz5fa7r1z18qlzk4gv07r6n1in2p5l1xi63f";
+    hash = "sha256-bpjYAy1X2BisyQfsR+anGIUf8lGufCmq+4aHQ+tlyI4=";
   };
 
   patches = [ ./rsvg-convert.patch ];
 
-  nativeBuildInputs = [
+  depsBuildBuild = [
     pkg-config
+  ];
+
+  nativeBuildInputs = [
     intltool
     gtk3
-  ];
-  buildInputs = [
-    iconnamingutils
-    imagemagick
     librsvg
+    imagemagick
+    iconnamingutils
+    gnome-icon-theme
+    hicolor-icon-theme
   ];
+
   propagatedBuildInputs = [
     gnome-icon-theme
     hicolor-icon-theme
   ];
   # still missing parent icon themes: cristalsvg
+
+  strictDeps = true;
 
   dontDropIconThemeCache = true;
 
@@ -46,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     gtk-update-icon-cache $out/share/icons/Tango
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Basic set of icons";

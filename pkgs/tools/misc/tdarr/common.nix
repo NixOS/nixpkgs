@@ -6,7 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  ffmpeg,
+  jellyfin-ffmpeg,
   handbrake,
   mkvtoolnix,
   ccextractor,
@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -24,6 +23,9 @@
   libxfixes,
   tesseract4,
   perl,
+  apprise,
+  openssl,
+  nixosTests,
 }:
 {
   pname,
@@ -51,7 +53,7 @@ let
 
   binPath = lib.makeBinPath (
     [
-      ffmpeg
+      jellyfin-ffmpeg
       mkvtoolnix
     ]
     ++ includeInPath
@@ -77,10 +79,10 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${ffmpeg}/bin/ffmpeg"
+      "${jellyfin-ffmpeg}/bin/ffmpeg"
       "--set-default"
       "ffprobePath"
-      "${ffmpeg}/bin/ffprobe"
+      "${jellyfin-ffmpeg}/bin/ffprobe"
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
@@ -100,7 +102,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.66.01";
+  version = "2.81.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -112,16 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
     gtk3
     libayatana-appindicator
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
@@ -129,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxcursor
     libxfixes
+    apprise
+    openssl
   ];
 
   postPatch = ''
@@ -159,6 +162,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
+    # Remove musl-only prebuilt Node addons on glibc systems.
+    # autoPatchelf scans all ELF files in $out and fails if musl libc is missing.
+    ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) ''
+      find $out/share/${pname} -type f -name '*.musl.node' -delete
+    ''}
+
     makeWrapper $out/share/${pname}/${componentName} $out/bin/${pname} ${commonWrapperArgs}
     makeWrapper $out/share/${pname}/${componentTrayName} $out/bin/${pname}-tray ${commonWrapperArgs}
   ''
@@ -174,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + "";
 
-  desktopItems = lib.optionals stdenv.isLinux [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       desktopName = "Tdarr ${componentUpper} Tray";
       name = "Tdarr ${componentUpper} Tray";
@@ -191,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       command = [ ./update-hashes.sh ];
       supportedFeatures = [ "commit" ];
     };
+    tests.nixos = nixosTests.tdarr;
   }
   // passthru;
 

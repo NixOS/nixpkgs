@@ -92,6 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/mailutils/-/raw/87c3614083260f52dd1222e872a1836f0ff9abe1/fix-build.patch";
       hash = "sha256-RN62l5mYqtViEjXpAlQKWhFez1TPynRMj/1nvZkq5Gs=";
     })
+    # Fix for non-portable assumptions causing test failures on musl
+    (fetchpatch {
+      name = "portability.patch";
+      url = "https://cgit.git.savannah.gnu.org/cgit/mailutils.git/patch/?id=6e038f04d575731cf90a44cf0114e485a9827a26";
+      hash = "sha256-kamIiQty+/PEB9gC4tPsEMzz1GMGuZAe+DXqjdTeg70=";
+    })
   ];
 
   enableParallelBuilding = true;

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ooniprobe-cli";
-  version = "3.29.0";
+  version = "3.29.1";
 
   src = fetchFromGitHub {
     owner = "ooni";
     repo = "probe-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bh17+yMs7DMffoJstYbYnvwEAue34rPmKadFQQQxYxQ=";
+    hash = "sha256-l45gVWddIQpVb3VDQ44K0MEjLiowLX120S0R/EMrAJU=";
   };
 
   vendorHash = "sha256-kbvdUqAz9k3AHtitoVr4q1kGMf2Jzfs6iSRUl1sp4UU=";

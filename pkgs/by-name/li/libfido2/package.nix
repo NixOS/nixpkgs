@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfido2";
-  version = "1.16.0";
+  version = "1.17.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/libfido2/Releases/libfido2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jCtvsnm1tC6aySrecYMuSFhSZHtTYHxDuqr7vOzqBOQ=";
+    hash = "sha256-wQEsiHHXG2WHL9X/Gp1rCDilVoOgPoW6l0ec5XEpxzY=";
   };
 
   nativeBuildInputs = [

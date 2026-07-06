@@ -24,6 +24,7 @@ buildGoModule (finalAttrs: {
       with geoclue* or other clients that support fetching NMEA location data over
       sockets.
     '';
+    homepage = "https://gitlab.com/postmarketOS/gnss-share";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ balsoft ];
     mainProgram = "gnss-share";

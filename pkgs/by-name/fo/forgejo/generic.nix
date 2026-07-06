@@ -126,6 +126,7 @@ buildGoModule rec {
         "TestDNSUpdate" # requires network: release.forgejo.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
+        "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

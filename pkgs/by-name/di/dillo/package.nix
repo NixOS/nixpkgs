@@ -1,7 +1,7 @@
 {
   lib,
   autoreconfHook,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   fltk_1_3,
   libjpeg,
   libpng,
@@ -12,6 +12,7 @@
   pkg-config,
   stdenv,
   which,
+  nix-update-script,
   # Configurable options
   tlsLibrary ? "libressl",
 }:
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.2.0";
+  version = "3.3.0";
 
-  src = fetchFromGitHub {
-    owner = "dillo-browser";
+  src = fetchFromCodeberg {
+    owner = "dillo";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
+    hash = "sha256-MzfY5Wyrt7ChTxp+BPNuDG10D8CefhgHjuaSvAiquZI=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://dillo-browser.github.io/";

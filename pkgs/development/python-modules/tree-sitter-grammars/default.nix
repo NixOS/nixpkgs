@@ -33,6 +33,7 @@ let
   # of overrides ensures the binding can find the correct symbol
   langIdentOverrides = {
     tree_sitter_org_nvim = "tree_sitter_org";
+    tree_sitter_go_template_helm = "tree_sitter_helm";
   };
   langIdent = langIdentOverrides.${snakeCaseName} or snakeCaseName;
 in

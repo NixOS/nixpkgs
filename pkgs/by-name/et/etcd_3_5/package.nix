@@ -1,18 +1,17 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  k3s,
   lib,
   nixosTests,
   symlinkJoin,
 }:
 
 let
-  version = "3.5.29";
-  etcdSrcHash = "sha256-riihCSd7QsH+G+//XcV+DYn7kBbXAbTjEBEXcP/mh1w=";
-  etcdServerVendorHash = "sha256-eJKgZ2kFNrWI+uKKv1xD7tGLkWaGqa/ODjA09SwDAzg=";
-  etcdUtlVendorHash = "sha256-+1/E/VGpszXEIID7tgSbiCpe4KQkUcSKJJRAUdTUklQ=";
-  etcdCtlVendorHash = "sha256-Xznj9HPx4BTUpipBmucbKjIcQpj+diyw0FtsdQVV61Y=";
+  version = "3.5.32";
+  etcdSrcHash = "sha256-pqCMgY5veIF5kQDjqTg9B7aSL+V6bdMZpc464wjTLMo=";
+  etcdServerVendorHash = "sha256-FDzAF2J9wbRmQETvrdJK3gL4cfAhiiihb5EOrimE11M=";
+  etcdUtlVendorHash = "sha256-0xfq7f7Xr3SWxiU8C1bWQPxdFvEaoIrlK+gX3hkd4ho=";
+  etcdCtlVendorHash = "sha256-59e/TORi/XX+GXRjMO/45SMumYgrFbOHEXqV7sM72H8=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -29,10 +28,7 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [
-      dtomvan
-      superherointj
-    ];
+    maintainers = with lib.maintainers; [ dtomvan ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 

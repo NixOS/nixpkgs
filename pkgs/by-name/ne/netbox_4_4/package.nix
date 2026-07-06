@@ -128,7 +128,6 @@ py.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       minijackson
-      raitobezarius
       transcaffeine
     ];
   };

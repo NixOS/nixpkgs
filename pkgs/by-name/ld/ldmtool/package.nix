@@ -14,35 +14,23 @@
   lvm2,
   libxslt,
   docbook_xsl,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldmtool";
-  version = "0.2.4";
+  version = "0.2.5-unstable-2025-02-06";
 
   src = fetchFromGitHub {
     owner = "mdbooth";
     repo = "libldm";
-    rev = "libldm-${finalAttrs.version}";
-    sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
+    rev = "1eafb653ac6347a9d4281848c8295f9daffb1613";
+    hash = "sha256-Vd+3FnM+U5y2FxuslEsEzgZEx+5AQWuTjUVRnoFhm3I=";
   };
-
-  patches = [
-    # Remove usage of deprecrated G_PARAM_PRIVATE
-    (fetchpatch {
-      url = "https://github.com/mdbooth/libldm/commit/ee1b37a034038f09d61b121cc8b3651024acc46f.patch";
-      sha256 = "02y34kbcpcpffvy1n9yqngvdldmxmvdkha1v2xjqvrnclanpigcp";
-    })
-  ];
 
   preConfigure = ''
     sed -i docs/reference/ldmtool/Makefile.am \
       -e 's|-nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|--nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl|g'
   '';
-
-  # glib-2.62 deprecations
-  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   configureScript = "sh autogen.sh";
 

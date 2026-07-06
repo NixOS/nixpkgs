@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
-    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/nexB/container-inspector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

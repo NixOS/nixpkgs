@@ -19,25 +19,35 @@ let
   # Copy the files from their original sources instead of using patches to reduce the size of the patch set in nixpkgs.
   otherSrcs = {
     # The last version of ld64 to have dyldinfo
-    ld64 = fetchFromGitHub {
+    dyldinfo = fetchFromGitHub {
       owner = "apple-oss-distributions";
       repo = "ld64";
       tag = "ld64-762";
       hash = "sha256-UIq/fwO40vk8yvoTfx+UlLhnuzkI0Ih+Ym6W/BwnP0s=";
     };
 
+    # The last version of ld64 to have machochecker and libpruntrie
+    machochecker = fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = "ld64";
+      tag = "ld64-954.16";
+      hash = "sha256-CVIyL2J9ISZnI4+r+wp4QtOb3+3Tmz2z2Z7/qeRqHS0=";
+    };
+
     # Provides the source files used in the vendored libtapi. The libtapi derivation puts `tapi-src` first.
     libtapi = lib.head libtapi.srcs;
   };
 
-  ld64src = lib.escapeShellArg "${otherSrcs.ld64}";
+  dyldinfoSrc = lib.escapeShellArg "${otherSrcs.dyldinfo}";
+  machocheckerSrc = lib.escapeShellArg "${otherSrcs.machochecker}";
+  libprunetrieSrc = lib.escapeShellArg "${otherSrcs.machochecker}";
   libtapisrc = lib.escapeShellArg "${otherSrcs.libtapi}";
 
   llvmPath = "${lib.getLib llvm}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld64";
-  version = "954.16";
+  version = "956.6";
 
   outputs = [
     "out"
@@ -49,16 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple-oss-distributions";
     repo = "ld64";
     tag = "ld64-${finalAttrs.version}";
-    hash = "sha256-CVIyL2J9ISZnI4+r+wp4QtOb3+3Tmz2z2Z7/qeRqHS0=";
+    hash = "sha256-2VlBjlCZ+ZPKGZ0f5UuG3jJTLZIBXf8IZOiD6snheh4=";
   };
 
   patches = [
-    # These patches are vendored from https://github.com/reckenrode/ld64/tree/ld64-951.9-nixpkgs.
+    # These patches are vendored from https://github.com/reckenrode/ld64/tree/ld64-956.6-nixpkgs.
     # See their comments for more on what they do.
     ./patches/0001-Always-use-write-instead-of-mmap.patch
     ./patches/0002-Add-compile_stubs.h-using-Clang-s-embed-extension-fo.patch
     ./patches/0003-Inline-missing-definitions-instead-of-using-private-.patch
-    ./patches/0004-Removed-unused-Blob-clone-method.patch
     ./patches/0005-Use-std-atomics-and-std-mutex-for-portability.patch
     ./patches/0006-Add-Meson-build-system.patch
     ./patches/0007-Add-CrashReporterClient-header.patch
@@ -73,16 +82,22 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
     ./patches/0017-Fix-dyldinfo-build.patch
     ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
-
-    # Fix zippered versions on macOS 26+. Part of upstream ld64-956.6. Remove on next version bump.
-    # https://github.com/apple-oss-distributions/ld64/commit/1a4389663d65d6630e4b3e31ace2a86b6183b452
-    ./patches/0019-Fix-zippered-versions-macos-26.patch
+    ./patches/0019-Deduplicate-RPATH-entries.patch
+    ./patches/0020-Remove-private-analytics-APIs.patch
+    ./patches/0021-Support-text-based-stubs-with-compatible-architectur.patch
   ];
 
   prePatch = ''
     # Copy dyldinfo source files
-    cp ${ld64src}/doc/man/man1/dyldinfo.1 doc/man/man1/dyldinfo.1
-    cp ${ld64src}/src/other/dyldinfo.cpp src/other/dyldinfo.cpp
+    cp ${dyldinfoSrc}/doc/man/man1/dyldinfo.1 doc/man/man1/dyldinfo.1
+    cp ${dyldinfoSrc}/src/other/dyldinfo.cpp src/other/dyldinfo.cpp
+
+    # Copy machochecker source files
+    cp ${machocheckerSrc}/src/other/machochecker.cpp src/other/machochecker.cpp
+
+    # The current version of cctools in Nixpkgs needs libprunetrie
+    cp ${libprunetrieSrc}/src/other/PruneTrie.cpp src/other/PruneTrie.cpp
+    cp ${libprunetrieSrc}/src/other/prune_trie.h src/other/prune_trie.h
 
     # Copy files needed from libtapi by ld64
     mkdir -p subprojects/libtapi/tapi
@@ -104,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  xcodeHash = "sha256-qip/1eiGn8PdLThonhPq3oq2veN4E1zOiamDPBfTeNE=";
+  xcodeHash = "sha256-b0KCdHkMWsdOb68LB8B2rbZPAQma8AOnGUGQNvHOnV0=";
   xcodeProject = "ld64.xcodeproj";
 
   nativeBuildInputs = [

@@ -4,6 +4,8 @@
   fetchurl,
   perl,
   bash,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +18,32 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ perl ];
+  nativeBuildInputs = [ copyDesktopItems ];
   configureScript = "${bash}/bin/bash configure";
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "aunpack";
+      desktopName = "Aunpack";
+      exec = "atool -x %f";
+      terminal = true;
+      noDisplay = true;
+      mimeTypes = [
+        "application/gzip"
+        "application/x-7z-compressed"
+        "application/x-bzip2"
+        "application/x-compressed-tar"
+        "application/x-cpio"
+        "application/x-gtar"
+        "application/x-lha"
+        "application/x-lzop"
+        "application/x-tar"
+        "application/x-xz-compressed-tar"
+        "application/zip"
+        "application/x-rar"
+      ];
+    })
+  ];
 
   meta = {
     homepage = "https://www.nongnu.org/atool";

@@ -22,20 +22,24 @@
 }:
 
 let
-  nodejs = nodejs_22; # NPM v11 included in nodejs_24 doesn't work with the current lockfile
+  nodejs = nodejs_22; # npm v11 included in nodejs_24 doesn't work with the current lockfile
 in
 buildNpmPackage.override { inherit nodejs; } rec {
   pname = "kando";
-  version = "2.1.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     tag = "v${version}";
-    hash = "sha256-x+emk0N5AL5Nfk9d1+RehdLoEvqVe5DafZL1WRPFdrc=";
+    hash = "sha256-vmdDcXpSm2O9MkOGfM3+VUrRSvUot1GB0TkxjNSN4r8=";
   };
 
-  npmDepsHash = "sha256-zbPrQpm2IgIMqGvMzj6fzEV/lV/FszfU3fnFx3kPHr4=";
+  patches = [
+    ./add-deep-link-note.patch
+  ];
+
+  npmDepsHash = "sha256-2J74igNLl5CwXm9WtHzxqTVt7+S113qcioxJja6uUOE=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -65,8 +69,6 @@ buildNpmPackage.override { inherit nodejs; } rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     # use our own node headers since we skip downloading them
     NIX_CFLAGS_COMPILE = "-I${nodejs}/include/node";
-    # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.hostPlatform.isDarwin "false";
   };
 
   postConfigure = ''
@@ -130,6 +132,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
       genericName = "Pie Menu";
       comment = "The Cross-Platform Pie Menu";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/kando" ];
     })
   ];
 

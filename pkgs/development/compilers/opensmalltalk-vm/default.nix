@@ -60,7 +60,7 @@ let
           --replace "/bin/rm" "rm"
         substituteInPlace ./platforms/unix/config/configure \
           --replace "/usr/bin/file" "file" \
-          --replace "/usr/bin/pkg-config" "pkg-config" \
+          --replace "/usr/bin/pkg-config" "pkg-config"
       '';
 
       preConfigure = ''

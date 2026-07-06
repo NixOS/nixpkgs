@@ -20,14 +20,14 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "high-tide";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BJN29Ew4yN2Whk9BVuo/eaumrN/65boeWc35lwbpBXg=";
+    hash = "sha256-uZkXpzRIDzn6wT3GmwNQbtf2/G9ddU13f7iMkj9Qopc=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     tidalapi
     requests
-    mpd2
+    python-mpd2
     pypresence
   ]);
 

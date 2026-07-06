@@ -26,6 +26,7 @@ let
       pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
+    meta.license = lib.licenses.mit;
   } ./pybind11-setup-hook.sh;
 in
 buildPythonPackage (finalAttrs: {

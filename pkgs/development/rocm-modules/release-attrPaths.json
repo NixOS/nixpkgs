@@ -561,7 +561,6 @@
     "python3Packages.torchsummary",
     "python3Packages.torchtitan",
     "python3Packages.torchtnt",
-    "python3Packages.torchtune",
     "python3Packages.torchvision",
     "python3Packages.tracerite",
     "python3Packages.trainer",

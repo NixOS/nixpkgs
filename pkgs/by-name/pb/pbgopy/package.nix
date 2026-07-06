@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pbgopy";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "nakabonne";
     repo = "pbgopy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P/MFDFMsqSTVErTM9izJJSMIbiOcbQ9Ya10/w6NRcYw=";
+    sha256 = "sha256-rm4fopreiYBwcFbtuo0B6FalveFft8hrNVf7JpvyNKE=";
   };
 
-  vendorHash = "sha256-S2X74My6wyDZOsEYTDilCFaYgV2vQzU0jOAY9cEkJ6A=";
+  vendorHash = "sha256-qxdylBQiUlHOkzaxV+P9m3tnkFqUdZTdF31LD0IWyuI=";
 
   meta = {
     description = "Copy and paste between devices";

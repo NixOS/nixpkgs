@@ -22,6 +22,10 @@ let
 
         afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
+        aeneas = callPackage ../development/ocaml-modules/aeneas { };
+
+        alcobar = callPackage ../development/ocaml-modules/alcobar { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
@@ -69,6 +73,10 @@ let
         astring = callPackage ../development/ocaml-modules/astring { };
 
         atd = callPackage ../development/ocaml-modules/atd { };
+
+        atd-jsonlike = callPackage ../development/ocaml-modules/atd/jsonlike.nix { };
+
+        atd-yamlx = callPackage ../development/ocaml-modules/atd/yamlx.nix { };
 
         atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
@@ -237,11 +245,15 @@ let
           git-binary = pkgs.git;
         };
 
+        cascade = callPackage ../development/ocaml-modules/cascade { };
+
         cbor = callPackage ../development/ocaml-modules/cbor { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
+        charon = callPackage ../development/ocaml-modules/charon { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
@@ -279,6 +291,8 @@ let
         cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
 
         cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
+
+        cohttp-server-lwt-unix = callPackage ../development/ocaml-modules/cohttp/server-lwt-unix.nix { };
 
         cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
@@ -537,6 +551,8 @@ let
 
         easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
+        easy_logging = callPackage ../development/ocaml-modules/easy_logging { };
+
         eigen = callPackage ../development/ocaml-modules/eigen {
           stdenv = pkgs.gcc14Stdenv;
         };
@@ -672,7 +688,7 @@ let
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
         frama-c = callPackage ../development/ocaml-modules/frama-c {
-          framac = pkgs.framac.override {
+          frama-c = pkgs.frama-c.override {
             ocamlPackages = self;
             why3 = pkgs.why3.override { ocamlPackages = self; };
           };
@@ -757,6 +773,8 @@ let
         gnuplot = callPackage ../development/ocaml-modules/gnuplot {
           inherit (pkgs) gnuplot;
         };
+
+        grace = callPackage ../development/ocaml-modules/grace { };
 
         graphics =
           if lib.versionOlder "4.09" ocaml.version then
@@ -1417,6 +1435,8 @@ let
 
         ### N ###
 
+        name_matcher_parser = callPackage ../development/ocaml-modules/name_matcher_parser { };
+
         nbd = pkgs.libnbd.override {
           ocamlPackages = self;
           buildOcamlBindings = true;
@@ -1438,7 +1458,7 @@ let
 
         nottui-unix = callPackage ../development/ocaml-modules/lwd/nottui-unix.nix { };
 
-        notty = callPackage ../development/ocaml-modules/notty { };
+        notty-community = callPackage ../development/ocaml-modules/notty-community { };
 
         npy = callPackage ../development/ocaml-modules/npy {
           inherit (pkgs.python3Packages) numpy;
@@ -1708,6 +1728,10 @@ let
         pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
         pbrt = callPackage ../development/ocaml-modules/pbrt { };
+
+        pbrt_services = callPackage ../development/ocaml-modules/pbrt/services.nix { };
+
+        pbrt_yojson = callPackage ../development/ocaml-modules/pbrt/yojson.nix { };
 
         pcre2 = callPackage ../development/ocaml-modules/pcre2 {
           inherit (pkgs) pcre2;
@@ -2025,8 +2049,6 @@ let
           mdx = mdx.override { inherit logs; };
         };
 
-        sodium = callPackage ../development/ocaml-modules/sodium { };
-
         sosa = callPackage ../development/ocaml-modules/sosa { };
 
         soundtouch = callPackage ../development/ocaml-modules/soundtouch {
@@ -2091,9 +2113,7 @@ let
           inherit (pkgs) git;
         };
 
-        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
-          inherit (pkgs) git;
-        };
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix { };
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
@@ -2170,6 +2190,8 @@ let
         tty = callPackage ../development/ocaml-modules/tty { };
 
         tuntap = callPackage ../development/ocaml-modules/tuntap { };
+
+        tw = callPackage ../development/ocaml-modules/tw { };
 
         twt = callPackage ../development/ocaml-modules/twt { };
 
@@ -2252,6 +2274,8 @@ let
         webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
 
         webmachine = callPackage ../development/ocaml-modules/webmachine { };
+
+        windtrap = callPackage ../development/ocaml-modules/windtrap { };
 
         wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
@@ -2336,17 +2360,6 @@ let
 
         google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-        hol_light = callPackage ../applications/science/logic/hol_light {
-          camlp5 =
-            if lib.versionAtLeast camlp5.version "8.04.00" then
-              camlp5.overrideAttrs {
-                version = "8.03.2";
-                __intentionallyOverridingVersion = true;
-              }
-            else
-              camlp5;
-        };
-
         ### End ###
 
       }
@@ -2357,6 +2370,8 @@ let
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        hol_light = pkgs.hol_light; # Added 2026-06-02
+        notty = throw "2026-05-05: notty is no longer maintained, use notty-community instead";
         ocaml-freestanding = throw "ocamlPackages.ocaml-freestanding has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05

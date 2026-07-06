@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.2";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-JxWuaOBhkjjw4sp7l++QF+0EzGIhPAOaJcKwwmdTg+w=";
+    hash = "sha256-y1h2KEbK2rSn54uDuCfH9ouo2FLTFbVxpgOqnR+kwhM=";
   };
 
   build-system = [
@@ -93,7 +93,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {

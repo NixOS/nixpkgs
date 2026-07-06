@@ -35,8 +35,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Source files
     mkdir -p $out/share/zinit
     install -m0444 zinit{,-side,-install,-autoload,-additional}.zsh _zinit $out/share/zinit
-    install -m0555 share/git-process-output.zsh $out/share/zinit
-    install -m0444 share/rpm2cpio.zsh $out/share/zinit
+    mkdir $out/share/zinit/share
+    install -m0555 share/git-process-output.zsh $out/share/zinit/share
+    install -m0444 share/rpm2cpio.zsh $out/share/zinit/share
 
     # Autocompletion
     installShellCompletion --zsh _zinit

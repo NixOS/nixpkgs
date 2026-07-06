@@ -28,19 +28,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.6.2.8008";
+  version = "0.6.3.8249";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xbJxV1q7+ddhnH0jDYzqVHwARCD0EyVh3POFRkl4d1Q=";
+    hash = "sha256-+rr1bn4O5v9rXyoIx+ejL+qe5Kf2bFpgWA3DkWRcDYk=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./dont-fix-app-bundle.diff
     ./remove-deep-flag-from-codesign.diff
   ];
+
+  # Dependencies are already managed by nix
+  cmakeFlags = [ "-DCONTOUR_USE_CPM=OFF" ];
 
   outputs = [
     "out"

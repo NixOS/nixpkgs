@@ -17,7 +17,7 @@ in
     maintainers = [ hexa ];
   };
 
-  nodes = {
+  containers = {
     server = {
       services.snapserver = {
         enable = true;

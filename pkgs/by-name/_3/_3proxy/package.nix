@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Don't strip binary on install, we strip it on fixup phase anyway.
   postPatch = ''
     substituteInPlace Makefile.Linux \
-      --replace "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
-      --replace "/usr" ""
+      --replace-fail "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
+      --replace-fail "/usr" ""
   '';
 
   makeFlags = [

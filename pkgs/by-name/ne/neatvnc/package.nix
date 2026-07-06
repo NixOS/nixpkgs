@@ -8,21 +8,25 @@
   aml,
   ffmpeg,
   gnutls,
+  libdrm,
   libjpeg_turbo,
   libgbm,
+  nettle,
   pixman,
   zlib,
+  python3,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neatvnc";
-  version = "0.9.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wAIifLw2rlu44jXMu/k31B7qePdJt6pT6TOhNxcyfLw=";
+    hash = "sha256-yEWNiazRxc8G7ToqOcTtCXEuBCgXO64v31Xx1YeOPCM=";
   };
 
   strictDeps = true;
@@ -37,17 +41,26 @@ stdenv.mkDerivation (finalAttrs: {
     aml
     ffmpeg
     gnutls
+    libdrm
     libjpeg_turbo
     libgbm
+    nettle
     pixman
     zlib
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "tests" true)
+  nativeCheckInputs = [
+    python3
+    openssl
   ];
 
-  doCheck = true;
+  mesonFlags = [
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "VNC server library";

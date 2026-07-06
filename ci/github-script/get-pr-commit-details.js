@@ -3,6 +3,17 @@ const { promisify } = require('node:util')
 const execFile = promisify(require('node:child_process').execFile)
 
 /**
+ * @typedef {{
+ *  subject: string,
+ *  sha: string,
+ *  author: { name: string, email: string },
+ *  committer: { name: string, email: string}
+ *  changedPaths: string[],
+ *  changedPathSegments: Set<string>,
+ * }} Commit
+ */
+
+/**
  * @param {{
  *  args: string[]
  *  core: import('@actions/core'),
@@ -34,12 +45,7 @@ async function runGit({ args, repoPath, core, quiet }) {
  *  repoPath?: string,
  * }} GetCommitMessagesForPRProps
  *
- * @returns {Promise<{
- *  subject: string,
- *  sha: string,
- *  changedPaths: string[],
- *  changedPathSegments: Set<string>,
- * }[]>}
+ * @returns {Promise<Commit[]>}
  */
 async function getCommitDetailsForPR({ core, pr, repoPath }) {
   await runGit({
@@ -70,17 +76,25 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
 
   return Promise.all(
     shas.map(async (sha) => {
-      // Subject first, then a blank line, then filenames.
+      // Subject, author name, author email, committer name, committer email (all tab-seperated)
+      // then a blank line, then filenames.
       const result = (
         await runGit({
-          args: ['log', '--format=%s', '--name-only', '-1', sha],
+          args: [
+            'log',
+            '--format=%s\t%aN\t%aE\t%cN\t%cE',
+            '--name-only',
+            '-1',
+            sha,
+          ],
           repoPath,
           core,
           quiet: true,
         })
       ).stdout.split('\n')
 
-      const subject = result[0]
+      const [subject, authorName, authorEmail, committerName, committerEmail] =
+        result[0].split('\t')
 
       const changedPaths = result.slice(2, -1)
 
@@ -91,6 +105,8 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
       return {
         sha,
         subject,
+        author: { name: authorName, email: authorEmail },
+        committer: { name: committerName, email: committerEmail },
         changedPaths,
         changedPathSegments,
       }

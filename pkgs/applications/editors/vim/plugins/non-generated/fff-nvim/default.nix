@@ -5,24 +5,26 @@
   nix-update-script,
   openssl,
   perl,
-  zig_0_15,
+  zig,
+  gitMinimal,
   pkg-config,
   stdenv,
   vimUtils,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.5.2";
+  version = "0.9.6";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
     tag = "v${version}";
-    hash = "sha256-rv33dRf53m9iJwRl56z9oU0EuY1wUChsZyHOi/3gv4A=";
+    hash = "sha256-JOoc4RDPIggZaoPtPEWhQ2msWfgOOuI4PPguFMczJls=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-ylQtZa3ZRs38mhge5tLLCRpnUdHYSjuZOwU+/6TO8Cw=";
+    cargoHash = "sha256-nHVQccbKSfX9fZXh0aPRP33n4nHWhaRdz9k49apULME=";
 
     cargoBuildFlags = [
       "-p"
@@ -42,15 +44,33 @@ let
       pkg-config
       perl
       rustPlatform.bindgenHook
+      writableTmpDirAsHomeHook
+      zig
     ];
+
+    dontUseZigConfigure = true;
+    dontUseZigBuild = true;
+    dontUseZigCheck = true;
+    dontUseZigInstall = true;
+
+    # Some tests need git
+    nativeCheckInputs = [ gitMinimal ];
+
+    # Tests need these permissions in order to use the FSEvents API on macOS.
+    sandboxProfile = ''
+      (allow mach-lookup (global-name "com.apple.FSEvents"))
+    '';
 
     buildInputs = [
       openssl
     ];
 
-    # This test requires curl and GitHub access
     checkFlags = [
+      # This test requires curl and GitHub access
       "--skip=update_check::tests::test_update_check_end_to_end"
+
+      # This test depends on catching a race window and is not deterministic
+      "--skip=drop_during_post_scan_does_not_crash"
     ];
 
     env = {
@@ -58,8 +78,6 @@ let
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
-
-      ZIG = lib.getExe zig_0_15; # zlob requires zig
     };
   };
 in
@@ -74,7 +92,7 @@ vimUtils.buildVimPlugin {
         "return '${fff-nvim-lib}/lib'"
   '';
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Skip single file dev config for testing fff.nvim locally
     "empty_config"
   ];

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "amply";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YUIRA8z44QZnFxFf55F2ENgx1VHGjTGhEIdqW2x4rqQ=";
+    hash = "sha256-Z1tzt9dhE922z3Q8wW7ZJbzMTnLvZpkfDHNyBkYys8k=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -9,7 +9,7 @@
   git,
   glibcLocales,
   gnupg,
-  gpgme,
+  gpg,
   merge3,
   nix-update-script,
   openssh,
@@ -25,19 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.1.0";
+  version = "1.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${finalAttrs.version}";
-    hash = "sha256-9y7+00M2Ib5j+1fHNsJBomkyNZWhihqcIvAgGpJ5AB8=";
+    hash = "sha256-nj20g5OmlcqWDaKv3NoKWZS5/e4HOMCf7DHeS7xDzjQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NEYauayn7laPLQUomQAFEskFP5m8546jYltazR/gn1A=";
+    hash = "sha256-wifh/beg3VVQpAXg/P/tq6qiUwCqXxhWPoRvX2HcFOc=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     https = [ urllib3 ];
     merge = [ merge3 ];
     pgp = [
-      gpgme
+      gpg
       gnupg
     ];
     paramiko = [ paramiko ];
@@ -89,8 +89,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
-    "tests/contrib"
     # AssertionError: GPGMEError not raised
     "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];

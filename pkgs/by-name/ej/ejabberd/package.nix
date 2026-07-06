@@ -19,6 +19,7 @@
   gawk,
   fetchFromGitHub,
   fetchgit,
+  fetchNpmDeps,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -35,6 +36,9 @@
   withRedis ? false,
   withImagemagick ? false,
   imagemagick,
+  withBootstrap ? true, # used for the built-in mod_invites page
+  nodejs,
+  npmHooks,
 }:
 
 let
@@ -76,7 +80,6 @@ let
     builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
-      jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
       cache_tab = prev.cache_tab.override { buildPlugins = [ beamPackages.pc ]; };
       mqtree = prev.mqtree.override { buildPlugins = [ beamPackages.pc ]; };
       stringprep = prev.stringprep.override { buildPlugins = [ beamPackages.pc ]; };
@@ -137,10 +140,11 @@ let
     "ezlib"
   ];
 
+  npmToolingUsed = withBootstrap;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "26.02";
+  version = "26.04";
 
   nativeBuildInputs = [
     makeWrapper
@@ -151,6 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
         rebar3_hex
       ];
     })
+  ]
+  ++ lib.optionals npmToolingUsed [
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   buildInputs = [
@@ -166,11 +174,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLua allBeamDeps.luerl
   ++ lib.optional withRedis allBeamDeps.eredis;
 
+  npmDeps = lib.optionalDrvAttr npmToolingUsed (fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = finalAttrs.src;
+    hash = "sha256-MTyoc8ozrCi3W0CXmxyLpyU8v+vlUjcbLnv/1ev/Qqo=";
+  });
+
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-izP7Rz65Lr4LDOCzZPdDWb3TyXDSTd/8gOPSfovVGM8=";
+    hash = "sha256-PF65TgHvKeSEudEqqJVEotu2zgiWgGtRuNvbiyE0nwc=";
   };
 
   passthru.tests = {
@@ -187,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
+    (lib.enableFeature withBootstrap "bootstrap")
   ]
   ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
@@ -197,6 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p _build/default/lib
     touch _build/default/lib/.got
     touch _build/default/lib/.built
+  '';
+
+  preBuild = lib.optionalString npmToolingUsed /* sh */ ''
+    npm run postinstall
   '';
 
   env.REBAR_IGNORE_DEPS = 1;

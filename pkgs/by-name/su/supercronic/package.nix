@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "supercronic";
-  version = "0.2.44";
+  version = "0.2.46";
 
   src = fetchFromGitHub {
     owner = "aptible";
     repo = "supercronic";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xtTQ5T+/kVnh4sjIN/N9HN9MeEd2ekAzSkvYdei0dKA=";
+    hash = "sha256-gjfQQcp7hKjkK7hQ922jgxizqu1l5aPbgna6ciovaiA=";
   };
 
-  vendorHash = "sha256-azjkMzmAhAKyHx/43cP0kpgo0mKM8Yh+LWHiR7audQw=";
+  vendorHash = "sha256-n22rFA4M4QBpZGTF9FVuqCEWTBZvof8Df1ZmTilbWjI=";
 
   excludedPackages = [ "cronexpr/cronexpr" ];
 

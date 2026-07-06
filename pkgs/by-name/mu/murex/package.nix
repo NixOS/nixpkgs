@@ -25,7 +25,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://murex.rocks";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

@@ -51,9 +51,9 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/tags
       ${latestVersionMajor} =
         let
-          version = "${latestVersionMajor}.2.5";
+          version = "${latestVersionMajor}.3.0";
           rev = "v${version}";
-          hash = "sha256-bj+oUqz0WHAjZ0iS7GlbIfLeMFSPQkH99mPaLdapkPo=";
+          hash = "sha256-xoUb0AAhaiAYA88Sn5/CfofMjGkYDLsCPVKwzHGz1XA=";
         in
         dedicatedServer: {
           inherit version;
@@ -72,8 +72,8 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "ec0dbb09ce081be2879acf67bebcd2a2987fd0a4";
-          hash = "sha256-8fH0Q0N2bKCO0t+lOs8EamThpiial2CfEcVP3cZbHX0=";
+          rev = "16da4a669d4c4d269132a903228918c2a8b87b08";
+          hash = "sha256-nTTJwxnTYP3kBxSMNpcYaKfMVGF6U/pYa2r10d8YdCE=";
         in
         dedicatedServer: {
           version = "${unstableVersionMajor}-${lib.substring 0 8 rev}";
@@ -94,12 +94,6 @@ let
             SDL2_mixer
           ];
           extraNativeBuildInputs = [ bison ];
-          # `label()` was removed in protobuf 34
-          # <https://github.com/protocolbuffers/protobuf/commit/b76faa921fdd244f374c7be0bddd4050fc42c292>
-          postPatch = ''
-            substituteInPlace src/network/nProtoBuf.cpp \
-              --replace-fail 'field->label() == FieldDescriptor::LABEL_REPEATED' 'field->is_repeated()'
-          '';
         };
 
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads

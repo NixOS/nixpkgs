@@ -32,6 +32,9 @@
       };
     };
 
+  # Disable the cloneConfig module. We have our own Service to generate a configuration.nix.
+  installer.cloneConfig = false;
+
   networking = {
     dhcpcd.enable = false;
     useDHCP = false;

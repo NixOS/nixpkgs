@@ -79,11 +79,6 @@
   bzip2,
   libcap,
 
-  # Fonts (See issue #463615)
-  makeFontsConf,
-  noto-fonts-cjk-sans,
-  noto-fonts-cjk-serif,
-
   # Necessary for USB audio devices.
   libpulseaudio,
   pulseSupport ? true,
@@ -184,11 +179,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "147.0.7727.101";
+    version = "150.0.7871.46";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-VU41cXkCB/JU2a1bXHGMQVF8ZK95Z7FBI6+k5yjPb80=";
+      hash = "sha256-abQBOftzoCGnSfMvzeCFP7F4G286izyvFzrY9nR/qnw=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -219,13 +214,6 @@ let
 
     rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
     binpath = lib.makeBinPath deps;
-
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        noto-fonts-cjk-sans
-        noto-fonts-cjk-serif
-      ];
-    };
 
     installPhase = ''
       runHook preInstall
@@ -278,7 +266,6 @@ let
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-        --set FONTCONFIG_FILE "${finalAttrs.fontsConf}" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
@@ -302,11 +289,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "147.0.7727.102";
+    version = "150.0.7871.47";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/adh7lit4ohn55bd2cyoftxkjiixa_147.0.7727.102/GoogleChrome-147.0.7727.102.dmg";
-      hash = "sha256-eslLqiI5DtExI1Hq31wYBNQGu4LktzeW/7Z+R/kPGzo=";
+      url = "http://dl.google.com/release2/chrome/ad2pojsfcj6hr5telal5kk4t6gua_150.0.7871.47/GoogleChrome-150.0.7871.47.dmg";
+      hash = "sha256-1VTMVSBLfSRp9CxPaRkmdgAC0H5KNuZNWywTGLSphUI=";
     };
 
     dontPatch = true;
@@ -344,7 +331,6 @@ let
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://chromereleases.googleblog.com/";
     description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;

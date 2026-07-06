@@ -63,7 +63,6 @@
   starlette,
   tomli-w,
   tritonclient,
-  uv,
   uvicorn,
   watchfiles,
   # native check inputs
@@ -202,7 +201,6 @@ buildPythonPackage {
     simple-di
     starlette
     tomli-w
-    uv
     uvicorn
     watchfiles
   ];

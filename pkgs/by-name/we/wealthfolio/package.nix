@@ -9,7 +9,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -19,20 +19,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "3.2.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-flXuskAzrDFBMcAtOe++QpFRIXvbbx5eqXxrymC4MMM=";
+    hash = "sha256-9dE0IQtDUcveZk2eWu9+UDpAYPgk/LbY+jsTNH3N9hg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) src pname version;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-feM1jQsUDKVX4+x4Otdwx6AEM+FO7fiaJjmMbU6GDf8=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-ELOwrrRHmHAMZg6K+5MWXdUj/gyNNBgMl6OY11zxbB4=";
   };
 
   cargoRoot = ".";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-Zo3EVWxuJ//EtqUZ1l2/B1MGlmpoBcWQksY/IpCb5N4";
+    hash = "sha256-P93AAivBXWBLik8M/DNUWyKXVsq7ttvX3DpiXwaDL2I=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];

@@ -7,22 +7,24 @@
   versionCheckHook,
 
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
 let
   tag-prefix = "@upstash/context7-mcp";
+
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";
-  version = "2.1.8";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${tag-prefix}@${finalAttrs.version}";
-    hash = "sha256-TMvDzDcZd9hoYI84x+jewOJYkSrb1qwVRTdzD2SwG4U=";
+    hash = "sha256-v3zKMnZsc0gWVAdgZwFTskWcFVlOU6sG2i+qDwjx+dw=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-MHKzlxlyvQoLvoLomhToaZgnPU7H6iHLmokhotZF6VY=";
+    hash = "sha256-S+TCwe4FJHjSLTUL/cPh+eRtWx/z7REUyfMNT0BgK7k=";
   };
 
   buildPhase = ''

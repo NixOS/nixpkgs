@@ -59,7 +59,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  mingwSupport ? stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64,
   waylandSupport ? false,
   x11Support ? false,
   ffmpegSupport ? false,
@@ -78,6 +78,7 @@ let
       darwinSuffixSalt = stdenv.cc.suffixSalt;
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
+    meta.license = lib.licenses.mit;
   } ./setup-hook-darwin.sh;
 
   # Building Wine with these flags isn't supported on Darwin. Using any of them will result in an evaluation failures

@@ -16,13 +16,13 @@ let
     };
   };
 
-  version = "2026.1.1";
+  version = "2026.1.2";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${version}";
-    hash = "sha256-qkItCF7MOtJQ8NKdB9ImIRKP8g+dzjddElUC4RvLW+s=";
+    hash = "sha256-/hs2sPeHyv06aXfUn7UdaGJo9UQ2hah/nufSxG+wO5Q=";
   };
 
   meta = {
@@ -95,6 +95,7 @@ python.pkgs.buildPythonApplication rec {
     "django-csp"
     "django-filter"
     "django-formset-js-improved"
+    "django-formtools"
     "django-i18nfield"
     "djangorestframework"
     "markdown"

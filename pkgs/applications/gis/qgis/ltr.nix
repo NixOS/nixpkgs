@@ -12,11 +12,10 @@
   # unwrapped package parameters
   withGrass ? false,
   withServer ? false,
-  withWebKit ? false,
 }:
 let
   qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {
-    inherit withGrass withServer withWebKit;
+    inherit withGrass withServer;
   };
 in
 

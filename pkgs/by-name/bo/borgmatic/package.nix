@@ -13,14 +13,17 @@
   testers,
   nixosTests,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "borgmatic";
-  version = "2.1.3";
+  version = "2.1.5";
   pyproject = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mWZQBoQUd+cwOV3QU62XyTCFdFpnBz2BsyImzVAozJE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-T0+E6opyfr7zxfP44OlNuhqsdQyi7OdIXiE5r310LaU=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -31,18 +34,24 @@ python3Packages.buildPythonApplication rec {
       flexmock
       pytestCheckHook
       pytest-cov-stub
+      pytest-timeout
     ]
-    ++ optional-dependencies.apprise;
+    ++ finalAttrs.passthru.optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
-  # The file NEWS not available on the pypi source, and this test is useless
+  #   NEWS file not available on the pypi source
+  # - test_log_outputs_includes_error_output_in_exception
+  #   TOCTOU race in log_outputs(): process.poll() returns None in
+  #   raise_for_process_errors but non-None in the while-loop exit check,
+  #   so the error is never raised. Timing-dependent; fails on x86_64-darwin.
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
+    "test_log_outputs_includes_error_output_in_exception"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     borgbackup
     colorama
     jsonschema
@@ -92,4 +101,4 @@ python3Packages.buildPythonApplication rec {
       x123
     ];
   };
-}
+})

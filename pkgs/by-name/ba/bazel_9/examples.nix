@@ -62,10 +62,10 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-MRm+Pm5mDXys8erQLKHRSClFzxWIYU7Y/otKxl5sJQg=";
-          aarch64-linux = "sha256-cJuNZapJ8LvfPRdv5V9iuy0xxCxLFI5uWTLtAa6bE/w=";
-          x86_64-darwin = "sha256-fOLRQIiRq7BATULy7W90bQ/DrW3Fn7vLut6fKFSoQDA=";
-          x86_64-linux = "sha256-nSe0ywhsTJz6ycqTZaUKfnOvpJOmwip8hYXck9HtW2Q=";
+          aarch64-darwin = "sha256-Jth981+r20azC/CqoWN3LK5USm8zUIpL9Xt88+TcL1o=";
+          aarch64-linux = "sha256-4E/QCSOXTN/dW65xz/n47tXW0PlHUOP1UP+TwJfMueI=";
+          x86_64-darwin = "sha256-t4JP4o3O9C9BehidQPVu4EATnUZodhFh1/ctITxD6JA=";
+          x86_64-linux = "sha256-HzgFpbEBZ8efA5pwUsGZjt9bKiAXslB17OZQcm3cspc=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -100,10 +100,10 @@ in
     bazelRepoCacheFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          aarch64-linux = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          x86_64-darwin = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          x86_64-linux = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
+          aarch64-darwin = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
+          aarch64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
+          x86_64-darwin = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
+          x86_64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -139,10 +139,10 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-6rUV8UMjFZXA053BXIruK8+OEturmtz+YeAlkivePdA=";
-          aarch64-linux = "sha256-/mv7HVsx97RLzYl12WwsI2gYf0qBr+78B5NiEpTRyrc=";
-          x86_64-darwin = "sha256-BpQFhalV5AfYSjWQp+9lxOnfbaD/NADtvrNMqznEojM=";
-          x86_64-linux = "sha256-uutDUAHYecqDYmS90jZfZ8IrhSzpWB6WgcsZPlRJVaM=";
+          aarch64-darwin = "sha256-uUl7PpR3jAKvj6VWspPE3IR4Gr/V2VrBv1MlTzOIZJs=";
+          aarch64-linux = "sha256-uhcIwDk8NAZDBynzxWk+0fLP/2XadKQRl5BlFPjf4/8=";
+          x86_64-darwin = "sha256-vi3+/ps+dhDjqYHxWSnWOXhh1jWJWwb5ifUUhN4vxrg=";
+          x86_64-linux = "sha256-YURF8Zjueq3BN5GfEx5L+C4hGmr5qfJc7OngqZ17384=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";

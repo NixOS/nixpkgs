@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "darbyjohnston";
+    owner = "grizzlypeak3d";
     repo = "feather-tk";
     tag = finalAttrs.version;
     hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableNFD [
     nativefiledialog-extended
   ]
-  ++ lib.optionals (enableNFD && stdenv.isLinux) [
+  ++ lib.optionals (enableNFD && stdenv.hostPlatform.isLinux) [
     gtk3
   ]
   ++ lib.optionals enablePython [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableTests;
 
-  nativeCheckInputs = lib.optionals (enableTests && stdenv.isLinux) [
+  nativeCheckInputs = lib.optionals (enableTests && stdenv.hostPlatform.isLinux) [
     xvfb-run
   ];
 
@@ -83,19 +83,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     cd feather-tk/src/feather-tk-build
-    ${if stdenv.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
+    ${if stdenv.hostPlatform.isLinux then "xvfb-run" else ""} ctest --verbose -C Release
 
     runHook postCheck
   '';
 
   meta = {
     description = "Lightweight toolkit for building cross-platform applications";
-    homepage = "https://github.com/darbyjohnston/feather-tk";
+    homepage = "https://github.com/grizzlypeak3d/feather-tk";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     badPlatforms = [
-      # Broken on darwin with latest SDK, see https://github.com/darbyjohnston/feather-tk/issues/1
+      # Broken on darwin with latest SDK, see https://github.com/grizzlypeak3d/feather-tk/issues/1
       lib.systems.inspect.patterns.isDarwin
     ];
   };

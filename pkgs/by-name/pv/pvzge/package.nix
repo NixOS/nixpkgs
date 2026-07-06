@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pvzge";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Gzh0821";
     repo = "pvzge_web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-juo+kM7IK+e3qPHH+V+/1D0NqQiZfXYEtvX940dLarQ=";
+    hash = "sha256-sirarRJyQUHk8Fx3B9uXJjCqgRXX+SYqxpj+/N8v7y8=";
   };
 
   iconSrc = fetchurl {
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     imagemagick
   ]
-  ++ lib.optional stdenvNoCC.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ++ lib.optional stdenvNoCC.hostPlatform.isDarwin desktopToDarwinBundle;
 
   postPatch = ''
     sed -i "s|<title>.*</title>|<title>PvZ2: Gardendless</title>|" docs/index.html

@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mapproxy";
-  version = "6.0.1";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = finalAttrs.version;
-    hash = "sha256-1LDN0vfnJlINHCIagQWhai4uJP+Fidi/9seBoJIlLl0=";
+    hash = "sha256-uEnmYL6dzjR5p6MVXW23IJY1tJqfMhCjbHBDnlvaYrE=";
   };
 
   prePatch = ''
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python-dateutil
     pyyaml
     pyproj
+    requests
     shapely
     gdal
     lxml

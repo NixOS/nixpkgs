@@ -73,8 +73,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.55.0";
+  version = "2.56.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.15";
 
@@ -90,22 +91,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-UiSRRs/c92ns/+VPWyyvJVUb9up42d2JeIwKZpynabc=";
-          cp312 = "sha256-zUYL2/iopLt2iiDDixxTTYT+Y7wOXzWAxcDvcwK5hrM=";
-          cp313 = "sha256-8W3qMuXMWO1AbA7w3UvmnWDOd6B17bXwOANWpIv4WrM=";
-          cp314 = "sha256-6wpheWQbxCCmbuhcybOC5Y8i7/vTYpfjaDp5PlzcCJg=";
+          cp311 = "sha256-xb8aQ4TA4qpEIMlUdLc00GTKw1Sw8AdgvgLYhq/pbKQ=";
+          cp312 = "sha256-eO80pxODwfzzNeUx4OWQhnhX/OkGnwbtNRvmznpY/FA=";
+          cp313 = "sha256-VNJyX4tl2WFckz/sXsYuVKZ7jy4UKGAm+wFGBiU2cO8=";
+          cp314 = "sha256-c+22+1/QVIGx81isLopMf2oDHYn5uCPSWlh923UpBw8=";
         };
         aarch64-linux = {
-          cp311 = "sha256-sf1zQnCT0a7x+3vTxUMKTmhtXhD6BAiXVxY6TCpRfes=";
-          cp312 = "sha256-t39AYHKsDOkEMaxDaCjzZMGDq1e6FcOg5oinSuPC0/M=";
-          cp313 = "sha256-zu6HqIRgKqs02xCUFeaDmm6RafR1DKtye36hYQ31uR8=";
-          cp314 = "sha256-t0OQ8gHyjwXI8lAGnf7VTW1qAQn/5IJCXXbBG+gg4wk=";
+          cp311 = "sha256-rqZVgx0lCEyzQwAqjmene2qlUt23dqZUYdSfYohPCWo=";
+          cp312 = "sha256-4f0DxuzF/kwxRmVp5BzgpPryb7kweYydHx6x9AWmh8g=";
+          cp313 = "sha256-oOnP6SyIq3SryiOSPBWlkvSbx2F//dpBkNrKd4WnxPY=";
+          cp314 = "sha256-w6FtQ9dSg6PWT6HZBKOtrz9Sbz9Qj0R1Bbi7jccLrWw=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-JCbpxFE8tIQr+vcKrt9LntwwL7Ad5cGQb2i5tCegwkM=";
-          cp312 = "sha256-bwuN+jcWzJvl/OO1Ppv9tzzqNgJb/m8dJ5KND4TP1pU=";
-          cp313 = "sha256-Hai4dVtuT94D23i2ziu87Pz70g05uTgz0kbFFdru3zw=";
-          cp314 = "sha256-1IvEUzs7dtWe0/nqsea3MipTp83vuPZX2bRu661W2+4=";
+          cp311 = "sha256-qa1OJpQesvjb1JStB/nyInFDFkxhFBMrJrI61PILHG8=";
+          cp312 = "sha256-aEpCfFB0WYnpKjMjQ/CBLJO4UG9xx2i5Wx7vwRNJJpk=";
+          cp313 = "sha256-mSBH9QRztb/qdMj1KPmZlo4LS8c1ryOtR2oPTgR0Guo=";
+          cp314 = "sha256-844Dt3xT49lAka7bhLFO/n7ltYHYW30TklBmvNSMRKI=";
         };
       };
     in
@@ -116,7 +117,7 @@ buildPythonPackage (finalAttrs: {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };

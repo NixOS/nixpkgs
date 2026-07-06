@@ -7,13 +7,13 @@
 }:
 mkLibretroCore {
   core = "mame2015";
-  version = "0-unstable-2026-03-31";
+  version = "0-unstable-2026-04-22";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mame2015-libretro";
-    rev = "48fdf6532f31e3bb8b58b9ae10198b047cd8de42";
-    hash = "sha256-z/SjAx615RZUOytoDPFFXl89E5063cbc0OFIV2/HZBo=";
+    rev = "b0cd015f4de7a3979374ab70613db65415e99477";
+    hash = "sha256-EyXnHzSbLD2yAGISX8obpAUM4toVobBxM/b/Fx1F9xY=";
   };
 
   patches = [ ./patches/mame2015-python311.patch ];

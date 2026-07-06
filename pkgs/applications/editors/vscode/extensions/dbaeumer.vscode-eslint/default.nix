@@ -17,6 +17,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint";
     homepage = "https://github.com/Microsoft/vscode-eslint";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.datafoo ];
   };
 }

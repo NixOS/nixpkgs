@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     description = "Securely transfer and send anything between computers with TUI";
     homepage = "https://github.com/abdfnx/tran";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "tran";
   };
 })

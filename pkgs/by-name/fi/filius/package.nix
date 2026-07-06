@@ -10,17 +10,16 @@
 
 maven.buildMavenPackage rec {
   pname = "filius";
-  version = "2.9.4";
+  version = "2.12.1";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
-    # they seem to have stopped using the "v" prefix since 2.9.3
-    tag = version;
-    hash = "sha256-nQyDPLDQe5kFH3PhCmLqAt8kVnitPwX5K3xLnyntF5k=";
+    tag = "v${version}";
+    hash = "sha256-sIcYjbWONg8Cq+dHpoBYj07cyHV7oX06Xh1zK0CHn64=";
   };
 
-  mvnHash = "sha256-6Qq/7vgA9bWQK+k66qORNwvLKMR1U5yb95DJMWaDq/k=";
+  mvnHash = "sha256-41NirfgR9EhHLRT3V6P5KrakYKZ6dJTlXZu6rgCAK3I=";
   mvnParameters = "-Plinux";
 
   # tests want to create an X11 window which isn't often feasible

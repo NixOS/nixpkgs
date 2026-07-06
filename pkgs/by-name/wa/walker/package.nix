@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "walker";
-  version = "2.16.0";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ugacgbPxYM68pAcQRceuSlCWtUEuddltMUzAWrnWlHA=";
+    hash = "sha256-fX3ErzTmHRO9z1SzHC2VZUgKOgRfO13X/joC5a3QN7Q=";
   };
 
-  cargoHash = "sha256-MPjMB5TsrJd28QuEoIDRJjM+SE0cTNCO5PRW+I+/CHE=";
+  cargoHash = "sha256-gm7xQ7qHui8F+uJBWKh7Fen0Zfi/YqpbdgNSoqar0wA=";
 
   nativeBuildInputs = [
     gobject-introspection

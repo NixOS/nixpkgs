@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "snakefmt";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-S6evESaS1IJ3YFn3jjhccNhzkBTFOL9Xt37DuLcDKeI=";
+    hash = "sha256-cvdAXFVEegcuWoNWv/D3Etije73dt50O2EPOlFOnXQg=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];

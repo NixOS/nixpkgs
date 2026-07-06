@@ -3,35 +3,41 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  supabase-cli,
+  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "supabase-cli";
-  version = "2.90.0";
+  version = "2.108.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-JaI5I+1rAdyHoct+ac6hayptfC5CK0otI1bIfr9s3CA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zhtt6JksIEZyfATxPDyZvf97syk9Z1kOXvzNgZxB1fI=";
   };
 
-  vendorHash = "sha256-cVnhOmkhbhMh+1faFDJz/yGfYsqubHXglVUJXVZKfAQ=";
+  # Supabase is in the process of porting the CLI to TS, for now we continue with the Go cli.
+  sourceRoot = "${finalAttrs.src.name}/apps/cli-go";
+
+  vendorHash = "sha256-VKEhmPdj0IJYSVncCRhfxqbjdZ/1WwdIBZgxMkS/65o=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/supabase/cli/internal/utils.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
-  doCheck = false; # tests are trying to connect to localhost
-
   nativeBuildInputs = [ installShellFiles ];
+
+  doCheck = false; # Root Go package does not have any tests.
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postInstall = ''
     mv $out/bin/{cli,supabase}
@@ -42,15 +48,10 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/supabase completion zsh)
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = supabase-cli;
-    };
-    updateScript = nix-update-script {
-      # Fetch versions from GitHub releases to detect pre-releases and
-      # avoid updating to them.
-      extraArgs = [ "--use-github-releases" ];
-    };
+  passthru.updateScript = nix-update-script {
+    # Fetch versions from GitHub releases to detect pre-releases and
+    # avoid updating to them.
+    extraArgs = [ "--use-github-releases" ];
   };
 
   meta = {

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cwal";
-  version = "0.8.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "nitinbhat972";
     repo = "cwal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/5l/Wc85ElB0V1j2tCW5CXKJKvhz6vb6V696d8UPM0c=";
+    hash = "sha256-RDtYBgqTG3Ycn1D6QtaHGZVXKxw8UqhzssxXA4temYo=";
   };
 
   strictDeps = true;

@@ -11,6 +11,9 @@ buildBatExtrasPkg {
     less
     procps
   ];
+  shellInit = {
+    flags = [ ];
+  };
 
   patches = [
     ../patches/batpipe-skip-outdated-test.patch

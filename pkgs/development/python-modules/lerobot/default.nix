@@ -34,6 +34,7 @@
   wandb,
 
   # tests
+  llvmPackages,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   pytest-timeout,
@@ -41,14 +42,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i4szKM8b766mAA0AxCHB4s1wEEZbGeBKGeGpLICVsrM=";
+    hash = "sha256-ZTRcJRVb6niSJXniUgq0C5ztVTWh0HTo3rc99WRc1qI=";
   };
 
   build-system = [
@@ -63,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     "draccus"
     "numpy"
     "opencv-python-headless"
+    "packaging"
     "rerun-sdk"
     "torch"
     "torchcodec"
@@ -170,21 +173,39 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: 'NoneType' object is not subscriptable
     "test_pi0_rtc_inference_with_prev_chunk"
+
+    # Flakes under load with AssertionError: assert 'second' == 'last'
+    "test_get_last_item_multiple_items_with_torch_queue"
+
+    # Flaky, assert 88 == 90 (Encoder queue full)
+    "test_video_duration_matches_frame_count"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!
     "test_complementary_data_float_dtype_conversion"
     "test_float_dtype_conversion"
     "test_float_dtype_with_mixed_tensors"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # gRPC fails to connect on loopback in sandbox despite __darwinAllowLocalNetworking
+    "test_end_to_end_interactions_flow"
+    "test_end_to_end_parameters_flow"
+    "test_end_to_end_transitions_flow"
   ];
 
   disabledTestPaths = [
+    # Require internet access
+    # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
+    "tests/policies/test_relative_actions.py"
+
     # Sometimes hang forever on some CPU models
     "tests/policies/test_sac_policy.py"
 
     # Sometimes hang forever
     "tests/policies/rtc/test_modeling_rtc.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Making AI for Robotics more accessible with end-to-end learning";

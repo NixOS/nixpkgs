@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -38,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.34.1";
+  version = "0.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZBlkp6nhTKEAWxCPDq9NIoOullwWartpU3eL0QIGFpw=";
+    hash = "sha256-mZ9u3mQ8JZIq+G1iwNQST8r7/rCWi/UW0j1xfeV9zFM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -54,11 +55,13 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace src/pyhanko/version/__init__.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     asn1crypto

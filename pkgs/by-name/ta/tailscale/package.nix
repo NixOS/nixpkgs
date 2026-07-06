@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.96.5";
+  version = "1.98.8";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vYYb+2OtuXftjGGG0zWJesHccrClB8YZpclv9KzNN/c=";
+    hash = "sha256-3Ikti52jcncQTq9//rBa3Q9N2C2MkGONJ6+4cn4eUFc=";
   };
 
-  vendorHash = "sha256-rhuWEEN+CtumVxOw6Dy/IRxWIrZ2x6RJb6ULYwXCQc4=";
+  vendorHash = "sha256-Sd2iLJ7eDfDYdIRuW4xuiKgzhQWJWGAnz97FJWrVRlE=";
 
   nativeBuildInputs = [
     makeWrapper

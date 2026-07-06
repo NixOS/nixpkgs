@@ -19,12 +19,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "showtime";
-  version = "49.1";
+  version = "50.0";
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/showtime/${lib.versions.major finalAttrs.version}/showtime-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iu+7DiAJx6HNRKuAGwbKN19+loPwKaBS64b7Qzp4U5M=";
+    hash = "sha256-Q5nJ+n9h5ZhCQuJ5rNFRm+7CRrmKZ21EpLKrlOnuywE=";
   };
 
   strictDeps = true;
@@ -68,13 +68,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export XDG_DATA_DIRS="${glib.makeSchemaDataDirPath "$out" "$name"}:$XDG_DATA_DIRS"
     export HOME="$TEMPDIR"
   '';
-
-  # HACK: To get rid of unreproducible __pycache__ created by pythonImportsCheck.
-  # See https://github.com/NixOS/nixpkgs/issues/469081
-  deletePycachePhase = ''
-    find $out/lib -type d -name __pycache__ -prune -exec rm -vr {} \;
-  '';
-  postPhases = [ "deletePycachePhase" ];
 
   passthru = {
     updateScript = gnome.updateScript {

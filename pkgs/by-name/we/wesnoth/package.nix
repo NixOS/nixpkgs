@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,6 +8,7 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_net,
+  makeBinaryWrapper,
   SDL2_ttf,
   pango,
   gettext,
@@ -17,7 +17,6 @@
   fribidi,
   dbus,
   libpng,
-  pcre,
   openssl,
   icu,
   lua5_4,
@@ -39,7 +38,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.23" else "1.18.7";
+  version = if enableDevel then "1.19.24" else "1.18.7";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-iqL7sXcvAeyewB0nSFvXETgODaHtB2IaP26Yx1x1i6I="
+        "sha256-q6gdzHDPkG/RqpJxIHqWsxD0n8dzKajDhAT49bjmq78="
       else
         "sha256-fODkyn4tyWL3PUVjXS4d7OW7VnQSL+fPaytvS8iigXg=";
   };
@@ -55,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
   buildInputs = [
     SDL2
@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     dbus
     libpng
-    pcre
     openssl
     icu
     lua
@@ -78,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_SYSTEM_LUA=ON"
+    (lib.cmakeBool "ENABLE_SYSTEM_LUA" true)
     "-DBINARY_SUFFIX=${suffix}"
   ];
 
@@ -110,25 +109,24 @@ stdenv.mkDerivation (finalAttrs: {
     echo "APPL????" > "$app_contents/PkgInfo"
     mv $out/bin "$app_contents/MacOS"
     mv $out/share/wesnoth "$app_contents/Resources"
+
     pushd ../projectfiles/Xcode
-    substitute Info.plist "$app_contents/Info.plist" \
-      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
-      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
-      --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
-    cp -r Resources/SDLMain.nib "$app_contents/Resources/"
-    install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
+      substitute Info.plist "$app_contents/Info.plist" \
+        --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
+        --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
+        --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
+
+      cp -r Resources/SDLMain.nib "$app_contents/Resources/"
+      install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
     popd
 
     # Make the game and dedicated server binary available for shell users
     mkdir -p "$out/bin"
     ln -s "$app_contents/MacOS/wesnothd${suffix}" "$out/bin/wesnothd${suffix}"
+
     # Symlinking the game binary is unsifficient as it would be unable to
     # find the bundle resources
-    cat << EOF > "$out/bin/wesnoth${suffix}"
-    #!${stdenvNoCC.shell}
-    open -na "$app_bundle" --args "\$@"
-    EOF
-    chmod +x "$out/bin/wesnoth${suffix}"
+    makeBinaryWrapper "$app_bundle/Contents/MacOS/wesnoth${suffix}" "$out/bin/wesnoth${suffix}"
   '';
 
   passthru.updateScript = nix-update-script {
@@ -154,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
       reclaim the throne of Wesnoth, or take hand in any number of other
       adventures.
     '';
-
     homepage = "https://www.wesnoth.org/";
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;

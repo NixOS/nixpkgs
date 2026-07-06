@@ -160,10 +160,7 @@ stdenv.mkDerivation rec {
       version 2.
     '';
     homepage = "http://www.mcs.anl.gov/mpi/mpich2/";
-    license = {
-      url = "http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
-      fullName = "MPICH license (permissive)";
-    };
+    license = lib.licenses.mpich2;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

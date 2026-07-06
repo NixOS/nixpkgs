@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "octodns-ddns";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-ddns";
     tag = "v${version}";
-    hash = "sha256-aIXRlQeh8GpbqxvgTSngFGpQt01K61Z7sVdAgIs7bkM=";
+    hash = "sha256-mHcm2MlQUVju3+3aQ3DVaMvg5WmDUi5+4zgAEQP3kiA=";
   };
 
   build-system = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  bash,
   fontconfig,
   libx11,
   libxinerama,
@@ -20,12 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu";
   version = "5.4";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchzip {
     url = "https://dl.suckless.org/tools/dmenu-${finalAttrs.version}.tar.gz";
     hash = "sha256-6bFq3Pj3cuZqLR0pkoJyfx3CDWmmSqkDoEVptMfej7g=";
   };
 
   buildInputs = [
+    bash
     fontconfig
     libx11
     libxinerama

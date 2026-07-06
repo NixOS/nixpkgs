@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "terraform-plugin-docs";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wN85uTZgHasP4EsG/tNkt28tnLRFfosN6N89iwcAX80=";
+    hash = "sha256-QgN2gcGu9Laq4gQkYBvbE7gadiwzAyERLaKVLI+XiHQ=";
   };
 
-  vendorHash = "sha256-ZL61b2LAE+GFRtfUBIAoF7O65s7FeQw7cX4Aw2Cfd+k=";
+  vendorHash = "sha256-+D3JwUpLJ6gZAkTFO0fQAFpl0OCp36HMbWES/+lK+9g=";
 
   nativeBuildInputs = [ makeWrapper ];
 

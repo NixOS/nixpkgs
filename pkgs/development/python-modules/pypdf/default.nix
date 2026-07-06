@@ -13,6 +13,7 @@
 
   # optionals
   cryptography,
+  fonttools,
   pillow,
 
   # tests
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "6.10.0";
+  version = "6.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-eAbA6vIRJ/wX5r/X218UG2yEqtGTuDAKFpLB702HvM0=";
+    hash = "sha256-h7JuQTTUZ5tWoAhixjp+grDVA3JQ8PbHcMBzIyCMOJU=";
   };
 
   outputs = [
@@ -54,8 +55,9 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = rec {
-    full = crypto ++ image;
+    full = crypto ++ fonts ++ image;
     crypto = [ cryptography ];
+    fonts = [ fonttools ];
     image = [ pillow ];
   };
 

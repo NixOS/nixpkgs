@@ -704,7 +704,7 @@ rec {
           finalAttrs: prevAttrs: {
             # A unique `hello` to make sure that it isn't included via another mechanism by accident.
             configureFlags = prevAttrs.configureFlags or [ ] ++ [
-              " --program-prefix=layeredImageWithFakeRootCommands-"
+              "--program-prefix=layeredImageWithFakeRootCommands-"
             ];
             doCheck = false;
             versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";

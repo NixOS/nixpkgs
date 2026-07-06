@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nominatim";
-  version = "5.3.1";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3WU8n121JbFFZTntcKG6t0x2mC1AzI97q/fMe/UTGTs=";
+    hash = "sha256-jP/OkEuFdVdvA8Uztv/49FXm9dsExVDjw2l2gyMOSsg=";
   };
 
   postPatch = ''

@@ -29,19 +29,20 @@ let
       };
     };
     "1.1.0" = rec {
-      release = "SR1";
-      rev = "2005";
-      src = fetchbzr {
-        url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
-        sha256 = "sha256-YVQduUjPQF5KxMlm730FZTShHP/7JEcAMIFn+mQITrQ=";
+      release = "SR2";
+      rev = "28965e3bd6dd118598db1f5639ce1cf2e3c56e36";
+      src = fetchFromGitHub {
+        owner = "Arcachofo";
+        repo = "SimuliDE_110";
         inherit rev;
+        hash = "sha256-Ec72OE4xBlanFFzrrGu0lTY2BEVu7slc1+ZDFr8lUT8=";
       };
     };
     "1.2.0" = rec {
       release = "RC1";
       rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
       src = fetchFromGitHub {
-        owner = "eeTools";
+        owner = "Arcachofo";
         repo = "SimulIDE-dev";
         hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
         inherit rev;
@@ -167,7 +168,8 @@ stdenv.mkDerivation {
       It supports PIC, AVR, Arduino and other MCUs and MPUs.
     '';
     homepage = "https://simulide.com/";
-    license = lib.licenses.gpl3Only;
+    license =
+      if lib.versionAtLeast versionNum "1.1.0" then lib.licenses.agpl3Only else lib.licenses.gpl3Only;
     mainProgram = "simulide";
     maintainers = with lib.maintainers; [
       carloscraveiro

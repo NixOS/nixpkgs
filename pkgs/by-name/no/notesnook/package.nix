@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.3.14";
+  version = "3.3.21";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -27,10 +27,10 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-fI9EI+XltHztwqVLLzHW49NqXNrxw4xZ1nxjEoz3D2o=";
-        aarch64-linux = "sha256-efg+g2ROR7rlWrcmeqL4y+YgbrOP/9Ylr5RqiLtMCNY=";
-        x86_64-darwin = "sha256-+cbrTM1w2nOROJvJOr4NBYyXw583aa3xOwYZVf10BCs=";
-        aarch64-darwin = "sha256-70EB93WXp8ds3izCvaAetmZgIq1PMNCTXXAgBcH1DSM=";
+        x86_64-linux = "sha256-NmhV+x5HrKBO7BX1bJyjChKQF/j38kQqJ3x0amSXzGU=";
+        aarch64-linux = "sha256-IU4hF/ol4pyh+ABTri2aqwqaB+cfrHLtsF7wrqE+wEY=";
+        x86_64-darwin = "sha256-YhJvkKreWUReEgs4R9lWV0/cx3d0hrjKTHZn0hDsp3k=";
+        aarch64-darwin = "sha256-9CTGpCPJY6sq6JWDpoCTyOTt/vtCazDaoDzFFUzR9zg=";
       }
       .${system} or throwSystem;
   };
@@ -53,9 +53,7 @@ let
     '';
     homepage = "https://notesnook.com";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      keysmashes
-    ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -84,7 +82,7 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';

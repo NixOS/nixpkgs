@@ -22,7 +22,7 @@ defaults:
 
 jobs:
   periodic-merge:
-    if: github.repository_owner == 'NixOS'
+    if: github.repository_owner == 'NixOS' || github.event_name == 'workflow_dispatch'
     strategy:
       # don't fail fast, so that all pairs are tried
       fail-fast: false

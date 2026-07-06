@@ -4,18 +4,21 @@
   fetchurl,
   autoPatchelfHook,
   libxcrypt-legacy,
+  zlib,
+  testers,
+  nav,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nav";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://github.com/Jojo4GH/nav/releases/download/v${finalAttrs.version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-LQdw8/V1KFNM6TY1rFt/RiZuiRQXM+8HNGkJXDrE/mw=";
-        aarch64-linux = "sha256-SMcdnUxKbJ5GXB358WglIMiPHWsn1uVnjN9UiL3V6dk=";
+        x86_64-linux = "sha256-/A6IZRX8v8yKfcxYxo0gxbsZri2dgTs8YH7H2LauaBE=";
+        aarch64-linux = "sha256-YNS/P6TU7qLPn39X6GyUtjBw7GXOi2btd3AV+etpUhQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
@@ -26,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     stdenv.cc.cc.lib
     libxcrypt-legacy
+    zlib
   ];
 
   installPhase = ''
@@ -36,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = nav;
+    };
+  };
 
   passthru.updateScript = ./update.sh;
 

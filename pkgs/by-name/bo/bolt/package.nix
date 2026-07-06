@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "boltctl";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

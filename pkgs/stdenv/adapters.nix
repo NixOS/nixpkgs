@@ -13,7 +13,10 @@
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
   defaultMkDerivationFromStdenv =
-    stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
+    let
+      makeDerivationFile = import ./generic/make-derivation.nix lib config;
+    in
+    stdenv: (makeDerivationFile stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and
@@ -92,15 +95,21 @@ rec {
             (mkDerivationSuper args).overrideAttrs (
               args:
               (
-                if (args.__structuredAttrs or false) || (args ? env.NIX_CFLAGS_LINK) then
+                if (args ? NIX_CFLAGS_LINK) then
+                  lib.warn
+                    (
+                      "NIX_CFLAGS_LINK is an environment variable and should be defined inside `env`"
+                      + lib.optionalString (args ? pname) " for package ${args.pname}"
+                      + lib.optionalString (args ? version) "-${args.version}"
+                    )
+                    {
+                      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                    }
+                else
                   {
                     env = (args.env or { }) // {
                       NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
                     };
-                  }
-                else
-                  {
-                    NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
                   }
               )
               // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
@@ -169,7 +178,7 @@ rec {
   # Puts all the other ones together
   makeStatic =
     stdenv:
-    lib.foldl (lib.flip lib.id) stdenv (
+    lib.foldl' (lib.flip lib.id) stdenv (
       lib.optional stdenv.hostPlatform.isDarwin makeStaticDarwin
 
       ++ [

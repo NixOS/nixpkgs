@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
 
   # build-system
   poetry-core,
@@ -24,23 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hass-web-proxy-lib";
-  version = "0.0.7";
+  version = "0.0.8";
   pyproject = true;
 
   # no tags on git
   src = fetchPypi {
     pname = "hass_web_proxy_lib";
     inherit (finalAttrs) version;
-    hash = "sha256-bhz71tNOpZ+4tSlndS+UbC3w2WW5+dAMtpk7TnnFpuQ=";
+    hash = "sha256-H9C8jwJeR6skvCVn8jeaWqmIL0fmcab+/BQ5SzUIt00=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "add-missing-build-system.patch";
-      url = "https://github.com/dermotduffy/hass-web-proxy-lib/commit/0eed7a57f503fc552948a45e7f490ddaff711896.patch";
-      hash = "sha256-ccOdhA0NhlTmdA51sNdB357Xh13E4PsLlvUTU4GQ9jk=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 
@@ -53,11 +44,6 @@ buildPythonPackage (finalAttrs: {
     pytest-homeassistant-custom-component
     pytest-timeout
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # https://github.com/dermotduffy/hass-web-proxy-lib/issues/65
-    "test_proxy_view_aiohttp_read_error"
   ];
 
   pythonImportsCheck = [

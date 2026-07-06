@@ -3,20 +3,26 @@
   stdenv,
   fetchFromGitLab,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arpa2cm";
-  version = "1.0.4";
+  version = "1.0.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "arpa2cm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-2vb/7UL+uWGrQNh8yOZ3gih5G1/eOp064hF78SDsPGk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JkMZUXqmrVzURVi8BJRsHprD4Jz6l83qhPxnOfq4KE4=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CMake Module library for the ARPA2 project";
@@ -33,8 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/arpa2/arpa2cm";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [
-      fufexan
-    ];
+    maintainers = with lib.maintainers; [ fufexan ];
+    teams = [ lib.teams.ngi ];
   };
 })

@@ -5,6 +5,7 @@
   pkg-config,
   libuuid,
   libsodium,
+  libunwind,
   keyutils,
   kmod,
   liburcu,
@@ -18,6 +19,7 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -29,18 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.0";
+  version = "1.38.8";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ARSrlQozhefNV4K75aiaKxgfKIkE9mPrDksDhuvXfA4=";
+    hash = "sha256-9sDE7ua3WMCfV9ZbwQdAbpatv2IhvcwHzzPr+/l2au0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-dtGRtJxsVvltjPdMl0KZMaAqnNppwGCtL/XnYbc1PyQ=";
+    hash = "sha256-F1+FeAlYSqOxeWJI8vHShpXrOZqYXjNGvty/s6f6u8w=";
   };
 
   postPatch = ''
@@ -57,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
     makeWrapper
     installShellFiles
   ];
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     keyutils
     lz4
     libsodium
+    libunwind
     liburcu
     libuuid
     zstd

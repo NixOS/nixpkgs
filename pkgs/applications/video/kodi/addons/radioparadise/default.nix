@@ -10,11 +10,11 @@
 buildKodiAddon rec {
   pname = "radioparadise";
   namespace = "script.radioparadise";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/script.radioparadise/script.radioparadise-${version}.zip";
-    sha256 = "sha256-hoSjsULE6OCO7TxSkE//B5xlmDfznKz7xGkc/kHDlM4=";
+    sha256 = "sha256-qM+YzWesgAIiqL2YbKgJ0wSTTghtPPBcMGzsKF7tVAY=";
   };
 
   propagatedBuildInputs = [

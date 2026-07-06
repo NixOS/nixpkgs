@@ -2,38 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnfs";
-  version = "5.0.2";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libnfs";
-    rev = "libnfs-${finalAttrs.version}";
-    sha256 = "sha256-rdxi5bPXHTICZQIj/CmHgZ/V70svnITJj/OSF4mmC3o=";
+    tag = "libnfs-${finalAttrs.version}";
+    hash = "sha256-uD7PtW2rcpGVzqD6U0DXK1gUaCKlKh+p+i6CW6jLGdw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
-  patches = [
-    # Fixes 100% CPU usage in multi-threaded mode
-    (fetchpatch {
-      url = "https://github.com/sahlberg/libnfs/commit/34d6fe37e986da5b0ced86cd028a88e482537d5a.patch";
-      sha256 = "sha256-i7mi+TVdkLb4MztT5Ic/Q8XBIWk9lo8v5bNjHOr6LaI=";
-    })
-    # Fixes deprecation warnings on macOS
-    (fetchpatch {
-      url = "https://github.com/sahlberg/libnfs/commit/f6631c54a7b0385988f11357bf96728a6d7345b9.patch";
-      sha256 = "sha256-xLRZ9J1vr04n//gNv9ljUBt5LHUGBRRVIXJCMlFbHFI=";
-    })
-  ];
-
-  configureFlags = [
-    "--enable-pthread"
+  cmakeFlags = [
+    "-DENABLE_MULTITHREADING=ON"
   ];
 
   enableParallelBuilding = true;

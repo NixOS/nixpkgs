@@ -24,6 +24,7 @@ buildGoModule {
 
   meta = {
     description = "Serve embedded files from jteeuwen/go-bindata";
+    homepage = "https://github.com/elazarl/go-bindata-assetfs";
     mainProgram = "go-bindata-assetfs";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ avnik ];

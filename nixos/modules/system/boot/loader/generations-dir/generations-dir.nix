@@ -66,7 +66,6 @@ in
 
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";
-    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
 
   };
 }

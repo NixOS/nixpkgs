@@ -77,7 +77,10 @@ let
       None = null;
     };
 
-  moveOutputsHook = makeSetupHook { name = "kf6-move-outputs-hook"; } ./move-outputs-hook.sh;
+  moveOutputsHook = makeSetupHook {
+    name = "kf6-move-outputs-hook";
+    meta.license = lib.licenses.mit;
+  } ./move-outputs-hook.sh;
 
   qmllintHook = makeSetupHook {
     name = "qmllint-validate-hook";
@@ -85,6 +88,7 @@ let
       qmllint = "${qt6.qtdeclarative}/bin/qmllint";
       jq = lib.getExe jq;
     };
+    meta.license = lib.licenses.mit;
   } ./qmllint-hook.sh;
 in
 {
@@ -185,6 +189,7 @@ let
   meta = {
     description = projectInfo.${pname}.description;
     homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
+    donationPage = "https://kde.org/donate/";
     license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.

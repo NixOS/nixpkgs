@@ -26,6 +26,13 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-JsbJ39zPZm4eyRTXkvdCMHwYaA08yUxZXcLglRn3kWs="; # odoo
   };
 
+  postPatch = ''
+    # hardcode the location of the unwrapped python scrip, otherwise the websocket
+    # server (called longpoll in codebase) will fail to start.
+    substituteInPlace odoo/service/server.py \
+      --replace-fail 'sys.argv[0]' "'${placeholder "out"}/bin/.odoo-wrapped'"
+  '';
+
   makeWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [
@@ -92,7 +99,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo19;
+      inherit (nixosTests) odoo19 odoo19-multiprocess;
     };
   };
 

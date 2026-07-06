@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  applyPatches,
   buildGoModule,
   callPackage,
   gnumake,
@@ -36,11 +37,20 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  src = fetchFromGitHub {
-    owner = "owncloud";
-    repo = "ocis";
-    tag = "v${version}";
-    hash = "sha256-TsMrQx+P1F2t66e0tGG0VvRi4W7+pCpDHd0aNsacOsI=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "owncloud";
+      repo = "ocis";
+      tag = "v${version}";
+      hash = "sha256-TsMrQx+P1F2t66e0tGG0VvRi4W7+pCpDHd0aNsacOsI=";
+    };
+    patches = [
+      # Remove the kpop dependency, whose upstream tarball
+      # (https://download.kopano.io/community/kapp:/kpop-2.2.0.tgz) is no longer
+      # available. Adapted from the upstream fix in v8.0.1
+      # (https://github.com/owncloud/ocis/pull/12043).
+      ./remove-kpop.patch
+    ];
   };
 
   nativeBuildInputs = [
@@ -58,8 +68,8 @@ buildGoModule rec {
       ;
     pnpm = pnpm_9;
     sourceRoot = "${src.name}/services/idp";
-    fetcherVersion = 1;
-    hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
+    fetcherVersion = 3;
+    hash = "sha256-5iRnRxFJAWePyx83464guOqBqmao2pybaC4sFVPCOqk=";
   };
   pnpmRoot = "services/idp";
 

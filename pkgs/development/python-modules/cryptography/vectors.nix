@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchpatch2,
   uv-build,
 }:
 
@@ -13,11 +12,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   sourceRoot = "${src.name}/vectors";
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.7.19,<0.9.0" "uv_build>=0.7.19,<0.11.0"
-  '';
 
   build-system = [ uv-build ];
 

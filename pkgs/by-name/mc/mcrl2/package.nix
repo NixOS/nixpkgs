@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     boost
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeWrapper;
 
   dontWrapQtApps = true;
 

@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Core dependency for cx_Freeze";
+    homepage = "https://github.com/marcelotduarte/freeze-core";
     changelog = "https://github.com/marcelotduarte/freeze-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];

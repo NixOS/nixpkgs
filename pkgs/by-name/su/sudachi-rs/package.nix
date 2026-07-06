@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudachi-rs";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2sJ9diE/EjrQmFcCc4VluE4Gu4RebTYitd7zzfgj3g4=";
+    hash = "sha256-UHJSojDJ5EpoXvXj3qIs2s9Kzg7JrPQhi7o6WWF4Y5o=";
   };
 
   postPatch = ''
@@ -24,12 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoPatches = [
-    # https://github.com/WorksApplications/sudachi.rs/issues/299
-    ./update-outdated-lockfile.patch
-  ];
-
-  cargoHash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
+  cargoHash = "sha256-qWuFY97qPoKVxWp29ywaMEr2fTc0Y4wDR9LK+40r6QI=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''

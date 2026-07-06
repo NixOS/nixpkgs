@@ -4,12 +4,14 @@
   lib,
   makeBinaryWrapper,
   nodejs,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildNpmPackage (finalAttrs: {
   pname = "claude-code-router";
   version = "2.0.0";

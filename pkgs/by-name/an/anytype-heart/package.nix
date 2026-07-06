@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
 
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.49.0-rc08";
+  version = "0.50.8";
 
   # Update only together with 'anytype' package.
   # nixpkgs-update: no auto update
@@ -34,10 +34,10 @@ buildGoModule (finalAttrs: {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gTUesFf6cDwsFCEUjpcy9VA67GwuZ9mNTih4HC0Vi7g=";
+    hash = "sha256-h59Vnmv+iB0NbLQPCHPlmHBDaYoFimrZP/4Cv/IQ7b8=";
   };
 
-  vendorHash = "sha256-1D7v/lgmoKOOHNG3vgpzDpWQ66lmmP8IeZ5rvXe4D9M=";
+  vendorHash = "sha256-uJ/Z2zxqIne3UuxAglZejoqHV/IchYdPhefL9K51U2I=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
@@ -59,16 +59,11 @@ buildGoModule (finalAttrs: {
     cp ${tantivy-go}/lib/libtantivy_go.a deps/libs/${arch}
   '';
 
-  postBuild = ''
-    protoc -I ./  --js_out=import_style=commonjs,binary:./dist/js/pb pb/protos/service/*.proto pb/protos/*.proto pkg/lib/pb/model/protos/*.proto
-    protoc -I ./  --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./dist/js/pb pb/protos/service/*.proto pb/protos/*.proto pkg/lib/pb/model/protos/*.proto
-  '';
-
   postInstall = ''
     mv $out/bin/grpcserver $out/bin/anytypeHelper
-    mkdir -p $out/lib
-    cp -r dist/js/pb/* $out/lib
-    cp -r dist/js/pb/* $out/lib
+    mkdir -p $out/lib/protos
+    find pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
+    find pkg/lib/pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
 
     mkdir -p $out/lib/json/generated
     cp pkg/lib/bundle/system*.json $out/lib/json/generated

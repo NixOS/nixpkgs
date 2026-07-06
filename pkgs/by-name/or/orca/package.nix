@@ -31,13 +31,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "orca";
-  version = "49.5";
+  version = "50.2";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/orca/${lib.versions.major finalAttrs.version}/orca-${finalAttrs.version}.tar.xz";
-    hash = "sha256-U99BVYMZ6XwehK1gSYmVegK10P9TFBkZDwWH6mslYDQ=";
+    hash = "sha256-BxRCHN6OxLr0fxjktKErTlxKPP47FhVp4HD+A3cT/QQ=";
   };
 
   patches = [
@@ -128,7 +128,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
       Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with lib.maintainers; [ berce ];
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;

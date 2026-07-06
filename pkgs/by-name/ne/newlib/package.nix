@@ -13,26 +13,14 @@
 
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "newlib";
-  version = "4.5.0.20241231";
+  version = "4.6.0.20260123";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-M/EmBeAFSWWZbCXBOCs+RjsK+ReZAB9buMBjDy7IyFI=";
+    sha256 = "sha256-b/J+O/AiZm9D94AiVb5oDu/3IqwYGxcl0h4ugxhgTuM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "0001-newlib-Fix-mips-libgloss-support.patch";
-      url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
-      hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
-    })
-    (fetchpatch {
-      name = "0002-newlib-Fix-i386-libgloss-support.patch";
-      url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=351842d55ee50fab672818b72f2c6bf3be1772bd;hp=4a1144dc540423b422dbec27eb433bc7dc725ae8";
-      hash = "sha256-GMx9nQKJEnXbA5HFczp3xjrrU94j1oXq4lIjEf0um9Y=";
-    })
-  ]
-  ++ lib.optionals nanoizeNewlib [
+  patches = lib.optionals nanoizeNewlib [
     # https://bugs.gentoo.org/723756
     (fetchpatch {
       name = "newlib-3.3.0-no-nano-cxx.patch";
@@ -114,6 +102,8 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   );
 
   enableParallelBuilding = true;
+  # install: cannot create regular file '.../powerpc-none-eabi/lib/crt0.o': File exists
+  enableParallelInstalling = false;
   dontDisableStatic = true;
 
   # apply necessary nano changes from https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/manifest/copy_nano_libraries.sh?rev=4c50be6ccb9c4205a5262a3925317073&hash=1375A7B0A1CD0DB9B9EB0D2B574ADF66

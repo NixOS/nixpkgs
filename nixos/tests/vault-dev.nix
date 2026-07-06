@@ -3,7 +3,6 @@
   name = "vault-dev";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
-      lnl7
       mic92
     ];
   };

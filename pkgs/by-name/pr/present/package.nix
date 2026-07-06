@@ -6,16 +6,20 @@
 
 let
   # https://github.com/NixOS/nixpkgs/issues/348788
-  mistune_2 = python3Packages.mistune.overridePythonAttrs (oldAttrs: rec {
-    version = "2.0.5";
-    src = fetchPypi {
-      inherit (oldAttrs) pname;
-      inherit version;
-      hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-    };
-  });
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      mistune = super.mistune.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.5";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
+    }
+  );
 in
-python3Packages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
   pname = "present";
   version = "0.6.0";
   pyproject = true;
@@ -25,14 +29,14 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-l9W5L4LD9qRo3rLBkgd2I/aDaj+ucib5UYg+X4RYg6c=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     click
     pyyaml
     pyfiglet
     asciimatics
-    mistune_2
+    mistune
   ];
 
   pythonImportsCheck = [ "present" ];

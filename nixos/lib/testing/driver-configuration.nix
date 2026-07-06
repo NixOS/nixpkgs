@@ -1,7 +1,7 @@
 {
   config,
   lib,
-  pkgs,
+  hostPkgs,
   ...
 }:
 let
@@ -75,9 +75,9 @@ in
         ) (lib.attrValues config.nodes ++ lib.attrValues config.containers)
       );
       global_timeout = config.globalTimeout;
-      test_script = pkgs.writeText "test-script" config.testScriptString;
+      test_script = hostPkgs.writeText "test-script" config.testScriptString;
       enable_ssh_backdoor = config.sshBackdoor.enable;
     };
-    driverConfigurationFile = pkgs.writers.writeJSON "driverConfiguration.json" config.driverConfiguration;
+    driverConfigurationFile = hostPkgs.writers.writeJSON "driverConfiguration.json" config.driverConfiguration;
   };
 }

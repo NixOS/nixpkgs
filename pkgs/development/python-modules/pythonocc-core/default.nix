@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
-    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tpaviot/pythonocc-core/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = [ ];

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
   hatchling,
@@ -55,14 +56,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "1.14.1";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = finalAttrs.version;
-    hash = "sha256-MwBcum9HX0emKPB0UpTCBTvZRnNP0YqU02YCEHZ4CeA=";
+    hash = "sha256-QrJM2oVoqos8GMhrn9E6i1m1O1guP/q+51b8NYtJA5Q=";
   };
 
   postPatch = ''
@@ -534,6 +535,9 @@ buildPythonPackage (finalAttrs: {
     "test_azure_agent_with_native_tool_calling"
     "test_azure_agent_kickoff_with_tools_mocked"
     "test_azure_streaming_emits_tool_call_events"
+
+    # Tests time dependent
+    "test_older_than"
   ];
 
   nativeCheckInputs = [
@@ -552,9 +556,16 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--override-ini=addopts="
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
+    ];
+  };
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

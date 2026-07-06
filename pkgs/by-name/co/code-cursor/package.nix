@@ -81,6 +81,12 @@ in
   };
 }).overrideAttrs
   (oldAttrs: {
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
+
     preFixup =
       (oldAttrs.preFixup or "")
       + lib.optionalString hostPlatform.isLinux ''

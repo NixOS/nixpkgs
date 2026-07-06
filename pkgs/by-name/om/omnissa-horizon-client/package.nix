@@ -8,11 +8,13 @@
   makeDesktopItem,
   makeWrapper,
   opensc,
+  liberation_ttf,
+  writeText,
   writeTextDir,
   configText ? "",
 }:
 let
-  version = "2512";
+  version = "2605";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -26,11 +28,42 @@ let
 
   mainProgram = "horizon-client";
 
+  # Horizon renders its broker/desktop launch-item (tile) labels with
+  # "DejaVu Sans", but fails to instantiate the font when fontconfig resolves it
+  # to a symlinked file -- which is exactly what nixpkgs' dejavu_fonts provides
+  # (it is a symlink tree into dejavu-fonts-minimal). The labels then render as
+  # blank boxes; the rest of the UI uses the GTK theme font and is unaffected.
+  # Other toolkits load the same symlinked font without issue, so this is
+  # specific to the client's font handling.
+  #
+  # The FHS sandbox bind-mounts the host's /etc/fonts, so the FHS environment's
+  # own fontconfig does not apply. Point the client at a config that keeps the
+  # host's fonts but maps "DejaVu Sans" onto a bundled, regular-file font
+  # (Liberation Sans). This is deterministic and independent of the host's
+  # font configuration.
+  fontconfigFile = writeText "omnissa-horizon-fontconfig.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+      <dir>${liberation_ttf}/share/fonts</dir>
+      <match target="pattern">
+        <test name="family" qual="any">
+          <string>DejaVu Sans</string>
+        </test>
+        <edit name="family" mode="assign" binding="same">
+          <string>Liberation Sans</string>
+        </edit>
+      </match>
+    </fontconfig>
+  '';
+
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
   wrapBinCommands = path: name: ''
     makeWrapper "$out/${path}/${name}" "$out/bin/${name}_wrapper" \
     --set GTK_THEME Adwaita \
+    --set FONTCONFIG_FILE "${fontconfigFile}" \
     --suffix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
     --suffix LD_LIBRARY_PATH : "$out/lib/omnissa/horizon/crtbora:$out/lib/omnissa"
   '';
@@ -39,8 +72,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART26FQ4_LIN_2512_TARBALL/Omnissa-Horizon-Client-Linux-2512-8.17.0-20187591429.tar.gz";
-      hash = "sha256-dYvP3W/tciqwazuVu4ib9gB98JUJykczd7sPCUih/Ew=";
+      url = "https://download3.omnissa.com/software/CART27FQ1_LIN_2603_TARBALL/Omnissa-Horizon-Client-Linux-2603-8.18.0-24120621798.tar.gz";
+      hash = "sha256:acd30479cec91ee693bbd685880fa3834f3678f8dd336511bb9d732f134f71d7";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''

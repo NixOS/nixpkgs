@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "olm";
-  version = "1.4.4";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "olm";
     tag = finalAttrs.version;
-    hash = "sha256-G2kYzYg4RUFHgW9z44PcQPK85FsD5SVBefpzBKIwUw0=";
+    hash = "sha256-4Kg/9X1TVhOZ/ogjiPV9BBr1Nls25ZJNf5HNVSSZEwg=";
   };
 
-  vendorHash = "sha256-D93SPwXAeoTLCbScjyH8AB9TJIF2b/UbLNMIQYi+B+c=";
+  vendorHash = "sha256-EJtcAmioC5EltsBeBa9aNDwKLR8rMQbQ2oHz+OVuZj0=";
 
   ldflags = [
     "-s"
@@ -23,6 +23,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tunneling client for Pangolin";

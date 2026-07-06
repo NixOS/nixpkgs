@@ -9,24 +9,24 @@
   fixup-yarn-lock,
   prefetch-yarn-deps,
   nixosTests,
-  nodejs_20,
-  nodejs-slim_20,
+  nodejs_24,
+  nodejs-slim_24,
   remarshal_0_17,
   nix-update-script,
   settings ? { },
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "3.3.0";
+  version = "4.3.11";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
     tag = finalAttrs.version;
-    hash = "sha256-Xc6zwnR0J+0DuTKNW3eHyJRvUgJgEeL3jA26wzNTMN0=";
+    hash = "sha256-BAzeS484udZ4Llgyx1pruKsgPOpI3i3XMTWy5cf2I1Q=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-EMns5J8rM4qOfrACoX6lttOXh/RUtZjaKtd+BpsS6Xs=";
+    hash = "sha256-PCJxn3qXOZBHVJifa6xTYu1quW6zelt162fIgyH9g8g=";
   };
 
   passthru = {
@@ -56,17 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     # but they've been overridden for the sake of consistency/in case future updates to dashy/node would cause issues with differing major versions
     (yarnConfigHook.override {
       fixup-yarn-lock = fixup-yarn-lock.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       prefetch-yarn-deps = prefetch-yarn-deps.override {
-        nodejs-slim = nodejs-slim_20;
+        nodejs-slim = nodejs-slim_24;
       };
       yarn = yarn.override {
-        nodejs = nodejs_20;
+        nodejs = nodejs_24;
       };
     })
     yarnBuildHook
-    nodejs_20
+    nodejs_24
     # For yaml conversion
     remarshal_0_17
   ];

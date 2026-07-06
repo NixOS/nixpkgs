@@ -12,6 +12,7 @@
   pkgsBuildBuild,
   rustc,
   cargo,
+  clippy,
   jq,
   libiconv,
   # Controls codegen parallelization for all crates.
@@ -155,14 +156,37 @@ crate_:
 lib.makeOverridable
   (
     # The rust compiler to use.
-    #
-    # Default: pkgs.rustc
     {
       rust ? rustc,
       # The cargo package to use for getting some metadata.
       #
       # Default: pkgs.cargo
       cargo ? cargo,
+      # Whether to compile the crate's library, binary, and test targets with
+      # `clippy-driver` instead of `rustc`. Build scripts (`build.rs`) keep
+      # plain `rustc` — they are typically auto-generated and clippy findings
+      # there are not actionable.
+      #
+      # `clippy-driver` wraps `rustc_driver` with extra lint passes and emits
+      # link-compatible `.rlib`/`.rmeta`, so dependency crates built with plain
+      # `rustc` are still usable; only the crate being linted needs this flag.
+      #
+      # Note that the default `capLints` of `"allow"` suppresses ALL lints,
+      # including clippy's. Set `capLints = "warn"` (or `"forbid"`) or supply
+      # a `lints` table — otherwise `useClippy` is a silent no-op. Lint flags
+      # such as `-D warnings` or `-W clippy::pedantic` go through the regular
+      # `extraRustcOpts` (clippy-driver forwards rustc flags unchanged).
+      #
+      # Example: true
+      # Default: false
+      useClippy,
+      # The clippy package providing `clippy-driver`. Only consulted when
+      # `useClippy = true`. Override this together with `rust` when using a
+      # toolchain (rust-overlay, Fenix) that bundles its own `clippy-driver`,
+      # so the sysroot matches.
+      #
+      # Default: pkgs.clippy
+      clippy ? clippy,
       # Whether to build a release version (`true`) or a debug
       # version (`false`). Debug versions are faster to build
       # but might be much slower at runtime.
@@ -198,6 +222,13 @@ lib.makeOverridable
       # Rust build dependencies, i.e. other libraries that were built
       # with buildRustCrate and are used by a build script.
       buildDependencies,
+      # Rust dev-dependencies, i.e. other libraries that were built
+      # with buildRustCrate and are linked only when `buildTests = true`.
+      # Mirrors Cargo's `[dev-dependencies]`: ignored for the regular
+      # lib/bin build, appended to `dependencies` for the test build.
+      #
+      # Default: []
+      devDependencies,
       # Specify the "extern" name of a library if it differs from the library target.
       # See above for an extended explanation.
       #
@@ -255,6 +286,12 @@ lib.makeOverridable
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
       extraRustcOptsForBuildRs,
+      # Extra rustc options for proc-macro crates, replacing
+      # `extraRustcOpts`. Lets callers keep instrumentation flags
+      # (sanitizers, coverage) off host dylibs, mirroring Cargo's
+      # behaviour of not applying RUSTFLAGS to host artifacts.
+      # Default: null (inherit `extraRustcOpts`)
+      extraRustcOptsForProcMacro,
       # The lint level cap passed to rustc via `--cap-lints`.
       # See <https://doc.rust-lang.org/rustc/lints/levels.html#capping-lints>.
       #
@@ -323,8 +360,10 @@ lib.makeOverridable
       crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: { }) crateOverrides crate_);
       dependencies_ = dependencies;
       buildDependencies_ = buildDependencies;
+      devDependencies_ = devDependencies;
       processedAttrs = [
         "src"
+        "propagatedBuildInputs"
         "nativeBuildInputs"
         "buildInputs"
         "crateBin"
@@ -333,6 +372,7 @@ lib.makeOverridable
         "libPath"
         "buildDependencies"
         "dependencies"
+        "devDependencies"
         "features"
         "crateRenames"
         "crateName"
@@ -352,7 +392,21 @@ lib.makeOverridable
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
+      extraRustcOptsForProcMacro_ = extraRustcOptsForProcMacro;
       buildTests_ = buildTests;
+      procMacro = lib.attrByPath [ "procMacro" ] false crate;
+      # For proc-macros, prefer the *ForProcMacro variant at each level
+      # (crate attr, override arg) and fall back to extraRustcOpts.
+      crateExtraRustcOpts =
+        if procMacro && crate ? extraRustcOptsForProcMacro then
+          crate.extraRustcOptsForProcMacro
+        else
+          crate.extraRustcOpts or [ ];
+      overrideExtraRustcOpts =
+        if procMacro && extraRustcOptsForProcMacro_ != null then
+          extraRustcOptsForProcMacro_
+        else
+          extraRustcOpts_;
       resolvedLints = crate.lints or lints;
       lintFlags = lintsToRustcFlags resolvedLints;
       resolvedCapLints =
@@ -411,6 +465,7 @@ lib.makeOverridable
           cargo
           jq
         ]
+        ++ lib.optional useClippy clippy
         ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ])
@@ -418,14 +473,28 @@ lib.makeOverridable
         buildInputs =
           lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
           ++ (crate.buildInputs or [ ])
-          ++ buildInputs_;
-        dependencies = map lib.getLib dependencies_;
+          ++ buildInputs_
+          ++ completePropagatedBuildInputs;
+        # Dev-dependencies are only linked when building tests, mirroring
+        # Cargo. When buildTests is false this is a no-op, so the metadata
+        # hash and store path of normal lib/bin builds are unchanged.
+        dependencies = map lib.getLib (dependencies_ ++ lib.optionals buildTests_ devDependencies_);
         buildDependencies = map lib.getLib buildDependencies_;
 
         completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
         completeBuildDeps = lib.unique (
           buildDependencies
           ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
+        );
+
+        # Propagated native build inputs from this crate and all transitive Rust
+        # dependencies. Analogous to completeDeps but for native library deps:
+        # a crate can declare `propagatedBuildInputs` in its override and they
+        # will automatically be added to the buildInputs of every crate that
+        # depends on it, without having to repeat them up the dependency tree.
+        completePropagatedBuildInputs = lib.unique (
+          (crate.propagatedBuildInputs or [ ])
+          ++ lib.concatMap (dep: dep.completePropagatedBuildInputs or [ ]) dependencies
         );
 
         # Create a list of features that are enabled by the crate itself and
@@ -474,7 +543,7 @@ lib.makeOverridable
         crateRustVersion = crate.rust-version or "";
         crateVersion = crate.version;
         crateType =
-          if lib.attrByPath [ "procMacro" ] false crate then
+          if procMacro then
             [ "proc-macro" ]
           else if lib.attrByPath [ "plugin" ] false crate then
             [ "dylib" ]
@@ -485,8 +554,8 @@ lib.makeOverridable
         edition = crate.edition or null;
         codegenUnits = if crate ? codegenUnits then crate.codegenUnits else defaultCodegenUnits;
         extraRustcOpts =
-          lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
-          ++ extraRustcOpts_
+          crateExtraRustcOpts
+          ++ overrideExtraRustcOpts
           ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
         extraRustcOptsForBuildRs =
@@ -531,6 +600,7 @@ lib.makeOverridable
         buildPhase = buildCrate {
           inherit
             crateName
+            version
             dependencies
             crateFeatures
             crateRenames
@@ -547,6 +617,7 @@ lib.makeOverridable
             buildTests
             codegenUnits
             capLints
+            useClippy
             ;
         };
         dontStrip = !release;
@@ -582,10 +653,13 @@ lib.makeOverridable
   {
     rust = crate_.rust or rustc;
     cargo = crate_.cargo or cargo;
+    useClippy = crate_.useClippy or false;
+    clippy = crate_.clippy or clippy;
     release = crate_.release or true;
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
+    extraRustcOptsForProcMacro = null;
     capLints = null;
     lints = { };
     features = [ ];
@@ -605,6 +679,7 @@ lib.makeOverridable
     postInstall = crate_.postInstall or "";
     dependencies = crate_.dependencies or [ ];
     buildDependencies = crate_.buildDependencies or [ ];
+    devDependencies = crate_.devDependencies or [ ];
     crateRenames = crate_.crateRenames or { };
     buildTests = crate_.buildTests or false;
   }

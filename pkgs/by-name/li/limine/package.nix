@@ -1,5 +1,6 @@
 # Derivation containing the Limine host tool and the compiled bootloader
 {
+  fetchpatch,
   fetchurl,
   lib,
   llvmPackages,
@@ -47,14 +48,14 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "11.4.0";
+  version = "12.4.0";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2ZEZgQPznh7BvE5OLxno/4aH49tzME3ffuOENKQ8IaA=";
+    hash = "sha256-fDTQuY+WYhyJl5AqP4ZoJ1T7WXgCca35pXHAv/8CjlA=";
   };
 
   enableParallelBuilding = true;
@@ -103,13 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Caution. Some submodules have different licenses.
     license = with lib.licenses; [
       asl20 # cc-runtime
-      bsd0 # freestanding-headers, freestanding-toolchain
+      bsd0 # freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
       bsd2 # limine, flanterm, libfdt, PicoEFI
       bsd2Patent # PicoEFI
       bsd3 # PicoEFI
       bsdAxisNoDisclaimerUnmodified # PicoEFI
       mit # PicoEFI, stb_image
-      zlib # tinf
     ];
     maintainers = with lib.maintainers; [
       johnrtitor

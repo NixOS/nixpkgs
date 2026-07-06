@@ -123,14 +123,14 @@ perlPackages.buildPerlPackage rec {
   ]);
 
   checkPhase = ''
-    # Temporarily disable a test failing because of a behavioural change in ImageMagick7
-    # t/04_Page.t ................................... 1/12
-    #   Failed test 'undefined'
-    #   at t/04_Page.t line 114.
-    #          got: '72'
-    #     expected: '300'
-    # Looks like you failed 1 test of 12.
+    # Skip a failing test, due to a change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/439/
     rm t/04_Page.t
+
+    # Skip a failing test, due to a breaking change in ImageMagick:
+    # https://sourceforge.net/p/gscan2pdf/bugs/442/
+    # https://github.com/ImageMagick/ImageMagick/issues/8714
+    rm t/113_save_pdf_with_downsample.t
 
     export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \

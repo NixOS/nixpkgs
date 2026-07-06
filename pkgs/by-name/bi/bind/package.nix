@@ -9,6 +9,7 @@
   libidn2,
   libtool,
   libxml2,
+  json_c,
   openssl,
   liburcu,
   libuv,
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.22";
+  version = "9.20.24";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
-    hash = "sha256-y6kv9jG5SWVfR1/ktUKQ9oYP0AcNOZ8iefZDfA04PsY=";
+    hash = "sha256-mJ/vH8iOpZ0EzYb4VNylpGFqIKmWi83ePBo2aKs2vgg=";
   };
 
   outputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libtool
     libxml2
+    json_c
     openssl
     liburcu
     libuv

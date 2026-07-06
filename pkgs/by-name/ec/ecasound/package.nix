@@ -18,9 +18,6 @@
 }:
 
 # TODO: fix python. See configure log.
-# fix -Dnullptr=0 cludge below.
-# The error is
-# /nix/store/*-lilv-0.24.10/include/lilv-0/lilv/lilvmm.hpp:272:53: error: 'nullptr' was not declared in this scope
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ecasound";
@@ -64,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   env.CXXFLAGS = "-std=c++11";
   configureFlags = [
     "--enable-liblilv"
-    "--with-extra-cppflags=-Dnullptr=0"
   ];
 
   postPatch = ''

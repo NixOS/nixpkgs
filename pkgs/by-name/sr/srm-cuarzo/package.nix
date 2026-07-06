@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CuarzoSoftware/SRM";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Only;
   };
 })

@@ -11,7 +11,7 @@
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving_cmdliner";
   version = "0.6.1";
 
@@ -19,8 +19,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "hammerlab";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ppx_deriving_cmdliner";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
   };
 
@@ -54,4 +54,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.romildo ];
     broken = lib.versionAtLeast ppxlib.version "0.36";
   };
-}
+})

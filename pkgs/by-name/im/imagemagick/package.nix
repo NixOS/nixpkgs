@@ -41,6 +41,8 @@
   pango,
   libtiffSupport ? true,
   libtiff,
+  libultrahdrSupport ? lib.meta.availableOn stdenv.hostPlatform libultrahdr,
+  libultrahdr,
   libxml2Support ? true,
   libxml2,
   openjpegSupport ? !stdenv.hostPlatform.isMinGW,
@@ -59,6 +61,7 @@
   nixos-icons,
   perlPackages,
   python3,
+  nix-update-script,
 }:
 
 assert libXtSupport -> libX11Support;
@@ -86,13 +89,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-17";
+  version = "7.1.2-24";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-niqHdNrFMwIr+9560vceRn0LyJPi6DIp6qCn5GlcVjY=";
+    hash = "sha256-oSH0dsQ3cuFNYJIIr6LHbv82FbFxxcmkjQ5csTNsYCA=";
   };
 
   outputs = [
@@ -115,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature librsvgSupport "pango")
     (lib.withFeature liblqr1Support "lqr")
     (lib.withFeature libjxlSupport "jxl")
+    (lib.withFeature libultrahdrSupport "uhdr")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
     (lib.withFeature fftwSupport "fftw")
@@ -141,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional libraqmSupport libraqm
   ++ lib.optional librawSupport libraw
   ++ lib.optional libtiffSupport libtiff
+  ++ lib.optional libultrahdrSupport libultrahdr
   ++ lib.optional libxml2Support libxml2
   ++ lib.optional libheifSupport libheif
   ++ lib.optional djvulibreSupport djvulibre
@@ -199,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
       version = lib.head (lib.splitString "-" finalAttrs.version);
     };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "http://www.imagemagick.org/";

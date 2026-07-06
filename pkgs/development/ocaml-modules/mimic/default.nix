@@ -12,14 +12,14 @@
   bigstringaf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mimic";
   version = "0.0.9";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/mimic/releases/download/${version}/mimic-${version}.tbz";
+    url = "https://github.com/dinosaure/mimic/releases/download/${finalAttrs.version}/mimic-${finalAttrs.version}.tbz";
     hash = "sha256-lU3xzrVIqSKnhUQIhaXRamr39zXWw3DtNdM5EUtp4p8=";
   };
 
@@ -44,4 +44,4 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/ocaml-git";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

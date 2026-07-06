@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "volatility3";
-  version = "2.27.0";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TtkLxzZq7tmLDpCl1UpOqdCWM7t+dgiUmQMsIg3vUGs=";
+    hash = "sha256-QO3rwGlVRBWEjReIGRDTK0LPVFN+4omkvxITaFC+5e0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

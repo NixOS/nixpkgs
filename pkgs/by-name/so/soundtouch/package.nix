@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soundtouch";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromCodeberg {
     owner = "soundtouch";
     repo = "soundtouch";
     rev = finalAttrs.version;
-    hash = "sha256-7JUBAFURKtPCZrcKqL1rOLdsYMd7kGe7wY0JUl2XPvw=";
+    hash = "sha256-srSeFykj6jxAO2OaFCgA8J7SbD2REOKtRp3V17bCFQI=";
   };
 
   nativeBuildInputs = [

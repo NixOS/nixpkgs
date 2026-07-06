@@ -908,6 +908,7 @@ class QemuMachine(BaseMachine):
 
         return (rc, output.decode(errors="replace"))
 
+    @warnings.deprecated("Use the SSH backdoor instead")
     def shell_interact(self, address: str | None = None) -> None:
         """
         Allows you to directly interact with the guest shell. This should
@@ -1031,6 +1032,7 @@ class QemuMachine(BaseMachine):
             As soon as we read some data from the socket here, we assume that
             our root shell is operational.
             """
+            assert self.shell
             (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
             return bool(ready)
 
@@ -1043,12 +1045,16 @@ class QemuMachine(BaseMachine):
             assert self.shell
 
             tic = time.time()
-            # TODO: do we want to bail after a set number of attempts?
-            while not shell_ready(timeout_secs=30):
+
+            for _ in range(10):
+                if shell_ready(timeout_secs=30):
+                    break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
                     "  To debug, enter the VM and run 'systemctl status backdoor.service'."
                 )
+            else:
+                raise RuntimeError("Shell did not start in time")
 
             while True:
                 chunk = self.shell.recv(1024)
@@ -1445,6 +1451,7 @@ class NspawnMachine(BaseMachine):
 
     machine_sock_path: Path
     machine_sock: socket.socket | None
+    notify_thread: threading.Thread | None
 
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
@@ -1475,7 +1482,12 @@ class NspawnMachine(BaseMachine):
 
         self.start_command = start_command
         self.process = None
-        self.pid = None
+        self.notify_thread = None
+        # State maintained by the notify-socket drainer thread (see
+        # `_drain_notify_socket`). Guarded by `_notify_lock`.
+        self._notify_lock = threading.Lock()
+        self._notify_ready = False
+        self._notify_leader_pid: int | None = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
@@ -1486,56 +1498,99 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
-        if self.pid is None:
+        if self.process is None:
             return
 
         if self.machine_sock:
             self.machine_sock.close()
 
-        self.logger.info(f"kill NspawnMachine (pid {self.pid})")
-        assert self.process is not None
+        self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
+        # Wait for the wrapper to finish its context-manager cleanups
+        # (veth/bridge/netns teardown) before returning, so the driver's
+        # subsequent vlan teardown does not race against it.
+        try:
+            self.process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self.logger.error(
+                f"NspawnMachine {self.name} (pid {self.process.pid}) did not exit after SIGTERM; sending SIGKILL"
+            )
+            self.process.kill()
+            self.process.wait()
         self.process = None
 
     def is_up(self) -> bool:
         return self.process is not None
 
-    def _poll_socket(self) -> tuple[bool, int | None]:
-        """Non-blocking check of container status via socket.
-        Returns (is_ready, leader_pid).
+    def _drain_notify_socket(self) -> None:
+        """Continuously drain the container's `sd_notify` socket (NOTIFY_SOCKET)
+        for the whole lifetime of the container, recording readiness and the
+        leader PID as they arrive.
+
+        Draining must not stop after boot: the container's PID 1 re-sends
+        `READY=1` on every `systemctl daemon-reexec` (the same Manager.Reexecute
+        that switch-to-configuration issues on a systemd change). If nothing
+        reads the socket, its receive buffer fills and PID 1 blocks in
+        `sendmsg()` to NOTIFY_SOCKET while re-executing -- it never finishes
+        re-initializing, and every later `systemctl` call inside the container
+        hangs or fails with `Transport endpoint is not connected`.
         """
         assert self.machine_sock is not None
-        ready = False
-        leader_pid = None
-        try:
-            data, _ = self.machine_sock.recvfrom(4096)
-            msg = data.decode()
-            for line in msg.splitlines():
+        sock = self.machine_sock
+        proc = self.process
+        assert proc is not None
+        # Bound the thread to the container's lifetime: on
+        # `wait_for_shutdown()` only non-None `proc.poll()` ends the loop.
+        # On exit of PID 1, any datagrams still queued are stale, so drop them.
+        while proc.poll() is None:
+            try:
+                # Block (with a timeout so we notice the container exiting)
+                # rather than busy-poll; we just need to keep the buffer empty.
+                sock.settimeout(0.5)
+                data, _ = sock.recvfrom(4096)
+            except (TimeoutError, BlockingIOError):
+                continue
+            except OSError:
+                break
+            ready = False
+            leader_pid = None
+            for line in data.decode(errors="replace").splitlines():
                 if line == "READY=1":
                     ready = True
                 if line.startswith("X_NSPAWN_LEADER_PID="):
                     leader_pid = int(line.split("=")[1])
-        except OSError:
-            pass
-        return ready, leader_pid
+            if ready or leader_pid is not None:
+                with self._notify_lock:
+                    if ready:
+                        self._notify_ready = True
+                    if leader_pid is not None:
+                        self._notify_leader_pid = leader_pid
 
     @cached_property
     def get_systemd_process(self) -> int:
-        """Block until startup is complete and return the PID of the container's systemd process."""
-        assert self.process is not None
+        """Block until startup is complete and return the PID of the container's systemd process.
 
-        container_pid: int | None = None
-        is_ready = False
+        Readiness and the leader PID are reported over NOTIFY_SOCKET, which is
+        drained by `_drain_notify_socket` (started in `start()`); we just wait
+        for that thread to record both.
+        """
+        assert self.process is not None
 
         start_time = time.monotonic()
         last_warning = start_time
         delay = 0.01
         max_delay = 0.5
 
-        while not is_ready or container_pid is None:
-            # Poll the socket until we have the container leader PID
+        # Poll the socket until we have the container leader PID
+        while True:
             if self.process.poll() is not None:
                 raise MachineError("systemd-nspawn process exited unexpectedly")
+
+            with self._notify_lock:
+                is_ready = self._notify_ready
+                container_pid = self._notify_leader_pid
+            if is_ready and container_pid is not None:
+                return container_pid
 
             # Print periodic warnings every 10s so the user knows we aren't deadlocked
             now = time.monotonic()
@@ -1545,18 +1600,8 @@ class NspawnMachine(BaseMachine):
                 )
                 last_warning = now
 
-            # Poll and update our local tracking variables
-            ready_now, pid_now = self._poll_socket()
-            if ready_now:
-                is_ready = True
-            if pid_now:
-                container_pid = pid_now
-
-            if not (is_ready and container_pid):
-                time.sleep(delay)
-                delay = min(delay * 2, max_delay)
-
-        return container_pid
+            time.sleep(delay)
+            delay = min(delay * 2, max_delay)
 
     def _execute(
         self,
@@ -1577,7 +1622,7 @@ class NspawnMachine(BaseMachine):
         # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
         # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
         # will continue to use the original /etc/profile.
-        command = f"set -eo pipefail; source /etc/profile; set -u; {command}"
+        command = f"set -eo pipefail; USER=root HOME=/root source /etc/profile; set -u; {command}"
 
         cp = subprocess.run(
             [
@@ -1670,10 +1715,10 @@ class NspawnMachine(BaseMachine):
 
         self.machine_sock = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_DGRAM)
         self.machine_sock.bind(str(self.machine_sock_path))
-        self.machine_sock.setblocking(False)
 
         self.process = subprocess.Popen(
             [self.start_command],
+            cwd=self.state_dir,
             env={
                 "RUN_NSPAWN_ROOT_DIR": str(self.state_dir),
                 "RUN_NSPAWN_SHARED_DIR": str(self.shared_dir),
@@ -1683,9 +1728,14 @@ class NspawnMachine(BaseMachine):
             stdout=subprocess.PIPE,
         )
 
-        self.pid = self.process.pid
+        self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
-        self.log(f"systemd-nspawn running (pid {self.pid})")
+        # Keep the notify socket drained for the container's whole lifetime, so
+        # PID 1 never blocks re-sending `READY=1` on `daemon-reexec`.
+        self.notify_thread = threading.Thread(
+            target=self._drain_notify_socket, daemon=True
+        )
+        self.notify_thread.start()
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
@@ -1710,3 +1760,18 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+
+
+class MachineDeprecationWrapper:
+    def __init__(self, msg: str, machine: QemuMachine | NspawnMachine):
+        self.msg = msg
+        self.machine = machine
+
+    def __getattribute__(self, name: str):
+        if name in ("msg", "machine"):
+            return object.__getattribute__(self, name)
+        typename = self.machine.__class__.__name__
+        warnings.warn(
+            f"invoking '{typename}.{name}' is deprecated: {self.msg}",
+        )
+        return self.machine.__getattribute__(name)

@@ -11,16 +11,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "crush";
-  version = "0.56.0";
+  version = "0.81.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JtqgEI09kRg/uW/2fxMQL5+cmODO2y6aW1e5OXTH2LY=";
+    hash = "sha256-FOvkCQxDW1dipzIzgQz2uvHIv6bm/TVV1WwhrvmBDWg=";
   };
 
-  vendorHash = "sha256-n5pqIxN2TwiEWd3ZzFHqYSIKYPsMYAip3kDRx4ajuck=";
+  vendorHash = "sha256-4gHvyEqiFhEvZ90lJbXeI/1fMMo6L19P/PD5Eu5YUmI=";
 
   ldflags = [
     "-s"
@@ -39,6 +39,7 @@ buildGo126Module (finalAttrs: {
         "TestOpenAIClientStreamChoices"
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
+        "TestDispatch_BinaryPassthroughExecutes"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -57,7 +58,7 @@ buildGo126Module (finalAttrs: {
       --zsh <($out/bin/crush completion zsh)
   '';
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";

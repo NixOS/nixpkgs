@@ -77,9 +77,10 @@ rec {
   gnome47Extensions = mapUuidNames (produceExtensionsList "47");
   gnome48Extensions = mapUuidNames (produceExtensionsList "48");
   gnome49Extensions = mapUuidNames (produceExtensionsList "49");
+  gnome50Extensions = mapUuidNames (produceExtensionsList "50");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome47Extensions // gnome48Extensions // gnome49Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome48Extensions // gnome49Extensions // gnome50Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions

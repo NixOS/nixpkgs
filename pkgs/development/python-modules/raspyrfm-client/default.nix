@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/markusressel/raspyrfm-client";
     changelog = "https://github.com/markusressel/raspyrfm-client/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
+    license = lib.licenses.gpl3Plus;
   };
 }

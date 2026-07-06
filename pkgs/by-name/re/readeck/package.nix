@@ -6,17 +6,18 @@
   nodejs_22,
   npmHooks,
   python3,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.21.5";
+  version = "0.22.3";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-9M9Bgl1CJ35x/Onlk5xUNCFkZKW40efF6qMOM+2/HR0=";
+    hash = "sha256-F4aj+vgCmwCnSBNa72kgCINNtmS6Zk1oeILZVXF5G+Y=";
   };
 
   nativeBuildInputs = [
@@ -61,10 +62,12 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-znUKRaUdx6GXD2YL6hs0iveaAAHQ8H9n4NHZFi331+g=";
+    hash = "sha256-ysDEkoL0e84udmCmvfTMA5lWS08aSyyTuCq+/8s3FMw=";
   };
 
-  vendorHash = "sha256-2MB7v5oG/LcEKtgbFNxPXSI8TljpbqYUrI7pvu7m+e8=";
+  vendorHash = "sha256-cfd52pO2uUT5fdqCXM2rreXztb63FzUWv0s5/wbKXDw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";

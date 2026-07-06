@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -48,7 +47,6 @@
   llvmPackages,
 
   # dependencies
-  astunparse,
   binutils,
   expecttest,
   filelock,
@@ -229,6 +227,9 @@ let
         rocm-smi
         clr.icd
         hipify
+        rocprofiler-sdk
+        rocprofiler-sdk.dev
+        amdsmi
       ]
       ++ lib.optionals (!vendorComposableKernel) [
         composable_kernel
@@ -282,8 +283,9 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.11.0";
+  version = "2.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out" # output standard python package
@@ -306,18 +308,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
-
-    # The GCC version upperbounds were wrong for cuda 12.8 and 12.9, which led downstream builds to
-    # illegitimately fail with:
-    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
-    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
-    #   (>=6.0.0, <14.0).
-    # TODO: remove at the next release
-    (fetchpatch {
-      name = "allow-gcc-14-with-cuda-12.8-9";
-      url = "https://github.com/pytorch/pytorch/commit/39565a7dcf8f93ea22cedeaa20088b24ff6d2634.patch";
-      hash = "sha256-Au5fVbs7i33d9c4Xj8koiBP7lGnsTGTaX4VlE2gAfy8=";
-    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -328,6 +318,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # with the Nix store, which fails. Simply remove this step to get
     # rpaths that point to the Nix store.
     ./disable-cmake-mkl-rpath.patch
+  ]
+  ++ lib.optionals rocmSupport [
+    # [ROCm] Make AOTriton bundling optional via BUILD_AOTRITON_INTO_WHEEL flag
+    # https://github.com/pytorch/pytorch/pull/182030
+    ./no-bundle-aotriton.patch
   ];
 
   postPatch = ''
@@ -384,19 +379,21 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
   ''
-  # Detection of NCCL version doesn't work particularly well when using the static binary.
-  + lib.optionalString cudaSupport ''
-    substituteInPlace cmake/Modules/FindNCCL.cmake \
-      --replace-fail \
-        'message(FATAL_ERROR "Found NCCL header version and library version' \
-        'message(WARNING "Found NCCL header version and library version'
-  ''
   # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
   # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
   # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
   # until https://github.com/pytorch/pytorch/issues/76082 is addressed
   + lib.optionalString cudaSupport ''
     rm cmake/Modules/FindCUDAToolkit.cmake
+  ''
+  # Otherwise, torch compile will fail at runtime if openmp is not available
+  #   torch._inductor.exc.InductorError: CppCompileError: C++ compile error
+  #   fatal error: 'omp.h' file not found
+  + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace torch/csrc/inductor/cpp_prefix.h \
+      --replace-fail \
+        "#include <omp.h>" \
+        '#include "${lib.getInclude llvmPackages.openmp}/include/omp.h"'
   '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
@@ -495,6 +492,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
+    # Don't copy AOTriton to output, load from AOTriton package
+    BUILD_AOTRITON_INTO_WHEEL = false;
     # Broken HIP flag setup, fails to compile due to not finding rocthrust
     # Only supports gfx942 so let's turn it off for now
     USE_FBGEMM_GENAI = setBool false;
@@ -503,9 +502,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
     # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
-    (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaMajorMinorVersion)
   ]
   ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CUDAToolkit_VERSION" cudaPackages.cudaMajorMinorVersion)
     # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
     # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
     (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
@@ -560,7 +559,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # <thrust/*>
+      cccl # <thrust/*>
       cuda_cudart # cuda_runtime.h and libraries
       cuda_cupti # For kineto
       cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
@@ -602,14 +601,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     "sympy"
   ];
   dependencies = [
-    astunparse
     expecttest
     filelock
     fsspec
     hypothesis
     jinja2
     networkx
-    ninja
     packaging
     psutil
     pyyaml

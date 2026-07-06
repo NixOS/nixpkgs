@@ -4,7 +4,6 @@
   fetchFromGitHub,
 
   pnpm_10,
-  pnpm ? pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeBinaryWrapper,
@@ -12,16 +11,18 @@
 
   nodejs,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store";
-  version = "2.21.98";
+  version = "2.22.26";
 
   src = fetchFromGitHub {
     owner = "sub-store-org";
     repo = "Sub-Store";
     tag = finalAttrs.version;
-    hash = "sha256-r2zlOZQ6pPxm/zjtaJkMMaG3vM/05xvS+hTDg4bydo8=";
+    hash = "sha256-EDYPDLB4oKAcArim9xIeyH4ijrRa4tTa2elfDaOpBfk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";

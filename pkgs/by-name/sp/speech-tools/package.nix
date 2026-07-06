@@ -5,6 +5,7 @@
   fetchpatch,
   ncurses,
   alsa-lib,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,10 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/festvox/speech_tools/commit/06141f69d21bf507a9becb5405265dc362edb0df.patch";
       hash = "sha256-tRestCBuRhak+2ccsB6mvDxGm/TIYX4eZ3oppCOEP9s=";
     })
+    # Fix C23 compatibility: https://github.com/festvox/speech_tools/pull/58
+    ./fix-c23.patch
+    # Fix "unbonded variable" error in some scripts
+    ./fix-unbonded-variable.patch
+    # Fix "ISO C++17 does not allow 'register' storage class specifier
+    ./remove-register-specifier.patch
   ];
 
   buildInputs = [
     ncurses
+    perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -48,11 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     # c99 makes isnan valid for float and double
     substituteInPlace include/EST_math.h \
       --replace '__isnanf(X)' 'isnan(X)'
+
+    # fix script referenced paths
+    substituteInPlace config/rules/script_process.awk \
+      --replace-fail "topdir" "\"$out\"" \
+      --replace-fail "est" "\"$out\""
   '';
 
   installPhase = ''
-    mkdir -p "$out"/{bin,lib}
-    for d in bin lib; do
+    mkdir -p "$out"/{bin,include,lib}
+    for d in bin include lib; do
       for i in ./$d/*; do
         test "$(basename "$i")" = "Makefile" ||
           cp -r "$(readlink -f $i)" "$out/$d"

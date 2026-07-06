@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
   beartype,
   invoke,
   numpy,
@@ -10,15 +11,17 @@
   feedparser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nptyping";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "nptyping";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
 
@@ -26,7 +29,9 @@ buildPythonPackage rec {
     ./numpy-2.0-compat.patch
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     beartype
@@ -63,11 +68,11 @@ buildPythonPackage rec {
   meta = {
     description = "Type hints for numpy";
     homepage = "https://github.com/ramonhagenaars/nptyping";
-    changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${finalAttrs.version}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bcdarwin
       pandapip1
     ];
   };
-}
+})

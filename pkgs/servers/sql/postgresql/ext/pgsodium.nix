@@ -10,13 +10,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgsodium";
-  version = "3.1.9";
+  version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "michelp";
     repo = "pgsodium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y8xL3PxF1GQV1JIgolMI1e8oGcUvWAgrPv84om7wKP8=";
+    hash = "sha256-2Hv4rc7Q0jdd112KRm7SsdfAzFDSC8LYIDAObuA7yUg=";
   };
 
   buildInputs = [

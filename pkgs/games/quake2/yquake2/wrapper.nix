@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       --add-flags "+set game ${game.id}"
   '') games
   + ''
-    install -Dm644 ${yquake2}/share/pixmaps/yamagi-quake2.png $out/share/pixmaps/yamagi-quake2.png;
+    install -Dm644 ${yquake2}/share/icons/hicolor/512x512/apps/yamagi-quake2.png $out/share/icons/hicolor/512x512/apps/yamagi-quake2.png;
     runHook postInstall
   '';
 

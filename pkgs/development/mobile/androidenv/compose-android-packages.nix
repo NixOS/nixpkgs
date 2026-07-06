@@ -798,7 +798,7 @@ lib.recurseIntoAttrs rec {
             done
           ''}
 
-          find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
+          find "$ANDROID_HOME/${cmdline-tools-package.path}/bin" -type f -executable | while read i; do
               ln -s $i $out/bin
           done
 

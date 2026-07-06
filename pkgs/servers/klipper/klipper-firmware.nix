@@ -20,11 +20,16 @@ args@{
 # are used by flash scripts
 # find those with `rg '\[\"lib'` inside of klipper repo
 let
+  needsBossac =
+    let
+      lines = lib.strings.splitString "\n" (builtins.readFile firmwareConfig);
+    in
+    builtins.any (line: builtins.match "[^#\r\n]*CONFIG_MACH_ATSAMD?=y.*" line != null) lines;
   flashBinaries = [
-    "lib/bossac/bin/bossac"
     "lib/hidflash/hid-flash"
     "lib/rp2040_flash/rp2040_flash"
-  ];
+  ]
+  ++ lib.optional needsBossac "lib/bossac/bin/bossac";
 in
 stdenv.mkDerivation {
   pname = "klipper-firmware-${mcu}";
@@ -41,8 +46,8 @@ stdenv.mkDerivation {
     avrdude
     stm32flash
     pkg-config
-    wxwidgets_3_2 # Required for bossac
-  ];
+  ]
+  ++ lib.optional needsBossac wxwidgets_3_2;
 
   configurePhase = ''
     cp ${firmwareConfig} ./.config
@@ -72,6 +77,7 @@ stdenv.mkDerivation {
     cp ./.config $out/config
     cp out/klipper.bin $out/ || true
     cp out/klipper.elf $out/ || true
+    cp out/klipper.elf.hex $out/ || true
     cp out/klipper.uf2 $out/ || true
 
     mkdir -p $out/lib/
@@ -95,7 +101,11 @@ stdenv.mkDerivation {
 
   passthru = {
     makeFlasher =
-      { flashDevice }:
+      {
+        flashDevice ? null,
+        canbusNetwork ? null,
+        canbusDevice ? null,
+      }:
       klipper-flash.override {
         klipper-firmware = klipper-firmware.override args;
         inherit
@@ -103,6 +113,8 @@ stdenv.mkDerivation {
           firmwareConfig
           mcu
           flashDevice
+          canbusNetwork
+          canbusDevice
           ;
       };
   };

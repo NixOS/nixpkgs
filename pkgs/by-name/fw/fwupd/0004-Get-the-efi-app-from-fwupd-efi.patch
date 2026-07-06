@@ -3,15 +3,16 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Mon, 28 Oct 2024 12:08:49 +0100
 Subject: [PATCH] Get the efi app from fwupd-efi
 
+EFI capsule is located in fwupd-efi now.
 ---
  meson.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/meson.build b/meson.build
-index f1f51e841..aaefe55d9 100644
+index 917770b38abb86056d6c42fa9c99dedf27ebe999..f52f3ec12dd9def0a68ea1645f7d508acbb731b9 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -646,7 +646,7 @@ endif
+@@ -651,7 +651,7 @@ endif
  
  # EFI
  if build_standalone

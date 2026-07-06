@@ -75,46 +75,11 @@ install_man(
 )
 
 executable(
-    'cfilutil',
-    dependencies : [ corecrypto ],
-    install : true,
-    sources : [
-        'cfilutil/cfilstat.c',
-        'cfilutil/cfilutil.c',
-    ],
-)
-install_man('cfilutil/cfilutil.1')
-
-executable(
     'dnctl',
     install : true,
     sources : [ 'dnctl/dnctl.c' ],
 )
 install_man('dnctl/dnctl.8')
-
-executable(
-    'ecnprobe',
-    dependencies : [ libnetwork_cmds, libpcap ],
-    install : true,
-    sources : [
-        'ecnprobe/capture.c',
-        'ecnprobe/ecn.c',
-        'ecnprobe/ecn_probe.c',
-        'ecnprobe/gmt2local.c',
-        'ecnprobe/history.c',
-        'ecnprobe/inet.c',
-        'ecnprobe/session.c',
-        'ecnprobe/support.c',
-    ],
-)
-install_man('ecnprobe/ecnprobe.1')
-
-executable(
-    'frame_delay',
-    install : true,
-    sources : [ 'frame_delay/frame_delay.c' ],
-)
-install_man('frame_delay/frame_delay.8')
 
 executable(
     'ifconfig',
@@ -140,13 +105,6 @@ executable(
 install_man('ifconfig.tproj/ifconfig.8')
 
 executable(
-    'ip6addrctl',
-    install : true,
-    sources : [ 'ip6addrctl.tproj/ip6addrctl.c' ],
-)
-install_man('ip6addrctl.tproj/ip6addrctl.8')
-
-executable(
     'kdumpd',
     dependencies : [ libnetwork_cmds ],
     install : true,
@@ -156,34 +114,6 @@ executable(
     ],
 )
 install_man('kdumpd.tproj/kdumpd.8')
-
-executable(
-    'mnc',
-    install : true,
-    sources : [
-        'mnc.tproj/mnc_main.c',
-        'mnc.tproj/mnc_multicast.c',
-        'mnc.tproj/mnc_opts.c',
-    ],
-)
-install_man('mnc.tproj/mnc.1')
-
-executable(
-    'mptcp_client',
-    install : true,
-    sources : [
-        'mptcp_client/conn_lib.c',
-        'mptcp_client/mptcp_client.c',
-    ],
-)
-install_man('mptcp_client/mptcp_client.1')
-
-executable(
-    'mtest',
-    install : true,
-    sources : [ 'mtest.tproj/mtest.c' ],
-)
-install_man('mtest.tproj/mtest.8')
 
 executable(
     'ndp',
@@ -231,7 +161,7 @@ executable(
     dependencies : [ libnetwork_cmds ],
     install : true,
     sources : [
-        'ecnprobe/gmt2local.c',
+        'network_cmds_lib/gmt2local.c',
         'ping.tproj/ping.c'
     ],
 )
@@ -242,25 +172,12 @@ executable(
     dependencies : [ libnetwork_cmds, libresolv ],
     install : true,
     sources : [
-        'ecnprobe/gmt2local.c',
+        'network_cmds_lib/gmt2local.c',
         'ping6.tproj/md5.c',
         'ping6.tproj/ping6.c',
     ],
 )
 install_man('ping6.tproj/ping6.8')
-
-executable(
-    'pktapctl',
-    install : true,
-    sources : [ 'pktapctl/pktapctl.c' ],
-)
-install_man('pktapctl/pktapctl.8')
-
-executable(
-    'pktmnglr',
-    install : true,
-    sources : [ 'pktmnglr/packet_mangler.c' ],
-)
 
 executable(
     'rarpd',
@@ -281,32 +198,6 @@ executable(
     sources : [ 'route.tproj/route.c' ],
 )
 install_man('route.tproj/route.8')
-
-executable(
-    'rtadvd',
-    c_args : [
-       '-DINET6',
-       '-DHAVE_GETIFADDRS',
-        # Required for `_COMM_PAGE_CPU_CAPABILITIES` in <machine/cpu_capabilities.h>
-       '-DPRIVATE',
-    ],
-    dependencies : libutil,
-    install : true,
-    sources : [
-        'rtadvd.tproj/advcap.c',
-        'rtadvd.tproj/config.c',
-        'rtadvd.tproj/dump.c',
-        'rtadvd.tproj/if.c',
-        'rtadvd.tproj/rrenum.c',
-        'rtadvd.tproj/rtadvd.c',
-        'rtadvd.tproj/rtadvd_logging.c',
-        'rtadvd.tproj/timer.c',
-    ],
-)
-install_man(
-  'rtadvd.tproj/rtadvd.8',
-  'rtadvd.tproj/rtadvd.conf.5',
-)
 
 executable(
     'rtsol',

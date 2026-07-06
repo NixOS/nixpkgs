@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legendary-heroic";
-  version = "0.20.42";
+  version = "0.20.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
     tag = finalAttrs.version;
-    hash = "sha256-ZnOQhIGAgUvZVdPpxdothKzPElp/hdvUJA0mTpXLyIM=";
+    hash = "sha256-EQBrj+GOmVD0ZEArOk1Me4LLKbs6Ezl1lTzD0k5uUsQ=";
   };
 
   build-system = with python3Packages; [
@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
     requests-futures
     filelock
+    pycryptodomex
   ];
 
   pythonImportsCheck = [ "legendary" ];

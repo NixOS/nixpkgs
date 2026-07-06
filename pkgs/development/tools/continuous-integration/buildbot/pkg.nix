@@ -1,14 +1,15 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   isPy3k,
   buildbot,
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   pname = "buildbot_pkg";
   inherit (buildbot) src version;
+  pyproject = true;
 
   postPatch = ''
     cd pkg
@@ -16,6 +17,8 @@ buildPythonPackage {
     # Do we have to care about that with Nix...?
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
+
+  build-system = [ setuptools ];
 
   # No tests
   doCheck = false;

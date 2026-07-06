@@ -9,7 +9,7 @@
   ppx_inline_test,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "patricia-tree";
   version = "0.11.0";
 
@@ -23,7 +23,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "codex-semantics-library";
     repo = "patricia-tree";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lpmU0KhsyIHxPBiw38ssA7XFEMsRvOT03MByoJG88Xs=";
   };
 
@@ -43,8 +43,8 @@ buildDunePackage rec {
     description = "Patricia Tree data structure in OCaml";
     homepage = "https://codex.top/api/patricia-tree/";
     downloadPage = "https://github.com/codex-semantics-library/patricia-tree";
-    changelog = "https://github.com/codex-semantics-library/patricia-tree/releases/tag/v${version}";
+    changelog = "https://github.com/codex-semantics-library/patricia-tree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
-}
+})

@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsmasq";
-  version = "2.92";
+  version = "2.93";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/dnsmasq-${finalAttrs.version}.tar.xz";
-    hash = "sha256-S/UMLBAY+fvCYDffUbkOzqDLc9RhYoRnY7kt8NbDpFg=";
+    hash = "sha256-DADU5cl8gwbl+5MrNIs0JpycKaDn3w6OgpWLQHCSvBk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

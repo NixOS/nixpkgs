@@ -28,6 +28,12 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # https://github.com/pytries/marisa-trie/issues/132
+    substituteInPlace tests/test_binary_trie.py tests/test_trie.py \
+      --replace-fail MARISA_FORMAT_ERROR std::runtime_error
+  '';
+
   build-system = [
     cython
     setuptools

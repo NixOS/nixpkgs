@@ -361,7 +361,11 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
+        inherit (callPackage ./utils.nix { inherit hostPlatform; })
+          derivationWithMeta
+          writeTextFile
+          writeText
+          ;
         test = kaem.runCommand "minimal-bootstrap-test" { } (
           ''
             echo ${bash.tests.get-version}

@@ -58,7 +58,7 @@ mkWrapper "sdk" (
     passthru = {
       pname = "dotnet";
       version = "combined";
-      inherit (cli) icu;
+      inherit (cli) icu hasCrossTargetBug;
 
       versions = lib.catAttrs "version" dotnetPackages;
       packages = lib.concatLists (lib.catAttrs "packages" dotnetPackages);

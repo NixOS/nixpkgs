@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Stringly: Human Readable Object Serialization";
     homepage = "https://github.com/evalf/stringly";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.Scriptkiddi ];
   };
 }

@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.16.0";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "nickel-lang";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-G+ik4tMr+WsDpiEFYv80ruBR/SpeEg9agUWqgXrq7UI=";
+    hash = "sha256-D+OI00Ouwm0v65igIYSCGPXKCl6/SZsOyz1wFM1VAF4=";
   };
 
-  cargoHash = "sha256-E3UBkLxd7AC/Pk1Zgy+KvHTPXgATqIr7lZXPB8vlSWs=";
+  cargoHash = "sha256-hIeTHajL+h6xhuje8TmfgkkM9R+tGwYFzlnSwaN3nK8=";
 
   cargoBuildFlags = [
     "--package"
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_28
+    nixVersions.nix_2_31
     boost
   ];
 
@@ -70,6 +70,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--exclude=py-nickel"
   ];
 
+  checkFlags = lib.optionals enableNixImport [
+    # libnixmain from Nix >= 2.31 tries to create /nix/var/nix/profiles on
+    # initialisation, which is rejected by the build sandbox.
+    "--skip=stdin_format::evaluates_nix_from_stdin"
+  ];
+
   postInstall = ''
     mkdir -p $nls/bin
     mv $out/bin/nls $nls/bin/nls
@@ -93,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       that are then fed to another system. It is designed to have a simple,
       well-understood core: it is in essence JSON with functions.
     '';
-    changelog = "https://github.com/tweag/nickel/blob/${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/nickel-lang/nickel/blob/${finalAttrs.version}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       felschr

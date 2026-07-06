@@ -26,14 +26,15 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.11.1";
+  version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aYQp9vEVQJgF1n/KsfnDvLQf5nD0/gsG+RAgVlhk7t8=";
+    hash = "sha256-eGof2Rk/dGYPlKVRSuJ+ZeeMh2u4K6/qXmROo187HTA=";
   };
 
   postPatch = ''
@@ -60,6 +61,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    torch.rocmPackages.clr
   ];
 
   buildInputs = [
@@ -95,6 +99,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     ENABLE_CUDA = cudaSupport;
   }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  }
   // lib.optionalAttrs rocmSupport {
     ROCM_PATH = torch.rocmtoolkit_joined;
     ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
@@ -110,7 +117,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    lib.optionals rocmSupport [
+      # HSA runtime logs topology error in sandbox breaking test that asserts no output
+      "test_python_logger"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fails in the sandbox:
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      "test_python_logger"
+
       # AssertionError: index 0
       "test_get_frames_played_at"
 

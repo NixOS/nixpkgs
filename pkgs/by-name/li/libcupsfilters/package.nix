@@ -5,6 +5,7 @@
   dejavu_fonts,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   fontconfig,
   ghostscript,
   lcms2,
@@ -21,6 +22,12 @@
   stdenv,
 }:
 
+let
+  testpage = fetchurl {
+    url = "https://codeberg.org/raboof/cups-testpage/releases/download/v0.1/default-testpage.pdf";
+    hash = "sha256-gtR/r/tORsXLw4PlFhxm29+//YNAKTT0c4z3GsgtzNw=";
+  };
+in
 stdenv.mkDerivation {
   pname = "libcupsfilters";
   version = "2.1.1";
@@ -99,6 +106,10 @@ stdenv.mkDerivation {
     "CUPS_DATADIR=$(out)/share/cups"
     "CUPS_SERVERROOT=$(out)/etc/cups"
   ];
+
+  preBuild = ''
+    cp ${testpage} data/default-testpage.pdf
+  '';
 
   meta = {
     homepage = "https://github.com/OpenPrinting/libcupsfilters";

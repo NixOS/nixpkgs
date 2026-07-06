@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
+  nodejs_22,
 }:
 
 buildNpmPackage rec {
@@ -18,7 +18,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-HIErBrQ0VP4vdCFZe7uT5b1q+QdSSf08CIQmNcSryZ8=";
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
   # Prevent Cypress binary download.
   env.CYPRESS_INSTALL_BINARY = 0;

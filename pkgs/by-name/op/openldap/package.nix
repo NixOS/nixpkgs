@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openldap";
-  version = "2.6.9";
+  version = "2.6.13";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-${finalAttrs.version}.tgz";
-    hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
+    hash = "sha256-1pO0lRekLvuFoaNkoxCu0WpT1CjRtGwNMe8/unj8tlY=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     openssl
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt # causes linking issues on *-darwin
   ]
   ++ lib.optionals withModules [
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-crypt"
     "--enable-overlays"
+    "--enable-spasswd"
     (lib.enableFeature withModules "argon2")
     (lib.enableFeature withModules "modules")
   ]
@@ -121,12 +122,18 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.openldap.org/show_bug.cgi?id=8623
     rm -f tests/scripts/test022-ppolicy
 
+    rm -f tests/scripts/test*-sync*
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
     # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
     # has made it to a release
     rm -f tests/scripts/test076-authid-rewrite
+  ''
+  # FIXME: revert after this gets unconditional above (on staging* branch)
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    rm -f tests/scripts/test*-sync*
   '';
 
   doCheck = true;

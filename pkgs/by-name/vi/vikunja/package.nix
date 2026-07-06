@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   nodejs_24,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   buildGoModule,
@@ -35,7 +35,7 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_10_29_2;
+      pnpm = pnpm_10;
       fetcherVersion = 3;
       hash = "sha256-cDGeIrCxZtcomu3YxikutjXpVe3EeUZ/L3+3y9yx67s=";
     };
@@ -44,7 +44,7 @@ let
       nodejs_24
       dart-sass
       pnpmConfigHook
-      pnpm_10_29_2
+      pnpm_10
     ];
 
     doCheck = true;

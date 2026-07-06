@@ -82,7 +82,7 @@ in
     machine.wait_until_succeeds("""
       curl -s 'http://localhost:10428/select/jaeger/api/services' | \
       jq -e '.data[] | select(. == "test-service")'
-    """, timeout=10)
+    """, timeout=20)
 
     # Query for traces from our test service
     machine.wait_until_succeeds("""

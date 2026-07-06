@@ -29,7 +29,6 @@ buildDunePackage {
     description = "Mirage implementation for Alcotest";
     maintainers = with lib.maintainers; [
       ulrikstrid
-      anmonteiro
     ];
   };
 }

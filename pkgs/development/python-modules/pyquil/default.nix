@@ -14,6 +14,7 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   qcs-sdk-python,
   respx,
   rpcq,
@@ -27,6 +28,9 @@ buildPythonPackage rec {
   pname = "pyquil";
   version = "4.17.0";
   pyproject = true;
+
+  # qcs-sdk-python (PyO3) caps at 3.12; upstream also pins python <3.13
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";

@@ -5,7 +5,7 @@
   cargo-tauri,
   desktop-file-utils,
   fetchFromGitHub,
-  gradle_8,
+  gradle_9,
   jdk17,
   makeBinaryWrapper,
   makeShellWrapper,
@@ -13,7 +13,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -25,19 +25,19 @@
 }:
 
 let
-  gradle = gradle_8.override { java = jdk; };
+  gradle = gradle_9.override { java = jdk; };
   jdk = jdk17;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.13.3";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vBBa2T5+JYvfO9eibJtcpq9y/GMh2PbO0ZBdkah9gms=";
+    hash = "sha256-kF808vT/CO1Aklv+P23GWdxSBqDshFphL8hx0PYSgQk=";
   };
 
   patches = [
@@ -67,7 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
-  cargoHash = "sha256-dbndaNIZzGX4QjGTJbDsKOReB5OeiBmQr8XNzfWPe/o=";
+  cargoHash = "sha256-GQmhyTGN+MItwQEVyZ5Ai0cowvOxp++THuSrXsrRG1A=";
+
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
@@ -75,9 +76,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-yF8sHG2+08JmtrKVLT0/gUPFJGgGWFMvHbi+uen2uwU=";
+    hash = "sha256-pbEKD8xkO7+//m0PBcAL62q0LC5YEKR+wOPGnzXIRJk=";
   };
 
   nativeBuildInputs = [
@@ -88,9 +89,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
     xcbuild
   ];
@@ -116,6 +117,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;
+    # Cidre requires a target version of at least 10.15
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.15";
   };
 
   preGradleUpdate = ''
@@ -170,7 +173,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
-    broken = !stdenv.hostPlatform.isx86_64 || !stdenv.hostPlatform.isLinux;
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache

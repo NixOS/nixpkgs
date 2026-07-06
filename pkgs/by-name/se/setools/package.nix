@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "setools";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = "setools";
     tag = finalAttrs.version;
-    hash = "sha256-UZisEbHx3zO92gmRQSYsI8TmY9MjCP7AWNAESYklAkk=";
+    hash = "sha256-Xe+/ZEtSRfBPFcRnyR4igoTJVYBg4jH3Ov76CFVY8+k=";
   };
 
   build-system = with python3Packages; [

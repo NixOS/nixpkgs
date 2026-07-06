@@ -6,14 +6,14 @@
   fetchFromGitHub,
   fetchNpmDeps,
   mono,
-  nodejs_20,
+  nodejs_24,
   slskd,
   testers,
   nix-update-script,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_24;
   # https://github.com/NixOS/nixpkgs/blob/d88947e91716390bdbefccdf16f7bebcc41436eb/pkgs/build-support/node/build-npm-package/default.nix#L62
   npmHooks = buildPackages.npmHooks.override { inherit nodejs; };
 in

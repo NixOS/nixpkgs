@@ -17,15 +17,18 @@
   discord-development,
   buildWebExtension ? false,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.14.7";
+  version = "1.14.15";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uLuWTquRwguWYu3eolrHa5rguSI8ydwzHY6CrOcP7qM=";
+    hash = "sha256-jQeLZa1rpKDkzWSpAqOa8snGRKLpv9xf9cwJ6hUwMzA=";
   };
 
   patches = [ ./fix-deps.patch ];
@@ -42,16 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       postPatch
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-b8Ko87Ddu3jcigbxluhsADJTsGVatiW5snXSXtrYho0=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-pm5f6bGm07pzNCqpDHRyKFnuX2ZTE5w9BtJu5xXPHiI=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm
   ];
 
   env = {
@@ -106,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       FlafyDev
       Gliczy
       NotAShelf

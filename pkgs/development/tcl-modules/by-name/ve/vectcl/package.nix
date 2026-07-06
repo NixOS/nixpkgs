@@ -2,6 +2,7 @@
   lib,
   mkTclDerivation,
   fetchFromGitHub,
+  tcl,
 }:
 
 mkTclDerivation rec {
@@ -22,5 +23,6 @@ mkTclDerivation rec {
     description = "Numeric array and linear algebra extension for Tcl";
     maintainers = with lib.maintainers; [ fgaz ];
     license = lib.licenses.tcltk;
+    broken = tcl.isTcl9;
   };
 }

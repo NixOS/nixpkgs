@@ -190,6 +190,12 @@ let
     pos = builtins.unsafeGetAttrPos "pname" prevAttrs;
     meta = prevAttrs.meta or { } // {
       homepage = prevAttrs.meta.homepage or "https://nixos.org/nix";
+      donationPage = prevAttrs.meta.donationPage or "https://nixos.org/donate/";
+      changelog =
+        let
+          ver = lib.versions.majorMinor finalAttrs.version;
+        in
+        prevAttrs.meta.changelog or "https://nix.dev/manual/nix/${ver}/release-notes/rl-${ver}.html";
       longDescription =
         prevAttrs.longDescription or ''
           Nix is a powerful package manager for mainly Linux and other Unix systems that
@@ -380,7 +386,8 @@ in
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { };
   nix-external-api-docs = callPackage ../src/external-api-docs/package.nix { };
 
-  nix-perl-bindings = callPackage ../src/perl/package.nix { };
+  nix-perl-bindings =
+    if (lib.versionAtLeast version "2.35pre") then null else callPackage ../src/perl/package.nix { };
 
   nix-everything = callPackage ../packaging/everything.nix { } // {
     # Note: no `passthru.overrideAllMesonComponents` etc

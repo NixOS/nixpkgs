@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Tool to quickly open a markdown document with already filled out frontmatter";
+    homepage = "https://codeberg.org/annaaurora/seehecht";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ annaaurora ];

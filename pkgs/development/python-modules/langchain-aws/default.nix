@@ -29,14 +29,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.4.4";
+  version = "1.6.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-QXWODYzyQTVAAIHL4h2cgEqSBl4lBByoT1+DWMatYWE=";
+    hash = "sha256-gvp4iS5cU7QhFNpHuS+ytxGVh+vWSlcS4cPV9O6c+tw=";
   };
 
   postPatch = ''
@@ -62,8 +63,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    anthropic = [
-      anthropic.optional-dependencies.bedrock
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
       langchain-anthropic
     ];
   };

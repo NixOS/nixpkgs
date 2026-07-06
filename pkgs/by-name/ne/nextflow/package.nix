@@ -84,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # --run is used instead of --set to avoid makeWrapper's single-quote escaping,
+  # which prevents $USER from expanding at runtime. See #192396
   postFixup = ''
     wrapProgram $out/bin/nextflow \
       --prefix PATH : ${
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       } \
       --set JAVA_HOME ${openjdk.home} \
-      --set NXF_OPTS "-Duser.name=\''${USER}"
+      --run 'export NXF_OPTS="-Duser.name=''$USER''${NXF_OPTS:+ ''$NXF_OPTS}"'
   '';
 
   passthru.tests.default = nixosTests.nextflow;

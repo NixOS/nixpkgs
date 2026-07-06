@@ -1,9 +1,9 @@
 {
   lib,
-  runCommandNoCC,
+  runCommand,
   opentxl,
 }:
-runCommandNoCC "opentxl-test"
+runCommand "opentxl-test"
   {
     nativeBuildInputs = [ opentxl ];
     src = lib.sources.sourceByRegex ./. [

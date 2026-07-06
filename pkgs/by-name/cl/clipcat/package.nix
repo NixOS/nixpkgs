@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       xrelkd
       bot-wxt1221
     ];
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "clipcatd";
   };
 })

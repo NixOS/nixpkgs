@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "affinegap";
-  version = "2";
+  version = "1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "affinegap";
-    tag = "pypideploy${version}";
-    hash = "sha256-TuydLF3YfeVIP2y2uDQH+oZ9Y2b325ZFEM0Fiu0Xhus=";
+    tag = "v${version}";
+    hash = "sha256-9eX41eoME5Vdtq+c04eQbMYnViy6QKOhKkafrkeMylI=";
   };
 
   build-system = [
@@ -40,6 +40,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "affinegap"
   ];
+
+  # Bulk updater will see an older tag ending with a "2" and switch to it
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Cython implementation of the affine gap string distance";

@@ -6,90 +6,137 @@
 }:
 
 let
-  version = "v2.0.0-beta.1";
+  version = "v2.0.0";
 
   mkFont =
     {
       width,
+      variant ? "",
       hash,
       isNF ? false,
-      variant ? "Hinted",
+      hinted ? true,
     }:
     let
-      variantName = lib.toLower width;
-      pkgSuffix = if isNF then "${variantName}-NF" else variantName;
-      fileName = "IoskeleyMono-${if isNF then "NerdFont-" else ""}${width}.zip";
+      fileName = "IoskeleyMono${if variant != "" then "-${variant}" else ""}${
+        if isNF then "-NerdFont" else ""
+      }.zip";
+      hintDir = if hinted then "Hinted" else "Unhinted";
+
+      pname =
+        let
+          wPart = "-${lib.toLower width}";
+          vPart = if variant != "" then "-${variant}" else "";
+          nfPart = if isNF then "-NF" else "";
+          hPart = if !hinted && !isNF then "-unhinted" else "";
+        in
+        "ioskeley-mono${wPart}${vPart}${nfPart}${hPart}";
     in
     stdenvNoCC.mkDerivation {
-      pname = "ioskeley-mono-${pkgSuffix}";
-      inherit version;
+      inherit pname version;
 
       src = fetchzip {
         url = "https://github.com/ahatem/IoskeleyMono/releases/download/${version}/${fileName}";
         stripRoot = false;
         inherit hash;
       };
-      sourceRoot = if isNF then "." else "source/${variant}";
+
+      sourceRoot = if isNF then "source/${width}" else "source/${width}/${hintDir}";
 
       nativeBuildInputs = [ installFonts ];
 
-      fontDirectories = [
-        "."
-        "Hinted"
-      ];
-
       meta = {
         homepage = "https://github.com/ahatem/IoskeleyMono";
-        description = "Iosevka configuration mimicking Berkeley Mono (${width}${
-          if isNF then ", Nerd Font" else ""
-        })";
+        description = "Iosevka configuration mimicking Berkeley Mono, ${width} width${
+          if variant != "" then ", ${variant} variant" else ""
+        }${if isNF then ", Nerd Font patched" else ""}${if !hinted then ", unhinted" else ""}";
         license = lib.licenses.ofl;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ nuexq ];
       };
     };
+
+  allWidths = [
+    "Normal"
+    "SemiCondensed"
+    "Condensed"
+  ];
+
+  mkWidths =
+    {
+      suffix ? "",
+      withHinting ? false,
+      ...
+    }@args:
+    let
+      mkWidthSet =
+        hinted:
+        map (w: {
+          name = "${lib.strings.toLower (builtins.substring 0 1 w)}${builtins.substring 1 (-1) w}${
+            if suffix != "" then "-${suffix}" else ""
+          }${if !hinted then "-unhinted" else ""}";
+
+          value = mkFont (
+            {
+              width = w;
+              inherit hinted;
+            }
+            // (removeAttrs args [
+              "suffix"
+              "withHinting"
+            ])
+          );
+        }) allWidths;
+    in
+    lib.listToAttrs (
+      if withHinting then
+        lib.concatMap (h: mkWidthSet h) [
+          true
+          false
+        ]
+      else
+        mkWidthSet true
+    );
 in
-{
-  normal = mkFont {
-    width = "Normal";
-    hash = "sha256-ZuV4yg6H0SayGo3LB2Naqn4axR0Lnmw95u/jiRk5B/U=";
-  };
-  normal-unhinted = mkFont {
-    width = "Normal";
-    hash = "sha256-ZuV4yg6H0SayGo3LB2Naqn4axR0Lnmw95u/jiRk5B/U=";
-    variant = "Unhinted";
-  };
-  semiCondensed = mkFont {
-    width = "SemiCondensed";
-    hash = "sha256-fOuQmf+ANuKy3kaLRbAu9RIsL3rORGJUlR/BerDg60U=";
-  };
-  semiCondensed-unhinted = mkFont {
-    width = "SemiCondensed";
-    hash = "sha256-fOuQmf+ANuKy3kaLRbAu9RIsL3rORGJUlR/BerDg60U=";
-    variant = "Unhinted";
-  };
-  condensed = mkFont {
-    width = "Condensed";
-    hash = "sha256-bzEh9YvbERZrIvXZPopHwhkSe87y3MdHhLaRGWLvTQU=";
-  };
-  condensed-unhinted = mkFont {
-    width = "Condensed";
-    hash = "sha256-bzEh9YvbERZrIvXZPopHwhkSe87y3MdHhLaRGWLvTQU=";
-    variant = "Unhinted";
-  };
-  normal-NF = mkFont {
-    width = "Normal";
-    hash = "sha256-rhSU4Md6D7hLT6EeH3TMetPgQGuiYowpYVaZqewGgh8=";
-    isNF = true;
-  };
-  semiCondensed-NF = mkFont {
-    width = "SemiCondensed";
-    hash = "sha256-W1ykPzdsoXfRBJ5YuxrjOc/J7uzwLQRjZTc9G2cj06Y=";
-    isNF = true;
-  };
-  condensed-NF = mkFont {
-    width = "Condensed";
-    hash = "sha256-TAneNRImlRNsvTr6xDCG+VKFycttbTxkP6hfh9Kr+X4=";
-    isNF = true;
-  };
+
+# Standard
+mkWidths {
+  hash = "sha256-EJDlA18XZPq7vhtpw/74n5s1NmTy0/DLu2oYB7OuvbA=";
+  withHinting = true;
+}
+
+# Term
+// mkWidths {
+  suffix = "term";
+  variant = "Term";
+  hash = "sha256-E7I7gmu9EOaCKn4JOFkCjHP/I/1wadRkZoCxVfm+b1k=";
+  withHinting = true;
+}
+
+// mkWidths {
+  suffix = "term-NF";
+  variant = "Term";
+  isNF = true;
+  hash = "sha256-GiMI2YTl20K+zUObcFNzgP1ivm7pH2zHWFG15gFgasg=";
+}
+
+# NL
+// mkWidths {
+  suffix = "NL";
+  variant = "NL";
+  hash = "sha256-dNOpQJ1VOrjcKS/UtPXKUP9W0gaxFMvH4aa+xK2hg2w=";
+  withHinting = true;
+}
+
+// mkWidths {
+  suffix = "NL-NF";
+  variant = "NL";
+  isNF = true;
+  hash = "sha256-N7mtM/aQwps77u907z8Rop3RftRGR4K8zDXFX8xWq5w=";
+}
+
+# Nerd Font Standard
+// mkWidths {
+  suffix = "NF";
+  isNF = true;
+  hash = "sha256-Nt8EaVhKvlb9BMKQe4l5iNGcPLzKba6KScIWZbcL8gA=";
 }

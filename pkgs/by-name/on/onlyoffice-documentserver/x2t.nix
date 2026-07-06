@@ -12,7 +12,7 @@
   optipng,
   x265,
   libde265,
-  icu,
+  icu78,
   jdk,
   lib,
   nodejs_22,
@@ -30,6 +30,9 @@
 }:
 
 let
+  # default at the time of writing is still 76,
+  # but libv8 from nodejs_22 needs 78
+  icu = icu78;
   openssl' = openssl.override {
     enableMD2 = true;
     static = true;
@@ -41,8 +44,11 @@ let
       $BUILDRT/Common/3dParty/icu/icu.pri \
       --replace-fail "ICU_MAJOR_VER = 74" "ICU_MAJOR_VER = ${lib.versions.major icu.version}"
 
-    mkdir $BUILDRT/Common/3dParty/icu/linux_64
-    ln -s ${icu}/lib $BUILDRT/Common/3dParty/icu/linux_64/build
+    mkdir -p $BUILDRT/Common/3dParty/icu/linux_64/build
+    ln -s ${icu.dev}/include $BUILDRT/Common/3dParty/icu/linux_64/build/include
+    for i in ${icu}/lib/* ; do
+      ln -s $i $BUILDRT/Common/3dParty/icu/linux_64/build/$(basename $i)
+    done
   '';
   icuQmakeFlags = [
     "QMAKE_LFLAGS+=-Wl,--no-undefined"

@@ -5,6 +5,7 @@
   fetchDebianPatch,
   libedit,
   autoreconfHook,
+  cmake,
   zlib,
   unzip,
   libtommath,
@@ -48,6 +49,9 @@ let
 
     enableParallelBuilding = true;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out
@@ -62,13 +66,13 @@ rec {
   firebird_3 = stdenv.mkDerivation (
     base
     // rec {
-      version = "3.0.13";
+      version = "3.0.14";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-ti3cFfByM2wxOLkAebwtFe25B5W7jOwi3f7MPYo/yUA=";
+        hash = "sha256-X6Jv32VniAefIWjLTPwEipsQVRl7HBb4EKyi2IL1VWM=";
       };
 
       patches = [
@@ -95,13 +99,13 @@ rec {
   firebird_4 = stdenv.mkDerivation (
     base
     // rec {
-      version = "4.0.6";
+      version = "4.0.7";
 
       src = fetchFromGitHub {
         owner = "FirebirdSQL";
         repo = "firebird";
         rev = "v${version}";
-        hash = "sha256-65wfG6huDzvG/tEVllA58OfZqoL4U/ilw5YIDqQywTs=";
+        hash = "sha256-4u1Vgwk5cMCkrGfGSk2xO7hVHiDda0ioitvX/r3KPQc=";
       };
 
       nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
@@ -113,5 +117,33 @@ rec {
     }
   );
 
-  firebird = firebird_4;
+  firebird_5 = stdenv.mkDerivation (
+    base
+    // rec {
+      version = "5.0.4";
+
+      src = fetchFromGitHub {
+        owner = "FirebirdSQL";
+        repo = "firebird";
+        rev = "v${version}";
+        fetchSubmodules = true;
+        hash = "sha256-IJrfs8q7GtX4Y+Cmg4avT5QJmLpld38tyR3TR1CcgyE=";
+      };
+
+      # CMake is just used for libcds
+      dontUseCmakeConfigure = true;
+
+      nativeBuildInputs = base.nativeBuildInputs ++ [
+        cmake
+        unzip
+      ];
+      buildInputs = base.buildInputs ++ [
+        zlib
+        libtommath
+        libtomcrypt
+      ];
+    }
+  );
+
+  firebird = firebird_5;
 }

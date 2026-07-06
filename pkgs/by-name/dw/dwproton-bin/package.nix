@@ -11,12 +11,17 @@ proton-ge-bin.overrideAttrs (
     inherit steamDisplayName;
 
     pname = "dwproton-bin";
-    version = "dwproton-10.0-24";
+    version = "dwproton-11.0-5";
 
     src = fetchzip {
       url = "https://dawn.wine/dawn-winery/dwproton/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.xz";
-      hash = "sha256-3mfJGi2pUwPgWNZCvGD1SNHghS2HThX5Y7TrnJaEYvw=";
+      hash = "sha256-2x4xotJ2aJYbg+G2TDPqyU7uuoc/hZQon9CA6SFGin0=";
     };
+
+    preFixup = ''
+      substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
+        --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
+    '';
 
     passthru.updateScript = writeScript "update-dwproton" ''
       #!/usr/bin/env nix-shell

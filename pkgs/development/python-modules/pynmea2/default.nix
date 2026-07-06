@@ -35,7 +35,6 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the NMEA 0183 protcol";
     homepage = "https://github.com/Knio/pynmea2";
-    changelog = "https://github.com/Knio/pynmea2/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

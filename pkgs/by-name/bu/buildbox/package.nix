@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "buildbox";
-  version = "1.4.0";
+  version = "1.4.11";
 
   src = fetchFromGitLab {
     owner = "BuildGrid";
     repo = "buildbox/buildbox";
     tag = finalAttrs.version;
-    hash = "sha256-yZux8uXjv9kQPGGL+y0p+1pURauFHhLpCAfjvOVMGmg=";
+    hash = "sha256-8Et5wgiugoDLtW2C2nsth5iPXPGQ7wkPDSc6hrBgeG8=";
   };
 
   nativeBuildInputs = [

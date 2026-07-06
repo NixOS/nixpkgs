@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.1.2-unstable-2026-03-28";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
-    rev = "a97c341e39e3f89e99f65d2a35d4e060b3b0168a";
-    hash = "sha256-FWpO2cp8licwevpAP25fmiIUEehkQp61E4A7RmsKJH0=";
+    tag = finalAttrs.version;
+    hash = "sha256-duIPpTzZqVSZLxF/CYlxa1PPtnzeABTCYfZZ7lomkls=";
   };
 
-  cargoHash = "sha256-xcCnzDN/U3sp12UwznaYjalzcKxo8Eo4vHnO/Sf++Zk=";
+  cargoHash = "sha256-gg1VcCrXKk5QsNvU7wz039md0gpFom6SrLuW6tjNQog=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail "target/release" \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
   installFlags = [

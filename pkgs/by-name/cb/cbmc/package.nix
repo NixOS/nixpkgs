@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.9.0";
+  version = "6.10.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-SMJBnzoyTwcwJa9L2X1iX2W4Z/Mwoirf8EXfoyG0dRI=";
+    hash = "sha256-GCagpb2TFhOEH+lzMth+PWiJxlEw0L+H1DYUEQoMF3g=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ls_parse.py $out/share/cbmc/ls_parse.py
     chmod +x $out/share/cbmc/ls_parse.py
     wrapProgram $out/bin/goto-cc \
-      --prefix PATH : "$out/share/cbmc" \
+      --prefix PATH : "$out/share/cbmc"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (

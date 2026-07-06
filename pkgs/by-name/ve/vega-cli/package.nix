@@ -27,8 +27,8 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "npm run data" "true"
 
     # Patch lerna.json to not use nx
-    mv lerna.json lerna.old.json
-    jq '. + {useNx: false}' < lerna.old.json > lerna.json
+    ${jq}/bin/jq '. + {useNx: false}' lerna.json > lerna.json.tmp
+    mv lerna.json.tmp lerna.json
   '';
 
   npmDepsHash = "sha256-mBe1fHnhor7ZR8CuRNs1zD7JzaZXZI5VM7mdAieVKqE=";
@@ -72,6 +72,8 @@ buildNpmPackage (finalAttrs: {
     description = "Command line tools for the Vega visualization grammar";
     homepage = "https://vega.github.io/vega/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      philocalyst
+    ];
   };
 })

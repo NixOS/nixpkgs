@@ -58,6 +58,8 @@ mkTclDerivation rec {
     done
   '';
 
+  tclRequiresCheck = [ "tclreadline" ];
+
   meta = {
     description = "GNU readline for interactive tcl shells";
     homepage = "https://github.com/flightaware/tclreadline";

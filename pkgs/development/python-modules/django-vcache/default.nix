@@ -1,27 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  croniter,
   django,
   fetchFromGitLab,
   hatchling,
   ormsgpack,
-  prometheus-client,
   pythonOlder,
-  valkey,
-  zstd,
+  pyzstd,
+  rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-vcache";
-  version = "1.0.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "django-vcache";
-    tag = "v${version}";
-    hash = "sha256-bOHEw4nl82tFjHiJdmyW0LleKMpjUh8uu4crGp6IsWY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/LyNJlz3Tx6tgQAwY4vIIsDlL2nCvKM6bna2bXyP5So=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-a9+3k6YTotmj+LBO6OyVd2NUh3hpLwpKXJsX7pBxXNE=";
   };
 
   build-system = [ hatchling ];
@@ -29,16 +32,13 @@ buildPythonPackage rec {
   dependencies = [
     django
     ormsgpack
-    croniter
-    valkey
   ]
-  ++ valkey.optional-dependencies.libvalkey
-  ++ lib.optional (pythonOlder "3.14") zstd;
+  ++ lib.optional (pythonOlder "3.14") pyzstd;
 
-  optional-dependencies = {
-    metrics = [ prometheus-client ];
-    valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
-  };
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
 
   pythonImportsCheck = [ "django_vcache" ];
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Specialized, lightweight Django cache backend for Valkey";
     homepage = "https://gitlab.com/glitchtip/django-vcache/";
     changelog = "https://gitlab.com/glitchtip/django-vcache/-/blob/main/CHANGELOG.md#${
-      lib.replaceString "." "" version
+      lib.replaceString "." "" finalAttrs.version
     }";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -57,4 +57,4 @@ buildPythonPackage rec {
       felbinger
     ];
   };
-}
+})

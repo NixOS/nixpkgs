@@ -12,6 +12,7 @@
   shaka-packager,
   nix-update-script,
   runCommand,
+  versionCheckHook,
 }:
 
 let
@@ -24,16 +25,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.32";
+  version = "0.2.33";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kqOzJZR2eoua8ruGcwNHdQHXg58xIkH8wlx1sEwzqtA=";
+    hash = "sha256-IPWbS3kIn3rC1s7nJe3Q94scuW87LaQn5KAhXTYvWGg=";
   };
 
-  cargoHash = "sha256-NHsEfqnJOyy5F3ALFKVB0by7xe4N/sVEBH0k8fO+cjI=";
+  cargoHash = "sha256-MmZwiH1Qzb5MiwhEYsCVo4xD5YmJ+mObpkgc6J0sfuw=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -55,6 +58,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

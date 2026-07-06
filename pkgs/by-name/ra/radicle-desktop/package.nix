@@ -21,17 +21,18 @@
   wrapGAppsHook4,
   rustfmt,
   clippy,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.9.0";
+  version = "0.13.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-ruBHhJ0JvbtXd0GonL5rNp733mulVSQJsVzkikQKCK0=";
+    hash = "sha256-XpzOzyUwAGLF/klXXbBFX5oLRSURB+AsL8n9WWv5x7s=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -52,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-x0u75on1Kc+u1u1R1SLLOfmTG5kFVvn2PsaWdH/RB3w=";
+    hash = "sha256-EigvRDUmiuz/wt5vZ3NSxovxjvxHVGrHdA9HIod/fO8=";
   };
 
-  cargoHash = "sha256-z5fnwc7EjSvkyu4zTUyAvVfs6quwH2p9VFDK/TdzZJE=";
+  cargoHash = "sha256-HInTwQYuLVFnRCbQq2hNRPGJP1I9gBRQZQ9ul3DWtBQ=";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -97,12 +98,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     radicle-node
     rustfmt
     clippy
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    export RAD_HOME="$PWD/_rad-home"
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"
@@ -125,8 +126,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle desktop app";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4D5UCArafTzTQpDZNQRuqswh3ury/tree/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.radicle ];

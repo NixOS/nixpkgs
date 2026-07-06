@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tableplus";
-  version = "0.1.284";
+  version = "0.1.296";
 
   src = fetchurl {
     url = "https://web.archive.org/web/20251230232124/https://deb.tableplus.com/debian/22/pool/main/t/tableplus/tableplus_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-TrYRRpjSVRD721XEd0gwGPv4RNq/uwaswPW2J8oVjXQ=";
+    hash = "sha256-BJ+S2cBRZtehDU5DOzNEVGzhMoF4jvsNSwntoa5bnlc=";
   };
 
   nativeBuildInputs = [

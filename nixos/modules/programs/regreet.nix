@@ -152,6 +152,9 @@ in
       theme_name = cfg.theme.name;
     };
 
+    # Needed to fetch accounts
+    services.accounts-daemon.enable = true;
+
     services.greetd = {
       enable = lib.mkDefault true;
       settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} ${lib.escapeShellArgs cfg.cageArgs} -- ${lib.getExe cfg.package}";

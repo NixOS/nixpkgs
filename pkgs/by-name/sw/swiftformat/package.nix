@@ -1,21 +1,22 @@
 {
   lib,
   fetchFromGitHub,
+  runCommand,
   swift,
   swiftpm,
   versionCheckHook,
   nix-update-script,
 }:
 
-swift.stdenv.mkDerivation rec {
+swift.stdenv.mkDerivation (finalAttrs: {
   pname = "swiftformat";
-  version = "0.61.0";
+  version = "0.61.1";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
-    rev = version;
-    sha256 = "sha256-+57Cuok7hIXaTZi699sIoqORFgFWEXfzl8P4sJkwFNE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-h0d/vdoKZuYJkMO+TmFFgomaSVA94P+MKclSlBlIleE=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,37 @@ swift.stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.format =
+      runCommand "swiftformat-test-format"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          export CACHE_DIR=$(mktemp -d)
+          printf "class Test{\nvar a:Int=1;;\n}" > test.swift
+          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 test.swift 2> stderr.txt
+
+          grep -Fxq "Running SwiftFormat..." stderr.txt
+          grep -Fxq "1/1 files formatted." stderr.txt
+
+          cat > expected.swift <<'EOF'
+          class Test {
+            var a: Int = 1
+          }
+          EOF
+
+          cmp expected.swift test.swift
+
+          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 test.swift 2> stderr.txt
+
+          grep -Fxq "Running SwiftFormat..." stderr.txt
+          grep -Fxq "0/1 files formatted." stderr.txt
+
+          cmp expected.swift test.swift
+
+          touch $out
+        '';
   };
 
   meta = {
@@ -46,4 +78,4 @@ swift.stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

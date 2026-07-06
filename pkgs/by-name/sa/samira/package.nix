@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Steam Achievement Manager for Linux";

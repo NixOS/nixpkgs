@@ -61,6 +61,7 @@ lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
+  context-legacy.scriptsFolder = "context/ruby";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -257,11 +258,6 @@ lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
-  context-legacy.binlinks = {
-    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
-    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
-  };
-
   dvipdfmx.binlinks = {
     # even though 'ebb' was removed from the Makefile, this symlink is still
     # part of the binary container of dvipdfmx
@@ -310,6 +306,10 @@ lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i 's!File.dirname(\$0)!'"'"'${tl.context-legacy.tex}/scripts/context/ruby'"'"'!' "$out"/bin/*
   '';
 
   cyrillic-bin.postFixup = ''
@@ -460,6 +460,15 @@ lib.recursiveUpdate orig rec {
     substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
 
+  # l3build ignores the TEXMFCNF variable to prevent user customisations from affecting the build
+  # but we rely on TEXMFCNF to find the system texmf.cnf, so we must inject its path into l3build
+  # WARNING: this relies on the system texmf.cnf being in $TEXMFSYSVAR/web2c
+  l3build.postUnpack = ''
+    if [[ -f "$out"/scripts/l3build/l3build-aux.lua ]] ; then
+      substituteInPlace "$out"/scripts/l3build/l3build-aux.lua --replace-fail '" TEXMFCNF=."' '" TEXMFCNF=." .. os_pathsep .. kpse.var_value("TEXMFSYSVAR") .. "/web2c"'
+    fi
+  '';
+
   # find files in script directory, not in binary directory
   minted.postFixup = ''
     substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
@@ -545,6 +554,13 @@ lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
+
+  # replace tex4ht.jar with our rebuilt version
+  tex4ht.deps = (orig.tex4ht.deps or [ ]) ++ [ "tex4htJar" ];
+  tex4ht.postUnpack = ''
+    [[ ! -d "$out"/tex4ht/bin ]] || rm -fr "$out"/tex4ht/bin
+  '';
+  tex4ht.hasJar = false;
 
   # Use top-level git-latexdiff's version and src. NOTE that this derivation is
   # still different from top-level's `git-latexdiff`, due to __structuredAttrs

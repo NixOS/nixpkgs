@@ -14,23 +14,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli";
-  version = "1.29.8";
+  version = "2.10.0";
 
   src =
     let
       darwinDmg = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-fop1/P/MCCsz+SspvQLDDWn8e+Pry4iX6nAlcrilsmY=";
+        hash = "sha256-NDeyXQO9NBsK3xqAEcO1gGn9ta+ZVQ1GNwZ4hbGUe3Q=";
       };
     in
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-oyLrb5fKyCusKGsijISxpqOWUJOM+TYqhYqX5kf1S4s=";
+        hash = "sha256-cJl6CyYCzbLpB6m+W9Tx7enaPzijgjOBjdmG6CPMM8k=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-UVpodniFUVlbL1NKuqmkdV4oY65wnD+FwGOKOycRRTA=";
+        hash = "sha256-39hKSRi1l5ruSqObViksJkufiCOvLTaIkQzT3sNQFQQ=";
       };
       x86_64-darwin = darwinDmg;
       aarch64-darwin = darwinDmg;
@@ -90,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiro.dev";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.jamesward ];
+    maintainers = with lib.maintainers; [
+      jamesward
+      pmw
+    ];
     mainProgram = "kiro-cli";
     platforms = [
       "x86_64-linux"

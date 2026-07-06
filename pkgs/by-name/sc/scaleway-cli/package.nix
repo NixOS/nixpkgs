@@ -10,16 +10,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "scaleway-cli";
-  version = "2.54.0";
+  version = "2.58.3";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pmuyCc+hWXiUlqHi1nDS+51SDxUzIqXqs6Td0Bvjh2o=";
+    hash = "sha256-CKsEPVzAYYQE+g3PTqiWKh+I7c2LOU9logpPIabUp2E=";
   };
 
-  vendorHash = "sha256-yB2/tHgbR5eJ6VyF49KI6FLyjeoE4om+Ajewofxzbs0=";
+  vendorHash = "sha256-tQcl40u8otGohEguPJCTk6JuuWlLB4hrdSsNPQ1ygIw=";
 
   env.CGO_ENABLED = 0;
 
@@ -42,6 +42,16 @@ buildGo126Module (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  checkFlags = [
+    # This subtest hardcodes a go-humanize relative-time string ("35 years ago")
+    # for a fixed 1990 date instead of computing it, so it breaks once enough
+    # wall-clock time passes (now "36 years ago"). go-humanize truncates the
+    # elapsed time by a fixed 360-day year (Year = 12*Month, Month = 30*Day), so
+    # diff/Year rolled 35 -> 36 on 2026-05-12. Upstream keeps bumping the
+    # literal by hand rather than fixing it, so skip the time-dependent subtest.
+    "-skip=^TestMarshal/structWithMapsInSection$"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/scw autocomplete script basename=scw shell=bash >scw.bash

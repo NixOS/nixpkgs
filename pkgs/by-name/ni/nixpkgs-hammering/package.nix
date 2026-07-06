@@ -4,20 +4,20 @@
   rustPlatform,
   makeWrapper,
   nix,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-hammering";
-  version = "0-unstable-2025-09-10";
+  version = "0-unstable-2026-04-21";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "8cb86601cfa5521b454974d7219924f2d1c304c9";
-    hash = "sha256-9rSdimO591tpfe3MpcHkqsc0lPk6roNwgj6ajVSOG7E=";
+    rev = "0ca8e718c6809e0c2b640b954bfe000b915634dc";
+    hash = "sha256-j/jqwdM466jE2Rf6aW3DfI6wQa44eN8W8/ii1aX8HDs=";
   };
 
-  cargoHash = "sha256-MRwmeR5rj0PWUF5VMW5+9BbcX7Pq82YhufUv2Gt107U=";
+  cargoHash = "sha256-Lmj9XWUUavlmZn/IK+CcXQhKUYfz3dKF6S2U3BMhoIc=";
 
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # running checks requires to run nix inside of the builder which fails due to permission errors
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Set of nit-picky rules that aim to point out and explain common mistakes in nixpkgs package pull requests";

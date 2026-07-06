@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "spire-tpm-plugin";
-  version = "1.11.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "spiffe";
     repo = "spire-tpm-plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6hy1aQg0tS2wxOZRbZLv82HQEufVmW/a5L6Da+bNeHU=";
+    hash = "sha256-QHFLFotfMyUxKQHN1CcmNMvLvMEatltZPHiUA3G5QWo=";
   };
 
   proxyVendor = true;

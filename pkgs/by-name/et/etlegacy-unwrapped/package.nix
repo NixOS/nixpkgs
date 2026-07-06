@@ -19,27 +19,38 @@
   SDL2,
   sqlite,
   zlib,
+  versionCheckHook,
 }:
 let
-  version = "2.83.2";
+  version = "2.84.0";
   fakeGit = writeScriptBin "git" ''
     if [ "$1" = "describe" ]; then
       echo "${version}"
     fi
   '';
+  binarySuffix =
+    if stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "aarch64"
+    else if stdenv.hostPlatform.isi686 then
+      "i386"
+    else
+      throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 in
 stdenv.mkDerivation {
   pname = "etlegacy-unwrapped";
   inherit version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
     tag = "v${version}";
-    hash = "sha256-hZwLYaYV0j3YwFi8KRr4DZV73L2yIwFJ3XqCyq6L7hE=";
+    hash = "sha256-E1eR0OIfXn2QkSGYNu1JFXDIVrkz+pxM7IU0GVkvAFQ=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -69,6 +80,9 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
+    (lib.cmakeBool "BUNDLED_WOLFSSL" false)
+    (lib.cmakeBool "BUNDLED_OPENSSL" false)
+    (lib.cmakeBool "BUNDLED_CURL" false)
     (lib.cmakeBool "BUNDLED_ZLIB" false)
     (lib.cmakeBool "BUNDLED_CJSON" false)
     (lib.cmakeBool "BUNDLED_JPEG" false)
@@ -86,11 +100,17 @@ stdenv.mkDerivation {
     (lib.cmakeBool "INSTALL_OMNIBOT" false)
     (lib.cmakeBool "INSTALL_GEOIP" false)
     (lib.cmakeBool "INSTALL_WOLFADMIN" false)
+    (lib.cmakeBool "FEATURE_FREETYPE" true)
+    (lib.cmakeBool "FEATURE_GETTEXT" true)
     (lib.cmakeBool "FEATURE_AUTOUPDATE" false)
     (lib.cmakeBool "FEATURE_RENDERER2" false)
+    (lib.cmakeBool "RENDERER_DYNAMIC" true)
     (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
     (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
@@ -104,5 +124,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       ashleyghooper
     ];
+    mainProgram = "etl." + binarySuffix;
+    platforms = lib.platforms.linux;
   };
 }

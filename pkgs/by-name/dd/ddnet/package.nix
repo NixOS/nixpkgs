@@ -15,7 +15,6 @@
   libogg,
   libx11,
   opusfile,
-  pcre,
   python3,
   SDL2,
   sqlite,
@@ -32,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.8";
+  version = "19.8.3";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-CpzmKJ8W0uh/3x6/YSEs4SpJoSwYfCZxLDo7wvw96KU=";
+    hash = "sha256-/SfUDliB6fdc/yf2yVXHiqYlH+cIIoxz3RkP8SxsgA4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     libnotify
-    pcre
     python3
     sqlite
   ]

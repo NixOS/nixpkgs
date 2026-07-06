@@ -42,7 +42,7 @@
   inline-snapshot,
   logfire-api,
   loguru,
-  mysql-connector,
+  mysql-connector-python,
   openai-agents,
   pandas,
   psycopg,
@@ -138,7 +138,7 @@ buildPythonPackage (finalAttrs: {
     inline-snapshot
     logfire-api
     loguru
-    mysql-connector
+    mysql-connector-python
     openai-agents
     pandas
     psycopg

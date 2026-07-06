@@ -480,6 +480,11 @@ in
           ];
           SystemCallErrorNumber = "EPERM";
         };
+        unitConfig.RequiresMountsFor = [
+          cfg.configDir
+          cfg.logDir
+          cfg.cacheDir
+        ];
       };
     };
 

@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    homepage = "http://pypi.python.org/pypi/numericalunits";
+    homepage = "http://pypi.org/pypi/numericalunits/";
     description = "Package that lets you define quantities with unit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       patch = "0005-fix_ftbfs_with_gcc13.patch";
       hash = "sha256-y5NDZ+3t6GkBeF/5UY8dwtH8k0cuM+5SGBGPSV7AX7M=";
     })
+    ./fix-non-ascii.patch
   ];
 
   configureFlags = [ "--enable-lv2" ];

@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   awesomeversion,
   backoff,
   buildPythonPackage,
@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-gotailwind";
     tag = "v${version}";
-    hash = "sha256-kNyqSyJ1ha+BumYX4ruWaN0akEvUEsRxPs7Fj7LDHOw=";
+    hash = "sha256-sDQnweGVDyewvTPkRlmk9f7YMnUdPmvB9VrvegAC2B8=";
   };
 
   postPatch = ''
@@ -53,19 +53,20 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "gotailwind" ];
 
   meta = {
     description = "Modul to communicate with Tailwind garage door openers";
     homepage = "https://github.com/frenck/python-gotailwind";
-    changelog = "https://github.com/frenck/python-gotailwind/releases/tag/v$version";
+    changelog = "https://github.com/frenck/python-gotailwind/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tailwind";

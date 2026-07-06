@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.4.6";
+  version = "2026.7.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tdHjJjLwnf0/0ZxVb9+tgCD8cD8/3TEE3hw6dM3fKtY=";
+    hash = "sha256-F/hxgkqLk36906uhr56W+4Evwc8WLbYWw8pibGsq3EY=";
   };
 
-  cargoHash = "sha256-8JLwlEqxt8Ixg/b67ZICBBoOjGw8PFIYzNIBRiBJ8OA=";
+  cargoHash = "sha256-W88dlxvDEwN6C1j1WMtL/KodWQZ9UnI1VJc3xp1Lnqw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
     cmake
+    # gix spawns git-upload-pack by name in file:// clone tests.
+    git
     rustPlatform.bindgenHook
   ];
 
@@ -73,6 +75,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
+    # Nix's build sandbox strips setuid bits, so this round-trip assertion
+    # fails on both Linux and Darwin (cf. apko's TestSpecialModeBits).
+    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
@@ -83,6 +88,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1

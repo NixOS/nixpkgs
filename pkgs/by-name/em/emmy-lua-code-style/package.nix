@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  # Vendored mimalloc-2.0.9 uses ATOMIC_VAR_INIT, removed in C23.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

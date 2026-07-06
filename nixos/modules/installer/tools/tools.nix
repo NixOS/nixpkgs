@@ -76,7 +76,7 @@ let
     {
       inputs = {
         # This is pointing to an unstable release.
-        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -314,6 +314,27 @@ in
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
       })
+      (
+        { config, ... }:
+        {
+          options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
+            support for being targeted by `nixos-rebuild --elevate=run0
+            --ask-elevate-password`.
+
+            This enables polkit and adds {command}`polkit-stdin-agent` to
+            {option}`environment.systemPackages` so that a deploying host
+            can find a target-architecture agent at
+            {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
+            closure (which is required for cross-architecture deploys and
+            mismatched nixpkgs revisions to work).
+          '';
+
+          config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
+            security.run0.enable = lib.mkDefault true;
+            environment.systemPackages = [ pkgs.polkit-stdin-agent ];
+          };
+        }
+      )
       (mkToolModule {
         name = "nixos-version";
         package = nixos-version;

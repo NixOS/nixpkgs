@@ -15,27 +15,27 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.38.1";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Iq/KxQ8rbLtXDbGzcZxspfFwar189H3mBWwOD4hO7HU=";
+    hash = "sha256-pabav4ehssc3oQFuF4MgnSG7Ql1r5Y6n+ZzYbgh5tz8=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-T3fxNFvkLR7f49GQjzzTnl3VM+VUUgJfFF5d2GGe7L4=";
+  npmDepsHash = "sha256-Df1EVzKYWo5o2cvP3kFGcNKEuDu3fZno4OTKBe37IK8=";
 
-  dontPatchElf = stdenv.isDarwin;
+  dontPatchElf = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     jq
     pkg-config
     makeWrapper
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optionalDependencies keytar
 
   buildInputs = [
     ripgrep
@@ -54,9 +54,13 @@ buildNpmPackage (finalAttrs: {
     # Remove node-pty dependency from packages/core/package.json
     ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
 
-    # Fix ripgrep path for SearchText; ensureRgPath() on its own may return the path to a dynamically-linked ripgrep binary without required libraries
+    # Prefer the Nix ripgrep binary by prepending it to candidate paths
     substituteInPlace packages/core/src/tools/ripGrep.ts \
-      --replace-fail "await ensureRgPath();" "'${lib.getExe ripgrep}';"
+      --replace-fail "const candidatePaths = [" "const candidatePaths = [\"${lib.getExe ripgrep}\", "
+
+    # Trust the Nix store path by adding it to standard system prefixes
+    substituteInPlace packages/core/src/utils/paths.ts \
+      --replace-fail "const trustedPrefixes = [" "const trustedPrefixes = [\"/nix/store\", "
 
     # Disable auto-update by changing default values in settings schema
     sed -i '/enableAutoUpdate:/,/default: true/ s/default: true/default: false/' packages/cli/src/config/settingsSchema.ts
@@ -115,7 +119,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
-      FlameFlag
+      _4evy
       taranarmo
       caverav
     ];

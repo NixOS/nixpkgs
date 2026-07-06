@@ -18,14 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "symfc";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "symfc";
     repo = "symfc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Szj/s0ZsrpEFJMIo9p/9rDFd5yJiHky58Iab/k3log=";
+    hash = "sha256-bMG22yQszrAAh7qbQjIuaY3KjDXB95Y2OgkwKU+FW0E=";
   };
 
   build-system = [
@@ -44,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isx86_64 [
     # assert (np.float64(0.5555555555555556) == 1.0 ± 1.0e-06
     "test_fc_basis_set_o3"
   ];

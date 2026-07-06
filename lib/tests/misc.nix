@@ -51,7 +51,6 @@ let
     filter
     filterAttrs
     fix
-    fold
     foldAttrs
     foldl
     foldl'
@@ -558,6 +557,10 @@ runTests {
       "c"
     ];
     expected = "a\nb\nc\n";
+  };
+  testConcatLinesEmpty = {
+    expr = concatLines [ ];
+    expected = "";
   };
 
   testMakeIncludePathWithPkgs = {
@@ -2158,6 +2161,21 @@ runTests {
       foo = "bar";
       foobar = "baz";
       foobarbaz = "baz";
+    };
+  };
+
+  testConcatMapAttrsDuplicates = {
+    expr =
+      concatMapAttrs
+        (name: value: {
+          final = value;
+        })
+        {
+          a = 1;
+          b = 2;
+        };
+    expected = {
+      final = 2;
     };
   };
 
@@ -4790,7 +4808,7 @@ runTests {
   # for sub-directories
   testPackagesFromDirectoryNestedScopes =
     let
-      inherit (lib) makeScope recurseIntoAttrs;
+      inherit (lib) makeScope;
       emptyScope = makeScope lib.callPackageWith (_: { });
     in
     {
@@ -5110,5 +5128,97 @@ runTests {
       ]
     );
     expected = false;
+  };
+
+  # mapDefinitionValue
+
+  testMapDefinitionValuePlain = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) 5;
+    expected = 6;
+  };
+
+  testMapDefinitionValueMkForce = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkForce 5);
+    expected = lib.mkForce 6;
+  };
+
+  testMapDefinitionValueMkDefault = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkDefault 5);
+    expected = lib.mkDefault 6;
+  };
+
+  testMapDefinitionValueMkOrder = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkOrder 500 5);
+    expected = lib.mkOrder 500 6;
+  };
+
+  testMapDefinitionValueMkOverrideNested = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkForce (lib.mkOrder 500 5));
+    expected = lib.mkForce (lib.mkOrder 500 6);
+  };
+
+  testMapDefinitionValueMkIf = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkIf true 5);
+    expected = lib.mkIf true 6;
+  };
+
+  testMapDefinitionValueMkMerge = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkMerge [
+        5
+        10
+      ]
+    );
+    expected = lib.mkMerge [
+      6
+      11
+    ];
+  };
+
+  testMapDefinitionValueMkDefinition = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkDefinition {
+        file = "test";
+        value = 5;
+      }
+    );
+    expected = lib.mkDefinition {
+      file = "test";
+      value = 6;
+    };
+  };
+
+  testMapDefinitionValueDeep = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (lib.mkIf true (lib.mkForce (lib.mkOrder 500 5)));
+    expected = lib.mkIf true (lib.mkForce (lib.mkOrder 500 6));
+  };
+
+  testMapDefinitionValueAllNested = {
+    expr = lib.modules.mapDefinitionValue (x: x + 1) (
+      lib.mkMerge [
+        (lib.mkIf true (
+          lib.mkForce (
+            lib.mkOrder 500 (
+              lib.mkDefinition {
+                file = "test";
+                value = lib.mkBefore 5;
+              }
+            )
+          )
+        ))
+      ]
+    );
+    expected = lib.mkMerge [
+      (lib.mkIf true (
+        lib.mkForce (
+          lib.mkOrder 500 (
+            lib.mkDefinition {
+              file = "test";
+              value = lib.mkBefore 6;
+            }
+          )
+        )
+      ))
+    ];
   };
 }

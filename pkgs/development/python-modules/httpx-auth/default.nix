@@ -39,6 +39,11 @@ buildPythonPackage rec {
     time-machine
   ];
 
+  pytestFlags = [
+    # tests use a 6-byte HMAC key; pyjwt 2.11+ warns and upstream sets filterwarnings=error.
+    "-Wignore::jwt.warnings.InsecureKeyLengthWarning"
+  ];
+
   pythonImportsCheck = [ "httpx_auth" ];
 
   __darwinAllowLocalNetworking = true;

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchDebianPatch,
   libintl,
 }:
 
@@ -13,6 +14,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://savannah/numdiff/numdiff-${finalAttrs.version}.tar.gz";
     sha256 = "1vzmjh8mhwwysn4x4m2vif7q2k8i19x8azq7pzmkwwj4g48lla47";
   };
+
+  patches = [
+    (fetchDebianPatch {
+      pname = "numdiff";
+      version = "5.9.0";
+      debianRevision = "2";
+      patch = "0005-gcc-15.patch";
+      hash = "sha256-+8pNiEfGuh/03LRCY6kuoIcPZ4fQOhNrD93ZW/mXxJw=";
+    })
+  ];
 
   buildInputs = [ libintl ];
 

@@ -11,6 +11,7 @@
   versionCheckHook,
   pytestCheckHook,
   pytest-asyncio,
+  python-dotenv,
   websockets,
   httpx,
   sniffio,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.7.2";
+  version = "2.7.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-6CtmoY3BHO2t+ZjMzZPKUufOkaal0K+MTYhC1eiVXWQ=";
+    hash = "sha256-89Kl/MrotK0fv0oAayUuZXyLLG9PPM1km57ER+dM1jw=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -34,12 +35,12 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
-    ./no-alloc.patch
+    ./no-alloc.patch # with --unified=1 context
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-7KeidUDMH79b8qgAR5bvY8tAmW5OHmVtLIdb9LlP9w0=";
+    hash = "sha256-mnqtzZ2+xuxUezhsgw+gr6MmWbi4Z4j0bHndys6vHFw=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     pname = [ setproctitle ];
     reload = [ watchfiles ];
     # rloop = [ rloop ]; # not packaged

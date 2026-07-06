@@ -38,14 +38,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-stats";
-  version = "0.8.0";
+  version = "1.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FAZXnKxNb/DPkcpIRJRIzSbthS8Djf75hd5WMxegdhY=";
+    hash = "sha256-KA36JGqgsYs5fF1AndsTBkXQ6U/duoebDQ1TOEmaCSc=";
   };
 
   build-system = [

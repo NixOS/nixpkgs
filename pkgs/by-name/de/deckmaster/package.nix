@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
   # Let the app find Roboto-*.ttf files (hard-coded file names).
   postFixup = ''
     wrapProgram $out/bin/deckmaster \
-      --prefix XDG_DATA_DIRS : "${roboto.out}/share/" \
+      --prefix XDG_DATA_DIRS : "${roboto.out}/share/"
   '';
 
   meta = {

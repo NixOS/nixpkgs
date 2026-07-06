@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvc";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-DtJyGzrs6G1eZ9xFgBp/2PLlzMiRp/ePTINv0lLZauw=";
+    hash = "sha256-l4eGEDZrAXOhN5hPQLy2TcQEsQ+TTSNZVBFVwNsoQCo=";
   };
 
   nativeBuildInputs = [

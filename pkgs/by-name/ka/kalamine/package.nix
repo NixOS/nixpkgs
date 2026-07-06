@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kalamine";
-  version = "0.38";
+  version = "0.40";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OneDeadKey";
     repo = "kalamine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eDOwoI7S0l48oOWWDaBbDlC0A8RtPEA+FDCHpPur0OQ=";
+    hash = "sha256-9R8N5p+VNuiqTl3a0SSmJEVg3Ol76nROf43GsdOdJL8=";
   };
 
   nativeBuildInputs = [

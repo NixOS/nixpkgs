@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     description = "Pipelined Query Language";
     homepage = "https://github.com/runreveal/pql";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "pql";
   };
 })

@@ -27,6 +27,7 @@ PKG_PREFERENCES = {
     "protobuf": "protobuf",
     "pydantic": "pydantic",
     "requests_toolbelt": "requests-toolbelt",
+    "sqlalchemy": "sqlalchemy",
 }
 
 # Requirements missing from the airflow provider metadata

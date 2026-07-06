@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jpsxdec";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "m35";
     repo = "jpsxdec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PZOc5mpnUiUyydWyfZjWuPG4w+tRd6WLJ6YQMqu/95I=";
+    hash = "sha256-X55/FKfPLSwl7veB0LOmXeFEh5zJ10zKdTbCUnnyB5g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/jpsxdec";

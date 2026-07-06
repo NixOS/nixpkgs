@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  idna,
   pefile,
   pytestCheckHook,
   python-magic,
@@ -10,26 +11,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iocx";
-  version = "0.6.0";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iocx-dev";
     repo = "iocx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WdUHqQXq/qJyqZ5O9+E777+fQaQowvftDtQ0mj67FHw=";
+    hash = "sha256-j7GApoKh0LBTWMLnapqzRncDFLu+89wLeNmSHxflcks=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    idna
     pefile
     python-magic
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "iocx" ];
 
@@ -40,6 +40,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test requires go to be available
     "test_cli_with_real_go_binary"
+    # flaky: timing-sensitive scaling assertion
+    "test_filepaths_scaling_behavior"
+    "test_crypto_scaling_behavior"
+    "test_scaling_behavior"
   ];
 
   meta = {

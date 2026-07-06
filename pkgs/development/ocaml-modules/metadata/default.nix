@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "metadata";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-metadata";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-g76R1ziRv3VDl0IEJOm626m/ywDz+qgHtQg0uPb0MCU=";
   };
 
@@ -23,4 +23,4 @@ buildDunePackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

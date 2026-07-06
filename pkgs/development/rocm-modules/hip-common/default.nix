@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";

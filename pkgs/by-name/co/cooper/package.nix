@@ -8,6 +8,11 @@ stdenvNoCC.mkDerivation {
   pname = "cooper";
   version = "1.01-unstable-2025-05-25";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "indestructible-type";
     repo = "Cooper";

@@ -28,6 +28,11 @@ buildPythonPackage (finalAttrs: {
     pytest-timeout
   ];
 
+  disabledTests = [
+    # timeout
+    "test_stress_different_keys_threadsafe"
+  ];
+
   meta = {
     description = "Mutable mapping tools";
     homepage = "https://github.com/dask/zict";

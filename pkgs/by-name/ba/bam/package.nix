@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Yet another build manager";
+    homepage = "https://github.com/matricks/bam";
     mainProgram = "bam";
     maintainers = with lib.maintainers; [
       raskin

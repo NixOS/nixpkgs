@@ -108,14 +108,12 @@ stdenv.mkDerivation rec {
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
-  wrapperPath = lib.makeBinPath (
+  wrapperPathPrefix = lib.makeBinPath (
     [
       coreutils
       findutils
       getopt
-      git
       gnugrep
-      gnupg
       gnused
       tree
       which
@@ -136,6 +134,11 @@ stdenv.mkDerivation rec {
     ]
   );
 
+  wrapperPathSuffix = lib.makeBinPath [
+    git
+    gnupg
+  ];
+
   postFixup = ''
     # Fix program name in --help
     substituteInPlace $out/bin/pass \
@@ -143,13 +146,15 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${wrapperPath}"
+      --prefix PATH : "${wrapperPathPrefix}" \
+      --suffix PATH : "${wrapperPathSuffix}"
   ''
   + lib.optionalString dmenuSupport ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.
     wrapProgram $out/bin/passmenu \
-      --prefix PATH : "$out/bin:${wrapperPath}"
+      --prefix PATH : "$out/bin:${wrapperPathPrefix}" \
+      --suffix PATH : "${wrapperPathSuffix}"
   '';
 
   # Turn "check" into "installcheck", since we want to test our pass,

@@ -3,72 +3,146 @@
   automake,
   bison,
   fetchFromGitHub,
-  fetchpatch,
   flex,
   gitMinimal,
   lib,
   libpq,
   libtool,
   libunwind,
+  perl,
   pkg-config,
   ripgrep,
+  rustc,
+  rustPlatform,
   stdenv,
+  symlinkJoin,
+  cargo,
 }:
+
+let
+  cxxbridge-cmd = rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "cxxbridge-cmd";
+    version = "1.0.97";
+
+    src = fetchFromGitHub {
+      owner = "dtolnay";
+      repo = "cxx";
+      tag = finalAttrs.version;
+      hash = "sha256-Zvu+OYCfBZVQZCNoOG2bDFsz48NnbVH0q4q+CPth+0E=";
+    };
+
+    cargoLock.lockFile = ./Cargo.lock;
+
+    postPatch = ''
+      cp ${./Cargo.lock} Cargo.lock
+    '';
+
+    cargoBuildFlags = [
+      "--package"
+      "cxxbridge-cmd"
+    ];
+
+    meta.mainProgram = "cxxbridge";
+  });
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "19.14.0";
+  version = "27.1.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lxBn/T01Tsa7tid3mRJUigUwv9d3BAPZhV9Mp1lywBU=";
+    hash = "sha256-EXtfkjNOl3Loml7GXWYE8hh/IqItqA677YEh0Ve6dOI=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix gcc-13 build failure due to missing <stdexcept> include
-    #   https://github.com/stellar/medida/pull/34
-    (fetchpatch {
-      name = "gcc-13-p1.patch";
-      url = "https://github.com/stellar/medida/commit/f91354b0055de939779d392999975d611b1b1ad5.patch";
-      stripLen = 1;
-      extraPrefix = "lib/libmedida/";
-      hash = "sha256-iVeSUY5Rcy62apIKJdbcHGgxAxpQCkygf85oSjbTTXU=";
-    })
-    (fetchpatch {
-      name = "gcc-13-p2.patch";
-      url = "https://github.com/stellar/stellar-core/commit/477b3135281b629554cabaeacfcdbcdc170aa335.patch";
-      hash = "sha256-UVRcAIA5LEaCn16lWfhg19UU7b/apigzTsfPROLZtYg=";
-    })
-  ];
+  cargoDeps =
+    let
+      sorobanProtocolHashes = {
+        p21 = "sha256-cUhi2YennW+tukwf0woP69bqf1ZMsQ4JDeNqpk0jYjg=";
+        p22 = "sha256-5mNAblS3TYXu5a1ThmIdbKC9hUg/3F8vUPvFex3G58U=";
+        p23 = "sha256-l1nqc4qrqWV8aKOd9NFUaOLw1Mags2znjbQixU5H3+Y=";
+        p24 = "sha256-P+Q8SNcuFX6diBYqGpkOwHtplK4y4PZxB+gj6MnpYDs=";
+        p25 = "sha256-9NhnB3bDQI1FLmr0zTYTjEYl8V8KteWbMefWObLDB/A=";
+        p26 = "sha256-OxkiWTzNtmYxB64OtLUwghAkcT//SnMZVfUXynFg2Bg=";
+        p27 = "sha256-KcsyPBJLUOwRAtp95IYFiZZNMi1xWmYW7XXG+bMucmY=";
+      };
+      mainCargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) src;
+        hash = "sha256-8seehYc2W0lvW9WPewPHC3cLR9Lgj2qCib/EXK0gwVA=";
+      };
+      sorobanCargoDeps = lib.mapAttrs (
+        protocol: hash:
+        rustPlatform.fetchCargoVendor {
+          pname = "stellar-core-${protocol}";
+          inherit (finalAttrs) version src;
+          cargoRoot = "src/rust/soroban/${protocol}";
+          inherit hash;
+        }
+      ) sorobanProtocolHashes;
+    in
+    symlinkJoin {
+      name = "stellar-core-${finalAttrs.version}-cargo-vendor-dir";
+      paths = [ mainCargoDeps ] ++ lib.attrValues sorobanCargoDeps;
+      passthru = {
+        inherit sorobanProtocolHashes mainCargoDeps sorobanCargoDeps;
+      };
+      postBuild = ''
+        # `soroban-synth-wasm` resolves this path relative to the vendored git
+        # source root, but cargo vendors the workspace crates with versioned
+        # directory names.
+        for source in "$out"/source-git-*; do
+          for dir in "$source"/soroban-env-common-*; do
+            if [ -d "$dir" ] && [ ! -e "$source"/soroban-env-common ]; then
+              ln -s "$(basename "$dir")" "$source"/soroban-env-common
+            fi
+            break
+          done
+        done
+      '';
+    };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     automake
     autoconf
+    bison
+    cargo
+    flex
     gitMinimal
     libtool
+    perl
     pkg-config
     ripgrep
+    rustc
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
+    libpq
     libunwind
   ];
 
-  propagatedBuildInputs = [
-    bison
-    flex
-    libpq
-  ];
-
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   preConfigure = ''
     # Due to https://github.com/NixOS/nixpkgs/issues/8567 we cannot rely on
     # having the .git directory present, so directly provide the version
     substituteInPlace src/Makefile.am --replace '$$vers' 'stellar-core ${finalAttrs.version}';
+    substituteInPlace src/Makefile.am \
+      --replace-fail 'CARGO=cargo +$(RUST_TOOLCHAIN_CHANNEL)' 'CARGO=cargo' \
+      --replace-fail \
+        'RUSTC_WRAPPER="$(RUSTC_WRAPPER)" CARGO_HTTP_MULTIPLEXING=false $(CARGO) install --force --locked --root $(RUST_BUILD_DIR) cxxbridge-cmd --version 1.0.68' \
+        'install -Dm755 ${lib.getExe cxxbridge-cmd} $(RUST_CXXBRIDGE)' \
+      --replace-fail \
+        '$(SOROBAN_LIBS_STAMP): $(wildcard rust/soroban/p*/Cargo.lock) $(ALL_SOROBAN_GIT_STATE_STAMPS) Makefile $(RUST_DEP_TREE_STAMP) $(SRC_RUST_FILES) $(RUST_TOOLCHAIN_FILE)' \
+        '$(SOROBAN_LIBS_STAMP): $(wildcard rust/soroban/p*/Cargo.lock) Makefile $(RUST_DEP_TREE_STAMP) $(SRC_RUST_FILES) $(RUST_TOOLCHAIN_FILE)'
+    patchShebangs hash-xdrs.sh src/test
 
     # Everything needs to be staged in git because the build uses
     # `git ls-files` to search for source files to compile.
@@ -78,18 +152,33 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
+  checkPhase = ''
+    runHook preCheck
+
+    # The full upstream test suite is too heavy for a default package check.
+    # Keep this focused on a basic consensus smoke test.
+    ./src/stellar-core test --ll fatal -w NoTests -a -r simple --disable-dots "standalone"
+
+    runHook postCheck
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
-    description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
-    homepage = "https://www.stellar.org/";
-    license = lib.licenses.asl20;
+    description = "Reference peer-to-peer agent that manages the Stellar network";
     longDescription = ''
-      Stellar-core is the backbone of the Stellar network. It maintains a
-      local copy of the ledger, communicating and staying in sync with other
-      instances of stellar-core on the network. Optionally, stellar-core can
-      store historical records of the ledger and participate in consensus.
+      Stellar-core is a replicated state machine that maintains a local copy of
+      the Stellar cryptographic ledger and processes transactions against it in
+      consensus with a set of peers. It implements the Stellar Consensus
+      Protocol, a federated consensus protocol.
     '';
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    homepage = "https://www.stellar.org/";
+    changelog = "https://github.com/stellar/stellar-core/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iamanaws ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "stellar-core";
   };
 })

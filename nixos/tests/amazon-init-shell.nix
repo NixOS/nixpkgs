@@ -15,7 +15,7 @@
   meta = with lib.maintainers; {
     maintainers = [ urbas ];
   };
-  nodes.machine = {
+  nodes.unnamed = {
     imports = [
       ../modules/profiles/headless.nix
       ../modules/virtualisation/amazon-init.nix

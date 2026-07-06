@@ -8,13 +8,13 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "kdf";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
-    url = "https://github.com/robur-coop/kdf/releases/download/v${version}/kdf-${version}.tbz";
-    hash = "sha256-0WFYKw7+ZtlY3WuMnCEGjp9kVM4hg3fWz4eCPexi4M4=";
+    url = "https://github.com/robur-coop/kdf/releases/download/v${finalAttrs.version}/kdf-${finalAttrs.version}.tbz";
+    hash = "sha256-mWwWW26VMoFtSuXH53Unpw0vERolWDwK63L0sCeFacU=";
   };
 
   propagatedBuildInputs = [
@@ -34,4 +34,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

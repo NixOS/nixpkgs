@@ -240,6 +240,25 @@ in
                 example = "auto";
               };
 
+              protocol = lib.mkOption {
+                type = lib.types.enum [
+                  "auto"
+                  "http2"
+                  "quic"
+                ];
+                default = "auto";
+                description = ''
+                  Specifies the protocol used to establish a connection between `cloudflared` and the Cloudflare global network.
+
+                  The value `auto` lets `cloudflared` choose the protocol (currently QUIC, falling back to HTTP/2).
+                  Set to `http2` to work around QUIC/UDP connectivity issues, such as restrictive firewalls, broken UDP path MTU, or QUIC interop bugs.
+                  Set to `quic` to force QUIC.
+
+                  See [Tunnel run parameters](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/cloudflared-parameters/run-parameters/#protocol).
+                '';
+                example = "http2";
+              };
+
               default = lib.mkOption {
                 type = lib.types.str;
                 description = ''
@@ -397,6 +416,7 @@ in
         environment = {
           TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) "%d/cert.pem";
           TUNNEL_EDGE_IP_VERSION = tunnel.edgeIPVersion;
+          TUNNEL_TRANSPORT_PROTOCOL = tunnel.protocol;
         };
       }
     ) config.services.cloudflared.tunnels;

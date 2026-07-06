@@ -13,18 +13,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "google-lighthouse";
-  version = "13.1.0";
+  version = "13.4.0";
 
   src = fetchFromGitHub {
     owner = "GoogleChrome";
     repo = "lighthouse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nSXIA1yRwcetv9u/UJ445iDP3i+dX0rhzozxzQvXkf0=";
+    hash = "sha256-diZT1SOCSpuiQfAS7kjGxea2imVAJyKYxf2WFBsE/H0=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-naB9TOFiggKNiJcXkHF5VbvsLtNAYQD84/pL//76fuE=";
+    hash = "sha256-Rp+LCYRZ5jVGiR1L8Wyd5juw8GPrwnUH2chrxrrwE6k=";
   };
 
   yarnBuildScript = "build-report";

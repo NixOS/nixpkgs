@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "browser-sync";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "BrowserSync";
     repo = "browser-sync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AQZfSdzAGsLnZf7q5YWy5v4W4Iv3f0s4eOV1tC7yhXw=";
+    hash = "sha256-BDwd62ZLGUA262b0FLCFs3vo8wwgcy3k48YNugeLvtU=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-HvV7zaD8EZiXR7S7fZRT3zDpUxa3B9Gza9fl8zEurLA=";
+  npmDepsHash = "sha256-32IgL7kXCW1KwQhrb402Rqse5+ggo9K/fhxcp8pbwRc=";
 
   meta = {
     description = "Keep multiple browsers & devices in sync when building websites";

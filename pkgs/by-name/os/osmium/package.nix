@@ -22,15 +22,18 @@
   nss,
   nspr,
   gtk3,
+  libnotify,
+  libpulseaudio,
+  writeShellApplication,
 }:
 
 stdenv.mkDerivation rec {
   pname = "osmium";
-  version = "0.0.19";
+  version = "0.0.30-alpha";
 
   src = fetchurl {
-    url = "https://updater.osmium.chat/Osmium-${version}-alpha-x64.tar.gz";
-    hash = "sha256-Qwh6K2QlJJapqR0BkaA0LvwLEsqktnLzOnyJg+7sMFo=";
+    url = "https://updater.osmium.chat/Osmium-${version}-x64.tar.gz";
+    hash = "sha256-NF7RF8odDQfh4zhk5B4md4OqDgh538exFNsRZzSJwBM=";
   };
 
   nativeBuildInputs = [
@@ -55,12 +58,14 @@ stdenv.mkDerivation rec {
     nss
     nspr
     gtk3
+    libnotify
+    libpulseaudio
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,opt,share/{pixmaps,icons/hicolor/256x256/apps}}
+    mkdir -p $out/{bin,opt,share}
 
     mv * $out/opt/
     chmod +x $out/opt/osmium
@@ -72,8 +77,13 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
 
-    ln -s $out/opt/resources/assets/icons/256x256.png $out/share/pixmaps/osmium.png
-    ln -s $out/opt/resources/assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/osmium.png
+    for size in 16x16 32x32 48x48 64x64 128x128 256x256 512x512
+    do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $out/opt/resources/assets/icons/$size.png $out/share/icons/hicolor/$size/apps/osmium.png
+    done
+
+    ln -s $out/opt/resources/assets/icons/1024x1024.png $out/share/icons/osmium.png
 
     ln -s "$desktopItem/share/applications" $out/share
 
@@ -92,6 +102,10 @@ stdenv.mkDerivation rec {
     ];
     mimeTypes = [ "x-scheme-handler/osmium" ];
     startupWMClass = "Osmium";
+  };
+
+  passthru = {
+    updateScript = ./update.sh;
   };
 
   meta = {

@@ -15,7 +15,7 @@
   libogg,
   libx11,
   opusfile,
-  pcre,
+  pcre2,
   python3,
   SDL2,
   sqlite,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libnotify
-    pcre
+    pcre2
     sqlite
     freetype
     libGLU

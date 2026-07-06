@@ -38,8 +38,10 @@ stdenv.mkDerivation {
     local indexJs="$out/Applications/LM Studio.app/Contents/Resources/app/.webpack/main/index.js"
     substituteInPlace "$indexJs" --replace-quiet "'/Applications'" "'/'"
 
-    # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
-    codesign --force --deep --sign - "$out/Applications/LM Studio.app"
+    # Re-sign the main executable, otherwise macOS reports the app as damaged
+    appBundle="$out/Applications/LM Studio.app"
+    mainExe="$appBundle/Contents/MacOS/LM Studio"
+    codesign --force --sign - "$mainExe"
 
     runHook postInstall
   '';

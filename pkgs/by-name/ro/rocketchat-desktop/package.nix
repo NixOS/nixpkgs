@@ -7,7 +7,7 @@
   pkg-config,
   node-gyp,
   python3Packages,
-  electron_40,
+  electron_42,
   vips,
   xvfb-run,
   copyDesktopItems,
@@ -17,26 +17,32 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  electron = electron_40;
+  electron = electron_42;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.14.0";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-5p0WmTKHqiRtNeWxJuBUKVHc2DHtAGMyBsXq9SpytWA=";
+    hash = "sha256-2ko2medsG0C6uq8Lp7ej2RgEgA7OIDsVlMG2BD1ENcM=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L182
+    ./yarn-4.14-support.patch
+  ];
 
   # This might need to be updated between releases.
   # See https://nixos.org/manual/nixpkgs/stable/#javascript-yarnBerry-missing-hashes
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Y6wdGp8Q5DW3f7pIrcE3ElKHFHYPxcAQFiM4R1cSYUA=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-WfIY3kCVsL7rXbXiH7OTuiIZmGs7itdK2DG4onua3Bc=";
   };
 
   nativeBuildInputs = [

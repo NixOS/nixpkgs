@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-GxNxc+cu3wBjz/1VF2+0DJ/PBTLlJKm0ncgzeaw5Fxw=";
+    hash = "sha256-mDcvVwqzSmszaJDahzkRNteiO4C/eU+BqTdBpWj5yGw=";
   };
 
   postPatch = ''
@@ -46,13 +46,19 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError: expected call not found
-    "test_moes"
     "test_tuya_mcu_set_time"
   ];
 
   disabledTestPaths = [
-    # TypeError: unhashable type: 'dict'
-    "tests/test_quirks_v2.py"
+    # function signature mismatch with zigpy 1.5.1
+    "tests/test_tuya.py"
+    "tests/test_tuya_builder.py"
+    "tests/test_tuya_dimmer.py"
+    "tests/test_tuya_rcbo.py"
+    "tests/test_tuya_siren.py"
+    "tests/test_tuya_spells.py"
+    "tests/test_tuya_trv.py"
+    "tests/test_tuya_valve.py"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];

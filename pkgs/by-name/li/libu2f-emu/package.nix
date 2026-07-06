@@ -39,12 +39,6 @@ stdenv.mkDerivation {
     # Fix header guard typo: TRANSaCTION_H -> TRANSACTION_H
     substituteInPlace src/usb/transaction.h \
       --replace-fail "define TRANSaCTION_H" "define TRANSACTION_H"
-
-    # Install headers into a u2f-emu/ subdirectory so consumers can
-    # use #include <u2f-emu/u2f-emu.h> (expected by QEMU).
-    substituteInPlace src/meson.build \
-      --replace-fail "install_headers(u2f_emu_headers)" \
-                     "install_headers(u2f_emu_headers, subdir: 'u2f-emu')"
   '';
 
   # Disable -Werror: upstream uses OpenSSL EC_KEY APIs deprecated since 3.0.

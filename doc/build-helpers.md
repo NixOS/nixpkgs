@@ -25,6 +25,5 @@ build-helpers/dev-shell-tools.chapter.md
 build-helpers/special.md
 build-helpers/images.md
 hooks/index.md
-languages-frameworks/index.md
 packages/index.md
 ```

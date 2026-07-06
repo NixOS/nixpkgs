@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "spacectl";
-  version = "1.21.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "spacelift-io";
     repo = "spacectl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GW8jeET8MBvyFbGZWblU2mj9kWSK9cfhdYj+UXxbt5s=";
+    hash = "sha256-9YhA1clYaPbrY/kAS51Qo20EDPSPOKwN5iLUUJ4sE60=";
   };
 
-  vendorHash = "sha256-wc6pRnCdIL7Se98eDfyU5OMOghJ2VrR1POM7lHo3Af8=";
+  vendorHash = "sha256-1ue5NHt/+QCtmzwQder6H7WqRBJ42on53ixuD+wiZpg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
       installShellCompletion --cmd spacectl \
         --bash <(${emulator} $out/bin/spacectl completion bash) \
         --fish <(${emulator} $out/bin/spacectl completion fish) \
-        --zsh <(${emulator} $out/bin/spacectl completion zsh) \
+        --zsh <(${emulator} $out/bin/spacectl completion zsh)
     '';
 
   meta = {

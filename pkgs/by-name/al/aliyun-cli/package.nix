@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "aliyun-cli";
-  version = "3.3.8";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5RFGpfeW3nLubN920hrBVyEdJEPa/V3Dz2YdxCh9YLU=";
+    hash = "sha256-x43yePNf1HVw9R7PqpAb7J2XYCEn90W81nx/zgfNQBg=";
     fetchSubmodules = true;
   };
 

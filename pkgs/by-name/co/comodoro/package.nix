@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.2";
 
   src = fetchFromGitHub {
-    owner = "soywod";
+    owner = "pimalaya";
     repo = "comodoro";
     rev = "v${finalAttrs.version}";
     hash = "sha256-FnNNJ6WHR8KCsW+1hPIYddxQlUvpPc+SRbaxAcdVEUk=";
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "CLI to manage your time";
     homepage = "https://github.com/pimalaya/comodoro";
-    changelog = "https://github.com/soywod/comodoro/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/pimalaya/comodoro/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soywod ];
     mainProgram = "comodoro";

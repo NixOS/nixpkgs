@@ -3,22 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.9.0";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     tag = "v${version}";
-    hash = "sha256-dkSTZkj6Rx6OMdlX4oDOydetosf/iEJhlARmEc0W9gQ=";
+    hash = "sha256-1MSnabckpAwV/NmD5wKxF7k7hwve6fBiCPyw7skxdlM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [ "zipstream" ];
 

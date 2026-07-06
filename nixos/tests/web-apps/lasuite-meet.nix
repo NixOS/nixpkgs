@@ -8,11 +8,9 @@ in
   name = "lasuite-meet";
   meta.maintainers = with lib.maintainers; [ soyouzpanda ];
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
-      virtualisation.memorySize = 4 * 1024;
-
       networking.hosts."127.0.0.1" = [ domain ];
 
       environment.systemPackages = with pkgs; [ jq ];

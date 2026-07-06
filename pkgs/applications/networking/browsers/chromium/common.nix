@@ -480,13 +480,15 @@ let
       # BUNDLE_WIDEVINE_CDM build flag does work in the way we want though.
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
-      ./patches/widevine-disable-auto-download-allow-bundle.patch
+      ./patches/${lib.optionalString (chromiumVersionAtLeast "150") "chromium-150-"}widevine-disable-auto-download-allow-bundle.patch
     ]
-    ++ [
+    ++ lib.optionals (!chromiumVersionAtLeast "150") [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+    ]
+    ++ [
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
@@ -504,10 +506,15 @@ let
       # allowing us to use our rustc and our clang.
       ./patches/chromium-140-rust.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "141") [
+    ++ lib.optionals (versionRange "141" "150") [
       # Rebased variant of the patch above due to
       # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
       ./patches/chromium-141-rust.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "150") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7858711
+      ./patches/chromium-150-rust.patch
     ]
     ++ lib.optionals (!chromiumVersionAtLeast "145" && stdenv.hostPlatform.isAarch64) [
       # Reverts decommit pooled pages which causes random crashes of tabs on systems
@@ -600,7 +607,7 @@ let
         hash = "sha256-tJ//HE7o9R8nSQDGhi+MKXdNUwnkCZI++CzpAmFn2YY=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "146" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "146" "148" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
       (fetchpatch {
         name = "chromium-146-revert-Update-fsanitizer=array-bounds-config.patch";
@@ -611,21 +618,82 @@ let
         hash = "sha256-WZsN2qm6lX121bDf7SoN75flXtCTmPPpwtHK0ayjkPc=";
       })
     ]
-    ++ lib.optionals (versionRange "146" "147") [
-      # Backport CL 7594600 from M147 to fix the following error:
-      #  error[E0277]: the trait bound `LaneCount<N>: SupportedLaneCount` is not satisfied
-      #  --> ../../third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/pod.rs:152:40
-      (fetchpatch {
-        name = "chromium-146-backport-Remove-now-obsolete-invalid-patch-on-bytemuck-v1.patch";
-        # https://chromium-review.googlesource.com/c/chromium/src/+/7594600
-        url = "https://chromium.googlesource.com/chromium/src/+/90b77efcecb262823fadb67b0ce218846cd9e756^!?format=TEXT";
-        decode = "base64 -d";
-        hash = "sha256-iDhDdVscy0tinQCRKXOghrn4ZRwlc8YjPZ0xPv0UMEU=";
-      })
+    ++ lib.optionals (!versionRange "146" "147") [
+      # Fix building with stable Rust 1.95 (https://issues.chromium.org/issues/480176523):
+      #  error[E0425]: cannot find type `LaneCount` in module `core::simd`
+      #  --> ../../third_party/rust/chromium_crates_io/vendor/bytemuck-v1/src/zeroable.rs:234:15
+      ./patches/chromium-142-bytemuck-rust-1.95.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "147" && lib.versionOlder llvmVersion "23") [
       # clang++: error: unknown argument: '-fno-lifetime-dse'
       ./patches/chromium-147-llvm-22.patch
+    ]
+    ++ lib.optionals (versionRange "148" "149" && lib.versionOlder llvmVersion "23") [
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+      (fetchpatch {
+        name = "chromium-148-revert-build-Add--fsanitizer=return-config.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7629257
+        url = "https://chromium.googlesource.com/chromium/src/+/99ba1f5302f9433efdb4df302cb7b7de56c72e4c^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-/qzzxwTdPMwIdsqD/G02S7kKHCj3QxECL+g1WYEaWmU=";
+      })
+      # ERROR Unresolved dependencies.
+      # //apps:apps(//build/toolchain/linux/unbundle:default)
+      #   needs //build/config/compiler:sanitize_return(//build/toolchain/linux/unbundle:default)
+      (fetchpatch {
+        name = "chromium-148-revert-build-Enable--fsanitizer=return-config.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7629258
+        url = "https://chromium.googlesource.com/chromium/src/+/9357bfbea03753fe52264c9ec36abe74f48cfef5^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-14fTHNh3vGsf4KgeH8uLX+aK3lrjK0VKd1dfK1g7r0I=";
+      })
+      # [33377/55552] LINK ./mksnapshot
+      # ld.lld: error: undefined symbol: __sanitizer_set_death_callback
+      # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/blob/148.0.7778.96-1/PKGBUILD#L168-174
+      (fetchpatch {
+        name = "archlinux-chromium-146-drop-unknown-clang-flag.patch";
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/raw/148.0.7778.96-1/chromium-146-drop-unknown-clang-flag.patch";
+        hash = "sha256-jR0G9z2R8VGl2tkB3u0368RyWM1J6qYXqNWwKkYd5zU=";
+      })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "149" && lib.versionOlder llvmVersion "23") [
+      # clang++: error: unknown argument: '-fdiagnostics-show-inlining-chain'
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=array-bounds'
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
+      ./patches/chromium-149-llvm-22.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
+      # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
+      # FAILED: [code=1] obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
+      # clang++ -MD -MF obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o.d [...]
+      # ../../media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc:123:9: error: use of undeclared identifier 'ERROR'
+      #   123 |     LOG(ERROR) << "dlopen(radeonsi_dri.so) failed with error: " << dlerror();
+      #       |         ^~~~~
+      ./patches/chromium-149-use-of-undeclared-identifier-ERROR.patch
+    ]
+    ++ lib.optionals (versionRange "148" "149") [
+      # ninja: error: '../../third_party/rust-toolchain/bin/rustc', needed by 'phony/default_for_rust_host_build_tools_rust_bin_inputs', missing and no known rule to make it
+      (fetchpatch {
+        name = "chromium-148-revert-Reland-build-use-tool-inputs-instead-of-siso-config-for-rust-actions.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7719879
+        url = "https://chromium.googlesource.com/chromium/src/+/9193ab90af24c23ee983e0a8da9bed45712f0d26^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-7xg8IZ2gO+Wtnv7lWLVE3lLpcmMgvtDtcWwUuMBzkrE=";
+      })
+    ]
+    ++ lib.optionals (versionRange "150" "151") [
+      # ninja: Entering directory `out/Release'
+      # ninja: error: 'ar', needed by 'default_for_rust_host_build_tools/obj/build/rust/allocator/liballoc_error_handler_impl.a', missing and no known rule to make it
+      (fetchpatch {
+        name = "chromium-150-backport-build--Omit-ar-from-inputs-when-resolved-via--PATH.patch";
+        # https://chromium-review.googlesource.com/c/chromium/src/+/7904982
+        url = "https://chromium.googlesource.com/chromium/src/+/60f987d8d5f7272793a40290d060b8f50933f825^!?format=TEXT";
+        decode = "base64 -d";
+        hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
+      })
     ];
 
     postPatch =
@@ -751,6 +819,18 @@ let
         sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
       ''
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7677517
+      # ninja: error: '../../third_party/gperf/cipd/bin/gperf', needed by 'gen/third_party/blink/renderer/core/css/parser/at_rule_descriptors.cc', missing and no known rule to make it
+      + lib.optionalString (chromiumVersionAtLeast "148") ''
+        mkdir -p third_party/gperf/cipd/bin
+        ln -s "${pkgsBuildHost.gperf}/bin/gperf" third_party/gperf/cipd/bin/gperf
+      ''
+      # https://chromium-review.googlesource.com/c/chromium/src/+/7719879
+      # ninja: error: '../../third_party/rust-toolchain/bin/rustc', needed by 'phony/default_for_rust_host_build_tools_rust_bin_inputs', missing and no known rule to make it
+      + lib.optionalString (chromiumVersionAtLeast "149") ''
+        mkdir -p third_party/rust-toolchain/bin
+        ln -s "${buildPackages.rustc}/bin/rustc" third_party/rust-toolchain/bin/rustc
+      ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
           ''
@@ -848,6 +928,12 @@ let
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
+      // lib.optionalAttrs (chromiumVersionAtLeast "150") {
+        # ERROR at //build/modules/BUILD.gn:80:23: Directory does not exist: /usr/include/
+        #     system_headers += expand_directory("${sysroot}/${root_include_dir}", true)
+        #                       ^------------------------------------------------------
+        use_unified_system_module = false;
+      }
       // {
         use_qt5 = false;
         use_qt6 = false;
@@ -903,6 +989,11 @@ let
       # but lit_reactive_element.patch only patches the former.
       + lib.optionalString (chromiumVersionAtLeast "146") ''
         rm -r third_party/node/node_modules/@lit/reactive-element/development
+      ''
+      # Similarly, having @types/estree causes:
+      # error TS2352: Conversion of type 'Node[]' to type 'TSPropertySignature[]' [...]
+      + lib.optionalString (chromiumVersionAtLeast "148") ''
+        rm -r third_party/node/node_modules/@types/estree
       '';
 
     configurePhase = ''
@@ -919,20 +1010,34 @@ let
       runHook postConfigure
     '';
 
-    # Chromium expects nightly/bleeding edge rustc features to be available.
-    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
-    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
-    # enable those features in our stable builds.
-    env.RUSTC_BOOTSTRAP = 1;
-    # Mute some warnings that are enabled by default. This is useful because
-    # our Clang is always older than Chromium's and the build logs have a size
-    # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow";
-    env.BUILD_CC = "$CC_FOR_BUILD";
-    env.BUILD_CXX = "$CXX_FOR_BUILD";
-    env.BUILD_AR = "$AR_FOR_BUILD";
-    env.BUILD_NM = "$NM_FOR_BUILD";
-    env.BUILD_READELF = "$READELF_FOR_BUILD";
+    env = {
+      # Chromium expects nightly/bleeding edge rustc features to be available.
+      # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+      # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+      # enable those features in our stable builds.
+      RUSTC_BOOTSTRAP = 1;
+
+      # Mute some warnings that are enabled by default. This is useful because
+      # our Clang is always older than Chromium's and the build logs have a size
+      # of approx. 25 MB without this option (and this saves e.g. 66 %).
+      NIX_CFLAGS_COMPILE =
+        "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow"
+        # warning: '_LIBCPP_HARDENING_MODE' macro redefined [-Wmacro-redefined]
+        # because of hardeningDisable = [ "strictflexarrays1" ];
+        + lib.optionalString (chromiumVersionAtLeast "149") " -Wno-macro-redefined";
+
+      BUILD_CC = "$CC_FOR_BUILD";
+      BUILD_CXX = "$CXX_FOR_BUILD";
+      BUILD_AR = "$AR_FOR_BUILD";
+      BUILD_NM = "$NM_FOR_BUILD";
+      BUILD_READELF = "$READELF_FOR_BUILD";
+    }
+    // lib.optionalAttrs (chromiumVersionAtLeast "150") {
+      # [56385/56385] LINK ./chrome
+      # FAILED: [code=1] chrome
+      # /nix/store/[...]/bin/ld.lld: line 288: /nix/store/[...]/bin/ld.lld: Argument list too long
+      NIX_LD_USE_RESPONSE_FILE = 1;
+    };
 
     buildPhase =
       let

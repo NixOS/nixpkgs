@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Lightweight LDAP server for development, home use, or CI";
     homepage = "https://github.com/glauth/glauth";
-    changelog = "https://github.com/glauth/glauth/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/glauth/glauth/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bjornfor

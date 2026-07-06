@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     python3.pkgs.pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Nixpkgs' default is `--capture=fd`, and with it, 2 command mock tests
     # fail, see: https://github.com/lucc/khard/issues/353
     "--capture=no"

@@ -8,17 +8,24 @@
   jq,
   keyutils,
   libgcc,
+  makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proton-pass-cli";
-  version = "1.10.0";
+  version = "2.2.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -37,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/pass-cli --set PROTON_PASS_NO_UPDATE_CHECK 1
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -46,19 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-aarch64";
-        hash = "sha256-tOHXJl4R27rtuXlsqAQ8XFpOJ7Pc1IEcnla85Myn7N0=";
+        hash = "sha256-+v1y8gxFy4Fnk/SNhiPObrnQZHhDGSN2fTZ3b96LRQ4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-aarch64";
-        hash = "sha256-zJQfWhiNk/noQbrhnxgEqGHZwccsyV2FX3sEOpUGTYQ=";
+        hash = "sha256-W/qSKyieYTM9cIx1x3qdvX0FbwBMg42CO8lIrN+xpa0=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-x86_64";
-        hash = "sha256-usmOErL5BeZ2s4VrShr4fYcO5ibBBaBJuk3oPtjf884=";
+        hash = "sha256-9lpkph6Quup7olbZsUcgFo8EQPWz1jDRbSffNbRVR5o=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-x86_64";
-        hash = "sha256-lkB4I5Srj+r+pLvd2HEch/NPFfHvhVfgu6RC7yh/njY=";
+        hash = "sha256-+RbPDVhFA0aOTOy0EreGV7VUU4IphBc/y5ZWo9GnjOY=";
       };
     };
     updateScript = writeShellScript "update-proton-pass-cli" ''

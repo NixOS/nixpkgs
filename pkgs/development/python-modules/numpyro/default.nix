@@ -30,14 +30,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.20.1";
+  version = "0.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = finalAttrs.version;
-    hash = "sha256-sNqllL9nBwXp0kn+HAjvIaHf7LR0UKh9q7DZ20yCr5A=";
+    hash = "sha256-4NA1m2N0AZy3ausAZc6+PPw175joGC7WwfZr0Ri0uK8=";
   };
 
   build-system = [ setuptools ];

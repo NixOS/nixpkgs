@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure --replace "libct.so" "libct.dylib"
   '';
 
+  # 'bool' used as identifier rejected by gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   enableParallelBuilding = true;
 
   buildInputs = [

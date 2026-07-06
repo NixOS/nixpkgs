@@ -9,20 +9,20 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "go-hass-agent";
-  version = "14.10.3";
+  version = "14.14.1";
 
   src = fetchFromGitHub {
     owner = "joshuar";
     repo = "go-hass-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7F4zxxMKNrUiKonfO7dQQuODEnFgaFRM7Rzb7n1Erys=";
+    hash = "sha256-s5kzxzyfNGK57MtusjEjcm0Gn75Wu8vfwJEIaVz7m20=";
   };
 
-  vendorHash = "sha256-WPglpc8xqCW51LmdhGLAuB4jg96T72eRuaS61zagoNw=";
+  vendorHash = "sha256-ZiLYnEcugciobjAchzJZNQrE3G11ehf3vi6cIMxZiTQ=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-baO2S+NNgNgGjMNPrtmgaiiNTHv3vScOXQIVx1Xaxow=";
+    hash = "sha256-K/VrxDlE3MVDBItsx4ADkAgn3W06onfVwpBYoU3kejs=";
   };
 
   overrideModAttrs = oldAttrs: {
@@ -72,7 +72,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/joshuar/go-hass-agent";
     changelog = "https://github.com/joshuar/go-hass-agent/blob/v${finalAttrs.version}/CHANGELOG.md";
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      nadir-ishiguro
+    ];
     platforms = lib.platforms.linux;
   };
 })

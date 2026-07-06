@@ -4,7 +4,7 @@
   buildPythonPackage,
   cryptography,
   esptool,
-  fetchFromGitHub,
+  fetchPypi,
   netifaces,
   pyserial,
   replaceVars,
@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rns";
-  version = "1.1.6";
+  version = "1.3.7";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "markqvist";
-    repo = "Reticulum";
-    tag = finalAttrs.version;
-    hash = "sha256-21ym6R2zPxm8Z4zO6g/ZA4/A4S0SmwhOEqC6B+DTpOI=";
+  src = fetchPypi {
+    pname = "rns";
+    version = finalAttrs.version;
+    hash = "sha256-Z1fbZcCvISs4a35EuV7aTjbWsRyug0JYvG0tEdrG4SU=";
   };
 
   patches = [
@@ -48,11 +48,10 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Cryptography-based networking stack for wide-area networks";
     homepage = "https://reticulum.network";
-    changelog = "https://github.com/markqvist/Reticulum/blob/${finalAttrs.src.tag}/Changelog.md";
-    # Reticulum License
-    # https://github.com/markqvist/Reticulum/blob/master/LICENSE
-    license = lib.licenses.unfree;
+    changelog = "https://github.com/markqvist/Reticulum/blob/${finalAttrs.version}/Changelog.md";
+    license = lib.licenses.reticulum;
     maintainers = with lib.maintainers; [
+      drupol
       fab
       qbit
     ];

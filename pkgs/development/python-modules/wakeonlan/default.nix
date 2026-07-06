@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "remcohaszing";
     repo = "pywakeonlan";
     tag = version;
-    hash = "sha256-VPdklyD3GVn0cex4I6zV61I0bUr4KQp8DdMKAM/r4io=";
+    hash = "sha256-AQjecGfcxI+zzUR6IO/iG/49QH1jClNYJFBEOABek5U=";
   };
 
   nativeBuildInputs = [ poetry-core ];

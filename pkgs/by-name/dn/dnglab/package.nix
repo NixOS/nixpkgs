@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Camera RAW to DNG file format converter";
     homepage = "https://github.com/dnglab/dnglab";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "dnglab";
   };
 })

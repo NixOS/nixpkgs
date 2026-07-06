@@ -8,6 +8,7 @@ python3Packages.toPythonApplication (
     dependencies =
       (oldAttrs.dependencies or [ ])
       ++ litellm.optional-dependencies.proxy
-      ++ litellm.optional-dependencies.extra_proxy;
+      ++ litellm.optional-dependencies.extra_proxy
+      ++ litellm.optional-dependencies.proxy-runtime;
   })
 )

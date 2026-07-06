@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "hbd";
     homepage = "https://github.com/xtream1101/humblebundle-downloader";
     changelog = "https://github.com/xtream1101/humblebundle-downloader/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

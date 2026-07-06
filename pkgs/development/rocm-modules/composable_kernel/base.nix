@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"

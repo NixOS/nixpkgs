@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-gamble";
-  version = "2.12.0";
+  version = "2.14.2";
 
   src = fetchFromGitLab {
     owner = "pinage404";
     repo = "git-gamble";
     rev = "version/${finalAttrs.version}";
-    hash = "sha256-6pH1gqZaMhXlm1JNu2D7JPO8KF9bA/DxqzM7t+2BUwQ=";
+    hash = "sha256-UPiktBeMPZf9vrKz5XFyMzBJtxCe0ojJabeIwhyo9/g=";
   };
 
-  cargoHash = "sha256-LKwhkZstsccnpg347xtryukx2d6AFbCJVJBB3bnN3bc=";
+  cargoHash = "sha256-yMlb3c2V3NUFw/GDPyCqTCSz+YLn3F9wmeP12jTySCI=";
 
   nativeCheckInputs = [ gitMinimal ];
   preCheck = ''

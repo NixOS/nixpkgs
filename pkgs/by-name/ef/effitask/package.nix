@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.4.2";
 
   src = fetchFromGitHub {
-    owner = "sanpii";
+    owner = "todotxt-rs";
     repo = "effitask";
     rev = finalAttrs.version;
     sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Or use it as standalone program by defining some environment variables
       like described in the projects readme.
     '';
-    homepage = "https://github.com/sanpii/effitask";
+    homepage = "https://github.com/todotxt-rs/effitask";
     maintainers = with lib.maintainers; [ davidak ];
     license = with lib.licenses; [ mit ];
     mainProgram = "effitask";

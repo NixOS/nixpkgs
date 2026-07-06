@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./add-option-for-installation-sysconfdir.patch
   ];
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [
     pkg-config
     intltool

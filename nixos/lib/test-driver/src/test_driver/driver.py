@@ -7,7 +7,7 @@ import sys
 import tempfile
 import threading
 import traceback
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Generator, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,6 +22,7 @@ from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import (
     BaseMachine,
+    MachineDeprecationWrapper,
     NspawnMachine,
     QemuMachine,
     retry,
@@ -299,7 +300,7 @@ class Driver:
                         f"Error during cleanup of vhost-device-vsock process: {e}"
                     )
 
-    def subtest(self, name: str) -> Iterator[None]:
+    def subtest(self, name: str) -> Generator[None]:
         """Group logs under a given test name"""
         with self.logger.subtest(name):
             try:
@@ -315,7 +316,7 @@ class Driver:
 
         general_symbols = dict(
             start_all=self.start_all,
-            test_script=self.config.test_script,
+            test_script=self.test_script,
             machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
@@ -338,11 +339,17 @@ class Driver:
             debug=self.debug,
             dump_machine_ssh=self.dump_machine_ssh,
         )
-        machine_symbols = {pythonize_name(m.name): m for m in self.machines}
+        machine_symbols: dict[
+            str, QemuMachine | NspawnMachine | MachineDeprecationWrapper
+        ] = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
         # "machine", even if it's not called that.
-        if len(self.machines) == 1:
-            (machine_symbols["machine"],) = self.machines
+        if len(self.machines) == 1 and "machine" not in machine_symbols:
+            only_machine_name = next(iter(machine_symbols))
+            machine_symbols["machine"] = MachineDeprecationWrapper(
+                f"It's deprecated to use the `machine` variable when the only machine is called {only_machine_name}. This behavior will no longer work in NixOS 27.05.",
+                self.machines[0],
+            )
         vlan_symbols = {
             f"vlan{v.nr}": self.vlans[idx] for idx, v in enumerate(self.vlans)
         }
@@ -359,8 +366,6 @@ class Driver:
     def dump_machine_ssh(self) -> None:
         if not self.config.enable_ssh_backdoor:
             return
-
-        assert self.vhost_vsock is not None
 
         if self.machines:
             print("SSH backdoor enabled, the machines can be accessed like this:")

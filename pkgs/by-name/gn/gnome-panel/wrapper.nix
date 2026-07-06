@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    selectedPanelModulePackages ++ lib.forEach selectedPanelModulePackages (x: x.buildInputs or [ ]);
+    selectedPanelModulePackages ++ lib.concatMap (x: x.buildInputs or [ ]) selectedPanelModulePackages;
 
   dontUnpack = true;
   dontConfigure = true;

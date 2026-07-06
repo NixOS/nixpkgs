@@ -871,13 +871,21 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- Extra arguments passed to `rustc` when the crate is a proc-macro,
+  replacing `extraRustcOpts`. Useful to keep instrumentation flags
+  (sanitizers, coverage) off host dylibs. Defaults to `null`, which
+  inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
+  ```
+
 - The lint level cap passed to `rustc`. Defaults to `null`, which
   auto-resolves to `"allow"` (silences all lints) when `lints` is
   empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
   only honours the first `--cap-lints` it receives, this cannot be
   changed via `extraRustcOpts`; use this attribute instead. Useful
-  when overriding the `rust` attribute to point at `clippy-driver`,
-  since clippy lints are also capped by this flag:
+  with `useClippy`, since clippy lints are also capped by this flag:
 
   ```nix
   (hello { }).override { capLints = "warn"; }
@@ -900,6 +908,34 @@ general. A number of other parameters can be overridden:
         priority = -1;
       };
     };
+  }
+  ```
+
+- Whether to compile the crate with `clippy-driver` instead of `rustc`.
+  Build scripts (`build.rs`) keep plain `rustc`. The default `capLints`
+  of `"allow"` suppresses all lints including clippy's, so this is
+  usually paired with `capLints` and lint flags via `extraRustcOpts`:
+
+  ```nix
+  (hello { }).override {
+    useClippy = true;
+    capLints = "warn";
+    extraRustcOpts = [
+      "-Dwarnings"
+      "-Wclippy::all"
+    ];
+  }
+  ```
+
+  When using a Rust toolchain that bundles its own `clippy-driver`
+  (rust-overlay, Fenix), pass it via `clippy` so the sysroot matches:
+
+  ```nix
+  (hello { }).override {
+    rust = myToolchain;
+    clippy = myToolchain;
+    useClippy = true;
+    capLints = "warn";
   }
   ```
 

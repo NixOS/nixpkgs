@@ -1,6 +1,7 @@
 {
   acl,
   bash,
+  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -13,7 +14,8 @@
   makeWrapper,
   mbuffer,
   msmtp,
-  nodejs,
+  nix-update-script,
+  nodejs_22,
   openssh,
   samba,
   shadow,
@@ -25,33 +27,60 @@
   yarn-berry,
   zfs,
 }:
+let
+  # Pin to Node <24.15.0: Yarn Berry's PnP linker breaks `require.cache` on
+  # newer Node, which crashes tailwindcss mid-build (and ESLint, per
+  # yarnpkg/berry#7106). See NixOS/nixpkgs#530137.
+  #
+  # `nodejs` is rebound here (rather than touched at every call site below)
+  # so the rest of this file is unaffected.
+  #
+  # yarn-berry's own `yarn` binary gets patchShebang'd against whatever
+  # `nodejs` *it* was built with, so overriding nativeBuildInputs alone does
+  # nothing - we have to rebuild yarn-berry itself against nodejs_22, for
+  # both the host and build-platform (cross-compilation) variants.
+  nodejs = nodejs_22;
+  yarnBerry = yarn-berry.override { inherit nodejs; };
+  yarnBerryForBuild = buildPackages.yarn-berry.override { nodejs = buildPackages.nodejs_22; };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.12-2";
+  version = "1.2.27-3";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oeXSOxogfAazRsKfngq2+DOyo//wRJQSqm7gaCza4WY=";
+    hash = "sha256-7hx9FJxFN7xsozMvAb0fdRTX2hAcxtJc5wdgrs2PGJc=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/45Drives/cockpit-zfs/blob/main/package.json#L13
+    ./yarn-4.14-support.patch
+  ];
 
   missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
+  # Use buildPackages for cross-compilation support
+  offlineCache = yarnBerryForBuild.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-Tdxe5bXN9psSrnUXL1f+1nh4WPzuvOI7j0I+VPU2/1s=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
+    nodejs_22
     jq
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    yarnBerry
+    yarnBerryForBuild.yarnBerryConfigHook
   ];
+
+  disallowedRequisites = [ finalAttrs.offlineCache ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.cockpitPath = [
     acl
@@ -63,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     lsscsi
     mbuffer
     msmtp
-    nodejs
+    nodejs_22
     openssh
     samba
     shadow
@@ -82,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
-  patchPhase =
+  postPatch =
     let
       # houston-common-lib has @types/electron which pulls in electron.
       # Electron's postinstall downloads binaries, which fails in sandbox.
@@ -91,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
       houstonUiDir = "houston-common/houston-common-ui";
     in
     ''
-      runHook prePatch
-
       # Remove electron type dependency
       substituteInPlace ${houstonLibDir}/package.json \
         --replace-fail '"@types/electron": "^1.6.12",' ""
@@ -116,8 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "VueDevTools()," "" \
         --replace-fail "import dts from 'vite-plugin-dts'" ""
       sed -i '/dts({/,/})/d' ${houstonUiDir}/vite.config.ts
-
-      runHook postPatch
     '';
 
   buildPhase = ''

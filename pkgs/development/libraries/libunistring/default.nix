@@ -22,11 +22,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunistring";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/libunistring-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ElQq12GUcO/ZWmIxdNzUs2TySDyvcIxr7oN8tTpUy50=";
+    hash = "sha256-6CZksXAGTmIzGWISayWdRS1Tsie7SpOrIAQNhG/sAdg=";
   };
 
   outputs = [

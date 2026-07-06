@@ -8,18 +8,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.5.5";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "DioCrafts";
+    owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nn8qgLdiw7w4PZIMCiI+UHZGNW64fjWZ5mErTJifRZU=";
+    hash = "sha256-7alpcK0KYg+ZusK2K7FPdQMLdPrawvL5wsfB6NpSXQw=";
   };
 
-  cargoHash = "sha256-4KfrKL2AKkTt3cOXdl9Xr2qed+qy8WSWuqYfN8WJ0bQ=";
+  cargoHash = "sha256-4gxpTCsS1W2CmRzdnRcsuRe+kr+TgG4hjkzdgihop5I=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -28,6 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ openssl ];
 
   cargoBuildFlags = [ "--bin=oxicloud" ];
+
+  postPatch = ''
+    # Upstream pins `target-cpu=native`, making the binary non-portable
+    # (breaks the binary cache). Build for the generic baseline instead.
+    rm -f .cargo/config.toml
+  '';
 
   postInstall = ''
     mkdir -p $out/share/oxicloud
@@ -41,8 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Ultra-fast, secure & lightweight self-hosted cloud storage";
-    homepage = "https://github.com/DioCrafts/OxiCloud";
-    changelog = "https://github.com/DioCrafts/OxiCloud/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/AtalayaLabs/OxiCloud";
+    changelog = "https://github.com/AtalayaLabs/OxiCloud/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "oxicloud";
     maintainers = with lib.maintainers; [ flashonfire ];

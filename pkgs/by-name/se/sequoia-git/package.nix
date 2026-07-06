@@ -12,18 +12,18 @@
   libfaketime,
   ...
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (final: {
   pname = "sequoia-git";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-git";
-    rev = "v${version}";
-    hash = "sha256-7ynaz48j/ebQAZ2QxeWwkf7kFP70HKtHCv4/wGxxaVY=";
+    rev = "v${final.version}";
+    hash = "sha256-1nSFzpz0Rl9uoE59teP3o7PduSmA20QEhe+fvTM6JGA=";
   };
 
-  cargoHash = "sha256-+sIH4zFLewNNkpd42co2B0rLrIsde5gsBDsqSSc0HZQ=";
+  cargoHash = "sha256-/9/nTqCRi74TMToWQjtnnzQ8en+nqKT8gUipNcHTxvs=";
 
   buildInputs = [
     openssl.dev
@@ -46,11 +46,13 @@ rustPlatform.buildRustPackage rec {
   env.ASSET_OUT_DIR = "target";
 
   postInstall = ''
-    installManPage ${env.ASSET_OUT_DIR}/man-pages/*.1
-    installShellCompletion --bash ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.bash
-    installShellCompletion --zsh ${env.ASSET_OUT_DIR}/shell-completions/_${meta.mainProgram}
-    installShellCompletion --fish ${env.ASSET_OUT_DIR}/shell-completions/${meta.mainProgram}.fish
+    installManPage ${final.env.ASSET_OUT_DIR}/man-pages/*.1
+    installShellCompletion --bash ${final.env.ASSET_OUT_DIR}/shell-completions/${final.meta.mainProgram}.bash
+    installShellCompletion --zsh ${final.env.ASSET_OUT_DIR}/shell-completions/_${final.meta.mainProgram}
+    installShellCompletion --fish ${final.env.ASSET_OUT_DIR}/shell-completions/${final.meta.mainProgram}.fish
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://sequoia-pgp.gitlab.io/sequoia-git";
@@ -58,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "sq-git";
   };
-}
+})

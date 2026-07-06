@@ -4,11 +4,11 @@
   fetchFromGitHub,
 
   # build-system
-  torch,
+  ninja,
   setuptools,
+  torch,
 
   # env
-  symlinkJoin,
   cudaPackages,
 
   # buildInputs
@@ -20,11 +20,6 @@
   cudaSupport ? config.cudaSupport,
 }:
 let
-  inherit (lib)
-    getBin
-    getInclude
-    ;
-
   minSupportedCudaCapability = "8.0"; # build fails with 7.5
 
   minCudaCapability = builtins.head (
@@ -56,6 +51,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   };
 
   build-system = [
+    ninja
     setuptools
     torch
   ];
@@ -66,31 +62,34 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
       DISABLE_SM90_FEATURES = if disableSm90Features then "1" else "0";
 
-      CUDA_HOME = symlinkJoin {
-        name = "cuda-redist";
-        paths = with cudaPackages; [
-          (getBin cuda_nvcc)
-
-          (getInclude cuda_cccl) # <nv/target>
-          (getInclude cuda_cudart) # cuda_runtime.h
-          (getInclude libcublas) # cublas_v2.h
-          (getInclude libcusolver) # cusolverDn.h
-          (getInclude libcusparse) # cusparse.h
-        ];
-      };
+      CUDA_HOME = (lib.getBin cudaPackages.cuda_nvcc).outPath;
     }
 
     # nvshmem must be disabled (unsetting NVSHMEM_DIR) when supporting <9.0 capabilities
     # https://github.com/deepseek-ai/DeepEP/blob/v1.2.1/setup.py#L65
     // lib.optionalAttrs (!disableSm90Features) {
-      NVSHMEM_DIR = (getInclude cudaPackages.libnvshmem).outPath;
+      NVSHMEM_DIR = (lib.getInclude cudaPackages.libnvshmem).outPath;
     }
   );
 
   buildInputs = [
     pybind11
     rdma-core
-  ];
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cccl # <nv/target>
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcusparse # cusparse.h
+    ]
+    # On CUDA >=13.0, crt/host_config.h is shipped in cudaPackages.cuda_crt
+    ++ lib.optionals cuda_crt.meta.available [
+      cuda_crt # crt/host_config.h
+    ]
+  );
 
   pythonImportsCheck = [ "deep_ep" ];
 

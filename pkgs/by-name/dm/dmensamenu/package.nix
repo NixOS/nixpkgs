@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dmensamenu";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dotlambda";
@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       inherit dmenu;
     })
   ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     requests

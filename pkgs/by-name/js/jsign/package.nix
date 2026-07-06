@@ -18,16 +18,16 @@ maven.buildMavenPackage rec {
   pname = "jsign";
   # For build from non-release, increment version by one and add -SNAPSHOT
   # e.g. 7.3-SNAPSHOT
-  version = "7.3";
+  version = "7.4";
 
   src = fetchFromGitHub {
     owner = "ebourg";
     repo = "jsign";
     tag = version;
-    hash = "sha256-FlVTKM1swdNP3kht8MELgUAHPv+FBpwt23WNl/moGjI=";
+    hash = "sha256-r19w9k6Iuk6AQGC3l2yu6Ocn740BtE7DjtFLXUdhdw8=";
   };
 
-  mvnHash = "sha256-N91gwM3vsDZQM/BptF5RgRQ/A8g56NOJ6bc2SkxLnBs=";
+  mvnHash = "sha256-zxlwb2id8yAw/yxTjD6jyAkPJx9IazrPQYGacQGLEK8=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

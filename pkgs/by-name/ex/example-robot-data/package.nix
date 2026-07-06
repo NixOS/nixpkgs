@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "example-robot-data";
-  version = "4.4.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnI1EaTSqk7mbihwFTgnMxgPZxMSYnAwaCLEXS3LUbE=";
+    hash = "sha256-oQk6mJ1lOTcWrTWLViVQWk+R6DdcnLSigxKuXgpLhs0=";
   };
 
   outputs = [

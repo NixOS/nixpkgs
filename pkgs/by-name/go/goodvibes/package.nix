@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goodvibes";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
     owner = "goodvibes";
     repo = "goodvibes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Lh4FPH0Bdxg2J4IxsZPs8Zjc7Tcobb4bTpvJzVNIy0Y=";
+    hash = "sha256-KEB6qSbsi+Q8NRHx5O9xOViIhuBDZceto53sWJv7As8=";
   };
 
   nativeBuildInputs = [

@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTDIR=$(out)"
   ];
 
+  # Fix build with GCC 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=old-style-definition";
+
   postInstall = ''
     mv $out/usr/bin $out/bin
     mv $out/usr/share $out/share

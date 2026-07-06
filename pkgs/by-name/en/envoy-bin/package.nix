@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.37.1";
+  version = "1.38.2";
   inherit (stdenvNoCC.hostPlatform) system;
   throwSystem = throw "envoy-bin is not available for ${system}.";
 
@@ -20,8 +20,8 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-ZYEeEq6PedT09kGNJ6LTL+vEzIpSM9Wuik2g4+Dz/nU=";
-      x86_64-linux = "sha256-jbkO4KoIWuaHPb8hISgW0p9sRV1HYMSuz01lk3Y9sYw=";
+      aarch64-linux = "sha256-nHFdDu2KrzqZgw7glwvDtevH1CIbvB4vP/chBWHanX0=";
+      x86_64-linux = "sha256-h3RKH8mY1ncHjJcDEToZLQgwutxoiGYkQWMoR/yziJk=";
     }
     .${system} or throwSystem;
 in
@@ -67,7 +67,6 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      katexochen
       charludo
     ];
     mainProgram = "envoy";
