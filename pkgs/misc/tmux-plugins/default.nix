@@ -71,6 +71,8 @@ let
 
               runHook postInstall
             '';
+
+            meta.hydraPlatforms = [ ];
           }
         )
       );
