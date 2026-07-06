@@ -1,17 +1,17 @@
 if [[ -z "${UPDATE_NIX_ATTR_PATH:-}" ]]; then
-    echo "Missing UPDATE_NIX_ATTR_PATH - make sure you use mainters/scripts/update.nix to run this script!" 1>&2
+    echo "Missing UPDATE_NIX_ATTR_PATH - make sure you use maintainers/scripts/update.nix to run this script!" 1>&2
     exit 1
 fi
 
 attrPath="$UPDATE_NIX_ATTR_PATH"
 
-nixFilePath="$(pwd)/pkgs/games/openra/engines/$build/default.nix"
+nixFilePath="$(pwd)/pkgs/by-name/op/openra/engines/$build/default.nix"
 if [[ ! -f "$nixFilePath" ]]; then
     echo "$nixFilePath does not exist!" 1>&2
     exit 1
 fi
 
-depsFilePath="$(pwd)/pkgs/games/openra/engines/$build/deps.json"
+depsFilePath="$(pwd)/pkgs/by-name/op/openra/engines/$build/deps.json"
 if [[ ! -f "$depsFilePath" ]]; then
     echo "$depsFilePath does not exist!" 1>&2
     exit 1
