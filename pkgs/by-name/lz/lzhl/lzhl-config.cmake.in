@@ -1,0 +1,5 @@
+add_library(liblzhl STATIC IMPORTED)
+set_target_properties(liblzhl PROPERTIES
+  IMPORTED_LOCATION "@out@/lib/liblzhl.a"
+  INTERFACE_INCLUDE_DIRECTORIES "@out@/include/CompLibHeader"
+)
