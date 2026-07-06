@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,6 +17,9 @@
   SDL2,
   opencv,
   zlib,
+
+  # nativeBuildInputs
+  cudaPackages,
 
   # dependencies
   numpy,
@@ -47,6 +51,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     jax
+  ];
+
+  nativeBuildInputs = lib.optionals config.cudaSupport [
+    # Required by opencv's cmake
+    cudaPackages.cuda_nvcc
   ];
 
   # disable lto on darwin, cmake cannot find llvm-ar
