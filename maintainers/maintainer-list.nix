@@ -411,8 +411,8 @@
   };
   aaravrav = {
     name = "aaravrav";
-    github = "Aarav";
-    githubId = 3279912;
+    github = "aaravrav";
+    githubId = 37036762;
   };
   aarnphm = {
     email = "contact@aarnphm.xyz";

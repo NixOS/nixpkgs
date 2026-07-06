@@ -16,16 +16,16 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pontos";
-  version = "26.5.0";
+  version = "26.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    tag = "v${version}";
-    hash = "sha256-P18RqOSY2g6R5m79nJbfoP9w1RhYiQ2HPWZrhwIHknI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NKe5kM4YPxsGge1UG7DjE3SDXlfZIVazOVmF5RBCbSo=";
   };
 
   build-system = [ poetry-core ];
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

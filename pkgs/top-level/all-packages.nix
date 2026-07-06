@@ -1213,6 +1213,8 @@ with pkgs;
     )
   );
 
+  tw = ocamlPackages.tw.bin;
+
   wrapRetroArch = retroarch-bare.wrapper;
 
   # Aliases kept here because they are easier to use
@@ -4023,13 +4025,6 @@ with pkgs;
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
-  nim = nim2;
-  nim1 = nim-1_0;
-  nim2 = nim-2_2;
-  nim-unwrapped = nim-unwrapped-2_2;
-  nim-unwrapped-1 = nim-unwrapped-1_0;
-  nim-unwrapped-2 = nim-unwrapped-2_2;
-
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
   buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
@@ -5417,7 +5412,7 @@ with pkgs;
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 
-  tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
+  tree-sitter-grammars = recurseIntoAttrs tree-sitter.grammarsScope;
 
   uhdMinimal = uhd.override {
     enableUtils = false;

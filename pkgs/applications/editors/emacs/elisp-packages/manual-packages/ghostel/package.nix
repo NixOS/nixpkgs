@@ -14,13 +14,13 @@ let
 
   pname = "ghostel";
 
-  version = "0.39.0-unstable-2026-06-26";
+  version = "0.41.0-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
-    rev = "92bfcc57dc85f254ce95dcb51dbdd2411fea5f02";
-    hash = "sha256-havDs3fZENB/ozMWWKQkdsyHUIBIeewmrjL+3xJKM94=";
+    rev = "f77efee9172854abc08652637d23adc26faa25a2";
+    hash = "sha256-6ME+aStZ9X1pkTr0uwwhrJXEHu/uLStPHsKtbudXl9I=";
   };
 
   module = stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ let
     deps = zig.fetchDeps {
       inherit (finalAttrs) src pname version;
       fetchAll = true;
-      hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
+      hash = "sha256-lFU0ywNyP1q2NL9MkIfWciH03VAA/Act5dGYAV4V7EY=";
     };
 
     nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
@@ -48,19 +48,6 @@ let
 
     zigBuildFlags = finalAttrs.zigCheckFlags;
 
-    postPatch = ''
-      # https://github.com/dakra/ghostel/issues/446
-      substituteInPlace build.zig \
-        --replace-fail 'addInstallFile(version_file, "../ghostel-module.version")' \
-                       'addInstallFile(version_file, "ghostel-module.version")'
-
-      # remove copy_step
-      substituteInPlace build.zig \
-        --replace-fail 'b.getInstallStep().dependOn(&copy_step.step);' ' ' \
-        --replace-fail 'const copy_step = b.addInstallFile' \
-                       '_ = b.addInstallFile'
-    '';
-
     postConfigure = ''
       cp -rLT ${finalAttrs.deps} "$ZIG_GLOBAL_CACHE_DIR/p"
       chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
@@ -77,7 +64,7 @@ melpaBuild {
   '';
 
   preBuild = ''
-    install ${module}/lib/libghostel-module${libExt} ghostel-module${libExt}
+    install ${module}/ghostel-module${libExt} ghostel-module${libExt}
     install --mode=444 ${module}/ghostel-module.version ghostel-module.version
   '';
 

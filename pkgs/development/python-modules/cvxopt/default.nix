@@ -45,7 +45,6 @@ buildPythonPackage rec {
     CVXOPT_BUILD_DSDP = "0";
     CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
     CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
   }
   // lib.optionalAttrs withGsl {
     CVXOPT_BUILD_GSL = "1";

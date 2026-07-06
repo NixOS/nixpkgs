@@ -75,26 +75,12 @@ let
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
-  /**
-    # Extensible package set for tree-sitter grammars.
-    # Provides .override and .extend for customization.
-    # Note: Use builtGrammars (not this) when iterating over grammars,
-    # as this includes package set functions alongside derivations
-  */
-  grammarsScope = lib.makeScope newScope (self: builtGrammars);
+  grammarDerivationsFrom = lib.filterAttrs (
+    name: value: lib.hasPrefix "tree-sitter-" name && lib.isDerivation value
+  );
 
-  # Usage:
-  # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
-  #
-  # or for all grammars:
-  # pkgs.tree-sitter.withPlugins (_: pkgs.tree-sitter.allGrammars)
-  # which is equivalent to
-  # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
-  withPlugins =
-    grammarFn:
-    let
-      grammars = grammarFn builtGrammars;
-    in
+  mkGrammarLinkFarm =
+    grammars:
     linkFarm "grammars" (
       map (
         drv:
@@ -112,7 +98,32 @@ let
       ) grammars
     );
 
-  allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
+  /**
+    Extensible package set of compiled tree-sitter grammars.
+
+    Exposed as `pkgs.tree-sitter-grammars` and `pkgs.tree-sitter.grammarsScope`.
+    Customize with `.overrideScope`; overrides propagate to every consumer that
+    reads the scope, including the grammar-only views below (which the
+    `pkgs.tree-sitter` passthru re-exports so there is a single source of truth):
+
+      `.derivations`  attrset of every grammar derivation
+      `.allGrammars`  list of non-broken grammar derivations
+      `.withPlugins`  build a grammar link farm
+
+    The scope also carries package-set helpers (`callPackage`, `overrideScope`,
+    …) alongside the grammars, so prefer one of the views above when iterating.
+  */
+  grammarsScope = lib.makeScope newScope (
+    self:
+    builtGrammars
+    // {
+      derivations = grammarDerivationsFrom self;
+      allGrammars = lib.filter (p: !(p.meta.broken or false)) (
+        lib.attrValues (grammarDerivationsFrom self)
+      );
+      withPlugins = grammarFn: mkGrammarLinkFarm (grammarFn (grammarDerivationsFrom self));
+    }
+  );
 
   isWasi = stdenv.hostPlatform.isWasi;
 
@@ -237,13 +248,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit
-      grammars
       buildGrammar
       builtGrammars
+      grammars
       grammarsScope
-      withPlugins
-      allGrammars
       ;
+
+    # Keep legacy `pkgs.tree-sitter` views wired to the overridable scope.
+    inherit (grammarsScope) allGrammars withPlugins;
 
     updateScript = nix-update-script { };
 

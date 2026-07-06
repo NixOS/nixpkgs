@@ -22,16 +22,16 @@ assert builtins.elem target [
 
 buildGoModule (finalAttrs: {
   pname = "syncthing";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sTtFmZBPJIHMksaFFLmA3Abt9EhAC8Nz/ibdzg2LMd4=";
+    hash = "sha256-OwR1OiwtlJSRnFXFEyyHcL3q6NdDUQd4JEy0YSQ18fg=";
   };
 
-  vendorHash = "sha256-rOsdg98WVAKqjV7AxH+m4oSf8Z4FPru4NSbgGFtUMVE=";
+  vendorHash = "sha256-gfGuXBvGdQr+o8zV4MM1FYnOy2fpytIIEdQ9waGNSW4=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
@@ -114,6 +114,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://syncthing.net/";
     description = "Open Source Continuous File Synchronization";
+    donationPage = "https://syncthing.net/donations/";
     changelog = "https://github.com/syncthing/syncthing/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
