@@ -13690,7 +13690,7 @@ final: prev: {
 
   nvim-test = buildVimPlugin {
     pname = "nvim-test";
-    version = "1.4.1-unstable-2026-7-2";
+    version = "1.4.1-unstable-2026-07-02";
     src = fetchFromGitHub {
       owner = "klen";
       repo = "nvim-test";
