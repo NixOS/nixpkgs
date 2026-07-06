@@ -1,18 +1,18 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl gnugrep common-updater-scripts
+#!nix-shell -i bash -p coreutils curl gnugrep jq common-updater-scripts
 #shellcheck shell=bash
 
-set -eu -o pipefail
+set -euo pipefail
 
-source_url="https://releases.linear.app/mac"
-
-version="$(curl -L -I "$source_url" | grep -ioE 'filename="Linear-[0-9]+(\.[0-9]+)*-universal\.dmg"' | grep -oE '[0-9]+(\.[0-9]+)*')"
+releases_url="https://releases.linear.app"
+version_pattern='filename="Linear-\K[0-9]+(\.[0-9]+)*(?=-universal\.dmg")'
+version="$(curl -fsSLI "$releases_url/mac" | grep -ioP "$version_pattern")"
 
 if [[ -z $version ]]; then
   echo "Could not find the latest Linear version in release headers" >&2
   exit 1
 fi
 
-hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --type sha256 "https://releases.linear.app/Linear-${version}-universal.dmg")")
+hash="$(nix store prefetch-file --json "$releases_url/Linear-${version}-universal.dmg" | jq -r .hash)"
 
 update-source-version linear "$version" "$hash" --ignore-same-version
