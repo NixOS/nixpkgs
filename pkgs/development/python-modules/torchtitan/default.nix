@@ -20,6 +20,7 @@
   tyro,
 
   # tests
+  expecttest,
   pytestCheckHook,
   tomli-w,
   triton,
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "torchtitan" ];
 
   nativeCheckInputs = [
+    expecttest
     pytestCheckHook
     tomli-w
     transformers
