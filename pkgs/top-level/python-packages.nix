@@ -20321,6 +20321,8 @@ self: super: with self; {
 
   tmdbsimple = callPackage ../development/python-modules/tmdbsimple { };
 
+  tmodbus = callPackage ../development/python-modules/tmodbus { };
+
   tnefparse = callPackage ../development/python-modules/tnefparse { };
 
   todoist = callPackage ../development/python-modules/todoist { };
