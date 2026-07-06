@@ -22,6 +22,8 @@ let
 
         afl-persistent = callPackage ../development/ocaml-modules/afl-persistent { };
 
+        alcobar = callPackage ../development/ocaml-modules/alcobar { };
+
         alcotest = callPackage ../development/ocaml-modules/alcotest { };
 
         alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix { };
@@ -240,6 +242,8 @@ let
         carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
           git-binary = pkgs.git;
         };
+
+        cascade = callPackage ../development/ocaml-modules/cascade { };
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
 
@@ -2178,6 +2182,8 @@ let
         tty = callPackage ../development/ocaml-modules/tty { };
 
         tuntap = callPackage ../development/ocaml-modules/tuntap { };
+
+        tw = callPackage ../development/ocaml-modules/tw { };
 
         twt = callPackage ../development/ocaml-modules/twt { };
 
