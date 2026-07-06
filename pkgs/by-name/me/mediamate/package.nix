@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "New, fresh visuals for changing your volume, brightness and now playing media";
     homepage = "https://wouter01.github.io/MediaMate/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [ _4evy ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

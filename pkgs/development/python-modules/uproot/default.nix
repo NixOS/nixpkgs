@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "uproot5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ox+PfMlO1ijkSyUM78g9YthdjUo+l0+Idd0jy+a83wE=";
+    hash = "sha256-McTYYA0A8P7Z7PxuTBg5upcOnMmBsfk64fHASMWegOs=";
   };
 
   build-system = [

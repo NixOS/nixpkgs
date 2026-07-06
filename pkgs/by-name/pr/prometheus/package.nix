@@ -3,7 +3,10 @@
   lib,
   go,
   buildGoModule,
-  buildNpmPackage,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_11,
+  fetchPnpmDeps,
   fetchFromGitHub,
   nixosTests,
   enableAWS ? true,
@@ -47,18 +50,29 @@ let
     hash = source.hash;
   };
 
-  assets = buildNpmPackage {
+  assets = stdenv.mkDerivation (finalAssetsAttrs: {
     pname = "${pname}-assets";
     inherit version;
 
     src = "${src}/web/ui";
 
-    npmDepsHash = source.npmDepsHash;
-
     patches = [
       # Disable old React app as it depends on deprecated create-react-apps
       # script
       ./disable-react-app.diff
+    ];
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAssetsAttrs) pname version src;
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = source.pnpmDepsHash;
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_11
     ];
 
     env.CI = true;
@@ -69,20 +83,29 @@ let
     checkPhase = ''
       runHook preCheck
 
-      npm test
+      pnpm test
 
       runHook postCheck
     '';
 
-    postInstall = ''
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/static
-      cp -r $out/lib/node_modules/prometheus-io/static/* $out/static
+      cp -r static/* $out/static
       find $out/static -type f -exec gzip -f9 {} \;
 
-      # Remove node_modules
-      rm -rf $out/lib
+      runHook postInstall
     '';
-  };
+  });
 in
 buildGoModule (finalAttrs: {
   inherit
@@ -209,6 +232,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    inherit assets;
     tests = { inherit (nixosTests) prometheus; };
     updateScript = ./update.sh;
   };
