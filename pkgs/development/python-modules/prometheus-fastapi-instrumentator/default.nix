@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # numerous test failures on Darwin
-  doCheck = stdenv.hostPlatform.isLinux;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
