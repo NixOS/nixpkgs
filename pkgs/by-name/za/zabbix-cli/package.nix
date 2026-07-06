@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zabbix-cli";
-  version = "3.6.3";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unioslo";
     repo = "zabbix-cli";
     tag = finalAttrs.version;
-    hash = "sha256-FbLKU8pjnKpVLE85zkxOmvc6rbhc3x6JdKiI7SdSn1w=";
+    hash = "sha256-pI6UEI8Jx481rS/cTGBsQCtOGB+vMC1epYO8Pqkn4K0=";
   };
 
   build-system = with python3Packages; [
@@ -55,11 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # Disable failing test with Click >= v8.2.0
-    "test_patch_get_click_type"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Requires network access
     "test_authenticator_login_with_any"
     "test_client_auth_method"
