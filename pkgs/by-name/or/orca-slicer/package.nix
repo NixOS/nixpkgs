@@ -22,6 +22,7 @@
   glib,
   glib-networking,
   gmp,
+  gsettings-desktop-schemas,
   gst_all_1,
   gtest,
   gtk3,
@@ -108,6 +109,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gmp
+    gsettings-desktop-schemas
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
