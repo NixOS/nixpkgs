@@ -6,6 +6,7 @@
   qt6Packages,
   borgbackup,
   versionCheckHook,
+  nix-update-script,
   makeFontsConf,
 }:
 
@@ -93,6 +94,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Darwin-only test
     "tests/network_manager/test_darwin.py"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/borgbase/vorta/releases/tag/v${finalAttrs.version}";
