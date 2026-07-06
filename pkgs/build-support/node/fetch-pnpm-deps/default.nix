@@ -167,6 +167,13 @@ in
               if [[ ${toString fetcherVersion} -ge 4 ]]; then
                 sqlite3 "$storePath/v11/index.db" .dump > "$storePath/v11/index.db.sql"
                 rm "$storePath/v11/index.db"
+                ${lib.optionalString (lib.versionAtLeast sqlite.version "3.53.0") ''
+                  # SQLite 3.53.0 refactored code around the dump generation, that changed
+                  # BLOB data type representations from `X'...'` to `x'...'`, breaking existing hashes.
+                  # This change was made in http://github.com/sqlite/sqlite/commit/d2424338b05f2766034f91c03009c8f0d78bc937
+                  # and the following command reverts the dump to the old format:
+                  sed -i "s/,x'/,X'/g" "$storePath/v11/index.db.sql"
+                ''}
               fi
             fi
 
