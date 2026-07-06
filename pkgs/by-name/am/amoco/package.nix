@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "amoco";
   version = "2.9.8";
   pyproject = true;
@@ -16,11 +16,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-3+1ssFyU7SKFJgDYBQY0kVjmTHOD71D2AjnH+4bfLXo=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     blessed
     click
     crysp
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   optional-dependencies = {
-    app = with python3.pkgs; [
+    app = with python3Packages; [
       # ccrawl
       ipython
       prompt-toolkit
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ];
   };
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

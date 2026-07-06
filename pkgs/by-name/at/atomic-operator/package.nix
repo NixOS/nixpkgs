@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "atomic-operator";
   version = "0.8.5";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "urllib3"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     attrs
     certifi
     chardet
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     urllib3
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

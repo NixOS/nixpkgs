@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   systemd,
   xrandr,
@@ -9,7 +9,7 @@
   udevCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autorandr";
   version = "1.15";
   pyproject = false;
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     desktop-file-utils
     udevCheckHook
   ];
-  propagatedBuildInputs = with python3.pkgs; [ packaging ];
+  propagatedBuildInputs = with python3Packages; [ packaging ];
 
   buildPhase = ''
     substituteInPlace autorandr.py \

@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alerta";
   version = "8.5.3";
   pyproject = true;
@@ -14,9 +14,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     click
     requests
     requests-hawk
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "alertaclient" ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     requests-mock
   ];

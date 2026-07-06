@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   git,
   testers,
@@ -9,7 +9,7 @@
   enableTelemetry ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "aws-sam-cli";
   version = "1.160.0";
   pyproject = true;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-IBxnBIgTSpPUNb/4yx3OqA7WFzudzRKgkKCFsJeyx08=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "aws_lambda_builders"
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python3.pkgs;
+    with python3Packages;
     [
       aws-lambda-builders
       aws-sam-translator
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
       watchdog
     ]
     ++ (
-      with python3.pkgs.boto3-stubs.optional-dependencies;
+      with python3Packages.boto3-stubs.optional-dependencies;
       lib.concatLists [
         apigateway
         cloudformation
@@ -95,7 +95,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ git ]}
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     filelock
     flaky
     jaraco-text

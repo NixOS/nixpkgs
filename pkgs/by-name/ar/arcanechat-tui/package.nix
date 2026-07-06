@@ -1,12 +1,13 @@
 {
   lib,
   python3,
+  python3Packages,
   fetchFromGitHub,
   testers,
   arcanechat-tui,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "arcanechat-tui";
   version = "0.12.0";
   pyproject = true;
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     appdirs
     deltachat2
     urwid

@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awslogs";
   version = "0.15.0";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sha256 = "sha256-o6xZqwlqAy01P+TZ0rB5rpEddWNUBzzHp7/cycpcwes=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     boto3
     termcolor
     python-dateutil
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace "boto3>=1.34.75" "boto3>=1.34.58"
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

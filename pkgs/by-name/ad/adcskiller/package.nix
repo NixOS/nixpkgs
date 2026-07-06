@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   coercer,
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "adcskiller";
   version = "0-unstable-2024-05-19";
   pyproject = false;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     coercer
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     ldap3
     certipy
   ];

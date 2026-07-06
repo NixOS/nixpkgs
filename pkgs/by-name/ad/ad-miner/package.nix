@@ -1,10 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ad-miner";
   version = "1.8.1";
   pyproject = true;
@@ -19,9 +19,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # All requirements are pinned
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     neo4j
     numpy
     pytz

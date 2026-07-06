@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adidnsdump";
   version = "1.4.0";
   pyproject = true;
@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-gKOIZuXYm8ltaajmOZXulPX5dI4fWz4xiZ8W0kPpcRk=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     impacket
     ldap3
   ];

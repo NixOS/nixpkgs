@@ -10,14 +10,14 @@
   wrapGAppsHook3,
   gobject-introspection,
   itstool,
-  python3,
+  python3Packages,
   at-spi2-core,
   gettext,
   libwnck,
   librsvg,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "accerciser";
   version = "3.48.0";
 
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     librsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     dbus-python
     ipython
     pyatspi
