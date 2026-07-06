@@ -14,13 +14,17 @@
   fetchFromGitHub,
   fftwFloat,
   flac,
+  ggmorse,
   glew,
   hackrf,
   hidapi,
   ffmpeg,
+  inmarsatc,
   libiio,
+  libogg,
   libopus,
   libpulseaudio,
+  libunwind,
   libusb1,
   limesuite,
   libbladeRF,
@@ -30,6 +34,7 @@
   pkg-config,
   qt6,
   qt6Packages,
+  rnnoise,
   rtl-sdr,
   serialdv,
   sdrplay,
@@ -71,13 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     fftwFloat
     flac
+    ggmorse
     glew
     hackrf
     hidapi
     libbladeRF
     libiio
+    libogg
     libopus
     libpulseaudio
+    libunwind
     libusb1
     limesuite
     mbelib
@@ -93,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qttools
     qt6Packages.qtwebsockets
     qt6Packages.qtwebengine
+    rnnoise
     rtl-sdr
     serialdv
     sgp4
@@ -100,7 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
     uhd
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    inmarsatc
+    qt6Packages.qtwayland
+  ]
   ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
