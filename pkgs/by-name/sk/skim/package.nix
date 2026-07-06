@@ -7,12 +7,12 @@
   nix-update-script,
   runtimeShell,
   rustPlatform,
-  skim,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "4.8.0";
+  version = "5.0.0";
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eU/OtURj/IriICi4qB5uUmyMzbsoZyEK18Kz40qKO08=";
+    hash = "sha256-fnpTEp2SXAgiK8stHR2AmRnefBDuXAS+gPoWbUDPirI=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-umJBYmX3lSaH6OjsxFMRT8+Ymq8OZNxG0qPtZs+Dhh0=";
+  cargoHash = "sha256-o02x09q3s4qyHJcAwhgjC0/fN6xTN392D2vlkAgTReI=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [
@@ -69,8 +69,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo nextest run --release --offline --lib --bins --examples --tests
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 
