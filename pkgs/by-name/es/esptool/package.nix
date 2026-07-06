@@ -1,5 +1,6 @@
 {
   lib,
+  addBinToPathHook,
   fetchFromGitHub,
   python3Packages,
   softhsm,
@@ -8,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "esptool";
-  version = "5.3.0";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     tag = "v${version}";
-    hash = "sha256-NRfXLf8u35/9RD1QxEuV06K3h030qXj5GM+QjvLC6FM=";
+    hash = "sha256-oHQ6rkMnzvjtP/dg+tyc7Dw+D/WuWDqRwqePKBBnjCw=";
   };
 
   postPatch = ''
@@ -77,16 +78,13 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs =
     with python3Packages;
     [
+      addBinToPathHook
       pyelftools
       pytestCheckHook
       requests
       softhsm
     ]
     ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
 
   pytestFlags = [
     "-m"
@@ -102,12 +100,10 @@ python3Packages.buildPythonApplication rec {
     "test_esp_rfc2217_server_py"
   ];
 
-  postCheck = ''
+  preCheck = ''
     export SOFTHSM2_CONF=$(mktemp)
     echo "directories.tokendir = $(mktemp -d)" > "$SOFTHSM2_CONF"
     ./ci/setup_softhsm2.sh
-
-    pytest test/test_espsecure_hsm.py
   '';
 
   meta = {
