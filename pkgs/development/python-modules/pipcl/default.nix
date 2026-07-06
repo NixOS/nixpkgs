@@ -26,9 +26,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Python packaging operations for use by a `setup.py";
+    description = "Python packaging operations for use by setup.py";
     homepage = "https://github.com/ArtifexSoftware/pipcl";
-    license = lib.licenses.agpl3Plus;
+    changelog = "https://github.com/ArtifexSoftware/pipcl/blob/${finalAttrs.src.tag}/README.rst#changelog";
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ sarahec ];
   };
 })
