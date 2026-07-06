@@ -4,6 +4,7 @@
   fetchurl,
   rustPlatform,
   libfaketime,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -42,6 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
     PREFIX=$out LIBDIR=$out/lib RELEASE=1 SKIP_PYTHON_INSTALL=1 faketime -f "$source_date" make install
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # also update the hash for vendorTarball
+      "--custom-dep=vendorTarball"
+    ];
+  };
 
   meta = {
     description = "Nmstate: A Declarative Network API";
