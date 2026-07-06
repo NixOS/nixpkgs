@@ -38,7 +38,7 @@
   pydantic-extra-types,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastapi";
   version = "0.136.3";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lfmk8ZveKPukEEfwWq2mKtWmOHAtVzGuE5BsOskDzh0=";
   };
 
@@ -116,7 +116,7 @@ buildPythonPackage rec {
     pytest-timeout
   ]
   ++ anyio.optional-dependencies.trio
-  ++ optional-dependencies.all;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Coverage test
@@ -134,10 +134,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastapi" ];
 
   meta = {
-    changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${finalAttrs.src.tag}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wd15 ];
   };
-}
+})
