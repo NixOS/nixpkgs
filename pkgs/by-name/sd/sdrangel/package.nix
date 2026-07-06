@@ -43,6 +43,7 @@
   uhd,
   zlib,
   withSDRplay ? false,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-rdPXqA0ySnqh/rlMlfcDLyAd6egbggWHrRQRnXeQPFM=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -116,13 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
-    "-DAPT_DIR=${aptdec}"
-    "-DDAB_DIR=${dab_lib}"
-    "-DSGP4_DIR=${sgp4}"
-    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    (lib.cmakeFeature "APT_DIR" aptdec.outPath)
+    (lib.cmakeFeature "DAB_DIR" dab_lib.outPath)
+    (lib.cmakeFeature "SGP4_DIR" sgp4.outPath)
+    (lib.cmakeFeature "SOAPYSDR_DIR" soapysdr-with-plugins.outPath)
+    (lib.cmakeBool "ENABLE_QT6" true)
     "-Wno-dev"
-    "-DENABLE_QT6=ON"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Software defined radio (SDR) software";
