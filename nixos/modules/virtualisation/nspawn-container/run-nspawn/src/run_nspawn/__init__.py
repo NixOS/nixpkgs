@@ -1,6 +1,7 @@
 import contextlib
 import dataclasses
 import fcntl
+import hashlib
 import logging
 import os
 import signal
@@ -124,6 +125,13 @@ def mk_veth(
     vlan: int,
 ) -> typing.Generator[None, None, None]:
     host_intf_name = f"{container_name}-{container_intf_name}"
+    # If the names for systemd-nspawn containers are too long,
+    # the generated bridge interface names will surpass the
+    # kernel limit IFNAMSIZ (15 characters + '\0').
+    if len(host_intf_name) > 15:
+        hashed = hashlib.sha256(host_intf_name.encode()).hexdigest()[:6]
+        host_intf_name = f"{host_intf_name[:8]}-{hashed}"
+
     with ensure_vlan_bridge(vlan) as bridge_name:
         logger.info("creating interface %s", host_intf_name)
         run_ip(
