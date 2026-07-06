@@ -9,6 +9,7 @@
 buildGoModule (finalAttrs: {
   pname = "lazyjira";
   version = "2.6.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "textfuel";
