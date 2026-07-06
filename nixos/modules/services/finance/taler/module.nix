@@ -13,7 +13,9 @@ in
 {
   # TODO turn this into a generic taler-like service thingy?
   options.services.taler = {
-    enable = lib.mkEnableOption "the GNU Taler system" // lib.mkOption { internal = true; };
+    enable = lib.mkEnableOption "the GNU Taler system" // {
+      internal = true;
+    };
     includes = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];

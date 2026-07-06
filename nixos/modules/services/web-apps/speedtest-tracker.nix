@@ -92,15 +92,13 @@ in
 
     enable = lib.mkEnableOption "Speedtest Tracker: A self-hosted internet performance tracking application";
 
-    package =
-      lib.mkPackageOption pkgs "speedtest-tracker" { }
-      // lib.mkOption {
-        apply =
-          speedtest-tracker:
-          speedtest-tracker.override (prev: {
-            dataDir = cfg.dataDir;
-          });
-      };
+    package = lib.mkPackageOption pkgs "speedtest-tracker" { } // {
+      apply =
+        speedtest-tracker:
+        speedtest-tracker.override (prev: {
+          dataDir = cfg.dataDir;
+        });
+    };
 
     user = lib.mkOption {
       type = lib.types.str;

@@ -294,7 +294,9 @@ in
         This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
         https://github.com/NixOS/nixpkgs/issues/240591 for more information
       ''
-      // lib.mkOption { default = true; };
+      // {
+        default = true;
+      };
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
