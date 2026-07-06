@@ -117,6 +117,7 @@ in
       portal = {
         enable = true;
         extraPortals = with pkgs; [
+          oo7-portal
           xdg-desktop-portal-cosmic
           xdg-desktop-portal-gtk
         ];
@@ -124,7 +125,10 @@ in
       };
     };
 
-    systemd.packages = [ pkgs.cosmic-session ];
+    systemd.packages = with pkgs; [
+      cosmic-session
+      oo7-server
+    ];
 
     fonts.packages = with pkgs; [
       fira
@@ -164,7 +168,9 @@ in
     networking.networkmanager.enable = lib.mkDefault true;
     services.acpid.enable = lib.mkDefault true;
     services.avahi.enable = lib.mkDefault true;
-    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    # COSMIC's upstream portal config prefers oo7-portal for
+    # org.freedesktop.impl.portal.Secret, with gnome-keyring only as fallback.
+    services.gnome.gnome-keyring.enable = lib.mkDefault false;
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
     services.power-profiles-daemon.enable = lib.mkDefault (
