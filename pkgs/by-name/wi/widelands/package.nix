@@ -26,6 +26,7 @@
   libsm,
   libice,
   libxext,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -80,7 +81,10 @@ stdenv.mkDerivation rec {
     libsm # XXX: these should be propagated by SDL2?
     libice
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libxext;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxext
+    libX11
+  ];
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
