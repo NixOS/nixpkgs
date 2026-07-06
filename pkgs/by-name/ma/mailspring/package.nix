@@ -118,6 +118,23 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
     pushd app
+
+    substituteInPlace \
+      build/resources/linux/Mailspring.desktop.in \
+      --replace-fail "<%= description %>" "The best email app for people and teams at work" \
+      --replace-fail "<%= productName %>" Mailspring
+
+    substituteInPlace \
+      build/resources/linux/mailspring.appdata.xml.in \
+      --replace-fail "<%= name %>" mailspring \
+      --replace-fail "<%= description %>" "The best email app for people and teams at work" \
+      --replace-fail "<%= productName %>" Mailspring
+
+    grep '<%' app/build/resources/linux/*.in && {
+      echo "Missing templates to be substituted for Mailspring!"
+      exit 1
+    }
+
     npm rebuild
     popd
   '';
@@ -135,6 +152,13 @@ buildNpmPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ html-tidy ]}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    install -Dm444 app/build/resources/linux/Mailspring.desktop.in $out/share/applications/Mailspring.desktop
+    install -Dm444 app/build/resources/linux/mailspring.appdata.xml.in $out/share/metainfo/mailspring.appdata.xml
+    install -Dm444 app/build/resources/linux/icons/512.png $out/share/pixmaps/mailspring.png
+    for size in 16 32 64 128 256; do
+      install -Dm444 app/build/resources/linux/icons/$size.png $out/share/icons/hicolor/''${size}x''${size}/apps/mailspring.png
+    done
 
     runHook postInstall
   '';
