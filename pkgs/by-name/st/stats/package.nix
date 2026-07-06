@@ -350,6 +350,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       FlameFlag
       emilytrau
+      kinnrai
     ];
     platforms = lib.platforms.darwin;
   };
