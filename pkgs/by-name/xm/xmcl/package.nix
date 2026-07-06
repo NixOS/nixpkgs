@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xmcl";
   version = "0.61.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Voxelum";
     repo = "x-minecraft-launcher";
