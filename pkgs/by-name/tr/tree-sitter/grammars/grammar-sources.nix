@@ -1579,7 +1579,7 @@
   };
 
   make = {
-    version = "0-unstable-2026-02-26";
+    version = "1.1.1-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-make";
     rev = "70613f3d812cbabbd7f38d104d60a409c4008b43";
     hash = "sha256-gyshhqVYiL0qSsMp38BM20FYc4uPgr2de5/DWsAJZGc=";
