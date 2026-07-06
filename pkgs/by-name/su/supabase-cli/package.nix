@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "supabase-cli";
-  version = "2.108.0";
+  version = "2.109.0";
 
   __structuredAttrs = true;
 
@@ -17,13 +17,13 @@ buildGoModule (finalAttrs: {
     owner = "supabase";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zhtt6JksIEZyfATxPDyZvf97syk9Z1kOXvzNgZxB1fI=";
+    hash = "sha256-5AfSH69poNnUlK7oT9W5k37DjcitCOSJEPBtnRMUqVc=";
   };
 
   # Supabase is in the process of porting the CLI to TS, for now we continue with the Go cli.
   sourceRoot = "${finalAttrs.src.name}/apps/cli-go";
 
-  vendorHash = "sha256-VKEhmPdj0IJYSVncCRhfxqbjdZ/1WwdIBZgxMkS/65o=";
+  vendorHash = "sha256-yHNtzzdYhCgBSb/VwGe2cqmZwNNwrKLVg2RVE0Nwq1M=";
 
   ldflags = [
     "-s"
