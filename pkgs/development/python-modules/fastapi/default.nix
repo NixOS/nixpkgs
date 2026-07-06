@@ -42,6 +42,8 @@ buildPythonPackage (finalAttrs: {
   pname = "fastapi";
   version = "0.139.0";
   pyproject = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
