@@ -59,12 +59,11 @@ in
 
   options.amazonImage = {
     configFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
+      type = types.path;
+      default = defaultConfigFile;
       description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
-        If set to `null`, the default Amazon EC2 image configuration is used.
       '';
     };
 
@@ -104,7 +103,7 @@ in
 
   config.system.build.amazonImage =
     let
-      configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      configFile = cfg.configFile;
 
       zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
         inherit

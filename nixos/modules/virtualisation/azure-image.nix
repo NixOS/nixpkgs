@@ -8,7 +8,6 @@
 with lib;
 let
   cfg = config.virtualisation.azureImage;
-  defaultConfigFile = ./azure-config-user.nix;
 in
 {
   imports = [
@@ -40,12 +39,11 @@ in
     };
 
     configFile = mkOption {
-      type = with types; nullOr path;
-      default = null;
+      type = types.path;
+      default = ./azure-config-user.nix;
       description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
-        If set to `null`, the default Azure image configuration is used.
       '';
     };
 
@@ -109,7 +107,7 @@ in
         truncate -s +${cfg.additionalSpace} "$out/${config.image.fileName}"
         ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
-      configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      configFile = cfg.configFile;
 
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
