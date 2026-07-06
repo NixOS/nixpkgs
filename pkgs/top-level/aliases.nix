@@ -871,7 +871,7 @@ mapAliases {
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
   fped = throw "'fped' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'kicad' instead."; # Added 2026-05-22
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
-  framac = frama-c; # Added 2026-04-24
+  framac = warnAlias "'framac' has been renamed to 'frama-c'" frama-c; # Added 2026-04-24
   framework-system-tools = throw "'framework-system-tools' has been renamed to/replaced by 'framework-tool'"; # Converted to throw 2025-10-27
   francis = throw "'francis' has been renamed to/replaced by 'kdePackages.francis'"; # Converted to throw 2025-10-27
   freebsdCross = throw "'freebsdCross' has been renamed to/replaced by 'freebsd'"; # Converted to throw 2025-10-27
