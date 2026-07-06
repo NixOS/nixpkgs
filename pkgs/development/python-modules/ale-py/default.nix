@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,6 +17,9 @@
   SDL2,
   opencv,
   zlib,
+
+  # nativeBuildInputs
+  cudaPackages,
 
   # dependencies
   numpy,
@@ -39,6 +43,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-hFbreHk0i4h+JOyvDYcNX3TmwgvxNC5U0l5Xrqqz1zQ=";
   };
 
+  # disable lto on darwin, cmake cannot find llvm-ar
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ale/CMakeLists.txt \
+      --replace-fail \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
+  '';
+
   build-system = [
     cmake
     ninja
@@ -49,13 +61,10 @@ buildPythonPackage (finalAttrs: {
     jax
   ];
 
-  # disable lto on darwin, cmake cannot find llvm-ar
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/ale/CMakeLists.txt \
-      --replace-fail \
-        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
-        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
-  '';
+  nativeBuildInputs = lib.optionals config.cudaSupport [
+    # Required by opencv's cmake
+    cudaPackages.cuda_nvcc
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -102,7 +111,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    #
     "tests/python/test_atari_vector_xla.py"
   ];
 
