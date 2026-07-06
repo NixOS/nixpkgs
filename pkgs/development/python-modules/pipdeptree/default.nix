@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipdeptree";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = finalAttrs.version;
-    hash = "sha256-poUults9ev+5aryrZPxnxF/X9u0iivnlc1ceLxB7dys=";
+    hash = "sha256-EDpKJBDb3CkTMfiLyYMakbm5riIHsf+49yM99uQDPT8=";
   };
 
   build-system = [

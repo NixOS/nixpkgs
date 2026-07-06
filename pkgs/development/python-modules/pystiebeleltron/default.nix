@@ -31,6 +31,11 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+  disabledTestPaths = [
+    # mock server is not compatible with pymodbus 3.13
+    "test/test_pystiebeleltron.py"
+  ];
+
   pythonImportsCheck = [ "pystiebeleltron" ];
 
   meta = {
