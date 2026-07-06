@@ -75,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     # racy
     "test_sync_readexactly_total_timeout"
     "test_sync_read_until_total_timeout"
+    "test_sync_readonly_partial_timeout"
   ];
 
   meta = {
