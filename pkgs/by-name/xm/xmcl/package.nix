@@ -1,69 +1,102 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   electron,
   makeWrapper,
-  dpkg,
+  pnpm_10, # XMCL uses 10.33.3
+  makeDesktopItem,
+  fetchPnpmDeps,
+  copyDesktopItems,
   ...
 }:
 let
-  githubRepo = "https://github.com/Voxelum/x-minecraft-launcher";
+  execPlaceholder = "TO_BE_REPLACED";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmcl";
-  version = "0.59.1";
+  version = "0.61.0";
 
-  src = fetchurl {
-    # Use the deb file because there aren't resources like icons in the tarball.
-    # However, the rpm file can be used as well.
-    url = "${githubRepo}/releases/download/v${finalAttrs.version}/xmcl-${finalAttrs.version}-amd64.deb";
-    sha256 = "1f68xy5kxp8sshn0bmhwq3rh4ihb8aygvwyadgik5bh776y3h9d8";
+  src = fetchFromGitHub {
+    owner = "Voxelum";
+    repo = "x-minecraft-launcher";
+    rev = "22a37c31aca0266fd4e91e22f1540e7c15a2c521";
+    hash = "sha256-mQ2HvB4W4pC4Keb4ex4mUUSpzYgiUFEjXZGvZl/SKkc=";
   };
-  unpackPhase = "dpkg -x $src ./";
 
-  strictDeps = true;
-  __structuredAttrs = true;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Yuxuqr1BiviSw+dGNHLs2jAy8ADlBvRks6Kmy7FmCMw=";
+  };
 
   # Tools needed during the build process itself
   nativeBuildInputs = [
-    dpkg # Unpacks the deb file
     makeWrapper # Creates wrapper scripts
+    copyDesktopItems
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm build:renderer
+    NODE_ENV=production pnpm run --prefix=xmcl-electron-app compile
+
+    runHook postBuild
+  '';
+
+  # Though the desktop file can be generated from config in {xmcl}/electron-builder.ts,
+  # manually writing here is a more simple way.
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "X Minecraft Launcher";
+      exec = execPlaceholder;
+      terminal = false;
+      icon = finalAttrs.pname;
+      startupWMClass = finalAttrs.pname;
+      mimeTypes = [ "x-scheme-handler/${finalAttrs.pname}" ];
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Game"
+      ];
+    })
   ];
 
   installPhase = ''
     runHook preInstall
 
-    # Directly copying ./usr to $out will cause strange paths because of unknown reasons.
-    mkdir -p $out/share
-    cp -r ./usr/share/* $out/share
+    mkdir -p $out/opt
+    cp -r ./xmcl-electron-app/dist $out/opt/xmcl
 
-    mkdir -p $out/opt/xmcl
-    cp -r ./opt/xmcl/resources/app.asar $out/opt/xmcl
     makeWrapper ${
       # Yes, XMCL uses Electron 29.3.1 instead of the latest version,
       # but 29.3.1 is too old to exist in nixpkgs.
       lib.getExe electron
     } $out/bin/xmcl \
       --argv0 "xmcl" \
-      --add-flags "$out/opt/xmcl/app.asar" \
+      --add-flags "$out/opt/xmcl" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 
 
-    # Substitute placeholder paths in the desktop file
-    substituteInPlace $out/share/applications/xmcl.desktop --replace "Exec=/opt/xmcl/xmcl %U" "Exec=$out/bin/xmcl %U" 
-                            
     runHook postInstall
+
+    # Yes, after postInstall
+    # Substitute placeholder paths in the desktop file
+    substituteInPlace $out/share/applications/xmcl.desktop --replace-warn "Exec=${execPlaceholder}" "Exec=$out/bin/xmcl %U"                  
   '';
-  
+
+  # It's downloaded from a *normal* url instead of a GitHub repository.
+  #passthru.updateScript = nix-update-script { };
   meta = {
     description = "An Open Source Minecraft Launcher with Modern UX";
     longDescription = ''
       XMCL is an Open Source Minecraft Launcher with Modern UX. 
       It provides a Disk Efficient way to manage all your Mods.
     '';
-    homepage = githubRepo;
+    homepage = "https://xmcl.app/";
     mainProgram = "xmcl";
     license = lib.licenses.mit;
     # XMCL does supports MacOS, but I haven't any darwin devices for test.
