@@ -1,6 +1,6 @@
 {
   dbus,
-  fetchCrate,
+  fetchFromGitHub,
   installShellFiles,
   lib,
   nix-update-script,
@@ -16,9 +16,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leetcode-cli";
   version = "0.5.0";
 
-  src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-EafEz5MhY9f56N1LCPaW+ktYrV01r9vHCbublDnfAKg=";
+  src = fetchFromGitHub {
+    owner = "clearloop";
+    repo = "leetcode-cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h3mCZzif+Uzv3bsEb9I24txrx1BHkc5I86gWcwDHsOc=";
   };
 
   cargoHash = "sha256-8bHpNckEsJ4VWlmEaDTeMW+Txi9SQh30lK5CKKperC8=";
