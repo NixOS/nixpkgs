@@ -396,8 +396,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.16.14";
-          hash = "sha256-WuDsYSQ5B2xA3LnU1fiXBx8yqOplGstZO0qYaLtPF0A=";
+          version = "2.16.17";
+          hash = "sha256-k54hpRlzjtNWv0mIUBKFxJYc5T2jpWxB9U8nuXXmjJ0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -1215,8 +1215,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.136.0";
-          hash = "sha256-RK493qHjEK/k8oy/OIzO3bvNnFo+ZftQhZMIAmBCaJk=";
+          version = "3.138.0";
+          hash = "sha256-FkaUKApoN6e8ET2o/71GVhyNWdZ34t6fqEzlraH7QBc=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1346,8 +1346,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.29.6";
-          hash = "sha256-CHpRetKZnGzShIePnbVUdR06/1AAO2I1RX7NiZ7GBNs=";
+          version = "2.29.7";
+          hash = "sha256-l0CTWC16Aw2u8uob5tKauYIT3KaDsptV/L8WR54eN64=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
