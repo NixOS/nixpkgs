@@ -27,7 +27,7 @@
 
   # optional-dependencies
   fastapi-cli,
-  httpx,
+  httpx2,
   jinja2,
   itsdangerous,
   python-multipart,
@@ -40,14 +40,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi";
-  version = "0.136.3";
+  version = "0.139.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "fastapi";
     tag = finalAttrs.version;
-    hash = "sha256-lfmk8ZveKPukEEfwWq2mKtWmOHAtVzGuE5BsOskDzh0=";
+    hash = "sha256-c4balkkmBv7zKRQnYRpRohVjP23m0HvtdiVrJtgNKYo=";
   };
 
   build-system = [ pdm-backend ];
@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     all = [
       fastapi-cli
-      httpx
+      httpx2
       jinja2
       python-multipart
       itsdangerous
@@ -78,7 +78,7 @@ buildPythonPackage (finalAttrs: {
     standard = [
       fastapi-cli
       # FIXME package fastar
-      httpx
+      httpx2
       jinja2
       python-multipart
       email-validator
@@ -90,7 +90,7 @@ buildPythonPackage (finalAttrs: {
     ++ uvicorn.optional-dependencies.standard;
     standard-no-fastapi-cloud-cli = [
       fastapi-cli
-      httpx
+      httpx2
       jinja2
       python-multipart
       email-validator
