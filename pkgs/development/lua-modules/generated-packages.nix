@@ -4903,6 +4903,42 @@ final: prev: {
     }
   ) { };
 
+  neotest-nix = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      neotest,
+      nvim-nio,
+    }:
+    buildLuarocksPackage {
+      pname = "neotest-nix";
+      version = "2.2.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/neotest-nix-2.2.0-1.rockspec";
+          sha256 = "07whvs4bwnlf4pf893r5y69246r9s3n1nypqgx5a1vlmmxinhx1v";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/khaneliman/neotest-nix/archive/61ba4c732ed5d685deb33b7f42963ff765752991.zip";
+        sha256 = "139fiir0q5s3b5vlchm1fyngz4mgz5hnbm1n1h7xk2w6yhrk43mc";
+      };
+
+      disabled = luaOlder "5.1";
+      propagatedBuildInputs = [
+        neotest
+        nvim-nio
+      ];
+
+      meta = {
+        homepage = "https://github.com/khaneliman/neotest-nix";
+        license = lib.licenses.mit;
+        description = "A Neotest adapter for Nix flakes.";
+      };
+    }
+  ) { };
+
   nginx-lua-prometheus = callPackage (
     {
       buildLuarocksPackage,

@@ -22,7 +22,11 @@
   openmpCheckPhaseHook,
 
   # Reverse dependency
+  astropy,
+  numba,
+  pandas,
   sage,
+  xarray,
 
   # tests
   hypothesis,
@@ -202,7 +206,17 @@ buildPythonPackage (finalAttrs: {
     coreIncludeInnerDir = "${python.sitePackages}/numpy/_core/include";
     coreIncludeDir = "${finalAttrs.finalPackage}/${finalAttrs.finalPackage.passthru.coreIncludeInnerDir}";
     tests = {
-      inherit sage;
+      # NOTE: It is important to check these central dependent packages when
+      # issuing Numpy PRs and especially version bumps (even minor version
+      # bumps) - evidently these have caused issues in staging-next in the
+      # past.
+      inherit
+        astropy
+        numba
+        pandas
+        sage
+        xarray
+        ;
     };
   };
 
