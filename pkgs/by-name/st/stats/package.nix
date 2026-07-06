@@ -46,6 +46,8 @@ let
     toPlist {
       CFBundleDevelopmentRegion = "en";
       CFBundleExecutable = "Stats";
+      CFBundleIconFile = "AppIcon";
+      CFBundleIconName = "AppIcon";
       CFBundleIdentifier = "eu.exelban.Stats";
       CFBundleInfoDictionaryVersion = "6.0";
       CFBundleName = "Stats";
@@ -317,6 +319,7 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx \
       --minimum-deployment-target 14.0 \
       --app-icon AppIcon \
+      --output-partial-info-plist /dev/null \
       "Stats/Supporting Files/Assets.xcassets"
 
     # Copy localization files
