@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  cacert,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
   chromium-hsts-preload-list,
   cmake,
+  makeWrapper,
   ninja,
   pkg-config,
   curlFull, # Websocket support
@@ -42,23 +43,60 @@
   sdl3,
   icu78,
   simdjson,
+  fetchzip,
+  glslang,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-memory-allocator,
 }:
 
+let
+  # Ladybird's GIFLoader.cpp does `#include <wuffs/wuffs-v0.3.c>`, and its CMake
+  # requires the `wuffs/wuffs-v0.3.c` header specifically (pinned to wuffs 0.3.4
+  # via vcpkg.json). The nixpkgs `wuffs` package tracks 0.4.x, which installs an
+  # incompatible `wuffs-v0.4.c` header, so we vendor just the single-file 0.3.4
+  # header on the include path, mirroring Ladybird's own vcpkg overlay-port.
+  wuffsHeader = fetchzip {
+    url = "https://github.com/google/wuffs-mirror-release-c/archive/refs/tags/v0.3.4.tar.gz";
+    hash = "sha256-V7inWJqH7Q4Ac/ZB//7XHrpgfAYUPBxWBerBem6Q/Kk=";
+  };
+
+  # Ladybird's AK/kmalloc.cpp calls mimalloc's `mi_heap_get_default()`, which was
+  # removed/renamed (to `mi_theap_get_default()`) in mimalloc 3.x. Ladybird pins
+  # mimalloc 2.2.7 via vcpkg.json, so build against the matching 2.x series rather
+  # than the nixpkgs default (3.x). Remove once Ladybird supports mimalloc 3.x.
+  mimalloc2 = mimalloc.overrideAttrs {
+    version = "2.2.7";
+    src = fetchFromGitHub {
+      owner = "microsoft";
+      repo = "mimalloc";
+      tag = "v2.2.7";
+      hash = "sha256-z9qMOTcGkURblZChXDGfQ58hrql52lG6EE1NQmxxuj0=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-06-05";
+  version = "0-unstable-2026-07-06";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "02b205361dd239e134f434e484b609d1fa5f1938";
-    hash = "sha256-+CVJjrL1kqT2A7r89F+riiHpMa39rcggqG9SByidUY4=";
+    rev = "fa395b0e3d051ac6ad3d73911bd35766233eb151";
+    hash = "sha256-9mQ5YRpME2azqIHjqtdlHcusU+o7oCZ+LfvRGipRS/k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-n0ACVH8NXwe7SIaGFoJ20WIGGR3XjcuLTwPSKGJpT5s=";
+    hash = "sha256-HI2GQEOkI25h1uYLIlMGb1wedDQ3mH+o7m1I9AM4LvA=";
   };
+
+  patches = [
+    # The LibSandbox seccomp policy applied to RequestServer omits readv/writev,
+    # so curl/OpenSSL crash the process with SIGSYS on most HTTPS sites. Unfixed
+    # upstream; Ladybird no longer accepts external patches. See patch header.
+    ./allow-readv-writev-in-seccomp-sandbox.patch
+  ];
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
@@ -71,6 +109,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
+
+    # The vendored wuffs 0.3.4 header trips Ladybird's -Werror (suggest-override,
+    # calloc-transposed-args) when added as a normal include dir. vcpkg exposes it
+    # as a system include; mirror that by marking WUFFS_INCLUDE_DIR SYSTEM.
+    substituteInPlace Libraries/LibImageDecoders/CMakeLists.txt \
+      --replace-fail \
+        "target_include_directories(LibImageDecoders PRIVATE \''${WUFFS_INCLUDE_DIR})" \
+        "target_include_directories(LibImageDecoders SYSTEM PRIVATE \''${WUFFS_INCLUDE_DIR})"
   '';
 
   preConfigure = ''
@@ -92,11 +138,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/HSTSPreload
     cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
+
+    # Provide the pinned wuffs 0.3.4 single-file header on the include path.
+    mkdir -p wuffs-include/wuffs
+    cp ${wuffsHeader}/release/c/wuffs-v0.3.c wuffs-include/wuffs/wuffs-v0.3.c
+    cmakeFlagsArray+=("-DWUFFS_INCLUDE_DIR=$PWD/wuffs-include")
   '';
 
   nativeBuildInputs = [
     cargo
     cmake
+    makeWrapper
     ninja
     perl
     pkg-config
@@ -105,6 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     qt6Packages.wrapQtAppsHook
     libtommath
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # glslangValidator is used to build the Vulkan DMABUF image shaders.
+    glslang
   ];
 
   buildInputs = [
@@ -119,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     libedit
     libwebp
     libxcrypt
-    mimalloc
+    mimalloc2
     openssl
     qt6Packages.qtbase
     qt6Packages.qtmultimedia
@@ -132,14 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Remove when/if this gets upstreamed in skia.
         "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
       ];
-      # Ladybird depends on the vcpkg-packaged version of skia,
-      # which includes this patch that exposes deprecated interfaces.
-      patches = prev.patches or [ ] ++ [
-        (fetchpatch {
-          url = "https://github.com/microsoft/vcpkg/raw/64e1fbee7d9f40eab5d112aaff648c4dcffe9e47/ports/skia/skpath-enable-edit-methods.patch";
-          hash = "sha256-r5+HqSjACINn8igXqBANQsq0K+fn+Ut8L2VRs40FkTM=";
-        })
-      ];
     }))
     woff2
     icu78
@@ -148,6 +196,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
+    # Vulkan GPU painting; on Linux this also enables shareable DMABUF images,
+    # for which CMake now requires VulkanMemoryAllocator (and glslangValidator).
+    vulkan-headers
+    vulkan-loader
+    vulkan-memory-allocator
   ];
 
   cmakeFlags = [
@@ -159,6 +212,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Ladybird requires icu 78, but without this flag the default icu
     # from other dependencies gets picked up instead.
     (lib.cmakeFeature "ICU_ROOT" (toString icu78.dev))
+    # WUFFS_INCLUDE_DIR is set from preConfigure via cmakeFlagsArray so it can
+    # point at the absolute path of the vendored wuffs 0.3.4 header directory.
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
@@ -179,6 +234,18 @@ stdenv.mkDerivation (finalAttrs: {
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
   # On linux we end up wraping some non-Qt apps, like headless-browser.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  # Remove once upstream reads the trust store before sandboxing
+  # (https://github.com/LadybirdBrowser/ladybird/pull/10256).
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram "$out/bin/Ladybird" \
+        --add-flags "--certificate=${cacert}/etc/ssl/certs/ca-bundle.crt"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapProgram "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird" \
+        --add-flags "--certificate=${cacert}/etc/ssl/certs/ca-bundle.crt"
+    '';
 
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
