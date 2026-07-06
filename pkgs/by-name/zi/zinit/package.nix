@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zinit";
-  version = "3.14.0";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = "zinit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cBMGmFrveBes30aCSLMBO8WrtoPZeMNjcEQoQEzBNvM=";
+    hash = "sha256-lVdia0iDGy7RDT3Ho4BBslwbng/NpsJWbbVBqgNccCg=";
   };
 
   outputs = [
