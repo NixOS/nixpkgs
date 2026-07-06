@@ -57,7 +57,7 @@ async function getInfo(liveCheckFile) {
 }
 
 async function main() {
-  const filePath = path.join(__dirname, "../info.json");
+  const filePath = path.join(__dirname, "../sources.json");
   /** @type {InfoMap} */
   const oldInfo = JSON.parse(
     await fsPromises.readFile(filePath, { encoding: "utf-8" })
