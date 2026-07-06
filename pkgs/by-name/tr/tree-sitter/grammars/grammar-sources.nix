@@ -517,7 +517,7 @@
   };
 
   dtd = {
-    version = "0-unstable-2026-01-21";
+    version = "0.7.0-unstable-2026-01-21";
     url = "github:tree-sitter-grammars/tree-sitter-xml";
     rev = "5000ae8f22d11fbe93939b05c1e37cf21117162d";
     hash = "sha256-QN+jQx1CrTbYpmM9mLUfjWcymGsa0Th7LVgk4thnQXU=";
