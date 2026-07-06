@@ -242,8 +242,6 @@ let
         + lib.optionalString (data.csr != null) " - ${data.csr}"
         + lib.optionalString (data.profile != null) " - ${data.profile}";
       certDir = mkHash hashData;
-      # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
-      domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
       accountHash = (mkAccountHash acmeServer data);
       accountDir = accountDirRoot + accountHash;
 
@@ -254,7 +252,10 @@ let
               "--dns"
               data.dnsProvider
             ]
-            ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation-disable-ans" ]
+            ++ lib.optionals (!data.dnsPropagationCheck) [
+              "--dns.propagation.wait"
+              "0s"
+            ]
             ++ lib.optionals (data.dnsResolver != null) [
               "--dns.resolvers"
               data.dnsResolver
@@ -269,7 +270,7 @@ let
         else if data.listenHTTP != null then
           [
             "--http"
-            "--http.port"
+            "--http.address"
             data.listenHTTP
           ]
         else
@@ -309,21 +310,24 @@ let
       ]) extraDomains
       ++ data.extraLegoFlags;
 
-      # Although --must-staple is common to both modes, it is not declared as a
-      # mode-agnostic argument in lego and thus must come after the mode.
       runOpts = lib.escapeShellArgs (
-        commonOpts
-        ++ [ "run" ]
+        [ "run" ]
+        ++ commonOpts
+        ++ [
+          "--no-random-sleep"
+          "--renew-force"
+          "--ari-disable"
+        ]
+        ++ lib.optionals (data.csr == null) [ "--force-cert-domains" ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRunFlags
       );
       renewOpts = lib.escapeShellArgs (
-        commonOpts
-        ++ [
-          "renew"
-          "--no-random-sleep"
-        ]
+        [ "run" ]
+        ++ commonOpts
+        ++ [ "--no-random-sleep" ]
+        ++ lib.optionals (data.csr == null) [ "--force-cert-domains" ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
         ++ data.extraLegoRenewFlags
@@ -575,13 +579,15 @@ let
             }
           }
 
-          echo '${domainHash}' > domainhash.txt
+          # lego v5 moved account keys out of the keys/ subdirectory.
+          # Guard the migration because lego migrate is not idempotent.
+          if [ -n "$(find accounts -path '*/keys/*.key' -print -quit)" ]; then
+            printf 'Y\n' | lego migrate --account-only --path .
+          fi
 
-          # Check if a new order is needed
-          # We can only renew if the list of domains has not changed.
+          # Check if the existing certificate can be renewed.
           # We also need an account key. Avoids #190493
-          if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && \
-            [ -e 'certificates/${keyName}.crt' ] && \
+          if [ -e '${certificateKey}' ] && [ -e 'certificates/${keyName}.crt' ] && \
             [ -n "$(find accounts -name '${
               if (data.email != null) then data.email else placeholderEmail
             }.key')" ];
@@ -590,7 +596,7 @@ let
             # Try to renew, and silently fail if the cert is not expired.
             # Avoids #85794 and resolves #129838
             if ! lego ${renewOpts} ${
-              if data.validMinDays != null then "--days ${toString data.validMinDays}" else "--dynamic"
+              if data.validMinDays != null then "--renew-days ${toString data.validMinDays}" else ""
             }; then
               if is_expiration_skippable out/full.pem; then
                 echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't due yet"
@@ -609,8 +615,6 @@ let
             # High number to avoid Systemd reserved codes.
             exit 10
           fi
-
-          mv domainhash.txt certificates/
 
           touch out/acme-success
 
@@ -871,7 +875,7 @@ let
           type = lib.types.listOf lib.types.str;
           inherit (defaultAndText "extraLegoFlags" [ ]) default defaultText;
           description = ''
-            Additional global flags to pass to all lego commands.
+            Additional flags to pass to both `lego run` invocations.
           '';
         };
 
@@ -879,7 +883,7 @@ let
           type = lib.types.listOf lib.types.str;
           inherit (defaultAndText "extraLegoRenewFlags" [ ]) default defaultText;
           description = ''
-            Additional flags to pass to lego renew.
+            Additional flags to pass to the non-forced renewal `lego run` invocation.
           '';
         };
 
@@ -887,7 +891,7 @@ let
           type = lib.types.listOf lib.types.str;
           inherit (defaultAndText "extraLegoRunFlags" [ ]) default defaultText;
           description = ''
-            Additional flags to pass to lego run.
+            Additional flags to pass to the forced obtain/reissue `lego run` invocation.
           '';
         };
       };
