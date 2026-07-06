@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "2.1.4";
 
   src = fetchFromGitHub {
-    owner = "patrickhener";
+    owner = "goshs-labs";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8xSYdLO+2AB044sV3JJw0RXB0RuLQ7eIzWvwgoJdp5k=";
@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Simple, yet feature-rich web server written in Go";
     homepage = "https://goshs.de";
-    changelog = "https://github.com/patrickhener/goshs/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/goshs-labs/goshs/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
