@@ -866,6 +866,28 @@ rec {
     ];
   };
 
+  ru_RU-mozilla = ru-ru-mozilla;
+  ru-ru-mozilla = mkDict {
+    pname = "hunspell-dict-ru-ru-mozilla";
+    version = "0-unstable-2026-05-30";
+
+    src = fetchFromGitHub {
+      owner = "Goudron";
+      repo = "ru-spelling-dictionary";
+      rev = "43cc600462d8681bc6e92d1afb29874e2902ea9b";
+      hash = "sha256-EN/f5lbpBiyItEFcHTJbuwuJF3rghkB1f5T9G0a2tdk=";
+    };
+
+    dictFileName = "ru_RU";
+    readmeFile = "README.md";
+
+    meta = {
+      description = "Hunspell dictionary for Russian, updated version as used in Mozilla products";
+      homepage = "https://github.com/Goudron/ru-spelling-dictionary";
+      license = [ lib.licenses.mpl20 ];
+    };
+  };
+
   # CZECH
 
   cs_CZ = cs-cz;
