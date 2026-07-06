@@ -14,7 +14,6 @@
   livekit-libwebrtc,
   lld,
   makeBinaryWrapper,
-  nix-update-script,
   pkg-config,
   openssl,
   ripgrep,
@@ -129,13 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--use-github-releases"
-        "--version-regex"
-        "^rust-v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+    updateScript = ./update.sh;
     inherit librusty_v8;
   };
 
