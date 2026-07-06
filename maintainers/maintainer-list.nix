@@ -22466,7 +22466,7 @@
     githubId = 38916722;
   };
   pradyuman = {
-    email = "me@pradyuman.co";
+    email = "me@pmn.co";
     github = "pradyuman";
     githubId = 9904569;
     name = "Pradyuman Vig";

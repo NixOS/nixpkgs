@@ -2360,10 +2360,6 @@ with pkgs;
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
-  krunvm = callPackage ../applications/virtualization/krunvm {
-    inherit (darwin) sigtool;
-  };
-
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
@@ -9170,10 +9166,6 @@ with pkgs;
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
-
-  ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
-    protobuf = protobuf_21;
-  };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 

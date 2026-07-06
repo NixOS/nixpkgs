@@ -13,16 +13,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "fvs2";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "fvs-lab";
     repo = "fvs2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YFtHWtkAPxHT2BqJyyKpPPwkrYyDoFEHq76mNPczJjI=";
+    hash = "sha256-wod+GzJ/tCl0dlAv0PM9I1TG9l96SujrOkSlEsgXp5U=";
   };
 
-  vendorHash = "sha256-onx9DxaDcNwDWXfSNSugOG9WoLG918b2A1KJIaeQNpI=";
+  vendorHash = "sha256-MDizWAeXJW0YTMrGEtk3Ulvx0InW0EgytrtE9O7T3Ps=";
 
   preBuild = ''
     cp -r ${core} ../core
