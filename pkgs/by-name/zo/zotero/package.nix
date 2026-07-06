@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  darwin,
   nodejs_22,
   perl,
   python3,
@@ -183,6 +184,7 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
+    darwin.autoSignDarwinBinariesHook
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     wrapGAppsHook3
