@@ -239,9 +239,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
-
   preCheck = ''
     # Unavailable in the build sandbox
     substituteInPlace frigate/const.py \
