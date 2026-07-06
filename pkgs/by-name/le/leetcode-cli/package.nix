@@ -52,7 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ congee ];
+    maintainers = with lib.maintainers; [
+      congee
+      ethancedwards8
+    ];
     mainProgram = "leetcode";
   };
 })
