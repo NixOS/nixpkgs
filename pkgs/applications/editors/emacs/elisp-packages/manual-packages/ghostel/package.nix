@@ -77,7 +77,10 @@ melpaBuild {
   meta = {
     homepage = "https://github.com/dakra/ghostel";
     description = "Terminal emulator powered by libghostty";
-    maintainers = with lib.maintainers; [ vonfry ];
+    maintainers = with lib.maintainers; [
+      rohan-datar
+      vonfry
+    ];
     license = lib.licenses.gpl3Plus;
   };
 }
