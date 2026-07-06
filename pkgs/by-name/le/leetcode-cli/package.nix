@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leetcode-cli";
-  version = "0.5.0";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "clearloop";
     repo = "leetcode-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h3mCZzif+Uzv3bsEb9I24txrx1BHkc5I86gWcwDHsOc=";
+    hash = "sha256-Qg4Sd3tcyOZsPl++/Y6qU2tTCzJ4nL062kJn6gSMygI=";
   };
 
-  cargoHash = "sha256-8bHpNckEsJ4VWlmEaDTeMW+Txi9SQh30lK5CKKperC8=";
+  cargoHash = "sha256-bbwyuFY3i/pcWBJjaKIZf2zHEkp4raZp7i5cWZtS9w8=";
 
   nativeBuildInputs = [
     installShellFiles
