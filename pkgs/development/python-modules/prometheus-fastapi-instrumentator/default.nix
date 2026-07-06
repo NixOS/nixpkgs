@@ -3,14 +3,20 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  prometheus-client,
+  starlette,
+
+  # tests
   devtools,
   fastapi,
   httpx,
-  poetry-core,
-  prometheus-client,
+  pytestCheckHook,
   requests,
-  starlette,
 }:
 
 buildPythonPackage (finalAttrs: {
