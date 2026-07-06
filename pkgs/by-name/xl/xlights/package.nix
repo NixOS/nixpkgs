@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "xlights";
-  version = "2026.11";
+  version = "2026.12";
 
   src = fetchurl {
     url = "https://github.com/smeighan/xLights/releases/download/${version}/xLights-${version}-x86_64.AppImage";
-    hash = "sha256-kTJD2xeclNApeSo1ALNI/XAwDY8tsBO0eMMQurtRF/M=";
+    hash = "sha256-aMOnG80gEZcCo1vIYcyRCTRhJIbcNPEEsmacfRLIoxY=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
