@@ -38,5 +38,5 @@ stdenv.mkDerivation rec {
       --replace "pkg-config" "$PKG_CONFIG"
   '';
 
-  NIX_LDFLAGS = "-lgmodule-2.0";
+  env.NIX_LDFLAGS = "-lgmodule-2.0";
 }

@@ -29,6 +29,7 @@ let
     "neorg"
     "neorg-interim-ls"
     "neotest"
+    "neotest-nix"
     "nui-nvim"
     "nvim-cmp"
     "nvim-nio"
