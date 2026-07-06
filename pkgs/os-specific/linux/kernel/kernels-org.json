@@ -1,7 +1,7 @@
 {
     "testing": {
-        "version": "7.2-rc1",
-        "hash": "sha256:1gpwr6n3cc2hqg36gy9g9w4rxawpz3y126j752z4zyls6h80b43v",
+        "version": "7.2-rc2",
+        "hash": "sha256:0fmmgckfjcld0ljwdz3jzc1bpkyfsj0i8q90mzzy92j07s28nffh",
         "lts": false
     },
     "6.1": {
