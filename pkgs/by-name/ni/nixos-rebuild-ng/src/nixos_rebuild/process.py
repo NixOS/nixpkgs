@@ -31,6 +31,21 @@ SSH_DEFAULT_OPTS: Final = [
 ]
 
 
+def ssh_default_opts() -> list[str]:
+    """Default ssh options appended after NIX_SSHOPTS.
+
+    NIXOS_REBUILD_SSH_DEFAULT_OPTS replaces the built-in connection
+    sharing defaults, e.g. to reuse an externally managed ControlMaster
+    and the port forwards attached to it. Set it to the empty string to
+    fall back to the connection sharing configured in ssh_config, if
+    any.
+    """
+    env = os.getenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS")
+    if env is None:
+        return SSH_DEFAULT_OPTS
+    return shlex.split(env)
+
+
 @dataclass(frozen=True)
 class Remote:
     host: str
@@ -133,7 +148,7 @@ def run_wrapper(
         ssh_args: list[Arg] = [
             "ssh",
             *remote.opts,
-            *SSH_DEFAULT_OPTS,
+            *ssh_default_opts(),
             remote.ssh_host(),
             "--",
             *[_quote_remote_arg(a) for a in remote_run_args],
@@ -282,7 +297,7 @@ def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
             [
                 "ssh",
                 *remote.opts,
-                *SSH_DEFAULT_OPTS,
+                *ssh_default_opts(),
                 remote.ssh_host(),
                 "--",
                 "pkill",
