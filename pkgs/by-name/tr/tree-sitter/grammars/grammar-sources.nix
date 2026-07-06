@@ -2992,7 +2992,7 @@
   };
 
   vim = {
-    version = "0.2.0-unstable-2026-02-26";
+    version = "0.8.1-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-vim";
     rev = "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b";
     hash = "sha256-MnLBFuJCJbetcS07fG5fkCwHtf/EcNP+Syf0Gn0K39c=";
