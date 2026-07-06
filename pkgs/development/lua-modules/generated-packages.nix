@@ -2443,28 +2443,30 @@ final: prev: {
       fetchurl,
       lua-resty-http,
       lua-resty-jwt,
+      lua-resty-openssl,
       lua-resty-session,
       luaOlder,
     }:
     buildLuarocksPackage {
       pname = "lua-resty-openidc";
-      version = "1.8.0-1";
+      version = "1.9.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-openidc-1.8.0-1.rockspec";
-          sha256 = "0jgajhn45nybhi7z15bg957kznzqcjzxc8nrzmgyignkwp4yi1qk";
+          url = "mirror://luarocks/lua-resty-openidc-1.9.0-1.rockspec";
+          sha256 = "0s4717scx37crqbnvq752j4n2f773hp0ndd8z0x2iyiwdnw8jjwf";
         }).outPath;
       src = fetchFromGitHub {
         owner = "zmartzone";
         repo = "lua-resty-openidc";
-        tag = "v1.8.0";
-        hash = "sha256-LSkNWebMF1L1a66QszugAxcHsW5o9uxQZHWituFFgJs=";
+        tag = "v1.9.0";
+        hash = "sha256-3dkHUN3Twe1g+oRXD7asMG28GxKzRAEF1SfZ4iuWhwA=";
       };
 
       disabled = luaOlder "5.1";
       propagatedBuildInputs = [
         lua-resty-http
         lua-resty-jwt
+        lua-resty-openssl
         lua-resty-session
       ];
 
