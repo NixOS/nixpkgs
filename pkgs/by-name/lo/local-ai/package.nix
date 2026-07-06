@@ -337,7 +337,7 @@ let
   pname = "local-ai";
   version = "2.28.0";
   src = fetchFromGitHub {
-    owner = "go-skynet";
+    owner = "mudler";
     repo = "LocalAI";
     tag = "v${version}";
     hash = "sha256-Hpz0dGkgasSY/FGO7mDzqsLjXut0LdQ9PUXGaURUOlY=";
