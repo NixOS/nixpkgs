@@ -4935,6 +4935,7 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/khaneliman/neotest-nix";
+        maintainers = with lib.maintainers; [ khaneliman ];
         license = lib.licenses.mit;
         description = "A Neotest adapter for Nix flakes.";
       };
