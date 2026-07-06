@@ -1,0 +1,37 @@
+diff --git a/src/qt_gui/game_install_dialog.cpp b/src/qt_gui/game_install_dialog.cpp
+index 8a9b94d..919d4a5 100644
+--- a/src/qt_gui/game_install_dialog.cpp
++++ b/src/qt_gui/game_install_dialog.cpp
+@@ -144,7 +144,9 @@ void GameInstallDialog::Save() {
+     // Check games directory.
+     auto gamesDirectory = m_gamesDirectory->text();
+     auto addonsDirectory = m_addonsDirectory->text();
++#ifndef HIDE_VERSION_MANAGER
+     auto versionDirectory = m_versionDirectory->text();
++#endif
+ 
+     if (gamesDirectory.isEmpty() || !QDir(gamesDirectory).exists() ||
+         !QDir::isAbsolutePath(gamesDirectory)) {
+@@ -167,6 +169,7 @@ void GameInstallDialog::Save() {
+         }
+     }
+ 
++#ifndef HIDE_VERSION_MANAGER
+     if (versionDirectory.isEmpty() || !QDir::isAbsolutePath(versionDirectory)) {
+         QMessageBox::critical(this, tr("Error"),
+                               "The value for location to install emulator versions is not valid.");
+@@ -181,11 +184,14 @@ void GameInstallDialog::Save() {
+             return;
+         }
+     }
++#endif
+ 
+     // Save the directories
+     Config::addGameInstallDir(Common::FS::PathFromQString(gamesDirectory));
+     Config::setAddonInstallDir(Common::FS::PathFromQString(addonsDirectory));
++#ifndef HIDE_VERSION_MANAGER
+     m_gui_settings->SetValue(gui::vm_versionPath, versionDirectory);
++#endif
+ 
+     const auto config_dir = Common::FS::GetUserPath(Common::FS::PathType::UserDir);
+     Config::save(config_dir / "config.toml");

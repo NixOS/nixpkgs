@@ -1,0 +1,18 @@
+--- a/tests/functional/ca/meson.build
++++ b/tests/functional/ca/meson.build
+@@ -27 +27 @@ suites += {
+-    'nix-shell.sh',
++    # 'nix-shell.sh',
+--- a/tests/functional/flakes/meson.build
++++ b/tests/functional/flakes/meson.build
+@@ -27 +27 @@ suites += {
+-    'shebang.sh',
++    # 'shebang.sh',
+--- a/tests/functional/meson.build
++++ b/tests/functional/meson.build
+@@ -65 +65 @@ suites = [
+-      'user-envs.sh',
++      # 'user-envs.sh',
+@@ -92 +92 @@ suites = [
+-      'nix-shell.sh',
++      # 'nix-shell.sh',

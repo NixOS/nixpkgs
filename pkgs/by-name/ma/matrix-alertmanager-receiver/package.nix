@@ -1,0 +1,46 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "matrix-alertmanager-receiver";
+  version = "2026.5.20";
+
+  src = fetchFromGitHub {
+    owner = "metio";
+    repo = "matrix-alertmanager-receiver";
+    tag = finalAttrs.version;
+    hash = "sha256-Eg7T4uLT7a+RgyAPXKVN4Xb1cvBK8M3amAEV1C2QGwI=";
+  };
+
+  vendorHash = "sha256-+kW84sOGArsbGgfgtNVP1BE/X10fn5rMB+Y/CsDiKu0=";
+
+  env.CGO_ENABLED = "0";
+
+  ldflags = [
+    "-s"
+    "-X main.matrixAlertmanagerReceiverVersion=${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Alertmanager client that forwards alerts to a Matrix room";
+    homepage = "https://github.com/metio/matrix-alertmanager-receiver";
+    changelog = "https://github.com/metio/matrix-alertmanager-receiver/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ liberodark ];
+    mainProgram = "matrix-alertmanager-receiver";
+  };
+})

@@ -1,0 +1,135 @@
+diff --git a/app/AssetService.main.ts b/app/AssetService.main.ts
+index 33b20b8d5..c122f8c67 100644
+--- a/app/AssetService.main.ts
++++ b/app/AssetService.main.ts
+@@ -32,7 +32,6 @@ const LOCAL_ASSETS = new Set([
+ 
+ // pathname to optional resource name
+ const OPTIONAL_ASSETS = new Map([
+-  ['optional-fonts/emoji-large.woff2', 'emoji-font.woff2'],
+ ]);
+ 
+ export class AssetService {
+diff --git a/app/protocol_filter.node.ts b/app/protocol_filter.node.ts
+index 17c68f0a4..4ed359de6 100644
+--- a/app/protocol_filter.node.ts
++++ b/app/protocol_filter.node.ts
+@@ -68,6 +68,7 @@ export function _createFileHandler({
+   const allowedRoots = [
+     userDataPath,
+     installPath,
++    "@noto-fonts-color-emoji@",
+     getAvatarsPath(userDataPath),
+     getBadgesPath(userDataPath),
+     getDraftPath(userDataPath),
+diff --git a/stylesheets/_fontfaces.scss b/stylesheets/_fontfaces.scss
+index d9f558cd4..45a42ecd1 100644
+--- a/stylesheets/_fontfaces.scss
++++ b/stylesheets/_fontfaces.scss
+@@ -89,7 +89,8 @@ $protocol: 'asset://';
+ 
+ @font-face {
+   font-family: 'Signal Emoji Small';
+-  src: url('#{$protocol}/fonts/emoji.woff2');
++  src: url('file://@noto-fonts-color-emoji@/share/fonts/noto/NotoColorEmoji.ttf');
++  size-adjust: 85%;
+ }
+ 
+ $largeEmojiFont: 'asset:///optional-fonts/emoji-large.woff2';
+diff --git a/stylesheets/components/fun/FunEmoji.scss b/stylesheets/components/fun/FunEmoji.scss
+index f96218420..612538cd3 100644
+--- a/stylesheets/components/fun/FunEmoji.scss
++++ b/stylesheets/components/fun/FunEmoji.scss
+@@ -8,14 +8,12 @@
+ }
+ 
+ .FunStaticEmoji {
+-  contain: strict;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+   z-index: 0;
+   flex: none;
+-  content-visibility: auto;
+   vertical-align: top;
+   letter-spacing: inherit;
+ 
+@@ -24,15 +22,6 @@
+   color: hsl(from currentColor h s l / 100%);
+ }
+ 
+-.FunStaticEmoji__Text {
+-  padding-top: 1px;
+-
+-  // Emoji font images are slightly higher than optical center
+-  @media (resolution >= 2x) {
+-    padding-top: 0.5px;
+-  }
+-}
+-
+ .FunStaticEmoji--Blot {
+   display: inline-flex;
+   margin-bottom: round(-0.4em + 3px, 1px);
+@@ -133,7 +122,6 @@ $inline-emoji-container-name: inline-emoji;
+ 
+ .FunInlineEmoji {
+   z-index: 0;
+-  contain: strict;
+   container: $inline-emoji-container-name / inline-size;
+   display: inline-block;
+   flex: none;
+@@ -142,8 +130,7 @@ $inline-emoji-container-name: inline-emoji;
+   font-size: var(--fun-inline-emoji-size, round(1.4em, 1px));
+   line-height: var(--fun-inline-emoji-size, round(1em, 1px));
+   letter-spacing: inherit;
+-  content-visibility: auto;
+-  vertical-align: bottom;
++  vertical-align: text-bottom;
+ }
+ 
+ .FunInlineEmoji__Image {
+@@ -170,26 +157,6 @@ $inline-emoji-container-name: inline-emoji;
+   @container #{$inline-emoji-container-name} (width > 64px) {
+     display: none;
+   }
+-
+-  // Emoji font images are slightly higher than optical center
+-  @container #{$inline-emoji-container-name} (width > 16px) {
+-    padding-top: 0.5px;
+-  }
+-
+-  @container #{$inline-emoji-container-name} (width > 45px) {
+-    padding-top: 1px;
+-  }
+-
+-  @media (resolution >= 2x) {
+-    // Emoji font has images are slightly higher than optical center
+-    @container #{$inline-emoji-container-name} (width > 8px) {
+-      padding-top: 0.5px;
+-    }
+-
+-    @container #{$inline-emoji-container-name} (width > 40px) {
+-      padding-top: 1px;
+-    }
+-  }
+ }
+ 
+ .FunInlineEmoji__Jumbo {
+diff --git a/ts/components/fun/FunEmoji.dom.tsx b/ts/components/fun/FunEmoji.dom.tsx
+index 853f8b7cd..f4589f735 100644
+--- a/ts/components/fun/FunEmoji.dom.tsx
++++ b/ts/components/fun/FunEmoji.dom.tsx
+@@ -31,12 +31,6 @@ function getEmojiJumboUrl(
+   emoji: EmojiVariantData,
+   size: number | undefined
+ ): string | null {
+-  if (size != null && size < MIN_JUMBOMOJI_SIZE) {
+-    return null;
+-  }
+-  if (KNOWN_JUMBOMOJI.has(emoji.value)) {
+-    return `emoji://jumbo?emoji=${encodeURIComponent(emoji.value)}`;
+-  }
+   return null;
+ }
+ 

@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3334931..64220c4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,8 +27,7 @@ message(STATUS "Fetching/configuring OSQP")
+ list(APPEND CMAKE_MESSAGE_INDENT "  ")
+ FetchContent_Declare(
+   osqp
+-  GIT_REPOSITORY https://github.com/osqp/osqp.git
+-  GIT_TAG v1.0.0
++  URL @osqp_src@
+ )
+ list(POP_BACK CMAKE_MESSAGE_INDENT)
+ FetchContent_MakeAvailable(osqp)

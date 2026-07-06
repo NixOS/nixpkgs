@@ -1,0 +1,29 @@
+diff --git a/etc/CMakeLists.txt b/etc/CMakeLists.txt
+index 826fff1..3cefc34 100644
+--- a/etc/CMakeLists.txt
++++ b/etc/CMakeLists.txt
+@@ -6,14 +6,14 @@ install(
+     FILES
+         ${CMAKE_CURRENT_SOURCE_DIR}/clamd.conf.sample
+     DESTINATION
+-        ${APP_CONFIG_DIRECTORY}
++        ${CMAKE_INSTALL_PREFIX}/${APP_CONFIG_DIRECTORY}
+     COMPONENT programs)
+ 
+ install(
+     FILES
+         ${CMAKE_CURRENT_SOURCE_DIR}/freshclam.conf.sample
+     DESTINATION
+-        ${APP_CONFIG_DIRECTORY}
++        ${CMAKE_INSTALL_PREFIX}/${APP_CONFIG_DIRECTORY}
+     COMPONENT programs)
+ 
+ if(ENABLE_MILTER)
+@@ -21,6 +21,6 @@ if(ENABLE_MILTER)
+         FILES
+             ${CMAKE_CURRENT_SOURCE_DIR}/clamav-milter.conf.sample
+         DESTINATION
+-            ${APP_CONFIG_DIRECTORY}
++            ${CMAKE_INSTALL_PREFIX}/${APP_CONFIG_DIRECTORY}
+         COMPONENT programs)
+ endif()

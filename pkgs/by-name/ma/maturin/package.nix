@@ -1,0 +1,73 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  testers,
+  nix-update-script,
+  maturin,
+  python3,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "maturin";
+  version = "1.12.6";
+
+  src = fetchFromGitHub {
+    owner = "PyO3";
+    repo = "maturin";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NQ94RdQTQlRR5+2dC95cFNhwYliHmkD11JWyGt6BV6g=";
+  };
+
+  cargoHash = "sha256-9VqS9wvQAsSYNhH7B9WlD6SZjXR4S2sYzYoNy6vbYBM=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  # Requires network access, fails in sandbox.
+  doCheck = false;
+
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = maturin; };
+      pyo3 = python3.pkgs.callPackage ./pyo3-test {
+        pyproject = true;
+        buildAndTestSubdir = "examples/word-count";
+        preConfigure = "";
+
+        nativeBuildInputs = with rustPlatform; [
+          cargoSetupHook
+          maturinBuildHook
+        ];
+      };
+    };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Build and publish Rust crates Python packages";
+    longDescription = ''
+      Build and publish Rust crates with PyO3, rust-cpython, and
+      cffi bindings as well as Rust binaries as Python packages.
+
+      This project is meant as a zero-configuration replacement for
+      setuptools-rust and Milksnake. It supports building wheels for
+      Python and can upload them to PyPI.
+    '';
+    homepage = "https://github.com/PyO3/maturin";
+    changelog = "https://github.com/PyO3/maturin/blob/v${finalAttrs.version}/Changelog.md";
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      miniharinn
+    ];
+    mainProgram = "maturin";
+  };
+})

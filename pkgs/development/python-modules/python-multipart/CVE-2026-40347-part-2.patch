@@ -1,0 +1,106 @@
+Based on upstream d4452a78bbde94995dd3c0d1b4aff3610a5c472f, adjusted
+to apply to 0.0.22
+
+diff --git a/python_multipart/multipart.py b/python_multipart/multipart.py
+index 0f238c2..d2a597e 100644
+--- a/python_multipart/multipart.py
++++ b/python_multipart/multipart.py
+@@ -1418,12 +1418,8 @@ class MultipartParser(BaseParser):
+                     state = MultipartState.END
+ 
+             elif state == MultipartState.END:
+-                # Don't do anything if chunk ends with CRLF.
+-                if c == CR and i + 1 < length and data[i + 1] == LF:
+-                    i += 2
+-                    continue
+-                # Skip data after the last boundary.
+-                self.logger.warning("Skipping data after last boundary")
++                # Silently discard any epilogue data (RFC 2046 section 5.1.1 allows a CRLF and optional
++                # epilogue after the closing boundary). Django and Werkzeug do the same.
+                 i = length
+                 break
+ 
+diff --git a/tests/test_multipart.py b/tests/test_multipart.py
+index 75982b6..3e8dd89 100644
+--- a/tests/test_multipart.py
++++ b/tests/test_multipart.py
+@@ -1,6 +1,5 @@
+ from __future__ import annotations
+ 
+-import logging
+ import os
+ import random
+ import sys
+@@ -722,6 +721,14 @@ single_byte_tests = [
+     "single_field_single_file",
+ ]
+ 
++EPILOGUE_TEST_HEAD = (
++    "--boundary\r\n"
++    'Content-Disposition: form-data; name="file"; filename="filename.txt"\r\n'
++    "Content-Type: text/plain\r\n\r\n"
++    "hello\r\n"
++    "--boundary--"
++).encode("latin-1")
++
+ 
+ def split_all(val: bytes) -> Iterator[tuple[bytes, bytes]]:
+     """
+@@ -1266,7 +1273,7 @@ class TestFormParser(unittest.TestCase):
+         self.assert_file_data(files[0], b"hello")
+ 
+     def test_multipart_parser_data_after_last_boundary(self) -> None:
+-        """This test makes sure that the parser does not handle when there is junk data after the last boundary."""
++        """Parser must short-circuit on arbitrary epilogue data after the closing boundary (no O(N) scan)."""
+         num = 50_000_000
+         data = (
+             "--boundary\r\n"
+@@ -1284,29 +1291,32 @@ class TestFormParser(unittest.TestCase):
+         f = FormParser("multipart/form-data", on_field=Mock(), on_file=on_file, boundary="boundary")
+         f.write(data.encode("latin-1"))
+ 
+-    @pytest.fixture(autouse=True)
+-    def inject_fixtures(self, caplog: pytest.LogCaptureFixture) -> None:
+-        self._caplog = caplog
+-
+-    def test_multipart_parser_data_end_with_crlf_without_warnings(self) -> None:
+-        """This test makes sure that the parser does not handle when the data ends with a CRLF."""
+-        data = (
+-            "--boundary\r\n"
+-            'Content-Disposition: form-data; name="file"; filename="filename.txt"\r\n'
+-            "Content-Type: text/plain\r\n\r\n"
+-            "hello\r\n"
+-            "--boundary--\r\n"
+-        )
++    @parametrize(
++        "chunks",
++        [
++            [EPILOGUE_TEST_HEAD + b"\r\n"],
++            [EPILOGUE_TEST_HEAD + b"\r", b"\n"],
++            [EPILOGUE_TEST_HEAD, b"\r\n"],
++            [EPILOGUE_TEST_HEAD + b"\r\n--boundary\r\nthis is not a valid header\r\n\r\nnot a real part"],
++        ],
++    )
++    def test_multipart_parser_ignores_epilogue(self, chunks: list[bytes]) -> None:
++        """Epilogue data after the closing boundary must be ignored.
+ 
++        Covers both the single-chunk case and the case where trailing CRLF is split across `write()` calls.
++        The final case asserts that epilogue bytes are not parsed or validated.
++        """
+         files: list[File] = []
+ 
+         def on_file(f: FileProtocol) -> None:
+             files.append(cast(File, f))
+ 
+         f = FormParser("multipart/form-data", on_field=Mock(), on_file=on_file, boundary="boundary")
+-        with self._caplog.at_level(logging.WARNING):
+-            f.write(data.encode("latin-1"))
+-            assert len(self._caplog.records) == 0
++        for chunk in chunks:
++            f.write(chunk)
++
++        assert len(files) == 1
++        self.assert_file_data(files[0], b"hello")
+ 
+     def test_max_size_multipart(self) -> None:
+         # Load test data.

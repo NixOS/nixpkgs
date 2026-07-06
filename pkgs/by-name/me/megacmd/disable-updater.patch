@@ -1,0 +1,125 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0daf084d..4ff0a86d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -88,6 +88,12 @@ endif()
+ include(megacmd_options) #Load first MEGAcmd's options (that we have prevalescence over SDK (e.g libuv)
+ include(sdklib_options) #load default sdk's
+ 
++if (WIN32 OR APPLE)
++    option(ENABLE_UPDATER "Enable updater" ON)
++else()
++    option(ENABLE_UPDATER "Enable updater" OFF)
++endif()
++
+ if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/sdk/include/mega/config.h)
+     file(RENAME ${CMAKE_CURRENT_LIST_DIR}/sdk/include/mega/config.h ${CMAKE_CURRENT_LIST_DIR}/sdk/include/mega/config.h_non_cmake_bk)
+ endif()
+@@ -222,6 +228,10 @@ target_compile_definitions(LMegacmdServer
+     $<$<BOOL:${USE_PCRE}>:USE_PCRE>
+ )
+ 
++if (ENABLE_UPDATER)
++    target_compile_definitions(LMegacmdServer PUBLIC ENABLE_UPDATER)
++endif()
++
+ if (NOT WIN32)
+     if (ENABLE_ASAN)
+         add_compile_options("-fsanitize=address" "-fno-omit-frame-pointer" "-fno-common")
+@@ -419,7 +429,7 @@ load_megacmdserver_libraries()
+ 
+ 
+ list(APPEND all_targets mega-exec mega-cmd mega-cmd-server)
+-if (APPLE)
++if (APPLE AND ENABLE_UPDATER)
+     list(APPEND all_targets mega-cmd-updater)
+ endif()
+ 
+diff --git a/src/megacmd.cpp b/src/megacmd.cpp
+index 9110ae31..aeb3b1e1 100644
+--- a/src/megacmd.cpp
++++ b/src/megacmd.cpp
+@@ -830,7 +830,7 @@ void insertValidParamsPerCommand(set<string> *validParams, string thecommand, se
+     {
+         validParams->insert("only-shell");
+     }
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+     else if ("update" == thecommand)
+     {
+         validOptValues->insert("auto");
+@@ -4211,7 +4211,7 @@ static bool process_line(const std::string_view line)
+                 break;
+             }
+ 
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+             else if (isBareCommand(l, "update")) //if extra args are received, it'll be processed by executer
+             {
+                 string confirmationQuery("This might require restarting MEGAcmd. Are you sure to continue");
+@@ -4684,7 +4684,7 @@ void megacmd()
+ 
+                 std::string s;
+ 
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+                 ostringstream os;
+                 auto updatMsgOpt = lookForAvailableNewerVersions(api);
+                 //TODO: have this executed in worker thread instead (see MegaCmdExecuter::mayExecutePendingStuffInWorkerThread)
+diff --git a/src/megacmdcommonutils.h b/src/megacmdcommonutils.h
+index 039d7b81..977dbb67 100644
+--- a/src/megacmdcommonutils.h
++++ b/src/megacmdcommonutils.h
+@@ -120,7 +120,7 @@ static std::vector<std::string> loginInValidCommands { "log", "debug", "speedlim
+ #elif defined(_WIN32)
+                              , "unicode"
+ #endif
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+                              , "update"
+ #endif
+                            };
+@@ -144,7 +144,7 @@ static std::vector<std::string> allValidCommands { "login", "signup", "confirm",
+ #else
+                              , "permissions"
+ #endif
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+                              , "update"
+ #endif
+ #ifdef WITH_FUSE
+diff --git a/src/megacmdexecuter.cpp b/src/megacmdexecuter.cpp
+index 19f4903b..7712d546 100644
+--- a/src/megacmdexecuter.cpp
++++ b/src/megacmdexecuter.cpp
+@@ -2696,7 +2696,7 @@ int MegaCmdExecuter::actUponLogin(SynchronousRequestListener *srl, int timeout)
+         fetchNodes(api, clientID);
+     }
+ 
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+ 
+     MegaCmdListener *megaCmdListener = new MegaCmdListener(NULL);
+     srl->getApi()->getLastAvailableVersion("BdARkQSQ",megaCmdListener);
+@@ -5829,7 +5829,7 @@ void MegaCmdExecuter::executecommand(vector<string> words, map<string, int> *clf
+             }
+         }
+     }
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+     else if (words[0] == "update")
+     {
+         string sauto = getOption(cloptions, "auto", "");
+diff --git a/src/megacmdshell/megacmdshell.cpp b/src/megacmdshell/megacmdshell.cpp
+index 7723982e..2d077c7c 100644
+--- a/src/megacmdshell/megacmdshell.cpp
++++ b/src/megacmdshell/megacmdshell.cpp
+@@ -1289,7 +1289,7 @@ void process_line(const char * line)
+                         doExit = true;
+                     }
+                 }
+-#if defined(_WIN32) || defined(__APPLE__)
++#ifdef ENABLE_UPDATER
+                 else if (words[0] == "update")
+                 {
+                     comms->markServerIsUpdating();

@@ -1,0 +1,52 @@
+diff --git a/bin/core/src/alert/discord.rs b/bin/core/src/alert/discord.rs
+index 427227d..6d19678 100644
+--- a/bin/core/src/alert/discord.rs
++++ b/bin/core/src/alert/discord.rs
+@@ -230,14 +230,13 @@ pub async fn send_alert(
+       )
+     }
+     AlertData::Custom { message, details } => {
+-      format!(
+-        "{level} | {message}{}",
+-        if details.is_empty() {
+-          format_args!("")
+-        } else {
+-          format_args!("\n{details}")
+-        }
+-      )
++      let details_str = if details.is_empty() {
++        String::new()
++      } else {
++        format!("\n{details} f")
++      };
++
++      format!("{level} | {message}{details_str}")
+     }
+     AlertData::None {} => Default::default(),
+   };
+diff --git a/bin/core/src/alert/mod.rs b/bin/core/src/alert/mod.rs
+index 9eba5da..1f51ac2 100644
+--- a/bin/core/src/alert/mod.rs
++++ b/bin/core/src/alert/mod.rs
+@@ -474,14 +474,13 @@ fn standard_alert_content(alert: &Alert) -> String {
+       )
+     }
+     AlertData::Custom { message, details } => {
+-      format!(
+-        "{level} | {message}{}",
+-        if details.is_empty() {
+-          format_args!("")
+-        } else {
+-          format_args!("\n{details}")
+-        }
+-      )
++      let details_str = if details.is_empty() {
++        String::new()
++      } else {
++        format!("\n{details}")
++      };
++
++      format!("{level} | {message}{details_str}")
+     }
+     AlertData::None {} => Default::default(),
+   }

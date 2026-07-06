@@ -1,0 +1,35 @@
+--- a/awslimitchecker/version.py
++++ b/awslimitchecker/version.py
+@@ -111,32 +106,5 @@ def _get_version_info():
+     :returns: awslimitchecker version
+     :rtype: str
+     """
+-    if os.environ.get('VERSIONCHECK_DEBUG', '') != 'true':
+-        for lname in ['versionfinder', 'pip', 'git']:
+-            l = logging.getLogger(lname)
+-            l.setLevel(logging.CRITICAL)
+-            l.propagate = True
+-    try:
+-        vinfo = find_version('awslimitchecker')
+-        dirty = ''
+-        if vinfo.git_is_dirty:
+-            dirty = '*'
+-        tag = vinfo.git_tag
+-        if tag is not None:
+-            tag += dirty
+-        commit = vinfo.git_commit
+-        if commit is not None:
+-            if len(commit) > 7:
+-                commit = commit[:8]
+-            commit += dirty
+-        return AWSLimitCheckerVersion(
+-            vinfo.version,
+-            vinfo.url,
+-            tag=tag,
+-            commit=commit
+-        )
+-    except Exception:
+-        logger.exception("Error checking installed version; this installation "
+-                         "may not be in compliance with the AGPLv3 license:")
+     # fall back to returning just the hard-coded release information
+     return AWSLimitCheckerVersion(_VERSION, _PROJECT_URL)
