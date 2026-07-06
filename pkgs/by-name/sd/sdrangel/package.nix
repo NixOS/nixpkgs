@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libopus
     libpulseaudio
-    libunwind
     libusb1
     limesuite
     mbelib
@@ -104,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtspeech
     qt6Packages.qttools
     qt6Packages.qtwebsockets
-    qt6Packages.qtwebengine
     rnnoise
     rtl-sdr
     serialdv
@@ -115,7 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     inmarsatc
+    libunwind
     qt6Packages.qtwayland
+    qt6Packages.qtwebengine
   ]
   ++ lib.optionals withSDRplay [ sdrplay ];
 
