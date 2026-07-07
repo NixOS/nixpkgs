@@ -2367,8 +2367,6 @@ self: super: with self; {
 
   biliass = callPackage ../development/python-modules/biliass { };
 
-  bilibili-api-python = callPackage ../development/python-modules/bilibili-api-python { };
-
   billiard = callPackage ../development/python-modules/billiard { };
 
   binance-connector = callPackage ../development/python-modules/binance-connector { };

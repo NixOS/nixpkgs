@@ -6,7 +6,7 @@
 
   # script interpreters
   bash,
-  jdk,
+  jre_headless,
   perl,
   python3,
   ruby,
@@ -174,7 +174,7 @@ let
 
   # find interpreters for the script extensions found in tlpdb
   extToInput = {
-    jar = jdk;
+    jar = jre_headless;
     lua = texliveBinaries.luatex;
     py = python3;
     rb = ruby;

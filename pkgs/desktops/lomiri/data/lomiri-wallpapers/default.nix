@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-wallpapers";
-  version = "20.04.0";
+  version = "20.04.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-wallpapers";
     rev = finalAttrs.version;
-    hash = "sha256-n8+vY+MPVqW6s5kSo4aEtGZv1AsjB3nNEywbmcNWfhI=";
+    hash = "sha256-NttA+je2jbE0q0EXZ5PSxrpB0ijRbqpSq0N0GCWEzJk=";
   };
 
   dontConfigure = true;
@@ -23,15 +23,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share
-
-    # release-specific wallpapers
+  ''
+  # release-specific wallpapers
+  + ''
     cp -r ${lib.versions.majorMinor finalAttrs.version} $out/share/wallpapers
-    rm $out/share/wallpapers/.placeholder
-
-    # eternal hardwired fallback/default
-    install -Dm644 {.,$out/share/wallpapers}/warty-final-ubuntu.png
-    ln -s warty-final-ubuntu.png $out/share/wallpapers/lomiri-default-background.png
-
+  ''
+  # default
+  + ''
+    install -Dm644 {.,$out/share/wallpapers}/lomiri-default-background.png
+  ''
+  + ''
     runHook postInstall
   '';
 
