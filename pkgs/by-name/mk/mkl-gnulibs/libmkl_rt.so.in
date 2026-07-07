@@ -1,0 +1,1 @@
+GROUP ( @out@/lib/libmkl_intel_lp64.so @out@/lib/libmkl_gnu_thread.so @out@/lib/libmkl_core.so @out@/lib/libmkl_rt_shim.so )

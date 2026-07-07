@@ -1,0 +1,10 @@
+prefix=@out@
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: mkl
+Description: Intel Math Kernel Library
+URL: https://software.intel.com/en-us/intel-mkl
+Version: @version@
+Cflags: -isystem${includedir}
+Libs: -Wl,-rpath,${libdir} -L${libdir} -lmkl_rt -ldl
