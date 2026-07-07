@@ -15,6 +15,7 @@ class VarsArgs:
 	yes: bool
 	generators: Optional[List[str]]
 	command: str  # gotta figure out how to type this properly
+	verbose: str
 
 	def from_dict(d: Mapping[str, Any]) -> Self:
 		# This one is only in the dict when the "generate" command is used.
