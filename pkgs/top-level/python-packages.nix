@@ -3471,6 +3471,10 @@ self: super: with self; {
     callPackage ../development/python-modules/comfyui-workflow-templates-core
       { };
 
+  comfyui-workflow-templates-json =
+    callPackage ../development/python-modules/comfyui-workflow-templates-json
+      { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
