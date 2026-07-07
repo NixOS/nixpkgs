@@ -9329,6 +9329,8 @@ self: super: with self; {
 
   knx-telegram-store = callPackage ../development/python-modules/knx-telegram-store { };
 
+  koji = callPackage ../development/python-modules/koji { };
+
   kokoro = callPackage ../development/python-modules/kokoro { };
 
   kombu = callPackage ../development/python-modules/kombu { };
