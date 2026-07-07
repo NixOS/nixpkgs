@@ -21,7 +21,7 @@
   ruby,
   perl,
   tk,
-  jdk,
+  jre_headless,
   bash,
   snobol4,
   coreutils,
@@ -202,7 +202,7 @@ let
       runCommand
       writeShellScript
       bash
-      jdk
+      jre_headless
       perl
       python3
       ruby
