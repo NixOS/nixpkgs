@@ -65,6 +65,10 @@ in
       builtins.elem fetcherVersion supportedFetcherVersions
       || throw "fetchPnpmDeps `fetcherVersion` is not set to a supported value (${lib.concatStringsSep ", " (map toString supportedFetcherVersions)}), see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
+    assert
+      !(fetcherVersion == 3 && lib.versionAtLeast pnpm.version "11.0.0")
+      || throw "fetchPnpmDeps `fetcherVersion = 3` is no longer supported for `pnpm_11`. Please upgrade to the latest, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
+
     stdenvNoCC.mkDerivation (
       finalAttrs:
       (
