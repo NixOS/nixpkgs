@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2025-02-10";
+  version = "2026-07-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "tela-icon-theme";
     rev = version;
-    hash = "sha256-ufjKFlKJnmNwD2m1w+7JSBQij6ltxXWCpUEvVxECS98=";
+    hash = "sha256-jadkfS39N51fYouxn7xFQ29BZOY0ccpKJY0Br4s/Guo=";
   };
 
   nativeBuildInputs = [
