@@ -340,6 +340,15 @@ buildStdenv.mkDerivation {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
       ./140-bindgen-string-view.patch
     ]
+    ++ lib.optionals (stdenv.hostPlatform.isMusl) [
+      ./firefox-146-musl-linux-sys-prctl-conflict.patch
+      ./firefox-148-mach-clobber.patch
+      ./firefox-148-webrtc-missing-includes.patch
+      ./firefox-152-missing-cstdint-include.patch
+      ./mallinfo.patch
+      ./rust-lto-thin.patch
+      ./single-threaded-header.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''

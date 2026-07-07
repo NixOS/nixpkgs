@@ -1,0 +1,10 @@
+--- a/dom/media/webrtc/libwebrtc_overrides/call/call_basic_stats.h
++++ b/dom/media/webrtc/libwebrtc_overrides/call/call_basic_stats.h
+@@ -7,6 +7,7 @@
+ #ifndef DOM_MEDIA_WEBRTC_LIBWEBRTCOVERRIDES_CALL_CALL_BASIC_STATS_H_
+ #define DOM_MEDIA_WEBRTC_LIBWEBRTCOVERRIDES_CALL_CALL_BASIC_STATS_H_
+ 
++#include <cstdint>
+ #include <optional>
+ #include <string>
+ 
