@@ -2360,10 +2360,6 @@ with pkgs;
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
-  krunvm = callPackage ../applications/virtualization/krunvm {
-    inherit (darwin) sigtool;
-  };
-
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
@@ -7011,6 +7007,11 @@ with pkgs;
     go = buildPackages.go_1_26;
   };
 
+  inherit ({ go_1_27 = callPackage ../development/compilers/go/1.27.nix { }; }) go_1_27;
+  buildGo127Module = callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_27;
+  };
+
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
@@ -9163,10 +9164,6 @@ with pkgs;
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
-
-  ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
-    protobuf = protobuf_21;
-  };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 

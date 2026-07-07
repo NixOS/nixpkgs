@@ -935,6 +935,7 @@ assertNoAdditions {
     nvimSkipModules = [
       "repro_blink"
       "repro_cmp"
+      "repro_native_completion"
     ];
   };
 

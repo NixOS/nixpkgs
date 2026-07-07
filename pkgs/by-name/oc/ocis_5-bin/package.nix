@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ramblurr
       bhankas
-      danth
       ramblurr
     ];
 

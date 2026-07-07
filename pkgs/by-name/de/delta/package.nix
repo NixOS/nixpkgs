@@ -45,8 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     installShellCompletion --cmd delta \
       --bash <($out/bin/delta --generate-completion bash) \
-      --fish <($out/bin/delta --generate-completion zsh) \
-      --zsh <($out/bin/delta --generate-completion fish)
+      --fish <($out/bin/delta --generate-completion fish) \
+      --zsh <($out/bin/delta --generate-completion zsh)
   '';
 
   # test_env_parsing_with_pager_set_to_bat sets environment variables,

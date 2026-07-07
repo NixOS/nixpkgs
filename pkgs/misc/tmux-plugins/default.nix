@@ -238,12 +238,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.3.0";
+    version = "3.3.1";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-KHvBT8HjFZFwnpbWjW3LzXWUNOGbDgZTPncYvtIliD0=";
+      hash = "sha256-UFK0PJFgGIBdpjuSn3stAJ7z73FgEj0yK6F+ETRQ5f4=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -258,12 +258,12 @@ in
 
   dotbar = mkTmuxPlugin rec {
     pluginName = "dotbar";
-    version = "0.3.2";
+    version = "0.3.3";
     src = fetchFromGitHub {
       owner = "vaaleyard";
       repo = "tmux-dotbar";
       tag = version;
-      hash = "sha256-WaRKepmPqiE+W8Tm0dBc6hGiqqZP122eXjrG0rJnt0w=";
+      hash = "sha256-CAKEN8Sk3t0nonV2R9df/DFTTUrVnbso0ZVGgeeGINM=";
     };
     meta = {
       homepage = "https://github.com/vaaleyard/tmux-dotbar";

@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
       ilys
-      FlameFlag
+      _4evy
       isabelroses
     ];
   };

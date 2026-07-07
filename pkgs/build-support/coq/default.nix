@@ -41,7 +41,7 @@ in
   pname,
   version ? null,
   fetcher ? null,
-  owner ? "coq-community",
+  owner ? "rocq-community",
   domain ? "github.com",
   repo ? pname,
   defaultVersion ? null,
@@ -98,7 +98,7 @@ let
       "dropAttrs"
       "dropDerivationAttrs"
       "keepAttrs"
-      "enableParallelBuilding"
+      "env"
     ]
     ++ dropAttrs
   ) keepAttrs;
@@ -158,29 +158,13 @@ let
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
   useDune = args.useDune or (useDuneifVersion fetched.version);
-  coqlib-flags =
-    switch coq.coq-version
-      [
-        {
-          case = v: versions.isLe "8.6" v && v != "dev";
-          out = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
-        }
-      ]
-      [
-        "COQLIBINSTALL=$(out)/lib/coq/${coq.coq-version}/user-contrib"
-        "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
-      ];
-  docdir-flags =
-    switch coq.coq-version
-      [
-        {
-          case = v: versions.isLe "8.6" v && v != "dev";
-          out = [ "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ];
-        }
-      ]
-      [ "COQDOCINSTALL=$(out)/share/coq/${coq.coq-version}/user-contrib" ];
+  coqlib-flags = [
+    "COQLIBINSTALL=$(out)/lib/coq/${coq.coq-version}/user-contrib"
+    "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)"
+  ];
+  docdir-flags = [ "COQDOCINSTALL=$(out)/share/coq/${coq.coq-version}/user-contrib" ];
+  COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
 in
-
 stdenv.mkDerivation (
   removeAttrs (
     {
@@ -202,10 +186,16 @@ stdenv.mkDerivation (
         );
       buildInputs =
         args.overrideBuildInputs or ([ coq ] ++ (args.buildInputs or [ ]) ++ extraBuildInputs);
-      enableParallelBuilding =
-        lib.warnIf (args ? enableParallelBuilding && args.enableParallelBuilding == true)
-          "mkCoqDerivation: enableParallelBuilding is enabled by default; remove the explicit setting"
-          enableParallelBuilding;
+      inherit enableParallelBuilding;
+
+      env =
+        optionalAttrs setCOQBIN {
+          COQBIN = "${coq}/bin/";
+        }
+        // optionalAttrs (args ? useMelquiondRemake) {
+          inherit COQUSERCONTRIB;
+        }
+        // (args.env or { });
 
       meta =
         (
@@ -228,7 +218,6 @@ stdenv.mkDerivation (
         // (args.meta or { });
 
     }
-    // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
     // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
       installFlags = coqlib-flags ++ docdir-flags ++ extraInstallFlags;
     })
@@ -246,8 +235,7 @@ stdenv.mkDerivation (
         runHook postInstall
       '';
     })
-    // (optionalAttrs (args ? useMelquiondRemake) rec {
-      COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
+    // (optionalAttrs (args ? useMelquiondRemake) {
       preConfigurePhases = [ "autoconf" ];
       configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
       buildPhase = "./remake -j$NIX_BUILD_CORES";

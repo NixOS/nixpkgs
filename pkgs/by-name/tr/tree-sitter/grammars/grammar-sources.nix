@@ -517,7 +517,7 @@
   };
 
   dtd = {
-    version = "0-unstable-2026-01-21";
+    version = "0.7.0-unstable-2026-01-21";
     url = "github:tree-sitter-grammars/tree-sitter-xml";
     rev = "5000ae8f22d11fbe93939b05c1e37cf21117162d";
     hash = "sha256-QN+jQx1CrTbYpmM9mLUfjWcymGsa0Th7LVgk4thnQXU=";
@@ -1543,7 +1543,7 @@
   };
 
   lua = {
-    version = "0.0.19-unstable-2026-02-26";
+    version = "0.5.0-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-lua";
     rev = "10fe0054734eec83049514ea2e718b2a56acd0c9";
     hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
@@ -1579,7 +1579,7 @@
   };
 
   make = {
-    version = "0-unstable-2026-02-26";
+    version = "1.1.1-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-make";
     rev = "70613f3d812cbabbd7f38d104d60a409c4008b43";
     hash = "sha256-gyshhqVYiL0qSsMp38BM20FYc4uPgr2de5/DWsAJZGc=";
@@ -2791,7 +2791,7 @@
   };
 
   toml = {
-    version = "0.5.1-unstable-2024-12-03";
+    version = "0.7.0-unstable-2024-12-03";
     url = "github:tree-sitter-grammars/tree-sitter-toml";
     rev = "64b56832c2cffe41758f28e05c756a3a98d16f41";
     hash = "sha256-m9RlGkHiOL/PNENrdEPqtPlahSqGymsx7gZrCoN/Lsk=";
@@ -2992,7 +2992,7 @@
   };
 
   vim = {
-    version = "0.2.0-unstable-2026-02-26";
+    version = "0.8.1-unstable-2026-02-26";
     url = "github:tree-sitter-grammars/tree-sitter-vim";
     rev = "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b";
     hash = "sha256-MnLBFuJCJbetcS07fG5fkCwHtf/EcNP+Syf0Gn0K39c=";
