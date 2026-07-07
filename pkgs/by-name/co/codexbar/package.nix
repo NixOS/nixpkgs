@@ -38,7 +38,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Show usage stats for AI coding-provider limits";
     homepage = "https://codex.bar/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Br1ght0ne ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      kinnrai
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
