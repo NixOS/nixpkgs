@@ -403,15 +403,18 @@ stdenv.mkDerivation {
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    isLinux && glibcLocales != null
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = lib.optionalString (
+      isLinux && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
-  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
-  # caused by separateDebugInfo
-  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    # clang: error: argument unused during compilation:
+    # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+    # caused by separateDebugInfo
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  };
 
   buildFlags = [
     "--with-packages"
