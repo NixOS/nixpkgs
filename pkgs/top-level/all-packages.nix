@@ -4823,13 +4823,12 @@ with pkgs;
   antlr = antlr4;
 
   inherit (callPackages ../servers/apache-kafka { })
-    apacheKafka_3_9
-    apacheKafka_4_0
     apacheKafka_4_1
     apacheKafka_4_2
+    apacheKafka_4_3
     ;
 
-  apacheKafka = apacheKafka_4_2;
+  apacheKafka = apacheKafka_4_3;
 
   libastyle = astyle.override { asLibrary = true; };
 
