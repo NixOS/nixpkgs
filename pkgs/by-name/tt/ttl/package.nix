@@ -27,6 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
+  # opt ouf of default features to deselect the update-check feature
+  buildNoDefaultFeatures = true;
+
   postInstall = ''
     installShellCompletion --cmd ttl \
       --bash <($out/bin/ttl --completions bash) \
