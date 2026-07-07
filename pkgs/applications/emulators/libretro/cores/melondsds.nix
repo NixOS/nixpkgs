@@ -1,17 +1,27 @@
 {
   lib,
+  applyPatches,
+  coreutils,
   fetchFromGitHub,
-  glm,
-  libslirp,
   fmt_11,
-  span-lite,
+  glm,
+  gnugrep,
+  gnused,
   howard-hinnant-date,
+  jq,
   libGL,
   libGLU,
-  cmake,
+  libslirp,
   mkLibretroCore,
+  nix,
+  nix-prefetch-git,
+  cmake,
+  span-lite,
+  unstableGitUpdater,
+  writeShellApplication,
 }:
 let
+  # NOTE: before changing the following fetches, see the updateScript below
   # https://github.com/JesseTG/melonds-ds/blob/33c48260402865ef77667487528efd5ca7ce1233/cmake/FetchDependencies.cmake#L44
   melonDS-src = fetchFromGitHub {
     owner = "JesseTG";
@@ -28,8 +38,8 @@ let
   embed-binaries-src = fetchFromGitHub {
     owner = "andoalon";
     repo = "embed-binaries";
-    rev = "21f28cabbba02cd657578c70b7aedd0f141467ff";
-    hash = "sha256-iW3DBGdp/ykE3EoGcuirq5V5lKV0vemzIjDFrINzQPM=";
+    rev = "078b62beba97e8192c99bfb16d5e17220cfc7598";
+    hash = "sha256-EkK+ZCbrZ2Y9wJ864OIwRWDfHcmxzKMco0QAkLOQOwY=";
   };
   pntr-src = fetchFromGitHub {
     owner = "robloach";
@@ -44,35 +54,33 @@ let
     hash = "sha256-J5wAqF5yQ5KYArJJyKzaqscWsXq+KAPKXybYfVgasXs=";
   };
   # using nixpkgs zlib gives a linking error
-  zlib-src = fetchFromGitHub {
-    owner = "madler";
-    repo = "zlib";
-    rev = "570720b0c24f9686c33f35a1b3165c1f568b96be";
-    hash = "sha256-5g/Jo8M/jvkgV0NofSAV4JdwJSk5Lyv9iGRb2Kz/CC0=";
+  zlib-src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "madler";
+      repo = "zlib";
+      rev = "925af44f3cde53c6b076611c297850091b5dc7bb";
+      hash = "sha256-TkPLWSN5QcPlL9D0kc/yhH0/puE9bFND24aj5NVDKYs=";
+    };
+    patches = [ ./patches/melondsds-zlib-no-zconf-rename.patch ];
   };
 in
 mkLibretroCore rec {
   core = "melondsds";
-  version = "1.2.0";
+  version = "0-unstable-2026-03-03";
 
   src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonds-ds";
-    rev = "33c48260402865ef77667487528efd5ca7ce1233";
-    hash = "sha256-n5MZ6BWUWRi+jz34EbL+SeSkjFZeqQNXE3hS6JzS424=";
+    rev = "bac0256dc6a8736c5a228f57c562257e45fd49f3";
+    hash = "sha256-EeXYibPV9BPazC/i5UqXEd4BKlIZbNbPNgpsoo4ws7k=";
   };
 
-  patches = [ ./patches/melondsds-noslirpcopy.patch ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "find_package(Git REQUIRED)" ""
 
     substituteInPlace src/libretro/CMakeLists.txt \
       --replace-fail "include(embed-binaries)" "include(${embed-binaries-src}/cmake/embed-binaries.cmake)"
-
-    substituteInPlace cmake/FetchDependencies.cmake \
-      --replace-fail "set_target_properties(example" "set_target_properties(zlib_example" \
-      --replace-fail "set_target_properties(zlib_example64 minigzip64" "set_target_properties(zlib_example64"
   '';
 
   makefile = "";
@@ -99,6 +107,79 @@ mkLibretroCore rec {
   ];
 
   postBuild = "cd src/libretro";
+
+  passthru.updateScript = [
+    (lib.getExe (writeShellApplication {
+      name = "update-libretro-melondsds";
+      runtimeInputs = [
+        coreutils
+        gnugrep
+        gnused
+        jq
+        nix
+        nix-prefetch-git
+      ];
+      text = ''
+        ${lib.escapeShellArgs (unstableGitUpdater {
+          hardcodeZeroVersion = true;
+        })}
+
+        src=$(nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH.src")
+        core_file="pkgs/applications/emulators/libretro/cores/melondsds.nix"
+
+        # find lines in the format:
+        #   fetch_dependency(name url rev)
+        # and extracts name, url and rev
+        grep "^fetch_dependency" "''${src}/cmake/FetchDependencies.cmake" |
+          sed 's/"//g' |
+          sed 's/fetch_dependency(\(.*\))/\1/' |
+          while read -r name url rev
+          do
+            echo >&2
+
+            # example: if there is fetch_dependency(melonDS ...) and no melonDS-src
+            if ! fetch_block=$(grep -A10 "''${name}-src =" "$core_file")
+            then
+
+              # if the dependency comes from nix, we just skip it
+              if grep -q "FETCHCONTENT_SOURCE_DIR_''${name^^}" "$core_file"
+              then
+                echo "> skipped: ''${name} is provided by nixpkgs" >&2
+                continue
+              fi
+
+              # otherwise, its a new dependency not specified on the config, and the updater can't continue
+              echo "> ERROR: dependency missing: ''${name}" >&2
+              exit 1
+            fi
+
+            echo "> ''${name}: ''${url} (''${rev})" >&2
+
+            prefetch=$(nix-prefetch-git --url "''${url}" --rev "''${rev}" --quiet)
+            rev=$(echo "$prefetch" | jq -r ".rev")
+            hash=$(echo "$prefetch" | jq -r ".hash")
+
+            old_rev=$(echo "$fetch_block" | grep -m1 "rev =" | sed 's/\s*rev = "\(.*\)".*/\1/')
+            old_hash=$(echo "$fetch_block" | grep -m1 "hash =" | sed 's/\s*hash = "\(.*\)".*/\1/')
+
+            if [[ "$old_hash" == "$hash" ]]
+            then
+              echo "> skipped: same hash" >&2
+              continue
+            fi
+
+            echo "rev - old: $old_rev" >&2
+            echo "rev - new: $rev" >&2
+            echo "hash - old: $old_hash" >&2
+            echo "hash - new: $hash" >&2
+
+            # finally replace old revision and old hash by the new one
+            sed -i "s|$old_hash|$hash|" "$core_file"
+            sed -i "s/$old_rev/$rev/" "$core_file"
+          done
+      '';
+    }))
+  ];
 
   meta = {
     description = "A remake of the libretro MelonDS core";
