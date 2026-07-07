@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://matt.ucc.asn.au/dropbear/releases";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
