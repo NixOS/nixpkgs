@@ -308,9 +308,10 @@ mapAliases {
   antlr4_8 = throw "antlr4_8 has been removed. Consider using a more recent version of antlr4"; # Added 2025-10-20
   ao = throw "'ao' has been renamed to/replaced by 'libfive'"; # Converted to throw 2025-10-27
   apacheAnt = throw "'apacheAnt' has been renamed to/replaced by 'ant'"; # Converted to throw 2025-10-27
-  apacheKafka_3_7 = throw "apacheKafka_2_8 through _3_9 have been removed from nixpkgs as outdated"; # Added 2025-09-27
-  apacheKafka_3_8 = throw "apacheKafka_2_8 through _3_9 have been removed from nixpkgs as outdated"; # Added 2025-09-27
-  apacheKafka_3_9 = throw "apacheKafka_2_8 through _3_9 have been removed from nixpkgs as outdated"; # Added 2026-07-07
+  apacheKafka_3_7 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2025-09-27
+  apacheKafka_3_8 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2025-09-27
+  apacheKafka_3_9 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2026-07-07
+  apacheKafka_4_0 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2026-07-07
   apmplanner2 = throw "'apmplanner2' has been removed as it depends on insecure&unmaintained qtwebkit"; # Added 2026-04-26
   apple-sdk_11 = throw "apple-sdk_11 was removed as Nixpkgs no longer supports macOS 11; see the 25.11 release notes"; # Added 2025-05-10
   apple-sdk_12 = throw "apple-sdk_12 was removed as Nixpkgs no longer supports macOS 12; see the 25.11 release notes"; # Added 2025-05-10
