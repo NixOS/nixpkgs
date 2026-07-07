@@ -104,10 +104,11 @@ let
     in
     locatedModules ++ legacyModules;
 
-  noUserModules = evalModulesMinimal {
+  nixosWithUserModules = evalModulesMinimal {
     inherit prefix specialArgs;
     modules =
       baseModules
+      ++ allUserModules
       ++ extraModules
       ++ [
         pkgsModule
@@ -120,7 +121,6 @@ let
     config = {
       _module.args = {
         inherit
-          noUserModules
           baseModules
           extraModules
           modules
@@ -128,8 +128,6 @@ let
       };
     };
   };
-
-  nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
   withExtraAttrs =
     configuration:
