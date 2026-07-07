@@ -624,6 +624,7 @@ let
             meta = meta // {
               description = "TeX Live environment for ${pname}";
               license = licenses.${pname};
+              problems.removal.message = "texlive.combined schemes are deprecated and will be removed from Nixpkgs 27.05. Please switch to texliveSmall or another top level scheme.";
             };
           }
       )
