@@ -41,6 +41,9 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<3"' ""
+
+    # do not install development tools
+    rm -r tools
   '';
 
   nativeBuildInputs = [
