@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   version = "1.3.36";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     sparseCheckout = [ "server" ];
     tag = "photos-v${finalAttrs.version}";
@@ -55,8 +55,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "API server for ente.io";
-    homepage = "https://github.com/ente-io/ente/tree/main/server";
-    changelog = "https://github.com/ente-io/ente/releases/tag/photos-v${finalAttrs.version}";
+    homepage = "https://github.com/ente/ente/tree/main/server";
+    changelog = "https://github.com/ente/ente/releases/tag/photos-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
