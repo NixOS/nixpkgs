@@ -811,6 +811,13 @@
     "hash": "sha256-q5tuqnN94FS1opr9oLx2LHFYuFX6PTDaBmuvrByXTsI=",
     "description": "Microsoft Azure Command-Line Tools MulticloudConnector Extension"
   },
+  "napster": {
+    "pname": "napster",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/napster-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-gwnA5Wly3q12ylnbvkVOTEm/vxVJTEIgUVoS5j8Mzgk=",
+    "description": "Microsoft Azure Command-Line Tools Napster Extension"
+  },
   "network-analytics": {
     "pname": "network-analytics",
     "version": "1.0.0b1",
