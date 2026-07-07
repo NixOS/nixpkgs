@@ -5,6 +5,7 @@ from typing import List, Set
 from pathlib import Path
 from .config import VarsConfig, VarsGeneratorBackend, VarsGenerator, VarsFile
 from .error import VarsError
+from .args import VarsArgs
 
 
 @functools.cache
@@ -23,12 +24,15 @@ def build_binary(path: Path) -> Path:
 
 
 def file_exists(
-	backend: VarsGeneratorBackend, generator: VarsGenerator, file: VarsFile
+	args: VarsArgs,
+	backend: VarsGeneratorBackend,
+	generator: VarsGenerator,
+	file: VarsFile,
 ) -> bool:
 	binary = build_binary(backend.exists)
 	result = subprocess.run(
 		[binary, generator.name, file.name],
-		capture_output=True,
+		capture_output=not args.verbose,
 		text=True,
 	)
 
@@ -45,14 +49,18 @@ def file_exists(
 
 
 def get_secret(
-	config: VarsConfig, generator: VarsGenerator, file: VarsFile, out: Path
+	args: VarsArgs,
+	config: VarsConfig,
+	generator: VarsGenerator,
+	file: VarsFile,
+	out: Path,
 ):
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.get)
 	try:
 		subprocess.run(
 			[binary, generator.name, file.name],
-			capture_output=True,
+			capture_output=not args.verbose,
 			text=True,
 			check=True,
 			env={"out": out},
@@ -64,14 +72,18 @@ def get_secret(
 
 
 def set_secret(
-	config: VarsConfig, generator: VarsGenerator, file: VarsFile, at: Path
+	args: VarsArgs,
+	config: VarsConfig,
+	generator: VarsGenerator,
+	file: VarsFile,
+	at: Path,
 ):
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.set)
 	try:
 		subprocess.run(
 			[binary, generator.name, file.name],
-			capture_output=True,
+			capture_output=not args.verbose,
 			text=True,
 			check=True,
 			env={"in": at},
@@ -86,6 +98,7 @@ def set_secret(
 # the secrets to be deleted might no longer exist in the configuration (e.g.
 # while garbage collecting).
 def delete_secret(
+	args: VarsArgs,
 	config: VarsConfig,
 	backend: VarsGeneratorBackend,
 	gen_name: str,
@@ -95,7 +108,7 @@ def delete_secret(
 	try:
 		subprocess.run(
 			[binary, gen_name, file_name],
-			capture_output=True,
+			capture_output=not args.verbose,
 			text=True,
 			check=True,
 		)
@@ -137,6 +150,27 @@ def list_secrets(
 		)
 
 
+def fixup_secret(
+	args: VarsArgs,
+	config: VarsConfig,
+	generator: VarsGenerator,
+	file: VarsFile,
+):
+	backend = config.generatorBackends[generator.backend]
+	binary = build_binary(backend.fixup)
+	try:
+		subprocess.run(
+			[binary, generator.name, file.name],
+			capture_output=not args.verbose,
+			text=True,
+			check=True,
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error running fixup script for secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
+		)
+
+
 def execution_order(config: VarsConfig) -> List[str]:
 	ts = graphlib.TopologicalSorter()
 
@@ -154,7 +188,11 @@ def execution_order(config: VarsConfig) -> List[str]:
 #
 # Optionally accepts a list of generators that must forcefully be included in
 # the returned list.
-def rebuild_order(config: VarsConfig, regenerate: List[str]) -> List[str]:
+def rebuild_order(
+	args: VarsArgs,
+	config: VarsConfig,
+	regenerate: List[str],
+) -> List[str]:
 	order = []
 
 	print("Rebuild order:")
@@ -174,7 +212,7 @@ def rebuild_order(config: VarsConfig, regenerate: List[str]) -> List[str]:
 		else:
 			for file in generator.files.values():
 				backend = config.generatorBackends[generator.backend]
-				if not file_exists(backend, generator, file):
+				if not file_exists(args, backend, generator, file):
 					print(f"- '{item}' (file '{file.name}' is missing)")
 					order.append(item)
 					break
@@ -182,3 +220,22 @@ def rebuild_order(config: VarsConfig, regenerate: List[str]) -> List[str]:
 				print(f"- Skipping '{item}'")
 
 	return order
+
+
+def fixup_all(args: VarsArgs, config: VarsConfig):
+	print("Running fixup scripts...")
+	if args.dry_run:
+		return
+
+	order = execution_order(config)
+	for gen_name in order:
+		generator = config.generators[gen_name]
+
+		if config.generatorBackends[generator.backend].fixup:
+			print(f"- '{gen_name} ({len(generator.files)} files)'")
+		else:
+			print(f"- Skipping '{gen_name}' (no fixup script)")
+			continue
+
+		for file in generator.files.values():
+			fixup_secret(args, config, generator, file)

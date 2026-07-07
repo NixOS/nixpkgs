@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Mapping, List, Any, Set, Self
+from typing import Mapping, List, Any, Set, Self, Optional
 from .error import VarsError
 
 
@@ -31,10 +31,11 @@ class VarsGeneratorBackend:
 	get: str
 	set: str
 	exists: str
-	delete: str
-	list: str
+	delete: Optional[str]
+	list: Optional[str]
+	fixup: Optional[str]
 	deploy: str
-	deployLocal: str
+	deployLocal: Optional[str]
 
 	def from_jsom(name: str, json: Any) -> Self:
 		return VarsGeneratorBackend(
@@ -42,10 +43,11 @@ class VarsGeneratorBackend:
 			get=json["get"],
 			set=json["set"],
 			exists=json["exists"],
-			delete=json["delete"],
-			list=json["list"],
+			delete=json.get("delete"),
+			list=json.get("list"),
+			fixup=json.get("fixup"),
 			deploy=json["deploy"],
-			deployLocal=json["deployLocal"],
+			deployLocal=json.get("deployLocal"),
 		)
 
 
