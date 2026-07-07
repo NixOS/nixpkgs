@@ -953,9 +953,9 @@
   },
   "qumulo": {
     "pname": "qumulo",
-    "version": "2.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/qumulo-2.0.1-py3-none-any.whl",
-    "hash": "sha256-HlMtkVEYvu86KqPPVBG/3i0zPg0S1P4qBedSnJwjIgg=",
+    "version": "3.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/qumulo-3.0.0-py3-none-any.whl",
+    "hash": "sha256-Gu30eY0y0Xr53UatKDPXK+3Mb5Y1EoxSAYCZoWbznJ8=",
     "description": "Microsoft Azure Command-Line Tools Qumulo Extension"
   },
   "quota": {
