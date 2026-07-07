@@ -18,6 +18,8 @@
   openssl,
   harfbuzz,
   icu,
+  libice,
+  libsm,
 }:
 
 let
@@ -53,6 +55,8 @@ let
         openssl
         harfbuzz
         icu
+        libice
+        libsm
       ];
 
       dontWrapQtApps = true;
