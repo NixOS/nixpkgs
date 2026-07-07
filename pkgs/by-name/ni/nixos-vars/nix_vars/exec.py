@@ -154,7 +154,7 @@ def execution_order(config: VarsConfig) -> List[str]:
 #
 # Optionally accepts a list of generators that must forcefully be included in
 # the returned list.
-def rebuild_order(config: VarsConfig, regenerate: List[str] = []) -> List[str]:
+def rebuild_order(config: VarsConfig, regenerate: List[str]) -> List[str]:
 	order = []
 
 	print("Rebuild order:")
