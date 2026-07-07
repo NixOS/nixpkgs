@@ -23,8 +23,7 @@ in
         echo ""
         echo -n "$text" > "$out"
       elif [[ "$1" == "multiline" ]]; then
-        read -srp "$2: " text
-        echo "$2" > "$out"
+        echo "<$2>" > "$out"
         $EDITOR "$out"
       else
         exit 1

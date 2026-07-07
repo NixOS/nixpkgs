@@ -76,18 +76,16 @@ let
         '';
 
         deploy = delayedPackage ''
-          Given $1=gen_name and $2=file_name, the script deploys the respective
-          secret to the target machine. Any additional information required by
-          the deploy script can be provided by the user through environment
-          variables.
+          Deploys every available file to the given machine. Any additional
+          information required by the deploy script can be provided by the user
+          through environment variables.
         '';
 
         deployLocal = nullableDelayedPackage ''
-          Given $1=gen_name and $2=file_name, the script deploys the respective
-          secret to the machine with system root mounted at $3=system_root.
-          This is useful for fresh installs from environments live live CDs,
-          where the target system is not yet up and running (even if
-          nixos-install has successfully completed).
+          Deploys every available file to the machine with system root mounted
+          at $1=system_root. This is useful for fresh installs from
+          environments live live CDs, where the target system is not yet up and
+          running (even if nixos-install has successfully completed).
         '';
       };
     }
@@ -110,6 +108,8 @@ let
             Whether the file should be deployed to the target machine. Disable
             this if the generated file is only used as an input to other
             generators.
+
+            This option is not currently used by the CLI.
           '';
           type = lib.types.bool;
           default = true;
@@ -120,6 +120,8 @@ let
             Whether the file should be treated as a secret. Backends might
             treat such files differently (e.g. they might choose not to encrypt
             them).
+
+            This option is not currently used by the CLI.
           '';
           type = lib.types.bool;
           default = true;

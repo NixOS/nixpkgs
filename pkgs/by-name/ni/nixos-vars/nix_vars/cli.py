@@ -6,6 +6,7 @@ from .eval import evaluate_config
 from .generate import generate_vars
 from .gc import collect_garbage
 from .args import VarsArgs
+from .deploy import deploy
 
 
 def common_args(parser: argparse.ArgumentParser):
@@ -116,6 +117,8 @@ def main() -> None:
 			generate_vars(args, config)
 		elif args.command == "collect-garbage":
 			collect_garbage(args, config)
+		elif args.command == "deploy":
+			deploy(args, config)
 		else:
 			raise VarsError(f"Command '{args.command}' is not implemented :(")
 	except VarsError as e:
