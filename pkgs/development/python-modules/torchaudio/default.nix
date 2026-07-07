@@ -28,12 +28,12 @@
   torchaudio,
 
   cudaSupport ? torch.cudaSupport,
-  cudaPackages,
   rocmSupport ? torch.rocmSupport,
 }:
 
 let
   inherit (stdenv) hostPlatform;
+  inherit (torch) cudaCapabilities cudaPackages;
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
@@ -53,7 +53,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # CUDA
     USE_CUDA = cudaSupport;
-    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 1;
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 1;
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MULTIGPU_CUDA = 1;
