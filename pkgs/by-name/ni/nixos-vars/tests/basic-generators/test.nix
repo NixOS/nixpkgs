@@ -36,7 +36,7 @@ pkgs.testers.runNixOSTest {
     machine.succeed("test ! -f /tmp/vars-demo/generators/derived/files/derived")
 
     machine.succeed("nix-vars generate -f /etc/nixos/config2.nix")
-    t.assertIn("< Hewwo placeholder!! >", machine.succeed("cat /tmp/vars-demo/generators/derived/files/derived2"))
+    t.assertIn("< Hewwo placeholder! >", machine.succeed("cat /tmp/vars-demo/generators/derived/files/derived2"))
 
     # Should be a no-op
     machine.succeed("nix-vars collect-garbage -f /etc/nixos/config2.nix ")
