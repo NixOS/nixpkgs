@@ -1,7 +1,7 @@
 let
   noop = pkgs: pkgs.writeShellScript "noop" "echo 'Unimplemented!'";
   root = "/tmp/vars-demo";
-  mkBackendScript =
+  mkScript =
     name: text: pkgs:
     pkgs.lib.getExe (
       pkgs.writeShellApplication {
@@ -12,24 +12,43 @@ let
 in
 {
   vars = {
+    defaultPromptBackend = "example";
+    promptBackends.example.script = mkScript "prompt" ''
+      out=''${out:?} # Make shellcheck happy
+      if [[ "$1" == "line" ]]; then
+        read -rp "$2: " text
+        echo -n "$text" > "$out"
+      elif [[ "$1" == "hidden" ]]; then
+        read -srp "$2: " text
+        echo ""
+        echo -n "$text" > "$out"
+      elif [[ "$1" == "multiline" ]]; then
+        read -srp "$2: " text
+        echo "$2" > "$out"
+        $EDITOR "$out"
+      else
+        exit 1
+      fi
+    '';
+
     defaultGeneratorBackend = "example";
     generatorBackends.example = {
-      get = mkBackendScript "get" ''
+      get = mkScript "get" ''
         out=''${out:?} # Make shellcheck happy
         cat ${root}/generators/"$1"/files/"$2" > "$out"
       '';
-      set = mkBackendScript "set" ''
+      set = mkScript "set" ''
         in=''${in:?} # Make shellcheck happy
         mkdir -p ${root}/generators/"$1"/files/
         cat "$in" > ${root}/generators/"$1"/files/"$2"
       '';
-      exists = mkBackendScript "exists" ''
+      exists = mkScript "exists" ''
         if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
           exit 42
         fi
       '';
 
-      delete = mkBackendScript "delete" ''
+      delete = mkScript "delete" ''
         rm -rf ${root}/generators/"$1"/files/"$2"
       '';
 
@@ -45,20 +64,23 @@ in
                       print(f"{generator.name} {file.name}")
         '';
 
-      fixup = mkBackendScript "fixup" ''
-        echo "Nothing to fix..."
-      '';
+      fixup = mkScript "fixup" "";
 
       deploy = noop;
     };
 
+    prompts.example.description = "Your name";
+    prompts.example.type = "multiline";
+
     generators.example = {
+      prompts = [ "example" ];
       files.example = { };
-      script =
-        pkgs:
-        pkgs.writeShellScript "gen-example" ''
-          echo "Hewwo!" > $out/example
-        '';
+      script = mkScript "gen-example" ''
+        # Make shellcheck happy
+        out=''${out:?}         
+        prompts=''${prompts:?}
+        echo "Hewwo $(cat "$prompts/example")!" > "$out/example"
+      '';
     };
 
     generators.derived = {

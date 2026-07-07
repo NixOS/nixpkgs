@@ -5,20 +5,23 @@ from .error import VarsError
 
 @dataclass
 class VarsPromptBackend:
+	name: str
 	script: str
 
-	def from_jsom(json: Any) -> Self:
-		return VarsPromptBackend(script=json["script"])
+	def from_jsom(name: str, json: Any) -> Self:
+		return VarsPromptBackend(name=name, script=json["script"])
 
 
 @dataclass
 class VarsPrompt:
+	name: str
 	description: str
 	backend: str
 	type: str  # There's probably a way to type this properly..
 
-	def from_jsom(json: Any) -> Self:
+	def from_jsom(name: str, json: Any) -> Self:
 		return VarsPrompt(
+			name=name,
 			description=json["description"],
 			backend=json["backend"],
 			type=json["type"],
@@ -98,10 +101,10 @@ class VarsConfig:
 		result = VarsConfig({}, {}, {}, {})
 
 		for k, v in json["prompts"].items():
-			result.prompts[k] = VarsPrompt.from_jsom(v)
+			result.prompts[k] = VarsPrompt.from_jsom(k, v)
 
 		for k, v in json["promptBackends"].items():
-			result.promptBackends[k] = VarsPromptBackend.from_jsom(v)
+			result.promptBackends[k] = VarsPromptBackend.from_jsom(k, v)
 
 		for k, v in json["generators"].items():
 			result.generators[k] = VarsGenerator.from_jsom(k, v)

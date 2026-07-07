@@ -4,7 +4,14 @@ import subprocess
 from pathlib import Path
 from .args import VarsArgs
 from .config import VarsConfig
-from .exec import rebuild_order, build_binary, get_secret, set_secret, fixup_all
+from .exec import (
+	rebuild_order,
+	build_binary,
+	get_secret,
+	set_secret,
+	fixup_all,
+	run_prompt,
+)
 from .error import VarsError
 
 
@@ -19,11 +26,37 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 	# single temporary directory is not a concern.
 	with tempfile.TemporaryDirectory() as temp:
 		temp = Path(temp)
+
+		print("Evaluating prompts")
+
+		prompt_dir = temp / "prompts"
+		os.makedirs(prompt_dir)
+
+		for prompt in config.prompts.values():
+			required_by = []
+			for gen_name in order:
+				generator = config.generators[gen_name]
+				if prompt.name in generator.prompts:
+					required_by.append(gen_name)
+
+			if required_by:
+				requirements = ", ".join(f"'{r}'" for r in required_by)
+				print(f"- '{prompt.name}' (required by {requirements})")
+
+				if not args.dry_run:
+					run_prompt(config, prompt, prompt_dir / prompt.name)
+			else:
+				print(f"- Skipping '{prompt.name}'")
+
 		for entry in order:
-			in_dir = temp / entry / "in"
-			out_dir = temp / entry / "out"
+			in_dir = temp / "generators" / entry / "in"
 			os.makedirs(in_dir)
+
+			out_dir = temp / "generators" / entry / "out"
 			os.makedirs(out_dir)
+
+			prompt_in_dir = temp / "generators" / entry / "prompts"
+			os.makedirs(prompt_in_dir)
 
 			generator = config.generators[entry]
 			binary = build_binary(generator.script)
@@ -31,6 +64,9 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 			print(f"Generating '{entry}'")
 			if args.dry_run:
 				continue
+
+			for name in generator.prompts:
+				(prompt_dir / name).copy(prompt_in_dir / name)
 
 			for dep_name in generator.dependencies:
 				dep = config.generators[dep_name]
@@ -64,11 +100,14 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 							"bwrap",
 							"--unshare-all",
 							"--ro-bind",
+							"/nix/store",
+							"/nix/store",
+							"--ro-bind",
 							in_dir,
 							in_dir,
 							"--ro-bind",
-							"/nix/store",
-							"/nix/store",
+							prompt_in_dir,
+							prompt_in_dir,
 							"--bind",
 							out_dir,
 							out_dir,
@@ -79,6 +118,9 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 							"--setenv",
 							"out",
 							out_dir,
+							"--setenv",
+							"prompts",
+							prompt_in_dir,
 							binary,
 						],
 						capture_output=not args.verbose,
