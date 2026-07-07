@@ -7,7 +7,7 @@ in
 }:
 pkgs.mkShell {
   packages = [
-    pkgs.python3
+    pkgs.python314
     pkgs.bubblewrap
     pkgs.ruff # Formatter
   ];
