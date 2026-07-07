@@ -6,6 +6,7 @@
   cctools,
   go-toml,
   ttfautohint-nox,
+  nodejs_latest,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
@@ -68,6 +69,7 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-tlBxO9K0itXO6Mac4jcygZ6+9kj1gTdmu+rtbL2qdcE=";
+  nodejs = nodejs_latest;
 
   nativeBuildInputs = [
     go-toml
