@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  removeReferencesTo,
   fstrm,
   libevent,
   openssl,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals withDnstap [ protobuf ];
 
@@ -95,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-nsd_conf_file=${configFile}"
       "--with-configdir=etc/nsd"
     ];
+
+  postFixup = ''
+    find "$out" -type f -exec remove-references-to -t ${openssl.dev} -t ${libevent.dev} '{}' +
+  '';
 
   passthru.tests = {
     inherit (nixosTests) nsd;
