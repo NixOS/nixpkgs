@@ -43,6 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-updater.diff
   ];
 
+  postPatch = ''
+    # set version
+    substituteInPlace package.json src-tauri/tauri.conf.json \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
+  '';
+
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
