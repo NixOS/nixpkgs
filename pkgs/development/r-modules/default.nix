@@ -1969,6 +1969,10 @@ let
       patches = [ ./patches/trajeR.patch ];
     });
 
+    RSQLite = old.RSQLite.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     arcpbf = old.arcpbf.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
