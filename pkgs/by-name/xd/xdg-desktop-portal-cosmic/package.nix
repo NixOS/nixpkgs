@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   glib,
+  just,
   libcosmicAppHook,
   pkg-config,
   util-linux,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     libcosmicAppHook
     rustPlatform.bindgenHook
     pkg-config
@@ -53,11 +55,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/share/backgrounds' '${cosmic-wallpapers}/share/backgrounds'
   '';
 
-  dontCargoInstall = true;
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   passthru = {
