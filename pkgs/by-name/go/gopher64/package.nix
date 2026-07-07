@@ -56,6 +56,12 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
 
   cargoHash = "sha256-rmt2b8lk/9ts8v33yguuSFcbFvUX00icg1onmhCbDTQ=";
 
+  # don't use lld on aarch64-linux
+  postPatch = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail 'rustflags = ["-C", "link-arg=-fuse-ld=lld"]' ""
+  '';
+
   env = {
     # See pkgs/by-name/ne/neovide/package.nix
     SKIA_SOURCE_DIR =
