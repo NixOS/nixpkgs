@@ -3,7 +3,14 @@ import graphlib
 import functools
 from typing import List, Set
 from pathlib import Path
-from .config import VarsConfig, VarsGeneratorBackend, VarsGenerator, VarsFile
+from .config import (
+	VarsConfig,
+	VarsGeneratorBackend,
+	VarsGenerator,
+	VarsFile,
+	VarsPrompt,
+	VarsPromptBackend,
+)
 from .error import VarsError
 from .args import VarsArgs
 
@@ -168,6 +175,21 @@ def fixup_secret(
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
 			f"Error running fixup script for secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
+		)
+
+
+def run_prompt(config: VarsConfig, prompt: VarsPrompt, out: Path):
+	backend = config.promptBackends[prompt.backend]
+	binary = build_binary(backend.script)
+	try:
+		subprocess.run(
+			[binary, prompt.type, prompt.description],
+			env={"out": out},
+			check=True,
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error running prompt '{prompt.name}' via the '{backend.name}' backend:\n{e.stderr}"
 		)
 
 
