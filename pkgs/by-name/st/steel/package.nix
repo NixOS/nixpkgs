@@ -5,7 +5,6 @@
   fetchFromGitHub,
   curl,
   pkg-config,
-  makeBinaryWrapper,
   installShellFiles,
   libgit2,
   oniguruma,
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     curl
-    makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
     installShellFiles
@@ -87,13 +85,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/steel completions bash) \
       --fish <($out/bin/steel completions fish) \
       --zsh <($out/bin/steel completions zsh)
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/forge --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/cargo-steel-lib --set-default STEEL_HOME "$out/lib/steel"
   '';
 
   env = {
