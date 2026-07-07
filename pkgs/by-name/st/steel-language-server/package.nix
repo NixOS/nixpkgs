@@ -1,7 +1,6 @@
 {
   lib,
   rustPlatform,
-  makeBinaryWrapper,
   steel,
 }:
 rustPlatform.buildRustPackage {
@@ -14,10 +13,7 @@ rustPlatform.buildRustPackage {
     postPatch
     ;
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   cargoBuildFlags = [
     "--package"
@@ -25,10 +21,6 @@ rustPlatform.buildRustPackage {
   ];
 
   doCheck = false;
-
-  postFixup = ''
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "${steel}/lib/steel"
-  '';
 
   meta = steel.meta // {
     description = "Steel language server";
