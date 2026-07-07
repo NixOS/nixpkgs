@@ -238,6 +238,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       ovlach
       pinpox
       liberodark
+      zraexy
     ];
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;
