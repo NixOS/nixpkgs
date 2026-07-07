@@ -97,6 +97,82 @@ let
 
   buildPrefix = "Build/*/*";
 
+  isQemuPlatform = builtins.elem projectDscPath [
+    "OvmfPkg/OvmfPkgX64.dsc"
+    "ArmVirtPkg/ArmVirtQemu.dsc"
+    "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc"
+    "OvmfPkg/LoongArchVirt/LoongArchVirtQemu.dsc"
+  ];
+
+  # QEMU firmware interop descriptors to install, keyed by file name.
+  # Add an attribute to ship an additional descriptor.
+  qemuDescriptors =
+    let
+      description = "${fwPrefix} UEFI firmware for ${cpuName}${lib.optionalString secureBoot " with Secure Boot"}";
+
+      flashMapping = varsFile: {
+        device = "flash";
+        mode = "split";
+        executable = {
+          filename = "${placeholder "fd"}/FV/${fwPrefix}_CODE.fd";
+          format = "raw";
+        };
+        nvram-template = {
+          filename = "${placeholder "fd"}/FV/${varsFile}";
+          format = "raw";
+        };
+      };
+
+      common = {
+        interface-types = [ "uefi" ];
+        targets = [
+          {
+            architecture = cpuName;
+            machines =
+              {
+                x86_64 =
+                  if systemManagementModeRequired then
+                    [ "pc-q35-*" ]
+                  else
+                    [
+                      "pc-i440fx-*"
+                      "pc-q35-*"
+                    ];
+                aarch64 = [ "virt-*" ];
+                riscv64 = [ "virt*" ];
+                loongarch64 = [ "virt*" ];
+              }
+              .${cpuName} or [ ];
+          }
+        ];
+        features =
+          lib.optionals stdenv.hostPlatform.isx86 [
+            "acpi-s3"
+            "amd-sev"
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.isx86 && !systemManagementModeRequired) [ "amd-sev-es" ]
+          ++ lib.optionals secureBoot [ "secure-boot" ]
+          ++ lib.optionals systemManagementModeRequired [ "requires-smm" ]
+          ++ lib.optionals (stdenv.hostPlatform.isx86 && !debug) [ "verbose-dynamic" ];
+        tags = [ ];
+      };
+    in
+    lib.optionalAttrs isQemuPlatform (
+      {
+        "50-edk2-${cpuName}${lib.optionalString secureBoot "-sb"}.json" = common // {
+          inherit description;
+          mapping = flashMapping "${fwPrefix}_VARS.fd";
+        };
+      }
+      // lib.optionalAttrs msVarsTemplate {
+        "40-edk2-${cpuName}${lib.optionalString secureBoot "-sb"}-enrolled.json" = common // {
+          description = "${description}, Microsoft keys enrolled";
+          mapping = flashMapping "${fwPrefix}_VARS.ms.fd";
+          features = common.features ++ [ "enrolled-keys" ];
+        };
+      }
+    );
+
 in
 
 assert msVarsTemplate -> fdSize4MB;
@@ -242,7 +318,17 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     mkdir -vp $fd/AAVMF
     ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
     ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-  '';
+  ''
+  + lib.optionalString (qemuDescriptors != { }) ''
+    mkdir -vp $fd/share/qemu/firmware
+  ''
+  + lib.concatStrings (
+    lib.mapAttrsToList (name: descriptor: ''
+      python3 -m json.tool > $fd/share/qemu/firmware/${name} <<'EOF'
+      ${builtins.toJSON descriptor}
+      EOF
+    '') qemuDescriptors
+  );
 
   dontPatchELF = true;
 
