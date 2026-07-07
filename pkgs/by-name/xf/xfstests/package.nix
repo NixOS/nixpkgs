@@ -29,8 +29,10 @@
   util-linux,
   which,
   writeScript,
+  writeShellScript,
   xfsprogs,
-  nix-update-script,
+  gitMinimal,
+  nix-update,
   runtimeShell,
 }:
 
@@ -157,7 +159,24 @@ stdenv.mkDerivation (finalAttrs: {
     }:$PATH
     exec ./check "$@"
   '';
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = writeShellScript "update-xfstests" ''
+    set -euo pipefail
+    export PATH=${
+      lib.makeBinPath [
+        coreutils
+        gitMinimal
+        gawk
+        nix-update
+      ]
+    }:$PATH
+    VERSION="$(git ls-remote --tags --refs https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git \
+      | awk '{ print $2 }' \
+      | grep '^refs/tags/v' \
+      | sed 's|^refs/tags/v||' \
+      | sort -V \
+      | tail -n1)"
+    exec nix-update --version "$VERSION" xfstests "$@"
+  '';
 
   meta = {
     description = "Torture test suite for filesystems";
