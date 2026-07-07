@@ -3,6 +3,7 @@
   esphome,
   fetchFromGitHub,
   python3Packages,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication (
@@ -50,6 +51,7 @@ python3Packages.buildPythonApplication (
 
     passthru = {
       pythonPath = python3Packages.makePythonPath dependencies;
+      tests = { inherit (nixosTests) esphome-device-builder; };
     };
 
     __structuredAttrs = true;
