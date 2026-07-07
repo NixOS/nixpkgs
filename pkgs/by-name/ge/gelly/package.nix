@@ -14,6 +14,7 @@
   openssl,
   bubblewrap,
   glycin-loaders,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -68,6 +69,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A Jellyfin GTK client for Linux focused on music";
