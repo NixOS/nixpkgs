@@ -12,6 +12,14 @@ let
 in
 {
   vars = {
+    defaultPromptBackend = "example";
+
+    # Non-interactive backend
+    promptBackends.example.script = mkBackendScript "prompt" ''
+      out=''${out:?} # Make shellcheck happy
+      echo -n "placeholder" > "$out"
+    '';
+
     defaultGeneratorBackend = "example";
     generatorBackends.example = {
       get = mkBackendScript "get" ''
@@ -31,18 +39,19 @@ in
       delete = mkBackendScript "delete" ''
         rm -rf ${root}/generators/"$1"/files/"$2"
       '';
-
-      # This example showcases that scripts can be written in any language
-      list =
-        pkgs:
-        pkgs.writers.writePython3 "list" { } ''
-          from pathlib import Path
-          base = Path("${root}/generators")
-          if base.exists():
-              for generator in base.iterdir():
-                  for file in (generator / "files").iterdir():
-                      print(f"{generator.name} {file.name}")
-        '';
+      list = mkBackendScript "list" ''
+        if [[ -d "${root}/generators" ]]; then
+          for generator in "${root}/generators"/*; do
+            [[ -d "$generator" ]] || continue
+            files="$generator/files"
+            [[ -d "$files" ]] || continue
+            for file in "$files"/*; do
+              [[ -e "$file" ]] || continue
+              echo "$(basename "$generator") $(basename "$file")"
+            done
+          done
+        fi
+      '';
 
       deploy = noop;
       fixup = noop; # This one's optional, but I wanted to make sure that works
