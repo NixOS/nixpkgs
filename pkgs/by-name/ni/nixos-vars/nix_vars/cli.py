@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from .error import VarsError
 from .eval import evaluate_config
-from .generate import generate_vars, regenerate_vars
+from .generate import generate_vars
 from .gc import collect_garbage
 from .args import VarsArgs
 
@@ -71,9 +71,18 @@ def main() -> None:
 	)
 
 	common_args(eval_parser)
-	gen_parser = subparsers.add_parser("generate", help="Generate secrets")
-
+	gen_parser = subparsers.add_parser("generate", help="(Re)generate secrets")
 	common_args(gen_parser)
+	gen_parser.add_argument(
+		"-g",
+		"--generator",
+		dest="generators",
+		type=str,
+		default=[],
+		action="append",
+		help="Generator(s) to force the regeneration of.",
+	)
+
 	gc_parser = subparsers.add_parser(
 		"collect-garbage", help="Delete stale secrets"
 	)
@@ -81,22 +90,6 @@ def main() -> None:
 	common_args(gc_parser)
 	deploy_parser = subparsers.add_parser("deploy", help="Deploy secrets")
 	common_args(deploy_parser)
-
-	regen_parser = subparsers.add_parser(
-		"regenerate", help="Regenerate secrets"
-	)
-
-	common_args(regen_parser)
-	regen_parser.add_argument(
-		"-g",
-		"--generator",
-		dest="generators",
-		type=str,
-		required=True,
-		default=[],
-		action="append",
-		help="The generators to re-run the scripts of.",
-	)
 
 	args = parser.parse_args()
 	args = VarsArgs.from_dict(vars(args))
@@ -107,8 +100,6 @@ def main() -> None:
 			print(config)
 		elif args.command == "generate":
 			generate_vars(args, config)
-		elif args.command == "regenerate":
-			regenerate_vars(args, config)
 		elif args.command == "collect-garbage":
 			collect_garbage(args, config)
 		else:

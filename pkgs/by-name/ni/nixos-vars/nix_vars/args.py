@@ -16,7 +16,7 @@ class VarsArgs:
 	command: str  # gotta figure out how to type this properly
 
 	def from_dict(d: Mapping[str, Any]) -> Self:
-		# This one is only in the dict when the "regenerate" command is used.
+		# This one is only in the dict when the "generate" command is used.
 		# I wish we had proper sum types...
 		if "generators" not in d:
 			d["generators"] = None

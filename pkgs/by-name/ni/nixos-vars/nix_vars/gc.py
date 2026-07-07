@@ -4,7 +4,6 @@ from .exec import list_secrets, delete_secret
 
 
 def collect_garbage(args: VarsArgs, config: VarsConfig):
-	count = 0
 	for backend in config.generatorBackends.values():
 		if not backend.list or not backend.delete:
 			print(
@@ -24,7 +23,6 @@ def collect_garbage(args: VarsArgs, config: VarsConfig):
 			print(f"Skipping '{backend.name}': nothing to collect")
 			continue
 
-		count += 1
 		print(f"Backend '{backend.name}':")
 		for gen_name, file_name in sorted(unspecified):
 			if args.dry_run:
@@ -32,5 +30,3 @@ def collect_garbage(args: VarsArgs, config: VarsConfig):
 			else:
 				print(f"- Deleting '{gen_name}/{file_name}'")
 				delete_secret(file, backend, gen_name, file_name)
-
-	print(f"Successfully garbage collected {count} backend(s).")
