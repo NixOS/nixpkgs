@@ -43,6 +43,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: assert 1783413599.053456 < (1783413589.024546 + 10)
+    "test_runner"
+
     # Require some unavailable pytest fixtures
     "test_adapt"
     "test_adaptive"
