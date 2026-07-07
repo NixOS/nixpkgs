@@ -2,12 +2,17 @@
   lib,
   buildPythonApplication,
   setuptools,
+  makeWrapper,
+  bubblewrap,
 }:
 
 buildPythonApplication {
   name = "nix-vars";
   format = "pyproject";
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    makeWrapper
+  ];
   src = lib.fileset.toSource {
     root = ./.;
     fileset = lib.fileset.unions [
@@ -15,4 +20,9 @@ buildPythonApplication {
       ./pyproject.toml
     ];
   };
+
+  postFixup = ''
+    wrapProgram $out/bin/nix-vars \
+      --prefix PATH : ${bubblewrap}/bin
+  '';
 }

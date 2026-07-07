@@ -1,3 +1,4 @@
+import os
 import subprocess
 import graphlib
 import functools
@@ -9,7 +10,6 @@ from .config import (
 	VarsGenerator,
 	VarsFile,
 	VarsPrompt,
-	VarsPromptBackend,
 )
 from .error import VarsError
 from .args import VarsArgs
@@ -65,12 +65,14 @@ def get_secret(
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.get)
 	try:
+		env = os.environ.copy()
+		env["out"] = out
 		subprocess.run(
 			[binary, generator.name, file.name],
 			capture_output=not args.verbose,
 			text=True,
 			check=True,
-			env={"out": out},
+			env=env,
 		)
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
@@ -88,12 +90,14 @@ def set_secret(
 	backend = config.generatorBackends[generator.backend]
 	binary = build_binary(backend.set)
 	try:
+		env = os.environ.copy()
+		env["in"] = at
 		subprocess.run(
 			[binary, generator.name, file.name],
 			capture_output=not args.verbose,
 			text=True,
 			check=True,
-			env={"in": at},
+			env=env,
 		)
 	except subprocess.CalledProcessError as e:
 		raise VarsError(
@@ -178,16 +182,38 @@ def fixup_secret(
 		)
 
 
+def deploy_secrets(
+	args: VarsArgs,
+	config: VarsConfig,
+	backend: VarsGeneratorBackend,
+):
+	binary = build_binary(backend.deploy)
+	try:
+		subprocess.run(
+			[binary],
+			capture_output=not args.verbose,
+			text=True,
+			check=True,
+		)
+	except subprocess.CalledProcessError as e:
+		raise VarsError(
+			f"Error running deploy via the '{backend.name}' backend:\n{e.stderr}"
+		)
+
+
 def run_prompt(config: VarsConfig, prompt: VarsPrompt, out: Path):
 	backend = config.promptBackends[prompt.backend]
 	binary = build_binary(backend.script)
 	try:
+		env = os.environ.copy()
+		env["out"] = out
 		subprocess.run(
 			[binary, prompt.type, prompt.description],
-			env={"out": out},
+			env=env,
 			check=True,
 		)
 	except subprocess.CalledProcessError as e:
+		print()
 		raise VarsError(
 			f"Error running prompt '{prompt.name}' via the '{backend.name}' backend:\n{e.stderr}"
 		)

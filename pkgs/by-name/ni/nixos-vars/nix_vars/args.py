@@ -13,7 +13,7 @@ class VarsArgs:
 	disable_sandbox: bool
 	dry_run: bool
 	yes: bool
-	generators: Optional[List[str]]
+	generators: List[str]
 	command: str  # gotta figure out how to type this properly
 	verbose: str
 
@@ -21,7 +21,7 @@ class VarsArgs:
 		# This one is only in the dict when the "generate" command is used.
 		# I wish we had proper sum types...
 		if "generators" not in d:
-			d["generators"] = None
+			d["generators"] = []
 
 		args = VarsArgs(**d)
 
