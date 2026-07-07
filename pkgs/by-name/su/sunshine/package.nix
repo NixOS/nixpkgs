@@ -47,7 +47,7 @@
   svt-av1,
   shaderc,
   vulkan-loader,
-  libappindicator,
+  qt6,
   libnotify,
   pipewire,
   miniupnpc,
@@ -69,7 +69,7 @@ let
   # a fixed-output derivation and point cmake at it via FFMPEG_PREPARED_BINARIES.
   # The tag must match the commit of the third-party/build-deps submodule pinned
   # in the Sunshine release.
-  buildDepsTag = "v2026.516.30821";
+  buildDepsTag = "v2026.713.132551";
   ffmpegArch =
     {
       x86_64-linux = "Linux-x86_64";
@@ -87,10 +87,10 @@ let
     # unlike the empty-hash trick).
     hash =
       {
-        x86_64-linux = "sha256-VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
-        aarch64-linux = "sha256-X5v/GsJy8G3/LHW/8s0VAS0Vegr7JhZSqYotXL/s81o=";
-        x86_64-darwin = "sha256-rrOGahWwJikRfUn27Q4jVra2Q/MMSNitu0wS2UGKGWk=";
-        aarch64-darwin = "sha256-xkfwLJgb7uz1H7mJrQFW79w2T/T/Zv7biXlvXz5UvXc=";
+        x86_64-linux = "sha256-nHL+JxxMbR5fva/w1tt0BqcDowSAojuV8504he/wbsg=";
+        aarch64-linux = "sha256-/4EW4ZWZxIYbMjIS1XujoCbQTtLmOy4j2roPxJaAXrw=";
+        x86_64-darwin = "sha256-VIQiPoguprNfqW6Qj7RlhFcGnNX8b6FIBhQ7RJFncjU=";
+        aarch64-darwin = "sha256-1DCdP4F+UKlhzfDPlZqV2cxvFxJ9bP435rj79HgmHZE=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -98,7 +98,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2026.516.143833";
+  version = "2026.713.170739";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -107,15 +107,14 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3yuhOyW1Rqz4ddZ40z2ZzpAReZQFva0SL595XrnFB60=";
+    hash = "sha256-v/PGx0C9lfPwcoJaX9GCDAU3ASxW91/gyRQPiYSpHYw=";
     fetchSubmodules = true;
   };
 
-  # build webui
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
+    npmDepsHash = "sha256-YRvUt10NJAAN1ZCDgjFI77amJ17qGjd+4qIQSzrOdls=";
 
     installPhase = ''
       runHook preInstall
@@ -170,6 +169,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals isLinux [
     wayland-scanner
     shaderc # provides glslc, needed at configure time for shader compilation
+    qt6.wrapQtAppsHook
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
   ]
@@ -220,7 +220,8 @@ stdenv'.mkDerivation (finalAttrs: {
     svt-av1
     vulkan-loader
     pipewire
-    libappindicator
+    qt6.qtbase
+    qt6.qtsvg
     libnotify
   ]
   ++ lib.optionals cudaSupport [
@@ -297,10 +298,12 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # allow Sunshine to find libvulkan
-  postFixup = lib.optionalString cudaSupport ''
+  dontWrapQtApps = true;
+
+  postFixup = lib.optionalString isLinux ''
     wrapProgram $out/bin/sunshine \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+      "''${qtWrapperArgs[@]}" \
+      ${lib.optionalString cudaSupport "--set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}"}
   '';
 
   doInstallCheck = isLinux;
