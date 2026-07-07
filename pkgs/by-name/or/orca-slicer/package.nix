@@ -63,13 +63,13 @@ in
 # with --cores 32 on clang).
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NJvJAQfkacMjMIirAoOND/G1GaXeMcNleiGQKoe+654=";
+    hash = "sha256-gUwLC0XkeohEdL0EScdOrA8MWXGuR8kUfezoQsk9i/A=";
   };
 
   __structuredAttrs = true;
