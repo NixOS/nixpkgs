@@ -10,9 +10,9 @@
   gfortran,
   perl,
   mpi,
-  blas,
-  lapack,
-  scalapack,
+  blas-ilp64,
+  lapack-ilp64,
+  scalapack-ilp64,
   libxc,
   python3,
   tcsh,
@@ -22,8 +22,8 @@
   makeWrapper,
 }:
 
-assert blas.isILP64 == lapack.isILP64;
-assert blas.isILP64 == scalapack.isILP64;
+assert blas-ilp64.isILP64 == lapack-ilp64.isILP64;
+assert blas-ilp64.isILP64 == scalapack-ilp64.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -76,9 +76,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tcsh
     openssh
-    blas
-    lapack
-    scalapack
+    blas-ilp64
+    lapack-ilp64
+    scalapack-ilp64
     libxc
     python3
   ];
@@ -134,12 +134,12 @@ stdenv.mkDerivation rec {
     export PYTHONHOME="${python3}"
     export PYTHONVERSION=${lib.versions.majorMinor python3.version}
 
-    export BLASOPT="-L${blas}/lib -lblas"
-    export LAPACK_LIB="-L${lapack}/lib -llapack"
-    export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
+    export BLASOPT="-L${blas-ilp64}/lib -lblas"
+    export LAPACK_LIB="-L${lapack-ilp64}/lib -llapack"
+    export BLAS_SIZE=${if blas-ilp64.isILP64 then "8" else "4"}
     export USE_SCALAPACK="y"
-    export SCALAPACK="-L${scalapack}/lib -lscalapack"
-    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
+    export SCALAPACK="-L${scalapack-ilp64}/lib -lscalapack"
+    export SCALAPACK_SIZE=${if scalapack-ilp64.isILP64 then "8" else "4"}
 
     export LIBXC_INCLUDE="${lib.getDev libxc}/include"
     export LIBXC_MODDIR="${lib.getDev libxc}/include"
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
     ln -s ${gaSrc} src/tools/ga-${versionGA}.tar.gz
     cd src
     make nwchem_config
-    ${lib.optionalString (!blas.isILP64) "make 64_to_32"}
+    ${lib.optionalString (!blas-ilp64.isILP64) "make 64_to_32"}
   '';
 
   postBuild = ''
