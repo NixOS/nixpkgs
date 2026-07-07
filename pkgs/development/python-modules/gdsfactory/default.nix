@@ -48,14 +48,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "gdsfactory";
-  version = "9.44.0";
+  version = "9.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5iP359Sy93Pr5gmsCEEcTK47d0qbFUy9eEpcFZ6AJp4=";
+    hash = "sha256-BO/4SoD2qSPfNGwRJTMpkbeZc8Zez7Xy23CgX9CIqC0=";
   };
 
   build-system = [
