@@ -25096,20 +25096,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  vimacs = buildVimPlugin {
-    pname = "vimacs";
-    version = "0.96-unstable-2016-03-24";
-    src = fetchFromGitHub {
-      owner = "andrep";
-      repo = "vimacs";
-      rev = "7b8e297722d55089f0f0535fe6422533c98112fb";
-      hash = "sha256-zgSKuwhuyoa67UlX4yX2JumjfHrx7Mlvg7Bv2i6TInU=";
-    };
-    meta.homepage = "https://github.com/andrep/vimacs/";
-    meta.license = unfree;
-    meta.hydraPlatforms = [ ];
-  };
-
   vimade = buildVimPlugin {
     pname = "vimade";
     version = "2.5.1-unstable-2026-05-17";
