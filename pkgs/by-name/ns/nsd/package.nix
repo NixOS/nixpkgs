@@ -57,12 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # TODO: prePatch doesn't actually get executed because patchPhase is overridden
-  prePatch = ''
-    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
-  '';
-
-  patchPhase = ''
+  # Prevent the install script from copying nsd.conf.sample into /etc/nsd.
+  postPatch = ''
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
 
