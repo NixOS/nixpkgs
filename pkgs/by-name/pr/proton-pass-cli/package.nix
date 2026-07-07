@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = writeShellScript "update-version" ''
       set -euo pipefail
-      ${lib.getExe curl} -fsSL -o pkgs/by-name/pr/proton-pass-cli/versions.json \
+      ${lib.getExe curl} -fsSL -o ${./versions.json} \
         https://proton.me/download/pass-cli/versions.json
     '';
   };
