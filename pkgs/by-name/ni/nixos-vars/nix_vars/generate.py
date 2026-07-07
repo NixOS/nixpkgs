@@ -16,7 +16,7 @@ from .error import VarsError
 
 
 def generate_vars(args: VarsArgs, config: VarsConfig):
-	order = rebuild_order(config, config, args.generators)
+	order = rebuild_order(args, config, args.generators)
 
 	for gen_name in args.generators:
 		if gen_name not in config.generators:
@@ -86,10 +86,14 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 						)
 
 			try:
+				env = os.environ.copy()
+				env["in"] = in_dir
+				env["out"] = out_dir
+
 				if args.disable_sandbox:
 					subprocess.run(
 						[binary],
-						env={"in": in_dir, "out": out_dir},
+						env=env,
 						capture_output=not args.verbose,
 						check=True,
 						text=True,
