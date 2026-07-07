@@ -4823,13 +4823,12 @@ with pkgs;
   antlr = antlr4;
 
   inherit (callPackages ../servers/apache-kafka { })
-    apacheKafka_3_9
-    apacheKafka_4_0
     apacheKafka_4_1
     apacheKafka_4_2
+    apacheKafka_4_3
     ;
 
-  apacheKafka = apacheKafka_4_2;
+  apacheKafka = apacheKafka_4_3;
 
   libastyle = astyle.override { asLibrary = true; };
 
@@ -9624,8 +9623,6 @@ with pkgs;
           platforms = lib.platforms.darwin;
         };
       });
-
-  vimacs = callPackage ../applications/editors/vim/vimacs.nix { };
 
   # this is a lower-level alternative to wrapNeovim conceived to handle
   # more usecases when wrapping neovim. The interface is being actively worked on
