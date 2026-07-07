@@ -6,14 +6,14 @@
   inotify-simple,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inotifyrecursive";
   version = "0.3.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "osRQsxdpPkU4QW+Q6x14WFBtr+a4uIUDe9LdmuLa+h4=";
+    inherit (finalAttrs) pname version;
+    sha256 = "sha256-osRQsxdpPkU4QW+Q6x14WFBtr+a4uIUDe9LdmuLa+h4=";
   };
 
   build-system = [ setuptools ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   # No tests included
   doCheck = false;
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [ "inotifyrecursive" ];
 
   meta = {
     description = "Simple recursive inotify watches for Python";
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})
