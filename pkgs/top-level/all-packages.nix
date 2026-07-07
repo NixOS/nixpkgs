@@ -2927,9 +2927,7 @@ with pkgs;
 
   subzerod = with python3Packages; toPythonApplication subzerod;
 
-  system-config-printer = callPackage ../tools/misc/system-config-printer {
-    libxml2 = libxml2Python;
-  };
+  system-config-printer = callPackage ../tools/misc/system-config-printer { };
 
   tartube-yt-dlp = tartube.override {
     youtube-dl = yt-dlp;
