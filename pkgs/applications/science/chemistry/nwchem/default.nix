@@ -20,6 +20,7 @@
   autoconf,
   libtool,
   makeWrapper,
+  mpich,
 }:
 
 assert blas-ilp64.isILP64 == lapack-ilp64.isILP64;
@@ -48,16 +49,19 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwchem";
   version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
-    rev = "v${version}-release";
+    tag = "v${finalAttrs.version}-release";
     hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -72,10 +76,12 @@ stdenv.mkDerivation rec {
     makeWrapper
     gfortran
     which
+    mpich
+    python3
+    openssh
   ];
   buildInputs = [
     tcsh
-    openssh
     blas-ilp64
     lapack-ilp64
     scalapack-ilp64
@@ -236,4 +242,4 @@ stdenv.mkDerivation rec {
     homepage = "https://nwchemgit.github.io";
     license = lib.licenses.ecl20;
   };
-}
+})
