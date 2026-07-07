@@ -1,26 +1,39 @@
 {
   lib,
   stdenv,
-  cmake,
-  cctools,
   fetchFromGitHub,
-  git,
-  gmp,
+
+  # nativeBuildInputs
   cadical,
+  cmake,
   leangz,
   makeWrapper,
   pkg-config,
+  # darwin-only:
+  cctools,
+
+  # buildInputs
+  gmp,
   libuv,
-  enableMimalloc ? true,
+
+  # nativeCheckInputs
+  gitMinimal,
   perl,
-  testers,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
+
+  enableMimalloc ? true,
 }:
 let
   cadical' = cadical.override { version = "2.1.3"; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.30.0";
+  version = "4.31.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Using a vendored version rather than nixpkgs' version to match the exact version required by
   # Lean.  Apparently, even a slight version change can impact greatly the final performance.
@@ -35,46 +48,67 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YTsfIppd6km7wOjAxRH5KMPsW++ztFDCJT2up72J86Q=";
+    hash = "sha256-up4Juc/IyMuggGLMSDgwYEOoMk/K5U8NI0jzeAKqhO0=";
   };
 
-  postPatch =
-    let
-      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
-    in
-    ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
+  patches = [
+    ./mimalloc.patch
+  ];
 
-      # Remove tests that fails in sandbox.
-      # It expects `sourceRoot` to be a git repository.
-      rm -rf src/lake/examples/git/
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail \
+        'set(GIT_SHA1 "")' \
+        'set(GIT_SHA1 "${finalAttrs.src.tag}")'
+  ''
+  # Remove tests that fails in sandbox.
+  # It expects `sourceRoot` to be a git repository.
+  + ''
+    rm -rf src/lake/examples/git/
+  ''
+  + lib.optionalString enableMimalloc (
     ''
-    + (lib.optionalString enableMimalloc ''
       substituteInPlace CMakeLists.txt \
         --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
-      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
-        substituteInPlace "$file" \
-          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-      done
-    '');
+    ''
+    + (
+      let
+        # Single-quoted at the use site so the literal `${LEAN_BINARY_DIR}` reaches
+        # substituteInPlace
+        pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
+      in
+      ''
+        substituteInPlace \
+          src/CMakeLists.txt \
+          src/runtime/CMakeLists.txt \
+          stage0/src/CMakeLists.txt \
+          stage0/src/runtime/CMakeLists.txt \
+          --replace-fail \
+            '${pattern}' \
+            '${finalAttrs.mimalloc-src}'
+      ''
+    )
+  );
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
   '';
 
   nativeBuildInputs = [
+    cadical'
     cmake
-    pkg-config
-    makeWrapper
     leangz # Provides leantar
+    makeWrapper
+    pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   buildInputs = [
+    cadical'
     gmp
     libuv
-    cadical'
   ];
 
   postInstall = ''
@@ -83,25 +117,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     perl
   ];
 
-  patches = [ ./mimalloc.patch ];
-
   cmakeFlags = [
-    "-DUSE_GITHASH=OFF"
-    "-DINSTALL_LICENSE=OFF"
-    "-DINSTALL_CADICAL=OFF"
-    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+    (lib.cmakeBool "USE_GITHASH" false)
+    (lib.cmakeBool "INSTALL_LICENSE" false)
+    (lib.cmakeBool "INSTALL_CADICAL" false)
+    (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Automatic and interactive theorem prover";

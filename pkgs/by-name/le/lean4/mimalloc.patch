@@ -1,17 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6aa7bf1547..f8615c7317 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -80,11 +80,7 @@
-   ExternalProject_add(
+@@ -123,13 +123,7 @@ endif()
+ if(USE_MIMALLOC)
+   FetchContent_Declare(
      mimalloc
-     PREFIX mimalloc
 -    GIT_REPOSITORY https://github.com/microsoft/mimalloc
 -    GIT_TAG v2.2.3
--    # just download, we compile it as part of each stage as it is small
--    CONFIGURE_COMMAND ""
--    BUILD_COMMAND ""
+-    # Unnecessarily deep directory structure, but it saves us from a complicated
+-    # stage0 update for now. If we ever update the other dependencies like
+-    # cadical, it might be worth reorganizing the directory structure.
+-    SOURCE_DIR
+-    "${CMAKE_BINARY_DIR}/mimalloc/src/mimalloc"
 +    SOURCE_DIR "MIMALLOC-SRC"
-     INSTALL_COMMAND ""
+     EXCLUDE_FROM_ALL
    )
-   list(APPEND EXTRA_DEPENDS mimalloc)
- endif()
- 
+   FetchContent_MakeAvailable(mimalloc)
