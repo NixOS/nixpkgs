@@ -413,6 +413,7 @@
   ./security/rtkit.nix
   ./security/run0.nix
   ./security/soteria.nix
+  ./security/step-agent.nix
   ./security/sudo-rs.nix
   ./security/sudo.nix
   ./security/systemd-confinement.nix
