@@ -211,43 +211,45 @@ let
   promptModule = lib.types.submodule (
     { name, ... }:
     {
-      name = lib.mkOption {
-        description = "The name of the backend.";
-        type = lib.types.str;
-        readOnly = true;
-        default = name;
-      };
+      options = {
+        name = lib.mkOption {
+          description = "The name of the backend.";
+          type = lib.types.str;
+          readOnly = true;
+          default = name;
+        };
 
-      description = lib.mkOption {
-        description = ''
-          The description of the prompted value
-        '';
-        type = lib.types.str;
-        default = name;
-        defaultText = "Name of the prompt";
-        example = "SSH private key";
-      };
+        description = lib.mkOption {
+          description = ''
+            The description of the prompted value
+          '';
+          type = lib.types.str;
+          default = name;
+          defaultText = "Name of the prompt";
+          example = "SSH private key";
+        };
 
-      type = lib.mkOption {
-        description = ''
-          The input type of the prompt.
-          The following types are available:
-            - hidden: A hidden text (e.g. password)
-            - line: A single line of text
-            - multiline: A multiline text
-        '';
-        type = lib.types.enum [
-          "hidden"
-          "line"
-          "multiline"
-        ];
-        default = "line";
-      };
+        type = lib.mkOption {
+          description = ''
+            The input type of the prompt.
+            The following types are available:
+              - hidden: A hidden text (e.g. password)
+              - line: A single line of text
+              - multiline: A multiline text
+          '';
+          type = lib.types.enum [
+            "hidden"
+            "line"
+            "multiline"
+          ];
+          default = "line";
+        };
 
-      backend = lib.mkOption {
-        type = safeName;
-        description = "The backend responsible for handling this prompt.";
-        default = cfg.defaultPromptBackend;
+        backend = lib.mkOption {
+          type = safeName;
+          description = "The backend responsible for handling this prompt.";
+          default = cfg.defaultPromptBackend;
+        };
       };
     }
   );
@@ -290,7 +292,8 @@ in
 
     prompts = lib.mkOption {
       description = ''
-        TODO
+        A set of prompts the user can use to provide manual input to the
+        generator backends.
       '';
       default = { };
       type = lib.types.attrsOf promptModule;
