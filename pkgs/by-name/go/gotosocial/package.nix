@@ -63,6 +63,9 @@ buildGo125Module (finalAttrs: {
   '';
 
   postInstall = ''
+    # remove a Go codegen helper binary
+    rm $out/bin/gen
+
     mkdir -p $out/share/gotosocial/web
     mv web/{assets,template} $out/share/gotosocial/web
   '';
