@@ -226,6 +226,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       oddlama
       pandapip1
       norpol
+      debtquity
     ];
   };
 })
