@@ -48,6 +48,7 @@
   xcbuild,
   apple-sdk_15,
   symlinkJoin,
+  nix-update-script,
 
   llvmPackages ? rustc.llvmPackages,
 }:
@@ -215,10 +216,20 @@ let
       runHook postInstall
     '';
 
-    passthru.tests = {
-      build-with-unit-tests = derivation.overrideAttrs (_: {
-        doCheck = true;
-      });
+    passthru = {
+      tests = {
+        build-with-unit-tests = derivation.overrideAttrs (_: {
+          doCheck = true;
+        });
+      };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "v(${lib.versions.major version}\\..*\\..*)"
+          "--override-filename"
+          "pkgs/by-name/ru/rusty-v8_${lib.versions.major version}/package.nix"
+        ];
+      };
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
