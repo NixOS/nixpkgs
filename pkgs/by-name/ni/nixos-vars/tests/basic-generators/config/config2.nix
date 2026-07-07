@@ -2,12 +2,15 @@
   imports = [ ./backend.nix ];
 
   vars = {
+    prompts.example.description = "Your name";
+
     generators.example = {
+      prompts = [ "example" ];
       files.example = { };
       script =
         pkgs:
         pkgs.writeShellScript "gen-example" ''
-          echo "Hewwo!" > $out/example
+          echo "Hewwo $(${pkgs.coreutils}/bin/cat "$prompts/example")!!" > $out/example
         '';
     };
 
