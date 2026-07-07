@@ -32,14 +32,7 @@ SSH_DEFAULT_OPTS: Final = [
 
 
 def ssh_default_opts() -> list[str]:
-    """Default ssh options appended after NIX_SSHOPTS.
-
-    NIXOS_REBUILD_SSH_DEFAULT_OPTS replaces the built-in connection
-    sharing defaults, e.g. to reuse an externally managed ControlMaster
-    and the port forwards attached to it. Set it to the empty string to
-    fall back to the connection sharing configured in ssh_config, if
-    any.
-    """
+    "Default ssh options appended after NIX_SSHOPTS."
     env = os.getenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS")
     if env is None:
         return SSH_DEFAULT_OPTS
