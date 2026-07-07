@@ -26532,12 +26532,6 @@
     github = "spreetin";
     githubId = 7392173;
   };
-  sprock = {
-    email = "rmason@mun.ca";
-    github = "sprock";
-    githubId = 6391601;
-    name = "Roger Mason";
-  };
   sputn1ck = {
     email = "kon@kon.ninja";
     github = "sputn1ck";
