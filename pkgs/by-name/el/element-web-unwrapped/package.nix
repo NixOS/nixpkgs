@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "element";
     inherit (finalAttrs) version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-Cxc2/NpOpkXavDvBgaU6Douud7AO06jt1KjuaLnZh8M=";
+    fetcherVersion = 4;
+    hash = "sha256-wTOdipfWUH0gjTTHJTP8np2D77bNoFCThCg5eRMJXS8=";
   };
 
   nativeBuildInputs = [

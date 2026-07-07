@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmInstallFlags
       ;
     pnpm = pnpm_11;
-    fetcherVersion = 3;
-    hash = "sha256-dF0nnBBpJaFq6MYCZVMMt4D85EWDv8zsGEbVnyhP0kE=";
+    fetcherVersion = 4;
+    hash = "sha256-KzF13ghND1NlJ3e2HsTuMbWZQCwqEXtBO31tyf1iIGI=";
   };
 
   __structuredAttrs = true;

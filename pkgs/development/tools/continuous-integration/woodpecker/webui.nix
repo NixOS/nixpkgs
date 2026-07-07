@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     sourceRoot = "${common.src.name}/web";
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = common.nodeModulesHash;
   };
 
