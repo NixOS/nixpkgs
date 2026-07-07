@@ -169,11 +169,6 @@
     githubId = 791309;
     name = "Jan Hrnko";
   };
-  _1000teslas = {
-    name = "Kevin Tran";
-    github = "sledgehammervampire";
-    githubId = 47207223;
-  };
   _13621 = {
     name = "13621";
     github = "13621";
@@ -26142,6 +26137,11 @@
     github = "shenlebantongying";
     githubId = 20123683;
     name = "Shenleban Tongying";
+  };
+  sledgehammervampire = {
+    name = "Kevin Tran";
+    github = "sledgehammervampire";
+    githubId = 47207223;
   };
   sleexyz = {
     email = "freshdried@gmail.com";
