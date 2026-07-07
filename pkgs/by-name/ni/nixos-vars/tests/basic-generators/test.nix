@@ -20,7 +20,13 @@ pkgs.testers.runNixOSTest {
     ];
 
     system.extraDependencies = [
-      pkgs.coreutils
+      (pkgs.closureInfo {
+        rootPaths = [
+          pkgs.coreutils
+          pkgs.python3
+          pkgs.cowsay
+        ];
+      })
     ];
   };
 
