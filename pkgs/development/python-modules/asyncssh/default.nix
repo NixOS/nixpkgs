@@ -16,6 +16,7 @@
   pytestCheckHook,
   python-pkcs11,
   setuptools,
+  stdenv,
   typing-extensions,
 }:
 
@@ -84,6 +85,9 @@ buildPythonPackage rec {
     "test_put_name_too_long"
     # SFTP copy ends up with an empty file on ZFS
     "test_copy_max_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_canonicalize_failure"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];
