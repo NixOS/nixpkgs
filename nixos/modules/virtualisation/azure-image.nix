@@ -12,6 +12,7 @@ in
 {
   imports = [
     ./azure-common.nix
+    ./config-file-option.nix
     ./disk-size-option.nix
     ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -35,15 +36,6 @@ in
       description = ''
         ESP partition size. Unit is MB.
         Only effective when vmGeneration is `v2`.
-      '';
-    };
-
-    configFile = mkOption {
-      type = types.path;
-      default = ./azure-config-user.nix;
-      description = ''
-        A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
-        and be used when switching to a new configuration.
       '';
     };
 
@@ -89,6 +81,8 @@ in
   };
 
   config = {
+    virtualisation.configFile = lib.mkDefault ./azure-config-user.nix;
+
     image.extension = "vhd";
     system.nixos.tags = [ "azure" ];
     system.build.image = config.system.build.azureImage;
@@ -107,7 +101,7 @@ in
         truncate -s +${cfg.additionalSpace} "$out/${config.image.fileName}"
         ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
-      configFile = cfg.configFile;
+      configFile = config.virtualisation.configFile;
 
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";

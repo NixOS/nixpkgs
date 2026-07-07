@@ -31,6 +31,7 @@ in
 {
   imports = [
     ../../../modules/virtualisation/amazon-image.nix
+    ../../../modules/virtualisation/config-file-option.nix
     ../../../modules/virtualisation/disk-size-option.nix
     ../../../modules/image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
@@ -58,15 +59,6 @@ in
   ];
 
   options.amazonImage = {
-    configFile = mkOption {
-      type = types.path;
-      default = defaultConfigFile;
-      description = ''
-        A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
-        and be used when switching to a new configuration.
-      '';
-    };
-
     contents = mkOption {
       example = literalExpression ''
         [ { source = pkgs.memtest86 + "/memtest.bin";
@@ -94,6 +86,7 @@ in
 
   # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
+  config.virtualisation.configFile = lib.mkDefault defaultConfigFile;
   config.virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
@@ -103,7 +96,7 @@ in
 
   config.system.build.amazonImage =
     let
-      configFile = cfg.configFile;
+      configFile = config.virtualisation.configFile;
 
       zfsBuilder = import ../../../lib/make-multi-disk-zfs-image.nix {
         inherit
