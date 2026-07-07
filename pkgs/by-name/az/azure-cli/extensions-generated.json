@@ -1079,9 +1079,9 @@
   },
   "staticwebapp": {
     "pname": "staticwebapp",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/staticwebapp-1.0.0-py3-none-any.whl",
-    "hash": "sha256-+x3Nh2/C2CnMehzFRelEU2TUM1fYiLs97rNqcWuAVxc=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/staticwebapp-1.0.1-py3-none-any.whl",
+    "hash": "sha256-7zEAwfO2Q6ySSBZrgJmTejeP6ntSd+jAmxfvdQ5dCCU=",
     "description": "Microsoft Azure Command-Line Tools Staticwebapp Extension"
   },
   "storage-actions": {
