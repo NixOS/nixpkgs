@@ -10011,12 +10011,6 @@
     name = "Will Owens";
     keys = [ { fingerprint = "8E98 BB01 BFF8 AEA4 E303  FC4C 8074 09C9 2CE2 3033"; } ];
   };
-  ghuntley = {
-    email = "ghuntley@ghuntley.com";
-    github = "ghuntley";
-    githubId = 127353;
-    name = "Geoffrey Huntley";
-  };
   gibbert = {
     email = "gbjgms@gmail.com";
     github = "zgibberish";

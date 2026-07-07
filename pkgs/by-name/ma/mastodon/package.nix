@@ -190,7 +190,6 @@ stdenv.mkDerivation rec {
       happy-river
       erictapen
       izorkin
-      ghuntley
     ];
   };
 }

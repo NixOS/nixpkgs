@@ -49,7 +49,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ asl20 ];
     platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with lib.maintainers; [
-      ghuntley
       jlesquembre
       cpcloud
       wrbbz
