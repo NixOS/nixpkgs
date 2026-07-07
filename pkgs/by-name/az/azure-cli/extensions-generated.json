@@ -97,13 +97,6 @@
     "hash": "sha256-JGt61AOwZxk4oxZh4ohktQQH73cBnuHyHwvreev+xH0=",
     "description": "Azure CLI commands for working with Azure Kubernetes Application Network resources"
   },
-  "appservice-kube": {
-    "pname": "appservice-kube",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/appservice_kube-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-85HDcR5CwGoGG2ZXOK0aPGyUoE4aXK7QMnJH2vcohac=",
-    "description": "Microsoft Azure Command-Line Tools App Service on Kubernetes Extension"
-  },
   "arcgateway": {
     "pname": "arcgateway",
     "version": "1.0.0b1",
