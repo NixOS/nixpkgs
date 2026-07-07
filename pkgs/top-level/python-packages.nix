@@ -2551,6 +2551,8 @@ self: super: with self; {
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
+  bodhi-client = callPackage ../development/python-modules/bodhi-client { };
+
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
