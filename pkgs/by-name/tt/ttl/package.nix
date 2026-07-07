@@ -51,7 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ttl";
     homepage = "https://github.com/lance0/ttl";
     changelog = "https://github.com/lance0/ttl/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ vincentbernat ];
+    maintainers = with lib.maintainers; [
+      vincentbernat
+      herbetom
+    ];
     license = with lib.licenses; [
       asl20
       mit
