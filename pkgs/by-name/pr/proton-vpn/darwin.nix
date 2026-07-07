@@ -4,15 +4,19 @@
   stdenvNoCC,
   _7zz,
   fetchurl,
-  nix-update-script,
+  writeShellScript,
+  coreutils,
+  curl,
+  xmlstarlet,
+  common-updater-scripts,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-vpn";
-  version = "6.5.0";
+  version = "6.5.1";
 
   src = fetchurl {
-    url = "https://github.com/ProtonVPN/ios-mac-app/releases/download/mac%2F${finalAttrs.version}/ProtonVPN_mac_v${finalAttrs.version}.dmg";
-    hash = "sha256-lB44pIA5AxdcYQ/iccWcqJDOrQkVLRVl0vy1HuPPl8o=";
+    url = "https://protonvpn.com/download/macos/${finalAttrs.version}/ProtonVPN_mac_v${finalAttrs.version}.dmg";
+    hash = "sha256-1QpJ8UxQsO+K1oqJ/JaF1WmbotT5LLTDQxcpG0JUNfg=";
   };
 
   __structuredAttrs = true;
@@ -31,15 +35,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "mac/(.*)"
-    ];
-  };
+  passthru.updateScript = writeShellScript "proton-vpn-update-script" ''
+    set -euo pipefail
+    export PATH="${
+      lib.makeBinPath [
+        curl
+        xmlstarlet
+        common-updater-scripts
+        coreutils
+      ]
+    }"
+
+    xml=$(curl -s "https://protonvpn.com/download/macos/updates/v5/sparkle.xml")
+
+    version=$(echo "$xml" | xmlstarlet sel -t -v '//enclosure/@sparkle:shortVersionString' | head -1)
+
+    update-source-version proton-vpn "$version" --file=./pkgs/by-name/pr/proton-vpn/darwin.nix
+  '';
 
   meta = meta // {
-    changelog = "https://github.com/ProtonVPN/ios-mac-app/releases/tag/mac%2F${finalAttrs.version}";
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"
