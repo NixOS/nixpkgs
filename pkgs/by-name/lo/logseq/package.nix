@@ -244,6 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r static/node_modules resources/node_modules
   '';
 
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
+
   yarnBuildScript = "release-electron";
 
   installPhase = ''
