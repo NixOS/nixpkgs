@@ -10,6 +10,7 @@ class VarsArgs:
 	flake: Optional[str]
 	json: Optional[str]
 	attr: Optional[str]
+	disable_sandbox: bool
 	dry_run: bool
 	yes: bool
 	generators: Optional[List[str]]
