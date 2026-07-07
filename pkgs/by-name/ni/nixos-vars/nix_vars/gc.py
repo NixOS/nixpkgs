@@ -1,6 +1,6 @@
 from .args import VarsArgs
 from .config import VarsConfig
-from .exec import list_secrets, delete_secret
+from .exec import list_secrets, delete_secret, fixup_all
 
 
 def collect_garbage(args: VarsArgs, config: VarsConfig):
@@ -29,4 +29,6 @@ def collect_garbage(args: VarsArgs, config: VarsConfig):
 				print(f"- Would delete '{gen_name}/{file_name}'")
 			else:
 				print(f"- Deleting '{gen_name}/{file_name}'")
-				delete_secret(file, backend, gen_name, file_name)
+				delete_secret(args, file, backend, gen_name, file_name)
+
+	fixup_all(args, config)

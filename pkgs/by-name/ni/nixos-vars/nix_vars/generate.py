@@ -2,15 +2,14 @@ import os
 import tempfile
 import subprocess
 from pathlib import Path
-from typing import List
 from .args import VarsArgs
 from .config import VarsConfig
-from .exec import rebuild_order, build_binary, get_secret, set_secret
+from .exec import rebuild_order, build_binary, get_secret, set_secret, fixup_all
 from .error import VarsError
 
 
 def generate_vars(args: VarsArgs, config: VarsConfig):
-	order = rebuild_order(config, args.generators)
+	order = rebuild_order(config, config, args.generators)
 
 	for gen_name in args.generators:
 		if gen_name not in config.generators:
@@ -39,7 +38,11 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 				for file in dep.files.values():
 					try:
 						get_secret(
-							config, dep, file, in_dir / dep_name / file.name
+							args,
+							config,
+							dep,
+							file,
+							in_dir / dep_name / file.name,
 						)
 					except subprocess.CalledProcessError as e:
 						raise VarsError(
@@ -51,7 +54,7 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 					subprocess.run(
 						[binary],
 						env={"in": in_dir, "out": out_dir},
-						capture_output=True,
+						capture_output=not args.verbose,
 						check=True,
 						text=True,
 					)
@@ -78,7 +81,7 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 							out_dir,
 							binary,
 						],
-						capture_output=True,
+						capture_output=not args.verbose,
 						check=True,
 						text=True,
 					)
@@ -87,10 +90,14 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 
 			for file in generator.files.values():
 				try:
-					set_secret(config, generator, file, out_dir / file.name)
+					set_secret(
+						args, config, generator, file, out_dir / file.name
+					)
 				except subprocess.CalledProcessError as e:
 					raise VarsError(
 						f"Error setting '{entry}/{file.name}': {e.stderr}"
 					)
 
 	print(f"Successfully (re)run {len(order)} generator(s).")
+
+	fixup_all(args, config)

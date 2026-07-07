@@ -45,8 +45,11 @@ in
                       print(f"{generator.name} {file.name}")
         '';
 
+      fixup = mkBackendScript "fixup" ''
+        echo "Nothing to fix..."
+      '';
+
       deploy = noop;
-      fixup = noop; # This one's optional, but I wanted to make sure that works
     };
 
     generators.example = {

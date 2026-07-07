@@ -77,6 +77,7 @@ else
       exists = evalDeferredPackage backend.exists;
       delete = evalDeferredPackage backend.delete;
       list = evalDeferredPackage backend.list;
+      fixup = evalDeferredPackage backend.fixup;
       deploy = evalDeferredPackage backend.deploy;
       deployLocal = evalDeferredPackage backend.deployLocal;
     }) cfg.generatorBackends;

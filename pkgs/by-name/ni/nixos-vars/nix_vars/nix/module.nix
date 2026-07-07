@@ -44,6 +44,8 @@ let
         exists = delayedPackage ''
           Given $1=gen_name and $2=file_name, the script exists with status
           code 0 if the secret exists, and with status code 42 otherwise.
+
+          This script must not perform side effects.
         '';
 
         delete = nullableDelayedPackage ''
@@ -55,6 +57,16 @@ let
           A script that lists all files managed by this backend. Should output
           space-separated or newline-separated pairs of: generator_name
           file_name.
+
+          This script must not perform side effects.
+        '';
+
+        fixup = nullableDelayedPackage ''
+          This script will be run on every invocation of the CLI's generator
+          command. Given $1=gen_name and $2=file_name, the script performs any
+          necessary updates to the secrets' files (e.g. rekeying encrypted
+          secrets). This script can perform side effects, but must be
+          idempotent.
         '';
 
         deploy = delayedPackage ''
@@ -70,13 +82,6 @@ let
           This is useful for fresh installs from environments live live CDs,
           where the target system is not yet up and running (even if
           nixos-install has successfully completed).
-        '';
-
-        fixup = nullableDelayedPackage ''
-          This script will be run on every invocation of the CLI's generator
-          command. Given $1=gen_name and $2=file_name, the script performs any
-          necessary updates to the secrets' files (e.g. rekeying encrypted
-          secrets).
         '';
       };
     }
