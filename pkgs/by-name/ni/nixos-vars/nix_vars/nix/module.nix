@@ -58,6 +58,12 @@ let
           space-separated or newline-separated pairs of: generator_name
           file_name.
 
+          If the backend supports multiple hosts, then this command should only
+          list the secrets owned by the current host. In particular, files
+          included in this command's output will be deleted by the
+          collect-garbage command, unless they appear in the user's generator
+          configuration.
+
           This script must not perform side effects.
         '';
 
