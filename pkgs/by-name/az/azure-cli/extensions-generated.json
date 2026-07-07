@@ -223,6 +223,13 @@
     "hash": "sha256-SfF2Ghsa0pFpry7NV5PhDd7Hl+uyYQ58cOGxqyt1Emo=",
     "description": "Microsoft Azure Command-Line Tools ChangeAnalysis Extension"
   },
+  "chaos": {
+    "pname": "chaos",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/chaos-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-xRPEXb3ukZUJrgWlC8lSQvSrbFXmce57e+yskfN1Xkg=",
+    "description": "Support for Azure Chaos Studio v2 workspaces, scenario configuration, and fault-injection run management"
+  },
   "cli-translator": {
     "pname": "cli-translator",
     "version": "0.3.0",
