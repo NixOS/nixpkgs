@@ -70,8 +70,10 @@ stdenv.mkDerivation rec {
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isGnu) [
       "gl_cv_func_getopt_gnu=yes"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
     ];
 
