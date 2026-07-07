@@ -8,6 +8,7 @@ in
 pkgs.mkShell {
   packages = [
     pkgs.python3
+    pkgs.bubblewrap
     pkgs.ruff # Formatter
   ];
 }

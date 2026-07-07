@@ -57,6 +57,13 @@ def common_args(parser: argparse.ArgumentParser):
 		help="Automatically confirm all backend execution prompts (dangerous)",
 	)
 
+	parser.add_argument(
+		"--no-sandbox",
+		action="store_true",
+		dest="disable_sandbox",
+		help="Do not run the generator scripts inside bubblewrap",
+	)
+
 
 def main() -> None:
 	parser = argparse.ArgumentParser(description="vars-ng-ng CLI")

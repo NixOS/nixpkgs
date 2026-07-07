@@ -47,13 +47,41 @@ def generate_vars(args: VarsArgs, config: VarsConfig):
 						)
 
 			try:
-				subprocess.run(
-					[binary],
-					env={"in": in_dir, "out": out_dir},
-					capture_output=True,
-					check=True,
-					text=True,
-				)
+				if args.disable_sandbox:
+					subprocess.run(
+						[binary],
+						env={"in": in_dir, "out": out_dir},
+						capture_output=True,
+						check=True,
+						text=True,
+					)
+				else:
+					subprocess.run(
+						[
+							"bwrap",
+							"--unshare-all",
+							"--ro-bind",
+							in_dir,
+							in_dir,
+							"--ro-bind",
+							"/nix/store",
+							"/nix/store",
+							"--bind",
+							out_dir,
+							out_dir,
+							"--clearenv",
+							"--setenv",
+							"in",
+							in_dir,
+							"--setenv",
+							"out",
+							out_dir,
+							binary,
+						],
+						capture_output=True,
+						check=True,
+						text=True,
+					)
 			except subprocess.CalledProcessError as e:
 				raise VarsError(f"Error generating '{entry}': {e.stderr}")
 
