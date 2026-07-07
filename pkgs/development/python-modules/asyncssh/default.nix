@@ -87,6 +87,7 @@ buildPythonPackage rec {
     "test_copy_max_requests"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires network access
     "test_canonicalize_failure"
   ];
 
