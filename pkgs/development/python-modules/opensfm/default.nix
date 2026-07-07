@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   ninja,
@@ -150,6 +151,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # flaky
     "test_match_candidates_from_metadata_bow"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.UnpicklingError: global 'numpy._core.numeric._frombuffer' is forbidden
+    "test_run_all"
+    "test_shot_view_ref_count"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_reconstruction_incremental"
