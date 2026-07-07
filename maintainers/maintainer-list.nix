@@ -21952,8 +21952,8 @@
     name = "Petr Hodina";
   };
   phorcys420 = {
-    name = "Adele";
-    email = "adele@coder.com";
+    name = "Phorcys";
+    email = "nixpkgs@phorcys.net";
     github = "phorcys420";
     githubId = 57866459;
   };
