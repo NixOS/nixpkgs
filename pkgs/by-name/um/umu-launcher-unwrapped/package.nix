@@ -14,18 +14,18 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-7BdA/iAAIn2NR/uLzxdvsIh5/1SZacSfkiXJVJBT3EQ=";
+    hash = "sha256-ZpYxoXux80QbmJUWyK5P9Om0iKNTWLrWH0RWDFXx5zE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-CVcbktCBRZGnEuDVvl2iJpRgKh+ShFe5mjT6oMHIjtQ=";
+    hash = "sha256-f9Me1dCS5GxXN4mADS6Z20M7YnX5ck3JXOXUFhM+h5o=";
   };
 
   nativeCheckInputs = [
