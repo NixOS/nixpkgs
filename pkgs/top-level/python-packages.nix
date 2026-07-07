@@ -6779,8 +6779,6 @@ self: super: with self; {
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
 
-  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
-
   glfw = callPackage ../development/python-modules/glfw { };
 
   gliner = callPackage ../development/python-modules/gliner { };
