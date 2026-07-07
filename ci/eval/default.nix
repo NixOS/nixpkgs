@@ -17,6 +17,7 @@
   busybox,
   jq,
   nix,
+  perf,
 }:
 
 {
@@ -92,6 +93,8 @@ let
       evalSystem ? builtins.currentSystem,
       # The path to the `result.json` file from `preEval`
       preEvalFile ? "${preEval { inherit evalSystem; }}/result.json",
+      # Output the number of assembly instructions executed during evaluation
+      countInstructions ? false,
     }:
     let
       singleChunk = writeShellScript "single-chunk" ''
@@ -147,13 +150,16 @@ let
     runCommand "nixpkgs-eval-${evalSystem}"
       {
         # Don't depend on -dev outputs to reduce closure size for CI.
-        nativeBuildInputs = map lib.getBin [
-          busybox
-          jq
-          nix
-        ];
+        nativeBuildInputs = map lib.getBin (
+          [
+            busybox
+            jq
+            nix
+          ]
+          ++ lib.optionals countInstructions [ perf ]
+        );
         env = {
-          inherit evalSystem chunkSize;
+          inherit evalSystem chunkSize countInstructions;
         };
         __structuredAttrs = true;
         unsafeDiscardReferences.out = true;
@@ -203,9 +209,23 @@ let
 
           mkdir -p "$chunkOutputDir"/{result,stats,timestats,stderr}
 
-          seq -w 0 "$seq_end" |
-            xargs -I{} -P"$cores" \
-            ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir" "$preEvalFile"
+          runAllChunks() {
+            seq -w 0 "$seq_end" |
+              xargs -I{} -P"$cores" \
+              ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir" "$preEvalFile"
+          }
+
+          if [[ -n "$countInstructions" ]]; then
+            export seq_end cores chunkSize evalSystem chunkOutputDir preEvalFile
+            export -f runAllChunks
+            perf stat \
+              --event instructions:u --field-separator , --output "$chunkOutputDir"/perf-output-file \
+              bash -c runAllChunks
+            cat "$chunkOutputDir"/perf-output-file | tail -n 1 | cut -d, -f1 > "$chunkOutputDir"/instructions
+            rm "$chunkOutputDir"/perf-output-file
+          else
+            runAllChunks
+          fi
 
           if (( chunkSize * chunkCount != attrCount )); then
             # A final incomplete chunk would mess up the stats, don't include it
@@ -237,6 +257,9 @@ let
 
         # We only use the stats from the allowed attrs eval, because the disallowed attrs are generally not even a full chunk
         cp -r "$chunkOutputDirs"/allowed/stats $out/${evalSystem}/stats-by-chunk
+        if [[ -f "$chunkOutputDirs"/allowed/instructions ]]; then
+          cp "$chunkOutputDirs"/allowed/instructions $out/${evalSystem}/instructions
+        fi
 
         cat "$chunkOutputDirs"/*/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
         cat "$chunkOutputDirs"/*/result/* | jq -s 'add | map_values(.meta)' > $out/${evalSystem}/meta.json
@@ -276,14 +299,20 @@ let
           }) | from_entries
         ' > $out/maintainers.json
 
-        mkdir -p $out/before/stats
+        mkdir -p $out/before/stats $out/before/instructions
         for d in ${diffDir}/before/*; do
           cp -r "$d"/stats-by-chunk $out/before/stats/$(basename "$d")
+          if [[ -f "$d"/instructions ]]; then
+            cp "$d"/instructions $out/before/instructions/$(basename "$d")
+          fi
         done
 
-        mkdir -p $out/after/stats
+        mkdir -p $out/after/stats $out/after/instructions
         for d in ${diffDir}/after/*; do
           cp -r "$d"/stats-by-chunk $out/after/stats/$(basename "$d")
+          if [[ -f "$d"/instructions ]]; then
+            cp "$d"/instructions $out/after/instructions/$(basename "$d")
+          fi
         done
       '';
 
@@ -293,13 +322,16 @@ let
     {
       # Whether to evaluate on a specific set of systems, by default all are evaluated
       evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
+      # Output the number of assembly instructions executed during evaluation on
+      # each system
+      countInstructions ? false,
     }:
     symlinkJoin {
       name = "nixpkgs-eval-baseline";
       paths = map (
         evalSystem:
         singleSystem {
-          inherit evalSystem;
+          inherit evalSystem countInstructions;
         }
       ) evalSystems;
     };
@@ -318,6 +350,9 @@ let
       # The branch the local comparison is made against; matches the `master`
       # used in the touched-files expression above.
       baseBranch ? "master",
+      # Output the number of assembly instructions executed during evaluation on
+      # each system
+      countInstructions ? false,
     }:
     let
       diffs = symlinkJoin {
@@ -328,7 +363,7 @@ let
             inherit evalSystem;
             beforeDir = baseline;
             afterDir = singleSystem {
-              inherit evalSystem;
+              inherit evalSystem countInstructions;
             };
           }
         ) evalSystems;

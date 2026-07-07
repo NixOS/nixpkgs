@@ -165,8 +165,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = {
-      config = "${placeholder "out"}/share/opencode/config.json";
-      tui = "${placeholder "out"}/share/opencode/tui.json";
+      config = "${finalAttrs.finalPackage}/share/opencode/config.json";
+      tui = "${finalAttrs.finalPackage}/share/opencode/tui.json";
     };
     updateScript = nix-update-script {
       extraArgs = [
