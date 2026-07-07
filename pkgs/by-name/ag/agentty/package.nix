@@ -39,6 +39,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit (choice) hash;
     };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   dontUnpack = true;
   dontStrip = true;
 
