@@ -14599,6 +14599,12 @@
     github = "kiranshila";
     githubId = 6305359;
   };
+  KirCK = {
+    email = "Arikkenebas09@gmail.com";
+    github = "AristarhKenebas";
+    githubId = 142233116;
+    name = "Aristarh Kenebas";
+  };
   kirelagin = {
     email = "kirelagin@gmail.com";
     matrix = "@kirelagin:matrix.org";
