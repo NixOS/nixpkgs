@@ -20,14 +20,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applets";
-  version = "1.1.0";
+  version = "1.2.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applets";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-A8Qk9u3Q83Q4AjzTrdptfS9UNoyKq39YihC4d/dNBYc=";
+    hash = "sha256-tygAgaafoU0CnTzKPb00uVaYTieCJ4uNjux3AYyYtXQ=";
   };
 
   cargoPatches = [
