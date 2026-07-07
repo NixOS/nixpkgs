@@ -99,7 +99,10 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/inngest/inngest/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.sspl;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = with lib.maintainers; [ kikos0 ];
+    maintainers = with lib.maintainers; [
+      albertchae
+      kikos0
+    ];
     mainProgram = "inngest";
     platforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
   };
