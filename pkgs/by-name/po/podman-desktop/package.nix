@@ -7,6 +7,8 @@
   nodejs-slim_24,
   pnpm_10,
   fetchPnpmDeps,
+  kind,
+  kubectl,
   pnpmConfigHook,
   darwin,
   nix-update-script,
@@ -15,7 +17,9 @@
   nix,
   jq,
   gnugrep,
+  which,
   podman,
+  podman-compose,
   krunkit,
 }:
 
@@ -122,7 +126,14 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       prefixPackages = lib.makeBinPath (
-        [ podman ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        [
+          kind
+          kubectl
+          podman
+          podman-compose
+          which
+        ]
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
       );
       commonWrapperArgs = "--prefix PATH : ${prefixPackages}";
     in
