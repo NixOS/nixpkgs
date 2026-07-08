@@ -24,11 +24,19 @@
   libunwind,
   orc,
   pkgsBuildBuild,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 qtModule {
   pname = "qtmultimedia";
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
+  ];
   buildInputs = [
     ffmpeg
   ]
@@ -72,6 +80,8 @@ qtModule {
 
   env = {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
+    # TODO: Clean up on `staging`.
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
   };
 }
