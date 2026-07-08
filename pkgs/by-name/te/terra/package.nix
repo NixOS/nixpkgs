@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   libxml2,
   symlinkJoin,
   cudaPackages,
-  enableCUDA ? false,
+  enableCUDA ? config.cudaSupport,
   libffi,
   libpfm,
 }:
@@ -37,8 +38,6 @@ let
     ];
   };
 
-  cuda = cudaPackages.cudatoolkit;
-
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
@@ -60,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libxml2
   ]
-  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optionals enableCUDA (with cudaPackages; [
+    cuda_nvcc
+    cuda_cudart
+  ])
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
