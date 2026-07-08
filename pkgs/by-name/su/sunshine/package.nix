@@ -101,6 +101,9 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
   version = "2026.516.143833";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
