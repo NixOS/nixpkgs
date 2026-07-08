@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pyserial,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "pylacrosse";
   version = "0.5";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -26,7 +27,9 @@ buildPythonPackage (finalAttrs: {
       --replace "version = version," "version = '${finalAttrs.version}',"
   '';
 
-  propagatedBuildInputs = [ pyserial ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial ];
 
   nativeCheckInputs = [
     mock
