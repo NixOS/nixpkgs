@@ -148,6 +148,10 @@ in
       one_gpu.succeed("podman load < ${testContainerImage}")
       one_gpu.succeed("podman run --pull=never --device=nvidia.com/gpu=all -v /run/opengl-driver:/run/opengl-driver:ro cdi-test:latest")
 
+    with subtest("The generated CDI spec exposes the Nvidia EGL and Vulkan loader manifests"):
+      one_gpu.succeed("grep -q /usr/share/glvnd/egl_vendor.d/10_nvidia.json /var/run/cdi/nvidia-container-toolkit.json")
+      one_gpu.succeed("grep -q /usr/share/vulkan/icd.d/nvidia_icd.json /var/run/cdi/nvidia-container-toolkit.json")
+
     # Issue: https://github.com/NixOS/nixpkgs/issues/319201
     with subtest("The generated CDI spec skips specified non-existant paths in the host"):
       one_gpu_invalid_host_paths.wait_for_unit("nvidia-container-toolkit-cdi-generator.service")

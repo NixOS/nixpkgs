@@ -109,6 +109,16 @@
           '';
         };
 
+        mount-nvidia-graphics-config = lib.mkOption {
+          default = true;
+          type = lib.types.bool;
+          description = ''
+            Mount the libglvnd EGL vendor and Vulkan ICD manifests
+            (10_nvidia.json, nvidia_icd.json) on containers, so EGL and Vulkan
+            applications can discover the Nvidia driver.
+          '';
+        };
+
         suppressNvidiaDriverAssertion = lib.mkOption {
           default = false;
           type = lib.types.bool;
@@ -259,6 +269,23 @@
         nvidia-container-toolkit.mounts =
           let
             nvidia-driver = config.hardware.nvidia.package;
+            egl-vendor-manifest = pkgs.writeText "nvidia-egl-vendor.json" (
+              builtins.toJSON {
+                file_format_version = "1.0.0";
+                ICD.library_path = "libEGL_nvidia.so.0";
+              }
+            );
+            # api_version is required by the Vulkan loader but its value is
+            # ignored, as the loader queries the driver directly.
+            vulkan-icd-manifest = pkgs.writeText "nvidia-icd.json" (
+              builtins.toJSON {
+                file_format_version = "1.0.0";
+                ICD = {
+                  library_path = "libGLX_nvidia.so.0";
+                  api_version = "1.3.0";
+                };
+              }
+            );
           in
           (lib.mkMerge [
             [
@@ -313,6 +340,16 @@
               {
                 hostPath = "${lib.getLib nvidia-driver}/lib";
                 containerPath = "/usr/local/nvidia/lib64";
+              }
+            ])
+            (lib.mkIf config.hardware.nvidia-container-toolkit.mount-nvidia-graphics-config [
+              {
+                hostPath = "${egl-vendor-manifest}";
+                containerPath = "/usr/share/glvnd/egl_vendor.d/10_nvidia.json";
+              }
+              {
+                hostPath = "${vulkan-icd-manifest}";
+                containerPath = "/usr/share/vulkan/icd.d/nvidia_icd.json";
               }
             ])
           ]);
