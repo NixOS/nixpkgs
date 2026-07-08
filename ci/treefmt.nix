@@ -4,6 +4,11 @@
   ...
 }:
 {
+  runtimeInputs = [
+    # tree-root uses `git rev-parse --show-toplevel`
+    pkgs.gitMinimal
+  ];
+
   settings = {
     # numtide/treefmt-nix defaults
     excludes = [
