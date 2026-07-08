@@ -74,7 +74,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://hk.jdx.dev";
     changelog = "https://github.com/jdx/hk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ typedrat ];
+    maintainers = with lib.maintainers; [
+      typedrat
+      Br1ght0ne
+    ];
     mainProgram = "hk";
   };
 })
