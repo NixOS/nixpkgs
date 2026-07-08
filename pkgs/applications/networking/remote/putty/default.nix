@@ -16,17 +16,20 @@ let
   gtk3' = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.84";
   pname = "putty";
 
   src = fetchurl {
     urls = [
-      "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
-      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
+      "https://the.earth.li/~sgtatham/putty/${finalAttrs.version}/putty-${finalAttrs.version}.tar.gz"
+      "ftp://ftp.wayne.edu/putty/putty-website-mirror/${finalAttrs.version}/putty-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-BgV4Yq4Zjx29IZ0MdJMIDVn2BhlLtQVsVJ40KqAbaf4=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -79,4 +82,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})
