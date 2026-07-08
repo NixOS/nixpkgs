@@ -90,6 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  # readline configure refuses shared libs on *-apple-ios; stdenv default
+  # --disable-static would then leave Makefile with no targets. iOS only.
+  dontDisableStatic = stdenv.hostPlatform.isiOS;
+  configureFlags = lib.optionals stdenv.hostPlatform.isiOS [
+    "--enable-static"
+    "--disable-shared"
+  ];
+
   # This install error is caused by a very old libtool. We can't autoreconfHook this package,
   # so this is the best we've got!
   postInstall = lib.optionalString stdenv.hostPlatform.isOpenBSD ''

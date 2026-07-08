@@ -1,0 +1,16 @@
+gnulib lib/stackvma.c's macOS arm #includes <libc.h> and <nlist.h>, but
+nothing in the function body actually references symbols from either.
+Removing them lets the file compile on iOS
+(where neither header exists) with no behavior change on macOS.
+
+--- a/lib/stackvma.c
++++ b/lib/stackvma.c
+@@ -1363,8 +1363,6 @@
+ 
+ #elif (defined __APPLE__ && defined __MACH__) /* macOS */
+ 
+-#include <libc.h>
+-#include <nlist.h>
+ #include <mach/mach.h>
+ #include <mach/machine/vm_param.h>
+ 

@@ -123,5 +123,12 @@ export CXX${role_post}=@named_cxx@
 : ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}
 export NIX_HARDENING_ENABLE
 
+# Export Darwin deployment target (e.g. IPHONEOS_DEPLOYMENT_TARGET) so tools
+# like cc-rs that invoke the compiler directly can see the correct minimum
+# version without going through the wrapper.
+if [[ -n "@darwinMinVersionVariable@" ]]; then
+    export @darwinMinVersionVariable@=${@darwinMinVersionVariable@:-@darwinMinVersion@}
+fi
+
 # No local scope in sourced file
 unset -v role_post

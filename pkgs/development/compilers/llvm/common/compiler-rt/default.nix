@@ -57,8 +57,24 @@ let
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
-  inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
-  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+  inherit (stdenv.hostPlatform)
+    isMusl
+    isAarch64
+    isWindows
+    isiOS
+    isiOSSimulator
+    ;
+  # Long form (iphoneos / iphonesimulator / macosx) = lowercased xcodePlatform.
+  # Short form (ios / iossim / osx) = LLVM's compiler-rt DARWIN_<X>_* vocabulary.
+  darwinLongPlatform = lib.toLower (stdenv.hostPlatform.xcodePlatform or "MacOSX");
+  darwinCmakePlatform =
+    {
+      iphoneos = "ios";
+      iphonesimulator = "iossim";
+      macosx = "osx";
+    }
+    .${darwinLongPlatform};
+  noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows || isiOS;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -155,12 +171,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
   ]
-  ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
-    (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
-    (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-    (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
-    (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
-  ]
+  ++
+    lib.optionals
+      ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic || isiOS)
+      [
+        (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
+        (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
+        (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
+        (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false) # may be possible to build with musl if necessary
+      ]
   ++ lib.optionals (!haveLibc || bareMetal) [
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
     (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
@@ -191,13 +210,27 @@ stdenv.mkDerivation (finalAttrs: {
       # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
       (lib.cmakeBool "COMPILER_RT_HAS_G_FLAG" true)
     ]
-    ++ [
+    ++ lib.optionals stdenv.hostPlatform.isMacOS [
       (lib.cmakeFeature "DARWIN_osx_ARCHS" stdenv.hostPlatform.darwinArch)
       (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
       (lib.cmakeFeature "SANITIZER_MIN_OSX_VERSION" stdenv.hostPlatform.darwinMinVersion)
+    ]
+    ++ [
       # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
       # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
-      (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
+      (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" stdenv.hostPlatform.isiOS)
+      (lib.cmakeBool "COMPILER_RT_ENABLE_TVOS" false)
+      (lib.cmakeBool "COMPILER_RT_ENABLE_WATCHOS" false)
+    ]
+    # iOS cross: force the active DARWIN_<plat>_ARCHS and zero osx so
+    # compiler-rt doesn't try to build a fat macOS slice. The inactive
+    # iOS sibling (iossim when building ios, and vice versa) is implicitly
+    # skipped because its SYSROOT isn't set in preConfigure.
+    ++ lib.optionals stdenv.hostPlatform.isiOS [
+      (lib.cmakeFeature "DARWIN_osx_ARCHS" "")
+      (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" "")
+      (lib.cmakeFeature "DARWIN_${darwinCmakePlatform}_ARCHS" stdenv.hostPlatform.darwinArch)
+      (lib.cmakeFeature "DARWIN_${darwinCmakePlatform}_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
     ]
   )
   ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
@@ -253,18 +286,41 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           substituteInPlace cmake/Modules/AddCompilerRT.cmake \
             --replace-fail 'find_program(CODESIGN codesign)' ""
-        '';
+        ''
+    + lib.optionalString isiOS ''
+      substituteInPlace cmake/config-ix.cmake \
+        --replace-fail 'set(DARWIN_ios_MIN_VER 9.0)' \
+                       'set(DARWIN_ios_MIN_VER ${stdenv.hostPlatform.darwinMinVersion})'
+    '';
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cmakeFlagsArray+=(
-      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
-      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
-    )
-  '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin (
+    let
+      sdkVersion = ''$(jq -r .Version "$SDKROOT/SDKSettings.json")'';
+    in
+    # Set CACHED_SYSROOT for the active platform, plus OVERRIDE_SDK_VERSION for
+    # all platforms compiler-rt probes (it checks macosx even when targeting iOS).
+    ''
+      cmakeFlagsArray+=(
+        "-DDARWIN_${darwinLongPlatform}_CACHED_SYSROOT=$SDKROOT"
+        "-DDARWIN_${darwinLongPlatform}_OVERRIDE_SDK_VERSION=${sdkVersion}"
+    ''
+    + lib.optionalString isiOS ''
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${sdkVersion}"
+    ''
+    + lib.optionalString (!isiOSSimulator && isiOS) ''
+      "-DDARWIN_iphonesimulator_OVERRIDE_SDK_VERSION=${sdkVersion}"
+    ''
+    + lib.optionalString isiOSSimulator ''
+      "-DDARWIN_iphoneos_OVERRIDE_SDK_VERSION=${sdkVersion}"
+    ''
+    + ''
+      )
+    ''
+  );
 
   # Hack around weird upstream RPATH bug
   postInstall =
-    lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    lib.optionalString stdenv.hostPlatform.isMacOS ''
       ln -s "$out/lib"/*/* "$out/lib"
     ''
     + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
