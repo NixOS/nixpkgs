@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.0";
+  version = "2026.7.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F/hxgkqLk36906uhr56W+4Evwc8WLbYWw8pibGsq3EY=";
+    hash = "sha256-t3IS7oTYa9wS8GhRewYC1fbSnhWu+1/EFLOq6CaRUgE=";
   };
 
-  cargoHash = "sha256-W88dlxvDEwN6C1j1WMtL/KodWQZ9UnI1VJc3xp1Lnqw=";
+  cargoHash = "sha256-ypEzqK+DkcSm5gxn/STkGcprFansQOARuHITg03PEFk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -75,9 +75,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-    # Nix's build sandbox strips setuid bits, so this round-trip assertion
-    # fails on both Linux and Darwin (cf. apko's TestSpecialModeBits).
-    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026

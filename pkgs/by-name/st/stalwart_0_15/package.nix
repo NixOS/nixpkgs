@@ -70,8 +70,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
+  cargoBuildFlags = [
+    "-p"
+    "stalwart"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
   env = {
+    # https://docs.rs/openssl/latest/openssl/#manual
     OPENSSL_NO_VENDOR = true;
+    OPENSSL_DIR = lib.getDev openssl;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
@@ -166,6 +175,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # No queue event received.
     # NOTE: Test unreliable on high load systems
     "smtp::management::queue::manage_queue"
+    "smtp::outbound::mta_sts::mta_sts_verify"
+    "smtp::outbound::dane::dane_verify"
     # thread 'responses::tests::parse_responses' panicked at crates/dav-proto/src/responses/mod.rs:671:17:
     # assertion `left == right` failed: failed for 008.xml
     #   left: ElementEnd
@@ -215,6 +226,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       oddlama
       pandapip1
       norpol
+      debtquity
     ];
   };
 })

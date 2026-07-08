@@ -10,6 +10,7 @@
   gdk-pixbuf,
   gtk4,
   libadwaita,
+  libdisplay-info,
   libdrm,
   ocl-icd,
   vulkan-loader,
@@ -25,16 +26,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c5GJf8AYgaAN3O6AVSEbJybEYb6lSHf7R24/1PKYhyM=";
+    hash = "sha256-/b5Cfexi/RtE3DkON5J3dc4aEX6aLZvIcAhsg6Kdv7M=";
   };
 
-  cargoHash = "sha256-Y+XdCmaDXdP7x22bYm//Ov7+IzlCr8GpFOgCXGFCfbA=";
+  cargoHash = "sha256-XV37VRbCaxySMgEqXmIA0TUpI9uR+6jGOzdMlEfWxDw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,12 +48,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     gtk4
     libadwaita
+    libdisplay-info
     libdrm
     ocl-icd
     vulkan-loader
     vulkan-tools
     hwdata
     fuse3
+  ];
+
+  checkFlags = [
+    # Requires /dev/fuse, which is unavailable in the Nix build sandbox.
+    "--skip=tests::apply_settings"
   ];
 
   # we do this here so that the binary is usable during integration tests

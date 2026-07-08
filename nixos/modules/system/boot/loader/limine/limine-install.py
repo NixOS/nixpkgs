@@ -621,7 +621,7 @@ def install_bootloader() -> None:
     paths[config_file_path] = True
 
     for dest_path, source_path in config("additionalFiles").items():
-        dest_path = os.path.join(limine_install_dir, dest_path)
+        dest_path = os.path.join(str(config("efiMountPoint")), dest_path)
 
         copy_file(source_path, dest_path)
 
