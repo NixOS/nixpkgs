@@ -4,14 +4,7 @@
   fetchFromGitHub,
 }:
 
-let
-  pythonPackages = python3Packages.overrideScope (
-    self: super: {
-      fints = self.fints_4;
-    }
-  );
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pretix-banktool";
   version = "1.1.0";
   pyproject = true;
@@ -23,14 +16,16 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     hash = "sha256-x6P+WqrOak5/gmMEmBkHrx6kPsbSOAXbKRbndFG3IJU=";
   };
 
-  build-system = with pythonPackages; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
     click
     fints
     requests
     mt-940
   ];
+
+  pythonRelaxDeps = [ "fints" ];
 
   doCheck = false; # no tests
 

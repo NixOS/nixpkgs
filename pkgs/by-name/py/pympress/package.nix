@@ -56,7 +56,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gst-libav
-    gst_all_1.gst-vaapi
   ];
 
   doCheck = false; # there are no tests

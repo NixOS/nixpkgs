@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "lovelace-xiaomi-vacuum-map-card";
-  version = "2.3.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "PiotrMachowski";
     repo = "lovelace-xiaomi-vacuum-map-card";
     tag = "v${version}";
-    hash = "sha256-3329L+2Su2XvrKQIKa5btJz3CQWgS+c8qHD/9vxuEbM=";
+    hash = "sha256-dkVBHtKezXr/X8Akij3LwRFn85FlN3YD6x8/z97YuTA=";
   };
 
   npmDepsHash = "sha256-vLxmzqDSmB+6VKjiwG5WH9FUvn0NlVHo9TBmbx5UkG0=";

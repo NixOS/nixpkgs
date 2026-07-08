@@ -1,6 +1,7 @@
 {
   lib,
   mkCoqDerivation,
+  dune,
   coq,
   stdlib,
   version ? null,
@@ -38,7 +39,7 @@ let
         else
           "A two-level approach to prove tautologies using Stålmarck's algorithm in Coq.";
     in
-    mkCoqDerivation {
+    mkCoqDerivation.override { dune = dune.override { version = "3.21.1"; }; } {
       inherit
         version
         pname

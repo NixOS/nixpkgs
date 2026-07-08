@@ -67,13 +67,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus";
-  version = "1.5.33";
+  version = "1.5.34";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     tag = finalAttrs.version;
-    hash = "sha256-cpNZI6KbL9zUJHw1szpWl4lOEAvlBdd+FA6xGh1sYYY=";
+    hash = "sha256-MCxzMnG+g2FC4pZtDOP2c7vSRG5Zk6EfrkGnEyFvBfQ=";
   };
 
   patches = [
@@ -88,8 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
       PYTHON = null;
     })
     ./build-without-dbus-launch.patch
-    # https://github.com/NixOS/nixpkgs/issues/230290
-    ./vala-parallelism.patch
   ];
 
   outputs = [

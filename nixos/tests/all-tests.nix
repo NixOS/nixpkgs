@@ -154,6 +154,7 @@ in
     containers = runTest ./nixos-test-driver/containers.nix;
     nspawn-daemon-reexec-dbus = runTest ./nspawn-daemon-reexec-dbus.nix;
     skip-typecheck = runTest ./nixos-test-driver/skip-typecheck.nix;
+    console-timeout = runTest ./nixos-test-driver/console-timeout.nix;
     options-doc-regression = import ./nixos-test-driver/options-doc-regression.nix { inherit pkgs; };
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
@@ -168,6 +169,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    efivars = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/efivars.nix;
   };
 
   # NixOS vm tests and non-vm unit tests

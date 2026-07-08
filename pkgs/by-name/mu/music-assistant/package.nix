@@ -88,11 +88,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    # Undo Python 3.14 only syntax
-    substituteInPlace music_assistant/controllers/streams/controller.py \
-      --replace-fail "except BrokenPipeError, ConnectionResetError, ConnectionError:" "except (BrokenPipeError, ConnectionResetError, ConnectionError):" \
-      --replace-fail "except BrokenPipeError, ConnectionResetError:" "except (BrokenPipeError, ConnectionResetError):"
-
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "==" ">="

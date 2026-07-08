@@ -25,6 +25,7 @@
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
   withNvshmem ? (cudaSupport && cudaPackages.libnvshmem.meta.available),
+  withTensorboard ? false,
   MPISupport ? false,
   mpi,
   buildDocs ? false,
@@ -33,34 +34,41 @@
   # tests.cudaAvailable:
   callPackage,
 
-  # Native build inputs
+  # build-system
   cmake,
+  ninja,
+  numpy,
+  packaging,
+  pyyaml,
+  requests,
+  six,
+
+  # nativeBuildInputs
   symlinkJoin,
   which,
   pybind11,
   pkg-config,
   removeReferencesTo,
 
-  # Build inputs
+  # buildInputs
   openssl,
   numactl,
   llvmPackages,
 
   # dependencies
-  binutils,
-  expecttest,
   filelock,
   fsspec,
-  hypothesis,
   jinja2,
   networkx,
-  packaging,
-  psutil,
-  pyyaml,
-  requests,
+  setuptools,
   sympy,
-  types-dataclasses,
   typing-extensions,
+
+  binutils,
+  expecttest,
+  hypothesis,
+  psutil,
+  types-dataclasses,
   # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.hostPlatform.isDarwin),
   triton,
@@ -84,12 +92,8 @@
   # See https://github.com/NixOS/nixpkgs/pull/83888
   blas,
 
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
-
   # dependencies for torch.utils.tensorboard
   pillow,
-  six,
   tensorboard,
   protobuf,
 
@@ -327,7 +331,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=70.1.0,<80.0" "setuptools"
+      --replace-fail "setuptools>=70.1.0,<82" "setuptools"
+    substituteInPlace setup.py \
+      --replace-fail "setuptools<82" setuptools
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
@@ -531,10 +537,20 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    which
     ninja
+    numpy
+    packaging
+    pyyaml
+    requests
+    setuptools
+    six
+    typing-extensions
+  ];
+
+  nativeBuildInputs = [
+    which
     pybind11
     pkg-config
     removeReferencesTo
@@ -597,32 +613,23 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     rocmPackages.clr # Added separately so setup hook applies
   ];
 
-  pythonRelaxDeps = [
-    "sympy"
-  ];
   dependencies = [
-    expecttest
     filelock
     fsspec
-    hypothesis
     jinja2
     networkx
-    packaging
-    psutil
-    pyyaml
-    requests
+    setuptools
     sympy
-    types-dataclasses
     typing-extensions
-
-    # the following are required for tensorboard support
-    pillow
-    six
-    tensorboard
-    protobuf
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
+  ]
+  ++ lib.optionals withTensorboard [
+    pillow
+    protobuf
+    six
+    tensorboard
   ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals vulkanSupport [

@@ -50,6 +50,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "acme"
+  ];
+
   dependencies = [
     acme
     aiohttp

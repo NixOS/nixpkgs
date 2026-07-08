@@ -55,6 +55,7 @@ in
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
   stdenvNoCC ? stdenv.override {
+    name = "${stdenv.name}-no-cc";
     cc = null;
     hasCC = false;
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure

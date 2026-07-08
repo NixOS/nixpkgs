@@ -35,6 +35,8 @@
   withShared ? true,
 
   nix-update-script,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withDocs [
     doxygen
     graphviz
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs =
@@ -139,6 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ]
+  # Fix for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   preBuild = lib.optionalString (withCairo && withShared && stdenv.hostPlatform.isDarwin) ''

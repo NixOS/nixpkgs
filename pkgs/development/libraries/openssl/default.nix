@@ -385,8 +385,8 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      strictDeps = lib.versionAtLeast version "4.0";
-      __structuredAttrs = lib.versionAtLeast version "4.0";
+      strictDeps = true;
+      __structuredAttrs = true;
 
       meta = {
         homepage = "https://www.openssl.org/";
@@ -507,8 +507,8 @@ in
   };
 
   openssl_3_6 = common {
-    version = "3.6.2";
-    hash = "sha256-qvUaH+BkOE+BHa6utOxNznNA7IvYkwJ+7mdq8x6DoE8=";
+    version = "3.6.3";
+    hash = "sha256-JDqGZJz28j7rai/yRW4J5dd92QGKVNPZawxr3Wumx/E=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

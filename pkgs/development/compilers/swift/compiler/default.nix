@@ -37,6 +37,8 @@
   DarwinTools,
   apple-sdk_14,
   darwinMinVersionHook,
+  # TODO: Clean up on `staging`
+  lld,
 }:
 
 let
@@ -252,6 +254,8 @@ stdenv.mkDerivation {
     DarwinTools # sw_vers
     fixDarwinDylibNames
     cctools.libtool
+    # TODO: Clean up on `staging`
+    lld
   ];
 
   buildInputs = [
@@ -562,6 +566,12 @@ stdenv.mkDerivation {
     #   Fixed in: https://github.com/apple/swift/commit/84083afef1de5931904d5c815d53856cdb3fb232
     cmakeFlags="
       -GNinja
+      ${
+        # Fix for ld64 hardening issue
+        #
+        # TODO: Clean up on staging
+        lib.optionalString stdenv.hostPlatform.isDarwin "-DCMAKE_LINKER_TYPE=LLD"
+      }
       -DBOOTSTRAPPING_MODE=BOOTSTRAPPING${lib.optionalString stdenv.hostPlatform.isDarwin "-WITH-HOSTLIBS"}
       -DSWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING=ON
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON

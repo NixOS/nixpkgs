@@ -390,6 +390,7 @@ mapAliases {
   biff = throw "biff has been renamed to/replaced by 'bttf'"; # Added 2026-06-04
   bindle = throw "bindle has been removed since it is vulnerable to CVE-2025-62518 and upstream has been archived"; # Added 2025-10-24
   binserve = throw "'binserve' has been removed because it is unmaintained upstream."; # Added 2025-11-29
+  binutilsDualAs = throw "binutilsDualAs has been removed because it was only useful on `x86_64-darwin` and also only useful for the GNAT bootstrap and also not even used for that any more and actually what on earth were you using this thing for anyway?"; # Added 2026-06-27
   bitbucket-server-cli = throw "bitbucket-server-cli has been removed due to lack of maintenance upstream."; # Added 2025-05-27
   bitcoin-abc = throw "bitcoin-abc has been removed due to a lack of maintanance"; # Added 2025-06-17
   bitcoind-abc = throw "bitcoind-abc has been removed due to a lack of maintanance"; # Added 2025-06-17
@@ -699,12 +700,15 @@ mapAliases {
   electron-chromedriver_35 = throw "electron-chromedriver_35 has been removed in favor of newer versions"; # Added 2025-11-10
   electron-chromedriver_36 = throw "electron-chromedriver_36 has been removed in favor of newer versions"; # Added 2026-02-02
   electron-chromedriver_37 = throw "electron-chromedriver_37 has been removed in favor of newer versions"; # Added 2026-03-20
+  electron-chromedriver_38 = throw "electron-chromedriver_38 has been removed in favor of newer versions"; # Added 2026-07-07
   electron_35 = throw "electron_35 has been removed in favor of newer versions"; # Added 2025-11-06
   electron_35-bin = throw "electron_35-bin has been removed in favor of newer versions"; # Added 2025-11-06
   electron_36 = throw "electron_36 has been removed in favor of newer versions"; # Added 2026-02-02
   electron_36-bin = throw "electron_36-bin has been removed in favor of newer versions"; # Added 2026-02-02
   electron_37 = throw "electron_37 has been removed in favor of newer versions"; # Added 2026-03-20
   electron_37-bin = throw "electron_37-bin has been removed in favor of newer versions"; # Added 2026-03-20
+  electron_38 = throw "electron_38 has been removed in favor of newer versions"; # Added 2026-07-07
+  electron_38-bin = throw "electron_38-bin has been removed in favor of newer versions"; # Added 2026-07-07
   elementsd-simplicity = throw "'elementsd-simplicity' has been removed due to lack of maintenance, consider using 'elementsd' instead"; # Added 2025-06-04
   elixir = warnAlias "'elixir' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir' instead." beamPackages.elixir; # added 2026-06-15
   elixir_1_15 = throw "'elixir_1_15' has been removed, due to the removal of erlang_26 as EOL"; # added 2026-04-01
@@ -1821,6 +1825,7 @@ mapAliases {
   pingvin-share = throw "'pingvin-share' has been removed as it was broken and archived upstream"; # Added 2025-11-08
   pipecontrol = throw "'pipecontrol' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
+  pkgsx86_64Darwin = throw "pkgsx86_64Darwin has been removed, as support for the platform has been dropped; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11"; # Added 2026-06-21
   plandex = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plandex-server = throw "plandex has been removed, as it is not maintained anymore"; # Added 2026-05-18
   plant-it = throw "plant-it backend was discontinued in september 2025"; # Added 2026-01-30

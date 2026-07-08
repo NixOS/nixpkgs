@@ -138,8 +138,7 @@ buildPythonPackage (finalAttrs: {
     "tests/test_subgraph_persistence_async.py"
     "tests/test_time_travel.py"
     "tests/test_time_travel_async.py"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+
     # Race condition
     "tests/test_retry.py::test_error_handler_resumes_after_crash_multiple_nodes"
   ];

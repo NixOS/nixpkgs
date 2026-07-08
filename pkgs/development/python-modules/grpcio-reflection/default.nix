@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.80.0";
+  version = "1.81.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_reflection";
     inherit version;
-    hash = "sha256-6cdqq8QyQnmUW3C8dqPUG8T5OWv/zxz8EBGlccLFYiE=";
+    hash = "sha256-UZHbeqbKsbaYGwh5+kT9zdQ7pkTwMBxAuXb4E+tO/wY=";
   };
 
   build-system = [ setuptools ];

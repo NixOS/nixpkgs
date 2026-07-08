@@ -19,7 +19,7 @@
   google-pasta,
   grpcio,
   h5py,
-  libclang,
+  clang,
   numpy,
   opt-einsum,
   packaging,
@@ -95,7 +95,7 @@ buildPythonPackage (finalAttrs: {
     google-pasta
     grpcio
     h5py
-    libclang
+    clang
     ml-dtypes
     numpy
     opt-einsum

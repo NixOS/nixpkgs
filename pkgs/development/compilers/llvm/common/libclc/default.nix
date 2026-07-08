@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ llvm ];
   strictDeps = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (lib.versionOlder finalAttrs.version "22.1") ''
     install -Dt $dev/bin prepare_builtins
   '';
 

@@ -98,6 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     # drop next release
     # https://git.musl-libc.org/cgit/musl/commit/?id=fde29c04adbab9d5b081bf6717b5458188647f1c
     ./stdio-skip-empty-iovec-when-buffering-is-disabled.patch
+    # Backport addition of statx fields needed by systemd
+    ./statx.patch
+    # Backport addition of statx attrs needed by systemd
+    ./statx-attr.patch
+    # Backport even more statx stuff for systemd
+    ./statx-linux-6.11.patch
+    # Backport addition of renameat2 syscall wrapper needed by systemd
+    ./renameat2.patch
   ];
 
   env = {

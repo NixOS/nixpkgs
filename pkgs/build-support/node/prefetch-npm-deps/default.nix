@@ -195,6 +195,28 @@
 
           hash = "sha256-QGObVDd9qVtf/U78+ayP6RHVWsU+HXhg70BFblQ1PZs=";
         };
+
+        # Test lockfiles with file: dependencies
+        fileDependenciesV1 = makeTest {
+          name = "file-dependencies-lockfile-v1";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/elbywan/wretch/970b19e0fcc3dd219b9f3fc247d8f34cc01979c6/package-lock.json";
+            hash = "sha256-3vTMxc9M2TeiclUFYbG5eTzavSAXjAzz6N5v/1VM4Bc=";
+          };
+
+          hash = "sha256-4wTohTVWF49iQvdaUxNhwplfTVb53yFnAaUVA2xIXrc=";
+        };
+        fileDependenciesV3 = makeTest {
+          name = "file-dependencies-lockfile-v3";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/alam00000/bentopdf/146e3f07d4111e309d0b29bb949e78e44454be3b/package-lock.json";
+            hash = "sha256-9Ea5ctJYbClxStYNhSfSpsO/P99/4CQK58PLK5e6PoQ=";
+          };
+
+          hash = "sha256-1xWkzAzZXd9f4sY9xFHLfj482ZCs2oKFJ79C+Iy7RFY=";
+        };
       };
 
     meta = {

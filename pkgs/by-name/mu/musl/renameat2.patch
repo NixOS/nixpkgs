@@ -1,0 +1,55 @@
+From 05ce67fea99ca09cd4b6625cff7aec9cc222dd5a Mon Sep 17 00:00:00 2001
+From: Tony Ambardar <tony.ambardar@gmail.com>
+Date: Mon, 6 May 2024 20:28:32 -0700
+Subject: add renameat2 linux syscall wrapper
+
+This syscall is available since Linux 3.15 and also implemented in
+glibc from version 2.28. It is commonly used in filesystem or security
+contexts.
+
+Constants RENAME_NOREPLACE, RENAME_EXCHANGE, RENAME_WHITEOUT are
+guarded by _GNU_SOURCE as with glibc.
+---
+ include/stdio.h       |  7 +++++++
+ src/linux/renameat2.c | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 src/linux/renameat2.c
+
+diff --git a/include/stdio.h b/include/stdio.h
+index cb858618..4ea4c170 100644
+--- a/include/stdio.h
++++ b/include/stdio.h
+@@ -158,6 +158,13 @@ char *ctermid(char *);
+ #define L_ctermid 20
+ #endif
+ 
++#if defined(_GNU_SOURCE)
++#define RENAME_NOREPLACE (1 << 0)
++#define RENAME_EXCHANGE  (1 << 1)
++#define RENAME_WHITEOUT  (1 << 2)
++
++int renameat2(int, const char *, int, const char *, unsigned);
++#endif
+ 
+ #if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
+  || defined(_BSD_SOURCE)
+diff --git a/src/linux/renameat2.c b/src/linux/renameat2.c
+new file mode 100644
+index 00000000..b8060388
+--- /dev/null
++++ b/src/linux/renameat2.c
+@@ -0,0 +1,11 @@
++#define _GNU_SOURCE
++#include <stdio.h>
++#include "syscall.h"
++
++int renameat2(int oldfd, const char *old, int newfd, const char *new, unsigned flags)
++{
++#ifdef SYS_renameat
++	if (!flags) return syscall(SYS_renameat, oldfd, old, newfd, new);
++#endif
++	return syscall(SYS_renameat2, oldfd, old, newfd, new, flags);
++}
+-- 
+cgit v1.2.1
+

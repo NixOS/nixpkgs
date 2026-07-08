@@ -42,13 +42,36 @@ wrapGApp() {
     wrapProgram "$program" "${gappsWrapperArgs[@]}" "$@"
 }
 
+_wrapGAppsHookMayRunForOutput() {
+    local -r output="$1"
+    if [[ -v wrapGAppsInOutputs ]]; then
+        local allowedOutput
+        # Support both structuredAttrs on and off
+        local -a allowedOutputs
+        concatTo allowedOutputs wrapGAppsInOutputs
+        for allowedOutput in "${allowedOutputs[@]}"; do
+            [ "$allowedOutput" = "$output" ] && return 0
+        done
+    else
+        [ "$outputBin" = "$output" ] && return 0
+    fi
+    return 1
+ }
+
+declare -gA wrapGAppsHookHasRunForOutput
+
 # Note: $gappsWrapperArgs still gets defined even if ${dontWrapGApps-} is set.
+# $output is brought into scope via fixupPhase() in pkgs/stdenv/generic/setup.sh
 wrapGAppsHook() {
-    # guard against running multiple times (e.g. due to propagation)
-    [ -z "$wrapGAppsHookHasRun" ] || return 0
-    wrapGAppsHookHasRun=1
+    # guard against running multiple times for the same output (e.g. due to propagation)
+    [ "${wrapGAppsHookHasRunForOutput["$output"]:-}" = 1 ] && return 0
+    wrapGAppsHookHasRunForOutput["$output"]=1
+    # guard against running for outputs we don't want to run it for
+    _wrapGAppsHookMayRunForOutput "$output" || return 0
 
     if [[ -z "${dontWrapGApps:-}" ]]; then
+        local targetDirsThatExist targetDirsRealPath targetDirs targetDir
+
         targetDirsThatExist=()
         targetDirsRealPath=()
 
@@ -69,6 +92,7 @@ wrapGAppsHook() {
         # wrap links to binaries that point outside targetDirs
         # Note: links to binaries within targetDirs do not need
         #       to be wrapped as the binaries have already been wrapped
+        local linkPathReal targetPath
         if [[ ${#targetDirsThatExist[@]} -ne 0 ]]; then
             find "${targetDirsThatExist[@]}" -type l -xtype f -executable -print0 |
                 while IFS= read -r -d '' linkPath; do

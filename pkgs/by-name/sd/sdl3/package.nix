@@ -61,6 +61,9 @@
   vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -127,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     validatePkgConfig
   ]
-  ++ lib.optional waylandSupport wayland-scanner;
+  ++ lib.optional waylandSupport wayland-scanner
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   buildInputs =
     lib.optionals libusbSupport [
@@ -207,6 +211,10 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   doCheck = true;

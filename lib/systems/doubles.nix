@@ -14,13 +14,15 @@ let
   inherit (lib.attrsets) matchAttrs;
 
   all = [
+    # our primary systems. at the top of the list for fastest matching
+    # inside check-meta
+    "x86_64-linux"
+    "aarch64-darwin"
+    "aarch64-linux"
+
     # Cygwin
     "i686-cygwin"
     "x86_64-cygwin"
-
-    # Darwin
-    "x86_64-darwin"
-    "aarch64-darwin"
 
     # FreeBSD
     "i686-freebsd"
@@ -38,8 +40,7 @@ let
     # JS
     "javascript-ghcjs"
 
-    # Linux
-    "aarch64-linux"
+    # Linux (excluding the primary two at the top)
     "arc-linux"
     "armv5tel-linux"
     "armv6l-linux"
@@ -62,7 +63,6 @@ let
     "riscv64-linux"
     "s390-linux"
     "s390x-linux"
-    "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"

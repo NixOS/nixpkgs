@@ -9732,6 +9732,12 @@
     githubId = 45048741;
     name = "Alwanga Oyango";
   };
+  galder = {
+    email = "galder@ibm.com";
+    github = "galderz";
+    githubId = 50187;
+    name = "Galder Zamarreño";
+  };
   gale-username = {
     name = "gale";
     email = "git@galewebsite.com";
@@ -24149,6 +24155,12 @@
     githubId = 7335;
     name = "Roman Gonzalez";
   };
+  roman-16 = {
+    email = "roman@lerchster.dev";
+    github = "roman-16";
+    githubId = 15262665;
+    name = "Roman";
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";
@@ -28292,6 +28304,12 @@
     github = "timstott";
     githubId = 1334474;
     name = "Timothy Stott";
+  };
+  tiptenbrink = {
+    email = "tip@tenbrinkmeijs.com";
+    github = "tiptenbrink";
+    githubId = 75669206;
+    name = "Tip ten Brink";
   };
   tiramiseb = {
     email = "sebastien@maccagnoni.eu";
