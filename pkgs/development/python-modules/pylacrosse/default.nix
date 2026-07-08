@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.5";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
