@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
   httpx,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "telegraph";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -21,7 +22,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   optional-dependencies = {
     aio = [ httpx ];
@@ -31,6 +34,7 @@ buildPythonPackage (finalAttrs: {
 
   enabledTestPaths = [ "tests/" ];
 
+  # Needs networking
   disabledTests = [ "test_get_page" ];
 
   pythonImportsCheck = [ "telegraph" ];
