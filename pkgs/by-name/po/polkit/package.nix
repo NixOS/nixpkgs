@@ -21,6 +21,7 @@
   docbook_xml_dtd_412,
   gtk-doc,
   coreutils,
+  useConsoleKit ? false,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   elogind,
@@ -42,6 +43,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "polkit";
   version = "127";
+
+  disallowedReferences = lib.optional useConsoleKit systemdLibs;
 
   outputs = [
     "bin"
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     duktape
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !useConsoleKit) [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemdLibs else elogind)
   ];
@@ -145,7 +148,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
+    "-Dsession_tracking=${
+      if useSystemd then
+        "logind"
+      else if useConsoleKit then
+        "ConsoleKit"
+      else
+        "elogind"
+    }"
   ];
 
   inherit doCheck;
