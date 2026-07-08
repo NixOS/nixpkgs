@@ -220,7 +220,6 @@ lib.makeOverridable (
     buildFlags = [
       "KBUILD_BUILD_VERSION=1-NixOS"
       target
-      "vmlinux" # for "perf" and things like that
       "scripts_gdb"
     ]
     ++ optional isModular "modules"
