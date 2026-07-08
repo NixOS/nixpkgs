@@ -81,34 +81,6 @@ in
           which is prohibited within the Nix build sandbox where the test is run.
         '';
       }
-      {
-        # Check every interface defined in allInterfaces.
-        # Containers try to create a bridge "${config.system.name}-${interfaceName}"
-        assertion = lib.all (
-          iface:
-          let
-            hostName = "${config.system.name}-${iface.name}";
-          in
-          lib.stringLength hostName <= 15
-        ) (lib.attrValues cfg.allInterfaces);
-
-        message =
-          let
-            offendingInterfaces = lib.filter (
-              iface: lib.stringLength "${config.system.name}-${iface.name}" > 15
-            ) (lib.attrValues cfg.allInterfaces);
-            offenderList = map (
-              i:
-              "${config.system.name}-${i.name} (${toString (lib.stringLength "${config.system.name}-${i.name}")} chars)"
-            ) offendingInterfaces;
-          in
-          ''
-            The following generated host interface names exceed the Linux 15-character limit:
-              ${lib.concatStringsSep "\n            " offenderList}
-
-            Please shorten 'config.system.name' or the interface names in 'virtualisation.interfaces'.
-          '';
-      }
     ];
 
     virtualisation.systemd-nspawn.options = [
