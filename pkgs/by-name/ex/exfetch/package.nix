@@ -6,10 +6,9 @@
 
 crystal.buildCrystalPackage rec {
   pname = "exfetch";
-  version = "1.3.5";
+  version = "1.7";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Izder456";
     repo = "exfetch";
     tag = version;
