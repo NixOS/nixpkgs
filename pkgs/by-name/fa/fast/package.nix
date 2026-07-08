@@ -3,17 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule {
+buildGoModule rec {
   pname = "fast";
-  version = "0-unstable-2026-07-08";
+  version = "0.1.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "fast";
-    rev = "67b965563bc80f35533ee033a5e4243a40a0b6a7";
-    hash = "sha256-1O80kvCndCHwnjsr9HwnWAZJADu7H8JfImyNUVMbDTA=";
+    tag = "v${version}";
+    hash = "sha256-/Li5AAuuHkVqJzmh38g5CPQXWj4RY0TRwvtjlpydosg=";
   };
 
   vendorHash = "sha256-YSjJ8NOL97hXZLnfGYIjoKmARv+gWOsv+5qkl9konnA=";
