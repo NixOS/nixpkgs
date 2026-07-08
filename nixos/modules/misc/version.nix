@@ -34,6 +34,7 @@ let
   osReleaseContents =
     let
       isNixos = cfg.distroId == "nixos";
+      optionalAttr = cond: attr: if cond then attr else null;
     in
     {
       NAME = "${cfg.distroName}";
@@ -54,8 +55,7 @@ let
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
       ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
-      ${if config.system.image.version != null then "IMAGE_VERSION" else null} =
-        config.system.image.version;
+      ${optionalAttr (config.system.image.version != null) "IMAGE_VERSION"} = config.system.image.version;
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
