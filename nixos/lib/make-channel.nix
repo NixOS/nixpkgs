@@ -35,6 +35,9 @@ pkgs.releaseTools.makeSourceTarball {
     NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --show-trace --xml \* > /dev/null
     cd ..
     chmod -R u+w $releaseName
+
+    # The compression tasks are shortlived; use all available CPUs (-T0) to
+    # prioritize fast channel advancement.
     XZ_OPT="-T0" tar \
       --create \
       --file=$out/tarballs/$releaseName.tar.xz \

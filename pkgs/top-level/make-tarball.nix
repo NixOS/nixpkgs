@@ -64,6 +64,9 @@ pkgs.releaseTools.sourceTarball {
   #   Some context: https://github.com/NixOS/infra/issues/438
   distPhase = ''
     mkdir -p $out/tarballs
+
+    # The compression tasks are shortlived; use all available CPUs (-T0) to
+    # prioritize fast channel advancement.
     XZ_OPT="-T0" tar \
       --create \
       --xz \
