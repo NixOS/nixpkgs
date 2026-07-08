@@ -710,6 +710,10 @@ let
 
         functory = callPackage ../development/ocaml-modules/functory { };
 
+        fuse3 = callPackage ../development/ocaml-modules/fuse3 {
+          inherit (pkgs) fuse3;
+        };
+
         ### G ###
 
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
