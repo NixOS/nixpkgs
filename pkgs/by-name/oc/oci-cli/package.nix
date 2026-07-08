@@ -66,6 +66,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "setuptools"
     "click"
     "PyYAML"
     "cryptography"
