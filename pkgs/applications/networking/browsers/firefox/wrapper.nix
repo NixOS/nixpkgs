@@ -581,6 +581,10 @@ let
           #   END EXTRA PREF CHANGES  #
           #                           #
           #############################
+        ''
+        + lib.optionalString isDarwin ''
+          mkdir -p "$out/bin"
+          makeWrapper "$out/${executablePath}" "$out/bin/${launcherName}"
         '';
 
       preferLocalBuild = true;
