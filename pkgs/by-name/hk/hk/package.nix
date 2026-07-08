@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hk";
-  version = "1.48.0";
+  version = "1.50.0";
 
   __structuredAttrs = true;
 
@@ -22,14 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "hk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jQVEKyFdzeVLBKkX3/zjJBXawxR6ayuf+8wSingESZA=";
+    hash = "sha256-1sty3JUxiT4UDPmoqR6vql9bQcoSR+xfq3dQzT6u6rY=";
   };
 
-  cargoHash = "sha256-QzjoLnHlGTdnNfsfaRn7ZVeTwQZumN87IOhubLcEDLQ=";
+  cargoHash = "sha256-oUgAzO7kWVlbw1ZvcjqIdV78tvXQYlV5bwvOSucQvWE=";
 
   nativeBuildInputs = [
     installShellFiles
-    versionCheckHook
     pkg-config
     usage
   ];
@@ -57,6 +56,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoTestFlags = [ "--all-features" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hk \
