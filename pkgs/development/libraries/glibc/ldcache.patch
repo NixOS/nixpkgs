@@ -1,20 +1,32 @@
 diff --git a/elf/dl-load.c b/elf/dl-load.c
-index 00b9da9..ff6f208 100644
+index 00b9da9e..8fb0c2fa 100644
 --- a/elf/dl-load.c
 +++ b/elf/dl-load.c
-@@ -1920,6 +1920,182 @@ _dl_lookup_map (Lmid_t nsid, const char *name)
+@@ -1920,6 +1920,202 @@ _dl_lookup_map (Lmid_t nsid, const char *name)
    return NULL;
  }
  
 +/* A binary patched with "patchelf --build-resolution-cache" carries a PT_NOTE
-+   (NT_NIXOS_LD_CACHE) whose descriptor is a sequence of NUL-terminated
-+   (needed, path-list) string pairs, terminated by an extra NUL byte after
-+   the final path-list.  Each path-list element is either "=<absolute-path>"
-+   (open it directly) or "?<dir>" (search that directory, e.g. a
-+   $ORIGIN-relative or glibc-hwcaps entry).  Consulting it lets
-+   _dl_map_new_object resolve a binary's direct dependencies without walking
-+   every DT_RUNPATH directory, avoiding the storm of failing openat()/stat()
-+   syscalls that slows /nix/store startup.  */
++   (NT_NIXOS_LD_CACHE) whose descriptor packs one or more string pairs
++
++       <needed> '\0' <path-list> '\0'
++
++   back to back, followed by one extra NUL byte.  patchelf only emits pairs
++   whose two strings are nonempty (when it has nothing to record it writes
++   no note at all), so a zero-length string where the next needed name
++   would start is unambiguous: it terminates the sequence, the same
++   double-NUL convention as an environment block.  A path-list is a
++   ':'-separated list whose elements are either "=<absolute-path>" (open it
++   directly) or "?<dir>" (search that directory at run time, e.g. a
++   $ORIGIN-relative or glibc-hwcaps entry).  Consulting the note lets
++   _dl_map_new_object resolve a binary's direct dependencies without
++   walking every DT_RUNPATH directory, avoiding the storm of failing
++   openat()/stat() syscalls that slows /nix/store startup.  The reader
++   nevertheless assumes nothing about the writer: _dl_find_nixos_cache
++   admits exactly the descriptors it can prove safe to walk,
++   _dl_lookup_nixos_cache stops trusting a note whose content violates the
++   grammar, and in either case the object falls back to the stock search
++   order.  */
 +
 +static const char *
 +_dl_find_nixos_cache (struct link_map *loader)
@@ -75,12 +87,20 @@ index 00b9da9..ff6f208 100644
 +              const char *desc = (const char *) note
 +                                 + ELF_NOTE_DESC_OFFSET (note->n_namesz, align);
 +              /* The descriptor must lie within the segment and end with two
-+                 NULs.  The first terminates the final path-list string; the
-+                 second is the zero-length needed-name sentinel checked by
-+                 entries[0] in _dl_lookup_nixos_cache.  Together they keep the
-+                 parser in bounds.  descsz >= 2 is required for the two reads
-+                 below; > 2 also rejects a bare "\0\0" descriptor carrying no
-+                 pairs.  Compare via the subtraction desc_off rather than
++                 NUL bytes; a conforming descriptor always does (the final
++                 path-list's terminator plus the end-of-sequence NUL).
++                 n_descsz >= 2 makes the two byte reads below themselves
++                 valid, and the two trailing NULs are the complete in-bounds
++                 invariant for the walk in _dl_lookup_nixos_cache: any
++                 non-NUL byte then sits at index n_descsz - 3 or lower, so
++                 every strlen there stops by index n_descsz - 2, and every
++                 advance past a string lands at most on the final NUL, where
++                 the walk either terminates or trips the malformed check.
++                 Nothing stricter is needed: the minimal descriptor "\0\0"
++                 reads as an empty sequence, every lookup misses, and the
++                 object falls back to the normal search, exactly as if the
++                 note were absent or rejected here.  Compare via the
++                 subtraction desc_off rather than
 +                 "desc + n_descsz <= start + size": on a 32-bit target
 +                 ElfW(Addr) is only 32 bits, and adding the untrusted
 +                 n_descsz straight to a pointer can wrap back into range,
@@ -88,7 +108,7 @@ index 00b9da9..ff6f208 100644
 +                 cannot overflow: desc was derived from note, which the loop
 +                 above already established lies at or after start.  */
 +              const ElfW(Addr) desc_off = (ElfW(Addr)) desc - start;
-+              if (note->n_descsz > 2
++              if (note->n_descsz >= 2
 +                  && desc_off <= size
 +                  && note->n_descsz <= size - desc_off
 +                  && desc[note->n_descsz - 2] == '\0'
@@ -185,7 +205,7 @@ index 00b9da9..ff6f208 100644
  /* Map in the shared object file NAME.  */
  
  struct link_map *
-@@ -1930,6 +2106,7 @@ _dl_map_new_object (struct link_map *loader, const char *name,
+@@ -1930,6 +2126,7 @@ _dl_map_new_object (struct link_map *loader, const char *name,
    const char *origname = NULL;
    char *realname;
    char *name_copy;
@@ -193,7 +213,7 @@ index 00b9da9..ff6f208 100644
    struct link_map *l;
    struct filebuf fb;
  
-@@ -2030,6 +2207,76 @@ _dl_map_new_object (struct link_map *loader, const char *name,
+@@ -2030,6 +2227,76 @@ _dl_map_new_object (struct link_map *loader, const char *name,
  			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
  			LA_SER_LIBPATH, &found_other_class);
  
@@ -271,7 +291,7 @@ index 00b9da9..ff6f208 100644
        if (fd == -1 && loader != NULL
  	  && cache_rpath (loader, &loader->l_runpath_dirs,
 diff --git a/elf/elf.h b/elf/elf.h
-index 2f29a47..10e4ea9 100644
+index 2f29a47c..10e4ea94 100644
 --- a/elf/elf.h
 +++ b/elf/elf.h
 @@ -1303,12 +1303,24 @@ typedef struct
@@ -300,7 +320,7 @@ index 2f29a47..10e4ea9 100644
  
  /* ABI information.  The descriptor consists of words:
 diff --git a/include/link.h b/include/link.h
-index 41e5e54..cef4889 100644
+index 41e5e54a..cef48898 100644
 --- a/include/link.h
 +++ b/include/link.h
 @@ -346,6 +346,17 @@ struct link_map
