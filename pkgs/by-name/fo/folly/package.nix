@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BOOST_LINK_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "FOLLY_NO_EXCEPTION_TRACER" stdenv.hostPlatform.isStatic)
 
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
 
@@ -115,6 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.cc.isGNU && stdenv.hostPlatform.isAarch64) [
       # /build/source/folly/algorithm/simd/Movemask.h:156:32: error: cannot convert '__Uint64x1_t' to '__Uint8x8_t'
       "-flax-vector-conversions"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # To support off64_t
+      "-D_LARGEFILE_SOURCE"
+      "-D_LARGEFILE64_SOURCE"
     ]
   );
 
@@ -156,6 +163,21 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/facebook/folly/commit/fdde9bc360d525a1b2889b9ba89d671c3a13e72e.patch?full_index=1";
       hash = "sha256-+1XJRAl4o9YubjqdIgQZpyrMmcb2imBfQUmiHNmFMRE=";
     })
+
+    # On musl compilation fails with `error: 'ELFCLASSFOLLY_ELF_NATIVE_CLASS'
+    # was not declared in this scope`, because musl doesn't define
+    # `__ELF_NATIVE_CLASS`.  Work around by setting
+    # `ELFCLASSFOLLY_ELF_NATIVE_CLASS` to `__WORDSIZE`.
+    # https://github.com/facebook/folly/issues/1478
+    ./elf-native-class.patch
+
+    # libunwind depends on liblzma (from xz) but when linking statically Folly's
+    # CMake does not detect that dependency, because it doesn't use libunwind's
+    # pkg-config files.
+    ./lzma-dependency.patch
+
+    # https://github.com/facebook/folly/pull/2670
+    ./Modify-LocalLifetime-destructor-to-clear-local-cache.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -221,6 +243,25 @@ stdenv.mkDerivation (finalAttrs: {
     # No idea why these fail.
     "logging_xlog_test.XlogTest.perFileCategoryHandling"
     "futures_future_test.Future.makeFutureFromMoveOnlyException"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # assertion failure: expected thread name [foo], got [Unknown]
+    "logging_glog_formatter_test.GlogFormatter.logThreadNameChanged"
+
+    # assertion failure: expected EINVAL (22), got ENOTTY (25)
+    "memory_test.alignedMalloc.examples"
+
+    # terminate called after throwing an instance of 'folly::OptionalEmptyException'
+    "system_thread_name_test.ThreadName.getCurrentThreadName"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    # FileUtilTest.cpp uses dlsym
+    "file_util_test.WriteFileAtomic.writeNew"
+    "file_util_test.WriteFileAtomic.withSync"
+    "file_util_test.WriteFileAtomic.overwrite"
+    "file_util_test.WriteFileAtomic.directoryPermissions"
+    "file_util_test.WriteFileAtomic.multipleFiles"
+    "file_util_test.WriteFileAtomic.WriteWithCustomTempPath"
+    "file_util_test.WriteFileAtomic.chmodFailure"
   ];
 
   passthru = {
