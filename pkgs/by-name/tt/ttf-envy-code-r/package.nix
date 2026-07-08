@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://damieng.com/blog/tag/envy-code-r";
+    homepage = "https://damieng.com/typography/";
     description = "Free scalable coding font by DamienG";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ pancaek ];
