@@ -411,7 +411,7 @@ lib.makeOverridable (
       make "''${makeFlags[@]}" oldconfig
       runHook postConfigure
 
-      make "''${makeFlags[@]}" prepare
+      make "''${makeFlags[@]}" include/config/kernel.release
       actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
       if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
         echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
