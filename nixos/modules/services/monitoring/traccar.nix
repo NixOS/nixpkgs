@@ -102,7 +102,7 @@ in
           ${lib.getExe pkgs.envsubst} \
             -i ${configuration} \
             -o ${configFilePath}
-          umask $old_umask
+          umask "$old_umask"
         '';
 
         serviceConfig = {
