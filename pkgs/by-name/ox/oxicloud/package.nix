@@ -5,10 +5,12 @@
   openssl,
   pkg-config,
   rustPlatform,
+  buildNpmPackage,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
-  version = "0.6.0";
+  version = "0.8.1";
 
   __structuredAttrs = true;
 
@@ -16,14 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AtalayaLabs";
     repo = "OxiCloud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7alpcK0KYg+ZusK2K7FPdQMLdPrawvL5wsfB6NpSXQw=";
+    hash = "sha256-vfVh1yqVYQD43RsTqUn2gVR6MldYG0MC0cdRWPZ6rRk=";
   };
 
-  cargoHash = "sha256-4gxpTCsS1W2CmRzdnRcsuRe+kr+TgG4hjkzdgihop5I=";
+  cargoHash = "sha256-sEO8Q980S/jXR8SoI1hTPA+gvV7pNZ8ZD7re5qlSJwY=";
 
   nativeBuildInputs = [
-    makeBinaryWrapper
     pkg-config
+    makeBinaryWrapper
   ];
   buildInputs = [ openssl ];
 
@@ -35,15 +37,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -f .cargo/config.toml
   '';
 
+  oxicloud-front = buildNpmPackage (frontFinalAttrs: {
+    pname = "oxicloud-front";
+    inherit (finalAttrs) version src;
+    sourceRoot = "${frontFinalAttrs.src.name}/frontend";
+
+    npmDepsHash = "sha256-dn9vEk84AYaqfhBhf2obsfQBYUPkE5qyjXalFNNziXw=";
+
+    postPatch = ''
+      substituteInPlace svelte.config.js \
+        --replace "'../static-dist'" "'static-dist'"
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -r static-dist $out
+      runHook postInstall
+    '';
+  });
+
   postInstall = ''
     mkdir -p $out/share/oxicloud
-    cp -r static-dist $out/share/oxicloud/static
   '';
 
   postFixup = ''
     wrapProgram $out/bin/oxicloud \
-      --set-default OXICLOUD_STATIC_PATH $out/share/oxicloud/static
+      --set-default OXICLOUD_STATIC_PATH ${finalAttrs.oxicloud-front}
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "oxicloud-front"
+    ];
+  };
 
   meta = {
     description = "Ultra-fast, secure & lightweight self-hosted cloud storage";
