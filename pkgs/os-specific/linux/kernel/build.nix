@@ -227,8 +227,7 @@ lib.makeOverridable (
     ++ optionals buildDTBs [
       "dtbs"
       "DTC_FLAGS=-@"
-    ]
-    ++ extraMakeFlags;
+    ];
 
     installFlags = [
       "INSTALL_PATH=${placeholder "out"}"
