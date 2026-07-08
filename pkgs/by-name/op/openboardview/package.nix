@@ -13,14 +13,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openboardview";
   version = "9.95.2";
 
   src = fetchFromGitHub {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-B5VnuycRt8h7Cz3FTIbhcGcXuA60zPCz0FMvFENTwws=";
     fetchSubmodules = true;
   };
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       mv "$out/openboardview.app" "$out/Applications/OpenBoardView.app"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      wrapGApp "$out/bin/${pname}" \
+      wrapGApp "$out/bin/${finalAttrs.pname}" \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
     '';
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ k3a ];
   };
-}
+})
