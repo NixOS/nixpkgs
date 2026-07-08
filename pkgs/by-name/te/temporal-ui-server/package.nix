@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   nix-update-script,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -27,7 +28,12 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) temporal;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/temporalio/ui-server/releases/tag/${finalAttrs.src.tag}";

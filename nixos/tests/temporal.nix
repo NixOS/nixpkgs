@@ -104,6 +104,12 @@
             enable = true;
             settings = {
               # Based on https://github.com/temporalio/temporal/blob/main/config/development-sqlite.yaml
+              global = {
+                membership = {
+                  maxJoinDuration = "30s";
+                  broadcastAddress = "0.0.0.0";
+                };
+              };
               log = {
                 stdout = true;
                 level = "info";
@@ -113,7 +119,7 @@
                   rpc = {
                     grpcPort = 7233;
                     membershipPort = 6933;
-                    bindOnLocalHost = true;
+                    bindOnIP = "0.0.0.0";
                     httpPort = 7243;
                   };
                 };
@@ -258,6 +264,93 @@
             };
           };
         };
+
+      temporal-ui =
+        { config, pkgs, ... }:
+        {
+          networking.useDHCP = false;
+          networking.firewall.allowedTCPPorts = [ 8080 ];
+
+          services.temporal-ui = {
+            enable = true;
+            settings = {
+              temporalGrpcAddress = "temporal:7233";
+              port = 8080;
+              enableUi = true;
+              defaultNamespace = "default";
+            };
+          };
+        };
+
+      browser =
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+        {
+          virtualisation.memorySize = 1024 * 2;
+
+          environment.systemPackages =
+            let
+              temporalUiSeleniumScript =
+                pkgs.writers.writePython3Bin "temporal-ui-selenium-script"
+                  {
+                    libraries = [ pkgs.python3Packages.selenium ];
+                  }
+                  ''
+                    from selenium import webdriver
+                    from selenium.webdriver.common.by import By
+                    from selenium.webdriver.firefox.options import Options
+                    from selenium.webdriver.support import expected_conditions as EC
+                    from selenium.webdriver.support.ui import WebDriverWait
+
+                    options = Options()
+                    options.add_argument("--headless")
+                    service = webdriver.FirefoxService(
+                      executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+
+                    driver = webdriver.Firefox(options=options, service=service)
+                    driver.implicitly_wait(10)
+
+                    driver.get("http://temporal-ui:8080/")
+                    wait = WebDriverWait(driver, 60)
+
+                    # Navigate via the side nav's link text
+                    wait.until(EC.element_to_be_clickable(
+                      (By.LINK_TEXT, "Namespaces"))).click()
+                    wait.until(EC.url_contains("/namespaces"))
+
+                    wait.until(EC.element_to_be_clickable(
+                      (By.LINK_TEXT, "default"))).click()
+                    wait.until(EC.url_contains("/namespaces/default"))
+
+                    wait.until(EC.element_to_be_clickable(
+                      (By.LINK_TEXT, "Workflows"))).click()
+                    wait.until(EC.url_contains("/namespaces/default/workflows"))
+
+                    # Find by Workflow ID, not position or a generated class name
+                    row = wait.until(EC.presence_of_element_located((
+                      By.XPATH,
+                      "//tr[@data-testid='workflows-summary-configurable-table-row']"
+                      "[.//text()[contains(., 'hello-activity-workflow-id')]]",
+                    )))
+
+                    status = row.find_element(
+                      By.XPATH, ".//*[@data-testid='workflow-status']").text
+                    assert "Completed" in status, f"unexpected workflow status: {status!r}"
+
+                    driver.close()
+                  '';
+            in
+            [
+              pkgs.curl
+              pkgs.firefox-unwrapped
+              pkgs.geckodriver
+              temporalUiSeleniumScript
+            ];
+        };
     };
 
     testScript = ''
@@ -322,6 +415,25 @@
       temporal.log(temporal.succeed(
         "systemd-analyze security temporal.service | grep -v '✓'"
       ))
+
+      temporal_ui.wait_for_unit("temporal-ui-server")
+      temporal_ui.wait_for_open_port(8080)
+
+      temporal_ui.wait_until_succeeds(
+        "curl -sf http://localhost:8080/healthz | grep '\"OK\"'"
+      )
+
+      temporal_ui.log(temporal_ui.succeed(
+        "systemd-analyze security temporal-ui-server.service | grep -v '✓'"
+      ))
+
+      browser.systemctl("start network-online.target")
+      browser.wait_for_unit("network-online.target")
+
+      browser.succeed("curl -sSf http://temporal-ui:8080/healthz")
+
+      # Confirm the hello-workflow shows up as completed in the actual UI
+      browser.succeed("PYTHONUNBUFFERED=1 temporal-ui-selenium-script")
     '';
   }
 )
