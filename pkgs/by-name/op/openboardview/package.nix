@@ -11,32 +11,26 @@
   fontconfig,
   gtk3,
   wrapGAppsHook3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboardview";
-  version = "9.95.2";
+  version = "10.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenBoardView";
     repo = "OpenBoardView";
     tag = finalAttrs.version;
-    hash = "sha256-B5VnuycRt8h7Cz3FTIbhcGcXuA60zPCz0FMvFENTwws=";
+    hash = "sha256-rvCWzIbjEZOHh5diaeP4xVIRsMHqt4PGMuYOGfWvwhA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-darwin-build.patch";
-      url = "https://github.com/OpenBoardView/OpenBoardView/commit/a1de2e5de908afd83eceed757260f6425314af2e.patch?full_index=1";
-      hash = "sha256-DK+K4F0+QGqaoWCyc8AvuIsaiTCqhAG6AsTNg2hegh0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3
+    python3Packages.jinja2
     wrapGAppsHook3
   ];
   buildInputs = [
