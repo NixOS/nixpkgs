@@ -305,6 +305,7 @@ in
   bootspec = handleTestOn [ "x86_64-linux" ] ./bootspec.nix { };
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
+  bouncarr = runTest ./bouncarr.nix;
   bpf = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix;
   bpftune = runTest ./bpftune.nix;
   breitbandmessung = runTest ./breitbandmessung.nix;
