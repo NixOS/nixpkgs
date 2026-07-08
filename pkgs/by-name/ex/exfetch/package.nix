@@ -1,6 +1,6 @@
 {
   crystal,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
 }:
 
