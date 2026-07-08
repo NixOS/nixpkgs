@@ -1,0 +1,23 @@
+From 98186266f1a95b8eae6dcb596684ca7bd238fe48 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Wed, 8 Jul 2026 01:00:15 +0200
+Subject: [PATCH] Fix admin_user_events template syntax error
+
+---
+ .../orga/templates/orga/tables/columns/admin_user_events.html  | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/pretalx/orga/templates/orga/tables/columns/admin_user_events.html b/src/pretalx/orga/templates/orga/tables/columns/admin_user_events.html
+index b92a4c1eaa..f681a5c3fa 100644
+--- a/src/pretalx/orga/templates/orga/tables/columns/admin_user_events.html
++++ b/src/pretalx/orga/templates/orga/tables/columns/admin_user_events.html
+@@ -5,7 +5,8 @@
+ {% load i18n %}
+ 
+ {% if record.is_administrator %}
+-    {% translate "All events" } {% else %}
++    {% translate "All events" %}
++{% else %}
+     <ul>
+         {% for event in record.get_events_with_any_permission %}
+             <li>
