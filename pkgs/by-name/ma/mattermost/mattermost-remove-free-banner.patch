@@ -77,7 +77,7 @@ index 852046de70..a310da48f4 100644
              historyApiFallback: {
                  index: '/static/root.html',
              },
-+            client {
++            client: {
 +                overlay: false,
 +            },
          },
