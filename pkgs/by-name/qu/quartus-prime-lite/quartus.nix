@@ -2,6 +2,7 @@
   stdenv,
   lib,
   unstick,
+  radare2,
   fetchurl,
   withQuesta ? true,
   supportedDevices ? [
@@ -81,7 +82,10 @@ stdenv.mkDerivation {
   inherit version;
   pname = "quartus-prime-lite-unwrapped";
 
-  nativeBuildInputs = [ unstick ];
+  nativeBuildInputs = [
+    unstick
+    radare2
+  ];
 
   buildCommand =
     let
@@ -120,6 +124,9 @@ stdenv.mkDerivation {
       # replace /proc pentium check with a true statement. this allows usage under emulation.
       substituteInPlace $out/quartus/adm/qenv.sh \
         --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
+
+      # vendored copy of sqlite3 contains undocumented x87 instructions that rosetta does not support; patch them out with equivalent instructions
+      r2 -q -w -c '(patch; wx+ 0xdd; wx 0xd); .(patch) @@/ao ffreep' $out/quartus/linux64/libccl_sqlite3.so
     '';
 
   meta = {
