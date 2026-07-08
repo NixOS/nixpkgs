@@ -148,5 +148,7 @@
           )
           webserver.wait_for_open_port(80)
           webserver.succeed("curl http://localhost | grep caddy")
+
+      webserver.log(webserver.succeed("systemd-analyze security caddy.service | grep -v '✓'"))
     '';
 }
