@@ -50,7 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jdx/fnox";
     changelog = "https://github.com/jdx/fnox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tiptenbrink ];
+    maintainers = with lib.maintainers; [
+      tiptenbrink
+      Br1ght0ne
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
