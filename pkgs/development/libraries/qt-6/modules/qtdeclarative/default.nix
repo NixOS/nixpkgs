@@ -11,6 +11,8 @@
   pkgsBuildBuild,
   replaceVars,
   fetchpatch,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 qtModule {
@@ -27,6 +29,8 @@ qtModule {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
   ];
 
   patches = [
@@ -68,6 +72,11 @@ qtModule {
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
+
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    # TODO: Clean up on `staging`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   meta.maintainers = with lib.maintainers; [
     nickcao
