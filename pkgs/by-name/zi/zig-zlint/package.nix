@@ -3,23 +3,23 @@
   stdenv,
   fetchFromGitHub,
   callPackage,
-  zig_0_15,
+  zig_0_16,
   versionCheckHook,
 }:
 
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
     owner = "DonIsaac";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yjMgmO/kjLA9eBPXY+TgfVLyOLIpBtBigItJuon+t9k=";
+    hash = "sha256-z5HYJbt4VAOI/o9TqFdZ4Q1BhgIin/NR29gFIZCX/i0=";
   };
 
   nativeBuildInputs = [
