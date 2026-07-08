@@ -5,15 +5,15 @@
 }:
 buildGoModule {
   pname = "fast";
-  version = "0-unstable-2026-07-01";
+  version = "0-unstable-2026-07-08";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "fast";
-    rev = "26d8fc9c189ba748c68f8930af11dee5c2467f7e";
-    hash = "sha256-YeDx082+ySqzamo9UutFTXXkrb37nmqt3ZUNzUHShf4=";
+    rev = "67b965563bc80f35533ee033a5e4243a40a0b6a7";
+    hash = "sha256-1O80kvCndCHwnjsr9HwnWAZJADu7H8JfImyNUVMbDTA=";
   };
 
   vendorHash = "sha256-YSjJ8NOL97hXZLnfGYIjoKmARv+gWOsv+5qkl9konnA=";
