@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p cabal2nix elm2nix -i bash ../../..
+#!nix-shell -I nixpkgs=../../../..
+#!nix-shell --pure -p nix cacert cabal2nix elm2nix nixfmt -i bash ../../../..
+
+set -o errexit
+set -o nounset
 
 # Update all cabal packages.
 for subpath in 'avh4-lib' 'elm-format-lib' 'elm-format-markdown' 'elm-format-test-lib'; do
@@ -21,3 +25,6 @@ echo "need to manually copy registry.dat from an existing elm project"
 pushd "$(nix-build -A elmPackages.elm.src --no-out-link ../../../..)/reactor"
   elm2nix convert > $OLDPWD/packages/elm-srcs.nix
 popd
+
+# cabal2nix, elm2nix, etc. may not respect nixpkgs formatting rules
+nixfmt .
