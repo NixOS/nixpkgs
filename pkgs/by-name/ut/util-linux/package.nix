@@ -33,6 +33,9 @@
   withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
   gitUpdater,
   nixosTests,
+  # For tests
+  bash,
+  e2fsprogs,
 }:
 
 # lastlog requires PAM, or else it's broken.
@@ -218,6 +221,58 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) pam-lastlog;
+
+      withCheck = finalAttrs.finalPackage.overrideAttrs (old: {
+        nativeCheckInputs = [
+          e2fsprogs
+        ];
+
+        doCheck = true;
+
+        postPatch = old.postPatch or "" + ''
+          patchShebangs tests
+
+          # enosys: replace /bin/false with the one from coreutils
+          sed -i "s@/bin/false@${lib.getExe' coreutils "false"}@" tests/helpers/test_enosys.c
+
+          # silence errors from trying to write to closed pipe
+          sed -i "s@| head -1@2>/dev/null | head -1@" tests/ts/findmnt/df-options
+
+          # coresched: replace /bin/bash with the Nix store path to bash
+          sed -i "s@ /bin/bash\b@ ${lib.getExe' bash "bash"}@" tests/ts/coresched/coresched
+
+          # patch shebang in tests/ts/mount/special
+          sed -i "s|#!/bin/bash|#!${bash}/bin/bash|" tests/ts/mount/special
+        '';
+
+        preCheck = ''
+          # skip tests that are incompatible/unreliable with the sandbox environment
+          exclude=(
+            fadvise/drop
+            fincore/count
+            fallocate/fallocate
+            lsfd/column-ainodeclass
+            lsfd/column-type
+            lsfd/mkfds-netlink-protocol
+            lsfd/mkfds-tcp6
+            lsfd/mkfds-tcp
+            lsfd/mkfds-unix-dgram
+            lsfd/mkfds-unix-stream-requiring-sockdiag
+            lsfd/mkfds-socketpair
+            lsfd/option-inet
+            lsfd/mkfds-udp
+            lsfd/mkfds-udp6
+            lsfd/mkfds-udp-lite
+            lsfd/mkfds-udp6-lite
+            lsfd/option-inet-udplite
+            lsblk/lsblk
+          )
+
+          checkFlagsArray+=(
+            "TESTS_COMPONENTS=--exclude=\"''${exclude[*]}\""
+          )
+        '';
+      });
     };
   }
   // lib.optionalAttrs (!isMinimal) {
