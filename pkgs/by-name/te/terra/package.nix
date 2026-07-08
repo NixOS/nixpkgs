@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
   version = "1.2.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
@@ -52,17 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCUDA [ cudaPackages.cuda_nvcc ];
   buildInputs = [
     llvmMerged
     ncurses
     libffi
     libxml2
   ]
-  ++ lib.optionals enableCUDA (with cudaPackages; [
-    cuda_nvcc
-    cuda_cudart
-  ])
+  ++ lib.optionals enableCUDA (
+    with cudaPackages;
+    [
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
+      cuda_cudart
+    ]
+  )
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
