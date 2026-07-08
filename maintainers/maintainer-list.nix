@@ -11156,9 +11156,9 @@
     github = "HolgerPeters";
     githubId = 4097049;
   };
-  Holiu0618 = {
+  Holiu618 = {
     email = "zvttt9db@anonaddy.me";
-    github = "Holiu0618";
+    github = "Holiu618";
     githubId = 165534185;
     name = "Holiu";
   };
