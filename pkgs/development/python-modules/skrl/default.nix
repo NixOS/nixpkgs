@@ -17,6 +17,7 @@
 
   # tests
   flax,
+  hypothesis,
   jax,
   optax,
   pettingzoo,
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     flax
+    hypothesis
     jax
     optax
     pettingzoo
