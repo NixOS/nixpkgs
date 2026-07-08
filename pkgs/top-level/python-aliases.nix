@@ -116,6 +116,7 @@ mapAliases {
   beets-stable = lib.warn "beets-stable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16
   beets-unstable = lib.warn "beets-unstable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16
   betterproto-fw = throw "'betterproto-fw' has been removed as it is not longer required by fireworks-ai"; # Added 2026-06-09
+  bilibili-api-python = throw "'bilibili-api-python' was removed because its source is unavailable"; # added 2026-07-07
   bimmer-connected = throw "'bimmer-connected' was removed because BMW started blocking third parties"; # added 2026-03-30
   bip_utils = throw "'bip_utils' has been renamed to/replaced by 'bip-utils'"; # Converted to throw 2025-10-29
   bjoern = throw "'bjoern' has been removed, as the upstream repository was unmaintained and it was using libraries with severe security issues."; # Added 2025-09-01
@@ -150,6 +151,7 @@ mapAliases {
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
+  dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29

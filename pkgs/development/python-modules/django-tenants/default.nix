@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-tenants";
-  version = "3.10.0";
+  version = "3.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-tenants";
     repo = "django-tenants";
     tag = "v${version}";
-    hash = "sha256-MzpoA49LOORR8LRLdWKhVZ+zQbF9GKLqBBi/j8WecK8=";
+    hash = "sha256-J7poXEHbRxhULYwFbV4tktet5wdsvd7RNHgivETy9+8=";
   };
 
   build-system = [ setuptools ];

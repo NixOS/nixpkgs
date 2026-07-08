@@ -169,11 +169,6 @@
     githubId = 791309;
     name = "Jan Hrnko";
   };
-  _1000teslas = {
-    name = "Kevin Tran";
-    github = "sledgehammervampire";
-    githubId = 47207223;
-  };
   _13621 = {
     name = "13621";
     github = "13621";
@@ -13254,6 +13249,12 @@
     githubId = 310981;
     name = "Joel Burget";
   };
+  joelgranados = {
+    email = "joel.granados.oss@joelgranados.com";
+    github = "Joelgranados";
+    githubId = 356364;
+    name = "Joel Granados";
+  };
   joelmo = {
     email = "joel.moberg@gmail.com";
     github = "joelmo";
@@ -14592,6 +14593,12 @@
     name = "Kiran Shila";
     github = "kiranshila";
     githubId = 6305359;
+  };
+  KirCK = {
+    email = "Arikkenebas09@gmail.com";
+    github = "AristarhKenebas";
+    githubId = 142233116;
+    name = "Aristarh Kenebas";
   };
   kirelagin = {
     email = "kirelagin@gmail.com";
@@ -21945,8 +21952,8 @@
     name = "Petr Hodina";
   };
   phorcys420 = {
-    name = "Adele";
-    email = "adele@coder.com";
+    name = "Phorcys";
+    email = "nixpkgs@phorcys.net";
     github = "phorcys420";
     githubId = 57866459;
   };
@@ -26130,6 +26137,11 @@
     github = "shenlebantongying";
     githubId = 20123683;
     name = "Shenleban Tongying";
+  };
+  sledgehammervampire = {
+    name = "Kevin Tran";
+    github = "sledgehammervampire";
+    githubId = 47207223;
   };
   sleexyz = {
     email = "freshdried@gmail.com";
@@ -30467,6 +30479,13 @@
     matrix = "@x807x:matrix.org";
     github = "x807x";
     githubId = 86676478;
+  };
+  xaltsc = {
+    email = "hey+dev@xaltsc.dev";
+    matrix = "@xaltsc:matrix.org";
+    name = "xaltsc";
+    github = "xaltsc";
+    githubId = 41400742;
   };
   xanderio = {
     name = "Alexander Sieg";

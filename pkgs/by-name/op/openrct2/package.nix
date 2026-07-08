@@ -40,14 +40,14 @@
 }:
 
 let
-  objects-version = "1.7.9";
+  objects-version = "1.7.10";
   openmusic-version = "1.6.1";
   opensfx-version = "1.0.6";
   title-sequences-version = "0.4.26";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-VUYe0gxugvFOmiec2ERlSwJkmZu5QDTVj6kS/e4m6tY=";
+    hash = "sha256-9IO+Jm3CIHe6hRe78y/+OIw1Q7LuWF4K+9QQLbRSgCE=";
   };
   openmusic = fetchurl {
     url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmusic-version}/openmusic.zip";
@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sKfNE57ZpTsHJk0uKG0YUQYg63xnOiAEwkgRaG4zgmo=";
+    hash = "sha256-my7fPBD5N0bO1yPaxwHUFqw6TvayQs10kcAX/NqPpIg=";
   };
 
   nativeBuildInputs = [

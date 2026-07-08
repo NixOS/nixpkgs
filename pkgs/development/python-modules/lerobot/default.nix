@@ -9,40 +9,32 @@
   setuptools,
 
   # dependencies
-  accelerate,
-  av,
-  datasets,
-  deepdiff,
-  diffusers,
   draccus,
   einops,
-  flask,
   gymnasium,
   huggingface-hub,
-  imageio,
-  jsonlines,
   numpy,
   opencv-python-headless,
   packaging,
-  pynput,
-  pyserial,
-  rerun-sdk,
+  pillow,
+  requests,
+  safetensors,
   termcolor,
   torch,
   torchcodec,
   torchvision,
-  wandb,
+  tqdm,
 
   # tests
-  llvmPackages,
+  av,
+  datasets,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  pytest-timeout,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lerobot";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "lerobot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZTRcJRVb6niSJXniUgq0C5ztVTWh0HTo3rc99WRc1qI=";
+    hash = "sha256-glTeELaebo5C6RethwYIHF4gB7CgKZlPr4wf45ih9cs=";
   };
 
   build-system = [
@@ -60,131 +52,94 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   pythonRelaxDeps = [
-    "av"
-    "diffusers"
     "draccus"
     "numpy"
-    "opencv-python-headless"
     "packaging"
-    "rerun-sdk"
     "torch"
-    "torchcodec"
     "torchvision"
-    "wandb"
   ];
   dependencies = [
-    accelerate
-    av
-    cmake
-    datasets
-    deepdiff
-    diffusers
     draccus
     einops
-    flask
     gymnasium
     huggingface-hub
-    imageio
-    jsonlines
     numpy
     opencv-python-headless
     packaging
-    pynput
-    pyserial
-    rerun-sdk
+    pillow
+    requests
+    safetensors
     termcolor
     torch
     torchcodec
     torchvision
-    wandb
-  ]
-  ++ imageio.optional-dependencies.ffmpeg;
+    tqdm
+  ];
 
   pythonImportsCheck = [ "lerobot" ];
 
   nativeCheckInputs = [
+    av
+    datasets
     pytestCheckHook
     writableTmpDirAsHomeHook
-    pytest-timeout
   ];
 
   disabledTests = [
-    # TypeError: only 0-dimensional arrays can be converted to Python scalars
-    "test_add_frame"
-    "test_add_frame_state_numpy"
-    "test_data_consistency_across_episodes"
-    "test_delta_timestamps_query_returns_correct_values"
-    "test_episode_boundary_integrity"
-    "test_from_lerobot_dataset"
-    "test_statistics_metadata_validation"
-    "test_task_indexing_and_validation"
-    "test_to_lerobot_dataset"
+    # Requires internet access
+    "test_act_backbone_lr"
+    "test_backward_compatibility"
+    "test_convert_image_to_video_dataset"
+    "test_convert_image_to_video_dataset_subset_episodes"
+    "test_factory"
+    "test_make_env_from_hub_async"
+    "test_make_env_from_hub_with_trust"
+    "test_policy_defaults"
+    "test_save_and_load_pretrained"
+    "test_save_pretrained_with_state_dict"
+
+    # Hang indefinitely
+    "test_aggregate_datasets"
+    "test_aggregate_with_low_threshold"
+
+    # RuntimeError: SingleStreamDecoder, /build/source/src/torchcodec/_core/SingleStreamDecoder.cpp:80,
+    # Failed to open input buffer: Invalid data found when processing input
+    "TestVideoDecoderCacheBounded"
+
+    # ValueError: pix_fmt='yuv420p' is not supported by codec 'h264_vaapi'; supported pixel formats: ['vaapi']
+    "test_vaapi_options"
+
+    # draccus.utils.ParsingError: Expected a dict with a 'type' key for ...
+    "test_reward_model_config_from_pretrained_roundtrip"
+
+    # TypeError: cannot create weak reference to 'str' object
+    "test_save_pretrained_round_trip_via_disk"
+
+    # [Errno 1094995529] Invalid data found when processing input: '/build/source/tests/artifacts/encoded_videos/clip_4frames.mp4'
+    "test_depth_encoder_config_sets_is_depth_map_true"
+    "test_geometry_preserved"
+    "test_merges_encoder_config_as_video_prefixed_entries"
+    "test_reencode_video"
+    "test_reencode_video_trim_window"
+    "test_returns_all_stream_fields"
+    "test_stream_derived_keys_take_precedence_over_config"
+    "test_three_clips_frame_count"
+    "test_two_clips_frame_count"
 
     # RuntimeError: OpenCVCamera(/build/source/tests/artifacts/cameras/image_480x270.png) read failed
     "test_async_read"
     "test_fourcc_with_camer"
     "test_read"
     "test_rotation"
-
-    # Require internet access
-    "test_act_backbone_lr"
-    "test_all_items_have_subtask"
-    "test_backward_compatibility"
-    "test_convert_image_to_video_dataset"
-    "test_convert_image_to_video_dataset_subset_episodes"
-    "test_dataset_initialization"
-    "test_factory"
-    "test_from_pretrained_nonexistent_path"
-    "test_getitem_has_subtask_index"
-    "test_getitem_returns_subtask_string"
-    "test_load_config_nonexistent_path_tries_hub"
-    "test_make_env_from_hub_async"
-    "test_make_env_from_hub_with_trust"
-    "test_policy_defaults"
-    "test_save_and_load_pretrained"
-    "test_subtask_dataset_loads"
-    "test_subtask_index_in_features"
-    "test_subtask_index_maps_to_valid_subtask"
-    "test_subtask_metadata_loaded"
-    "test_task_and_subtask_coexist"
-
-    # TypeError: stack(): argument 'tensors' (position 1) must be tuple of Tensors, not Column
-    "test_check_timestamps_sync_slightly_off"
-    "test_check_timestamps_sync_synced"
-    "test_check_timestamps_sync_unsynced"
-    "test_check_timestamps_sync_unsynced_no_exception"
-    "test_compute_sampler_weights_drop_n_last_frames"
-    "test_compute_sampler_weights_nontrivial_ratio"
-    "test_compute_sampler_weights_nontrivial_ratio_and_drop_last_n"
-    "test_compute_sampler_weights_trivial"
-    "test_record_and_replay"
-    "test_record_and_resume"
-    "test_same_attributes_defined"
-
-    # AssertionError between two dicts. One has an extra `'_is_initial': False` entry.
-    "test_cosine_decay_with_warmup_scheduler"
-    "test_diffuser_scheduler"
-    "test_vqbet_scheduler"
-
-    # AssertionError: Regex pattern did not match.
-    #  Regex: "Can't instantiate abstract class NonCallableStep with abstract method __call_"
-    #  Input: "Can't instantiate abstract class NonCallableStep without an implementation for abstract method '__call__'"
-    "test_construction_rejects_step_without_call"
-
-    # TypeError: 'NoneType' object is not subscriptable
-    "test_pi0_rtc_inference_with_prev_chunk"
-
-    # Flakes under load with AssertionError: assert 'second' == 'last'
-    "test_get_last_item_multiple_items_with_torch_queue"
-
-    # Flaky, assert 88 == 90 (Encoder queue full)
-    "test_video_duration_matches_frame_count"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!
     "test_complementary_data_float_dtype_conversion"
     "test_float_dtype_conversion"
     "test_float_dtype_with_mixed_tensors"
+
+    # AssertionError: assert 'f7566ea964d1...371ef6c23b64f' == 'c17e47af68a8...095018561ae9e'
+    "test_groot_n1_7_eval_image_transform_matches_oss_reference"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # gRPC fails to connect on loopback in sandbox despite __darwinAllowLocalNetworking
@@ -197,9 +152,6 @@ buildPythonPackage (finalAttrs: {
     # Require internet access
     # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
     "tests/policies/test_relative_actions.py"
-
-    # Sometimes hang forever on some CPU models
-    "tests/policies/test_sac_policy.py"
 
     # Sometimes hang forever
     "tests/policies/rtc/test_modeling_rtc.py"

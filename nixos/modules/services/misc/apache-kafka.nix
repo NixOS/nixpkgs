@@ -63,7 +63,7 @@ in
 
         options = {
           "broker.id" = lib.mkOption {
-            description = "Broker ID. -1 or null to auto-allocate in zookeeper mode.";
+            description = "Broker ID.";
             default = null;
             type = with lib.types; nullOr int;
           };
@@ -172,9 +172,13 @@ in
       [ "services" "apache-kafka" "logDirs" ]
       [ "services" "apache-kafka" "settings" "log.dirs" ]
     )
-    (lib.mkRenamedOptionModule
-      [ "services" "apache-kafka" "zookeeper" ]
-      [ "services" "apache-kafka" "settings" "zookeeper.connect" ]
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "apache-kafka"
+        "zookeeper"
+      ]
+      "ZooKeeper mode is no longer supported by any packaged Apache Kafka version; please migrate to KRaft mode instead"
     )
 
     (lib.mkRemovedOptionModule [
