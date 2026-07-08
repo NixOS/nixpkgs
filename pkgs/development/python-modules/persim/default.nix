@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   deprecated,
   hopcroftkarp,
   joblib,
@@ -15,7 +16,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "persim";
   version = "0.3.8";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -25,7 +26,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4T0YWEF2uKdk0W1+Vt8I3Mi6ZsazJXoHI0W+O9WbpA0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     deprecated
     hopcroftkarp
     joblib
