@@ -3245,6 +3245,8 @@ let
         patchShebangs src/library/keyring/configure
         patchShebangs src/library/pkgdepends/configure
         patchShebangs src/library/ps/configure
+        patchShebangs src/library/tsitter/configure
+        patchShebangs src/library/tstoml/configure
       '';
     });
 
