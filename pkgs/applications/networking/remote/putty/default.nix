@@ -6,10 +6,15 @@
   perl,
   pkg-config,
   gtk3,
+  gtk3-x11,
   ncurses,
   copyDesktopItems,
   makeDesktopItem,
 }:
+
+let
+  gtk3' = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
+in
 
 stdenv.mkDerivation rec {
   version = "0.84";
@@ -30,7 +35,7 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk3
+    gtk3'
     ncurses
   ];
   enableParallelBuilding = true;

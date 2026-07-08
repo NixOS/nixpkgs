@@ -10927,9 +10927,7 @@ with pkgs;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 
-  putty = callPackage ../applications/networking/remote/putty {
-    gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
-  };
+  putty = callPackage ../applications/networking/remote/putty { };
 
   qmasterpassword-wayland = qmasterpassword.override {
     x11Support = false;
