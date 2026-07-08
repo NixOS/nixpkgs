@@ -26,6 +26,8 @@ buildGoModule (finalAttrs: {
     "-X=github.com/numtide/nix-auth/internal/version.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
