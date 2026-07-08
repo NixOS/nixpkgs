@@ -56,6 +56,8 @@ let
       "gemdir"
     ]
     // {
+      __structuredAttrs = true;
+
       inherit preferLocalBuild allowSubstitutes; # pass the defaults
       inherit (basicEnv) version pname;
 
