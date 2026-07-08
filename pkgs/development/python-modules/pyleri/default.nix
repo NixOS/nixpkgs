@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyleri";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cesbit";
     repo = "pyleri";
     tag = "v${version}";
-    hash = "sha256-5umFhP6t0Aezm4ecjg4ix18JhC0mm+bjyIZYqBHZMmI=";
+    hash = "sha256-EmdQdUKFkt3sERU0Q4JOdoiFIvtRIRIl4V4BTId7Ngo=";
   };
 
   build-system = [ setuptools ];
