@@ -264,18 +264,30 @@ lib.warnIf (withDocs != null)
     meta = {
       homepage = "https://www.gnu.org/software/bash/";
       description =
-        "GNU Bourne-Again Shell, the de facto standard shell on Linux"
-        + lib.optionalString interactive " (for interactive use)";
-      longDescription = ''
-        Bash is the shell, or command language interpreter, that will
-        appear in the GNU operating system.  Bash is an sh-compatible
-        shell that incorporates useful features from the Korn shell
-        (ksh) and C shell (csh).  It is intended to conform to the IEEE
-        POSIX P1003.2/ISO 9945.2 Shell and Tools standard.  It offers
-        functional improvements over sh for both programming and
-        interactive use.  In addition, most sh scripts can be run by
-        Bash without modification.
-      '';
+        (if interactive then "Interactive" else "Non-interactive")
+        + " GNU Bourne-Again Shell, the de facto standard shell on Linux";
+      longDescription =
+        ''
+          Bash is the shell, or command language interpreter, that will
+          appear in the GNU operating system.  Bash is an sh-compatible
+          shell that incorporates useful features from the Korn shell
+          (ksh) and C shell (csh).  It is intended to conform to the IEEE
+          POSIX P1003.2/ISO 9945.2 Shell and Tools standard.  It offers
+          functional improvements over sh for both programming and
+          interactive use.  In addition, most sh scripts can be run by
+          Bash without modification.
+        ''
+        + lib.optionalString interactive ''
+
+          This variant includes readline support for interactive features
+          such as command history and line editing.
+        ''
+        + lib.optionalString (!interactive) ''
+
+          This variant omits readline support and interactive features
+          such as command history and line editing. For interactive use,
+          prefer bashInteractive.
+        '';
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.all;
       # https://github.com/NixOS/nixpkgs/issues/333338
