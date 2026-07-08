@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation {
   pname = "kbd-ergol";
-  version = "0-unstable-2026-07-03";
+  version = "0-unstable-2026-07-07";
 
   src = fetchFromCodeberg {
     owner = "Alerymin";
     repo = "kbd-ergol";
-    rev = "5111b8c90cee7daddb6c49115ba1ca665b2102ab";
-    hash = "sha256-kkxsTFNXGO8dly8r/EQyKL/JWZC4hUnq67rHChhwmkU=";
+    rev = "0af6404625fe4da03bc27e1141dc255ac49fa94e";
+    hash = "sha256-875ss78HdU03EgoSpQqLWG279Zg3tIoc6ZTP/hnedcg=";
   };
 
   strictDeps = true;
