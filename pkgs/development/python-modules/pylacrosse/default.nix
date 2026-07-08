@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylacrosse";
   version = "0.5";
   format = "setuptools";
@@ -15,13 +15,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z2OlYFFK/+BONg22+Vk0kQQ0KJoQnRkjP7OUS/TVpfI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version = version," "version = '${version}',"
+      --replace "version = version," "version = '${finalAttrs.version}',"
   '';
 
   propagatedBuildInputs = [ pyserial ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ lgpl2Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
