@@ -416,8 +416,9 @@
     "arwn" =
       ps: with ps; [
         aiohasupervisor
+        arwn-client
         paho-mqtt
-      ]; # missing inputs: arwn-client
+      ];
     "aseko_pool_live" =
       ps: with ps; [
         aioaseko
@@ -7845,6 +7846,7 @@
     "aranet"
     "arcam_fmj"
     "arve"
+    "arwn"
     "aseko_pool_live"
     "assist_pipeline"
     "assist_satellite"
