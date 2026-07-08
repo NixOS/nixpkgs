@@ -12,6 +12,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.2.0";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
