@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux SDL/ImGui edition software for viewing .brd files";
     mainProgram = "openboardview";
     homepage = "https://github.com/OpenBoardView/OpenBoardView";
+    changelog = "https://github.com/OpenBoardView/OpenBoardView/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ k3a ];
