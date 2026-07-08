@@ -11,18 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teamtype";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "teamtype";
     repo = "teamtype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-74MufpLTACkPevzOyaXw2Rr7S7VvaFEYHEyTQYwKVT8=";
+    hash = "sha256-FsT1ako/3EIPynWuBqCSiwaZtMnsd7ypJnrh+4EDRwM=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/daemon";
-
-  cargoHash = "sha256-OIOffnCC9PlT/SXPOuTnKx3feZnkHP+jzbQIJWX0tzk=";
+  cargoHash = "sha256-gphTpVKbmfYJSUasOCtNgyMKI9JU/if8KcH7Lu3Svjs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,6 +49,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  # E2E Tests fail reporting:
+  # Before running e2e tests you must build /build/source/target/debug/teamtype
+  checkFlags = [
+    "--skip=nvim_processes_deltas_correctly"
+    "--skip=nvim_sends_correct_delta"
+    "--skip=nvim_sends_something_to_socket"
+    "--skip=plugin_loaded"
+    "--skip=teamtype_executable_from_nvim"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
