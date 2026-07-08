@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "chezmoi";
-  version = "2.70.5";
+  version = "2.71.0";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KvPUIucPW+vTJ9HY1rtD9nwyei+JHhYGSBRDtEh8PGg=";
+    hash = "sha256-s3qhTNAia8vaCT9yXas6AjtmtEfWpvj6T9uPgaC7axo=";
   };
 
-  vendorHash = "sha256-jCKO/ih/HRLZ5hv4Ib8qB9kIJagJQq79wtSqBi+BgCY=";
+  vendorHash = "sha256-kuXEM97V9FFtzb2/kGMXjQufvs2+gFfhQeAQE4LlYf8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,12 +42,12 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "Manage your dotfiles across multiple machines, securely";
     homepage = "https://www.chezmoi.io/";
     changelog = "https://github.com/twpayne/chezmoi/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
-    maintainers = [ ];
+    license = licenses.mit;
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "chezmoi";
   };
 })
