@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  darwin,
   nodejs_22,
   perl,
   python3,
@@ -182,10 +183,11 @@ buildNpmPackage (finalAttrs: {
     rsync
     copyDesktopItems
   ]
-  ++ lib.optionals stdenv.targetPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
+    darwin.autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals (!stdenv.targetPlatform.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     wrapGAppsHook3
   ];
 
@@ -247,12 +249,12 @@ buildNpmPackage (finalAttrs: {
       # The correct firefox version can be found in zotero/app/config.sh at `GECKO_VERSION_LINUX`.
       mkdir -p app/xulrunner/
     ''
-    + lib.optionalString stdenv.targetPlatform.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
     ''
-    + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
-      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.targetPlatform.parsed.kernel.name}-${
-        lib.replaceString "aarch64" "arm64" stdenv.targetPlatform.parsed.cpu.name
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
+        lib.replaceString "aarch64" "arm64" stdenv.hostPlatform.parsed.cpu.name
       }"
     ''
     + ''
@@ -261,9 +263,7 @@ buildNpmPackage (finalAttrs: {
       build_dir=$(mktemp -d)
       ./app/scripts/prepare_build -s ./build -o "$build_dir" -c release
       ./app/build.sh -d "$build_dir" -c release -s \
-        ${
-          if stdenv.targetPlatform.isDarwin then "-p m" else "-p l -a ${zoteroArch stdenv.targetPlatform}"
-        }
+        ${if stdenv.hostPlatform.isDarwin then "-p m" else "-p l -a ${zoteroArch stdenv.hostPlatform}"}
 
       runHook postBuild
     '';
@@ -307,12 +307,12 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
   ''
-  + lib.optionalString stdenv.targetPlatform.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Copy package contents
     mkdir -p $out/Applications
     cp -r app/staging/Zotero.app $out/Applications/
   ''
-  + lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Copy package contents
     mkdir -p $out/lib/
     cp -r app/staging/*/. $out/lib/
@@ -331,7 +331,7 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (!stdenv.targetPlatform.isDarwin) ''
+  preFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     gappsWrapperArgs+=(--suffix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
         libGL
@@ -341,7 +341,7 @@ buildNpmPackage (finalAttrs: {
     })
   '';
 
-  postFixup = lib.optionalString stdenv.targetPlatform.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     makeWrapper $out/Applications/Zotero.app/Contents/MacOS/zotero $out/bin/zotero
   '';
