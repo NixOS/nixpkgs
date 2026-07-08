@@ -14,7 +14,7 @@
   autoAddDriverRunpath,
   effectiveMagma ?
     if cudaSupport then
-      magma-cuda-static
+      magma-cuda-static.override { inherit cudaPackages; }
     else if rocmSupport then
       magma-hip
     else
