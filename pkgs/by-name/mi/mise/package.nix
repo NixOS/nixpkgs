@@ -144,7 +144,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
 })
