@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "openmotor";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reilleya";
     repo = "openMotor";
     tag = "v${version}";
-    hash = "sha256-5b/Q/qjd2EH+OG6pAZhPTnEnFy0e/reBH8sIH0DZORo=";
+    hash = "sha256-DPEC0nW2z7kuOAZE6ZWk1Ge+cx2V9XdwjWMDOcKPLdY=";
   };
 
   patches = [
