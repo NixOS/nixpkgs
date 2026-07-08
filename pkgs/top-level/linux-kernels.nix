@@ -238,6 +238,8 @@ in
         inherit (pkgs) oci-seccomp-bpf-hook; # added 2022-11
         inherit (pkgs) dpdk; # added 2024-03
 
+        rebuildImage = callPackage ../os-specific/linux/kernel/rebuild-image.nix { };
+
         acer-wmi-battery = callPackage ../os-specific/linux/acer-wmi-battery { };
 
         acpi_call = callPackage ../os-specific/linux/acpi-call { };
