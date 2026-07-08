@@ -51,22 +51,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "persim" ];
 
-  disabledTests = [
-    # AttributeError: module 'collections' has no attribute 'Iterable'
-    "test_empyt_diagram_list"
-    "test_empty_diagram_list"
-    "test_fit_diagram"
-    "test_integer_diagrams"
-    "test_lists_of_lists"
-    "test_mixed_pairs"
-    "test_multiple_diagrams"
-    "test_n_pixels"
-    # https://github.com/scikit-tda/persim/issues/67
-    "test_persistenceimager"
-    # ValueError: setting an array element with a sequence
-    "test_exact_critical_pairs"
-  ];
-
   meta = {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
