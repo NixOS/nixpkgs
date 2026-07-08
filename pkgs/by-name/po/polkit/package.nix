@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   glib,
   expat,
@@ -40,7 +39,7 @@ let
   system = "/run/current-system/sw";
   setuid = "/run/wrappers/bin";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polkit";
   version = "127";
 
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "polkit-org";
     repo = "polkit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YTugETy0rqu/bv53jV1UeGqSK79bRXR52EJNcTblvzo=";
   };
 
@@ -193,4 +192,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.freedesktop ];
   };
-}
+})
