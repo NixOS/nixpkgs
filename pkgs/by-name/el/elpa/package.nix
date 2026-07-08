@@ -116,9 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     #patchShebangs ./
 
-    # Run dual threaded
-    export OMP_NUM_THREADS=2
-
     # Reduce test problem sizes
     export TEST_FLAGS="1500 50 16"
   '';
