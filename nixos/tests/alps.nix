@@ -1,12 +1,16 @@
+{ lib, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
+  port = 1323;
 in
-{ pkgs, ... }:
 {
   name = "alps";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ hmenke ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      hmenke
+      prince213
+    ];
   };
 
   nodes = {
@@ -53,9 +57,8 @@ in
           };
         };
       };
-
     client =
-      { nodes, config, ... }:
+      { nodes, pkgs, ... }:
       {
         security.pki.certificateFiles = [
           certs.ca.cert
@@ -65,31 +68,44 @@ in
         '';
         services.alps = {
           enable = true;
-          theme = "alps";
-          imaps = {
-            host = domain;
-            port = 993;
-          };
-          smtps = {
-            host = domain;
-            port = 465;
+          settings = {
+            server = {
+              addr = ":${toString port}";
+            };
+            provider = {
+              type = "imap";
+              imap = {
+                server = "imaps://${domain}:993";
+              };
+            };
+            smtp = {
+              server = "smtps://${domain}:465";
+            };
           };
         };
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "test-alps-login" { } ''
             from urllib.request import build_opener, HTTPCookieProcessor, Request
-            from urllib.parse import urlencode, urljoin
+            from urllib.parse import urljoin
             from http.cookiejar import CookieJar
+            import json
 
-            baseurl = "http://localhost:${toString config.services.alps.port}"
+            baseurl = "http://localhost:${toString port}"
             username = "alice"
             password = "${nodes.server.users.users.alice.password}"
             cookiejar = CookieJar()
             cookieprocessor = HTTPCookieProcessor(cookiejar)
             opener = build_opener(cookieprocessor)
 
-            data = urlencode({"username": username, "password": password}).encode()
-            req = Request(urljoin(baseurl, "login"), data=data, method="POST")
+            data = json.dumps(
+                {"username": username, "password": password, "remember-me": ""}
+            ).encode()
+            req = Request(
+                urljoin(baseurl, "session"),
+                data=data,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
             with opener.open(req) as ret:
                 # Check that the alps_session cookie is set
                 print(cookiejar)
@@ -102,9 +118,9 @@ in
                 assert any(cookie.name == "alps_session" for cookie in cookiejar)
                 # ...and that we have not been redirected back to the login page
                 print(ret.url)
-                assert ret.url == urljoin(baseurl, "mailbox/INBOX")
+                assert ret.url != urljoin(baseurl, "#/login")
 
-            req = Request(urljoin(baseurl, "logout"))
+            req = Request(urljoin(baseurl, "session"), method="DELETE")
             with opener.open(req) as ret:
                 # Check that the alps_session cookie is now gone
                 print(cookiejar)
@@ -114,18 +130,16 @@ in
       };
   };
 
-  testScript =
-    { nodes, ... }:
-    ''
-      server.start()
-      server.wait_for_unit("postfix.service")
-      server.wait_for_unit("dovecot.service")
-      server.wait_for_open_port(465)
-      server.wait_for_open_port(993)
+  testScript = ''
+    server.start()
+    server.wait_for_unit("postfix.service")
+    server.wait_for_unit("dovecot.service")
+    server.wait_for_open_port(465)
+    server.wait_for_open_port(993)
 
-      client.start()
-      client.wait_for_unit("alps.service")
-      client.wait_for_open_port(${toString nodes.client.services.alps.port})
-      client.succeed("test-alps-login")
-    '';
+    client.start()
+    client.wait_for_unit("alps.service")
+    client.wait_for_open_port(${toString port})
+    client.succeed("test-alps-login")
+  '';
 }

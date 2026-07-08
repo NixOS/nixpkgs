@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CPRn1F15N4Rjry91Gu+ZXWpKVTOEnHI3TmZn8502QB4=";
+    hash = "sha256-WqfxrVAJvD6Y6ZjkhbvibL6Bps7PL2lx3JBY94Yd6kk=";
   };
 
   postPatch = ''

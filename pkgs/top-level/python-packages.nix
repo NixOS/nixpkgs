@@ -21805,6 +21805,8 @@ self: super: with self; {
 
   vt-py = callPackage ../development/python-modules/vt-py { };
 
+  vtherm-api = callPackage ../development/python-modules/vtherm-api { };
+
   vtjp = callPackage ../development/python-modules/vtjp { };
 
   vtk = toPythonModule (
