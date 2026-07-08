@@ -2,6 +2,7 @@
   stdenv,
   lib,
   makeDesktopItem,
+  makeBinaryWrapper,
   makeWrapper,
   lndir,
   config,
@@ -298,10 +299,11 @@ let
       );
 
       nativeBuildInputs = [
-        makeWrapper
         lndir
         jq
-      ];
+      ]
+      ++ (lib.optional isDarwin makeBinaryWrapper)
+      ++ (lib.optional (!isDarwin) makeWrapper);
       buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
 
       makeWrapperArgs = [
@@ -378,6 +380,7 @@ let
           sourceBinary = "${browser}/${executablePath}";
           libDir = if isDarwin then "${appPath}/Contents/Resources" else "lib/${libName}";
           prefsDir = if isDarwin then "${libDir}/browser/defaults/preferences" else "${libDir}/defaults/pref";
+          wrapperCommand = if isDarwin then "makeBinaryWrapper" else "makeWrapper";
         in
         ''
           if [ ! -x "${sourceBinary}" ]
@@ -491,7 +494,7 @@ let
         + ''
           concatTo makeWrapperArgs oldWrapperArgs
 
-          makeWrapper "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
+          ${wrapperCommand} "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
 
           #############################
           #                           #
@@ -584,7 +587,7 @@ let
         ''
         + lib.optionalString isDarwin ''
           mkdir -p "$out/bin"
-          makeWrapper "$out/${executablePath}" "$out/bin/${launcherName}"
+          ${wrapperCommand} "$out/${executablePath}" "$out/bin/${launcherName}"
         '';
 
       preferLocalBuild = true;
