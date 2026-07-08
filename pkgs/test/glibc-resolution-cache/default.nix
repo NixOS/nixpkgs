@@ -32,6 +32,16 @@
 # overriding libfoo and asserts the override wins over the note's exact real/
 # entry. The fixture relies on the sandbox build root being /build for both
 # the fixture build and this test, like the LD_DEBUG assumption above.
+#
+# A fourth fixture links a hand-crafted note whose descriptor is a bare
+# "\0\0", i.e. an empty pair sequence, something patchelf never emits (it
+# writes no note at all when it has nothing to record). The loader must treat
+# it as an empty cache: no hits, graceful fallback to the normal RUNPATH walk,
+# and the program still runs. Because the linker (not patchelf) places this
+# note, it shares a PT_NOTE segment with the GNU build-id and ABI-tag notes,
+# so this also exercises the reader stepping over foreign notes. It lives in
+# the control package: generate-ld-cache rightly fails the build when a
+# binary already carries a note with a different descriptor.
 
 {
   lib,
@@ -86,6 +96,26 @@ let
         $CC main_foo.c -o $out/bin/prog-runtime \
           -L$out/lib/real -lfoo \
           -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/real"
+
+        ${lib.optionalString (!generateCache) ''
+          # A well-formed note (padded to the 4-byte boundary, so readelf and
+          # the loader agree on where it ends) whose descriptor is just the
+          # end-of-sequence NUL plus one more: an empty cache.
+          printf '%s\n' \
+            '.section .note.nixos.ldcache, "a", %note' \
+            '.balign 4' \
+            '.long 6' \
+            '.long 2' \
+            '.long 0x63a86cb6' \
+            '.ascii "NixOS\0"' \
+            '.balign 4' \
+            '.byte 0, 0' \
+            '.balign 4' \
+            '.section .note.GNU-stack, "", %progbits' > empty-note.s
+          $CC main.c empty-note.s -o $out/bin/prog-empty \
+            -L$out/lib/dep -lbar -L$out/lib/real -lfoo \
+            -Wl,--enable-new-dtags -Wl,-rpath,"$out/lib/dep:$out/lib/real"
+        ''}
 
         runHook postBuild
       '';
@@ -195,6 +225,28 @@ runCommand "glibc-resolution-cache-test"
     rc=0
     "$control/bin/prog-runtime" || rc=$?
     [ "$rc" -eq 42 ]
+
+    prog_empty="$control/bin/prog-empty"
+
+    echo "[test] the crafted note carries an empty two-NUL descriptor"
+    readelf -n "$prog_empty" | grep NixOS | grep -q 0x00000002
+
+    echo "[test] an empty note is harmless: the loader falls back to the RUNPATH walk"
+    e=$(probes "$prog_empty")
+    echo "  dep/ probes (empty note): $e"
+    [ "$e" -gt 0 ]
+
+    echo "[test] an empty note never produces a cache hit"
+    if { LD_DEBUG=libs "$prog_empty" 2>&1 >/dev/null || true; } \
+        | grep -q "trying cached file="; then
+      echo "  unexpected cache hit with an empty note" >&2
+      exit 1
+    fi
+
+    echo "[test] the program with the empty note still runs (returns 7)"
+    rc=0
+    "$prog_empty" || rc=$?
+    [ "$rc" -eq 7 ]
 
     echo "[test] PASS"
     touch "$out"
