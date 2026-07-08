@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hk";
-  version = "1.48.0";
+  version = "1.50.0";
 
   __structuredAttrs = true;
 
@@ -22,14 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "hk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jQVEKyFdzeVLBKkX3/zjJBXawxR6ayuf+8wSingESZA=";
+    hash = "sha256-1sty3JUxiT4UDPmoqR6vql9bQcoSR+xfq3dQzT6u6rY=";
   };
 
-  cargoHash = "sha256-QzjoLnHlGTdnNfsfaRn7ZVeTwQZumN87IOhubLcEDLQ=";
+  cargoHash = "sha256-oUgAzO7kWVlbw1ZvcjqIdV78tvXQYlV5bwvOSucQvWE=";
 
   nativeBuildInputs = [
     installShellFiles
-    versionCheckHook
     pkg-config
     usage
   ];
@@ -58,6 +57,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--all-features" ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hk \
       --bash <($out/bin/hk completion bash) \
@@ -72,7 +74,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://hk.jdx.dev";
     changelog = "https://github.com/jdx/hk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ typedrat ];
+    maintainers = with lib.maintainers; [
+      typedrat
+      Br1ght0ne
+    ];
     mainProgram = "hk";
   };
 })

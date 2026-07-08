@@ -6496,8 +6496,6 @@ with pkgs;
   # pcre32 seems unused
   pcre-cpp = pcre.override { variant = "cpp"; };
 
-  pcre2 = callPackage ../development/libraries/pcre2 { };
-
   inherit
     (callPackage ../development/libraries/physfs {
     })
