@@ -31,6 +31,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-UH1t/CXJ7OX250SoUZYKMIAHuCxYxOT6l79RXI/oMLs=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=80,<81" setuptools
+  '';
+
   build-system = [
     setuptools
   ];

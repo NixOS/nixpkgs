@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fido2";
-  version = "2.1.1";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8TefhFhwzH/GTH8HMjw85B6MlsNwVOeeCs1WMLP+xaw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-hXh0KKlMP46vcvD/MK+6mDtVmhsbeVyTMYyBtK1AYsQ=";
   };
 
   build-system = [ poetry-core ];
@@ -28,7 +28,10 @@ buildPythonPackage rec {
     pcsc = [ pyscard ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     "-v"
@@ -40,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Provides library functionality for FIDO 2.0, including communication with a device over USB";
     homepage = "https://github.com/Yubico/python-fido2";
-    changelog = "https://github.com/Yubico/python-fido2/releases/tag/${version}";
+    changelog = "https://github.com/Yubico/python-fido2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

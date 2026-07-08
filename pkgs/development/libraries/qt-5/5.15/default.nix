@@ -10,6 +10,7 @@
   generateSplicesForMkScope,
   lib,
   stdenv,
+  callPackages,
   gcc14Stdenv,
   fetchurl,
   fetchgit,
@@ -297,6 +298,7 @@ let
 
       wrapQtAppsHook = callPackage (
         {
+          wrapQtAppsHook,
           makeBinaryWrapper,
           qtbase,
           qtwayland,
@@ -308,6 +310,9 @@ let
             makeBinaryWrapper
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
+          passthru.tests = callPackages ../../qt-6/tests/wrap-qt-apps-hook.nix {
+            inherit qtbase wrapQtAppsHook;
+          };
           meta.license = lib.licenses.mit;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };

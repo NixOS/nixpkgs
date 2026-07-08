@@ -25,6 +25,8 @@
   buildPackages,
   gobject-introspection,
   testers,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -83,8 +89,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  env.FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
+  env = {
+    FONTCONFIG_FILE = makeFontsConf {
+      fontDirectories = [ freefont_ttf ];
+    };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # workaround for ld64 hardening issue
+    #
+    # TODO: Clean up on `staging`
+    CC_LD = "lld";
+    OBJC_LD = "lld";
   };
 
   # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
@@ -139,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
       "pangofc"
       "pangoft2"
       "pangoot"
+    ]
+    ++ lib.optionals x11Support [
       "pangoxft"
     ];
   };

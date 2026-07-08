@@ -27,6 +27,8 @@
   gdktarget ? if stdenv.hostPlatform.isDarwin then "quartz" else "x11",
   cupsSupport ? config.gtk2.cups or stdenv.hostPlatform.isLinux,
   xineramaSupport ? stdenv.hostPlatform.isLinux,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -56,13 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     gtkCleanImmodulesCache
   ];
 
-  nativeBuildInputs = finalAttrs.setupHooks ++ [
-    gdk-pixbuf
-    gettext
-    gobject-introspection
-    perl
-    pkg-config
-  ];
+  nativeBuildInputs =
+    finalAttrs.setupHooks
+    ++ [
+      gdk-pixbuf
+      gettext
+      gobject-introspection
+      perl
+      pkg-config
+    ]
+    # TODO: Clean up on `staging`
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.lld
+    ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
@@ -120,12 +128,19 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=implicit-int"
-      "-Wno-error=incompatible-pointer-types"
-    ];
-  };
+  env =
+    lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=implicit-int"
+        "-Wno-error=incompatible-pointer-types"
+      ];
+    }
+    # Fix for ld64 hardening issue
+    #
+    # TODO: Clean up on `staging`
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    };
 
   enableParallelBuilding = true;
 

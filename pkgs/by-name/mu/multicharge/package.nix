@@ -80,10 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     echo 'set(custom-lapack_FOUND TRUE)' >> config/cmake/Findcustom-lapack.cmake
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";

@@ -4,6 +4,9 @@
   fetchFromGitHub,
   lib,
   setuptools,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +31,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     darwin.DarwinTools # sw_vers
+
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -35,6 +41,9 @@ buildPythonPackage rec {
     "-Wno-error=cast-function-type-mismatch"
     "-Wno-error=unused-command-line-argument"
   ];
+
+  # TODO: Clean up on `staging`.
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   pythonImportsCheck = [ "objc" ];
 

@@ -20,6 +20,8 @@
   which,
   # darwin support
   xcbuild,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 
   dbus,
   fontconfig,
@@ -192,6 +194,8 @@ stdenv.mkDerivation (
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         xcbuild
+        # TODO: Clean up on `staging`
+        llvmPackages.lld
       ];
 
     }
@@ -373,6 +377,12 @@ stdenv.mkDerivation (
         # if dependency paths contain the string "pq", which can occur in the hash.
         # To prevent these failures, we need to override PostgreSQL detection.
         PSQL_LIBS = "-L${libpq}/lib -lpq";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        # Fix for ld64 hardening issue
+        #
+        # TODO: Clean up on `staging`
+        NIX_CFLAGS_LINK = "-fuse-ld=lld";
       };
 
       prefixKey = "-prefix ";

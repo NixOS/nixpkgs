@@ -70,8 +70,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 3;
-    hash = "sha256-BPukv+nFcXncEwRvBd5JEmUNsX3JIXYldbaOGXakhJA=";
+    fetcherVersion = 4;
+    hash = "sha256-ixBGVKYAk1FYcAayvKKJMT5v3JLjSK17ds0mrBEj850=";
   };
 
   cargoRoot = "src-tauri";

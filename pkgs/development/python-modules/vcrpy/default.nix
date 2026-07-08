@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "8.1.1";
+  version = "8.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kevin1024";
     repo = "vcrpy";
     tag = "v${version}";
-    hash = "sha256-X6cOoj+XP0lVvf78FTb7FkNqrq5RfXtQlQ3lcOzr3D8=";
+    hash = "sha256-PlpbBzAj9a4bAfORGozAAsbrzngJt2Pnnp3bI96wYfI=";
   };
 
   build-system = [ setuptools ];

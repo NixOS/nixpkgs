@@ -49,6 +49,9 @@ rustPlatform.buildRustPackage rec {
 
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
+
+    # #[deny(warnings)] trips on newer rustc
+    RUSTFLAGS = "--cap-lints warn";
   };
   nativeBuildInputs = [
     protobuf
