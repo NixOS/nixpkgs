@@ -228,7 +228,6 @@ stdenv'.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
     cudaPackages.cuda_cudart
   ]
   ++ lib.optionals isDarwin [
