@@ -232,6 +232,8 @@ let
       ];
     };
 
+  configDirPrefix = "lib/${passthru.libPrefix}/config-${passthru.pythonVersion}";
+
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
   nativeBuildInputs = [
@@ -510,7 +512,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-suffix=${execSuffix}"
   ]
   ++ optionals enableLTO [
-    "--with-lto"
+    # The fixup below assumes ThinLTO bitcode. Request it explicitly with Clang
+    # instead of relying on CPython's version-dependent default policy; Python
+    # 3.11, in particular, preserves the historical full-LTO default.
+    (if stdenv.cc.isClang then "--with-lto=thin" else "--with-lto")
   ]
   ++ optionals (!static && !enableFramework) [
     "--enable-shared"
@@ -674,7 +679,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Get rid of retained dependencies on -dev packages, and remove
       # some $TMPDIR references to improve binary reproducibility.
       # Note that the .pyc file of _sysconfigdata.py should be regenerated!
-      for i in $out/lib/${libPrefix}/_sysconfigdata*.py $out/lib/${libPrefix}/config-${sourceVersion.major}.${sourceVersion.minor}*/Makefile; do
+      for i in $out/lib/${libPrefix}/_sysconfigdata*.py "$out/${configDirPrefix}"*/Makefile; do
          sed -i $i -e "s|$TMPDIR|/no-such-path|g"
       done
 
@@ -758,10 +763,44 @@ stdenv.mkDerivation (finalAttrs: {
       linkDLLsInfolder $out/lib/python*/lib-dynload/
     '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
-  '';
+  preFixup =
+    lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      # Ensure patch-shebangs uses shebangs of host interpreter.
+      export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
+    ''
+    + lib.optionalString (enableLTO && stdenv.cc.isClang && !enableDebug) ''
+      # ThinLTO debug metadata in libpython.a retains references to the SDK.
+      opt=${lib.getExe' stdenv.cc.cc.libllvm "opt"}
+      llvmAr=${lib.getExe' stdenv.cc.cc.libllvm "llvm-ar"}
+
+      for archive in "$out/${configDirPrefix}"*/libpython*.a; do
+        work="$(mktemp -d)"
+        mapfile -t members < <("$llvmAr" t "$archive")
+
+        # Sanity check: bulk extraction cannot distinguish duplicate archive
+        # members. Revisit this if libpython ever contains duplicate names.
+        duplicateMembers="$(printf '%s\n' "''${members[@]}" | sort | uniq -d)"
+        if [[ -n "$duplicateMembers" ]]; then
+          echo "duplicate members in $archive:" >&2
+          printf '%s\n' "$duplicateMembers" >&2
+          exit 1
+        fi
+
+        "$llvmAr" x --output "$work" "$archive"
+
+        for member in "''${members[@]}"; do
+          "$opt" -strip-debug -module-summary -module-hash \
+            "$work/$member" -o "$work/$member.stripped"
+          mv "$work/$member.stripped" "$work/$member"
+        done
+
+        (
+          cd "$work"
+          "$llvmAr" rs "$archive" "''${members[@]}"
+        )
+        rm -rf "$work"
+      done
+    '';
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
