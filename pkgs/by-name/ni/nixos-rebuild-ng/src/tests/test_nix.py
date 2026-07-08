@@ -275,6 +275,17 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
             },
         )
 
+    # NIXOS_REBUILD_SSH_DEFAULT_OPTS replaces the ControlMaster defaults
+    monkeypatch.setenv("NIX_SSHOPTS", "-oControlPath=/run/user/1000/%C")
+    monkeypatch.setenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS", "")
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--to", "user@target.host", closure],
+            append_local_env={"NIX_SSHOPTS": "-oControlPath=/run/user/1000/%C"},
+        )
+    monkeypatch.delenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS")
+
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     env = {"NIX_SSHOPTS": " ".join(["--ssh build-target-opt", *p.SSH_DEFAULT_OPTS])}
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
