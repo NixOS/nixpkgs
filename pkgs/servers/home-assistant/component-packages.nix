@@ -363,7 +363,8 @@
       ];
     "aqvify" =
       ps: with ps; [
-      ]; # missing inputs: pyaqvify
+        pyaqvify
+      ];
     "aranet" =
       ps: with ps; [
         aioesphomeapi
@@ -7842,6 +7843,7 @@
     "apsystems"
     "aquacell"
     "aqualogic"
+    "aqvify"
     "aranet"
     "arcam_fmj"
     "arve"
