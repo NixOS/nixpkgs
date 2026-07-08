@@ -8,6 +8,11 @@ let
   cfg = config.services.part-db;
   pkg = cfg.package;
 
+  envFile = pkgs.writeText "part-db-env" (
+    lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=\"${value}\"") cfg.settings)
+    + "\n"
+  );
+
   inherit (lib)
     mkEnableOption
     mkPackageOption
@@ -59,6 +64,17 @@ in
       default = "localhost";
       description = ''
         The virtualHost at which you wish part-db to be served.
+      '';
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/part-db.env";
+      description = ''
+        Path to a file containing extra Part-DB environment variables in dotenv
+        format. This can be used for secrets such as `APP_SECRET` without
+        putting them in the Nix store.
       '';
     };
 
@@ -213,10 +229,32 @@ in
 
     systemd = {
       services = {
+        part-db-setup = {
+          before = [ "part-db-migrate.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          restartTriggers = [ envFile ];
+          script = ''
+            install -Dm0600 -o part-db -g part-db ${envFile} /var/lib/part-db/env.local
+          ''
+          + lib.optionalString (cfg.environmentFile != null) ''
+            cat ${lib.escapeShellArg cfg.environmentFile} >> /var/lib/part-db/env.local
+          '';
+        };
+
         part-db-migrate = {
           before = [ "phpfpm-part-db.service" ];
-          after = [ "postgresql.target" ];
-          requires = [ "postgresql.target" ];
+          after = [
+            "postgresql.target"
+            "part-db-setup.service"
+          ];
+          requires = [
+            "postgresql.target"
+            "part-db-setup.service"
+          ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -250,11 +288,6 @@ in
           mode = "0750";
           user = "part-db";
           group = "part-db";
-        };
-        "/var/lib/part-db/env.local"."L+" = {
-          argument = "${pkgs.writeText "part-db-env" (
-            lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=\"${value}\"") cfg.settings)
-          )}";
         };
         "/var/lib/part-db/".d = {
           mode = "0755";

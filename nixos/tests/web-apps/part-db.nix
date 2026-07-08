@@ -5,7 +5,12 @@
 
   nodes = {
     machine = {
-      services.part-db.enable = true;
+      services.part-db = {
+        enable = true;
+        environmentFile = pkgs.writeText "part-db.env" ''
+          APP_SECRET=0123456789abcdef0123456789abcdef
+        '';
+      };
     };
   };
 
@@ -21,6 +26,8 @@
     machine.succeed("test -d /var/lib/part-db/share")
     machine.succeed("test $(readlink ${pkgs.part-db}/public/media) = /var/lib/part-db/public/media/")
     machine.succeed("test $(readlink ${pkgs.part-db}/uploads) = /var/lib/part-db/uploads/")
+    machine.succeed("grep APP_SECRET=0123456789abcdef0123456789abcdef /var/lib/part-db/env.local")
+    machine.succeed("test $(stat -c %a:%U:%G /var/lib/part-db/env.local) = 600:part-db:part-db")
 
     machine.wait_for_open_port(80)
 
