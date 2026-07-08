@@ -24155,6 +24155,12 @@
     githubId = 7335;
     name = "Roman Gonzalez";
   };
+  roman-16 = {
+    email = "roman@lerchster.dev";
+    github = "roman-16";
+    githubId = 15262665;
+    name = "Roman";
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";
