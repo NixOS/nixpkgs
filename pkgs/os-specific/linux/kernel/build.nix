@@ -417,37 +417,52 @@ lib.makeOverridable (
         echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
         exit 1
       fi
-
-      cd $buildRoot
     '';
 
     postInstall = ''
-      mkdir -p $dev
-      cp vmlinux $dev/
-    ''
-    + optionalString isModular ''
-      mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
-      # Installing from source dir instead of $buildRoot so as to omit intermediate artifacts.
-      cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
-      # Installing `constants.py` from `$buildRoot` as it's generated.
-      cp scripts/gdb/linux/constants.py $dev/lib/modules/${modDirVersion}/build/scripts/gdb/linux
+      # Keep some extra files.
+      shopt -s extglob
+      keepPaths=(
+        # Required for building external modules with BTF information.
+        "$buildRoot/vmlinux"
+        "$buildRoot/tools/bpf/resolve_btfids/resolve_btfids"
 
-      unlink $modules/lib/modules/${modDirVersion}/build
+        # Possibly not required by anything, but we kept it before,
+        # Fedora and Arch keep it around, and it seems like it might be
+        # generally useful.
+        "$buildRoot/.config"
 
-      mkdir -p $dev/lib/modules/${modDirVersion}/build
+        # Required for building external modules on some PowerPC
+        # configurations.
+        "$buildRoot/arch/powerpc/lib/crtsavres.o"
+      )
+      shopt -u extglob
 
-      cd $dev/lib/modules/${modDirVersion}/source
-
-      cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-      make modules_prepare "''${makeFlags[@]}" O=$dev/lib/modules/${modDirVersion}/build
-
-      # Keep an extra file on powerpc
-      for f in arch/powerpc/lib/crtsavres.o; do
-        if [ -f "$buildRoot/$f" ]; then
-          mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
-          cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+      keepRoot=$(mktemp -d)
+      for path in "''${keepPaths[@]}"; do
+        if [[ -e $path ]]; then
+          keepPath=''${path/#"$buildRoot"/"$keepRoot"}
+          mkdir -p -- "''${keepPath%/*}"
+          mv -- "$path" "$keepPath"
         fi
       done
+
+      make "''${makeFlags[@]}" clean
+
+      find -- "$buildRoot" -type d -empty -delete
+      mv -- "$buildRoot" ..
+      buildRoot="$dev/lib/modules/${modDirVersion}/build"
+      cp -a -- "$keepRoot/." "$buildRoot/"
+
+      # Ensure that `KBUILD_OUTPUT` is set correctly in the retained
+      # build tree’s Makefile; otherwise e.g. the ZFS build breaks.
+      make "''${makeFlags[@]}" outputmakefile
+
+      ln -s "$buildRoot/vmlinux" "$dev/"
+
+      if [[ -v modules ]]; then
+        unlink $modules/lib/modules/${modDirVersion}/build
+      fi
 
       # !!! No documentation on how much of the source tree must be kept
       # If/when kernel builds fail due to missing files, you can add
@@ -455,13 +470,10 @@ lib.makeOverridable (
       # from drivers/ in the future; it adds 50M to keep all of its
       # headers on 3.10 though.
 
-      chmod u+w -R ..
-      buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
-
       # Remove unused arches
       for d in $(cd arch/; ls); do
-        if [ -d "$buildArchDir/$d" ]; then continue; fi
-        if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
+        if [ -d "$buildRoot/arch/$d" ]; then continue; fi
+        if [ -d "$buildRoot/arch/arm64" ] && [ "$d" = arm ]; then continue; fi
         rm -rf arch/$d
       done
 
@@ -495,6 +507,8 @@ lib.makeOverridable (
         $STRIP -v -S -p $out/vmlinux
       fi
     '';
+
+    stripExclude = [ "lib/modules/${modDirVersion}/build/vmlinux" ];
 
     requiredSystemFeatures = [ "big-parallel" ];
 
