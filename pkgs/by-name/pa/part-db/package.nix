@@ -11,6 +11,8 @@
   envLocalPath ? "/var/lib/part-db/env.local",
   cachePath ? "/var/cache/part-db/",
   logPath ? "/var/log/part-db/",
+  mediaPath ? "/var/lib/part-db/public/media/",
+  uploadsPath ? "/var/lib/part-db/uploads/",
 }:
 let
   pname = "part-db";
@@ -79,10 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out
     mv * .* $out/
 
-    rm -rf $out/var/{cache,log}
+    rm -rf $out/var/{cache,log} $out/public/media $out/uploads
     ln -s ${envLocalPath} $out/.env.local
     ln -s ${logPath} $out/var/log
     ln -s ${cachePath} $out/var/cache
+    ln -s ${mediaPath} $out/public/media
+    ln -s ${uploadsPath} $out/uploads
   '';
 
   passthru.tests = { inherit (nixosTests) part-db; };

@@ -176,18 +176,34 @@ in
           root = "${pkg}/public";
           locations = {
             "/" = {
-              tryFiles = "$uri $uri/ /index.php?$query_string";
+              tryFiles = "$uri $uri/ /index.php$is_args$args";
               index = "index.php";
               extraConfig = ''
+                add_header Content-Security-Policy "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; sandbox;" always;
+                add_header X-Content-Type-Options "nosniff" always;
                 sendfile off;
               '';
             };
-            "~ \\.php$" = {
+            "= /index.php" = {
               extraConfig = ''
-                include ${config.services.nginx.package}/conf/fastcgi_params ;
-                fastcgi_param SCRIPT_FILENAME $request_filename;
-                fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+                include ${config.services.nginx.package}/conf/fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+                fastcgi_param DOCUMENT_ROOT $realpath_root;
+                fastcgi_param modHeadersAvailable true; # Avoid sending the security headers twice
                 fastcgi_pass unix:${config.services.phpfpm.pools.part-db.socket};
+                internal;
+              '';
+            };
+            "~ \\.php$" = {
+              return = "404";
+            };
+            "~* ^/media/.*\\.(php[3-8]?|phar|phtml|pht|phps)$" = {
+              return = "403";
+            };
+            "~* \\.svg$" = {
+              extraConfig = ''
+                add_header Content-Security-Policy "default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'; sandbox;" always;
+                add_header X-Content-Type-Options "nosniff" always;
               '';
             };
           };
@@ -239,6 +255,31 @@ in
           argument = "${pkgs.writeText "part-db-env" (
             lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=\"${value}\"") cfg.settings)
           )}";
+        };
+        "/var/lib/part-db/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/public/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/public/media/".d = {
+          mode = "0755";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/uploads/".d = {
+          mode = "0750";
+          user = "part-db";
+          group = "part-db";
+        };
+        "/var/lib/part-db/share/".d = {
+          mode = "0750";
+          user = "part-db";
+          group = "part-db";
         };
         "/var/log/part-db/".d = {
           mode = "0750";
