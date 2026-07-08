@@ -10927,8 +10927,6 @@ with pkgs;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
 
-  putty = callPackage ../applications/networking/remote/putty { };
-
   qmasterpassword-wayland = qmasterpassword.override {
     x11Support = false;
     waylandSupport = true;
