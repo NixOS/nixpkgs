@@ -73,14 +73,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.4";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BSP8fi4grbEzGOfR4tGCJVjIom/1d2mnFrK8O6BRWL4=";
+    hash = "sha256-3p/e7UZ8BLwT+dpb61NmzX2Z1QxxEgkgjlNzv5lWybM=";
   };
 
   patches = [
@@ -100,16 +100,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     + lib.optionalString cudaSupport ''
       substituteInPlace mistralrs-flash-attn/build.rs \
         --replace-fail \
-          ".with_cutlass(Some(CUTLASS_COMMIT))" \
+          ".with_cutlass(Some(&cutlass_commit))" \
           ""
 
       substituteInPlace mistralrs-quant/build.rs \
         --replace-fail \
-          'builder = builder.with_cutlass(Some("7d49e6c7e2f8896c47f586706e67e1fb215529dc"));' \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
           ""
     '';
 
-  cargoHash = "sha256-T4TPm31fihx9ZvQ6jme67yrc0osl4c9CiAm4+rISgFs=";
+  cargoHash = "sha256-TULJ3mEAWp1ktPDPeBbUJGHhsEuo5T2qh3/JpS+8+ds=";
 
   nativeBuildInputs = [
     pkg-config

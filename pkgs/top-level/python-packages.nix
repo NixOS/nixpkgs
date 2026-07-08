@@ -3959,8 +3959,6 @@ self: super: with self; {
 
   dask-mpi = callPackage ../development/python-modules/dask-mpi { };
 
-  dask-yarn = callPackage ../development/python-modules/dask-yarn { };
-
   data-grand-lyon-ha = callPackage ../development/python-modules/data-grand-lyon-ha { };
 
   databackend = callPackage ../development/python-modules/databackend { };
