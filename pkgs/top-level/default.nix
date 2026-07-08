@@ -30,11 +30,11 @@ let
   # there’s nothing we can do about that within the constraints of the
   # Nix language.
   x86_64DarwinDeprecationWarning =
-    pristineLib.warn
+    lib.warn
       "Nixpkgs 26.05 will be the last release to support x86_64-darwin; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.05"
       (x: x);
 
-  pristineLib = import ../../lib;
+  lib = import ../../lib;
 in
 
 {
@@ -48,10 +48,6 @@ in
 
   # Allow a configuration attribute set to be passed in as an argument.
   config ? { },
-
-  # Temporary hack to let Nixpkgs forbid internal use of `lib.fileset`
-  # until <https://github.com/NixOS/nix/issues/11503> is fixed.
-  __allowFileset ? true,
 
   # List of overlays layers used to extend Nixpkgs.
   overlays ? [ ],
@@ -68,31 +64,16 @@ in
   ...
 }@args:
 
+assert
+  args ? __allowFileset
+  -> throw "__allowFileset option was removed as it's no longer neeed, please remove it.";
+
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
 
 in
 let
-  lib =
-    if __allowFileset then
-      pristineLib
-    else
-      pristineLib.extend (
-        _: _: {
-          fileset = abort ''
-
-            The use of `lib.fileset` is currently forbidden in Nixpkgs due to the
-            upstream Nix bug <https://github.com/NixOS/nix/issues/11503>. This
-            causes difficult‐to‐debug errors when combined with chroot stores,
-            such as in the NixOS installer.
-
-            For packages that require source to be vendored inside Nixpkgs,
-            please use a subdirectory of the package instead.
-          '';
-        }
-      );
-
   inherit (lib) throwIfNot;
 
   checked =

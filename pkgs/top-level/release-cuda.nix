@@ -34,8 +34,6 @@ in
       # Don't evaluate duplicate and/or deprecated attributes
       allowAliases = false;
     };
-
-    __allowFileset = false;
   },
   ...
 }@args:
