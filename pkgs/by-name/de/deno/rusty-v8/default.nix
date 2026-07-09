@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   rustc,
   rustc-unwrapped,
