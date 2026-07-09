@@ -1347,6 +1347,8 @@ self: super: with self; {
 
   arviz-stats = callPackage ../development/python-modules/arviz-stats { };
 
+  arwn-client = callPackage ../development/python-modules/arwn-client { };
+
   arxiv = callPackage ../development/python-modules/arxiv { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
