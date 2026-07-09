@@ -12,6 +12,7 @@
   eliom,
   resource-pooling,
   ocsigen-ppx-rpc,
+  js_of_ocaml-ppx_deriving_json,
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +24,10 @@ stdenv.mkDerivation {
     findlib
     eliom
   ];
-  buildInputs = [ ocsigen-ppx-rpc ];
+  buildInputs = [
+    ocsigen-ppx-rpc
+    js_of_ocaml-ppx_deriving_json
+  ];
   propagatedBuildInputs = [
     pgocaml_ppx
     safepass
