@@ -101,6 +101,7 @@ in
   '';
 
   meta.maintainers = with lib.maintainers; [
+    bartoostveen
     nyabinary
     snaki
   ];
