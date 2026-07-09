@@ -97,9 +97,9 @@
   },
   "jaspLearnBayes": {
     "pname": "jaspLearnBayes",
-    "version": "0.95.5-release.12",
-    "tag": "0.95.5-release.12_R-4-5-2_Release",
-    "hash": "sha256-zqMcWFML/iexmegMtGWCe/OCGqwmWW98/XZfKVs6N8w="
+    "version": "0.96.5-release.0",
+    "tag": "0.96.5-release.0_R-4-5-2_Release",
+    "hash": "sha256-TdlwB2TV+YNj4Uwf4rNSIw/OtKQHEbrFKv1t2RioTmI="
   },
   "jaspLearnStats": {
     "pname": "jaspLearnStats",
