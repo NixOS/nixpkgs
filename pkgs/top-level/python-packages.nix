@@ -3058,6 +3058,8 @@ self: super: with self; {
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
+  chefiq-ble = callPackage ../development/python-modules/chefiq-ble { };
+
   cheroot = callPackage ../development/python-modules/cheroot { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy { };
