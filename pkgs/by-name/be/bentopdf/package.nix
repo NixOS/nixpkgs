@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   simpleMode ? true,
 }:
@@ -35,8 +36,11 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests.bentopdf) caddy nginx;
+  passthru = {
+    tests = {
+      inherit (nixosTests.bentopdf) caddy nginx;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
