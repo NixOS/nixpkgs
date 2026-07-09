@@ -584,8 +584,6 @@ let
     ];
     HiCParser = [ pkgs.zlib ];
     yyjsonr = with pkgs; [ zlib.dev ];
-    RNifti = with pkgs; [ zlib.dev ];
-    RNiftyReg = with pkgs; [ zlib.dev ];
     highs = [
       pkgs.which
       pkgs.cmake
@@ -1236,6 +1234,8 @@ let
       netcdf
     ];
     rsbml = [ pkgs.libsbml ];
+    RNifti = [ pkgs.zlib ];
+    RNiftyReg = [ pkgs.zlib ];
     SuperGauss = [ pkgs.fftw ];
     ravetools = with pkgs; [
       pkg-config
