@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   imports = [ ./backend.nix ];
 
@@ -11,7 +12,8 @@
         pkgs:
         pkgs.writeScript "gen-example" ''
           #!/bin/sh
-          echo "Hewwo $(${pkgs.coreutils}/bin/cat "$prompts/example")!!" > $out/example
+          export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+          echo "Hewwo $(cat "$prompts/example")!!" > $out/example
         '';
     };
 
@@ -22,8 +24,14 @@
         pkgs:
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh
-          ${pkgs.coreutils}/bin/cat $in/example/example \
-             > $out/derived2
+          export PATH="${
+            lib.makeBinPath [
+              pkgs.coreutils
+              pkgs.cowsay
+            ]
+          }"
+
+          cat $in/example/example | cowsay > $out/derived2
         '';
     };
   };
