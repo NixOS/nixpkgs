@@ -457,10 +457,7 @@ let
       ncurses
       gsl
     ];
-    bioacoustics = [
-      pkgs.fftw.dev
-      pkgs.cmake
-    ];
+    bioacoustics = [ pkgs.cmake ];
     bigGP = [ pkgs.mpi ];
     bigrquerystorage = with pkgs; [
       grpc
@@ -1095,6 +1092,7 @@ let
       zlib.dev
       zstd.dev
     ];
+    bioacoustics = [ pkgs.fftw ];
     blosc = [ pkgs.c-blosc ];
     curl = [ pkgs.curl ];
     EHRmuse = [ pkgs.gsl.dev ];
