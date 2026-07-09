@@ -14696,6 +14696,8 @@ self: super: with self; {
 
   pyheck = callPackage ../development/python-modules/pyheck { };
 
+  pyhelty = callPackage ../development/python-modules/pyhelty { };
+
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
