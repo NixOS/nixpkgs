@@ -15,16 +15,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pijul";
-  version = "1.0.0-beta.11";
+  version = "1.0.0-beta.18";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-+rMMqo2LBYlCFQJv8WFCSEJgDUbMi8DnVDKXIWm3tIk=";
+    hash = "sha256-vU41JiuxB6Bsi88st/tkt02054oN3HEN52pnLu5hMA4=";
   };
 
-  cargoHash = "sha256-IhArTiReUdj49bA+XseQpOiszK801xX5LdLj8vXD8rs=";
-
-  patches = [ ./fix-rand-0.9-sanakirja-imports.patch ];
+  cargoHash = "sha256-Ach8wLBhZ3pA5+m910Gt+oftEaO3Mu/ii+bxgnla0ak=";
 
   doCheck = false;
   nativeBuildInputs = [
