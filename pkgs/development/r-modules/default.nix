@@ -661,7 +661,7 @@ let
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mcrPioda = [ pkgs.gsl ];
-    mwaved = [ pkgs.fftw.dev ];
+    mwaved = [ pkgs.pkg-config ];
     mzR = with pkgs; [
       zlib
       netcdf
@@ -1262,7 +1262,7 @@ let
     image_textlinedetector = [ pkgs.opencv ];
     lwgeom = [ pkgs.proj ];
     magick = [ pkgs.imagemagick ];
-    mwaved = [ pkgs.pkg-config ];
+    mwaved = [ pkgs.fftw ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
     otelsdk = with pkgs; [
