@@ -688,10 +688,7 @@ let
     ];
     ncdf4 = [ pkgs.netcdf ];
     neojags = [ pkgs.jags ];
-    nloptr = with pkgs; [
-      nlopt
-      pkg-config
-    ];
+    nloptr = [ pkgs.pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixodbc ];
     opencv = [ pkgs.pkg-config ];
@@ -1287,6 +1284,7 @@ let
     ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
+    nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
     otelsdk = with pkgs; [
