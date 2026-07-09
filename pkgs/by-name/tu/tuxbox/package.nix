@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tuxbox";
-  version = "3.1.5";
+  version = "3.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AndyCappDev";
     repo = "tuxbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5DpL9Mq/eXmk0Eh8vZY53TZXJxaJk1orS+luWnzYlrE=";
+    hash = "sha256-BZUo02q2szaxnJYx8UvYvfCErJX4KFzToCvZLuBRJKQ=";
   };
 
   build-system = [ python3Packages.setuptools ];
