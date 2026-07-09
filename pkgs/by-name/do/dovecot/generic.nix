@@ -78,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     perl
     pkg-config
+    autoreconfHook
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ autoreconfHook ]
   ++ lib.optional (withMySQL && lib.versionOlder version "2.4") fake_mysql_config;
 
   buildInputs = [
@@ -125,7 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+  env = {
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+    LUA_PATH = lib.optionalString withLua "${lua5_3.pkgs.json}/share/lua/${lua5_3.luaversion}/?.lua";
+  };
 
   postPatch = ''
     sed -i -E \
