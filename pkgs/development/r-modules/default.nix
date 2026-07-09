@@ -486,6 +486,7 @@ let
       rustc
     ];
     interpolation = [ pkgs.pkg-config ];
+    image_textlinedetector = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     CytoML = [ pkgs.libxml2.dev ];
     data_table =
@@ -1258,10 +1259,7 @@ let
       gmp
       mpfr
     ];
-    image_textlinedetector = with pkgs; [
-      pkg-config
-      opencv
-    ];
+    image_textlinedetector = [ pkgs.opencv ];
     lwgeom = [ pkgs.proj ];
     magick = [ pkgs.imagemagick ];
     mwaved = [ pkgs.pkg-config ];
