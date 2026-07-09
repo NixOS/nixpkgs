@@ -11,6 +11,7 @@
   undmg,
   makeBinaryWrapper,
   fetchpatch,
+  roboto,
 }:
 
 let
@@ -51,6 +52,38 @@ let
     postPatch = ''
       substituteInPlace lib/util/native/autostart_helper.dart \
         --replace-fail 'Exec=''${Platform.resolvedExecutable}' "Exec=localsend_app"
+    ''
+    # On aarch64-linux the Flutter engine fails to load the platform font, so
+    # all text renders blank while bundled font assets (e.g. the MaterialIcons
+    # glyphs) draw fine (https://github.com/localsend/localsend/issues/2873).
+    # Bundle Roboto as an app asset and use it as the default font family, so
+    # text is drawn from a bundled font exactly like the icons.
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      mkdir -p fonts
+      cp ${roboto}/share/fonts/truetype/Roboto-Regular.ttf fonts/
+      cp ${roboto}/share/fonts/truetype/Roboto-Medium.ttf fonts/
+      cp ${roboto}/share/fonts/truetype/Roboto-Bold.ttf fonts/
+      cp ${roboto}/share/fonts/truetype/Roboto-Italic.ttf fonts/
+      cp ${roboto}/share/fonts/truetype/Roboto-BoldItalic.ttf fonts/
+
+      substituteInPlace pubspec.yaml \
+        --replace-fail '  uses-material-design: true' '  uses-material-design: true
+        fonts:
+          - family: Roboto
+            fonts:
+              - asset: fonts/Roboto-Regular.ttf
+              - asset: fonts/Roboto-Medium.ttf
+                weight: 500
+              - asset: fonts/Roboto-Bold.ttf
+                weight: 700
+              - asset: fonts/Roboto-Italic.ttf
+                style: italic
+              - asset: fonts/Roboto-BoldItalic.ttf
+                weight: 700
+                style: italic'
+
+      substituteInPlace lib/config/theme.dart \
+        --replace-fail 'fontFamily = null;' "fontFamily = 'Roboto';"
     '';
 
     nativeBuildInputs = [
