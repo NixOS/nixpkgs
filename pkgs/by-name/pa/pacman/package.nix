@@ -44,14 +44,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pacman";
-  version = "7.1.0";
+  version = "7.1.0-unstable-2026-01-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "pacman";
     repo = "pacman";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bGg2ZrIsEYJYZCLsIh4FZROhpyLSBO0Lar1mSoz66wI=";
+    rev = "cb7452f63414291b52061166ab2ebf1083897917";
+    hash = "sha256-ocynGQ1oIeaQgLlCTCrxq/ihxziDMqrIPKAJThvV7SE=";
   };
 
   strictDeps = true;

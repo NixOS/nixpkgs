@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-time";
-  version = "2026.6.16";
+  version = "2026.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = finalAttrs.version;
-    hash = "sha256-n8l4E6S4d19GQnKWO1y2De1SuHa/R8UGlb/GMR4dbMw=";
+    hash = "sha256-rBdJoTC1wOEMbAAeSccFqaHL7lacf2SFfxZ/pp2Lx90=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/time/";
