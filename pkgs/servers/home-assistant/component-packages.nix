@@ -1726,7 +1726,8 @@
       ];
     "envertech_evt800" =
       ps: with ps; [
-      ]; # missing inputs: pyenvertechevt800
+        pyenvertechevt800
+      ];
     "environment_canada" =
       ps: with ps; [
         env-canada
@@ -8030,6 +8031,7 @@
     "enigma2"
     "enocean"
     "enphase_envoy"
+    "envertech_evt800"
     "environment_canada"
     "envisalink"
     "epic_games_store"
