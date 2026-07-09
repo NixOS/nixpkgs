@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-gcc-14.patch
     # error: initialization of 'void (*)(int,  int,  int)' from incompatible pointer type 'void (*)(void)' [-Wincompatible-pointer-types]
     ./fix-gcc-15.patch
+    # fixes Wayland segfault from missing X11 fonts by providing a fallback
+    ./fix-wayland-segfault.patch
   ];
 
   nativeBuildInputs = [
