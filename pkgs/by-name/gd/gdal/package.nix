@@ -79,8 +79,8 @@
   xz,
   zlib,
   zstd,
+  buildPackages,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
   version = "3.13.1";
@@ -132,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     # This is not strictly needed as the Java bindings wouldn't build anyway if
     # ant/jdk were not available.
     "-DBUILD_JAVA_BINDINGS=OFF"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   buildInputs =
