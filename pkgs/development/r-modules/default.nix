@@ -707,7 +707,7 @@ let
       pkgs.pkg-config
       pkgs.clp
     ];
-    pdftools = [ pkgs.poppler.dev ];
+    pdftools = [ pkgs.pkg-config ];
     PEPBVS = [ pkgs.gsl ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
@@ -1294,7 +1294,7 @@ let
       protobuf
       zlib.dev
     ];
-    pdftools = [ pkgs.pkg-config ];
+    pdftools = [ pkgs.poppler ];
     qckitfastq = [ pkgs.zlib.dev ];
     raer = with pkgs; [
       zlib.dev
