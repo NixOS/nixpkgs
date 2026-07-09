@@ -1069,7 +1069,10 @@ let
     ];
     symbolicQspray = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
-    vapour = [ pkgs.pkg-config ];
+    vapour = with pkgs; [
+      pkg-config
+      gdal # for gdal-config
+    ];
     xdvir = [ pkgs.freetype.dev ];
   };
 
@@ -1628,10 +1631,7 @@ let
       gmp.dev
       mpfr.dev
     ];
-    vapour = with pkgs; [
-      proj.dev
-      gdal
-    ];
+    vapour = [ pkgs.proj ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = with pkgs; [
       eigen
@@ -2169,12 +2169,6 @@ let
 
     unsum = old.unsum.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-    });
-
-    vapour = old.vapour.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
     });
 
     rzmq = old.rzmq.overrideAttrs (attrs: {
