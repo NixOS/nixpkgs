@@ -33,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   pname = "accelerate";
   version = "1.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
