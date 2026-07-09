@@ -17262,6 +17262,8 @@ self: super: with self; {
 
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
 
+  repl-session = callPackage ../development/python-modules/repl-session { };
+
   replicate = callPackage ../development/python-modules/replicate { };
 
   reportlab = callPackage ../development/python-modules/reportlab { };
