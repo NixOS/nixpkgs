@@ -19,7 +19,7 @@
   coreutils,
   lapack,
 
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 
   # Reverse dependency
   astropy,
@@ -118,7 +118,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''
