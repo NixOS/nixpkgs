@@ -872,11 +872,9 @@ let
       bzip2
     ];
     sf = with pkgs; [
-      gdal
-      proj
-      geos
-      libtiff
-      curl
+      pkg-config
+      gdal # for gdal-config
+      geos # for geos-config
     ];
     fio = with pkgs; [
       cargo
@@ -1283,9 +1281,8 @@ let
     ];
     saeMSPE = [ pkgs.gsl.dev ];
     sf = with pkgs; [
-      pkg-config
-      sqlite.dev
-      proj.dev
+      proj
+      sqlite
     ];
     terra = with pkgs; [
       pkg-config
@@ -2170,12 +2167,6 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
-    });
-
-    sf = old.sf.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
     });
 
     terra = old.terra.overrideAttrs (attrs: {
