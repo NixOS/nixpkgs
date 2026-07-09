@@ -25,7 +25,7 @@
   torchvision,
   transformers,
   config,
-  cudatoolkit,
+  cudaPackages,
   writableTmpDirAsHomeHook,
 }:
 
@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudaPackages.cuda_nvcc "ptxas"}"
   '';
   enabledTestPaths = [ "tests" ];
   disabledTests = [
