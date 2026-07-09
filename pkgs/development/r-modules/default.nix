@@ -1262,7 +1262,6 @@ let
     mwaved = [ pkgs.pkg-config ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
-    openssl = [ pkgs.pkg-config ];
     otelsdk = with pkgs; [
       protobuf
       zlib.dev
@@ -2581,9 +2580,6 @@ let
     });
 
     openssl = old.openssl.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
       env = (attrs.env or { }) // {
         PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
         PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
