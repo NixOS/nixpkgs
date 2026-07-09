@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonPath = with python3Packages; [
     configparser
+    dbus-next
     dbus-python
     pygobject3
   ];
