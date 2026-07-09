@@ -23,7 +23,8 @@
   trustme,
   aioresponses,
   vdirsyncer,
-  testers,
+  versionCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -73,7 +74,14 @@ buildPythonPackage rec {
     "test_verbosity"
   ];
 
-  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru.tests = {
+    vdirsyncer = nixosTests.vdirsyncer;
+  };
 
   meta = {
     description = "Synchronize calendars and contacts";
