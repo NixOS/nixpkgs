@@ -484,13 +484,7 @@ let
       rustc
     ];
     cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = with pkgs; [
-      libtiff
-      libjpeg
-      cairo.dev
-      libxt.dev
-      fontconfig.lib
-    ];
+    Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
@@ -1333,7 +1327,7 @@ let
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
-    Cairo = [ pkgs.pkg-config ];
+    Cairo = [ pkgs.cairo ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
     OpenCL = with pkgs; [
@@ -2238,12 +2232,6 @@ let
 
     clustermq = old.clustermq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-    });
-
-    Cairo = old.Cairo.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        NIX_LDFLAGS = "-lfontconfig";
-      };
     });
 
     curl = old.curl.overrideAttrs (attrs: {
