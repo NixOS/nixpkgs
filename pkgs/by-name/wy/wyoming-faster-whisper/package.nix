@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-faster-whisper";
-  version = "3.2.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-faster-whisper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4tgBsraFd7IUHw6p/59FHzuUISOaALxBU7H8V0yQl0E=";
+    hash = "sha256-V4WPd8forlrJDdcqDvZ8ghtfIYKsGPbTaAJBlilkdv8=";
   };
 
   build-system = with python3Packages; [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     faster-whisper
+    pysilero-vad
     wyoming
   ];
 
