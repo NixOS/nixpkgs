@@ -76,7 +76,11 @@ let
         homepage = "https://github.com/wlrfx/scenefx";
         changelog = "https://github.com/wlrfx/scenefx/releases/tag/${finalAttrs.version}";
         license = lib.licenses.mit;
-        maintainers = [ ];
+        maintainers = with lib.maintainers; [
+          swarsel
+          yvnth
+        ];
+
         mainProgram = "scenefx";
         pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
         platforms = lib.platforms.all;
