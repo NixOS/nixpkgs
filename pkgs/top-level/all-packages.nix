@@ -10322,9 +10322,7 @@ with pkgs;
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
-  hh-suite = callPackage ../applications/science/biology/hh-suite {
-    inherit (llvmPackages) openmp;
-  };
+  hh-suite = callPackage ../applications/science/biology/hh-suite { };
 
   nest-mpi = nest.override { withMpi = true; };
 

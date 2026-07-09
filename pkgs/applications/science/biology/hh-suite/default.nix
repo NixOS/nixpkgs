@@ -7,18 +7,21 @@
   xxd,
   enableMpi ? false,
   mpi,
-  openmp,
+  llvmPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hh-suite";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = "hh-suite";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kjNqJddioCZoh/cZL3YNplweIGopWIGzCYQOnKDqZmw=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     # Should be removable as soon as this upstream PR is merged: https://github.com/soedinglab/hh-suite/pull/357
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.avx2Support "-DHAVE_AVX2=1"
     ++ lib.optional stdenv.hostPlatform.sse4_1Support "-DHAVE_SSE4_1=1";
 
-  buildInputs = lib.optional stdenv.cc.isClang openmp ++ lib.optional enableMpi mpi;
+  buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp ++ lib.optional enableMpi mpi;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -55,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
   };
-}
+})
