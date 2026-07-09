@@ -8660,6 +8660,13 @@
     githubId = 63652646;
     name = "Xaver Oswald";
   };
+  examosa = {
+    email = "examosa@fastmail.com";
+    github = "examosa";
+    githubId = 23395221;
+    matrix = "@jamonith:matrix.org";
+    name = "Jules Amonith";
+  };
   exarkun = {
     email = "exarkun@twistedmatrix.com";
     github = "exarkun";
@@ -18895,6 +18902,12 @@
     github = "mrbenjadmin";
     githubId = 68156310;
     name = "Benjamin Strachan";
+  };
+  mrbjarksen = {
+    email = "bjarki@harksen.is";
+    github = "mrbjarksen";
+    githubId = 62466569;
+    name = "Bjarki B. Harksen";
   };
   mrcjkb = {
     email = "marc@jakobi.dev";

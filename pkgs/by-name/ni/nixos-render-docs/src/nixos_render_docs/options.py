@@ -21,7 +21,7 @@ from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
 from .manual_structure import make_xml_id, XrefTarget
 from .md import Converter, md_escape, md_make_code
-from .types import OptionLoc, Option, RenderedOption, AnchorStyle
+from .types import OptionLoc, Option, RenderedOption, AnchorStyle, AdmonitionStyle
 
 def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
     if key not in option:
@@ -317,18 +317,20 @@ class OptionsCommonMarkRenderer(OptionDocsRestrictions, CommonMarkRenderer):
 
 class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     __option_block_separator__ = ""
+    _admonition_style: AdmonitionStyle
     _anchor_style: AnchorStyle
     _anchor_prefix: str
 
 
-    def __init__(self, manpage_urls: Mapping[str, str], revision: str, anchor_style: AnchorStyle = AnchorStyle.NONE, anchor_prefix: str = ""):
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, anchor_style: AnchorStyle = AnchorStyle.NONE, anchor_prefix: str = "", admonition_style: AdmonitionStyle = AdmonitionStyle.PLAIN):
         super().__init__(revision)
-        self._renderer = OptionsCommonMarkRenderer(manpage_urls)
+        self._renderer = OptionsCommonMarkRenderer(manpage_urls, admonition_style)
+        self._admonition_style = admonition_style
         self._anchor_style = anchor_style
         self._anchor_prefix = anchor_prefix
 
     def _parallel_render_prepare(self) -> Any:
-        return (self._renderer._manpage_urls, self._revision)
+        return (self._renderer._manpage_urls, self._revision, self._anchor_style, self._anchor_prefix, self._admonition_style)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> CommonMarkConverter:
         return cls(*a)
@@ -514,6 +516,15 @@ def parse_anchor_style(value: str|AnchorStyle) -> AnchorStyle:
     except ValueError:
         raise argparse.ArgumentTypeError(f"Invalid value {value}\nExpected one of {', '.join(style.value for style in AnchorStyle)}")
 
+def parse_admonition_style(value: str|AdmonitionStyle) -> AdmonitionStyle:
+    if isinstance(value, AdmonitionStyle):
+        # Used by `argparse.add_argument`'s `default`
+        return value
+    try:
+        return AdmonitionStyle(value.lower())
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Invalid value {value}\nExpected one of {', '.join(style.value for style in AdmonitionStyle)}")
+
 def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
@@ -528,6 +539,13 @@ def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
         required=False,
         default="",
         help="(default: no prefix) String to prepend to anchor ids. Not used when anchor style is none."
+    )
+    p.add_argument(
+        '--admonition-style',
+        required=False,
+        default=AdmonitionStyle.PLAIN.value,
+        choices = [style.value for style in AdmonitionStyle],
+        help = "(default: %(default)s) Admonition style to use for notes, warnings, etc. \nOnly plain is standard CommonMark."
     )
     p.add_argument("infile")
     p.add_argument("outfile")
@@ -566,7 +584,9 @@ def _run_cli_commonmark(args: argparse.Namespace) -> None:
         md = CommonMarkConverter(json.load(manpage_urls),
             revision = args.revision,
             anchor_style = parse_anchor_style(args.anchor_style),
-            anchor_prefix = args.anchor_prefix)
+            anchor_prefix = args.anchor_prefix,
+            admonition_style = parse_admonition_style(args.admonition_style),
+         )
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))

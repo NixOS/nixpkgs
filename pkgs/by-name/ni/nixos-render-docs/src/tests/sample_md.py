@@ -1,4 +1,10 @@
 sample1 = """\
+> [!NOTE]
+> This is a *GFM* note.
+>
+> > [!caution]
+> > This is a **nested** GFM alert.
+
 :::: {.warning}
 foo
 ::: {.note}

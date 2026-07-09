@@ -191,6 +191,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
+
     # on Darwin, cmake uses find_library to locate R instead of using the PATH
     NIX_LDFLAGS = "-L${R}/lib/R/lib";
 
