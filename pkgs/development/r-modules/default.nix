@@ -946,7 +946,7 @@ let
     spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
-    stringi = [ pkgs.icu.dev ];
+    stringi = [ pkgs.pkg-config ];
     parseLatex = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
@@ -1310,7 +1310,7 @@ let
     ];
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
-    stringi = [ pkgs.pkg-config ];
+    stringi = [ pkgs.icu74 ];
     SynExtend = [ pkgs.zlib.dev ];
     sysfonts = with pkgs; [
       zlib
