@@ -31,8 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   '');
 
   configurePhase = ''
+    runHook preConfigure
     cd src
     makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
+    runHook postConfigure
   '';
 
   meta = {
