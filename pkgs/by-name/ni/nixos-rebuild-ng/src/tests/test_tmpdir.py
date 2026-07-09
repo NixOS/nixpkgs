@@ -8,23 +8,15 @@ from nixos_rebuild.tmpdir import MAX_TMPDIR_LENGTH, make_tmpdir
 
 
 @contextlib.contextmanager
-def system_tempdir(path: Path) -> typing.Generator[None]:
-    path.mkdir(exist_ok=True)
-
-    # `tempfile` caches the tempdir, you must clear it for it to recompute.
-    tempfile.tempdir = None
-
-    og_tmpdir = os.environ.get("TMPDIR")
-
+def tempfile_tempdir(path: str) -> typing.Generator[None]:
+    Path(path).mkdir(exist_ok=True)
     try:
-        os.environ["TMPDIR"] = str(path)
-        assert Path(tempfile.gettempdir()) == path
+        og_tmpdir = tempfile.tempdir
+        tempfile.tempdir = path
+        assert tempfile.gettempdir() == path
         yield
     finally:
-        if og_tmpdir is None:
-            del os.environ["TMPDIR"]
-        else:
-            os.environ["TMPDIR"] = og_tmpdir
+        tempfile.tempdir = og_tmpdir
 
 
 def test_make_tmpdir() -> None:
@@ -36,7 +28,7 @@ def test_make_tmpdir() -> None:
     assert len(os.fsencode(str(tmp))) <= MAX_TMPDIR_LENGTH
 
     # Test with a short system temp dir. We should use it unmodified.
-    with system_tempdir(Path("/tmp/not-too-long")):
+    with tempfile_tempdir("/tmp/not-too-long"):
         tmpdir = make_tmpdir()
         tmp = Path(tmpdir.name)
 
@@ -47,7 +39,7 @@ def test_make_tmpdir() -> None:
     # Test with a long system temp dir. We should ignore
     # it and fall back to something short enough for OpenSSH to
     # create sockets in.
-    with system_tempdir(Path("/tmp/long" + ("g" * MAX_TMPDIR_LENGTH))):
+    with tempfile_tempdir("/tmp/long" + ("g" * MAX_TMPDIR_LENGTH)):
         tmpdir = make_tmpdir()
         tmp = Path(tmpdir.name)
 
