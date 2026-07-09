@@ -50,6 +50,9 @@ let
 in
 writeShellApplication {
   name = "ImmichFrame";
+  derivationArgs = {
+    inherit version;
+  };
 
   text = ''
     cd ${frontend}
