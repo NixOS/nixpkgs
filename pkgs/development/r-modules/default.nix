@@ -813,10 +813,7 @@ let
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
-    RProtoBuf = with pkgs; [
-      protobuf
-      abseil-cpp.dev
-    ];
+    RProtoBuf = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
       cargo
       rustc
@@ -1211,7 +1208,10 @@ let
       libpng.dev
     ];
     RGtk2 = [ pkgs.pkg-config ];
-    RProtoBuf = [ pkgs.pkg-config ];
+    RProtoBuf = with pkgs; [
+      protobuf
+      abseil-cpp
+    ];
     Rpoppler = [ pkgs.pkg-config ];
     RPostgres = with pkgs; [ libpq ];
     XML = [ pkgs.pkg-config ];
