@@ -48,14 +48,14 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + "xgboost";
-  version = "3.0.5";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = "xgboost";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
+    hash = "sha256-rQ8mEU3OmGf17owxnsWzTBaUeXke/0bQRAXC9/LQM1I=";
   };
 
   nativeBuildInputs = [
@@ -116,17 +116,25 @@ effectiveStdenv.mkDerivation rec {
           "ThreadGroup.TimerThread"
           "ThreadGroup.TimerThreadSimple"
         ];
-        networkingTest = [
+        networkingTests = [
           "AllgatherTest.Basic"
           "AllgatherTest.VAlgo"
           "AllgatherTest.VBasic"
           "AllgatherTest.VRing"
           "AllreduceGlobal.Basic"
           "AllreduceGlobal.Small"
+          "AllreduceTest.AllreduceV"
           "AllreduceTest.Basic"
           "AllreduceTest.BitOr"
           "AllreduceTest.Restricted"
           "AllreduceTest.Sum"
+          "Anchors/QuantileDistributedContainerTest.Invariants/empty_numeric_bins16"
+          "Anchors/QuantileDistributedContainerTest.Invariants/dense_numeric_unweighted_bins2"
+          "Anchors/QuantileDistributedContainerTest.Invariants/dense_numeric_unweighted_bins16"
+          "Anchors/QuantileDistributedContainerTest.Invariants/dense_numeric_weighted_bins256"
+          "Anchors/QuantileDistributedContainerTest.Invariants/sparse_numeric_weighted_bins32"
+          "Anchors/QuantileDistributedContainerTest.Invariants/dense_mixed_unweighted_bins16"
+          "Anchors/QuantileDistributedContainerTest.Invariants/sparse_mixed_weighted_bins64"
           "Approx.PartitionerColumnSplit"
           "BroadcastTest.Basic"
           "CPUHistogram.BuildHistColSplit"
@@ -159,7 +167,9 @@ effectiveStdenv.mkDerivation rec {
           "QuantileHist.MultiPartitionerColumnSplit"
           "QuantileHist.PartitionerColumnSplit"
           "Stats.SampleMean"
+          "Stats.SampleMeanDist"
           "Stats.WeightedSampleMean"
+          "Stats.WeightedSampleMeanDist"
           "SimpleDMatrix.ColumnSplit"
           "TrackerAPITest.CAPI"
           "TrackerTest.AfterShutdown"
@@ -167,8 +177,19 @@ effectiveStdenv.mkDerivation rec {
           "TrackerTest.GetHostAddress"
           "TrackerTest.Print"
           "VectorAllgatherV.Basic"
+          # belows only being tested on `aarch64-macos`
+          "LoopTest.Timeout"
+          "LoopTest.Op"
+          "LoopTest.Block"
+          "SocketTest.Basic"
+          "SocketTest.Bind"
         ];
-        excludedTests = xsimdTests ++ networkingTest;
+        numaTests = [
+          "Numa.GetNumNodes"
+          "Numa.GetHasCpuNodes" # https://github.com/dmlc/xgboost/blob/ec5977f38e0cb7853848c4269b77f9c9183dc63b/src/common/numa_topo.cc#L205
+          "Numa.GetHasNormalMemoryNodes" # https://github.com/dmlc/xgboost/blob/ec5977f38e0cb7853848c4269b77f9c9183dc63b/src/common/numa_topo.cc#L194
+        ];
+        excludedTests = xsimdTests ++ networkingTests ++ numaTests;
       in
       "-${builtins.concatStringsSep ":" excludedTests}";
   };
