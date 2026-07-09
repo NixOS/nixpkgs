@@ -61,6 +61,8 @@ let
 
       nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != [ ]) [ makeWrapper ];
 
+      strictDeps = true;
+
       meta = {
         mainProgram = pname;
         inherit (ruby.meta) platforms;
