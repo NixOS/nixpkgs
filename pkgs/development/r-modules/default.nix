@@ -412,11 +412,7 @@ let
   packagesWithNativeBuildInputs = {
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
-    Apollonius = with pkgs; [
-      pkg-config
-      gmp.dev
-      mpfr.dev
-    ];
+    Apollonius = [ pkgs.pkg-config ];
     arrow =
       with pkgs;
       [
@@ -1083,6 +1079,10 @@ let
       libkrb5.dev
       openpam
       libpq
+    ];
+    Apollonius = with pkgs; [
+      gmp
+      mpfr
     ];
     asciicast = with pkgs; [
       bzip2.dev
