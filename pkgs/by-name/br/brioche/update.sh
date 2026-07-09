@@ -3,18 +3,18 @@
 
 set -euo pipefail
 
-# Update deno
-old_version="$(nix-instantiate --raw --eval -A deno.version)"
-nix-update deno
-new_version="$(nix-instantiate --raw --eval -A deno.version)"
+# Update brioche
+old_version="$(nix-instantiate --raw --eval -A brioche.version)"
+nix-update brioche
+new_version="$(nix-instantiate --raw --eval -A brioche.version)"
 
 if [ "$old_version" = "$new_version" ]; then
-  echo "No deno update, nothing to do"
+  echo "No brioche update, nothing to do"
   exit 0
 fi
 
-# Extract v8 version from deno's Cargo.lock
-new_v8_version="$(curl -sL "https://raw.githubusercontent.com/denoland/deno/refs/tags/v$new_version/Cargo.lock" | \
+# Extract v8 version from brioche's Cargo.lock
+new_v8_version="$(curl -sL "https://raw.githubusercontent.com/brioche-dev/brioche/refs/tags/v$new_version/Cargo.lock" | \
   tomlq -r '.package[] | select(.name == "v8") | .version')"
 
 new_v8_major="$(echo "$new_v8_version" | cut -d. -f1)"
@@ -25,4 +25,4 @@ echo "Updating librusty_v8 to $new_v8_version (rusty-v8_$new_v8_major)"
 # Update rusty-v8 import in package.nix
 sed -i "s/rusty-v8_[0-9]\+/rusty-v8_$new_v8_major/g" "$(dirname "${BASH_SOURCE[0]}")/package.nix"
 
-echo "Updated deno to $new_version with rusty-v8 $new_v8_version"
+echo "Updated brioche to $new_version with rusty-v8 $new_v8_version"

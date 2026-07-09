@@ -1,18 +1,17 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   perl,
   openssl,
   versionCheckHook,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
-  nix-update-script,
+  rusty-v8_145,
 }:
+let
+  librusty_v8 = rusty-v8_145;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
   version = "2.7.0-hotfix1";
@@ -83,7 +82,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $out/bin/spacetimedb-cli $out/bin/spacetime
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = ./update.sh;
+    inherit librusty_v8;
+  };
 
   meta = {
     description = "Full-featured relational database system that lets you run your application logic inside the database";

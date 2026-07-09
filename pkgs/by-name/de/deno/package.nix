@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
   cmake,
@@ -10,7 +9,7 @@
   installShellFiles,
   makeBinaryWrapper,
   versionCheckHook,
-  librusty_v8 ? callPackage ./rusty-v8 { },
+  rusty-v8_149,
   libffi,
   sqlite,
   lld,
@@ -30,6 +29,8 @@
 
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  librusty_v8 = rusty-v8_149;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
@@ -264,7 +265,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
           || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isx86_64));
       });
       # Also include librusty_v8 tests
-      librusty_v8-tests = librusty_v8.passthru.tests;
+      librusty_v8-tests = librusty_v8.overrideAttrs (fa: {
+        doCheck = true;
+      });
     };
     inherit librusty_v8;
   };

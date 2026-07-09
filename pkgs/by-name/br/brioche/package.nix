@@ -3,18 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  callPackage,
-  librusty_v8 ? (
-    callPackage ./librusty_v8.nix {
-      inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-    }
-  ),
+  rusty-v8_146,
   openssl,
   tzdata,
   versionCheckHook,
-  _experimental-update-script-combinators,
-  nix-update-script,
 }:
+
+let
+  librusty_v8 = rusty-v8_146;
+in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brioche";
@@ -51,10 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
-    ./update-librusty.sh
-  ];
+  passthru = {
+    updateScript = ./update.sh;
+    inherit librusty_v8;
+  };
 
   meta = {
     description = "Package manager for building and running complex software projects";

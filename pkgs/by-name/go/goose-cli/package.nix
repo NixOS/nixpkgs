@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
@@ -14,12 +13,9 @@
   cacert,
   writableTmpDirAsHomeHook,
   versionCheckHook,
-  nix-update-script,
   llvmPackages,
   makeWrapper,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  rusty-v8_145,
 
   # Extension(s) Dependencies
   python3,
@@ -35,6 +31,7 @@
 }:
 
 let
+  librusty_v8 = rusty-v8_145;
   gpt-4o-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
     hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";
@@ -177,7 +174,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = ./update.sh;
+    inherit librusty_v8;
+  };
 
   meta = {
     description = "Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM";

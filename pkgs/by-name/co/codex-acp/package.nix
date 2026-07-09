@@ -1,16 +1,16 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
   libcap,
   bubblewrap,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
+  rusty-v8_146,
 }:
 let
+  librusty_v8 = rusty-v8_146;
   # codex-acp 0.13.0 pins openai/codex rust-v0.128.0 in Cargo.lock.
   codexRev = "e4310be51f617f5e60382038fa9cbf53a2429ca4";
   codexHash = "sha256-v2W0eslPOPHxHX76+bnkE/f4y+MnQuopeOoAC5X16TA=";
@@ -62,7 +62,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    inherit librusty_v8;
+  };
 
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";

@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  callPackage,
-  rustPlatform,
   fetchFromGitHub,
+  rustPlatform,
   installShellFiles,
   bubblewrap,
   clang,
@@ -11,19 +10,19 @@
   gitMinimal,
   libcap,
   libclang,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
+  rusty-v8_146,
   livekit-libwebrtc,
   lld,
   makeBinaryWrapper,
-  nix-update-script,
   pkg-config,
   openssl,
   ripgrep,
   versionCheckHook,
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
+let
+  librusty_v8 = rusty-v8_146;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
   version = "0.142.5";
@@ -57,7 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # use LK_CUSTOM_WEBRTC to point to the packaged library and adjust linking
     # to use the shared library instead
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
-      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc" \
+      --replace-fail "framework=Appkit" "framework=AppKit"
     substituteInPlace Cargo.toml \
       --replace-fail 'lto = "thin"' "" \
       --replace-fail 'codegen-units = 4' ""
@@ -128,13 +128,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--use-github-releases"
-        "--version-regex"
-        "^rust-v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+    updateScript = ./update.sh;
+    inherit librusty_v8;
   };
 
   meta = {
