@@ -680,7 +680,7 @@ let
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
-    odbc = [ pkgs.unixodbc ];
+    odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
@@ -1265,7 +1265,7 @@ let
     magick = [ pkgs.imagemagick ];
     mwaved = [ pkgs.pkg-config ];
     nloptr = [ pkgs.nlopt ];
-    odbc = [ pkgs.pkg-config ];
+    odbc = [ pkgs.unixodbc ];
     openssl = [ pkgs.pkg-config ];
     otelsdk = with pkgs; [
       protobuf
