@@ -6439,7 +6439,8 @@
       ];
     "swisscom" =
       ps: with ps; [
-      ]; # missing inputs: python-swisscom-internet-box
+        python-swisscom-internet-box
+      ];
     "switch" =
       ps: with ps; [
       ];
@@ -8714,6 +8715,7 @@
     "sunweg"
     "surepetcare"
     "swiss_public_transport"
+    "swisscom"
     "switch"
     "switch_as_x"
     "switchbee"
