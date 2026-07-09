@@ -548,17 +548,7 @@ let
     ];
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
-    gdtools =
-      with pkgs;
-      [
-        cairo.dev
-        fontconfig.lib
-        freetype.dev
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        expat
-        libxdmcp
-      ];
+    gdtools = [ pkgs.pkg-config ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = [ pkgs.libpng.dev ];
     git2r = with pkgs; [
@@ -1221,7 +1211,17 @@ let
     fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.fftw ];
-    gdtools = [ pkgs.pkg-config ];
+    gdtools =
+      with pkgs;
+      [
+        cairo
+        fontconfig.lib
+        freetype
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        expat
+        libxdmcp
+      ];
     archive = [ pkgs.libarchive ];
     lpsymphony = with pkgs; [
       symphony
