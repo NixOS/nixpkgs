@@ -20161,7 +20161,7 @@
     name = "Nindouja";
   };
   ninelore = {
-    email = "9l+nix@9lo.re";
+    email = "9l@9lo.re";
     matrix = "@9lore:tchncs.de";
     github = "ninelore";
     githubId = 21343557;
