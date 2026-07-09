@@ -642,9 +642,8 @@ let
       gettext
     ];
     lwgeom = with pkgs; [
-      proj
-      geos
-      gdal
+      pkg-config
+      geos # for geos-config
     ];
     otelsdk = with pkgs; [
       cmake
@@ -1258,11 +1257,7 @@ let
       pkg-config
       opencv
     ];
-    lwgeom = with pkgs; [
-      pkg-config
-      proj.dev
-      sqlite.dev
-    ];
+    lwgeom = [ pkgs.proj ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
     nloptr = [ pkgs.nlopt ];
@@ -2172,12 +2167,6 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
-    });
-
-    lwgeom = old.lwgeom.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
     });
 
     sf = old.sf.overrideAttrs (attrs: {
