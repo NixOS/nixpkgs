@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-lblas"
       "-llapack"
     ];
-    OMP_NUM_THREADS = 2; # required for check phase
   };
 
   enableParallelBuilding = true;

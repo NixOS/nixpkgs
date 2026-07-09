@@ -22,7 +22,7 @@ let
     hash = "sha256-Jw9GXD0RFFPkqhJuNZaooxIHVDt1ti0a4g863jIwtkY=";
   };
 
-  pnpm-hash = "sha256-2iGCe9LmH99hVOWEWkDy7/XH4r/Jlr8rzL5FrCRpn3Q=";
+  pnpm-hash = "sha256-YoBmnZyDw245D4xI3emfScE4tbaaG5GYi+DYPM8kXfQ=";
   vendor-hash = "sha256-EHsGCrphP6SRQ04Q0sIh8CmzMwbvqDQeiL44ItBGIaM=";
 
   service = callPackage ./service.nix {

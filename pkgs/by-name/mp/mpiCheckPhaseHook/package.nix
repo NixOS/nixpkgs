@@ -1,7 +1,7 @@
 {
-  callPackage,
   makeSetupHook,
   stdenv,
+  openmpCheckPhaseHook,
 }:
 
 makeSetupHook {
@@ -11,4 +11,8 @@ makeSetupHook {
     iface = if stdenv.hostPlatform.isDarwin then "lo0" else "lo";
     topology = ./topology.xml;
   };
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
+  ];
 } ./mpi-check-hook.sh
