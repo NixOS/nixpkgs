@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.06.02";
+  version = "2026.07.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-60ZMaevTqYjHq6WrhKVQ8T8kfrQV7Auy59y3JFMHi5w=";
+    hash = "sha256-HO5JJQHeEJYXU7TtNCXZALgqkNbIMGI+TjDwbvs5L8w=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
