@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  replaceVars,
-  fetchPypi,
-  setuptools,
-  pkgs,
-  pillow,
+  fetchFromGitHub,
   mesa,
+  pkgs,
+  replaceVars,
+  setuptools,
+  stdenv,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -15,22 +14,12 @@ buildPythonPackage (finalAttrs: {
   version = "3.1.10";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-xKAtaGa1TrEZyOmz+wT6g1qVq4At2WYHq0zbABLfgzU=";
+  src = fetchFromGitHub {
+    owner = "mcfletch";
+    repo = "pyopengl";
+    tag = finalAttrs.version;
+    hash = "sha256-U/7J3EoxKHp/dR2LAzTiwR5wcjZbUBuT5Dt3c76xxj4=";
   };
-
-  build-system = [ setuptools ];
-
-  dependencies = [ pillow ];
-
-  passthru.runtimeLibs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    "/run/opengl-driver/lib"
-    pkgs.libglvnd
-    pkgs.libGLU
-    pkgs.libglut
-    pkgs.gle
-  ];
 
   patches = lib.optionals (finalAttrs.passthru.runtimeLibs != [ ]) [
     # patch OpenGL.platform.ctypesloader::_loadLibraryPosix with extra search paths
@@ -39,11 +28,11 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
-  # Need to fix test runner
-  # Tests have many dependencies
-  # Extension types could not be found.
-  # Should run test suite from $out/${python.sitePackages}
-  doCheck = false; # does not affect pythonImportsCheck
+  build-system = [ setuptools ];
+
+  # mosts tests fail in the nix sandbox with:
+  #  GLX is not supported
+  doCheck = false;
 
   # PyOpenGL looks for libraries during import, making this a somewhat decent test of our patching
   # (these are impure deps on darwin)
@@ -61,14 +50,19 @@ buildPythonPackage (finalAttrs: {
     "OpenGL.GLX"
   ];
 
+  passthru.runtimeLibs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "/run/opengl-driver/lib"
+    pkgs.libglvnd
+    pkgs.libGLU
+    pkgs.libglut
+    pkgs.gle
+  ];
+
   meta = {
     homepage = "https://mcfletch.github.io/pyopengl/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
-      PyOpenGL is the cross platform Python binding to OpenGL and
-      related APIs.  The binding is created using the standard (in
-      Python 2.5) ctypes library, and is provided under an extremely
-      liberal BSD-style Open-Source license.
+      PyOpenGL is the cross platform Python binding to OpenGL and related APIs.
     '';
     license = lib.licenses.bsd3;
     inherit (mesa.meta) platforms;
