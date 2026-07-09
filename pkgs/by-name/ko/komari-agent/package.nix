@@ -27,7 +27,9 @@ buildGoModule (finalAttrs: {
   # tests require network access
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     homepage = "https://github.com/komari-monitor/komari-agent";
