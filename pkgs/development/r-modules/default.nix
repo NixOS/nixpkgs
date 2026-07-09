@@ -659,6 +659,7 @@ let
     rvg = [ pkgs.libpng.dev ];
     SuperGauss = [ pkgs.pkg-config ];
     ravetools = [ pkgs.pkg-config ];
+    cartogramR = [ pkgs.pkg-config ];
     MAGEE = [
       pkgs.zlib.dev
       pkgs.bzip2.dev
@@ -1240,10 +1241,7 @@ let
     SuperGauss = [ pkgs.fftw ];
     ravetools = [ pkgs.fftw ];
     specklestar = [ pkgs.fftw.dev ];
-    cartogramR = with pkgs; [
-      fftw.dev
-      pkg-config
-    ];
+    cartogramR = [ pkgs.fftw ];
     Rhdf5lib = with pkgs; [
       curl
       zlib.dev
