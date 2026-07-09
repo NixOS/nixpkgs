@@ -695,6 +695,7 @@
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/nvidia-optimus.nix
+  ./services/hardware/openlinkhub.nix
   ./services/hardware/openrgb.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pdudaemon.nix
