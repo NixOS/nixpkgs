@@ -3459,6 +3459,8 @@ self: super: with self; {
 
   comfy-aimdo = callPackage ../development/python-modules/comfy-aimdo { };
 
+  comfy-angle = callPackage ../development/python-modules/comfy-angle { };
+
   comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
