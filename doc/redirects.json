@@ -2920,7 +2920,8 @@
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
-  "setup-hook-omp-check": [
+  "setup-hook-check-phase-thread-limit": [
+    "index.html#setup-hook-check-phase-thread-limit",
     "index.html#setup-hook-omp-check"
   ],
   "ninja": [
