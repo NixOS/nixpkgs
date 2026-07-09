@@ -5,17 +5,12 @@
   fetchpatch,
   click,
   click-log,
-  click-threading,
-  requests-toolbelt,
   requests,
-  atomicwrites,
   hypothesis,
   pytestCheckHook,
   pytest-cov-stub,
-  pytest-subtesthack,
   setuptools,
   setuptools-scm,
-  wheel,
   aiostream,
   aiohttp-oauthlib,
   aiohttp,
@@ -42,22 +37,21 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    atomicwrites
     click
     click-log
-    click-threading
     requests
-    requests-toolbelt
     aiostream
     aiohttp
-    aiohttp-oauthlib
   ];
+
+  optional-dependencies = {
+    google = [ aiohttp-oauthlib ];
+  };
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytest-cov-stub
-    pytest-subtesthack
     pytest-asyncio
     trustme
     aioresponses
