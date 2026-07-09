@@ -23,6 +23,7 @@
   libopenglrecorder,
   sqlite,
   libsamplerate,
+  libsquish,
   shaderc,
   nix-update-script,
   serverOnly ? false,
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mcpp
     angelscript
     sqlite
+    libsquish
   ]
   ++ lib.optionals (!serverOnly) (
     [
@@ -167,16 +169,13 @@ stdenv.mkDerivation (finalAttrs: {
       # archaic Makefiles, too complicated to switch to.
       "irrlicht"
 
-      # Not packaged to this date
-      "libsquish"
-
-      # Not packaged to this date
+      # No USE_SYSTEM_SHEENBIDI flag upstream
       "sheenbidi"
 
-      # Not packaged to this date
+      # No USE_SYSTEM_TINYGETTEXT flag upstream
       "tinygettext"
 
-      # Not packaged to this date (needed on Darwin)
+      # Used on Darwin as a static OpenAL replacement (USE_MOJOAL=ON by default on Apple)
       "mojoal"
     ];
   };
