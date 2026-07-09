@@ -42,6 +42,10 @@ buildDotnetModule (finalAttrs: {
     "/m:1"
   ];
 
+  dotnetInstallFlags = [
+    "/m:1"
+  ];
+
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
