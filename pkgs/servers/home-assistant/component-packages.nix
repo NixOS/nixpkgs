@@ -1009,6 +1009,7 @@
         bluetooth-adapters
         bluetooth-auto-recovery
         bluetooth-data-tools
+        chefiq-ble
         dbus-fast
         esphome-dashboard-api
         ha-ffmpeg
@@ -1021,7 +1022,7 @@
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: chefiq-ble
+      ];
     "chess_com" =
       ps: with ps; [
         chess-com-api
@@ -7916,6 +7917,7 @@
     "centriconnect"
     "cert_expiry"
     "chacon_dio"
+    "chef_iq"
     "chess_com"
     "cielo_home"
     "citybikes"
