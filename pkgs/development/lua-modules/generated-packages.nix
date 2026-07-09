@@ -6307,15 +6307,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "tree-sitter-kulala_http";
-      version = "0.2.1-1";
+      version = "0.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/tree-sitter-kulala_http-0.2.1-1.rockspec";
-          sha256 = "05zrx3sqjdyibfdlm0ycf02s0vpzbaq47gwamg9bizjd5mhhyv22";
+          url = "mirror://luarocks/tree-sitter-kulala_http-0.3.0-1.rockspec";
+          sha256 = "15wvlzf7ggr1bli32zi865y4gfsdwiqmrl2kz7vga9c58gqb05pz";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mistweaverco/tree-sitter-kulala-http/archive/v0.2.1.zip";
-        sha256 = "1xl2qjfdqj13jmqzvh90i9djlqf675br42z6jm3cfkmj14riid1s";
+        url = "https://github.com/mistweaverco/tree-sitter-kulala-http/archive/v0.3.0.zip";
+        sha256 = "08f9hx939xpnz772yc5zywkksgp9v0hhbj3xd2bb6xwf52avnfmm";
       };
 
       nativeBuildInputs = [ luarocks-build-treesitter-parser ];
