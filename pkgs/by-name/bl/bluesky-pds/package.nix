@@ -4,7 +4,7 @@
   removeReferencesTo,
   srcOnly,
   python3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -15,6 +15,7 @@
   lib,
   nix-update-script,
   cctools,
+  fetchpatch2,
 }:
 
 let
@@ -22,21 +23,29 @@ let
   nodejs = nodejs_24;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.5006";
+  version = "0.4.5009";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jb2qAB6P5KlRu4L99fcK/v0/Fspr8IFaFXuYg+PBxhM=";
+    hash = "sha256-3IEbVn7ThiVL7E2fXMHzsRSLT7Tm1eiX8bPQ88rJCvs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
+
+  patchFlags = [ "-p2" ];
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bluesky-social/pds/commit/f8de5f08900c42023b01a4d10995556f16d05145.patch?full_index=1";
+      hash = "sha256-E0mWvLWQ4lFjkFgqtmMIESpNH7PSAB/QpSqxIwsj6Q8=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -60,10 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      patchFlags
+      patches
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-YfwoUkTJJ2qANqwtSWKDGfFmahAtIDNyYFwCUE72oB0=";
+    hash = "sha256-BTSMmGhLpQ6KrI7/XfinRwe8ap7btIrPa55f6HB63M8=";
   };
 
   buildPhase = ''

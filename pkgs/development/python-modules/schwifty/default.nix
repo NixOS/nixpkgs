@@ -23,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2026.01.0";
+  version = "2026.07.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname;
     # The version is different missing leading zeros in the CalVer month.
     # This is due to PyPI's normalization of integers
-    version = "2026.1.0";
-    hash = "sha256-VhZBQDAewy23iyMfli9Xsf1zIAKO6Q38OWNEOW9pdJg=";
+    version = "2026.7.0";
+    hash = "sha256-ej/mSjACWqM1nm8zGhgSeOxCFHarll3wCXUA2d2+V8Y=";
   };
 
   build-system = [
