@@ -34,7 +34,7 @@
   npmHooks,
 
   pkg-config,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
+  metalSupport ? stdenv.hostPlatform.isDarwin && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
   openssl,
@@ -206,9 +206,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      metal = llama-cpp.override { metalSupport = true; };
-    };
     updateScript = nix-update-script {
       attrPath = "llama-cpp";
       extraArgs = [
