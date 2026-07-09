@@ -44,7 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Deletes all bundled libs in stk-code/lib except those
     # That couldn't be replaced with system packages
-    find lib -maxdepth 1 -type d | egrep -v "^lib$|${(lib.concatStringsSep "|" finalAttrs.passthru.bundledLibraries)}" | xargs -n1 -L1 -r -I{} rm -rf {}
+    find lib -mindepth 1 -maxdepth 1 -type d \
+      ${
+        lib.concatMapStringsSep " " (
+          name: "-not -name ${lib.escapeShellArg name}"
+        ) finalAttrs.passthru.bundledLibraries
+      } \
+      -exec rm -rf {} +
 
     # Allow building with system-installed wiiuse on Darwin
     substituteInPlace CMakeLists.txt \
