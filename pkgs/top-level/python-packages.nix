@@ -5434,6 +5434,8 @@ self: super: with self; {
 
   encutils = callPackage ../development/python-modules/encutils { };
 
+  energieleser = callPackage ../development/python-modules/energieleser { };
+
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
   energyflow = callPackage ../development/python-modules/energyflow { };
