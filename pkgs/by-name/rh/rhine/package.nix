@@ -10,13 +10,14 @@
   river,
   libxkbcommon,
   libnotify,
+  dbus,
   callPackage,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhine";
-  version = "0.2.0";
+  version = "0.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sivecano";
     repo = "rhine";
     tag = finalAttrs.version;
-    hash = "sha256-8lyssccIwk2+niFwaDa/jJspsgdj9Kjlb2UixsDI5wg=";
+    hash = "sha256-1urSOudD12Ge/hy3mGFfGNQAKLjqvuyV+cO1T4HloYs=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     river
     libxkbcommon
     libnotify
+    dbus
   ];
 
   deps = callPackage ./build.zig.zon.nix { };
