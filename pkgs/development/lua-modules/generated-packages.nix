@@ -4916,15 +4916,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neotest-nix";
-      version = "2.2.0-1";
+      version = "2.3.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neotest-nix-2.2.0-1.rockspec";
-          sha256 = "07whvs4bwnlf4pf893r5y69246r9s3n1nypqgx5a1vlmmxinhx1v";
+          url = "mirror://luarocks/neotest-nix-2.3.0-1.rockspec";
+          sha256 = "0p5vc6nblxc5vqpxwr5a2fy8l14gdbqhvkkdx1zbkba01qph7rll";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/khaneliman/neotest-nix/archive/61ba4c732ed5d685deb33b7f42963ff765752991.zip";
-        sha256 = "139fiir0q5s3b5vlchm1fyngz4mgz5hnbm1n1h7xk2w6yhrk43mc";
+        url = "https://github.com/khaneliman/neotest-nix/archive/b61774dcb3e0d93af07c55de608775b8eb013fc7.zip";
+        sha256 = "1ynq7ywqn9l8dyzf4nzjvywrirjg6nrkijrv1mhasa7cikar567v";
       };
 
       disabled = luaOlder "5.1";
@@ -4937,7 +4937,7 @@ final: prev: {
         homepage = "https://github.com/khaneliman/neotest-nix";
         maintainers = with lib.maintainers; [ khaneliman ];
         license = lib.licenses.mit;
-        description = "A Neotest adapter for Nix flakes.";
+        description = "A Neotest adapter for Nix tests.";
       };
     }
   ) { };
