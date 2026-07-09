@@ -18,31 +18,16 @@ pkgs'.testers.runNixOSTest {
         "flakes"
       ];
 
-      system.extraDependencies =
-        # TODO: abstract this away in a helper function that can be reused by
-        # all the tests
-        let
-          j = import ../../nix_vars/nix/jsonify.nix {
-            config = ./config/config1.nix;
-            pkgsHost = pkgs;
-            pkgsTarget = pkgs;
-          };
-        in
-        [
-          (pkgs.closureInfo {
-            rootPaths = [
-              (j.generatorBackends.example.list)
-              (j.generatorBackends.example.delete)
-              (j.generatorBackends.example.get)
-              (j.generatorBackends.example.set)
-              (j.generatorBackends.example.exists)
-              (j.generatorBackends.example.fixup)
-              (j.generators.example.script)
-              (j.generators.derived.script)
-              (j.promptBackends.example.script)
-            ];
-          })
-        ];
+      system.extraDependencies = [
+        (import ../collect-vars-scripts.nix {
+          inherit pkgs;
+          config = ./config/config1.nix;
+        })
+        (import ../collect-vars-scripts.nix {
+          inherit pkgs;
+          config = ./config/config2.nix;
+        })
+      ];
     };
 
   testScript = ''
