@@ -635,6 +635,7 @@ let
       gfortran
       gettext
     ];
+    sodium = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [
       pkg-config
       geos # for geos-config
@@ -1226,6 +1227,7 @@ let
       cgl
       clp
     ];
+    sodium = [ pkgs.libsodium ];
     gdalcubes = with pkgs; [
       proj.dev
       gdal
@@ -2937,15 +2939,11 @@ let
       '';
     });
 
-    sodium = old.sodium.overrideAttrs (
-      attrs: with pkgs; {
-        preConfigure = ''
-          patchShebangs configure
-        '';
-        nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
-        buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
-      }
-    );
+    sodium = old.sodium.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
 
     keyring = old.keyring.overrideAttrs (attrs: {
       preConfigure = ''
