@@ -12163,6 +12163,8 @@ self: super: with self; {
 
   openccu-data = callPackage ../development/python-modules/openccu-data { };
 
+  openccu-loom-client = callPackage ../development/python-modules/openccu-loom-client { };
+
   openccu-loom-types = callPackage ../development/python-modules/openccu-loom-types { };
 
   opencensus = callPackage ../development/python-modules/opencensus { };
