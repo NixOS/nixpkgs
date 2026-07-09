@@ -943,7 +943,7 @@ let
       freetype.dev
     ];
     simplexreg = [ pkgs.gsl ];
-    spate = [ pkgs.fftw.dev ];
+    spate = [ pkgs.pkg-config ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
     stringi = [ pkgs.pkg-config ];
@@ -1309,7 +1309,7 @@ let
       proj.dev
     ];
     showtext = [ pkgs.pkg-config ];
-    spate = [ pkgs.pkg-config ];
+    spate = [ pkgs.fftw ];
     stringi = [ pkgs.icu74 ];
     SynExtend = [ pkgs.zlib.dev ];
     sysfonts = with pkgs; [
