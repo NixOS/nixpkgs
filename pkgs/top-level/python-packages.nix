@@ -14468,6 +14468,8 @@ self: super: with self; {
 
   pyenphase = callPackage ../development/python-modules/pyenphase { };
 
+  pyenvertechevt800 = callPackage ../development/python-modules/pyenvertechevt800 { };
+
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
   pyephember2 = callPackage ../development/python-modules/pyephember2 { };
