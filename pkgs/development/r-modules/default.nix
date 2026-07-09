@@ -951,7 +951,6 @@ let
       udunits
       expat
     ];
-    units = [ pkgs.udunits ];
     unigd = [ pkgs.pkg-config ];
     unsum = with pkgs; [
       cargo
@@ -1187,6 +1186,7 @@ let
     ];
     Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ libpq ];
+    units = [ pkgs.udunits ];
     XML = with pkgs; [
       libtool
       libxml2
