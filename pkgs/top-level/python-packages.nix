@@ -4043,6 +4043,8 @@ self: super: with self; {
 
   datashaper = callPackage ../development/python-modules/datashaper { };
 
+  datasieve = callPackage ../development/python-modules/datasieve { };
+
   datasketch = callPackage ../development/python-modules/datasketch { };
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
