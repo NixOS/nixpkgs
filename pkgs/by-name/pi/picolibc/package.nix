@@ -9,30 +9,35 @@
   pkgsCross,
 
   # General Build Options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L40-L57
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L40
   multilib ? true,
+  multilib-list ? [ ],
+  multilib-exclude ? [ ],
   sanitize-bounds ? false,
+  sanitize-undefined ? false,
   sanitize-trap-on-error ? false,
+  sanitize-allow-missing ? false,
   profile ? false,
   analyzer ? false,
   assert-verbose ? true,
   fast-strcmp ? true,
+  sanitize ? "none",
 
   # Testing options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L75
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L87
   picolib ? stdenvNoLibc.hostPlatform.isNone,
   semihost ? stdenvNoLibc.hostPlatform.isNone,
+  fake-semihost ? true,
 
   # Stdio Options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L114
-  tinystdio ? true,
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L125
   io-c99-formats ? true,
   io-long-long ? false,
   io-pos-args ? false,
   io-long-double ? false,
 
   # Tinystdio options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L129
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L129
   io-float-exact ? true,
   atomic-ungetc ? true,
   posix-console ? !stdenvNoLibc.hostPlatform.isNone,
@@ -44,9 +49,12 @@
   minimal-io-long-long ? false,
   fast-bufio ? false,
   io-wchar ? false,
+  stdio-locking ? false,
+  have-fcntl ? false,
+  fstat-bufsiz ? false,
 
   # Internationalization options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L181
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L166
   mb-capable ? false,
   mb-extended-charsets ? false,
   mb-ucs-charsets ? "auto",
@@ -55,39 +63,41 @@
   mb-windows-charsets ? "auto",
 
   # Startup/shutdown options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L198
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L180
   picocrt ? stdenvNoLibc.hostPlatform.isNone,
   picocrt-enable-mmu ? true,
   picocrt-lib ? true,
-  picoexit ? true,
   initfini-array ? true,
+  initfini ? false,
   crt-runtime-size ? false,
 
   # Legacy (non-picoexit) startup/shutdown options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L217
-  newlib-atexit-dynamic-alloc ? false,
-  newlib-global-atexit ? !stdenvNoLibc.hostPlatform.isNone,
-  newlib-register-fini ? false,
 
   # Malloc options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L228
-  newlib-nano-malloc ? true,
-  nano-malloc-clear-freed ? false,
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L194
+  enable-malloc ? true,
+  malloc-clear-freed ? false,
+  internal-heap ? 0,
 
   # Locking options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L237
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L206
   single-thread ? false,
 
   # TLS storage options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L244
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L209
   thread-local-storage ? "picolibc",
+  thread-local-storage-api ? true,
   tls-model ? if stdenvNoLibc.hostPlatform.isNone then "local-exec" else "global-dynamic",
   newlib-global-errno ? false,
   errno-function ? if stdenvNoLibc.hostPlatform.isNone then "false" else "auto",
   tls-rp2040 ? false,
+  stack-protector-guard ? "auto",
 
   # Math options
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L261
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/meson_options.txt#L225
+  newlib-obsolete-math ? "auto",
+  newlib-obsolete-math-float ? "auto",
+  newlib-obsolete-math-double ? "auto",
   want-math-errno ? false,
 }:
 let
@@ -97,7 +107,7 @@ let
 in
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "picolibc";
-  version = "1.8.9-2";
+  version = "1.8.11";
   strictDeps = true;
 
   outputs = [
@@ -109,10 +119,10 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     owner = "picolibc";
     repo = "picolibc";
     tag = finalAttrs.version;
-    hash = "sha256-djOZKkinsaaYD4tUEA6mKdo+5em0GP1/+rI0mIm7Vs8=";
+    hash = "sha256-9xFkUZJJ2ikyi4/m5B+oDa5Zznm/1aPa8El2JLEZBE8=";
   };
 
-  depsBuildBuild = lib.optionals canExecute [
+  depsBuildBuild = lib.optionals (stdenvNoLibc.buildPlatform.canExecute stdenvNoLibc.hostPlatform) [
     buildPackages.stdenv.cc
   ];
 
@@ -123,25 +133,30 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
 
   # Default values taken from
   # Build fails without using them.
-  # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/doc/os.md?plain=1#L183
+  # https://github.com/picolibc/picolibc/blob/95869670fb165e7c43e85c3d384a1e5682505244/doc/os.md?plain=1#L183
   mesonFlags = [
     (mesonBool "multilib" multilib)
+    (mesonOption "multilib-list" (lib.concatStringsSep "," multilib-list))
+    (mesonOption "multilib-exclude" (lib.concatStringsSep "," multilib-exclude))
     (mesonBool "sanitize-bounds" sanitize-bounds)
+    (mesonBool "sanitize-undefined" sanitize-undefined)
     (mesonBool "sanitize-trap-on-error" sanitize-trap-on-error)
+    (mesonBool "sanitize-allow-missing" sanitize-allow-missing)
     (mesonBool "profile" profile)
     (mesonBool "analyzer" analyzer)
     (mesonBool "assert-verbose" assert-verbose)
     (mesonBool "fast-strcmp" fast-strcmp)
+    (mesonOption "sanitize" sanitize)
 
     # Testing options
     (mesonBool "picolib" picolib)
     (mesonBool "semihost" semihost)
+    (mesonBool "fake-semihost" fake-semihost)
     (mesonBool "use-stdlib" true)
 
     # Install options
     (mesonOption "specsdir" "${placeholder "dev"}/lib")
 
-    (mesonBool "tinystdio" tinystdio)
     (mesonBool "io-c99-formats" io-c99-formats)
     (mesonBool "io-long-long" io-long-long)
     (mesonBool "io-pos-args" io-pos-args)
@@ -158,6 +173,9 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     (mesonBool "minimal-io-long-long" minimal-io-long-long)
     (mesonBool "fast-bufio" fast-bufio)
     (mesonBool "io-wchar" io-wchar)
+    (mesonBool "stdio-locking" stdio-locking)
+    (mesonBool "have-fcntl" have-fcntl)
+    (mesonBool "fstat-bufsiz" fstat-bufsiz)
 
     (mesonBool "mb-capable" mb-capable)
     (mesonBool "mb-extended-charsets" mb-extended-charsets)
@@ -169,25 +187,27 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     (mesonBool "picocrt" picocrt)
     (mesonBool "picocrt-enable-mmu" picocrt-enable-mmu)
     (mesonBool "picocrt-lib" picocrt-lib)
-    (mesonBool "picoexit" picoexit)
-    (mesonBool "newlib-initfini-array" initfini-array)
+    (mesonBool "initfini-array" initfini-array)
+    (mesonBool "initfini" initfini)
     (mesonBool "crt-runtime-size" crt-runtime-size)
 
-    (mesonBool "newlib-atexit-dynamic-alloc" newlib-atexit-dynamic-alloc)
-    (mesonBool "newlib-global-atexit" newlib-global-atexit)
-    (mesonBool "newlib-register-fini" newlib-register-fini)
+    (mesonBool "enable-malloc" enable-malloc)
+    (mesonBool "malloc-clear-freed" malloc-clear-freed)
+    (mesonOption "internal-heap" (toString internal-heap))
 
-    (mesonBool "newlib-nano-malloc" newlib-nano-malloc)
-    (mesonBool "nano-malloc-clear-freed" nano-malloc-clear-freed)
-
-    (mesonBool "newlib-multithread" (!single-thread))
+    (mesonBool "single-thread" single-thread)
 
     (mesonOption "thread-local-storage" thread-local-storage)
+    (mesonBool "thread-local-storage-api" thread-local-storage-api)
     (mesonOption "tls-model" tls-model)
     (mesonBool "newlib-global-errno" newlib-global-errno)
     (mesonOption "errno-function" errno-function)
     (mesonBool "tls-rp2040" tls-rp2040)
+    (mesonOption "stack-protector-guard" stack-protector-guard)
 
+    (mesonOption "newlib-obsolete-math" newlib-obsolete-math)
+    (mesonOption "newlib-obsolete-math-float" newlib-obsolete-math-float)
+    (mesonOption "newlib-obsolete-math-double" newlib-obsolete-math-double)
     (mesonBool "want-math-errno" want-math-errno)
   ]
   ++ lib.optionals finalAttrs.finalPackage.doCheck [
