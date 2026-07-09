@@ -3,6 +3,10 @@
   fetchFromGitHub,
   python3Packages,
   withFreqUI ? true,
+  withPlot ? false,
+  withFreqAI ? false,
+  withFreqAIRL ? false,
+  withHyperopt ? false,
 }:
 
 let
@@ -26,50 +30,80 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
     wheel
   ];
-  dependencies = with python3Packages; [
-    ccxt
-    sqlalchemy
-    python-telegram-bot
-    humanize
-    cachetools
-    requests
-    httpx
-    urllib3
-    jsonschema
-    scipy
-    numpy
-    pandas
-    ta-lib
-    ft-pandas-ta
-    technical
-    tabulate
-    pycoingecko
-    python-rapidjson
-    orjson
-    jinja2
-    questionary
-    prompt-toolkit
-    joblib
-    rich
-    pyarrow
-    fastapi
-    pydantic
-    pyjwt
-    websockets
-    uvicorn
-    psutil
-    schedule
-    janus
-    ast-comments
-    aiofiles
-    aiohttp
-    cryptography
-    sdnotify
-    python-dateutil
-    pytz
-    packaging
-    freqtrade-client
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      ccxt
+      sqlalchemy
+      python-telegram-bot
+      humanize
+      cachetools
+      requests
+      httpx
+      urllib3
+      jsonschema
+      scipy
+      numpy
+      pandas
+      ta-lib
+      ft-pandas-ta
+      technical
+      tabulate
+      pycoingecko
+      python-rapidjson
+      orjson
+      jinja2
+      questionary
+      prompt-toolkit
+      joblib
+      rich
+      pyarrow
+      fastapi
+      pydantic
+      pyjwt
+      websockets
+      uvicorn
+      psutil
+      schedule
+      janus
+      ast-comments
+      aiofiles
+      aiohttp
+      cryptography
+      sdnotify
+      python-dateutil
+      pytz
+      packaging
+      freqtrade-client
+    ]
+    ++ lib.optionals withPlot finalAttrs.passthru.optional-dependencies.plot
+    ++ lib.optionals withFreqAI finalAttrs.passthru.optional-dependencies.freqAI
+    ++ lib.optionals withFreqAIRL finalAttrs.passthru.optional-dependencies.freqAIRL
+    ++ lib.optionals withHyperopt finalAttrs.passthru.optional-dependencies.hyperopt;
+  optional-dependencies = with python3Packages; {
+    plot = [ plotly ];
+    freqAI = [
+      scikit-learn
+      joblib
+      lightgbm
+      xgboost
+      tensorboard
+      datasieve
+    ];
+    freqAIRL = [
+      torch
+      gymnasium
+      stable-baselines3
+      sb3-contrib
+      tqdm
+    ];
+    hyperopt = [
+      scikit-learn
+      filelock
+      optuna
+      cmaes
+    ];
+  };
   postInstall = lib.optionalString withFreqUI ''
     # https://github.com/freqtrade/freqtrade/blob/064e67c42af3c4026d123990f992ac42f7ee3cde/freqtrade/commands/deploy_commands.py#L117
     ln -s ${frequi} $out/${python3Packages.python.sitePackages}/freqtrade/rpc/api_server/ui/installed
