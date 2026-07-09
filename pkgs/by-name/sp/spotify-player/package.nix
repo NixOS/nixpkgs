@@ -30,6 +30,7 @@
   withFuzzy ? true,
   stdenv,
   makeBinaryWrapper,
+  lld,
 
   # passthru
   nix-update-script,
@@ -49,16 +50,16 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotify-player";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LjQGCE4xbD3+k78827u346/qhC6D8vrhyUq6c+8eWSw=";
+    hash = "sha256-SxzQdQOg+KS6jXJNifVkehR91g6gTHBYgyxfXx9WWI8=";
   };
 
-  cargoHash = "sha256-mD1UJn3LjX88Ht6QUpPO9lu9WiCec5+qUphtLoCjiXg=";
+  cargoHash = "sha256-TmGdJXKOsTL9HVyEEe3PtiLMSDJV/TRokRBVAUdHL7I=";
 
   nativeBuildInputs = [
     pkg-config
@@ -67,9 +68,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     # Tries to access $HOME when installing shell files, and on Darwin
     writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
+    lld
   ];
 
   buildInputs = [
@@ -94,6 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   buildNoDefaultFeatures = true;
 
