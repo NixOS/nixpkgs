@@ -479,7 +479,7 @@ let
     cairoDevice = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
-    chebpol = [ pkgs.fftw.dev ];
+    chebpol = [ pkgs.pkg-config ];
     ChemmineOB = [ pkgs.pkg-config ];
     ciflyr = with pkgs; [
       cargo
@@ -1194,7 +1194,10 @@ let
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.gtk2 ];
     CBN2Path = [ pkgs.gsl ];
-    chebpol = [ pkgs.pkg-config ];
+    chebpol = with pkgs; [
+      fftw
+      gsl
+    ];
     baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     iscream = with pkgs; [
