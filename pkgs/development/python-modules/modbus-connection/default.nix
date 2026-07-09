@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-IEdOLd+BjX2b6bQS7hw33CyuDFVJ5dO0BaHLLhGp3LE=";
+    hash = "sha256-jWS6quM+hZTMGNyxopC4RS3mUaYAqD/MOsmTU7sD+pg=";
   };
 
   nativeBuildInputs = [
