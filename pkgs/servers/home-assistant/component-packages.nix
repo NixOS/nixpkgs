@@ -3980,7 +3980,8 @@
       ];
     "melcloud_home" =
       ps: with ps; [
-      ]; # missing inputs: aiomelcloudhome
+        aiomelcloudhome
+      ];
     "melissa" =
       ps: with ps; [
         py-melissa-climate
@@ -8351,6 +8352,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melcloud_home"
     "melissa"
     "melnor"
     "meraki"
