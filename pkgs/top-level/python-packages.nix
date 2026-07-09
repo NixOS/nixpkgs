@@ -16249,6 +16249,8 @@ self: super: with self; {
 
   pytest-textual-snapshot = callPackage ../development/python-modules/pytest-textual-snapshot { };
 
+  pytest-ticket = callPackage ../development/python-modules/pytest-ticket { };
+
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
