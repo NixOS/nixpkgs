@@ -7,6 +7,8 @@
   fetchurl,
   fetchpatch,
   xcbuild,
+  lld,
+  llvm,
   python3,
   ninja,
   git,
@@ -182,7 +184,13 @@ stdenv.mkDerivation {
     ln -sf ${lib.getExe gn} buildtools/mac/gn
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
-    substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
+
+    # When 'use_lld=true' is set, llvm-ar is used instead of ar.
+    # The build config expects llvm-ar to be inside the provided clang base path,
+    # but this is not the case in nixpkgs.
+    substituteInPlace build/toolchain/apple/toolchain.gni \
+      --replace-fail "/bin/cp -Rc" "cp -a" \
+      --replace-fail '${"$"}{prefix}llvm-ar' '${lib.getExe' llvm "llvm-ar"}'
 
     # nixpkgs calls the target "darwin" instead of "macos", and passing a different target
     # results in warnings by the nixpkgs compiler wrapper
@@ -210,7 +218,10 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+      lld
+    ];
 
   buildInputs = [
     nasm
@@ -279,7 +290,8 @@ stdenv.mkDerivation {
     "rtc_enable_objc_symbol_export=true"
     "rtc_include_dav1d_in_internal_decoder_factory=true"
     "clang_use_chrome_plugins=false"
-    "use_lld=false"
+    # ld64 traps on linking because of C++ hardening
+    "use_lld=true"
     ''clang_base_path="${clang}"''
   ]);
 
@@ -296,6 +308,12 @@ stdenv.mkDerivation {
     "sdk:mac_framework_objc"
     "desktop_capture_objc"
   ];
+
+  env = {
+    # ensure install_name_tool has enough space in binary headers
+    # to replace rpaths with very long nix store paths
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+  };
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isLinux ''
