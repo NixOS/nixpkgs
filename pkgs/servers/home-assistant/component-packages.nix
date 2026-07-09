@@ -1690,7 +1690,8 @@
       ];
     "energieleser" =
       ps: with ps; [
-      ]; # missing inputs: energieleser
+        energieleser
+      ];
     "energy" =
       ps: with ps; [
         fnv-hash-fast
@@ -8022,6 +8023,7 @@
     "emulated_kasa"
     "emulated_roku"
     "energenie_power_sockets"
+    "energieleser"
     "energy"
     "energyid"
     "energyzero"
