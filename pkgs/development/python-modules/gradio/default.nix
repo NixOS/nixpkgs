@@ -414,14 +414,14 @@ buildPythonPackage (finalAttrs: {
         # gradio.sans-reverse-dependencies, which would create a build cycle.
         # Break it by giving hf-gradio a checkless gradio-client.
         hf-gradio = hf-gradio.override {
-          gradio-client = gradio-client.overridePythonAttrs {
-            doCheck = false;
-          };
+          gradio-client = gradio-client.sans-reverse-dependencies;
         };
       }).overridePythonAttrs
         (old: {
           pname = old.pname + "-sans-reverse-dependencies";
           pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          # we aggressively remove all checkPhase related attrs
+          # to save on rebuilds during bumps
           doInstallCheck = false;
           doCheck = false;
           postPatch = "";
