@@ -1,7 +1,7 @@
 {
   lib,
+  stdenvNoCC,
   callPackage,
-  runCommand,
   makeWrapper,
   ruby,
 }@defs:
@@ -77,7 +77,12 @@ let
         // passthru;
     };
 in
-runCommand basicEnv.name cmdArgs ''
+stdenvNoCC.mkDerivation (
+  finalAttrs:
+  cmdArgs
+  // {
+    inherit (basicEnv) name;
+    buildCommand = ''
   mkdir -p $out/bin
   ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
   ${
@@ -105,4 +110,6 @@ runCommand basicEnv.name cmdArgs ''
     done
     compressManPages "''${!outputMan}"
   ''}
-''
+    '';
+  }
+)
