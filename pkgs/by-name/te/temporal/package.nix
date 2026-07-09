@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.31.1";
+  version = "1.31.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NOmIEVBWA91oU7+yp1ySF7dyGlnQHgor1gKvvGg80BE=";
+    hash = "sha256-NuvgeG1a7octJ2HD0EGQIdU8CtZsNRf4KX/F17S/uOQ=";
   };
 
   vendorHash = "sha256-KZKlARki/AXGhfsQsOixHjx+t1H9htd9oBx3wsiebY0=";
