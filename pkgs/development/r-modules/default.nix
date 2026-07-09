@@ -891,10 +891,9 @@ let
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
-      gdal
-      proj
-      geos
-      netcdf
+      pkg-config
+      gdal # for gdal-config
+      geos # for geos-config
     ];
     tok = with pkgs; [
       cargo
@@ -1285,9 +1284,8 @@ let
       sqlite
     ];
     terra = with pkgs; [
-      pkg-config
-      sqlite.dev
-      proj.dev
+      proj
+      sqlite
     ];
     showtext = with pkgs; [
       zlib
@@ -2167,12 +2165,6 @@ let
         --replace-fail "Calloc" "R_Calloc" \
         --replace-fail "Free" "R_Free"
       '';
-    });
-
-    terra = old.terra.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
     });
 
     unsum = old.unsum.overrideAttrs (attrs: {
