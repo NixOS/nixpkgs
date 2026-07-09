@@ -1547,6 +1547,13 @@
     githubId = 169249;
     name = "Alex Brandt";
   };
+  alvr = {
+    name = "Álvaro Salcedo García";
+    email = "me@alvaro.sg";
+    github = "alvr";
+    githubId = 217315;
+    matrix = "@alvr:matrix.org";
+  };
   alx = {
     email = "nix@alexgirard.com";
     github = "alx";
