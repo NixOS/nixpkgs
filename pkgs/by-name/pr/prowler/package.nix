@@ -1,12 +1,13 @@
 {
   lib,
   fetchFromGitHub,
+  kingfisher,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.31.1";
+  version = "5.33.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,10 +16,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-V3kPj3gtS8ZkeU/rBaTPaOdfWvYI70jAi52kCX0m/jg=";
+    hash = "sha256-dx4/AmV+K4YH9gqjznMNJcVv0MZ5Qt/Lelw6ErbHgt8=";
   };
 
   pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [ "kingfisher-bin" ];
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -106,6 +109,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tzlocal
     uuid6
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/prowler --prefix PATH : "${lib.makeBinPath [ kingfisher ]}"
+  '';
 
   pythonImportsCheck = [ "prowler" ];
 

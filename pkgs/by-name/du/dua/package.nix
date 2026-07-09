@@ -1,9 +1,11 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # TODO: Upstream also provides Elvish and PowerShell completions,
+    # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
+      installShellCompletion --cmd dua \
+        --bash <($out/bin/dua completions bash) \
+        --fish <($out/bin/dua completions fish) \
+        --zsh  <($out/bin/dua completions zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
