@@ -732,7 +732,7 @@ let
       cmake
       pkg-config
     ];
-    RGtk2 = [ pkgs.gtk2.dev ];
+    RGtk2 = [ pkgs.pkg-config ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = with pkgs; [
       cmake
@@ -1181,7 +1181,7 @@ let
       freetype.dev
       libpng.dev
     ];
-    RGtk2 = [ pkgs.pkg-config ];
+    RGtk2 = [ pkgs.gtk2 ];
     RProtoBuf = with pkgs; [
       protobuf
       abseil-cpp
