@@ -10687,6 +10687,8 @@ self: super: with self; {
 
   modal = callPackage ../development/python-modules/modal { };
 
+  modbus-connection = callPackage ../development/python-modules/modbus-connection { };
+
   modbus-tk = callPackage ../development/python-modules/modbus-tk { };
 
   moddb = callPackage ../development/python-modules/moddb { };
@@ -14021,6 +14023,8 @@ self: super: with self; {
   pyannoteai-sdk = callPackage ../development/python-modules/pyannoteai-sdk { };
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
+
+  pyaqvify = callPackage ../development/python-modules/pyaqvify { };
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
 
@@ -20320,6 +20324,8 @@ self: super: with self; {
   tmb = callPackage ../development/python-modules/tmb { };
 
   tmdbsimple = callPackage ../development/python-modules/tmdbsimple { };
+
+  tmodbus = callPackage ../development/python-modules/tmodbus { };
 
   tnefparse = callPackage ../development/python-modules/tnefparse { };
 

@@ -9542,12 +9542,6 @@
     name = "Fritz Stracke";
     keys = [ { fingerprint = "7A9D 6DB2 0C5A AA55 7838  EEE6 B8CA 2D9A D8F0 506F"; } ];
   };
-  ftrvxmtrx = {
-    email = "ftrvxmtrx@gmail.com";
-    github = "ftrvxmtrx";
-    githubId = 248148;
-    name = "Sigrid Solveig Haflínudóttir";
-  };
   ftsimas = {
     name = "Filippos Tsimas";
     email = "filippos.tsimas@outlook.com";
@@ -9731,6 +9725,12 @@
     github = "Galagora";
     githubId = 45048741;
     name = "Alwanga Oyango";
+  };
+  galder = {
+    email = "galder@ibm.com";
+    github = "galderz";
+    githubId = 50187;
+    name = "Galder Zamarreño";
   };
   gale-username = {
     name = "gale";
@@ -24149,6 +24149,12 @@
     githubId = 7335;
     name = "Roman Gonzalez";
   };
+  roman-16 = {
+    email = "roman@lerchster.dev";
+    github = "roman-16";
+    githubId = 15262665;
+    name = "Roman";
+  };
   romildo = {
     email = "malaquias@gmail.com";
     github = "romildo";
@@ -28292,6 +28298,12 @@
     github = "timstott";
     githubId = 1334474;
     name = "Timothy Stott";
+  };
+  tiptenbrink = {
+    email = "tip@tenbrinkmeijs.com";
+    github = "tiptenbrink";
+    githubId = 75669206;
+    name = "Tip ten Brink";
   };
   tiramiseb = {
     email = "sebastien@maccagnoni.eu";
