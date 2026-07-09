@@ -528,7 +528,7 @@ let
       cargo
       rustc
     ];
-    fftw = [ pkgs.fftw.dev ];
+    fftw = [ pkgs.pkg-config ];
     fftwtools = with pkgs; [
       fftw.dev
       pkg-config
@@ -1231,7 +1231,7 @@ let
     ];
     fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
-    fftw = [ pkgs.pkg-config ];
+    fftw = [ pkgs.fftw ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive ];
     lpsymphony = with pkgs; [
