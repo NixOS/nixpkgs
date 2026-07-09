@@ -9317,9 +9317,7 @@ with pkgs;
     # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
-  taffybar = callPackage ../applications/window-managers/taffybar {
-    inherit (haskellPackages) ghcWithPackages taffybar;
-  };
+  taffybar = callPackage ../applications/window-managers/taffybar { };
 
   telegram-desktop =
     kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop

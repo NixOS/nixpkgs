@@ -1,7 +1,8 @@
 {
   stdenv,
-  ghcWithPackages,
-  taffybar,
+  haskellPackages,
+  ghcWithPackages ? haskellPackages.ghcWithPackages,
+  taffybar-unwrapped ? haskellPackages.taffybar,
   makeWrapper,
   packages ? (x: [ ]),
 }:
@@ -17,7 +18,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "taffybar-with-packages";
-  inherit (taffybar) version;
+  inherit (taffybar-unwrapped) version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,5 +37,5 @@ stdenv.mkDerivation {
   buildInputs = [ taffybarEnv ];
   shellHook = "eval $(egrep ^export ${taffybarEnv}/bin/ghc)";
 
-  inherit (taffybar) meta;
+  inherit (taffybar-unwrapped) meta;
 }
