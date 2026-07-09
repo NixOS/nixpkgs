@@ -87,13 +87,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    #TODO: update it in update script
     outputHash = "sha256-6IHFidjVDDzUOCRXVwjvzcLGKV6dWWS7k2jwrOuJ748=";
     outputHashMode = "recursive";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    # used upstream for builds: https://github.com/anyproto/anytype-ts/blob/5d66657f764c0649410e37c9e9c06e3ff18487ee/.github/workflows/build.yml#L192.
+    NODE_OPTIONS = "--max-old-space-size=8192";
   };
 
   nativeBuildInputs = [

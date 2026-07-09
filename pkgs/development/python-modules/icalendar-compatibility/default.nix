@@ -46,8 +46,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icalendar_compatibility" ];
 
-  # env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = {
     homepage = "https://icalendar-compatibility.readthedocs.io/en/latest/";
     changelog = "https://icalendar-compatibility.readthedocs.io/en/latest/changes.html";

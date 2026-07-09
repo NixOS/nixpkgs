@@ -16,18 +16,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.10";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
-    tag = finalAttrs.version;
-    hash = "sha256-Rp7BgtJnV3fPed/QlWSxH8nL7cCTgMDpRGcgX5VI2l0=";
+    # Rewritten git history many times
+    rev = "3261587f8b10471a6ed3c5ad132ada0f7c06e4cf";
+    hash = "sha256-wjoYh6XWV4lJpSr9GQwPnlKGkbFH0YJOp1xVZJb5uOY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-yAM1jzebUlNkVWiY8lPtlelfqpFQonNcAqNmmghCdPU=";
+  vendorHash = "sha256-pbldRarOQ44bE4FPUSHvk2Qk4WQ0zKU0Hd75E717mLI=";
 
   ldflags = [
     "-s"
@@ -51,7 +52,14 @@ buildGoModule (finalAttrs: {
   ];
 
   # git ls-files doesn't work as source is not a git repo
-  checkFlags = [ "-skip=^TestOldVersionLiteralsAreAllowlisted$" ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestOldVersionLiteralsAreAllowlisted"
+        "TestLinuxAppIdentityContract"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   env.CGO_ENABLED = 1;
 

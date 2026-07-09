@@ -102,7 +102,7 @@ buildNpmPackage {
   meta = {
     homepage = "https://github.com/luizcorreia/spectral-language-server";
     description = "Awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "spectral-language-server";
   };

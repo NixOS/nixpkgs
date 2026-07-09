@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "marxin";
     repo = "cvise";
     tag = "v${version}";
-    hash = "sha256-UaWOHjgTiSVvpKKw6VFAeRAYkYp4y0Dnamzr7yhH0vQ=";
+    hash = "sha256-ObnhFe7hAKUoUxNJ+9jo0Q4AE6jQqDgI1Ta/jsumqpI=";
   };
 
   patches = [

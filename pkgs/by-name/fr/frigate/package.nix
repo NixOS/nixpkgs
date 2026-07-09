@@ -15,14 +15,14 @@
 }:
 
 let
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-jQQ54By77dOVSIu08YhJn+EUV0D03j1bcMQRk9404RE=";
+    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -238,9 +238,6 @@ python3Packages.buildPythonApplication rec {
     ffmpeg-headless
     pytestCheckHook
   ];
-
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
 
   preCheck = ''
     # Unavailable in the build sandbox

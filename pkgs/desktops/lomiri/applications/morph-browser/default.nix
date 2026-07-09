@@ -11,6 +11,7 @@
   libpsl,
   lomiri-action-api,
   lomiri-content-hub,
+  lomiri-thumbnailer,
   lomiri-ui-extras,
   lomiri-ui-toolkit,
   mesa,
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     # QML
     lomiri-action-api
     lomiri-content-hub
+    lomiri-thumbnailer
     lomiri-ui-extras
     lomiri-ui-toolkit
     qqc2-suru-style

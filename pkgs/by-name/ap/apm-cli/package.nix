@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apm-cli";
-  version = "0.18.0";
+  version = "0.21.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mHu5r08y3OUTJjnl5Xvb23yhoJu9DupoZhkhL74K6UE=";
+    hash = "sha256-Wotyqsg/1nbjttMk+4wpGK76+kaL7j6oMH61NwsTuNc=";
   };
 
   postPatch = ''

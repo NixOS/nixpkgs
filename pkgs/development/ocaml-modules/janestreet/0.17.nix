@@ -60,6 +60,7 @@ with self;
     pname = "accessor_core";
     hash = "sha256-ku83ZfLtVI8FvQhrKcnJmhmoNlYcVMKx1tor5N8Nq7M=";
     meta.description = "Accessors for Core types, for use with the Accessor library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.5";
     propagatedBuildInputs = [
       accessor_base
       core_kernel
@@ -1577,7 +1578,7 @@ with self;
       if lib.versionAtLeast ppxlib.version "0.36" then
         {
           version = "0.17.1";
-          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=$";
+          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=";
         }
       else
         {

@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
     # a more conservative version of https://github.com/sagemath/sage/pull/37951
     ./patches/gap-element-crash.patch
 
+    # https://github.com/sagemath/sage/issues/42473
+    ./patches/lower-sleep2-test-threshold.patch
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";
@@ -98,6 +101,13 @@ stdenv.mkDerivation rec {
       name = "flint-3.5.0-update.patch";
       url = "https://github.com/sagemath/sage/commit/f1cf1552c2c7636fa069fbc47c5bfc937753f7b2.patch?full_index=1";
       hash = "sha256-Z3SU6cSCnnaTZLcTh0LNb672HyBqhBd6+iYUEeK1cGQ=";
+    })
+
+    # https://github.com/sagemath/sage/pull/40679, rebased by void linux
+    (fetchpatch2 {
+      name = "maxima-5.49-update.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/f8951eacbdc6538af3330d17d5587a0c208ab349/srcpkgs/sagemath/patches/40679-Update_to_maxima_5.49.patch";
+      hash = "sha256-n6YSVNomLM7f5kRAGzhijag8QnlXxKJz9RHFLVtZpdk=";
     })
   ];
 

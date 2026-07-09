@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "mypyllant";
-  version = "0.9.12";
+  version = "0.9.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "signalkraft";
     repo = "myPyllant";
     tag = "v${version}";
-    hash = "sha256-ZVk9QV5Q5bEeS3dsyFkhdPOJDqwf76o6XW5VSBuutMw=";
+    hash = "sha256-Uzy7W+ZwdBDKKayl0z6FIj/NK9uA/IsWFFJCeO0o4vQ=";
   };
 
   build-system = [

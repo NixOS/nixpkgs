@@ -41,12 +41,8 @@ fn main() -> anyhow::Result<()> {
             .as_object()
             .ok_or_else(|| anyhow::anyhow!("{} does not contain an object", args.input.display()))?
             .get(&unwrap_key)
-            .ok_or_else(|| {
-                anyhow::anyhow!(
-                    "{} does not containt attribute '{unwrap_key}'",
-                    args.input.display()
-                )
-            })?
+            // The key is missing from structured attrs when the value is null, treat missing value as Value::Null.
+            .unwrap_or(&serde_json::Value::Null)
     } else {
         &parsed_json
     };

@@ -12,12 +12,6 @@ let
         inherit stdenv fetchurl lib;
       };
     };
-    pdf_a4 = {
-      recurseForDerivations = true;
-      python314 = import ./3.14-pdf-a4.nix {
-        inherit stdenv fetchurl lib;
-      };
-    };
     text = {
       recurseForDerivations = true;
       python314 = import ./3.14-text.nix {

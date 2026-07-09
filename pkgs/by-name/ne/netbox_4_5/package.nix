@@ -141,7 +141,6 @@ py.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       minijackson
-      raitobezarius
       transcaffeine
     ];
   };

@@ -59,7 +59,7 @@
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  ffmpeg-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -89,6 +89,9 @@
 
   bzip2,
   callPackage,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }@inputs:
 
 let
@@ -386,7 +389,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
@@ -434,7 +437,7 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ]
@@ -470,6 +473,10 @@ effectiveStdenv.mkDerivation {
   )
   ++ optionals enableCuda [
     cudaPackages.cuda_nvcc
+  ]
+  # TODO: Clean up on `staging`.
+  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   env = {
@@ -559,6 +566,10 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals (enabledModules != [ ]) [
     (cmakeFeature "BUILD_LIST" (concatStringsSep "," enabledModules))
+  ]
+  # TODO: Clean up on `staging`.
+  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
+    (cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   postBuild = optionalString enableDocs ''

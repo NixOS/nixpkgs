@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastdds";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-C9MKfQJ+8XsiSIYaB43j6xmoIyRH7h7sgEyzj1gml/8=";
+    hash = "sha256-17AxZwYPBhl+AyehWvNYP/if124GcmNfWJOD/yB+tgk=";
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,7 @@
   cmake,
   supercollider,
   fftw,
+  fftwFloat,
   gitUpdater,
 }:
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     supercollider
     fftw
+    fftwFloat # builds without this will return an error message about no FFTW3F-INCLUDE-DIR
   ];
 
   cmakeFlags = [
@@ -46,7 +48,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      pretentiousUsername
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

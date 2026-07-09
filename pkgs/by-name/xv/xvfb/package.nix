@@ -38,12 +38,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvfb";
 
-  # TODO: rebuild avoidance. revert on staging.
+  # TODO: commented out for rebuild avoidance after xorg-server update. revert
+  # on staging.
   # inherit (xorg-server) src version;
-  version = "21.1.22";
+  version = "21.1.23";
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-GiQsiRfEm6KczB9gIWE9iiuYBd0NJxpmrp0J9LC7BrM=";
+    hash = "sha256-45gy5WF9ra8HL9+fDhnl0uHCoTYHrCgLrBq6n4/hRjQ=";
   };
 
   strictDeps = true;

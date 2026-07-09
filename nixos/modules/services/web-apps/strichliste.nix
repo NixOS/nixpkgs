@@ -128,21 +128,23 @@ in
           };
 
           account = {
-            lower = mkOption {
-              type = types.int;
-              default = -200000;
-              example = 0;
-              description = ''
-                The credit limit for user accounts.
-              '';
-            };
+            boundary = {
+              lower = mkOption {
+                type = types.int;
+                default = -200000;
+                example = 0;
+                description = ''
+                  The credit limit for user accounts.
+                '';
+              };
 
-            upper = mkOption {
-              type = types.ints.positive;
-              default = 200000;
-              description = ''
-                The maximum balance on a user account.
-              '';
+              upper = mkOption {
+                type = types.ints.positive;
+                default = 200000;
+                description = ''
+                  The maximum balance on a user account.
+                '';
+              };
             };
           };
 
@@ -256,7 +258,7 @@ in
               };
             };
 
-            transaction = {
+            transactions = {
               enabled = mkOption {
                 type = types.bool;
                 default = true;
@@ -476,20 +478,15 @@ in
         inherit (cfg) environment;
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;
           User = "strichliste";
           Group = "strichliste";
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = map toString [
-            [
-              (lib.getExe cfg.packages.backend)
-              "cache:clear"
-            ]
-            [
-              (lib.getExe cfg.packages.backend)
-              "doctrine:migrations:migrate"
-              "--allow-no-migration"
-              "--no-interaction"
-            ]
+          ExecStart = toString [
+            (lib.getExe cfg.packages.backend)
+            "doctrine:migrations:migrate"
+            "--allow-no-migration"
+            "--no-interaction"
           ];
         };
       };
@@ -497,6 +494,11 @@ in
       systemd.services.phpfpm-strichliste = {
         inherit (cfg) environment;
         serviceConfig.EnvironmentFile = cfg.environmentFiles;
+        restartTriggers = [ settingsFile ];
+        preStart = toString [
+          (lib.getExe cfg.packages.backend)
+          "cache:clear"
+        ];
       };
 
       services.phpfpm.pools.strichliste = {

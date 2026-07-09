@@ -102,7 +102,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg_7 ]
   );
 
-  version = "15.0.15";
+  version = "15.0.17";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -112,7 +112,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-UlKf5YPGnPCKzCiFu1dxLg6kg3bJQAcZlwOKE9rTIgQ=";
+      hash = "sha256-WJFDd+DVj4oKHjv7py3yVrttrrCHFcHJbyvLNOwCjhs=";
     };
 
     i686-linux = fetchurl {
@@ -122,7 +122,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-bIFw4QOIgEQBdcQqjYRKWmy/C0srG0eBBR5H5oteWlo=";
+      hash = "sha256-pKmAKDWutSp7ptJ66PMiS59aV+pRs3Oz9pV64kRuebI=";
     };
   };
 
@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "torbrowser";
+      name = "tor-browser";
       exec = "tor-browser %U";
       icon = "tor-browser";
       desktopName = "Tor Browser";
@@ -340,6 +340,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser routing traffic through the Tor network";
     mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/raw/maint-${lib.versions.majorMinor version}/projects/browser/Bundle-Data/Docs-TBB/ChangeLog.txt";
     platforms = lib.attrNames sources;
     maintainers = with lib.maintainers; [

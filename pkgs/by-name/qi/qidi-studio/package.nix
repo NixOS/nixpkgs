@@ -7,11 +7,11 @@
 }:
 let
   pname = "qidi-studio";
-  version = "2.06.00.51";
+  version = "2.07.01.57";
 
   src = fetchurl {
     url = "https://github.com/QIDITECH/QIDIStudio/releases/download/v${version}/QIDIStudio_v0${version}_Ubuntu24.AppImage";
-    hash = "sha256-Qb/NbyjOCtIg74O5yPxX9Jq0Hf92hJXo9RqQTQh/ESM=";
+    hash = "sha256-hMkA8rlMOzV1t4aEi3KLrgeWUIgO+CVjwIM6mwM8pGA=";
   };
 
   appimageContents = appimageTools.extract {

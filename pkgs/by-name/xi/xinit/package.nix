@@ -12,6 +12,9 @@
   xauth,
   xorg-server,
   nix-update-script,
+
+  # path to the X server binary to use - override for setuid, for example: "/run/wrappers/bin/X"
+  xserverPath ? "${xorg-server.out}/bin/X",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xinit";
@@ -53,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-xserver=${xorg-server.out}/bin/X"
+    "--with-xserver=${xserverPath}"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-launchd=yes"

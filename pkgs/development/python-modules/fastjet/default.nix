@@ -76,8 +76,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = {
     description = "Jet-finding in the Scikit-HEP ecosystem";
     homepage = "https://github.com/scikit-hep/fastjet";

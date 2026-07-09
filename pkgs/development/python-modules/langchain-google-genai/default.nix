@@ -29,14 +29,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-google-genai";
-  version = "4.2.3";
+  version = "4.2.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${finalAttrs.version}";
-    hash = "sha256-OJQRYCzMa6y1F3gHFBAY+G3v3ZWzhw1ZqvbePTJyzr8=";
+    hash = "sha256-D+G9+8YlkJy0uI3BK4muTf95/inzeyxAOE4KqTIf9Gc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/genai";
@@ -68,6 +69,9 @@ buildPythonPackage (finalAttrs: {
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
     "test_serialize"
+    # pydantic_core._pydantic_core.ValidationError: 1 validation error for GenerateContentResponse
+    # extra inputs are not permitted
+    "test_grounding_metadata_to_citations_conversion"
   ];
 
   disabledTestPaths = [

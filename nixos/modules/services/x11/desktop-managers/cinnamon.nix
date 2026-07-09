@@ -111,7 +111,10 @@ in
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
       hardware.bluetooth.enable = mkDefault true;
-      security.polkit.enable = true;
+      security.polkit = {
+        enable = true;
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs; [
@@ -120,6 +123,15 @@ in
         nemo-with-extensions
         xapp
       ];
+      systemd.packages =
+        with pkgs;
+        [
+          cinnamon-session
+        ]
+        ++ utils.removePackagesByName [
+          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          xdg-user-dirs-gtk
+        ] config.environment.cinnamon.excludePackages;
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -215,6 +227,7 @@ in
             mint-y-icons
             xapp # provides some xapp-* icons
             xapp-symbolic-icons
+            xdg-user-dirs-gtk
           ] config.environment.cinnamon.excludePackages
         );
 

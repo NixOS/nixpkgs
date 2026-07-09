@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv * "$out/itgmania/Themes/Arrow Cloud"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Arrow Cloud's fork of Zmod";

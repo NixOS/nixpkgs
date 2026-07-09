@@ -32,6 +32,7 @@
   libslirp,
   libcbor,
   darwin,
+  apple-sdk_15,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -122,6 +123,9 @@
   minimal ? toolsOnly || userOnly,
   gitUpdater,
   qemu-utils, # for tests attribute
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -140,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "11.0.0";
+  version = "11.0.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wEyjYBJlPzLRHGdNNwz1KnEOfT8Ywti2PkkyBSpIVNY=";
+    hash = "sha256-DSNfWCAnjZFKMVXsJ6+OQljWl+qJKJVXCAfWnAy4zWQ=";
   };
 
   depsBuildBuild = [
@@ -179,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals hexagonSupport [ glib ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
+
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
   ]
   ++ lib.optionals (!userOnly) [ dtc ];
 
@@ -251,7 +258,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
-  ++ lib.optionals valgrindSupport [ valgrind-light ];
+  ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -422,6 +430,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString (!minimal && !xenSupport) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";

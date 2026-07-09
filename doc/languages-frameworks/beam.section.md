@@ -125,7 +125,7 @@ There are 2 ways to package backend dependencies: either per-dependency mix2nix 
 
 When writing an elixir project targeting `mixRelease`, you can also consider using [deps_nix](https://github.com/code-supply/deps_nix) with `mixNixDeps`. `deps_nix` supports git dependencies, but is intended to be added to the project's `mix.exs` directly.
 
-###### mix2nix {#mix2nix}
+##### mix2nix {#mix2nix}
 
 `mix2nix` is a cli tool available in Nixpkgs. It will generate a Nix expression from a `mix.lock` file. It is quite standard in the 2nix tool series.
 
@@ -175,7 +175,7 @@ If there are git dependencies.
 
 You will need to run the build process once to fix the hash to correspond to your new git src.
 
-###### FOD {#fixed-output-derivation}
+##### FOD {#fixed-output-derivation}
 
 A fixed output derivation will download mix dependencies from the internet. To ensure reproducibility, a hash will be supplied. Note that mix is relatively reproducible. An FOD generating a different hash on each run hasn't been observed (as opposed to npm where the chances are relatively high). See [akkoma](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/ak/akkoma/package.nix) for a usage example of FOD.
 
@@ -255,7 +255,7 @@ Setup will require the following steps:
 
 #### Example of creating a service for an Elixir - Phoenix project {#example-of-creating-a-service-for-an-elixir---phoenix-project}
 
-In order to create a service with your release, you could add a `service.nix`
+To create a service with your release, you could add a `service.nix`
 in your project with the following
 
 ```nix

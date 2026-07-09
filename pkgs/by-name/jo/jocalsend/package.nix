@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jocalsend";
   version = "1.618033988";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitea {
     domain = "git.kittencollective.com";
     owner = "nebkor";

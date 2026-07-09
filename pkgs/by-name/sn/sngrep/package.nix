@@ -8,7 +8,7 @@
   libpcap,
   ncurses,
   openssl,
-  pcre,
+  pcre2,
   pkg-config,
 }:
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     ncurses
     openssl
-    pcre
+    pcre2
   ];
 
   configureFlags = [
-    "--with-pcre"
+    "--with-pcre2"
     "--enable-unicode"
     "--enable-ipv6"
     "--enable-eep"

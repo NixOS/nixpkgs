@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.6.0";
+  version = "2026.7.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UE+Mo6AtNiVgKOfLS7khAoVNJGyomL5Vb/pfcCke5fI=";
+    hash = "sha256-Jjvg2PBxeW2kKqVA3GoKpMXcEXTMh4g2J+cby6av45s=";
   };
 
-  cargoHash = "sha256-N1/lLQZbkqeQavNGhYBx4PDl0cid+DACzy9gpj5g1rs=";
+  cargoHash = "sha256-JoXbR4gcca4Zk1KwVwE3qc+TqRTMZyFaTrEd4bzRTJY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -144,7 +144,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
 })

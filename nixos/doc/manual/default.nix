@@ -201,8 +201,7 @@ rec {
           --script ./highlightjs/loader.js \
           --script ./anchor.min.js \
           --script ./anchor-use.js \
-          --toc-depth 1 \
-          --chunk-toc-depth 1 \
+          --sidebar-depth 2 \
           ./manual.md \
           $dst/${common.indexPath}
 

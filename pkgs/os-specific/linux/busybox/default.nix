@@ -99,6 +99,13 @@ stdenv.mkDerivation (finalAttrs: {
       excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
       hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
+    # tar: only strip unsafe components from hardlinks, not symlinks
+    # fix issue introduced by the previous patch (CVE-2026-26157_CVE-2026-26158.patch)
+    (fetchpatch {
+      name = "CVE-2026-26157_CVE-2026-26158-2.patch";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/599f5dd8fac390c18b79cba4c14c334957605dae.patch";
+      hash = "sha256-go/KHSsuMSm21nC0yvKEtAQs8Jnjjqdcs5i8RWBGwT4=";
+    })
     # syslogd: fix writing to local log file
     # https://lists.busybox.net/pipermail/busybox/2024-October/090969.html
     (fetchpatch {
@@ -262,12 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
 
         # Relies on suid/guid bits
         skip-testcase cpio.tests "cpio restores suid/sgid bits"
-
-        # Weird failures, looks related to our sandbox
-        skip-testcase tar.tests "tar does not extract into symlinks"
-        skip-testcase tar.tests "tar -k does not extract into symlinks"
-        skip-testcase tar.tests "tar Symlink attack: create symlink and then write through it"
-        skip-testcase tar.tests "tar Symlinks and hardlinks coexist"
 
         popd
       '';

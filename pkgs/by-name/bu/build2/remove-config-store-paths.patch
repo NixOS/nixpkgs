@@ -1,14 +1,14 @@
 --- a/libbuild2/buildfile
 +++ b/libbuild2/buildfile
-@@ -86,8 +86,11 @@ build2_config_lines = [strings]
- host_config_lines = [strings]
+@@ -109,8 +109,11 @@ host_config_no_warnings_lines = [strings]
+ build2_config_no_warnings_lines = [strings]
  
- for l: $regex.replace_lines(                                                   \
-+  $regex.replace_lines(                                                        \
-   $config.save(),                                                              \
-   '^( *(#|(config\.(test[. ]|dist\.|install\.chroot|config\.hermetic))).*|)$', \
-+  [null], return_lines),                                                       \
-+  '^.*'$getenv(NIX_STORE)'/[a-z0-9]{32}-.*$',                                  \
+ for l: $regex.replace_lines(                                                            \
++  $regex.replace_lines(                                                                 \
+   $config.save(),                                                                       \
+   '^( *(#|(config\.(build2\.|test[. ]|dist\.|install\.chroot|config\.hermetic))).*|)$', \
++  [null], return_lines),                                                                \
++  '^.*'$getenv(NIX_STORE)'/[a-z0-9]{32}-.*$',                                           \
    [null])
  {
-   build2_config_lines += $l
+   if ($defined(config.build2.host_c) && $regex.match($l, ' *config\.c[ =].*'))

@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "checksec";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec";
     tag = finalAttrs.version;
-    hash = "sha256-LsVK+ufSUGXWHpPk1iAFD6Lxh5hEp1WmTAy9hZMEiKk=";
+    hash = "sha256-vvfr5JsCTq1NWUfOOlHIjf+ToNNzP5Xps09XPLlG1zc=";
   };
 
-  vendorHash = "sha256-GzSliyKxBfATA7BaHO/4HyReEwT7dYTpRuyjADNtJuc=";
+  vendorHash = "sha256-sW2C39xhMQCyR8S1m0ZplVQxu42w+tNqjxH7VO5stGw=";
 
   ldflags = [
     "-s"

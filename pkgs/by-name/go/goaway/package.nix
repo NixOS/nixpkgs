@@ -14,13 +14,13 @@
 let
   pnpm = pnpm_10;
 
-  version = "0.63.15";
+  version = "0.63.17";
 
   src = fetchFromGitHub {
     owner = "pommee";
     repo = "goaway";
     tag = "v${version}";
-    hash = "sha256-jtUAMCGdFmt89kchHdy9AnSMKu1rZeTLPcFIzqipOyw=";
+    hash = "sha256-cRx7XN8eaxqqI5+CWF93U4rgP8sH3HY4MPOA6VtqXK8=";
   };
 
   goaway-web = stdenvNoCC.mkDerivation (finalAttrs: {

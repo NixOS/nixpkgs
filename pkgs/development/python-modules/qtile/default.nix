@@ -16,7 +16,7 @@
   dbus-fast,
   iwlib,
   libcst,
-  mpd2,
+  python-mpd2,
   prompt-toolkit,
   psutil,
   pulsectl-asyncio,
@@ -118,7 +118,7 @@ buildPythonPackage (finalAttrs: {
     dbus-fast
     iwlib
     libcst
-    mpd2
+    python-mpd2
     # prompt-toolkit used for qtile repl
     # see https://github.com/qtile/qtile/blob/master/libqtile/scripts/repl.py
     prompt-toolkit

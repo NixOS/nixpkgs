@@ -906,10 +906,14 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
+The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
+`r-ryantm` runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) to find new versions of packages.
+In most cases, `nixpkgs-update` will be capable of finding new versions and perform the update with out any special instructions.
+Putting a `passthru.updateScript` attribute sets an explicit update procedure for `nixpkgs-update`, but this is not required for most cases.
+To learn more about the default update procedures, read their [FAQ for Nixpkgs maintainers](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/).
 
 > [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) function provided in Nixpkgs, which makes automatic updates use [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
 > { stdenv, nix-update-script }:
@@ -919,9 +923,10 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
-> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
-> While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+> `nix-update` is a little bit more flexible than `nixpkgs-update` in performing updates, so it can be useful for cases such as:
+>
+>  - A `nix-update` CLI flag like `--version branch` or `--version-regex` are needed to make the update work.
+>  - You don't want to rely upon new versions to be listed in [Repology](https://repology.org/), and `nix-update` finds new versions easily (e.g GitLab projects).
 
 The `passthru.updateScript` attribute can contain one of the following:
 
@@ -1019,7 +1024,7 @@ Furthermore each update script will be passed the following environment variable
 > An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
 > Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
 
-While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--arg commit true`.
 If you need to customize commit message, you can have the update script implement the `commit` feature.
 
 ### Supported features
@@ -1046,7 +1051,7 @@ If you need to customize commit message, you can have the update script implemen
   ```
   :::
 
-  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
+  When `update.nix` is run with `--arg commit true`, it will create a separate commit for each of the objects.
   An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
 
   The commit object contains the following values:

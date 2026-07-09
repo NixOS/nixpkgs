@@ -89,7 +89,7 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
     with cudaPackages;
     [
       cuda_cudart # cuda_runtime.h
-      cuda_cccl # <thrust/*>
+      cccl # <thrust/*>
       libcublas # cublas_v2.h
     ]
   );

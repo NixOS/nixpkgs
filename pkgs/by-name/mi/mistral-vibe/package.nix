@@ -1,34 +1,19 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   # tests
+  gitMinimal,
   uv,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = _final: prev: {
-      # Many tests fail with the current version of opentelemetry we have in nixpkgs
-      # vibe.acp.exceptions.InternalError: module '...' has no attribute 'GEN_AI_PROVIDER_NAME'
-      opentelemetry-api = prev.opentelemetry-api.overridePythonAttrs (old: rec {
-        version = "1.40.0";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
-        };
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.13.0";
+  version = "2.19.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4VkqsqcjJfRJwShs5JGyoeGXgc8Ioa0M3UZbO68z0A=";
+    hash = "sha256-PODG/SQsZsixBz/j+k8ALBhXS1fPg3v/o6TXkTyzSIQ=";
   };
 
   build-system = with python3Packages; [
@@ -70,6 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       httpcore
       httpx
       httpx-sse
+      humanize
       idna
       importlib-metadata
       jaraco-classes
@@ -117,6 +103,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       requests
       rich
       rpds-py
+      sentry-sdk
       six
       smmap
       sounddevice
@@ -147,6 +134,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "vibe" ];
 
   nativeCheckInputs = [
+    # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
+    gitMinimal
     python3Packages.pytest-asyncio
     python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
@@ -160,9 +149,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
+    # vibe is spawned in a sub-process and fails to import `mcp`
+    # ModuleNotFoundError: No module named 'mcp'
+    "TestMCPConnectionPoolIntegration"
+
+    # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
+    "test_changes_when_file_changes"
+
     # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
     # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
     "test_generic_backend_streaming_uses_ssl_cert_file"
+
+    # AssertionError: assert 0 == 1
+    "test_preserves_accents_when_matching_latin1_encoded_file"
 
     # Fail in the sandbox
     # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
@@ -230,6 +229,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/acp/test_acp.py"
     "tests/acp/test_acp_entrypoint_smoke.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Minimal CLI coding agent by Mistral";

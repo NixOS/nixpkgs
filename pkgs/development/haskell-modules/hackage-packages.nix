@@ -110622,7 +110622,6 @@ self: {
       ];
       description = "Useful bitwise operations";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -197731,6 +197730,7 @@ self: {
       ];
       description = "reflex backend for diagrams drawing EDSL";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -274677,8 +274677,9 @@ self: {
       description = "Libsoup 2.4.x bindings";
       license = lib.licenses.lgpl21Only;
       hydraPlatforms = lib.platforms.none;
+      broken = true;
     }
-  ) { inherit (pkgs) libsoup_2_4; };
+  ) { libsoup_2_4 = null; };
 
   gi-soup3 = callPackage (
     {
@@ -289319,6 +289320,7 @@ self: {
       ];
       description = "grapesy-etcd - GRPC interface to etcd";
       license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -376777,7 +376779,6 @@ self: {
       ];
       description = "Bit manipulation";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -377536,7 +377537,6 @@ self: {
       ];
       description = "Additional facilities for Integers";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -377608,7 +377608,6 @@ self: {
       doHaddock = false;
       description = "Library for manipulating IP addresses and CIDR blocks";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "hw-ip";
     }
   ) { };
@@ -379301,7 +379300,6 @@ self: {
       ];
       description = "Primitive functions and data types";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -386392,7 +386390,6 @@ self: {
       ];
       description = "Haskell Web Framework";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.mpscholten ];
     }
   ) { };
@@ -386561,7 +386558,6 @@ self: {
       ];
       description = "IHP DataSync Framework";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -386603,7 +386599,6 @@ self: {
       ];
       description = "TypeScript code generation for IHP DataSync";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "generate-datasync-types";
     }
   ) { };
@@ -386658,7 +386653,6 @@ self: {
       ];
       description = "GraphQL support for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -386696,7 +386690,6 @@ self: {
       ];
       description = "Test helpers for IHP apps";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387034,7 +387027,6 @@ self: {
       ];
       description = "Dev tools for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.mpscholten ];
     }
   ) { };
@@ -387106,7 +387098,6 @@ self: {
       ];
       description = "Dashboard for IHP job runners";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387179,7 +387170,6 @@ self: {
       ];
       description = "Email support for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387561,7 +387551,6 @@ self: {
       ];
       description = "Lightweight schema compiler for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "build-generated-code";
     }
   ) { };
@@ -387605,7 +387594,6 @@ self: {
       ];
       description = "SEO";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387651,7 +387639,6 @@ self: {
       ];
       description = "Server Side Components for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387720,7 +387707,6 @@ self: {
       ];
       description = "Compile-time typed SQL quasiquoter for IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387748,7 +387734,6 @@ self: {
       ];
       description = "IHP Welcome Controller";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -387774,7 +387759,6 @@ self: {
       ];
       description = "Support for making ZIP archives with IHP";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -427980,6 +427964,7 @@ self: {
       ];
       description = "Haskell IDE written in Haskell";
       license = "GPL";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "leksah";
     }
   ) { inherit (pkgs) gtk3; };
@@ -584926,6 +584911,7 @@ self: {
       ];
       description = "Functional Reactive Web Apps with Reflex";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.maralorn ];
     }
   ) { };
@@ -584997,6 +584983,7 @@ self: {
       ];
       description = "Use colonnade with reflex-dom";
       license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -586059,6 +586046,7 @@ self: {
       description = "Helper widgets for reflex-localize";
       license = lib.licenses.mit;
       badPlatforms = [ "aarch64-linux" ] ++ lib.platforms.darwin;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -650813,8 +650801,9 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "spike";
+      broken = true;
     }
-  ) { inherit (pkgs) libsoup_2_4; };
+  ) { libsoup_2_4 = null; };
 
   spine = callPackage (
     { mkDerivation, base }:
@@ -693017,6 +693006,7 @@ self: {
       ];
       description = "Out of the box reflex-dom elements";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -714366,6 +714356,7 @@ self: {
       ];
       description = "Reactive Type Safe Routing";
       license = lib.licenses.mit;
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 

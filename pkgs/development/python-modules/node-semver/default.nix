@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "node-semver";
-  version = "0.9.0";
+  version = "0.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "podhmo";
     repo = "python-node-semver";
     tag = version;
-    hash = "sha256-Ncl+RUvy9G9lF3EzLz2HfiDB02tEgAlZ34Wbn4mlF6Y=";
+    hash = "sha256-akeFBF0za4DjcYfR4/M06D5M19o+4xqfyuG74FPSDBU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

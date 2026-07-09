@@ -4,9 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -15,12 +12,16 @@
   torchcodec,
 
   # tests
+  expecttest,
   inflect,
+  librosa,
   parameterized,
   pytestCheckHook,
   pytorch-lightning,
+  requests,
   scipy,
   sentencepiece,
+  soundfile,
   unidecode,
 
   # passthru
@@ -88,13 +89,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs =
-    lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals torch.stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   dependencies = [
     torch
@@ -104,6 +101,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "torchaudio" ];
 
   nativeCheckInputs = [
+    expecttest
     inflect
     parameterized
     pytestCheckHook
@@ -111,11 +109,18 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     scipy
     sentencepiece
     unidecode
+    librosa
+    requests
+    soundfile
   ];
 
   disabledTestPaths = [
     # Require internet access
     "test/integration_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Passes, but hangs the build after Pytest completes
+    "test/torchaudio_unittest/models/models_test.py::TestConvTasNet"
   ];
 
   disabledTests = [
@@ -126,6 +131,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Very long to run
     "AutogradCPUTest"
+    "TestAutogradLfilterCPU"
+    "TestWav2Vec2Model"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!
@@ -133,6 +140,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "test_batch_pitch_shift"
     "test_batch_spectrogram"
     "test_griffinlim_0_99"
+
+    # RuntimeError: illegal immediate parameter (range error)
+    "test_lfilter_shape_4"
+    "test_lfilter_shape_6"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
     # AssertionError: Tensor-likes are not close!
@@ -160,7 +171,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
     changelog = "https://github.com/pytorch/audio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     platforms =

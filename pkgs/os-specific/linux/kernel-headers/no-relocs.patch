@@ -2,6 +2,6 @@
 +++ b/arch/x86/Makefile
 @@ -231,3 +231,3 @@ endif
  archscripts: scripts_basic
--	$(Q)$(MAKE) $(build)=arch/x86/tools relocs
-+	$(Q)$(MAKE) $(build)=arch/x86/tools
+-	$(Q)$(MAKE) $(build)=arch/x86/tools relocs vdso2c
++	$(Q)$(MAKE) $(build)=arch/x86/tools vdso2c
  

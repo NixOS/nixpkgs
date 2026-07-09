@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       benley
-      philipwilk
+      jadewilk
     ];
     mainProgram = "hddfancontrol";
     platforms = lib.platforms.linux;

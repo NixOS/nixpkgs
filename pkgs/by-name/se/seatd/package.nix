@@ -6,8 +6,8 @@
   pkg-config,
   scdoc,
   stdenv,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs = lib.optionals systemdSupport [ systemd ];
+  buildInputs = lib.optionals systemdSupport [ systemdLibs ];
 
   mesonFlags = [
     "-Dlibseat-logind=${if systemdSupport then "systemd" else "disabled"}"

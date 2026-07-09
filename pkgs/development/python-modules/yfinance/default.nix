@@ -23,16 +23,16 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yfinance";
-  version = "1.3.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
-    tag = version;
-    hash = "sha256-z6O1din71ZAZQGm4TEEtrFyB/CZPGPFC+qnfpGrdXgc=";
+    tag = finalAttrs.version;
+    hash = "sha256-5ynbdBys7uTcvsKQB44aoe8PmQgqP28wPtOATcv8I7g=";
   };
 
   build-system = [ setuptools ];
@@ -62,9 +62,7 @@ buildPythonPackage rec {
       requests-cache
       requests-ratelimiter
     ];
-    repair = [
-      scipy
-    ];
+    repair = [ scipy ];
   };
 
   # Tests require internet access
@@ -75,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to doiwnload Yahoo! Finance market data";
     homepage = "https://github.com/ranaroussi/yfinance";
-    changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

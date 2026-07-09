@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -21,7 +21,7 @@
 }:
 let
   electron = electron_41;
-  pnpm = pnpm_10_29_2;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
@@ -40,11 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
+      patches
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-zmLc+ExrZg/y2PEI5rH+no9WenE6I+2bLkdXcA/nOic=";
+    hash = "sha256-HCSuCtJXaRMLCCZIKQ4ElDkrlYXFUIsHfK1H3pUSQX4=";
   };
+
+  # When pnpm >= 10.29.3 and electron-builder < 26.8.2, it causes the package to fail at runtime; this patch will be removed once the upstream releases a version that includes the new version of electron-builder.
+  patches = [ ./electron-builder-26.8.2.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)

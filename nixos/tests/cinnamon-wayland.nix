@@ -51,8 +51,9 @@
           machine.wait_until_succeeds("${eval "Main.runState"} | grep -q 'true,..2'")
 
       with subtest("Check if Cinnamon components actually start"):
-          for i in ["csd-media-keys", "xapp-sn-watcher", "nemo-desktop"]:
-            machine.wait_until_succeeds(f"pgrep -f {i}")
+          # https://unix.stackexchange.com/a/74186
+          for i in ["[c]sd-media-keys", "[x]app-sn-watcher", "[n]emo-desktop"]:
+            machine.wait_until_succeeds(f"pgrep -f \"{i}\"")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
 
@@ -83,6 +84,10 @@
           machine.succeed("${su "dbus-launch gnome-terminal"}")
           machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
           machine.sleep(2)
+
+      # Only can be tested after opening the above apps.
+      with subtest("Check if x-d-p actually starts"):
+          machine.wait_until_succeeds("pgrep -xf \"${pkgs.xdg-desktop-portal}/libexec/xdg-desktop-portal\"")
 
       with subtest("Check if Cinnamon has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep -E 'cinnamon|nemo'")

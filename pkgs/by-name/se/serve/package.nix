@@ -2,32 +2,30 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
-  makeWrapper,
-  nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "serve";
-  version = "14.2.4";
+  version = "14.2.6";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "serve";
-    tag = finalAttrs.version;
-    hash = "sha256-QVbau4MrpgEQkwlWx4tU9H93zdM0mSZgIzXpjHRM5mk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lM04fuzgcLHz8/Jf4wJVYXveFcO6sFyJ9PQAcpweyjk=";
   };
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-N5oasGilHECndJZYdRHZFvAa4aYwmPtOTBZtcty4g/k=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-9gejKf+GqB8BPAQtQSuZsTb6jFro3X1aL1noVfyKTPg=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm_10 ];
   npmConfigHook = pnpmConfigHook;
 
   dontNpmBuild = true;

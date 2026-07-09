@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual";
-  version = "8.2.7";
+  version = "8.2.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Textualize";
     repo = "textual";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRTdxVpeRk8gAur5+VpLVVghBdYenXysoEFRBfczkR4=";
+    hash = "sha256-4T+/eD0adPugDP7TCDoDaOe0OrEFskCUadLVEixmTwo=";
   };
 
   build-system = [ poetry-core ];

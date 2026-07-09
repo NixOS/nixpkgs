@@ -34,8 +34,8 @@
   acl,
   lz4,
   openssl,
+  libucontext,
   libgcrypt,
-  libgpg-error,
   libidn2,
   curl,
   zlib,
@@ -106,6 +106,7 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? true,
+  withImds ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -142,6 +143,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
   withTimedated ? true,
@@ -190,7 +192,7 @@ assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
 let
-  wantCurl = withRemote || withImportd;
+  wantCurl = withRemote || withImportd || withImds;
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -201,13 +203,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.1";
+  version = "261";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6IB1ZEQqQ0impwBhCaLZAEgMVkVFU61JDVlGotxNzGQ=";
   };
 
   # PATCH POLICY
@@ -308,11 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      # pefile is only required to trigger a check in meson to actually build
-      # ukify. This module should never appear in the runtime closure of ukify.
-      # Instead the pefile from buildInputs should be used.
-      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
-      ++ lib.optional withUkify ps.pefile
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -321,17 +319,25 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.llvmPackages.libllvm
   ];
 
-  autoPatchelfFlags = [ "--keep-libc" ];
+  autoPatchelfFlags = [
+    "--keep-libc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # TODO: can be unconditionalized on staging.
+    # Nixpkgs does not rely on gettext for libintl for musl.
+    "--ignore-missing=libintl.so.8"
+  ];
 
   buildInputs = [
     libxcrypt
     libuuid
     linuxHeaders
   ]
-
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libucontext
+  ]
   ++ lib.optionals withGcrypt [
     libgcrypt
-    libgpg-error
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -347,7 +353,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withCryptsetup cryptsetup
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
@@ -363,7 +369,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
-  ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+  ++ lib.optional withUkify (
+    python3Packages.python.withPackages (
+      ps: with ps; [
+        cryptography
+        pefile
+      ]
+    )
+  )
   ++ lib.optionals withPasswordQuality [ libpwquality ]
   ++ lib.optionals withQrencode [ qrencode ]
   ++ lib.optionals withLibarchive [ libarchive ]
@@ -491,6 +504,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "apparmor" withApparmor)
     (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
@@ -532,6 +546,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
     (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysinstall" withSysinstall)
     (lib.mesonBool "sysusers" withSysusers)
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
@@ -696,6 +711,7 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withNspawn
+      withRepart
       withPortabled
       withSysupdate
       withTimedated
@@ -773,7 +789,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          systemd-repart-factory-reset
+          # systemd-repart-factory-reset # broken upstream
           ;
       }
       // {

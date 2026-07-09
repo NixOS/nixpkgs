@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-settings";
-  version = "3.4.1";
+  version = "3.5.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "williballenthin";
     repo = "ida-settings";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YPkJ/yn7ZmEYZJART6oFLO7zIqzgPl2XCq5RfXasFV0=";
+    hash = "sha256-InMHWKshBwkx1xrr6yW/K6EmmifUzuRFGJZhwpwVYqc=";
   };
 
   postPatch = ''

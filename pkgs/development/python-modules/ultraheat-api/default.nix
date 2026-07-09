@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ultraheat-api";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vpathuis";
     repo = "ultraheat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mw2BEm98FqD/bggABJu8jftwyMEik0+xtKHONoFVxhw=";
+    hash = "sha256-I8tdq50zCbC3+D19R5TLkb8F1TbEh0GZG3tepe1mPPc=";
   };
 
   build-system = [ setuptools ];

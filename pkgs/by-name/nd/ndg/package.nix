@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ndg";
-  version = "2.8.0";
+  version = "2.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "feel-co";
     repo = "ndg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YIKEyzh0NFQlD0O92LQQNMoVCDwV8yw1Xz0Iu+4ZC5U=";
+    hash = "sha256-be9NxraQyoB4wLjiPHxpmklfJYuB+Qs/x69P395I1Fk=";
   };
 
-  cargoHash = "sha256-r4lNSZuGFtNTOkIyd7skdEmA61lfbetI03tIUD+MO+Y=";
+  cargoHash = "sha256-N0em5kNY94sdPv3Fcpprk09yx1yKo8GZMWND/FJSSIw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/feel-co/ndg";
     changelog = "https://github.com/feel-co/ndg/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.teams.feel-co ];
     mainProgram = "ndg";
+    teams = [ lib.teams.feel-co ];
   };
 })

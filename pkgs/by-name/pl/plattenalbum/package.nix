@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     pygobject3
-    mpd2
+    python-mpd2
   ];
 
   dontWrapGApps = true;

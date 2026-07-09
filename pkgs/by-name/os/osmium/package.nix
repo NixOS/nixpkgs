@@ -25,18 +25,15 @@
   libnotify,
   libpulseaudio,
   writeShellApplication,
-  curl,
-  yq,
-  common-updater-scripts,
 }:
 
 stdenv.mkDerivation rec {
   pname = "osmium";
-  version = "0.0.26-alpha";
+  version = "0.0.30-alpha";
 
   src = fetchurl {
     url = "https://updater.osmium.chat/Osmium-${version}-x64.tar.gz";
-    hash = "sha256-6hsXZ9ykM7x4RNqixolK3/C9K0OBjMuUNIWYjjj8uCs=";
+    hash = "sha256-NF7RF8odDQfh4zhk5B4md4OqDgh538exFNsRZzSJwBM=";
   };
 
   nativeBuildInputs = [
@@ -108,18 +105,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "update-osmium";
-      runtimeInputs = [
-        curl
-        yq
-        common-updater-scripts
-      ];
-      text = ''
-        version="$(curl -s https://updater.osmium.chat/alpha-linux.yml | yq .version)"
-        update-source-version osmium "$version"
-      '';
-    });
+    updateScript = ./update.sh;
   };
 
   meta = {

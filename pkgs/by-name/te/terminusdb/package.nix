@@ -71,13 +71,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminusdb";
-  version = "12.0.4";
+  version = "12.0.6";
 
   src = fetchFromGitHub {
     owner = "terminusdb";
     repo = "terminusdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vJifp0U4FrbtI86M8pt022BQWIIeK8jWWFG1Ch1m7IQ=";
+    hash = "sha256-TxLTPwESQ9pGrm/piWyyTwKlYtVogXRdQjnppvjX8F8=";
     leaveDotGit = true;
     postFetch = ''
       # Will be used for `TERMINUSDB_GIT_HASH`
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-SvWS18amC4FHuXc/N6e+tomwnVfJ/KlTLIACfl72Nqc=";
+    hash = "sha256-WymXMJaUKz/IT2gDgQYagin1Sfg1akqCU+mkYUs40Ic=";
   };
 
   postPatch = ''
@@ -100,6 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $cargoDepsCopy/*/tikv-jemalloc-sys-*/build.rs \
       --replace-fail 'format!("{orig_makeflags} {makeflags}")' \
                      'format!("{makeflags} {orig_makeflags}")'
+
+    # Hardcode terminus_home to a Nix store path that will exist both
+    # at compile time (via the symlink in preBuild) and at runtime.
+    substituteInPlace src/load_paths.pl \
+      --replace-fail "top_level_directory(TopDir)," \
+                     "TopDir = '$out/share/terminusdb',"
   '';
 
   strictDeps = true;
@@ -151,6 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export TERMINUSDB_GIT_HASH=$(cat $src/COMMIT)
     export TERMINUSDB_JWT_ENABLED=true
+
+    # Point terminus_home at the build directory during compilation
+    # so the Rust dylib and Prolog sources are findable.
+    mkdir -p $out/share/terminusdb
+    ln --symbolic --force --no-target-directory $PWD/src $out/share/terminusdb/src
   '';
 
   # Required for Prolog initialisation
@@ -160,6 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     installBin terminusdb
     installManPage $src/docs/terminusdb.1
+
+    # Replace with the Nix store source so schema files are findable
+    # at runtime (the build directory no longer exists).
+    ln --symbolic --force --no-target-directory $src/src $out/share/terminusdb/src
     runHook postInstall
   '';
 

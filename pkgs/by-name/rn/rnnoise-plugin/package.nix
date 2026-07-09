@@ -5,7 +5,7 @@
   fetchFromGitHub,
   freetype,
   gtk3-x11,
-  pcre,
+  pcre2,
   pkg-config,
   webkitgtk_4_1,
   libxrandr,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     gtk3-x11
-    pcre
+    pcre2
     libx11
     libxrandr
   ]

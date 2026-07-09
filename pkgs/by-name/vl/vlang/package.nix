@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "0.5";
+  version = "0.5.1";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -25,12 +25,12 @@ let
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.5";
+    version = "0.5.1";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "294bff4ef87427743d0b35c0f7eb1b34a6dd061b";
-      hash = "sha256-NZR9Sxa9+iI0hGjB7Hwxl24K0Ra6ZJiUTk9yHp1J7kw=";
+      rev = "f461dfebcdfac3c75fdf28fec80c07f0a7a9a53d";
+      hash = "sha256-GsciyAqCVbLpC6L+HFX90+1yX1Iq/GIBZIIzLVXbFN0=";
     };
 
     # patch the ptrace reference for darwin
@@ -48,8 +48,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "5a1c9d82669e765493abe19488eaef0252c97dac";
-    hash = "sha256-d/HGVYbbMv7cmF3I4LzD6N0gXSd8CJlPp0la3nPe1dw=";
+    rev = "6ecbf4c519de2ca4cb26432bb2653c9cb9f17309";
+    hash = "sha256-tFOI9Dh1yvFtsWHr4JvFUonbI6la3aj47YmfuFt3unI=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-iS9tXeEsEjxEpgJNjz/08MQfZkSfFZWHy0CMurITr+E=";
+    hash = "sha256-f9YtL2+gWvFI/fX09CtQlPRLDZT7D6K8bRQvXApXByU=";
   };
 
   propagatedBuildInputs = [

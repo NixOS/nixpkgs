@@ -14,7 +14,7 @@
 let
   Libc = sourceRelease "Libc";
   libplatform = sourceRelease "libplatform";
-  xnu = sourceRelease "xnu";
+  xnu = sourceRelease "xnu"; # Can’t use xnuHeaders because adv_cmds is a transitive dependency of xnuHeaders.
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";
@@ -27,6 +27,9 @@ let
       install -D -m644 -t "$out/include/System/sys" \
         '${xnu}/bsd/sys/persona.h' \
         '${xnu}/bsd/sys/proc.h'
+
+      install -D -m644 -t "$out/include/sys" \
+        '${xnu}/bsd/sys/proc_private.h'
     '';
   };
 in

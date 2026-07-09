@@ -33,14 +33,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "sklearn2pmml";
-  version = "0.130.0";
+  version = "0.131.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpmml";
     repo = "sklearn2pmml";
     tag = finalAttrs.version;
-    hash = "sha256-u+fuOiJ0YTyxVZkKhBhxn0gUHbLRQ69WwSX2GwhYaHU=";
+    hash = "sha256-FHk5vsXksVJs873VJqfX85nkRkojYBhaivbPIv1FReU=";
   };
 
   postPatch = ''

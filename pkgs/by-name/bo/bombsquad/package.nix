@@ -25,7 +25,7 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-Su7xEVzgFBl+Q2iFWdIRbyO8lRs8Xd4KabFhycZUVjs=";
+        hash = "sha256-zKZpRsyBCTYDJbTwjaP/HFXfYvD9zBhetUGzriB9754=";
       };
       aarch64-linux = {
         name = "BombSquad_Linux_Arm64";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: This version trails behind the latest version by one since the latest
   # version sometimes gets replaced for minor updates. The builds in /old/ are
   # stable.
-  version = "1.7.62";
+  version = "1.7.63";
 
   src = fetchurl {
     url = "https://files.ballistica.net/bombsquad/builds/old/${archive.name}_${finalAttrs.version}.tar.gz";

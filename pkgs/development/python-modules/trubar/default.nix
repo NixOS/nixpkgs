@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/janezd/trubar";
     changelog = "https://github.com/janezd/trubar/releases/tag/${version}";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
 
   # build-system
   ninja,
@@ -9,9 +10,7 @@
   torch,
 
   # dependencies
-  cuda-bindings,
   einops,
-  nvidia-cutlass-dsl,
 
   # tests
   apex,
@@ -31,7 +30,7 @@ let
 
   self = buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     pname = "flash-attention";
-    version = "2.8.3";
+    version = "2.8.3.post1";
     pyproject = true;
     __structuredAttrs = true;
 
@@ -40,13 +39,8 @@ let
       repo = "flash-attention";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-6I1O4E5K5IdbpzrXFHK06QVcOE8zuVkFE338ffk6N8M=";
+      hash = "sha256-IgK517JorAf9ERcimusF20HgnuETBNKgnGaOxWBuV/M=";
     };
-
-    patches = [
-      # cutlass.utils.ampere_helpers was removed from nvidia-cutlass-dsl, this patch is a workaround.
-      ./drop-cutlass-ampere-utils.patch
-    ];
 
     preConfigure = ''
       export MAX_JOBS="$NIX_BUILD_CORES"
@@ -74,7 +68,7 @@ let
     ];
 
     buildInputs = [
-      cudaPackages.cuda_cccl # <thrust/*>
+      cudaPackages.cccl # <thrust/*>
       cudaPackages.libcublas # cublas_v2.h
       cudaPackages.libcurand # curand.h
       cudaPackages.libcusolver # cusolverDn.h
@@ -83,13 +77,17 @@ let
     ];
 
     dependencies = [
-      # Used in flash_attn/cute/interface.py
-      cuda-bindings
-
       einops
-      nvidia-cutlass-dsl
       torch
     ];
+
+    # The CuTeDSL implementation (flash_attn/cute) is the FlashAttention-4 module,
+    # packaged separately as `flash-attn-4`. Drop the stale snapshot bundled in this
+    # FA2 release so the two packages don't collide on flash_attn/cute/ when a single
+    # environment installs both.
+    postInstall = ''
+      rm -rf "$out/${python.sitePackages}/flash_attn/cute"
+    '';
 
     pythonImportsCheck = [ "flash_attn" ];
 

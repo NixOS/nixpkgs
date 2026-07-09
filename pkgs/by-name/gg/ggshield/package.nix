@@ -5,49 +5,34 @@
   python3,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # Doesn't support latest marshmallow
-      marshmallow = super.marshmallow.overridePythonAttrs (oldAttrs: rec {
-        version = "3.26.2";
-        src = fetchFromGitHub {
-          owner = "marshmallow-code";
-          repo = "marshmallow";
-          tag = version;
-          hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
-        };
-      });
-    };
-  };
-in
-
-py.pkgs.buildPythonApplication (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.50.4";
+  version = "1.52.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wwGj7i1GoxNzdfUhcL7mulgQAPtz5WhbT67hgbcMxpo=";
+    hash = "sha256-bz3R1ylmkaYF3Wt/ylzeE2IsWKvZ8bmoF39Xu4tVzFU=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with py.pkgs; [ hatchling ];
+  build-system = with python3.pkgs; [ hatchling ];
 
-  dependencies = with py.pkgs; [
+  dependencies = with python3.pkgs; [
     charset-normalizer
     click
+    configupdater
     cryptography
+    filelock
     keyring
     marshmallow
     marshmallow-dataclass
     notify-py
     oauthlib
+    packaging
     platformdirs
     pygitguardian
     pyjwt
@@ -56,6 +41,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     requests
     rich
     sigstore
+    tomli
     truststore
     typing-extensions
     urllib3
@@ -64,7 +50,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     git
   ]
-  ++ (with py.pkgs; [
+  ++ (with python3.pkgs; [
     jsonschema
     pyfakefs
     pytest-factoryboy
@@ -100,6 +86,8 @@ py.pkgs.buildPythonApplication (finalAttrs: {
     "test_generate_files_from_paths"
     # Nixpkgs issue
     "test_get_file_sha_in_ref"
+    # Generated hooks config references pytest binary, instead of ggshield CLI. Odd!
+    "test_install_cursor_local_fresh"
   ];
 
   meta = {

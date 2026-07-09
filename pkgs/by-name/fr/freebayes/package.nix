@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     name = "freebayes-${finalAttrs.version}-src";
-    owner = "ekg";
+    owner = "freebayes";
     repo = "freebayes";
     tag = "v${finalAttrs.version}";
     sha256 = "035nriknjqq8gvil81vvsmvqwi35v80q8h1cw24vd1gdyn1x7bys";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";
     license = lib.licenses.mit;
-    homepage = "https://github.com/ekg/freebayes";
+    homepage = "https://github.com/freebayes/freebayes";
     maintainers = with lib.maintainers; [ jdagilliland ];
     platforms = [ "x86_64-linux" ];
   };

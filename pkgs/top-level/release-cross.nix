@@ -121,6 +121,9 @@ let
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
+    tree-sitter.builtGrammars =
+      mapAttrs (_: _: nativePlatforms)
+        (pkgsForCross systems.examples.wasi32 (builtins.head supportedSystems)).tree-sitter.builtGrammars;
     zlib = nativePlatforms;
   };
 

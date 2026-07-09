@@ -22,7 +22,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://anuragsoni.github.io/routes";
     maintainers = with lib.maintainers; [
       ulrikstrid
-      anmonteiro
     ];
   };
 })

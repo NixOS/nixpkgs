@@ -31,6 +31,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     pugixml
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "A fast and consistent wire protocol for IPC ";

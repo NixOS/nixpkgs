@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.9.0";
 
   src = fetchFromGitHub {
-    owner = "makeworld-the-better-one";
+    owner = "makew0rld";
     repo = "gemget";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-P5+yRaf2HioKOclJMMm8bJ8/BtBbNEeYU57TceZVqQ8=";
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Command line downloader for the Gemini protocol";
-    homepage = "https://github.com/makeworld-the-better-one/gemget";
+    homepage = "https://github.com/makew0rld/gemget";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amfl ];
     mainProgram = "gemget";

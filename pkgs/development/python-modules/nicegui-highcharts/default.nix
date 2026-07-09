@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui-highcharts";
-  version = "3.2.1";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/lQ2E2kcFjS3FbuOgixAu1E24dzwR/ppT0DRlRjrp6E=";
+    hash = "sha256-wzpgTDXTI3INQrkio6lgge07r+76wUKd193mt5ugc6g=";
   };
 
   pythonRelaxDeps = [ "docutils" ];

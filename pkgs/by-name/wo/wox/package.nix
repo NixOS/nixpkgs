@@ -1,192 +1,71 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  flutter341,
-  keybinder3,
-  nodejs,
-  pnpm_9,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  python3Packages,
-  writableTmpDirAsHomeHook,
+  callPackage,
   buildGoModule,
-  pkg-config,
+  replaceVars,
+
+  # build-time
   autoPatchelfHook,
-  libxtst,
+  copyDesktopItems,
+  desktop-file-utils,
+  makeDesktopItem,
+  pkg-config,
+  xdg-utils,
+
+  # run-time
+  gtk3,
+  libayatana-appindicator,
   libx11,
   libxkbcommon,
-  xorgproto,
-  libayatana-appindicator,
-  gtk3,
-  desktop-file-utils,
-  xdg-utils,
-  copyDesktopItems,
-  makeDesktopItem,
+  libxtst,
+  nodejs,
 }:
-
-let
-  version = "2.0.2";
+buildGoModule (finalAttrs: {
+  pname = "wox";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
-    tag = "v${version}";
-    hash = "sha256-Qav2RhmhJQr2D1D3okshIrnnQuOh7V1gWbZwXR3LBAc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FbOnENSko/BYtTI7z2Ep+IIYufgZpNWcz6d0mqhTL5g=";
   };
-
-  metaCommon = {
-    description = "Cross-platform launcher that simply works";
-    homepage = "https://github.com/Wox-launcher/Wox";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = [ ];
-  };
-
-  ui-flutter = flutter341.buildFlutterApplication {
-    pname = "wox-ui-flutter";
-    inherit version src;
-
-    sourceRoot = "${src.name}/wox.ui.flutter/wox";
-
-    pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-    postPatch = ''
-      substituteInPlace linux/runner/my_application.cc \
-        --replace-fail "X11/Xkeysym.h" "X11/keysym.h"
-    '';
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-
-    buildInputs = [
-      keybinder3
-      xorgproto
-      libx11
-      libxtst
-    ];
-
-    meta = metaCommon // {
-      mainProgram = "wox";
-      platforms = lib.platforms.linux;
-    };
-  };
-
-  plugin-host-nodejs = stdenv.mkDerivation (finalAttrs: {
-    pname = "wox-plugin-host-nodejs";
-    inherit version src;
-
-    sourceRoot = "${finalAttrs.src.name}/wox.plugin.host.nodejs";
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm_9
-    ];
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-cbuVQV8ih8rztERFLUHGnK63MBz8+QVmzeegYLDwcj4=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm run build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm644 dist/index.js $out/node-host.js
-
-      runHook postInstall
-    '';
-
-    meta = metaCommon;
-  });
-
-  plugin-python = python3Packages.buildPythonApplication {
-    pname = "wox-plugin";
-    inherit version src;
-    pyproject = true;
-
-    sourceRoot = "${src.name}/wox.plugin.python";
-
-    build-system = with python3Packages; [ hatchling ];
-
-    meta = metaCommon;
-  };
-
-  plugin-host-python = python3Packages.buildPythonApplication {
-    pname = "wox-plugin-host-python";
-    inherit version src;
-    pyproject = true;
-
-    sourceRoot = "${src.name}/wox.plugin.host.python";
-
-    build-system = with python3Packages; [ hatchling ];
-
-    nativeBuildInputs = [ writableTmpDirAsHomeHook ];
-
-    buildInputs = with python3Packages; [
-      loguru
-      websockets
-      plugin-python
-    ];
-
-    dependencies = with python3Packages; [
-      loguru
-      websockets
-      plugin-python
-    ];
-
-    meta = metaCommon // {
-      mainProgram = "run";
-    };
-  };
-in
-buildGoModule {
-  pname = "wox";
-  inherit version src;
-
-  sourceRoot = "${src.name}/wox.core";
-
-  postPatch = ''
-    substituteInPlace plugin/host/host_python.go \
-      --replace-fail 'n.findPythonPath(ctx), path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' '"env", "${plugin-host-python}/bin/run"'
-    substituteInPlace plugin/host/host_nodejs.go \
-      --replace-fail "/usr/bin/node" "${lib.getExe nodejs}"
-    substituteInPlace util/deeplink.go \
-      --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
-      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \
-      --replace-fail "Exec=%s" "Exec=wox"
-    sed -i '/^	"path"$/d' plugin/host/host_python.go
-  '';
 
   vendorHash = "sha256-IDcIEZVCJp1ls5c2fblgX+I+MhfRDXqFbf0GhgcFiTo=";
+
+  sourceRoot = "${finalAttrs.src.name}/wox.core";
+
+  patches = [
+    (replaceVars ./plugin-host-python.patch {
+      plugin-host-python = "${finalAttrs.passthru.plugin-host-python}/bin/run";
+    })
+    (replaceVars ./plugin-host-nodejs.patch {
+      nodejs-path = "${lib.getExe nodejs}";
+      plugin-host-nodejs = "${finalAttrs.passthru.plugin-host-python}/node-host.js";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace util/deeplink.go \
+      --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
+      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime"
+  '';
 
   proxyVendor = true;
 
   nativeBuildInputs = [
-    pkg-config
     autoPatchelfHook
     copyDesktopItems
+    pkg-config
   ];
 
   buildInputs = [
-    libx11
-    libxtst
-    libxkbcommon
-    libayatana-appindicator
     gtk3
+    libayatana-appindicator
+    libx11
+    libxkbcommon
+    libxtst
   ];
 
   env.CGO_ENABLED = 1;
@@ -199,8 +78,8 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p resource/ui/flutter resource/hosts
-    cp -r ${ui-flutter}/app/${ui-flutter.pname} resource/ui/flutter/wox
-    cp ${plugin-host-nodejs}/node-host.js resource/hosts/node-host.js
+    cp -r ${finalAttrs.passthru.ui-flutter}/app/${finalAttrs.passthru.ui-flutter.pname} resource/ui/flutter/wox
+    cp ${finalAttrs.passthru.plugin-host-nodejs}/node-host.js resource/hosts/node-host.js
   '';
 
   # XOpenDisplay failure!
@@ -220,8 +99,19 @@ buildGoModule {
     install -Dm644 ../assets/app.png $out/share/icons/wox.png
   '';
 
-  meta = metaCommon // {
+  passthru = {
+    plugin-host-nodejs = callPackage ./plugin-host-nodejs.nix { };
+    plugin-host-python = callPackage ./plugin-host-python.nix { };
+    ui-flutter = callPackage ./ui-flutter.nix { };
+  };
+
+  meta = {
+    description = "Cross-platform launcher that simply works";
+    homepage = "https://github.com/Wox-launcher/Wox";
+    changelog = "https://github.com/Wox-launcher/Wox/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     mainProgram = "wox";
     platforms = lib.platforms.linux;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

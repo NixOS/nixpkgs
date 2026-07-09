@@ -25,7 +25,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch";
-  version = "3.16.1";
+  version = "3.16.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "farion1231";
     repo = "cc-switch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9X7/5/6YPDGr31ZUwx+ZzujFCRiTlKN8Y/qOTtj7OyE=";
+    hash = "sha256-jj7FHJtXn127hqpjCe6buxvJNCtWxRe5HZPY8NRcglM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-Uy85VwcPv3NVxGDe4ojfArHg5kgOe4cjrHdmgnD/eiM=";
+  cargoHash = "sha256-PfTkrD3ts/OugZ5qM82tTfWwSOcSddgDYzQhr6wLvOg=";
 
   nativeBuildInputs = [
     jq

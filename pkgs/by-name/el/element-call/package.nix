@@ -2,71 +2,91 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  git,
-  yarn-berry,
-  yarnConfigHook,
+  pnpm_10,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   nodejs,
   runCommand,
 }:
 
+let
+  pnpm = pnpm_10;
+
+  # Separately build matrix-js-sdk, as upstream expects to 'pnpm i && pnpm build' in the dependency's directory
+  # Keep this in sync with upstream locked version (likely a stable release, but not always latest)
+  matrix-js-sdk = stdenv.mkDerivation (finalAttrs: {
+    pname = "matrix-js-sdk";
+    version = "41.8.0";
+
+    src = fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "matrix-js-sdk";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-9OWB3Hz8EoDIu27jvA6Am4l1dH53IZGE9TStB2Viw6E=";
+    };
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-Me76t/wl4HtmbQ+FzUNLEpOM6aYbzTl68tuDSEh+Hq4=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+      pnpm build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r src $out/
+      cp -r lib $out/
+      cp package.json $out/
+
+      runHook postInstall
+    '';
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.18.0";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5RkZNf/ErSxNwW0ZfPwF52k3fZzAQAFMmbJ9xM7f74=";
+    hash = "sha256-H+In5fsX82eMDGk5kaS5ulqU1U5S67auEPc24rtCkuA=";
   };
 
-  patches = [
-    # Remove after updating since project has moved to pnpm
-    # https://github.com/element-hq/element-call/blob/v0.19.2/package.json#L159
-    ./yarn-4.14-support.patch
-  ];
-
-  matrixJsSdkRevision = "6e3efef0c5f660df47cf00874927dec1c75cc3cf";
-  matrixJsSdkOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.offlineCache}/checkouts/${finalAttrs.matrixJsSdkRevision}/yarn.lock";
-    hash = "sha256-YvXmPWHt3qL9z8uap0/faKi5OId6zZ0ISiMT3x6ARx8=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-JOpKxtElmNKepx3W+1LIolcrYrevsCEq7+Aoh0kwZEw=";
   };
 
-  dontYarnInstallDeps = true;
-  preConfigure = ''
-    cp -r $offlineCache writable
-    chmod u+w -R writable
-    pushd writable/checkouts/${finalAttrs.matrixJsSdkRevision}/
-    mkdir -p .git/{refs,objects}
-    echo ${finalAttrs.matrixJsSdkRevision} > .git/HEAD
-    SKIP_YARN_COREPACK_CHECK=1 offlineCache=$matrixJsSdkOfflineCache yarnConfigHook
-    SKIP_YARN_COREPACK_CHECK=1 yarn build
-    popd
-    offlineCache=writable
-    # The matrix-js-sdk git package checksum in yarn.lock was computed against a
-    # developer checkout with pre-compiled lib/. nix-prefetch-git stores a bare
-    # working tree so the repack at build time produces a different zip hash.
-    # The offline cache is already verified by the FOD hash, so this is safe.
-    export YARN_CHECKSUM_BEHAVIOR=ignore
-  '';
-
-  missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-2P4kwccT2WP2SlJJ1biZCRU8O+Y43sGJmfRTUujklUg=";
-  };
+  inherit matrix-js-sdk;
 
   nativeBuildInputs = [
-    git
-    yarn-berry.yarnBerryConfigHook
-    yarnConfigHook
     nodejs
+    pnpmConfigHook
+    pnpm
   ];
 
   buildPhase = ''
     runHook preBuild
-    ${lib.getExe yarn-berry} build
+    # Instead of making an override, invalidating the pnpm lock, just add the built files in lib right before invoking pnpm build
+    cp -r ${finalAttrs.matrix-js-sdk}/* node_modules/matrix-js-sdk/
+    pnpm build
     runHook postBuild
   '';
 
@@ -79,17 +99,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.build = runCommand "${finalAttrs.pname}-test" { } ''
-    test -f ${finalAttrs.finalPackage}/index.html
-    test -d ${finalAttrs.finalPackage}/assets
-    touch $out
-  '';
+  passthru = {
+    tests.build = runCommand "${finalAttrs.pname}-test" { } ''
+      test -f ${finalAttrs.finalPackage}/index.html
+      test -d ${finalAttrs.finalPackage}/assets
+      touch $out
+    '';
+    inherit (finalAttrs) matrix-js-sdk;
+  };
 
   meta = {
     changelog = "https://github.com/element-hq/element-call/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/element-hq/element-call";
     description = "Group calls powered by Matrix";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kilimnik ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      kilimnik
+    ];
   };
 })

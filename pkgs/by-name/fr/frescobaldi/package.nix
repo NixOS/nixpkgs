@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wbsoft";
+    owner = "frescobaldi";
     repo = "frescobaldi";
     tag = "v${version}";
     hash = "sha256-IgvjKj0+8oNbuZ91n4O16kGXBS7rS63HQUNQnJcOis8=";

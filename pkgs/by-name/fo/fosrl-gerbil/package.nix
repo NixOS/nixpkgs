@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gerbil";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "gerbil";
     tag = finalAttrs.version;
-    hash = "sha256-wKqJfiCzmMbKZXJGB7BWoXRNDukc4t+PX60XyynJNAU=";
+    hash = "sha256-NlwP2A1SGEDgoLubLs2HHnaOPUu5L84I1kJAbXyja7Q=";
   };
 
   vendorHash = "sha256-S5olgsmX0uZR9P/u/8Rf3lzRCSIwPDcmlvSzJhhJM3w=";

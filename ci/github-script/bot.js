@@ -206,20 +206,8 @@ module.exports = async ({ github, context, core, dry }) => {
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
-    const merge_bot_eligible = await handleMerge({
-      github,
-      context,
-      core,
-      log,
-      dry,
-      pull_request,
-      events,
-      maintainers,
-      getTeamMembers,
-      getUser,
-    })
-
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
+    // `commit { oid }` is needed by handleMerge to verify approvals are against the current head.
     const reviews = (
       await github.graphql(
         `query($owner: String!, $repo: String!, $pr: Int!) {
@@ -231,6 +219,7 @@ module.exports = async ({ github, context, core, dry }) => {
             reviews(first: 100) {
               nodes {
                 state
+                commit { oid }
                 user: author {
                   # Only get users, no bots
                   ... on User {
@@ -265,6 +254,20 @@ module.exports = async ({ github, context, core, dry }) => {
         // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
+
+    const merge_bot_eligible = await handleMerge({
+      github,
+      context,
+      core,
+      log,
+      dry,
+      pull_request,
+      events,
+      reviews,
+      maintainers,
+      getTeamMembers,
+      getUser,
+    })
 
     const approvals = new Set(
       reviews

@@ -31,11 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./0002-disable-update-check.patch
     ./0003-make-compatible-with-native-electron.patch
+    ./0004-Upgrade-Electron-14-to-force-removal-of-remote-module.patch
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-mo5Ir/pLoqc6K/0AOJqKC0yup7vx9UrNfQ+casIgBCo=";
+    yarnLock = ./yarn.lock;
+    hash = "sha256-CKWFtIZBASGx/1tBR8n7aKPqfj4P9dCAPIzee/DIOP8=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = ''
     runHook preConfigure
+
+    # Replace lockfile with our own (sync offline cache)
+    cp -f ${./yarn.lock} yarn.lock
 
     # setup yarn
     fixup-yarn-lock yarn.lock

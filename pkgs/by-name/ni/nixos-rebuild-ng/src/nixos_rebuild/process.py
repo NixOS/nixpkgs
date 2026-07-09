@@ -25,7 +25,7 @@ SSH_DEFAULT_OPTS: Final = [
     "-o",
     "ControlMaster=auto",
     "-o",
-    f"ControlPath={tmpdir.TMPDIR_PATH / 'ssh-%C'}",
+    f"ControlPath={tmpdir.SSH_CONTROL_PATH}",
     "-o",
     "ControlPersist=60",
 ]

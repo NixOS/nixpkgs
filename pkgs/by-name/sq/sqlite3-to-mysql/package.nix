@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     click
-    mysql-connector
+    mysql-connector-python
     pytimeparse2
     pymysql
     pymysqlsa

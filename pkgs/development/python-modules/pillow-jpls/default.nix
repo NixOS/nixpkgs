@@ -30,8 +30,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   dontUseCmakeConfigure = true;
 
   postPatch = ''

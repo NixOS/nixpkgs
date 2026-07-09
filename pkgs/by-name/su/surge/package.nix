@@ -73,6 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix build with gcc 15
   env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
+  # The generated ScalablePiggy.S has no .note.GNU-stack section, so the linker
+  # marks the LV2/VST3 plugin .so as requiring an executable stack. Since glibc
+  # 2.41 dlopen() refuses to load such objects ("cannot enable executable stack
+  # as shared object requires"). This breaks the post-build step that dlopens
+  # the freshly built LV2 plugin to generate its .ttl manifest. Force a
+  # non-executable stack at link time.
+  env.NIX_LDFLAGS = "-z noexecstack";
+
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp \
       --replace "/usr/share/Surge" "$out/share/surge"

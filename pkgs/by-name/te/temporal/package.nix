@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.30.4";
+  version = "1.30.5";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qC4SMy8ypeSJlqqTtMb27d869bLP1dcGilqU50Fen60=";
+    hash = "sha256-Uw1E1GcLtIo1XZea/tb1TnbIk9O4Mf2NaCpDwUIfSak=";
   };
 
-  vendorHash = "sha256-YJbovD2woypOiYfn9axO8lshIg/6gO9Sa8a3DIt8QFg=";
+  vendorHash = "sha256-5++ETJgWDVveUxb2QZL5AUQG8/8QNVx5iS/NBjoacCY=";
 
   overrideModAttrs = old: {
     # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
@@ -49,6 +49,7 @@ buildGoModule (finalAttrs: {
 
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
     install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
+    install -Dm755 "$GOPATH/bin/elasticsearch" -T $out/bin/temporal-elasticsearch-tool
     install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
     install -Dm755 "$GOPATH/bin/tdbg" -T $out/bin/tdbg
 

@@ -55,6 +55,7 @@ in
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
   stdenvNoCC ? stdenv.override {
+    name = "${stdenv.name}-no-cc";
     cc = null;
     hasCC = false;
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
@@ -309,6 +310,28 @@ let
     };
   };
 
+  # Replaces the attributes in config.attrPathsDisallowedForInternalUse with aborts.
+  # Not warnings because those wouldn't give a backtrace, which is important for debugging
+  # Not throws because those would be ignored by nix-env, which is what CI uses to evaluate everything
+  # See also ./default.nix, which removes these attributes entirely from the end result
+  internallyDisallowedAttrPathsOverlay =
+    final: prev:
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      { }
+    else
+      lib.updateManyAttrsByPath (map (
+        { attrPath, reason }:
+        {
+          path = attrPath;
+          update =
+            _:
+            abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
+              lib.optionalString (reason != null) ", because ${reason}"
+            }";
+        }
+      ) config.attrPathsDisallowedForInternalUse) prev;
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlaid.
@@ -324,6 +347,7 @@ let
       aliases
       variants
       configOverrides
+      internallyDisallowedAttrPathsOverlay
     ]
     ++ overlays
     ++ [

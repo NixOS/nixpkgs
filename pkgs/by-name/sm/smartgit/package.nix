@@ -1,5 +1,6 @@
 {
   lib,
+  git,
   stdenv,
   fetchurl,
   makeDesktopItem,
@@ -16,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartgit";
-  version = "24.1.5";
+  version = "26.1.038";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
+    url = "https://download.smartgit.dev/smartgit/smartgit-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }.tar.gz";
-    hash = "sha256-YqueTbwA9KcXEJG5TeWkPzzNyAnnJQ1+VQYsqZKS2/I=";
+    }-no-git-linux-amd64.tar.gz";
+    hash = "sha256-XyMdojfyaTS3S3felGRvOOazx1mym/wE3j4GyCU9crc=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=( \
       --prefix PATH : ${
         lib.makeBinPath [
+          git
           jre
           which
         ]
@@ -103,11 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
       SmartGit is a multi-platform Git GUI client, free to use for active Open Source developers and users from academic institutions.
       Command line Git is required.
     '';
-    homepage = "https://www.syntevo.com/smartgit/";
-    changelog = "https://www.syntevo.com/smartgit/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
+    homepage = "https://www.smartgit.dev/";
+    changelog = "https://www.smartgit.dev/changelogs/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       jraygauthier
       tmssngr

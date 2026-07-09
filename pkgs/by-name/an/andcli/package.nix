@@ -11,6 +11,8 @@ buildGoModule (finalAttrs: {
   pname = "andcli";
   version = "2.7.0";
 
+  __structuredAttrs = true;
+
   subPackages = [ "cmd/andcli" ];
 
   src = fetchFromGitHub {

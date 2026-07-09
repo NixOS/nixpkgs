@@ -46,10 +46,11 @@ buildPythonPackage (finalAttrs: {
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
     changelog = "https://github.com/markqvist/LXMF/releases/tag/${finalAttrs.src.tag}";
-    # Reticulum License
-    # https://github.com/markqvist/LXMF/blob/master/LICENSE
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ fab ];
+    license = lib.licenses.reticulum;
+    maintainers = with lib.maintainers; [
+      drupol
+      fab
+    ];
     mainProgram = "lxmd";
   };
 })

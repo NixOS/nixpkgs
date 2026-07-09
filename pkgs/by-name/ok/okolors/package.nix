@@ -27,7 +27,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
     homepage = "https://github.com/IanManske/Okolors";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       sandarukasa
     ];

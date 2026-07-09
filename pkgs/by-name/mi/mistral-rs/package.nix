@@ -73,14 +73,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.3";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ohkr45VXuXB7Ms8igZxQ7shrJa3+WBVT1fNYlc6JvZQ=";
+    hash = "sha256-3p/e7UZ8BLwT+dpb61NmzX2Z1QxxEgkgjlNzv5lWybM=";
   };
 
   patches = [
@@ -94,9 +94,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+    ''
+    # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
+    # Instead, we provide cutlass in buildInputs.
+    + lib.optionalString cudaSupport ''
+      substituteInPlace mistralrs-flash-attn/build.rs \
+        --replace-fail \
+          ".with_cutlass(Some(&cutlass_commit))" \
+          ""
+
+      substituteInPlace mistralrs-quant/build.rs \
+        --replace-fail \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
+          ""
     '';
 
-  cargoHash = "sha256-ZwUCzbRpDgT7KwsT9kPGsGp4iU/0I+lrMFqM3UCwkYw=";
+  cargoHash = "sha256-TULJ3mEAWp1ktPDPeBbUJGHhsEuo5T2qh3/JpS+8+ds=";
 
   nativeBuildInputs = [
     pkg-config
@@ -116,11 +129,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
     cudaPackages.libcurand
+
+    # For compiling kernels
+    cudaPackages.cutlass
   ]
   ++ lib.optionals mklSupport [ mkl ];
 

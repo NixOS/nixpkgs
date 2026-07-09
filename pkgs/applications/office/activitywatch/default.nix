@@ -40,7 +40,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
       pynput
     ];
 
@@ -70,7 +70,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
     ];
 
     pythonRelaxDeps = [

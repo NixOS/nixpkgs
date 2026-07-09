@@ -5,12 +5,12 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-quizlet-importer-extended";
-  version = "2026.01.17";
+  version = "2026.06.08";
   src = fetchFromGitHub {
     owner = "sviatoslav-lebediev";
     repo = "anki-quizlet-importer-extended";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BTddZColXM193x8xFa1axHeiWukjxXvwkXGpHxsLtR0=";
+    hash = "sha256-f8Y2Tp3Wo41rKhz/YX602xhxvR7xWUOfvjIKuprt/bo=";
   };
   meta = {
     description = "Import Quizlet Decks into Anki";

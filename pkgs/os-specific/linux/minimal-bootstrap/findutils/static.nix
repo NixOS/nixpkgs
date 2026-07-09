@@ -47,6 +47,7 @@ bash.runCommand "${pname}-${version}"
       result:
       bash.runCommand "${pname}-get-version-${version}" { } ''
         ${result}/bin/find --version
+        ${result}/bin/xargs --version
         mkdir $out
       '';
 
@@ -69,6 +70,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
+      --disable-nls \
       CC=musl-gcc \
       CFLAGS=-static
 
@@ -77,5 +79,8 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
-    rm $out/bin/updatedb
+
+    # Keep only the bootstrap-relevant find/xargs tools.
+    rm -f $out/bin/locate $out/bin/updatedb
+    rm -rf $out/libexec $out/share $out/var
   ''

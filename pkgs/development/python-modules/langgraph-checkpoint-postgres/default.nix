@@ -24,16 +24,17 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-postgres";
-  version = "3.0.5";
+  version = "3.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointpostgres==${version}";
-    hash = "sha256-EonOCCC6aCM2PQdd3UlazEMf4zjglHx8AxHB0i2W4IY=";
+    tag = "checkpointpostgres==${finalAttrs.version}";
+    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
   };
 
   postgresqlTestSetupPost = ''
@@ -42,7 +43,7 @@ buildPythonPackage rec {
       --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5441/\"" "DEFAULT_POSTGRES_URI = \"postgres:///\""
   '';
 
-  sourceRoot = "${src.name}/libs/checkpoint-postgres";
+  sourceRoot = "${finalAttrs.src.name}/libs/checkpoint-postgres";
 
   build-system = [ hatchling ];
 
@@ -102,10 +103,10 @@ buildPythonPackage rec {
   meta = {
     description = "Library with a Postgres implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-postgres";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sarahec
     ];
   };
-}
+})

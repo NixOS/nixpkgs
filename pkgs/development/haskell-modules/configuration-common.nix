@@ -1547,6 +1547,10 @@ with haskellLib;
     revision = null;
   }) super.svgcairo;
 
+  # Support GHC >= 9.12.3 || >= 9.14.1
+  # Patch from https://github.com/gtk2hs/gtk2hs/pull/349
+  glib = appendPatches [ ./patches/glib-support-rts-at-least-9.12.3-and-9.14.patch ] super.glib;
+
   # Too strict upper bound on tasty-hedgehog (<1.5)
   # https://github.com/typeclasses/ascii-predicates/pull/1
   ascii-predicates = doJailbreak super.ascii-predicates;
@@ -2530,12 +2534,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.12";
+          version = "14.14";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-9Y14sDjHf51qv78DGIrcoU1S/nSHOhc6lGM9wRlegMs=";
+            hash = "sha256-iAyGu0yKXpSg0uFgGvD1UGc35yDMLYQ/fHoRERiKJMU=";
           };
         })
       ];

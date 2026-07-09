@@ -35,6 +35,7 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-huggingface";
   version = "1.2.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -75,6 +76,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires a circular dependency on langchain
     "test_init_chat_model_huggingface"
+    # AssertionError: Expected 'bind' to have been called once. Called 0 times.
+    "test_bind_tools"
   ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];

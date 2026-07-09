@@ -81,7 +81,7 @@ in
         Linux = lib.mkOptionDefault "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
         Initrd = lib.mkOptionDefault "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
         Cmdline = lib.mkOptionDefault "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
-        Stub = lib.mkOptionDefault "${pkgs.systemd}/lib/systemd/boot/efi/linux${efiArch}.efi.stub";
+        Stub = lib.mkOptionDefault "${config.systemd.package}/lib/systemd/boot/efi/linux${efiArch}.efi.stub";
         Uname = lib.mkOptionDefault "${config.boot.kernelPackages.kernel.modDirVersion}";
         OSRelease = lib.mkOptionDefault "@${config.system.build.etc}/etc/os-release";
         # This is needed for cross compiling.

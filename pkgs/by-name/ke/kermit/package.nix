@@ -39,7 +39,8 @@ stdenv.mkDerivation {
     make -f makefile install
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
+  # Old K&R C sources fail under GCC 14+ default C standard (e.g. dosexp prototypes).
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration -Wno-implicit-int";
 
   meta = {
     homepage = "https://www.kermitproject.org/ck90.html";

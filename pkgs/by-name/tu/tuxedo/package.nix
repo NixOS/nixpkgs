@@ -2,46 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxedo";
-  version = "2026.5.12";
+  version = "2026.6.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "webstonehq";
     repo = "tuxedo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4GIHq4kjj+FiNBJJjWeXmg4f40ARUILzwsEl0CDV1o=";
+    hash = "sha256-1uTa+S1bUyBsWy5FpmXFbggFc7lMbnDKul0h1O4NvMI=";
   };
 
-  cargoHash = "sha256-rIdjrwNuY0DySdk4jc880JrFgoIuKTYEcx6XoSfllp4=";
+  cargoHash = "sha256-PIhtD0/0hxFOn51PwOWCtz82a2dvhS+2jbd8Wvr/JUM=";
 
-  preCheck = ''
-    export HOME="$TMPDIR/home"
-    export XDG_CONFIG_HOME="$TMPDIR/config"
-    export XDG_CACHE_HOME="$TMPDIR/cache"
-    export XDG_STATE_HOME="$TMPDIR/state"
-
-    mkdir -p \
-      "$HOME" \
-      "$XDG_CONFIG_HOME" \
-      "$XDG_CACHE_HOME" \
-      "$XDG_STATE_HOME"
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [
     # Failure
     "--skip=insert_dialog_after_nl_parse"
   ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "fast, keyboard-driven terminal UI for todo.txt";
     homepage = "https://github.com/webstonehq/tuxedo";

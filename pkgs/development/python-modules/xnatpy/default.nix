@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "xnatpy";
-  version = "0.7.2";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "xnat";
     inherit version;
-    hash = "sha256-YbZJl6lvhuhpmeC+0LikZghIEsR2OYe0Om6IRxZcBwg=";
+    hash = "sha256-2hU+fUu058G+z/ecncQJd1D1b3e+9KpbnCxEb+VPWa0=";
   };
 
   build-system = [

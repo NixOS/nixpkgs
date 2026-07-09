@@ -9,6 +9,7 @@
 
 {
   crateName,
+  version,
   dependencies,
   crateFeatures,
   crateRenames,
@@ -25,6 +26,7 @@
   buildTests,
   codegenUnits,
   capLints,
+  useClippy,
 }:
 
 let
@@ -32,6 +34,20 @@ let
     (if release then "-C opt-level=3" else "-C debuginfo=2")
     "-C codegen-units=${toString codegenUnits}"
     "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    # Map the unpacked source root to a stable, crate-identifying path.
+    # Sources from fetchCrate unpack to $NIX_BUILD_TOP/<crateName>-<version>,
+    # so the prefix above already yields /<crateName>-<version>/src/... and
+    # this remap is a no-op for them. Sources supplied via a custom `src`
+    # (lib.fileset.toSource, lib.cleanSource, a flake's `self`) all unpack to
+    # a fixed basename like `source`, so without this every such crate
+    # collapses to /source/src/... — losing crate identity in panic
+    # backtraces, file!() expansions, debuginfo, and coverage maps. rustc
+    # applies remaps last-match-wins, so this more-specific prefix wins
+    # for everything under the source root (including OUT_DIR, which
+    # configure-crate.nix places at $sourceRoot/target/build/); the
+    # broader $NIX_BUILD_TOP remap above remains as a fallback for any
+    # path that happens to fall outside $sourceRoot.
+    "--remap-path-prefix=$NIX_BUILD_TOP/$sourceRoot=/${crateName}-${version}"
     # When the rust-src component is present (common with rust-overlay
     # toolchains), rustc unvirtualises libstd source paths. Panic
     # locations from monomorphised generic std code then embed the
@@ -94,6 +110,7 @@ in
   runHook preBuild
 
   # configure & source common build functions
+  RUSTC_DRIVER="${if useClippy then "clippy-driver" else "rustc"}"
   LIB_RUSTC_OPTS="${libRustcOpts}"
   BIN_RUSTC_OPTS="${binRustcOpts}"
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"

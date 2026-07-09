@@ -591,8 +591,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
-        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/mysql";
       };
     };
     buildInputs = old.buildInputs ++ [
@@ -1003,10 +1003,17 @@ in
       # remove failing tests
       rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
       rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+      # trailing whitespace inconsistencies
+      rm tests/plenary/api/api_spec.lua
+      rm tests/plenary/babel/tangle_spec.lua
+      rm tests/plenary/capture/datetree_spec.lua
+      rm tests/plenary/init_spec.lua
+
+      # UI tests depend on the neovim version
+      rm -r tests/plenary/ui/*
 
       # not sure why yet
-      rm tests/plenary/ui/mappings/date_spec.lua \
-        tests/plenary/capture/templates_spec.lua
+      rm tests/plenary/capture/templates_spec.lua
 
       # bypass upstream launcher that interacts with network
       nvim --headless -i NONE \
@@ -1171,9 +1178,9 @@ in
     '';
     postConfigure = (old.postConfigure or "") + ''
       substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
-        --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",'
+        --replace-fail '"ltreesitter == 0.3.0",' '"ltreesitter >= 0.3.0",' \
+        --replace-fail '"luv == 1.52.1",' '"luv >= 1.52.1",' \
+        --replace-fail '"tl == 0.24.8",' '"tl >= 0.24.8",'
     '';
   });
 
@@ -1249,6 +1256,13 @@ in
 
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
+  tree-sitter-kulala_http = prev.tree-sitter-kulala_http.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
       tree-sitter
       writableTmpDirAsHomeHook
     ];

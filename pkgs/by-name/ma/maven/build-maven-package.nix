@@ -121,6 +121,7 @@ let
               -o -name resolver-status.properties \
               -o -name _remote.repositories \) \
               -delete
+            rm -rf $out/.m2/.meta
 
             runHook postInstall
           '';

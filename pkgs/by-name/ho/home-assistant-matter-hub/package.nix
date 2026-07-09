@@ -7,19 +7,20 @@
   pnpmConfigHook,
   fetchPnpmDeps,
   makeWrapper,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-assistant-matter-hub";
-  version = "2.0.46";
+  version = "2.0.48";
 
   src = fetchFromGitHub {
     owner = "RiDDiX";
     repo = "home-assistant-matter-hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lVsLvniPU7VAgxrUMZsGh9/cWgqap6iyX44r+Ap2Tjk=";
+    hash = "sha256-0M1ZSqNyLQECaO0cj4MpDGN5x8wVZeJczMViW5d9IXQ=";
   };
 
   # The bundled cli.js imports transitive dependencies (e.g. @noble/curves)
@@ -36,8 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-CuO+DTLPBr1WMyUMPKKzwYUrdWJLdWfj0IqmOyysaFo=";
+    fetcherVersion = 4;
+    hash = "sha256-Bfg2c6gYTUv1rsBGriXUiftlOwGCzPdbdYgW9qhFSLw=";
   };
 
   __structuredAttrs = true;
@@ -91,6 +92,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
+  };
 
   meta = {
     description = "Publish your home-assistant instance using Matter";

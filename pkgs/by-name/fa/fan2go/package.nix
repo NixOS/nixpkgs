@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fan2go";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "fan2go";
     tag = finalAttrs.version;
-    hash = "sha256-JU6hk3JJwoiC3R+Qx6QKzALnvhTA0/luQzO5X6Cpb/I=";
+    hash = "sha256-LEPyyVlVPbGnAfRF0E7wr4fQqRNSKKSsDSKGBCISt5A=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-6rcU7Qtzz80WcygeLVftdpGYAuzGmWD0M+ZVxgGcgnI=";
+  vendorHash = "sha256-LydoBk7qt3Xsf13isJ/yTf6a+FExV9TSSUfD5Tu8Hqk=";
 
   nativeBuildInputs = lib.optionals enableNVML [
     autoAddDriverRunpath

@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.19.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9y7H1Iq/Dn89NIJDegY8lbII4ehx3jhulyOEkBIm4Nk=";
+    hash = "sha256-k3VfZ9+ATu2Cwx531D0WVagjn1ZMIKR1i3yyq+3IGJ4=";
   };
 
   build-system = with python3Packages; [
@@ -34,7 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     argcomplete
     bcrypt
     pyyaml
-    jsonschema
     jinja2
   ];
 
@@ -44,6 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+    patchShebangs hack/markdown-preprocess
   '';
 
   preBuild = ''

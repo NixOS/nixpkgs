@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "brutus";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "brutus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jk4O0euYvW7e8iwS0zmKAmw4yXMNU0ABovznzv5tXVM=";
+    hash = "sha256-iZ0oUYlrcPxPGuJvHXqHX+R4dXKS7pLgZgNhBuBVWtc=";
   };
 
-  vendorHash = "sha256-YdnKRxPagV6h22QEEOpC/HNUGfyFyWwIsh2LxMUmMrk=";
+  vendorHash = "sha256-XpwwFz8PfyTksLD0SomC5BE0tzUL9D/qtBSed4mrsXQ=";
 
   ldflags = [
     "-s"

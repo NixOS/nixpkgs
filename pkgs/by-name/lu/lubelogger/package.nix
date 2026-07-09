@@ -3,17 +3,18 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.6.4";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-w1UxnmuMBPi5Ov+3h7R0I0EIiZShsZm+TgXmfKdc1BU=";
+    hash = "sha256-ePzR6TmByUBWGuOEg8WKMpvQT7qHGkZuBF8CkTwMtuY=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -27,6 +28,8 @@ buildDotnetModule rec {
   ];
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Vehicle service records and maintainence tracker";

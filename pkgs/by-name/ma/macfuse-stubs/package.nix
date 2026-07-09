@@ -58,13 +58,14 @@ stdenv.mkDerivation rec {
     cp -R usr/local/include/fuse{,.h} $out/include
   '';
 
+  passthru.warning = meta.description;
+
   meta = {
     homepage = "https://osxfuse.github.io";
     description = "Build time stubs for FUSE on macOS";
     longDescription = ''
       macFUSE is required for this package to work on macOS. To install macFUSE,
-      use the installer from the <link xlink:href="https://osxfuse.github.io/">
-      project website</link>.
+      use the installer from the [project website](https://osxfuse.github.io/).
     '';
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ midchildan ];
@@ -76,10 +77,4 @@ stdenv.mkDerivation rec {
       lgpl2Plus # libfuse
     ];
   };
-
-  passthru.warning = ''
-    macFUSE is required for this package to work on macOS. To install macFUSE,
-    use the installer from the <link xlink:href="https://osxfuse.github.io/">
-    project website</link>.
-  '';
 }

@@ -2,6 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # optional dependencies
+  eventlet,
+  gevent,
+  pure-sasl,
 }:
 
 buildPythonPackage rec {
@@ -13,6 +18,17 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-kFeWrk9MEr1OSukubl0BhDnmtWyM+7JIJTYuebIw2rE=";
   };
+
+  optional-dependencies = {
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    sasl = [ pure-sasl ];
+  };
+
+  pythonImportsCheck = [
+    "kazoo"
+    "kazoo.client"
+  ];
 
   # tests take a long time to run and leave threads hanging
   doCheck = false;

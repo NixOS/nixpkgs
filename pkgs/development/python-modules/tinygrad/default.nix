@@ -179,6 +179,10 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.testing;
 
   disabledTests = [
+    # Benign regression since safetensors >= 0.8.0
+    #   json.decoder.JSONDecodeError: Expecting ',' delimiter: line 1 column 235 (char 234)
+    "test_load_supported_types"
+
     # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
     "test_backward_sum_acc_dtype"
     "test_failure_27"
@@ -191,6 +195,8 @@ buildPythonPackage (finalAttrs: {
     # Flaky:
     #   AssertionError: 2.1376906810000946 not less than 2.0
     "test_recursive_pad"
+    # AssertionError: 23476983700 not greater than 60457564575 (performance test)
+    "test_flops"
 
     # Require internet access
     "testCopySHMtoDefault"
@@ -240,6 +246,10 @@ buildPythonPackage (finalAttrs: {
     "test_transcribe_long"
     "test_transcribe_long_no_batch"
     "test_vgg7"
+    # Downloads external model each time.
+    # Skipped when building on Hydra (no network access),
+    # but interferes with local builds
+    "test_xlm_roberta_large"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fail with AssertionError

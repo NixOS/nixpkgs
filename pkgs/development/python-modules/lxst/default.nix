@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  libpulseaudio,
   audioop-lts,
   lxmf,
   numpy,
@@ -23,6 +24,11 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-MAJ1n6EUZ6FmIfKKuM2ppbTVrWkxpjC5KIICo5stc+k=";
   };
+
+  postPatch = ''
+    substituteInPlace LXST/Platforms/linux/soundcard.py \
+      --replace-fail "libpulse.so" "${lib.getLib libpulseaudio}/lib/libpulse.so"
+  '';
 
   build-system = [
     setuptools

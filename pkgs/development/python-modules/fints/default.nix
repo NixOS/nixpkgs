@@ -24,6 +24,8 @@ buildPythonPackage rec {
     hash = "sha256-ll2+PtcGQiY5nbQTKVetd2ecDBVSXgzWP4Vzzri1Trs=";
   };
 
+  pythonRelaxDeps = [ "lxml" ];
+
   pythonRemoveDeps = [ "enum-tools" ];
 
   build-system = [ setuptools ];

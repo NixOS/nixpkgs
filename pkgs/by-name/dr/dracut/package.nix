@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "dracut-ng";
-    repo = "dracut-ng";
+    repo = "dracut";
     tag = finalAttrs.version;
     hash = "sha256-2jdS7/LGuLSBBXv1R/o8yjgwdXl2l2wNbZWxq01wSb0";
   };

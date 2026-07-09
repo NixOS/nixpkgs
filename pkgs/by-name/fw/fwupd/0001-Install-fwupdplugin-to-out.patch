@@ -3,6 +3,8 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Mon, 28 Oct 2024 12:07:51 +0100
 Subject: [PATCH] Install fwupdplugin to out
 
+Install plug-ins and libfwupdplugin to $out output, they are not really
+part of the library.
 ---
  meson.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

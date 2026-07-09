@@ -15,7 +15,7 @@
   dart,
 }:
 let
-  version = "0.9.23-beta";
+  version = "0.9.24-beta";
 in
 flutter341.buildFlutterApplication {
   inherit version;
@@ -24,7 +24,7 @@ flutter341.buildFlutterApplication {
     owner = "UnicornsOnLSD";
     repo = "finamp";
     rev = version;
-    hash = "sha256-N1+6rB16geFMYMbfiF7eppnXfXC/pqv90I9aY/57lKI=";
+    hash = "sha256-o7q7Yr47maTrt4CG3PiV9Fdhy77ToboVdd8olZFfFts=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

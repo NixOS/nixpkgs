@@ -2,8 +2,9 @@
   bc,
   zip,
   lib,
-  fetchFromGitHub,
   bats,
+  fetchFromGitHub,
+  python,
   buildPythonApplication,
   callPackage,
   kicad,
@@ -19,6 +20,7 @@
   versioneer,
   shapely,
   setuptools,
+  versionCheckHook,
   nix-update-script,
 }:
 let
@@ -36,7 +38,10 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-QhtdQgMgHaB0xj2hQ4MCptr5DDgCOfRClUSyYzrFQis=";
     # Upstream uses versioneer, which relies on gitattributes substitution.
     # This leads to non-reproducible archives on GitHub.
-    # See https://github.com/NixOS/nixpkgs/issues/84312
+    # See
+    # https://github.com/NixOS/nixpkgs/issues/84312
+    # https://github.com/NixOS/nixpkgs/pull/395213
+    # https://github.com/python-versioneer/python-versioneer/issues/217
     postFetch = ''
       rm "$out/kikit/_version.py"
     '';
@@ -72,6 +77,7 @@ buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    versionCheckHook
     bats
   ];
 
@@ -79,9 +85,10 @@ buildPythonApplication (finalAttrs: {
     "kikit"
   ];
 
-  postPatch = ''
-    # Recreate _version.py, deleted at fetch time due to non-reproducibility.
-    echo 'def get_versions(): return {"version": "${finalAttrs.version}"}' > kikit/_version.py
+  # Recreate _version.py, deleted at fetch time due to non-reproducibility.
+  # should be done in postInstall to overwrite what versioneer generates again during the build phase
+  postInstall = ''
+    echo 'def get_versions(): return {"version": "${finalAttrs.version}"}' > $out/${python.sitePackages}/kikit/_version.py
   '';
 
   preCheck = ''
@@ -96,14 +103,15 @@ buildPythonApplication (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${finalAttrs.src.tag}";
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
-    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "kikit";
     maintainers = with lib.maintainers; [
       jfly
       matusf
     ];
     teams = with lib.teams; [ ngi ];
-    license = lib.licenses.mit;
   };
 })

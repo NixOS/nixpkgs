@@ -107,9 +107,9 @@ in
         services.displayManager.sessionPackages = [ cfg.package ];
 
         systemd = lib.mkIf cfg.systemd.setPath.enable {
-          user.extraConfig = ''
-            DefaultEnvironment="PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"
-          '';
+          user.settings.Manager = {
+            DefaultEnvironment = "PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH";
+          };
         };
       }
 

@@ -3,6 +3,7 @@ From: r-vdp <ramses@well-founded.dev>
 Date: Mon, 28 Oct 2024 12:08:49 +0100
 Subject: [PATCH] Get the efi app from fwupd-efi
 
+EFI capsule is located in fwupd-efi now.
 ---
  meson.build | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

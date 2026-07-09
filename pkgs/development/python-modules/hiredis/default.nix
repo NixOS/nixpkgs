@@ -38,6 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/redis/hiredis-py";
     changelog = "https://github.com/redis/hiredis-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ hythera ];
+    teams = [ lib.teams.redis ];
   };
 })

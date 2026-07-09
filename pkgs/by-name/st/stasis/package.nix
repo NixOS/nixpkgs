@@ -4,42 +4,41 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
-  wayland-scanner,
   wayland,
   wayland-protocols,
   dbus,
   pkg-config,
-  libinput,
-  udev,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stasis";
-  version = "1.2.0";
+  version = "1.3.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saltnpepper97";
     repo = "stasis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xnEzGsUhB7ZAWgBlpZstJqIWcQNiu9o6P/eS7qMv/0w=";
+    hash = "sha256-5p0r9ymR2YimorGEVFdjqYKaQTeqSY7dZleV3kghUIc=";
   };
 
-  cargoHash = "sha256-CZ9TRtd+4KtHwZn8VjkuLMujP9eZHFkaiItGc6BqQsI=";
+  cargoHash = "sha256-pXu9TQ3LKzjvenHzFjPEhtEj0oEl7cplGBchBRHWAAo=";
 
   nativeBuildInputs = [
     pkg-config
-    wayland-scanner
   ];
 
   buildInputs = [
     wayland
     wayland-protocols
     dbus
-    libinput
-    udev
   ];
 
   #There are no tests
   doCheck = false;
+
+  postInstall = ''
+    install -Dm644 assets/stasis.png $out/share/icons/hicolor/256x256/apps/stasis.png
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -57,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       configuration language.
     '';
     homepage = "https://github.com/saltnpepper97/stasis";
-    changelog = "https://github.com/saltnpepper97/stasis/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/saltnpepper97/stasis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     platforms = lib.platforms.linux;

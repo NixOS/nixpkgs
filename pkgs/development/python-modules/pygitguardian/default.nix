@@ -15,20 +15,15 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.30.0";
+  version = "1.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${version}";
-    hash = "sha256-8kKTqthpkH3A5secb8TqbM+/twA77R81y80MOPNQZPA=";
+    hash = "sha256-f8DkRwgtwaB5R78zklAI0ZvA2gfSwsHFOS3IgDgcEEo=";
   };
-
-  pythonRelaxDeps = [
-    "marshmallow-dataclass"
-    "setuptools"
-  ];
 
   build-system = [ pdm-backend ];
 
@@ -53,10 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    # https://github.com/GitGuardian/py-gitguardian/issues/167
-    broken = lib.versionAtLeast marshmallow.version "4";
   };
 }

@@ -72,6 +72,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/hypr/hyprlock.conf $out/etc/xdg/hypr/hyprlock.conf
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

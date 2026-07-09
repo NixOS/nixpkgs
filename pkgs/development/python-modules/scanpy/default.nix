@@ -26,6 +26,7 @@
   pynndescent,
   scikit-learn,
   scipy,
+  scverse-misc,
   seaborn,
   session-info2,
   statsmodels,
@@ -63,14 +64,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-r8kicjCFyEKLxQtFYuZg0NKK7gRBoaLSSFGWqcQtBqM=";
+    hash = "sha256-0CtFaj0+mCNDLG5h728vJkvYGcsa48SbDd3/Y8TXtQo=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -105,6 +107,7 @@ buildPythonPackage (finalAttrs: {
     pynndescent
     scikit-learn
     scipy
+    scverse-misc
     seaborn
     session-info2
     statsmodels
@@ -206,6 +209,7 @@ buildPythonPackage (finalAttrs: {
     "test_burczynski06"
     "test_clip"
     "test_doc_shape"
+    "test_download_atomic"
     "test_download_failure"
     "test_ebi_expression_atlas"
     "test_mean_var"

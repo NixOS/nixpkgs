@@ -2,7 +2,7 @@
   llvmPackages_20,
   lib,
   fetchurl,
-  fetchpatch,
+  fetchpatch2,
   dotnetCorePackages,
   jq,
   curl,
@@ -153,7 +153,15 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
-    ++ lib.optional (lib.versionAtLeast version "11") ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ++ lib.optionals (lib.versionAtLeast version "11") [
+      ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+      (fetchpatch2 {
+        url = "https://github.com/dotnet/roslyn/commit/0efb81ea44ddf262eb50d71c9d0f1728e2ad7ac6.patch";
+        hash = "sha256-ZZZGMtO1cuvywhPpmwF8PFAGnuidD3yht2TVGCMjVZ0=";
+        stripLen = 1;
+        extraPrefix = "src/roslyn/";
+      })
+    ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
   postPatch = ''
@@ -395,15 +403,18 @@ stdenv.mkDerivation {
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    isLinux && glibcLocales != null
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = lib.optionalString (
+      isLinux && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
-  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
-  # caused by separateDebugInfo
-  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    # clang: error: argument unused during compilation:
+    # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+    # caused by separateDebugInfo
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  };
 
   buildFlags = [
     "--with-packages"

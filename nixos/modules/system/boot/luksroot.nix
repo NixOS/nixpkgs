@@ -1100,7 +1100,9 @@ in
       }
       {
         assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
-        message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
+        message = ''
+          boot.initrd.luks.devices.<name>.preLVM has no effect with systemd stage 1. It can be safely removed from your configuration, and systemd will discover LVM devices automatically at runtime, whether they come before or after LUKS. The preLVM option will be removed in 26.11 along with scripted stage 1.
+        '';
       }
       {
         assertion =

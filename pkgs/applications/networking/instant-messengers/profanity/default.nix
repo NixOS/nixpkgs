@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
+  meson,
+  ninja,
   cmocka,
   curl,
   expat,
@@ -12,7 +12,6 @@
   glibcLocales,
   libstrophe,
   libmicrohttpd,
-  libotr,
   libuuid,
   ncurses,
   openssl,
@@ -35,41 +34,39 @@
   python3,
   traySupport ? true,
   gtk3,
+  otrSupport ? true,
+  libotr,
+  avatarScalingSupport ? true,
+  spellcheckSupport ? true,
+  enchant,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.17.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = finalAttrs.version;
-    hash = "sha256-fZFLEkbwiYeAtnqDOImV8aXbYGMqO9TEcXPFMuchJaE=";
+    hash = "sha256-rPiYzG5KvJyKt7b99AImmO6wTYxZPFcf/6Xhz8SrgIo=";
   };
-
-  patches = [
-    ./patches/packages-osx.patch
-  ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
-    glibcLocales
+    meson
     pkg-config
+    ninja
   ];
 
   buildInputs = [
-    cmocka
     curl
     expat
     expect
     glib
     libstrophe
     libmicrohttpd
-    libotr
     libuuid
     ncurses
     openssl
@@ -91,22 +88,38 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pgpSupport [ gpgme ]
   ++ lib.optionals pythonPluginSupport [ python3 ]
-  ++ lib.optionals traySupport [ gtk3 ];
+  ++ lib.optionals traySupport [ gtk3 ]
+  ++ lib.optionals otrSupport [ libotr ]
+  ++ lib.optionals spellcheckSupport [ enchant ]
+  ++ lib.optionals avatarScalingSupport [ gdk-pixbuf ];
 
-  # Enable feature flags, so that build fail if libs are missing
-  configureFlags = [
-    "--enable-c-plugins"
-    "--enable-otr"
-  ]
-  ++ lib.optionals notifySupport [ "--enable-notifications" ]
-  ++ lib.optionals traySupport [ "--enable-icons-and-clipboard" ]
-  ++ lib.optionals pgpSupport [ "--enable-pgp" ]
-  ++ lib.optionals pythonPluginSupport [ "--enable-python-plugins" ]
-  ++ lib.optionals omemoSupport [ "--enable-omemo" ];
+  # see also: https://profanity-im.github.io/guide/latest/build.html#expl
+  mesonFlags = [
+    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonEnable "notifications" notifySupport)
+    (lib.mesonEnable "python-plugins" pythonPluginSupport)
+    (lib.mesonEnable "c-plugins" true)
+    (lib.mesonEnable "otr" otrSupport)
+    (lib.mesonEnable "pgp" pgpSupport)
+    (lib.mesonEnable "omemo" omemoSupport)
+    (lib.mesonEnable "omemo-qrcode" omemoSupport)
+    (lib.mesonEnable "icons-and-clipboard" traySupport)
+    (lib.mesonEnable "gdk-pixbuf" avatarScalingSupport)
+    (lib.mesonEnable "xscreensaver" autoAwaySupport)
+    (lib.mesonEnable "spellcheck" spellcheckSupport)
+  ];
+
+  # this build directory is hard coded by the tests:
+  # https://github.com/profanity-im/profanity/blob/c9033aae568d1a8f5435c566f31aa165718c7726/tests/functionaltests/proftest.c#L275
+  mesonBuildDir = "build_run";
 
   doCheck = true;
+  nativeCheckInputs = [
+    cmocka
 
-  env.LC_ALL = "en_US.utf8";
+    # when stabber is found, functional tests are enabled which take a very long time
+    # stabber
+  ];
 
   meta = {
     homepage = "https://profanity-im.github.io";

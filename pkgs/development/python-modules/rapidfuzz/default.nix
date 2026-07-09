@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   clang-tools,
   cmake,
   cython,
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-wF7eeSD6GQfN0EOwDvrgjMqN5u2wxXFlktQS7nIKgkU=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/rapidfuzz/RapidFuzz/pull/486
+      name = "support-taskflow-4.1.0.patch";
+      url = "https://github.com/rapidfuzz/RapidFuzz/commit/76fa54bf8c3f2d24879ca1966ea98bbba7b3c9d6.patch";
+      hash = "sha256-hJZtYNLSqK5NgcBAcvrf9NPh3Z0+pSlyy0W+uJ96kBQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

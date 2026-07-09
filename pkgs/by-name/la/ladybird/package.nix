@@ -7,6 +7,7 @@
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
+  chromium-hsts-preload-list,
   cmake,
   ninja,
   pkg-config,
@@ -14,6 +15,7 @@
   libavif,
   angle, # libEGL
   libjxl,
+  libedit,
   libpulseaudio,
   libwebp,
   libxcrypt,
@@ -34,6 +36,8 @@
   skia,
   nixosTests,
   unstableGitUpdater,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
   libtommath,
   sdl3,
   icu78,
@@ -42,18 +46,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-05-04";
+  version = "0-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "90b790f8702a5d5c5a66ef02f8669da2838ca6e3";
-    hash = "sha256-BdJ24YtKMv8B6Vvequf9b5qr0S3FfFuphFo78mCIaN4=";
+    rev = "02b205361dd239e134f434e484b609d1fa5f1938";
+    hash = "sha256-+CVJjrL1kqT2A7r89F+riiHpMa39rcggqG9SByidUY4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-sbNYOdY56+waCVQHbGuvV5jT9EawV2IiGmL1e/O6ZRc=";
+    hash = "sha256-n0ACVH8NXwe7SIaGFoJ20WIGGR3XjcuLTwPSKGJpT5s=";
   };
 
   postPatch = ''
@@ -85,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
+
+    mkdir build/Caches/HSTSPreload
+    cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
   '';
 
   nativeBuildInputs = [
@@ -109,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     angle # libEGL
     libjxl
+    libedit
     libwebp
     libxcrypt
     mimalloc
@@ -176,7 +184,25 @@ stdenv.mkDerivation (finalAttrs: {
     nixosTest = nixosTests.ladybird;
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript =
+    let
+      updateSource = unstableGitUpdater {
+        hardcodeZeroVersion = true;
+      };
+
+      updateCargoDeps = {
+        command = [
+          (lib.getExe' common-updater-scripts "update-source-version")
+          "ladybird"
+          "--ignore-same-version"
+          "--source-key=cargoDeps.vendorStaging"
+        ];
+      };
+    in
+    _experimental-update-script-combinators.sequence [
+      updateSource
+      updateCargoDeps
+    ];
 
   meta = {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";

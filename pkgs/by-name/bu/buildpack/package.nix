@@ -42,6 +42,6 @@ buildGoModule (finalAttrs: {
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

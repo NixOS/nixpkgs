@@ -31,6 +31,7 @@ buildPythonPackage (finalAttrs: {
   inherit (mujoco) version;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via
@@ -38,7 +39,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-AZoLNAaJK8mEVOr1XL0n+F0Wd1iteF93xgimHzo0rRc=";
+    hash = "sha256-yejV2H2CIE7VvMyH2EPApT51qvOB3ik47EbQTxrG4k4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -87,7 +88,7 @@ buildPythonPackage (finalAttrs: {
         ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
         ${lib.getExe perl} -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
 
-        build="/build/${finalAttrs.pname}-${finalAttrs.version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
+        build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps
         ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
         ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src

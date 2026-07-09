@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.12.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vOdL+It8wY+U0Jt68KPAxMe3th0muaCXlEkuEphCVVY=";
+    hash = "sha256-jtAfFwgtIP2sJRH4RcGTgVn/S5yvA15q3u2xeWus/8s=";
   };
 
-  vendorHash = "sha256-NfRVgGtm8w/K0utb3/AlBfT71txpmJlOaFrdqGC8Dkg=";
+  vendorHash = "sha256-aKXfVDu3uTEeSzs4nVWQMUj+HaVkzk+iTr+lti+Yb6E=";
 
   subPackages = [ "cmd/kcl" ];
 
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     runHook preInstallCheck
     set -o pipefail
     $out/bin/kcl --version | grep $version
-    $out/bin/kcl <(echo 'hello = "KCL"') | grep "hello: KCL"
+    $out/bin/kcl run <(echo 'hello = "KCL"') | grep "hello: KCL"
     runHook postInstallCheck
   '';
 

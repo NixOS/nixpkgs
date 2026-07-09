@@ -12,6 +12,7 @@
   # dependencies
   cuda-bindings,
   numpy,
+  protobuf,
   typing-extensions,
 }:
 
@@ -28,22 +29,22 @@ let
 
   hashes = {
     x86_64-linux = {
-      cp311 = "sha256-kReQDLpT08Iajay6a789bl8mnkJ6UmwyD7RHB6DVc2M=";
-      cp312 = "sha256-Fe9qWRk2Z+Zjk070hz+MytN0Vem3w8QZwwchE7iu32E=";
-      cp313 = "sha256-5Z2n2J5eT4UUxlMIQ/kQ+dhzTYBC3KoHnJ2cUGPrNRQ=";
-      cp314 = "sha256-EsKffB8fgoUQkro4aSZNr6+wNSKMDZgnqNsIuIT7gMo=";
+      cp311 = "sha256-IYsM/q+MMYSTNjUDL1icbBkFE/Pv4LIysFtp0LW+XEs=";
+      cp312 = "sha256-oz2DkFz8p6LbIDSi9liUECR1XXXBtQDJOqy+YWTsAwA=";
+      cp313 = "sha256-Gd4Dm7NJa6qAbPIsimi5id2ZihKYR9PYu4MNNLp3fwg=";
+      cp314 = "sha256-Xj3sJ4B7XSQ0eeWX8shGtWC4m4DXfyUmiWOeZzcxPRA=";
     };
     aarch64-linux = {
-      cp311 = "sha256-y7VVqVxwEeSzyjKL5AcpnHfSiWYK2+oi7VFdRAbmlJw=";
-      cp312 = "sha256-0qPEEih+NW++SP6fhF1tM8013qXiDX5PYowglXlnys0=";
-      cp313 = "sha256-OVvXfPZCru8xExNFPmWC8RyTV6S4H+Yg6j2szR/Mq5s=";
-      cp314 = "sha256-IW7uaqgQfTVWn5RRtmsDo8UxZ4QdGvm2MLlm742Wbhk=";
+      cp311 = "sha256-0I/rlCm9hyAi0B/XkKapze1XoU9OorJSXtYu5KMvX38=";
+      cp312 = "sha256-l2g+5iMexXxPe/0s5TFx1/o4Bc+PMH3dI47XVwdEbNs=";
+      cp313 = "sha256-/ikvI1LniluT91AYEaA199iUX8GYZCawvozueoy7Lh8=";
+      cp314 = "sha256-M/2vaRZTr0UgbH5BFK1T6/8mCxqDdAHlSXdc2dDMJo8=";
     };
   };
 in
 buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass-dsl-libs-base";
-  version = "4.5.2";
+  version = "4.6.0.dev0";
   format = "wheel";
 
   src = fetchPypi {
@@ -63,9 +64,13 @@ buildPythonPackage (finalAttrs: {
     # Only cuda-bindings is needed
     "cuda-python"
   ];
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
   dependencies = [
     cuda-bindings
     numpy
+    protobuf
     typing-extensions
   ];
 

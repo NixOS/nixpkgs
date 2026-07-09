@@ -17,28 +17,38 @@
   android-tools,
   e2fsprogs,
   fakeroot,
-  fuse,
   libadwaita,
   libxml2,
   systemd,
   unzip,
+  vte-gtk4,
   nix-update-script,
+  fetchpatch,
 }:
 
 let
-  version = "0.2.7";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "ayasa520";
     repo = "waydroid-helper";
     tag = "v${version}";
-    hash = "sha256-I8DwaPQQz4eSyuTCwkbidhXACfpdOYcmGjP7d03DIU0=";
+    hash = "sha256-6mVb4GPD2NCsvyaqQAOFox0rNIlyOttiaZKbHBS40Rg=";
   };
 in
 python3Packages.buildPythonApplication {
   pname = "waydroid-helper";
   inherit version src;
   pyproject = false; # uses meson
+
+  patches = [
+    # remove for next release
+    (fetchpatch {
+      name = "USE_UMOUNT_NOT_FUSERMOUNT";
+      url = "https://github.com/waydroid-helper/waydroid-helper/commit/eb8ccf7a276f95b31972edbd063245704b2b5b2e.patch";
+      hash = "sha256-z0PWBZTox3RpPCm8/fGYEukU0v41U7/TFcYE0Ec5Zeg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace dbus/meson.build \
@@ -74,6 +84,7 @@ python3Packages.buildPythonApplication {
     libadwaita
     libxml2
     systemd
+    vte-gtk4
   ];
 
   dontUseCmakeConfigure = true;
@@ -99,7 +110,6 @@ python3Packages.buildPythonApplication {
         bindfs
         e2fsprogs
         fakeroot
-        fuse
         unzip
       ]
     }"

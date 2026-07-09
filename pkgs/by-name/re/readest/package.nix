@@ -1,7 +1,7 @@
 {
   stdenv,
   rustPlatform,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   cargo-tauri,
@@ -23,13 +23,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.11.1";
+  version = "0.11.17";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VS1YpSy9dw0Z6hOZRKhq/3Yl2+x+jxQf7VWXeDs2HIg=";
+    hash = "sha256-vueP/UGu1G+DnwqJ7GhcYIxIsyTeFGYIiz7Iu0fs3NA=";
     fetchSubmodules = true;
   };
 
@@ -44,13 +44,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-AnCxGeYaA5pY3tXA8e03fAXvU/mj4mBP0ZA3MUkodNo=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-wtWYdIfqytwn8PNahbQ/WxJuhhH1lbgNshQy6V0vvcA=";
+    pnpmInstallFlags = [
+      # Increase number of fetch attempts to work around timeout issues on slow
+      # networks: "TimeoutError: The operation was aborted due to timeout".
+      #
+      # If this still happens on your network, consider changing some of the
+      # fetch setting and opening a pull request:
+      # https://pnpm.io/settings#request-settings
+      "--fetch-retries=5"
+    ];
   };
 
   cargoRoot = "../..";
-  cargoHash = "sha256-BGI1C8SSDjkqhkBhos1GVXMaIUpYmSmPgb6lTuZJSQs=";
+  cargoHash = "sha256-QxsiYl7mG+kS35pcU8/WLQA+f3gepe7qrHelhUzONbY=";
 
   buildAndTestSubdir = "src-tauri";
 
@@ -63,6 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
 
+    jq '.version = "${finalAttrs.version}"' package.json | sponge package.json
+
     mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
     cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
     jq '.scripts.build = "true"' \
@@ -74,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_11
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -115,9 +126,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pname = "tauri-plugin-turso";
     version = finalAttrs.version;
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-quVUYsT3u4UBhuJ75QQ4SEuW8MhGQ0vGhtwtUj/eKHs=";
   };
 
   passthru.tursoPlugin = stdenv.mkDerivation {
@@ -126,7 +137,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
 
     nativeBuildInputs = [
-      pnpm_10
+      pnpm_11
       pnpmConfigHook
       nodejs
     ];

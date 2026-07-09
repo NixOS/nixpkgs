@@ -6,8 +6,6 @@ let
 
   inherit (builtins) length;
 
-  inherit (lib.trivial) warnIf;
-
   asciiTable = import ./ascii-table.nix;
 
 in
@@ -16,6 +14,7 @@ rec {
 
   inherit (builtins)
     compareVersions
+    concatMap
     elem
     elemAt
     filter
@@ -564,7 +563,10 @@ rec {
     :::
   */
   makeSearchPath =
-    subDir: paths: concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
+    subDir: paths:
+    concatStringsSep ":" (
+      concatMap (path: if path != null then [ (path + "/" + subDir) ] else [ ]) paths
+    );
 
   /**
     Construct a Unix-style search path by appending the given
@@ -602,8 +604,14 @@ rec {
     :::
   */
   makeSearchPathOutput =
-    output: subDir: pkgs:
-    makeSearchPath subDir (map (lib.getOutput output) pkgs);
+    output:
+    let
+      getOutput' = lib.getOutput output;
+    in
+    subDir: pkgs:
+    concatStringsSep ":" (
+      concatMap (path: if path != null then [ (getOutput' path + "/" + subDir) ] else [ ]) pkgs
+    );
 
   /**
     Construct a library search path (such as RPATH) containing the
@@ -721,15 +729,17 @@ rec {
     :::
   */
   normalizePath =
+    let
+      startsWithSlash = hasSuffix "/";
+    in
     s:
-    warnIf (isPath s)
-      ''
+    if isPath s then
+      throw ''
         lib.strings.normalizePath: The argument (${toString s}) is a path value, but only strings are supported.
-            Path values are always normalised in Nix, so there's no need to call this function on them.
-            This function also copies the path to the Nix store and returns the store path, the same as "''${path}" will, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x + y) "" (stringToCharacters s)
+            Path values are always normalised in Nix, so there's no need to call this function on them.''
+    else
+      builtins.foldl' (x: y: if y == "/" && startsWithSlash x then x else x + y) "" (
+        stringToCharacters s
       );
 
   /**
@@ -796,17 +806,18 @@ rec {
     :::
   */
   hasPrefix =
-    pref: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath pref)
-      ''
+    pref:
+    let
+      lenPrefix = stringLength pref;
+    in
+    if isPath pref then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
-            There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
-      (substring 0 (stringLength pref) str == pref);
+    else
+      str: substring 0 lenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -839,20 +850,23 @@ rec {
     :::
   */
   hasSuffix =
-    suffix: content:
+    suffix:
     let
-      lenContent = stringLength content;
       lenSuffix = stringLength suffix;
     in
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath suffix)
-      ''
+    if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
-            There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix);
+        There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
+        This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      content:
+      let
+        lenContent = stringLength content;
+      in
+      lenContent >= lenSuffix && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /**
     Determine whether a string contains the given infix
@@ -889,16 +903,19 @@ rec {
     :::
   */
   hasInfix =
-    infix: content:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath infix)
-      ''
+    infix:
+    let
+      escapedInfix = escapeRegex infix;
+    in
+    if isPath infix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.hasInfix: The first argument (${toString infix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (builtins.match ".*${escapeRegex infix}.*" "${content}" != null);
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      content: builtins.match ".*${escapedInfix}.*" "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
@@ -1303,8 +1320,11 @@ rec {
     :::
   */
   toShellVar =
-    name: value:
-    lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
+    name:
+    if (!isValidPosixName name) then
+      throw "toShellVar: ${name} is not a valid shell variable name"
+    else
+      value:
       if isAttrs value && !isStringLike value then
         "declare -A ${name}=(${
           concatStringsSep " " (lib.mapAttrsToList (n: v: "[${escapeShellArg n}]=${escapeShellArg v}") value)
@@ -1312,8 +1332,7 @@ rec {
       else if isList value then
         "declare -a ${name}=(${escapeShellArgs value})"
       else
-        "${name}=${escapeShellArg value}"
-    );
+        "${name}=${escapeShellArg value}";
 
   /**
     Translate an attribute set `vars` into corresponding shell variable declarations
@@ -1570,15 +1589,14 @@ rec {
   */
   toSentenceCase =
     str:
-    lib.throwIfNot (isString str)
-      "toSentenceCase does only accepts string values, but got ${typeOf str}"
-      (
-        let
-          firstChar = substring 0 1 str;
-          rest = substring 1 (stringLength str) str;
-        in
-        addContextFrom str (toUpper firstChar + toLower rest)
-      );
+    if !isString str then
+      throw "toSentenceCase does only accepts string values, but got ${typeOf str}"
+    else
+      let
+        firstChar = substring 0 1 str;
+        rest = substring 1 (-1) str; # -1 takes till the end of the string
+      in
+      toUpper firstChar + toLower rest;
 
   /**
     Converts a string to camelCase. Handles snake_case, PascalCase,
@@ -1614,7 +1632,9 @@ rec {
   */
   toCamelCase =
     str:
-    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+    if !isString str then
+      throw "toCamelCase does only accepts string values, but got ${typeOf str}"
+    else
       let
         separators = splitStringBy (
           prev: curr:
@@ -1634,8 +1654,7 @@ rec {
         first = if length parts > 0 then toLower (head parts) else "";
         rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
       in
-      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
-    );
+      concatStrings ([ first ] ++ rest);
 
   /**
     Appends string context from string like object `src` to `target`.
@@ -1721,13 +1740,11 @@ rec {
     :::
   */
   splitString =
-    sep: s:
+    sep:
     let
-      splits = builtins.filter builtins.isString (
-        builtins.split (escapeRegex (toString sep)) (toString s)
-      );
+      escapedSep = escapeRegex (toString sep);
     in
-    map (addContextFrom s) splits;
+    s: map (addContextFrom s) (filter isString (split escapedSep (toString s)));
 
   /**
     Splits a string into substrings based on a predicate that examines adjacent characters.
@@ -1794,31 +1811,27 @@ rec {
     predicate: keepSplit: str:
     let
       len = stringLength str;
+      withContext = addContextFrom str;
 
       # Helper function that processes the string character by character
       go =
         pos: currentPart: result:
         # Base case: reached end of string
         if pos == len then
-          result ++ [ currentPart ]
+          result ++ [ (withContext currentPart) ]
         else
           let
             currChar = substring pos 1 str;
             prevChar = if pos > 0 then substring (pos - 1) 1 str else "";
-            isSplit = predicate prevChar currChar;
           in
-          if isSplit then
+          if predicate prevChar currChar then
             # Split here - add current part to results and start a new one
-            let
-              newResult = result ++ [ currentPart ];
-              newCurrentPart = if keepSplit then currChar else "";
-            in
-            go (pos + 1) newCurrentPart newResult
+            go (pos + 1) (if keepSplit then currChar else "") (result ++ [ (withContext currentPart) ])
           else
             # Keep building current part
             go (pos + 1) (currentPart + currChar) result;
     in
-    if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
+    if len == 0 then [ (withContext "") ] else go 0 "" [ ];
 
   /**
     Returns a string without the specified prefix, if the prefix matches.
@@ -1851,25 +1864,24 @@ rec {
     :::
   */
   removePrefix =
-    prefix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath prefix)
-      ''
+    prefix:
+    let
+      preLen = stringLength prefix;
+    in
+    if isPath prefix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.removePrefix: The first argument (${toString prefix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        let
-          preLen = stringLength prefix;
-        in
-        if substring 0 preLen str == prefix then
-          # -1 will take the string until the end
-          substring preLen (-1) str
-        else
-          str
-      );
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      str:
+      if substring 0 preLen str == prefix then
+        # -1 will take the string until the end
+        substring preLen (-1) str
+      else
+        str;
 
   /**
     Returns a string without the specified suffix, if the suffix matches.
@@ -1902,25 +1914,26 @@ rec {
     :::
   */
   removeSuffix =
-    suffix: str:
-    # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
-    warnIf (isPath suffix)
-      ''
+    suffix:
+    let
+      sufLen = stringLength suffix;
+    in
+    if isPath suffix then
+      # Before 23.05, paths would be copied to the store before converting them
+      # to strings and comparing. This was surprising and confusing.
+      throw ''
         lib.strings.removeSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
             There is almost certainly a bug in the calling code, since this function never removes any suffix in such a case.
-            This function also copies the path to the Nix store, which may not be what you want.
-            This behavior is deprecated and will throw an error in the future.''
-      (
-        let
-          sufLen = stringLength suffix;
-          sLen = stringLength str;
-        in
-        if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
-          substring 0 (sLen - sufLen) str
-        else
-          str
-      );
+            This function also copies the path to the Nix store, which may not be what you want.''
+    else
+      str:
+      let
+        sLen = stringLength str;
+      in
+      if sufLen <= sLen && suffix == substring (sLen - sufLen) sufLen str then
+        substring 0 (sLen - sufLen) str
+      else
+        str;
 
   /**
     Returns true if string `v1` denotes a version older than `v2`.
@@ -1986,7 +1999,7 @@ rec {
 
     :::
   */
-  versionAtLeast = v1: v2: !versionOlder v1 v2;
+  versionAtLeast = v1: v2: compareVersions v2 v1 != 1;
 
   /**
     This function takes an argument `x` that's either a derivation or a
@@ -2149,8 +2162,9 @@ rec {
         "LIST"
       ];
     in
-    type: feature: value:
+    type:
     assert (elem (toUpper type) types);
+    feature: value:
     assert (isString feature);
     assert (isString value);
     "-D${feature}:${toUpper type}=${value}";
@@ -2186,9 +2200,8 @@ rec {
   */
   cmakeBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
-    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+    cmakeOptionType "bool" condition (if flag then "TRUE" else "FALSE");
 
   /**
     Create a `"-D<feature>:STRING=<value>"` string that can be passed to typical
@@ -2220,11 +2233,7 @@ rec {
 
     :::
   */
-  cmakeFeature =
-    feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    cmakeOptionType "string" feature value;
+  cmakeFeature = cmakeOptionType "string";
 
   /**
     Create a `"-D<feature>=<value>"` string that can be passed to typical Meson
@@ -2294,7 +2303,6 @@ rec {
   */
   mesonBool =
     condition: flag:
-    assert (lib.isString condition);
     assert (lib.isBool flag);
     mesonOption condition (lib.boolToString flag);
 
@@ -2331,7 +2339,6 @@ rec {
   */
   mesonEnable =
     feature: flag:
-    assert (lib.isString feature);
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
@@ -2525,8 +2532,9 @@ rec {
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
     in
-    assert lib.assertMsg (strw <= width)
-      "fixedWidthString: requested string length (${toString width}) must not be shorter than actual length (${toString strw})";
+    assert
+      strw <= width
+      || throw "fixedWidthString: requested string length (${toString width}) must not be shorter than actual length (${toString strw})";
     if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
   /**

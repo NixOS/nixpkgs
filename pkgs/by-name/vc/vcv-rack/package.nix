@@ -170,11 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./rack-minimize-vendoring.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (fetchpatch {
-      name = "fix-segfault-on-linux.patch";
-      url = "https://github.com/VCVRack/Rack/pull/1944.patch";
-      hash = "sha256-dlndyCfCznGDzlWNWrQTgh+FtmsrrL2DVuRE0xCxUck=";
-    })
+    # https://github.com/VCVRack/Rack/pull/1944
+    # https://github.com/VCVRack/Rack/commit/9f0eb9a0da8e9d6f1729f823555fdac2135214f0
+    ./fix-segfault-on-linux.patch
   ];
 
   prePatch = ''

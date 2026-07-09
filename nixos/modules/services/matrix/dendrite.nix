@@ -341,5 +341,4 @@ in
       };
     };
   };
-  meta.teams = [ lib.teams.matrix ];
 }

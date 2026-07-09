@@ -43,7 +43,14 @@ class Repo:
         )
 
         deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, vars_override=repo_vars, filename="DEPS")
+        evaluated = gclient_eval.Parse(
+            deps_file,
+            filename="DEPS",
+            vars_override=repo_vars,
+            # KeyError: "host_cpu was used as a variable, but was not declared in the vars dict (file 'DEPS', line 114)"
+            # https://chromium.googlesource.com/webpagereplay.git/+/b2b856131e36c99e9de9c419fe8ca02f857082ba/DEPS#114
+            builtin_vars= {"host_cpu": "*host_cpu_placeholder*"} if path == "src/third_party/webpagereplay" else None,
+        )
 
         repo_vars = dict(evaluated.get("vars", {})) | repo_vars
 

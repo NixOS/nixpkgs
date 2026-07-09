@@ -23,6 +23,9 @@ stdenvNoCC.mkDerivation {
     # remove when merged
     # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/34
     ./fix-install-script.patch
+    # remove when merged
+    # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/35
+    ./gtk3-remove-border-spacing.patch
   ];
 
   propagatedUserEnvPkgs = [

@@ -28,6 +28,7 @@
   gtk-layer-shell,
   vulkan-loader,
   vulkan-headers,
+  spirv-headers,
   shaderc,
   gst_all_1,
   glib-networking,
@@ -54,7 +55,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.8.3";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -62,11 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sCCtp6UAxmCAcYeOM9+RW2czATh4Geqf1H8wXNMniYc=";
+    hash = "sha256-jRzy8nsLtlNrYXb4LWP5SK6XpIy2pguNcZno3m6Mkqw=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-mvOThNqfE24iMkVBM2zYexJkQxpMMgE4PPNXKy39hSg=";
+  cargoHash = "sha256-Ag02t6KwKvgO1kKsQ4RAw9X+rWYNhDyav2N6i4o7ifQ=";
 
   nativeInstallInputs = [ jq ];
 
@@ -109,6 +110,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook4
     shaderc
+    spirv-headers
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
@@ -154,12 +156,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SWIFTC = lib.getExe' swift "swiftc"; # Explicit so the Handy build system can avoid xcrun
   };
 
-  preBuild = ''
-    cp -R ${finalAttrs.passthru.frontendDeps}/node_modules .
-    chmod -R u+w node_modules
-    patchShebangs node_modules
-    bun run build
-  '';
+  preBuild =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Linux enables transcribe-cpp's ggml Vulkan backend, whose CMake build
+      # needs SPIRV-Headers' package config and headers.
+      export CMAKE_PREFIX_PATH="${spirv-headers}''${CMAKE_PREFIX_PATH:+:''${CMAKE_PREFIX_PATH}}"
+      export NIX_CFLAGS_COMPILE="-isystem ${spirv-headers}/include ''${NIX_CFLAGS_COMPILE:-}"
+    ''
+    + ''
+      cp -R ${finalAttrs.passthru.frontendDeps}/node_modules .
+      chmod -R u+w node_modules
+      patchShebangs node_modules
+      bun run build
+    '';
 
   # If removed, the binary is produced, but not the app bundle for any platform.
   installPhase = ''
@@ -208,8 +217,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The hook and deps fetcher in https://github.com/NixOS/nixpkgs/pull/376299 should simplify this dramatically.
     frontendDeps = stdenv.mkDerivation {
       pname = "handy-frontend-deps";
-      version = "0.8.3";
-      inherit (finalAttrs) src;
+      inherit (finalAttrs) src version;
 
       nativeBuildInputs = [
         bun
@@ -238,9 +246,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       outputHash =
         {
-          "x86_64-linux" = "sha256-tJ6LK99dELOiR0BcsTRTt/vLyNamntujLxhBy5Xl/lc=";
-          "aarch64-linux" = "sha256-S+dX6ZVgv9dexxIHoa5PxP7e0nxf/d7cKUGty5eEi8A=";
-          "aarch64-darwin" = "sha256-DQbogNBQ9izK5GPmoOudqiB2lJvct1vZI2U5lp3WFy8=";
+          "x86_64-linux" = "sha256-1jZBFvX9Ch3jNGPgSnOE8yNCXlHru7tcMJZ5uNZtE1g=";
+          "aarch64-linux" = "sha256-MsY2tOdBg11OMyQLRkLoVKxyrcqa0yVddfcYuIVWSxw=";
+          "aarch64-darwin" = "sha256-Fw0va7mq0F36qa15bDFVL01Q5pEprWhza78CzurLoLg=";
         }
         .${stdenv.hostPlatform.system};
 
@@ -268,7 +276,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/cjpais/Handy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "handy";
-    maintainers = with lib.maintainers; [ philocalyst ];
+    maintainers = with lib.maintainers; [
+      faukah
+      philocalyst
+    ];
     platforms = with lib.platforms; linux ++ darwin;
     badPlatforms = [ "x86_64-darwin" ]; # We weren't able to get hashes here
   };

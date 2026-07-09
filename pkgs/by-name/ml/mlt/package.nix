@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    (opencv4.override { inherit ffmpeg; })
+    (opencv4.override { ffmpeg-headless = ffmpeg; })
     ffmpeg
     fftw
     frei0r

@@ -6,7 +6,6 @@
   pkg-config,
   protobuf,
   fontconfig,
-  libgit2,
   openssl,
   sqlite,
   zlib,
@@ -31,7 +30,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
-  version = "2.1.2";
+  version = "3.0.1";
 
   outputs = [
     "out"
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "GramEditor";
     repo = "gram";
     tag = finalAttrs.version;
-    hash = "sha256-7FzAvC/JMMIFcuTGkL2Ju644UAIsneOMhiDUFnQske4=";
+    hash = "sha256-B3RmY1h0+D0aawNzevdt9f+gzozckjInhoz+t9taf8o=";
   };
 
   postPatch = ''
@@ -54,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
   '';
 
-  cargoHash = "sha256-feESY8ALSG3xa906HBc4pOKGerQ1jF7VUxzvUcsZbrY=";
+  cargoHash = "sha256-pK0rUuPtWejXitbDQqh9fvdEv3aza0ZEg1XWnCmY4eE=";
 
   __structuredAttrs = true;
 
@@ -66,12 +65,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    rustPlatform.bindgenHook
   ];
 
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    libgit2
     openssl
     sqlite
     zlib
@@ -89,16 +88,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
 
-  # Required on darwin because we don't have access to the proprietary Metal shader compiler.
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
-
   env = {
     ALLOW_MISSING_LICENSES = true;
     OPENSSL_NO_VENDOR = true;
-    LIBGIT2_NO_VENDOR = true;
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
     RELEASE_VERSION = finalAttrs.version;
+    GRAM_UPDATE_EXPLANATION = "Updates are handled by nixpkgs";
   };
 
   preBuild = ''

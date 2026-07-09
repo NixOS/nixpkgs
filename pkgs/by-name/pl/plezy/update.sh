@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq nix nix-prefetch-git python3 yq-go flutter338 git
+#! nix-shell -I nixpkgs=./. -i bash -p curl gnused jq nix nix-prefetch-git python3 yq-go flutter344 git
 
 set -eou pipefail
 
@@ -19,11 +19,11 @@ echo "updating plezy: $currentVersion -> $latestVersion"
 sed -i "s/version = \".*\"/version = \"${latestVersion}\"/" "$ROOT/package.nix"
 
 GIT_SRC_URL="https://github.com/edde746/plezy/archive/refs/tags/${latestVersion}.tar.gz"
-GIT_SRC_SHA=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(nix-prefetch-url --unpack "$GIT_SRC_URL")")
+GIT_SRC_SHA=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$(nix-prefetch-url --unpack "$GIT_SRC_URL")")
 sed -i "/fetchFromGitHub/,/hash/{s|hash = \".*\"|hash = \"${GIT_SRC_SHA}\"|}" "$ROOT/package.nix"
 
 DMG_URL="https://github.com/edde746/plezy/releases/download/${latestVersion}/plezy-macos.dmg"
-DMG_SHA=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(nix-prefetch-url "$DMG_URL")")
+DMG_SHA=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$(nix-prefetch-url "$DMG_URL")")
 sed -i "/plezy-macos.dmg/,/hash/{s|hash = \".*\"|hash = \"${DMG_SHA}\"|}" "$ROOT/package.nix"
 
 # Only here to handle the patched pubsec.yaml

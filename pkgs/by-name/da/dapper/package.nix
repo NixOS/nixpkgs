@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "rancher";
+    owner = "rancher-archives";
     repo = "dapper";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Docker build wrapper";
     mainProgram = "dapper";
-    homepage = "https://github.com/rancher/dapper";
+    homepage = "https://github.com/rancher-archives/dapper";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kuznero ];

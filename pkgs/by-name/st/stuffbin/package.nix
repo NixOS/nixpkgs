@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     description = "Compress and embed static files and assets into Go binaries and access them with a virtual file system in production";
     homepage = "https://github.com/knadh/stuffbin";
     changelog = "https://github.com/knadh/stuffbin/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
     license = lib.licenses.mit;
   };
 })

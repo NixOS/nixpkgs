@@ -234,6 +234,9 @@ stdenv.mkDerivation (finalAttrs: {
       else
         ./8/patches/swing-use-gtk-jdk8.patch
     )
+  ]
+  ++ lib.optionals (featureVersion == "11") [
+    ./11/patches/fix-oopdesc-ptr-alignment-ub.patch
   ];
 
   strictDeps = true;

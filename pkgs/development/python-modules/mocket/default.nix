@@ -11,6 +11,7 @@
   decorator,
   h11,
   puremagic,
+  typing-extensions,
   urllib3,
 
   # optional-dependencies
@@ -36,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.14.1";
+  version = "3.14.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MLlh0CRtlUsg+Bvvdvedzk0RVLCm+zzt8TWie6yHTkU=";
+    hash = "sha256-n8SQbK45B+mijEbnc/Otq+8NX0CIxuOQ72FEAhnOCac=";
   };
 
   build-system = [ hatchling ];
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     decorator
     h11
     puremagic
+    typing-extensions
     urllib3
   ];
 
@@ -88,6 +90,8 @@ buildPythonPackage rec {
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
+    # redis-py response mismatch
+    "test_hgetall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287

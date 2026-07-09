@@ -9,7 +9,10 @@
 
   containers.machine = {
     services.postfix.enable = true;
-    services.postfix-tlspol.enable = true;
+    services.postfix-tlspol = {
+      enable = true;
+      settings.server.metrics-address = "127.0.0.1:8642";
+    };
 
     services.dnsmasq = {
       enable = true;
@@ -26,13 +29,19 @@
     with subtest("Interact with the service"):
       machine.succeed("postfix-tlspol -purge")
 
-      response = json.loads((machine.succeed("postfix-tlspol -query localhost")))
+      response = machine.log(machine.succeed("postfix-tlspol -query localhost"))
+      response = json.loads(machine.succeed("postfix-tlspol -query localhost"))
       machine.log(json.dumps(response, indent=2))
 
       assert response["dane"]["policy"] == "", f"Unexpected DANE policy for localhost: {response["dane"]["policy"]}"
       assert response["mta-sts"]["policy"] == "TEMP", f"Unexpected MTA-STS policy for localhost: {response["mta-sts"]["policy"]}"
 
-    machine.log(machine.execute("systemd-analyze security postfix-tlspol.service | grep -v ✓")[1])
+    with subtest("Metrics listener"):
+      machine.log(machine.succeed("curl --silent --fail http://localhost:8642/metrics | grep --quiet postfix_tlspol_queries_total"))
+
+
+    with subtest("Hardening"):
+      machine.log(machine.execute("systemd-analyze security postfix-tlspol.service | grep -v ✓")[1])
   '';
 
 }

@@ -10,12 +10,12 @@ buildPythonPackage (finalAttrs: {
   pname = "libusbsio";
   # If the versions come back into sync switch back to inheriting from c lib
   # inherit (libusbsio) version;
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-zs4LXyTQzrUrepp4ZEI+0rEq5F1BAXFmGaE85KLIqwA=";
+    hash = "sha256-ZccYDX93F2cNjDwyDxo/RdXHO7E8ZXZ5D8GngY44AlQ=";
   };
 
   # The source includes both the python module directly and also prebuilt binaries

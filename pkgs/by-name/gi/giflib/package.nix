@@ -3,21 +3,33 @@
   lib,
   fetchurl,
   fixDarwinDylibNames,
+
+  # for passthru.tests
+  SDL2_image,
+  SDL_image,
+  gdal,
+  imlib2,
+  leptonica,
+  libjxl,
+  libwebp,
+  openimageio,
+  openjdk,
   pkgsStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giflib";
-  version = "5.2.2";
+  version = "6.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/giflib/giflib-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vn/70FfK3r4qoURUL9kMaDjGoIO16KkEi47jtmsp1fs=";
+    hash = "sha256-tltmuZ8EJLk1JfmHOG8i/F77naK/ySrUpTIkmq/7qw4=";
   };
 
   patches = [
-    ./CVE-2021-40633.patch
-    ./CVE-2025-31344.patch
+    # Fix missing symbol error on Darwin when linking libutil.dylib.
+    # Based on discussion in https://sourceforge.net/p/giflib/bugs/189/.
+    ./0001-Suppress-undefined-symbol-error-on-Darwin.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
@@ -54,6 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     static = pkgsStatic.giflib;
+    inherit
+      SDL2_image
+      SDL_image
+      gdal
+      imlib2
+      leptonica
+      libjxl
+      openimageio
+      openjdk
+      ;
   };
 
   meta = {

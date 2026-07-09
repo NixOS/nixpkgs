@@ -214,7 +214,6 @@ let
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         chvp
-        lucasew
       ];
       platforms = lib.platforms.linux;
     };

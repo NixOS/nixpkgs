@@ -1,6 +1,7 @@
 {
   lib,
   mkCoqDerivation,
+  dune,
   coq,
   stdlib,
   version ? null,
@@ -17,7 +18,7 @@ let
       (case (isEq "8.20") "8.20.0")
     ] null;
   release = {
-    "8.20.0".sha256 = "sha256-jITxQT1jLyZvWCGPnmK8i3IrwsZwMPOV0aBe9r22TIQ=";
+    "8.20.0".hash = "sha256-jITxQT1jLyZvWCGPnmK8i3IrwsZwMPOV0aBe9r22TIQ=";
   };
   releaseRev = v: "v${v}";
 
@@ -38,7 +39,7 @@ let
         else
           "A two-level approach to prove tautologies using Stålmarck's algorithm in Coq.";
     in
-    mkCoqDerivation {
+    mkCoqDerivation.override { dune = dune.override { version = "3.21.1"; }; } {
       inherit
         version
         pname

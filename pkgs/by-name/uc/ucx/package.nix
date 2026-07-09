@@ -42,14 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucx";
-  version = "1.20.1";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CD8a7CoKAj5DuRa9C+Eef54qGcH3F0uNBXRlO0hneI4=";
+    # Otherwise compilation fails with:
+    #   fatal error: gpunetio/common/doca_gpunetio_verbs_def.h: No such file or directory
+    fetchSubmodules = true;
+    hash = "sha256-Td6L5wXDadIbHfk251bj6k9J3kIjqCYVx5lDso/u76M=";
   };
+
+  postPatch = ''
+    patchShebangs config/nvcc_wrap.sh
+  '';
 
   outputs = [
     "out"

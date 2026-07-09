@@ -11,7 +11,7 @@
   pydocstyle,
   pyflakes,
   vulture,
-  setuptools,
+  setuptools_80,
   pylint,
   pytestCheckHook,
 }:
@@ -43,7 +43,7 @@ let
       pycodestyle
       pydocstyle
       pyflakes
-      setuptools
+      setuptools_80
       vulture
     ];
 

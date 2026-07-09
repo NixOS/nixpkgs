@@ -45,6 +45,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };

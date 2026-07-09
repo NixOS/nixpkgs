@@ -174,6 +174,59 @@ To make sure that your package does not add extra manual effort when upgrading M
 </plugin>
 ```
 
+## Maven 4 {#maven-4}
+
+Alongside the default `maven` package (the latest Maven 3 release), nixpkgs ships `maven_4`, which packages the [Maven 4](https://maven.apache.org/whatsnewinmaven4.html) release line.
+
+`maven_4` is a standalone derivation and can be used as a drop-in replacement wherever `maven` is used, for example to build a project with the latest Maven 4:
+
+```nix
+{
+  lib,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  maven_4,
+}:
+
+maven_4.buildMavenPackage (finalAttrs: {
+  pname = "jd-cli";
+  version = "1.2.1";
+
+  src = fetchFromGitHub {
+    owner = "intoolswetrust";
+    repo = "jd-cli";
+    tag = "jd-cli-${finalAttrs.version}";
+    hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
+  };
+
+  mvnHash = "";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/jd-cli
+    install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
+
+    makeWrapper ${jre}/bin/java $out/bin/jd-cli \
+      --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Simple command line wrapper around JD Core Java Decompiler project";
+    homepage = "https://github.com/intoolswetrust/jd-cli";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ majiir ];
+  };
+})
+```
+
+`maven_4` exposes the same `buildMavenPackage` helper as `maven` (see [](#maven-buildmavenpackage)), so all of the patterns documented above apply equally. Note that the Maven dependencies resolved by Maven 4 differ from those resolved by Maven 3, so `mvnHash` must be recomputed when switching between the two.
+
 ## Manually using `mvn2nix` {#maven-mvn2nix}
 ::: {.warning}
 This way is no longer recommended; see [](#maven-buildmavenpackage) for the simpler and preferred way.
@@ -288,7 +341,7 @@ The double invocation is a _simple_ way to get around the problem that `nix-buil
 
 It treats the entire Maven repository as a single source to be downloaded, relying on Maven's dependency resolution to satisfy the output hash. This is similar to fetchers like `fetchgit`, except it has to run a Maven build to determine what to download.
 
-The first step will be to build the Maven project as a fixed-output derivation in order to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
+The first step will be to build the Maven project as a fixed-output derivation to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
 
 ::: {.note}
 Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
@@ -416,7 +469,7 @@ The previous example builds a `jar` file but that's not a file one can run.
 
 You need to use it with `java -jar $out/share/java/output.jar` and make sure to provide the required dependencies on the classpath.
 
-The following explains how to use `makeWrapper` in order to make the derivation produce an executable that will run the JAR file you created.
+The following explains how to use `makeWrapper` to make the derivation produce an executable that will run the JAR file you created.
 
 We will use the same repository we built above (either _double invocation_ or _buildMaven_) to setup a CLASSPATH for our JAR.
 

@@ -9,16 +9,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "miniflux";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = finalAttrs.version;
-    hash = "sha256-cUCekYGFzvqdLql2Z0YoJ4Ug1bOYFMpvhBinD3sOaB0=";
+    hash = "sha256-gfudc11dJKzRtsT2gEazzgGFoUVaZNqgzdIATuGH29U=";
   };
 
-  vendorHash = "sha256-aTRc1SspNET3nki7dji0EKIBwSbplsNkKZWud8XJTNA=";
+  vendorHash = "sha256-JjZfZJyml6/ANilLNAKaounUJ35TWhj/wVWWiGEhxps=";
 
   nativeBuildInputs = [ installShellFiles ];
 

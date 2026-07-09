@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     i3ipc
     psutil
     tenacity
-    xlib
+    python-xlib
   ];
 
   installPhase = ''

@@ -15,7 +15,7 @@
   pango,
   pixman,
   pkg-config,
-  pnpm_10,
+  pnpm_10_34_0,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -24,7 +24,7 @@
 }:
 
 let
-  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm = pnpm_10_34_0.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";

@@ -6,6 +6,7 @@
 }:
 
 {
+  config,
   fetchurl,
   stdenv,
   lib,
@@ -22,7 +23,6 @@
   writeShellScript,
   common-updater-scripts,
   curl,
-  openssl_1_1,
   openssl_3_5,
   bzip2,
   sqlite,
@@ -33,7 +33,6 @@ let
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
   binaries = [
     "sublime_text"
-    "plugin_host-3.3"
     "plugin_host-3.${if lib.versionAtLeast buildVersion "4205" then "14" else "8"}"
     crashHandlerBinary
   ];
@@ -55,7 +54,6 @@ let
     libxtst
     glib
     libglvnd
-    openssl_1_1
     gtk3
     cairo
     pango
@@ -87,6 +85,10 @@ let
 
     buildPhase = ''
       runHook preBuild
+
+      # Remove old plugin host because it depends on EOL openssl 1.1
+      rm plugin_host-3.3
+      echo '{"disable_plugin_host_3.3": true}' > Packages/Preferences.sublime-settings
 
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
@@ -221,11 +223,18 @@ stdenv.mkDerivation (finalAttrs: {
       demin-dmitriy
       zimbatm
     ];
+    mainProgram = "subl";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
+    problems = {
+      removal.message = "We have removed Python 3.3 package support ahead of upstream schedule but if you do not use any old packages, this should just work.";
+    }
+    // lib.optionalAttrs (lib.versionOlder buildVersion "4205") {
+      broken.message = "Packages, including core ones, do not run without plug-in host depending on insecure OpenSSL.";
+    };
   };
 })

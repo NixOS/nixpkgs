@@ -2198,6 +2198,7 @@ broken-packages:
   - gi-gtksheet # failure in job https://hydra.nixos.org/build/233211386 at 2023-09-02
   - gi-ibus # failure in job https://hydra.nixos.org/build/233220272 at 2023-09-02
   - gi-keybinder # failure in job https://hydra.nixos.org/build/265273447 at 2024-07-14
+  - gi-soup2 # depends on libsoup 2.4, which has been dropped from Nixpkgs
   - gi-webkit # failure in job https://hydra.nixos.org/build/307610609 at 2025-09-19
   - gi-webkit2webextension # failure in job https://hydra.nixos.org/build/254424710 at 2024-03-31
   - gi-webkitwebprocessextension # failure in job https://hydra.nixos.org/build/233227647 at 2023-09-02
@@ -5952,6 +5953,7 @@ broken-packages:
   - speculation # failure in job https://hydra.nixos.org/build/233211559 at 2023-09-02
   - sphinx-cli # failure in job https://hydra.nixos.org/build/295097187 at 2025-04-22
   - sphinxesc # failure in job https://hydra.nixos.org/build/233194825 at 2023-09-02
+  - spike # depends on libsoup 2.4, which has been dropped from Nixpkgs
   - spir-v # failure in job https://hydra.nixos.org/build/233191427 at 2023-09-02
   - spiros # failure in job https://hydra.nixos.org/build/233249615 at 2023-09-02
   - splay # failure in job https://hydra.nixos.org/build/233217055 at 2023-09-02

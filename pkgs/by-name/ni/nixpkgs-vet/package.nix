@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-vet";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "nixpkgs-vet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GJhN77zLtV2fUEL5wxjcybtDqUa6ODg39d3UxuOrapo=";
+    hash = "sha256-+A4KmOIOC7glVOdW+jxSwQnrBHVej4QqwxTsOQin07U=";
   };
 
-  cargoHash = "sha256-zTh18jec0trJP4q3rYheHZz01lbkhpDaotuPbvgzMpo=";
+  cargoHash = "sha256-bWmI79H6yQjxoWxcZ7GgqbxIc8fCLB1I4g9WF2IejVI=";
 
   doCheck = false;
 
@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       philiptaron
       willbush
     ];
+    teams = [ lib.teams.ci ];
   };
 })

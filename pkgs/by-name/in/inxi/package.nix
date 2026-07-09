@@ -109,7 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/smxi/inxi/src/tag/${finalAttrs.version}/inxi.changelog";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     mainProgram = "inxi";
   };
 })

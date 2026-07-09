@@ -1,11 +1,11 @@
 {
   lib,
-  python312Packages,
+  python3Packages,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-python312Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "ark-pixel-font";
   version = "2025.08.24";
   pyproject = false;
@@ -17,7 +17,7 @@ python312Packages.buildPythonPackage rec {
     hash = "sha256-kxct994UmZhJBMlXZmayN24eiKqeG9T7GdyfsjBYpn0=";
   };
 
-  dependencies = with python312Packages; [
+  dependencies = with python3Packages; [
     pixel-font-builder
     pixel-font-knife
     unidata-blocks

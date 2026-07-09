@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
+  fetchpatch,
 
   updateAutotoolsGnuConfigScriptsHook,
   perl,
-
+  python3,
   libiconv,
   zlib,
   popt,
@@ -29,23 +29,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.4.1";
+  version = "3.4.4";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
+    hash = "sha256-vYjPgvplPaMjFPsikTZAfFyQ+A0XWNj0sJF2eHfY+pY=";
   };
 
   patches = [
-    # See: <https://github.com/RsyncProject/rsync/pull/790>
-    ./fix-tests-in-darwin-sandbox.patch
-    # fix compilation with gcc15
+    # Fixes test failure on darwin
     (fetchpatch {
-      url = "https://github.com/RsyncProject/rsync/commit/a4b926dcdce96b0f2cc0dc7744e95747b233500a.patch";
-      hash = "sha256-UiEQJ+p2gtIDYNJqnxx4qKgItKIZzCpkHnvsgoxBmSE=";
+      url = "https://github.com/RsyncProject/rsync/commit/e1c5f0e93a75dd45f32f3b92ba221ef158ac2e5f.patch";
+      hash = "sha256-pg65K9BCTq/WvS5icK6KT28ARccFKedp2445wLYdRsE=";
+      excludes = [
+        ".github/workflows/cygwin-build.yml"
+      ];
     })
   ];
+
+  preBuild = ''
+    patchShebangs ./runtests.py
+  '';
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
@@ -80,11 +85,28 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
     # fix `multiversioning needs 'ifunc' which is not supported on this target` error
     "--disable-roll-simd"
+  ]
+  # Linux can hard-link symlinks; configure defaults this check to "no" when
+  # cross-compiling (e.g. pkgsStatic) because it cannot run the probe.
+  # That leaves hardlink_symlinks false while itemize still reports identical
+  # --copy-dest/--link-dest symlinks with blank attribute flags, so
+  # testsuite/itemize.test fails (https://github.com/NixOS/nixpkgs/issues/537437).
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform != stdenv.buildPlatform) [
+    "rsync_cv_can_hardlink_symlink=yes"
   ];
 
   enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  nativeCheckInputs = [
+    python3
+  ];
+
+  # Test fails when built in a chroot store
+  preCheck = ''
+    rm testsuite/chgrp.test
+  '';
 
   doCheck = true;
 

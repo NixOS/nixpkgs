@@ -6,7 +6,7 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -22,7 +22,7 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   platformIds = {
     "x86_64-linux" = "linux";
@@ -35,20 +35,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.6.5";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Rz8g03JHQ+52lOd92413ArE4LixioCFNSG7ytduxsA=";
+    hash = "sha256-K31h2noDpTn7vCXj16K2dxRPww5z+HC/nA4Gn5MAVms=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-WXlzUtiaphaSngWd6aXQuOHiBb3a3bCNgIHypMP4YXo=";
+    vendorHash = "sha256-fZLVqrWTWUHo6BhixB6+krXaM7WCiZpusHA8T2SicgQ=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -73,12 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [ "fts5" ];
   };
 
-  # this should contain a 'packages' key, but it doesn't...
-  # we can remove it because it's not needed to build
-  postPatch = ''
-    rm pnpm-workspace.yaml
-  '';
-
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
@@ -99,11 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      postPatch
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-M2Fdie0XK2Pck/fP7Djxb7XNAQXpJO2i2kSJrDj1G0E=";
+    fetcherVersion = 4;
+    hash = "sha256-1QIGx0Zm6v4FIR1EYgXQzmBMZBa9Bi24vouT1K6v9EQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";

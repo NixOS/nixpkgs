@@ -1,6 +1,7 @@
 {
   aiohttp,
   alive-progress,
+  ast-serialize,
   build,
   clang-tools,
   click,
@@ -196,6 +197,7 @@ stdenv.mkDerivation rec {
       dependencies = [
         aiohttp
         alive-progress
+        ast-serialize
         colorama
         coloredlogs
         click

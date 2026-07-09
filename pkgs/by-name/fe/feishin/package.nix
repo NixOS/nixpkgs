@@ -8,7 +8,7 @@
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10_29_2,
+  pnpm_10,
   darwin,
   actool,
   copyDesktopItems,
@@ -42,7 +42,7 @@ buildNpmPackage {
       version
       src
       ;
-    pnpm = pnpm_10_29_2;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
     hash = "sha256-zNOGJ24G0xcgsGK4DmbBm7d1PHTp7IJS+RTALGRtfDg=";
   };
@@ -50,7 +50,7 @@ buildNpmPackage {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm_10_29_2
+    pnpm_10
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tofu-ls";
-  version = "0.5.0";
+  version = "0.5.1";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "opentofu";
     repo = "tofu-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v6oqCRsiTAOGqhVZD6Zwhq0/bSl55PhH9+aEYxjlQcA=";
+    hash = "sha256-lmTvFtgXV8u4GNR3Bof+bfLMoq+luFdT1YeQq7ooLg8=";
   };
 
-  vendorHash = "sha256-vugyEaOD7diOiymo9nDEfIez++mPYWq1qVj3a9wCqoc=";
+  vendorHash = "sha256-+yG4Tz29NJ3m2is0ERMqW8vC/HJv4uudyDg9KSA/z/o=";
 
   ldflags = [
     "-s"

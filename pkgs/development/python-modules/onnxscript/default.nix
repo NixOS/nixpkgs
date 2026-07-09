@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnxscript";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     owner = "microsoft";
     repo = "onnxscript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PktzMtG8GpeRy3XUz8MFbOSISVzAIubpeOS0ESbVvrI=";
+    hash = "sha256-l6Nsnbg7LG/0Z9y1EX5BPP3sFdY/EZwRFFHOrP4mwdw=";
   };
 
   env = {

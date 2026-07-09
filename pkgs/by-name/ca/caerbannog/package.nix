@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   propagatedBuildInputs = with python3.pkgs; [
     anytree
     fuzzyfinder
-    gpgme
+    gpg
     pygobject3
   ];
 

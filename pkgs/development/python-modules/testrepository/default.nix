@@ -5,7 +5,7 @@
   testtools,
   testresources,
   pbr,
-  subunit,
+  python-subunit,
   fixtures,
   python,
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [ pbr ];
   propagatedBuildInputs = [
     fixtures
-    subunit
+    python-subunit
     testtools
   ];
 

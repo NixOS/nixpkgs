@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
   rustPlatform,
   cargo,
@@ -27,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
-    fetcherVersion = 3;
-    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
+    fetcherVersion = 4;
+    hash = "sha256-HK3AetwGqFq/dhxX+aWgUww6eLCeQEkZIVsmmnYqdmM=";
   };
 
   cargoRoot = "deps/extension";
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     rustPlatform.cargoSetupHook
     cargo
@@ -53,15 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
-    pnpm run build
 
-    runHook postBuild
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
   '';
+
+  pnpmBuildScript = "build";
 
   installPhase = ''
     runHook preInstall

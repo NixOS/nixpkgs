@@ -17,7 +17,7 @@ let
     field:
     with builtins;
     let
-      matches = match ''^.*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+      matches = match ''^[^#\r\n]*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
     in
     if matches != null then head matches else null;
   matchPlatform = getConfigField "CONFIG_BOARD_DIRECTORY";

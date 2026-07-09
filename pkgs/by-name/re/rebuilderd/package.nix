@@ -7,6 +7,7 @@
   installShellFiles,
   scdoc,
   bzip2,
+  cacert,
   openssl,
   sqlite,
   xz,
@@ -20,13 +21,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.25.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BuL9s3ewZ1NvR9GG51TVrAncB0PR78Wuw8by+loSP8Q=";
+    hash = "sha256-f+WfmkV0P4VfaOXxX3t5t9g/uJYCh2A587HEq9OK5QU=";
   };
 
   postPatch = ''
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  cargoHash = "sha256-4M5uWgksYsV8PGe0zn9ADv06q3Ga/GVoQ8HjS7GCnwo=";
+  cargoHash = "sha256-se5u7+SF3fW5WqdUA3qmztUw5oPa0YXbgOp9GIVOQu0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -79,6 +80,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         installManPage "$page"
       done
     '';
+
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert.out}/etc/ssl/certs/ca-bundle.crt
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [
     # Failing tests

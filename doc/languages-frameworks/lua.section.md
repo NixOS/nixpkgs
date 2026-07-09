@@ -162,6 +162,14 @@ the package `luarocks-packages-updater`:
 nix-shell -p luarocks-packages-updater --run luarocks-packages-updater
 ```
 
+To add a new package without updating all packages, run
+
+```sh
+
+nix-shell -p luarocks-packages-updater
+luarocks-packages-updater add <package-name>
+```
+
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
 These customizations go in [pkgs/development/lua-modules/overrides.nix](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/lua-modules/overrides.nix).

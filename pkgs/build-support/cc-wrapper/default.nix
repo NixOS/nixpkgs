@@ -26,6 +26,8 @@
   nixSupport ? { },
   isGNU ? false,
   isClang ? cc.isClang or false,
+  isFlang ? cc.isFlang or false,
+  isAlireGNAT ? false,
   isZig ? cc.isZig or false,
   isArocc ? cc.isArocc or false,
   isCcache ? cc.isCcache or false,
@@ -314,6 +316,17 @@ let
   tune =
     if targetPlatform ? gcc.tune then findBestTuneApproximation targetPlatform.gcc.tune else null;
 
+  tlsDialect =
+    if
+      # Support status on non-Linux systems is a bit unclear.
+      targetPlatform.isLinux
+      # Support added in https://github.com/llvm/llvm-project/commit/36b4a9ccd9f7e04010476e6b2a311f2052a4ac20 (19.1.0)
+      && (isClang -> versionAtLeast ccVersion "19.1")
+    then
+      (if targetPlatform.isx86 then "gnu2" else null)
+    else
+      null;
+
   # Machine flags. These are necessary to support
 
   # TODO: We should make a way to support miscellaneous machine
@@ -351,7 +364,13 @@ let
         # TODO: clang on powerpcspe also needs a condition: https://github.com/llvm/llvm-project/issues/71356
         # https://releases.llvm.org/18.1.6/tools/clang/docs/ReleaseNotes.html#loongarch-support
         ((targetPlatform.isLoongArch64 && isClang) -> versionAtLeast ccVersion "18.1")
-    ) "-mcmodel=${targetPlatform.gcc.cmodel}";
+    ) "-mcmodel=${targetPlatform.gcc.cmodel}"
+    # Enable TLSDESC. This needs to be supported by the libc and bintools.
+    # See: https://maskray.me/blog/2021-02-14-all-about-thread-local-storage
+    # Aarch64 uses TLSDESC by default and the option is completely ignored (at least on LLVM).
+    # TODO: Enable by default in GCC via --with-tls since https://gcc.gnu.org/cgit/gcc/commit/?id=96a291c4bb0b8a00b0a125e6a60f60072ffe53a7 (GCC 16).
+    # No equivalent build-time option for LLVM yet.
+    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
@@ -387,7 +406,9 @@ let
   #
   # TODO: Drop `mangle-NIX_STORE-in-__FILE__.patch` from GCC and make
   # this unconditional once the upstream bug is fixed.
-  useMacroPrefixMap = !isGNU;
+  useMacroPrefixMap = !isGNU && !isFlang;
+  systemIncludeFlag = if isFlang || isArocc then "-I" else "-idirafter";
+  fortifyIncludeFlag = if isFlang then "-I" else "-isystem";
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -574,10 +595,18 @@ stdenvNoCC.mkDerivation {
   ''
 
   + optionalString cc.langFortran or false ''
-    wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
-    ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
-    ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
-    export named_fc=${targetPrefix}gfortran
+    if [ -e $ccPath/${targetPrefix}gfortran ]; then
+      wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
+      export named_fc=${targetPrefix}gfortran
+    elif [ -e $ccPath/${targetPrefix}flang ]; then
+      wrap ${targetPrefix}flang $wrapper $ccPath/${targetPrefix}flang
+      export named_fc=${targetPrefix}flang
+    elif [ -e $ccPath/flang ]; then
+      wrap ${targetPrefix}flang $wrapper $ccPath/flang
+      export named_fc=${targetPrefix}flang
+    fi
   ''
 
   + optionalString cc.langGo or false ''
@@ -709,13 +738,11 @@ stdenvNoCC.mkDerivation {
         touch "$out/nix-support/libc-cflags"
         touch "$out/nix-support/libc-ldflags"
       ''
-      + optionalString (!isArocc) ''
+      + optionalString (!isArocc && !(isAlireGNAT && targetPlatform.isDarwin)) ''
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
       + ''
-        include "-${
-          if isArocc then "I" else "idirafter"
-        }" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
       ''
       + optionalString isGNU ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
@@ -723,9 +750,9 @@ stdenvNoCC.mkDerivation {
         done
       ''
       + optionalString (libc.w32api or null != null) ''
-        echo '-idirafter ${lib.getDev libc.w32api}${
+        include "${systemIncludeFlag}" "${lib.getDev libc.w32api}${
           libc.incdir or "/include/w32api"
-        }' >> $out/nix-support/libc-cflags
+        }" >> $out/nix-support/libc-cflags
       ''
       + ''
 
@@ -740,7 +767,7 @@ stdenvNoCC.mkDerivation {
       # like option that forces the libc headers before all -idirafter,
       # hence -isystem here.
       + optionalString includeFortifyHeaders' ''
-        include -isystem "${fortify-headers}/include" >> $out/nix-support/libc-cflags
+        include "${fortifyIncludeFlag}" "${fortify-headers}/include" >> $out/nix-support/libc-cflags
       ''
     )
 
@@ -761,7 +788,7 @@ stdenvNoCC.mkDerivation {
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
-    + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
+    + optionalString (libcxx == null && isClang && useGccForLibs && (cc.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
         include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
@@ -786,7 +813,9 @@ stdenvNoCC.mkDerivation {
     # ${cc_solib}/lib64 (even though it does actually search there...)..
     # This confuses libtool.  So add it to the compiler tool search
     # path explicitly.
-    + optionalString (!nativeTools && !isArocc) ''
+    # Injecting CFlags and LDFlags causes duplicate rpath at linking
+    # stage for Alire GNAT. Skip adding flags here.
+    + optionalString (!nativeTools && !isArocc && !isAlireGNAT) ''
       ccLDFlags=()
       ccCFlags=()
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
@@ -801,7 +830,6 @@ stdenvNoCC.mkDerivation {
       touch "$out/nix-support/gnat-cflags"
       touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
-      ccCFlags+=("-B$basePath" "-I$basePath/adainclude")
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
       echo "$gnatCFlags" >> $out/nix-support/gnat-cflags
@@ -828,6 +856,7 @@ stdenvNoCC.mkDerivation {
       optionalString
         (
           (cc.isClang or false)
+          && !isFlang
           && !(cc.isROCm or false)
           && !targetPlatform.isDarwin
           && !targetPlatform.isAndroid
@@ -862,7 +891,8 @@ stdenvNoCC.mkDerivation {
       let
         enable_fp = !targetPlatform.isx86_32 && !targetPlatform.isS390;
         enable_leaf_fp =
-          enable_fp
+          !isFlang
+          && enable_fp
           && (
             targetPlatform.isx86_64
             || targetPlatform.isAarch64
@@ -928,7 +958,7 @@ stdenvNoCC.mkDerivation {
     # well with multi line flags, so make the flags single line again
     + ''
       for flags in "$out/nix-support"/*flags*; do
-        substituteInPlace "$flags" --replace $'\n' ' '
+        substituteInPlace "$flags" --replace-quiet $'\n' ' '
       done
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
@@ -974,6 +1004,7 @@ stdenvNoCC.mkDerivation {
 
   env = {
     inherit isClang;
+    inherit isFlang;
 
     # for substitution in utils.bash
     # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence

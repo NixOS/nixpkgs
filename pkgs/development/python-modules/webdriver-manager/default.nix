@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "webdriver-manager";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MqLM1mSfoirBaJYKkikNuS2XPWPTM2MQNgEwhtp+2ek=";
+    hash = "sha256-UQeiBtql0+IEG0iY0XoY+iqKqMB9Wmt+NxH7coxrJCw=";
   };
 
   __darwinAllowLocalNetworking = true;

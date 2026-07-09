@@ -24,7 +24,7 @@ maven.buildMavenPackage (finalAttrs: {
   };
 
   mvnParameters = "-f h2/pom.xml";
-  mvnHash = "sha256-ue1X0fswi3C9uqJ/cVCf/qd2XStMve1k1qA+IsREOGk=";
+  mvnHash = "sha256-j4Uso/bl4UhQbJc7Wre0btgC+9RKvuCHkn9euQFuTxk=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -55,12 +55,14 @@ let
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
+      mathcomp-real-closed = callPackage ../development/rocq-modules/mathcomp-real-closed { };
       mathcomp-reals = self.mathcomp-analysis.reals;
       mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       micromega-plugin = callPackage ../development/rocq-modules/micromega-plugin { };
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
+      rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
       stdpp = callPackage ../development/rocq-modules/stdpp { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };

@@ -3,7 +3,7 @@
   fetchurl,
   lib,
   makeWrapper,
-  electron_40, # see https://github.com/NixOS/nixpkgs/pull/521495
+  electron,
   makeDesktopItem,
   imagemagick,
   asar,
@@ -102,7 +102,7 @@ let
         --replace-fail "supportFetchAPI: true," "supportFetchAPI: true, corsEnabled: true,"
       asar pack app-src resources/app.asar
 
-      makeWrapper ${electron_40}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}

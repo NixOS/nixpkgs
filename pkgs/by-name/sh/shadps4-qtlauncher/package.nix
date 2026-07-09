@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
 
   cmake,
@@ -13,15 +13,15 @@
 
   shadps4,
 }:
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4-qtlauncher";
-  version = "224";
+  version = "0-unstable-2026-06-07";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadps4-qtlauncher";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lRZH9fokUKN/n3m/ZkTsRHwkwZZ04buvqBMXYLrqqLE=";
+    rev = "eadffe744d6f2bb7b21aedeef2cc0f66cdffd6ed";
+    hash = "sha256-tlCP8Cu3UVoclaQ0cIVr89q7wwgkzFVwhMSqpVB6FnM=";
 
     postCheckout = ''
       cd "$out"
@@ -31,7 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       git -C externals submodule update --init --recursive \
         volk \
-        json
+        json \
+        openal-soft \
+        spdlog
     '';
   };
 

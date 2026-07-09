@@ -83,7 +83,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0jfngqmRQwIVGHM72KUnp/TlR2js+QLRpsX6abiv84=";
+    hash = "sha256-xnQLwOofHwdRvrOMNJpAEiOT7BEfxoPmrcxw2H3CTvI=";
   };
 
   postPatch = ''

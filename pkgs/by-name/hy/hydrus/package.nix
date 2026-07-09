@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hydrus";
-  version = "668";
+  version = "675";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F6sQ2AyAIE7z7GH942sgzVbufA5GHEazoG+4YN8cFxQ=";
+    hash = "sha256-c/jt7CnGCbyTEtR/OW0IkRp9OeUnypfuS+yUZR6Nshs=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
-    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
+    mv hydrus static $out/${python3Packages.python.sitePackages}
     # Fix random files being marked with execute permissions
     chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
     # Build docs

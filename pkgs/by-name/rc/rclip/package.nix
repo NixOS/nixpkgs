@@ -6,58 +6,55 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "2.1.6";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-95OiG3I9S9eJHMYkRd9Y52XnCROFV98fvmUs4SRBF4s=";
+    hash = "sha256-LiqhJNt6wSSmwJ6kQJQpIHXYjdQI9eR2rrqkYPZknrQ=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
+  '';
+
   build-system = with python3Packages; [
-    poetry-core
+    uv-build
   ];
 
   dependencies = with python3Packages; [
+    ftfy
+    huggingface-hub
     numpy
-    open-clip-torch
+    onnxruntime
     pillow
     pillow-heif
+    regex
     requests
-    torch
-    torchvision
     tqdm
     rawpy
   ];
 
   pythonRelaxDeps = [
     "numpy"
-    "open_clip_torch"
     "pillow"
     "rawpy"
-    "torch"
-    "torchvision"
   ];
 
   pythonImportsCheck = [ "rclip" ];
 
   nativeCheckInputs = [
     versionCheckHook
+    python3Packages.jinja2
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
 
   disabledTestPaths = [
     # requires network
     "tests/e2e/test_rclip.py"
-  ];
-
-  disabledTests = [
-    # requires network
-    "test_text_model_produces_the_same_vector_as_the_main_model"
-    "test_loads_text_model_when_text_processing_only_requested_and_checkpoint_exists"
-    "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
   ];
 
   meta = {

@@ -20,13 +20,13 @@
   withGpu ? true,
 }:
 let
-  version = "1.18.0";
+  version = "1.19.3";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "libkrun";
     tag = "v${version}";
-    hash = "sha256-R7q52ZwiL9JsGofLPhXVTk/eH6bEob3DoZe21PHSBrU=";
+    hash = "sha256-mDko5fRcjnb3BI6cINr4gm6DiCghUlkIn1ZiQeHxyaE=";
   };
 
   virglrenderer = stdenv.mkDerivation (finalAttrs: {
@@ -77,7 +77,7 @@ let
 
     buildPhase = ''
       runHook preBuild
-      cd init
+      cd src/init_blob/init
       $CC -O2 -static -Wall -o init init.c dhcp.c
       runHook postBuild
     '';
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-3IAEWF+XGeKnb61SUpuVHMPiX6q0FgQFN4/eOBCH80c=";
+    hash = "sha256-PE8xO8T5TFuGnL+95Y1BAz9EdJVUrxgVtVssAgStW+8=";
   };
 
   nativeBuildInputs = [

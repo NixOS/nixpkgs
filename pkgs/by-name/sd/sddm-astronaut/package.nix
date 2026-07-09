@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   kdePackages,
   formats,
   nix-update-script,
@@ -15,16 +16,18 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "sddm-astronaut";
-  version = "0-unstable-2026-05-12";
+  version = "0-unstable-2026-07-06";
 
   src = fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
-    rev = "8c85b9c8d00ce70e39320f77071dca2040544f19";
-    hash = "sha256-+Z1igZ4BxRqXr/lxfHEr3I4n/sX8+AIwUr6JFO9yoWs=";
+    rev = "292c87b770ff9eab1903dd2c6ddff466faf87fb0";
+    hash = "sha256-O/EMJc1j2TRF3W+vuurzA9j5eG1OXSjGFrYxQbp99KU=";
   };
 
   dontWrapQtApps = true;
+
+  nativeBuildInputs = [ installFonts ];
 
   propagatedBuildInputs = with kdePackages; [
     # avoid .dev outputs propagation
@@ -34,6 +37,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p ${basePath}
     cp -r $src/* ${basePath}
   ''
@@ -46,6 +51,9 @@ stdenvNoCC.mkDerivation {
   + lib.optionalString (themeConfig != null) ''
     chmod u+w ${basePath}/Themes/
     ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
+  ''
+  + ''
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };

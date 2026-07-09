@@ -31,7 +31,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/anmonteiro/ocaml-h2";
     maintainers = with lib.maintainers; [
       sternenseemann
-      anmonteiro
     ];
   };
 })

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coal";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "coal-library";
     repo = "coal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2fmu2VZJ+Fd87q2RpnJU61v6Lj2C9r5iweFrr1HwQQI=";
+    hash = "sha256-lCTybqJPP7CuqdACjzuiR/kufu6fJxKhpa71/Z3oWXA=";
   };
 
   strictDeps = true;

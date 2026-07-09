@@ -1,17 +1,18 @@
 {
   lib,
   stdenv,
-  bun,
   fetchFromGitHub,
+  fetchPnpmDeps,
   kulala-core,
   makeBinaryWrapper,
   nodejs,
-  writableTmpDirAsHomeHook,
+  pnpm_11,
+  pnpmConfigHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-fmt";
-  version = "3.1.0";
+  version = "4.3.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,66 +21,27 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mistweaverco";
     repo = "kulala-fmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4rVsw3dyoKrC6lj8m2R42iZmBk5G2LIVtV6Ro9pHSBo=";
+    hash = "sha256-sARZDtrF8JihVuE2Ix/f4h/OWIbdGW48xpVJlVmTdYY=";
   };
 
-  node_modules = stdenv.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
-    inherit (finalAttrs) version src;
-
-    strictDeps = true;
-    __structuredAttrs = true;
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -R node_modules $out/
-
-      runHook postInstall
-    '';
-
-    dontFixup = true;
-
-    outputHash = "sha256-z+jQC2RCav3VG/agWizcWFat8KgkGdBzaGQriviEbyo=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-wPMWFYRd3R570oAMORHTKamE0qcmIT+LFRuTiXFX97M=";
   };
 
   nativeBuildInputs = [
-    bun
     makeBinaryWrapper
     nodejs
+    pnpm_11
+    pnpmConfigHook
   ];
-
-  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    cp -R ${finalAttrs.node_modules}/node_modules .
-    patchShebangs node_modules
-    bun run build
+    pnpm run build
 
     runHook postBuild
   '';

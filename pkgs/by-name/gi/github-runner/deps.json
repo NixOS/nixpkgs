@@ -36,8 +36,8 @@
   },
   {
     "pname": "Microsoft.Bcl.Cryptography",
-    "version": "10.0.6",
-    "hash": "sha256-6VaDedxTljDNE+a4ao4xSG3rzZ6lbmCShtgMgHe9aH4="
+    "version": "10.0.7",
+    "hash": "sha256-5hOu8j2jLhCj9m7MlBoCjq3Qo0ST+b8n6oG2lLHL24s="
   },
   {
     "pname": "Microsoft.CodeCoverage",
@@ -46,18 +46,18 @@
   },
   {
     "pname": "Microsoft.DevTunnels.Connections",
-    "version": "1.3.39",
-    "hash": "sha256-aJBUNv1n7b64EBrAa04+Gw1MLYC315xANCRdK3RnWlA="
+    "version": "1.3.48",
+    "hash": "sha256-/E7ik2riVOMUyPt/1pxU7laDHG1pG5JpLIf5cQ7x7K4="
   },
   {
     "pname": "Microsoft.DevTunnels.Contracts",
-    "version": "1.3.39",
-    "hash": "sha256-lREgEhQhgQJyLoMYS/N5w+i6iX0s3Ppnl0T71KhG2u8="
+    "version": "1.3.48",
+    "hash": "sha256-YYmyZWmKv03BnOKAwbAeLrKqYDbBQ4ZS26jn92QkLSc="
   },
   {
     "pname": "Microsoft.DevTunnels.Management",
-    "version": "1.3.39",
-    "hash": "sha256-twyduZ89fY69k5onUihezBwdiu3BxdOMBLIXq4aQvY0="
+    "version": "1.3.48",
+    "hash": "sha256-DyDPqIwQkKJESx5K9Y4nKtw05cHrTlTp56rg/JXuVag="
   },
   {
     "pname": "Microsoft.DevTunnels.Ssh",
@@ -536,8 +536,8 @@
   },
   {
     "pname": "System.Diagnostics.EventLog",
-    "version": "10.0.6",
-    "hash": "sha256-MpXUz1TiiFkD1ngApC7HKqW+i37zi5V2ApOmqZwDqiI="
+    "version": "10.0.7",
+    "hash": "sha256-fV+2RcEzBV/JUnPDOLce3VBQKqvo32zcTWMZeJcAAJg="
   },
   {
     "pname": "System.Diagnostics.EventLog",
@@ -561,8 +561,8 @@
   },
   {
     "pname": "System.Formats.Asn1",
-    "version": "10.0.6",
-    "hash": "sha256-h5f9iYBUHgG9kOV7jlVQ8HqBQ0DQJt+wy3R/FbB1kaQ="
+    "version": "10.0.7",
+    "hash": "sha256-s48DCef2td3qUMdsRRGFfzkZ/wl/kUaVseQBDDfWUzM="
   },
   {
     "pname": "System.Globalization",
@@ -856,8 +856,8 @@
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "10.0.6",
-    "hash": "sha256-7T34t/DoxxMWUGRPSnLV1l5ScAxcDnK9iYKstRvLJuA="
+    "version": "10.0.7",
+    "hash": "sha256-+3RdvoSme0k3FoutPdJLkbWPWsmqPVo80hMgpuH3FP0="
   },
   {
     "pname": "System.Security.Cryptography.Primitives",
@@ -896,8 +896,8 @@
   },
   {
     "pname": "System.ServiceProcess.ServiceController",
-    "version": "10.0.6",
-    "hash": "sha256-Lvkb2mzQT/tcJ2yxkQDmKKFpEyaUbQ75qU51FwD1dzY="
+    "version": "10.0.7",
+    "hash": "sha256-koSlZI43JaCrG3ultJ6Sj7Ic9D9N878L+6HtRRGyJSA="
   },
   {
     "pname": "System.Text.Encoding",

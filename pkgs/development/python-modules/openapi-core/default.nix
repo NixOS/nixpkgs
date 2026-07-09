@@ -42,6 +42,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "jsonschema-path"
+  ];
+
   dependencies = [
     isodate
     more-itertools
@@ -84,6 +88,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires secrets and additional configuration
     "tests/integration/contrib/django/"
+  ];
+
+  disabledTests = [
+    # https://github.com/p1c2u/jsonschema-path/pull/262 broke comparison of `SchemaPath`s
+    "test_returns_default_server"
   ];
 
   pythonImportsCheck = [

@@ -6,6 +6,7 @@
   doxygen,
   eigen,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   gts,
   hdf5,
@@ -99,7 +100,15 @@ freecad-utils.makeCustomizable (
     ]
     ++ pythonDeps;
 
-    patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
+    patches = [
+      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+      (fetchpatch {
+        # https://github.com/FreeCAD/FreeCAD/pull/30899
+        # fix COIN3D_MICRO_VERSION regex for coin 4.0.10
+        url = "https://github.com/FreeCAD/FreeCAD/commit/e3e56059865849c6b1c85161f69183ad872414e3.patch";
+        hash = "sha256-qe0wn7DwvQT/pmrSCa44+orMetztpw8DZ+NhDJEYAMw=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
@@ -145,6 +154,9 @@ freecad-utils.makeCustomizable (
         ];
       };
     };
+
+    # 6.9k object files, cuts down build time from 2-3 hours to 15 minutes
+    requiredSystemFeatures = [ "big-parallel" ];
 
     meta = {
       homepage = "https://www.freecad.org";

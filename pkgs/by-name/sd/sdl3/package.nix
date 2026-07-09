@@ -61,6 +61,9 @@
   vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 assert lib.assertMsg (
@@ -70,7 +73,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.8";
+  version = "3.4.10";
 
   outputs = [
     "lib"
@@ -83,14 +86,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-uBGyGxrUVx642Ku8qhR2sTy2JagcSioIhh/5RsXVAIM=";
+    hash = "sha256-6Dph2eLiJUmpQzPWe8EuY5LrWhrFwde2f2dwfgCcWNw=";
   };
 
   postPatch =
-    # Tests timeout on Darwin
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      # intermittent test failure
+      # https://github.com/libsdl-org/SDL/issues/15346
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 20)' \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 300)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
@@ -120,7 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     validatePkgConfig
   ]
-  ++ lib.optional waylandSupport wayland-scanner;
+  ++ lib.optional waylandSupport wayland-scanner
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   buildInputs =
     lib.optionals libusbSupport [
@@ -200,6 +211,10 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   doCheck = true;
