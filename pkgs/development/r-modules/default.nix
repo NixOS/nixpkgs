@@ -971,10 +971,7 @@ let
     rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
-    tesseract = with pkgs; [
-      tesseract
-      leptonica
-    ];
+    tesseract = [ pkgs.pkg-config ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [
       libx11
@@ -1326,7 +1323,10 @@ let
     SynExtend = [ pkgs.zlib.dev ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
-    tesseract = [ pkgs.pkg-config ];
+    tesseract = with pkgs; [
+      tesseract
+      leptonica
+    ];
     Cairo = [ pkgs.cairo ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
