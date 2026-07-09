@@ -625,7 +625,7 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = with pkgs; [ pkg-config ];
-    kza = [ pkgs.fftw.dev ];
+    kza = [ pkgs.pkg-config ];
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
@@ -1248,7 +1248,7 @@ let
     ];
     GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
-    kza = [ pkgs.pkg-config ];
+    kza = [ pkgs.fftw ];
     igraph = with pkgs; [
       gmp
       libxml2.dev
