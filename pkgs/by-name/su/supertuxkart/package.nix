@@ -110,10 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
       freetype
       libjpeg
       libpng
-      libx11
       harfbuzz
       wiiuse
     ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libx11
     ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
     ++ lib.optional stdenv.hostPlatform.isLinux openal
     ++ lib.optional stdenv.hostPlatform.isDarwin libsamplerate
@@ -137,11 +137,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-include stdexcept"
   ];
 
-  # Extract binary from built app bundle
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/bin
-    mv $out/{supertuxkart.app/Contents/MacOS,bin}/supertuxkart
-    rm -rf $out/supertuxkart.app
+    app=$out/Applications/SuperTuxKart.app
+
+    mkdir -p "$out"/{bin,Applications}
+    mv "$out/supertuxkart.app" "$app"
+
+    cp "$app/Contents/MacOS/supertuxkart" \
+      "$out/bin/supertuxkart"
+    ln -sfn "$out/share/supertuxkart/data" \
+      "$app/Contents/Resources/data"
   '';
 
   # Obtain the assets directly from the fetched store path, to avoid duplicating assets across multiple engine builds
@@ -149,6 +154,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/supertuxkart \
       --set-default SUPERTUXKART_ASSETS_DIR "${assets}" \
       --set-default SUPERTUXKART_DATADIR "$out/share/supertuxkart"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # patch the copy inside the app bundle so launching via Finder works.
+    cp $out/bin/supertuxkart \
+      $out/Applications/SuperTuxKart.app/Contents/MacOS/supertuxkart
   '';
 
   meta = {
@@ -166,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
       philocalyst
       SchweGELBin
     ];
-    platforms = with lib.platforms; unix;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${finalAttrs.version}/CHANGELOG.md";
   };
 })
