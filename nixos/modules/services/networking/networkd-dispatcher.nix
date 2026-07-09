@@ -93,6 +93,10 @@ in
 
   config = mkIf cfg.enable {
 
+    warnings = mkIf (!config.networking.useNetworkd) [
+      "services.networkd-dispatcher will not execute any scripts unless networking.useNetworkd is enabled."
+    ];
+
     systemd = {
       packages = [ pkgs.networkd-dispatcher ];
       services.networkd-dispatcher = {
