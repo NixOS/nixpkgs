@@ -19342,6 +19342,12 @@
     name = "n-hass";
     keys = [ { fingerprint = "FDEE 6116 DBA7 8840 7323  4466 A371 5973 2728 A6A6"; } ];
   };
+  n0099 = {
+    email = "nixpkgs@n0099.com";
+    github = "n0099";
+    githubId = 13030387;
+    name = "n0099";
+  };
   n00b0ss = {
     email = "nixpkgs@n00b0ss.de";
     github = "n00b0ss";
