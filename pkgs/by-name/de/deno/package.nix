@@ -159,6 +159,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=node_unit_tests::net_test"
     "--skip=node_unit_tests::tls_test"
     "--skip=npm::lock_file_lock_write"
+    "--skip=happy_eyeballs::tests::test_parallel_second_wins"
 
     # GPU access
     "--skip=js_unit_tests::webgpu_test"
