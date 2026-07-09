@@ -1043,6 +1043,7 @@ let
       pkgs.pkg-config
       pkgs.gmp.dev
     ];
+    multibridge = [ pkgs.pkg-config ];
     RcppCWB = [
       pkgs.pkg-config
       pkgs.pcre2
@@ -1545,10 +1546,7 @@ let
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = with pkgs; [
-      pkg-config
-      mpfr.dev
-    ];
+    multibridge = [ pkgs.mpfr ];
     RcppCWB = with pkgs; [
       pcre.dev
       glib.dev
