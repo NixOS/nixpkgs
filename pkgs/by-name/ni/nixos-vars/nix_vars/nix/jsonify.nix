@@ -50,7 +50,8 @@ let
           if forced.type or null == "derivation" then
             forced
           else
-            pkgsHost'.writeShellScript "vars-wrapper-script" ''
+            pkgsHost'.writeScript "vars-wrapper-script" ''
+              #!/bin/sh
               exec ${forced} "$@"
             '';
       in
