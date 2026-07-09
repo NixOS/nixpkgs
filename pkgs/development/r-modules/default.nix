@@ -476,7 +476,7 @@ let
       cargo
       rustc
     ];
-    cairoDevice = [ pkgs.gtk2.dev ];
+    cairoDevice = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
@@ -1196,7 +1196,7 @@ let
       libxslt
     ];
     apsimx = [ pkgs.which ];
-    cairoDevice = [ pkgs.pkg-config ];
+    cairoDevice = [ pkgs.gtk2 ];
     CBN2Path = [ pkgs.gsl ];
     chebpol = [ pkgs.pkg-config ];
     baseline = [ pkgs.lapack ];
