@@ -18088,6 +18088,8 @@ self: super: with self; {
 
   saxonche = callPackage ../development/python-modules/saxonche { };
 
+  sb3-contrib = callPackage ../development/python-modules/sb3-contrib { };
+
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
