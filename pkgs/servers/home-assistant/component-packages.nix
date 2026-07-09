@@ -3241,7 +3241,8 @@
       ];
     "itach" =
       ps: with ps; [
-      ]; # missing inputs: pyitachip2ir2
+        pyitachip2ir2
+      ];
     "itunes" =
       ps: with ps; [
       ];
@@ -8257,6 +8258,7 @@
     "iss"
     "ista_ecotrend"
     "isy994"
+    "itach"
     "ituran"
     "izone"
     "jellyfin"
