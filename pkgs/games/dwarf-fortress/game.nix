@@ -14,7 +14,7 @@
   ncurses,
   gcc,
 
-  dfVersion,
+  dfVersion ? "53.15",
   dfVersions,
 }:
 
