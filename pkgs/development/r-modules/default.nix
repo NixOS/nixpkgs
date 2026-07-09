@@ -999,7 +999,7 @@ let
       rustc
     ];
     vdiffr = [ pkgs.libpng.dev ];
-    V8 = [ pkgs.nodejs-slim_22.libv8 ]; # when unpinning the version, don't forget about the other usages later
+    V8 = [ pkgs.pkg-config ];
     xactonomial = with pkgs; [
       cargo
       rustc
@@ -1150,6 +1150,10 @@ let
     svKomodo = [ pkgs.which ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
+    V8 = with pkgs; [
+      nodejs-slim_22.libv8
+      icu78 # use same icu version as in pkgs/development/web/nodejs/nodejs.nix
+    ];
     unrtf = with pkgs; [
       bzip2.dev
       icu.dev
@@ -2643,18 +2647,9 @@ let
     });
 
     V8 = old.V8.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace configure \
-          --replace-fail " -lv8_libplatform" ""
-        # Bypass the test checking if pointer compression is needed
-        substituteInPlace configure \
-          --replace-fail "./pctest1" "true"
-      '';
-
       preConfigure = ''
-        # when unpinning the version, don't forget about the other usage earlier
-        export INCLUDE_DIR=${pkgs.nodejs-slim_22.libv8}/include
-        export LIB_DIR=${pkgs.nodejs-slim_22.libv8}/lib
+        export V8_PKG_CFLAGS="$(pkg-config --cflags v8)";
+        export V8_PKG_LIBS="$(pkg-config --libs v8)";
         patchShebangs configure
       '';
 
