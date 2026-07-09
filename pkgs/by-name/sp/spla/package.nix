@@ -30,10 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "spla";
   version = "1.6.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "spla";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fNH1IOKV1Re8G7GH9Xfn3itR80eonTbEGKQRRD16/2k=";
   };
 
@@ -50,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gfortran
+    mpi
   ]
   ++ lib.optionals (gpuBackend == "cuda") [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     blas
-    mpi
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
