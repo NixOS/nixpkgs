@@ -26,29 +26,35 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.142.5";
+  version = "0.144.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-Ua1UVArTvjHcg3bPK1FYyShYiIUH3AOxtoUTvA4UZwU=";
+    hash = "sha256-GbLeECsju5jifeVah1xN4HFFHxOKtCj55gl/0ZULj+g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-1gDiCB3Nf/0aIm+EoL3g9C0xbCi3cv6TfH5VytjJpOY=";
+  cargoHash = "sha256-S4dsZXfmKvJItL2XYKyxfhqdCMATEG6oPjrtVRwkuYc=";
 
   __structuredAttrs = true;
 
-  # Match upstream's release build for the codex binary only.
+  # Match upstream's release build for the codex binary, plus the
+  # codex-code-mode-host binary required by models with a `tool_mode` of
+  # `code_mode_only`
   cargoBuildFlags = [
     "--package"
     "codex-cli"
+    "--package"
+    "codex-code-mode-host"
   ];
   cargoCheckFlags = [
     "--package"
     "codex-cli"
+    "--package"
+    "codex-code-mode-host"
   ];
 
   postPatch = ''
