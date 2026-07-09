@@ -17,6 +17,7 @@
   pytest-asyncio,
   trustme,
   aioresponses,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -69,6 +70,10 @@ buildPythonPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) vdirsyncer;
+  };
 
   meta = {
     description = "Synchronize calendars and contacts";
