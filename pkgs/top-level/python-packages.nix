@@ -14786,6 +14786,8 @@ self: super: with self; {
 
   pyitachip2ir = callPackage ../development/python-modules/pyitachip2ir { };
 
+  pyitachip2ir2 = callPackage ../development/python-modules/pyitachip2ir2 { };
+
   pyituran = callPackage ../development/python-modules/pyituran { };
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };
