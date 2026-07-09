@@ -446,9 +446,9 @@ nixos/tests/forgejo.nix               @adamcstephens @bendlas @christoph-heiss @
 /doc/hooks/zig.section.md       @RossComputerGuy
 
 # Buildbot
-nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
-nixos/tests/buildbot.nix                               @Mic92 @zowoq
-pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+nixos/modules/services/continuous-integration/buildbot @Mic92
+nixos/tests/buildbot.nix                               @Mic92
+pkgs/development/tools/continuous-integration/buildbot @Mic92
 
 # Pretix
 pkgs/by-name/pr/pretix/ @mweinelt
