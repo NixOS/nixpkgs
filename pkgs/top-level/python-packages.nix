@@ -14222,6 +14222,8 @@ self: super: with self; {
 
   pycoin = callPackage ../development/python-modules/pycoin { };
 
+  pycoingecko = callPackage ../development/python-modules/pycoingecko { };
+
   pycollada = callPackage ../development/python-modules/pycollada { };
 
   pycolorecho = callPackage ../development/python-modules/pycolorecho { };
