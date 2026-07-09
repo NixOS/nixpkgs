@@ -50,12 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.deps}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Window manager for river supporting multiple layouts and awesome animations";
