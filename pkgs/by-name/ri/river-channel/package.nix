@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-channel";
-  version = "0.4.0";
+  version = "0.4.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -25,16 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sivecano";
     repo = "channel";
     tag = finalAttrs.version;
-    hash = "sha256-sNCdZ486I27nYQOgzQIF1W/Gdfade1Va9ej7RUkt2K8=";
+    hash = "sha256-AIP5SO7p2Z8fYeLSoIliSya2fQALV1xkkYfIRdHY6TQ=";
   };
-
-  patches = [
-    # Doesn't find the xkb header otherwise
-    (fetchpatch {
-      url = "https://codeberg.org/Sivecano/channel/commit/eb36892f7903c91a3584a89df77bd045cb466c71.patch";
-      hash = "sha256-pFucr7lfUillewKGKmcfsDezxdtryJuCeS6COVRMUVw=";
-    })
-  ];
 
   nativeBuildInputs = [
     zig
