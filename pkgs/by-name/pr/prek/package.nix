@@ -56,6 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "prek";
     changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.knl ];
+    maintainers = [ ];
   };
 })
