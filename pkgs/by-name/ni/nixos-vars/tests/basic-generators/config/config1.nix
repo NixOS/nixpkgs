@@ -23,9 +23,13 @@
         pkgs:
         pkgs.writeScript "gen-derived" ''
           #!/bin/sh
-          export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-          cat $in/example/example \
-             > $out/derived
+          export PATH="${
+            lib.makeBinPath [
+              pkgs.coreutils
+              pkgs.cowsay
+            ]
+          }"
+          cat $in/example/example | cowsay > $out/derived
         '';
     };
   };
