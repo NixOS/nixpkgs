@@ -14736,6 +14736,8 @@ self: super: with self; {
 
   pyimgbox = callPackage ../development/python-modules/pyimgbox { };
 
+  pyimouapi = callPackage ../development/python-modules/pyimouapi { };
+
   pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy { inherit (pkgs) ssdeep; };
 
   pyindego = callPackage ../development/python-modules/pyindego { };
