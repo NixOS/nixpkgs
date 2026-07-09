@@ -14250,12 +14250,12 @@ final: prev: {
 
   oklch-color-picker-nvim = buildVimPlugin {
     pname = "oklch-color-picker.nvim";
-    version = "5.0.0";
+    version = "5.0.2";
     src = fetchFromGitHub {
       owner = "eero-lehtinen";
       repo = "oklch-color-picker.nvim";
-      tag = "v5.0.0";
-      hash = "sha256-KW30ECF4TT1uv6Mty2SFzg5COqy+2ocKTQ+B3EpCP10=";
+      tag = "v5.0.2";
+      hash = "sha256-cFCA/4xoY/P0h4aL2y6ZVdWiizhz1aRplE6RaQoxeYY=";
     };
     meta.homepage = "https://github.com/eero-lehtinen/oklch-color-picker.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
