@@ -15611,6 +15611,8 @@ self: super: with self; {
 
   pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
 
+  pytest-mh = callPackage ../development/python-modules/pytest-mh { };
+
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
