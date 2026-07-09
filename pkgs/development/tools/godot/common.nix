@@ -95,7 +95,6 @@ let
   arch = stdenv.hostPlatform.linuxArch;
 
   dotnet-sdk = if withMono then dotnetCorePackages.sdk_8_0-source else null;
-  dotnet-sdk_alt = if withMono then dotnetCorePackages.sdk_9_0-source else null;
 
   dottedVersion = lib.replaceStrings [ "-" ] [ "." ] version + lib.optionalString withMono ".mono";
 
@@ -594,7 +593,6 @@ let
               sdl3
             ]
           )
-          ++ lib.optionals (editor && withMono) dotnet-sdk.packages
           ++ lib.optional withAlsa alsa-lib
           ++ lib.optional (withX11 || withWayland) libxkbcommon
           ++ lib.optionals withX11 [
@@ -754,11 +752,7 @@ let
 
         passthru = {
           inherit updateScript;
-          tests =
-            mkTests finalAttrs.finalPackage dotnet-sdk
-            // lib.optionalAttrs (editor && withMono) {
-              sdk-override = mkTests finalAttrs.finalPackage dotnet-sdk_alt;
-            };
+          tests = mkTests finalAttrs.finalPackage dotnet-sdk;
         }
         // lib.optionalAttrs editor {
           export-template = mkTarget "template_release";
@@ -821,7 +815,7 @@ let
 
             pname = finalAttrs.unwrapped.pname + "-wrapper";
             inherit (finalAttrs.unwrapped) version outputs meta;
-            inherit unwrapped dotnet-sdk;
+            inherit unwrapped;
 
             dontUnpack = true;
             dontConfigure = true;
@@ -833,7 +827,7 @@ let
             installPhase = ''
               runHook preInstall
 
-              mkdir -p "$out"/{bin,libexec,share/applications,nix-support}
+              mkdir -p "$out"/{bin,libexec,share/applications}
 
               cp -d "$unwrapped"/bin/* "$out"/bin/
               ln -s "$unwrapped"/libexec/* "$out"/libexec/
@@ -845,12 +839,6 @@ let
                 --replace-fail "Exec=$unwrapped/bin/godot${suffix}" "Exec=$out/bin/godot${suffix}"
               ln -s "$unwrapped"/share/icons $out/share/
 
-              # ensure dotnet hooks get run
-              echo "${finalAttrs.dotnet-sdk}" >> "$out"/nix-support/propagated-build-inputs
-
-              wrapProgram "$out"/libexec/${binary} \
-                --prefix PATH : "${lib.makeBinPath [ finalAttrs.dotnet-sdk ]}"
-
               runHook postInstall
             '';
 
@@ -859,11 +847,8 @@ let
             '') finalAttrs.unwrapped.outputs;
 
             passthru = unwrapped.passthru // {
-              tests = mkTests finalAttrs.finalPackage null // {
+              tests = mkTests finalAttrs.finalPackage dotnet-sdk // {
                 unwrapped = lib.recurseIntoAttrs unwrapped.tests;
-                sdk-override = lib.recurseIntoAttrs (
-                  mkTests (finalAttrs.finalPackage.overrideAttrs { dotnet-sdk = dotnet-sdk_alt; }) null
-                );
               };
             };
           })
