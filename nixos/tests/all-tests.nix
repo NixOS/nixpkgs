@@ -976,6 +976,7 @@ in
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
+  loreserver = runTest ./loreserver.nix;
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
   luks-suspend = runTest ./luks-suspend.nix;
