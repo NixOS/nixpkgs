@@ -950,11 +950,7 @@ let
     parseLatex = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
-    sysfonts = with pkgs; [
-      zlib
-      libpng
-      freetype.dev
-    ];
+    sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
@@ -1316,7 +1312,11 @@ let
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
     SynExtend = [ pkgs.zlib.dev ];
-    sysfonts = [ pkgs.pkg-config ];
+    sysfonts = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
     systemfonts = with pkgs; [
       fontconfig
       freetype
