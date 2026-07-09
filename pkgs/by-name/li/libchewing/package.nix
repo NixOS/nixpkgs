@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libchewing";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromCodeberg {
     owner = "chewing";
     repo = "libchewing";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+oSO1HgLMF5+UcY+2NwQjPmspGqaPYuI7mdvSLrhkNg=";
+    hash = "sha256-1/aamkc66pjAf/jl4pD2rJ9ipFW0bAWjvKg6KtINWuQ=";
   };
 
   # ld: unknown option: -version-script
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-TcNhoGCN+S/Tt3IdysVnGmXNl+hXQoWMppp8yN9N0NY=";
+    hash = "sha256-1b8GbZ75jBVmvXquOjG2CEcLXg4AthAwQzdO68CjjPs=";
   };
 
   nativeBuildInputs = [
