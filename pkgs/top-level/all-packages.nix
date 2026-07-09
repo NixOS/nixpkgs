@@ -9569,8 +9569,6 @@ with pkgs;
 
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
-  vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
-
   vim = vimUtils.makeCustomizable (
     callPackage ../applications/editors/vim {
     }
