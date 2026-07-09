@@ -7,6 +7,8 @@
   qtbase,
   qttools,
   libsecret,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +24,21 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
+
   cmakeFlags = [
     "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"
     "-DQT_TRANSLATIONS_DIR=share/qt/translations"
   ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
-  ;
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ]; # TODO: Clean up on `staging`
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ] ++ [
     qtbase
