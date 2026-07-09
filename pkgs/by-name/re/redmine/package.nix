@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchurl,
   bundlerEnv,
-  ruby_3_4,
+  ruby_4_0,
   makeWrapper,
   nixosTests,
   openssl,
@@ -19,7 +19,7 @@ let
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    ruby = ruby_3_4;
+    ruby = ruby_4_0;
     gemdir = ./.;
     groups = [
       "development"
