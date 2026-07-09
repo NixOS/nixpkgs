@@ -2395,6 +2395,8 @@ self: super: with self; {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  brei = callPackage ../development/python-modules/brei { };
+
   brelpy = callPackage ../development/python-modules/brelpy { };
 
   brevo-python = callPackage ../development/python-modules/brevo-python { };
