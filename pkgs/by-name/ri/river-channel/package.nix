@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/Sivecano/channel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "river-channel";
+    mainProgram = "channel";
     inherit (zig.meta) platforms;
   };
 })
