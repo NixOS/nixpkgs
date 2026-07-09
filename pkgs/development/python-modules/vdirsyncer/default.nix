@@ -17,8 +17,7 @@
   pytest-asyncio,
   trustme,
   aioresponses,
-  vdirsyncer,
-  testers,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -67,7 +66,9 @@ buildPythonPackage rec {
     "test_verbosity"
   ];
 
-  passthru.tests.version = testers.testVersion { package = vdirsyncer; };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Synchronize calendars and contacts";
