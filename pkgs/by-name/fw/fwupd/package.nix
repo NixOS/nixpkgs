@@ -122,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.5";
+  version = "2.1.6";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -140,14 +140,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-DzQ+N99ZmFRqZc2rN6PSqmoIMXUyrE8Kkn+KnT/AWPc=";
+    hash = "sha256-K8n1rPiLuHDybWPoAUQA7RY4J+Ga1fwNiaj48fHAh9A=";
   };
 
   patches = [
     ./0001-Install-fwupdplugin-to-out.patch
     ./0002-Add-output-for-installed-tests.patch
     ./0003-Add-option-for-installation-sysconfdir.patch
-    ./0004-Get-the-efi-app-from-fwupd-efi.patch
   ];
 
   postPatch = ''
@@ -227,6 +226,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
+    # EFI capsule is located in fwupd-efi now.
+    (lib.mesonOption "efi_app_location" "${fwupd-efi}/libexec/fwupd/efi")
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
     (lib.mesonEnable "hsi" isx86)
