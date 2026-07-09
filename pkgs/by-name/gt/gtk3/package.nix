@@ -58,6 +58,8 @@
   broadwaySupport ? true,
   wayland-scanner,
   testers,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -142,6 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
       ]
   ++ lib.optionals waylandSupport [
     wayland-scanner
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs =
@@ -213,7 +219,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env = {
+    NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # workaround for ld64 hardening issue
+    #
+    # TODO: Clean up on `staging`
+
+    CC_LD = "lld";
+    OBJC_LD = "lld";
+  };
 
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259

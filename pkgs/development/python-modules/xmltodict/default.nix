@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/martinblech/xmltodict";
     changelog = "https://github.com/martinblech/xmltodict/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

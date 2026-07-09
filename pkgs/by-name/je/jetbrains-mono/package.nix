@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  python3Packages,
+  python313Packages,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -19,7 +19,8 @@ stdenvNoCC.mkDerivation rec {
   env."PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION" = "python";
 
   nativeBuildInputs = [
-    python3Packages.gftools
+    # Currently broken on 3.14
+    python313Packages.gftools
   ];
 
   buildPhase = ''

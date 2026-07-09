@@ -39,6 +39,7 @@ assert lib.assertMsg (
   darwin,
   doxygen,
   editline,
+  fetchpatch2,
   flex,
   git,
   gtest,
@@ -127,16 +128,24 @@ let
         substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
       '';
 
-  # https://github.com/NixOS/nixpkgs/pull/525953 backported a performance patch
-  # that /somehow/ breaks Lix unit tests.
-  # FIXME revert when the patch is gone in curl drv
+  # curl 8.21.0 /somehow/ breaks Lix unit tests.
+  # See https://github.com/NixOS/nixpkgs/issues/534713
+  # FIXME remove once fixed
   curl-fixed = curl.overrideAttrs (
     {
       patches ? [ ],
       ...
     }:
     {
-      patches = lib.filter (patch: !lib.strings.hasSuffix "fix-wakeup-consumption.patch" patch) patches;
+      patches = patches ++ [
+        # See https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23
+        (fetchpatch2 {
+          name = "fix-wakeup-consumption-revert.patch";
+          url = "https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23.patch";
+          hash = "sha256-dkwr1ZaR7XB408JxeIKhuHxJrlwf3J01jL6lnOLXo1I=";
+          revert = true;
+        })
+      ];
     }
   );
 in

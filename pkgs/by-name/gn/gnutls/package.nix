@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  buildPackages,
   fetchurl,
   zlib,
   libtasn1,
@@ -9,7 +8,6 @@
   pkg-config,
   perl,
   gmp,
-  automake,
   libidn2,
   libiconv,
   texinfo,
@@ -166,10 +164,6 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     texinfo
-  ]
-  ++ [
-    buildPackages.autoconf269
-    automake
   ]
   ++ lib.optionals doCheck [
     which

@@ -16,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "3.7.0";
+  version = "3.8.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "OHF-Voice";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-C3nx8w0y4RsHq9txwdSfgS9BMcY4TyZiBOq4QIq5w+0=";
+    hash = "sha256-b+ykT6P9yG8jZZN92K76uBaKTJpV6lkcqP3AAYbj3dU=";
   };
 
   build-system = [ setuptools ];

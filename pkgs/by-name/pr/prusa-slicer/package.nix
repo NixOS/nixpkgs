@@ -80,6 +80,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./allow_wayland.patch
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./no-ilmbase.patch
+    # catch2 3.15 support
+    # https://github.com/prusa3d/PrusaSlicer/pull/15462
+    ./catch2_3_15.patch
   ];
 
   # (not applicable to super-slicer fork)

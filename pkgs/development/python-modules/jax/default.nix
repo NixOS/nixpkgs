@@ -132,6 +132,10 @@ buildPythonPackage (finalAttrs: {
     # --numprocesses.
     # New test in jax 0.10.2 (tests/random_impl_test.py).
     "test_random_bits"
+
+    # Jax uses deprecated numpy logic as an oracle. Fixed upstream in jax 0.11.0, can't be properly backported.
+    # https://github.com/jax-ml/jax/commit/d219f03b589a1075f499148113aa9c647e1be0b9
+    "testCross"
   ]
   ++ lib.optionals usingMKL [
     # See

@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bluetooth-adapters";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r/qDwlIVa7VBkhepmuFqwtlJ7WYUTiYRKikhURTgLH8=";
+    hash = "sha256-d1vHb1WvsumlvilwuV6yfTwMXViLqeosSSM3LijIGYY=";
   };
 
   outputs = [

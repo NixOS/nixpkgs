@@ -41,7 +41,7 @@ let
         documentation.enable = false;
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
-        system.extraDependencies = with pkgs; [ stdenvNoCC ];
+        system.extraDependencies = with pkgs; [ stdenvNoCC hello ];
 
         boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
@@ -278,14 +278,14 @@ let
           target.succeed("nix-store --verify --check-contents >&2")
 
       with subtest("Check whether the channel works"):
-          target.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in target.succeed("type -tP ps | tee /dev/stderr")
+          target.succeed("nix-env -iA nixos.hello >&2")
+          assert ".nix-profile" in target.succeed("type -tP hello | tee /dev/stderr")
 
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "
           "(this will build a new profile generation through the daemon)"
       ):
-          target.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
+          target.succeed("su alice -l -c 'nix-env -iA nixos.hello' >&2")
 
       with subtest("Configure system with writable Nix store on next boot"):
           # we're not using copy_from_host here because the installer image
@@ -677,7 +677,6 @@ let
         # non-EFI tests can only run on x86
         platforms = mkIf (!isEfi) [
           "x86_64-linux"
-          "x86_64-darwin"
           "i686-linux"
         ];
         inherit broken;
@@ -745,6 +744,7 @@ let
                   desktop-file-utils
                   docbook5
                   docbook_xsl_ns
+                  hello
                   kbd.dev
                   kmod.dev
                   libarchive.dev

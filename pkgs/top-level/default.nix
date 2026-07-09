@@ -18,25 +18,6 @@
   or dot-files.
 */
 
-let
-  # We hoist this above the closure so that the same thunk is shared
-  # between multiple imports of Nixpkgs. This ensures that commands
-  # like `nix eval nixpkgs#legacyPackages.x86_64-darwin.pkgsStatic.hello`
-  # print only one warning, which would otherwise be spammy in common
-  # scenarios that instantiate many copies of Nixpkgs.
-  #
-  # Unfortunately, flakes’ handling of transitive dependencies mean
-  # that it’s still likely users will see multiple warnings, but
-  # there’s nothing we can do about that within the constraints of the
-  # Nix language.
-  x86_64DarwinDeprecationWarning =
-    pristineLib.warn
-      "Nixpkgs 26.05 will be the last release to support x86_64-darwin; see https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.05"
-      (x: x);
-
-  pristineLib = import ../../lib;
-in
-
 {
   # The system packages will be built on. See the manual for the
   # subtle division of labor between these two `*System`s and the three
@@ -74,6 +55,8 @@ let # Rename the function arguments
 
 in
 let
+  pristineLib = import ../../lib;
+
   lib =
     if __allowFileset then
       pristineLib
@@ -93,7 +76,33 @@ let
         }
       );
 
-  inherit (lib) throwIfNot;
+  inherit (lib) throwIfNot throwIf;
+
+  x86_64DarwinDeprecationMessage = ''
+    Nixpkgs 26.11 has dropped support for x86_64-darwin.
+
+    The 26.05 stable branch still supports x86_64-darwin, and will
+    receive security fixes until the end of 2026. If you use channels,
+    you can switch to 26.05 as follows:
+
+        $ sudo nix-channel --add https://nixos.org/channels/nixpkgs-26.05-darwin nixpkgs
+        $ sudo nix-channel --update
+
+    If this doesn’t work, you may need to run:
+
+        # Lack of sudo is deliberate:
+        $ nix-channel --remove nixpkgs
+
+    If you use flakes, switch your flake input:
+
+        inputs.nixpkgs = {
+          url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
+        };
+
+    See the release notes for more information and alternatives:
+
+      https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
+  '';
 
   checked =
     (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
@@ -101,15 +110,10 @@ let
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
       (
-        if
-          (
-            ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
-            && config.allowDeprecatedx86_64Darwin == false
-          )
-        then
-          x86_64DarwinDeprecationWarning
-        else
-          x: x
+        throwIf (
+          ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+          && config.allowDeprecatedx86_64Darwin != "force"
+        ) x86_64DarwinDeprecationMessage
       );
 
   localSystem = lib.systems.elaborate args.localSystem;

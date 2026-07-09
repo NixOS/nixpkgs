@@ -158,7 +158,6 @@ buildPythonPackage rec {
     requests
     rich
     ruamel-yaml
-    setuptools
     skia-pathops
     statmake
     strictyaml

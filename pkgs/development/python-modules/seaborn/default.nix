@@ -12,6 +12,7 @@
   pandas,
   scipy,
   statsmodels,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -64,11 +65,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-xdist
     pytest8_3CheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # requires internet connection
     "test_load_dataset_string_error"
+    # matplotlib error string matching
+    "test_theme_validation"
+    # log scale transformation match too strict
+    "test_log_scale"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # overly strict float tolerances

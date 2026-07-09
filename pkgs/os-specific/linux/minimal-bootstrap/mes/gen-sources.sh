@@ -17,13 +17,15 @@ ARCHS="x86 x86_64"
 KERNELS="linux"
 COMPILERS="mescc gcc"
 
+to_json_joined_string() {
+  printf '%s\n' "$@" | jq --raw-input --null-input '[inputs]|join(" ")'
+}
 
-to_json_array() {
-  if [ $# -eq 0 ]; then
-    echo '[]'
-  else
-    printf '%s\n' "$@" | jq --raw-input --null-input '[inputs]'
-  fi
+to_json_joined_string_1() {
+  printf '%s\n' "$@" | jq --raw-input --null-input '[inputs]|.[0:100]|join(" ")'
+}
+to_json_joined_string_2() {
+  printf '%s\n' "$@" | jq --raw-input --null-input '[inputs]|.[100:]|join(" ")'
 }
 
 gen_sources() {
@@ -38,20 +40,22 @@ gen_sources() {
 
   jq --null-input \
     --arg key "$mes_cpu.$mes_kernel.$compiler" \
-    --argjson libc_mini_SOURCES "$(to_json_array $libc_mini_SOURCES)" \
-    --argjson libmescc_SOURCES "$(to_json_array $libmescc_SOURCES)" \
-    --argjson libtcc1_SOURCES "$(to_json_array $libtcc1_SOURCES)" \
-    --argjson libc_SOURCES "$(to_json_array $libc_SOURCES)" \
-    --argjson libc_tcc_SOURCES "$(to_json_array $libc_tcc_SOURCES)" \
-    --argjson libc_gnu_SOURCES "$(to_json_array $libc_gnu_SOURCES)" \
-    --argjson mes_SOURCES "$(to_json_array $mes_SOURCES)" \
+    --argjson libc_mini_SOURCES "$(to_json_joined_string $libc_mini_SOURCES)" \
+    --argjson libmescc_SOURCES "$(to_json_joined_string $libmescc_SOURCES)" \
+    --argjson libtcc1_SOURCES "$(to_json_joined_string $libtcc1_SOURCES)" \
+    --argjson libc_SOURCES "$(to_json_joined_string $libc_SOURCES)" \
+    --argjson libc_tcc_SOURCES "$(to_json_joined_string $libc_tcc_SOURCES)" \
+    --argjson libc_gnu1_SOURCES "$(to_json_joined_string_1 $libc_gnu_SOURCES)" \
+    --argjson libc_gnu2_SOURCES "$(to_json_joined_string_2 $libc_gnu_SOURCES)" \
+    --argjson mes_SOURCES "$(to_json_joined_string $mes_SOURCES)" \
     '{($key): {
       libc_mini_SOURCES: $libc_mini_SOURCES,
       libmescc_SOURCES: $libmescc_SOURCES,
       libtcc1_SOURCES: $libtcc1_SOURCES,
       libc_SOURCES: $libc_SOURCES,
       libc_tcc_SOURCES: $libc_tcc_SOURCES,
-      libc_gnu_SOURCES: $libc_gnu_SOURCES,
+      libc_gnu1_SOURCES: $libc_gnu1_SOURCES,
+      libc_gnu2_SOURCES: $libc_gnu2_SOURCES,
       mes_SOURCES: $mes_SOURCES
     }}'
 }

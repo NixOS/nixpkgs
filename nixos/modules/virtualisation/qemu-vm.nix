@@ -741,7 +741,7 @@ in
       default = pkgs;
       defaultText = literalExpression "pkgs";
       example = literalExpression ''
-        import pkgs.path { system = "x86_64-darwin"; }
+        import pkgs.path { system = "aarch64-darwin"; }
       '';
       description = ''
         Package set to use for the host-specific packages of the VM runner.

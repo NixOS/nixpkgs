@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchurl,
@@ -11,6 +10,7 @@
   jinja2,
   numpy,
   pandas,
+  setuptools,
   tzlocal,
   pytestCheckHook,
 }:
@@ -42,7 +42,9 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ipython
     jinja2
     numpy
@@ -56,6 +58,11 @@ buildPythonPackage rec {
   pytestFlags = [
     # https://github.com/rpy2/rpy2/issues/1218
     "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
+  disabledTests = [
+    # panda 3.0 type mismatch
+    "test_ri2pandas"
   ];
 
   meta = {
