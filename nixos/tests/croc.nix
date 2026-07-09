@@ -12,8 +12,8 @@ in
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       equirosa
-      SuperSandro2000
       ryan4yin
+      kaynetik
     ];
   };
 
@@ -45,7 +45,7 @@ in
     sender.execute("echo Hello World > testfile01.txt")
     sender.execute("echo Hello Earth > testfile02.txt")
     sender.execute(
-        "env CROC_SECRET=topSecret croc --pass ${pass} --relay relay send testfile01.txt testfile02.txt >&2 &"
+        "env CROC_SECRET=topSecret croc --pass ${pass} --relay relay send --no-local testfile01.txt testfile02.txt >&2 &"
     )
 
     # receive the testfiles and check them
