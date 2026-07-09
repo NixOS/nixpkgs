@@ -991,10 +991,8 @@ let
     ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [
-      libtool
-      libxml2.dev
-      xmlsec
-      libxslt
+      pkg-config
+      libxml2 # for xml2-config
     ];
     affyPLM = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
@@ -1214,7 +1212,12 @@ let
     ];
     Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ libpq ];
-    XML = [ pkgs.pkg-config ];
+    XML = with pkgs; [
+      libtool
+      libxml2
+      xmlsec
+      libxslt
+    ];
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
     CBN2Path = [ pkgs.gsl ];
