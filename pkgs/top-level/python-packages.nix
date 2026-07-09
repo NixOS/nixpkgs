@@ -16749,6 +16749,10 @@ self: super: with self; {
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
+  python-swisscom-internet-box =
+    callPackage ../development/python-modules/python-swisscom-internet-box
+      { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   python-tds = callPackage ../development/python-modules/python-tds { };
