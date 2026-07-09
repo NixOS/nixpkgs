@@ -3002,7 +3002,8 @@
       ];
     "imou" =
       ps: with ps; [
-      ]; # missing inputs: pyimouapi
+        pyimouapi
+      ];
     "improv_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -8222,6 +8223,7 @@
     "imeon_inverter"
     "imgw_pib"
     "immich"
+    "imou"
     "improv_ble"
     "incomfort"
     "indevolt"
