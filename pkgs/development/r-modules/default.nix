@@ -659,6 +659,7 @@ let
     ];
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
+    SuperGauss = [ pkgs.pkg-config ];
     MAGEE = [
       pkgs.zlib.dev
       pkgs.bzip2.dev
@@ -1235,10 +1236,7 @@ let
       netcdf
     ];
     rsbml = [ pkgs.libsbml ];
-    SuperGauss = [
-      pkgs.pkg-config
-      pkgs.fftw.dev
-    ];
+    SuperGauss = [ pkgs.fftw ];
     ravetools = with pkgs; [
       pkg-config
       fftw.dev
