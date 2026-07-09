@@ -658,6 +658,7 @@ let
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     SuperGauss = [ pkgs.pkg-config ];
+    ravetools = [ pkgs.pkg-config ];
     MAGEE = [
       pkgs.zlib.dev
       pkgs.bzip2.dev
@@ -1233,10 +1234,7 @@ let
     RNifti = [ pkgs.zlib ];
     RNiftyReg = [ pkgs.zlib ];
     SuperGauss = [ pkgs.fftw ];
-    ravetools = with pkgs; [
-      pkg-config
-      fftw.dev
-    ];
+    ravetools = [ pkgs.fftw ];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = with pkgs; [
       fftw.dev
