@@ -9,7 +9,8 @@
       files.example = { };
       script =
         pkgs:
-        pkgs.writeShellScript "gen-example" ''
+        pkgs.writeScript "gen-example" ''
+          #!/bin/sh
           echo "Hewwo $(${pkgs.coreutils}/bin/cat "$prompts/example")!!" > $out/example
         '';
     };
@@ -19,9 +20,10 @@
       files.derived2 = { };
       script =
         pkgs:
-        pkgs.writeShellScript "gen-derived" ''
+        pkgs.writeScript "gen-derived" ''
+          #!/bin/sh
           ${pkgs.coreutils}/bin/cat $in/example/example \
-            | ${pkgs.lib.getExe pkgs.cowsay} > $out/derived2
+             > $out/derived2
         '';
     };
   };

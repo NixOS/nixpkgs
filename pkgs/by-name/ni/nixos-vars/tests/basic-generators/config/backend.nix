@@ -1,14 +1,14 @@
+{ lib, ... }:
 let
   noop = pkgs: pkgs.writeShellScript "noop" "echo 'Unimplemented!'";
   root = "/tmp/vars-demo";
   mkBackendScript =
     name: text: pkgs:
-    pkgs.lib.getExe (
-      pkgs.writeShellApplication {
-        inherit name text;
-        runtimeInputs = [ pkgs.coreutils ];
-      }
-    );
+    pkgs.writeScript name ''
+      #!/bin/sh
+      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+      ${text}
+    '';
 in
 {
   vars = {
