@@ -10633,8 +10633,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  megam = callPackage ../applications/science/misc/megam { };
-
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   ### SCIENCE / PHYSICS
