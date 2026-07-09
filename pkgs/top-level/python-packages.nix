@@ -2155,6 +2155,8 @@ self: super: with self; {
 
   bandcamp-api = callPackage ../development/python-modules/bandcamp-api { };
 
+  bandcamp-async-api = callPackage ../development/python-modules/bandcamp-async-api { };
+
   bandit = callPackage ../development/python-modules/bandit { };
 
   bangla = callPackage ../development/python-modules/bangla { };
