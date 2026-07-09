@@ -81,7 +81,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.19.0";
+  version = "6.20.0"; # please always backport gradio changes
   pyproject = true;
   __structuredAttrs = true;
 
@@ -89,7 +89,7 @@ buildPythonPackage (finalAttrs: {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-9vO+cuxpXERD/rH8wMuNWBNSH6Mu+yZLQMxLoiUTKtk=";
+    hash = "sha256-q5OoMguG/f0A3c6X+zotafc3kRRuebxMBPUIlrlcNFI=";
   };
 
   patches = [
@@ -102,17 +102,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      ;
+    pname = "gradio"; # to avoid a "sans-reverse-dependencies" duplicate
+    inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 4;
     hash = "sha256-xCxr/jnp9emeB6THGt4cumvApw6fSZQwG2NGOcvR0yQ=";
   };
 
   env = {
+    # test/test_utils.py
+    # @settings(derandomize=os.getenv("CI") is not None)
     CI = "true";
   };
 
@@ -431,6 +430,7 @@ buildPythonPackage (finalAttrs: {
           disabledTestPaths = [ ];
           disabledTestMarks = [ ];
           pytestFlags = [ ];
+          preBuild = ":"; # skip pnpm build, for speed
           postInstall = ''
             shopt -s globstar
             for f in $out/**/*.py; do
