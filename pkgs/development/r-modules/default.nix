@@ -663,7 +663,7 @@ let
       pkgs.zlib.dev
       pkgs.bzip2.dev
     ];
-    magick = [ pkgs.imagemagick.dev ];
+    magick = [ pkgs.pkg-config ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mcrPioda = [ pkgs.gsl ];
@@ -1262,7 +1262,7 @@ let
       opencv
     ];
     lwgeom = [ pkgs.proj ];
-    magick = [ pkgs.pkg-config ];
+    magick = [ pkgs.imagemagick ];
     mwaved = [ pkgs.pkg-config ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.pkg-config ];
