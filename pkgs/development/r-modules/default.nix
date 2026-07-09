@@ -936,12 +936,7 @@ let
     ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
-    showtext = with pkgs; [
-      zlib
-      libpng
-      icu
-      freetype.dev
-    ];
+    showtext = [ pkgs.pkg-config ];
     simplexreg = [ pkgs.gsl ];
     spate = [ pkgs.pkg-config ];
     ssanv = [ pkgs.proj ];
@@ -1308,7 +1303,11 @@ let
       sqlite.dev
       proj.dev
     ];
-    showtext = [ pkgs.pkg-config ];
+    showtext = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
     spate = [ pkgs.fftw ];
     stringi = [ pkgs.icu74 ];
     SynExtend = [ pkgs.zlib.dev ];
