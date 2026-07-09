@@ -14530,12 +14530,12 @@ final: prev: {
 
   otter-nvim = buildVimPlugin {
     pname = "otter.nvim";
-    version = "2.14.5";
+    version = "2.14.6";
     src = fetchFromGitHub {
       owner = "jmbuhr";
       repo = "otter.nvim";
-      tag = "v2.14.5";
-      hash = "sha256-kTDFzud+Kx3YAI36QhEi+WjVkB6Owao7PdUBX3mLXKw=";
+      tag = "v2.14.6";
+      hash = "sha256-hfyZ9eG6dMbDzPtQ8wIrx4B3la2VQqnZuXS2eG9gaFU=";
     };
     meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
