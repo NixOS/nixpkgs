@@ -813,7 +813,6 @@ let
       boost
     ];
     rzmq = [ pkgs.pkg-config ];
-    httpuv = [ pkgs.zlib.dev ];
     clustermq = [ pkgs.pkg-config ];
     SAVE = with pkgs; [
       zlib
@@ -1121,6 +1120,7 @@ let
     bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
     bayesWatch = [ pkgs.boost.dev ];
     rzmq = [ pkgs.zeromq ];
+    httpuv = [ pkgs.zlib ];
     clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
