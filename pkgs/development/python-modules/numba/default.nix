@@ -8,6 +8,12 @@
   # nativeBuildInputs
   setuptools,
 
+  # sets NUMBA_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numba during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numba.readthedocs.io/en/stable/reference/envvars.html#threading-control
+  checkPhaseThreadLimitHook,
+
   # dependencies
   llvmlite,
   numpy,
@@ -102,6 +108,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-xdist
     writableTmpDirAsHomeHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
