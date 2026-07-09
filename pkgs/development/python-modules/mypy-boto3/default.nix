@@ -87,8 +87,8 @@ in
       "sha256-MzXtUHNFCx5jRkcU4PIh3xIs6A9jNbORcdls/3UjQIc=";
 
   mypy-boto3-appconfig =
-    buildMypyBoto3Package "appconfig" "1.43.37"
-      "sha256-Go9APBF3KBQKtEC14VV8afMW4wSXPF3gHVP9fQzkD6c=";
+    buildMypyBoto3Package "appconfig" "1.43.43"
+      "sha256-vptHQtETj3TU1HfzmK9G4T0kJDNaS7UWlO8nlb9WfHE=";
 
   mypy-boto3-appconfigdata =
     buildMypyBoto3Package "appconfigdata" "1.43.0"
