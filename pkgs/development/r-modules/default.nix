@@ -494,7 +494,6 @@ let
     ];
     interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
-    curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
     data_table =
       with pkgs;
@@ -1134,6 +1133,7 @@ let
       zstd.dev
     ];
     blosc = [ pkgs.c-blosc ];
+    curl = [ pkgs.curl ];
     EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
