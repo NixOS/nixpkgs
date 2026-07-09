@@ -697,11 +697,7 @@ let
       cargo
       rustc
     ];
-    R2SWF = with pkgs; [
-      zlib
-      libpng
-      freetype.dev
-    ];
+    R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
@@ -1168,7 +1164,11 @@ let
       zstd.dev
     ];
     RCurl = [ pkgs.curl.dev ];
-    R2SWF = [ pkgs.pkg-config ];
+    R2SWF = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
     rDEA = [ pkgs.glpk ];
     rgl = with pkgs; [
       libGLU
