@@ -2,7 +2,7 @@
   symlinkJoin,
   deadbeef,
   makeWrapper,
-  plugins,
+  plugins ? [ ],
 }:
 
 symlinkJoin {
