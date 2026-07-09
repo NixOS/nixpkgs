@@ -955,10 +955,7 @@ let
       libpng
       freetype.dev
     ];
-    systemfonts = with pkgs; [
-      fontconfig.dev
-      freetype.dev
-    ];
+    systemfonts = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
@@ -1320,7 +1317,10 @@ let
     stringi = [ pkgs.pkg-config ];
     SynExtend = [ pkgs.zlib.dev ];
     sysfonts = [ pkgs.pkg-config ];
-    systemfonts = [ pkgs.pkg-config ];
+    systemfonts = with pkgs; [
+      fontconfig
+      freetype
+    ];
     tesseract = with pkgs; [
       tesseract
       leptonica
