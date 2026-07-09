@@ -811,7 +811,7 @@ let
     ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.tclPackages.bwidget ];
-    Rpoppler = [ pkgs.poppler ];
+    Rpoppler = [ pkgs.pkg-config ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
@@ -1212,7 +1212,7 @@ let
       protobuf
       abseil-cpp
     ];
-    Rpoppler = [ pkgs.pkg-config ];
+    Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ libpq ];
     XML = [ pkgs.pkg-config ];
     apsimx = [ pkgs.which ];
