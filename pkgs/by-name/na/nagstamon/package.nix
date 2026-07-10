@@ -41,8 +41,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dbus-python
     keyring
     lxml
+    packaging
     psutil
     pyqt6
+    pyqt6-webengine
     pysocks
     python-dateutil
     requests
