@@ -4231,8 +4231,8 @@ let
         mktplcRef = {
           publisher = "shardulm94";
           name = "trailing-spaces";
-          version = "0.4.1";
-          hash = "sha256-pLE1bfLRxjlm/kgU9nmtiPBOnP05giQnWq6bexrrIZY=";
+          version = "0.4.4";
+          hash = "sha256-L2WM021Jyyovy8KElkIspXc0MdHC9APsbPdX5hK4CIM=";
         };
         meta = {
           license = lib.licenses.mit;
