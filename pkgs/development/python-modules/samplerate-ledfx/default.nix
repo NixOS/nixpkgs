@@ -56,6 +56,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # timing sensitive: AssertionError: Expected speedup > 1.0, got 0.68x
+    "tests/test_threading_performance.py::test_conditional_gil_release_large_data_threading"
+  ];
+
   pythonImportsCheck = [ "samplerate" ];
 
   meta = {
