@@ -838,7 +838,7 @@ let
     ];
     pdftools = [ pkgs.pkg-config ];
     phytools = [ pkgs.which ];
-    png = [ pkgs.libpng.dev ];
+    png = [ pkgs.libpng ]; # for libpng-config
     protolite = [ pkgs.protobuf ];
     prqlr = with pkgs; [
       cargo
@@ -1425,6 +1425,7 @@ let
       fftw.dev
       libpng.dev
     ];
+    png = [ pkgs.libpng ];
     podkat = with pkgs; [
       zlib.dev
       xz.dev
