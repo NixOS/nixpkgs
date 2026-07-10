@@ -6,7 +6,7 @@
   pkg-config,
   libglut,
   gtk2,
-  gtkglext,
+  gnome2,
   libjpeg_turbo,
   libtheora,
   libxmu,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libglut
     gtk2
-    gtkglext
+    gnome2.gtkglext
     lua
     perl
     libjpeg_turbo
