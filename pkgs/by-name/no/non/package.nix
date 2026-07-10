@@ -13,23 +13,28 @@
   liblo,
   libsigcxx,
   lrdf,
-  wafHook,
+  waf,
 }:
 
+let
+  wafHook = (waf.override { extraTools = [ "gccdeps" ]; }).hook;
+in
 stdenv.mkDerivation {
   pname = "non";
   version = "unstable-2021-01-28";
+
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "non";
     rev = "cdad26211b301d2fad55a26812169ab905b85bbb";
-    sha256 = "sha256-iMJNMDytNXpEkUhL0RILSd25ixkm8HL/edtOZta0Pf4=";
+    hash = "sha256-iMJNMDytNXpEkUhL0RILSd25ixkm8HL/edtOZta0Pf4=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wafHook
   ];
+
   buildInputs = [
     python3
     cairo

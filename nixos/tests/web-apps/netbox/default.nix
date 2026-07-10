@@ -27,23 +27,23 @@ import ../../make-test-python.nix (
 
     skipTypeCheck = true;
 
-    nodes.machine =
+    containers.machine =
       { config, ... }:
       {
-        virtualisation.memorySize = 2048;
+        boot.kernelParams = [
+          # helps debugging seccomp filter issues
+          "audit=1"
+        ];
         services.netbox = {
           enable = true;
           package = netbox;
-          secretKeyFile = pkgs.writeText "secret" ''
-            abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-          '';
-          # Value from https://netbox.readthedocs.io/en/feature/configuration/required-parameters/#api_token_peppers
-          apiTokenPeppersFile = pkgs.writeText "pepper" ''
-            kp7ht*76fiQAhUi5dHfASLlYUE_S^gI^(7J^K5M!LfoH@vl&b_
-          '';
 
-          enableLdap = true;
-          ldapConfigPath = pkgs.writeText "ldap_config.py" ''
+          nginx = {
+            enable = true;
+            hostname = "localhost";
+          };
+
+          ldapConfigFile = pkgs.writeText "ldap_config.py" ''
             import ldap
             from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
@@ -68,18 +68,6 @@ import ../../make-test-python.nix (
             # For more granular permissions, we can map LDAP groups to Django groups.
             AUTH_LDAP_FIND_GROUP_PERMS = True
           '';
-        };
-
-        services.nginx = {
-          enable = true;
-
-          recommendedProxySettings = true;
-
-          virtualHosts.netbox = {
-            default = true;
-            locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
-            locations."/static/".alias = "/var/lib/netbox/static/";
-          };
         };
 
         # Adapted from the sssd-ldap NixOS test

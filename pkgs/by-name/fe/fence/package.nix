@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fence";
-  version = "0.1.61";
+  version = "0.1.62";
 
   src = fetchFromGitHub {
     owner = "fencesandbox";
     repo = "fence";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/IVxTPgAzl+mX85M1IyD+21O8j/tIxt2a18TLtQz/zk=";
+    hash = "sha256-uJfQFOKR3f8OjzA1z18IeKvhAgTmQQ7o4Y7K4CFbwko=";
   };
 
   vendorHash = "sha256-aMxay3dow6mDKyv396R0j1GOKDmhkX4ebGmhca1B4WE=";
