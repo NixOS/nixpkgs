@@ -479,10 +479,7 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
-    Rmpi = with pkgs; [
-      mpi.dev
-      prrte.dev
-    ];
+    Rmpi = [ pkgs.prrte ];
     Rpoppler = [ pkgs.pkg-config ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
@@ -1152,6 +1149,7 @@ let
       gmp
       mpfr
     ];
+    Rmpi = [ pkgs.mpi ];
     RoBMA = [ pkgs.jags ];
     RoBSA = [ pkgs.jags ];
     Rpoppler = [ pkgs.poppler ];
