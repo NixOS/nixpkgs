@@ -19,6 +19,9 @@ stdenv.mkDerivation {
     hash = "sha256-IC5740+1YT3TDayath3Md3hdjuml1S1A/OWYd0GxbDc=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   preConfigure = ''
     sed -r \
         -e "s|ubox_include_dir libubox/ustream.h|ubox_include_dir libubox/ustream.h HINTS ${libubox-nossl}/include|g" \
