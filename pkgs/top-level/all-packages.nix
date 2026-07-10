@@ -5548,8 +5548,6 @@ with pkgs;
 
   inherit (cosmopolitan) cosmocc;
 
-  ustream-ssl = callPackage ../development/libraries/ustream-ssl { };
-
   ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
     ssl_implementation = mbedtls;
   };
