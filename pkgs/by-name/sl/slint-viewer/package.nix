@@ -1,13 +1,20 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchCrate,
 
   fontconfig,
   libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
   pkg-config,
   qt6,
+  wayland,
 
+  autoPatchelfHook,
   nix-update-script,
   versionCheckHook,
 }:
@@ -30,8 +37,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     qt6.wrapQtAppsHook
+  ];
+
+  # stolen from the surfer package
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libx11
+    libxcursor
+    libxi
+    libxkbcommon
+    wayland
   ];
 
   # There are no tests
