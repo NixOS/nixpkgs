@@ -2544,6 +2544,7 @@ let
     });
 
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [ new.Rhdf5lib.hdf5 ];
       buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
     });
 
