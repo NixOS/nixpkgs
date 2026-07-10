@@ -634,6 +634,7 @@
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
+  ./services/finance/freqtrade.nix
   ./services/finance/libeufin/bank.nix
   ./services/finance/libeufin/module.nix
   ./services/finance/libeufin/nexus.nix
