@@ -435,7 +435,7 @@ let
     PICS = [ pkgs.gsl ];
     QF = [ pkgs.gsl ]; # for gsl-config
     R2SWF = [ pkgs.pkg-config ];
-    RAppArmor = [ pkgs.libapparmor ];
+    RAppArmor = [ pkgs.pkg-config ];
     RCurl = [ pkgs.curl ]; # for curl-config
     RDieHarder = [ pkgs.gsl ];
     RGtk2 = [ pkgs.pkg-config ];
@@ -967,6 +967,7 @@ let
       expat
     ];
     unigd = [ pkgs.pkg-config ];
+    unix = [ pkgs.pkg-config ];
     unsum = with pkgs; [
       cargo
       rustc
@@ -1106,6 +1107,7 @@ let
       libpng
       freetype
     ];
+    RAppArmor = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libapparmor ];
     RGtk2 = [ pkgs.gtk2 ];
     RITCH = [ pkgs.zlib.dev ];
     RKHSMetaMod = [ pkgs.gsl ];
@@ -1616,6 +1618,7 @@ let
         libxdmcp
       ];
     units = [ pkgs.udunits ];
+    unix = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libapparmor ];
     unrtf = with pkgs; [
       bzip2.dev
       icu.dev
@@ -1992,9 +1995,11 @@ let
     });
 
     RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        LIBAPPARMOR_HOME = pkgs.libapparmor;
-      };
+      postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+        # ignore apparmor detection logic
+        substituteInPlace configure \
+          --replace-fail '[ ! -e "/sys/module/apparmor" ]' 'false'
+      '';
     });
 
     RBioFormats = old.RBioFormats.overrideAttrs (attrs: {
@@ -3129,6 +3134,14 @@ let
 
     universalmotif = old.universalmotif.overrideAttrs (attrs: {
       patches = [ ./patches/universalmotif.patch ];
+    });
+
+    unix = old.unix.overrideAttrs (attrs: {
+      postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+        # ignore apparmor detection logic
+        substituteInPlace configure \
+          --replace-fail '[ ! -d "/sys/module/apparmor" ]' 'false'
+      '';
     });
 
     unsum = old.unsum.overrideAttrs (attrs: {
