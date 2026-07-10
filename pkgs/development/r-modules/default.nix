@@ -412,11 +412,7 @@ let
   packagesWithNativeBuildInputs = {
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
-    Apollonius = with pkgs; [
-      pkg-config
-      gmp.dev
-      mpfr.dev
-    ];
+    Apollonius = [ pkgs.pkg-config ];
     arrow =
       with pkgs;
       [
@@ -457,10 +453,7 @@ let
       ncurses
       gsl
     ];
-    bioacoustics = [
-      pkgs.fftw.dev
-      pkgs.cmake
-    ];
+    bioacoustics = [ pkgs.cmake ];
     bigGP = [ pkgs.mpi ];
     bigrquerystorage = with pkgs; [
       grpc
@@ -483,24 +476,18 @@ let
       cargo
       rustc
     ];
-    cairoDevice = [ pkgs.gtk2.dev ];
-    Cairo = with pkgs; [
-      libtiff
-      libjpeg
-      cairo.dev
-      libxt.dev
-      fontconfig.lib
-    ];
+    cairoDevice = [ pkgs.pkg-config ];
+    Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
-    chebpol = [ pkgs.fftw.dev ];
+    chebpol = [ pkgs.pkg-config ];
     ChemmineOB = [ pkgs.pkg-config ];
     ciflyr = with pkgs; [
       cargo
       rustc
     ];
     interpolation = [ pkgs.pkg-config ];
+    image_textlinedetector = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
-    curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
     data_table =
       with pkgs;
@@ -535,7 +522,7 @@ let
       cargo
       rustc
     ];
-    fftw = [ pkgs.fftw.dev ];
+    fftw = [ pkgs.pkg-config ];
     fftwtools = with pkgs; [
       fftw.dev
       pkg-config
@@ -555,17 +542,7 @@ let
     ];
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
-    gdtools =
-      with pkgs;
-      [
-        cairo.dev
-        fontconfig.lib
-        freetype.dev
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        expat
-        libxdmcp
-      ];
+    gdtools = [ pkgs.pkg-config ];
     GeneralizedWendland = [ pkgs.gsl ];
     ggiraph = [ pkgs.libpng.dev ];
     git2r = with pkgs; [
@@ -601,8 +578,6 @@ let
     ];
     HiCParser = [ pkgs.zlib ];
     yyjsonr = with pkgs; [ zlib.dev ];
-    RNifti = with pkgs; [ zlib.dev ];
-    RNiftyReg = with pkgs; [ zlib.dev ];
     highs = [
       pkgs.which
       pkgs.cmake
@@ -644,7 +619,7 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = with pkgs; [ pkg-config ];
-    kza = [ pkgs.fftw.dev ];
+    kza = [ pkgs.pkg-config ];
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
@@ -660,10 +635,10 @@ let
       gfortran
       gettext
     ];
+    sodium = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [
-      proj
-      geos
-      gdal
+      pkg-config
+      geos # for geos-config
     ];
     otelsdk = with pkgs; [
       cmake
@@ -676,15 +651,18 @@ let
     ];
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
+    SuperGauss = [ pkgs.pkg-config ];
+    ravetools = [ pkgs.pkg-config ];
+    cartogramR = [ pkgs.pkg-config ];
     MAGEE = [
       pkgs.zlib.dev
       pkgs.bzip2.dev
     ];
-    magick = [ pkgs.imagemagick.dev ];
+    magick = [ pkgs.pkg-config ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mcrPioda = [ pkgs.gsl ];
-    mwaved = [ pkgs.fftw.dev ];
+    mwaved = [ pkgs.pkg-config ];
     mzR = with pkgs; [
       zlib
       netcdf
@@ -695,12 +673,9 @@ let
     ];
     ncdf4 = [ pkgs.netcdf ];
     neojags = [ pkgs.jags ];
-    nloptr = with pkgs; [
-      nlopt
-      pkg-config
-    ];
+    nloptr = [ pkgs.pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
-    odbc = [ pkgs.unixodbc ];
+    odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
@@ -714,7 +689,7 @@ let
       pkgs.pkg-config
       pkgs.clp
     ];
-    pdftools = [ pkgs.poppler.dev ];
+    pdftools = [ pkgs.pkg-config ];
     PEPBVS = [ pkgs.gsl ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
@@ -724,11 +699,7 @@ let
       cargo
       rustc
     ];
-    R2SWF = with pkgs; [
-      zlib
-      libpng
-      freetype.dev
-    ];
+    R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
@@ -763,7 +734,7 @@ let
       cmake
       pkg-config
     ];
-    RGtk2 = [ pkgs.gtk2.dev ];
+    RGtk2 = [ pkgs.pkg-config ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = with pkgs; [
       cmake
@@ -821,12 +792,9 @@ let
     ];
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.tclPackages.bwidget ];
-    Rpoppler = [ pkgs.poppler ];
+    Rpoppler = [ pkgs.pkg-config ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
-    RProtoBuf = with pkgs; [
-      protobuf
-      abseil-cpp.dev
-    ];
+    RProtoBuf = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
       cargo
       rustc
@@ -845,12 +813,8 @@ let
       zlib.dev
       boost
     ];
-    rzmq = with pkgs; [
-      zeromq
-      pkg-config
-    ];
-    httpuv = [ pkgs.zlib.dev ];
-    clustermq = [ pkgs.zeromq ];
+    rzmq = [ pkgs.pkg-config ];
+    clustermq = [ pkgs.pkg-config ];
     SAVE = with pkgs; [
       zlib
       bzip2
@@ -898,11 +862,9 @@ let
       bzip2
     ];
     sf = with pkgs; [
-      gdal
-      proj
-      geos
-      libtiff
-      curl
+      pkg-config
+      gdal # for gdal-config
+      geos # for geos-config
     ];
     fio = with pkgs; [
       cargo
@@ -919,10 +881,9 @@ let
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
-      gdal
-      proj
-      geos
-      netcdf
+      pkg-config
+      gdal # for gdal-config
+      geos # for geos-config
     ];
     tok = with pkgs; [
       cargo
@@ -952,36 +913,21 @@ let
     ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
-    showtext = with pkgs; [
-      zlib
-      libpng
-      icu
-      freetype.dev
-    ];
+    showtext = [ pkgs.pkg-config ];
     simplexreg = [ pkgs.gsl ];
-    spate = [ pkgs.fftw.dev ];
+    spate = [ pkgs.pkg-config ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
-    stringi = [ pkgs.icu.dev ];
+    stringi = [ pkgs.pkg-config ];
     parseLatex = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl ];
     svglite = [ pkgs.libpng.dev ];
-    sysfonts = with pkgs; [
-      zlib
-      libpng
-      freetype.dev
-    ];
-    systemfonts = with pkgs; [
-      fontconfig.dev
-      freetype.dev
-    ];
+    sysfonts = [ pkgs.pkg-config ];
+    systemfonts = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
-    tesseract = with pkgs; [
-      tesseract
-      leptonica
-    ];
+    tesseract = [ pkgs.pkg-config ];
     tiff = [ pkgs.libtiff.dev ];
     tkrplot = with pkgs; [
       libx11
@@ -992,7 +938,6 @@ let
       udunits
       expat
     ];
-    units = [ pkgs.udunits ];
     unigd = [ pkgs.pkg-config ];
     unsum = with pkgs; [
       cargo
@@ -1010,10 +955,8 @@ let
     ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [
-      libtool
-      libxml2.dev
-      xmlsec
-      libxslt
+      pkg-config
+      libxml2 # for xml2-config
     ];
     affyPLM = [ pkgs.zlib.dev ];
     BitSeq = [ pkgs.zlib.dev ];
@@ -1027,7 +970,6 @@ let
     gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib.dev ];
     Rsubbotools = [ pkgs.gsl ];
-    XVector = [ pkgs.zlib.dev ];
     Rsamtools = with pkgs; [
       zlib.dev
       curl.dev
@@ -1077,6 +1019,7 @@ let
       pkgs.pkg-config
       pkgs.gmp.dev
     ];
+    multibridge = [ pkgs.pkg-config ];
     RcppCWB = [
       pkgs.pkg-config
       pkgs.pcre2
@@ -1116,7 +1059,10 @@ let
     ];
     symbolicQspray = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
-    vapour = [ pkgs.pkg-config ];
+    vapour = with pkgs; [
+      pkg-config
+      gdal # for gdal-config
+    ];
     xdvir = [ pkgs.freetype.dev ];
   };
 
@@ -1131,6 +1077,10 @@ let
       openpam
       libpq
     ];
+    Apollonius = with pkgs; [
+      gmp
+      mpfr
+    ];
     asciicast = with pkgs; [
       bzip2.dev
       icu.dev
@@ -1139,7 +1089,9 @@ let
       zlib.dev
       zstd.dev
     ];
+    bioacoustics = [ pkgs.fftw ];
     blosc = [ pkgs.c-blosc ];
+    curl = [ pkgs.curl ];
     EHRmuse = [ pkgs.gsl.dev ];
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
@@ -1168,7 +1120,9 @@ let
     pqsfinder = [ pkgs.boost ];
     bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
     bayesWatch = [ pkgs.boost.dev ];
-    clustermq = [ pkgs.pkg-config ];
+    rzmq = [ pkgs.zeromq ];
+    httpuv = [ pkgs.zlib ];
+    clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
     milorGWAS = [ pkgs.zlib.dev ];
@@ -1216,7 +1170,11 @@ let
       zstd.dev
     ];
     RCurl = [ pkgs.curl.dev ];
-    R2SWF = [ pkgs.pkg-config ];
+    R2SWF = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
     rDEA = [ pkgs.glpk ];
     rgl = with pkgs; [
       libGLU
@@ -1225,15 +1183,27 @@ let
       freetype.dev
       libpng.dev
     ];
-    RGtk2 = [ pkgs.pkg-config ];
-    RProtoBuf = [ pkgs.pkg-config ];
-    Rpoppler = [ pkgs.pkg-config ];
+    RGtk2 = [ pkgs.gtk2 ];
+    RProtoBuf = with pkgs; [
+      protobuf
+      abseil-cpp
+    ];
+    Rpoppler = [ pkgs.poppler ];
     RPostgres = with pkgs; [ libpq ];
-    XML = [ pkgs.pkg-config ];
+    units = [ pkgs.udunits ];
+    XML = with pkgs; [
+      libtool
+      libxml2
+      xmlsec
+      libxslt
+    ];
     apsimx = [ pkgs.which ];
-    cairoDevice = [ pkgs.pkg-config ];
+    cairoDevice = [ pkgs.gtk2 ];
     CBN2Path = [ pkgs.gsl ];
-    chebpol = [ pkgs.pkg-config ];
+    chebpol = with pkgs; [
+      fftw
+      gsl
+    ];
     baseline = [ pkgs.lapack ];
     eds = [ pkgs.zlib.dev ];
     iscream = with pkgs; [
@@ -1243,14 +1213,25 @@ let
     ];
     fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
-    fftw = [ pkgs.pkg-config ];
-    gdtools = [ pkgs.pkg-config ];
+    fftw = [ pkgs.fftw ];
+    gdtools =
+      with pkgs;
+      [
+        cairo
+        fontconfig.lib
+        freetype
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        expat
+        libxdmcp
+      ];
     archive = [ pkgs.libarchive ];
     lpsymphony = with pkgs; [
       symphony
       cgl
       clp
     ];
+    sodium = [ pkgs.libsodium ];
     gdalcubes = with pkgs; [
       proj.dev
       gdal
@@ -1258,26 +1239,19 @@ let
       netcdf
     ];
     rsbml = [ pkgs.libsbml ];
-    SuperGauss = [
-      pkgs.pkg-config
-      pkgs.fftw.dev
-    ];
-    ravetools = with pkgs; [
-      pkg-config
-      fftw.dev
-    ];
+    RNifti = [ pkgs.zlib ];
+    RNiftyReg = [ pkgs.zlib ];
+    SuperGauss = [ pkgs.fftw ];
+    ravetools = [ pkgs.fftw ];
     specklestar = [ pkgs.fftw.dev ];
-    cartogramR = with pkgs; [
-      fftw.dev
-      pkg-config
-    ];
+    cartogramR = [ pkgs.fftw ];
     Rhdf5lib = with pkgs; [
       curl
       zlib.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
-    kza = [ pkgs.pkg-config ];
+    kza = [ pkgs.fftw ];
     igraph = with pkgs; [
       gmp
       libxml2.dev
@@ -1287,24 +1261,17 @@ let
       gmp
       mpfr
     ];
-    image_textlinedetector = with pkgs; [
-      pkg-config
-      opencv
-    ];
-    lwgeom = with pkgs; [
-      pkg-config
-      proj.dev
-      sqlite.dev
-    ];
-    magick = [ pkgs.pkg-config ];
-    mwaved = [ pkgs.pkg-config ];
-    odbc = [ pkgs.pkg-config ];
-    openssl = [ pkgs.pkg-config ];
+    image_textlinedetector = [ pkgs.opencv ];
+    lwgeom = [ pkgs.proj ];
+    magick = [ pkgs.imagemagick ];
+    mwaved = [ pkgs.fftw ];
+    nloptr = [ pkgs.nlopt ];
+    odbc = [ pkgs.unixodbc ];
     otelsdk = with pkgs; [
       protobuf
       zlib.dev
     ];
-    pdftools = [ pkgs.pkg-config ];
+    pdftools = [ pkgs.poppler ];
     qckitfastq = [ pkgs.zlib.dev ];
     raer = with pkgs; [
       zlib.dev
@@ -1317,23 +1284,35 @@ let
     ];
     saeMSPE = [ pkgs.gsl.dev ];
     sf = with pkgs; [
-      pkg-config
-      sqlite.dev
-      proj.dev
+      proj
+      sqlite
     ];
     terra = with pkgs; [
-      pkg-config
-      sqlite.dev
-      proj.dev
+      proj
+      sqlite
     ];
-    showtext = [ pkgs.pkg-config ];
-    spate = [ pkgs.pkg-config ];
-    stringi = [ pkgs.pkg-config ];
+    showtext = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
+    spate = [ pkgs.fftw ];
+    stringi = [ pkgs.icu74 ];
     SynExtend = [ pkgs.zlib.dev ];
-    sysfonts = [ pkgs.pkg-config ];
-    systemfonts = [ pkgs.pkg-config ];
-    tesseract = [ pkgs.pkg-config ];
-    Cairo = [ pkgs.pkg-config ];
+    sysfonts = with pkgs; [
+      zlib
+      libpng
+      freetype
+    ];
+    systemfonts = with pkgs; [
+      fontconfig
+      freetype
+    ];
+    tesseract = with pkgs; [
+      tesseract
+      leptonica
+    ];
+    Cairo = [ pkgs.cairo ];
     CLVTools = [ pkgs.gsl ];
     excursions = [ pkgs.gsl ];
     OpenCL = with pkgs; [
@@ -1554,10 +1533,7 @@ let
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = with pkgs; [
-      pkg-config
-      mpfr.dev
-    ];
+    multibridge = [ pkgs.mpfr ];
     RcppCWB = with pkgs; [
       pcre.dev
       glib.dev
@@ -1656,10 +1632,7 @@ let
       gmp.dev
       mpfr.dev
     ];
-    vapour = with pkgs; [
-      proj.dev
-      gdal
-    ];
+    vapour = [ pkgs.proj ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = with pkgs; [
       eigen
@@ -1670,6 +1643,7 @@ let
       pkgs.lapack
       pkgs.blas
     ];
+    XVector = [ pkgs.zlib ];
   };
 
   packagesRequiringX = [
@@ -2194,32 +2168,8 @@ let
       '';
     });
 
-    lwgeom = old.lwgeom.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
-    });
-
-    sf = old.sf.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
-    });
-
-    terra = old.terra.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
-    });
-
     unsum = old.unsum.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-    });
-
-    vapour = old.vapour.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
-      ];
     });
 
     rzmq = old.rzmq.overrideAttrs (attrs: {
@@ -2238,12 +2188,6 @@ let
 
     clustermq = old.clustermq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-    });
-
-    Cairo = old.Cairo.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        NIX_LDFLAGS = "-lfontconfig";
-      };
     });
 
     curl = old.curl.overrideAttrs (attrs: {
@@ -2618,9 +2562,6 @@ let
     });
 
     openssl = old.openssl.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
       env = (attrs.env or { }) // {
         PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
         PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
@@ -2993,15 +2934,11 @@ let
       '';
     });
 
-    sodium = old.sodium.overrideAttrs (
-      attrs: with pkgs; {
-        preConfigure = ''
-          patchShebangs configure
-        '';
-        nativeBuildInputs = [ pkg-config ] ++ attrs.nativeBuildInputs;
-        buildInputs = [ libsodium.dev ] ++ attrs.buildInputs;
-      }
-    );
+    sodium = old.sodium.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
 
     keyring = old.keyring.overrideAttrs (attrs: {
       preConfigure = ''
