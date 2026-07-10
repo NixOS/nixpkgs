@@ -834,18 +834,7 @@ let
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
     rGEDI = [ pkgs.gsl ];
-    rJava = with pkgs; [
-      stripJavaArchivesHook
-      zlib
-      bzip2.dev
-      icu
-      xz.dev
-      zstd.dev
-      pcre.dev
-      jdk
-      libzip
-      libdeflate
-    ];
+    rJava = [ pkgs.stripJavaArchivesHook ];
     ragg = [ pkgs.pkg-config ];
     rapport = [ pkgs.which ];
     rapportools = [ pkgs.which ];
@@ -1449,6 +1438,13 @@ let
       hdf5.dev
     ];
     rJPSGCS = [ pkgs.zlib.dev ];
+    rJava = with pkgs; [
+      zlib
+      bzip2
+      xz
+      zstd
+      icu
+    ];
     raer = with pkgs; [
       zlib.dev
       xz.dev
