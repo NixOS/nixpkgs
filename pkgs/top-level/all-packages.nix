@@ -2800,6 +2800,14 @@ with pkgs;
 
   rmate = rubyPackages.rmate;
 
+  rosecFull = pkgs.rosec.override {
+    provider = with pkgsCross.wasi32; [
+      rosec-bitwarden-pm
+      rosec-bitwarden-sm
+      rosec-gnome-keyring
+    ];
+  };
+
   rpatool = with python3Packages; toPythonApplication rpatool;
 
   rpm = callPackage ../tools/package-management/rpm {
