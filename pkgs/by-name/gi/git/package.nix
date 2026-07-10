@@ -139,6 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://lore.kernel.org/git/20251201031040.1120091-1-brianmlyles@gmail.com/raw";
       hash = "sha256-vvhbvg74OIMzfksHiErSnjOZ+W0M/T9J8GOQ4E4wKbU=";
     })
+    # Fix fortify darwin crashes when dealing with unicode filenames.
+    (fetchurl {
+      name = "darwin-unicode-filename-fix.patch";
+      url = "https://lore.kernel.org/git/20260704233724.16928-1-ihar.hrachyshka@gmail.com/raw";
+      hash = "sha256-lpGz3nFKQvFDtW2TtQLx/684ECJVBLGPGqip0XEtOdU=";
+    })
   ]
   ++ lib.optionals rustSupport [
     # The above patch doesn’t work with Rust support enabled.
