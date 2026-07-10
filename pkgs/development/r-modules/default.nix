@@ -421,7 +421,6 @@ let
     BiocCheck = [ pkgs.which ];
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
-    CellBarcode = [ pkgs.zlib ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2.dev ];
     DEploid = [ pkgs.zlib.dev ];
@@ -1068,6 +1067,7 @@ let
     CLVTools = [ pkgs.gsl ];
     CNEr = with pkgs; [ zlib ];
     Cairo = [ pkgs.cairo ];
+    CellBarcode = [ pkgs.zlib ];
     ChemmineOB = with pkgs; [
       eigen
       openbabel
