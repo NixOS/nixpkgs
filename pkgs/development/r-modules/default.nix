@@ -453,8 +453,8 @@ let
       pkg-config
       pcre2 # for pcre2-config
     ];
-    RcppDPR = [ pkgs.gsl ];
-    RcppGSL = [ pkgs.gsl ];
+    RcppDPR = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    RcppGSL = [ pkgs.gsl ]; # for gsl-config
     RcppMeCab = [ pkgs.pkg-config ];
     RcppPlanc = with pkgs; [
       which
