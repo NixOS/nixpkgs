@@ -37,6 +37,7 @@ buildPythonPackage (finalAttrs: {
       pname
       version
       src
+      sourceRoot
       cargoRoot
       ;
     hash = "sha256-WEuCK1jpemnNpO+UxsfpdAkFLSM0v2WRjZr3qmSLBJI=";
@@ -91,7 +92,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pytestFlags = [
-    "-o cache_dir=$TMPDIR/.pytest_cache"
+    "-p no:cacheprovider"
   ];
 
   enabledTestPaths = [ "tests/cover" ];
