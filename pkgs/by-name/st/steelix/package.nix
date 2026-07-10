@@ -5,6 +5,31 @@
   lib,
   helix,
   helix-unwrapped,
+  grammarsOverlay ? (
+    final: prev: {
+      tree-sitter-beancount = prev.tree-sitter-beancount.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
+        dontCheckForBrokenSymlinks = true;
+      };
+      tree-sitter-strace = prev.tree-sitter-strace.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tact = prev.tree-sitter-tact.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.override {
+        dontPatch = true;
+      };
+      tree-sitter-vue = prev.tree-sitter-vue.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-wit = prev.tree-sitter-wit.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+    }
+  ),
 }:
 let
   steelix-unwrapped = helix-unwrapped.overrideAttrs (
@@ -52,6 +77,8 @@ let
 in
 (helix.override {
   helix-unwrapped = steelix-unwrapped;
+  lockedGrammars = lib.importJSON ./grammars.json;
+  inherit grammarsOverlay;
 }).overrideAttrs
   (
     _: previousAttrs: {
