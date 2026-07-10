@@ -429,7 +429,6 @@ let
       pkg-config
       which
     ];
-    JavaGD = [ pkgs.jdk ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = with pkgs; [ pkg-config ];
     LOMAR = [ pkgs.gmp.dev ];
