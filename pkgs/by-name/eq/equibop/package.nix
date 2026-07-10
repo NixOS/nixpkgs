@@ -14,6 +14,7 @@
   autoPatchelfHook,
   bun,
   nodejs,
+  glib,
   withTTS ? true,
   withMiddleClickScroll ? false,
 }:
@@ -130,6 +131,14 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/equibop \
       --add-flags $out/opt/Equibop/resources/app.asar \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          (lib.getLib stdenv.cc.cc)
+          pipewire
+          libpulseaudio
+          glib
+        ]
+      } \
       ${lib.optionalString withTTS ''
         --run 'if [[ "''${NIXOS_SPEECH:-default}" != "False" ]]; then NIXOS_SPEECH=True; else unset NIXOS_SPEECH; fi' \
         --add-flags "\''${NIXOS_SPEECH:+--enable-speech-dispatcher}" \
