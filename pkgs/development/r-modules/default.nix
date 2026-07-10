@@ -912,10 +912,7 @@ let
       cmake
       pkg-config
     ];
-    rtracklayer = with pkgs; [
-      zlib.dev
-      curl.dev
-    ];
+    rtracklayer = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
     rvg = [ pkgs.libpng.dev ];
     rzmq = [ pkgs.pkg-config ];
@@ -1516,6 +1513,10 @@ let
     ];
     rtk = [ pkgs.zlib.dev ];
     rtmpt = [ pkgs.gsl ];
+    rtracklayer = with pkgs; [
+      zlib
+      curl
+    ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
       abseil-cpp
