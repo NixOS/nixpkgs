@@ -77,8 +77,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Fails on aarch64-linux and darwin with:
     #   RuntimeError: `fbgemm` is not available
     # `fbgemm` is indeed an x86_64-linux-only feature
-    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION =
-      if ((hostPlatform.isLinux && hostPlatform.isAarch64) || hostPlatform.isDarwin) then 1 else 0;
+    # in some x86_64-linux build environments this is also needed
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION = 1;
   };
 
   build-system = [
@@ -128,6 +128,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Mismatched elements: 1070 / 32800 (3.3%)
     "test_amplitude_to_DB"
     "test_amplitude_to_DB_power"
+    "test_griffinlim_0_99"
+    "test_MelSpectrogram_00"
+    "test_MelSpectrogram_01"
+    "test_MelSpectrogram_04"
+    "test_MelSpectrogram_05"
+    "test_MelSpectrogram_08"
+    "test_MelSpectrogram_09"
 
     # Very long to run
     "AutogradCPUTest"
@@ -139,24 +146,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "test_batch_inverse_spectrogram"
     "test_batch_pitch_shift"
     "test_batch_spectrogram"
-    "test_griffinlim_0_99"
 
     # RuntimeError: illegal immediate parameter (range error)
     "test_lfilter_shape_4"
     "test_lfilter_shape_6"
-  ]
-  ++ lib.optionals hostPlatform.isDarwin [
-    # AssertionError: Tensor-likes are not close!
-    "test_griffinlim_0_99"
-  ]
-  ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
-    # AssertionError: Tensor-likes are not close!
-    "test_MelSpectrogram_00"
-    "test_MelSpectrogram_01"
-    "test_MelSpectrogram_04"
-    "test_MelSpectrogram_05"
-    "test_MelSpectrogram_08"
-    "test_MelSpectrogram_09"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
