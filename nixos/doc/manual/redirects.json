@@ -352,6 +352,24 @@
   "module-services-opencloud-basic-usage": [
     "index.html#module-services-opencloud-basic-usage"
   ],
+  "module-services-openlinkhub": [
+    "index.html#module-services-openlinkhub"
+  ],
+  "module-services-openlinkhub-web-ui": [
+    "index.html#module-services-openlinkhub-web-ui"
+  ],
+  "module-services-openlinkhub-state": [
+    "index.html#module-services-openlinkhub-state"
+  ],
+  "module-services-openlinkhub-uinput": [
+    "index.html#module-services-openlinkhub-uinput"
+  ],
+  "module-services-openlinkhub-group": [
+    "index.html#module-services-openlinkhub-group"
+  ],
+  "module-services-openlinkhub-limitations": [
+    "index.html#module-services-openlinkhub-limitations"
+  ],
   "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
     "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
   ],
