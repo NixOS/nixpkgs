@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-retry";
   version = "0.9.9.20250322";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "types_retry";
     inherit version;
     hash = "sha256-LqpvS4MsGHEhBWmIu+bS0Lb06wNjH9yXUuKsKAL3tyY=";
   };
+
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
