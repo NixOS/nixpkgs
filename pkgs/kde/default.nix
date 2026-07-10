@@ -98,6 +98,7 @@ let
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };
         kzones = self.callPackage ./third-party/kzones { };
+        smod = self.callPackage ./third-party/smod { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
     );
