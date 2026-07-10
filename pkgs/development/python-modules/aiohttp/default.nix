@@ -34,7 +34,6 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isal,
   proxy-py,
   pytest-codspeed,
   pytest-cov-stub,
@@ -44,6 +43,12 @@
   re-assert,
   trustme,
   zlib-ng,
+
+  # Tests with ISA-L.
+  # Excluded by default to avoided making thousands of python packages dependant on ISA-L.
+  withIsalTests ? false,
+  isal,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
@@ -109,7 +114,6 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     gunicorn
-    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
@@ -119,6 +123,9 @@ buildPythonPackage rec {
     re-assert
     trustme
     zlib-ng
+  ]
+  ++ lib.optionals withIsalTests [
+    isal
   ];
 
   disabledTests = [
@@ -158,6 +165,12 @@ buildPythonPackage rec {
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
   '';
+
+  passthru.tests = {
+    with-isal = aiohttp.override {
+      withIsalTests = true;
+    };
+  };
 
   meta = {
     changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
