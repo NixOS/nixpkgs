@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
     # start sender in background
     MSG="See you later, alligator!"
-    croc --relay localhost:11111 send --no-local --code correct-horse-battery-staple --text "$MSG" &
+    croc --relay localhost:11111 send --code correct-horse-battery-staple --text "$MSG" &
 
     # wait for things to settle
     sleep 1
