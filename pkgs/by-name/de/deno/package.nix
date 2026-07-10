@@ -101,6 +101,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
+  # de-vendor SQLite
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+
   # Don't run checks on hydra as they've been observed to be flakey for us and
   # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
   # We haven't reproduced it on local machines, could be related to doing other
