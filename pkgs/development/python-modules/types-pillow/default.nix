@@ -5,13 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-pillow";
   version = "10.2.0.20240822";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "types-Pillow";
     hash = "sha256-VZ+1Ki75kcMm5KDSCsyzu2Onuo1A60k+DssDELpS8NM=";
   };
@@ -29,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arjan-s ];
   };
-}
+})
