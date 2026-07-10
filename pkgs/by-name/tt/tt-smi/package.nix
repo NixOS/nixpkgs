@@ -54,5 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = with lib.licenses; [ asl20 ];
+    broken = true;
   };
 })
