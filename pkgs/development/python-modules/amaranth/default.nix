@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  version = "0.5.8";
+  version = "0.6.0.dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     tag = "v${version}";
-    hash = "sha256-hqMgyQJRz1/5C9KB3nAI2RKPZXZUl3zhfZbk9M1hTxs=";
+    hash = "sha256-DLXJ7s97Wv7gHjA5uf208rjQgH2SASt9u78eSZVJEBE=";
   };
 
   postPatch = ''
