@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   libredirect,
   iana-etc,
   versionCheckHook,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "scip";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "sourcegraph";
+    owner = "scip-code";
     repo = "scip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lpzGrTvWUXUFfmyn5z4rsqJEcAOA8D1qfN1assRAdn4=";
+    hash = "sha256-3iUDxZAde1aVpZNFKvuITHg/b+3+sXHQvmjq/f6AIzM=";
   };
 
-  vendorHash = "sha256-ARfsSW/d2bb4Lp6hedSmMerr3LrkuTfUCi569hI6eYY=";
+  vendorHash = "sha256-p4/YFp+FY83c0HO+8DBI8qQu4EV0DbXa2rEdfkgfsI4=";
 
   subPackages = [ "cmd/scip" ];
 
@@ -45,9 +45,9 @@ buildGo125Module (finalAttrs: {
   meta = {
     description = "SCIP Code Intelligence Protocol CLI";
     mainProgram = "scip";
-    homepage = "https://github.com/sourcegraph/scip";
-    changelog = "https://github.com/sourcegraph/scip/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/scip-code/scip";
+    changelog = "https://github.com/scip-code/scip/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ nicolas-guichard ];
   };
 })
