@@ -433,7 +433,6 @@ let
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     PEPBVS = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
-    PKI = [ pkgs.openssl.dev ];
     QF = [ pkgs.gsl ];
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
@@ -1092,6 +1091,7 @@ let
       ocl-icd
     ];
     PING = [ pkgs.gsl ];
+    PKI = [ pkgs.openssl ];
     PROJ = [ pkgs.proj.dev ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];
