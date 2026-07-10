@@ -498,7 +498,7 @@ let
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ]; # for gsl-config
     V8 = [ pkgs.pkg-config ];
-    VBLPCM = [ pkgs.gsl ];
+    VBLPCM = [ pkgs.gsl ]; # for gsl-config
     XBRL = with pkgs; [
       zlib
       libxml2.dev
