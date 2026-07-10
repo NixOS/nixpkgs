@@ -7,15 +7,10 @@
   }
  },
  "https://jitpack.io/com/github": {
-  "Anuken#jabel/0.9.0": {
-   "jar": "sha256-uFYvq/P7dVZNH8xfSZPmm57JI+h47A7YqOaN3bsFLuo=",
-   "module": "sha256-r0Hiyh4MXzQkBudNhixHcXf1QOr4GWU841ypzRa0w/g=",
-   "pom": "sha256-2Zp//AsIqW7/+5ybmtConz5ykh3ZYrFBi6SzLuKTz8A="
-  },
-  "Anuken#rhino/54b75cbd1207ef1fd5cff517cbd188e763c85baa": {
-   "jar": "sha256-sZ5zFOXvyOLYEbb/LAQLU2u2S4FZ41T+rFHBfrG5O/Y=",
-   "module": "sha256-QqoHjAbLp9eza+7r921k2L6bbV8zqjhdkqHhCy1qIkA=",
-   "pom": "sha256-5xheV+aFDLRgYUS6b7GoGW0b2KSYsA8jY7NPy+Gb+H8="
+  "Anuken#rhino/e74ac129d2bff72c1deb536d7d99a0dbb7046d2e": {
+   "jar": "sha256-iRvhgKzqoi/8VMmkiM5ibGULv6e07A98e8QoMB6XROQ=",
+   "module": "sha256-c02sDzu5Z+dMXP2DcCFen9ImCWTtZ2I06uSrrtJ8QIo=",
+   "pom": "sha256-kUrWd9wtr/SN21fjmyInwRN8CSxp2nKfeji3qz1OteA="
   },
   "Anuken#steamworks4j/0b86023401880bb5e586bc404bedbaae9b1f1c94": {
    "jar": "sha256-YbaPhCjWtlExwQ1dFNA6JrkiAfQYWxJ0VRV9rLnoYhY=",
@@ -342,6 +337,13 @@
    "jar": "sha256-mGCQahk3SQv187BtLw4Q70UeZblbJp8i2vaKPR9QZcU=",
    "module": "sha256-/2oi2kAECTh1HbCuIRd+dlF9vxJqdnlvVCZye/dsEig=",
    "pom": "sha256-pWM6vVNGfOuRYi2B8umCCAh3FF4LduG3V4hxVDSIXQs="
+  },
+  "org/jline#jline-parent/4.0.0": {
+   "pom": "sha256-qTWw4PG+PcA92t0Mhztwp1MdnO+RFf3JQLb0mor7w9s="
+  },
+  "org/jline#jline/4.0.0": {
+   "jar": "sha256-bcYGBxAc6o6XQOPLYjs46HMduP94j3WaOl+rwRkmcDI=",
+   "pom": "sha256-cbdxuk5C/hYpW1lmJEDdhqMveltqxYeNHzsl+TqUF9Y="
   },
   "org/json#json/20230618": {
    "jar": "sha256-cAQAep/Yf+HYb2c7RywDcuW8ULrLckwCmmES18S0pkA=",

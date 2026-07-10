@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "158.1";
+  version = "159.2";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-AnwsrStALE6g6PdAUVqxezDNO5oWk/11ZT6Rw5lV87I=";
+    hash = "sha256-pHFQ+2Le6rKsjygufmin4YAo8KFU4FNiAQ2RF2LVzuU=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-zn/SMsanJpXMcgr9iHrdiywirOJRh+JFCfWSw8k7WVM=";
+    hash = "sha256-RuIorQ7cTBZepa8xfH6jPFafNOfCLRE1+A/RupCTcYc=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's build.gradle
-    tag = "2026.02.03";
-    hash = "sha256-Klng3c/AN5oYxnU+jeTnlPEThhKlpGADgmygjJRAJDg=";
+    tag = "2026.06.01";
+    hash = "sha256-0/A3myfCYb+AMP3WH6stmXeb1eiA4dgX6H1Quj4AD9Q=";
   };
 
   desktopItem = makeDesktopItem {
