@@ -31,7 +31,7 @@ in
           backup.schedule = "*/1 * * * *";
           backup.endpoint = "[::]:3900";
           extraEnvironment.BACKUP_BUCKET_NAME = "pdfding-bucket";
-          extraEnvironment.BACKUP_REGION = "garage";
+          extraEnvironment.BACKUP_REGION = "us-east-1";
 
           envFiles = [ pdfding-s3-keys ];
           installTestHelpers = true;
@@ -48,7 +48,7 @@ in
             rpc_secret = "5c1915fa04d0b6739675c61bf5907eb0fe3d9c69850c83820f51b4d25d13868c";
 
             s3_api = {
-              s3_region = "garage";
+              s3_region = "us-east-1";
               api_bind_addr = "[::]:3900";
               root_domain = ".s3.garage";
             };
@@ -140,7 +140,7 @@ in
           -F "description=" \
           -F "collection=1" \
           -F "use_file_name=on" \
-          -F "name=test-upload" \
+          -F "name=dummy" \
           -F "file=@{test_pdf};type=application/pdf" \
           -F "csrfmiddlewaretoken=$csrf_token" \
           -H "Referer: {endpoint}/pdf/add" \
