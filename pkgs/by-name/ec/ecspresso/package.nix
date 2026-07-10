@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X main.buildDate=none"
-    "-X main.Version=${finalAttrs.version}"
+    "-X github.com/kayac/ecspresso/v2.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
