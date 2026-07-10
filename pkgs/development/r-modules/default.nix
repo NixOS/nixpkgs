@@ -423,11 +423,6 @@ let
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
-    DiffBind = with pkgs; [
-      zlib.dev
-      xz.dev
-      bzip2.dev
-    ];
     EMCluster = [ pkgs.lapack ];
     Formula = [ pkgs.gmp ];
     GLAD = [ pkgs.gsl ];
@@ -1075,7 +1070,11 @@ let
       pkgs.lapack
       pkgs.blas
     ];
-    DiffBind = with pkgs; [ zlib.dev ];
+    DiffBind = with pkgs; [
+      zlib
+      xz
+      bzip2
+    ];
     DirichletMultinomial = with pkgs; [ gsl ];
     DropletUtils = [ pkgs.zlib.dev ];
     EHRmuse = [ pkgs.gsl.dev ];
