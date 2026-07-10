@@ -280,7 +280,10 @@ lib.makeOverridable (
         cp -av $3 $4
       ''}"
     ]
-    ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
+    ++ optionals isModular [
+      "INSTALL_MOD_PATH=${placeholder "modules"}"
+      "INSTALL_MOD_STRIP=$(if $(dontStrip),,1)"
+    ]
     ++ optionals buildDTBs [
       "dtbs_install"
       "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
@@ -410,9 +413,6 @@ lib.makeOverridable (
       # Installing `constants.py` from `$buildRoot` as it's generated.
       cp scripts/gdb/linux/constants.py $dev/lib/modules/${modDirVersion}/build/scripts/gdb/linux
 
-      if [ -z "''${dontStrip-}" ]; then
-        installFlags+=("INSTALL_MOD_STRIP=1")
-      fi
       make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
       unlink $modules/lib/modules/${modDirVersion}/build
 
