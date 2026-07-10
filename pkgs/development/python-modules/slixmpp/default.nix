@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.16.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
     tag = "slix-${finalAttrs.version}";
-    hash = "sha256-d0laQWaqZUoviF7NM/egENQ3ArQE12ER0TzfPBcnc7Q=";
+    hash = "sha256-1jCKaUwWuIxTQGA0WkQMpB3xWW8XEAfAlyrqoTFIhVY=";
   };
 
   patches = [
@@ -76,11 +76,6 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  preCheck = ''
-    # don't test against pure python version in the source tree
-    rm -rf slixmpp
-  '';
-
   disabledTestPaths = [
     # Exclude integration tests
     "itests/"
@@ -95,6 +90,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://slixmpp.readthedocs.io/";
     changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      haansn08
+    ];
   };
 })

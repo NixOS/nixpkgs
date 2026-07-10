@@ -2,9 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  ocaml,
+  ocaml-ng,
   ncurses,
 }:
+
+let
+  inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
+in
 
 stdenv.mkDerivation {
   pname = "megam";
@@ -12,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://hal3.name/megam/megam_src.tgz";
-    sha256 = "dc0e9f59ff8513449fe3bd40b260141f89c88a4edf6ddc8b8a394c758e49724e";
+    hash = "sha256-3A6fWf+FE0Sf471AsmAUH4nIik7fbdyLijlMdY5Jck4=";
   };
 
   patches = [
@@ -23,12 +27,13 @@ stdenv.mkDerivation {
   postPatch = ''
     # Deprecated in ocaml 3.10 https://github.com/ocaml/ocaml/commit/f6190f3d0c49c5220d443ee8d03ca5072d68aa87
     # Deprecated in ocaml 3.08 https://github.com/ocaml/ocaml/commit/0c7aecb88dc696f66f49f3bed54a037361a26b8d
-    substituteInPlace fastdot_c.c --replace copy_double caml_copy_double --replace Bigarray_val Caml_ba_array_val --replace caml_bigarray caml_ba_array
+    substituteInPlace fastdot_c.c --replace-fail copy_double caml_copy_double --replace-fail Bigarray_val Caml_ba_array_val --replace-fail caml_bigarray caml_ba_array
     # They were already deprecated in 3.12 https://v2.ocaml.org/releases/3.12/htmlman/libref/Array.html
-    substituteInPlace abffs.ml main.ml --replace create_matrix make_matrix
-    substituteInPlace intHashtbl.ml --replace Array.create Array.make
+    substituteInPlace abffs.ml main.ml --replace-fail create_matrix make_matrix
+    substituteInPlace intHashtbl.ml --replace-fail Array.create Array.make
   '';
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ ocaml ];
 

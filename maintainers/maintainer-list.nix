@@ -26304,6 +26304,12 @@
     github = "snpschaaf";
     githubId = 105843013;
   };
+  sntx = {
+    name = "sntx";
+    email = "sntx@sntx.space";
+    github = "Sntx626";
+    githubId = 48636286;
+  };
   snu = {
     email = "kabelfrickler@gmail.com";
     github = "snue";

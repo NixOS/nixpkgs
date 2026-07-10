@@ -120,6 +120,22 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
+    # Cyclic dependencies are fun!
+    # overridePythonAttrs is not available in finalAttrs.finalPackage
+    sans-reverse-dependencies = finalAttrs.finalPackage.overrideAttrs (old: {
+      pname = old.pname + "-sans-reverse-dependencies";
+      # we aggressively remove all checkPhase related attrs
+      # to save on rebuilds during bumps
+      doInstallCheck = false;
+      doCheck = false;
+      preCheck = "";
+      enabledTestPaths = [ ];
+      disabledTestMarks = [ ];
+      disabledTests = [ ];
+      pythonImportsCheck = null;
+      dontCheckRuntimeDeps = true;
+    });
+
     inherit (gradio) updateScript;
   };
 

@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
-  version = "0.17.0-1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iNqWNF+X5qFRNpo7OXxCNCP8HR28EukgMAx8a025Ai8=";
+    hash = "sha256-1qhBBa6Mzo8XqvzwiHKnP0W9Oo26nvMiwZTzRAnLtfs=";
   };
 
-  cargoHash = "sha256-3qg5yTzalaKoOXYb1yo0K3AT6itJP1DErEQ2S8EfLNg=";
+  cargoHash = "sha256-I39SPTBH4JUx5z65eD2w2ntWKfjWSxweSco6QE9V5sM=";
 
   nativeBuildInputs = [
     cmake
