@@ -423,8 +423,6 @@ let
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
-    DEploid = [ pkgs.zlib.dev ];
-    DEploid_utils = [ pkgs.zlib.dev ];
     DiffBind = with pkgs; [
       zlib.dev
       xz.dev
@@ -1073,6 +1071,8 @@ let
       openbabel
       zlib.dev
     ];
+    DEploid = [ pkgs.zlib ];
+    DEploid_utils = [ pkgs.zlib ];
     DGP4LCF = [
       pkgs.lapack
       pkgs.blas
