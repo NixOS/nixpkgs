@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchgit,
   gitUpdater,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-GrpBVgisVu7NklFYqkEqYi0hui/pCHlsM3Ky4mEUq90=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype/ubuntu *.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "import/"; };
 

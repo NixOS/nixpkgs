@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 let
@@ -49,21 +50,7 @@ let
 
       sourceRoot = ".";
 
-      installPhase =
-        let
-          dirName = lib.strings.concatStrings (lib.strings.splitString " " patchedName);
-        in
-        ''
-          runHook preInstall
-
-          dst_opentype=$out/share/fonts/opentype/NerdFonts/${dirName}
-          dst_truetype=$out/share/fonts/truetype/NerdFonts/${dirName}
-
-          find -name \*.otf -exec mkdir -p $dst_opentype \; -exec cp -p {} $dst_opentype \;
-          find -name \*.ttf -exec mkdir -p $dst_truetype \; -exec cp -p {} $dst_truetype \;
-
-          runHook postInstall
-        '';
+      nativeBuildInputs = [ installFonts ];
 
       passthru = {
         inherit releaseVersion;

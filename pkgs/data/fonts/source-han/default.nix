@@ -4,6 +4,7 @@
   fetchurl,
   installFonts,
   unzip,
+  installFonts,
 }:
 
 let
