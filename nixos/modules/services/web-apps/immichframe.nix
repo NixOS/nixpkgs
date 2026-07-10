@@ -134,6 +134,40 @@ in
           Type = "simple";
           Restart = "on-failure";
           RestartSec = 3;
+
+          # systemd hardening, based on jellyfin (also .NET) but stricter
+          CapabilityBoundingSet = [ "" ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = !config.boot.isContainer;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = !config.boot.isContainer;
+          ProtectKernelTunables = !config.boot.isContainer;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          # no AF_NETLINK here since there's no network connection monitoring
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = !config.boot.isContainer;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
+          UMask = "0077";
         };
       };
   };
