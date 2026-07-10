@@ -448,7 +448,6 @@ let
     ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
-    RSclient = [ pkgs.openssl.dev ];
     RVowpalWabbit = with pkgs; [
       zlib.dev
       boost
@@ -1122,6 +1121,7 @@ let
       quantlib.dev
       boost.dev
     ];
+    RSclient = [ pkgs.openssl ];
     Rarr = [ pkgs.zlib.dev ];
     Rbowtie = with pkgs; [ zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
