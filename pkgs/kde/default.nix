@@ -92,6 +92,7 @@ let
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 
         aeroshell-kwin-components = self.callPackage ./third-party/aeroshell-kwin-components { };
+        aeroshell-uac-polkit-agent = self.callPackage ./third-party/aeroshell-uac-polkit-agent { };
         aerothemeplasma = self.callPackage ./third-party/aerothemeplasma { };
         aerothemeplasma-icons = self.callPackage ./third-party/aerothemeplasma-icons { };
         aerothemeplasma-sounds = self.callPackage ./third-party/aerothemeplasma-sounds { };
