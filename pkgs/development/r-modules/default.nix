@@ -778,7 +778,6 @@ let
     ];
     jSDM = [ pkgs.gsl ];
     jack = [ pkgs.pkg-config ];
-    jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
     kza = [ pkgs.pkg-config ];
     leidenAlg = [ pkgs.gmp.dev ];
@@ -1365,6 +1364,7 @@ let
       xz.dev
       bzip2.dev
     ];
+    jpeg = [ pkgs.libjpeg ];
     jqr = [ pkgs.jq.out ];
     knowYourCG = with pkgs; [
       zlib.dev
