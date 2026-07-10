@@ -530,12 +530,6 @@ let
       prrte.dev
     ];
     Rpoppler = [ pkgs.pkg-config ];
-    Rsamtools = with pkgs; [
-      zlib.dev
-      curl.dev
-      bzip2
-      xz
-    ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
     Rsubbotools = [ pkgs.gsl ];
@@ -1187,6 +1181,11 @@ let
     RoBMA = [ pkgs.jags ];
     RoBSA = [ pkgs.jags ];
     Rpoppler = [ pkgs.poppler ];
+    Rsamtools = with pkgs; [
+      bzip2
+      xz
+      zlib
+    ];
     Rsymphony = with pkgs; [
       symphony
       doxygen
