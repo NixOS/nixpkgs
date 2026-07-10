@@ -440,11 +440,7 @@ let
     RDieHarder = [ pkgs.gsl ]; # for gsl-config
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
-    RMySQL = with pkgs; [
-      zlib
-      libmysqlclient
-      openssl.dev
-    ];
+    RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
     RNetCDF = with pkgs; [
       netcdf
       udunits
@@ -2027,17 +2023,6 @@ let
            echo "bftools provides: $bf_version"
            exit 1
         fi
-      '';
-    });
-
-    RMySQL = old.RMySQL.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        MYSQL_DIR = "${pkgs.libmysqlclient}";
-        PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
-        NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
-      };
-      preConfigure = ''
-        patchShebangs configure
       '';
     });
 
