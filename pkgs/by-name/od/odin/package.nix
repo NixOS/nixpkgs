@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-05";
+  version = "dev-2026-07";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-fgN6Lz1CnUPXrmnQr+sPEfwSF/7y0+eZBX6TKFcFA50=";
+    hash = "sha256-pVCZB6YOk73tBGVE1i73JJG3z9SZNakFuMp4Kepqnvc=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/build_settings.cpp \
       --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
 
-    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+    rm -r vendor/raylib/{linux,macos,wasm,windows}
 
     patchShebangs --build build_odin.sh
   '';
