@@ -29833,7 +29833,7 @@
   VZstless = {
     name = "VZstless";
     email = "i@vzstless.moe";
-    github = "atlarator";
+    github = "VZstless";
     githubId = 233668878;
   };
   w-lfchen = {
