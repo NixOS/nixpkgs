@@ -449,7 +449,6 @@ let
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
     RationalMatrix = [ pkgs.pkg-config ];
-    RcppCNPy = [ pkgs.zlib.dev ];
     RcppCWB = [
       pkgs.pkg-config
       pkgs.pcre2
@@ -1124,6 +1123,7 @@ let
     Rbwa = [ pkgs.zlib ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+    RcppCNPy = [ pkgs.zlib ];
     RcppCWB = with pkgs; [
       pcre.dev
       glib.dev
