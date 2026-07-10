@@ -423,7 +423,6 @@ let
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
-    Formula = [ pkgs.gmp ];
     GLAD = [ pkgs.gsl ];
     GPBayes = [ pkgs.gsl ];
     GeneralizedWendland = [ pkgs.gsl ];
