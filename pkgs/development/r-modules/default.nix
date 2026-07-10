@@ -431,7 +431,7 @@ let
     ];
     KSgeneral = with pkgs; [ pkg-config ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
-    PEPBVS = [ pkgs.gsl ];
+    PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     R2SWF = [ pkgs.pkg-config ];
