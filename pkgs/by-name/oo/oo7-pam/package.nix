@@ -1,5 +1,4 @@
 {
-  lib,
   cargo,
   meson,
   ninja,
@@ -9,14 +8,17 @@
   rustc,
   stdenv,
   systemdLibs,
-  useWrappedDaemon ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "oo7-server";
+  pname = "oo7-pam";
   inherit (oo7) version src cargoDeps;
 
-  sourceRoot = "${finalAttrs.src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/pam";
   cargoRoot = "../";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -31,11 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
   ];
 
-  postFixup = lib.optionalString useWrappedDaemon ''
-    substituteInPlace "$out/share/systemd/user/oo7-daemon.service" \
-      --replace-fail "$out/libexec/oo7-daemon" "/run/wrappers/bin/oo7-daemon"
-  '';
-
   meta = {
     inherit (oo7.meta)
       homepage
@@ -44,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers
       platforms
       ;
-    description = "${oo7.meta.description} (Daemon)";
+    description = "${oo7.meta.description} (PAM modules)";
   };
 })
