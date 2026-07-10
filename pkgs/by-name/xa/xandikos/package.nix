@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   python3Packages,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,6 +33,12 @@ python3Packages.buildPythonApplication rec {
     multidict
     vobject
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage man/xandikos{,-milter}.8
+  '';
 
   passthru.tests.xandikos = nixosTests.xandikos;
 
