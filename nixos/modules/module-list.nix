@@ -1699,7 +1699,6 @@
   ./services/web-apps/immich-kiosk.nix
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
-  ./services/web-apps/immichframe.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/invoiceplane.nix
   ./services/web-apps/isso.nix

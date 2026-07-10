@@ -259,6 +259,10 @@ in
       "services"
       "ihatemoney"
     ] "The ihatemoney module has been removed for lack of downstream maintainer")
+    (mkRemovedOptionModule [
+      "services"
+      "immichframe"
+    ] "The immichframe module has been removed for lack of downstream maintainance")
     (mkRemovedOptionModule [ "services" "jira" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
