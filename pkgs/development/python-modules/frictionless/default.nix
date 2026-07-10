@@ -61,19 +61,19 @@
 
 buildPythonPackage rec {
   pname = "frictionless";
-  version = "5.18.1";
+  version = "5.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frictionlessdata";
     repo = "frictionless-py";
     tag = "v${version}";
-    hash = "sha256-svspEHcEw994pEjnuzWf0FFaYeFZuqriK96yFAB6/gI=";
+    hash = "sha256-/l+IXcyraXCwdrM7pWr1hvjiIasDzNUQt+mQAXHS+jM=";
   };
 
   postPatch = ''
     substituteInPlace frictionless/conftest.py \
-      --replace-fail "from pytest_cov.embed import cleanup_on_sigterm" "" \
+      --replace-fail "from pytest_cov.embed import cleanup_on_sigterm  # type: ignore" "pass" \
       --replace-fail "cleanup_on_sigterm()" ""
   '';
 
@@ -214,6 +214,17 @@ buildPythonPackage rec {
     "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite[duckdb_url]"
     "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_with_metadata[duckdb_url]"
     "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_on_progress[duckdb_url]"
+  ];
+
+  disabledTests = [
+    # These encoding-detection tests use very short sample files with a single
+    # non-ascii byte, so chardet's confidence is low and its exact guess is
+    # sensitive to the precise chardet release under test. Upstream tuned
+    # these assertions against a newer chardet than the 6.0.0.post1 currently
+    # packaged in nixpkgs; see the discussion in
+    # https://github.com/frictionlessdata/frictionless-py/pull/1768
+    "test_resource_encoding_detection_accent"
+    "test_remote_loader_latin1"
   ];
 
   pythonImportsCheck = [
