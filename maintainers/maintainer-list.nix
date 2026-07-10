@@ -1251,12 +1251,6 @@
     githubId = 12470950;
     name = "AN";
   };
-  AlexAntonik = {
-    email = "antonikavv@gmail.com";
-    github = "AlexAntonik";
-    githubId = 55547934;
-    name = "Alex Antonik";
-  };
   ALEX11BR = {
     email = "alexioanpopa11@gmail.com";
     github = "ALEX11BR";
@@ -1289,6 +1283,12 @@
     githubId = 65486851;
     name = "Alexandru Tocar";
     keys = [ { fingerprint = "B617 DD24 3AB0 2E3F 2E67  DBFD 1305 2A85 D7A4 2AA4"; } ];
+  };
+  AlexAntonik = {
+    email = "antonikavv@gmail.com";
+    github = "AlexAntonik";
+    githubId = 55547934;
+    name = "Alex Antonik";
   };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";

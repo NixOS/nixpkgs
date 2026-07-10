@@ -2451,6 +2451,8 @@ let
 
       jackmacwindows.craftos-pc = callPackage ./jackmacwindows.craftos-pc { };
 
+      jacobdufault.fuzzy-search = callPackage ./jacobdufault.fuzzy-search { };
+
       jakestanger.corn = callPackage ./jakestanger.corn { };
 
       james-yu.latex-workshop = callPackage ./james-yu.latex-workshop { };
