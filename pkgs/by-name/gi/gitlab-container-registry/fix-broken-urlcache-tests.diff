@@ -1,0 +1,22 @@
+diff --git a/registry/storage/driver/middleware/urlcache/urlcache_test.go b/registry/storage/driver/middleware/urlcache/urlcache_test.go
+index 67ef4abc0e..6644c80837 100644
+--- a/registry/storage/driver/middleware/urlcache/urlcache_test.go
++++ b/registry/storage/driver/middleware/urlcache/urlcache_test.go
+@@ -37,7 +37,7 @@
+ 			name:        "missing redis cache",
+ 			options:     make(map[string]any),
+ 			wantErr:     true,
+-			errContains: "urlcache middleware requires `cache` Redis configured",
++			errContains: "`_redisCache` key has not been passed to urlcache middleware",
+ 		},
+ 		{
+ 			name: "default configuration with redis",
+@@ -231,7 +231,7 @@
+ 				"_redisCache": "not a redis cache",
+ 			},
+ 			wantErr:     true,
+-			errContains: "unusable redis cache object",
++			errContains: "redis cache passed to the middleware cannot be used as the type is wrong",
+ 		},
+ 	}
+ 

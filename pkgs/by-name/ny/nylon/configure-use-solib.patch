@@ -1,0 +1,33 @@
+--- nylon-1.21/configure	2006-08-20 00:53:31.000000000 +0200
++++ nylon-1.21-patch/configure	2015-01-13 22:23:34.509154220 +0100
+@@ -5174,25 +5174,25 @@
+   *)
+      echo "$as_me:$LINENO: result: $withval" >&5
+ echo "${ECHO_T}$withval" >&6
+-     if test -f $withval/include/event.h -a -f $withval/lib/libevent.a; then
++     if test -f $withval/include/event.h -a -f $withval/lib/libevent.so; then
+         owd=`pwd`
+         if cd $withval; then withval=`pwd`; cd $owd; fi
+         EVENTINC="-I$withval/include"
+         EVENTLIB="-L$withval/lib -levent"
+-     elif test -f $withval/event.h -a -f $withval/libevent.a; then
++     elif test -f $withval/event.h -a -f $withval/libevent.so; then
+         owd=`pwd`
+         if cd $withval; then withval=`pwd`; cd $owd; fi
+         EVENTINC="-I$withval"
+         EVENTLIB="-L$withval -levent"
+      else
+-        { { echo "$as_me:$LINENO: error: event.h or libevent.a not found in $withval" >&5
+-echo "$as_me: error: event.h or libevent.a not found in $withval" >&2;}
++        { { echo "$as_me:$LINENO: error: event.h or libevent.so not found in $withval" >&5
++echo "$as_me: error: event.h or libevent.so not found in $withval" >&2;}
+    { (exit 1); exit 1; }; }
+      fi
+      ;;
+   esac
+ else
+-   if test -f ${prefix}/include/event.h -a -f ${prefix}/lib/libevent.a;
++   if test -f ${prefix}/include/event.h -a -f ${prefix}/lib/libevent.so;
+ then
+      EVENTINC="-I${prefix}/include"
+      EVENTLIB="-L${prefix}/lib -levent"

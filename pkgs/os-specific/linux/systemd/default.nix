@@ -1,0 +1,909 @@
+{
+  stdenv,
+  lib,
+  nixosTests,
+  pkgsCross,
+  testers,
+  fetchFromGitHub,
+  buildPackages,
+  makeBinaryWrapper,
+  ninja,
+  meson,
+  m4,
+  pkg-config,
+  coreutils,
+  gperf,
+  glibcLocales,
+  autoPatchelfHook,
+
+  # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
+  glib,
+  gettext,
+  python3Packages,
+
+  # Mandatory dependencies
+  util-linux,
+  kbd,
+  kmod,
+  libxcrypt,
+
+  # Optional dependencies
+  pam,
+  cryptsetup,
+  audit,
+  acl,
+  lz4,
+  openssl,
+  libgcrypt,
+  libgpg-error,
+  libidn2,
+  curl,
+  zlib,
+  xz,
+  zstd,
+  tpm2-tss,
+  libuuid,
+  libapparmor,
+  intltool,
+  bzip2,
+  pcre2,
+  elfutils,
+  linuxHeaders ? stdenv.cc.libc.linuxHeaders,
+  gnutls,
+  withSelinux ? false,
+  libselinux,
+  withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
+  libseccomp,
+  withKexectools ? lib.meta.availableOn stdenv.hostPlatform kexec-tools,
+  kexec-tools,
+  bash,
+  bashNonInteractive,
+  libmicrohttpd,
+  libfido2,
+  p11-kit,
+  libpwquality,
+  qrencode,
+  libarchive,
+  llvmPackages,
+
+  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
+  # be available during build time.
+  # Only libbpf should be a runtime dependency.
+  # Note: llvmPackages is explicitly taken from buildPackages instead of relying
+  # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
+  # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we
+  # explicitly take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to
+  # us. Working around this is important, because systemd is in the dependency
+  # closure of GHC via emscripten and jdk.
+  bpftools,
+  libbpf,
+
+  # Needed to produce a ukify that works for cross compiling UKIs.
+  targetPackages,
+
+  withAcl ? true,
+  withAnalyze ? true,
+  withApparmor ? true,
+  withAudit ? true,
+  # compiles systemd-boot, assumes EFI is available.
+  withBootloader ?
+    withEfi
+    # "Unknown 64-bit data model"
+    && !stdenv.hostPlatform.isRiscV32,
+  # adds bzip2, lz4, xz and zstd
+  withCompression ? true,
+  withCoredump ? true,
+  withCryptsetup ? true,
+  withRepart ? true,
+  withDocumentation ? true,
+  withEfi ? stdenv.hostPlatform.isEfi,
+  withFido2 ? true,
+  withFirstboot ? true,
+  withGcrypt ? true,
+  withHomed ? true,
+  withHostnamed ? true,
+  withHwdb ? true,
+  withImportd ? true,
+  withKmod ? true,
+  withLibBPF ?
+    lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
+    # assumes hard floats
+    && (
+      stdenv.hostPlatform.isAarch
+      ->
+        stdenv.hostPlatform.parsed.cpu ? version
+        && lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6"
+    )
+    # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    && !stdenv.hostPlatform.isMips64
+    # https://reviews.llvm.org/D43106#1019077
+    && (stdenv.hostPlatform.isRiscV32 -> stdenv.cc.isClang)
+    # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
+    # but we do it this way to avoid taking llvmPackages as an input, and
+    # risking making it too easy to ignore the above comment about llvmPackages.
+    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt,
+  withLibidn2 ? true,
+  withLocaled ? true,
+  withLogind ? true,
+  withMachined ? true,
+  withNetworkd ? true,
+  withNspawn ? !buildLibsOnly,
+  withNss ? !stdenv.hostPlatform.isMusl,
+  withOomd ? true,
+  withOpenSSL ? true,
+  withPam ? true,
+  withPasswordQuality ? true,
+  withPCRE2 ? true,
+  withPolkit ? true,
+  withPortabled ? true,
+  withQrencode ? true,
+  withRemote ? true,
+  withResolved ? true,
+  withShellCompletions ? true,
+  withSysusers ? true,
+  withSysupdate ? true,
+  withTimedated ? true,
+  withTimesyncd ? true,
+  withTpm2Tss ? true,
+  # adds python to closure which is too much by default
+  withUkify ? false,
+  withUserDb ? true,
+  # utmp does not exist on musl, so it would be implicitly disabled
+  # It is important to document the lack of utmp in nix,
+  # otherwise the condition for systemd-update-utmp.service will
+  # attempt to load a service which does not exist, resulting in errors.
+  withUtmp ? !stdenv.hostPlatform.isMusl,
+  withVmspawn ? true,
+  # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
+  # building disk images for non-NixOS systems. To save users from trying to use it
+  # on their live NixOS system, we disable it by default.
+  withKernelInstall ? false,
+  withLibarchive ? true,
+  withVConsole ? true,
+  # tests assume too much system access for them to be feasible for us right now
+  withTests ? false,
+  # build only libudev and libsystemd
+  buildLibsOnly ? false,
+
+  # yes, pname is an argument here
+  pname ? "systemd",
+
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  docbook_xml_dtd_45,
+  withLogTrace ? false,
+}:
+
+assert withImportd -> withCompression;
+assert withCoredump -> withCompression;
+assert withHomed -> withCryptsetup;
+assert withHomed -> withPam;
+assert withHomed -> withOpenSSL;
+assert withFido2 -> withOpenSSL;
+assert withSysupdate -> withOpenSSL;
+assert withImportd -> (withGcrypt || withOpenSSL);
+assert withUkify -> (withEfi && withBootloader);
+assert withRepart -> withCryptsetup;
+assert withBootloader -> withEfi;
+
+let
+  wantCurl = withRemote || withImportd;
+
+  # Use the command below to update `releaseTimestamp` on every (major) version
+  # change. More details in the commentary at mesonFlags.
+  # command:
+  #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
+  #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
+  releaseTimestamp = "1773777352";
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname;
+  version = "260.2";
+
+  src = fetchFromGitHub {
+    owner = "systemd";
+    repo = "systemd";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NXmmSV7/9WIW6C8wjdOwaerCy4v7Zcrd8+XDzcS8rEk=";
+  };
+
+  # PATCH POLICY
+  #
+  # There are only two reasons we accept patches on systemd:
+  # 1. systemd functionality is fundamentally incompatible with how NixOS works
+  #    and workarounds are not possible.
+  # 2. Hotfixes that we want to apply before they have reached a systemd branch
+  #    we can use. If we come up with the fixes in Nixpkgs, they need to be
+  #    reported upstream and the upstream issue needs to be linked in the
+  #    commit message of the patch.
+  #
+  # Importantly, patches to improve usability, enable new features on NixOS or
+  # add entirely new features to systemd are not allowed.
+
+  # On major changes, or when otherwise required, you *must* :
+  # 1. reformat the patches,
+  # 2. `git am path/to/00*.patch` them into a systemd worktree,
+  # 3. rebase to the more recent systemd version,
+  # 4. and export the patches again via
+  #   `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
+  # patches
+  patches = [
+    ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0003-add-rootprefix-to-lookup-dir-paths.patch
+    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0005-core-don-t-taint-on-unmerged-usr.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+  ''
+  + lib.optionalString withLibBPF ''
+    substituteInPlace meson.build \
+      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+  ''
+  + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
+  ''
+  # Finally, patch shebangs in scripts used at build time. This must not patch
+  # scripts that will end up in the output, to avoid build platform references
+  # when cross-compiling.
+  + ''
+    shopt -s extglob
+    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
+  '';
+
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ (lib.optional (!buildLibsOnly) "man");
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  hardeningDisable = lib.optionals withLibBPF [
+    # breaks clang -target bpf; should be fixed to not use
+    # a wrapped clang?
+    "zerocallusedregs"
+    "shadowstack"
+    "pacret"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+    gperf
+    ninja
+    meson
+    glibcLocales
+    m4
+    autoPatchelfHook
+
+    intltool
+    gettext
+
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_45
+    bash
+    (buildPackages.python3Packages.python.withPackages (
+      ps:
+      with ps;
+      [
+        lxml
+        jinja2
+      ]
+      ++ lib.optional withEfi ps.pyelftools
+      # pefile is only required to trigger a check in meson to actually build
+      # ukify. This module should never appear in the runtime closure of ukify.
+      # Instead the pefile from buildInputs should be used.
+      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
+      ++ lib.optional withUkify ps.pefile
+    ))
+  ]
+  ++ lib.optionals withLibBPF [
+    bpftools
+    buildPackages.llvmPackages.clang
+    buildPackages.llvmPackages.libllvm
+  ];
+
+  autoPatchelfFlags = [ "--keep-libc" ];
+
+  buildInputs = [
+    libxcrypt
+    libuuid
+    linuxHeaders
+  ]
+
+  ++ lib.optionals withGcrypt [
+    libgcrypt
+    libgpg-error
+  ]
+  ++ lib.optionals withOpenSSL [ openssl ]
+  ++ lib.optional withTests glib
+  ++ lib.optional withAcl acl
+  ++ lib.optional withApparmor libapparmor
+  ++ lib.optional withAudit audit
+  ++ lib.optional wantCurl (lib.getDev curl)
+  ++ lib.optionals withCompression [
+    zlib
+    bzip2
+    lz4
+    xz
+    zstd
+  ]
+  ++ lib.optional withCoredump elfutils
+  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withKexectools kexec-tools
+  ++ lib.optional withKmod kmod
+  ++ lib.optional withLibidn2 libidn2
+  ++ lib.optional withLibseccomp libseccomp
+  ++ lib.optional withPam pam
+  ++ lib.optional withPCRE2 pcre2
+  ++ lib.optional withSelinux libselinux
+  ++ lib.optionals withRemote [
+    libmicrohttpd
+    gnutls
+  ]
+  ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
+  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals withLibBPF [ libbpf ]
+  ++ lib.optional withTpm2Tss tpm2-tss
+  ++ lib.optional withUkify (
+    python3Packages.python.withPackages (
+      ps: with ps; [
+        cryptography
+        pefile
+      ]
+    )
+  )
+  ++ lib.optionals withPasswordQuality [ libpwquality ]
+  ++ lib.optionals withQrencode [ qrencode ]
+  ++ lib.optionals withLibarchive [ libarchive ]
+  ++ lib.optional (withBootloader && stdenv.targetPlatform.useLLVM or false) (
+    llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    }
+  );
+
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    # Options
+
+    # We bump this attribute on every (major) version change to ensure that we
+    # have known-good value for a timestamp that is in the (not so distant)
+    # past. This serves as a lower bound for valid system timestamps during
+    # startup. Systemd will reset the system timestamp if this date is +- 15
+    # years from the system time.
+    # See the systemd v250 release notes for further details:
+    #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
+    (lib.mesonOption "time-epoch" releaseTimestamp)
+
+    (lib.mesonOption "version-tag" finalAttrs.version)
+    (lib.mesonOption "mode" "release")
+    (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
+    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
+    (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
+    (lib.mesonOption "ntp-servers" "0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+
+    # /bin/sh is also the upstream default. Explicitly set this so that we're
+    # independent of upstream changes to the default.
+    (lib.mesonOption "debug-shell" "/bin/sh")
+
+    # Use the correct path for Bash for user shells (e.g. used in nspawn and
+    # homed), which otherwise defaults to /bin/bash.
+    (lib.mesonOption "default-user-shell" "/run/current-system/sw/bin/bash")
+
+    # Attempts to check /usr/sbin and that fails in macOS sandbox because
+    # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
+    # We set it to false since stdenv moves sbin/* to bin and creates a symlink,
+    # that is, we do not have split bin.
+    (lib.mesonOption "split-bin" "false")
+
+    # D-Bus
+    (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.mesonOption "dbussessionservicedir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+
+    # pkgconfig
+    (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
+    (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
+
+    # SBAT
+    (lib.mesonOption "sbat-distro" "nixos")
+    (lib.mesonOption "sbat-distro-summary" "NixOS")
+    (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
+    (lib.mesonOption "sbat-distro-pkgname" pname)
+    (lib.mesonOption "sbat-distro-version" finalAttrs.version)
+
+    # Users
+    (lib.mesonOption "system-uid-max" "999")
+    (lib.mesonOption "system-gid-max" "999")
+
+    # Login
+    (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
+
+    # Mount
+    (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
+    (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+    # Swap
+    (lib.mesonOption "swapon-path" "${lib.getOutput "swap" util-linux}/sbin/swapon")
+    (lib.mesonOption "swapoff-path" "${lib.getOutput "swap" util-linux}/sbin/swapoff")
+
+    # SSH
+    (lib.mesonOption "sshconfdir" "")
+    (lib.mesonOption "sshdconfdir" "no")
+
+    # RPM
+    # This stops building/installing RPM specific tools.
+    (lib.mesonOption "rpmmacrosdir" "no")
+
+    # Features
+
+    # Tests
+    (lib.mesonBool "tests" withTests)
+    (lib.mesonEnable "glib" withTests)
+    (lib.mesonEnable "dbus" withTests)
+
+    # Compression
+    (lib.mesonEnable "bzip2" withCompression)
+    (lib.mesonEnable "lz4" withCompression)
+    (lib.mesonEnable "xz" withCompression)
+    (lib.mesonEnable "zstd" withCompression)
+    (lib.mesonEnable "zlib" withCompression)
+
+    # NSS
+    (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
+    (lib.mesonEnable "nss-resolve" withNss)
+    (lib.mesonBool "nss-myhostname" withNss)
+    (lib.mesonBool "nss-systemd" withNss)
+
+    # Cryptsetup
+    (lib.mesonEnable "libcryptsetup" withCryptsetup)
+    (lib.mesonEnable "libcryptsetup-plugins" withCryptsetup)
+    (lib.mesonEnable "p11kit" (withHomed || withCryptsetup))
+
+    # FIDO2
+    (lib.mesonEnable "libfido2" withFido2)
+    (lib.mesonEnable "openssl" withOpenSSL)
+
+    # Password Quality
+    (lib.mesonEnable "pwquality" withPasswordQuality)
+    (lib.mesonEnable "passwdqc" false)
+
+    # Remote
+    (lib.mesonEnable "remote" withRemote)
+    (lib.mesonEnable "microhttpd" withRemote)
+
+    (lib.mesonEnable "pam" withPam)
+    (lib.mesonEnable "acl" withAcl)
+    (lib.mesonEnable "audit" withAudit)
+    (lib.mesonEnable "apparmor" withApparmor)
+    (lib.mesonEnable "gcrypt" withGcrypt)
+    (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "homed" withHomed)
+    (lib.mesonEnable "polkit" withPolkit)
+    (lib.mesonEnable "elfutils" withCoredump)
+    (lib.mesonEnable "libcurl" wantCurl)
+    (lib.mesonEnable "libidn2" withLibidn2)
+    (lib.mesonEnable "repart" withRepart)
+    (lib.mesonEnable "sysupdate" withSysupdate)
+    (lib.mesonEnable "sysupdated" withSysupdate)
+    (lib.mesonEnable "seccomp" withLibseccomp)
+    (lib.mesonEnable "selinux" withSelinux)
+    (lib.mesonEnable "tpm2" withTpm2Tss)
+    (lib.mesonEnable "pcre2" withPCRE2)
+    (lib.mesonEnable "bpf-framework" withLibBPF)
+    (lib.mesonEnable "bootloader" withBootloader)
+    (lib.mesonEnable "ukify" withUkify)
+    (lib.mesonEnable "kmod" withKmod)
+    (lib.mesonEnable "qrencode" withQrencode)
+    (lib.mesonEnable "vmspawn" withVmspawn)
+    (lib.mesonEnable "libarchive" withLibarchive)
+    (lib.mesonEnable "xenctrl" false)
+    (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "xkbcommon" false)
+    (lib.mesonEnable "man" true)
+    (lib.mesonEnable "nspawn" withNspawn)
+
+    (lib.mesonBool "vconsole" withVConsole)
+    (lib.mesonBool "analyze" withAnalyze)
+    (lib.mesonBool "logind" withLogind)
+    (lib.mesonBool "localed" withLocaled)
+    (lib.mesonBool "hostnamed" withHostnamed)
+    (lib.mesonBool "machined" withMachined)
+    (lib.mesonBool "networkd" withNetworkd)
+    (lib.mesonBool "oomd" withOomd)
+    (lib.mesonBool "portabled" withPortabled)
+    (lib.mesonBool "hwdb" withHwdb)
+    (lib.mesonBool "timedated" withTimedated)
+    (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "userdb" withUserDb)
+    (lib.mesonBool "coredump" withCoredump)
+    (lib.mesonBool "firstboot" withFirstboot)
+    (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysusers" withSysusers)
+    (lib.mesonBool "efi" withEfi)
+    (lib.mesonBool "utmp" withUtmp)
+    (lib.mesonBool "log-trace" withLogTrace)
+    (lib.mesonBool "kernel-install" withKernelInstall)
+    (lib.mesonBool "quotacheck" false)
+    (lib.mesonBool "ldconfig" false)
+    (lib.mesonBool "install-sysconfdir" false)
+    (lib.mesonBool "create-log-dirs" false)
+    (lib.mesonBool "smack" true)
+    (lib.mesonBool "b_pie" true)
+  ]
+  ++ lib.optionals withVConsole [
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+  ]
+  ++ lib.optionals withKexectools [
+    (lib.mesonOption "kexec-path" "${kexec-tools}/bin/kexec")
+  ]
+  ++ lib.optionals withKmod [
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
+  ]
+  ++ lib.optionals (withShellCompletions == false) [
+    (lib.mesonOption "bashcompletiondir" "no")
+    (lib.mesonOption "zshcompletiondir" "no")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (lib.mesonOption "libc" "musl")
+    (lib.mesonBool "gshadow" false)
+    (lib.mesonBool "idn" false)
+  ];
+  preConfigure = ''
+    substituteInPlace src/libsystemd/sd-journal/catalog.c \
+      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+  '';
+
+  # These defines are overridden by CFLAGS and would trigger annoying
+  # warning messages
+  postConfigure = ''
+    substituteInPlace config.h \
+      --replace-fail "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
+      --replace-fail "SYSTEM_SHUTDOWN_PATH" "_SYSTEM_SHUTDOWN_PATH" \
+      --replace-fail "SYSTEM_SLEEP_PATH" "_SYSTEM_SLEEP_PATH"
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-USYSTEMD_BINARY_PATH"
+    "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SHUTDOWN_PATH"
+    "-DSYSTEM_SHUTDOWN_PATH=\"/etc/systemd/system-shutdown\""
+
+    # This path is not exposed via meson
+    "-USYSTEM_SLEEP_PATH"
+    "-DSYSTEM_SLEEP_PATH=\"/etc/systemd/system-sleep\""
+  ];
+
+  doCheck = false;
+
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
+
+  mesonInstallTags = lib.optionals buildLibsOnly [
+    "devel"
+    "libudev"
+    "libsystemd"
+  ];
+
+  postInstall =
+    lib.optionalString (!buildLibsOnly) ''
+      mkdir -p $out/example/systemd
+      mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
+      mv $out/lib/systemd/{system,user} $out/example/systemd
+
+      rm -rf $out/etc/systemd/system
+
+      # Fix reference to /bin/false in the D-Bus services.
+      for i in $out/share/dbus-1/system-services/*.service; do
+        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+      done
+
+      # For compatibility with dependents that use sbin instead of bin.
+      ln -s bin "$out/sbin"
+    ''
+    + lib.optionalString (!withDocumentation) ''
+      rm -rf $out/share/doc
+    ''
+    + lib.optionalString (withKmod && !buildLibsOnly) ''
+      mv $out/lib/modules-load.d $out/example
+    ''
+    + lib.optionalString withSysusers ''
+      mv $out/lib/sysusers.d $out/example
+    '';
+
+  doInstallCheck = true;
+
+  # check udev rules exposed by systemd
+  # can't use `udevCheckHook` here as that would introduce infinite recursion
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ${lib.optionalString (
+      !buildLibsOnly
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
+
+    runHook postInstallCheck
+  '';
+
+  # Avoid *.EFI binary stripping.
+  # At least on aarch64-linux strip removes too much from PE32+ files:
+  #   https://github.com/NixOS/nixpkgs/issues/169693
+  stripExclude = [ "lib/systemd/boot/efi/*" ];
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup =
+    lib.optionalString withCryptsetup ''
+      for f in bin/systemd-cryptsetup bin/systemd-cryptenroll; do
+        # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+        wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+      done
+    ''
+    + lib.optionalString withUkify ''
+      # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+      # ukify with the correct binutils. When wrapping, no splicing happens so we
+      # have to explicitly pull binutils from targetPackages.
+      wrapProgram $out/bin/ukify --prefix PATH : ${
+        lib.makeBinPath [ targetPackages.stdenv.cc.bintools ]
+      }:${placeholder "out"}/lib/systemd
+    '';
+
+  disallowedReferences =
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+      # 'or p' is for manually specified buildPackages as they dont have __spliced
+      (builtins.filter (p: p != null) (map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs));
+
+  disallowedRequisites = lib.optionals (!withUkify) [
+    bash
+    bashNonInteractive
+  ];
+
+  passthru = {
+    # The `interfaceVersion` attribute below points out the incompatibilities
+    # between systemd versions. When the new systemd build is
+    # backwards-compatible with the previous one, then they can be switched at
+    # runtime (the reboot being optional in this case); otherwise, a reboot is
+    # needed - and therefore `interfaceVersion` should be incremented.
+    interfaceVersion = 2;
+
+    inherit
+      withBootloader
+      withCryptsetup
+      withEfi
+      withFido2
+      withHostnamed
+      withImportd
+      withKmod
+      withLocaled
+      withLogind
+      withMachined
+      withNetworkd
+      withNspawn
+      withRepart
+      withPortabled
+      withSysupdate
+      withTimedated
+      withTpm2Tss
+      withUtmp
+      util-linux
+      kmod
+      kbd
+      ;
+
+    # Many TPM2-related units are only installed if this trio of features are
+    # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
+    withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
+
+    # These are all the tests that need to pass in order to merge a PR that
+    # updates systemd.
+    #
+    # This list cannot grow indefinitely. It needs to balance the coverage of
+    # important features of a NixOS system exposed via systemd and the actual
+    # ability of maintainers to execute the tests. Only if this remains
+    # executable with reasonable effort, can it serve its purpose as a quality
+    # gate for updating systemd.
+    nixosTests =
+      let
+        prefixTests =
+          prefix:
+          lib.mapAttrs' (name: value: {
+            name = "${prefix}-${name}";
+            inherit value;
+          }) nixosTests."${prefix}";
+      in
+      {
+        inherit (prefixTests "systemd-binfmt")
+          systemd-binfmt-basic
+          systemd-binfmt-chroot
+          systemd-binfmt-ldPreload
+          systemd-binfmt-preserveArgvZero
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-initrd-networkd")
+          systemd-initrd-networkd-basic
+          systemd-initrd-networkd-doFlush
+          systemd-initrd-networkd-dontFlush
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-boot")
+          systemd-boot-basic
+          systemd-boot-basicXbootldr
+          systemd-boot-bootCounting
+          systemd-boot-bootCountingSpecialisation
+          systemd-boot-defaultEntry
+          systemd-boot-defaultEntryWithBootCounting
+          systemd-boot-edk2-uefi-shell
+          systemd-boot-entryFilenameXbootldr
+          systemd-boot-extraEntries
+          systemd-boot-extraFiles
+          systemd-boot-fallback
+          systemd-boot-garbage-collect-entry
+          systemd-boot-garbageCollectEntryWithBootCounting
+          systemd-boot-memtest86
+          systemd-boot-memtestSortKey
+          systemd-boot-netbootxyz
+          systemd-boot-secureBoot
+          systemd-boot-specialisation
+          systemd-boot-switch-test
+          systemd-boot-update
+          systemd-boot-windows
+          ;
+      }
+      // {
+        inherit (prefixTests "systemd-repart")
+          systemd-repart-after-initrd
+          systemd-repart-basic
+          systemd-repart-create-root
+          systemd-repart-encrypt-tpm2
+          systemd-repart-factory-reset
+          ;
+      }
+      // {
+        inherit (nixosTests)
+          simple-vm
+          fsck-systemd-stage-1
+          hibernate-systemd-stage-1
+          switchTest
+          # systemd # broken on master
+          systemd-analyze
+          systemd-bpf
+          systemd-confinement
+          # systemd-coredump # broken on master
+          systemd-cryptenroll
+          systemd-credentials-tpm2
+          systemd-escaping
+          systemd-initrd-btrfs-raid
+          systemd-initrd-luks-fido2
+          systemd-initrd-luks-keyfile
+          systemd-initrd-luks-empty-passphrase
+          systemd-initrd-luks-password
+          systemd-initrd-luks-tpm2
+          systemd-initrd-modprobe
+          systemd-initrd-shutdown
+          systemd-initrd-simple
+          systemd-initrd-swraid
+          # systemd-initrd-vconsole # broken on master
+          systemd-initrd-networkd-ssh
+          systemd-initrd-networkd-openvpn
+          systemd-initrd-vlan
+          systemd-journal
+          # systemd-journal-gateway # broken on master
+          systemd-journal-upload
+          # systemd-machinectl # broken on master
+          systemd-networkd
+          systemd-networkd-bridge
+          systemd-networkd-dhcpserver
+          systemd-networkd-dhcpserver-static-leases
+          systemd-networkd-ipv6-prefix-delegation
+          systemd-networkd-vrf
+          systemd-no-tainted
+          systemd-nspawn
+          systemd-nspawn-configfile
+          systemd-oomd
+          systemd-portabled
+          systemd-pstore
+          systemd-resolved
+          systemd-shutdown
+          systemd-sysupdate
+          systemd-sysusers-mutable
+          systemd-sysusers-immutable
+          systemd-sysusers-password-option-override-ordering
+          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-user-linger
+          systemd-user-tmpfiles-rules
+          systemd-misc
+          systemd-userdbd
+          # systemd-homed # broken on master
+          ;
+      };
+
+    tests = finalAttrs.passthru.nixosTests // {
+      cross =
+        let
+          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
+    homepage = "https://systemd.io";
+    description = "System and service manager for Linux";
+    longDescription = ''
+      systemd is a suite of basic building blocks for a Linux system. It
+      provides a system and service manager that runs as PID 1 and starts the
+      rest of the system. systemd provides aggressive parallelization
+      capabilities, uses socket and D-Bus activation for starting services,
+      offers on-demand starting of daemons, keeps track of processes using Linux
+      control groups, maintains mount and automount points, and implements an
+      elaborate transactional dependency-based service control logic. systemd
+      supports SysV and LSB init scripts and works as a replacement for
+      sysvinit. Other parts include a logging daemon, utilities to control basic
+      system configuration like the hostname, date, locale, maintain a list of
+      logged-in users and running containers and virtual machines, system
+      accounts, runtime directories and settings, and daemons to manage simple
+      network configuration, network time synchronization, log forwarding, and
+      name resolution.
+    '';
+    license = with lib.licenses; [
+      # Taken from https://raw.githubusercontent.com/systemd/systemd-stable/${finalAttrs.src.rev}/LICENSES/README.md
+      bsd2
+      bsd3
+      cc0
+      lgpl21Plus
+      lgpl2Plus
+      mit
+      mit0
+      ofl
+      publicDomain
+    ];
+    teams = [
+      lib.teams.systemd
+      lib.teams.security-review
+    ];
+    pkgConfigModules = [
+      "libsystemd"
+      "libudev"
+      "systemd"
+      "udev"
+    ];
+    # See src/basic/missing_syscall_def.h
+    platforms =
+      with lib.platforms;
+      lib.intersectLists linux (aarch ++ x86 ++ loongarch64 ++ m68k ++ mips ++ power ++ riscv ++ s390);
+    priority = 10;
+    badPlatforms = [
+      # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
+  };
+})

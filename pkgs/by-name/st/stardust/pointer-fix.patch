@@ -1,0 +1,13 @@
+diff --git a/src/obj.c b/src/obj.c
+index 66d528b..ab08a4f 100644
+--- a/src/obj.c
++++ b/src/obj.c
+@@ -183,7 +183,7 @@ static short intnpar(char *line, int mode, struct face *face) {
+  */
+ #define ALLOC_MORE 100
+ GLuint obj_load(Obj *object, const char *obj_file) {
+-  gzFile *gzp = NULL;
++  gzFile gzp = NULL;
+   char line[1024], command[1024];
+ 
+   char filename_mtl[256] = "\0";

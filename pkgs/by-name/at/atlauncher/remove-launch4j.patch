@@ -1,0 +1,71 @@
+diff --git a/build.gradle b/build.gradle
+index 474c0c0..59fc2d2 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -24,7 +24,6 @@ plugins {
+     id 'org.cadixdev.licenser' version '0.6.1'
+     id 'com.adarshr.test-logger' version '4.0.0'
+     id 'edu.sc.seis.macAppBundle' version '2.3.0'
+-    id 'edu.sc.seis.launch4j' version '3.0.6'
+     id 'de.undercouch.download' version '5.6.0'
+     id 'com.github.johnrengelman.shadow' version '8.1.1'
+     id 'com.github.ben-manes.versions' version '0.52.0'
+@@ -282,34 +281,15 @@ def currentYear() {
+     return df.format(new Date())
+ }
+ 
+-launch4j {
+-    outfile = "ATLauncher-${project.version}.exe"
+-    jreMinVersion = "${project.targetCompatibility.toString()}"
+-    mainClassName = 'com.atlauncher.App'
+-    icon = "${projectDir}/src/main/resources/assets/image/icon.ico"
+-    version = "${project.version}"
+-    textVersion = "${project.version}"
+-    copyright = "2013-${currentYear()} ${project.name}"
+-    companyName = "${project.name}"
+-    bundledJrePath = "jre/;%JAVA_HOME%;%PATH%"
+-    jvmOptions = [
+-        "-Djna.nosys=true",
+-        "-Djava.net.preferIPv4Stack=true",
+-        "-Dawt.useSystemAAFontSettings=on",
+-        "-Dswing.aatext=true"
+-    ]
+-}
+ 
+ artifacts {
+     archives shadowJar
+-    archives file(project.tasks.jar.getArchivePath().getPath().replace('.jar', '.exe').replace('libs', 'launch4j'))
+     archives file(project.tasks.jar.getArchivePath().getPath().replace('.jar', '.zip').replace('libs', 'distributions'))
+ }
+ 
+ task copyArtifacts(type: Copy) {
+     dependsOn build
+     from shadowJar
+-    from file(project.tasks.jar.getArchivePath().getPath().replace('.jar', '.exe').replace('libs', 'launch4j'))
+     from file(project.tasks.jar.getArchivePath().getPath().replace('.jar', '.zip').replace('libs', 'distributions'))
+     into "${projectDir}/dist"
+ }
+@@ -368,14 +348,6 @@ clean.doFirst {
+     delete "${projectDir}/dist"
+ }
+ 
+-project.afterEvaluate {
+-    tasks.check {
+-        dependsOn -= tasks.find {
+-            it.name.equals("checkLicenses")
+-        }
+-    }
+-}
+-
+ def shouldIgnoreUpdate = { String version -> return ['ALPHA', 'BETA', 'RC', '-M'].any { it -> version.toUpperCase(Locale.ENGLISH).contains(it) } }
+ tasks.named("dependencyUpdates").configure {
+     rejectVersionIf {
+@@ -385,8 +357,6 @@ tasks.named("dependencyUpdates").configure {
+ 
+ build.finalizedBy copyArtifacts
+ shadowJar.dependsOn jar
+-build.dependsOn createExe, createMacApp
+ startScripts.dependsOn shadowJar
+-createExe.dependsOn shadowJar
+ createAppZip.dependsOn downloadNewerUniversalJavaApplicationStub
+ createDmg.dependsOn downloadNewerUniversalJavaApplicationStub

@@ -1,0 +1,23 @@
+diff --git a/setup.py b/setup.py
+index 507dd32d..bf258897 100644
+--- a/setup.py
++++ b/setup.py
+@@ -435,9 +435,6 @@ class install_pymol(install):
+         super().run()
+         self.install_pymol_path()
+ 
+-        if not self.no_launcher:
+-            self.make_launch_script()
+-
+         if self.bundled_pmw:
+             raise Exception(
+                 "--bundled-pmw has been removed, please install Pmw from "
+@@ -487,7 +484,7 @@ class install_pymol(install):
+         launch_script = os.path.join(self.install_scripts, launch_script)
+ 
+         python_exe = os.path.abspath(sys.executable)
+-        site_packages_dir = sysconfig.get_path('purelib')
++        site_packages_dir = sysconfig.get_path("purelib")
+         pymol_file = self.unchroot(
+             os.path.join(site_packages_dir, "pymol", "__init__.py")
+         )

@@ -1,0 +1,26 @@
+set -e
+
+scriptdir=$(cd $(dirname $0) && pwd)
+fwdir=$LINUX_FIRMWARE/intel/iwlwifi
+
+for dir in $scriptdir/*; do
+	if [ ! -d "$dir" ]; then
+		continue
+	fi
+	rm -rf "$dir"
+done
+
+for file in $fwdir/*.*; do
+	base=$(basename $file)
+
+	echo "SUBDIR += $base" >> Makefile
+
+	mkdir -p "$scriptdir/$base"
+	cat > "$scriptdir/$base/Makefile" <<EOF
+NAME=		$base
+
+.include <bsd.kmod.mk>
+EOF
+done
+
+echo ".include <bsd.subdir.mk>" >> Makefile

@@ -1,0 +1,9 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index bbde353..bcbed04 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -54,4 +54,3 @@ LIBS += @LIBICONV@
+ endif
+ 
+ install-exec-hook:
+-	chmod u+s $(DESTDIR)$(sbindir)/mount.davfs;

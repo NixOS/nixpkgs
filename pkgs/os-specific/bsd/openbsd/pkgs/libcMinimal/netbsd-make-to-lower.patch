@@ -1,0 +1,16 @@
+NetBSD's make uses `${variable:tl}` not `${variable:L}`.
+
+diff --git a/lib/libc/Makefile b/lib/libc/Makefile
+index 4bb4b67fcbb..ffb35c196ea 100644
+--- a/lib/libc/Makefile
++++ b/lib/libc/Makefile
+@@ -11,8 +11,8 @@ CLEANFILES+=tags Symbols.map
+ CFLAGS+=-Wimplicit
+ #CFLAGS+=-Werror
+ LDADD=-nostdlib
+-.if ${COMPILER_VERSION:L} == "clang"
++.if ${COMPILER_VERSION:tl} == "clang"
+ LDADD+=-lcompiler_rt
+ .else
+ LDADD+=-lgcc
+ .endif

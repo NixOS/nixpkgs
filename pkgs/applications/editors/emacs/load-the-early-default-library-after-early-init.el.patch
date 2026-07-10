@@ -1,0 +1,140 @@
+From: Lin Jian <me@linj.tech>
+Subject: Load the early-default library after early-init.el
+
+emacs.pkgs.withPackages from Nixpkgs can be used to configure Emacs.
+Its main functionality is to add extra Emacs lisp libraries.
+By (ab)using a library named default, user configuration (init.el) can
+also be added by it.
+
+A natural extension[1] is to add early-init.el via
+emacs.pkgs.withPackages.  With this patch, early-init.el can be added by
+packaging it as a library named early-default.
+
+The early-default library is similar to the default library except that
+it is loaded right after early-init.el and is controlled by
+inhibit-early-default-init.
+
+[1]: https://github.com/nix-community/emacs-overlay/issues/532
+
+--- a/doc/emacs/cmdargs.texi
++++ b/doc/emacs/cmdargs.texi
+@@ -338,9 +338,10 @@ meant for regular (or interactive) use, since it makes commands like
+ @opindex -q
+ @itemx --no-init-file
+ @opindex --no-init-file
+-@cindex bypassing init and @file{default.el} file
++@cindex bypassing init, @file{early-default.el} and @file{default.el} file
+ @cindex init file, not loading
+ @cindex @file{default.el} file, not loading
++@cindex @file{early-default.el} file, not loading
+ Do not load any initialization file (@pxref{Init File}).  When Emacs
+ is invoked with this option, the Customize facility does not allow
+ options to be saved (@pxref{Easy Customization}).  This option does
+--- a/doc/emacs/custom.texi
++++ b/doc/emacs/custom.texi
+@@ -2601,6 +2601,13 @@ But your init file, if any, is loaded first; if it sets
+ @code{inhibit-default-init} non-@code{nil}, then @file{default} is not
+ loaded.
+ 
++@cindex @file{early-default.el}, the early default init file
++  There can also be an @dfn{early default init file}, which is the library
++named @file{early-default.el}.  It is similar to the default init file
++except that it is loaded after the early init file (@pxref{Early Init File})
++and is controlled by @code{inhibit-early-default-init}.  This behavior is
++Nixpkgs-specific.
++
+ @cindex site init file
+ @cindex @file{site-start.el}, the site startup file
+   Your site may also have a @dfn{site startup file}; this is named
+@@ -2614,7 +2621,8 @@ better to put them in @file{default.el}, so that users can more easily
+ override them.
+ 
+ @cindex @file{site-lisp} directories
+-  You can place @file{default.el} and @file{site-start.el} in any of
++  You can place @file{early-default.el}, @file{default.el} and
++@file{site-start.el} in any of
+ the directories which Emacs searches for Lisp libraries.  The variable
+ @code{load-path} (@pxref{Lisp Libraries}) specifies these directories.
+ Many sites put these files in a subdirectory named @file{site-lisp} in
+--- a/doc/lispref/os.texi
++++ b/doc/lispref/os.texi
+@@ -107,6 +107,13 @@ GNU Emacs Manual}).  This is not done if the options @samp{-q},
+ was specified, Emacs looks for the init file in that user's home
+ directory instead.
+ 
++@item
++It loads the library @file{early-default}, if it exists.  This is not done
++if @code{inhibit-early-default-init} is non-@code{nil}, nor if the options
++@samp{-q}, @samp{-Q}, or @samp{--batch} were specified.  This behavior is
++Nixpkgs-specific.
++@cindex @file{early-default.el}
++
+ @item
+ It calls the function @code{package-activate-all} to activate any
+ optional Emacs Lisp package that has been installed.  @xref{Packaging
+@@ -358,7 +365,8 @@ Do not initialize any display; just start a server.
+ 
+ @item --no-init-file
+ @itemx -q
+-Do not load either the init file, or the @file{default} library.
++Do not load either the init file, or the @file{default} and
++@file{early-default} libraries.
+ 
+ @item --no-site-file
+ Do not load the @file{site-start} library.
+@@ -428,6 +436,13 @@ to a non-@code{nil} value, then Emacs does not subsequently load the
+ (or @samp{-Q}), Emacs loads neither your personal init file nor
+ the default init file.
+ 
++@cindex early default init file
++  An Emacs installation may also have an @dfn{early default init file},
++which is a Lisp library named @file{early-default.el}.  It is similar to
++the default init file except that it is loaded after the early init file
++and is controlled by @code{inhibit-early-default-init}.  This behavior
++is Nixpkgs-specific.
++
+   Another file for site-customization is @file{site-start.el}.  Emacs
+ loads this @emph{before} the user's init file.  You can inhibit the
+ loading of this file with the option @samp{--no-site-file}.
+@@ -449,6 +464,12 @@ If this variable is non-@code{nil}, it prevents Emacs from loading the
+ default initialization library file.  The default value is @code{nil}.
+ @end defopt
+ 
++@defopt inhibit-early-default-init
++If this variable is non-@code{nil}, it prevents Emacs from loading the
++early default initialization library file.  The default value is @code{nil}.
++This is Nixpkgs-specific.
++@end defopt
++
+ @defvar before-init-hook
+ This normal hook is run, once, just before loading all the init files
+ (@file{site-start.el}, your init file, and @file{default.el}).
+--- a/lisp/startup.el
++++ b/lisp/startup.el
+@@ -101,6 +101,12 @@ startup message unless he personally acts to inhibit it."
+   :type '(choice (const :tag "Don't inhibit")
+ 		 (string :tag "Enter your user name, to inhibit")))
+ 
++(defcustom inhibit-early-default-init nil
++  "Non-nil inhibits loading the `early-default' library.
++
++This behavior is Nixpkgs-specific."
++  :type 'boolean)
++
+ (defcustom inhibit-default-init nil
+   "Non-nil inhibits loading the `default' library."
+   :type 'boolean)
+@@ -1540,6 +1546,10 @@ please check its value")
+       startup-init-directory)))
+   (setq early-init-file user-init-file)
+ 
++  (when (and init-file-user
++             (not inhibit-early-default-init))
++    (load "early-default" 'noerror 'nomessage))
++
+   ;; Amend `native-comp-eln-load-path', since the early-init file may
+   ;; have altered `user-emacs-directory' and/or changed the eln-cache
+   ;; directory.
+-- 
+2.53.0
+

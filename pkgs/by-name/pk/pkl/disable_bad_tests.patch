@@ -1,0 +1,12 @@
+diff --git i/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt w/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
+index df88c423..ae1db500 100644
+--- i/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
++++ w/pkl-cli/src/test/kotlin/org/pkl/cli/CliEvaluatorTest.kt
+@@ -1497,6 +1497,7 @@ result = someLib.x
+     assertThat(output).isEqualTo("result = 1\n")
+   }
+ 
++  @Disabled
+   @Test
+   fun `eval file with non-ASCII name`() {
+     val tempDirUri = tempDir.toUri()

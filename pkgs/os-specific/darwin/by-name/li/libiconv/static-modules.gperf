@@ -1,0 +1,73 @@
+%language=ANSI-C
+%compare-strncmp
+%pic
+%readonly-tables
+%{
+#include "citrus_namespace.h"
+#include "citrus_types.h"
+#include "citrus_module.h"
+#include "citrus_hash.h"
+
+#include "citrus_iconv.h"
+#include "citrus_mapper.h"
+#include "citrus_stdenc.h"
+
+extern _CITRUS_STDENC_GETOPS_FUNC(BIG5);
+extern _CITRUS_STDENC_GETOPS_FUNC(DECHanyu);
+extern _CITRUS_STDENC_GETOPS_FUNC(DECKanji);
+extern _CITRUS_STDENC_GETOPS_FUNC(EUC);
+extern _CITRUS_STDENC_GETOPS_FUNC(EUCTW);
+extern _CITRUS_STDENC_GETOPS_FUNC(GBK2K);
+extern _CITRUS_STDENC_GETOPS_FUNC(HZ);
+extern _CITRUS_STDENC_GETOPS_FUNC(ISO2022);
+extern _CITRUS_STDENC_GETOPS_FUNC(JOHAB);
+extern _CITRUS_STDENC_GETOPS_FUNC(MSKanji);
+extern _CITRUS_STDENC_GETOPS_FUNC(UES);
+extern _CITRUS_STDENC_GETOPS_FUNC(UTF1632);
+extern _CITRUS_STDENC_GETOPS_FUNC(UTF7);
+extern _CITRUS_STDENC_GETOPS_FUNC(UTF8);
+extern _CITRUS_STDENC_GETOPS_FUNC(UTF8MAC);
+extern _CITRUS_STDENC_GETOPS_FUNC(VIQR);
+extern _CITRUS_STDENC_GETOPS_FUNC(ZW);
+
+extern _CITRUS_ICONV_GETOPS_FUNC(iconv_none);
+extern _CITRUS_ICONV_GETOPS_FUNC(iconv_std);
+
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_646);
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_none);
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_parallel);
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_serial);
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_std);
+extern _CITRUS_MAPPER_GETOPS_FUNC(mapper_zone);
+%}
+%define lookup-function-name lookup_getops
+%define hash-function-name is_known_encoding
+%define string-pool-name encodings
+%struct-type
+struct getops_pair { int name; void* opsfn; };
+%%
+BIG5, _citrus_BIG5_stdenc_getops
+DECHanyu, _citrus_DECHanyu_stdenc_getops
+DECKanji, _citrus_DECKanji_stdenc_getops
+EUC, _citrus_EUC_stdenc_getops
+EUCTW, _citrus_EUCTW_stdenc_getops
+GBK2K, _citrus_GBK2K_stdenc_getops
+HZ, _citrus_HZ_stdenc_getops
+ISO2022, _citrus_ISO2022_stdenc_getops
+JOHAB, _citrus_JOHAB_stdenc_getops
+MSKanji, _citrus_MSKanji_stdenc_getops
+UES, _citrus_UES_stdenc_getops
+UTF1632, _citrus_UTF1632_stdenc_getops
+UTF7, _citrus_UTF7_stdenc_getops
+UTF8, _citrus_UTF8_stdenc_getops
+UTF8MAC, _citrus_UTF8MAC_stdenc_getops
+VIQR, _citrus_VIQR_stdenc_getops
+ZW, _citrus_ZW_stdenc_getops
+iconv_none, _citrus_iconv_none_iconv_getops
+iconv_std, _citrus_iconv_std_iconv_getops
+mapper_646, _citrus_mapper_646_mapper_getops
+mapper_none, _citrus_mapper_none_mapper_getops
+mapper_serial, _citrus_mapper_serial_mapper_getops
+mapper_parallel, _citrus_mapper_parallel_mapper_getops
+mapper_std, _citrus_mapper_std_mapper_getops
+mapper_zone, _citrus_mapper_zone_mapper_getops

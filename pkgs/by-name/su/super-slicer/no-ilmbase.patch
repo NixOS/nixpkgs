@@ -1,0 +1,38 @@
+diff --git a/cmake/modules/FindOpenVDB.cmake b/cmake/modules/FindOpenVDB.cmake
+index 4fde5fa4a75..b62813fa663 100644
+--- a/cmake/modules/FindOpenVDB.cmake
++++ b/cmake/modules/FindOpenVDB.cmake
+@@ -347,25 +347,6 @@ macro(just_fail msg)
+   return()
+ endmacro()
+ 
+-find_package(IlmBase QUIET)
+-if(NOT IlmBase_FOUND)
+-  pkg_check_modules(IlmBase QUIET IlmBase)
+-endif()
+-if (IlmBase_FOUND AND NOT TARGET IlmBase::Half)
+-  message(STATUS "Falling back to IlmBase found by pkg-config...")
+-
+-  find_library(IlmHalf_LIBRARY NAMES Half)
+-  if(IlmHalf_LIBRARY-NOTFOUND OR NOT IlmBase_INCLUDE_DIRS)
+-    just_fail("IlmBase::Half can not be found!")
+-  endif()
+-  
+-  add_library(IlmBase::Half UNKNOWN IMPORTED)
+-  set_target_properties(IlmBase::Half PROPERTIES
+-    IMPORTED_LOCATION "${IlmHalf_LIBRARY}"
+-    INTERFACE_INCLUDE_DIRECTORIES "${IlmBase_INCLUDE_DIRS}")
+-elseif(NOT IlmBase_FOUND)
+-  just_fail("IlmBase::Half can not be found!")
+-endif()
+ find_package(TBB ${_quiet} ${_required} COMPONENTS tbb)
+ find_package(ZLIB ${_quiet} ${_required})
+ find_package(Boost ${_quiet} ${_required} COMPONENTS iostreams system )
+@@ -471,7 +452,6 @@ endif()
+ set(_OPENVDB_VISIBLE_DEPENDENCIES
+   Boost::iostreams
+   Boost::system
+-  IlmBase::Half
+ )
+ 
+ set(_OPENVDB_DEFINITIONS)

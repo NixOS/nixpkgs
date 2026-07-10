@@ -1,0 +1,44 @@
+commit 898804bed022d1ef26e5c0b12550f87fc86f29ed
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Thu Dec 4 21:42:40 2025 +0100
+
+    tests: improve reliability of run-sysroot.sh
+    
+    Previously, the 'second' test would test the `RESOLVE_IN_ROOT` feature
+    when the current libc supports it, even when the currently running
+    kernel did not yet support it.
+    
+    Signed-off-by: Arnout Engelen <arnout@bzzt.net>
+
+diff --git a/tests/run-sysroot.sh b/tests/run-sysroot.sh
+index fe302446..d2041e8a 100755
+--- a/tests/run-sysroot.sh
++++ b/tests/run-sysroot.sh
+@@ -46,10 +46,14 @@ TID 431185:
+ #8  0x0000aaaae56127f0 _start
+ EOF
+ 
+-HAVE_OPENAT2=$(grep '^#define HAVE_OPENAT2_RESOLVE_IN_ROOT' \
+-                    ${abs_builddir}/../config.h | awk '{print $3}')
++libc_has_openat2_resolve_in_root() {
++  grep '^#define HAVE_OPENAT2_RESOLVE_IN_ROOT' ${abs_builddir}/../config.h | awk '{print $3}'
++}
++kernel_has_openat2_resolve_in_root() {
++  printf "%s\n%s" "5.6.0" "$(uname -r)" | sort -V -C
++}
+ 
+-if [[ "$HAVE_OPENAT2" = 1 ]]; then
++if libc_has_openat2_resolve_in_root && kernel_has_openat2_resolve_in_root; then
+     # Change the layout of files in sysroot to test symlink escape scenario
+     rm -f "${tmpdir}/sysroot/bin"
+     mkdir "${tmpdir}/sysroot/bin"
+@@ -57,7 +61,8 @@ if [[ "$HAVE_OPENAT2" = 1 ]]; then
+     ln -s /bin/bash "${tmpdir}/sysroot/usr/bin/bash"
+ 
+     # Check that stack with --sysroot generates correct backtrace even if target
+-    # binary is actually absolute symlink pointing outside of sysroot directory
++    # binary is actually absolute symlink to be interpreted relative to the sysroot
++    # directory
+     testrun "${abs_top_builddir}"/src/stack --core "${tmpdir}/core.bash" \
+ 	    --sysroot "${tmpdir}/sysroot" >"${tmpdir}/stack.out"
+ 

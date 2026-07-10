@@ -1,0 +1,156 @@
+From d144e153686e063ef3febeb3dbcaa5e98c3831ae Mon Sep 17 00:00:00 2001
+From: Govind Singh <govind.sk85@gmail.com>
+Date: Thu, 6 Nov 2025 11:25:53 +0400
+Subject: [PATCH] fix build compatibility till Linux 6.12.3 with strict type
+ checks
+
+Signed-off-by: Govind Singh <govind.sk85@gmail.com>
+---
+ Makefile   |  2 +-
+ apf.c      | 27 +++++++++++++++++++++++++++
+ debug.h    |  2 +-
+ firmware.h |  4 +++-
+ mac.c      |  1 +
+ morse.h    |  2 +-
+ vendor.c   |  2 --
+ 7 files changed, 34 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5dc7bb2..fce34ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -155,6 +155,7 @@ morse-y += coredump.o
+ morse-y += peer.o
+ morse-y += led.o
+ morse-y += bss_stats.o
++morse-y += apf.o
+ morse-$(CONFIG_MORSE_MONITOR) += monitor.o
+ morse-$(CONFIG_MORSE_SDIO) += sdio.o
+ morse-$(CONFIG_MORSE_SPI) += spi.o
+@@ -164,7 +165,6 @@ morse-$(CONFIG_MORSE_USER_ACCESS) += uaccess.o
+ morse-$(CONFIG_MORSE_HW_TRACE) += hw_trace.o
+ morse-$(CONFIG_MORSE_PAGESET_TRACE) += pageset_trace.o
+ morse-$(CONFIG_MORSE_BUS_TRACE) += bus_trace.o
+-morse-$(CONFIG_ANDROID) += apf.o
+ 
+ ifeq ($(CONFIG_DISABLE_MORSE_RC),y)
+ 	morse-y += minstrel_rc.o
+diff --git a/apf.c b/apf.c
+index baecd05..96b4b1b 100644
+--- a/apf.c
++++ b/apf.c
+@@ -16,6 +16,7 @@
+ #define MORSE_APF_WARN(_m, _f, _a...)		morse_warn(FEATURE_ID_APF, _m, _f, ##_a)
+ #define MORSE_APF_ERR(_m, _f, _a...)		morse_err(FEATURE_ID_APF, _m, _f, ##_a)
+ 
++#ifdef CONFIG_ANDROID
+ struct nla_policy morse_apf_nla_policy[VENDOR_ATTR_PACKET_FILTER_MAX] = {
+ 	[VENDOR_ATTR_PACKET_FILTER_VERSION] = { .type = NLA_U32},
+ 	[VENDOR_ATTR_PACKET_FILTER_MAX_LENGTH] = { .type = NLA_U32},
+@@ -210,3 +211,29 @@ exit:
+ 	kfree(program);
+ 	return ret;
+ }
++#else
++int morse_vendor_cmd_get_supported_feature_set(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_get_capabilities(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_set_packet_filter(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++int morse_vendor_cmd_apf_read_packet_filter_data(struct wiphy *wiphy,
++		struct wireless_dev *wdev, const void *data, int data_len)
++{
++	return -EOPNOTSUPP;
++}
++
++#endif /* CONFIG_ANDROID */
+diff --git a/debug.h b/debug.h
+index 2b734d5..f03f419 100644
+--- a/debug.h
++++ b/debug.h
+@@ -156,7 +156,7 @@ extern uint debug_mask;
+  *
+  * @returns	True if output would be generated and false otherwise.
+  */
+-bool morse_log_is_enabled(u32 id, u8 level);
++bool morse_log_is_enabled(enum morse_feature_id id, u8 level);
+ 
+ /**
+  * Set the default logging level for all features.
+diff --git a/firmware.h b/firmware.h
+index 217339a..0b1815f 100644
+--- a/firmware.h
++++ b/firmware.h
+@@ -32,6 +32,8 @@
+ #error "Capability subset filled by firmware is to big"
+ #endif
+ 
++enum morse_config_test_mode;
++
+ enum morse_fw_info_tlv_type {
+ 	MORSE_FW_INFO_TLV_BCF_ADDR = 1,
+ 	MORSE_FW_INFO_TLV_COREDUMP_MEM_REGION = 2,
+@@ -146,7 +148,7 @@ struct extended_host_table {
+ 	u8 ext_host_table_data_tlvs[];
+ } __packed;
+ 
+-int morse_firmware_init(struct morse *mors, uint test_mode);
++int morse_firmware_init(struct morse *mors, enum morse_config_test_mode test_mode);
+ 
+ /**
+  * @brief Do necessary preparation and then initialise firmware
+diff --git a/mac.c b/mac.c
+index 7844af9..3b3595f 100644
+--- a/mac.c
++++ b/mac.c
+@@ -4295,6 +4295,7 @@ static void morse_mac_ops_sta_rc_update(struct ieee80211_hw *hw,
+ #else
+ 					struct ieee80211_link_sta *link_sta,
+ #endif
++
+ 					u32 changed)
+ {
+ 	struct morse *mors;
+diff --git a/morse.h b/morse.h
+index d001ab5..850587c 100644
+--- a/morse.h
++++ b/morse.h
+@@ -55,7 +55,7 @@
+ /* Re-Define the IGNORE channel flag, if not defined by the cfg80211 patch.
+  * The flag won't be used by MM81xx.
+  */
+-#if defined(__x86_64__)
++#ifndef IEEE80211_CHAN_IGNORE
+ #define IEEE80211_CHAN_IGNORE	IEEE80211_CHAN_DISABLED
+ #endif
+ 
+diff --git a/vendor.c b/vendor.c
+index 0556715..7fcd31a 100644
+--- a/vendor.c
++++ b/vendor.c
+@@ -14,9 +14,7 @@
+ #include "wiphy.h"
+ #include "vendor.h"
+ #include "mesh.h"
+-#ifdef CONFIG_ANDROID
+ #include "apf.h"
+-#endif
+ 
+ /** Extra overhead to account for any additional netlink framing */
+ #define VENDOR_EVENT_OVERHEAD			(30)
+-- 
+2.34.1
+

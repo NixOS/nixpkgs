@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 185b721eb..6752ff32d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -185,7 +185,6 @@ endif()
+ add_subdirectory(fdbbackup)
+ add_subdirectory(contrib)
+ add_subdirectory(tests)
+-add_subdirectory(flowbench EXCLUDE_FROM_ALL)
+ if(WITH_PYTHON AND WITH_C_BINDING)
+   add_subdirectory(bindings)
+ endif()
+-- 
+2.38.1
+

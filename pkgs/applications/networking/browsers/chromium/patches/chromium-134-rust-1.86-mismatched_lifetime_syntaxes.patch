@@ -1,0 +1,14 @@
+diff --git a/build/rust/cargo_crate.gni b/build/rust/cargo_crate.gni
+index 8266c44cbd1dfb8a53797dbe911ea74c32ce070e..ec7d751f2d068151dfeb71aa1f6510483bebd95c 100644
+--- a/build/rust/cargo_crate.gni
++++ b/build/rust/cargo_crate.gni
+@@ -285,6 +285,9 @@ template("cargo_crate") {
+     }
+     rustenv = _rustenv
+
++    # TODO(crbug.com/424424323): Clean up and enable.
++    rustflags += [ "-Amismatched_lifetime_syntaxes" ]
++
+     if (!defined(build_native_rust_unit_tests)) {
+       build_native_rust_unit_tests = _crate_type != "proc-macro"
+     }

@@ -1,0 +1,11 @@
+diff -Naurd x/third_party/systemlibs/absl_py.absl.flags.BUILD y/third_party/systemlibs/absl_py.absl.flags.BUILD
+--- x/third_party/systemlibs/absl_py.absl.flags.BUILD	2023-09-20 06:02:15.079683729 +0000
++++ y/third_party/systemlibs/absl_py.absl.flags.BUILD	2023-09-20 06:04:58.491897303 +0000
+@@ -5,3 +5,7 @@
+ py_library(
+     name = "flags",
+ )
++
++py_library(
++    name = "argparse_flags",
++)

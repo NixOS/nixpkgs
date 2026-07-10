@@ -1,0 +1,27 @@
+commit faa845aab6113190ba8c75a171b2cca8673a6214
+Author: Zhenlei Huang <zlei@FreeBSD.org>
+Date:   Sun Jan 26 01:59:33 2025 +0800
+
+    kern_sysctl: Fix printing function name in the re-use sysctl leaf warning
+    
+    The helper function sysctl_warn_reuse() is intended to print the name of
+    the caller rather than that of itself.
+    
+    PR:     221853
+    Fixes:  4ae2ade11426 Enhance debugibility of sysctl leaf re-use warnings
+    MFC after:      3 days
+    Differential Revision:  https://reviews.freebsd.org/D48645
+
+diff --git a/sys/kern/kern_sysctl.c b/sys/kern/kern_sysctl.c
+index 9d824fbd3cbd..da09aaed5558 100644
+--- a/sys/kern/kern_sysctl.c
++++ b/sys/kern/kern_sysctl.c
+@@ -411,7 +411,7 @@ sysctl_warn_reuse(const char *func, struct sysctl_oid *leaf)
+ 	(void)sbuf_new(&sb, buf, sizeof(buf), SBUF_FIXEDLEN | SBUF_INCLUDENUL);
+ 	sbuf_set_drain(&sb, sbuf_printf_drain, NULL);
+ 
+-	sbuf_printf(&sb, "%s: can't re-use a leaf (", __func__);
++	sbuf_printf(&sb, "%s: can't re-use a leaf (", func);
+ 
+ 	rc = sysctl_search_oid(nodes, leaf);
+ 	if (rc > 0) {
