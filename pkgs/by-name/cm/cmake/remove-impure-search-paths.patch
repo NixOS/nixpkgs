@@ -584,7 +584,7 @@ diff --git a/Modules/FindJNI.cmake b/Modules/FindJNI.cmake
 index a70b00f330..1962b55d4a 100644
 --- a/Modules/FindJNI.cmake
 +++ b/Modules/FindJNI.cmake
-@@ -367,57 +367,6 @@ if (WIN32)
+@@ -367,56 +367,6 @@ if (WIN32)
  endif()
  
  set(_JNI_JAVA_DIRECTORIES_BASE
@@ -638,10 +638,9 @@ index a70b00f330..1962b55d4a 100644
 -  # SuSE specific paths for default JVM
 -  /usr/lib64/jvm/java
 -  /usr/lib64/jvm/jre
--  )
+   )
  
  set(_JNI_JAVA_AWT_LIBRARY_TRIES)
- set(_JNI_JAVA_INCLUDE_TRIES)
 diff --git a/Modules/FindJava.cmake b/Modules/FindJava.cmake
 index 1587ce648b..e92213cba7 100644
 --- a/Modules/FindJava.cmake
