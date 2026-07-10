@@ -15,6 +15,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.oo7 ];
+
     services.dbus.packages = [ pkgs.oo7-server ];
 
     systemd.packages = [ pkgs.oo7-server ];
