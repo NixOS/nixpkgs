@@ -76,6 +76,16 @@ in
         Enabled by default for Hyprland versions older than 0.41.2.
       '';
     };
+
+    rootWrapper.enable = lib.mkEnableOption null // {
+      description = ''
+        Whether to wrap the `Hyprland` binary and make it owned by the `root` user, and grant CAP_SYS_NICE.
+
+        Disable this option if you need environment variables like `TZDIR` to be preserved as the musl
+        wrapper automatically strips some of these variables.
+      '';
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -91,6 +101,7 @@ in
         # Hyprland needs permissions to give itself SCHED_RR on startup:
         # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
         security.wrappers.Hyprland = {
+          inherit (cfg.rootWrapper) enable;
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
