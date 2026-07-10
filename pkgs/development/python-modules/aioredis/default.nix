@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchpatch,
   fetchPypi,
+  setuptools,
   async-timeout,
   typing-extensions,
   hiredis,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aioredis";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     typing-extensions
   ]
