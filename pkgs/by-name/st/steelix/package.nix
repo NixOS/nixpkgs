@@ -75,6 +75,7 @@ in
 
       passthru = previousAttrs.passthru // {
         updateScript = ./update.sh;
+        unwrapped = steelix-unwrapped;
       };
     }
   )
