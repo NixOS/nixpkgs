@@ -2,77 +2,102 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   libglut,
-  gtk2,
-  gnome2,
   libjpeg_turbo,
-  libtheora,
-  libxmu,
   lua,
   libGLU,
   libGL,
   perl,
-  autoreconfHook,
+  eigen,
+  freetype,
+  cmake,
+  libepoxy,
+  libpng,
+  boost,
+  fmt,
+  libavif,
+  ffmpeg,
+  gperf,
+  gettext,
+  qt6Packages,
+  callPackage,
+  celestia-content ? callPackage ./content.nix { },
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "celestia";
-  version = "1.6.4";
+  version = "1.6.4-unstable-2026-07-02";
 
   src = fetchFromGitHub {
     owner = "CelestiaProject";
     repo = "Celestia";
-    rev = version;
-    sha256 = "sha256-MkElGo1ZR0ImW/526QlDE1ePd+VOQxwkX7l+0WyZ6Vs=";
+    rev = "ded2c69ec7b819640a6c807fc7d4280bbf08e26b";
+    hash = "sha256-GDp31jwY9ifppUJ3Yy84E+x33O4+UmR/ODrHwH2HyeM=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/CelestiaProject/Celestia/commit/94894bed3bf98d41c5097e7829d491d8ff8d4a62.patch?full_index=1";
-      hash = "sha256-hEZ6BhSEx6Qm+fLisc63xSCDT6GX92AHD0BuldOhzFk=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail "dnl AM_GNU_GETTEXT_VERSION([0.15])" "AM_GNU_GETTEXT_VERSION([0.15])"
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
+    cmake
+    gperf
+    gettext
+    qt6Packages.wrapQtAppsHook
   ];
+
   buildInputs = [
+    qt6Packages.qtbase
     libglut
-    gtk2
-    gnome2.gtkglext
     lua
     perl
     libjpeg_turbo
-    libtheora
-    libxmu
+    eigen
+    libepoxy
+    libpng
+    fmt
+    boost
+    libavif
+    ffmpeg
+    freetype
     libGLU
     libGL
   ];
 
-  configureFlags = [
-    "--with-gtk"
-    "--with-lua=${lua}"
+  cmakeFlags = [
+    (lib.cmakeFeature "ENABLE_QT6" "ON")
+    (lib.cmakeFeature "ENABLE_FFMPEG" "ON")
+    (lib.cmakeFeature "ENABLE_LIBAVIF" "ON")
+    (lib.cmakeFeature "GIT_COMMIT" "${finalAttrs.src.rev}")
   ];
 
   enableParallelBuilding = true;
+
+  qtWrapperArgs = [
+    "--unset"
+    "QT_QPA_PLATFORMTHEME"
+    "--unset"
+    "QT_STYLE_OVERRIDE"
+  ];
+
+  postInstall = ''
+    cp -r ${celestia-content}/share/celestia/* $out/share/celestia
+    cp -r ${celestia-content}/share/locale/* $out/share/locale
+  '';
 
   meta = {
     homepage = "https://celestiaproject.space/";
     description = "Real-time 3D simulation of space";
     mainProgram = "celestia";
-    changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
+    # no tagged release for ages, remove this for now
+    # changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       returntoreality
+      pancaek
     ];
     platforms = lib.platforms.linux;
   };
-}
+})
