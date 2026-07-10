@@ -494,7 +494,6 @@ let
       cargo
       rustc
     ];
-    SemiCompRisks = [ pkgs.gsl ];
     SimInf = [ pkgs.gsl ];
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ];
@@ -1173,6 +1172,7 @@ let
     ];
     SLmetrics = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
+    SemiCompRisks = [ pkgs.gsl ];
     ShortRead = [ pkgs.zlib ];
     Signac = [ pkgs.zlib.dev ];
     SuperGauss = [ pkgs.fftw ];
