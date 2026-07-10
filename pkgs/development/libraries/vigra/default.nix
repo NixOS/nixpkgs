@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pknZHHIIhjfOxdp+qCOOGvo0W5ByTHXRiIQzzN7Z6M4=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
