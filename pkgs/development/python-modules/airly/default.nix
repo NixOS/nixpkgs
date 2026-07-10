@@ -5,6 +5,7 @@
   aiounittest,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "airly";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ak-ambi";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-weliT/FYnRX+pzVAyRWFly7lfj2z7P+hpq5SIhyIgmI=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # aiounittest is not supported on 3.12
   doCheck = pythonOlder "3.12";
