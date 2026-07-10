@@ -10,7 +10,7 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "cosmic-applibrary";
+  pname = "cosmic-app-library";
   version = "1.1.0";
 
   # nixpkgs-update: no auto update
