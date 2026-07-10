@@ -441,10 +441,7 @@ let
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
     RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
-    RNetCDF = with pkgs; [
-      netcdf
-      udunits
-    ];
+    RNetCDF = [ pkgs.pkg-config ];
     RODBC = [ pkgs.libiodbc ];
     RPesto = with pkgs; [
       cargo
@@ -1109,6 +1106,10 @@ let
     RKHSMetaMod = [ pkgs.gsl ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     RMark = [ pkgs.which ];
+    RNetCDF = with pkgs; [
+      netcdf
+      udunits
+    ];
     RNifti = [ pkgs.zlib ];
     RNiftyReg = [ pkgs.zlib ];
     RPostgres = with pkgs; [ libpq ];
