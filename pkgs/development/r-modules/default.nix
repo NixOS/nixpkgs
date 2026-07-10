@@ -671,10 +671,7 @@ let
       rustc
     ];
     fftw = [ pkgs.pkg-config ];
-    fftwtools = with pkgs; [
-      fftw.dev
-      pkg-config
-    ];
+    fftwtools = [ pkgs.pkg-config ];
     fingerPro = [ pkgs.gsl ];
     fio = with pkgs; [
       cargo
@@ -1284,6 +1281,7 @@ let
     ];
     excursions = [ pkgs.gsl ];
     fftw = [ pkgs.fftw ];
+    fftwtools = [ pkgs.fftw ];
     flan = [ pkgs.gsl ];
     flowWorkspace = [ pkgs.zlib.dev ];
     fs = [ pkgs.libuv ];
