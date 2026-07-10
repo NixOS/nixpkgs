@@ -497,7 +497,6 @@ let
     SimInf = [ pkgs.gsl ]; # for gsl-config
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ]; # for gsl-config
-    TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
     V8 = [ pkgs.pkg-config ];
     VBLPCM = [ pkgs.gsl ];
@@ -1177,6 +1176,7 @@ let
     Signac = [ pkgs.zlib.dev ];
     SuperGauss = [ pkgs.fftw ];
     SynExtend = [ pkgs.zlib.dev ];
+    TAQMNGR = [ pkgs.zlib ];
     TransView = with pkgs; [
       xz.dev
       bzip2.dev
