@@ -178,7 +178,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI coding agent desktop client";
     homepage = "https://opencode.ai";
-    inherit (opencode.meta) platforms;
+    inherit (opencode.meta) changelog platforms;
     license = lib.licenses.mit;
     mainProgram = if stdenvNoCC.hostPlatform.isDarwin then "OpenCode" else "opencode-desktop";
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
