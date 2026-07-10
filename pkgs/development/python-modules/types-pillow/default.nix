@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-pillow";
   version = "10.2.0.20240822";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "types-Pillow";
     hash = "sha256-VZ+1Ki75kcMm5KDSCsyzu2Onuo1A60k+DssDELpS8NM=";
   };
+
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
