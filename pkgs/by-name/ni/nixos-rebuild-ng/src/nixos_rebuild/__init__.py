@@ -249,7 +249,9 @@ def parse_args(
             parser.exit()
 
     if args.action is None:
-      parser.error(f"No valid subcommands. Type {parser.prog} --help for more information")
+        parser.error(
+            f"No valid subcommands. Type {parser.prog} --help for more information"
+        )
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
