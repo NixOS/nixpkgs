@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "immichframe";
-  version = "1.0.33.0";
+  version = "1.0.35.0";
 
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b8hfzNZJz9XCRO4UfzwK5OsrgqV2F5wnZlRH7h3Eo9Q=";
+    hash = "sha256-VET0em+CyJzXPlCXjozj6SDhjD26lH94AETFKGG895I=";
   };
 
   projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
@@ -34,7 +34,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-PjbbBpYYUHH4oucJuk0FCdJa0LzTlkQnjkZ5MLziqTY=";
+    hash = "sha256-RyMY5ooC6Q+W+Y24ILv+WCcWLMDToZ52yefFuoAYubY=";
   };
 
   preBuild = ''
@@ -57,6 +57,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/immichFrame/ImmichFrame/releases/tag/${finalAttrs.src.tag}";
     description = "Display your photos from Immich as a digital photo frame";
     homepage = "https://immichframe.dev";
     license = lib.licenses.gpl3Only;
