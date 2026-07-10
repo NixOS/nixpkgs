@@ -23,6 +23,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  # Upstream pins pandas<3 (still true as of the v0.1.0 tag), but the
+  # package works fine against pandas 3.x; relax the constraint rather
+  # than staying behind on pandas.
+  # https://github.com/thombashi/df-diskcache/blob/v0.1.0/requirements/requirements.txt
+  pythonRelaxDeps = [ "pandas" ];
+
   propagatedBuildInputs = [
     pandas
     simplesqlite
