@@ -456,6 +456,7 @@ let
     QF = [ pkgs.gsl ];
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
+    RCurl = [ pkgs.curl ]; # for curl-config
     RDieHarder = [ pkgs.gsl ];
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ];
@@ -1126,7 +1127,6 @@ let
       libpng
       freetype
     ];
-    RCurl = [ pkgs.curl.dev ];
     RGtk2 = [ pkgs.gtk2 ];
     RITCH = [ pkgs.zlib.dev ];
     RKHSMetaMod = [ pkgs.gsl ];
