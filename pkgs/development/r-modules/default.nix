@@ -936,7 +936,6 @@ let
       fftw.dev
       libsndfile.dev
     ];
-    seqinr = [ pkgs.zlib.dev ];
     seqminer = with pkgs; [
       zlib.dev
       bzip2
@@ -1540,6 +1539,7 @@ let
       bzip2.dev
       xz.dev
     ];
+    seqinr = [ pkgs.zlib ];
     sf = with pkgs; [
       proj
       sqlite
