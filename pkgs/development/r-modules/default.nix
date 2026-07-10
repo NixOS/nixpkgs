@@ -422,7 +422,7 @@ let
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
-    CytoML = [ pkgs.libxml2.dev ];
+    CytoML = [ pkgs.libxml2 ]; # for xml2-config
     DEploid = [ pkgs.zlib.dev ];
     DEploid_utils = [ pkgs.zlib.dev ];
     DiffBind = with pkgs; [
