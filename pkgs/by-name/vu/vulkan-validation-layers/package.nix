@@ -64,6 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
+    # this defaults to on; it will fail in the nix sandbox due to needing
+    # networking and we pass them via buildInputs anyways
+    "-DUPDATE_DEPS=OFF"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];
