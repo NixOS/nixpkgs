@@ -462,7 +462,6 @@ let
       pkg-config
     ];
     RcppZiggurat = [ pkgs.gsl ]; # for gsl-config
-    Rglpk = [ pkgs.glpk ];
     Rhdf5lib = with pkgs; [
       cmake
     ];
@@ -1139,6 +1138,7 @@ let
       bzip2.dev
       zlib.dev
     ];
+    Rglpk = [ pkgs.glpk ];
     Rhdf5lib = with pkgs; [
       curl
       zlib.dev
