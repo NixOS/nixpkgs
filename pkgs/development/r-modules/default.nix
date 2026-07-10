@@ -416,9 +416,6 @@ let
   packagesWithNativeBuildInputs = {
     # keep-sorted start block=yes
     Apollonius = [ pkgs.pkg-config ];
-    BayesChange = [ pkgs.gsl ];
-    BayesSAE = [ pkgs.gsl ];
-    BayesVarSel = [ pkgs.gsl ];
     BayesXsrc = with pkgs; [
       readline.dev
       ncurses
@@ -1085,6 +1082,9 @@ let
       which
     ];
     BNSP = [ pkgs.gsl ];
+    BayesChange = [ pkgs.gsl ];
+    BayesSAE = [ pkgs.gsl ];
+    BayesVarSel = [ pkgs.gsl ];
     BigDataStatMeth = [ pkgs.zlib ];
     CBN2Path = [ pkgs.gsl ];
     CLVTools = [ pkgs.gsl ];
