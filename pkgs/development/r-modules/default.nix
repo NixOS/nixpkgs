@@ -691,7 +691,6 @@ let
       glpk
     ];
     gmapR = [ pkgs.zlib.dev ];
-    gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gslnls = [ pkgs.gsl ];
@@ -1307,6 +1306,7 @@ let
         libxdmcp
       ];
     gfilogisreg = [ pkgs.gmp.dev ];
+    gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
