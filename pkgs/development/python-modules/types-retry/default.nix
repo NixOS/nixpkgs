@@ -5,14 +5,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-retry";
   version = "0.9.9.20250322";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "types_retry";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-LqpvS4MsGHEhBWmIu+bS0Lb06wNjH9yXUuKsKAL3tyY=";
   };
 
@@ -29,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
