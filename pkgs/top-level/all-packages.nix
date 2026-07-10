@@ -6828,8 +6828,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra { };
-
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
