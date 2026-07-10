@@ -519,14 +519,6 @@ let
       mpi
       pcre.dev
     ];
-    Rhtslib = with pkgs; [
-      zlib.dev
-      automake
-      autoconf
-      bzip2.dev
-      xz.dev
-      curl.dev
-    ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ];
     Rmpfr = with pkgs; [
@@ -1183,6 +1175,12 @@ let
     Rhdf5lib = with pkgs; [
       curl
       zlib.dev
+    ];
+    Rhtslib = with pkgs; [
+      bzip2
+      curl
+      xz
+      zlib
     ];
     RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
