@@ -17,16 +17,16 @@
 }:
 
 let
-  version = "0.307.1";
+  version = "0.311.1";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-ED+mRcnkerdPFjEhxH3fBr8GcH0geLVnjnejpNqNBdI=";
+    hash = "sha256-dxP28NPW+V30XIzh2w++Glrb2xfZ0tpp4H+qOM13yt8=";
   };
 
-  vendorHash = "sha256-sOyx1Ev0UfoI6mOQAWide19Sg/MWJ8VUVftN9psNq5U=";
+  vendorHash = "sha256-Eh07T9FAoeoUfhJsK6DPmwE2rJX55Ijzp4ydxJc8/bQ=";
 
   commonMeta = {
     license = lib.licenses.mit;
@@ -40,7 +40,7 @@ buildGo126Module rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-U7gcAkfw7a0skM91mSAZJIPUPBRfSkyJYVjjVyEyZ4E=";
+    hash = "sha256-MhLc5RUjn8FYXiFQbGchRnf132QXwG0kSyyPsRRzu1A=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,6 @@ buildGo126Module rec {
 
   tags = [
     "release"
-    "test"
   ];
 
   ldflags = [
@@ -88,6 +87,10 @@ buildGo126Module rec {
         "TestOctopusConfigParse"
         "TestSessionHandlerTimezoneFilter"
         "TestTemplates"
+        # network access: mdns fails to start Avahi provider
+        "TestControlBoxGridGuardHeartbeat"
+        "TestEEBus"
+        "TestShipPairing"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];

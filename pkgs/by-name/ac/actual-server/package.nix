@@ -15,13 +15,13 @@
 let
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.6.0";
+  version = "26.7.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-Ulz3M5z78mJQRr+te7qwVCeULCgEfE17NECSBagbI88=";
+    hash = "sha256-KePWt08rAhLZUrgyN7tdFUQXR/5y0TvakReji4eMwxg=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-lC9+B9agqwVARfMhXSTjb6cBj23PQz+RpZZ700jypF4=";
+    hash = "sha256-eZxQAf2AfNd+0wrSEmE9kg5XWdqhE3Dlf6OGc1bZhXA=";
   };
 
   pname = "actual-server";
