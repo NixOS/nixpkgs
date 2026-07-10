@@ -479,10 +479,6 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
-    Rmpfr = with pkgs; [
-      gmp
-      mpfr.dev
-    ];
     Rmpi = with pkgs; [
       mpi.dev
       prrte.dev
@@ -1152,6 +1148,10 @@ let
     Rlibeemd = [ pkgs.gsl ];
     RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
+    Rmpfr = with pkgs; [
+      gmp
+      mpfr
+    ];
     RoBMA = [ pkgs.jags ];
     RoBSA = [ pkgs.jags ];
     Rpoppler = [ pkgs.poppler ];
@@ -2113,12 +2113,6 @@ let
       preConfigure = ''
         substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
-    });
-
-    Rmpfr = old.Rmpfr.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
-      ];
     });
 
     Rmpi = old.Rmpi.overrideAttrs (attrs: {
