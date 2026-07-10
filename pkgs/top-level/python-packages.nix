@@ -12031,6 +12031,8 @@ self: super: with self; {
 
   okta = callPackage ../development/python-modules/okta { };
 
+  okta_2 = callPackage ../development/python-modules/okta/2.nix { };
+
   oldest-supported-numpy = callPackage ../development/python-modules/oldest-supported-numpy { };
 
   oldmemo = callPackage ../development/python-modules/oldmemo { };
