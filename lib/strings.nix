@@ -1335,6 +1335,72 @@ rec {
         "${name}=${escapeShellArg value}";
 
   /**
+    Translate a Nix value into a shell variable declaration, with proper escaping.
+
+    This function is the same as `toShellVar`, but it takes an attribute set as
+    its argument and has additional options.
+
+    # Inputs
+
+    `name` (String)
+
+    : The name of the resulting shell variable.
+
+    `value` (String, list of strings or attribute set where every value is a string)
+
+    : The value of the resulting shell variable. See the description for
+    `lib.strings.toShellVar` for more information about the different types of
+    values that can be used.
+
+    `export` (Boolean; _optional_)
+
+    : If `true`, then the generated shell variable will be exported using [the
+    POSIX {command}`export` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_23).
+
+      _Default:_ `false`
+
+    `readonly` (Boolean; _optional_)
+
+    : If `true`, then the generated shell variable will be made read-only using
+    [the POSIX {command}`readonly` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_24).
+
+      _Default:_ `false`
+
+    # Type
+
+    ```
+    toShellVar' :: AttrSet -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toShellVar'` usage example
+
+    ```nix
+    ''
+      ${toShellVar' {
+        name = "DOOMWADDIR";
+        value = "${pkgs.freedoom}/share/games/doom";
+        export = true;
+      }}
+      crispy-doom -iwad freedoom2.wad
+    ''
+    ```
+
+    :::
+  */
+  toShellVar' =
+    {
+      name,
+      value,
+      export ? false,
+      readonly ? false,
+    }:
+    (toShellVar name value)
+    + (optionalString export "\nexport ${escapeShellArg name}")
+    + (optionalString readonly "\nreadonly ${escapeShellArg name}");
+
+  /**
     Translate an attribute set `vars` into corresponding shell variable declarations
     using `toShellVar`.
 
@@ -1368,6 +1434,86 @@ rec {
     :::
   */
   toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
+
+  /**
+    Translate an attribute set `vars` into corresponding shell variable
+    declarations using `toShellVar'`.
+
+    This function is similar to `lib.strings.toShellVars` but it has additional
+    options.
+
+    # Inputs
+
+    `vars` (Attribute set where each value is a string, a list of strings or an attribute set where every value is a string)
+
+    : The names and values of the resulting shell variables. See the
+    description for `lib.strings.toShellVar` for more information about the
+    different types of values that can be used.
+
+    `export` (Boolean; _optional_)
+
+    : If `true`, then all of the generated shell variables will be exported using
+    [the POSIX {command}`export` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_23).
+
+      _Default:_ `false`
+
+    `readonly` (Boolean; _optional_)
+
+    : If `true`, then all of the generated shell variables will be made read-only using
+    [the POSIX {command}`readonly` command](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_24).
+
+      _Default:_ `false`
+
+    # Type
+
+    ```
+    toShellVars' :: AttrSet -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toShellVars'` usage example
+
+    ```nix
+    ''
+      # Set a bunch of variables that will get used by the Linux man-pages
+      # project’s make file.
+      ${toShellVars' {
+        vars = {
+          TINOS_PFB = "${pkgs.texlivePackages.tinos}/fonts/type1/google/tinos/Tinos.pfb";
+          TINOSR_TTF = "${pkgs.texlivePackages.tinos}/fonts/truetype/google/tinos/Tinos-Regular.ttf";
+          PDF_TEXT_ENC = "${pkgs.groff}/share/groff/current/font/devpdf/enc/text.enc";
+          PDF_TEXT_MAP = "${pkgs.groff}/share/groff/current/font/devpdf/map/text.map";
+        };
+        # Export the variables so that they can be seen by commands that the
+        # user runs.
+        export = true;
+      }}
+      # Drop the user into an interactive shell so that they can start
+      # contributing to the Linux man-pages project.
+      bash
+    ''
+    ```
+
+    :::
+  */
+  toShellVars' =
+    {
+      vars,
+      export ? false,
+      readonly ? false,
+    }:
+    concatMapAttrsStringSep "\n" (
+      name: value:
+      lib.toShellVar' {
+        inherit
+          name
+          value
+          export
+          readonly
+          ;
+      }
+    ) vars;
 
   /**
     Turn a string `s` into a Nix expression representing that string
