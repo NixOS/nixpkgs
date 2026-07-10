@@ -5,6 +5,11 @@
   numpy,
   pytestCheckHook,
   setuptools,
+  # sets NUMEXPR_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numexpr during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numexpr.readthedocs.io/en/latest/user_guide.html#threadpool-configuration
+  checkPhaseThreadLimitHook,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +35,10 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
 
   preCheck = ''
     pushd $out
