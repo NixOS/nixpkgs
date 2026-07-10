@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  rustPlatform,
+  rustPackages_1_97,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
@@ -9,19 +9,19 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_97.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mago";
-  version = "1.29.0";
+  version = "1.43.0";
 
   src = fetchFromGitHub {
     owner = "carthage-software";
     repo = "mago";
     tag = finalAttrs.version;
-    hash = "sha256-e/LKOQ+GAtdDye/poJdbX/98gDWle3NWIZ2zHwkGkcQ=";
+    hash = "sha256-AWnPhylz41E6d1M7PxVpH4EbyYeO9T6jlWVlzBqiOhQ=";
     forceFetchGit = true; # Does not download all files otherwise
   };
 
-  cargoHash = "sha256-stjjP8VRHy5k9zMXWGikVNExXRFte0gVBEsbKmPY6U4=";
+  cargoHash = "sha256-f7HZTJ0ESx7QTKgBqd2FOH1nCeIzgODMM9Sb0tQpfdE=";
 
   env = {
     # Get openssl-sys to use pkg-config
