@@ -9,15 +9,17 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datefinder";
   version = "0.7.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "akoumjian";
     repo = "datefinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uOSwS+mHgbvEL+rTfs4Ax9NvJnhYemxFVqqDssy2i7g=";
   };
 
@@ -42,4 +44,4 @@ buildPythonPackage rec {
       despsyched
     ];
   };
-}
+})
