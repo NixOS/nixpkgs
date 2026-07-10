@@ -461,7 +461,7 @@ let
       cmake
       pkg-config
     ];
-    RcppZiggurat = [ pkgs.gsl ];
+    RcppZiggurat = [ pkgs.gsl ]; # for gsl-config
     Rglpk = [ pkgs.glpk ];
     Rhdf5lib = with pkgs; [
       cmake
@@ -1133,6 +1133,7 @@ let
       hwloc
       hdf5.dev
     ];
+    RcppZiggurat = [ pkgs.gsl ];
     Rfastp = with pkgs; [
       xz.dev
       bzip2.dev
