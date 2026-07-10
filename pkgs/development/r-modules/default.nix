@@ -430,7 +430,6 @@ let
       which
     ];
     KSgeneral = with pkgs; [ pkg-config ];
-    LOMAR = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     MAGEE = [
       pkgs.zlib.dev
@@ -1082,6 +1081,7 @@ let
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     LCMCR = [ pkgs.gsl ];
+    LOMAR = [ pkgs.gmp ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     MethScope = with pkgs; [
       ncurses
