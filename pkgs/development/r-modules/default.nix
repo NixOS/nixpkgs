@@ -494,9 +494,9 @@ let
       cargo
       rustc
     ];
-    SimInf = [ pkgs.gsl ];
+    SimInf = [ pkgs.gsl ]; # for gsl-config
     SuperGauss = [ pkgs.pkg-config ];
-    SymTS = [ pkgs.gsl ];
+    SymTS = [ pkgs.gsl ]; # for gsl-config
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
     V8 = [ pkgs.pkg-config ];
