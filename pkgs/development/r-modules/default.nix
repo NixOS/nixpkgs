@@ -424,7 +424,7 @@ let
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
-    GPBayes = [ pkgs.gsl ];
+    GPBayes = [ pkgs.gsl ]; # for gsl-config
     GeneralizedWendland = [ pkgs.gsl ];
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
