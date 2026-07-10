@@ -2,18 +2,21 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dawg-python";
   version = "0.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "DAWG-Python";
     hash = "sha256-Sl4yhuYmHMoC8gXP1VFqerEBkPowxRwo00WAj1leNCE=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "dawg_python" ];
 
