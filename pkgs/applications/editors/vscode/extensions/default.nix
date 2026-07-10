@@ -3876,6 +3876,8 @@ let
         };
       };
 
+      rangav.vscode-thunder-client = callPackage ./rangav.vscode-thunder-client { };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
