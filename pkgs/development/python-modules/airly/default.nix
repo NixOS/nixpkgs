@@ -41,11 +41,6 @@ buildPythonPackage (finalAttrs: {
     cd tests
   '';
 
-  disabledTests = [
-    "InstallationsLoaderTestCase"
-    "MeasurementsSessionTestCase"
-  ];
-
   pythonImportsCheck = [ "airly" ];
 
   meta = {
