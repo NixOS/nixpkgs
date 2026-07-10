@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   aenum,
   python,
 }:
@@ -9,17 +10,19 @@
 buildPythonPackage rec {
   pname = "dbf";
   version = "0.99.11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-IWnAUlLA776JfzRvBoMybsJYVL6rHQxkMN9ukDpXsxU=";
   };
 
+  build-system = [ setuptools ];
+
   # Workaround for https://github.com/ethanfurman/dbf/issues/48
   patches = lib.optional python.stdenv.hostPlatform.isDarwin ./darwin.patch;
 
-  propagatedBuildInputs = [ aenum ];
+  dependencies = [ aenum ];
 
   checkPhase = ''
     runHook preCheck
