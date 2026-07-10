@@ -52,6 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "no-self-updater" ];
   buildAndTestSubdir = subdir;
 
+  postInstall = ''
+    install -Dm644 ${subdir}/icons/icon.png $out/share/icons/hicolor/512x512/apps/ALCOM.png
+    for size in 32x32 64x64 128x128 128x128@2x; do
+      install -Dm644 ${subdir}/icons/$size.png $out/share/icons/hicolor/''${size%x}/apps/ALCOM.png
+    done
+  '';
+
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
