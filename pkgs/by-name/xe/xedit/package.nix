@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xedit";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xorg/app";
     repo = "xedit";
     rev = "${pname}-${version}";
-    sha256 = "sha256-0vP+aR8QBXAqbULOLEs7QXsehk18BJ405qoelrcepwE=";
+    sha256 = "sha256-+nWtoqm+5ie2U5nFJRioftMkxJFNtws09kTelmWhqgA=";
   };
 
   # ./lisp/mathimp.c:493:10: error: implicitly declaring library function 'finite' with type 'int (double)'
