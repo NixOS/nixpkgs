@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mxnet";
   version = "1.9.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     name = "apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
     url = "mirror://apache/incubator/mxnet/${finalAttrs.version}/apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
