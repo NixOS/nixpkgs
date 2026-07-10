@@ -1347,6 +1347,8 @@ self: super: with self; {
 
   arviz-stats = callPackage ../development/python-modules/arviz-stats { };
 
+  arwn-client = callPackage ../development/python-modules/arwn-client { };
+
   arxiv = callPackage ../development/python-modules/arxiv { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
@@ -1452,6 +1454,8 @@ self: super: with self; {
   async-modbus = callPackage ../development/python-modules/async-modbus { };
 
   async-stagger = callPackage ../development/python-modules/async-stagger { };
+
+  async-substrate-interface = callPackage ../development/python-modules/async-substrate-interface { };
 
   async-tiff = callPackage ../development/python-modules/async-tiff { };
 
@@ -2431,6 +2435,10 @@ self: super: with self; {
 
   bitstruct = callPackage ../development/python-modules/bitstruct { };
 
+  bittensor = callPackage ../development/python-modules/bittensor { };
+
+  bittensor-cli = callPackage ../development/python-modules/bittensor-cli { };
+
   bittensor-drand = callPackage ../development/python-modules/bittensor-drand { };
 
   bittensor-wallet = callPackage ../development/python-modules/bittensor-wallet { };
@@ -3049,6 +3057,8 @@ self: super: with self; {
   checksumdir = callPackage ../development/python-modules/checksumdir { };
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
+
+  chefiq-ble = callPackage ../development/python-modules/chefiq-ble { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
 
@@ -10687,6 +10697,8 @@ self: super: with self; {
 
   modal = callPackage ../development/python-modules/modal { };
 
+  modbus-connection = callPackage ../development/python-modules/modbus-connection { };
+
   modbus-tk = callPackage ../development/python-modules/modbus-tk { };
 
   moddb = callPackage ../development/python-modules/moddb { };
@@ -10870,6 +10882,8 @@ self: super: with self; {
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
+
+  msgpack-numpy-opentensor = callPackage ../development/python-modules/msgpack-numpy-opentensor { };
 
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
@@ -14021,6 +14035,8 @@ self: super: with self; {
   pyannoteai-sdk = callPackage ../development/python-modules/pyannoteai-sdk { };
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
+
+  pyaqvify = callPackage ../development/python-modules/pyaqvify { };
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
 
@@ -20318,6 +20334,8 @@ self: super: with self; {
   tmb = callPackage ../development/python-modules/tmb { };
 
   tmdbsimple = callPackage ../development/python-modules/tmdbsimple { };
+
+  tmodbus = callPackage ../development/python-modules/tmodbus { };
 
   tnefparse = callPackage ../development/python-modules/tnefparse { };
 

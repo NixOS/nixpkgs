@@ -8,20 +8,20 @@
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
-  version = "${kernel.version}-unstable-2024-09-18";
+  version = "${kernel.version}-unstable-2026-06-22";
 
   src = fetchFromGitHub {
-    owner = "aircrack-ng";
+    owner = "gglluukk";
     repo = "rtl8188eus";
-    rev = "f969c544ab6100da3d80a5709e077f920f2df698";
-    sha256 = "sha256-uwO2nDDff4t0PZw3mLWmUPOHHftDgoaBaWMXQKHQunI=";
+    rev = "cbeae98cb423378dfd5e5efb63290fe43a6ed965";
+    hash = "sha256-wiWG0ndtQML/h88alNyQOX64krpJOf56HyB8LW5dYbA=";
   };
 
   prePatch = ''
     substituteInPlace ./Makefile \
-      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace /sbin/depmod \# \
-      --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      --replace-fail /lib/modules/ "${kernel.dev}/lib/modules/" \
+      --replace-fail /sbin/depmod \# \
+      --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
   hardeningDisable = [ "pic" ];
@@ -36,9 +36,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
-    homepage = "https://github.com/aircrack-ng/rtl8188eus";
+    homepage = "https://github.com/gglluukk/rtl8188eus";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ moni ];
-    broken = kernel.kernelAtLeast "6.17";
   };
 }

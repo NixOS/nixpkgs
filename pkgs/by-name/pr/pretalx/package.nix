@@ -20,7 +20,7 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pretalx";
-  version = "2026.2.0";
+  version = "2026.2.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -29,24 +29,19 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "pretalx";
     repo = "pretalx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c6xLSosAn0HZFkujdgC4rp1CPHLsRcz4LsiAPaSgP1g=";
+    hash = "sha256-dsnnr9/G8i5vfcinRiqpGv1ce90LwW7Esj/SrTK1Ov4=";
   };
 
   npmRoot = "src/pretalx/frontend";
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version;
     src = "${finalAttrs.src}/src/pretalx/frontend";
-    hash = "sha256-P9A2Kms+Eb1YI2qu9mt5BfiDDeXv+NkvVxy33Ns2S2A=";
+    hash = "sha256-wWGNvUT9SFIm/Gfl8wuOe9xTn1QqH6JWoOIHTiSg0rQ=";
   };
 
   outputs = [
     "out"
     "static"
-  ];
-
-  patches = [
-    # template error; https://github.com/pretalx/pretalx/pull/2559
-    ./pr2559.patch
   ];
 
   postPatch = ''

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "snmpen";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "snmpen";
     tag = finalAttrs.version;
-    hash = "sha256-XJP+f5Ahizxgk80B0896sbE6JeNB0Bm7aafwJsFaHYY=";
+    hash = "sha256-4/QLPq4td2o17lIhktl5aVKz5esWibVoVm8OdVIxWmM=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];

@@ -277,7 +277,7 @@ in
             backend = lib.mkOption {
               type = with lib.types; nullOr str;
               default = "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
-              defaultText = lib.literalExpression "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
+              defaultText = lib.literalExpression "redis+socket://\${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
               description = ''
                 URI to the celery backend used for the asynchronous job queue.
               '';
@@ -286,7 +286,7 @@ in
             broker = lib.mkOption {
               type = with lib.types; nullOr str;
               default = "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
-              defaultText = lib.literalExpression "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
+              defaultText = lib.literalExpression "redis+socket://\${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
               description = ''
                 URI to the celery broker used for the asynchronous job queue.
               '';

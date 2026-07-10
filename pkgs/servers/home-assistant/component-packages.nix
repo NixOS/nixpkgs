@@ -363,7 +363,8 @@
       ];
     "aqvify" =
       ps: with ps; [
-      ]; # missing inputs: pyaqvify
+        pyaqvify
+      ];
     "aranet" =
       ps: with ps; [
         aioesphomeapi
@@ -416,8 +417,9 @@
     "arwn" =
       ps: with ps; [
         aiohasupervisor
+        arwn-client
         paho-mqtt
-      ]; # missing inputs: arwn-client
+      ];
     "aseko_pool_live" =
       ps: with ps; [
         aioaseko
@@ -1007,6 +1009,7 @@
         bluetooth-adapters
         bluetooth-auto-recovery
         bluetooth-data-tools
+        chefiq-ble
         dbus-fast
         esphome-dashboard-api
         ha-ffmpeg
@@ -1019,7 +1022,7 @@
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: chefiq-ble
+      ];
     "chess_com" =
       ps: with ps; [
         chess-com-api
@@ -7842,9 +7845,11 @@
     "apsystems"
     "aquacell"
     "aqualogic"
+    "aqvify"
     "aranet"
     "arcam_fmj"
     "arve"
+    "arwn"
     "aseko_pool_live"
     "assist_pipeline"
     "assist_satellite"
@@ -7912,6 +7917,7 @@
     "centriconnect"
     "cert_expiry"
     "chacon_dio"
+    "chef_iq"
     "chess_com"
     "cielo_home"
     "citybikes"

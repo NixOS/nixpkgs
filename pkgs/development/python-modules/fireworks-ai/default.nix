@@ -59,6 +59,8 @@ buildPythonPackage (finalAttrs: {
     hatch-fancy-pypi-readme
   ];
 
+  pythonRelaxDeps = [ "pydantic" ];
+
   dependencies = [
     aiohttp
     anyio

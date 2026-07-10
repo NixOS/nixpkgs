@@ -967,6 +967,8 @@ with pkgs;
 
   auditwheel = with python3Packages; toPythonApplication auditwheel;
 
+  btcli = with python3Packages; toPythonApplication bittensor-cli;
+
   btrsync = with python3Packages; toPythonApplication btrsync;
 
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
@@ -4831,7 +4833,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_38-bin
     electron_39-bin
     electron_40-bin
     electron_41-bin
@@ -4839,7 +4840,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_38
     electron-chromedriver_39
     electron-chromedriver_40
     electron-chromedriver_41
@@ -4863,7 +4863,6 @@ with pkgs;
           });
       in
       {
-        electron_38 = electron_38-bin;
         electron_39 = electron_39-bin;
         electron_40 = getElectronPkg {
           src = electron-source.electron_40;
@@ -4879,7 +4878,6 @@ with pkgs;
         };
       }
     )
-    electron_38
     electron_39
     electron_40
     electron_41
@@ -6497,8 +6495,6 @@ with pkgs;
 
   # pcre32 seems unused
   pcre-cpp = pcre.override { variant = "cpp"; };
-
-  pcre2 = callPackage ../development/libraries/pcre2 { };
 
   inherit
     (callPackage ../development/libraries/physfs {
@@ -8541,10 +8537,6 @@ with pkgs;
     waveform-seekbar = callPackage ../applications/audio/deadbeef/plugins/waveform-seekbar.nix { };
   };
 
-  deadbeef-with-plugins = callPackage ../applications/audio/deadbeef/wrapper.nix {
-    plugins = [ ];
-  };
-
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
   djview4 = djview;
@@ -8620,11 +8612,7 @@ with pkgs;
     eval = false;
   } emacs.pkgs;
 
-  espeak-classic = callPackage ../applications/audio/espeak { };
-
   espeak = espeak-ng;
-
-  espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
   evolution-data-server-gtk4 = evolution-data-server.override {
     withGtk3 = false;
@@ -9574,8 +9562,6 @@ with pkgs;
   unigine-sanctuary = pkgsi686Linux.callPackage ../applications/graphics/unigine-sanctuary { };
 
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
-
-  vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
 
   vim = vimUtils.makeCustomizable (
     callPackage ../applications/editors/vim {

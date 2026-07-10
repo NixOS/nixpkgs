@@ -3,30 +3,36 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_40,
+  electron,
   python3,
   xcodebuild,
+  applyPatches,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "dopamine";
   version = "3.0.6";
 
-  src = fetchFromGitHub {
-    owner = "digimezzo";
-    repo = "dopamine";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HTPWejm5Wi6yGJyS/f1RhjIluTz01ue8lAsnAcQY3IY=";
+  # needed to upgrade better-sqlite3 in npmConfigHook
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "digimezzo";
+      repo = "dopamine";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-HTPWejm5Wi6yGJyS/f1RhjIluTz01ue8lAsnAcQY3IY=";
+    };
+    patches = [
+      # register-scheme contains install scripts, but has no lockfile
+      ./remove-register-scheme.patch
+
+      # fixes node-addon-api errors with aarch64-darwin
+      ./update-node-addon-api.patch
+
+      # bump better-sqlite3 to work with electron 41
+      ./bump-better-sqlite3.patch
+    ];
   };
 
-  npmDepsHash = "sha256-JkGS0YmjsdUiOD48HcGXy/fPTP33JQAtJui0mQWicmc=";
-
-  patches = [
-    # register-scheme contains install scripts, but has no lockfile
-    ./remove-register-scheme.patch
-
-    # fixes node-addon-api errors with aarch64-darwin
-    ./update-node-addon-api.patch
-  ];
+  npmDepsHash = "sha256-9dQUqoLfzYXOgmE9j2lkew9b/1m4XOghT7roD82y+qg=";
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ distutils ]))
@@ -39,8 +45,8 @@ buildNpmPackage (finalAttrs: {
     runHook preBuild
 
     # needed for better-sqlite3 rebuild
-    export npm_config_nodedir="${electron_40.headers}"
-    export npm_config_target="${electron_40.version}"
+    export npm_config_nodedir="${electron.headers}"
+    export npm_config_target="${electron.version}"
 
     npm rebuild --verbose --no-progress --offline
 
@@ -57,7 +63,7 @@ buildNpmPackage (finalAttrs: {
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
-          cp -r ${electron_40.dist}/Electron.app ./
+          cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' -exec chmod +rw {} \;
 
           npm exec electron-builder -- \
@@ -65,7 +71,7 @@ buildNpmPackage (finalAttrs: {
             -c.npmRebuild=false \
             -c.mac.identity=null \
             -c.electronDist=./ \
-            -c.electronVersion=${electron_40.version} \
+            -c.electronVersion=${electron.version} \
             -c.extraMetadata.version=v${finalAttrs.version} \
             --config electron-builder.config.js
         ''
@@ -74,8 +80,8 @@ buildNpmPackage (finalAttrs: {
           npm exec electron-builder -- \
             --dir \
             -c.npmRebuild=false \
-            -c.electronDist=${electron_40.dist} \
-            -c.electronVersion=${electron_40.version} \
+            -c.electronDist=${electron.dist} \
+            -c.electronVersion=${electron.version} \
             -c.extraMetadata.version=v${finalAttrs.version} \
             --config electron-builder.config.js
         ''
@@ -99,7 +105,7 @@ buildNpmPackage (finalAttrs: {
           mkdir -p $out/share/dopamine
           cp -r release/linux*unpacked/{locales,resources{,.pak}} $out/share/dopamine
 
-          makeWrapper ${lib.getExe electron_40} $out/bin/dopamine \
+          makeWrapper ${lib.getExe electron} $out/bin/dopamine \
             --add-flags $out/share/dopamine/resources/app.asar \
             --inherit-argv0
 
