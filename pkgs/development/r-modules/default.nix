@@ -430,10 +430,6 @@ let
       which
     ];
     KSgeneral = with pkgs; [ pkg-config ];
-    MAGEE = [
-      pkgs.zlib.dev
-      pkgs.bzip2.dev
-    ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     NanoMethViz = [ pkgs.zlib.dev ];
     PEPBVS = [ pkgs.gsl ];
@@ -1082,6 +1078,10 @@ let
     LCMCR = [ pkgs.gsl ];
     LOMAR = [ pkgs.gmp ];
     Libra = [ pkgs.gsl ];
+    MAGEE = with pkgs; [
+      zlib
+      bzip2
+    ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     MethScope = with pkgs; [
       ncurses
