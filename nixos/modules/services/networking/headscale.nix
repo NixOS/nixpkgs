@@ -110,6 +110,15 @@ in
               example = "https://myheadscale.example.com:443";
             };
 
+            node.ephemeral.inactivity_timeout = lib.mkOption {
+              type = lib.types.str;
+              default = "30m";
+              description = ''
+                Time before an inactive ephemeral node is deleted.
+              '';
+              example = "5m";
+            };
+
             noise.private_key_path = lib.mkOption {
               type = lib.types.path;
               default = "${dataDir}/noise_private.key";
@@ -199,15 +208,6 @@ in
                   Path to derp private key file, generated automatically if it does not exist.
                 '';
               };
-            };
-
-            ephemeral_node_inactivity_timeout = lib.mkOption {
-              type = lib.types.str;
-              default = "30m";
-              description = ''
-                Time before an inactive ephemeral node is deleted.
-              '';
-              example = "5m";
             };
 
             database = {
@@ -609,10 +609,23 @@ in
       [ "services" "headscale" "derp" "urls" ]
       [ "services" "headscale" "settings" "derp" "urls" ]
     )
-    (mkRenamedOptionModule
-      [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
-      [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
-    )
+    (mkRenamedOptionModuleWith {
+      from = [
+        "services"
+        "headscale"
+        "settings"
+        "ephemeral_node_inactivity_timeout"
+      ];
+      to = [
+        "services"
+        "headscale"
+        "settings"
+        "node"
+        "ephemeral"
+        "inactivity_timeout"
+      ];
+      sinceRelease = 2611;
+    })
     (mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]
       [ "services" "headscale" "settings" "log" "level" ]
