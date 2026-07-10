@@ -43,7 +43,7 @@
 }:
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "tilelang";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +52,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "tilelang";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-C/c99/26/dBnQJYGrZ+NXl1Rqk3bjM2kpkgP/hWkTGE=";
+    hash = "sha256-qmn34YMwLU6j2cpUUh9ms1OqzVI+wIzZtZITNBLQp3k=";
   };
 
   postPatch =
