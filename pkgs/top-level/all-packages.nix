@@ -11186,4 +11186,8 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  # Reserved namespace for overlaying onto.
+  # Never used within Nixpkgs.
+  alt = { };
 }
