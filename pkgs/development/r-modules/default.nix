@@ -425,7 +425,6 @@ let
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
-    HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HilbertVisGUI = with pkgs; [
       pkg-config
@@ -1094,6 +1093,7 @@ let
     GrafGen = [ pkgs.zlib ];
     HDF5Array = [ pkgs.zlib.dev ];
     HiCDCPlus = [ pkgs.zlib.dev ];
+    HiCParser = [ pkgs.zlib ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     JMcmprsk = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
