@@ -437,9 +437,9 @@ let
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.pkg-config ];
     RCurl = [ pkgs.curl ]; # for curl-config
-    RDieHarder = [ pkgs.gsl ];
+    RDieHarder = [ pkgs.gsl ]; # for gsl-config
     RGtk2 = [ pkgs.pkg-config ];
-    RJMCMCNucleosomes = [ pkgs.gsl ];
+    RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
     RMySQL = with pkgs; [
       zlib
       libmysqlclient
