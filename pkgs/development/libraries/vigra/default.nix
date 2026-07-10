@@ -32,11 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     boost
     fftw
     fftwSinglePrec
-    hdf5
+    (hdf5.override {
+      apiVersion = "v110";
+    })
     libjpeg
     libpng
     libtiff
