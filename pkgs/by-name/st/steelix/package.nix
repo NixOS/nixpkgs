@@ -74,7 +74,10 @@ in
       };
 
       passthru = previousAttrs.passthru // {
-        updateScript = ./update.sh;
+        updateScript = [
+          previousAttrs.passthru.updateSh
+          "steelix"
+        ];
         unwrapped = steelix-unwrapped;
       };
     }
