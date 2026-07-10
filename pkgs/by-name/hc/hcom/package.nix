@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hcom";
-  version = "0.7.22";
+  version = "0.7.23";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aannoo";
     repo = "hcom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nYJ/S6/yNaMU8dJ4NoQbNHa133Ui4mHxc/2Dfmzga90=";
+    hash = "sha256-58AcL/hOi8Fl1Nq6QBOyM7Uf7ZUjBabU4PBzZWo25Vo=";
   };
 
-  cargoHash = "sha256-3wDLq7qymMO5NUK9ekbh9+ij+zp5Ny1lFcxVmHzti+4=";
+  cargoHash = "sha256-cGhssU75BrNmHqxYWvqRcjNxB70rxYHXBz3hZDY+was=";
 
   doCheck = true;
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
