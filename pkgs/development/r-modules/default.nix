@@ -429,7 +429,6 @@ let
       pkg-config
       which
     ];
-    KFKSDS = [ pkgs.gsl ];
     KSgeneral = with pkgs; [ pkg-config ];
     LOMAR = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
@@ -1084,6 +1083,7 @@ let
     HiCseg = [ pkgs.gsl ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     JMcmprsk = [ pkgs.gsl ];
+    KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     LCMCR = [ pkgs.gsl ];
     MedianaDesigner = [ pkgs.zlib.dev ];
