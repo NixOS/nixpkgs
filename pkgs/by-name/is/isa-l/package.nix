@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+  doCheck = true;
 
   passthru = {
     tests = {
