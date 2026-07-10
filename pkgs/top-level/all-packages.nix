@@ -4451,11 +4451,12 @@ with pkgs;
   };
 
   inherit (callPackages ../applications/networking/cluster/hadoop { })
+    hadoop_3_5
     hadoop_3_4
     hadoop_3_3
     hadoop2
     ;
-  hadoop3 = hadoop_3_4;
+  hadoop3 = hadoop_3_5;
   hadoop = hadoop3;
 
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;

@@ -126,8 +126,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        # JRE 15 removed option `UseConcMarkSweepGC` which is needed.
-        JAVA_HOME = "${pkgs.jre8}";
+        JAVA_HOME = cfg.package.jdk.home;
         HBASE_LOG_DIR = cfg.logDir;
       };
 

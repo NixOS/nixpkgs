@@ -56,6 +56,8 @@ let
           ;
       };
       doCheck = true;
+      strictDeps = true;
+      __structuredAttrs = true;
 
       # Build the container executor binary from source
       # InstallPhase is not lazily evaluating containerExecutor for some reason
@@ -72,7 +74,10 @@ let
         makeWrapper
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      buildInputs = [
+        bash
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
         (lib.getLib stdenv.cc.cc)
         openssl
         protobuf
@@ -167,29 +172,56 @@ let
     });
 in
 {
-  # Different version of hadoop support different java runtime versions
-  # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
-  hadoop_3_4 = common {
+  # Different versions of Hadoop support different Java runtime versions.
+  # Upstream guidance is conservative
+  # (https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions);
+  # the JDKs below are the latest that actually pass nixosTests.hadoop*, which
+  # run a real MapReduce job rather than just starting daemons:
+  #   3.4+ -> JDK 21: they ship --add-opens flags for java.base, so reflective
+  #           access (e.g. httpfs) survives JPMS and they run past JDK 11. The
+  #           cap is JDK 21 because JDK 24 removed the SecurityManager (JEP 486),
+  #           which breaks Hadoop's Subject.doAs UGI propagation: the MapReduce
+  #           AM then runs as the OS container user "nobody" and HDFS writes fail
+  #           with AccessControlException. Daemons still start on JDK 25, so
+  #           daemon-only tests pass; the combined test (hadoop.nix) catches it.
+  #   3.3  -> JDK 11: no --add-opens; JDK 17+ fails (httpfs hits
+  #           InaccessibleObjectException on java.lang.ClassLoader.defineClass).
+  #   2.10 -> JDK 8.
+  hadoop_3_5 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
-        version = "3.4.2";
-        hash = "sha256-YySoP+EeUXiQQ2/G2AvIKVBu0lLL4kZXUrkSIJAN+4M=";
-        srcHash = "sha256-AkZjpHk57S3pYiZambxgRHR7PD51HSI4H1HHW9ICah4=";
-        variant = "lean";
+        version = "3.5.0";
+        hash = "sha256-grnCuJwskD3BBHsSl9pCrlvL9KPnNVlAwzfrWlFASFA=";
+        srcHash = "sha256-RTKKflqPspyoUD8z5fAmn4+7zogk7JEnQmqtbR2a8CM=";
       };
       x86_64-darwin = x86_64-linux;
-      aarch64-linux = {
-        version = "3.4.0";
-        hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
-        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
-        jdk = jdk11_headless;
+      aarch64-linux = x86_64-linux // {
+        hash = "sha256-GjePuVxAeLpD4VfLWGzZKGieiSCi+wPUPwZ04x2LxbE=";
       };
       aarch64-darwin = aarch64-linux;
     };
     jdk = jdk21_headless;
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
+  };
+  hadoop_3_4 = common {
+    pname = "hadoop";
+    platformAttrs = rec {
+      x86_64-linux = {
+        version = "3.4.3";
+        hash = "sha256-ymW2epza0ns6ocuBSWoxNt5XK6s+jyKJwqrell9oc1M=";
+        srcHash = "sha256-FHAOIOj+bgyTTJWyWDA9GTOW5yVBRYh0CtXvXe30aLQ=";
+      };
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = x86_64-linux // {
+        hash = "sha256-IpAWw399Hy2kPpcS4hI2ZwyMyjVG35npg+R9ioaGARg=";
+      };
+      aarch64-darwin = aarch64-linux;
+    };
+    jdk = jdk21_headless;
+    # TODO: Package and add Intel Storage Acceleration Library
+    tests = nixosTests.hadoop_3_4;
   };
   hadoop_3_3 = common {
     pname = "hadoop";
