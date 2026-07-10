@@ -115,13 +115,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z18SEjUdFP2/grQtHFI6J7CVcAMalshPt3Sd4tGXsDw=";
+    hash = "sha256-DLDzICjhvIErVm15CLoLnd8WwQl+lcalXhz2xmWposA=";
   };
 
   pnpmDeps = fetchPnpmDeps {

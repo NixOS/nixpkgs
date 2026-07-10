@@ -3,10 +3,12 @@
   libgbm,
   libjxl,
   libGL,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
   pango,
   pkg-config,
+  installShellFiles,
   rustPlatform,
   wayland,
 }:
@@ -20,7 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-sbY3h3FoWxDmxSng9YvYpt3kyasVJGsykYC/7tblFn8=";
   };
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [
     pango
     libgbm
@@ -29,6 +34,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
   ];
   cargoHash = "sha256-J7ZKWx258bBCNBd061aCeKgTdcWMUF4yzAiIa9l8ZRA=";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wayshot \
+      --bash <($out/bin/wayshot --completions bash) \
+      --fish <($out/bin/wayshot --completions fish) \
+      --zsh <($out/bin/wayshot --completions zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
