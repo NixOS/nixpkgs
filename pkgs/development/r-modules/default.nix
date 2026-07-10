@@ -437,50 +437,31 @@ let
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.pkg-config ];
     RCurl = [ pkgs.curl ]; # for curl-config
-    RDieHarder = [ pkgs.gsl ];
+    RDieHarder = [ pkgs.gsl ]; # for gsl-config
     RGtk2 = [ pkgs.pkg-config ];
-    RJMCMCNucleosomes = [ pkgs.gsl ];
-    RMySQL = with pkgs; [
-      zlib
-      libmysqlclient
-      openssl.dev
-    ];
-    RNetCDF = with pkgs; [
-      netcdf
-      udunits
-    ];
-    RODBC = [ pkgs.libiodbc ];
+    RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
+    RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
+    RNetCDF = [ pkgs.pkg-config ];
     RPesto = with pkgs; [
       cargo
       rustc
     ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
-    RSclient = [ pkgs.openssl.dev ];
-    RVowpalWabbit = with pkgs; [
-      zlib.dev
-      boost
+    RationalMatrix = [ pkgs.pkg-config ];
+    RcppCWB = with pkgs; [
+      pkg-config
+      pcre2 # for pcre2-config
     ];
-    RationalMatrix = [
-      pkgs.pkg-config
-      pkgs.gmp.dev
-    ];
-    Rbwa = [ pkgs.zlib.dev ];
-    RcppCNPy = [ pkgs.zlib.dev ];
-    RcppCWB = [
-      pkgs.pkg-config
-      pkgs.pcre2
-    ];
-    RcppDPR = [ pkgs.gsl ];
-    RcppGSL = [ pkgs.gsl ];
+    RcppDPR = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    RcppGSL = [ pkgs.gsl ]; # for gsl-config
     RcppMeCab = [ pkgs.pkg-config ];
     RcppPlanc = with pkgs; [
       which
       cmake
       pkg-config
     ];
-    RcppZiggurat = [ pkgs.gsl ];
-    Rglpk = [ pkgs.glpk ];
+    RcppZiggurat = [ pkgs.gsl ]; # for gsl-config
     Rhdf5lib = with pkgs; [
       cmake
     ];
@@ -497,20 +478,10 @@ let
       pcre.dev
     ];
     Rigraphlib = [ pkgs.cmake ];
-    Rlibeemd = [ pkgs.gsl ];
-    Rmpfr = with pkgs; [
-      gmp
-      mpfr.dev
-    ];
-    Rmpi = with pkgs; [
-      mpi.dev
-      prrte.dev
-    ];
+    Rlibeemd = [ pkgs.gsl ]; # for gsl-config
+    Rmpi = [ pkgs.prrte ];
     Rpoppler = [ pkgs.pkg-config ];
-    Rserve = [ pkgs.openssl ];
-    Rssa = [ pkgs.fftw.dev ];
-    Rsubbotools = [ pkgs.gsl ];
-    Rsubread = [ pkgs.zlib.dev ];
+    Rsubbotools = [ pkgs.gsl ]; # for gsl-config
     Rsymphony = [ pkgs.pkg-config ];
     SAVE = with pkgs; [
       zlib
@@ -523,41 +494,35 @@ let
       cargo
       rustc
     ];
-    SemiCompRisks = [ pkgs.gsl ];
-    SimInf = [ pkgs.gsl ];
+    SimInf = [ pkgs.gsl ]; # for gsl-config
     SuperGauss = [ pkgs.pkg-config ];
-    SymTS = [ pkgs.gsl ];
-    TAQMNGR = [ pkgs.zlib.dev ];
-    TDA = [ pkgs.gmp ];
+    SymTS = [ pkgs.gsl ]; # for gsl-config
     V8 = [ pkgs.pkg-config ];
-    VBLPCM = [ pkgs.gsl ];
-    XBRL = with pkgs; [
-      zlib
-      libxml2.dev
-    ];
+    VBLPCM = [ pkgs.gsl ]; # for gsl-config
+    XBRL = [ pkgs.libxml2 ]; # for xml2-config
     XML = with pkgs; [
       pkg-config
       libxml2 # for xml2-config
     ];
-    abn = [ pkgs.gsl ];
+    abn = with pkgs; [
+      gsl # for gsl-config
+      jags
+    ];
     adimpro = [ pkgs.imagemagick ];
-    affyPLM = [ pkgs.zlib.dev ];
-    affyio = [ pkgs.zlib.dev ];
     alcyon = with pkgs; [
       cmake
       which
     ];
     animation = [ pkgs.which ];
-    apcf = with pkgs; [ geos ];
+    apcf = [ pkgs.geos ]; # for geos-config
     arcgisgeocode = with pkgs; [
       cargo
       rustc
     ];
     arcgisplaces = with pkgs; [
-      pkg-config
-      openssl.dev
       cargo
       rustc
+      pkg-config
     ];
     arcgisutils = with pkgs; [
       cargo
@@ -704,7 +669,6 @@ let
       glpk
     ];
     gmapR = [ pkgs.zlib.dev ];
-    gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gslnls = [ pkgs.gsl ];
@@ -851,7 +815,7 @@ let
     rgeos = [ pkgs.geos ];
     rhdf5 = [ pkgs.zlib ];
     ridge = [ pkgs.gsl ];
-    rjags = [ pkgs.jags ];
+    rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     rmatio = [
       pkgs.zlib.dev
@@ -1003,7 +967,6 @@ let
       cargo
       rustc
     ];
-    yyjsonr = with pkgs; [ zlib.dev ];
     # keep-sorted end
   };
 
@@ -1113,8 +1076,13 @@ let
     RKHSMetaMod = [ pkgs.gsl ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     RMark = [ pkgs.which ];
+    RNetCDF = with pkgs; [
+      netcdf
+      udunits
+    ];
     RNifti = [ pkgs.zlib ];
     RNiftyReg = [ pkgs.zlib ];
+    RODBC = [ pkgs.libiodbc ];
     RPostgres = with pkgs; [ libpq ];
     RProtoBuf = with pkgs; [
       protobuf
@@ -1125,25 +1093,35 @@ let
       quantlib.dev
       boost.dev
     ];
+    RSclient = [ pkgs.openssl ];
+    RVowpalWabbit = with pkgs; [
+      boost
+      zlib
+    ];
     Rarr = [ pkgs.zlib.dev ];
+    RationalMatrix = [ pkgs.gmp ];
     Rbowtie = with pkgs; [ zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    Rbwa = [ pkgs.zlib ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+    RcppCNPy = [ pkgs.zlib ];
     RcppCWB = with pkgs; [
-      pcre.dev
-      glib.dev
+      pcre2
+      glib
     ];
     RcppMeCab = [ pkgs.mecab ];
     RcppPlanc = with pkgs; [
       hwloc
       hdf5.dev
     ];
+    RcppZiggurat = [ pkgs.gsl ];
     Rfastp = with pkgs; [
       xz.dev
       bzip2.dev
       zlib.dev
     ];
+    Rglpk = [ pkgs.glpk ];
     Rhdf5lib = with pkgs; [
       curl
       zlib.dev
@@ -1154,8 +1132,14 @@ let
       xz
       zlib
     ];
+    Rlibeemd = [ pkgs.gsl ];
     RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
+    Rmpfr = with pkgs; [
+      gmp
+      mpfr
+    ];
+    Rmpi = [ pkgs.mpi ];
     RoBMA = [ pkgs.jags ];
     RoBSA = [ pkgs.jags ];
     Rpoppler = [ pkgs.poppler ];
@@ -1164,6 +1148,9 @@ let
       xz
       zlib
     ];
+    Rserve = [ pkgs.openssl ];
+    Rssa = [ pkgs.fftw ];
+    Rsubread = [ pkgs.zlib ];
     Rsymphony = with pkgs; [
       symphony
       doxygen
@@ -1179,10 +1166,13 @@ let
     ];
     SLmetrics = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
+    SemiCompRisks = [ pkgs.gsl ];
     ShortRead = [ pkgs.zlib ];
     Signac = [ pkgs.zlib.dev ];
     SuperGauss = [ pkgs.fftw ];
     SynExtend = [ pkgs.zlib.dev ];
+    TAQMNGR = [ pkgs.zlib ];
+    TDA = [ pkgs.gmp ];
     TransView = with pkgs; [
       xz.dev
       bzip2.dev
@@ -1206,7 +1196,6 @@ let
     ];
     XVector = [ pkgs.zlib ];
     XYomics = [ pkgs.boost ];
-    abn = [ pkgs.jags ];
     adbcpostgresql = with pkgs; [
       readline.dev
       zlib.dev
@@ -1219,7 +1208,10 @@ let
       which
       xdpyinfo
     ];
+    affyPLM = [ pkgs.zlib ];
+    affyio = [ pkgs.zlib ];
     apsimx = [ pkgs.which ];
+    arcgisplaces = [ pkgs.openssl ];
     archive = [ pkgs.libarchive ];
     arrangements = with pkgs; [ gmp.dev ];
     asciicast = with pkgs; [
@@ -1310,6 +1302,7 @@ let
         libxdmcp
       ];
     gfilogisreg = [ pkgs.gmp.dev ];
+    gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
@@ -1487,6 +1480,7 @@ let
       zlib.dev
       bzip2.dev
     ];
+    rjags = [ pkgs.jags ];
     rlas = with pkgs; [
       boost
       gdal
@@ -1638,6 +1632,7 @@ let
         libxml2
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
+    yyjsonr = [ pkgs.zlib ];
     zlib = [ pkgs.zlib.dev ];
     # keep-sorted end
   };
@@ -2030,17 +2025,6 @@ let
       '';
     });
 
-    RMySQL = old.RMySQL.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        MYSQL_DIR = "${pkgs.libmysqlclient}";
-        PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
-        NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
-      };
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
     ROracle = old.ROracle.overrideAttrs (attrs: {
       configureFlags = [
         "--with-oci-lib=${pkgs.oracle-instantclient.lib}/lib"
@@ -2127,12 +2111,6 @@ let
       preConfigure = ''
         substituteInPlace R/zzz.R --replace-fail "-lcurl" "-L${pkgs.curl.out}/lib -lcurl"
       '';
-    });
-
-    Rmpfr = old.Rmpfr.overrideAttrs (attrs: {
-      configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
-      ];
     });
 
     Rmpi = old.Rmpi.overrideAttrs (attrs: {
@@ -2560,6 +2538,7 @@ let
     });
 
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [ new.Rhdf5lib.hdf5 ];
       buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
     });
 
