@@ -10629,10 +10629,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  megam = callPackage ../applications/science/misc/megam {
-    inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
-  };
-
   spyder = with python3.pkgs; toPythonApplication spyder;
 
   ### SCIENCE / PHYSICS
