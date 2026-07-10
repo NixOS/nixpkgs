@@ -433,7 +433,7 @@ let
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
-    QF = [ pkgs.gsl ];
+    QF = [ pkgs.gsl ]; # for gsl-config
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
     RCurl = [ pkgs.curl ]; # for curl-config
