@@ -546,7 +546,6 @@ let
       rustc
     ];
     SemiCompRisks = [ pkgs.gsl ];
-    ShortRead = [ pkgs.zlib.dev ];
     SimInf = [ pkgs.gsl ];
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ];
@@ -1199,6 +1198,7 @@ let
     ];
     SLmetrics = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
+    ShortRead = [ pkgs.zlib ];
     Signac = [ pkgs.zlib.dev ];
     SuperGauss = [ pkgs.fftw ];
     SynExtend = [ pkgs.zlib.dev ];
