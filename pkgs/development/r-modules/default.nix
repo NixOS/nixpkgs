@@ -419,7 +419,6 @@ let
     BayesXsrc = [ pkgs.gsl ]; # for gsl-config
     BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
-    Biostrings = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib.dev ];
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
