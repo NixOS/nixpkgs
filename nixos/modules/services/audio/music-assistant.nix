@@ -19,6 +19,7 @@ let
     bool
     listOf
     enum
+    port
     str
     ;
 
@@ -75,6 +76,13 @@ in
         List of provider names for which dependencies will be installed.
       '';
     };
+
+    spotifyConnectPort = mkOption {
+      type = port;
+      default = 0;
+      example = 1234;
+      description = "If spotify_connect is used as a provider, this is the port it will listen on and that will be opened in the fireall if openFirewall is true.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -84,6 +92,7 @@ in
         ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
         ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
+        ++ lib.optional (lib.elem "spotify_connect" cfg.providers && cfg.spotifyConnectPort != 0) cfg.spotifyConnectPort
         ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
           # https://lyrion.org/reference/slimproto-protocol/
           3483 # Slimproto control
@@ -167,6 +176,9 @@ in
           ]
           ++ cfg.extraOptions
         );
+        Environment = lib.mkIf (lib.elem "spotify_connect" cfg.providers) [
+          "MUSIC_ASSISTANT_SPOTIFY_CONNECT_ZEROCONF_PORT=${toString cfg.spotifyConnectPort}"
+        ];
         DynamicUser = true;
         StateDirectory = "music-assistant";
         AmbientCapabilities = "";

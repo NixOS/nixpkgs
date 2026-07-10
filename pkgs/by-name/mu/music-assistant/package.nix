@@ -60,6 +60,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # Look up librespot from PATH at runtime
     ./librespot.patch
 
+    # Allow specifying a port via an env for the port go-librespot listens on instead of using a random one.
+    # If unset, defaults to random port.
+    ./allow-specifying-port-for-go-librespot.diff
+
     # Look up shairport-sync from PATH at runtime
     ./shairport-sync.patch
 
