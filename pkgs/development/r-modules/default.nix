@@ -423,7 +423,7 @@ let
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
-    GLAD = [ pkgs.gsl ];
+    GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ];
     GeneralizedWendland = [ pkgs.gsl ];
     HiCParser = [ pkgs.zlib ];
@@ -1081,6 +1081,7 @@ let
       bzip2.dev
       xz.dev
     ];
+    GLAD = [ pkgs.gsl ];
     GMMAT = with pkgs; [
       zlib.dev
       bzip2.dev
