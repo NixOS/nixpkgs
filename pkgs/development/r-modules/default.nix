@@ -416,58 +416,27 @@ let
   packagesWithNativeBuildInputs = {
     # keep-sorted start block=yes
     Apollonius = [ pkgs.pkg-config ];
-    BayesChange = [ pkgs.gsl ];
-    BayesSAE = [ pkgs.gsl ];
-    BayesVarSel = [ pkgs.gsl ];
-    BayesXsrc = with pkgs; [
-      readline.dev
-      ncurses
-      gsl
-    ];
+    BayesXsrc = [ pkgs.gsl ]; # for gsl-config
     BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
-    Biostrings = [ pkgs.zlib ];
-    BitSeq = [ pkgs.zlib.dev ];
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
-    CellBarcode = [ pkgs.zlib ];
     ChemmineOB = [ pkgs.pkg-config ];
-    CytoML = [ pkgs.libxml2.dev ];
-    DEploid = [ pkgs.zlib.dev ];
-    DEploid_utils = [ pkgs.zlib.dev ];
-    DiffBind = with pkgs; [
-      zlib.dev
-      xz.dev
-      bzip2.dev
-    ];
-    EMCluster = [ pkgs.lapack ];
-    Formula = [ pkgs.gmp ];
-    GLAD = [ pkgs.gsl ];
-    GPBayes = [ pkgs.gsl ];
-    GeneralizedWendland = [ pkgs.gsl ];
-    HiCParser = [ pkgs.zlib ];
-    HiCseg = [ pkgs.gsl ];
+    CytoML = [ pkgs.libxml2 ]; # for xml2-config
+    GLAD = [ pkgs.gsl ]; # for gsl-config
+    GPBayes = [ pkgs.gsl ]; # for gsl-config
     HilbertVisGUI = with pkgs; [
       pkg-config
       which
     ];
-    JavaGD = [ pkgs.jdk ];
-    KFKSDS = [ pkgs.gsl ];
     KSgeneral = with pkgs; [ pkg-config ];
-    LOMAR = [ pkgs.gmp.dev ];
-    Libra = [ pkgs.gsl ];
-    MAGEE = [
-      pkgs.zlib.dev
-      pkgs.bzip2.dev
-    ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
-    NanoMethViz = [ pkgs.zlib.dev ];
-    PEPBVS = [ pkgs.gsl ];
+    PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
-    PKI = [ pkgs.openssl.dev ];
-    QF = [ pkgs.gsl ];
+    QF = [ pkgs.gsl ]; # for gsl-config
     R2SWF = [ pkgs.pkg-config ];
     RAppArmor = [ pkgs.libapparmor ];
+    RCurl = [ pkgs.curl ]; # for curl-config
     RDieHarder = [ pkgs.gsl ];
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ];
@@ -527,14 +496,6 @@ let
       mpi
       pcre.dev
     ];
-    Rhtslib = with pkgs; [
-      zlib.dev
-      automake
-      autoconf
-      bzip2.dev
-      xz.dev
-      curl.dev
-    ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ];
     Rmpfr = with pkgs; [
@@ -546,12 +507,6 @@ let
       prrte.dev
     ];
     Rpoppler = [ pkgs.pkg-config ];
-    Rsamtools = with pkgs; [
-      zlib.dev
-      curl.dev
-      bzip2
-      xz
-    ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
     Rsubbotools = [ pkgs.gsl ];
@@ -569,7 +524,6 @@ let
       rustc
     ];
     SemiCompRisks = [ pkgs.gsl ];
-    ShortRead = [ pkgs.zlib.dev ];
     SimInf = [ pkgs.gsl ];
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ];
@@ -674,13 +628,13 @@ let
       pkgs.which
       pkgs.cmake
     ];
-    data_table =
-      with pkgs;
+    data_table = (
+      # added extra parentheses so that `keep-sorted` doesn't get tripped up
       [
-        pkg-config
-        zlib.dev
+        pkgs.pkg-config
       ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
+      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
+    );
     datefixR = with pkgs; [
       cargo
       rustc
@@ -709,10 +663,7 @@ let
       rustc
     ];
     fftw = [ pkgs.pkg-config ];
-    fftwtools = with pkgs; [
-      fftw.dev
-      pkg-config
-    ];
+    fftwtools = [ pkgs.pkg-config ];
     fingerPro = [ pkgs.gsl ];
     fio = with pkgs; [
       cargo
@@ -801,7 +752,6 @@ let
     ];
     jSDM = [ pkgs.gsl ];
     jack = [ pkgs.pkg-config ];
-    jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
     kza = [ pkgs.pkg-config ];
     leidenAlg = [ pkgs.gmp.dev ];
@@ -862,7 +812,7 @@ let
     ];
     pdftools = [ pkgs.pkg-config ];
     phytools = [ pkgs.which ];
-    png = [ pkgs.libpng.dev ];
+    png = [ pkgs.libpng ]; # for libpng-config
     protolite = [ pkgs.protobuf ];
     prqlr = with pkgs; [
       cargo
@@ -871,18 +821,7 @@ let
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
     rGEDI = [ pkgs.gsl ];
-    rJava = with pkgs; [
-      stripJavaArchivesHook
-      zlib
-      bzip2.dev
-      icu
-      xz.dev
-      zstd.dev
-      pcre.dev
-      jdk
-      libzip
-      libdeflate
-    ];
+    rJava = [ pkgs.stripJavaArchivesHook ];
     ragg = [ pkgs.pkg-config ];
     rapport = [ pkgs.which ];
     rapportools = [ pkgs.which ];
@@ -939,10 +878,7 @@ let
       cmake
       pkg-config
     ];
-    rtracklayer = with pkgs; [
-      zlib.dev
-      curl.dev
-    ];
+    rtracklayer = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
     rvg = [ pkgs.libpng.dev ];
     rzmq = [ pkgs.pkg-config ];
@@ -960,7 +896,6 @@ let
       fftw.dev
       libsndfile.dev
     ];
-    seqinr = [ pkgs.zlib.dev ];
     seqminer = with pkgs; [
       zlib.dev
       bzip2
@@ -1009,7 +944,6 @@ let
     tesseract = [ pkgs.pkg-config ];
     textshaping = [ pkgs.pkg-config ];
     themetagenomics = [ pkgs.zlib.dev ];
-    tiff = [ pkgs.libtiff.dev ];
     tinyimg = with pkgs; [
       cargo
       rustc
@@ -1085,21 +1019,32 @@ let
       which
     ];
     BNSP = [ pkgs.gsl ];
+    BayesChange = [ pkgs.gsl ];
+    BayesSAE = [ pkgs.gsl ];
+    BayesVarSel = [ pkgs.gsl ];
     BigDataStatMeth = [ pkgs.zlib ];
+    BitSeq = [ pkgs.zlib ];
     CBN2Path = [ pkgs.gsl ];
     CLVTools = [ pkgs.gsl ];
     CNEr = with pkgs; [ zlib ];
     Cairo = [ pkgs.cairo ];
+    CellBarcode = [ pkgs.zlib ];
     ChemmineOB = with pkgs; [
       eigen
       openbabel
       zlib.dev
     ];
+    DEploid = [ pkgs.zlib ];
+    DEploid_utils = [ pkgs.zlib ];
     DGP4LCF = [
       pkgs.lapack
       pkgs.blas
     ];
-    DiffBind = with pkgs; [ zlib.dev ];
+    DiffBind = with pkgs; [
+      zlib
+      xz
+      bzip2
+    ];
     DirichletMultinomial = with pkgs; [ gsl ];
     DropletUtils = [ pkgs.zlib.dev ];
     EHRmuse = [ pkgs.gsl.dev ];
@@ -1108,11 +1053,13 @@ let
       bzip2.dev
       xz.dev
     ];
+    GLAD = [ pkgs.gsl ];
     GMMAT = with pkgs; [
       zlib.dev
       bzip2.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
+    GeneralizedWendland = [ pkgs.gsl ];
     GeoFIS = with pkgs; [
       mpfr.dev
       gmp.dev
@@ -1120,20 +1067,31 @@ let
     GrafGen = [ pkgs.zlib ];
     HDF5Array = [ pkgs.zlib.dev ];
     HiCDCPlus = [ pkgs.zlib.dev ];
+    HiCParser = [ pkgs.zlib ];
+    HiCseg = [ pkgs.gsl ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     JMcmprsk = [ pkgs.gsl ];
+    KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     LCMCR = [ pkgs.gsl ];
+    LOMAR = [ pkgs.gmp ];
+    Libra = [ pkgs.gsl ];
+    MAGEE = with pkgs; [
+      zlib
+      bzip2
+    ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     MethScope = with pkgs; [
       ncurses
       zlib.dev
     ];
+    NanoMethViz = [ pkgs.zlib ];
     OpenCL = with pkgs; [
       opencl-clhpp
       ocl-icd
     ];
     PING = [ pkgs.gsl ];
+    PKI = [ pkgs.openssl ];
     PROJ = [ pkgs.proj.dev ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];
@@ -1148,7 +1106,6 @@ let
       libpng
       freetype
     ];
-    RCurl = [ pkgs.curl.dev ];
     RGtk2 = [ pkgs.gtk2 ];
     RITCH = [ pkgs.zlib.dev ];
     RKHSMetaMod = [ pkgs.gsl ];
@@ -1189,11 +1146,22 @@ let
       curl
       zlib.dev
     ];
+    Rhtslib = with pkgs; [
+      bzip2
+      curl
+      xz
+      zlib
+    ];
     RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
     RoBSA = [ pkgs.jags ];
     Rpoppler = [ pkgs.poppler ];
+    Rsamtools = with pkgs; [
+      bzip2
+      xz
+      zlib
+    ];
     Rsymphony = with pkgs; [
       symphony
       doxygen
@@ -1209,6 +1177,7 @@ let
     ];
     SLmetrics = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
+    ShortRead = [ pkgs.zlib ];
     Signac = [ pkgs.zlib.dev ];
     SuperGauss = [ pkgs.fftw ];
     SynExtend = [ pkgs.zlib.dev ];
@@ -1291,6 +1260,7 @@ let
       curl
     ];
     curl = [ pkgs.curl ];
+    data_table = [ pkgs.zlib ];
     deepSNV = with pkgs; [
       xz.dev
       bzip2.dev
@@ -1310,6 +1280,7 @@ let
     ];
     excursions = [ pkgs.gsl ];
     fftw = [ pkgs.fftw ];
+    fftwtools = [ pkgs.fftw ];
     flan = [ pkgs.gsl ];
     flowWorkspace = [ pkgs.zlib.dev ];
     fs = [ pkgs.libuv ];
@@ -1373,6 +1344,7 @@ let
       xz.dev
       bzip2.dev
     ];
+    jpeg = [ pkgs.libjpeg ];
     jqr = [ pkgs.jq.out ];
     knowYourCG = with pkgs; [
       zlib.dev
@@ -1433,6 +1405,7 @@ let
       fftw.dev
       libpng.dev
     ];
+    png = [ pkgs.libpng ];
     podkat = with pkgs; [
       zlib.dev
       xz.dev
@@ -1461,6 +1434,13 @@ let
       hdf5.dev
     ];
     rJPSGCS = [ pkgs.zlib.dev ];
+    rJava = with pkgs; [
+      zlib
+      bzip2
+      xz
+      zstd
+      icu
+    ];
     raer = with pkgs; [
       zlib.dev
       xz.dev
@@ -1523,6 +1503,10 @@ let
     ];
     rtk = [ pkgs.zlib.dev ];
     rtmpt = [ pkgs.gsl ];
+    rtracklayer = with pkgs; [
+      zlib
+      curl
+    ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
       abseil-cpp
@@ -1546,6 +1530,7 @@ let
       bzip2.dev
       xz.dev
     ];
+    seqinr = [ pkgs.zlib ];
     sf = with pkgs; [
       proj
       sqlite
@@ -1613,6 +1598,7 @@ let
     ];
     tfevents = [ pkgs.protobuf ];
     tidypopgen = [ pkgs.zlib.dev ];
+    tiff = [ pkgs.libtiff ];
     tikzDevice = with pkgs; [
       which
       texliveMedium
