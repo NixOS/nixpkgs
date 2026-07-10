@@ -413,7 +413,6 @@ lib.makeOverridable (
       # Installing `constants.py` from `$buildRoot` as it's generated.
       cp scripts/gdb/linux/constants.py $dev/lib/modules/${modDirVersion}/build/scripts/gdb/linux
 
-      make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
       unlink $modules/lib/modules/${modDirVersion}/build
 
       mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
@@ -526,7 +525,8 @@ lib.makeOverridable (
         else
           "install"
       )
-    ];
+    ]
+    ++ lib.optionals isModular [ "modules_install" ];
 
     karch = stdenv.hostPlatform.linuxArch;
 
