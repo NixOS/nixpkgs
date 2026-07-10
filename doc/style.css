@@ -263,16 +263,6 @@ code {
   font-family: monospace;
 }
 
-code {
-  color: #ff8657;
-  background: #f4f4f4;
-  display: inline-block;
-  padding: 0 0.5rem;
-  border: 1px solid #d8d8d8;
-  border-radius: 0.5rem;
-  line-height: 1.57777778;
-}
-
 div.book .programlisting,
 div.appendix .programlisting {
   border-radius: 0.5rem;
@@ -378,11 +368,6 @@ div.appendix dt {
 
 div.book code,
 div.appendix code {
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-  color: inherit;
-  font-size: 100%;
   -webkit-hyphens: none;
   -moz-hyphens: none;
   hyphens: none;
