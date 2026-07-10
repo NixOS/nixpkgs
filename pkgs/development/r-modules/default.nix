@@ -431,7 +431,6 @@ let
     ];
     KSgeneral = with pkgs; [ pkg-config ];
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
-    NanoMethViz = [ pkgs.zlib.dev ];
     PEPBVS = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     PKI = [ pkgs.openssl.dev ];
@@ -1087,6 +1086,7 @@ let
       ncurses
       zlib.dev
     ];
+    NanoMethViz = [ pkgs.zlib ];
     OpenCL = with pkgs; [
       opencl-clhpp
       ocl-icd
