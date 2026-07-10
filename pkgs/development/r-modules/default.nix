@@ -481,7 +481,6 @@ let
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     Rmpi = [ pkgs.prrte ];
     Rpoppler = [ pkgs.pkg-config ];
-    Rssa = [ pkgs.fftw.dev ];
     Rsubbotools = [ pkgs.gsl ];
     Rsubread = [ pkgs.zlib.dev ];
     Rsymphony = [ pkgs.pkg-config ];
@@ -1158,6 +1157,7 @@ let
       zlib
     ];
     Rserve = [ pkgs.openssl ];
+    Rssa = [ pkgs.fftw ];
     Rsymphony = with pkgs; [
       symphony
       doxygen
