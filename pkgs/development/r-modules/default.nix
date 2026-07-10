@@ -449,7 +449,6 @@ let
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
     RationalMatrix = [ pkgs.pkg-config ];
-    Rbwa = [ pkgs.zlib.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppCWB = [
       pkgs.pkg-config
@@ -1122,6 +1121,7 @@ let
     RationalMatrix = [ pkgs.gmp ];
     Rbowtie = with pkgs; [ zlib.dev ];
     Rbowtie2 = [ pkgs.zlib.dev ];
+    Rbwa = [ pkgs.zlib ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
     RcppCWB = with pkgs; [
