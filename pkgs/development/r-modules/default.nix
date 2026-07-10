@@ -478,7 +478,7 @@ let
       pcre.dev
     ];
     Rigraphlib = [ pkgs.cmake ];
-    Rlibeemd = [ pkgs.gsl ];
+    Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     Rmpfr = with pkgs; [
       gmp
       mpfr.dev
@@ -1149,6 +1149,7 @@ let
       xz
       zlib
     ];
+    Rlibeemd = [ pkgs.gsl ];
     RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
     RoBMA = [ pkgs.jags ];
