@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "datefinder";
   version = "0.7.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "akoumjian";
@@ -20,7 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-uOSwS+mHgbvEL+rTfs4Ax9NvJnhYemxFVqqDssy2i7g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     regex
     pytz
     python-dateutil
