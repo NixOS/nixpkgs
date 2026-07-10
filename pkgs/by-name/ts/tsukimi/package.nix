@@ -19,21 +19,23 @@
   dbus,
   desktop-file-utils,
   versionCheckHook,
+  libxml2,
+  appstream,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsukimi";
-  version = "26.6.1";
+  version = "26.7.1";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fJT5o9GOQB5TIlbqTRcMCaf5OYYW+D19dNPbLFqViCg=";
+    hash = "sha256-PGd2dWmUfdOyBsfn2Jozb7tAxSy2sv8XOKL1K8FwuLE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-Rdne9EQ9QSZ2RlYWEFEy9/OZEdIucQ/nB1Z8MJ0gAsU=";
+    hash = "sha256-lfDPrmCl+Fuf/AG8xiFv00HD76Wy63cBc9Iji7Cw2sw=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     cargo
     desktop-file-utils
+    libxml2 # xmllint
+    appstream # appstreamcli
   ];
 
   buildInputs = [
@@ -63,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-ugly
     gst-libav
   ]);
+
+  mesonFlags = [
+    "-Drust-target=release"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -8,15 +8,15 @@
 
 buildPythonPackage {
   pname = "msrplib";
-  version = "0.21.0-unstable-2021-06-01";
+  version = "0.21.0-unstable-2026-07-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-msrplib";
     # no tag pushed for version 0.21.1 release, and commit title is wrong
-    rev = "5bd069620d436d5a65e1c369e43cc6b88857fb9e";
-    hash = "sha256-z0gF/oQW/h3qiCL1cFWBPK7JYzLCNAD7/dg7HfY4rig=";
+    rev = "1b50e00b2b242be41287b3e3ae3ef02c5a7b96e6";
+    hash = "sha256-HmIuJl/H94GX0caT+uKriz8RMkpzuFgsPPyPhwo3kHM=";
   };
 
   build-system = [
