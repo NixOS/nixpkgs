@@ -425,7 +425,6 @@ let
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
-    GeneralizedWendland = [ pkgs.gsl ];
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HilbertVisGUI = with pkgs; [
@@ -1087,6 +1086,7 @@ let
       bzip2.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
+    GeneralizedWendland = [ pkgs.gsl ];
     GeoFIS = with pkgs; [
       mpfr.dev
       gmp.dev
