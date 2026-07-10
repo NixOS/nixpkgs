@@ -14,8 +14,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ansible-vault-rw";
-  version = "2.1.0";
+  pname = "ansible-vault";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchPypi {

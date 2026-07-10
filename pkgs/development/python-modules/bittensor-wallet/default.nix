@@ -9,7 +9,7 @@
   libsodium,
   libiconv,
   pytestCheckHook,
-  ansible-vault-rw,
+  ansible-vault,
   setuptools,
 }:
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    ansible-vault-rw
+    ansible-vault
     setuptools
   ];
 
