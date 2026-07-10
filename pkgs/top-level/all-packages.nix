@@ -11186,4 +11186,5 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+  weather-fetch = callPackage ../tools/misc/weather-fetch { };
 }
