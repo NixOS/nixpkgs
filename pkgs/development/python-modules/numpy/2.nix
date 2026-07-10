@@ -19,7 +19,7 @@
   coreutils,
   lapack,
 
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 
   # Reverse dependency
   sage,
@@ -112,7 +112,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''
