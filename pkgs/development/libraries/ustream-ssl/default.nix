@@ -5,7 +5,8 @@
   cmake,
   pkg-config,
   libubox-nossl,
-  ssl_implementation,
+  ssl_implementation ? openssl,
+  openssl,
 }:
 
 stdenv.mkDerivation {
