@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-L0ro4VoU1GDMcs1m7qGns+S8y5+n1Q0oQ5EO1ojdLr0=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.7.2/contacts-v8.7.2.tar.gz",
-    "version": "8.7.2",
+    "hash": "sha256-Lgw+wF40FlZTlbw5IXG/eUW8Chaw5Cm1i9f2R8YyPRU=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.7.3/contacts-v8.7.3.tar.gz",
+    "version": "8.7.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "cookbook": {
-    "hash": "sha256-Xn2yvgVL7XPIN8awCaH5mznRMW9Jcr0s2E19D13Hm8I=",
-    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.7/cookbook-0.11.7.tar.gz",
-    "version": "0.11.7",
+    "hash": "sha256-eOB04pPqR5rthxK+yrpxuxgZes9chxjRKhy2yd+kIME=",
+    "url": "https://github.com/christianlupus-nextcloud/cookbook-releases/releases/download/v0.11.8/cookbook-0.11.8.tar.gz",
+    "version": "0.11.8",
     "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
     "homepage": "https://github.com/nextcloud/cookbook/",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-2jy9p4pu2OXdi8JENFCBcPSDHnGIQkpzuyKkjxALAE4=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.8/groupfolders-v21.0.8.tar.gz",
-    "version": "21.0.8",
+    "hash": "sha256-2LlfB3hCX2RvIxG6W0LY4vz9833C/TX8rI0/Ab3jiiE=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v21.0.9/groupfolders-v21.0.9.tar.gz",
+    "version": "21.0.9",
     "description": "Team Folders (formerly \"Group Folders\") allows administrators to create and manage shared\nfolders for selected teams within Nextcloud.\n\nAdmins can grant one or more teams access to a folder, configure permissions (such as read,\nwrite, and sharing rights), and assign storage quotas from the Team Folders section (under\nadmin settings). The app also supports advanced permissions and integration with Nextcloud’s\ntrash and versioning systems.\n\nAs of Hub 10 / Nextcloud 31, admins must be members of a team to assign that team to a Team\nFolder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -160,9 +160,9 @@
     ]
   },
   "guests": {
-    "hash": "sha256-w1uPtTZEQFJlhfobGflHf17GEYF3oBPwhieumWfYaDk=",
-    "url": "https://github.com/nextcloud-releases/guests/releases/download/v4.7.5/guests-v4.7.5.tar.gz",
-    "version": "4.7.5",
+    "hash": "sha256-MK3P6fMKYWgKkYTPy9oQFTea/B2iJoZANVVT/HFEnKI=",
+    "url": "https://github.com/nextcloud-releases/guests/releases/download/v4.8.0/guests-v4.8.0.tar.gz",
+    "version": "4.8.0",
     "description": "👥 Allows for better collaboration with external users by allowing users to create guests account.\n\nGuests accounts can be created from the share menu by entering either the recipients email or name and choosing \"create guest account\", once the share is created the guest user will receive an email notification about the mail with a link to set their password.\n\nGuests users can only access files shared to them and cannot create any files outside of shares, additionally, the apps accessible to guest accounts are whitelisted.",
     "homepage": "https://github.com/nextcloud/guests/",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-GkLTk3Q1mSUGhU6lsNHmHGkwW6u4XoDCOj405vi8xuY=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.10.3/mail-v5.10.3.tar.gz",
-    "version": "5.10.3",
+    "hash": "sha256-c0pMd+A2Fbxa/20BAkg3lPeVRIdu0XRTbAGJxb/9NT0=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.10.7/mail-v5.10.7.tar.gz",
+    "version": "5.10.7",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -270,9 +270,9 @@
     ]
   },
   "oidc": {
-    "hash": "sha256-CTnFegGasnG+2MPK6c0H01OjrEKSM0WALwns9nJySaA=",
-    "url": "https://github.com/H2CK/oidc/releases/download/1.17.0/oidc-1.17.0.tar.gz",
-    "version": "1.17.0",
+    "hash": "sha256-5CJjNvbZHuadT+7IHMNJSp8r47kZqzQwMey7ccpe/4Y=",
+    "url": "https://github.com/H2CK/oidc/releases/download/2.0.3/oidc-2.0.3.tar.gz",
+    "version": "2.0.3",
     "description": "Nextcloud as OpenID Connect Identity Provider\n\nWith this app you can use Nextcloud as OpenID Connect Identity Provider. If other services\nare configured correctly, you are able to access those services with your Nextcloud login.\n\nFull documentation can be found at:\n\n- [User Documentation](https://github.com/H2CK/oidc/wiki#user-documentation)\n- [Developer Documentation](https://github.com/H2CK/oidc/wiki#developer-documentation)",
     "homepage": "https://github.com/H2CK/oidc",
     "licenses": [
@@ -390,9 +390,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-1oIezD9c7DPPGlFXfKrt/+3ohQpcD+JiKKArRXiDRYM=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.7/spreed-v23.0.7.tar.gz",
-    "version": "23.0.7",
+    "hash": "sha256-/katcYNLcsdnjHA+4ES+kdvhzuPNdDSv5Ann7X0+5xI=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v23.0.8/spreed-v23.0.8.tar.gz",
+    "version": "23.0.8",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -410,9 +410,9 @@
     ]
   },
   "tasks": {
-    "hash": "sha256-nJFU65dthPRWd/SClKM/suZdYU3ic3QsIcXiPzUkQ6c=",
-    "url": "https://github.com/nextcloud/tasks/releases/download/v0.18.0/tasks.tar.gz",
-    "version": "0.18.0",
+    "hash": "sha256-DJiNUFMcm/okbmwx8/lTaa3eFim6cNFRlJFatW4kaHs=",
+    "url": "https://github.com/nextcloud/tasks/releases/download/v0.18.1/tasks.tar.gz",
+    "version": "0.18.1",
     "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
     "homepage": "https://github.com/nextcloud/tasks/",
     "licenses": [
@@ -430,9 +430,9 @@
     ]
   },
   "twofactor_admin": {
-    "hash": "sha256-dx8bEsC/rSAKN9rwP2hf3d8G3f3J1RzCrSqU6BbcvRY=",
-    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.1/twofactor_admin-v4.11.1.tar.gz",
-    "version": "4.11.1",
+    "hash": "sha256-IkHzIqRBhG6zr+8y5ifrRfsKl9TyMDx7G1JGogbQrDM=",
+    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.12.0/twofactor_admin-v4.12.0.tar.gz",
+    "version": "4.12.0",
     "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
     "homepage": "",
     "licenses": [
@@ -480,9 +480,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-rEeaUUYhsTVLZDo11Xh/wGI3k97Tq5J0Jn18QY1M1Xs=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v8.1.2/user_saml-v8.1.2.tar.gz",
-    "version": "8.1.2",
+    "hash": "sha256-LDiWtEaVJbNECJkcn80L4behkUyUsRlDFDd2lk2g+pE=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v8.1.4/user_saml-v8.1.4.tar.gz",
+    "version": "8.1.4",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\t* Authentik\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
