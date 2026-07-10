@@ -184,59 +184,52 @@ hr {
   margin-bottom: 1rem;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 800;
-  line-height: 110%;
-  font-size: 200%;
-  margin-bottom: 1rem;
+  line-height: 1.1;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/*
+  Major-second scale see: https://typescale.com/
+  rounded to .025rem (0.4px)
+*/
+h1 {
+  font-size: 2rem;
   color: var(--heading-color);
 }
 
 h2 {
-  font-weight: 800;
-  line-height: 110%;
-  font-size: 170%;
-  margin-bottom: 0.625rem;
+  font-size: 1.8rem;
   color: var(--heading-color);
-}
-
-h2:not(:first-child) {
-  margin-top: 1rem;
 }
 
 h3 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 150%;
+  font-size: 1.6rem;
   color: var(--heading-color);
 }
 
-:is(.note, .tip, .warning, .caution, .important) h3 {
-  font-size: 120%;
-}
-
 h4 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 140%;
+  font-size: 1.425rem;
   color: var(--heading-color);
 }
 
 h5 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 130%;
+  font-size: 1.275rem;
   color: var(--small-heading-color);
 }
 
 h6 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 120%;
+  font-size: 1.125rem;
+}
+
+:is(.note, .tip, .warning, .caution, .important) h3 {
+  font-size: 1.425rem;
 }
 
 strong {
@@ -328,11 +321,6 @@ div.appendix .programlisting {
 .caution {
   color: var(--caution-text-color);
   background: var(--caution-background);
-}
-
-div.book .section,
-div.appendix .section {
-  margin-top: 2em;
 }
 
 div.book div.example,
