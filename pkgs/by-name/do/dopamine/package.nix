@@ -10,7 +10,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "dopamine";
-  version = "3.0.6";
+  version = "3.0.7";
 
   # needed to upgrade better-sqlite3 in npmConfigHook
   src = applyPatches {
@@ -18,7 +18,7 @@ buildNpmPackage (finalAttrs: {
       owner = "digimezzo";
       repo = "dopamine";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-HTPWejm5Wi6yGJyS/f1RhjIluTz01ue8lAsnAcQY3IY=";
+      hash = "sha256-zYuf5BIQaxTqHBXWX1PLghGR5WmwtnSxTYrNosVFebc=";
     };
     patches = [
       # register-scheme contains install scripts, but has no lockfile
@@ -32,7 +32,7 @@ buildNpmPackage (finalAttrs: {
     ];
   };
 
-  npmDepsHash = "sha256-9dQUqoLfzYXOgmE9j2lkew9b/1m4XOghT7roD82y+qg=";
+  npmDepsHash = "sha256-m5y8TmOUAUf2IE87b73hFe2vj/uRAqFGgfuy3vkUX/s=";
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ distutils ]))
