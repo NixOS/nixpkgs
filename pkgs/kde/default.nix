@@ -94,6 +94,7 @@ let
         aeroshell-kwin-components = self.callPackage ./third-party/aeroshell-kwin-components { };
         aerothemeplasma = self.callPackage ./third-party/aerothemeplasma { };
         aerothemeplasma-icons = self.callPackage ./third-party/aerothemeplasma-icons { };
+        aerothemeplasma-sounds = self.callPackage ./third-party/aerothemeplasma-sounds { };
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
         dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
         karousel = self.callPackage ./third-party/karousel { };
