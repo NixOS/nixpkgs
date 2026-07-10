@@ -429,7 +429,7 @@ let
       doInstallCheck ? doCheckByDefault,
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
-      strictDeps ? defaultStrictDeps,
+      strictDeps ? true,
 
       enableParallelBuilding ? enableParallelBuildingByDefault,
 
