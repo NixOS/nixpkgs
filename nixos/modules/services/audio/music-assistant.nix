@@ -114,6 +114,15 @@ in
           9000 # Slimproto JSON-RPC
           9090 # Slimproto CLI
         ];
+      allowedTCPPortRanges =
+        # Music Assistant does not configure the zeroconf_port, so all ephemeral ports are used
+        # https://github.com/devgianlu/go-librespot#example-minimal-zeroconf-configuration
+        lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+          {
+            from = 32768;
+            to = 65535;
+          }
+        ];
       allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
         # https://lyrion.org/reference/slimproto-protocol/
         3483 # Slimproto discovery
