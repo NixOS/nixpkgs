@@ -13,6 +13,8 @@
   librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
+  pkg-config,
+  zstd,
   lld,
   writableTmpDirAsHomeHook,
 
@@ -65,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libffi
     sqlite
+    zstd
   ];
 
   # uses zlib-ng but can't dynamically link yet
@@ -75,6 +78,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     yq
     # required by libz-ng-sys crate
     cmake
+    # required to de-vendor zstd
+    pkg-config
     # required by deno_kv crate
     protobuf
     installShellFiles
@@ -103,6 +108,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # de-vendor SQLite
   env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+  # de-vendor zstd
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   # Don't run checks on hydra as they've been observed to be flakey for us and
   # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
