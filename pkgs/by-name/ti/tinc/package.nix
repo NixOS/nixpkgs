@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.36";
+  version = "1.0.37";
   pname = "tinc";
 
   src = fetchurl {
     url = "https://www.tinc-vpn.org/packages/tinc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QPc7s/rMSA7/4OdxRCpwb/BIjt6npfJQXUzLKqgWMQg=";
+    hash = "sha256-9jt+IcMsTGN1dthfNr3SjqZ4taoX+tAkJ2Rd6jDlKsc=";
   };
 
   buildInputs = [
