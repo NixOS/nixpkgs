@@ -372,6 +372,9 @@ in
           "atkbd"
           "i8042"
         ]
+        ++ optionals (versionAtLeast config.boot.kernelPackages.kernel.version "7.2") [
+          "xhci-pci-prom21" # https://bugzilla.kernel.org/show_bug.cgi?id=221721
+        ]
       );
 
       boot.initrd.kernelModules = optionals config.boot.initrd.includeDefaultModules [
