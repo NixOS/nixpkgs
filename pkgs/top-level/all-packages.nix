@@ -7145,9 +7145,7 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra {
-    hdf5 = hdf5.override { apiVersion = "v110"; };
-  };
+  vigra = callPackage ../development/libraries/vigra { };
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
