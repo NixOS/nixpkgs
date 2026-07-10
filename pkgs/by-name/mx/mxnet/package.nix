@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -61,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
   ++ lib.optionals cudaSupport [
     # needed for OpenCV cmake module
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
   ];
 
   cmakeFlags = [
