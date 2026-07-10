@@ -416,11 +416,7 @@ let
   packagesWithNativeBuildInputs = {
     # keep-sorted start block=yes
     Apollonius = [ pkgs.pkg-config ];
-    BayesXsrc = with pkgs; [
-      readline.dev
-      ncurses
-      gsl
-    ];
+    BayesXsrc = [ pkgs.gsl ]; # for gsl-config
     BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
