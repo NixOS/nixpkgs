@@ -442,7 +442,6 @@ let
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
     RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
     RNetCDF = [ pkgs.pkg-config ];
-    RODBC = [ pkgs.libiodbc ];
     RPesto = with pkgs; [
       cargo
       rustc
@@ -1112,6 +1111,7 @@ let
     ];
     RNifti = [ pkgs.zlib ];
     RNiftyReg = [ pkgs.zlib ];
+    RODBC = [ pkgs.libiodbc ];
     RPostgres = with pkgs; [ libpq ];
     RProtoBuf = with pkgs; [
       protobuf
