@@ -95,6 +95,7 @@ let
         aeroshell-uac-polkit-agent = self.callPackage ./third-party/aeroshell-uac-polkit-agent { };
         aerothemeplasma = self.callPackage ./third-party/aerothemeplasma { };
         aerothemeplasma-icons = self.callPackage ./third-party/aerothemeplasma-icons { };
+        aerothemeplasma-libplasma = self.callPackage ./third-party/aerothemeplasma-libplasma { };
         aerothemeplasma-sounds = self.callPackage ./third-party/aerothemeplasma-sounds { };
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
         dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
