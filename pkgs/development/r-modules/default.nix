@@ -484,6 +484,7 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
+    RmecabKo = [ pkgs.mecab ]; # for mecab-config
     Rmpi = [ pkgs.prrte ];
     Rpoppler = [ pkgs.pkg-config ];
     Rsubbotools = [ pkgs.gsl ]; # for gsl-config
@@ -1027,7 +1028,6 @@ let
       zlib
     ];
     Rlibeemd = [ pkgs.gsl ];
-    RmecabKo = [ pkgs.mecab ];
     Rmmquant = [ pkgs.zlib.dev ];
     Rmpfr = with pkgs; [
       gmp
