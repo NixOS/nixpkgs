@@ -98,6 +98,15 @@
     };
   };
 
+  basic = {
+    version = "0-unstable-2025-11-11";
+    url = "github:Ra77a3l3-jar/tree-sitter-basic";
+    rev = "a98449c11d6c688b54c1ca132148a62d7e586a2a";
+    hash = "sha256-4wJLK+yZjBELTzTnB/9Xb70uGodetEyjVDtFshviQyA=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   bass = {
     version = "0-unstable-2024-05-03";
     url = "github:vito/tree-sitter-bass";
