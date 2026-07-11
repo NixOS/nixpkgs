@@ -658,11 +658,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
-    hypergeo2 = with pkgs; [
-      gmp.dev
-      mpfr.dev
-      pkg-config
-    ];
+    hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ];
     image_CannyEdges = with pkgs; [
       fftw.dev
@@ -1306,6 +1302,10 @@ let
     haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib.dev ];
     httpuv = [ pkgs.zlib ];
+    hypergeo2 = with pkgs; [
+      gmp
+      mpfr
+    ];
     igraph = with pkgs; [
       gmp
       libxml2.dev
