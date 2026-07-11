@@ -26,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RWcv7BZctMwTWKLXa11X0ih23Ll6sWlCesOFy+HVWXo=";
   };
 
+  # Work around too strict landlock hardening
+  # https://bugs.astron.com/view.php?id=785
+  postPatch = ''
+    substituteInPlace src/landlock.c --replace-fail \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+  '';
+
   outputs = [
     "out"
     "dev"
