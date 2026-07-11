@@ -2397,6 +2397,14 @@
     };
   };
 
+  proverif = {
+    version = "0-unstable-2026-02-28";
+    url = "codeberg:maribu/tree-sitter-proverif";
+    rev = "7741807092c4009c1fe4c3648da60ca72b1b80f1";
+    hash = "sha256-fMtGQsEbZHNIamrz3hoGvCJn5Dtu0oHhuLmMxOjFhGU=";
+    meta.license = lib.licenses.bsd0;
+  };
+
   prql = {
     version = "0-unstable-2023-07-28";
     url = "github:PRQL/tree-sitter-prql";
