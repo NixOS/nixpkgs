@@ -746,7 +746,7 @@ let
     rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     rmatio = [ pkgs.pkg-config ];
-    rnetcarto = [ pkgs.gsl ];
+    rnetcarto = [ pkgs.gsl ]; # for gsl-config
     roxigraph = with pkgs; [
       cargo
       rustc
