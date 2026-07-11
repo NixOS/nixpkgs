@@ -640,8 +640,8 @@ let
       gmp
       glpk
     ];
-    gsl = [ pkgs.gsl ];
-    gslnls = [ pkgs.gsl ];
+    gsl = [ pkgs.gsl ]; # for gsl-config
+    gslnls = [ pkgs.gsl ]; # for gsl-config
     h3o = with pkgs; [
       cargo
       rustc
