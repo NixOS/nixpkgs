@@ -6,7 +6,7 @@
   mock,
   pbr,
   pyyaml,
-  setuptools,
+  setuptools_80,
   six,
   multi-key-dict,
   testscenarios,
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pbr
     pyyaml
-    setuptools
+    setuptools_80
     six
     multi-key-dict
     requests
