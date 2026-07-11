@@ -27,6 +27,7 @@
   lerc,
   doxygen,
   writableTmpDirAsHomeHook,
+  qtbase,
   nix-update-script,
 }:
 
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
     doxygen # docs
+    qtbase
   ];
 
   cmakeFlags = [
