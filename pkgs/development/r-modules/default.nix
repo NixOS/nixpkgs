@@ -635,7 +635,10 @@ let
       gdal # for gdal-config
       netcdf # for nc-config
     ];
-    gdalraster = [ pkgs.pkg-config ];
+    gdalraster = with pkgs; [
+      pkg-config
+      gdal # for gdal-config
+    ];
     gdtools = [ pkgs.pkg-config ];
     gert = [ pkgs.pkg-config ];
     gglinedensity = [ pkgs.cargo ];
@@ -1197,11 +1200,7 @@ let
       proj.dev
       sqlite.dev
     ];
-    gdalraster = with pkgs; [
-      gdal
-      proj.dev
-      sqlite.dev
-    ];
+    gdalraster = [ pkgs.proj ];
     gdtools =
       with pkgs;
       [
