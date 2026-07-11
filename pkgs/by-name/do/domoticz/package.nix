@@ -94,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with lib.maintainers; [ edcragg ];
+    maintainers = with lib.maintainers; [
+      edcragg
+      lenny
+    ];
     homepage = "https://www.domoticz.com/";
     changelog = "https://github.com/domoticz/domoticz/blob/${finalAttrs.version}/History.txt";
     license = lib.licenses.gpl3Plus;
