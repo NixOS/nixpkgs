@@ -131,8 +131,8 @@ jobs:
     # Luckily there's no need to lint commit messages in the Merge Queue, because
     # changes to the target branch can't change commit messages on the base branch.
     if: ${{ github.event.pull_request.number }}
-    runs-on: ubuntu-slim
-    timeout-minutes: 5
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
