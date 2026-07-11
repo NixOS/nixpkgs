@@ -585,6 +585,7 @@ let
     clarabel = [ pkgs.cargo ];
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
+    coga = [ pkgs.gsl ]; # for gsl-config
     cpp11bigwig = [ pkgs.curl ]; # for curl-config
     crc32c = [
       pkgs.which
@@ -1147,7 +1148,6 @@ let
     cit = [ pkgs.gsl ];
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
-    coga = [ pkgs.gsl.dev ];
     cpp11bigwig = [ pkgs.zlib ];
     cpp11qpdf = with pkgs; [
       libjpeg
