@@ -1565,6 +1565,13 @@
     };
   };
 
+  kcl = {
+    version = "0.0.2";
+    url = "github:KittyCAD/tree-sitter-kcl";
+    hash = "sha256-oxyC6YPSf14YmZ7t/htMPU8BqUagylMCKCmJ5ky5ZII=";
+    meta.license = lib.licenses.mit;
+  };
+
   kdl = {
     version = "1.1.0";
     url = "github:tree-sitter-grammars/tree-sitter-kdl";
