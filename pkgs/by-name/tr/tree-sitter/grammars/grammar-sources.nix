@@ -2988,6 +2988,13 @@
     };
   };
 
+  systemverilog = {
+    version = "0.3.1";
+    url = "github:gmlarumbe/tree-sitter-systemverilog";
+    hash = "sha256-wzsjHDn6ZdGfOlufARurxCTwT8HqMvyfsnIIpXzRUYs=";
+    meta.license = lib.licenses.mit;
+  };
+
   t32 = {
     version = "9.0.1";
     url = "github:xasc/tree-sitter-t32";
