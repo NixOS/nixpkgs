@@ -739,11 +739,7 @@ let
     ];
     redux = [ pkgs.pkg-config ];
     reprex = [ pkgs.which ];
-    resultant = with pkgs; [
-      gmp.dev
-      mpfr.dev
-      pkg-config
-    ];
+    resultant = [ pkgs.pkg-config ];
     rgdal = with pkgs; [
       proj.dev
       gdal
@@ -1478,6 +1474,10 @@ let
       xz.dev
       libdeflate
       zstd.dev
+    ];
+    resultant = with pkgs; [
+      gmp
+      mpfr
     ];
     rgl = with pkgs; [
       libGLU
