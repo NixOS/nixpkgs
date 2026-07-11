@@ -504,7 +504,10 @@ let
       pkg-config
       libxml2 # for xml2-config
     ];
-    abn = [ pkgs.gsl ];
+    abn = with pkgs; [
+      gsl # for gsl-config
+      jags
+    ];
     adimpro = [ pkgs.imagemagick ];
     affyPLM = [ pkgs.zlib.dev ];
     affyio = [ pkgs.zlib.dev ];
@@ -1197,7 +1200,6 @@ let
     ];
     XVector = [ pkgs.zlib ];
     XYomics = [ pkgs.boost ];
-    abn = [ pkgs.jags ];
     adbcpostgresql = with pkgs; [
       readline.dev
       zlib.dev
