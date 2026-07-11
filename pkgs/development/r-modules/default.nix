@@ -672,7 +672,6 @@ let
     jack = [ pkgs.pkg-config ];
     kza = [ pkgs.pkg-config ];
     libdeflate = [ pkgs.cmake ];
-    libstable4u = [ pkgs.gsl ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
       pkg-config
@@ -1351,6 +1350,7 @@ let
     landsepi = [ pkgs.gsl ];
     largeList = [ pkgs.zlib.dev ];
     leidenAlg = [ pkgs.gmp ];
+    libstable4u = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     lnmixsurv = [ pkgs.gsl.dev ];
     lpsymphony = with pkgs; [
