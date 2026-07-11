@@ -514,7 +514,7 @@ let
       which
     ];
     animation = [ pkgs.which ];
-    apcf = with pkgs; [ geos ];
+    apcf = [ pkgs.geos ]; # for geos-config
     arcgisgeocode = with pkgs; [
       cargo
       rustc
