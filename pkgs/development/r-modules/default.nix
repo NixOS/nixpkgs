@@ -1418,6 +1418,7 @@ let
     poisbinom = [ pkgs.fftw.dev ];
     pqsfinder = [ pkgs.boost ];
     proj4 = [ pkgs.proj.dev ];
+    protolite = [ pkgs.protobuf ];
     psbcGroup = [ pkgs.gsl.dev ];
     qckitfastq = [ pkgs.zlib.dev ];
     qpdf = with pkgs; [
