@@ -670,7 +670,6 @@ let
     ];
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
-    jqr = [ pkgs.jq.dev ];
     kza = [ pkgs.pkg-config ];
     leidenAlg = [ pkgs.gmp.dev ];
     libdeflate = [ pkgs.cmake ];
@@ -1344,7 +1343,7 @@ let
       bzip2.dev
     ];
     jpeg = [ pkgs.libjpeg ];
-    jqr = [ pkgs.jq.out ];
+    jqr = [ pkgs.jq ];
     knowYourCG = with pkgs; [
       zlib.dev
       ncurses.dev
