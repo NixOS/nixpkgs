@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wg-ddns";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "fernvenue";
     repo = "wg-ddns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BV57jidn6bPWU/IhhQvIeMF4xHtTm2WZKm4MQRSMM5Y=";
+    hash = "sha256-Djh/H/PlpwVeJ3T2V/xG8AAJNznYmStCQEMd5uh38us=";
   };
 
-  vendorHash = "sha256-VfSLrWuvJF4XwAW2BQGxh+3v9RiWmPdysw/nIdt2A9M=";
+  vendorHash = "sha256-oJOpf7PPQvb5z7nqpW0YjOhsF0UiWt/nlwBvF2SdzsY=";
 
   meta = {
     description = "Lightweight tool that provides DDNS dynamic DNS support for WireGuard";
