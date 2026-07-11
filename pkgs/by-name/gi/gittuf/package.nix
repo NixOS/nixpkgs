@@ -3,26 +3,30 @@
   fetchFromGitHub,
   buildGoModule,
   git,
+  gnupg,
+  less,
   openssh,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gittuf";
-  version = "0.12.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = "gittuf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/PKbo8LPvU6ZTav9n82mrj2h6z6AyJ225mCH7EfazVU=";
+    hash = "sha256-VWbM7y9XCs/pANJtPa3MDbDhuEtVQ97X5Cyo6yY0Rd8=";
   };
 
-  vendorHash = "sha256-unj9PpRkfNHWQzeCmcjppMFGAlHNcP0/j9EiGvpRzRc=";
+  vendorHash = "sha256-VTfS0bLq7B037qmFABO5JDrV98zik5ycR4s6NZr3H4s=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${finalAttrs.version}" ];
 
   nativeCheckInputs = [
     git
+    gnupg
+    less
     openssh
   ];
   checkFlags = [
