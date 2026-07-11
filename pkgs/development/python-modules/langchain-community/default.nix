@@ -9,7 +9,6 @@
 
   # dependencies
   aiohttp,
-  dataclasses-json,
   httpx-sse,
   langchain-classic,
   langchain-core,
@@ -25,6 +24,7 @@
   blockbuster,
   langchain-tests,
   lark,
+  mypy-extensions,
   pandas,
   pytest-asyncio,
   pytest-mock,
@@ -61,7 +61,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    dataclasses-json
     httpx-sse
     langchain-classic
     langchain-core
@@ -80,6 +79,7 @@ buildPythonPackage rec {
     blockbuster
     langchain-tests
     lark
+    mypy-extensions
     pandas
     pytest-asyncio
     pytest-mock
