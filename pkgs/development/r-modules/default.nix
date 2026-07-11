@@ -41,12 +41,17 @@ let
     args:
     let
       hydraPlatforms' = hydraPlatforms;
+      licenseMap = {
+        # Deprecated spdxID same as BSD-2-Clause-Views (https://spdx.org/licenses/BSD-2-Clause-FreeBSD.html)
+        BSD-2-Clause-FreeBSD = lib.licenses.bsd2WithViews;
+      };
     in
     lib.makeOverridable (
       {
         name,
         version,
         sha256,
+        spdx ? null,
         depends ? [ ],
         doCheck ? true,
         requireX ? false,
@@ -70,6 +75,18 @@ let
         meta.hydraPlatforms = hydraPlatforms;
         meta.broken = broken;
         meta.maintainers = maintainers;
+        meta.license =
+          # Unknown license
+          if spdx == null || lib.any isNull spdx then
+            lib.licenses.unfree
+          # Unlimited license
+          else if spdx == [ ] then
+            lib.licenses.free
+          # Known license
+          else
+            (if lib.length spdx == 1 then lib.head else lib.licenses.OR) (
+              lib.map (x: lib.getLicenseFromSpdxIdOr x licenseMap.${x}) spdx
+            );
       }
     );
 
