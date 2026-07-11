@@ -9,7 +9,7 @@
   hatch-vcs,
 
   # dependencies
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [ "fixtures" ];
 
-  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.12") [ setuptools ];
+  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.12") [ setuptools_80 ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
