@@ -776,10 +776,6 @@ let
       rustc
     ];
     scorematchingad = [ pkgs.cmake ];
-    seqminer = with pkgs; [
-      zlib.dev
-      bzip2
-    ];
     sf = with pkgs; [
       pkg-config
       gdal # for gdal-config
@@ -1530,6 +1526,12 @@ let
       xz.dev
     ];
     seqinr = [ pkgs.zlib ];
+    seqminer = with pkgs; [
+      bzip2
+      sqlite
+      zlib
+      zstd
+    ];
     sf = with pkgs; [
       proj
       sqlite
