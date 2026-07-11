@@ -3163,6 +3163,15 @@
     };
   };
 
+  tolk = {
+    version = "0-unstable-2025-07-14";
+    url = "github:ton-blockchain/ton-language-server";
+    rev = "e90dbb89f8ec8fbf8a16b61a31d6cc19a840de4f";
+    hash = "sha256-EeCp7i8ao+KCm8OAx4ALCDg7Nj0GAZbcC1ecyw76qZQ=";
+    location = "server/src/languages/tolk/tree-sitter-tolk";
+    meta.license = lib.licenses.mit;
+  };
+
   toml = {
     version = "0.7.0-unstable-2024-12-03";
     url = "github:tree-sitter-grammars/tree-sitter-toml";
