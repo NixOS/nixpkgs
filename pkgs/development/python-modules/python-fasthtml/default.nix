@@ -30,7 +30,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "fasthtml";
+  pname = "python-fasthtml";
   version = "0.13.3";
   pyproject = true;
 

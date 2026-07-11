@@ -5835,8 +5835,6 @@ self: super: with self; {
 
   fastgit = callPackage ../development/python-modules/fastgit { };
 
-  fasthtml = callPackage ../development/python-modules/fasthtml { };
-
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = callPackage ../development/python-modules/fastjet { };
@@ -16410,6 +16408,8 @@ self: super: with self; {
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
   python-family-hub-local = callPackage ../development/python-modules/python-family-hub-local { };
+
+  python-fasthtml = callPackage ../development/python-modules/python-fasthtml { };
 
   python-fedora = callPackage ../development/python-modules/python-fedora { };
 
