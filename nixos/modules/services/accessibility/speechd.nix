@@ -82,6 +82,7 @@ let
             # keep-sorted start case=no
             espeakNg = "espeak-ng";
             flite = "flite";
+            mary = "mary";
             pico = "pico";
             #keep-sorted end
           };

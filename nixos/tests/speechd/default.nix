@@ -45,6 +45,28 @@
       moduleConfig.debug = true;
     }
   );
+  mary = runTest (
+    import ./module-test.nix {
+      inherit lib;
+      defaultModule = "mary";
+      moduleConfig = {
+        debug = true;
+        port = 5646;
+      };
+      extraNodeConfig = {
+        services.marytts = {
+          enable = true;
+          port = 5646;
+          voices = [
+            (pkgs.fetchzip {
+              url = "https://github.com/marytts/voice-bits1-hsmm/releases/download/v5.2/voice-bits1-hsmm-5.2.zip";
+              hash = "sha256-1nK+qZxjumMev7z5lgKr660NCKH5FDwvZ9sw/YYYeaA=";
+            })
+          ];
+        };
+      };
+    }
+  );
   pico = runTest (
     import ./module-test.nix {
       inherit lib;
