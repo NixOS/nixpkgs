@@ -797,7 +797,7 @@ let
     sphereTessellation = [ pkgs.pkg-config ];
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
-    survSNP = [ pkgs.gsl ];
+    survSNP = [ pkgs.gsl ]; # for gsl-config
     surveyvoi = [ pkgs.pkg-config ];
     svglite = [ pkgs.libpng.dev ];
     symbolicQspray = [ pkgs.pkg-config ];
