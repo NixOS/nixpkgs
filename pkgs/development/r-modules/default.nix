@@ -671,7 +671,10 @@ let
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
     kza = [ pkgs.pkg-config ];
-    libdeflate = [ pkgs.cmake ];
+    libdeflate = with pkgs; [
+      cmake
+      pkg-config
+    ];
     lpsymphony = with pkgs; [
       pkg-config
       gfortran
@@ -1349,6 +1352,7 @@ let
     landsepi = [ pkgs.gsl ];
     largeList = [ pkgs.zlib.dev ];
     leidenAlg = [ pkgs.gmp ];
+    libdeflate = [ pkgs.libdeflate ];
     libstable4u = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     littler = with pkgs; [
