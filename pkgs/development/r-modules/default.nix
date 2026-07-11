@@ -708,7 +708,6 @@ let
       pandoc
       which
     ];
-    parseLatex = [ pkgs.icu.dev ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
@@ -1403,6 +1402,7 @@ let
       zlib
     ];
     pak = [ pkgs.curl ];
+    parseLatex = [ pkgs.icu ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
     pdftools = [ pkgs.poppler ];
     pexm = [ pkgs.jags ];
