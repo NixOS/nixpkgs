@@ -594,7 +594,7 @@ let
       cargo
       rustc
     ];
-    diseq = [ pkgs.gsl ];
+    diseq = [ pkgs.gsl ]; # for gsl-config
     diversitree = with pkgs; [
       gsl
       fftw
