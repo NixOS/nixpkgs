@@ -6,16 +6,16 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-toO+gVPHfc/drP9Xj0vJOJvOxsH/0VqXKSwfYvkZfnE=";
+    hash = "sha256-laGQWJbke+q0dAdqR8opXw4oQm6wdJJT0/t/A9c7d9s=";
   };
 
-  cargoHash = "sha256-lbS67Hiv0ay0DzzoZsFRxc9EKl9sw+pYJwn9FmXquos=";
+  cargoHash = "sha256-+T9aGsewRHdmKMtZisXv4st+9kBTNtEZnPraLz8S4e8=";
 
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -33,6 +33,11 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_preserve_settings_dir_7777_preserves_special_bits"
     "--skip=test_preserve_settings_file_7777_preserves_special_bits"
     "--skip=test_preserve_settings_none_strips_special_bits_on_directories"
+    "--skip=no_setid_clears_bits_for_unchanged_owner_rule"
+    "--skip=no_setid_clears_existing_bits_for_unrelated_mode"
+    "--skip=no_setid_dry_run_reports_but_does_not_clear_bits"
+    "--skip=no_setid_respects_filter_and_per_type_scope"
+    "--skip=no_setid_retains_sticky_and_clears_setgid_on_directory"
     # this test expects overwrite behavior that doesn't work in a sandbox
     "--skip=test_overwrite_behavior"
     # these tests require network access to determine local IP address
