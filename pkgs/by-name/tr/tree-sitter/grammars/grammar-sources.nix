@@ -558,6 +558,14 @@
     };
   };
 
+  doxyfile = {
+    version = "0-unstable-2025-08-14";
+    url = "github:tingerrr/tree-sitter-doxyfile";
+    rev = "18e44c6da639632a4e42264c7193df34be915f34";
+    hash = "sha256-/u1BHMJkj3FkTUwNiB6d8aQIBnnENsBzagXnQa9Dcls=";
+    meta.license = lib.licenses.mit;
+  };
+
   dtd = {
     version = "0.7.0-unstable-2026-01-21";
     url = "github:tree-sitter-grammars/tree-sitter-xml";
