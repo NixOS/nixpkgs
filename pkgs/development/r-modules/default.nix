@@ -662,7 +662,6 @@ let
     iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_textlinedetector = [ pkgs.pkg-config ];
     imager = [ pkgs.pkg-config ];
-    imbibe = [ pkgs.zlib.dev ];
     immunoClust = [ pkgs.gsl ];
     interpolation = [ pkgs.pkg-config ];
     iscream = with pkgs; [
@@ -1323,6 +1322,7 @@ let
       libtiff
       libx11
     ];
+    imbibe = [ pkgs.zlib ];
     interpolation = with pkgs; [
       gmp
       mpfr
