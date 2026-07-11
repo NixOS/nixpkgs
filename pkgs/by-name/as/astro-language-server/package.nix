@@ -2,39 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_11,
-  nodejs-slim_22,
+  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
   nix-update-script,
-  fetchpatch2,
 }:
-let
-  # pnpm 11's bundled Node.js 24 has a libuv/kqueue bug on macOS, workaround copied from openclaw package
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.16.10";
+  version = "2.16.11";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "astro";
     tag = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-ZzLLGfbY6Rtjzqw+MMCHthvalo3B8lf/qxFJNJ/2LdQ=";
+    hash = "sha256-FbgxlXW87vMionLpN1IRztmq4iPoARsBZ8SO9axEbCc=";
   };
-
-  patches = [
-    # remove on next release
-    (fetchpatch2 {
-      name = "fix-supply-chain-verification-fail.patch";
-      url = "https://github.com/withastro/astro/commit/272ca6173b40cfa37299c27b513f495f386d4009.patch?full_index=1";
-      includes = [ "pnpm-workspace.yaml" ];
-      hash = "sha256-jPYFiyBlIoqpbIcT/hPa+VlF1IX+QCP8CVFQGarzlEs=";
-    })
-  ];
 
   # https://pnpm.io/filtering#--filter-package_name-1
   pnpmWorkspaces = [
@@ -48,12 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       pnpmWorkspaces
-      patches
       ;
-    inherit pnpm;
+
     # pnpm 11 stores state in a SQLite binary, fetcherVersion = 4 dumps it to a deterministic SQL text file
     fetcherVersion = 4;
-    hash = "sha256-dqqvN8FMLjEbTtgQRkkURD7clMJ/OL9Mbk6icc4KU60=";
+    hash = "sha256-/GpdKKvldm89LBr0f7zxSkuoawh2j/QL+FPozTlBRVA=";
   };
 
   nativeBuildInputs = [
