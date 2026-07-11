@@ -688,8 +688,8 @@ let
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
-    mmpca = [ pkgs.gsl ];
-    monoreg = [ pkgs.gsl ];
+    mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
     mvabund = [ pkgs.gsl ];
     mvst = [ pkgs.gsl ];
