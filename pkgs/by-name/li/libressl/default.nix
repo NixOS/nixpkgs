@@ -100,6 +100,17 @@ let
         moveToOutput "share/man/man1/nc.1.gz" "$nc"
       '';
 
+      doInstallCheck = true;
+      installCheckPhase = ''
+        runHook preInstallCheck
+
+        # Check whether the build target actually contains our cacert.
+        # A simple binary match for the path is enough.
+        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+
+        runHook postInstallCheck
+      '';
+
       meta = {
         description = "Free TLS/SSL implementation";
         homepage = "https://www.libressl.org";
