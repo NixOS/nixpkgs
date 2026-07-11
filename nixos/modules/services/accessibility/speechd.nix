@@ -80,11 +80,21 @@ let
           )
           {
             # keep-sorted start case=no
+            baratinoo = "baratinoo";
+            cicero = "cicero";
+            dtk = "dtk";
+            epos = "epos";
             espeakNg = "espeak-ng";
             festival = "festival";
             flite = "flite";
+            kali = "kali";
+            lliaPhon = "llia-phon";
             mary = "mary";
+            mimic3 = "mimic3";
+            openjtalk = "openjtalk";
             pico = "pico";
+            swift = "swift";
+            voxin = "voxin";
             #keep-sorted end
           };
       binaryFor =
