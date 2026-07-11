@@ -782,7 +782,6 @@ let
       geos # for geos-config
     ];
     showtext = [ pkgs.pkg-config ];
-    simplexreg = [ pkgs.gsl ];
     smam = [ pkgs.gsl ];
     smcryptoR = with pkgs; [
       cargo
@@ -1542,6 +1541,7 @@ let
       freetype
     ];
     shrinkTVP = [ pkgs.gsl ];
+    simplexreg = [ pkgs.gsl ];
     sodium = [ pkgs.libsodium ];
     spFW = [ pkgs.fftw.dev ];
     spaMM = [ pkgs.gsl ];
