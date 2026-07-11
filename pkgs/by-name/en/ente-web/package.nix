@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     hash = "sha256-NYPxaVYEaJVcsRX6wLVJd+/UUJrNel0zTPYGdEv8a+U=";
   };
-  cargoRoot = "packages/wasm";
+  cargoRoot = "../rust";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
@@ -76,9 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
   env = extraBuildEnv;
 
   postPatch =
+    # The Rust workspace lives in `../rust`, outside the `web` sourceRoot, so it
+    # is not made writable during unpacking. `wasm-pack` needs to create a cargo
+    # target directory there, so make it writable.
+    ''
+      chmod -R u+w ../rust
+    ''
     # Use our `wasm-pack` binary, rather than the Node version, which is
     # just a wrapper that tries to download the actual binary
-    ''
+    + ''
       substituteInPlace \
         packages/wasm/package.json \
         --replace-fail "wasm-pack " ${lib.escapeShellArg "${wasm-pack}/bin/wasm-pack "}
@@ -139,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "Updated to version $new_version, checking wasm-bindgen..."
 
       # Fetch Cargo.lock from GitHub instead of cloning repository
-      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/web/packages/wasm/Cargo.lock"
+      cargo_lock_url="https://raw.githubusercontent.com/ente-io/ente/photos-v$new_version/rust/Cargo.lock"
 
       wasm_bindgen_version=$(curl -s "$cargo_lock_url" | tr -d '\r' | grep -A1 '^name = "wasm-bindgen"$' | grep -oP 'version = "\K[^"]+' | head -n1)
 
