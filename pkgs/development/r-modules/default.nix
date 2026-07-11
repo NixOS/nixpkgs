@@ -692,7 +692,7 @@ let
     monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
     mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
-    mvst = [ pkgs.gsl ];
+    mvst = [ pkgs.gsl ]; # for gsl-config
     mwaved = [ pkgs.pkg-config ];
     mzR = with pkgs; [
       zlib
