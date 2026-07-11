@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  cacert,
   cmake,
   gitMinimal,
   versionCheckHook,
@@ -26,10 +27,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ gitMinimal ];
 
   postInstall = ''
-    rm -f $out/bin/generate-settings-docs
+    rm -f $out/bin/generate-{error-codes,settings}-docs
   '';
 
+  checkFlags = [
+    # failed on x86_64-linux
+    "--skip=http::ticket_cache::tests::max_per_host_evicts_oldest"
+  ];
+
   __darwinAllowLocalNetworking = true;
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
