@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.9.4";
+  version = "2.9.6";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -272,10 +272,8 @@
       ps: with ps; [
         pkce
       ];
-    spotify_connect =
-      ps: with ps; [
-        pkce
-      ];
+    spotify_connect = ps: [
+    ];
     squeezelite =
       ps: with ps; [
         aioslimproto

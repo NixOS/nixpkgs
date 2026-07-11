@@ -3513,8 +3513,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.27.4";
-          hash = "sha256-VmxvSryOkZTKb4AfH/zBdVilPNHroDh/ORicPi5Mfxo=";
+          version = "1.28.1";
+          hash = "sha256-+Pc9blI/n6JeokdUhWjLzicwBv90p4MjhK2rvpQ2xrA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
@@ -5238,8 +5238,8 @@ let
         mktplcRef = {
           name = "volar";
           publisher = "Vue";
-          version = "3.3.5";
-          hash = "sha256-Oz4or7AtfrlcAXmFB4lkNk4Uqmpm1AsGP4RLcdpzRbo=";
+          version = "3.3.7";
+          hash = "sha256-qXbJCRzHc7QS4QLCGso5orfSiRYp6V2wz/4tvyU3rfg=";
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
@@ -5498,8 +5498,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.16";
-          hash = "sha256-rBpC3YIG4M4QDPg/zViinDGXk3U6GvJfiwVUe5NW2vU=";
+          version = "0.1.17";
+          hash = "sha256-j7K1MS9XBLwCjER41NsSt22LUh0Zmm2sUK9JqZLiSfk=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";
