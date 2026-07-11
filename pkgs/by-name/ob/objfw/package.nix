@@ -12,14 +12,14 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.5.6";
+  version = "1.5.7";
 
   src = fetchFromGitea {
     domain = "git.nil.im";
     owner = "ObjFW";
     repo = "ObjFW";
     rev = "${finalAttrs.version}-release";
-    hash = "sha256-9wrsRi3HnAhDbWsK8AcKBesFANvBLkGvgaE/mOK5KSw=";
+    hash = "sha256-3MdQG2pVjlBdbmBzTrrKdkbSzsvjZWZRoSPsN+MURCQ=";
   };
 
   nativeBuildInputs = [
