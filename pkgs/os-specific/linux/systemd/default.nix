@@ -248,7 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
   ''
   + lib.optionalString withLibBPF ''
-    substituteInPlace meson.build \
+    substituteInPlace src/bpf/meson.build \
       --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   ''
   + lib.optionalString withUkify ''
