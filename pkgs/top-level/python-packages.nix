@@ -10502,6 +10502,8 @@ self: super: with self; {
 
   mistune = callPackage ../development/python-modules/mistune { };
 
+  mistune_2 = callPackage ../development/python-modules/mistune/2.nix { };
+
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
   mitmproxy-linux = callPackage ../development/python-modules/mitmproxy-linux { };

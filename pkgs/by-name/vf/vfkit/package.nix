@@ -5,6 +5,7 @@
   darwin,
   fetchFromGitHub,
   fetchpatch2,
+  llvmPackages,
   nix-update-script,
   testers,
   vfkit,
@@ -33,11 +34,16 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     darwin.sigtool
+    # TODO: Remove this when NixOS/nixpkgs#536365 reaches master.
+    llvmPackages.lld
   ];
 
   buildInputs = [
     apple-sdk_15
   ];
+
+  # TODO: Remove this when NixOS/nixpkgs#536365 reaches master.
+  env.NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' llvmPackages.lld "ld64.lld"}";
 
   postFixup = ''
     codesign --entitlements vf.entitlements -f -s - $out/bin/vfkit

@@ -40,7 +40,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.4";
+  version = "2.9.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-PiSBghhlxknijRqghkO8wn1CB2XqaJrjrvGNvZUlNbo=";
+    hash = "sha256-lEbWQi6iUvqL2MXk/ZqkdX4Ou5pFWIVi6qfSyWCs8uQ=";
   };
 
   patches = [
@@ -146,6 +146,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       gql
       ifaddr
       librosa
+      markdownify
       mashumaro
       modern-colorthief
       music-assistant-frontend

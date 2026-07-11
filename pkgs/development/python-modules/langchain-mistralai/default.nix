@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
-  version = "1.1.5";
+  version = "1.1.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${finalAttrs.version}";
-    hash = "sha256-lWhFFPEGNKUVmYC48MtyNZjgujfQRwUKR4bzZEvr5DQ=";
+    hash = "sha256-FkldUvLhbOS0FwRQaAZHebUv1jUSWMXMuIx780B6R+8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/mistralai";

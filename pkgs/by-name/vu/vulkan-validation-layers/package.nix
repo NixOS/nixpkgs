@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
+    # Don't run update_deps.py which tries to git clone dependencies
+    "-DUPDATE_DEPS=OFF"
   ];
 
   # Tests require access to vulkan-compatible GPU, which isn't
