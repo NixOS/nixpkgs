@@ -848,7 +848,7 @@ let
       cargo
       rustc
     ];
-    xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
+    xml2 = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     xslt = [ pkgs.pkg-config ];
     ymd = with pkgs; [
       cargo
@@ -1629,6 +1629,7 @@ let
     webp = [ pkgs.libwebp ];
     writexl = with pkgs; [ zlib.dev ];
     xdvir = [ pkgs.freetype ];
+    xml2 = [ pkgs.libxml2 ];
     xslt =
       with pkgs;
       [
@@ -3145,7 +3146,6 @@ let
 
     xml2 = old.xml2.overrideAttrs (attrs: {
       preConfigure = ''
-        export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
       '';
     });
