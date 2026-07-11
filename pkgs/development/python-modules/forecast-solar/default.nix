@@ -6,6 +6,7 @@
   aiohttp,
   aresponses,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-freezer,
@@ -28,7 +29,9 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  env.PACKAGE_VERSION = version;
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiodns

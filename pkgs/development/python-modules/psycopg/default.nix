@@ -108,6 +108,9 @@ let
 
     dependencies = [ typing-extensions ];
 
+    # the psycopg-pool version isn't updated in tandem with psycopg
+    dontCheckPythonMetadata = true;
+
     # tested in psycopg
     doCheck = false;
 

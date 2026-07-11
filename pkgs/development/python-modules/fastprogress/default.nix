@@ -5,8 +5,8 @@
   setuptools,
   fastcore,
   numpy,
-  fasthtml,
   ipython,
+  python-fasthtml,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,8 +26,8 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     fastcore
     numpy
-    fasthtml
     ipython
+    python-fasthtml
   ];
 
   # no real tests

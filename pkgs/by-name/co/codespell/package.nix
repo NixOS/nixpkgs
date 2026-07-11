@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    aspell-python
+    aspell-python-py3
     chardet
     pytestCheckHook
     pytest-cov-stub

@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  setuptools-scm,
+  setuptools,
   fetchFromGitLab,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
@@ -13,11 +14,15 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "alelec";
     repo = "__version__";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bnpuFJSd4nBXJA75V61kiB+nU5pUzdEAIScfKx7aaGU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonImportsCheck = [ "__version__" ];
 
