@@ -722,7 +722,7 @@ let
     ];
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
-    rGEDI = [ pkgs.gsl ];
+    rGEDI = [ pkgs.gsl ]; # for gsl-config
     rJava = [ pkgs.stripJavaArchivesHook ];
     ragg = [ pkgs.pkg-config ];
     rapport = [ pkgs.which ];
