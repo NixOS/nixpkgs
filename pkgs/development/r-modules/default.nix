@@ -633,7 +633,7 @@ let
     gdalcubes = [ pkgs.pkg-config ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
-    gert = [ pkgs.libgit2 ];
+    gert = [ pkgs.pkg-config ];
     ggiraph = [ pkgs.libpng.dev ];
     gglinedensity = [ pkgs.cargo ];
     git2r = with pkgs; [
@@ -1303,6 +1303,7 @@ let
         expat
         libxdmcp
       ];
+    gert = [ pkgs.libgit2 ];
     gfilogisreg = [ pkgs.gmp.dev ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
