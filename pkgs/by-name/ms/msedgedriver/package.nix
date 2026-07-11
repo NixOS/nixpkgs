@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
-  version = "149.0.4022.98";
+  version = "150.0.4078.65";
 
   src = fetchzip {
     url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_linux64.zip";
-    hash = "sha256-itfjetfyfKayowWickDYVd2drBXWTNIYCdUUKTnnZzM=";
+    hash = "sha256-TwGjt8Hw4rvwW2OwkIcqRzKLXu1dRL7/9n+Zq3VmKag=";
     stripRoot = false;
   };
 
