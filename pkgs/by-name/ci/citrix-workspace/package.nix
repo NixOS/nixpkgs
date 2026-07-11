@@ -332,6 +332,9 @@ stdenv.mkDerivation rec {
       # the tarball still contains the legacy WebKitGTK 4.0 bundle.
       rm -rf "$ICAInstDir/Webkit2gtk4.0"
 
+      # FHS launcher hinst generates even for non-root installs; it hardcodes
+      # store paths without any of the wrapper environment.
+      rm -f "$ICAInstDir/wfica.sh"
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
         ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
