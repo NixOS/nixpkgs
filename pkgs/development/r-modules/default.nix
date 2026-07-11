@@ -640,7 +640,6 @@ let
       gmp
       glpk
     ];
-    graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gslnls = [ pkgs.gsl ];
     h3o = with pkgs; [
