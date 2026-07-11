@@ -740,10 +740,7 @@ let
     redux = [ pkgs.pkg-config ];
     reprex = [ pkgs.which ];
     resultant = [ pkgs.pkg-config ];
-    rgdal = with pkgs; [
-      proj.dev
-      gdal
-    ];
+    rgdal = [ pkgs.gdal ]; # for gdal-config
     rgeos = [ pkgs.geos ];
     rhdf5 = [ pkgs.zlib ];
     ridge = [ pkgs.gsl ];
@@ -1479,6 +1476,7 @@ let
       gmp
       mpfr
     ];
+    rgdal = [ pkgs.proj ];
     rgl = with pkgs; [
       libGLU
       libGL
