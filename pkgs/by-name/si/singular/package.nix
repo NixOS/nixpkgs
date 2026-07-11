@@ -140,6 +140,9 @@ stdenv.mkDerivation rec {
     rm /tmp/conic.log /tmp/conic.tex /tmp/tropicalcurve*.tex || true
     make install
   ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    install -Dm644 ${src}/omalloc/xalloc.h $out/include/omalloc/xalloc.h
+  ''
   + lib.optionalString enableDocs ''
     # Sage uses singular.info, which is not installed by default
     mkdir -p $out/share/info
