@@ -68,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-perplexity==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
