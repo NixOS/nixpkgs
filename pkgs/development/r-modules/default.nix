@@ -646,11 +646,6 @@ let
       cargo
       rustc
     ];
-    h5vc = with pkgs; [
-      zlib.dev
-      bzip2.dev
-      xz.dev
-    ];
     hSDM = [ pkgs.gsl ];
     harbinger = [ pkgs.glibcLocales ];
     heck = with pkgs; [
@@ -1303,6 +1298,11 @@ let
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
+    h5vc = with pkgs; [
+      zlib
+      bzip2
+      xz
+    ];
     hadron = [ pkgs.gsl ];
     haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib.dev ];
