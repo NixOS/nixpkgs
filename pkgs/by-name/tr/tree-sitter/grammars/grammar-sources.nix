@@ -1572,6 +1572,13 @@
     meta.license = lib.licenses.mit;
   };
 
+  kconfig = {
+    version = "1.3.0";
+    url = "github:tree-sitter-grammars/tree-sitter-kconfig";
+    hash = "sha256-ypjfe1IM3vxfoLWtsDUf+2WzjHkUjy8pc4xxKP4tUL4=";
+    meta.license = lib.licenses.mit;
+  };
+
   kdl = {
     version = "1.1.0";
     url = "github:tree-sitter-grammars/tree-sitter-kdl";
