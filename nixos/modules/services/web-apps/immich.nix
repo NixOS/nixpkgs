@@ -347,7 +347,7 @@ in
       in
       [
         ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' postgresqlPackage "psql"} -p "${toString cfg.database.port}" -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
