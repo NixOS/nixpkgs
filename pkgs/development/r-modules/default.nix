@@ -813,7 +813,6 @@ let
     ];
     tesseract = [ pkgs.pkg-config ];
     textshaping = [ pkgs.pkg-config ];
-    themetagenomics = [ pkgs.zlib.dev ];
     tinyimg = with pkgs; [
       cargo
       rustc
@@ -1597,6 +1596,7 @@ let
       libpng
     ];
     tfevents = [ pkgs.protobuf ];
+    themetagenomics = [ pkgs.zlib ];
     tidypopgen = [ pkgs.zlib.dev ];
     tiff = [ pkgs.libtiff ];
     tikzDevice = with pkgs; [
