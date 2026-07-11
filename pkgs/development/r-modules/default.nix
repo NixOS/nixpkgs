@@ -423,6 +423,7 @@ let
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
     CytoML = [ pkgs.libxml2 ]; # for xml2-config
+    DirichletMultinomial = [ pkgs.gsl ]; # for gsl-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
     HilbertVisGUI = with pkgs; [
@@ -903,7 +904,6 @@ let
       xz
       bzip2
     ];
-    DirichletMultinomial = with pkgs; [ gsl ];
     DropletUtils = [ pkgs.zlib.dev ];
     EHRmuse = [ pkgs.gsl.dev ];
     FLAMES = with pkgs; [
