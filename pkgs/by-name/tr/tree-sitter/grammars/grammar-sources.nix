@@ -701,6 +701,14 @@
     };
   };
 
+  embedded-perl = {
+    version = "0-unstable-2026-03-18";
+    url = "github:jobindex-open/tree-sitter-embedded-perl";
+    rev = "5557a53f1f59a67cbd54c25bacd0c56d43158818";
+    hash = "sha256-4I14D3FY/GTOyESIywrRz298G1+I6DxwdSz84cI7Bqc=";
+    meta.license = lib.licenses.mit;
+  };
+
   embedded-template = {
     version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-embedded-template";
