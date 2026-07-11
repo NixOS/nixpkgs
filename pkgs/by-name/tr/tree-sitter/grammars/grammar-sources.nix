@@ -2921,6 +2921,21 @@
     meta.license = lib.licenses.mit;
   };
 
+  styx = rec {
+    version = "5.0.0-rc.0";
+    url = "github:bearcove/styx?ref=tree-sitter-styx-v${version}";
+    hash = "sha256-ogxqiKXdVuWZuMrVObGOLfV0t7snhRXtQhiGggvyvWY=";
+    location = "crates/tree-sitter-styx";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.OR (
+      with lib.licenses;
+      [
+        mit
+        asl20
+      ]
+    );
+  };
+
   supercollider = {
     version = "0.3.2";
     url = "github:madskjeldgaard/tree-sitter-supercollider";
