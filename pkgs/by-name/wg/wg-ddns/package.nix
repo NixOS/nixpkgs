@@ -21,7 +21,10 @@ buildGoModule (finalAttrs: {
     description = "Lightweight tool that provides DDNS dynamic DNS support for WireGuard";
     homepage = "https://github.com/fernvenue/wg-ddns";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.bdim404 ];
+    maintainers = [
+      lib.maintainers.fernvenue
+      lib.maintainers.bdim404
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wg-ddns";
   };
