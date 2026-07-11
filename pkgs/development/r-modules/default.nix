@@ -621,7 +621,7 @@ let
     ];
     flint = [ pkgs.pkg-config ];
     flowPeaks = [ pkgs.gsl ]; # for gsl-config
-    frailtyMMpen = [ pkgs.gsl ];
+    frailtyMMpen = [ pkgs.gsl ]; # for gsl-config
     fru = with pkgs; [
       cargo
       rustc
@@ -1278,6 +1278,7 @@ let
       flint
     ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    frailtyMMpen = [ pkgs.gsl ];
     fs = [ pkgs.libuv ];
     gaston = with pkgs; [ zlib.dev ];
     gdalcubes = with pkgs; [
