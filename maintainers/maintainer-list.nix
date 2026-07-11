@@ -209,6 +209,12 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _2zqa = {
+    name = "Marijn Kok";
+    email = "hkju4b4ds@mozmail.com";
+    github = "2zqa";
+    githubId = 25235249;
+  };
   _30350n = {
     name = "Max Schlecht";
     github = "30350n";
@@ -257,11 +263,10 @@
     name = "Eske Nielsen";
   };
   _4evy = {
-    name = "_4evy";
-    email = "git@ps1.sh";
-    github = "_4evy";
+    name = "4evy";
+    email = "git@evy.pink";
+    github = "4evy";
     githubId = 57304299;
-    matrix = "@donteatoreo:matrix.org";
   };
   _4r7if3x = {
     email = "the.artifex@proton.me";
@@ -17820,6 +17825,12 @@
       { fingerprint = "838A FE0D 55DC 074E 360F  943A 84B6 9CE6 F3F6 B767"; }
     ];
   };
+  mcuste = {
+    email = "github@muratcanuste.com";
+    github = "mcuste";
+    githubId = 10829864;
+    name = "Murat Can Üste";
+  };
   mcwitt = {
     email = "mcwitt@gmail.com";
     github = "mcwitt";
@@ -27265,6 +27276,11 @@
     github = "Szczyp";
     githubId = 203195;
     name = "Szczyp";
+  };
+  szhekpisov = {
+    github = "szhekpisov";
+    githubId = 87662520;
+    name = "Sergei Zhekpisov";
   };
   szkiba = {
     email = "iszkiba@gmail.com";

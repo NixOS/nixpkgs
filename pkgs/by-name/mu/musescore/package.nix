@@ -74,17 +74,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ libjack2 ]
-    }"
+    "--prefix"
+    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ libjack2 ])
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
+    "--set"
+    "ALSA_PLUGIN_DIR"
+    "${alsa-plugins}/lib/alsa-lib"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
+    "--set-default"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   preFixup = ''
