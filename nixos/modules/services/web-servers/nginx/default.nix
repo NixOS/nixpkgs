@@ -1617,6 +1617,7 @@ in
           MemoryDenyWriteExecute =
             !(
               (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
+              || cfg.lua.enable
               || (cfg.package == pkgs.openresty)
             );
           RestrictRealtime = true;
