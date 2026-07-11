@@ -825,6 +825,14 @@
     };
   };
 
+  freebasic = {
+    version = "0-unstable-2025-11-11";
+    url = "github:Ra77a3l3-jar/tree-sitter-freebasic";
+    rev = "dbf696adb4c0b9c020074e75043c90592981ee7f";
+    hash = "sha256-9JDf9Tj6K55JRTNfw9U7wR3/idQ8eBoQRCOQnLm3hbs=";
+    meta.license = lib.licenses.mit;
+  };
+
   fsharp = {
     version = "0.3.0-unstable-2026-04-16";
     url = "github:ionide/tree-sitter-fsharp";
