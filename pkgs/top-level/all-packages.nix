@@ -11694,4 +11694,6 @@ with pkgs;
   gpac-unstable = callPackage ../by-name/gp/gpac/package.nix {
     releaseChannel = "unstable";
   };
+
+  feishin-web = feishin.override { webVersion = true; };
 }
