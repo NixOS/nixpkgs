@@ -579,10 +579,6 @@ let
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
     cpp11bigwig = [ pkgs.curl ]; # for curl-config
-    cpp11qpdf = with pkgs; [
-      zlib.dev
-      libjpeg
-    ];
     crc32c = [
       pkgs.which
       pkgs.cmake
@@ -1249,6 +1245,10 @@ let
     clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
     cpp11bigwig = [ pkgs.zlib ];
+    cpp11qpdf = with pkgs; [
+      libjpeg
+      zlib
+    ];
     crandep = [ pkgs.gsl ];
     csaw = with pkgs; [
       zlib.dev
