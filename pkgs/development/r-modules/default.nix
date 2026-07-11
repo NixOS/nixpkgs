@@ -557,7 +557,6 @@ let
       protobuf
       which
     ];
-    bio3d = [ pkgs.zlib ];
     bioacoustics = [ pkgs.cmake ];
     blosc = [ pkgs.pkg-config ];
     bnpmr = [ pkgs.gsl ];
@@ -1237,7 +1236,7 @@ let
       protobuf
     ];
     bigsnpr = [ pkgs.zlib.dev ];
-    bio3d = with pkgs; [ zlib.dev ];
+    bio3d = [ pkgs.zlib ];
     bioacoustics = [ pkgs.fftw ];
     blosc = [ pkgs.c-blosc ];
     cairoDevice = [ pkgs.gtk2 ];
