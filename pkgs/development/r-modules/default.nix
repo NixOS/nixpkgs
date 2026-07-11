@@ -614,7 +614,7 @@ let
     ];
     fftw = [ pkgs.pkg-config ];
     fftwtools = [ pkgs.pkg-config ];
-    fingerPro = [ pkgs.gsl ];
+    fingerPro = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     fio = with pkgs; [
       cargo
       rustc
@@ -1275,6 +1275,7 @@ let
     fastpng = [ pkgs.zlib ];
     fftw = [ pkgs.fftw ];
     fftwtools = [ pkgs.fftw ];
+    fingerPro = [ pkgs.gsl ];
     flan = [ pkgs.gsl ];
     flowWorkspace = [ pkgs.zlib.dev ];
     fs = [ pkgs.libuv ];
