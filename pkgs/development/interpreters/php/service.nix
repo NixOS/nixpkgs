@@ -1,11 +1,10 @@
 # Tests in: nixos/tests/php/fpm-modular.nix
 
 # Non-module dependencies (importApply)
-{ formats, coreutils }:
+{ formats }:
 
 # Service module
 {
-  options,
   config,
   lib,
   ...
@@ -162,30 +161,6 @@ in
       "-y"
       configFile
     ];
-  }
-  // lib.optionalAttrs (options ? systemd) {
-
-    systemd.service = {
-      after = [ "network.target" ];
-      documentation = [ "man:php-fpm(8)" ];
-
-      serviceConfig = {
-        Type = "notify";
-        ExecReload = "${coreutils}/bin/kill -USR2 $MAINPID";
-        RuntimeDirectory = "php-fpm";
-        RuntimeDirectoryPreserve = true;
-        Restart = "always";
-      };
-    };
-
-  }
-  // lib.optionalAttrs (options ? finit) {
-
-    finit.service = {
-      conditions = [ "service/syslogd/ready" ];
-      reload = "${coreutils}/bin/kill -USR2 $MAINPID";
-      notify = "systemd";
-    };
   };
 
   meta.maintainers = with lib.maintainers; [

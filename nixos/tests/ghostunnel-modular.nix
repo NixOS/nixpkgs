@@ -14,10 +14,10 @@
         networking.firewall.allowedTCPPorts = [ 80 ];
       };
     service =
-      { pkgs, ... }:
+      { config, ... }:
       {
         system.services."ghostunnel-plain-old" = {
-          imports = [ pkgs.ghostunnel.services.default ];
+          imports = [ config.modularServices.ghostunnel.default ];
           ghostunnel = {
             listen = "0.0.0.0:443";
             cert = "/root/service-cert.pem";
@@ -28,7 +28,7 @@
           };
         };
         system.services."ghostunnel-client-cert" = {
-          imports = [ pkgs.ghostunnel.services.default ];
+          imports = [ config.modularServices.ghostunnel.default ];
           ghostunnel = {
             listen = "0.0.0.0:1443";
             cert = "/root/service-cert.pem";

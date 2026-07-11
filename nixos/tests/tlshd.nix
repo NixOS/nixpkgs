@@ -31,10 +31,10 @@ in
 
   nodes = {
     server =
-      { pkgs, ... }:
+      { config, ... }:
       {
         system.services.tlshd = {
-          imports = [ pkgs.ktls-utils.services.default ];
+          imports = [ config.modularServices.ktls-utils.default ];
           tlshd.settings = {
             "authenticate.server" = {
               "x509.certificate" = toString serverCert;
@@ -56,10 +56,10 @@ in
       };
 
     client =
-      { pkgs, ... }:
+      { config, ... }:
       {
         system.services.tlshd = {
-          imports = [ pkgs.ktls-utils.services.default ];
+          imports = [ config.modularServices.ktls-utils.default ];
           tlshd.settings = {
             "authenticate.client" = {
               "x509.certificate" = toString clientCert;

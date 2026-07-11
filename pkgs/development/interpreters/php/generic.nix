@@ -32,7 +32,6 @@ let
       common-updater-scripts,
       curl,
       jq,
-      coreutils,
       formats,
 
       version,
@@ -413,7 +412,7 @@ let
             services.default = {
               imports = [
                 (lib.modules.importApply ./service.nix {
-                  inherit formats coreutils;
+                  inherit formats;
                 })
               ];
               php-fpm.package = lib.mkDefault finalAttrs.finalPackage;

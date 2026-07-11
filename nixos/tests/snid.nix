@@ -5,10 +5,10 @@
 
   nodes = {
     machine =
-      { pkgs, ... }:
+      { config, ... }:
       {
         system.services.snid = {
-          imports = [ pkgs.snid.services.default ];
+          imports = [ config.modularServices.snid.default ];
           snid = {
             listen = [ "tcp:8443" ];
             mode = "tcp";
