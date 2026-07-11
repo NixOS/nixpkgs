@@ -3488,6 +3488,13 @@
     };
   };
 
+  wikitext = {
+    version = "0.1.3";
+    url = "github:wikimedia/tree-sitter-wikitext";
+    hash = "sha256-jqM+SQzQZNjUyHc4wv9c80lPkH62xWrxAU1uvGEmQho=";
+    meta.license = lib.licenses.mit;
+  };
+
   wing = {
     version = "0.83.11";
     url = "github:winglang/tree-sitter-wing";
