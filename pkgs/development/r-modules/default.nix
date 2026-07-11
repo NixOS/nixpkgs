@@ -635,13 +635,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     gert = [ pkgs.pkg-config ];
     gglinedensity = [ pkgs.cargo ];
-    git2r = with pkgs; [
-      zlib.dev
-      openssl.dev
-      libssh2.dev
-      libgit2
-      pkg-config
-    ];
+    git2r = [ pkgs.pkg-config ];
     glpkAPI = with pkgs; [
       gmp
       glpk
@@ -1305,6 +1299,7 @@ let
     gert = [ pkgs.libgit2 ];
     gfilogisreg = [ pkgs.gmp.dev ];
     ggiraph = [ pkgs.libpng ];
+    git2r = [ pkgs.libgit2 ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
