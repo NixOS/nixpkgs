@@ -825,7 +825,6 @@ let
       cargo
       rustc
     ];
-    trackViewer = [ pkgs.zlib.dev ];
     udunits2 = with pkgs; [
       udunits
       expat
