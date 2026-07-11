@@ -595,10 +595,7 @@ let
       rustc
     ];
     diseq = [ pkgs.gsl ]; # for gsl-config
-    diversitree = with pkgs; [
-      gsl
-      fftw
-    ];
+    diversitree = [ pkgs.gsl ]; # for gsl-config
     dynr = [ pkgs.gsl ];
     eaf = [ pkgs.gsl ];
     exactextractr = [ pkgs.geos ];
@@ -1267,6 +1264,7 @@ let
       xz.dev
       bzip2.dev
     ];
+    diversitree = [ pkgs.fftw ];
     divest = [ pkgs.zlib.dev ];
     econetwork = [ pkgs.gsl ];
     eds = [ pkgs.zlib.dev ];
