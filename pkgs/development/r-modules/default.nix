@@ -574,7 +574,7 @@ let
       cargo
       rustc
     ];
-    cit = [ pkgs.gsl ];
+    cit = [ pkgs.gsl ]; # for gsl-config
     clarabel = [ pkgs.cargo ];
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
@@ -1247,6 +1247,7 @@ let
       fftw
       gsl
     ];
+    cit = [ pkgs.gsl ];
     clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
     crandep = [ pkgs.gsl ];
