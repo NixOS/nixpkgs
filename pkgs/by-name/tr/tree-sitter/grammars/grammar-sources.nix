@@ -654,6 +654,13 @@
     };
   };
 
+  eiffel = {
+    version = "1.0.0";
+    url = "github:imustafin/tree-sitter-eiffel";
+    hash = "sha256-DeZZT+xlb+oWdTKXvf4W/siL8q/ESDVtpCOXUO/yeao=";
+    meta.license = lib.licenses.mit;
+  };
+
   elisp = rec {
     version = "1.6.1";
     url = "github:wilfred/tree-sitter-elisp?ref=${version}";
