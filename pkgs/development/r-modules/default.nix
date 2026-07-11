@@ -521,6 +521,7 @@ let
     ];
     animation = [ pkgs.which ];
     apcf = [ pkgs.geos ]; # for geos-config
+    apsimx = [ pkgs.which ];
     arcgisgeocode = with pkgs; [
       cargo
       rustc
@@ -1104,7 +1105,6 @@ let
     ];
     affyPLM = [ pkgs.zlib ];
     affyio = [ pkgs.zlib ];
-    apsimx = [ pkgs.which ];
     arcgisplaces = [ pkgs.openssl ];
     archive = [ pkgs.libarchive ];
     arrangements = with pkgs; [ gmp.dev ];
