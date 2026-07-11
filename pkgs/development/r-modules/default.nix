@@ -835,7 +835,6 @@ let
       pkg-config
       gdal # for gdal-config
     ];
-    vdiffr = [ pkgs.libpng.dev ];
     watcher = with pkgs; [
       cmake
       which
@@ -1627,6 +1626,7 @@ let
       xz
       zlib
     ];
+    vdiffr = [ pkgs.libpng ];
     webp = [ pkgs.libwebp ];
     writexl = with pkgs; [ zlib.dev ];
     xslt =
