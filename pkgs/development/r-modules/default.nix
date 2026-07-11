@@ -703,7 +703,7 @@ let
       mbedtls
       nng
     ];
-    ncdf4 = [ pkgs.netcdf ];
+    ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
