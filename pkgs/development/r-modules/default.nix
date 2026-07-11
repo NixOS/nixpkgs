@@ -630,7 +630,11 @@ let
       cargo
       rustc
     ];
-    gdalcubes = [ pkgs.pkg-config ];
+    gdalcubes = with pkgs; [
+      pkg-config
+      gdal # for gdal-config
+      netcdf # for nc-config
+    ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     gert = [ pkgs.pkg-config ];
@@ -1191,9 +1195,7 @@ let
     gaston = with pkgs; [ zlib.dev ];
     gdalcubes = with pkgs; [
       proj.dev
-      gdal
       sqlite.dev
-      netcdf
     ];
     gdalraster = with pkgs; [
       gdal
