@@ -1,18 +1,15 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   binaryen,
   cargo,
   fetchFromGitHub,
-  fetchYarnDeps,
   nodejs,
   rustPlatform,
   rustc,
   sd,
   wasm-bindgen-cli_0_2_108,
   wasm-pack,
-  yarnConfigHook,
-  yarnBuildHook,
   writeScript,
   extraBuildEnv ? { },
   # This package contains serveral sub-applications. This specifies which of them you want to build.
@@ -25,7 +22,7 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
   version = "1.3.36";
 
@@ -54,14 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
   cargoRoot = "../rust";
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-eGu+s8g0nGijYfjo8RkT5/iBfbwk5cBMacbe/gO03NI=";
-  };
+  npmDepsHash = "sha256-eGu+s8g0nGijYfjo8RkT5/iBfbwk5cBMacbe/gO03NI=";
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
     binaryen
     cargo
     rustPlatform.cargoSetupHook
@@ -98,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  yarnBuildScript = "build:${enteApp}";
+  npmBuildScript = "build:${enteApp}";
   installPhase =
     let
       distName = if enteApp == "payments" then "dist" else "out";
