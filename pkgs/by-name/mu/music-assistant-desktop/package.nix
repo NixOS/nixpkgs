@@ -8,6 +8,8 @@
 
   # nativeBuildInputs
   cargo-tauri,
+  jq,
+  moreutils,
   nodejs,
   pkg-config,
   yarnBuildHook,
@@ -30,13 +32,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.5.0";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-UfHodoDGsBQUcTaQ5x04jf0nG4jX47TzXXPJzAwYbEQ=";
+    hash = "sha256-KKyIYSSIC134t46H7YOFNCdj4M/VoBrX9jN5aX/kSlc=";
   };
 
   patches = [
@@ -47,12 +49,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # set version
     substituteInPlace package.json src-tauri/tauri.conf.json \
       --replace-fail "0.0.0" "${finalAttrs.version}"
+
+    # disable upstream updater
+    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
+      | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-xc1eT9TKAqREC2fMi4eFR9Ag1c8Ksq4mGoRnO9WZggI=";
+  cargoHash = "sha256-AFn2m8eO+U86s6g2LlzBuAsJBesrm3Gncihf+zbPDeE=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -61,6 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
+    jq
+    moreutils
     nodejs
     pkg-config
     yarnBuildHook
