@@ -443,6 +443,7 @@ let
     RDieHarder = [ pkgs.gsl ]; # for gsl-config
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
+    RMariaDB = [ pkgs.libmysqlclient ]; # for mysql_config
     RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
     RNetCDF = [ pkgs.pkg-config ];
     RPesto = with pkgs; [
@@ -968,7 +969,6 @@ let
     RGtk2 = [ pkgs.gtk2 ];
     RITCH = [ pkgs.zlib.dev ];
     RKHSMetaMod = [ pkgs.gsl ];
-    RMariaDB = [ pkgs.libmysqlclient.dev ];
     RMark = [ pkgs.which ];
     RNetCDF = with pkgs; [
       netcdf
