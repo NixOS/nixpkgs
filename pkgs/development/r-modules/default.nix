@@ -660,10 +660,6 @@ let
     ];
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
-    image_CannyEdges = with pkgs; [
-      fftw.dev
-      libpng.dev
-    ];
     image_textlinedetector = [ pkgs.pkg-config ];
     imager = [ pkgs.libx11.dev ];
     imbibe = [ pkgs.zlib.dev ];
@@ -1316,6 +1312,10 @@ let
       libtiff
       libjpeg
       zlib
+    ];
+    image_CannyEdges = with pkgs; [
+      fftw
+      libpng
     ];
     image_textlinedetector = [ pkgs.opencv ];
     interpolation = with pkgs; [
