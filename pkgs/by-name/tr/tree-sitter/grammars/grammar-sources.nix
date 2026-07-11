@@ -2418,6 +2418,14 @@
     };
   };
 
+  ptx = {
+    version = "0-unstable-2026-01-02";
+    url = "codeberg:jer-gremlin/tree-sitter-ptx";
+    rev = "3dfa6758d4c15832d051f933101992b9e01d6611";
+    hash = "sha256-h2a+ievbZGAYFVl3aZxM4/zTn92/fnfxelHWKfnXoP8=";
+    meta.license = lib.licenses.mit;
+  };
+
   pug = {
     version = "0-unstable-2024-11-17";
     url = "github:zealot128/tree-sitter-pug";
