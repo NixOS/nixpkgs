@@ -1007,6 +1007,14 @@
     excludeBrokenTreeSitterJson = true;
   };
 
+  glimmer-javascript = {
+    version = "0-unstable-2026-05-14";
+    url = "github:ember-tooling/tree-sitter-glimmer-javascript";
+    rev = "d9cf7a2f1dad3c6b660148eaf77e955d418fdb8b";
+    hash = "sha256-gvs85PiyNov10Ar0JytOzjmJQVOeVx74ZQSbV+XUKa4=";
+    meta.license = lib.licenses.mit;
+  };
+
   glsl = {
     version = "0.2.0";
     url = "github:tree-sitter-grammars/tree-sitter-glsl";
