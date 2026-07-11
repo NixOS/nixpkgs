@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "4.0.1";
   pname = "pamqp";
 
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = "pamqp";
     tag = version;
-    hash = "sha256-0rRVbzC5G+lH6Okvw8PtoPZKD8LlobAGYvDEIDw0aFo=";
+    hash = "sha256-WKkiwisCfGRkNbw8WtXqNe4OqUiRgVfVL7o0oMdeFJw=";
   };
 
   build-system = [ hatchling ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/gmr/pamqp/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/gmr/pamqp/blob/${src.tag}/docs/changelog.md";
     description = "RabbitMQ Focused AMQP low-level library";
     homepage = "https://github.com/gmr/pamqp";
     license = lib.licenses.bsd3;
