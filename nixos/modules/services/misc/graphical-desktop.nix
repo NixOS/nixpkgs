@@ -21,23 +21,32 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      # localectl looks into 00-keyboard.conf
-      etc."X11/xorg.conf.d/00-keyboard.conf".text = ''
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbModel" "${xcfg.xkb.model}"
-          Option "XkbLayout" "${xcfg.xkb.layout}"
-          Option "XkbOptions" "${xcfg.xkb.options}"
-          Option "XkbVariant" "${xcfg.xkb.variant}"
-        EndSection
-      '';
-      systemPackages = with pkgs; [
-        nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
-        xdg-utils
-      ];
-    };
+    environment =
+      let
+        inherit (xcfg) xkb;
+        optionLines = lib.concatMapAttrsStringSep "\n" (key: val: ''Option "${key}" "${val}"'') (
+          lib.filterAttrs (_: val: val != "") {
+            XkbModel = xkb.model;
+            XkbLayout = xkb.layout;
+            XkbOptions = xkb.options;
+            XkbVariant = xkb.variant;
+          }
+        );
+      in
+      {
+        # localectl looks into 00-keyboard.conf
+        etc."X11/xorg.conf.d/00-keyboard.conf".text = ''
+          Section "InputClass"
+            Identifier "Keyboard catchall"
+            MatchIsKeyboard "on"
+            ${optionLines}
+          EndSection
+        '';
+        systemPackages = with pkgs; [
+          nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
+          xdg-utils
+        ];
+      };
 
     fonts.enableDefaultPackages = lib.mkDefault true;
 

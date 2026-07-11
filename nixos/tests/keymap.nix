@@ -93,6 +93,10 @@ let
 
         machine.wait_for_x()
 
+        with subtest("X11 layout is reported by localectl"):
+            status, stdout = machine.execute("localectl")
+            t.assertIn("X11 Layout: ${extraConfig.services.xserver.xkb.layout}", stdout)
+
         for test_case_name, test_data in tests.items():
             for keymap_env_name, command in keymap_environments.items():
                 with subtest(f"{test_case_name} - {keymap_env_name}"):
