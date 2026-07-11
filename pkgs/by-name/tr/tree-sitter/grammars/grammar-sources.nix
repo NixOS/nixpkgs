@@ -1766,6 +1766,13 @@
     };
   };
 
+  lua-format-string = {
+    version = "0.1.0";
+    url = "codeberg:kpbaks/tree-sitter-lua-format-string";
+    hash = "sha256-fP1c2F/nn4BsmO1u0JAGbECQfv0J9TCZWqiwu6W+JvM=";
+    meta.license = lib.licenses.mit;
+  };
+
   luau = {
     version = "0-unstable-2025-12-08";
     url = "github:polychromatist/tree-sitter-luau";
