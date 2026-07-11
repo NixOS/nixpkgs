@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = "gittuf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VWbM7y9XCs/pANJtPa3MDbDhuEtVQ97X5Cyo6yY0Rd8=";
   };
 
@@ -23,21 +23,21 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${finalAttrs.version}" ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeCheckInputs = [
     git
     gnupg
     less
     openssh
   ];
-  checkFlags = [
-    "-skip=TestLoadRepository"
-    "-skip=TestSSH"
-  ];
+  checkFlags = [ "-skip=TestLoadRepository|TestSSH" ];
 
   postInstall = "rm $out/bin/cli $out/bin/sandbox"; # remove gendoc helper binaries
 
   meta = {
-    changelog = "https://github.com/gittuf/gittuf/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gittuf/gittuf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
     license = lib.licenses.asl20;
