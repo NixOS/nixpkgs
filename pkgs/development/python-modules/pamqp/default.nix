@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "4.0.1";
   pname = "pamqp";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "pamqp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WKkiwisCfGRkNbw8WtXqNe4OqUiRgVfVL7o0oMdeFJw=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/gmr/pamqp/blob/${src.tag}/docs/changelog.md";
+    changelog = "https://github.com/gmr/pamqp/blob/${finalAttrs.src.tag}/docs/changelog.md";
     description = "RabbitMQ Focused AMQP low-level library";
     homepage = "https://github.com/gmr/pamqp";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
