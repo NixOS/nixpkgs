@@ -71,7 +71,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonPath = with python3.pkgs; [
     dasbus
     pygobject3
-    dbus-python
     pyxdg
     brltty
     liblouis
