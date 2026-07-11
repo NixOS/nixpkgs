@@ -658,7 +658,6 @@ let
       pkgs.which
       pkgs.cmake
     ];
-    httpgd = with pkgs; [ cairo.dev ];
     hypergeo2 = with pkgs; [
       gmp.dev
       mpfr.dev
