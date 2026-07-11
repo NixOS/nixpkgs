@@ -1017,6 +1017,11 @@ lib.mapAttrs mkLicense (
       url = "https://opensource.franz.com/preamble.html";
     };
 
+    llgplPreamble = {
+      spdxId = "LLGPL";
+      fullName = "LLGPL Preamble";
+    };
+
     llvm-exception = {
       spdxId = "LLVM-exception";
       fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
