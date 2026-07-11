@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -33,6 +34,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ln -s $out/opt/tuist/tuist $out/bin/tuist
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "XDG_CACHE_HOME"
+    "XDG_CONFIG_HOME"
+    "XDG_STATE_HOME"
+  ];
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+    export XDG_CACHE_HOME=$HOME/.cache
+    export XDG_CONFIG_HOME=$HOME/.config
+    export XDG_STATE_HOME=$HOME/.local/state
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9.]+)$" ]; };
