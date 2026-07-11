@@ -20,10 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspaces = [
-    "@astrojs/language-server..."
-    "@astrojs/ts-plugin"
-  ];
+  pnpmWorkspaces = [ "@astrojs/language-server..." ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -35,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # pnpm 11 stores state in a SQLite binary, fetcherVersion = 4 dumps it to a deterministic SQL text file
     fetcherVersion = 4;
-    hash = "sha256-/GpdKKvldm89LBr0f7zxSkuoawh2j/QL+FPozTlBRVA=";
+    hash = "sha256-U2K0uF0D3HyY1fLxpoPtMmNEFT7DKllRsFcgknVDt6Y=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter "@astrojs/language-server..." --filter "@astrojs/ts-plugin" build
+    pnpm --filter "@astrojs/language-server..." build
 
     runHook postBuild
   '';
@@ -62,10 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm install --offline --prod --filter="@astrojs/language-server..."
     mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
     cp -r ./node_modules $out/lib/node_modules/astro-language-server
-    cp -r packages/language-tools/{language-server,yaml2ts,ts-plugin} $out/lib/node_modules/astro-language-server/packages/language-tools/
+    cp -r packages/language-tools/{language-server,yaml2ts} $out/lib/node_modules/astro-language-server/packages/language-tools/
     pushd $out/lib/node_modules/astro-language-server/node_modules
-    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark} .pnpm/node_modules/@astrojs/ts-plugin
+    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark}
     popd
+
     # pnpm creates symlinks for optional platform-specific packages (e.g. @biomejs/cli-darwin-arm64)
     # that are not installed by the --prod --filter install, leaving dangling symlinks
     find $out -xtype l -delete
