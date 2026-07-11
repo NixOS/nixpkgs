@@ -776,10 +776,6 @@ let
       rustc
     ];
     scorematchingad = [ pkgs.cmake ];
-    sdcTable = with pkgs; [
-      gmp
-      glpk
-    ];
     seewave = with pkgs; [
       fftw.dev
       libsndfile.dev
@@ -1527,6 +1523,10 @@ let
       zlib.dev
     ];
     screenCounter = [ pkgs.zlib.dev ];
+    sdcTable = with pkgs; [
+      gmp
+      glpk
+    ];
     seqTools = [ pkgs.zlib.dev ];
     seqbias = with pkgs; [
       zlib.dev
