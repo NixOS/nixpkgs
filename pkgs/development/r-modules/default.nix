@@ -452,6 +452,7 @@ let
     ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.pkg-config ];
+    RQuantLib = [ pkgs.quantlib ]; # for quantlib-config
     RationalMatrix = [ pkgs.pkg-config ];
     RcppCWB = with pkgs; [
       pkg-config
@@ -984,8 +985,8 @@ let
     ];
     RPushbullet = [ pkgs.which ];
     RQuantLib = with pkgs; [
-      quantlib.dev
-      boost.dev
+      boost
+      quantlib
     ];
     RSclient = [ pkgs.openssl ];
     RVowpalWabbit = with pkgs; [
