@@ -737,7 +737,6 @@ let
       cargo
       rustc
     ];
-    rcdd = [ pkgs.gmp.dev ];
     redux = [ pkgs.pkg-config ];
     reprex = [ pkgs.which ];
     resultant = with pkgs; [
@@ -1469,6 +1468,7 @@ let
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
     rbedrock = [ pkgs.zlib ];
+    rcdd = [ pkgs.gmp ];
     rcontroll = [ pkgs.gsl.dev ];
     redux = [ pkgs.hiredis ];
     registr = with pkgs; [
