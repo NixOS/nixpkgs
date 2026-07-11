@@ -1052,6 +1052,11 @@ lib.mapAttrs mkLicense (
       fullName = "MIT License";
     };
 
+    mit-click = {
+      spdxId = "MIT-Click";
+      fullName = "MIT Click License";
+    };
+
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";

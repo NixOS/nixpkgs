@@ -48,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/sameboy.thumbnailer \
+      --replace-fail "TryExec=sameboy-thumbnailer" "TryExec=$out/bin/sameboy-thumbnailer" \
+      --replace-fail "Exec=sameboy-thumbnailer" "Exec=$out/bin/sameboy-thumbnailer"
+  '';
+
   meta = {
     homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
