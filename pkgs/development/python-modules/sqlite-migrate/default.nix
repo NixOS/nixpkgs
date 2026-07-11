@@ -1,23 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  uv-build,
   sqlite-utils,
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-migrate";
-  version = "0.1b0";
+  version = "0.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jVArPKS5xF5WASvTXAPSMjXwgjyXbUzpQMu0DjMIfe0=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "sqlite-migrate";
+    tag = version;
+    hash = "sha256-0fU3yOujqc4mZS4XcsM9xH2iK9fFX5MUsmuc/o+I+nY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    uv-build
+  ];
 
   propagatedBuildInputs = [ sqlite-utils ];
 
