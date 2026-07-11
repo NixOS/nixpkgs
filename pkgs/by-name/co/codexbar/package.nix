@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   nix-update-script,
+  makeWrapper,
   unzip,
 }:
 
@@ -19,13 +20,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    cp -r CodexBar.app $out/Applications
+    makeWrapper $out/Applications/CodexBar.app/Contents/MacOS/CodexBar $out/bin/codexbar
 
     runHook postInstall
   '';
@@ -44,5 +46,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "codexbar";
   };
 })
