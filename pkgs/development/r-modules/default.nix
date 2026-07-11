@@ -594,7 +594,6 @@ let
       cargo
       rustc
     ];
-    devEMF = with pkgs; [ libxft.dev ];
     diseq = [ pkgs.gsl ];
     diversitree = with pkgs; [
       gsl
@@ -1263,6 +1262,7 @@ let
       bzip2.dev
       zlib.dev
     ];
+    devEMF = [ pkgs.zlib ];
     diffHic = with pkgs; [
       xz.dev
       bzip2.dev
@@ -2394,13 +2394,6 @@ let
     });
 
     dbarts = old.dbarts.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
-
-    devEMF = old.devEMF.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
-        NIX_LDFLAGS = "-lX11";
-      };
-    });
 
     enderecobr = old.enderecobr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
