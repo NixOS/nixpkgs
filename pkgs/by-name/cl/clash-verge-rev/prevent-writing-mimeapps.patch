@@ -1,0 +1,29 @@
+diff --git a/src-tauri/src/utils/init.rs b/src-tauri/src/utils/init.rs
+index 43b61c8f..5094667a 100644
+--- a/src-tauri/src/utils/init.rs
++++ b/src-tauri/src/utils/init.rs
+@@ -384,24 +384,6 @@ pub fn init_scheme() -> Result<()> {
+ }
+ #[cfg(target_os = "linux")]
+ pub fn init_scheme() -> Result<()> {
+-    const DESKTOP_FILE: &str = "clash-verge.desktop";
+-
+-    for scheme in DEEP_LINK_SCHEMES {
+-        let handler = format!("x-scheme-handler/{scheme}");
+-        let output = std::process::Command::new("xdg-mime")
+-            .arg("default")
+-            .arg(DESKTOP_FILE)
+-            .arg(&handler)
+-            .output()?;
+-        if !output.status.success() {
+-            return Err(anyhow::anyhow!(
+-                "failed to set {handler}, {}",
+-                String::from_utf8_lossy(&output.stderr)
+-            ));
+-        }
+-    }
+-
+-    crate::utils::linux::mime::ensure_mimeapps_entries(DESKTOP_FILE, DEEP_LINK_SCHEMES)?;
+     Ok(())
+ }
+ #[cfg(target_os = "macos")]
