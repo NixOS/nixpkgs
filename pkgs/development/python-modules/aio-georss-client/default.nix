@@ -52,8 +52,8 @@ buildPythonPackage rec {
     broken = lib.versionAtLeast xmltodict.version "1";
     description = "Python library for accessing GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-aio-georss-client";
-    changelog = "https://github.com/exxamalte/python-aio-georss-client/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/exxamalte/python-aio-georss-client/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
