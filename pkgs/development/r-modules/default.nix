@@ -634,7 +634,6 @@ let
     gdalraster = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     gert = [ pkgs.pkg-config ];
-    ggiraph = [ pkgs.libpng.dev ];
     gglinedensity = [ pkgs.cargo ];
     git2r = with pkgs; [
       zlib.dev
@@ -1305,6 +1304,7 @@ let
       ];
     gert = [ pkgs.libgit2 ];
     gfilogisreg = [ pkgs.gmp.dev ];
+    ggiraph = [ pkgs.libpng ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
