@@ -672,7 +672,6 @@ let
     jack = [ pkgs.pkg-config ];
     kza = [ pkgs.pkg-config ];
     libdeflate = [ pkgs.cmake ];
-    littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
       pkg-config
       gfortran
@@ -1352,6 +1351,13 @@ let
     leidenAlg = [ pkgs.gmp ];
     libstable4u = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
+    littler = with pkgs; [
+      xz
+      zlib
+      bzip2
+      zstd
+      icu
+    ];
     lnmixsurv = [ pkgs.gsl.dev ];
     lpsymphony = with pkgs; [
       symphony
@@ -2634,28 +2640,16 @@ let
       '';
     });
 
-    littler = old.littler.overrideAttrs (
-      attrs: with pkgs; {
-        buildInputs = [
-          pcre
-          xz
-          zlib
-          bzip2
-          icu
-          which
-          zstd.dev
-        ]
-        ++ attrs.buildInputs;
-        postInstall = ''
-          install -d $out/bin $out/share/man/man1
-          ln -s ../library/littler/bin/r $out/bin/r
-          ln -s ../library/littler/bin/r $out/bin/lr
-          ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
-          # these won't run without special provisions, so better remove them
-          rm -r $out/library/littler/script-tests
-        '';
-      }
-    );
+    littler = old.littler.overrideAttrs (attrs: {
+      postInstall = ''
+        install -d $out/bin $out/share/man/man1
+        ln -s ../library/littler/bin/r $out/bin/r
+        ln -s ../library/littler/bin/r $out/bin/lr
+        ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
+        # these won't run without special provisions, so better remove them
+        rm -r $out/library/littler/script-tests
+      '';
+    });
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
       postPatch = ''
