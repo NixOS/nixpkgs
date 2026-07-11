@@ -8437,9 +8437,6 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  apngasm = callPackage ../applications/graphics/apngasm { };
-  apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
-
   arelle = with python3Packages; toPythonApplication arelle;
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
