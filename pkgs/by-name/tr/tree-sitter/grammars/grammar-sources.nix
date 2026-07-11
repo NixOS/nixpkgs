@@ -2914,6 +2914,13 @@
     excludeBrokenTreeSitterJson = true;
   };
 
+  strictdoc = {
+    version = "0.2.0";
+    url = "github:manueldiagostino/tree-sitter-strictdoc";
+    hash = "sha256-sIbh8mYWrGhaXtRxe/FYIT1aD8WAKfQYJJbhWhz9jEs=";
+    meta.license = lib.licenses.mit;
+  };
+
   supercollider = {
     version = "0.3.2";
     url = "github:madskjeldgaard/tree-sitter-supercollider";
