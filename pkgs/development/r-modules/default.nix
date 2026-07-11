@@ -825,7 +825,6 @@ let
       cargo
       rustc
     ];
-    topicmodels = [ pkgs.gsl ];
     trackViewer = [ pkgs.zlib.dev ];
     udunits2 = with pkgs; [
       udunits
@@ -1603,6 +1602,7 @@ let
       libx11
       tk
     ];
+    topicmodels = [ pkgs.gsl ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
     unigd =
