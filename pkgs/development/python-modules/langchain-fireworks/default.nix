@@ -73,6 +73,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-fireworks==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
