@@ -659,7 +659,7 @@ let
       pkgs.cmake
     ];
     hypergeo2 = [ pkgs.pkg-config ];
-    iBMQ = [ pkgs.gsl ];
+    iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_CannyEdges = with pkgs; [
       fftw.dev
       libpng.dev
@@ -1306,6 +1306,7 @@ let
       gmp
       mpfr
     ];
+    iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [
       gmp
       libxml2.dev
