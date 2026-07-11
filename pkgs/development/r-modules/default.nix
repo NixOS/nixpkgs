@@ -835,12 +835,6 @@ let
       pkg-config
       gdal # for gdal-config
     ];
-    vcfppR = [
-      pkgs.curl.dev
-      pkgs.bzip2
-      pkgs.zlib.dev
-      pkgs.xz
-    ];
     vdiffr = [ pkgs.libpng.dev ];
     watcher = with pkgs; [
       cmake
@@ -1626,6 +1620,13 @@ let
     ];
     vapour = [ pkgs.proj ];
     vcfR = with pkgs; [ zlib.dev ];
+    vcfppR = with pkgs; [
+      bzip2
+      curl
+      libdeflate
+      xz
+      zlib
+    ];
     webp = [ pkgs.libwebp ];
     writexl = with pkgs; [ zlib.dev ];
     xslt =
