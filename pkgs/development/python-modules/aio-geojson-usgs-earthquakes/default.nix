@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "0.4";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
