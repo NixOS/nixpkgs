@@ -1927,6 +1927,14 @@
     };
   };
 
+  nearley = {
+    version = "0-unstable-2025-09-24";
+    url = "github:mi2ebi/tree-sitter-nearley";
+    rev = "12d01113e194c8e83f6341aab8c2a5f21db9cac9";
+    hash = "sha256-Uhr1DbUK7svhJX1JCtBvKhwO4jgxQLvFPL3mc/zWAy8=";
+    meta.license = lib.licenses.mit;
+  };
+
   netlinx = {
     version = "1.0.4";
     url = "github:norgate-av/tree-sitter-netlinx";
