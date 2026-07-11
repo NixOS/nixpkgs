@@ -1,5 +1,6 @@
 {
   fetchpatch,
+  fetchFromGitLab,
   lib,
   stdenv,
 }:
@@ -2630,6 +2631,21 @@
         aciceri
       ];
     };
+  };
+
+  rpmspec = {
+    version = "0-unstable-2025-08-11";
+    src = fetchFromGitLab {
+      owner = "cryptomilk";
+      repo = "tree-sitter-rpmspec";
+      rev = "d0275cd1316d9b7a2e0fae028ce95a5a18741e1d";
+      hash = "sha256-YBC0thdMf4UYdZr8+vm1SQjBBh1CZD/VpuzndxsglOU=";
+      postFetch = ''
+        # ensure that case-insensitive folders are not merged on Darwin
+        rm -rf $out/bindings/swift
+      '';
+    };
+    meta.license = lib.licenses.mit;
   };
 
   rst = {
