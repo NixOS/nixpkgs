@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "click-aliases";
-  version = "1.0.6";
+  version = "1.0.7";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = "click-aliases";
     rev = "v${version}";
-    hash = "sha256-nHUvzUiWc7Fq22PPsodIDOwU1INy2CQfztD0ceguhEo=";
+    hash = "sha256-Km6rVAsdoctECEFxZG/gCnacmhdHQVJcVrOta6xh1XU=";
   };
 
   nativeBuildInputs = [ poetry-core ];
