@@ -543,7 +543,6 @@ let
       cargo
       rustc
     ];
-    audio = [ pkgs.portaudio ];
     awdb = with pkgs; [
       cargo
       rustc
@@ -1222,6 +1221,7 @@ let
       zlib.dev
       zstd.dev
     ];
+    audio = [ pkgs.portaudio ];
     bamsignals = with pkgs; [
       zlib.dev
       xz.dev
