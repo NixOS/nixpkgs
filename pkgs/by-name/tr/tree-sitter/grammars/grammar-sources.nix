@@ -2761,6 +2761,14 @@
     };
   };
 
+  slisp = {
+    version = "0-unstable-2025-09-15";
+    url = "github:xenogenics/tree-sitter-slisp";
+    rev = "29f9c6707ce9dfc2fc915d175ec720b207f179f3";
+    hash = "sha256-ciolUtCf2e7VXmSIR8Zk4fQAGCeHoIQekYi2LVq7Hpg=";
+    meta.license = lib.licenses.bsd2;
+  };
+
   smali = {
     version = "1.0.0-unstable-2024-05-05";
     url = "github:amaanq/tree-sitter-smali";
