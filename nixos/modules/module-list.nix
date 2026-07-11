@@ -268,6 +268,7 @@
   ./programs/mininet.nix
   ./programs/minipro.nix
   ./programs/miriway.nix
+  ./programs/moonlight-qt.nix
   ./programs/mosh.nix
   ./programs/mouse-actions.nix
   ./programs/msmtp.nix
