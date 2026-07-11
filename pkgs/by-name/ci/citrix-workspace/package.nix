@@ -413,7 +413,12 @@ stdenv.mkDerivation rec {
       done
 
       echo "Copy .desktop files."
-      cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
+      cp $out/opt/citrix-icaclient/desktop/*.desktop $out/share/applications/
+
+      install -Dm444 "$ICAInstDir/desktop/Citrix-mime_types.xml" \
+        $out/share/mime/packages/Citrix-mime_types.xml
+      install -Dm444 "$ICAInstDir/icons/000_Receiver_64.png" \
+        $out/share/icons/hicolor/64x64/apps/Citrix-Receiver.png
 
       runHook postInstall
     '';
