@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   cacert,
+  installShellFiles,
   libredirect,
   pkg-config,
   openssl,
@@ -29,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
@@ -53,6 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_google"
     "--skip=test_proxy"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd oha --$shell <($out/bin/oha --completions $shell)
+    done
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
