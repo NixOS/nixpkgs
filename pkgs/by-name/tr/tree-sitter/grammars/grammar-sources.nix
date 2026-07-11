@@ -1688,6 +1688,13 @@
     };
   };
 
+  less = {
+    version = "1.0.0-d";
+    url = "github:jimliang/tree-sitter-less";
+    hash = "sha256-v2pE5CM6XxqQUooLR5r3qaPbDo/3tqQVMx2jWGGxfGo=";
+    meta.license = lib.licenses.mit;
+  };
+
   linkerscript = {
     version = "1.0.0";
     url = "github:tree-sitter-grammars/tree-sitter-linkerscript";
