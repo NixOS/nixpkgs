@@ -1248,6 +1248,7 @@ let
       gsl
     ];
     cit = [ pkgs.gsl ];
+    cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
     crandep = [ pkgs.gsl ];
