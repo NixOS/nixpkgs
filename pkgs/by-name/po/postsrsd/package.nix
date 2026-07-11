@@ -38,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "postsrsd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.hexa ];
   };
 })
