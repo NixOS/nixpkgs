@@ -742,7 +742,7 @@ let
     resultant = [ pkgs.pkg-config ];
     rgdal = [ pkgs.gdal ]; # for gdal-config
     rgeos = [ pkgs.geos ]; # for geos-config
-    ridge = [ pkgs.gsl ];
+    ridge = [ pkgs.gsl ]; # for gsl-config
     rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     rmatio = [
@@ -1487,6 +1487,7 @@ let
       zlib.dev
       bzip2.dev
     ];
+    ridge = [ pkgs.gsl ];
     rjags = [ pkgs.jags ];
     rlas = with pkgs; [
       boost
