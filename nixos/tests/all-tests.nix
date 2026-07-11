@@ -1684,6 +1684,7 @@ in
   systemd-journal = runTest ./systemd-journal.nix;
   systemd-journal-gateway = runTest ./systemd-journal-gateway.nix;
   systemd-journal-upload = runTest ./systemd-journal-upload.nix;
+  systemd-localed = runTest ./systemd-localed.nix;
   systemd-lock-handler = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./systemd-lock-handler.nix;
   systemd-machinectl = runTest ./systemd-machinectl.nix;
   systemd-misc = runTest ./systemd-misc.nix;
