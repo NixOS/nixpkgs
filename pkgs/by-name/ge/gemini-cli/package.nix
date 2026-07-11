@@ -115,7 +115,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       brantes
       xiaoxiangmoe
-      FlameFlag
+      _4evy
       taranarmo
       caverav
     ];
