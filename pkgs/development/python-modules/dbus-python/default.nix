@@ -41,6 +41,14 @@ buildPythonPackage (finalAttrs: {
       url = "https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/d5e19698a8d6e1485f05b67a5b2daa2392819aaf.patch";
       hash = "sha256-Rmj/ByRLiLnIF3JsMBElJugxsG8IARcBdixLhoWgIYU=";
     })
+
+    # Fix on Python 3.15, the patch did not achieve what it aimed for anyway.
+    # https://gitlab.freedesktop.org/dbus/dbus-python/-/work_items/59
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/ebecd1747c382a57ad8e47d0e32112cdbd454b40.patch";
+      hash = "sha256-Hg4o+FPJvQ1/RW9fd8UJg/YEeVOvbJCov7SS7bT0vvs=";
+      revert = true;
+    })
   ];
 
   postPatch = ''
