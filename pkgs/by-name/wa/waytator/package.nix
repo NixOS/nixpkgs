@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Screenshot annotator and lightweight image editor";
     license = lib.licenses.gpl3Plus;
     mainProgram = "waytator";
-    maintainers = with lib.maintainers; [ _74k1 ];
+    maintainers = with lib.maintainers; [
+      _74k1
+      reo101
+    ];
     platforms = lib.platforms.linux;
   };
 })
