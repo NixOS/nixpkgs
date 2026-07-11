@@ -795,7 +795,6 @@ let
     sodium = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
-    ssanv = [ pkgs.proj ];
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
