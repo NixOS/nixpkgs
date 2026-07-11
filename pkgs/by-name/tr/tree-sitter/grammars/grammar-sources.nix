@@ -436,6 +436,14 @@
     };
   };
 
+  cython = {
+    version = "0-unstable-2024-12-21";
+    url = "github:b0o/tree-sitter-cython";
+    rev = "62f44f5e7e41dde03c5f0a05f035e293bcf2bcf8";
+    hash = "sha256-TFMVjzKWZBN1JISq5RTbXDTkqnttLKxckvwhf3WBQX0=";
+    meta.license = lib.licenses.mit;
+  };
+
   d = {
     version = "0.8.2-unstable-2025-06-29";
     url = "github:gdamore/tree-sitter-d";
