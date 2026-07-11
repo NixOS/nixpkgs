@@ -1484,6 +1484,15 @@
     meta.license = lib.licenses.mit;
   };
 
+  jjtemplate = {
+    version = "0-unstable-2025-07-09";
+    url = "github:bryceberger/tree-sitter-jjtemplate";
+    rev = "4313eda8ac31c60e550e3ad5841b100a0a686715";
+    hash = "sha256-8rEatsR1vKBOlYYnGW88uwV0xLXGa+/rMAwiUeAuofk=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   jq = {
     version = "0-unstable-2025-05-10";
     url = "github:flurie/tree-sitter-jq";
