@@ -640,7 +640,6 @@ let
       gmp
       glpk
     ];
-    gmapR = [ pkgs.zlib.dev ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gslnls = [ pkgs.gsl ];
@@ -1300,6 +1299,7 @@ let
     gfilogisreg = [ pkgs.gmp.dev ];
     ggiraph = [ pkgs.libpng ];
     git2r = [ pkgs.libgit2 ];
+    gmapR = [ pkgs.zlib ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
