@@ -559,7 +559,6 @@ let
     ];
     bioacoustics = [ pkgs.cmake ];
     blosc = [ pkgs.pkg-config ];
-    bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.pkg-config ];
     cartogramR = [ pkgs.pkg-config ];
     caugi = with pkgs; [
@@ -1239,6 +1238,7 @@ let
     bio3d = [ pkgs.zlib ];
     bioacoustics = [ pkgs.fftw ];
     blosc = [ pkgs.c-blosc ];
+    bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2 ];
     cartogramR = [ pkgs.fftw ];
     catSurv = [ pkgs.gsl ];
