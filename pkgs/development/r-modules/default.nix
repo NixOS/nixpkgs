@@ -431,6 +431,7 @@ let
       which
     ];
     KSgeneral = with pkgs; [ pkg-config ];
+    LCMCR = [ pkgs.gsl ]; # for gsl-config
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
@@ -931,7 +932,6 @@ let
     JMcmprsk = [ pkgs.gsl ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
-    LCMCR = [ pkgs.gsl ];
     LOMAR = [ pkgs.gmp ];
     Libra = [ pkgs.gsl ];
     MAGEE = with pkgs; [
