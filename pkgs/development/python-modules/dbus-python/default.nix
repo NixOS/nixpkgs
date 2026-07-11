@@ -14,6 +14,9 @@
   # native dependencies
   dbus,
   dbus-glib,
+
+  # test dependencies
+  pygobject3,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -70,8 +73,12 @@ buildPythonPackage (finalAttrs: {
     dbus-glib
   ];
 
+  checkInputs = [
+    pygobject3
+  ];
+
   mesonFlags = [
-    (lib.mesonBool "tests" finalAttrs.finalPackage.doInstallCheck)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doInstallCheck)
   ];
 
   # workaround bug in meson-python
