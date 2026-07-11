@@ -11208,4 +11208,6 @@ with pkgs;
     enableWayland = false;
     enableX11 = true;
   };
+
+  feishin-web = feishin.override { webVersion = true; };
 }

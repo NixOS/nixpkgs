@@ -34,6 +34,8 @@ buildNpmPackage {
 
   inherit src;
 
+  __structuredAttrs = true;
+
   npmConfigHook = pnpmConfigHook;
   npmBuildScript = if webVersion then "build:web" else "build";
 
