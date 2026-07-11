@@ -782,7 +782,7 @@ let
       geos # for geos-config
     ];
     showtext = [ pkgs.pkg-config ];
-    smam = [ pkgs.gsl ];
+    smam = [ pkgs.gsl ]; # for gsl-config
     smcryptoR = with pkgs; [
       cargo
       rustc
