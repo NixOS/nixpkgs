@@ -1519,6 +1519,12 @@
     githubId = 169249;
     name = "Alex Brandt";
   };
+  aluoty = {
+    email = "alexanderluo0910@gmail.com";
+    github = "aluoty";
+    githubId = 291213059;
+    name = "Alexander Luo Tingyou";
+  };
   alx = {
     email = "nix@alexgirard.com";
     github = "alx";
