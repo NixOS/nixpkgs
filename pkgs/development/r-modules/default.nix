@@ -704,7 +704,6 @@ let
       cmake
       which
     ];
-    pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
       pandoc
       which
@@ -1403,6 +1402,7 @@ let
       protobuf
       zlib
     ];
+    pak = [ pkgs.curl ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
     pdftools = [ pkgs.poppler ];
     pexm = [ pkgs.jags ];
