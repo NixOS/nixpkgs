@@ -703,7 +703,6 @@ let
     otelsdk = with pkgs; [
       cmake
       which
-      curl.dev
     ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
@@ -1400,8 +1399,9 @@ let
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
     otelsdk = with pkgs; [
+      curl
       protobuf
-      zlib.dev
+      zlib
     ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
     pdftools = [ pkgs.poppler ];
