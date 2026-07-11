@@ -15387,7 +15387,7 @@
   };
   lactose = {
     name = "lactose";
-    email = "lactose@allthingslinux.com";
+    email = "mail@lactose.dev";
     github = "juuyokka";
     githubId = 15185244;
   };
