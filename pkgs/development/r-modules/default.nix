@@ -661,7 +661,7 @@ let
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_textlinedetector = [ pkgs.pkg-config ];
-    imager = [ pkgs.libx11.dev ];
+    imager = [ pkgs.pkg-config ];
     imbibe = [ pkgs.zlib.dev ];
     immunoClust = [ pkgs.gsl ];
     interpolation = [ pkgs.pkg-config ];
@@ -1318,6 +1318,11 @@ let
       libpng
     ];
     image_textlinedetector = [ pkgs.opencv ];
+    imager = with pkgs; [
+      fftw
+      libtiff
+      libx11
+    ];
     interpolation = with pkgs; [
       gmp
       mpfr
