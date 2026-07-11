@@ -98,10 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGUI [ cmark ]
   ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''
+    # autoupdate is not needed but it silences a ton of pointless warnings
     patchShebangs . > /dev/null
     autoupdate configure.ac ac/*.m4
+
+    # fix unit tests with GUI disabled
+    sed -i '5i$gtest_apps.delete("gui") if !$build_mkvtoolnix_gui' rake.d/gtest.rb
   '';
 
   configureFlags = [
