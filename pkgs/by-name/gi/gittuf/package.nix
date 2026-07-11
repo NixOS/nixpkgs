@@ -6,6 +6,8 @@
   gnupg,
   less,
   openssh,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -35,6 +37,12 @@ buildGoModule (finalAttrs: {
   checkFlags = [ "-skip=TestLoadRepository|TestSSH" ];
 
   postInstall = "rm $out/bin/cli $out/bin/sandbox"; # remove gendoc helper binaries
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/gittuf/gittuf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
