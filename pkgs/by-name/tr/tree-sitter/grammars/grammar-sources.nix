@@ -2612,6 +2612,13 @@
     };
   };
 
+  robots-txt = {
+    version = "1.0.1";
+    url = "github:opa-oz/tree-sitter-robots-txt";
+    hash = "sha256-fQq5agJ/xHsWxEJAydGxED4Z0bmREfXJ1t/EspBkYC8=";
+    meta.license = lib.licenses.mit;
+  };
+
   ron = {
     version = "0.2.0-unstable-2024-05-05";
     url = "github:tree-sitter-grammars/tree-sitter-ron";
