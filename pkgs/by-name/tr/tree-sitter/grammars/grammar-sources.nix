@@ -1588,6 +1588,15 @@
     };
   };
 
+  klog = {
+    version = "0-unstable-2026-01-10";
+    url = "github:Ansimorph/tree-sitter-klog";
+    rev = "0b215fe75bdeb8368546e3cee36aca8c19212d06";
+    hash = "sha256-L0FJpQsiMvPxZOGvp5kfStTPRc5Zgr8xMUj06Yp6VGU=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   koka = {
     version = "0-unstable-2025-07-26";
     url = "github:mtoohey31/tree-sitter-koka";
