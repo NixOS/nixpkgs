@@ -32,7 +32,6 @@
   enableWideVine ? false,
   ungoogled ? false, # Whether to build chromium or ungoogled-chromium
   cupsSupport ? true,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   commandLineArgs ? "",
   pkgsBuildBuild,
   pkgs,
@@ -76,7 +75,6 @@ let
       inherit
         proprietaryCodecs
         cupsSupport
-        pulseSupport
         ungoogled
         ;
       gnChromium = buildPackages.gn.override upstream-info.deps.gn;

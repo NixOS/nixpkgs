@@ -91,7 +91,6 @@
   cupsSupport ? true,
   cups ? null,
   proprietaryCodecs ? true,
-  pulseSupport ? false,
   libpulseaudio ? null,
   ungoogled ? false,
   ungoogled-chromium,
@@ -394,7 +393,9 @@ let
       libgcrypt
       cups
     ]
-    ++ lib.optional pulseSupport libpulseaudio;
+    ++ [
+      libpulseaudio
+    ];
 
     buildInputs = [
     ]
@@ -455,7 +456,9 @@ let
       libgcrypt
       cups
     ]
-    ++ lib.optional pulseSupport libpulseaudio;
+    ++ [
+      libpulseaudio
+    ];
 
     patches = [
       ./patches/cross-compile.patch
@@ -968,7 +971,7 @@ let
         use_vaapi = false;
         use_v4l2_codec = true;
       }
-      // lib.optionalAttrs pulseSupport {
+      // {
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
