@@ -245,19 +245,19 @@ in
       };
 
       components = {
-        subversion = lib.mkEnableOption "Subversion integration.";
+        subversion = lib.mkEnableOption "Subversion integration";
 
-        mercurial = lib.mkEnableOption "Mercurial integration.";
+        mercurial = lib.mkEnableOption "Mercurial integration";
 
-        git = lib.mkEnableOption "git integration.";
+        git = lib.mkEnableOption "git integration";
 
-        cvs = lib.mkEnableOption "cvs integration.";
+        cvs = lib.mkEnableOption "cvs integration";
 
-        breezy = lib.mkEnableOption "bazaar integration.";
+        breezy = lib.mkEnableOption "bazaar integration";
 
-        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG.";
+        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG";
 
-        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
+        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF";
 
         minimagick_font_path = lib.mkOption {
           type = lib.types.str;
