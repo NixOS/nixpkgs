@@ -78,10 +78,10 @@ buildGoModule (finalAttrs: {
       }
     ln -sv $out/bin/minikube $out/bin/kubectl
 
-    for shell in bash zsh fish; do
-      $out/bin/minikube completion $shell > minikube.$shell
-      installShellCompletion minikube.$shell
-    done
+    installShellCompletion --cmd minikube \
+      --bash <($out/bin/minikube completion bash) \
+      --fish <($out/bin/minikube completion fish) \
+      --zsh <($out/bin/minikube completion zsh)
 
     runHook postInstall
   '';
