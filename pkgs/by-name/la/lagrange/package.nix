@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Beautiful Gemini Client";
     homepage = "https://gmi.skyjake.fi/lagrange/";
+    mainProgram = "lagrange";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
