@@ -11,7 +11,7 @@
   fireworks-ai,
   langchain-core,
   openai,
-  pydantic,
+  requests,
 
   # tests
   langchain-tests,
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     fireworks-ai
     langchain-core
     openai
-    pydantic
+    requests
   ];
 
   pythonRelaxDeps = [
