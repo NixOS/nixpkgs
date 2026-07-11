@@ -8437,9 +8437,6 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  apngasm = callPackage ../applications/graphics/apngasm { };
-  apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
-
   arelle = with python3Packages; toPythonApplication arelle;
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
@@ -9368,10 +9365,6 @@ with pkgs;
   rtl-sdr = rtl-sdr-blog;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
-
-  scantailor-advanced = callPackage ../applications/graphics/scantailor/advanced.nix { };
-
-  scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
   sweethome3d = recurseIntoAttrs (
     (callPackage ../applications/misc/sweethome3d { })
