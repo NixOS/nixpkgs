@@ -795,7 +795,6 @@ let
     sodium = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
-    strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
     stsm = [ pkgs.gsl ];
@@ -1554,6 +1553,7 @@ let
     spp = with pkgs; [ zlib.dev ];
     ssh = with pkgs; [ libssh ];
     stpphawkes = [ pkgs.gsl ];
+    strawr = [ pkgs.curl ];
     stringi = [ pkgs.icu74 ];
     surveyvoi = with pkgs; [
       gmp.dev
