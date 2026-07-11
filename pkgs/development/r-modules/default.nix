@@ -455,7 +455,7 @@ let
     ];
     RcppDPR = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     RcppGSL = [ pkgs.gsl ]; # for gsl-config
-    RcppMeCab = [ pkgs.pkg-config ];
+    RcppMeCab = [ pkgs.mecab ]; # for mecab-config
     RcppPlanc = with pkgs; [
       which
       cmake
@@ -997,7 +997,6 @@ let
       pcre2
       glib
     ];
-    RcppMeCab = [ pkgs.mecab ];
     RcppPlanc = with pkgs; [
       hwloc
       hdf5.dev
