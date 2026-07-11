@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomematic";
-  version = "2026.5.11";
+  version = "2026.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = version;
-    hash = "sha256-Ua7/sLhL0mbZvJwx+TNfXoP+z+jE2TyCO3DqsFpPe6A=";
+    hash = "sha256-P9w6re8ZRw04v6YKSYeYwjrpYpwqGSmRNWk4J+GbwpM=";
   };
 
   build-system = [ setuptools ];
