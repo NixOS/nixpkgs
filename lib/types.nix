@@ -91,6 +91,14 @@ let
     in
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
+  # Shared binOp for elemType-based functors, allocated once instead of per call.
+  elemTypeBinOp =
+    a: b:
+    let
+      merged = a.elemType.typeMerge b.elemType.functor;
+    in
+    if merged == null then null else { elemType = merged; };
+
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
   # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
@@ -99,12 +107,7 @@ let
     {
       inherit name payload;
       type = types.${name};
-      binOp =
-        a: b:
-        let
-          merged = a.elemType.typeMerge b.elemType.functor;
-        in
-        if merged == null then null else { elemType = merged; };
+      binOp = elemTypeBinOp;
     };
 
   checkDefsForError =
@@ -550,7 +553,8 @@ rec {
       descriptionClass = "noun";
       check = x: str.check x && builtins.match pattern x != null;
       inherit (str) merge;
-      functor = defaultFunctor "strMatching" // {
+      functor = {
+        name = "strMatching";
         type = payload: strMatching payload.pattern;
         payload = { inherit pattern; };
         binOp = lhs: rhs: if lhs == rhs then lhs else null;
@@ -567,7 +571,8 @@ rec {
       descriptionClass = "noun";
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
-      functor = (defaultFunctor name) // {
+      functor = {
+        inherit name;
         payload = { inherit sep; };
         type = payload: lib.types.separatedString payload.sep;
         binOp = lhs: rhs: if lhs.sep == rhs.sep then { inherit (lhs) sep; } else null;
@@ -674,7 +679,8 @@ rec {
         descriptionClass = "noun";
 
         merge = mergeEqualOption;
-        functor = defaultFunctor "path" // {
+        functor = {
+          name = "path";
           type = pathWith;
           payload = { inherit inStore absolute; };
           binOp = lhs: rhs: if lhs == rhs then lhs else null;
@@ -1161,7 +1167,8 @@ rec {
             tag: opt: opt // (optionalAttrs (tagsWithNewTypes ? ${tag}) { type = tagsWithNewTypes.${tag}; })
           ) tags
         );
-      functor = defaultFunctor "attrTag" // {
+      functor = {
+        name = "attrTag";
         type = { tags, ... }: lib.types.attrTag tags;
         payload = { inherit tags; };
         binOp =
@@ -1334,7 +1341,8 @@ rec {
             staticModules = m;
           }
         );
-      functor = defaultFunctor "deferredModuleWith" // {
+      functor = {
+        name = "deferredModuleWith";
         type = lib.types.deferredModuleWith;
         payload = {
           inherit staticModules;
@@ -1497,13 +1505,16 @@ rec {
           # configuration. See `noCheckForDocsModule` comment.
           inherit (docsEval._module) freeformType;
         in
-        docsEval.options
-        // optionalAttrs (freeformType != null) {
-          # Expose the sub options of the freeform type. Note that the option
-          # discovery doesn't care about the attribute name used here, so this
-          # is just to avoid conflicts with potential options from the submodule
-          _freeformOptions = freeformType.getSubOptions prefix;
-        };
+        if freeformType != null then
+          docsEval.options
+          // {
+            # Expose the sub options of the freeform type. Note that the option
+            # discovery doesn't care about the attribute name used here, so this
+            # is just to avoid conflicts with potential options from the submodule
+            _freeformOptions = freeformType.getSubOptions prefix;
+          }
+        else
+          docsEval.options;
       getSubModules = modules;
       substSubModules =
         m:
@@ -1513,10 +1524,9 @@ rec {
             modules = m;
           }
         );
-      nestedTypes = lib.optionalAttrs (freeformType != null) {
-        freeformType = freeformType;
-      };
-      functor = defaultFunctor name // {
+      nestedTypes = if freeformType != null then { inherit freeformType; } else { };
+      functor = {
+        inherit name;
         type = lib.types.submoduleWith;
         payload = {
           inherit
@@ -1602,7 +1612,8 @@ rec {
       descriptionClass = if builtins.length values < 2 then "noun" else "conjunction";
       check = flip elem values;
       merge = mergeEqualOption;
-      functor = (defaultFunctor name) // {
+      functor = {
+        inherit name;
         payload = { inherit values; };
         type = payload: lib.types.enum payload.values;
         binOp = a: b: { values = unique (a.values ++ b.values); };
