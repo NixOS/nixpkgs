@@ -16,12 +16,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "docker-sbx";
-  version = "0.34.0";
+  version = "0.35.0";
   src =
     if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/docker/sbx-releases/releases/download/v${finalAttrs.version}/DockerSandboxes-linux-amd64.tar.gz";
-        hash = "sha256-5H9LOyKi0/SBVJ0ld6OkcP1h9r9eHrAb4fsVVVdMusg=";
+        hash = "sha256-FG2q69lI8ru45GwxwTm3lTHJp4D5T5FaD8TKwuvPsFs=";
       }
     else if stdenvNoCC.hostPlatform.system == "aarch64-linux" then
       fetchurl {
