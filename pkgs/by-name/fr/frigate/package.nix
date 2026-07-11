@@ -102,6 +102,9 @@ python3Packages.buildPythonApplication rec {
     # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resultion in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''
