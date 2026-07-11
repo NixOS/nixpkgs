@@ -12,12 +12,22 @@
 let
   inherit (pkgs) symlinkJoin callPackage mathjax;
 
+  isDarwinAarch64 = pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64;
+
+  ntl = if (!isDarwinAarch64) then pkgs.ntl else pkgs.ntl.overrideAttrs (old: {
+    configureFlags = (old.configureFlags or [ ]) ++ [
+      "NTL_THREADS=off"
+      "NTL_THREAD_BOOST=off"
+    ];
+  });
+
   python3 = pkgs.python3 // {
     pkgs = pkgs.python3.pkgs.overrideScope (
       self: super: {
         # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
         sagelib = self.callPackage ./sagelib.nix {
           inherit flint;
+          inherit ntl;
           inherit sage-src env-locations singular;
           inherit (maxima) lisp-compiler;
           linbox = pkgs.linbox;
@@ -80,6 +90,7 @@ let
       singular
       palp
       flint
+      ntl
       pythonEnv
       maxima
       ;
@@ -94,6 +105,7 @@ let
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit python3 pythonEnv;
+    inherit ntl;
     inherit sage-env;
     inherit singular maxima;
     inherit three;
