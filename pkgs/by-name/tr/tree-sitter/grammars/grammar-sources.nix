@@ -1250,6 +1250,14 @@
     };
   };
 
+  hdl = {
+    version = "0-unstable-2025-09-09";
+    url = "github:quantonganh/tree-sitter-hdl";
+    rev = "2199fdf1d302100a53002ea2cf540999119836a0";
+    hash = "sha256-aurnBP9R03QN1cDTKpZbp1VX3HCYjleRkSQs6m1aCxA=";
+    meta.license = lib.licenses.mit;
+  };
+
   heex = {
     version = "0.9.0";
     url = "github:phoenixframework/tree-sitter-heex";
