@@ -265,6 +265,8 @@ in
           description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
+
+        pandoc = lib.mkEnableOption "pandoc integration for previewing LibreOffice and Microsoft Office documents";
       };
     };
   };
@@ -310,6 +312,7 @@ in
         imagemagick_convert_command = lib.optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
         gs_command = lib.optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
+        pandoc_command = lib.optionalString cfg.components.pandoc "${pkgs.pandoc}/bin/pandoc";
       };
     };
 
