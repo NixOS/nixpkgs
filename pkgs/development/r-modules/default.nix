@@ -741,7 +741,7 @@ let
     reprex = [ pkgs.which ];
     resultant = [ pkgs.pkg-config ];
     rgdal = [ pkgs.gdal ]; # for gdal-config
-    rgeos = [ pkgs.geos ];
+    rgeos = [ pkgs.geos ]; # for geos-config
     rhdf5 = [ pkgs.zlib ];
     ridge = [ pkgs.gsl ];
     rjags = [ pkgs.pkg-config ];
