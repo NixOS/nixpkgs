@@ -343,6 +343,15 @@
     };
   };
 
+  concerto = {
+    version = "0-unstable-2026-03-19";
+    url = "github:accordproject/concerto-tree-sitter";
+    rev = "920ba23ea93af56b19dfc38fcddf80b3ddc62685";
+    hash = "sha256-WD+YEdwZJg4F4wNvUGDIMsL68QUt5AMypfC22lmLB+8=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.asl20;
+  };
+
   cpon = {
     version = "0-unstable-2023-06-06";
     url = "github:fvacek/tree-sitter-cpon";
