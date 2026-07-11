@@ -596,8 +596,8 @@ let
     ];
     diseq = [ pkgs.gsl ]; # for gsl-config
     diversitree = [ pkgs.gsl ]; # for gsl-config
-    dynr = [ pkgs.gsl ];
-    eaf = [ pkgs.gsl ];
+    dynr = [ pkgs.gsl ]; # for gsl-config
+    eaf = [ pkgs.gsl ]; # for gsl-config
     exactextractr = [ pkgs.geos ];
     fRLR = [ pkgs.gsl ];
     fangs = with pkgs; [
