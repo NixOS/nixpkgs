@@ -411,12 +411,14 @@ lib.extendMkDerivation {
 
       passthru = {
         inherit
-          disabled
           pyproject
           build-system
           dependencies
           optional-dependencies
           ;
+
+        disabled = meta ? problems.unsupportedPython || disabled;
+
         updateScript = nix-update-script { };
         # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
         # They are internal and subject to changes.
@@ -432,7 +434,22 @@ lib.extendMkDerivation {
         platforms = python.meta.platforms;
         isBuildPythonPackage = python.meta.platforms;
       }
-      // meta;
+      // meta
+      // {
+        problems =
+          let
+            disabled' = meta ? problems.unsupportedPython || finalAttrs.disabled;
+          in
+          meta.problems or { }
+          // {
+            ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
+              kind = "broken";
+              message =
+                meta.problems.unsupportedPython.message
+                  or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
+            };
+          };
+      };
     }
     // optionalAttrs (attrs ? checkPhase) {
       # If given use the specified checkPhase, otherwise use the setup hook.
@@ -468,20 +485,5 @@ lib.extendMkDerivation {
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.
-  transformDrv =
-    let
-      # Workaround to make the `lib.extendDerivation`-based disabled functionality
-      # respect `<pkg>.overrideAttrs`
-      # It doesn't cover `<pkg>.<output>.overrideAttrs`.
-      disablePythonPackage =
-        drv:
-        extendDerivation (
-          drv.disabled
-          -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
-        ) { } drv
-        // {
-          overrideAttrs = fdrv: disablePythonPackage (drv.overrideAttrs fdrv);
-        };
-    in
-    drv: disablePythonPackage (toPythonModule drv);
+  transformDrv = toPythonModule;
 }
