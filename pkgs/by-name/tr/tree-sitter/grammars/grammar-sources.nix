@@ -1063,6 +1063,13 @@
     };
   };
 
+  go-format-string = {
+    version = "1.1.0";
+    url = "codeberg:kpbaks/tree-sitter-go-format-string";
+    hash = "sha256-Em9uodgqj1TXyZieLuwrYouth5r4UvZoBFSSbzAqJE0=";
+    meta.license = lib.licenses.mit;
+  };
+
   go-template = {
     version = "0-unstable-2026-03-21";
     url = "github:ngalaiko/tree-sitter-go-template";
