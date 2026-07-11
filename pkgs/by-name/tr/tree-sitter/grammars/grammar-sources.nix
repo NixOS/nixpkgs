@@ -212,6 +212,14 @@
     };
   };
 
+  c3 = {
+    version = "0.11.0";
+    url = "github:c3lang/tree-sitter-c3";
+    hash = "sha256-EADHh63Sf4VlffQX3gH/9kodiws4lQsG+cyMwg1dFp8=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   caddyfile = {
     version = "0-unstable-2026-04-06";
     url = "github:caddyserver/tree-sitter-caddyfile";
