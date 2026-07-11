@@ -8,10 +8,12 @@
 
   # dependencies
   boto3,
-  langchain,
   langchain-core,
   numpy,
   pydantic,
+
+  # tests
+  langchain,
 
   # optional-dependencies
   anthropic,
@@ -51,7 +53,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     boto3
-    langchain
     langchain-core
     numpy
     pydantic
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     anthropic
+    langchain
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
