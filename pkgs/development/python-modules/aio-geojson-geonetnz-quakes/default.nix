@@ -2,6 +2,7 @@
   lib,
   aio-geojson-client,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-quakes";
-  version = "0.17";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
     tag = "v${version}";
-    hash = "sha256-RZ+wgLYMl7y3CdmlipsfZGcew1pYSMEhkyyeLqIwVwI=";
+    hash = "sha256-JzhKlQR7tNRCtiEVSQGWFIDxUl6o+jhR3kKYjRCMTAU=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
