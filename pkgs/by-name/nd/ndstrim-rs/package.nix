@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ndstrim-rs";
   version = "0.2.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Nemris";
     repo = "ndstrim-rs";
