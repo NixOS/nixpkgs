@@ -669,7 +669,6 @@ let
     ];
     hSDM = [ pkgs.gsl ];
     harbinger = [ pkgs.glibcLocales ];
-    haven = with pkgs; [ zlib.dev ];
     heck = with pkgs; [
       cargo
       rustc
@@ -1308,6 +1307,7 @@ let
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
     hadron = [ pkgs.gsl ];
+    haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib.dev ];
     httpuv = [ pkgs.zlib ];
     igraph = with pkgs; [
