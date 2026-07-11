@@ -1773,6 +1773,13 @@
     meta.license = lib.licenses.mit;
   };
 
+  luap = {
+    version = "1.0.1";
+    url = "github:tree-sitter-grammars/tree-sitter-luap";
+    hash = "sha256-SW2ubK5317GUc1dQLkhoaisMgctLOwr6TPVYSQh02vE=";
+    meta.license = lib.licenses.mit;
+  };
+
   luau = {
     version = "0-unstable-2025-12-08";
     url = "github:polychromatist/tree-sitter-luau";
