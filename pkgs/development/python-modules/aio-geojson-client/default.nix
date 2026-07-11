@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.21";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
     tag = "v${version}";
-    hash = "sha256-zHgqsl278XBr2X8oQOsnIQxfyYuB5G8NLcTNy4oerUI=";
+    hash = "sha256-gC6z3If8OJKDXqpBsWFMy5rYpeqZ2wjljw/dksD0XIU=";
   };
 
   pythonRelaxDeps = [ "geojson" ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    aiointercept
     mock
     pytest-asyncio
     pytestCheckHook
