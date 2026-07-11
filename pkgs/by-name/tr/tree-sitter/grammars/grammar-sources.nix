@@ -2258,6 +2258,13 @@
     };
   };
 
+  picat = {
+    version = "0.1.0";
+    url = "github:dlr-ft/tree-sitter-picat";
+    hash = "sha256-xMiQQHC2GsH9MQJDQkSeAaFr5g7tix0CVn3JvgwxauQ=";
+    meta.license = lib.licenses.mit;
+  };
+
   pioasm = {
     version = "0-unstable-2024-10-12";
     url = "github:leo60228/tree-sitter-pioasm";
