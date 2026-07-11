@@ -769,7 +769,6 @@ let
     ];
     rtracklayer = [ pkgs.pkg-config ];
     runjags = [ pkgs.pkg-config ];
-    rvg = [ pkgs.libpng.dev ];
     rzmq = [ pkgs.pkg-config ];
     s2 = [ pkgs.pkg-config ];
     salso = with pkgs; [
@@ -1510,6 +1509,7 @@ let
       curl
     ];
     runjags = [ pkgs.jags ];
+    rvg = [ pkgs.libpng ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
       abseil-cpp
