@@ -699,7 +699,6 @@ let
     neojags = [ pkgs.pkg-config ];
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
-    oligo = [ pkgs.zlib.dev ];
     opencv = [ pkgs.pkg-config ];
     otelsdk = with pkgs; [
       cmake
@@ -1399,6 +1398,7 @@ let
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
+    oligo = [ pkgs.zlib ];
     otelsdk = with pkgs; [
       protobuf
       zlib.dev
