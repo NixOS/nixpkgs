@@ -18,6 +18,15 @@ let
       "yes"
     else if false == value then
       "no"
+    else if isString value then
+      # Escape according to https://www.php.net/manual/en/function.parse-ini-file.php
+      # Not escaping `$` since users might want to use that to interpolate environment variables.
+      # Additionally, php-fpm applies post-processing to env values that start with `$` and replaces
+      # them with the respective env variable, with no way to escape: https://github.com/php/php-src/blob/631c366f9f58c8ba4078a48d1f56187cfbf8e549/sapi/fpm/fpm/fpm_env.c#L171-L180
+      # In all platforms except for Windows, PHP_EOL is the line feed `\n` character,
+      # which we use here as an escape value since php-fpm parses the config line-by-line.
+      # See https://github.com/NixOS/nixpkgs/pull/516530#issuecomment-4878738511 for more information.
+      ''"${replaceString "\n" ''" PHP_EOL "'' (escape [ "\"" "\\" ] value)}"''
     else
       toString value;
 
