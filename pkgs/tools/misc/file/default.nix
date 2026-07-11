@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW libgnurx;
 
+  configureFlags = [
+    "--disable-landlock" # Landlock causes permissions issues that breaks MIME type detection and breaks tests for `patool`
+  ];
+
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;
 
