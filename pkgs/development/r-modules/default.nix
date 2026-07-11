@@ -1232,6 +1232,10 @@ let
     bbl = with pkgs; [ gsl ];
     bgx = [ pkgs.boost ];
     bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
+    bigrquerystorage = with pkgs; [
+      grpc
+      protobuf
+    ];
     bigsnpr = [ pkgs.zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
     bioacoustics = [ pkgs.fftw ];
