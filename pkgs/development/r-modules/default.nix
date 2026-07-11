@@ -499,10 +499,7 @@ let
     SymTS = [ pkgs.gsl ]; # for gsl-config
     V8 = [ pkgs.pkg-config ];
     VBLPCM = [ pkgs.gsl ]; # for gsl-config
-    XBRL = with pkgs; [
-      zlib
-      libxml2.dev
-    ];
+    XBRL = [ pkgs.libxml2 ]; # for xml2-config
     XML = with pkgs; [
       pkg-config
       libxml2 # for xml2-config
