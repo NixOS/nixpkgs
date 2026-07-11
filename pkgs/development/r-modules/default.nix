@@ -695,10 +695,6 @@ let
     mvst = [ pkgs.gsl ]; # for gsl-config
     mwaved = [ pkgs.pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
-    nanonext = with pkgs; [
-      mbedtls
-      nng
-    ];
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.pkg-config ];
@@ -1392,6 +1388,10 @@ let
     mutscan = [ pkgs.zlib.dev ];
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw ];
+    nanonext = with pkgs; [
+      mbedtls
+      nng
+    ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     ncdfFlow = [ pkgs.zlib.dev ];
