@@ -25,6 +25,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "gtfs-realtime-bindings"
+  ];
+
   dependencies = [
     aiofiles
     aiohttp

@@ -1,78 +1,68 @@
 {
   buildDotnetModule,
-  buildNpmPackage,
   dotnet-sdk,
   fetchFromGitHub,
+  fetchNpmDeps,
   lib,
   nixosTests,
-  writeShellApplication,
-  _experimental-update-script-combinators,
+  nodejs,
+  npmHooks,
   nix-update-script,
 }:
 
-let
-  version = "1.0.33.0";
+buildDotnetModule (finalAttrs: {
+  pname = "immichframe";
+  version = "1.0.35.0";
+
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
-    tag = "v${version}";
-    hash = "sha256-b8hfzNZJz9XCRO4UfzwK5OsrgqV2F5wnZlRH7h3Eo9Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VET0em+CyJzXPlCXjozj6SDhjD26lH94AETFKGG895I=";
   };
 
-  api = buildDotnetModule {
-    pname = "immichframe";
-    inherit version src;
-    projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
-    nugetDeps = ./deps.json;
-    dotnet-runtime = dotnet-sdk.aspnetcore;
+  projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
+  nugetDeps = ./deps.json;
+  dotnet-runtime = dotnet-sdk.aspnetcore;
 
-    meta.mainProgram = "ImmichFrame.WebApi";
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+    nodejs
+  ];
+
+  npmRoot = "immichFrame.Web";
+
+  npmDeps = fetchNpmDeps {
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-RyMY5ooC6Q+W+Y24ILv+WCcWLMDToZ52yefFuoAYubY=";
   };
 
-  frontend = buildNpmPackage {
-    pname = "immichframe-frontend";
-    inherit version src;
-
-    sourceRoot = "${src.name}/immichFrame.Web";
-
-    npmBuildScript = "build";
-    npmDepsHash = "sha256-PjbbBpYYUHH4oucJuk0FCdJa0LzTlkQnjkZ5MLziqTY=";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp -r build/ $out/wwwroot
-
-      runHook postInstall
-    '';
-  };
-in
-writeShellApplication {
-  name = "ImmichFrame";
-
-  text = ''
-    cd ${frontend}
-    exec ${lib.getExe api} "$@"
+  preBuild = ''
+    pushd ${finalAttrs.npmRoot}
+    npm run build
+    popd
   '';
 
+  postInstall = ''
+    cp -r ${finalAttrs.npmRoot}/build/* $out/lib/immichframe/wwwroot/
+  '';
+
+  makeWrapperArgs = [
+    "--chdir ${placeholder "out"}/lib/immichframe"
+  ];
+
   passthru = {
-    inherit api frontend;
-    updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script { attrPath = "immichframe.api"; })
-      (nix-update-script {
-        attrPath = "immichframe.frontend";
-        extraArgs = [ "--version=skip" ];
-      })
-    ];
+    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) immichframe; };
   };
 
   meta = {
+    changelog = "https://github.com/immichFrame/ImmichFrame/releases/tag/${finalAttrs.src.tag}";
     description = "Display your photos from Immich as a digital photo frame";
     homepage = "https://immichframe.dev";
     license = lib.licenses.gpl3Only;
+    mainProgram = "ImmichFrame.WebApi";
     maintainers = with lib.maintainers; [ jfly ];
     platforms = lib.platforms.all;
   };
-}
+})
