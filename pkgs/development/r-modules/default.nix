@@ -685,9 +685,9 @@ let
       geos # for geos-config
     ];
     magick = [ pkgs.pkg-config ];
-    mcrPioda = [ pkgs.gsl ];
-    mixlink = [ pkgs.gsl ];
-    mixture = [ pkgs.gsl ];
+    mcrPioda = [ pkgs.gsl ]; # for gsl-config
+    mixlink = [ pkgs.gsl ]; # for gsl-config
+    mixture = [ pkgs.gsl ]; # for gsl-config
     mmpca = [ pkgs.gsl ];
     monoreg = [ pkgs.gsl ];
     multibridge = [ pkgs.pkg-config ];
