@@ -646,14 +646,14 @@ let
       cargo
       rustc
     ];
-    hSDM = [ pkgs.gsl ];
+    hSDM = [ pkgs.gsl ]; # for gsl-config
     harbinger = [ pkgs.glibcLocales ];
     heck = with pkgs; [
       cargo
       rustc
     ];
     hellorust = [ pkgs.cargo ];
-    hgwrr = [ pkgs.gsl ];
+    hgwrr = [ pkgs.gsl ]; # for gsl-config
     highs = [
       pkgs.which
       pkgs.cmake
