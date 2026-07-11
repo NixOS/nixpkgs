@@ -81,6 +81,7 @@ let
           {
             # keep-sorted start case=no
             espeakNg = "espeak-ng";
+            festival = "festival";
             flite = "flite";
             mary = "mary";
             pico = "pico";
