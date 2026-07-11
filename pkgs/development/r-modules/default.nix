@@ -729,10 +729,9 @@ let
     rapportools = [ pkgs.which ];
     ratioOfQsprays = [ pkgs.pkg-config ];
     ravetools = [ pkgs.pkg-config ];
-    rbedrock = [
-      pkgs.zlib.dev
-      pkgs.which
-      pkgs.cmake
+    rbedrock = with pkgs; [
+      which
+      cmake
     ];
     rbm25 = with pkgs; [
       cargo
@@ -1469,6 +1468,7 @@ let
     ];
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
+    rbedrock = [ pkgs.zlib ];
     rcontroll = [ pkgs.gsl.dev ];
     redux = [ pkgs.hiredis ];
     registr = with pkgs; [
