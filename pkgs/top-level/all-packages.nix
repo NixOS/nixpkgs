@@ -8521,17 +8521,6 @@ with pkgs;
       extraIntegrations = extras;
     };
 
-  deadbeefPlugins = recurseIntoAttrs {
-    headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
-    lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
-    mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
-    musical-spectrum = callPackage ../applications/audio/deadbeef/plugins/musical-spectrum.nix { };
-    statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
-    playlist-manager = callPackage ../applications/audio/deadbeef/plugins/playlist-manager.nix { };
-    vgmstream = callPackage ../applications/audio/deadbeef/plugins/vgmstream.nix { };
-    waveform-seekbar = callPackage ../applications/audio/deadbeef/plugins/waveform-seekbar.nix { };
-  };
-
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
   djview4 = djview;
