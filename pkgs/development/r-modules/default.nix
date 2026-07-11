@@ -520,10 +520,9 @@ let
       rustc
     ];
     arcgisplaces = with pkgs; [
-      pkg-config
-      openssl.dev
       cargo
       rustc
+      pkg-config
     ];
     arcgisutils = with pkgs; [
       cargo
@@ -968,7 +967,6 @@ let
       cargo
       rustc
     ];
-    yyjsonr = with pkgs; [ zlib.dev ];
     # keep-sorted end
   };
 
@@ -1213,6 +1211,7 @@ let
     affyPLM = [ pkgs.zlib ];
     affyio = [ pkgs.zlib ];
     apsimx = [ pkgs.which ];
+    arcgisplaces = [ pkgs.openssl ];
     archive = [ pkgs.libarchive ];
     arrangements = with pkgs; [ gmp.dev ];
     asciicast = with pkgs; [
@@ -1633,6 +1632,7 @@ let
         libxml2
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xz ];
+    yyjsonr = [ pkgs.zlib ];
     zlib = [ pkgs.zlib.dev ];
     # keep-sorted end
   };
