@@ -2,6 +2,7 @@
   lib,
   aio-geojson-client,
   aiohttp,
+  aiointercept,
   aioresponses,
   mock,
   buildPythonPackage,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.10";
+  version = "2026.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     tag = "v${version}";
-    hash = "sha256-B+jULYeel7efk7fB26zXQyS1ZCsmFVKlOkfnKWFQFJ4=";
+    hash = "sha256-BA8ejjzwonIYsLrBP3MGBfZ3bKoj2h/Qe4TcjL16FOA=";
   };
 
   build-system = [ setuptools ];
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     mock
     pytest-asyncio
