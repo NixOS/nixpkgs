@@ -1045,6 +1045,15 @@
     };
   };
 
+  gnuplot = {
+    version = "0-unstable-2026-01-29";
+    url = "codeberg:maribu/tree-sitter-gnuplot";
+    rev = "21a3a3929facb964b3592daeb69119294ff84cf2";
+    hash = "sha256-2Z0CDtLOZ7LWffFboxO+tE0VWEkzNNodFMXr5PHQkoo=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.bsd0;
+  };
+
   go = {
     version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-go";
