@@ -82,26 +82,22 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    let
-      inherit (lib) licenses maintainers;
-    in
-    {
-      description = "C library designed for embedded 32- and 64- bit systems";
-      longDescription = ''
-        Picolibc is library offering standard C library APIs that targets
-        small embedded systems with limited RAM. Picolibc was formed by blending
-        code from [Newlib](http://sourceware.org/newlib/) and
-        [AVR Libc](https://www.nongnu.org/avr-libc/).
-      '';
-      homepage = "https://keithp.com/picolibc/";
-      changelog = "https://github.com/picolibc/picolibc/releases/tag/${finalAttrs.version}";
-      license = [
-        licenses.bsd2
-        licenses.bsd3
-      ];
-      maintainers = [ ];
-      # https://github.com/picolibc/picolibc/tree/db4d0fe5952d5ecd714781e3212d4086d970735a?tab=readme-ov-file#supported-architectures
-      platforms = lib.platforms.all;
-    };
+  meta = {
+    description = "C library designed for embedded 32- and 64-bit systems";
+    longDescription = ''
+      Picolibc is library offering standard C library APIs that targets small
+      embedded systems with limited RAM. Picolibc was formed by blending code
+      from [Newlib](http://sourceware.org/newlib/) and [AVR
+      Libc](https://www.nongnu.org/avr-libc/).
+    '';
+    homepage = "https://keithp.com/picolibc/";
+    changelog = "https://github.com/picolibc/picolibc/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+    ];
+    maintainers = [ ];
+    # https://github.com/picolibc/picolibc/tree/${finalAttrs.version}?tab=readme-ov-file#supported-architectures
+    platforms = lib.platforms.all;
+  };
 })
