@@ -509,8 +509,6 @@ let
       jags
     ];
     adimpro = [ pkgs.imagemagick ];
-    affyPLM = [ pkgs.zlib.dev ];
-    affyio = [ pkgs.zlib.dev ];
     alcyon = with pkgs; [
       cmake
       which
@@ -1212,6 +1210,8 @@ let
       which
       xdpyinfo
     ];
+    affyPLM = [ pkgs.zlib ];
+    affyio = [ pkgs.zlib ];
     apsimx = [ pkgs.which ];
     archive = [ pkgs.libarchive ];
     arrangements = with pkgs; [ gmp.dev ];
