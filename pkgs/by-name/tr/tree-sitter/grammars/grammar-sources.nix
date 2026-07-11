@@ -272,6 +272,14 @@
     };
   };
 
+  chuck = {
+    version = "0-unstable-2026-03-27";
+    url = "github:tymbalodeon/tree-sitter-chuck";
+    rev = "68fb7bdba480915d87177feaa5593a666c0bb602";
+    hash = "sha256-yd+RWeY+gHtTkRaxYxXSv27yWupjZtnIDxbsUAMa9eg=";
+    meta.license = lib.licenses.mit;
+  };
+
   circom = {
     version = "0-unstable-2024-09-09";
     url = "github:Decurity/tree-sitter-circom";
