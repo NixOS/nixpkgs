@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     "-skip=TestSSH"
   ];
 
-  postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
+  postInstall = "rm $out/bin/cli $out/bin/sandbox"; # remove gendoc helper binaries
 
   meta = {
     changelog = "https://github.com/gittuf/gittuf/blob/v${finalAttrs.version}/CHANGELOG.md";
