@@ -2648,6 +2648,13 @@
     meta.license = lib.licenses.mit;
   };
 
+  rshtml = {
+    version = "0.1.6";
+    url = "github:rshtml/tree-sitter-rshtml";
+    hash = "sha256-7RzjvJEMhtWDRnaoLki7FjTK9Y7+ZECE5gIqGUlx6DE=";
+    meta.license = lib.licenses.mit;
+  };
+
   rst = {
     version = "0.2.0";
     url = "github:stsewd/tree-sitter-rst";
