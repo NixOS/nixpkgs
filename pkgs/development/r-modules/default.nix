@@ -815,7 +815,7 @@ let
     rgeos = [ pkgs.geos ];
     rhdf5 = [ pkgs.zlib ];
     ridge = [ pkgs.gsl ];
-    rjags = [ pkgs.jags ];
+    rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
     rmatio = [
       pkgs.zlib.dev
@@ -1479,6 +1479,7 @@ let
       zlib.dev
       bzip2.dev
     ];
+    rjags = [ pkgs.jags ];
     rlas = with pkgs; [
       boost
       gdal
