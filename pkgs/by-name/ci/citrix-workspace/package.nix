@@ -18,12 +18,8 @@
   gdk-pixbuf,
   glib,
   glib-networking,
-  gnome2,
   gst_all_1,
-  gtk2,
-  gtk2-x11,
   gtk3,
-  gtk_engines,
   harfbuzzFull,
   heimdal,
   hyphen,
@@ -41,7 +37,6 @@
   libjson,
   libmanette,
   libnotify,
-  libpng12,
   libpulseaudio,
   libredirect,
   libseccomp,
@@ -77,7 +72,6 @@
   xprop,
   xdpyinfo,
   libxcb,
-  x264,
   zlib,
 
   extraCerts ? [ ],
@@ -168,11 +162,7 @@ stdenv.mkDerivation rec {
     fuse3'
     gdk-pixbuf
     glib-networking
-    gnome2.gtkglext
-    gtk2
-    gtk2-x11
     gtk3
-    gtk_engines
     harfbuzzFull
     heimdal
     hyphen
@@ -188,7 +178,6 @@ stdenv.mkDerivation rec {
     libjson
     libmanette
     libnotify
-    libpng12
     libpulseaudio
     libseccomp
     libsecret
@@ -212,7 +201,6 @@ stdenv.mkDerivation rec {
     libxaw
     libxmu
     libxtst
-    x264
     zlib
   ]
   ++ gstPackages;
