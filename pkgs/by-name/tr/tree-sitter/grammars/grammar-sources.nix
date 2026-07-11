@@ -2731,6 +2731,13 @@
     };
   };
 
+  shellcheckrc = {
+    version = "0.1.0";
+    url = "codeberg:kpbaks/tree-sitter-shellcheckrc";
+    hash = "sha256-f7hko5qYClgft2vvw95w/yU21r/pN5LkqaGJ/aAq8bM=";
+    meta.license = lib.licenses.mit;
+  };
+
   slang = {
     version = "0.3.1-unstable-2025-09-01";
     url = "github:tree-sitter-grammars/tree-sitter-slang";
