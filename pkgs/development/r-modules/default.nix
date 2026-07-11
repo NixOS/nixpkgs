@@ -694,10 +694,6 @@ let
     mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mvst = [ pkgs.gsl ]; # for gsl-config
     mwaved = [ pkgs.pkg-config ];
-    mzR = with pkgs; [
-      zlib
-      netcdf
-    ];
     n1qn1 = [ pkgs.gfortran ];
     nanonext = with pkgs; [
       mbedtls
