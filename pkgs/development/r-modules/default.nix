@@ -598,8 +598,8 @@ let
     diversitree = [ pkgs.gsl ]; # for gsl-config
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
-    exactextractr = [ pkgs.geos ];
-    fRLR = [ pkgs.gsl ];
+    exactextractr = [ pkgs.geos ]; # for geos-config
+    fRLR = [ pkgs.gsl ]; # for gsl-config
     fangs = with pkgs; [
       cargo
       rustc
