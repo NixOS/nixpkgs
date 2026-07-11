@@ -543,7 +543,6 @@ let
       cargo
       rustc
     ];
-    audio = [ pkgs.portaudio ];
     awdb = with pkgs; [
       cargo
       rustc
@@ -558,10 +557,8 @@ let
       protobuf
       which
     ];
-    bio3d = [ pkgs.zlib ];
     bioacoustics = [ pkgs.cmake ];
     blosc = [ pkgs.pkg-config ];
-    bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.pkg-config ];
     cartogramR = [ pkgs.pkg-config ];
     caugi = with pkgs; [
@@ -577,18 +574,11 @@ let
       cargo
       rustc
     ];
-    cit = [ pkgs.gsl ];
+    cit = [ pkgs.gsl ]; # for gsl-config
     clarabel = [ pkgs.cargo ];
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
-    cpp11bigwig = with pkgs; [
-      zlib.dev
-      curl.dev
-    ];
-    cpp11qpdf = with pkgs; [
-      zlib.dev
-      libjpeg
-    ];
+    cpp11bigwig = [ pkgs.curl ]; # for curl-config
     crc32c = [
       pkgs.which
       pkgs.cmake
@@ -604,16 +594,12 @@ let
       cargo
       rustc
     ];
-    devEMF = with pkgs; [ libxft.dev ];
-    diseq = [ pkgs.gsl ];
-    diversitree = with pkgs; [
-      gsl
-      fftw
-    ];
-    dynr = [ pkgs.gsl ];
-    eaf = [ pkgs.gsl ];
-    exactextractr = [ pkgs.geos ];
-    fRLR = [ pkgs.gsl ];
+    diseq = [ pkgs.gsl ]; # for gsl-config
+    diversitree = [ pkgs.gsl ]; # for gsl-config
+    dynr = [ pkgs.gsl ]; # for gsl-config
+    eaf = [ pkgs.gsl ]; # for gsl-config
+    exactextractr = [ pkgs.geos ]; # for geos-config
+    fRLR = [ pkgs.gsl ]; # for gsl-config
     fangs = with pkgs; [
       cargo
       rustc
@@ -622,26 +608,20 @@ let
       cargo
       rustc
     ];
-    fastpng = [ pkgs.zlib.dev ];
     fcl = with pkgs; [
       cargo
       rustc
     ];
     fftw = [ pkgs.pkg-config ];
     fftwtools = [ pkgs.pkg-config ];
-    fingerPro = [ pkgs.gsl ];
+    fingerPro = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     fio = with pkgs; [
       cargo
       rustc
     ];
-    flint = with pkgs; [
-      pkg-config
-      gmp.dev
-      mpfr.dev
-      flint
-    ];
-    flowPeaks = [ pkgs.gsl ];
-    frailtyMMpen = [ pkgs.gsl ];
+    flint = [ pkgs.pkg-config ];
+    flowPeaks = [ pkgs.gsl ]; # for gsl-config
+    frailtyMMpen = [ pkgs.gsl ]; # for gsl-config
     fru = with pkgs; [
       cargo
       rustc
@@ -650,78 +630,51 @@ let
       cargo
       rustc
     ];
-    gamstransfer = [ pkgs.zlib ];
     gdalcubes = [ pkgs.pkg-config ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
-    gert = [ pkgs.libgit2 ];
-    ggiraph = [ pkgs.libpng.dev ];
+    gert = [ pkgs.pkg-config ];
     gglinedensity = [ pkgs.cargo ];
-    git2r = with pkgs; [
-      zlib.dev
-      openssl.dev
-      libssh2.dev
-      libgit2
-      pkg-config
-    ];
+    git2r = [ pkgs.pkg-config ];
     glpkAPI = with pkgs; [
       gmp
       glpk
     ];
-    gmapR = [ pkgs.zlib.dev ];
-    graphscan = [ pkgs.gsl ];
-    gsl = [ pkgs.gsl ];
-    gslnls = [ pkgs.gsl ];
+    gsl = [ pkgs.gsl ]; # for gsl-config
+    gslnls = [ pkgs.gsl ]; # for gsl-config
     h3o = with pkgs; [
       cargo
       rustc
     ];
-    h5vc = with pkgs; [
-      zlib.dev
-      bzip2.dev
-      xz.dev
-    ];
-    hSDM = [ pkgs.gsl ];
+    hSDM = [ pkgs.gsl ]; # for gsl-config
     harbinger = [ pkgs.glibcLocales ];
-    haven = with pkgs; [ zlib.dev ];
     heck = with pkgs; [
       cargo
       rustc
     ];
     hellorust = [ pkgs.cargo ];
-    hgwrr = [ pkgs.gsl ];
+    hgwrr = [ pkgs.gsl ]; # for gsl-config
     highs = [
       pkgs.which
       pkgs.cmake
     ];
-    httpgd = with pkgs; [ cairo.dev ];
-    hypergeo2 = with pkgs; [
-      gmp.dev
-      mpfr.dev
-      pkg-config
-    ];
-    iBMQ = [ pkgs.gsl ];
-    image_CannyEdges = with pkgs; [
-      fftw.dev
-      libpng.dev
-    ];
+    hypergeo2 = [ pkgs.pkg-config ];
+    iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_textlinedetector = [ pkgs.pkg-config ];
-    imager = [ pkgs.libx11.dev ];
-    imbibe = [ pkgs.zlib.dev ];
-    immunoClust = [ pkgs.gsl ];
+    imager = [ pkgs.pkg-config ];
+    immunoClust = [ pkgs.gsl ]; # for gsl-config
     interpolation = [ pkgs.pkg-config ];
     iscream = with pkgs; [
       pkg-config
       which
     ];
-    jSDM = [ pkgs.gsl ];
+    jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
-    jqr = [ pkgs.jq.dev ];
     kza = [ pkgs.pkg-config ];
-    leidenAlg = [ pkgs.gmp.dev ];
-    libdeflate = [ pkgs.cmake ];
-    libstable4u = [ pkgs.gsl ];
-    littler = [ pkgs.libdeflate ];
+    libdeflate = with pkgs; [
+      cmake
+      pkg-config
+    ];
     lpsymphony = with pkgs; [
       pkg-config
       gfortran
@@ -1222,6 +1175,7 @@ let
       zlib.dev
       zstd.dev
     ];
+    audio = [ pkgs.portaudio ];
     bamsignals = with pkgs; [
       zlib.dev
       xz.dev
@@ -1232,10 +1186,15 @@ let
     bbl = with pkgs; [ gsl ];
     bgx = [ pkgs.boost ];
     bigmemory = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libuuid.dev ];
+    bigrquerystorage = with pkgs; [
+      grpc
+      protobuf
+    ];
     bigsnpr = [ pkgs.zlib.dev ];
-    bio3d = with pkgs; [ zlib.dev ];
+    bio3d = [ pkgs.zlib ];
     bioacoustics = [ pkgs.fftw ];
     blosc = [ pkgs.c-blosc ];
+    bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2 ];
     cartogramR = [ pkgs.fftw ];
     catSurv = [ pkgs.gsl ];
@@ -1244,8 +1203,15 @@ let
       fftw
       gsl
     ];
+    cit = [ pkgs.gsl ];
+    cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
     coga = [ pkgs.gsl.dev ];
+    cpp11bigwig = [ pkgs.zlib ];
+    cpp11qpdf = with pkgs; [
+      libjpeg
+      zlib
+    ];
     crandep = [ pkgs.gsl ];
     csaw = with pkgs; [
       zlib.dev
@@ -1260,10 +1226,12 @@ let
       bzip2.dev
       zlib.dev
     ];
+    devEMF = [ pkgs.zlib ];
     diffHic = with pkgs; [
       xz.dev
       bzip2.dev
     ];
+    diversitree = [ pkgs.fftw ];
     divest = [ pkgs.zlib.dev ];
     econetwork = [ pkgs.gsl ];
     eds = [ pkgs.zlib.dev ];
@@ -1273,11 +1241,20 @@ let
       zlib.dev
     ];
     excursions = [ pkgs.gsl ];
+    fastpng = [ pkgs.zlib ];
     fftw = [ pkgs.fftw ];
     fftwtools = [ pkgs.fftw ];
+    fingerPro = [ pkgs.gsl ];
     flan = [ pkgs.gsl ];
+    flint = with pkgs; [
+      gmp
+      mpfr
+      flint
+    ];
     flowWorkspace = [ pkgs.zlib.dev ];
+    frailtyMMpen = [ pkgs.gsl ];
     fs = [ pkgs.libuv ];
+    gamstransfer = [ pkgs.zlib ];
     gaston = with pkgs; [ zlib.dev ];
     gdalcubes = with pkgs; [
       proj.dev
@@ -1301,14 +1278,29 @@ let
         expat
         libxdmcp
       ];
+    gert = [ pkgs.libgit2 ];
     gfilogisreg = [ pkgs.gmp.dev ];
+    ggiraph = [ pkgs.libpng ];
+    git2r = [ pkgs.libgit2 ];
+    gmapR = [ pkgs.zlib ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
+    h5vc = with pkgs; [
+      zlib
+      bzip2
+      xz
+    ];
     hadron = [ pkgs.gsl ];
+    haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib.dev ];
     httpuv = [ pkgs.zlib ];
+    hypergeo2 = with pkgs; [
+      gmp
+      mpfr
+    ];
+    iBMQ = [ pkgs.gsl ];
     igraph = with pkgs; [
       gmp
       libxml2.dev
@@ -1319,7 +1311,18 @@ let
       libjpeg
       zlib
     ];
+    image_CannyEdges = with pkgs; [
+      fftw
+      libpng
+    ];
     image_textlinedetector = [ pkgs.opencv ];
+    imager = with pkgs; [
+      fftw
+      libtiff
+      libx11
+    ];
+    imbibe = [ pkgs.zlib ];
+    immunoClust = [ pkgs.gsl ];
     interpolation = with pkgs; [
       gmp
       mpfr
@@ -1340,7 +1343,7 @@ let
       bzip2.dev
     ];
     jpeg = [ pkgs.libjpeg ];
-    jqr = [ pkgs.jq.out ];
+    jqr = [ pkgs.jq ];
     knowYourCG = with pkgs; [
       zlib.dev
       ncurses.dev
@@ -1348,7 +1351,17 @@ let
     kza = [ pkgs.fftw ];
     landsepi = [ pkgs.gsl ];
     largeList = [ pkgs.zlib.dev ];
+    leidenAlg = [ pkgs.gmp ];
+    libdeflate = [ pkgs.libdeflate ];
+    libstable4u = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
+    littler = with pkgs; [
+      xz
+      zlib
+      bzip2
+      zstd
+      icu
+    ];
     lnmixsurv = [ pkgs.gsl.dev ];
     lpsymphony = with pkgs; [
       symphony
@@ -2392,13 +2405,6 @@ let
 
     dbarts = old.dbarts.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
-    devEMF = old.devEMF.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
-        NIX_LDFLAGS = "-lX11";
-      };
-    });
-
     enderecobr = old.enderecobr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
       nativeBuildInputs = attrs.nativeBuildInputs ++ [
@@ -2638,28 +2644,16 @@ let
       '';
     });
 
-    littler = old.littler.overrideAttrs (
-      attrs: with pkgs; {
-        buildInputs = [
-          pcre
-          xz
-          zlib
-          bzip2
-          icu
-          which
-          zstd.dev
-        ]
-        ++ attrs.buildInputs;
-        postInstall = ''
-          install -d $out/bin $out/share/man/man1
-          ln -s ../library/littler/bin/r $out/bin/r
-          ln -s ../library/littler/bin/r $out/bin/lr
-          ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
-          # these won't run without special provisions, so better remove them
-          rm -r $out/library/littler/script-tests
-        '';
-      }
-    );
+    littler = old.littler.overrideAttrs (attrs: {
+      postInstall = ''
+        install -d $out/bin $out/share/man/man1
+        ln -s ../library/littler/bin/r $out/bin/r
+        ln -s ../library/littler/bin/r $out/bin/lr
+        ln -s ../../../library/littler/man-page/r.1 $out/share/man/man1
+        # these won't run without special provisions, so better remove them
+        rm -r $out/library/littler/script-tests
+      '';
+    });
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
       postPatch = ''
