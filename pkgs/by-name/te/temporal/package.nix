@@ -6,27 +6,21 @@
   testers,
   temporal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "temporal";
-  version = "1.30.5";
+  version = "1.31.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uw1E1GcLtIo1XZea/tb1TnbIk9O4Mf2NaCpDwUIfSak=";
+    hash = "sha256-NuvgeG1a7octJ2HD0EGQIdU8CtZsNRf4KX/F17S/uOQ=";
   };
 
-  vendorHash = "sha256-5++ETJgWDVveUxb2QZL5AUQG8/8QNVx5iS/NBjoacCY=";
-
-  overrideModAttrs = old: {
-    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
-    postBuild = ''
-      patch -p0 < ${./darwin-sandbox-fix.patch}
-    '';
-  };
+  vendorHash = "sha256-KZKlARki/AXGhfsQsOixHjx+t1H9htd9oBx3wsiebY0=";
 
   excludedPackages = [ "./build" ];
 
@@ -62,10 +56,18 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) temporal;
-    version = testers.testVersion {
-      package = temporal;
+  passthru = {
+    tests = {
+      inherit (nixosTests) temporal;
+      version = testers.testVersion {
+        package = temporal;
+      };
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--use-github-releases"
+      ];
     };
   };
 
