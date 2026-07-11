@@ -817,10 +817,6 @@ let
       cargo
       rustc
     ];
-    tkrplot = with pkgs; [
-      libx11
-      tk.dev
-    ];
     tok = with pkgs; [
       cargo
       rustc
@@ -1602,6 +1598,10 @@ let
     tikzDevice = with pkgs; [
       which
       texliveMedium
+    ];
+    tkrplot = with pkgs; [
+      libx11
+      tk
     ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
