@@ -13,14 +13,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      mistune = super.mistune.overridePythonAttrs (old: rec {
-        version = "2.0.5";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
-        };
-      });
+      mistune = self.mistune_2;
     };
   };
 in

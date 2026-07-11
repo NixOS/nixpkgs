@@ -8207,6 +8207,12 @@
     githubId = 7820865;
     name = "Eric Dallo";
   };
+  erics118 = {
+    name = "Eric Shen";
+    github = "erics118";
+    githubId = 52634785;
+    email = "ericshen118@gmail.com";
+  };
   ericson2314 = {
     email = "John.Ericson@Obsidian.Systems";
     matrix = "@Ericson2314:matrix.org";
@@ -29990,6 +29996,13 @@
     matrix = "@x807x:matrix.org";
     github = "x807x";
     githubId = 86676478;
+  };
+  xaltsc = {
+    email = "hey+dev@xaltsc.dev";
+    matrix = "@xaltsc:matrix.org";
+    name = "xaltsc";
+    github = "xaltsc";
+    githubId = 41400742;
   };
   xanderio = {
     name = "Alexander Sieg";

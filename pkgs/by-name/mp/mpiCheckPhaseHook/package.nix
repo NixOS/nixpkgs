@@ -1,7 +1,7 @@
 {
   makeSetupHook,
   stdenv,
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
 }:
 
 makeSetupHook {
@@ -13,6 +13,6 @@ makeSetupHook {
   };
 
   propagatedNativeBuildInputs = [
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
   ];
 } ./mpi-check-hook.sh
