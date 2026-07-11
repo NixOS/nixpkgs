@@ -685,48 +685,33 @@ let
       geos # for geos-config
     ];
     magick = [ pkgs.pkg-config ];
-    mcrPioda = [ pkgs.gsl ];
-    mixlink = [ pkgs.gsl ];
-    mixture = [ pkgs.gsl ];
-    mmpca = [ pkgs.gsl ];
-    monoreg = [ pkgs.gsl ];
+    mcrPioda = [ pkgs.gsl ]; # for gsl-config
+    mixlink = [ pkgs.gsl ]; # for gsl-config
+    mixture = [ pkgs.gsl ]; # for gsl-config
+    mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
-    mvabund = [ pkgs.gsl ];
-    mvst = [ pkgs.gsl ];
+    mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    mvst = [ pkgs.gsl ]; # for gsl-config
     mwaved = [ pkgs.pkg-config ];
-    mzR = with pkgs; [
-      zlib
-      netcdf
-    ];
     n1qn1 = [ pkgs.gfortran ];
-    nanonext = with pkgs; [
-      mbedtls
-      nng
-    ];
-    ncdf4 = [ pkgs.netcdf ];
-    neojags = [ pkgs.jags ];
+    ncdf4 = [ pkgs.netcdf ]; # for nc-config
+    neojags = [ pkgs.pkg-config ];
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
-    oligo = [ pkgs.zlib.dev ];
     opencv = [ pkgs.pkg-config ];
     otelsdk = with pkgs; [
       cmake
       which
-      curl.dev
     ];
-    pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
       pandoc
       which
     ];
-    parseLatex = [ pkgs.icu.dev ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
-    pcaL1 = [
-      pkgs.pkg-config
-      pkgs.clp
-    ];
+    pcaL1 = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
     phytools = [ pkgs.which ];
     png = [ pkgs.libpng ]; # for libpng-config
@@ -737,44 +722,31 @@ let
     ];
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
-    rGEDI = [ pkgs.gsl ];
+    rGEDI = [ pkgs.gsl ]; # for gsl-config
     rJava = [ pkgs.stripJavaArchivesHook ];
     ragg = [ pkgs.pkg-config ];
     rapport = [ pkgs.which ];
     rapportools = [ pkgs.which ];
     ratioOfQsprays = [ pkgs.pkg-config ];
     ravetools = [ pkgs.pkg-config ];
-    rbedrock = [
-      pkgs.zlib.dev
-      pkgs.which
-      pkgs.cmake
+    rbedrock = with pkgs; [
+      which
+      cmake
     ];
     rbm25 = with pkgs; [
       cargo
       rustc
     ];
-    rcdd = [ pkgs.gmp.dev ];
     redux = [ pkgs.pkg-config ];
     reprex = [ pkgs.which ];
-    resultant = with pkgs; [
-      gmp.dev
-      mpfr.dev
-      pkg-config
-    ];
-    rgdal = with pkgs; [
-      proj.dev
-      gdal
-    ];
-    rgeos = [ pkgs.geos ];
-    rhdf5 = [ pkgs.zlib ];
-    ridge = [ pkgs.gsl ];
+    resultant = [ pkgs.pkg-config ];
+    rgdal = [ pkgs.gdal ]; # for gdal-config
+    rgeos = [ pkgs.geos ]; # for geos-config
+    ridge = [ pkgs.gsl ]; # for gsl-config
     rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
-    rmatio = [
-      pkgs.zlib.dev
-      pkgs.pkg-config
-    ];
-    rnetcarto = [ pkgs.gsl ];
+    rmatio = [ pkgs.pkg-config ];
+    rnetcarto = [ pkgs.gsl ]; # for gsl-config
     roxigraph = with pkgs; [
       cargo
       rustc
@@ -796,8 +768,7 @@ let
       pkg-config
     ];
     rtracklayer = [ pkgs.pkg-config ];
-    runjags = [ pkgs.jags ];
-    rvg = [ pkgs.libpng.dev ];
+    runjags = [ pkgs.pkg-config ];
     rzmq = [ pkgs.pkg-config ];
     s2 = [ pkgs.pkg-config ];
     salso = with pkgs; [
@@ -805,32 +776,18 @@ let
       rustc
     ];
     scorematchingad = [ pkgs.cmake ];
-    sdcTable = with pkgs; [
-      gmp
-      glpk
-    ];
-    seewave = with pkgs; [
-      fftw.dev
-      libsndfile.dev
-    ];
-    seqminer = with pkgs; [
-      zlib.dev
-      bzip2
-    ];
     sf = with pkgs; [
       pkg-config
       gdal # for gdal-config
       geos # for geos-config
     ];
     showtext = [ pkgs.pkg-config ];
-    simplexreg = [ pkgs.gsl ];
-    smam = [ pkgs.gsl ];
+    smam = [ pkgs.gsl ]; # for gsl-config
     smcryptoR = with pkgs; [
       cargo
       rustc
       which
     ];
-    snpStats = [ pkgs.zlib.dev ];
     socratadata = with pkgs; [
       cargo
       rustc
@@ -838,14 +795,10 @@ let
     sodium = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
-    ssanv = [ pkgs.proj ];
-    strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
-    stsm = [ pkgs.gsl ];
-    survSNP = [ pkgs.gsl ];
+    survSNP = [ pkgs.gsl ]; # for gsl-config
     surveyvoi = [ pkgs.pkg-config ];
-    svglite = [ pkgs.libpng.dev ];
     symbolicQspray = [ pkgs.pkg-config ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
@@ -860,14 +813,9 @@ let
     ];
     tesseract = [ pkgs.pkg-config ];
     textshaping = [ pkgs.pkg-config ];
-    themetagenomics = [ pkgs.zlib.dev ];
     tinyimg = with pkgs; [
       cargo
       rustc
-    ];
-    tkrplot = with pkgs; [
-      libx11
-      tk.dev
     ];
     tok = with pkgs; [
       cargo
@@ -877,8 +825,6 @@ let
       cargo
       rustc
     ];
-    topicmodels = [ pkgs.gsl ];
-    trackViewer = [ pkgs.zlib.dev ];
     udunits2 = with pkgs; [
       udunits
       expat
@@ -1394,18 +1340,29 @@ let
     mixcat = [ pkgs.gsl ];
     multibridge = [ pkgs.mpfr ];
     mutscan = [ pkgs.zlib.dev ];
+    mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw ];
+    nanonext = with pkgs; [
+      mbedtls
+      nng
+    ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     ncdfFlow = [ pkgs.zlib.dev ];
     ndjson = [ pkgs.zlib.dev ];
+    neojags = [ pkgs.jags ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
+    oligo = [ pkgs.zlib ];
     otelsdk = with pkgs; [
+      curl
       protobuf
-      zlib.dev
+      zlib
     ];
+    pak = [ pkgs.curl ];
+    parseLatex = [ pkgs.icu ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    pcaL1 = [ pkgs.clp ];
     pdftools = [ pkgs.poppler ];
     pexm = [ pkgs.jags ];
     pgenlibr = [ pkgs.zlib.dev ];
@@ -1422,6 +1379,7 @@ let
     poisbinom = [ pkgs.fftw.dev ];
     pqsfinder = [ pkgs.boost ];
     proj4 = [ pkgs.proj.dev ];
+    protolite = [ pkgs.protobuf ];
     psbcGroup = [ pkgs.gsl.dev ];
     qckitfastq = [ pkgs.zlib.dev ];
     qpdf = with pkgs; [
@@ -1472,6 +1430,8 @@ let
     ];
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
+    rbedrock = [ pkgs.zlib ];
+    rcdd = [ pkgs.gmp ];
     rcontroll = [ pkgs.gsl.dev ];
     redux = [ pkgs.hiredis ];
     registr = with pkgs; [
@@ -1482,6 +1442,11 @@ let
       libdeflate
       zstd.dev
     ];
+    resultant = with pkgs; [
+      gmp
+      mpfr
+    ];
+    rgdal = [ pkgs.proj ];
     rgl = with pkgs; [
       libGLU
       libGL
@@ -1493,6 +1458,7 @@ let
       zlib.dev
       bzip2.dev
     ];
+    ridge = [ pkgs.gsl ];
     rjags = [ pkgs.jags ];
     rlas = with pkgs; [
       boost
@@ -1501,6 +1467,7 @@ let
       sqlite
       geos
     ];
+    rmatio = [ pkgs.zlib ];
     rmumps = with pkgs; [ zlib.dev ];
     rrd = [ pkgs.rrdtool ];
     rsbml = [ pkgs.libsbml ];
@@ -1516,6 +1483,8 @@ let
       zlib
       curl
     ];
+    runjags = [ pkgs.jags ];
+    rvg = [ pkgs.libpng ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
       abseil-cpp
@@ -1533,6 +1502,10 @@ let
       zlib.dev
     ];
     screenCounter = [ pkgs.zlib.dev ];
+    sdcTable = with pkgs; [
+      gmp
+      glpk
+    ];
     seqTools = [ pkgs.zlib.dev ];
     seqbias = with pkgs; [
       zlib.dev
@@ -1540,6 +1513,12 @@ let
       xz.dev
     ];
     seqinr = [ pkgs.zlib ];
+    seqminer = with pkgs; [
+      bzip2
+      sqlite
+      zlib
+      zstd
+    ];
     sf = with pkgs; [
       proj
       sqlite
@@ -1550,6 +1529,8 @@ let
       freetype
     ];
     shrinkTVP = [ pkgs.gsl ];
+    simplexreg = [ pkgs.gsl ];
+    snpStats = [ pkgs.zlib ];
     sodium = [ pkgs.libsodium ];
     spFW = [ pkgs.fftw.dev ];
     spaMM = [ pkgs.gsl ];
@@ -1563,12 +1544,15 @@ let
     spp = with pkgs; [ zlib.dev ];
     ssh = with pkgs; [ libssh ];
     stpphawkes = [ pkgs.gsl ];
+    strawr = [ pkgs.curl ];
     stringi = [ pkgs.icu74 ];
+    stsm = [ pkgs.gsl ];
     surveyvoi = with pkgs; [
       gmp.dev
       mpfr.dev
     ];
     svKomodo = [ pkgs.which ];
+    svglite = [ pkgs.libpng ];
     symbolicQspray = with pkgs; [
       gmp.dev
       mpfr.dev
@@ -1606,12 +1590,18 @@ let
       libpng
     ];
     tfevents = [ pkgs.protobuf ];
+    themetagenomics = [ pkgs.zlib ];
     tidypopgen = [ pkgs.zlib.dev ];
     tiff = [ pkgs.libtiff ];
     tikzDevice = with pkgs; [
       which
       texliveMedium
     ];
+    tkrplot = with pkgs; [
+      libx11
+      tk
+    ];
+    topicmodels = [ pkgs.gsl ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
     unigd =
