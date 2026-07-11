@@ -825,10 +825,6 @@ let
       cargo
       rustc
     ];
-    udunits2 = with pkgs; [
-      udunits
-      expat
-    ];
     unigd = [ pkgs.pkg-config ];
     unix = [ pkgs.pkg-config ];
     unsum = with pkgs; [
@@ -1603,6 +1599,10 @@ let
     ];
     topicmodels = [ pkgs.gsl ];
     transmogR = [ pkgs.zlib.dev ];
+    udunits2 = with pkgs; [
+      udunits
+      expat
+    ];
     ulid = [ pkgs.zlib.dev ];
     unigd =
       with pkgs;
