@@ -2704,6 +2704,14 @@
     };
   };
 
+  scfg = {
+    version = "0-unstable-2025-10-29";
+    url = "github:rockorager/tree-sitter-scfg";
+    rev = "d850fd470445d73de318a21d734d1e09e29b773c";
+    hash = "sha256-AnyOcQFA3N6AFZiG7eLS1xCm1qX6hko9lFV4oV9p/E8=";
+    meta.license = lib.licenses.mit;
+  };
+
   scheme = {
     version = "0.24.7-1-unstable-2026-03-17";
     url = "github:6cdh/tree-sitter-scheme";
