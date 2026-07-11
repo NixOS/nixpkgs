@@ -8,19 +8,21 @@
 
 buildGoModule rec {
   pname = "qbt_go";
-  version = "2.2.0";
+  version = "2.3.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ludviglundgren";
     repo = "qbittorrent-cli";
     tag = "v${version}";
-    hash = "sha256-7d5z/+948tfxkrs/s9Zv9guCCEIOuZhE9P954N4TD/g=";
+    hash = "sha256-T2U7DP1LsRv1PJwsA3tl2gkUONZ/g/l/eulhSMBp4OQ=";
   };
 
-  vendorHash = "sha256-we4iI4s8PvBak67lTZZ3jLThQ3bqBhkEh3QRGcQgH80=";
+  vendorHash = "sha256-x9WarAz+EQ4PDn1+tRNzhMoNvmP6BuMf7fylLsR2JCQ=";
 
   postPatch = ''
-    substituteInPlace cmd/qbt/main.go \
+    substituteInPlace cmd/root.go \
       --replace-fail 'Use:   "qbt"' 'Use:   "qbt_go"'
     mv cmd/qbt cmd/qbt_go
   '';
