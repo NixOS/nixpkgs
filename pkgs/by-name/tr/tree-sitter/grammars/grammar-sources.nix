@@ -2185,6 +2185,15 @@
     };
   };
 
+  penrose = {
+    version = "0-unstable-2026-01-25";
+    url = "github:klukaszek/tree-sitter-penrose";
+    rev = "d9368ff7f743b2ac2145a3342db13b1ad950cba5";
+    hash = "sha256-E/tpautC1I3w2+p2xrnd2CjdHVvNooX7yW84gUXlyrg=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   perl = {
     version = "1.1.1";
     url = "github:ganezdragon/tree-sitter-perl";
