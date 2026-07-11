@@ -620,7 +620,7 @@ let
       rustc
     ];
     flint = [ pkgs.pkg-config ];
-    flowPeaks = [ pkgs.gsl ];
+    flowPeaks = [ pkgs.gsl ]; # for gsl-config
     frailtyMMpen = [ pkgs.gsl ];
     fru = with pkgs; [
       cargo
