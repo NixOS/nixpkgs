@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-ePzR6TmByUBWGuOEg8WKMpvQT7qHGkZuBF8CkTwMtuY=";
+    hash = "sha256-JD/pcc5zhIIACmLv+TOVJ1u6SdNxXji3xDdE4ynUluk=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -39,7 +39,10 @@ buildDotnetModule rec {
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lyndeno ];
+    maintainers = with lib.maintainers; [
+      esch
+      lyndeno
+    ];
     mainProgram = "CarCareTracker";
     platforms = lib.platforms.all;
   };
