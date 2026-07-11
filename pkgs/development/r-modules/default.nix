@@ -691,7 +691,7 @@ let
     mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
-    mvabund = [ pkgs.gsl ];
+    mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mvst = [ pkgs.gsl ];
     mwaved = [ pkgs.pkg-config ];
     mzR = with pkgs; [
@@ -1394,6 +1394,7 @@ let
     mixcat = [ pkgs.gsl ];
     multibridge = [ pkgs.mpfr ];
     mutscan = [ pkgs.zlib.dev ];
+    mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
