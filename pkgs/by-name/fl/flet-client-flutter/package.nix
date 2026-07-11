@@ -1,8 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
-  flutter338,
+  flutter341,
   gst_all_1,
   libunwind,
   makeWrapper,
@@ -18,15 +19,15 @@
   fletTarget ? "linux",
 }:
 
-flutter338.buildFlutterApplication rec {
+flutter341.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.80.0";
+  version = "0.85.3";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-PxSFDWo5qN9RB/E+vLu1xYttJ8CQdy86OStyLMRn6Lo=";
+    hash = "sha256-aLDb8TJgegYM1CFm3N33fa2EcY57Lgz5XGWxB13SUYI=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -66,7 +67,11 @@ flutter338.buildFlutterApplication rec {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
+      (gitUpdater {
+        rev-prefix = "v";
+        # Exclude prerelease tags like v0.86.0.dev2 (gitUpdater ranks them "newer").
+        allowedVersions = "^[0-9\\.]+$";
+      })
       {
         command = [
           "env"
@@ -94,5 +99,7 @@ flutter338.buildFlutterApplication rec {
       heyimnova
     ];
     mainProgram = "flet";
+    # Linux target pulls rive_native prebuilts that are currently x86_64-only.
+    broken = fletTarget == "linux" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }
