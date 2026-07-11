@@ -1,0 +1,35 @@
+From 1935d690c3eead6844093b5df3b0aecff4f95345 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 5 Oct 2025 13:48:29 +0200
+Subject: [PATCH 2/2] Find rlottie via pkg-config
+
+Because availability of the CMake module depends on how rlottie was built - building via Meson doesn't generate the module.
+---
+ CMakeLists.txt | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d06eb5..f12ae3c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,13 +17,15 @@ add_library(${PLUGIN} MODULE ${SRC})
+ # set_target_properties(${PLUGIN} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PLUGIN})
+ # qt5_use_modules(${PLUGIN} Qml Quick DBus Multimedia)
+ 
++find_package(PkgConfig REQUIRED)
+ find_package(Qt5 COMPONENTS Core Qml Quick Multimedia CONFIG REQUIRED)
+ # set(rlottie_DIR "${CMAKE_CURRENT_BINARY_DIR}/../rlottie/install/lib/cmake/rlottie")
+-find_package(rlottie REQUIRED)
++pkg_check_modules(RLOTTIE REQUIRED rlottie)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ find_package(QuaZip-Qt5 REQUIRED)
+ 
+-target_link_libraries(${PLUGIN} QuaZip::QuaZip rlottie::rlottie)
++target_include_directories(${PLUGIN} PUBLIC ${RLOTTIE_INCLUDE_DIRS})
++target_link_libraries(${PLUGIN} QuaZip::QuaZip ${RLOTTIE_LIBRARIES})
+ target_link_libraries(${PLUGIN}
+   # PUBLIC
+   Qt5::Qml
+-- 
+2.51.0
+

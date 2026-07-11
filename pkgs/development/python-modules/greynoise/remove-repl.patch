@@ -1,0 +1,37 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 9c5950e..f19a5db 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,7 +33,6 @@ dependencies = [
+     "cachetools",
+     "colorama",
+     "click-default-group",
+-    "click-repl",
+     "dict2xml",
+     "jinja2",
+     "more-itertools>=8.14.0",
+@@ -53,4 +52,4 @@ greynoise = "greynoise.cli:main"
+ packages = ["src/greynoise"]
+ 
+ [tool.hatch.build.targets.wheel.shared-data]
+-"src/greynoise/cli/templates/*.j2" = "greynoise/cli/templates" 
+\ No newline at end of file
++"src/greynoise/cli/templates/*.j2" = "greynoise/cli/templates"
+diff --git a/src/greynoise/cli/__init__.py b/src/greynoise/cli/__init__.py
+index a7c22ea..9d26d3e 100644
+--- a/src/greynoise/cli/__init__.py
++++ b/src/greynoise/cli/__init__.py
+@@ -2,7 +2,6 @@
+ 
+ import click
+ from click_default_group import DefaultGroup
+-from click_repl import register_repl
+ 
+ from greynoise.cli import subcommand
+ 
+@@ -24,5 +23,3 @@ SUBCOMMAND_FUNCTIONS = [
+ 
+ for subcommand_function in SUBCOMMAND_FUNCTIONS:
+     main.add_command(subcommand_function)
+-
+-register_repl(main)

@@ -1,0 +1,11 @@
+--- a/pdns/version.cc
++++ b/pdns/version.cc
+@@ -180,7 +180,7 @@ string getBuildConfiguration()
+ #define double_escape(s) #s
+ #define escape_quotes(s) double_escape(s)
+   // NOLINTEND(cppcoreguidelines-macro-usage)
+-  ret << "Configured with: " << escape_quotes(PDNS_CONFIG_ARGS) << endl;
++  ret << "Configured with: " << "redacted to reduce closure size" << endl;
+ #undef escape_quotes
+ #undef double_escape
+ #endif

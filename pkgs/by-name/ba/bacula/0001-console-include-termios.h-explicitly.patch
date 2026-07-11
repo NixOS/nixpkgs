@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Wed, 7 Jan 2026 17:30:51 -0800
+Subject: [PATCH] console: include termios.h explicitly
+
+ncurses 6.6 moved the termios.h include inside #ifdef NCURSES_INTERNALS
+in term.h, so applications can no longer rely on term.h to provide
+termios symbols. Include termios.h explicitly.
+---
+ src/console/conio.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/console/conio.c b/src/console/conio.c
+index 2bea887..7ac61d6 100755
+--- a/src/console/conio.c
++++ b/src/console/conio.c
+@@ -56,6 +56,7 @@
+ 
+ #include <curses.h>
+ #include <term.h>
++#include <termios.h>
+ 
+ #ifdef HAVE_SUN_OS
+ #ifndef _TERM_H

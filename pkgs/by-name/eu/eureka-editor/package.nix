@@ -1,0 +1,53 @@
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fltk,
+  zlib,
+  xdg-utils,
+  libxinerama,
+  libjpeg,
+  libGLU,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "eureka-editor";
+  version = "1.27b";
+
+  src = fetchzip {
+    url = "mirror://sourceforge/eureka-editor/Eureka/${lib.versions.majorMinor finalAttrs.version}/eureka-${finalAttrs.version}-source.tar.gz";
+    sha256 = "075w7xxsgbgh6dhndc1pfxb2h1s5fhsw28yl1c025gmx9bb4v3bf";
+  };
+
+  buildInputs = [
+    fltk
+    zlib
+    xdg-utils
+    libjpeg
+    libxinerama
+    libGLU
+  ];
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    substituteInPlace src/main.cc --replace /usr/local $out
+    substituteInPlace Makefile    --replace /usr/local $out
+  '';
+
+  preInstall = ''
+    mkdir -p $out/bin $out/share/applications $out/share/icons $out/man/man6
+    cp misc/eureka.desktop $out/share/applications
+    cp misc/eureka.ico $out/share/icons
+    cp misc/eureka.6 $out/man/man6
+  '';
+
+  meta = {
+    homepage = "https://eureka-editor.sourceforge.net";
+    description = "Map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
+    mainProgram = "eureka";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    badPlatforms = lib.platforms.darwin;
+  };
+})

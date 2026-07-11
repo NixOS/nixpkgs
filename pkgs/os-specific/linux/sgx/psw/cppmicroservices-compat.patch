@@ -1,0 +1,87 @@
+diff --git a/external/CppMicroServices/CMakeLists.txt b/external/CppMicroServices/CMakeLists.txt
+index 8d0aff3..44d45d9 100644
+--- a/external/CppMicroServices/CMakeLists.txt
++++ b/external/CppMicroServices/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # Extract the current version from the VERSION file
+ file(STRINGS VERSION _version LIMIT_COUNT 1)
+ 
+-set(US_CMAKE_MINIMUM_REQUIRED_VERSION 3.2)
++set(US_CMAKE_MINIMUM_REQUIRED_VERSION 3.10)
+ 
+ cmake_minimum_required(VERSION ${US_CMAKE_MINIMUM_REQUIRED_VERSION})
+ 
+diff --git a/external/CppMicroServices/framework/include/cppmicroservices/AnyMap.h b/external/CppMicroServices/framework/include/cppmicroservices/AnyMap.h
+index 3f240f4..e8acef9 100644
+--- a/external/CppMicroServices/framework/include/cppmicroservices/AnyMap.h
++++ b/external/CppMicroServices/framework/include/cppmicroservices/AnyMap.h
+@@ -25,6 +25,7 @@
+ 
+ #include "cppmicroservices/Any.h"
+ 
++#include <cstdint>
+ #include <string>
+ #include <unordered_map>
+ 
+diff --git a/external/CppMicroServices/framework/include/cppmicroservices/BundleEvent.h b/external/CppMicroServices/framework/include/cppmicroservices/BundleEvent.h
+index 9b36a9b..12894fa 100644
+--- a/external/CppMicroServices/framework/include/cppmicroservices/BundleEvent.h
++++ b/external/CppMicroServices/framework/include/cppmicroservices/BundleEvent.h
+@@ -25,6 +25,7 @@
+ 
+ #include "cppmicroservices/FrameworkExport.h"
+ 
++#include <cstdint>
+ #include <iostream>
+ #include <memory>
+ 
+diff --git a/external/CppMicroServices/framework/include/cppmicroservices/Constants.h b/external/CppMicroServices/framework/include/cppmicroservices/Constants.h
+index 590a890..cf60926 100644
+--- a/external/CppMicroServices/framework/include/cppmicroservices/Constants.h
++++ b/external/CppMicroServices/framework/include/cppmicroservices/Constants.h
+@@ -25,6 +25,7 @@
+ 
+ #include "cppmicroservices/FrameworkConfig.h"
+ 
++#include <cstdint>
+ #include <string>
+ 
+ namespace cppmicroservices {
+diff --git a/external/CppMicroServices/framework/include/cppmicroservices/FrameworkEvent.h b/external/CppMicroServices/framework/include/cppmicroservices/FrameworkEvent.h
+index 71caf1b..a29e87c 100644
+--- a/external/CppMicroServices/framework/include/cppmicroservices/FrameworkEvent.h
++++ b/external/CppMicroServices/framework/include/cppmicroservices/FrameworkEvent.h
+@@ -25,6 +25,7 @@
+ 
+ #include "cppmicroservices/FrameworkExport.h"
+ 
++#include <cstdint>
+ #include <iostream>
+ #include <memory>
+ 
+diff --git a/external/CppMicroServices/framework/include/cppmicroservices/ServiceEvent.h b/external/CppMicroServices/framework/include/cppmicroservices/ServiceEvent.h
+index 451cb82..da7c5f0 100644
+--- a/external/CppMicroServices/framework/include/cppmicroservices/ServiceEvent.h
++++ b/external/CppMicroServices/framework/include/cppmicroservices/ServiceEvent.h
+@@ -25,6 +25,8 @@
+ 
+ #include "cppmicroservices/ServiceReference.h"
+ 
++#include <cstdint>
++
+ US_MSVC_PUSH_DISABLE_WARNING(
+   4251) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+ 
+diff --git a/psw/ae/aesm_service/source/CMakeLists.txt b/psw/ae/aesm_service/source/CMakeLists.txt
+index 5728e9b..0169263 100644
+--- a/psw/ae/aesm_service/source/CMakeLists.txt
++++ b/psw/ae/aesm_service/source/CMakeLists.txt
+@@ -30,7 +30,7 @@
+ #
+ 
+ # [proj-begin]
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.10.0)
+ project(ModularAESM VERSION 0.1.0)
+ 
+ 

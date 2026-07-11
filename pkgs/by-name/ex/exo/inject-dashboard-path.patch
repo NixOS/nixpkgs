@@ -1,0 +1,18 @@
+diff --git a/src/exo/utils/dashboard_path.py b/src/exo/utils/dashboard_path.py
+index 980bb80f..7faecd27 100644
+--- a/src/exo/utils/dashboard_path.py
++++ b/src/exo/utils/dashboard_path.py
+@@ -32,12 +32,7 @@ def _find_resources_in_bundle() -> Path | None:
+ 
+ 
+ def find_dashboard() -> Path:
+-    dashboard = _find_dashboard_in_repo() or _find_dashboard_in_bundle()
+-    if not dashboard:
+-        raise FileNotFoundError(
+-            "Unable to locate dashboard assets - you probably forgot to run `cd dashboard && npm install && npm run build && cd ..`"
+-        )
+-    return dashboard
++    return Path("@dashboard@")
+ 
+ 
+ def _find_dashboard_in_repo() -> Path | None:

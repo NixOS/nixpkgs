@@ -1,0 +1,16 @@
+diff --git a/platform/macos/detect.py b/platform/macos/detect.py
+index 227738877d..5a4bfa77d9 100644
+--- a/platform/macos/detect.py
++++ b/platform/macos/detect.py
+@@ -265,11 +265,6 @@ def configure(env: "SConsEnvironment"):
+ 
+             if mvk_path != "":
+                 env.Append(LINKFLAGS=["-L" + mvk_path])
+-            else:
+-                print_error(
+-                    "MoltenVK SDK installation directory not found, use 'vulkan_sdk_path' SCons parameter to specify SDK path."
+-                )
+-                sys.exit(255)
+ 
+     if len(extra_frameworks) > 0:
+         frameworks = [item for key in extra_frameworks for item in ["-framework", key]]

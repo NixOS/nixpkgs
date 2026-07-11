@@ -1,0 +1,64 @@
+From 9b4412fa12df1452bc987149e8497e50d58e76f0 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Fri, 10 Jan 2025 17:45:39 +0100
+Subject: [PATCH] Display sync button only if profiles are enabled and set
+
+---
+ src/qml/CalendarChoicePopup.qml | 5 +++--
+ src/qml/EventActions.qml        | 6 ++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index a0367138..3964c3c1 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -30,7 +30,8 @@ Page {
+     objectName: "calendarchoicepopup"
+ 
+     property var model
+-    readonly property var canSynchronize: !networkError && buteoSync.serviceAvailable && buteoSync.profiles.length > 0 && !buteoSync.synchronizing
++    readonly property bool syncAvailable: buteoSync.serviceAvailable && buteoSync.profiles.length > 0
++    readonly property var canSynchronize: !networkError && syncAvailable && !buteoSync.synchronizing
+     signal collectionUpdated()
+ 
+     function accountFromId(accountId)
+@@ -62,7 +63,7 @@ Page {
+             text: enabled ? i18n.tr("Sync") : i18n.tr("Syncing")
+             onTriggered: buteoSync.synchronize()
+             enabled: calendarChoicePage.canSynchronize
+-            visible: buteoSync.serviceAvailable
++            visible: calendarChoicePage.syncAvailable
+         }
+         flickable: flickable
+     }
+diff --git a/src/qml/EventActions.qml b/src/qml/EventActions.qml
+index 63e50fb9..579981d5 100644
+--- a/src/qml/EventActions.qml
++++ b/src/qml/EventActions.qml
+@@ -30,7 +30,8 @@ Item {
+     property alias settingsAction: _settingsAction
+     property Settings settings
+     readonly property bool syncInProgress: buteoSync.synchronizing
+-    readonly property var canSynchronize: !networkError && buteoSync.serviceAvailable && buteoSync.profiles.length > 0 && !buteoSync.synchronizing
++    readonly property bool syncAvailable: buteoSync.serviceAvailable && buteoSync.profiles.length > 0
++    readonly property var canSynchronize: !networkError && syncAvailable && !buteoSync.synchronizing
+ 
+ 
+     onSyncInProgressChanged: {
+@@ -81,11 +82,12 @@ Item {
+         text: i18n.tr("Sync")
+         onTriggered: buteoSync.synchronize()
+         enabled: actionPool.canSynchronize
+-        visible: buteoSync.serviceAvailable
++        visible: actionPool.syncAvailable
+     }
+ 
+     SyncManager {
+         id: buteoSync
++        filterDisabled: true
+         filterHidden: true
+         filterBy.key: "category"
+         filterBy.value: "calendar"
+-- 
+GitLab
+

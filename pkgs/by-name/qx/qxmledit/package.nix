@@ -1,0 +1,57 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
+  libGLU,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qxmledit";
+  version = "0.9.17";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "lbellonda";
+    repo = "qxmledit";
+    rev = finalAttrs.version;
+    hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
+  };
+
+  nativeBuildInputs = [ libsForQt5.qmake ];
+
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qtsvg
+    libsForQt5.qtscxml
+    libGLU
+  ];
+
+  qmakeFlags = [ "CONFIG+=release" ];
+
+  preConfigure = ''
+    export QXMLEDIT_INST_DATA_DIR="$out/share/data"
+    export QXMLEDIT_INST_TRANSLATIONS_DIR="$out/share/i18n"
+    export QXMLEDIT_INST_INCLUDE_DIR="$out/include"
+    export QXMLEDIT_INST_DIR="$out/bin"
+    export QXMLEDIT_INST_LIB_DIR="$out/lib"
+    export QXMLEDIT_INST_DOC_DIR="$doc"
+  '';
+
+  dontWrapQtApps = true;
+
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Simple XML editor based on qt libraries";
+    homepage = "https://sourceforge.net/projects/qxmledit";
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/lbellonda/qxmledit/blob/${finalAttrs.version}/NEWS";
+    mainProgram = "qxmledit";
+  };
+})

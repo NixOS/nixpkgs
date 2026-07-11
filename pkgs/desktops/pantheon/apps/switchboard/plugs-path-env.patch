@@ -1,0 +1,21 @@
+diff --git a/lib/PlugsManager.vala b/lib/PlugsManager.vala
+index 8b21e7b..bc36321 100644
+--- a/lib/PlugsManager.vala
++++ b/lib/PlugsManager.vala
+@@ -36,7 +36,15 @@ public class Switchboard.PlugsManager : GLib.Object {
+ 
+     private PlugsManager () {
+         plugs = new Gee.LinkedList<Switchboard.Plug> ();
+-        var base_folder = File.new_for_path (Build.PLUGS_DIR);
++
++        var plugs_path = Environment.get_variable("SWITCHBOARD_PLUGS_PATH");
++        if (plugs_path != null) {
++            debug ("SWITCHBOARD_PLUGS_PATH set to %s", plugs_path);
++        } else {
++            critical ("SWITCHBOARD_PLUGS_PATH not set");
++        }
++
++        var base_folder = File.new_for_path (plugs_path);
+         find_plugins (base_folder);
+     }
+ 
