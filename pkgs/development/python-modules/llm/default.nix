@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   pytestCheckHook,
   replaceVars,
   setuptools,
@@ -167,7 +168,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.30";
+    version = "0.31.1";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -176,11 +177,17 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-+8fwx7sS1vFSTqb+p2uDLqWW/UIx8WoW3kYJihznRRg=";
+      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
     };
 
     patches = [
       ./001-disable-install-uninstall-commands.patch
+      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
+      ./do-not-commit-inside-content_hash-embeddings.patch
+      (fetchpatch2 {
+        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
+        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
+      })
     ]
     # See https://github.com/NixOS/nixpkgs/issues/476258 and https://github.com/simonw/llm/pull/1334
     # TODO: Remove when sqlite 3.52.x is released.
