@@ -799,7 +799,6 @@ let
     stringi = [ pkgs.pkg-config ];
     survSNP = [ pkgs.gsl ]; # for gsl-config
     surveyvoi = [ pkgs.pkg-config ];
-    svglite = [ pkgs.libpng.dev ];
     symbolicQspray = [ pkgs.pkg-config ];
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
@@ -1560,6 +1559,7 @@ let
       mpfr.dev
     ];
     svKomodo = [ pkgs.which ];
+    svglite = [ pkgs.libpng ];
     symbolicQspray = with pkgs; [
       gmp.dev
       mpfr.dev
