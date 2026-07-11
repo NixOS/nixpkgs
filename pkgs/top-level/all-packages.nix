@@ -9586,10 +9586,6 @@ with pkgs;
     versionSuffix = "esr";
   };
 
-  timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
-    fftw = fftwSinglePrec;
-  };
-
   inherit
     ({
       timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { };

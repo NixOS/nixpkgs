@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   puredata,
-  fftw,
+  fftwSinglePrec,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     puredata
-    fftw
+    fftwSinglePrec
   ];
 
   unpackPhase = ''
