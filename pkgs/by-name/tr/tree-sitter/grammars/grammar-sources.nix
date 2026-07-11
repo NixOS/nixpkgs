@@ -566,6 +566,14 @@
     meta.license = lib.licenses.mit;
   };
 
+  drools = {
+    version = "0.1.0";
+    url = "github:iByteABit256/tree-sitter-drools";
+    hash = "sha256-TuIJbr5URQJOChsb0OuiLO3A0mUyoZ0zMU4dzquhL58=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.agpl3Only;
+  };
+
   dtd = {
     version = "0.7.0-unstable-2026-01-21";
     url = "github:tree-sitter-grammars/tree-sitter-xml";
