@@ -2892,6 +2892,13 @@
     };
   };
 
+  ssh-client-config = rec {
+    version = "2026.7.9";
+    url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
+    hash = "sha256-La1h6uJC5gUA84OAr3zBbQiR+AnrhcUhNf6r4HUpwhg=";
+    meta.license = lib.licenses.cc0;
+  };
+
   strace = {
     version = "0-unstable-2025-12-21";
     url = "github:sigmaSd/tree-sitter-strace";
