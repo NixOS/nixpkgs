@@ -22,16 +22,16 @@ assert builtins.elem target [
 
 buildGoModule (finalAttrs: {
   pname = "syncthing";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OwR1OiwtlJSRnFXFEyyHcL3q6NdDUQd4JEy0YSQ18fg=";
+    hash = "sha256-tR4yXoEYbCi8Uh3wCyATc+J4+cGvD7k0d9egjHS5H4k=";
   };
 
-  vendorHash = "sha256-gfGuXBvGdQr+o8zV4MM1FYnOy2fpytIIEdQ9waGNSW4=";
+  vendorHash = "sha256-t2wjl4eWvcUHMaBS7KEPzZejqrlI+7c5fRqWqxuCZy8=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
