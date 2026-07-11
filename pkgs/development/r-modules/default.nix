@@ -684,6 +684,7 @@ let
       pkg-config
       which
     ];
+    island = [ pkgs.gsl ]; # for gsl-config
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
     kza = [ pkgs.pkg-config ];
@@ -1268,7 +1269,6 @@ let
       xz.dev
       zlib.dev
     ];
-    island = [ pkgs.gsl.dev ];
     jack = with pkgs; [
       gmp.dev
       mpfr.dev
