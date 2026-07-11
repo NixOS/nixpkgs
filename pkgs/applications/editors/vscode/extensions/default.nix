@@ -3737,6 +3737,8 @@ let
 
       oxc.oxc-vscode = callPackage ./oxc.oxc-vscode { };
 
+      pflannery.vscode-versionlens = callPackage ./pflannery.vscode-versionlens { };
+
       ph-hawkins.arc-plus = callPackage ./ph-hawkins.arc-plus { };
 
       phind.phind = buildVscodeMarketplaceExtension {
