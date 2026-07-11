@@ -19,6 +19,7 @@
   brial,
   cliquer,
   eclib,
+  eclibEnabled ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   ecm,
   fflas-ffpack,
   flint,
@@ -115,7 +116,10 @@ buildPythonPackage rec {
     libpng
   ];
 
-  mesonFlags = [ "-Dbuild-docs=false" ];
+  mesonFlags = [ "-Dbuild-docs=false" ]
+               ++ lib.optional (!eclibEnabled) [
+                 "-Declib=disabled"
+               ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     # code tries to assign a unsigned long to an int in an initialized list
@@ -130,7 +134,6 @@ buildPythonPackage rec {
     boost
     brial
     cliquer
-    eclib
     ecm
     fflas-ffpack
     flint
@@ -195,6 +198,8 @@ buildPythonPackage rec {
     sphinx
     sympy
     typing-extensions
+  ] ++ lib.optional eclibEnabled [
+    eclib
   ];
 
   preBuild = ''
