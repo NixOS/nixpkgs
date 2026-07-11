@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netbox-documents";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jasonyates";
     repo = "netbox-documents";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6t7r/98UILL73JT1TwUBAqygQOtOWj1s1bY7IbRcUKQ=";
+    hash = "sha256-hupJ5gbRj/70oslEosob4gT2y2le5vOrq30t3NWl0nQ=";
   };
 
   build-system = [ setuptools ];
