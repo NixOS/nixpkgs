@@ -1168,6 +1168,11 @@ lib.mapAttrs mkLicense (
       fullName = "Nethack General Public License";
     };
 
+    ngrep = {
+      spdxId = "ngrep";
+      fullName = "ngrep License";
+    };
+
     nistSoftware = {
       spdxId = "NIST-Software";
       fullName = "NIST Software License";
