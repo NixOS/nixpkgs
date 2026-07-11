@@ -797,7 +797,6 @@ let
     sphereTessellation = [ pkgs.pkg-config ];
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
-    stsm = [ pkgs.gsl ];
     survSNP = [ pkgs.gsl ];
     surveyvoi = [ pkgs.pkg-config ];
     svglite = [ pkgs.libpng.dev ];
@@ -1555,6 +1554,7 @@ let
     stpphawkes = [ pkgs.gsl ];
     strawr = [ pkgs.curl ];
     stringi = [ pkgs.icu74 ];
+    stsm = [ pkgs.gsl ];
     surveyvoi = with pkgs; [
       gmp.dev
       mpfr.dev
