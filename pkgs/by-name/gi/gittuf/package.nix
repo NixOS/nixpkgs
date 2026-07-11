@@ -50,6 +50,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://gittuf.dev";
     license = lib.licenses.asl20;
     mainProgram = "gittuf";
-    maintainers = with lib.maintainers; [ flandweber ];
+    maintainers = with lib.maintainers; [
+      flandweber
+      anish
+    ];
   };
 })
