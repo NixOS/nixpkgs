@@ -795,6 +795,14 @@
     };
   };
 
+  flatbuffers = {
+    version = "0-unstable-2024-10-23";
+    url = "github:yuanchenxi95/tree-sitter-flatbuffers";
+    rev = "95e6f9ef101ea97e870bf6eebc0bd1fdfbaf5490";
+    hash = "sha256-rxCgEpZ9NXjhq7ByJLtl/3Oy73dPv1EGG95k3eGOUVE=";
+    meta.license = lib.licenses.mit;
+  };
+
   forth = {
     version = "0-unstable-2025-12-01";
     url = "github:alexanderbrevig/tree-sitter-forth";
