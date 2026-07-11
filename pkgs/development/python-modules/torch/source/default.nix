@@ -263,6 +263,9 @@ let
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport
       && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
+    "Triton cudaPackages does not match cudaPackages" =
+      cudaSupport
+      && (_tritonEffective.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
   };
 
   unroll-src = writeShellScript "unroll-src" ''
