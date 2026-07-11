@@ -115,13 +115,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z18SEjUdFP2/grQtHFI6J7CVcAMalshPt3Sd4tGXsDw=";
+    hash = "sha256-DLDzICjhvIErVm15CLoLnd8WwQl+lcalXhz2xmWposA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -197,8 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
     \) -exec rm -r {} +
 
     mkdir -p "$packageOut/build/plugins"
-    ln -s '${finalAttrs.passthru.plugin-core}' "$packageOut/build/plugins/immich-plugin-core"
-    ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
+    ln -s '${finalAttrs.plugin-core}' "$packageOut/build/plugins/immich-plugin-core"
+    ln -s '${finalAttrs.web}' "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
@@ -222,6 +222,65 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  plugin-core = stdenv.mkDerivation {
+    pname = "immich-plugin-core";
+    inherit (finalAttrs) version src pnpmDeps;
+
+    nativeBuildInputs = [
+      binaryen
+      extism-js
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter @immich/plugin-core... build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cd packages/plugin-core
+      mkdir $out
+      cp -r dist manifest.json $out
+
+      runHook postInstall
+    '';
+  };
+
+  web = stdenv.mkDerivation {
+    pname = "immich-web";
+    inherit (finalAttrs) version src pnpmDeps;
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm --filter immich-web... build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cd web
+      cp -r build $out
+
+      runHook postInstall
+    '';
+  };
+
   passthru = {
     tests = {
       inherit (nixosTests) immich immich-vectorchord-reindex;
@@ -229,65 +288,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     machine-learning = immich-machine-learning.override {
       immich = finalAttrs.finalPackage;
-    };
-
-    plugin-core = stdenv.mkDerivation {
-      pname = "immich-plugin-core";
-      inherit (finalAttrs) version src pnpmDeps;
-
-      nativeBuildInputs = [
-        binaryen
-        extism-js
-        nodejs
-        pnpmConfigHook
-        pnpm
-      ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        pnpm --filter @immich/plugin-core... build
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        cd packages/plugin-core
-        mkdir $out
-        cp -r dist manifest.json $out
-
-        runHook postInstall
-      '';
-    };
-
-    web = stdenv.mkDerivation {
-      pname = "immich-web";
-      inherit (finalAttrs) version src pnpmDeps;
-
-      nativeBuildInputs = [
-        nodejs
-        pnpmConfigHook
-        pnpm
-      ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        pnpm --filter immich-web... build
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        cd web
-        cp -r build $out
-
-        runHook postInstall
-      '';
     };
 
     inherit

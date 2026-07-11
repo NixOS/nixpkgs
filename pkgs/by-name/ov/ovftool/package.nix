@@ -35,7 +35,7 @@ let
       fileName,
       version,
       toolId ? ovftoolId,
-      artifactId ? 29161,
+      artifactId ? 29848,
       fileType ? "Download",
       source ? "",
       hash ? "",
@@ -95,14 +95,14 @@ let
 
   ovftoolSystems = {
     "x86_64-linux" = rec {
-      version = "5.0.0-24781994";
+      version = "5.1.0-25410048";
       fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
-      hash = "sha256-I389VdRZQH9BJT/qxSyUPlRZC7MHv++TDc8rJ1jY788=";
+      hash = "sha256-LIOXCiEswBJirbds47nFKvOW+tg0D/cay3SeM+hsjjM=";
     };
     "x86_64-darwin" = rec {
-      version = "5.0.0-24781994";
+      version = "5.1.0-25410048";
       fileName = "VMware-ovftool-${version}-mac.x64.zip";
-      hash = "sha256-vfhagEOnTGxOsY8kFY555c8EhI12GwQ2JwgTjEz7UT0=";
+      hash = "sha256-gDSraL+B3As+QxT2GlAmL8KjsIelxAd2e4iSRaXOTtI=";
     };
   };
 
@@ -177,9 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
     # with the addition of a libexec directory and a Nix-style binary wrapper.
 
     # Almost all libs in the package appear to be VMware proprietary except for
-    # libgoogleurl and libcurl.
+    # libcurl.
     #
-    # FIXME: Replace libgoogleurl? Possibly from Chromium?
     # FIXME: Tell VMware to use a modern version of OpenSSL on macOS.
 
     # Install all libs that are not patched in preFixup.
@@ -188,7 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 644 -t "$out/lib" \
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    libgoogleurl.so.59 \
     libssoclient.so \
     libvim-types.so \
     libvmacore.so \
@@ -197,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
   # macOS still relies on OpenSSL 1.0.2 as of v4.6.3 and later, but Linux is in the clear
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     lib/libcrypto.1.0.2.dylib \
-    lib/libgoogleurl.59.0.30.45.2.dylib \
     lib/libssl.1.0.2.dylib \
     lib/libssoclient.dylib \
     lib/libvim-types.dylib \

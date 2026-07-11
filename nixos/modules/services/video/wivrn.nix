@@ -201,6 +201,8 @@ in
           # Exec path isn't absolute, it will be resolved relative to $PATH, so we must
           # not override the value of $PATH.
           enableDefaultPath = false;
+
+          unitConfig.ConditionUser = "!@system";
           serviceConfig = (
             if cfg.highPriority then
               {

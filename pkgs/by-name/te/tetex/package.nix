@@ -5,23 +5,23 @@
   flex,
   bison,
   zlib,
-  libpng,
+  libpng12,
   ncurses,
   ed,
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tetex";
   version = "3.0";
 
   src = fetchurl {
-    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-src-${version}.tar.gz";
+    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${finalAttrs.version}/distrib/tetex-src-${finalAttrs.version}.tar.gz";
     sha256 = "16v44465ipd9yyqri9rgxp6rbgs194k4sh1kckvccvdsnnp7w3ww";
   };
 
   texmf = fetchurl {
-    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${version}/distrib/tetex-texmf-${version}.tar.gz";
+    url = "https://mirrors.ctan.org/obsolete/systems/unix/teTeX/${finalAttrs.version}/distrib/tetex-texmf-${finalAttrs.version}.tar.gz";
     sha256 = "1hj06qvm02a2hx1a67igp45kxlbkczjlg20gr8lbp73l36k8yfvc";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     flex
     bison
     zlib
-    libpng
+    libpng12
     ncurses
     ed
   ];
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     hydraPlatforms = [ ];
   };
-}
+})

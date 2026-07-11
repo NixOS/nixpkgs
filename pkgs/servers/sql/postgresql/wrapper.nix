@@ -40,14 +40,15 @@ buildEnv (finalAttrs: {
   derivationArgs = {
     strictDeps = true;
     nativeBuildInputs = [ makeBinaryWrapper ];
-    postBuild =
-      let
-        args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-      in
-      ''
-        wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-      '';
   };
+
+  postBuild =
+    let
+      args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+    in
+    ''
+      wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+    '';
 
   passthru = {
     inherit installedExtensions;

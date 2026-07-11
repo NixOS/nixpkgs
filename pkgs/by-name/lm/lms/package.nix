@@ -17,6 +17,7 @@
   openssl,
   xxhash,
   pugixml,
+  onnxruntime,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xxhash
     pugixml
+    onnxruntime
   ];
 
   postPatch = ''
@@ -59,8 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${lib.getExe ffmpeg}"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/docroot" "$out/share/lms/docroot"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/approot" "$out/share/lms/approot"
+    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms" "$out/share/lms"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"
     install -Dm444 $out/share/lms/default.service -T $out/lib/systemd/system/lmsd.service
   '';
