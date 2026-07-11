@@ -608,7 +608,6 @@ let
       cargo
       rustc
     ];
-    fastpng = [ pkgs.zlib.dev ];
     fcl = with pkgs; [
       cargo
       rustc
@@ -1273,6 +1272,7 @@ let
       zlib.dev
     ];
     excursions = [ pkgs.gsl ];
+    fastpng = [ pkgs.zlib ];
     fftw = [ pkgs.fftw ];
     fftwtools = [ pkgs.fftw ];
     flan = [ pkgs.gsl ];
