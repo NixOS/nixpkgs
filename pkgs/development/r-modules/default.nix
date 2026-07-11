@@ -419,6 +419,7 @@ let
     BayesXsrc = [ pkgs.gsl ]; # for gsl-config
     BigDataStatMeth = [ pkgs.pkg-config ];
     BiocCheck = [ pkgs.which ];
+    CLVTools = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     Cairo = [ pkgs.pkg-config ];
     Cardinal = [ pkgs.which ];
     ChemmineOB = [ pkgs.pkg-config ];
@@ -885,7 +886,6 @@ let
     BigDataStatMeth = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
     CBN2Path = [ pkgs.gsl ];
-    CLVTools = [ pkgs.gsl ];
     CNEr = with pkgs; [ zlib ];
     Cairo = [ pkgs.cairo ];
     CellBarcode = [ pkgs.zlib ];
