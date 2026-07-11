@@ -529,6 +529,7 @@ let
               "test-fetch"
               "test-http2-allow-http1-upgrade-ws"
               "test-http-proxy-fetch"
+              "test-https-proxy-fetch"
               "test-http-set-global-proxy-from-env-fetch"
               "test-http-set-global-proxy-from-env-fetch-default"
               "test-http-set-global-proxy-from-env-fetch-empty"
