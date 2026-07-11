@@ -696,7 +696,7 @@ let
     mwaved = [ pkgs.pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
-    neojags = [ pkgs.jags ];
+    neojags = [ pkgs.pkg-config ];
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     oligo = [ pkgs.zlib.dev ];
@@ -1396,6 +1396,7 @@ let
     nat_templatebrains = [ pkgs.which ];
     ncdfFlow = [ pkgs.zlib.dev ];
     ndjson = [ pkgs.zlib.dev ];
+    neojags = [ pkgs.jags ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixodbc ];
     otelsdk = with pkgs; [
