@@ -9021,6 +9021,11 @@
     githubId = 5198058;
     name = "Udo Sauer";
   };
+  fernvenue = {
+    github = "fernvenue";
+    githubId = 84565547;
+    name = "fernvenue";
+  };
   feyorsh = {
     email = "george@feyor.sh";
     github = "Feyorsh";
