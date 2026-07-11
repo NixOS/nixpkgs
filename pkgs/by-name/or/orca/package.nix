@@ -4,6 +4,7 @@
   buildPackages,
   pkg-config,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -20,8 +21,6 @@
   dbus,
   xkbcomp,
   procps,
-  gnugrep,
-  coreutils,
   gsettings-desktop-schemas,
   speechd-minimal,
   brltty,
@@ -41,9 +40,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   patches = [
+    # Avoid running `cat` and `grep` subshells.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/8f47283da2da7a7d34e769d9c129152decf632cb.patch";
+      hash = "sha256-ts/ZCgEaTrnmMM1cUFJB2rDW9icMoi4jV34psD0IDCc=";
+    })
+
+    # Required for next patch to apply.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/a7b10302b9ff9145a98cb3626f2488d15c558d3e.patch";
+      hash = "sha256-lacy9vIyM3n84s+tbYvAUBKWCT+4nlI9uPVl7UPVS74=";
+      includes = [
+        "src/orca/orca_modifier_manager.py"
+      ];
+    })
+
     (replaceVars ./fix-paths.patch {
-      cat = "${coreutils}/bin/cat";
-      grep = "${gnugrep}/bin/grep";
       pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
