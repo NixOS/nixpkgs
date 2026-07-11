@@ -776,10 +776,6 @@ let
       rustc
     ];
     scorematchingad = [ pkgs.cmake ];
-    seewave = with pkgs; [
-      fftw.dev
-      libsndfile.dev
-    ];
     seqminer = with pkgs; [
       zlib.dev
       bzip2
