@@ -1212,6 +1212,15 @@
     };
   };
 
+  haskell-literate = {
+    version = "0-unstable-2025-10-30";
+    url = "github:LaurentRDC/tree-sitter-haskell-literate";
+    rev = "8ad7bd1b1595f4cc1a4ccc775d4a3c460f43a596";
+    hash = "sha256-P9FTcMwPU1AvH55ly0XydCSVOP0Mfi6jQ0Yg6Muraqk=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   haskell-persistent = {
     version = "0-unstable-2023-09-19";
     url = "github:MercuryTechnologies/tree-sitter-haskell-persistent";
