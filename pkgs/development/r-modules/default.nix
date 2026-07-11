@@ -711,10 +711,7 @@ let
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
-    pcaL1 = [
-      pkgs.pkg-config
-      pkgs.clp
-    ];
+    pcaL1 = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
     phytools = [ pkgs.which ];
     png = [ pkgs.libpng ]; # for libpng-config
@@ -1404,6 +1401,7 @@ let
     pak = [ pkgs.curl ];
     parseLatex = [ pkgs.icu ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
+    pcaL1 = [ pkgs.clp ];
     pdftools = [ pkgs.poppler ];
     pexm = [ pkgs.jags ];
     pgenlibr = [ pkgs.zlib.dev ];
