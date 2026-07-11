@@ -619,12 +619,7 @@ let
       cargo
       rustc
     ];
-    flint = with pkgs; [
-      pkg-config
-      gmp.dev
-      mpfr.dev
-      flint
-    ];
+    flint = [ pkgs.pkg-config ];
     flowPeaks = [ pkgs.gsl ];
     frailtyMMpen = [ pkgs.gsl ];
     fru = with pkgs; [
@@ -1277,6 +1272,11 @@ let
     fftwtools = [ pkgs.fftw ];
     fingerPro = [ pkgs.gsl ];
     flan = [ pkgs.gsl ];
+    flint = with pkgs; [
+      gmp
+      mpfr
+      flint
+    ];
     flowWorkspace = [ pkgs.zlib.dev ];
     fs = [ pkgs.libuv ];
     gaston = with pkgs; [ zlib.dev ];
