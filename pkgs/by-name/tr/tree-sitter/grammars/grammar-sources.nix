@@ -2581,6 +2581,15 @@
     };
   };
 
+  ripple = {
+    version = "0-unstable-2025-11-15";
+    url = "github:Ripple-TS/ripple";
+    rev = "49762f0a63de0d1845fcd2e6632639c095995336";
+    hash = "sha256-ohUhJXdo9UPKhSCxuFXGJE1vl8/QNApQkIrbiszVCbM=";
+    location = "packages/tree-sitter";
+    meta.license = lib.licenses.mit;
+  };
+
   river = {
     version = "0-unstable-2023-11-22";
     url = "github:grafana/tree-sitter-river";
