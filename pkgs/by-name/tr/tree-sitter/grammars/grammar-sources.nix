@@ -3182,6 +3182,13 @@
     };
   };
 
+  tql = {
+    version = "1.1.0";
+    url = "github:tenzir/tree-sitter-tql";
+    hash = "sha256-2XbSwUKSNcODT2GIQ/k4w+4DSbV8dH689DrYBnWhPfU=";
+    meta.license = lib.licenses.mit;
+  };
+
   tsq = {
     version = "0.19.0-unstable-2024-02-24";
     url = "github:tree-sitter/tree-sitter-tsq";
