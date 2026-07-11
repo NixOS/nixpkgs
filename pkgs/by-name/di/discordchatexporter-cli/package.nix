@@ -43,7 +43,7 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = lib.licenses.gpl3Plus;
     mainProgram = "discordchatexporter-cli";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
     platforms = lib.platforms.unix;
   };
 })
