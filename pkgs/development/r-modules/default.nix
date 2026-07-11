@@ -745,10 +745,7 @@ let
     ridge = [ pkgs.gsl ]; # for gsl-config
     rjags = [ pkgs.pkg-config ];
     rlas = [ pkgs.pkg-config ];
-    rmatio = [
-      pkgs.zlib.dev
-      pkgs.pkg-config
-    ];
+    rmatio = [ pkgs.pkg-config ];
     rnetcarto = [ pkgs.gsl ];
     roxigraph = with pkgs; [
       cargo
@@ -1496,6 +1493,7 @@ let
       sqlite
       geos
     ];
+    rmatio = [ pkgs.zlib ];
     rmumps = with pkgs; [ zlib.dev ];
     rrd = [ pkgs.rrdtool ];
     rsbml = [ pkgs.libsbml ];
