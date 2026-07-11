@@ -630,7 +630,6 @@ let
       cargo
       rustc
     ];
-    gamstransfer = [ pkgs.zlib ];
     gdalcubes = [ pkgs.pkg-config ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
@@ -1280,6 +1279,7 @@ let
     flowWorkspace = [ pkgs.zlib.dev ];
     frailtyMMpen = [ pkgs.gsl ];
     fs = [ pkgs.libuv ];
+    gamstransfer = [ pkgs.zlib ];
     gaston = with pkgs; [ zlib.dev ];
     gdalcubes = with pkgs; [
       proj.dev
