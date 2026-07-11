@@ -417,7 +417,7 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
 
-        disabled = meta ? problems.unsupportedPython || disabled;
+        disabled = finalAttrs ? meta.problems.unsupportedPython;
 
         updateScript = nix-update-script { };
         # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
@@ -438,7 +438,7 @@ lib.extendMkDerivation {
       // {
         problems =
           let
-            disabled' = meta ? problems.unsupportedPython || finalAttrs.disabled;
+            disabled' = meta ? problems.unsupportedPython || disabled;
           in
           meta.problems or { }
           // {

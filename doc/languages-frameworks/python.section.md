@@ -198,6 +198,50 @@ following are specific to `buildPythonPackage`:
   })
   ```
 
+  One can also choose to mark a package with `meta.problems.unsupportedPython` providing a custom `message` and optional `urls`:
+
+  ```nix
+  {
+    lib,
+    namePrefix,
+    pythonAtLeast,
+    buildPythonPackage,
+    fetchFromGitHub,
+    setuptools,
+  }:
+  buildPythonPackage (finalAttrs: {
+    pname = "coconut";
+    version = "3.1.2";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "evhub";
+      repo = "coconut";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
+    };
+
+    build-system = [
+      setuptools
+    ];
+
+    meta = {
+      homepage = "http://coconut-lang.org/";
+      problems.unsupportedPython = lib.optionalAttrs (pythonAtLeast "3.13") {
+        message = "${lib.removePrefix namePrefix} requires Python <3.13";
+        urls = [
+          "https://github.com/evhub/coconut/issues/873"
+        ];
+      };
+    };
+  })
+  ```
+
+  ::: {.note}
+  Referencing `<pkg>.disabled` or `finalAtts.disabled` for Python packages are deprecated.
+  Use `<pkg> ? meta.problems.unsupportedPython` instead (the same goes with `finalAttrs`).
+  :::
+
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
