@@ -788,7 +788,6 @@ let
       rustc
       which
     ];
-    snpStats = [ pkgs.zlib.dev ];
     socratadata = with pkgs; [
       cargo
       rustc
@@ -1542,6 +1541,7 @@ let
     ];
     shrinkTVP = [ pkgs.gsl ];
     simplexreg = [ pkgs.gsl ];
+    snpStats = [ pkgs.zlib ];
     sodium = [ pkgs.libsodium ];
     spFW = [ pkgs.fftw.dev ];
     spaMM = [ pkgs.gsl ];
