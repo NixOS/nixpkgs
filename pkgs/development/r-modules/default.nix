@@ -788,7 +788,7 @@ let
       pkg-config
     ];
     rtracklayer = [ pkgs.pkg-config ];
-    runjags = [ pkgs.jags ];
+    runjags = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     rzmq = [ pkgs.pkg-config ];
     s2 = [ pkgs.pkg-config ];
@@ -1513,6 +1513,7 @@ let
       zlib
       curl
     ];
+    runjags = [ pkgs.jags ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
       abseil-cpp
