@@ -16,29 +16,28 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "14k2xk5zrzrw1zprdbwx45hrlc7ck8vq4drpd3l455i5r8yk4y6b";
   };
 
+  sourceRoot = ".";
+
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     puredata
     fftwSinglePrec
   ];
 
-  unpackPhase = ''
-    mkdir source
-    cd source
-    unzip $src
-  '';
-
-  buildPhase = ''
-    make tIDLib.o all
-  '';
+  makeFlags = [
+    "tIDLib.o"
+    "all"
+  ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/
     cp -r *.pd $out/
     cp -r *.pd_linux $out/
     cp -r audio/ $out/
     cp -r data/ $out/
     cp -r doc/ $out/
+    runHook postInstall
   '';
 
   postFixup = ''
