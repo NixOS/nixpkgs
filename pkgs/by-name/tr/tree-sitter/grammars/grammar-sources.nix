@@ -1475,6 +1475,15 @@
     };
   };
 
+  jjrevset = {
+    version = "0-unstable-2025-07-09";
+    url = "github:bryceberger/tree-sitter-jjrevset";
+    rev = "d9af23944b884ec528b505f41d81923bb3136a51";
+    hash = "sha256-815IDF/V+blItEjW1ljUeV/it/8w532tm4k295z+ago=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   jq = {
     version = "0-unstable-2025-05-10";
     url = "github:flurie/tree-sitter-jq";
