@@ -848,7 +848,6 @@ let
       cargo
       rustc
     ];
-    xdvir = [ pkgs.freetype.dev ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     xslt = [ pkgs.pkg-config ];
     ymd = with pkgs; [
@@ -1629,6 +1628,7 @@ let
     vdiffr = [ pkgs.libpng ];
     webp = [ pkgs.libwebp ];
     writexl = with pkgs; [ zlib.dev ];
+    xdvir = [ pkgs.freetype ];
     xslt =
       with pkgs;
       [
