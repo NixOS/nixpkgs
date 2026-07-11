@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       hash = "sha256-ts/ZCgEaTrnmMM1cUFJB2rDW9icMoi4jV34psD0IDCc=";
     })
 
-    # Required for next patch to apply.
+    # Required for fix-paths.patch to apply.
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/orca/-/commit/a7b10302b9ff9145a98cb3626f2488d15c558d3e.patch";
       hash = "sha256-lacy9vIyM3n84s+tbYvAUBKWCT+4nlI9uPVl7UPVS74=";
@@ -90,6 +90,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     speechd-minimal
     gst-python
     setproctitle
+    at-spi2-core
   ];
 
   strictDeps = false;
