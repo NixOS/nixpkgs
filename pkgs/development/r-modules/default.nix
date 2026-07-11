@@ -668,7 +668,7 @@ let
       pkg-config
       which
     ];
-    jSDM = [ pkgs.gsl ];
+    jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
     jqr = [ pkgs.jq.dev ];
     kza = [ pkgs.pkg-config ];
