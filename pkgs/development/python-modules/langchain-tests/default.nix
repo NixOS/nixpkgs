@@ -81,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-tests==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
