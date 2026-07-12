@@ -33,6 +33,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Last.FM scrobbler for MPD";
     mainProgram = "yams";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      acidbong
+    ];
   };
 })
