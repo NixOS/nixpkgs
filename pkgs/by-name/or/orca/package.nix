@@ -26,6 +26,15 @@
   brltty,
   liblouis,
   gst_all_1,
+  vte,
+  xvfb,
+  less,
+  nano,
+  vim,
+  ncurses,
+  glibcLocales,
+  makeFontsConf,
+  dejavu_fonts,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -93,9 +102,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     pytest
+    dbus
+    xvfb
+    less
+    nano
+    vim
+    ncurses # For clear
   ];
 
   checkInputs = with python3.pkgs; [
+    vte
     pytest-mock
   ];
 
@@ -103,11 +119,23 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "-Dmathcat=false"
   ];
 
+  mesonCheckFlags = [
+    "-v"
+  ];
+
   # Help GI find typelibs during Meson's configure step in cross builds
   preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     export GI_TYPELIB_PATH=${buildPackages.gtk3}/lib/girepository-1.0''${GI_TYPELIB_PATH:+:$GI_TYPELIB_PATH}
   '';
 
+  preCheck = ''
+    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
+    # Silence fontconfig warnings about missing config during tests
+    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [
+      # Tests require DejaVu Sans Mono
+      dejavu_fonts
+    ]; }}
+    export XDG_CACHE_HOME=$(mktemp -d)
   # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
   # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
   # See: https://github.com/NixOS/nixpkgs/issues/47390
