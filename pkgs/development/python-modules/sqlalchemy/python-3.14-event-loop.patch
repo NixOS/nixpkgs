@@ -1,0 +1,15 @@
+diff --git a/lib/sqlalchemy/util/_concurrency_py3k.py b/lib/sqlalchemy/util/_concurrency_py3k.py
+index 0ba6d3d..f08b783 100644
+--- a/lib/sqlalchemy/util/_concurrency_py3k.py
++++ b/lib/sqlalchemy/util/_concurrency_py3k.py
+@@ -190,6 +190,10 @@ def get_event_loop():
+         try:
+             return asyncio.get_running_loop()
+         except RuntimeError:
++            if sys.version_info >= (3, 14):
++                loop = asyncio.new_event_loop()
++                asyncio.set_event_loop(loop)
++                return loop
+             return asyncio.get_event_loop_policy().get_event_loop()
+     else:
+         return asyncio.get_event_loop()

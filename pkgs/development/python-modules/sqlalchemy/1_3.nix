@@ -37,6 +37,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
   };
 
+  patches = [
+    # Python 3.14 no longer creates an event loop implicitly
+    ./python-3.14-event-loop.patch
+  ];
+
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
   '';
