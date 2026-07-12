@@ -709,6 +709,7 @@ let
     ];
     magick = [ pkgs.pkg-config ];
     markets = [ pkgs.gsl ]; # for gsl-config
+    mashr = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
@@ -1320,7 +1321,6 @@ let
     magick = [ pkgs.imagemagick ];
     mappoly = [ pkgs.zlib.dev ];
     markets = [ pkgs.gsl ];
-    mashr = [ pkgs.gsl ];
     matchingMarkets = [ pkgs.zlib.dev ];
     methylKit = with pkgs; [
       zlib.dev
