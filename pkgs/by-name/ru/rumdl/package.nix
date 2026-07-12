@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       kachick
       hasnep
+      faukah
     ];
     mainProgram = "rumdl";
     platforms = with lib.platforms; unix ++ windows;
