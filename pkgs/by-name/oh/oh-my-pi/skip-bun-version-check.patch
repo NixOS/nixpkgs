@@ -1,0 +1,26 @@
+diff --git a/packages/coding-agent/src/cli.ts b/packages/coding-agent/src/cli.ts
+index 5eb3155..bc1d5a6 100755
+--- a/packages/coding-agent/src/cli.ts
++++ b/packages/coding-agent/src/cli.ts
+@@ -19,7 +19,6 @@ import type { CliConfig } from "@oh-my-pi/pi-utils/cli";
+ import {
+ 	APP_NAME,
+ 	getActiveProfile,
+-	MIN_BUN_VERSION,
+ 	resolveProfileEnv,
+ 	setProfile,
+ 	VERSION,
+@@ -28,13 +27,6 @@ import { declareWorkerHostEntry, installWorkerInbox } from "@oh-my-pi/pi-utils/w
+ import { installProfileAlias, resolveProfileAliasCommandFromProcess } from "./cli/profile-alias";
+ import { extractProfileFlags } from "./cli/profile-bootstrap";
+ 
+-if (Bun.semver.order(Bun.version, MIN_BUN_VERSION) < 0) {
+-	process.stderr.write(
+-		`error: Bun runtime must be >= ${MIN_BUN_VERSION} (found v${Bun.version}). Please upgrade: bun upgrade\n`,
+-	);
+-	process.exit(1);
+-}
+-
+ process.title = APP_NAME;
+ 
+ // Worker-host entry declaration (Worker threads and worker subprocesses
