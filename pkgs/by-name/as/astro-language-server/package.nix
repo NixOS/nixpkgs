@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
   version = "2.16.11";
@@ -29,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    inherit pnpm;
 
     # pnpm 11 stores state in a SQLite binary, fetcherVersion = 4 dumps it to a deterministic SQL text file
     fetcherVersion = 4;
@@ -40,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm
   ];
-
-  buildInputs = [ nodejs ];
 
   buildPhase = ''
     runHook preBuild
