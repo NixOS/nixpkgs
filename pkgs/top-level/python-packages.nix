@@ -18131,6 +18131,8 @@ self: super: with self; {
 
   simber = callPackage ../development/python-modules/simber { };
 
+  simp-sexp = callPackage ../development/python-modules/simp-sexp { };
+
   simpful = callPackage ../development/python-modules/simpful { };
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
