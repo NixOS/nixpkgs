@@ -23,14 +23,14 @@ body {
 @media screen and (min-width: 992px) {
   .book,
   .appendix {
-    max-width: 60rem;
+    max-width: 55rem;
   }
 }
 
 @media screen and (min-width: 1200px) {
   .book,
   .appendix {
-    max-width: 73rem;
+    max-width: 55rem;
   }
 }
 
