@@ -72,7 +72,15 @@ stdenv.mkDerivation rec {
     # ld: file not found: @rpath/libquadmath.0.dylib
     substituteInPlace m4/p-procs.m4 \
       --replace-fail "-flat_namespace" ""
-
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    # In xalloc fallback mode libSingular must record a real dependency on
+    # libomalloc instead of relying on unresolved flat-namespace lookups.
+    substituteInPlace Singular/Makefile.am \
+      --replace-fail 'libSingular_la_LDFLAGS    =$(SINGULAR_LDFLAGS) ''${USEPPROCSDYNAMICLDFLAGS} ''${USEPPROCSDYNAMICLD} -release ''${PACKAGE_VERSION} $(CCLUSTER_LIBS) ''${PTHREAD_LDFLAGS}' 'libSingular_la_LDFLAGS    =$(SINGULAR_LDFLAGS) -release ''${PACKAGE_VERSION} $(CCLUSTER_LIBS) ''${PTHREAD_LDFLAGS}' \
+      --replace-fail 'libSingular_la_LIBADD     =''${USEPPROCSDYNAMICLDFLAGS} ''${USEPPROCSDYNAMICLD} ''${BUILTIN_FLAGS} ''${top_builddir}/kernel/libkernel.la ''${PTHREAD_LIBS}' 'libSingular_la_LIBADD     =''${BUILTIN_FLAGS} ''${top_builddir}/kernel/libkernel.la ''${OMALLOC_LIBS} ''${PTHREAD_LIBS}'
+  ''
+  + ''
     patchShebangs .
   '';
 
@@ -141,7 +149,7 @@ stdenv.mkDerivation rec {
     make install
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    install -Dm644 ${src}/omalloc/xalloc.h $out/include/omalloc/xalloc.h
+    install -Dm644 omalloc/xalloc.h $out/include/omalloc/xalloc.h
   ''
   + lib.optionalString enableDocs ''
     # Sage uses singular.info, which is not installed by default
