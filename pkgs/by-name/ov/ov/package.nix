@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  buildPackages,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  buildDocs ? buildPackages.pandoc.compiler.bootstrapAvailable,
   pandoc,
   makeWrapper,
   testers,
@@ -34,14 +36,14 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    pandoc
     makeWrapper
-  ];
+  ]
+  ++ lib.optionals buildDocs [ pandoc ];
 
   outputs = [
     "out"
-    "doc"
-  ];
+  ]
+  ++ lib.optionals buildDocs [ "doc" ];
 
   postInstall =
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -55,6 +57,8 @@ buildGoModule (finalAttrs: {
       cp $src/ov-less.yaml $out/share/$name/less-config.yaml
       makeWrapper $out/bin/ov $out/bin/ov-less --add-flags "--config $out/share/$name/less-config.yaml"
 
+    ''
+    + lib.optionalString buildDocs ''
       mkdir -p $doc/share/doc/$name
       pandoc -s < $src/README.md > $doc/share/doc/$name/README.html
       mkdir -p $doc/share/$name
