@@ -72,7 +72,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      ccellado
       anthonyroussel
     ];
   };
