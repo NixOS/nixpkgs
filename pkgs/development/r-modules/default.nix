@@ -809,6 +809,7 @@ let
       geos # for geos-config
     ];
     showtext = [ pkgs.pkg-config ];
+    shrinkTVP = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     smam = [ pkgs.gsl ]; # for gsl-config
     smcryptoR = with pkgs; [
       cargo
@@ -1520,7 +1521,6 @@ let
       libpng
       freetype
     ];
-    shrinkTVP = [ pkgs.gsl ];
     simplexreg = [ pkgs.gsl ];
     snpStats = [ pkgs.zlib ];
     sodium = [ pkgs.libsodium ];
