@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "glabels-qt";
-  version = "0-unstable-2025-12-03";
+  version = "0-unstable-2026-05-24";
 
   src = fetchFromGitHub {
     owner = "j-evins";
     repo = "glabels-qt";
-    tag = "3.99-master602";
-    hash = "sha256-7MQufoU1GBvmZd8FRn331/PwmwQMuZeuFKQqViRI754=";
+    tag = "3.99-master638";
+    hash = "sha256-oi9WOzt3o+5QpfHeosCnbvDmLirE7jXaQUJ5ADd3LY4=";
   };
 
   nativeBuildInputs = [
