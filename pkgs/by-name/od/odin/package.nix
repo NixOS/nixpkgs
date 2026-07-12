@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       astavie
       atomicptr
-      diniamo
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
