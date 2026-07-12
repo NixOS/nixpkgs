@@ -80,6 +80,10 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # overly strict float tolerances
     "TestDendrogram"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # overly strict float tolerances
+    "test_ticklabels_overlap"
   ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
