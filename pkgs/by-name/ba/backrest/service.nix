@@ -1,5 +1,9 @@
 # Non-module dependencies (`importApply`)
-{ }:
+{
+  bash,
+  symlinkJoin,
+  makeBinaryWrapper,
+}:
 
 # Service module
 {
@@ -11,10 +15,27 @@
 let
   inherit (lib)
     getExe
+    literalExpression
     mkOption
     types
     ;
   cfg = config.backrest;
+
+  backrestWrapped = symlinkJoin {
+    name = "backrest-wrapped";
+    paths = [ cfg.package ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/backrest \
+        ${
+          lib.optionalString (cfg.extraPackages != [ ]) "--prefix PATH : ${lib.makeBinPath cfg.extraPackages}"
+        } \
+        --set-default BACKREST_PORT ${cfg.address}:${toString cfg.port} \
+        --set-default BACKREST_DATA ${cfg.dataDir} \
+        ${lib.optionalString (cfg.configPath != null) "--set-default BACKREST_CONFIG ${cfg.configPath}"}
+    '';
+    meta.mainProgram = "backrest";
+  };
 in
 {
   # https://nixos.org/manual/nixos/unstable/#modular-services
@@ -57,20 +78,19 @@ in
         type = types.listOf types.str;
         default = [ ];
       };
+
+      extraPackages = mkOption {
+        description = "Extra packages to add make available to backrest's PATH, useful for backrest hooks.";
+        type = types.listOf types.package;
+        defaultText = literalExpression "[ pkgs.bash ]"; # TODO: can I use pkgs in modular services?
+        default = [ bash ];
+      };
     };
   };
 
   config = {
     process.argv = [
-      (getExe cfg.package)
-      "-bind-address"
-      "${cfg.address}:${toString cfg.port}"
-      "-data-dir"
-      cfg.dataDir
-    ]
-    ++ lib.optionals (cfg.configPath != null) [
-      "-config-file"
-      cfg.configPath
+      (getExe backrestWrapped)
     ]
     ++ cfg.extraArgs;
   }

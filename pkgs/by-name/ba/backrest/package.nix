@@ -17,6 +17,8 @@
   versionCheckHook,
   nix-update-script,
   _experimental-update-script-combinators,
+  symlinkJoin,
+  bash,
   nixosTests,
 }:
 let
@@ -199,7 +201,11 @@ buildGoModule (finalAttrs: {
       inherit (nixosTests) backrest-modular;
     };
     services.default = {
-      imports = [ (lib.modules.importApply ./service.nix { }) ];
+      imports = [
+        (lib.modules.importApply ./service.nix {
+          inherit bash symlinkJoin makeBinaryWrapper;
+        })
+      ];
       backrest.package = finalAttrs.finalPackage;
     };
   };
