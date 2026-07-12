@@ -20,61 +20,66 @@ in
       };
       networking.firewall.allowedTCPPorts = [ 6167 ];
     };
+
     client =
       { pkgs, ... }:
       {
         environment.systemPackages = [
-          (pkgs.writers.writePython3Bin "do_test" { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
+          (pkgs.writers.writePython3Bin "do_test" { libraries = [ pkgs.python3Packages.mautrix ]; } ''
             import asyncio
-            import nio
+
+            from mautrix.client import Client
+            from mautrix.types import EventType, RoomFilter
 
 
             async def main() -> None:
                 # Connect to continuwuity
-                client = nio.AsyncClient("http://continuwuity:6167", "${user}")
+                client = Client(
+                    mxid="@${user}:${name}",
+                    base_url="http://continuwuity:6167",
+                )
 
                 # Log in as user alice
-                response = await client.login("${pass}")
+                await client.login(password="${pass}")
 
                 # Create a new room
-                response = await client.room_create(federate=False)
-                print("Matrix room create response:", response)
-                assert isinstance(response, nio.RoomCreateResponse)
-                room_id = response.room_id
+                room_id = await client.create_room()
+                print("Created room:", room_id)
 
                 # Join the room
-                response = await client.join(room_id)
-                print("Matrix join response:", response)
-                assert isinstance(response, nio.JoinResponse)
+                await client.join_room_by_id(room_id)
+                print("Joined room")
 
                 # Send a message to the room
-                response = await client.room_send(
-                    room_id=room_id,
-                    message_type="m.room.message",
-                    content={
-                        "msgtype": "m.text",
-                        "body": "Hello continuwuity!"
-                    }
-                )
-                print("Matrix room send response:", response)
-                assert isinstance(response, nio.RoomSendResponse)
+                received = asyncio.Event()
+                msg = "Hello continuwuity!"
 
-                # Sync responses
-                response = await client.sync(timeout=30000)
-                print("Matrix sync response:", response)
-                assert isinstance(response, nio.SyncResponse)
+                async def on_message(evt):
+                    if (
+                        evt.room_id != room_id
+                        or evt.sender != client.mxid
+                        or evt.type != EventType.ROOM_MESSAGE
+                    ):
+                        return
 
-                # Check the message was received by continuwuity
-                last_message = response.rooms.join[room_id].timeline.events[-1].body
-                assert last_message == "Hello continuwuity!"
+                    assert evt.content.body == msg
+                    received.set()
+
+                client.add_event_handler(EventType.ROOM_MESSAGE, on_message)
+                sync_task = client.start(RoomFilter(rooms=[room_id]))
+
+                await client.send_text(room_id, msg)
+
+                # Sync until message is received
+                await asyncio.wait_for(received.wait(), timeout=30)
 
                 # Leave the room
-                response = await client.room_leave(room_id)
-                print("Matrix room leave response:", response)
-                assert isinstance(response, nio.RoomLeaveResponse)
+                await client.leave_room(room_id)
+                print("Left room")
 
                 # Close the client
-                await client.close()
+                client.stop()
+                await sync_task
 
 
             if __name__ == "__main__":
@@ -96,6 +101,7 @@ in
   '';
 
   meta.maintainers = with lib.maintainers; [
+    bartoostveen
     nyabinary
     snaki
   ];
