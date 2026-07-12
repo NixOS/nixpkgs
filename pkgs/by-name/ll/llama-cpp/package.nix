@@ -189,9 +189,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
   postInstall = ''
-    # Match previous binary name for this package
-    ln -sf $out/bin/llama-cli $out/bin/llama
-
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
 
