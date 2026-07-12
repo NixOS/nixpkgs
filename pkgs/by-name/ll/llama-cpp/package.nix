@@ -36,7 +36,6 @@
   vulkanSupport ? false,
   rpcSupport ? false,
   openssl,
-  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
