@@ -10305,10 +10305,6 @@ with pkgs;
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
-  hh-suite = callPackage ../applications/science/biology/hh-suite {
-    inherit (llvmPackages) openmp;
-  };
-
   nest-mpi = nest.override { withMpi = true; };
 
   neuron-mpi = neuron.override { useMpi = true; };
