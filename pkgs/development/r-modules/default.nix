@@ -2443,15 +2443,6 @@ let
       '';
     });
 
-    pathfindR = old.pathfindR.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace "R/zzz.R" \
-          --replace-fail "    check_java_version()" "    Sys.setenv(JAVA_HOME = \"${lib.getBin pkgs.jre_minimal}\"); check_java_version()"
-        substituteInPlace "R/active_snw_search.R" \
-          --replace-fail "system(paste0(\"java" "system(paste0(\"${lib.getBin pkgs.jre_minimal}/bin/java"
-      '';
-    });
-
     pbdZMQ = old.pbdZMQ.overrideAttrs (attrs: {
       postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
         for file in R/*.{r,r.in}; do
