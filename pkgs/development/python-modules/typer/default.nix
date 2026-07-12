@@ -9,7 +9,6 @@
 
   # dependencies
   annotated-doc,
-  click,
 
   # optional-dependencies
   rich,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.25.1";
+  version = "0.26.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-HIvXseuR7zUXFuTWzntDfHhAp8BcFjxo35gn0i4+03w=";
+    hash = "sha256-VkqvlWLzmtbQPaplx/YRdSNN1xq/UMRl8EZVIEm97Lk=";
   };
 
   postPatch = ''
@@ -47,7 +46,6 @@ buildPythonPackage rec {
 
   dependencies = [
     annotated-doc
-    click
     rich
     shellingham
   ];
@@ -67,6 +65,10 @@ buildPythonPackage rec {
     # fails also on Linux
     "test_show_completion"
     "test_install_completion"
+    # error message mismatch
+    "test_file_error"
+    # test invokes test_types_file.py and fails to import .../tests
+    "test_binary_stderr"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "test_install_completion"
