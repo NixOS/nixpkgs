@@ -9,18 +9,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "codexbar";
-  version = "0.42.0";
+  version = "0.42.1";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/steipete/CodexBar/releases/download/v${finalAttrs.version}/CodexBar-macos-universal-${finalAttrs.version}.zip";
-    hash = "sha256-R5l4R9E564p9ILFV5A5ZyoQceLhEc1kL2h6eB7hImOU=";
+    hash = "sha256-PXzuRhlQUwqc6ftC8UKpnNY6EK8r9DKPeVbItiGnL64=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     runHook preInstall
