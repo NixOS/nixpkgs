@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [ ./dont-use-pkg-resources.patch ];
+
   build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
@@ -26,6 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     natsort
     numpy
     opencv-python
+    packaging
     pillow
     pyclipper
     requests

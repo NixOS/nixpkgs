@@ -1,0 +1,35 @@
+diff --git a/comic_text_detector/utils/yolov5_utils.py b/comic_text_detector/utils/yolov5_utils.py
+index 2173263..e12d614 100644
+--- a/comic_text_detector/utils/yolov5_utils.py
++++ b/comic_text_detector/utils/yolov5_utils.py
+@@ -1,7 +1,7 @@
+ import math
+ import torch
+ import torch.nn as nn
+-import pkg_resources as pkg
++from packaging.version import Version
+ import torch.nn.functional as F
+ import cv2
+ import numpy as np
+@@ -73,7 +73,7 @@ def intersect_dicts(da, db, exclude=()):
+ 
+ def check_version(current='0.0.0', minimum='0.0.0', name='version ', pinned=False, hard=False):
+     # Check version vs. required version
+-    current, minimum = (pkg.parse_version(x) for x in (current, minimum))
++    current, minimum = (Version(x) for x in (current, minimum))
+     result = (current == minimum) if pinned else (current >= minimum)  # bool
+     if hard:  # assert min requirements met
+         assert result, f'{name}{minimum} required by YOLOv5, but {name}{current} is currently installed'
+diff --git a/pyproject.toml b/pyproject.toml
+index 7d96687..5abe0d6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,7 +23,7 @@ dependencies = [
+     "pyclipper",
+     "requests",
+     "scipy",
+-    "setuptools<81",
++    "packaging",
+     "shapely",
+     "torch>=1.7.0",
+     "torchsummary",
