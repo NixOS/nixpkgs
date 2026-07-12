@@ -10,7 +10,7 @@
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "structlog";
   version = "26.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Q31eqeRYAbwn6Cj3hkXfy3udeBHHglEk5/qTjKbBbL8=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
-    changelog = "https://github.com/hynek/structlog/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/structlog/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
