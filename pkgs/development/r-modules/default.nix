@@ -798,6 +798,7 @@ let
       cargo
       rustc
     ];
+    sbrl = [ pkgs.gsl ]; # for gsl-config
     scorematchingad = [ pkgs.cmake ];
     sf = with pkgs; [
       pkg-config
@@ -1485,10 +1486,7 @@ let
       openssl.dev
     ];
     saeMSPE = [ pkgs.gsl.dev ];
-    sbrl = with pkgs; [
-      gsl
-      gmp.dev
-    ];
+    sbrl = [ pkgs.gmp ];
     scModels = [ pkgs.mpfr.dev ];
     scPipe = with pkgs; [
       bzip2.dev
