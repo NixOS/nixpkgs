@@ -823,6 +823,7 @@ let
     sodium = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
+    stpphawkes = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     string2path = [ pkgs.cargo ];
     stringi = [ pkgs.pkg-config ];
     survSNP = [ pkgs.gsl ]; # for gsl-config
@@ -1535,7 +1536,6 @@ let
     ];
     spp = with pkgs; [ zlib.dev ];
     ssh = with pkgs; [ libssh ];
-    stpphawkes = [ pkgs.gsl ];
     strawr = [ pkgs.curl ];
     stringi = [ pkgs.icu74 ];
     stsm = [ pkgs.gsl ];
