@@ -8,11 +8,13 @@
   meson,
   ninja,
   wrapGAppsHook3,
+  breakpointHook,
+  gdb,
   gobject-introspection,
   gettext,
   yelp-tools,
   itstool,
-  python3,
+  python313,
   gtk3,
   gnome,
   replaceVars,
@@ -20,10 +22,12 @@
   at-spi2-core,
   dbus,
   xkbcomp,
+  glib,
   procps,
   gsettings-desktop-schemas,
   speechd-minimal,
   brltty,
+  libsegfault,
   liblouis,
   gst_all_1,
   vte,
@@ -37,7 +41,7 @@
   dejavu_fonts,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python313.pkgs.buildPythonApplication (finalAttrs: {
   pname = "orca";
   version = "50.2";
 
@@ -61,11 +65,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # cross-compilation support requires the host environment's build time
     # to make the following buildPackages available.
     buildPackages.gtk3
-    buildPackages.python3
-    buildPackages.python3Packages.pygobject3
+    buildPackages.python313
+    buildPackages.python313Packages.pygobject3
     meson
     ninja
     wrapGAppsHook3
+    breakpointHook
+    gdb
     pkg-config
     gettext
     yelp-tools
@@ -73,7 +79,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gobject-introspection
   ];
 
-  pythonPath = with python3.pkgs; [
+  pythonPath = with python313.pkgs; [
     dasbus
     pygobject3
     pyxdg
@@ -83,16 +89,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     speechd-minimal
     gst-python
     setproctitle
-    at-spi2-core
+    # (at-spi2-core.override { python3 = python313; })
   ];
 
   strictDeps = false;
 
   buildInputs = [
-    python3
+    python313
     gtk3
-    at-spi2-atk
-    at-spi2-core
+    # at-spi2-atk
+    # at-spi2-core
     dbus
     gsettings-desktop-schemas
     gst_all_1.gstreamer
@@ -100,7 +106,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gst_all_1.gst-plugins-good
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python313.pkgs; [
     pytest
     dbus
     xvfb
@@ -110,7 +116,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ncurses # For clear
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python313.pkgs; [
     vte
     pytest-mock
   ];
@@ -129,6 +135,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   preCheck = ''
+    export LD_PRELOAD=${libsegfault}/lib/libsegfault.so
+    export NIX_DEBUG_INFO_DIRS=${glib.debug}/lib/debug:${gtk3.debug}/lib/debug:${at-spi2-core.debug}/lib/debug:${python313.pkgs.pygobject3.debug}/lib/debug
+    export SEGFAULT_SIGNALS=all
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
     # Silence fontconfig warnings about missing config during tests
     export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [
@@ -136,6 +145,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       dejavu_fonts
     ]; }}
     export XDG_CACHE_HOME=$(mktemp -d)
+    echo PPPPPPPPPPPPPPPPPPPPPPP=$PYTHONPATH
+  '';
+
   # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
   # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
   # See: https://github.com/NixOS/nixpkgs/issues/47390

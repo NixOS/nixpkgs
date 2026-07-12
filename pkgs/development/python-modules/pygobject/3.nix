@@ -64,6 +64,9 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
+separateDebugInfo =true;
+__structuredAttrs =true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "pygobject";
