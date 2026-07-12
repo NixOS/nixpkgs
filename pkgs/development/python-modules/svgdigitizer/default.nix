@@ -42,6 +42,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  # https://github.com/echemdb/svgdigitizer/issues/298
+  pythonRelaxDeps = [
+    "astropy"
+  ];
+
   dependencies = [
     astropy
     click
