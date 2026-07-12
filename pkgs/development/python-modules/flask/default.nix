@@ -59,6 +59,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
+  disabledTests = [
+    # https://github.com/pallets/flask/issues/6092#issuecomment-4952497033
+    "test_bad_environ_raises_bad_request"
+  ];
+
   passthru.tests = {
     inherit
       flask-limiter
