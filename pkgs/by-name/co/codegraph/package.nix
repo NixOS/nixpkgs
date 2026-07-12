@@ -7,6 +7,7 @@
   writeShellScript,
   curl,
   common-updater-scripts,
+  gnused,
   cctools,
   darwin,
   rcodesign,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codegraph";
-  version = "0.9.9";
+  version = "1.4.1";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -75,19 +76,19 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
-        hash = "sha256-Jm7gOMUpRulu4iKEP8bz5E01E0HtmPEfUne9/OmIDKU=";
+        hash = "sha256-Smea5aXLn/+QDdWbt4baalgbf2j0z3E73t0TfjR9NNw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-arm64.tar.gz";
-        hash = "sha256-c8bldypGnYwcs8+OuToIULDeLoAQWwoCrA/QWdEn3pk=";
+        hash = "sha256-DWLF6yci+NGdIPehvZdEReGNUpTLWb4Ragw9Vc6HWR8=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-x64.tar.gz";
-        hash = "sha256-tYPq7T5Ou0/tPGsI47H3j3v2Z8WAQVU9aWIpsh4+nxE=";
+        hash = "sha256-Q2+WlDz9km6m0KhFTxiDPSElTV/Zs9IkMXsUJhMt75U=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-linux-x64.tar.gz";
-        hash = "sha256-xA7oC84tNUyHS+/l7OmWKBy0bPCDAENy02/YpyOLWfs=";
+        hash = "sha256-+1hf9QGNb6qkbSgrYfT2ibx5Z+2KG0Z6XFVt187ZtUI=";
       };
     };
     updateScript = writeShellScript "update-codegraph" ''
@@ -96,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           curl
           common-updater-scripts
+          gnused
         ]
       }"
       NEW_VERSION=$(curl --silent -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/colbymchenry/codegraph/releases/latest" | sed -n 's#.*/releases/tag/v##p')
