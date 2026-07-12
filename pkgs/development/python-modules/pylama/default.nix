@@ -73,6 +73,8 @@ let
     };
 
     meta = {
+      # https://github.com/klen/pylama/issues/249
+      broken = lib.versionAtLeast setuptools.version "82";
       description = "Code audit tool for python";
       mainProgram = "pylama";
       homepage = "https://github.com/klen/pylama";
