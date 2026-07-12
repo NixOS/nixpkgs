@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yams";
   # nixpkgs-update: no auto update
   version = "0.7.3";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Berulacks";
     repo = "yams";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1zkhcys9i0s6jkaz24an690rvnkv1r84jxpaa84sf46abi59ijh8";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})
