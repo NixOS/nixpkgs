@@ -26,8 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
   ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "yams.scrobble" ];
 
   meta = {
