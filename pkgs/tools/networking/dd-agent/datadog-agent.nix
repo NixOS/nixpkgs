@@ -23,12 +23,12 @@ let
   owner = "DataDog";
   repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.75.0";
+  version = "7.81.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
     tag = version;
-    hash = "sha256-oj4LFQiaEeSHcSx0Bar4vU7w/8gi0fgBGSAUjaD4SFc=";
+    hash = "sha256-2n7grmaVdjXMgx83aD99U2DP2uHclVjyiNhV8cKh0tY=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -49,7 +49,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  vendorHash = "sha256-5lqWfhMXrYyZkP/MYH/Uvgu0VHaDmYMOmBOc5xExLi4=";
+  vendorHash = "sha256-EOPKzlVh1YjwDj0bPEXm/DmIYgfY3Wg7OpmwNmdQ4QI=";
 
   subPackages = [
     "cmd/agent"
