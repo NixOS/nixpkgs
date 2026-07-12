@@ -842,6 +842,7 @@ let
     ];
     tesseract = [ pkgs.pkg-config ];
     textshaping = [ pkgs.pkg-config ];
+    tfevents = [ pkgs.protobuf ];
     tinyimg = with pkgs; [
       cargo
       rustc
