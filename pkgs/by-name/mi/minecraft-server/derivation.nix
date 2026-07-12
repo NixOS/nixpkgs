@@ -36,7 +36,11 @@ stdenv.mkDerivation {
 
   passthru = {
     tests = { inherit (nixosTests) minecraft-server; };
-    updateScript = ./update.py;
+    updateScript = {
+      command = [ ./update.py ];
+
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   meta = {
