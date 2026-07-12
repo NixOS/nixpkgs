@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.10.1";
+  version = "11.0.4";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
+    hash = "sha256-j7+IXVyQGDNE2xHGn4iaZv5v2ez/jnOBU0qwhr08ATU=";
   };
 
   patches = lib.optional (
@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       adev
+      aln730
     ];
   };
 })
