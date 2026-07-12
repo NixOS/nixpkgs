@@ -64,10 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ShokoAnime/Shoko-WebUI";
     changelog = "https://github.com/ShokoAnime/Shoko-WebUI/releases/tag/v${finalAttrs.version}";
     description = "Web-based frontend for the Shoko anime management system";
-    maintainers = with lib.maintainers; [
-      diniamo
-      nanoyaki
-    ];
+    maintainers = with lib.maintainers; [ nanoyaki ];
     inherit (shoko.meta) license platforms;
   };
 })
