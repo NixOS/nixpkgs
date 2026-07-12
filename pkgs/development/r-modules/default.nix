@@ -694,6 +694,7 @@ let
       cmake
       pkg-config
     ];
+    lnmixsurv = [ pkgs.gsl ]; # for gsl-config
     lpsymphony = with pkgs; [
       pkg-config
       gfortran
@@ -1302,7 +1303,6 @@ let
       zstd
       icu
     ];
-    lnmixsurv = [ pkgs.gsl.dev ];
     lpsymphony = with pkgs; [
       symphony
       cgl
