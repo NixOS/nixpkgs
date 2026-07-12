@@ -662,6 +662,7 @@ mapAliases {
   dleyna-server = throw "'dleyna-server' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dnscrypt-proxy2 = throw "'dnscrypt-proxy2' has been renamed to/replaced by 'dnscrypt-proxy'"; # Converted to throw 2025-10-27
   docker-distribution = throw "'docker-distribution' has been renamed to/replaced by 'distribution'"; # Converted to throw 2025-10-27
+  docker-machine-hyperkit = throw "docker-machine-hyperkit has been removed as it only supported x86_64-darwin"; # Added 2026-07-12
   docker-sync = throw "'docker-sync' has been removed because it was broken and unmaintained"; # Added 2025-08-26
   docker_26 = throw "'docker_26' has been removed because it has been unmaintained since February 2025. Use docker_28 or newer instead."; # Added 2025-06-21
   docker_27 = throw "'docker_27' has been removed because it has been unmaintained since May 2025. Use docker_28 or newer instead."; # Added 2025-06-15
