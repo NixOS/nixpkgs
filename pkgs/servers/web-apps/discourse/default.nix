@@ -34,7 +34,7 @@
   brotli,
   procps,
   rsync,
-  icu,
+  icu78,
   rustPlatform,
   buildRubyGem,
   rustc,
@@ -183,7 +183,7 @@ let
     gemset = import ./rubyEnv/gemset.nix;
     gemConfig = defaultGemConfig // {
       mini_racer = attrs: {
-        buildInputs = [ icu ];
+        buildInputs = [ icu78 ];
         dontBuild = false;
         NIX_LDFLAGS = "-licui18n";
       };
