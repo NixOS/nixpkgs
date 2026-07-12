@@ -610,6 +610,7 @@ let
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
     exactextractr = [ pkgs.geos ]; # for geos-config
+    excursions = [ pkgs.gsl ]; # for gsl-config
     fRLR = [ pkgs.gsl ]; # for gsl-config
     fangs = with pkgs; [
       cargo
@@ -1190,7 +1191,6 @@ let
       bzip2.dev
       zlib.dev
     ];
-    excursions = [ pkgs.gsl ];
     fastpng = [ pkgs.zlib ];
     fftw = [ pkgs.fftw ];
     fftwtools = [ pkgs.fftw ];
