@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     "all"
   ];
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/
