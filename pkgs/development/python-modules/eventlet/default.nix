@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_ssl_close"
     # flaky test
     "test_send_timeout"
+    # greenlet 3.5.1 compat issue
+    "test_patcher_existing_logging_module_lock"
   ];
 
   pythonImportsCheck = [ "eventlet" ];
