@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabricmanagedclusters";
-  version = "2.1.0b3";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_servicefabricmanagedclusters";
     inherit version;
-    hash = "sha256-52i8y0V2qy3yDP/mJi7zATE0+qi5H+F8Zcjnoc2qQTU=";
+    hash = "sha256-6JcaQubkkT9IWr9NRRQBGwvYbNQeFQovh9yHWO/P984=";
   };
 
   build-system = [ setuptools ];
