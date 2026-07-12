@@ -1,0 +1,15 @@
+{
+  "version": "6.6.16.1",
+  "sources": [
+    {
+      "url": "https://cdn.waterfox.com/waterfox/releases/6.6.16.1/Linux_x86_64/waterfox-6.6.16.1.tar.bz2",
+      "hash": "sha512-MW3qiphn/b5cxqyi1zJIQSa+70vMveWuJLxxw3CqPQ+l9WBb2Em5yEB9LuRg0QKoN790iped6binSmvHLWj4xQ==",
+      "arch": "Linux_x86_64"
+    },
+    {
+      "url": "https://cdn.waterfox.com/waterfox/releases/6.6.16.1/Darwin_x86_64-aarch64/Waterfox%206.6.16.1.dmg",
+      "hash": "sha512-WNtxepp6Acr1OeSz/AXFFZ4NmK8K6FpC/tJMtH6nWMkxBzpJZPTCFWr4PGpki+Aq2pR1k+pzeYIYIQySu/yDIg==",
+      "arch": "Darwin_x86_64-aarch64"
+    }
+  ]
+}

@@ -70,6 +70,7 @@ let
       pkcs11Modules ? [ ],
       useGlvnd ? (!isDarwin),
       cfg ? config.${applicationName} or { },
+      strictDeps ? false,
 
       ## Following options are needed for extra prefs & policies
       # For more information about anti tracking (german website)
@@ -215,6 +216,7 @@ let
     in
     stdenv.mkDerivation (finalAttrs: {
       __structuredAttrs = true;
+      inherit strictDeps;
       inherit pname version;
 
       desktopItem = makeDesktopItem (

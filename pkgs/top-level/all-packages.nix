@@ -8769,6 +8769,11 @@ with pkgs;
     pname = "floorp-bin";
   };
 
+  waterfox-bin = wrapFirefox waterfox-bin-unwrapped {
+    pname = "waterfox-bin";
+    strictDeps = true;
+  };
+
   inherit
     ({
       freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
