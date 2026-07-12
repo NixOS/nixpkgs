@@ -34,6 +34,7 @@ let
       (replaceVars ./paths.patch {
         git = "${lib.getBin git}/bin/git";
       })
+      ./pytest-9.1-compat.patch
     ];
 
     propagatedBuildInputs = [
