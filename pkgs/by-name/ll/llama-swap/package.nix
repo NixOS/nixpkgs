@@ -12,6 +12,8 @@
 
   nixosTests,
   nix-update-script,
+
+  withUI ? true,
 }:
 
 let
@@ -46,7 +48,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-jQRnFGqQvk6my7ejnesv1pylCmEXLs9GKbQJEZdsaYg=";
 
   # Upstream only embeds the UI when this build tag is set.
-  tags = [ "embed_ui" ];
+  tags = lib.optionals withUI [ "embed_ui" ];
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
@@ -73,8 +75,10 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
     ldflags+=" -X main.date=$(cat SOURCE_DATE_EPOCH)"
 
-    # copy for go:embed in internal/server/ui_embed.go
-    cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ${lib.optionalString withUI ''
+      # copy for go:embed in internal/server/ui_embed.go
+      cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ''}
   '';
 
   excludedPackages = [
