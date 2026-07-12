@@ -184,6 +184,10 @@ buildPythonPackage rec {
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
     changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    knownVulnerabilities = [
+      "CVE-2026-49468"
+      "CVE-2026-59822"
+    ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
