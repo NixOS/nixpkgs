@@ -84,6 +84,8 @@ in
         DynamicUser = true;
         StateDirectory = "backrest";
         Environment = "HOME=${cfg.dataDir}";
+        AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" ];
+        CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
       };
     };
   };

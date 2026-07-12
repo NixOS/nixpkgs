@@ -24,6 +24,11 @@
   testScript = /* py */ ''
     machine.succeed("mkdir -p /srv/backup-source")
     machine.succeed("echo 'important backup data' > /srv/backup-source/data.txt")
+
+    machine.succeed("echo 'root owned data' > /srv/backup-source/root.txt")
+    machine.succeed("chown root:root /srv/backup-source/root.txt")
+    machine.succeed("chmod 600 /srv/backup-source/root.txt")
+
     machine.succeed("echo 'testpass' > /srv/restic-password")
 
     machine.start_job("backrest.service")
@@ -33,9 +38,11 @@
     machine.succeed("curl -fsS http://localhost:9898")
 
     # Trigger a backup manually via the API and wait for it to complete
-    machine.succeed("curl -fsS -X POST -H 'Content-Type: application/json' -d '{\"value\": \"test-backup\"}' http://localhost:9898/v1.Backrest/Backup")
+    machine.succeed("""curl -fsS -X POST -H 'Content-Type: application/json' -d '{"value": "test-backup"}' http://localhost:9898/v1.Backrest/Backup""")
 
-    machine.succeed("${hostPkgs.restic}/bin/restic -r /var/lib/backrest/restic-repo --password-file /srv/restic-password ls latest | grep -q data.txt")
+    restic_cmd = "${hostPkgs.restic}/bin/restic -r /var/lib/backrest/restic-repo --password-file /srv/restic-password"
+    machine.succeed(f"{restic_cmd} ls latest | grep -q data.txt")
+    machine.succeed(f"{restic_cmd} ls latest | grep -q root.txt")
   '';
 
   meta.maintainers = with lib.maintainers; [ phanirithvij ];
