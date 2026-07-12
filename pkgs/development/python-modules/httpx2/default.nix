@@ -102,6 +102,9 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # uvicorn access logging mismatch
+    "test_logging_request"
+    "test_logging_redirect_chain"
   ];
 
   passthru.tests = {
