@@ -25,7 +25,8 @@ buildPythonPackage {
     substituteInPlace README.rst \
       --replace-fail " PreconditionError" " dpcontracts.PreconditionError" \
       --replace-fail " PostconditionError" " dpcontracts.PostconditionError" \
-      --replace-fail ">>> class Counter:" $'>>> from dpcontracts import preserve\n    >>> class Counter:'
+      --replace-fail ">>> class Counter:" $'>>> from dpcontracts import preserve\n    >>> class Counter:' \
+      --replace-fail "asyncio.get_event_loop().run_until_complete(" "asyncio.run("
   '';
 
   build-system = [
