@@ -94,7 +94,9 @@ in
           5000 # AirPlay 1/RAOP
           7000 # AirPlay 2
         ]
+        # https://www.music-assistant.io/player-support/sendspin/#connecting-external-sendspin-clients
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
+        # https://www.music-assistant.io/player-support/snapcast/#known-issues--notes
         ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
         ++ lib.optional (lib.elem "spotify_connect" cfg.providers && cfg.spotifyConnectPort != 0) cfg.spotifyConnectPort
         ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
