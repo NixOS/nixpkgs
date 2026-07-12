@@ -25608,12 +25608,6 @@
     githubId = 106669955;
     name = "Léon Gessner";
   };
-  shardy = {
-    email = "shardul@baral.ca";
-    github = "shardulbee";
-    githubId = 16765155;
-    name = "Shardul Baral";
-  };
   sharpchen = {
     github = "sharpchen";
     githubId = 77432836;
