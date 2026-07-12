@@ -33,12 +33,11 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
 
-  srcs = rec {
+  srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
       hash = "sha256-08vjdcv6QCTbGRC5gZFkn0E0xcSK7l5gtudxOYfc2yg=";
@@ -49,12 +48,10 @@ let
       hash = "sha256-mKrDTR8TKjXPUG/D+hltWV3N7v3r1EsMxfqqehohDeI=";
     };
 
-    x86_64-darwin = fetchurl {
+    aarch64-darwin = fetchurl {
       url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
       hash = "sha256-BdqlT14aRFj3XaKfj6qhfo43rhaZhDJTf2dMYm25m84=";
     };
-
-    aarch64-darwin = x86_64-darwin;
   };
 
   src =
