@@ -733,6 +733,7 @@ let
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.which ];
     pcaL1 = [ pkgs.pkg-config ];
     pdftools = [ pkgs.pkg-config ];
+    pexm = [ pkgs.jags ];
     phytools = [ pkgs.which ];
     png = [ pkgs.libpng ]; # for libpng-config
     protolite = [ pkgs.protobuf ];
@@ -1357,7 +1358,6 @@ let
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.binutils ];
     pcaL1 = [ pkgs.clp ];
     pdftools = [ pkgs.poppler ];
-    pexm = [ pkgs.jags ];
     pgenlibr = [ pkgs.zlib.dev ];
     pliman = with pkgs; [
       fftw.dev
