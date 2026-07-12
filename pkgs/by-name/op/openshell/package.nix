@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openshell";
-  version = "0.0.36";
+  version = "0.0.80";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "OpenShell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AnZliQrn5kwaVJw1LEorT+VPtIk2NIbVY0QISxfnORs=";
+    hash = "sha256-kl2ngpl0ASOu+2wTJglQNTYgzxQcoVttP6KXbcYa/WY=";
   };
 
-  cargoHash = "sha256-kmmzzph39KaAXkEbjOHMoTRltX2ttqxtHppb6apoSSs=";
+  cargoHash = "sha256-5Zb9HqEndTn1iKJQSS4mdfDfGdXnHzof7nnaQgS0sTU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -66,7 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       see and do, and where inference goes. It enables claws to run in isolated
       sandboxes, with fine-grained control over privacy and security.
     '';
-    maintainers = with lib.maintainers; [ wishstudio ];
+    maintainers = with lib.maintainers; [
+      cig0
+      wishstudio
+    ];
     mainProgram = "openshell";
     platforms = lib.platforms.all;
   };
