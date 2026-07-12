@@ -245,19 +245,19 @@ in
       };
 
       components = {
-        subversion = lib.mkEnableOption "Subversion integration.";
+        subversion = lib.mkEnableOption "Subversion integration";
 
-        mercurial = lib.mkEnableOption "Mercurial integration.";
+        mercurial = lib.mkEnableOption "Mercurial integration";
 
-        git = lib.mkEnableOption "git integration.";
+        git = lib.mkEnableOption "git integration";
 
-        cvs = lib.mkEnableOption "cvs integration.";
+        cvs = lib.mkEnableOption "cvs integration";
 
-        breezy = lib.mkEnableOption "bazaar integration.";
+        breezy = lib.mkEnableOption "bazaar integration";
 
-        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG.";
+        imagemagick = lib.mkEnableOption "exporting Gant diagrams as PNG";
 
-        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
+        ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF";
 
         minimagick_font_path = lib.mkOption {
           type = lib.types.str;
@@ -265,6 +265,8 @@ in
           description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
+
+        pandoc = lib.mkEnableOption "pandoc integration for previewing LibreOffice and Microsoft Office documents";
       };
     };
   };
@@ -310,6 +312,7 @@ in
         imagemagick_convert_command = lib.optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
         gs_command = lib.optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
+        pandoc_command = lib.optionalString cfg.components.pandoc "${pkgs.pandoc}/bin/pandoc";
       };
     };
 
