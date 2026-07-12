@@ -570,6 +570,7 @@ let
     blosc = [ pkgs.pkg-config ];
     cairoDevice = [ pkgs.pkg-config ];
     cartogramR = [ pkgs.pkg-config ];
+    catSurv = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     caugi = with pkgs; [
       cargo
       rustc
