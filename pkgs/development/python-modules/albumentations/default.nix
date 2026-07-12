@@ -44,6 +44,17 @@ buildPythonPackage rec {
     ./dont-check-for-updates.patch
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        'from pkg_resources import DistributionNotFound, get_distribution' \
+        'from importlib.metadata import PackageNotFoundError as DistributionNotFound, distribution as get_distribution'
+    substituteInPlace tests/test_blur.py \
+      --replace-fail \
+        '(ImageFilter.GaussianBlur(radius=sigma))' \
+        '(ImageFilter.GaussianBlur(radius=float(sigma)))'
+  '';
+
   pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
