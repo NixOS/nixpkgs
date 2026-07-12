@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swcgeom";
-  version = "0.21.5";
+  version = "0.21.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "yzx9";
     repo = "swcgeom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QLo2tfoQFuoKee/e/t5l3bUwOtobV57Od9UvAze78FE=";
+    hash = "sha256-Q9YvHHUAYGX3m9jJ+ogTYRrdPaCdrcNY2cNlKK7ThX4=";
   };
 
   build-system = [
