@@ -207,6 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontStrip = debug;
 
+  # fixes: no space left on device
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Just the built source without the libraries";
     longDescription = ''
