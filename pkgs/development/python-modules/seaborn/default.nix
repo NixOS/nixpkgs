@@ -15,15 +15,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "seaborn";
   version = "0.13.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwaskom";
     repo = "seaborn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
@@ -47,9 +48,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
@@ -90,8 +91,8 @@ buildPythonPackage rec {
   meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
-    changelog = "https://github.com/mwaskom/seaborn/blob/v${version}/doc/whatsnew/v${version}.rst";
+    changelog = "https://github.com/mwaskom/seaborn/blob/${finalAttrs.src.tag}/doc/whatsnew/${finalAttrs.src.tag}.rst";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})
