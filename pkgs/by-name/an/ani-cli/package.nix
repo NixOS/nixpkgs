@@ -66,10 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pystardust/ani-cli";
     description = "Cli tool to browse and play anime";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      skykanin
-      diniamo
-    ];
+    maintainers = with lib.maintainers; [ skykanin ];
     platforms = lib.platforms.unix;
     mainProgram = "ani-cli";
     sourceProvenance = with lib.sourceTypes; [
