@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "yabai";
     maintainers = with lib.maintainers; [
       cmacrae
-      shardy
       khaneliman
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];

@@ -10,7 +10,7 @@ in
 {
   options.services.oo7 = {
     enable = lib.mkEnableOption ''
-      oo7, a service providing the Secret Service D-Bus API.
+      oo7, a service providing the Secret Service D-Bus API
     '';
   };
 

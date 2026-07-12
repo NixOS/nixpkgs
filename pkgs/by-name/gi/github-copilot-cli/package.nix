@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      dbreyfogle
       me-and
     ];
     mainProgram = "copilot";
