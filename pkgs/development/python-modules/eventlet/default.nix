@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.40.3";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
     tag = version;
-    hash = "sha256-yieyNx91jvKoh02zDFIEFk70yf3I27DWiumqoOjtdzQ=";
+    hash = "sha256-g/AmHqCtWExp8XAdb9/knfATPne9Ma8MbIhYBHZxyOY=";
   };
 
   pythonRelaxDeps = lib.optionals isPyPy [ "greenlet" ];
