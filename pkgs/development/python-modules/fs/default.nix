@@ -12,7 +12,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pytz,
-  setuptools_80,
+  setuptools,
   six,
 }:
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
       --replace ThreadedTestFTPd FtpdThreadWrapper
   '';
 
-  build-system = [ setuptools_80 ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    setuptools_80
+    setuptools
     six
     appdirs
     pytz
