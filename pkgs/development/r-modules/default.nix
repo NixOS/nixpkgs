@@ -561,6 +561,10 @@ let
       cargo
       rustc
     ];
+    b64 = with pkgs; [
+      cargo
+      rustc
+    ];
     bigGP = [ pkgs.mpi ];
     bigrquerystorage = with pkgs; [
       grpc
@@ -610,6 +614,10 @@ let
     diversitree = [ pkgs.gsl ]; # for gsl-config
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
+    enderecobr = with pkgs; [
+      cargo
+      rustc
+    ];
     exactextractr = [ pkgs.geos ]; # for geos-config
     excursions = [ pkgs.gsl ]; # for gsl-config
     fRLR = [ pkgs.gsl ]; # for gsl-config
@@ -656,6 +664,10 @@ let
     gdtools = [ pkgs.pkg-config ];
     gert = [ pkgs.pkg-config ];
     gglinedensity = [ pkgs.cargo ];
+    gifski = with pkgs; [
+      cargo
+      rustc
+    ];
     git2r = [ pkgs.pkg-config ];
     glpkAPI = with pkgs; [
       gmp
@@ -2328,13 +2340,6 @@ let
     });
 
     b64 = old.b64.overrideAttrs (attrs: {
-      nativeBuildInputs =
-        with pkgs;
-        [
-          cargo
-          rustc
-        ]
-        ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -2404,10 +2409,6 @@ let
 
     enderecobr = old.enderecobr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [
-        pkgs.cargo
-        pkgs.rustc
-      ];
     });
 
     exifr = old.exifr.overrideAttrs (attrs: {
@@ -2482,22 +2483,6 @@ let
       env = (attrs.env or { }) // {
         RGL_USE_NULL = "true";
       };
-    });
-
-    gifski = old.gifski.overrideAttrs (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-        src = attrs.src;
-        sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
-      };
-
-      cargoRoot = "src/myrustlib";
-
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [
-        pkgs.rustPlatform.cargoSetupHook
-        pkgs.cargo
-        pkgs.rustc
-      ];
     });
 
     gmailr = old.gmailr.overrideAttrs (attrs: {
