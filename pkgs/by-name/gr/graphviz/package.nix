@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
     (lib.withFeature withXorg "x")
+    (lib.withFeature stdenv.hostPlatform.isDarwin "quartz")
   ];
 
   enableParallelBuilding = true;
