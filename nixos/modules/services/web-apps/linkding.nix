@@ -151,6 +151,18 @@ in
       default = false;
       description = "Open the linkding port in the firewall.";
     };
+
+    processes = mkOption {
+      type = types.ints.positive;
+      default = 2;
+      description = "Number of uWSGI processes to spawn.";
+    };
+
+    threads = mkOption {
+      type = types.ints.positive;
+      default = 2;
+      description = "Number of threads to spawn (per uWSGI process).";
+    };
   };
 
   config = mkIf cfg.enable (
@@ -196,8 +208,8 @@ in
         plugin = python3
         module = bookmarks.wsgi:application
         env = DJANGO_SETTINGS_MODULE=bookmarks.settings.prod
-        processes = 2
-        threads = 2
+        processes = ${toString cfg.processes}
+        threads = ${toString cfg.threads}
         buffer-size = 8192
         die-on-term = true
         mime-file = ${pkgs.mailcap}/etc/mime.types
