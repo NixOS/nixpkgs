@@ -25,18 +25,16 @@
   pytestCheckHook,
 }:
 
-let
-  version = "0.21.5";
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swcgeom";
-  inherit version;
+  version = "0.21.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yzx9";
     repo = "swcgeom";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QLo2tfoQFuoKee/e/t5l3bUwOtobV57Od9UvAze78FE=";
   };
 
@@ -88,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Neuron geometry library for swc format";
     homepage = "https://github.com/yzx9/swcgeom";
-    changelog = "https://github.com/yzx9/swcgeom/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/yzx9/swcgeom/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})
