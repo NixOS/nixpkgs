@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumdl";
   version = "0.2.31";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rvben";
     repo = "rumdl";
