@@ -14,6 +14,7 @@
   # tests
   ase,
   gemmi,
+  gsd,
   pycifrw,
   pytest-doctestplus,
   pytestCheckHook,
@@ -22,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "parsnip";
-  version = "0.6.0";
+  version = "1.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -31,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "glotzerlab";
     repo = "parsnip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A1YoTBRN3ukcueUso5P2zPZ/pxu25k9h6aI7+AQvr1Q=";
+    hash = "sha256-27FEp+Z+Q4a2RR01YVmN7eUClpto8uUysp5mZWeKz7M=";
   };
 
   patches = [
@@ -58,6 +59,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     ase
     gemmi
+    gsd
     pycifrw
     pytest-doctestplus
     pytestCheckHook
