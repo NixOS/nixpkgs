@@ -737,6 +737,10 @@ let
     nloptr = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
+    orbweaver = with pkgs; [
+      cargo
+      rustc
+    ];
     otelsdk = with pkgs; [
       cmake
       which
@@ -796,6 +800,10 @@ let
       rustc
     ];
     rsbml = [ pkgs.pkg-config ];
+    rsgeo = with pkgs; [
+      cargo
+      rustc
+    ];
     rshift = with pkgs; [
       cargo
       rustc
@@ -804,6 +812,10 @@ let
     rswipl = with pkgs; [
       cmake
       pkg-config
+    ];
+    rtiktoken = with pkgs; [
+      cargo
+      rustc
     ];
     rtracklayer = [ pkgs.pkg-config ];
     runjags = [ pkgs.pkg-config ];
@@ -2741,10 +2753,6 @@ let
 
     orbweaver = old.orbweaver.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [
-        pkgs.cargo
-        pkgs.rustc
-      ];
     });
 
     otelsdk = old.otelsdk.overrideAttrs (attrs: {
@@ -2936,7 +2944,6 @@ let
     });
 
     rsgeo = old.rsgeo.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -2952,10 +2959,6 @@ let
 
     rtiktoken = old.rtiktoken.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [
-        pkgs.cargo
-        pkgs.rustc
-      ];
     });
 
     rvisidata = old.rvisidata.overrideAttrs (attrs: {
