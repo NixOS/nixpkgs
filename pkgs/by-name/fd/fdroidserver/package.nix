@@ -7,14 +7,7 @@
   installShellFiles,
 }:
 
-let
-  pythonPackages = python3Packages.overrideScope (
-    self: super: {
-      sqlalchemy = self.sqlalchemy_1_4;
-    }
-  );
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fdroidserver";
   version = "2.4.3";
 
@@ -43,7 +36,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   '';
 
   preConfigure = ''
-    ${pythonPackages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''
@@ -55,12 +48,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with pythonPackages; [
+  build-system = with python3Packages; [
     setuptools
     babel
   ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
     androguard
     biplist
     clint
