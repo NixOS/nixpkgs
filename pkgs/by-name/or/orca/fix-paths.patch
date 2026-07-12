@@ -73,3 +73,16 @@ index 3c6c917cb..5d714f2a5 100644
                  stdin=subprocess.PIPE,
                  stdout=None,
                  stderr=None,
+diff --git a/tests/integration_test_wrapper.py.in b/tests/integration_test_wrapper.py.in
+index 576a1d4f3..d117076a5 100644
+--- a/tests/integration_test_wrapper.py.in
++++ b/tests/integration_test_wrapper.py.in
+@@ -16,7 +16,7 @@ from typing import NoReturn
+ _SKIP_EXIT = 77
+ # Prefer this prefix's AT-SPI.
+ _ATSPI_DIRECTORIES = (
+-    os.path.join("@prefix@", "libexec"),
++    os.path.join("@at_spi2_core@", "libexec"),
+     os.path.join("@prefix@", "lib", "at-spi2-core"),
+     "/usr/libexec",
+     "/usr/lib/at-spi2-core",
