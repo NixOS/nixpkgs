@@ -100,6 +100,8 @@ let
       less # needed to prevent transient test errors until https://github.com/ipython/ipython/pull/11864 is resolved
     ]
   );
+
+  isDarwinAarch64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 in
 writeTextFile rec {
   name = "sage-env";
@@ -179,12 +181,14 @@ writeTextFile rec {
 
     # for find_library
     export DYLD_LIBRARY_PATH="${
-      lib.makeLibraryPath [
+      lib.makeLibraryPath ([
         stdenv.cc.libc
         singular
         giac
         gap
-      ]
+      ] ++ lib.optionals isDarwinAarch64 [
+        maxima.lisp-compiler
+      ])
     }''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 }
