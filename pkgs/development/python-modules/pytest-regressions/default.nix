@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.9.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ESSS";
     repo = "pytest-regressions";
     tag = "v${version}";
-    hash = "sha256-pqlRfpi5Z9b6zrvU6M1sNRz5ltZLAFiJITFvex7YqcE=";
+    hash = "sha256-BojXizPr1b09YOa4wEeHQheyubKR2nBvtzLlcvt3380=";
   };
 
   build-system = [ setuptools-scm ];
