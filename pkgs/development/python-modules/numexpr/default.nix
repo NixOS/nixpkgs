@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
+  pytest-run-parallel,
   pytestCheckHook,
   setuptools,
   # sets NUMEXPR_NUM_THREADS and OMP_NUM_THREADS for packages
@@ -34,11 +35,17 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-run-parallel
+    pytestCheckHook
+  ];
 
   propagatedNativeBuildInputs = [
     checkPhaseThreadLimitHook
   ];
+
+  # tests check for OMP_NUM_THREADS application and complete quick enough
+  env.dontLimitCheckPhaseThreads = 1;
 
   preCheck = ''
     pushd $out
