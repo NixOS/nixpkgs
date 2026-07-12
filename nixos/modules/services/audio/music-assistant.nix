@@ -89,7 +89,11 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts =
         lib.optional cfg.enable 8097 # Music Assistant stream port
-        ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
+        # https://github.com/music-assistant/server/blob/dev/music_assistant/providers/airplay/pairing.py#L191
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [
+          5000 # AirPlay 1/RAOP
+          7000 # AirPlay 2
+        ]
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
         ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
         ++ lib.optional (lib.elem "spotify_connect" cfg.providers && cfg.spotifyConnectPort != 0) cfg.spotifyConnectPort
