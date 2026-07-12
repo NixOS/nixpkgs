@@ -17,10 +17,7 @@
         machine.succeed("curl --fail http://localhost:8111")
       '';
 
-      meta.maintainers = with lib.maintainers; [
-        diniamo
-        nanoyaki
-      ];
+      meta.maintainers = with lib.maintainers; [ nanoyaki ];
     }
   );
 

@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Automated solution to bypassing anime opening and ending sequences";
     mainProgram = "ani-skip";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.diniamo ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -7036,12 +7036,6 @@
     github = "DimitarNestorov";
     githubId = 8790386;
   };
-  diniamo = {
-    name = "diniamo";
-    email = "diniamo53@gmail.com";
-    github = "diniamo";
-    githubId = 55629891;
-  };
   diogomdp = {
     email = "me@diogodp.dev";
     github = "diogomdp";
