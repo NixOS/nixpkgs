@@ -88,23 +88,18 @@
 }:
 
 let
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "HandBrake";
       repo = "HandBrake";
       # uses version commit for logic in version.txt
-      rev = "4ce99a885cde39b3511016efdb5124726819defb";
-      hash = "sha256-oWXNiRK0wbmINnjM3GrOIawcSULTuy3yANfgW8li9F0=";
+      rev = "9eb6c936803e8b071035b1a77662cb0db58441ea";
+      hash = "sha256-f4kBFeW1yVFLlXGAimWsZx+9PKlgR6xrXUZG+CBh28A=";
     };
 
     patches = [
-      # Only needed so the subsequent patch applies
-      (fetchpatch2 {
-        url = "https://github.com/HandBrake/HandBrake/commit/c8e16778a330881af36fa32004f887bd73874d15.patch";
-        hash = "sha256-i3/X9opDzsZIO7bjLHHZltuQH93uENRF0t7FP7DDdBM=";
-      })
       # Update x265 submodule to v4.2, drop in next release
       (fetchpatch2 {
         url = "https://github.com/HandBrake/HandBrake/commit/432514bf839e7280511e4a7afc35fb4868ef4d0b.patch";
@@ -124,34 +119,39 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-hb = ffmpeg_8-full.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
-      "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
-      "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
-      "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-      "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
-      "${src}/contrib/ffmpeg/A06-avformat-mov-read-and-write-additional-iTunes-style-.patch"
-      "${src}/contrib/ffmpeg/A07-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
-      "${src}/contrib/ffmpeg/A08-dvdsubdec-fix-processing-of-partial-packets.patch"
-      "${src}/contrib/ffmpeg/A09-dvdsubdec-return-number-of-bytes-used.patch"
-      "${src}/contrib/ffmpeg/A10-dvdsubdec-use-pts-of-initial-packet.patch"
-      "${src}/contrib/ffmpeg/A11-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
-      "${src}/contrib/ffmpeg/A12-ccaption_dec-fix-pts-in-real_time-mode.patch"
-      "${src}/contrib/ffmpeg/A13-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
-      "${src}/contrib/ffmpeg/A14-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
-      "${src}/contrib/ffmpeg/A15-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
-      "${src}/contrib/ffmpeg/A16-libavcodec-qsvenc.c-update-has_b_frames-value-after-.patch"
-      "${src}/contrib/ffmpeg/A17-qsv-enable-av1-scc.patch"
-      "${src}/contrib/ffmpeg/A18-fixed-BT2020-BT709-conversion-via-VPP.patch"
-      "${src}/contrib/ffmpeg/A19-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
-      "${src}/contrib/ffmpeg/A20-videotoolbox-speedup-decoding.patch"
-      "${src}/contrib/ffmpeg/A21-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
-      "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
-      "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
-      "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
-    ];
-  });
+  ffmpeg-hb =
+    (ffmpeg_8-full.override {
+      version = "8.0.2";
+      hash = "sha256-5um1aG+92tn7ykVU59sBKWEvg1egODfZr6XTp/kSaG4=";
+    }).overrideAttrs
+      (old: {
+        patches = (old.patches or [ ]) ++ [
+          "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
+          "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
+          "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
+          "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
+          "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
+          "${src}/contrib/ffmpeg/A06-avformat-mov-read-and-write-additional-iTunes-style-.patch"
+          "${src}/contrib/ffmpeg/A07-avformat-movenc-write-iTunEXTC-and-iTunMOVI-metadata.patch"
+          "${src}/contrib/ffmpeg/A08-dvdsubdec-fix-processing-of-partial-packets.patch"
+          "${src}/contrib/ffmpeg/A09-dvdsubdec-return-number-of-bytes-used.patch"
+          "${src}/contrib/ffmpeg/A10-dvdsubdec-use-pts-of-initial-packet.patch"
+          "${src}/contrib/ffmpeg/A11-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
+          "${src}/contrib/ffmpeg/A12-ccaption_dec-fix-pts-in-real_time-mode.patch"
+          "${src}/contrib/ffmpeg/A13-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
+          "${src}/contrib/ffmpeg/A14-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
+          "${src}/contrib/ffmpeg/A15-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+          "${src}/contrib/ffmpeg/A16-libavcodec-qsvenc.c-update-has_b_frames-value-after-.patch"
+          "${src}/contrib/ffmpeg/A17-qsv-enable-av1-scc.patch"
+          "${src}/contrib/ffmpeg/A18-fixed-BT2020-BT709-conversion-via-VPP.patch"
+          "${src}/contrib/ffmpeg/A19-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
+          "${src}/contrib/ffmpeg/A20-videotoolbox-speedup-decoding.patch"
+          "${src}/contrib/ffmpeg/A21-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+          "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
+          "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
+          "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
+        ];
+      });
 
   x265-hb = x265.overrideAttrs (old: {
     version = "4.2";
