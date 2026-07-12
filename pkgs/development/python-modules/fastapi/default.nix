@@ -18,6 +18,7 @@
   a2wsgi,
   dirty-equals,
   flask,
+  httpx2,
   inline-snapshot,
   pwdlib,
   pyjwt,
@@ -27,7 +28,7 @@
 
   # optional-dependencies
   fastapi-cli,
-  httpx2,
+  httpx,
   jinja2,
   itsdangerous,
   python-multipart,
@@ -43,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.139.0";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "tiangolo";
@@ -65,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     all = [
       fastapi-cli
-      httpx2
+      httpx
       jinja2
       python-multipart
       itsdangerous
@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     standard = [
       fastapi-cli
       # FIXME package fastar
-      httpx2
+      httpx
       jinja2
       python-multipart
       email-validator
@@ -92,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     ++ uvicorn.optional-dependencies.standard;
     standard-no-fastapi-cloud-cli = [
       fastapi-cli
-      httpx2
+      httpx
       jinja2
       python-multipart
       email-validator
@@ -110,6 +110,7 @@ buildPythonPackage (finalAttrs: {
     a2wsgi
     dirty-equals
     flask
+    httpx2
     inline-snapshot
     pwdlib
     pyjwt
