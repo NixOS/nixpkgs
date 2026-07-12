@@ -40,7 +40,6 @@ buildDotnetModule rec {
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      esch
       lyndeno
     ];
     mainProgram = "CarCareTracker";
