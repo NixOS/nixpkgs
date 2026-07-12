@@ -18808,6 +18808,12 @@
     githubId = 830082;
     name = "Nathan Moos";
   };
+  mootfrost = {
+    email = "hello@mootfrost.dev";
+    github = "mootfrost";
+    githubId = 75925945;
+    name = "Andrew Semeykin";
+  };
   moraxyc = {
     name = "Moraxyc Xu";
     email = "i@qaq.li";
@@ -25601,12 +25607,6 @@
     github = "shard77";
     githubId = 106669955;
     name = "Léon Gessner";
-  };
-  shardy = {
-    email = "shardul@baral.ca";
-    github = "shardulbee";
-    githubId = 16765155;
-    name = "Shardul Baral";
   };
   sharpchen = {
     github = "sharpchen";

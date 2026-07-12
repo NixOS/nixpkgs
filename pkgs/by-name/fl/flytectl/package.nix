@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "flytectl version";
-    version = "v${finalAttrs.src.version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
