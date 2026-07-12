@@ -58,7 +58,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wire-desktop";
-  inherit (sources.${stdenv.system}) version src;
+  inherit (sources.${stdenv.system} or sources.x86_64-linux) version src;
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {

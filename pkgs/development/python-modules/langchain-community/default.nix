@@ -129,6 +129,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libs/community/v";
+    ignoredVersions = "a|b|dev|rc";
   };
 
   meta = {
