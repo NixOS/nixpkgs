@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       thoughtpolice
       tomberek
+      wrench-exile-legacy
       costrouc
     ];
     mainProgram = "minecraft-server";
