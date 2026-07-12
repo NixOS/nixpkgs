@@ -5137,6 +5137,12 @@
     github = "Ciflire";
     githubId = 39668077;
   };
+  cig0 = {
+    name = "Martín Cigorraga";
+    email = "cig0.github@gmail.com";
+    github = "cig0";
+    githubId = 394089;
+  };
   cigrainger = {
     name = "Christopher Grainger";
     email = "chris@amplified.ai";
