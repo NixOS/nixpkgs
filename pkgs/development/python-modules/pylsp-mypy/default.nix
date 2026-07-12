@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylsp-mypy";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pylsp_mypy";
     inherit (finalAttrs) version;
-    hash = "sha256-6U9THUzlIyIsKvdHGr45bP60zDxLGB1URi+21VPh4LM=";
+    hash = "sha256-ANhur6TlRO6Bpzl57/GpmPvUDUrpwYIf6IAjMmp1bcI=";
   };
 
   build-system = [ setuptools ];
