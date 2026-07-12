@@ -486,6 +486,8 @@ let
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     RmecabKo = [ pkgs.mecab ]; # for mecab-config
     Rmpi = [ pkgs.prrte ];
+    RoBMA = [ pkgs.pkg-config ];
+    RoBSA = [ pkgs.pkg-config ];
     Rpoppler = [ pkgs.pkg-config ];
     Rsubbotools = [ pkgs.gsl ]; # for gsl-config
     Rsymphony = [ pkgs.pkg-config ];
