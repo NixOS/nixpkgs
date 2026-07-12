@@ -6,7 +6,6 @@
   runCommand,
   python3,
   encryptionSupport ? true,
-  sqliteSupport ? true,
 }:
 
 let
@@ -58,9 +57,6 @@ let
         python-olm
         pycryptodome
         unpaddedbase64
-      ]
-      ++ lib.optionals sqliteSupport [
-        sqlalchemy_1_3
       ];
 
     # used for plugin tests
