@@ -106,6 +106,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-classic==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

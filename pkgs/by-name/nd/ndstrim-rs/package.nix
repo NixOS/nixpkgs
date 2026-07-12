@@ -5,12 +5,14 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "ndstrim";
+  pname = "ndstrim-rs";
   version = "0.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Nemris";
-    repo = "ndstrim";
+    repo = "ndstrim-rs";
     rev = "v${finalAttrs.version}";
     hash = "sha256-KgtejBbFg6+klc8OpCs1CIb+7uVPCtP0/EM671vxauk=";
   };
@@ -19,8 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Trim the excess padding found in Nintendo DS(i) ROMs";
-    homepage = "https://github.com/Nemris/ndstrim";
-    changelog = "https://github.com/Nemris/ndstrim/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Nemris/ndstrim-rs";
+    changelog = "https://github.com/Nemris/ndstrim-rs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thiagokokada ];
