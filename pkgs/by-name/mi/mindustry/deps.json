@@ -1,20 +1,20 @@
 {
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
- "https://download.savannah.gnu.org": {
-  "releases/freetype/freetype-2.14.1": {
-   "tar.gz": "sha256-F02eU0AuG/nscnfiLsGZuj5Vpr4sB0DLGMDumFD8jDQ="
-  }
- },
  "https://jitpack.io/com/github": {
   "Anuken#rhino/e74ac129d2bff72c1deb536d7d99a0dbb7046d2e": {
    "jar": "sha256-iRvhgKzqoi/8VMmkiM5ibGULv6e07A98e8QoMB6XROQ=",
    "module": "sha256-c02sDzu5Z+dMXP2DcCFen9ImCWTtZ2I06uSrrtJ8QIo=",
    "pom": "sha256-kUrWd9wtr/SN21fjmyInwRN8CSxp2nKfeji3qz1OteA="
   },
-  "Anuken#steamworks4j/0b86023401880bb5e586bc404bedbaae9b1f1c94": {
-   "jar": "sha256-YbaPhCjWtlExwQ1dFNA6JrkiAfQYWxJ0VRV9rLnoYhY=",
-   "pom": "sha256-ktvhk8s3T1zswrYWuXz+cWHRyK3YbkikD5Sv/gjcfz4="
+  "Anuken#steamworks4j/da41c05b7a2a44c8625ca0ba7d6ca1a2e73f621a": {
+   "jar": "sha256-+8oDVVVbQSpioDAUXKm+vqe3YutsioD4eON7bp9JW0k=",
+   "pom": "sha256-F0jV/Pn+62IzshAyMgSj/kWaAcs98nH+iFEH4m0D8q0="
+  },
+  "Anuken/steamworks4j#build/da41c05b7a2a44c8625ca0ba7d6ca1a2e73f621a": {
+   "jar": "sha256-aUW6wELo6ixScFyjAAACxDsv1pc5Qy22JAxxHfu99ns=",
+   "module": "sha256-G4us5o9uhVf5uovjADWvn4uzac+lqhNaPIlQgLai2eg=",
+   "pom": "sha256-gqPxOnpZeJXAWsPvVZr5ja/aoMgxY/3Fp0zHNBuvh5I="
   }
  },
  "https://plugins.gradle.org/m2": {
@@ -402,6 +402,11 @@
   },
   "org/sonatype/oss#oss-parent/9": {
    "pom": "sha256-+0AmX5glSCEv+C42LllzKyGH7G8NgBgohcFO8fmCgno="
+  }
+ },
+ "https://sourceforge.net": {
+  "projects/freetype/files/freetype2/2.14.3/freetype-2.14.3": {
+   "tar.gz/download": "sha256-5hsxqyY1i5Rudn7X639LsuUH2hz+/reohhrOf9XImaE="
   }
  }
 }
