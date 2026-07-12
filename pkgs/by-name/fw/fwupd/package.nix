@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
-    # EFI capsule is located in fwupd-efi now.
+    # Use the EFI app from the separate fwupd-efi package.
     (lib.mesonOption "efi_app_location" "${fwupd-efi}/libexec/fwupd/efi")
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
