@@ -904,7 +904,15 @@ let
     ];
     xml2 = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     xslt = [ pkgs.pkg-config ];
+    yaml12 = with pkgs; [
+      cargo
+      rustc
+    ];
     ymd = with pkgs; [
+      cargo
+      rustc
+    ];
+    zoomerjoin = with pkgs; [
       cargo
       rustc
     ];
@@ -3151,10 +3159,6 @@ let
 
     yaml12 = old.yaml12.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [
-        pkgs.cargo
-        pkgs.rustc
-      ];
     });
 
     ymd = old.ymd.overrideAttrs (attrs: {
@@ -3162,11 +3166,6 @@ let
     });
 
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
-      nativeBuildInputs = [
-        pkgs.cargo
-        pkgs.rustc
-      ]
-      ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
     # keep-sorted end
