@@ -43,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.4.2";
+  version = "2.4.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "firewalld";
     repo = "firewalld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RUDDUvpGfWEKI+VtC4SBMLKsAHkStV1qAYpHLQbN5HM=";
+    hash = "sha256-S7E0szAZ2MEttL4PdBkoOcDGFVCVrwsTKr9xe+DPPgM=";
   };
 
   patches = [
@@ -132,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!withGui) ''
     rm $out/bin/firewall-{applet,config}
+    rm $out/etc/xdg/autostart/firewall-applet.desktop
+    rm $out/share/applications/firewall-config.desktop
+    rm $out/share/metainfo/org.firewalld.firewall-config.metainfo.xml
   '';
 
   dontWrapGApps = true;
