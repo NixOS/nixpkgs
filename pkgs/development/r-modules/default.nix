@@ -704,6 +704,7 @@ let
       geos # for geos-config
     ];
     magick = [ pkgs.pkg-config ];
+    markets = [ pkgs.gsl ]; # for gsl-config
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
