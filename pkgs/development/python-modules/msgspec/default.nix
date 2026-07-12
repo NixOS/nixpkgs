@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.20.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     # use `$Format:%d$` in msgspec/_version.py, and GitHub produces different
     # tarballs depending on whether tagged commit is the last commit, see
     # https://github.com/NixOS/nixpkgs/issues/84312
-    hash = "sha256-DWDmnSuo12oXl9NVfNhIOtWrQeJ9DMmHxOyHY33Datk=";
+    hash = "sha256-mjABnKhZeLLbSQPelZmi+UKZDEIiXi3c9shC8EG6tfE=";
   };
 
   build-system = [
