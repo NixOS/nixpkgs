@@ -825,6 +825,7 @@ in
             RestrictSUIDSGID = true;
             ExecReload = [
               " " # This is needed to clear the ExecReload definitions from upstream
+              "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
             ];
             ExecStart = [
               " " # This is needed to clear the ExecStart definitions from upstream
