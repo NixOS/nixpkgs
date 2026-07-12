@@ -9,7 +9,6 @@
   directory,
   edit-distance,
   fetchgit,
-  file-embed,
   filelock,
   filepath,
   ghc-prim,
@@ -24,7 +23,6 @@
   network,
   parsec,
   process,
-  raw-strings-qq,
   scientific,
   SHA,
   snap-core,
@@ -38,13 +36,14 @@
 }:
 mkDerivation {
   pname = "elm";
-  version = "0.19.1";
+  version = "0.19.2";
   src = fetchgit {
     url = "https://github.com/elm/compiler";
-    sha256 = "1h9jhwlv1pqqna5s09vd72arwhhjn0dlhv0w9xx5771x0xryxxg8";
-    rev = "2f6dd29258e880dbb7effd57a829a0470d8da48b";
+    sha256 = "0npadfvk5gyiifq4095yg7k8cr3hb28drdh07b77nxzwsqanp4s5";
+    rev = "48befde196cbcbdf459114e36c02b52c49b58050";
     fetchSubmodules = true;
   };
+  patches = [ ./ansi-terminal-1.1.patch ];
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
@@ -56,7 +55,6 @@ mkDerivation {
     containers
     directory
     edit-distance
-    file-embed
     filelock
     filepath
     ghc-prim
@@ -70,7 +68,6 @@ mkDerivation {
     network
     parsec
     process
-    raw-strings-qq
     scientific
     SHA
     snap-core
@@ -84,6 +81,6 @@ mkDerivation {
   ];
   homepage = "https://elm-lang.org";
   description = "The `elm` command line interface";
-  license = lib.licenses.bsd3;
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
   mainProgram = "elm";
 }
