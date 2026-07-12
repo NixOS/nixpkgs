@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     badPlatforms = [
       # Could not find a package configuration file provided by "Protobuf"
       # It is unclear why this is only happening on x86_64-darwin
-      "x86_64-darwin"
     ];
   };
 })

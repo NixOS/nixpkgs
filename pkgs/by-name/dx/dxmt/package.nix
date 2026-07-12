@@ -126,7 +126,7 @@ symlinkJoin {
       maintainers
       license
       ;
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
     hydraPlatforms = [ ];
   };
 }

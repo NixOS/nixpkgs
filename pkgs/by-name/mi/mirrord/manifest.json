@@ -12,10 +12,6 @@
     "aarch64-darwin": {
       "url": "https://github.com/metalbear-co/mirrord/releases/download/3.229.0/mirrord_mac_universal",
       "hash": "sha256-o71hF5s3dwNPgubbJrO1/Vjfau3kTVZAjDYahuDpevc="
-    },
-    "x86_64-darwin": {
-      "url": "https://github.com/metalbear-co/mirrord/releases/download/3.229.0/mirrord_mac_universal",
-      "hash": "sha256-o71hF5s3dwNPgubbJrO1/Vjfau3kTVZAjDYahuDpevc="
     }
   }
 }

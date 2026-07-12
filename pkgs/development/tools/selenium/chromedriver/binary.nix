@@ -14,10 +14,6 @@ let
 
   # See ./source.nix for Linux
   allSpecs = {
-    x86_64-darwin = {
-      system = "mac-x64";
-      hash = upstream-info.hash_darwin;
-    };
 
     aarch64-darwin = {
       system = "mac-arm64";

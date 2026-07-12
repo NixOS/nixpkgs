@@ -27,7 +27,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   sourceRoot =
     {
       aarch64-darwin = "bun-darwin-aarch64";
-      x86_64-darwin = "bun-darwin-x64-baseline";
     }
     .${stdenvNoCC.hostPlatform.system} or null;
 
@@ -86,10 +85,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
         hash = "sha256-cLrkGzkIsKEg4eWMXIrzDnSvrjuNEbDT/djnh937SyI=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-x64-baseline.zip";
-        hash = "sha256-qYumpIDyL9qbNDYmuQak4mqlNhi/hdK8WSjs8rpF8O0=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";

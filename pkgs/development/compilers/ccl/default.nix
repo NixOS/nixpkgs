@@ -30,12 +30,6 @@ let
       runtime = "armcl";
       kernel = "linuxarm";
     };
-    x86_64-darwin = {
-      arch = "darwinx86";
-      hash = "sha256-r+OhkU0b+QDgoZpZb0Xpc3V0yRq8GBKcNLt2IzeOSdE=";
-      runtime = "dx86cl64";
-      kernel = "darwinx8664";
-    };
     armv6l-linux = armv7l-linux;
   };
   cfg =

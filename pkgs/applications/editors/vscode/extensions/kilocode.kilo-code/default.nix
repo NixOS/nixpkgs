@@ -14,10 +14,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
           arch = "linux-x64";
           hash = "sha256-uPmJyEq7X6uJzE1M5Xywax1mrnTcg6jOb9MlpKZ0WRk=";
         };
-        "x86_64-darwin" = {
-          arch = "darwin-x64";
-          hash = "sha256-oEVt3VbRUPD4tfQs0EU7RX6671fCJiMi38wF+76RzZI=";
-        };
         "aarch64-linux" = {
           arch = "linux-arm64";
           hash = "sha256-b46f0f99rjBivewC9jUbAFiKK+DS1XKv+AynUlKHliw=";
@@ -52,7 +48,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };

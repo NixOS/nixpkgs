@@ -141,7 +141,6 @@ buildPythonPackage (finalAttrs: {
     badPlatforms = [
       # Tests crash with:
       # Fatal Python error: Segmentation fault for x86_64 Darwin in tests/python.py
-      "x86_64-darwin"
     ];
   };
 })

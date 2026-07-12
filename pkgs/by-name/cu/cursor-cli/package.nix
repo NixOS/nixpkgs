@@ -17,10 +17,6 @@ let
       url = "https://downloads.cursor.com/lab/2026.06.26-7079533/linux/arm64/agent-cli-package.tar.gz";
       hash = "sha256-WcMurHV8Pm/2Y1HvNJGZYqjgt3OzHwn5oW5W27egueE=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/lab/2026.06.26-7079533/darwin/x64/agent-cli-package.tar.gz";
-      hash = "sha256-5J2SA5AoyOxT9Ng58MnyCFtNllQCYhbO5MQZaONwgsk=";
-    };
     aarch64-darwin = fetchurl {
       url = "https://downloads.cursor.com/lab/2026.06.26-7079533/darwin/arm64/agent-cli-package.tar.gz";
       hash = "sha256-UO8SRA6depwO9SNhvYl9uOy9Dp625vHVNiyfxtmq3c4=";

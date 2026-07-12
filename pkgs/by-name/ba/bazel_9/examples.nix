@@ -64,7 +64,6 @@ in
         {
           aarch64-darwin = "sha256-Jth981+r20azC/CqoWN3LK5USm8zUIpL9Xt88+TcL1o=";
           aarch64-linux = "sha256-4E/QCSOXTN/dW65xz/n47tXW0PlHUOP1UP+TwJfMueI=";
-          x86_64-darwin = "sha256-t4JP4o3O9C9BehidQPVu4EATnUZodhFh1/ctITxD6JA=";
           x86_64-linux = "sha256-HzgFpbEBZ8efA5pwUsGZjt9bKiAXslB17OZQcm3cspc=";
         }
         .${stdenv.hostPlatform.system};
@@ -102,7 +101,6 @@ in
         {
           aarch64-darwin = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
           aarch64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
-          x86_64-darwin = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
           x86_64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
         }
         .${stdenv.hostPlatform.system};
@@ -141,7 +139,6 @@ in
         {
           aarch64-darwin = "sha256-uUl7PpR3jAKvj6VWspPE3IR4Gr/V2VrBv1MlTzOIZJs=";
           aarch64-linux = "sha256-uhcIwDk8NAZDBynzxWk+0fLP/2XadKQRl5BlFPjf4/8=";
-          x86_64-darwin = "sha256-vi3+/ps+dhDjqYHxWSnWOXhh1jWJWwb5ifUUhN4vxrg=";
           x86_64-linux = "sha256-YURF8Zjueq3BN5GfEx5L+C4hGmr5qfJc7OngqZ17384=";
         }
         .${stdenv.hostPlatform.system};

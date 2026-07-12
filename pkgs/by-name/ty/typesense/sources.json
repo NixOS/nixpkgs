@@ -9,10 +9,6 @@
       "arch": "linux-amd64",
       "hash": "sha256-BD0qE1dEVKVUPwO2fMO0SMXiwG9dD0RMnAzkVZitFKA="
     },
-    "x86_64-darwin": {
-      "arch": "darwin-amd64",
-      "hash": "sha256-9imHOPW8OkFczuNxXGn3bXFI49BIdUJ5GGh1mrvcMgE="
-    },
     "aarch64-darwin": {
       "arch": "darwin-arm64",
       "hash": "sha256-yAOR/bGYBQGp8Mllhh0yKyqmItd2+IfLib3W+lIHwr0="

@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ emilytrau ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
   };
 })

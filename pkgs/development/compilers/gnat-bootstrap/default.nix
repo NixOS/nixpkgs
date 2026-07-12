@@ -38,11 +38,6 @@ stdenv.mkDerivation (
           alireRevision = "2";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
@@ -60,11 +55,6 @@ stdenv.mkDerivation (
           alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
@@ -86,12 +76,6 @@ stdenv.mkDerivation (
           gccVersion = "15.2.0";
         }
         // {
-          x86_64-darwin = {
-            alireRevision = "1";
-            inherit url;
-            hash = "sha256-1YTqWsLBwNH/GBAtF5CL/YZHQvfE/3PE0LlLJ9HmjAg=";
-            upstreamTriplet = "x86_64-apple-darwin22.6.0";
-          };
           x86_64-linux = {
             alireRevision = "1";
             inherit url;
@@ -117,11 +101,6 @@ stdenv.mkDerivation (
           alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-u/cYFKqWLTaFADTscDxnrkYSoemKrfKpNIZ8XPlTbLI=";
-            upstreamTriplet = "x86_64-apple-darwin24.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-5bKYPJnXDGa80BtAogLE82X0zTuYKdN2cKh503oMeic=";
@@ -289,7 +268,6 @@ stdenv.mkDerivation (
       ];
       platforms = [
         "x86_64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ]
       ++ lib.optionals (lib.versionAtLeast majorVersion "14") [

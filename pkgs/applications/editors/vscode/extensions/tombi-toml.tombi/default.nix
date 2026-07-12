@@ -10,10 +10,6 @@ let
       hash = "sha256-DWrKvjWpUYvyqgZCShqwBKw33MHW31cxb4ERV65O+uc=";
       arch = "linux-x64";
     };
-    x86_64-darwin = {
-      hash = "sha256-CYDutYtU0+AAn6PYO/EQ/Suv8BNuMtvePpFdKRtiqAs=";
-      arch = "darwin-x64";
-    };
     aarch64-linux = {
       hash = "sha256-iFHeZiTubXA/t2Gib9hP42d7yjq/WRyywp+l8VhGfmo=";
       arch = "linux-arm64";

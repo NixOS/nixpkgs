@@ -30,6 +30,6 @@ buildGoModule rec {
     description = "HyperKit driver for docker-machine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ atkinschang ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
   };
 }

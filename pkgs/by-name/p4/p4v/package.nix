@@ -8,7 +8,7 @@
 
 let
   # Upstream replaces minor versions, so use archived URLs.
-  srcs = rec {
+  srcs = {
     x86_64-linux = fetchurl {
       url = "https://web.archive.org/web/20260414052921/https://filehost.perforce.com/perforce/r26.1/bin.linux26x86_64/p4v.tgz";
       sha256 = "sha256-89Xz9dxAeLGOOr90K0CdlxjrfIf9vUmyZV3tzWspWdQ=";
@@ -18,7 +18,6 @@ let
       sha256 = "sha256-8MBLS6EQOVenxZ1Uv75kPzU8aO2AldmxkwOz+JcBRpY=";
     };
     # this is universal
-    x86_64-darwin = aarch64-darwin;
   };
 
   mkDerivation =

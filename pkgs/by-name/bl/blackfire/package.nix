@@ -74,10 +74,6 @@ stdenv.mkDerivation rec {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
         hash = "sha256-Ofs9raAtx/duS8dXWfvjKGzhJr3j9+gkH8lP/VLfnkE=";
       };
-      "x86_64-darwin" = fetchurl {
-        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        hash = "sha256-+rMiD/vFFIA8dR3quUnpr8uDNTdvnXyYjT8brgiOxBI=";
-      };
     };
 
     updateScript = writeShellScript "update-blackfire" ''
@@ -112,7 +108,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
