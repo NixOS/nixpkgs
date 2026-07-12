@@ -103,6 +103,8 @@ buildPythonPackage (finalAttrs: {
     "test_title_quantiles_raises"
     "test_titles1"
     "test_titles2"
+    "test_titles_fmt_multi"
+    "test_titles_fmt_single"
     "test_top_ticks"
     "test_truths"
   ];
