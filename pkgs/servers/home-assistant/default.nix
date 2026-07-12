@@ -332,6 +332,9 @@ python3Packages.buildPythonApplication rec {
 
     # https://github.com/home-assistant/core/pull/172893
     ./patches/pyjwt-2.13-compat.patch
+
+    # remove is_xdist_controller usage
+    ./patches/syrupy-5.5-compat.patch
   ];
 
   postPatch = ''
