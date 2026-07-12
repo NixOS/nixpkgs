@@ -62,7 +62,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace internal/process/process_command_forking_test.go \
-      --replace "#!/bin/bash" "#!${lib.getExe bash}"
+      --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
   '';
 
   preBuild = ''
