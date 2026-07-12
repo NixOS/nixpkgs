@@ -1,0 +1,105 @@
+{
+  lib,
+  fetchpatch,
+  fetchPypi,
+  buildPythonPackage,
+  python,
+
+  # dependencies
+  absl-py,
+  grpcio,
+  markdown,
+  numpy,
+  packaging,
+  pillow,
+  protobuf,
+  setuptools,
+  tensorboard-data-server,
+  werkzeug,
+  standard-imghdr,
+
+  versionCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "tensorboard";
+  version = "2.20.0";
+  format = "wheel";
+
+  # tensorflow/tensorboard is built from a downloaded wheel, because
+  # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
+  src = fetchPypi {
+    inherit pname version;
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
+  };
+
+  pythonRelaxDeps = [
+    "google-auth-oauthlib"
+    "protobuf"
+  ];
+
+  dependencies = [
+    absl-py
+    grpcio
+    markdown
+    numpy
+    packaging
+    pillow
+    protobuf
+    setuptools
+    tensorboard-data-server
+    werkzeug
+
+    # Requires 'imghdr' which has been removed from python in 3.13
+    # ModuleNotFoundError: No module named 'imghdr'
+    # https://github.com/tensorflow/tensorboard/issues/6964
+    standard-imghdr
+  ];
+
+  postInstall =
+    let
+      patch = fetchpatch {
+        name = "remove-runtime-pkg_resources-dependency.patch";
+        url = "https://github.com/tensorflow/tensorboard/commit/29f809f4737489912612635d9079a61f8e570bb8.patch";
+        excludes = [
+          "tensorboard/BUILD"
+          "tensorboard/data/BUILD"
+          "tensorboard/default_test.py"
+          "tensorboard/version_test.py"
+        ];
+        hash = "sha256-+jaXI4fVQP4mOg6y94KPMMCg3XuHV/gBUDNsp3ogS6c=";
+      };
+    in
+    ''
+      pushd $out/${python.sitePackages}
+      patch -p1 < ${patch}
+      popd
+    '';
+
+  pythonImportsCheck = [
+    "tensorboard"
+    "tensorboard.backend"
+    "tensorboard.compat"
+    "tensorboard.data"
+    "tensorboard.plugins"
+    "tensorboard.summary"
+    "tensorboard.util"
+  ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
+    description = "TensorFlow's Visualization Toolkit";
+    homepage = "https://www.tensorflow.org/";
+    license = lib.licenses.asl20;
+    mainProgram = "tensorboard";
+    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+}

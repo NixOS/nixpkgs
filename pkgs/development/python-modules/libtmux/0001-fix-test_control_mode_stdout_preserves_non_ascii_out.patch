@@ -1,0 +1,37 @@
+From 8e12cc39f60012b6abb3a097f97950fe2c061386 Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Sun, 24 May 2026 10:09:00 -0400
+Subject: [PATCH] fix test_control_mode_stdout_preserves_non_ascii_output in
+ nix sandbox
+
+The select() call times out when in the nix sandbox for unknown reasons,
+even though the fd is ready.
+---
+ tests/test_control_mode.py | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tests/test_control_mode.py b/tests/test_control_mode.py
+index f72f6846..1a564e78 100644
+--- a/tests/test_control_mode.py
++++ b/tests/test_control_mode.py
+@@ -4,7 +4,6 @@ from __future__ import annotations
+ 
+ import locale
+ import os
+-import select
+ import sys
+ import typing as t
+ 
+@@ -87,9 +86,6 @@ def test_control_mode_stdout_preserves_non_ascii_output(
+             )
+ 
+             for _ in range(20):
+-                ready, _, _ = select.select([ctl.stdout], [], [], 1)
+-                assert ready, "timed out waiting for control-mode output"
+-
+                 line = ctl.stdout.readline()
+                 if FORMAT_SEPARATOR in line:
+                     break
+-- 
+2.51.2
+

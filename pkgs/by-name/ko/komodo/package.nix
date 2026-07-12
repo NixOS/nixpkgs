@@ -1,0 +1,69 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  nixosTests,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "komodo";
+  version = "2.2.0";
+
+  src = fetchFromGitHub {
+    owner = "moghtech";
+    repo = "komodo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hw0JD4e/ODK19M/bZtX9foCu5c79XA8Jgv2fleltdLs=";
+  };
+
+  cargoHash = "sha256-b/AgQBmS1QfP+BOCT4xL8majVKobig5M2YJhGuXMToc=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  # disable for check. document generation is fail
+  # > error: doctest failed, to rerun pass `-p komodo_client --doc`
+  doCheck = false;
+
+  # xtask is a workspace-internal build helper, not a user-facing program.
+  postInstall = ''
+    rm -f $out/bin/xtask
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) komodo-periphery;
+    };
+  };
+
+  meta = {
+    description = "Tool to build and deploy software on many servers";
+    longDescription = ''
+      Komodo is a web app to provide structure for managing your servers, builds, deployments, and automated procedures.
+
+      With Komodo you can:
+      * Connect all of your servers, and alert on CPU usage, memory usage, and disk usage.
+      * Create, start, stop, and restart Docker containers on the connected servers, and view their status and logs.
+      * Deploy docker compose stacks. The file can be defined in UI, or in a git repo, with auto deploy on git push.
+      * Build application source into auto-versioned Docker images, auto built on webhook. Deploy single-use AWS instances for infinite capacity.
+      * Manage repositories on connected servers, which can perform automation via scripting / webhooks.
+      * Manage all your configuration / environment variables, with shared global variable and secret interpolation.
+      * Keep a record of all the actions that are performed and by whom.
+
+      Komodo is composed of a single core and any amount of connected servers running the periphery application.
+    '';
+    homepage = "https://komo.do";
+    changelog = "https://github.com/moghtech/komodo/releases/tag/v${finalAttrs.version}";
+    mainProgram = "km";
+    maintainers = with lib.maintainers; [
+      r17x
+      channinghe
+    ];
+    license = lib.licenses.gpl3;
+  };
+})

@@ -1,0 +1,49 @@
+From c1c2000c35ff39b09cb70fbdf66a107d3b17a674 Mon Sep 17 00:00:00 2001
+From: Stephan Bergmann <sbergman@redhat.com>
+Date: Wed, 12 Oct 2022 08:40:49 +0200
+Subject: [PATCH] Fix missing #include <time.h>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+At least on recent Fedora 37 beta, building now failed with
+
+> CLucene/document/DateTools.cpp:26:19: error: ‘gmtime’ was not declared in this scope
+>    26 |         tm *ptm = gmtime(&secs);
+>       |                   ^~~~~~
+
+etc.
+
+As it turns out, after 22f9d40320e3deeaa8d6aaa7a770077c20a21dae "git-svn-id:
+https://clucene.svn.sourceforge.net/svnroot/clucene/branches/lucene2_3_2@2672
+20ef185c-fe11-0410-a618-ba9304b01011" on 2008-06-26 had commented out
+_CL_TIME_WITH_SYS_TIME in clucene-config.h.cmake as "not actually used for
+anything", then cceccfb52917b5f4da447f1cf20c135952d41442 "Presenting DateTools
+and deprecating DateField. DateTools still requires some testing and its own
+unit testing" on 2008-06-29 had introduced this use of it (into then
+src/CLucene/document/DateTools.H).  And apparently most build environments have
+silently been happy ever since when the dead leading check for
+_CL_TIME_WITH_SYS_TIME didn't include both <sys/time.h> and <time.h>, but the
+following check for _CL_HAVE_SYS_TIME_H only included <sys/time.h> but not
+<time.h>.
+---
+ src/shared/CLucene/clucene-config.h.cmake | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/shared/CLucene/clucene-config.h.cmake b/src/shared/CLucene/clucene-config.h.cmake
+index bd8683a5..6fe0f92b 100644
+--- a/src/shared/CLucene/clucene-config.h.cmake
++++ b/src/shared/CLucene/clucene-config.h.cmake
+@@ -100,8 +100,7 @@ ${SYMBOL__T}
+ //#cmakedefine _CL_STAT_MACROS_BROKEN
+ 
+ /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+-//not actually used for anything...
+-//#cmakedefine _CL_TIME_WITH_SYS_TIME  1 
++#cmakedefine _CL_TIME_WITH_SYS_TIME  1 
+ 
+ /* Define that we will be using -fvisibility=hidden, and 
+  * make public classes visible using __attribute__ ((visibility("default")))
+-- 
+2.37.3
+

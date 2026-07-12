@@ -1,0 +1,19 @@
+Fix build with gnutar-1.30
+
+Creating source archive...
+tar: The following options were used after any non-optional arguments in archive create or update mode.  These options are positional and affect only arguments that follow them.  Please, rearrange them properly.
+tar: --exclude 'debian/data' has no effect
+tar: Exiting with failure status due to previous errors
+diff --git a/build.sh b/build.sh
+index 0ea0403..725178c 100755
+--- a/build.sh
++++ b/build.sh
+@@ -25,7 +25,7 @@ rm -rf out/ obj/ tmp/
+ mkdir -p out
+ if [ "$1" != "debian" ]; then
+ 	echo Creating source archive...
+-	$tar --transform "s,^,quicktun-`cat version`/," -czf "out/quicktun-`cat version`.tgz" build.sh clean.sh debian src version --exclude "debian/data"
++	$tar --transform "s,^,quicktun-`cat version`/," -czf "out/quicktun-`cat version`.tgz" --exclude "debian/data" build.sh clean.sh debian src version
+ fi
+ 
+ mkdir -p obj tmp tmp/include tmp/lib

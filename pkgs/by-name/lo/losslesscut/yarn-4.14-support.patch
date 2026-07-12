@@ -1,0 +1,13 @@
+diff --git i/yarn.lock w/yarn.lock
+index 1e4550e7..6a2e770c 100644
+--- i/yarn.lock
++++ w/yarn.lock
+@@ -2,7 +2,7 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10
+ 
+ "7zip-bin@npm:~5.2.0":

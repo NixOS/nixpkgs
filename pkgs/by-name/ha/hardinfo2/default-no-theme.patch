@@ -1,0 +1,13 @@
+diff --git a/shell/shell.c b/shell/shell.c
+index 76523e9a..dbfe2d16 100644
+--- a/shell/shell.c
++++ b/shell/shell.c
+@@ -620,7 +620,7 @@ static void create_window(void)
+     gchar *conf_path = g_build_filename(g_get_user_config_dir(), "hardinfo2","settings.ini", NULL);
+     g_key_file_load_from_file(key_file, conf_path, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, NULL);
+     params.theme = g_key_file_get_integer(key_file, "Theme", "ThemeNumber", NULL);
+-    if(params.theme==0) params.theme=1;
++    if(params.theme==0) params.theme=-1; //default to no theme
+     if(params.theme<-1) params.theme=-1;
+     if(params.theme>6) params.theme=-1;
+ 

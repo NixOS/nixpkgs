@@ -1,0 +1,23 @@
+diff --git a/src/linker.cpp b/src/linker.cpp
+index 2210c13..803b654 100644
+--- a/src/linker.cpp
++++ b/src/linker.cpp
+@@ -779,18 +779,6 @@ try_cross_linking:;
+ 				}
+ 				platform_lib_str = gb_string_append_fmt(platform_lib_str, "--sysroot %s ", darwin_sdk_path);
+ 
+-				platform_lib_str = gb_string_appendc(platform_lib_str, "-L/usr/local/lib ");
+-
+-				// Homebrew's default library path, checking if it exists to avoid linking warnings.
+-				if (gb_file_exists("/opt/homebrew/lib")) {
+-					platform_lib_str = gb_string_appendc(platform_lib_str, "-L/opt/homebrew/lib ");
+-				}
+-
+-				// MacPort's default library path, checking if it exists to avoid linking warnings.
+-				if (gb_file_exists("/opt/local/lib")) {
+-					platform_lib_str = gb_string_appendc(platform_lib_str, "-L/opt/local/lib ");
+-				}
+-
+ 				// Only specify this flag if the user has given a minimum version to target.
+ 				// This will cause warnings to show up for mismatched libraries.
+ 				if (build_context.minimum_os_version_string_given) {

@@ -1,0 +1,32 @@
+diff --git a/src/sage/doctest/test.py b/src/sage/doctest/test.py
+index 812f8167c12..a4822642f0c 100644
+--- a/src/sage/doctest/test.py
++++ b/src/sage/doctest/test.py
+@@ -49,11 +49,11 @@ Check that :issue:`2235` has been fixed::
+ 
+ Check slow doctest warnings are correctly raised::
+ 
+-    sage: subprocess.call(["python3", "-m", "sage.doctest", "--warn-long",     # long time
++    sage: subprocess.call(["python3", "-m", "sage.doctest", "--warn-long", "0.2",     # long time
+     ....:       "--random-seed=0", "--optional=sage", "sleep2.rst"], **kwds)
+     Running doctests...
+     Doctesting 1 file.
+-    ... --warn-long --random-seed=0 sleep2.rst
++    ... --warn-long 0.2 --random-seed=0 sleep2.rst
+     **********************************************************************
+     File "sleep2.rst", line 4, in sage.doctest.tests.sleep2
+     Warning: slow doctest:
+@@ -66,11 +66,11 @@ Check slow doctest warnings are correctly raised::
+     ----------------------------------------------------------------------
+     ...
+     0
+-    sage: subprocess.call(["python3", "-m", "sage.doctest", "--format=github", "--warn-long",     # long time
++    sage: subprocess.call(["python3", "-m", "sage.doctest", "--format=github", "--warn-long", "0.2",    # long time
+     ....:       "--random-seed=0", "--optional=sage", "sleep2.rst"], **kwds)
+     Running doctests...
+     Doctesting 1 file.
+-    ... --warn-long --random-seed=0 sleep2.rst
++    ... --warn-long 0.2 --random-seed=0 sleep2.rst
+     **********************************************************************
+     ::warning title=Warning: slow doctest:,file=sleep2.rst,line=4::slow doctest:: Test ran for ...s cpu, ...s wall%0ACheck ran for ...s cpu, ...s wall%0A
+         while walltime(t) < 2: pass

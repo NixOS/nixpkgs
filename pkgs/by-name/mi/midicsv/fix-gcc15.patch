@@ -1,0 +1,12 @@
+diff --git a/getopt.c b/getopt.c
+index 1564e53..8db0459 100644
+--- a/getopt.c
++++ b/getopt.c
+@@ -73,7 +73,6 @@ int Getopt(int nargc, char *nargv[], char *ostr)
+         static char     *place = EMSG;  /* option letter processing */
+         static char     *lastostr = (char *) 0;
+         register char   *oli;           /* option letter list index */
+-        char    *index();
+ 
+         /* LANCE PATCH: dynamic reinitialization */
+         if (ostr != lastostr) {

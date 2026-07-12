@@ -1,0 +1,14 @@
+diff --git a/igc/IGC/common/LLVMWarningsPush.hpp b/igc/IGC/common/LLVMWarningsPush.hpp
+index 12874dfcc2..38acd80943 100644
+--- a/igc/IGC/common/LLVMWarningsPush.hpp
++++ b/igc/IGC/common/LLVMWarningsPush.hpp
+@@ -43,6 +43,9 @@
+ #if __GNUC__ > 8
+ #pragma GCC diagnostic ignored "-Winit-list-lifetime"
+ #endif
++#if __GNUC__ > 14
++#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
++#endif
+ #endif
+ 
+ #if defined(_WIN32) || defined(_WIN64)

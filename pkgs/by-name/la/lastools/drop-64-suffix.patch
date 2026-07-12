@@ -1,0 +1,10 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -40,6 +41,6 @@
+   set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 17)
+   target_link_libraries(${TARGET} LASlib ${CMAKE_DL_LIBS})
+   set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../bin64)
+-  set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${TARGET}64)
++  set_target_properties(${TARGET} PROPERTIES OUTPUT_NAME ${TARGET})
+   install(TARGETS ${TARGET} RUNTIME DESTINATION bin)
+ endforeach(TARGET)

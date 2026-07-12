@@ -1,0 +1,13 @@
+diff --git a/build/config/rust.gni b/build/config/rust.gni
+index ef45a4a9a6daa45859df27fa00bd17d6ee87aa21..b46cb483330133dd0a02e9b276979dc3a94f2520 100644
+--- a/build/config/rust.gni
++++ b/build/config/rust.gni
+@@ -112,7 +112,7 @@ use_chromium_rust_toolchain = rust_sysroot_absolute == ""
+ # `rustc_nightly_capability = false` will make the build avoid the use of
+ # Rust nightly features. There are no bots that test this and there is no
+ # guarantee it will work, but we accept patches for this configuration.
+-rustc_nightly_capability = use_chromium_rust_toolchain
++rustc_nightly_capability = true
+ 
+ # Platform support for the Rust toolchain.
+ chromium_toolchain_supports_platform = !is_wasm

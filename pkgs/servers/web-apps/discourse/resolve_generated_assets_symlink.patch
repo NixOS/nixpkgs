@@ -1,0 +1,13 @@
+diff --git a/lib/plugin/instance.rb b/lib/plugin/instance.rb
+index a5a5b8f943..30faee615d 100644
+--- a/lib/plugin/instance.rb
++++ b/lib/plugin/instance.rb
+@@ -1383,7 +1383,7 @@ class Plugin::Instance
+     contents = javascript_includes.map { |js| File.read(js) }
+ 
+     if contents.present?
+-      ensure_directory(extra_js_file_path)
++      ensure_directory(File.realpath(extra_js_file_path))
+       Discourse::Utils.atomic_write_file(extra_js_file_path, contents.join("\n;\n"))
+     else
+       begin

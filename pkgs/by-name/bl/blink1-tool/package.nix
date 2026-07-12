@@ -1,0 +1,55 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libusb1,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "blink1";
+  version = "2.5.0";
+
+  src = fetchFromGitHub {
+    owner = "todbot";
+    repo = "blink1-tool";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-i3DtDPAKvJ53HTgNnnf2iSGmayxg/++Kk3/4cEnD+Sk=";
+  };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "@git submodule update --init" "true"
+    substituteInPlace Makefile \
+      --replace-fail "INSTALL = install''\n" "INSTALL = install -D''\n"
+  ''
+  # Drop the hardcoded universal-binary flags so we build a single-arch.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail "-arch x86_64 -arch arm64" ""
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libusb1 ];
+
+  makeFlags = [
+    "GIT_TAG_RAW=v${finalAttrs.version}"
+    "GIT_TAG=v${finalAttrs.version}"
+    "USBLIB_TYPE=HIDAPI"
+    "HIDAPI_TYPE=LIBUSB"
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  meta = {
+    description = "Command line client for the blink(1) notification light";
+    homepage = "https://blink1.thingm.com/";
+    license = with lib.licenses; [ cc-by-sa-40 ];
+    maintainers = with lib.maintainers; [ cransom ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "blink1-tool";
+  };
+})

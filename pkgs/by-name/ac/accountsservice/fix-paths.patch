@@ -1,0 +1,143 @@
+diff --git a/src/daemon.c b/src/daemon.c
+index 48c310e..cd36e60 100644
+--- a/src/daemon.c
++++ b/src/daemon.c
+@@ -1806,7 +1806,7 @@ daemon_create_user_backend (Daemon         *daemon,
+         const gchar *argv[9] = { NULL };
+         int i = 0;
+ 
+-        argv[i++] = "/usr/sbin/useradd";
++        argv[i++] = "@shadow@/bin/useradd";
+         argv[i++] = "-m";
+         argv[i++] = "-c";
+         argv[i++] = cd->real_name;
+@@ -2040,7 +2040,7 @@ daemon_delete_shadow_user (Daemon                *daemon,
+         }
+         free (resolved_homedir);
+ 
+-        argv[i++] = "/usr/sbin/userdel";
++        argv[i++] = "@shadow@/bin/userdel";
+         argv[i++] = "-f";
+ 
+         if (rm_files)
+diff --git a/src/user.c b/src/user.c
+index da6428c..682842d 100644
+--- a/src/user.c
++++ b/src/user.c
+@@ -1947,7 +1947,7 @@ user_change_real_name_authorized_cb (Daemon                *daemon,
+                                 new_gecos = g_strdup (name);
+                         }
+ 
+-                        argv[0] = "/usr/sbin/usermod";
++                        argv[0] = "@shadow@/bin/usermod";
+                         argv[1] = "-c";
+                         argv[2] = new_gecos;
+                         argv[3] = "--";
+@@ -2022,7 +2022,7 @@ user_change_user_name_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          name);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-l";
+                 argv[2] = name;
+                 argv[3] = "--";
+@@ -2609,7 +2609,7 @@ user_set_password_expiration_policy_authorized_cb (Daemon                *daemon
+                 days_to_warn = g_strdup_printf ("%ld", pwd_expiration->days_to_warn);
+                 days_after_exp_until_lock = g_strdup_printf ("%ld", pwd_expiration->days_after_expiration_until_lock);
+ 
+-                argv[0] = "/usr/bin/chage";
++                argv[0] = "@shadow@/bin/chage";
+                 argv[1] = "-m";
+                 argv[2] = min_days_bt_changes;
+                 argv[3] = "-M";
+@@ -2735,7 +2735,7 @@ user_set_user_expiration_policy_authorized_cb (Daemon                *daemon,
+                         expiration_time = g_strdup ("-1");
+                 }
+ 
+-                argv[0] = "/usr/bin/chage";
++                argv[0] = "@shadow@/bin/chage";
+                 argv[1] = "-E";
+                 argv[2] = expiration_time;
+                 argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -2861,7 +2861,7 @@ user_change_home_dir_authorized_cb (Daemon                *daemon,
+                          accounts_user_get_uid (ACCOUNTS_USER (user)),
+                          home_dir);
+ 
+-                argv[0] = "/usr/sbin/usermod";
++                argv[0] = "@shadow@/bin/usermod";
+                 argv[1] = "-m";
+                 argv[2] = "-d";
+                 argv[3] = home_dir;
+@@ -2957,7 +2957,7 @@ user_change_shell_authorized_cb (Daemon                *daemon,
+                 } else {
+                         const gchar *argv[6];
+ 
+-                        argv[0] = "/usr/sbin/usermod";
++                        argv[0] = "@shadow@/bin/usermod";
+                         argv[1] = "-s";
+                         argv[2] = shell;
+                         argv[3] = "--";
+@@ -3163,7 +3163,7 @@ user_change_icon_file_classic_authorized_cb (Daemon                *daemon,
+                         return;
+                 }
+ 
+-                argv[0] = "/bin/cat";
++                argv[0] = "@coreutils@/bin/cat";
+                 argv[1] = filename;
+                 argv[2] = NULL;
+ 
+@@ -3279,7 +3279,7 @@ user_change_locked_authorized_cb (Daemon                *daemon,
+                 } else {
+                         const gchar *argv[5];
+ 
+-                        argv[0] = "/usr/sbin/usermod";
++                        argv[0] = "@shadow@/bin/usermod";
+                         argv[1] = locked ? "-L" : "-U";
+                         argv[2] = "--";
+                         argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -3471,7 +3471,7 @@ user_change_account_type_shadow (GDBusMethodInvocation *context,
+ 
+         g_free (groups);
+ 
+-        argv[0] = "/usr/sbin/usermod";
++        argv[0] = "@shadow@/bin/usermod";
+         argv[1] = "-G";
+         argv[2] = str->str;
+         argv[3] = "--";
+@@ -3604,7 +3604,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                         }
+                 } else if (mode == PASSWORD_MODE_SET_AT_LOGIN ||
+                            mode == PASSWORD_MODE_NONE) {
+-                        argv[0] = "/usr/bin/passwd";
++                        argv[0] = "/run/wrappers/bin/passwd";
+                         argv[1] = "-d";
+                         argv[2] = "--";
+                         argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -3616,7 +3616,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                         }
+ 
+                         if (mode == PASSWORD_MODE_SET_AT_LOGIN) {
+-                                argv[0] = "/usr/bin/chage";
++                                argv[0] = "@shadow@/bin/chage";
+                                 argv[1] = "-d";
+                                 argv[2] = "0";
+                                 argv[3] = "--";
+@@ -3637,7 +3637,7 @@ user_change_password_mode_authorized_cb (Daemon                *daemon,
+                          */
+                         accounts_user_set_locked (ACCOUNTS_USER (user), FALSE);
+                 } else if (accounts_user_get_locked (ACCOUNTS_USER (user))) {
+-                        argv[0] = "/usr/sbin/usermod";
++                        argv[0] = "@shadow@/bin/usermod";
+                         argv[1] = "-U";
+                         argv[2] = "--";
+                         argv[3] = accounts_user_get_user_name (ACCOUNTS_USER (user));
+@@ -3717,7 +3717,7 @@ user_change_password_authorized_cb (Daemon                *daemon,
+ 
+         g_autoptr (GError) error = NULL;
+         g_autoptr (GSubprocess) process = NULL;
+-        const char *argv[] = { "/usr/sbin/chpasswd", "-e", NULL };
++        const char *argv[] = { "@shadow@/bin/chpasswd", "-e", NULL };
+ 
+         sys_log (context,
+                  "set password and hint of user '%s' (%" G_GUINT64_FORMAT ")",
