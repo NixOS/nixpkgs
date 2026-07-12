@@ -27,16 +27,20 @@
   srtp,
   libnice,
   gnutls,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
+  gst_all_1,
   webrtc-audio-processing,
 }:
 
 # Upstream is very deliberate about which features are enabled per default or are automatically enabled.
 # Everything that is disabled per default has to been seen experimental and should not be enabled without strong reasoning.
 # see https://github.com/NixOS/nixpkgs/issues/469614#issuecomment-3649662176
-
+let
+  inherit (gst_all_1)
+    gstreamer
+    gst-plugins-base
+    ;
+  gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dino";
   version = "0.5.1";
