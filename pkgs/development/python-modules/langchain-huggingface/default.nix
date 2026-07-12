@@ -87,6 +87,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-huggingface==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

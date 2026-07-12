@@ -114,7 +114,7 @@ html {
 body {
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--main-text-color);
   background-color: var(--background);
   min-height: 100vh;
@@ -184,59 +184,52 @@ hr {
   margin-bottom: 1rem;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 800;
-  line-height: 110%;
-  font-size: 200%;
-  margin-bottom: 1rem;
+  line-height: 1.1;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/*
+  Major-second scale see: https://typescale.com/
+  rounded to .025rem (0.4px)
+*/
+h1 {
+  font-size: 2rem;
   color: var(--heading-color);
 }
 
 h2 {
-  font-weight: 800;
-  line-height: 110%;
-  font-size: 170%;
-  margin-bottom: 0.625rem;
+  font-size: 1.8rem;
   color: var(--heading-color);
-}
-
-h2:not(:first-child) {
-  margin-top: 1rem;
 }
 
 h3 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 150%;
+  font-size: 1.6rem;
   color: var(--heading-color);
 }
 
-:is(.note, .tip, .warning, .caution, .important) h3 {
-  font-size: 120%;
-}
-
 h4 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 140%;
+  font-size: 1.425rem;
   color: var(--heading-color);
 }
 
 h5 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 130%;
+  font-size: 1.275rem;
   color: var(--small-heading-color);
 }
 
 h6 {
-  font-weight: 800;
-  line-height: 110%;
-  margin-bottom: 1rem;
-  font-size: 120%;
+  font-size: 1.125rem;
+}
+
+:is(.note, .tip, .warning, .caution, .important) h3 {
+  font-size: 1.425rem;
 }
 
 strong {
@@ -264,13 +257,9 @@ code {
 }
 
 code {
-  color: #ff8657;
-  background: #f4f4f4;
-  display: inline-block;
-  padding: 0 0.5rem;
-  border: 1px solid #d8d8d8;
-  border-radius: 0.5rem;
-  line-height: 1.57777778;
+  padding: 0.2em 0.4em;
+  background: var(--inline-code-background);
+  border-radius: 0.375rem;
 }
 
 div.book .programlisting,
@@ -330,11 +319,6 @@ div.appendix .programlisting {
   background: var(--caution-background);
 }
 
-div.book .section,
-div.appendix .section {
-  margin-top: 2em;
-}
-
 div.book div.example,
 div.appendix div.example {
   margin-top: 1.5em;
@@ -378,11 +362,6 @@ div.appendix dt {
 
 div.book code,
 div.appendix code {
-  padding: 0;
-  border: 0;
-  background-color: inherit;
-  color: inherit;
-  font-size: 100%;
   -webkit-hyphens: none;
   -moz-hyphens: none;
   hyphens: none;
@@ -441,6 +420,7 @@ div.appendix .variablelist .term {
   --caution-background: #ffebe8;
   --codeblock-background: #f2f8fd;
   --codeblock-text-color: #000;
+  --inline-code-background: #818b981f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -466,6 +446,7 @@ div.appendix .variablelist .term {
     --caution-background: #422522;
     --codeblock-background: #393939;
     --codeblock-text-color: #fff;
+    --inline-code-background: #656c7633;
   }
 
   :is(.note, .tip, .warning, .caution, .important) {
@@ -476,7 +457,12 @@ div.appendix .variablelist .term {
 
 @font-face {
   font-family: Roboto;
-  src: url(Roboto.ttf);
+  src:
+    url(Roboto.ttf) format("truetype") tech(variations),
+    url(Roboto.ttf) format("truetype-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
 }
 
 .chapter {
