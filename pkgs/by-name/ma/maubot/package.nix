@@ -4,13 +4,15 @@
   fetchpatch,
   callPackage,
   runCommand,
-  python,
+  python3,
   encryptionSupport ? true,
   sqliteSupport ? true,
 }:
 
 let
-  maubot = python.pkgs.buildPythonPackage (finalAttrs: {
+  python = python3;
+
+  maubot = python.pkgs.buildPythonApplication (finalAttrs: {
     pname = "maubot";
     version = "0.6.0";
     pyproject = true;
