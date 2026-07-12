@@ -605,9 +605,21 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       "x86_64-darwin"
     ];
     knownVulnerabilities = [
+      "CVE-2026-25960"
       "CVE-2026-27893"
+      "CVE-2026-41523"
       "CVE-2026-44222"
       "CVE-2026-44223"
+      "CVE-2026-47155"
+      "CVE-2026-48746"
+      "CVE-2026-53923"
+      "CVE-2026-54232"
+      "CVE-2026-54233"
+      "CVE-2026-54234"
+      "CVE-2026-54235"
+      "CVE-2026-54236"
+      "CVE-2026-55514"
+      "CVE-2026-55574"
     ];
   };
 })
