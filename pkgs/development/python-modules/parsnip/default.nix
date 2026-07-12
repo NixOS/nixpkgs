@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -32,6 +33,18 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-A1YoTBRN3ukcueUso5P2zPZ/pxu25k9h6aI7+AQvr1Q=";
   };
+
+  patches = [
+    # Numpy 2.5 compatibility, see: https://github.com/glotzerlab/parsnip/pull/245
+    (fetchpatch {
+      url = "https://github.com/glotzerlab/parsnip/commit/41a6bd6e42ea212203d5ce5864c687927b834586.patch";
+      includes = [
+        # Other files are changelog & credits
+        "parsnip/parsnip.py"
+      ];
+      hash = "sha256-Y91fITsPkmcct2tDsaHtNB8ct41IMtw1A+QnRwChc7k=";
+    })
+  ];
 
   build-system = [
     setuptools
