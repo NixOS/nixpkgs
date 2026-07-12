@@ -111,6 +111,7 @@
   ./hardware/sensor/iio.nix
   ./hardware/sheep-net.nix
   ./hardware/steam-hardware.nix
+  ./hardware/stlink.nix
   ./hardware/system-76.nix
   ./hardware/tenstorrent.nix
   ./hardware/tuxedo-drivers.nix
