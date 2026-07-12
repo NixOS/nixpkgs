@@ -159,6 +159,7 @@ in
           gwenview
           okular
           kate
+          kwrite
           ktexteditor # provides elevated actions for kate
           khelpcenter
           dolphin

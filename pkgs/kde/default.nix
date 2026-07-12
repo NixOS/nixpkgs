@@ -65,6 +65,17 @@ let
         # Alias to match metadata
         kquickimageeditor = self.kquickimageedit;
 
+        kwrite = lib.extendDerivation true {
+          pname = "kwrite";
+          name = "kwrite-${self.kate.version}";
+          meta = self.kate.meta // {
+            description = "Text Editor";
+            homepage = "https://apps.kde.org/kwrite/";
+            mainProgram = "kwrite";
+            outputsToInstall = [ "kwrite" ];
+          };
+        } self.kate.kwrite;
+
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
