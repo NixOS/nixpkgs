@@ -102,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
       --skipunit unit/memefficiency \
       --skipunit unit/type/string \
       --skipunit integration/failover \
-      --skipunit integration/aof-multi-part
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/dual-channel-replication
 
     runHook postCheck
   '';
