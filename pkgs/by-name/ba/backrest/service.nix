@@ -106,6 +106,30 @@ in
         Environment = "HOME=${cfg.dataDir}";
         AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" ];
         CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+        NoNewPrivileges = true;
+        LockPersonality = true;
+        UMask = "0077";
+        DevicePolicy = "closed";
+        ProtectKernelLogs = true;
+        SystemCallArchitectures = "native";
+        RestrictSUIDSGID = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        SystemCallFilter = [
+          "~@reboot"
+          "~@swap"
+          "~@obsolete"
+          "~@mount"
+          "~@module"
+          "~@debug"
+          "~@cpu-emulation"
+          "~@clock"
+          "~@raw-io"
+          "~@privileged"
+          "~@resources"
+        ];
       };
     };
   };
