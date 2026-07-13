@@ -221,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
 
-  inherit libPath;
+  inherit libPath stageModules;
 
   autoPatchelfIgnoreMissingDeps = [
     "libssl.so.1.1"
@@ -260,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/${binaryName} \
         ${lib.strings.optionalString disableUpdates "--run ${lib.getExe disableBreakingUpdates}"} \
-        --run "${stageModules} $out/opt/${binaryName}/modules" \
+        --run "${finalAttrs.stageModules} $out/opt/${binaryName}/modules" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
