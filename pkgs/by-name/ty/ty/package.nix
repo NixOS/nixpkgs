@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.58";
+  version = "0.0.59";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-Iy8pJ9q+pfSH1JpiHmL14Wu201C3wnud97N0NFBQqok=";
+    hash = "sha256-9wk1Nl1ObVfGbjGFzvMYLnVP9PjGdI7I9HACeGfZ0d0=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-usviiAc7tWy/fqxE5fD/1B8rsUY0UnSA5EKgk0JLDpA=";
+  cargoHash = "sha256-MdzVg+FzY3AmNt2WaSeWbBxkWABedMlr2+hJXYZEmJo=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
