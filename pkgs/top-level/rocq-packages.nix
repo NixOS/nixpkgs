@@ -26,7 +26,7 @@ let
         recurseForDerivations = false;
       };
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
