@@ -59,7 +59,7 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `releaseArtifact` (optional, defaults to `(v: null)`), provides a default mapping from release names to artifact names (only works for github artifact for now),
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
-* `namePrefix` (optional, defaults to `[ "rocq-core" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
+* `namePrefix` (optional, defaults to `[ "rocq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
 * `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
 * `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
 * `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,

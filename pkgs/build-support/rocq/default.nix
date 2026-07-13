@@ -162,8 +162,13 @@ let
     + optionalString (v == null) "-broken";
   useDune = args.useDune or (useDuneifVersion fetched.version);
   useCoq = args.useCoq or (useCoqifVersion fetched.version);
-  namePrefix = args.namePrefix or [ (if useCoq then "coq" else "rocq-core") ];
-  append-version = p: n: p + display-pkg n "" rocqPackages.${n}.version + "-";
+  namePrefix = args.namePrefix or [ (if useCoq then "coq" else "rocq") ];
+  append-version =
+    p: n:
+    let
+      version = if n == "rocq" then rocqPackages.rocq-core.version else rocqPackages.${n}.version;
+    in
+    p + display-pkg n "" version + "-";
   prefix-name = foldl append-version "" namePrefix;
   opam-name = args.opam-name or (concatStringsSep "-" (namePrefix ++ [ pname ]));
   rocq-core = if useCoq then coq // { rocq-version = coq.coq-version; } else args0.rocq-core;
