@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbit";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchurl {
     url = "https://github.com/yuzeguitarist/Orbit/releases/download/v${finalAttrs.version}/Orbit.dmg";
-    hash = "sha256-SNwJGUbV6BPmObmMsAui9qXwOPkGheVJ4Ezy6C0Ozpg=";
+    hash = "sha256-5SHMfufwQgR5u008Ws4qNT5x5Owb4qCO+bKijnfu0YA=";
   };
 
   nativeBuildInputs = [ undmg ];
