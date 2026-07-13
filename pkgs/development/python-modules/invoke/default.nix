@@ -3,27 +3,22 @@
   bash,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "3.0.3";
-  pyproject = true;
+  version = "2.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q3tqYiIjgkOAv7TmT2EnEaa2SMeV9WXvyGJa9m+1fww=";
+    hash = "sha256-UVv0m0pIkyt5sCRZA0jaIvOcSULf+ZGtH7i4uuob5wc=";
   };
 
   postPatch = ''
     sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
   '';
-
-  build-system = [
-    setuptools
-  ];
 
   # errors with vendored libs
   doCheck = false;
