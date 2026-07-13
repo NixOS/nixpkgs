@@ -265,6 +265,8 @@ class HTMLParameters(NamedTuple):
     sidebar_depth: int
     media_dir: Path
     sidebar_open: frozenset[str] = frozenset()
+    header: Path | None = None
+    no_navheader: bool = False
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -344,7 +346,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if toc.next:
             next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
-        if toc.prev or toc.parent or toc.next:
+        # nav_header is not disabled
+        if not self._html_params.no_navheader and (toc.prev or toc.parent or toc.next):
             nav_html = "\n".join([
                 '  <div class="navheader">',
                 '   <table width="100%" summary="Navigation header">',
@@ -381,6 +384,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 });
             });
         """
+        header_content = ""
+        if self._html_params.header:
+            with open(self._html_params.header) as header_file:
+                header_content = header_file.read()
 
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
@@ -406,6 +413,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ('  <button type="button" class="toc-toggle" popovertarget="manual-toc"'
              ' popovertargetaction="toggle" aria-label="Toggle table of contents">'
              '☰</button>') if sidebar else "",
+            header_content,
             nav_html,
             f'  <nav id="manual-toc" class="toc-sidebar" popover="auto">{sidebar}</nav>' if sidebar else "",
             '  <main class="content">',
@@ -757,6 +765,9 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--chunk-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
     p.add_argument('--section-toc-depth', nargs='?', action=_DeprecatedDepthFlag, default=None)
     # Positional
+    p.add_argument('--no-navheader', default=False, action='store_true')
+    p.add_argument('--header', type=Path,
+                   help='Inject any html fragment into the <body> as first child')
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -774,7 +785,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script,
-                           args.sidebar_depth, args.media_dir, sidebar_open),
+                           args.sidebar_depth, args.media_dir, sidebar_open, args.header, args.no_navheader),
             json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
