@@ -139,29 +139,21 @@ let
       propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
     }
   );
-  patched-derivation4 = patched-derivation3.overrideAttrs (
-    o:
-    lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGe "2.5.0" o.version))
-      {
-        configurePhase = ''
-          make dune-files || true
-        '';
-        buildPhase = ''
-          dune build -p rocq-elpi @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-        '';
-        installPhase = ''
-          dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
-          mkdir $out/lib/coq/
-          mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
-        '';
-      }
-  );
 in
-# this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
-if coq.rocqPackages ? rocq-elpi then
-  coq.rocqPackages.rocq-elpi.override {
-    inherit version elpi-version;
-    inherit (coq.rocqPackages) rocq-core;
-  }
-else
-  patched-derivation4
+patched-derivation3.overrideAttrs (
+  o:
+  lib.optionalAttrs (o.version != null && (o.version == "dev" || lib.versions.isGe "2.5.0" o.version))
+    {
+      configurePhase = ''
+        make dune-files || true
+      '';
+      buildPhase = ''
+        dune build -p rocq-elpi @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+      '';
+      installPhase = ''
+        dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
+        mkdir $out/lib/coq/
+        mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
+      '';
+    }
+)

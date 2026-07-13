@@ -100,6 +100,7 @@ let
   version = fetched.version;
   coq-version =
     args.coq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
+  rocq-version = coq-version;
   coqAtLeast = v: coq-version == "dev" || lib.versionAtLeast coq-version v;
   buildIde = args.buildIde or (coqAtLeast "8.10" && !coqAtLeast "8.14");
   csdpPatch = lib.optionalString (csdp != null) ''
@@ -161,6 +162,7 @@ let
 
     passthru = {
       inherit coq-version;
+      inherit rocq-version;
       inherit ocamlPackages ocamlNativeBuildInputs;
       inherit ocamlPropagatedBuildInputs;
       # For compatibility
