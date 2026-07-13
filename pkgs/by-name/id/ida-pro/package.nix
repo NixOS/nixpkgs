@@ -25,6 +25,8 @@ in
 pkgs.stdenv.mkDerivation rec {
   pname = "ida-pro";
   version = "9.2.250908";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = pkgs.requireFile {
     name = "ida-pro_92_x64linux.run";
