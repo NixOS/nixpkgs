@@ -55,6 +55,7 @@ let
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
       "x86_64-darwin"
