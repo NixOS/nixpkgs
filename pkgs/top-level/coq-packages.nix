@@ -74,11 +74,7 @@ let
       autosubst = callPackage ../development/coq-modules/autosubst { };
       autosubst-ocaml = callPackage ../development/coq-modules/autosubst-ocaml { };
       bbv = callPackage ../development/coq-modules/bbv { };
-      bignums =
-        if lib.versionAtLeast coq.coq-version "8.6" then
-          callPackage ../development/coq-modules/bignums { }
-        else
-          null;
+      bignums = callPackage ../development/rocq-modules/bignums { };
       CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
