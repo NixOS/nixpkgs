@@ -16326,9 +16326,13 @@ self: super: with self; {
 
   pytest8_3CheckHook = pytestCheckHook.override { pytest = pytest_8_3; };
 
+  pytest9_0CheckHook = pytestCheckHook.override { pytest = pytest_9_0; };
+
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
 
   pytest_8_3 = callPackage ../development/python-modules/pytest/8_3.nix { };
+
+  pytest_9_0 = callPackage ../development/python-modules/pytest/9_0.nix { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
