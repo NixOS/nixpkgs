@@ -15,13 +15,13 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "displaycal";
-  version = "3.9.17";
+  version = "3.9.18";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "DisplayCAL";
+    pname = "displaycal";
     inherit (finalAttrs) version;
-    hash = "sha256-cV8x1Hx+KQUhOOzqw/89QgoZ9+82vhwGrhG13KpE9Vw=";
+    hash = "sha256-mHUtO3vVIREzcIv6IFmPlo4nwuPPGDd9+UbIoXfvLYo=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +29,30 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     gtk3
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools_80 ];
+
+  postPatch = ''
+    # 2 conflicting copies of bin/displaycal end up from the installation
+    # process (one from pyproject.toml’s gui-scripts, one from setup.py). Keep
+    # only the setup.py version. Replace key with an invalide name to be
+    # skipped.
+    substituteInPlace pyproject.toml \
+      --replace-fail "[project.gui-scripts]" "[_project.gui-scripts]" \
+  '';
 
   dependencies = with python3.pkgs; [
     build
     certifi
+    defusedxml
     wxpython
     dbus-python
     distro
     numpy
     pillow
+    psutil
     pychromecast
+    pyglet
+    pyyaml
     send2trash
     zeroconf
   ];
