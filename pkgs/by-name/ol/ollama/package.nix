@@ -95,7 +95,7 @@ let
 
   cudaToolkit = buildEnv {
     # ollama hardcodes the major version in the Makefile to support different variants.
-    # - https://github.com/ollama/ollama/blob/v0.31.1/CMakePresets.json#L21-L47
+    # - https://github.com/ollama/ollama/blob/v0.31.2/CMakePresets.json#L21-L47
     name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
@@ -322,7 +322,7 @@ goBuild (finalAttrs: {
   '';
 
   # ollama looks for acceleration libs in ../lib/ollama/ (now also for CPU-only with arch specific optimizations)
-  # https://github.com/ollama/ollama/blob/v0.31.1/docs/development.md#library-detection
+  # https://github.com/ollama/ollama/blob/v0.31.2/docs/development.md#library-detection
   postInstall = ''
     mkdir -p $out/lib
     cp -r build/lib/ollama $out/lib/
