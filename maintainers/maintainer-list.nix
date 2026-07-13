@@ -16123,6 +16123,13 @@
     githubId = 78693624;
     name = "llakala";
   };
+  llamato = {
+    email = "tguessbacher@gmx.de";
+    github = "llamato";
+    githubId = 7943059;
+    name = "llamato";
+    keys = [ { fingerprint = "5B27 0167 DF91 4022 28CA C1F2 9683 C220 A49A 0E99"; } ];
+  };
   llehouerou = {
     email = "laurent@lehouerou.net";
     github = "llehouerou";
