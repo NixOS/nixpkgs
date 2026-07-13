@@ -4,27 +4,45 @@
   fetchFromGitHub,
   makeWrapper,
   coreutils,
-  gnused,
   gawk,
   fd,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  writeShellScript,
 }:
 
+let
+  duForTests = writeShellScript "mole-cleaner-du-for-tests" ''
+    args=()
+    while (( $# > 0 )); do
+      case "$1" in
+        -I)
+          shift
+          args+=("--exclude=$1")
+          ;;
+        *)
+          args+=("$1")
+          ;;
+      esac
+      shift
+    done
+
+    exec ${lib.getExe' coreutils "du"} "''${args[@]}"
+  '';
+in
 buildGoModule (finalAttrs: {
   pname = "mole-cleaner";
-  version = "1.31.0";
-  __structuredAttrs = true;
+  version = "1.46.0";
 
   src = fetchFromGitHub {
     owner = "tw93";
     repo = "Mole";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-dalmW3W/seGZreSWuYP7JN/nMUbs3WyDHzKU83EveeY=";
+    hash = "sha256-rIoVXEz4K0RFb1ir1gRCyDw5euNwQvLS0GwBsJhuApE=";
   };
 
-  vendorHash = "sha256-LznLZ0NO8VBWP95ReAVORUMIDhh7/pgTY5mGNN2tND8=";
+  vendorHash = "sha256-hLFlAy4AE1eNOxd4d75Mbo3ZKlwvNK7QV2DNVPd7NHc=";
 
   subPackages = [
     "cmd/analyze"
@@ -39,13 +57,11 @@ buildGoModule (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
     coreutils
-    gnused
     gawk
   ];
 
   postInstall = ''
     install -Dm755 mole $out/libexec/mole/mole
-    install -Dm755 mo $out/libexec/mole/mo
     cp -r bin lib $out/libexec/mole/
 
     mv $out/bin/analyze $out/libexec/mole/bin/analyze-go
@@ -53,45 +69,59 @@ buildGoModule (finalAttrs: {
 
     patchShebangs $out/libexec/mole
 
-    makeWrapper $out/libexec/mole/mole $out/bin/mole \
+    mkdir -p $out/libexec/mole/nix-bin
+    ln -s ${lib.getExe' coreutils "timeout"} $out/libexec/mole/nix-bin/timeout
+
+    makeWrapper $out/libexec/mole/mole $out/bin/mo \
+      --run '
+        case "$1" in
+          update|remove)
+            echo "mo $1 is unsupported for Nix-installed Mole; update or remove it through your Nix profile or configuration." >&2
+            exit 1
+            ;;
+        esac
+      ' \
       --prefix PATH : ${
         lib.makeBinPath [
           fd
-          coreutils
-          gnused
-          gawk
         ]
-      }
-    makeWrapper $out/libexec/mole/mo $out/bin/mo \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          fd
-          coreutils
-          gnused
-          gawk
-        ]
-      }
+      }:$out/libexec/mole/nix-bin:/usr/bin:/bin
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    mkdir -p "$TMPDIR/mole-test-bin"
+    ln -s ${duForTests} "$TMPDIR/mole-test-bin/du"
+    PATH="$TMPDIR/mole-test-bin:$PATH" go test ./...
+    runHook postCheck
   '';
 
   doInstallCheck = true;
-  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckKeepEnvironment = [
+    "HOME"
+    "PATH"
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/mo";
   versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/mole --help > /dev/null
     $out/bin/mo --help > /dev/null
+    test -w "$HOME"
+    test ! -e $out/bin/mole
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "V"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^V(.*)$" ];
+  };
 
   meta = {
     description = "CLI tool for cleaning and optimizing macOS systems";
     homepage = "https://github.com/tw93/Mole";
     changelog = "https://github.com/tw93/Mole/releases/tag/V${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ IanHollow ];
-    mainProgram = "mole";
+    mainProgram = "mo";
     platforms = lib.platforms.darwin;
   };
 })
