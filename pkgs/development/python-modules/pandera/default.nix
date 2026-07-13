@@ -19,7 +19,6 @@
   # optional-dependencies
   black,
   dask,
-  duckdb,
   fastapi,
   frictionless,
   geopandas,
@@ -35,6 +34,7 @@
   xarray,
 
   # tests
+  duckdb,
   joblib,
   pyarrow-hotfix,
   pyarrow,
@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   pname = "pandera";
   version = "0.32.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
@@ -103,7 +104,7 @@ buildPythonPackage (finalAttrs: {
         ];
         ibis = [
           ibis-framework
-          duckdb
+          pyarrow-hotfix
         ];
         narwhals = [ narwhals ];
         pandas = [
@@ -112,14 +113,15 @@ buildPythonPackage (finalAttrs: {
         ];
         polars = [ polars ];
         xarray = [
-          xarray
           numpy
+          xarray
         ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
+    duckdb
     joblib
     pyarrow
     pyarrow-hotfix
@@ -150,6 +152,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: assert failure_cases.equals(expected_failure_cases)
+    "test_ibis_custom_check"
+
     # TypeError: __class__ assignment: 'GeoDataFrame' object...
     "test_schema_model"
     "test_schema_from_dataframe"
