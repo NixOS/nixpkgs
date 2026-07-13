@@ -28,6 +28,8 @@
   libtiff,
   enableWebP ? true,
   libwebp,
+  enableJpegXL ? true,
+  libjxl,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
   enableJPEG2000 ? true,
@@ -382,6 +384,9 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableWebP [
     libwebp
   ]
+  ++ optionals enableJpegXL [
+    libjxl
+  ]
   ++ optionals enableEXR [
     openexr
   ]
@@ -504,6 +509,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_IPP" enableIpp)
     (cmakeBool "WITH_TIFF" enableTIFF)
     (cmakeBool "WITH_WEBP" enableWebP)
+    (cmakeBool "WITH_JPEGXL" enableJpegXL)
     (cmakeBool "WITH_JPEG" enableJPEG)
     (cmakeBool "WITH_PNG" enablePNG)
     (cmakeBool "WITH_OPENEXR" enableEXR)
