@@ -4,8 +4,11 @@
   fetchFromGitHub,
 }:
 buildGoModule {
-  pname = "rHttp";
+  pname = "rhttp";
   version = "0-unstable-2024-04-28";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "1buran";
