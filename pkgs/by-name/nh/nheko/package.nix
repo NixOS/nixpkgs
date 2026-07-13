@@ -21,6 +21,7 @@
   gst_all_1,
   libnice,
   qt6Packages,
+  kdePackages,
   fetchpatch,
   withVoipSupport ? stdenv.hostPlatform.isLinux,
 }:
@@ -89,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     (gst_all_1.gst-plugins-good.override { qt6Support = true; })
     gst_all_1.gst-plugins-bad
     libnice
+  ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    kdePackages.kirigami
   ];
 
   cmakeFlags = [
