@@ -13,9 +13,7 @@
   libice,
   libsm,
   openssl,
-  unzip,
   xdg-utils,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -64,8 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     ln -s ${xdg-utils}/bin/xdg-open $out/bin/open
-    wrapProgram $out/bin/muse-sounds-manager \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
   '';
 
   dontStrip = true;
