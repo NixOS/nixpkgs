@@ -67,6 +67,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # click 8.4 compat
+    "test_cli_blueprints"
+  ];
+
   meta = {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
