@@ -67,7 +67,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/apple/container/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "container";
-    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      Br1ght0ne
+    ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
