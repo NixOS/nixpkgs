@@ -78,19 +78,8 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.fuse old)
-    // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        (
-          if stdenv.cc.isClang then
-            "-Wno-error=incompatible-function-pointer-types"
-          else
-            "-Wno-error=incompatible-pointer-types"
-        )
-      ];
-    };
+  # requires fuse2
+  fuse = broken;
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
