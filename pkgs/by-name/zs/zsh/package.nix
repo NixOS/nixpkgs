@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pSub
       artturin
+      doronbehar
     ];
     platforms = lib.platforms.unix;
     mainProgram = "zsh";
