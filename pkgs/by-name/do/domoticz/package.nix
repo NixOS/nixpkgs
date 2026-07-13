@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   makeWrapper,
   cmake,
   python3,
@@ -20,18 +19,17 @@
   cereal,
   minizip,
   versionCheckHook,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2026.2";
+  version = "2026.2-unstable-2026-07-09";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = "domoticz";
-    tag = finalAttrs.version;
-    hash = "sha256-WJDNnzjmQe9Ap5EqmXEgrglIbGcLRRFBJgAHDvzswzo=";
+    rev = "7e12d1e5d7bf3f7d083ef31d5dd611d678f89d48"; # pinned due to removed dependency (see nixpkgs pr #539060)
+    hash = "sha256-+6EIEsgGTaLEPzBa/R5EYAxnYB3+cj54LGDJwutTQGA=";
     fetchSubmodules = true;
   };
 
@@ -81,11 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [
-    versionCheckHook
+    # versionCheckHook # readd once we can move to a tagged release again
   ];
   doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Home automation system";
