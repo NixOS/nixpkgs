@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::trio.TrioDeprecationWarning"
+    "-Wignore::pytest.PytestRemovedIn10Warning"
   ];
 
   disabledTests = [
