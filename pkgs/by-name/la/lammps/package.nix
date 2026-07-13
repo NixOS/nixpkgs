@@ -8,6 +8,7 @@
   blas,
   lapack,
   python3,
+  mpich,
   cmake,
   autoAddDriverRunpath,
   pkg-config,
@@ -39,6 +40,7 @@
     SRD = true;
     REAXFF = true;
     PYTHON = true;
+    MPIIO = true;
   },
   # Extra cmakeFlags to add as "-D${attr}=${value}"
   extraCmakeFlags ? { },
@@ -71,7 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     # GPU_API=cuda, and it doesn't users that don't enable the GPU package.
     autoAddDriverRunpath
   ]
-  ++ lib.optionals packages.PYTHON [ python3 ];
+  ++ lib.optionals packages.PYTHON [
+    python3
+  ]
+  ++ lib.optionals packages.MPIIO [
+    mpich
+  ];
 
   passthru = {
     inherit packages;
