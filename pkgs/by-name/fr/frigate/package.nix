@@ -12,36 +12,11 @@
   sqlite-vec,
   frigate,
   nixosTests,
-  go2rtc,
 }:
 
 let
-  version = "0.17.2";
-
-  src = fetchFromGitHub {
-    name = "frigate-${version}-source";
-    owner = "blakeblackshear";
-    repo = "frigate";
-    tag = "v${version}";
-    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
-  };
-
-  frigate-web = callPackage ./web.nix {
-    inherit version src;
-  };
-
   python3Packages = python313Packages.overrideScope (
     self: super: {
-      joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
-        version = "1.1.0";
-        src = fetchFromGitHub {
-          owner = "authlib";
-          repo = "joserfc";
-          tag = version;
-          hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
-        };
-      });
-
       # transformers 4.* is not compatible with the latest tokenizers
       tokenizers = super.tokenizers.overridePythonAttrs (
         oldAttrs:
@@ -100,12 +75,18 @@ let
     hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";
-  inherit version;
+  version = "0.18.0-rc1";
   pyproject = false;
 
-  inherit src;
+  src = fetchFromGitHub {
+    name = "frigate-${finalAttrs.version}-source";
+    owner = "blakeblackshear";
+    repo = "frigate";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nMlaExkofbUmzRy3nr42Wy8r+yHcgHiyAsdfq/XdF0Q=";
+  };
 
   patches = [
     # Always lookup ffmpeg from config setting
@@ -116,24 +97,27 @@ python3Packages.buildPythonApplication rec {
       inherit (addDriverRunpath) driverLink;
     })
 
-    # Use ai-edge-litert as tensorflow interpreter
-    # https://github.com/blakeblackshear/frigate/pull/21876
-    ./ai-edge-litert.patch
-
     # Disable failing optimization in onnxruntime
     # https://github.com/microsoft/onnxruntime/issues/26717
+    # https://github.com/microsoft/onnxruntime/pull/29196
     ./onnxruntime-compat.patch
 
-    # Fix excessive trailing whitespaces in process commandlines
-    # https://github.com/blakeblackshear/frigate/pull/22089
-    ./proc-cmdline-strip.patch
+    # Reuse EXPORT_DIR in tests
+    ./fix-tests-media-auth-paths.patch
 
     # Fix more granular dtype resolution in Pandas 3.0
     ./pandas3-compat.patch
+
+    # Various fixes for newer library packages, migrates to
+    # - FastAPI lifespan,
+    # - native tz-aware objects,
+    # - Pydantic TypeAdapter
+    # https://github.com/blakeblackshear/frigate/pull/23641
+    ./pr23641.patch
   ];
 
   postPatch = ''
-    echo 'VERSION = "${version}"' > frigate/version.py
+    echo 'VERSION = "${finalAttrs.version}"' > frigate/version.py
 
     substituteInPlace \
       frigate/app.py \
@@ -175,75 +159,77 @@ python3Packages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  dependencies = with python3Packages; [
-    # docker/main/requirements-wheel.txt
-    # TODO: degirum (no source repo, binary wheels only)
-    ai-edge-litert
-    aiofiles
-    aiohttp
-    appdirs
-    argcomplete
-    click
-    contextlib2
-    cryptography
-    distlib
-    fastapi
-    faster-whisper
-    filelock
-    google-genai
-    importlib-metadata
-    importlib-resources
-    joserfc
-    keras # via tensorflow.keras
-    librosa
-    markupsafe
-    memray
-    netaddr
-    netifaces
-    norfair
-    numpy
-    ollama
-    onnxruntime
-    onvif-zeep-async
-    openai
-    opencv4
-    openvino
-    paho-mqtt
-    pandas
-    pathvalidate
-    peewee
-    peewee-migrate
-    prometheus-client
-    psutil
-    py3nvml
-    pyclipper
-    pydantic
-    python-multipart
-    pytz
-    py-vapid
-    pywebpush
-    pyzmq
-    rapidfuzz
-    requests
-    ruamel-yaml
-    scipy
-    setproctitle
-    shapely
-    sherpa-onnx
-    slowapi
-    soundfile
-    starlette
-    starlette-context
-    tensorflow
-    titlecase
-    transformers
-    tzlocal
-    unidecode
-    uvicorn
-    verboselogs
-    virtualenv
-    ws4py
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      # docker/main/requirements-wheel.txt
+      ai-edge-litert
+      aiofiles
+      aiohttp
+      appdirs
+      argcomplete
+      click
+      contextlib2
+      cryptography
+      distlib
+      fastapi
+      faster-whisper
+      filelock
+      google-genai
+      httpx
+      importlib-metadata
+      importlib-resources
+      joserfc
+      keras # via tensorflow.keras
+      librosa
+      markupsafe
+      memray
+      netaddr
+      netifaces
+      norfair
+      numpy
+      ollama
+      onnxruntime
+      onvif-zeep-async
+      openai
+      opencv4
+      openvino
+      paho-mqtt
+      pandas
+      pathvalidate
+      peewee
+      peewee-migrate
+      prometheus-client
+      psutil
+      py3nvml
+      pyclipper
+      pydantic
+      python-multipart
+      py-vapid
+      pywebpush
+      pyzmq
+      rapidfuzz
+      requests
+      ruamel-yaml
+      scipy
+      setproctitle
+      shapely
+      sherpa-onnx
+      slowapi
+      soundfile
+      starlette
+      starlette-context
+      tensorflow
+      titlecase
+      transformers
+      tzlocal
+      unidecode
+      uvicorn
+      verboselogs
+      virtualenv
+      ws4py
+    ]
+    ++ httpx.optional-dependencies.http2;
 
   installPhase = ''
     runHook preInstall
@@ -269,9 +255,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
-    # Unavailable in the build sandbox
+    # FHS paths are unreachable in the build sandbox
     substituteInPlace frigate/const.py \
-      --replace-fail "/var/lib/frigate" "$TMPDIR/" \
+      --replace-fail "/var/lib/frigate" "$TMPDIR" \
       --replace-fail "/var/cache/frigate" "$TMPDIR"
   '';
 
@@ -286,16 +272,20 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
-    web = frigate-web;
     inherit python;
-    pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
+    pythonPath =
+      (python3Packages.makePythonPath finalAttrs.finalPackage.dependencies)
+      + ":${frigate}/${python.sitePackages}";
+    web = callPackage ./web.nix {
+      inherit (finalAttrs) version src;
+    };
     tests = {
       inherit (nixosTests) frigate;
     };
   };
 
   meta = {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${finalAttrs.src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI
@@ -306,4 +296,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
