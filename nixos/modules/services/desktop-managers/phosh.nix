@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.services.xserver.desktopManager.phosh;
+  cfg = config.services.desktopManager.phosh;
 
   phocConfigType = lib.types.submodule {
     options = {
@@ -131,8 +131,15 @@ in
     maintainers = with lib.maintainers; [ armelclo ];
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "phosh" ]
+      [ "services" "desktopManager" "phosh" ]
+    )
+  ];
+
   options = {
-    services.xserver.desktopManager.phosh = {
+    services.desktopManager.phosh = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
