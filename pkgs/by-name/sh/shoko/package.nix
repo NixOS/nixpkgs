@@ -55,10 +55,7 @@ buildDotnetModule (finalAttrs: {
     description = "Backend for the Shoko anime management system";
     license = lib.licenses.mit;
     mainProgram = "Shoko.CLI";
-    maintainers = with lib.maintainers; [
-      diniamo
-      nanoyaki
-    ];
+    maintainers = with lib.maintainers; [ nanoyaki ];
     inherit (dotnet-sdk_8.meta) platforms;
   };
 })

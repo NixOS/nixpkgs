@@ -1523,14 +1523,6 @@ with pkgs;
     plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
   };
 
-  dino = callPackage ../applications/networking/instant-messengers/dino {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      ;
-    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
-  };
-
   inherit (ocamlPackages) dot-merlin-reader;
 
   inherit (ocamlPackages) dune-release;
@@ -9495,10 +9487,6 @@ with pkgs;
     versionSuffix = "esr";
   };
 
-  timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
-    fftw = fftwSinglePrec;
-  };
-
   inherit
     ({
       timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { };
@@ -10302,10 +10290,6 @@ with pkgs;
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
-
-  hh-suite = callPackage ../applications/science/biology/hh-suite {
-    inherit (llvmPackages) openmp;
-  };
 
   nest-mpi = nest.override { withMpi = true; };
 

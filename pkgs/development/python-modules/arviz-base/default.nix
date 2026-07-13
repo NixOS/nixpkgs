@@ -67,6 +67,11 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  pytestFlags = [
+    # DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+    "-Wignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "Base ArviZ features and converters";
     homepage = "https://github.com/arviz-devs/arviz-base";

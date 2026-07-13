@@ -348,6 +348,8 @@ runCommandLocal name
     // {
       inherit nativeBuildInputs;
 
+      __structuredAttrs = true;
+
       passthru = passthru // {
         env =
           runCommandLocal "${name}-shell-env"
