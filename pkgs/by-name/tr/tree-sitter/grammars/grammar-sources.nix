@@ -2544,9 +2544,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.6.4";
+    version = "2026.7.9";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-jluMtWRFuyG8WGiVn1ge2NfSdRIq8zqS1R12AG/Imtc=";
+    hash = "sha256-La1h6uJC5gUA84OAr3zBbQiR+AnrhcUhNf6r4HUpwhg=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
