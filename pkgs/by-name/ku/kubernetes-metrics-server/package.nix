@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-metrics-server";
-  version = "0.6.4";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "metrics-server";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-e9iFOe2iZaKbYNUk0vuyzcGDCNxot34kRH06L5UQs4I=";
+    sha256 = "sha256-RITmujmqDGHhhX8uOxchJE1jrIIuuhrjB/GgDHwkmo8=";
   };
 
-  vendorHash = "sha256-BR9mBBH5QE3FMTNtyHfHA1ei18CIDr5Yhvg28hGbDR4=";
+  vendorHash = "sha256-YaVO5WSm0JoCwJ+9FqxXkgt3jaSz6/LavtFi5OQn+Ao=";
 
   preCheck = ''
     # the e2e test breaks the sandbox, so let's skip that
