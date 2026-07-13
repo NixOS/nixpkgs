@@ -121,7 +121,7 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
