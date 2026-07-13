@@ -22,6 +22,7 @@
   libxrender,
   python3,
   withXorg ? true,
+  withQuartz ? stdenv.hostPlatform.isDarwin,
 
   # for passthru.tests
   exiv2,
@@ -75,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
     (lib.withFeature withXorg "x")
-    (lib.withFeature stdenv.hostPlatform.isDarwin "quartz")
-  ];
+  ]
+  ++ optional withQuartz "--with-quartz";
 
   enableParallelBuilding = true;
   strictDeps = true;
