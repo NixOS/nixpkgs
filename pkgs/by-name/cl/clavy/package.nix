@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clavy";
-  version = "0.1.0";
+  version = "0.1.1";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rami3l";
     repo = "clavy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2GDZKvIHhsAUUXRIU6Ql6TF1tGY6wNNeekZRStbux3o=";
+    hash = "sha256-9EhxUa2z0aBnvFJ/h/5xD0sG7yxEpp5F0XG5Paoj0es=";
   };
 
-  cargoHash = "sha256-qfL4RIaznfiucYf7qhu3PH0acqNI32uZW77BlvqYHqY=";
+  cargoHash = "sha256-giqr84nuFh94jIQjqAxmxDiBQ68375+6TD9BQSWkYkU=";
 
   nativeBuildInputs = [
     git # Git2 support
