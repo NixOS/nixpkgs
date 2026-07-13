@@ -15,6 +15,7 @@
   pkg-config,
   ronn,
   which,
+  runCommandLocal,
 
   # dependencies
   alsa-plugins,
@@ -63,9 +64,12 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espeak-ng";
   inherit version src;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     # https://github.com/espeak-ng/espeak-ng/pull/2274
@@ -134,6 +138,80 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit mbrolaSupport ucd-tools;
+
+    tests = {
+      voices = runCommandLocal "espeak-ng-voices-test" { } ''
+        set -u
+        fail=0
+
+        voices=$(
+          ${lib.getExe finalAttrs.finalPackage} --voices \
+            | tail -n +2 \
+            | awk '{print $5}'
+        )
+
+        mkdir -p "$out"
+        for voice in $voices; do
+          # Replace / with _ for safe filenames in $out
+          safe_name=$(echo "$voice" | tr '/' '_')
+          wav="$out/$safe_name.wav"
+          err="$out/$safe_name.err"
+
+          if ! ${lib.getExe finalAttrs.finalPackage} -v "$voice" "This is a test" -w "$wav" 2>"$err"; then
+            echo "FAIL (exit code): $voice" >&2
+            cat "$err" >&2
+            fail=1
+            continue
+          fi
+
+          size=$(stat -c%s "$wav" 2>/dev/null || echo 0)
+          if [ "$size" -le 44 ]; then
+            echo "FAIL (empty output): $voice" >&2
+            fail=1
+          else
+            echo "OK: $voice" >&2
+          fi
+        done
+
+        exit "$fail"
+      '';
+    }
+    // lib.optionalAttrs mbrolaSupport {
+      mbrolaVoices = runCommandLocal "espeak-ng-mbrola-voices-test" { } ''
+        set -u
+        fail=0
+
+        voices=$(
+          ${lib.getExe finalAttrs.finalPackage} --voices=mb \
+            | tail -n +2 \
+            | awk '{print $5}'
+        )
+
+        mkdir -p "$out"
+        for voice in $voices; do
+          safe_name=$(echo "$voice" | tr '/' '_')
+          wav="$out/$safe_name.wav"
+          err="$out/$safe_name.err"
+
+          if ! ${lib.getExe finalAttrs.finalPackage} -v "$voice" "This is a test" -w "$wav" 2>"$err"; then
+            echo "FAIL (exit code): $voice" >&2
+            cat "$err" >&2
+            fail=1
+            continue
+          fi
+
+          size=$(stat -c%s "$wav" 2>/dev/null || echo 0)
+          if [ "$size" -le 44 ]; then
+            echo "FAIL (empty output): $voice" >&2
+            fail=1
+          else
+            echo "OK: $voice" >&2
+          fi
+        done
+
+        exit "$fail"
+      '';
+    };
   };
 
   meta = {
@@ -145,4 +223,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "espeak-ng";
   };
-}
+})

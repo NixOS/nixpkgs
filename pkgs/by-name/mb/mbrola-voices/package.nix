@@ -24,27 +24,28 @@ let
   };
 in
 
-if (languages == [ ]) then
-  src
-else
-  stdenv.mkDerivation {
-    inherit src;
+stdenv.mkDerivation {
+  inherit src;
 
-    postPatch = ''
-      shopt -s extglob
-      pushd data
-      rm -rfv !(${lib.concatStringsSep "|" languages})
-      popd
-    '';
+  __structuredAttrs = true;
+  strictDeps = true;
 
-    installPhase = ''
-      runHook preInstall
+  postPatch = lib.optionalString (languages != [ ]) ''
+    shopt -s extglob
+    pushd data
+    rm -rfv !(${lib.concatStringsSep "|" languages})
+    popd
+  '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/share/mbrola
+    cp -R data/* $out/share/mbrola
+    runHook postInstall
+  '';
 
-      mkdir $out
-      cp -R data $out/
-
-      runHook postInstall
-    '';
-
-    inherit pname version meta;
-  }
+  inherit
+    pname
+    version
+    meta
+    ;
+}

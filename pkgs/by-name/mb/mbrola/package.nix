@@ -29,6 +29,9 @@ let
       hash = "sha256-ZjCl1gx/6sGtpXAYO4sAh6dutjwzClQ7kZoq0WaaBlU=";
     };
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -54,7 +57,7 @@ runCommandLocal "${pname}-${version}"
     inherit pname version meta;
   }
   ''
-    mkdir -p "$out/share/mbrola"
-    ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
+    mkdir -p "$out/share"
+    ln -s '${mbrola-voices}/share/mbrola' "$out/share/mbrola"
     ln -s '${bin}/bin' "$out/"
   ''

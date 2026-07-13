@@ -12,15 +12,24 @@ index e3e4b702..de06dd21 100644
  		/* if execution reaches this point then the exec() failed */
  		snprintf(mbr_errorbuf, sizeof(mbr_errorbuf),
 diff --git a/src/libespeak-ng/synth_mbrola.c b/src/libespeak-ng/synth_mbrola.c
-index 5f9b0458..26a05635 100644
+index 5f9b0458..f051e7b7 100644
 --- a/src/libespeak-ng/synth_mbrola.c
 +++ b/src/libespeak-ng/synth_mbrola.c
+@@ -80,7 +80,7 @@ espeak_ng_STATUS LoadMbrolaTable(const char *mbrola_voice, const char *phtrans,
+ 	int ix;
+ 	int *pw;
+ 	FILE *f_in;
+-	char path[sizeof(path_home)+15];
++	char path[4096];
+ 
+ 	mbrola_name[0] = 0;
+ 	mbrola_delay = 0;
 @@ -95,7 +95,7 @@ espeak_ng_STATUS LoadMbrolaTable(const char *mbrola_voice, const char *phtrans,
  	if (!load_MBR())
  		return ENS_MBROLA_NOT_FOUND;
  
 -	sprintf(path, "%s/mbrola/%s", path_home, mbrola_voice);
-+	sprintf(path, "%s/@mbrola@/%s", path_home, mbrola_voice);
++	sprintf(path, "@mbrola@/share/mbrola/%s/%s", mbrola_voice, mbrola_voice);
  #if PLATFORM_POSIX
  	// if not found, then also look in
  	//   $data_dir/mbrola/xx, $data_dir/mbrola/xx/xx, $data_dir/mbrola/voices/xx
