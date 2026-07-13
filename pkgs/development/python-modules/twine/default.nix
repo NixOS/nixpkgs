@@ -55,6 +55,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # docutils 0.23 string changes
+    "test_fails_rst_syntax_error"
+  ];
+
   pythonImportsCheck = [ "twine" ];
 
   meta = {
