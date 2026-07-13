@@ -105,6 +105,10 @@ buildPythonPackage (finalAttrs: {
     # uvicorn access logging mismatch
     "test_logging_request"
     "test_logging_redirect_chain"
+    # chardet shenanigans (Windows-1252 == WINDOWS-1252 cmp)
+    "test_client_decode_text_using_autodetect"
+    "test_client_decode_text_using_explicit_encoding"
+    "test_response_decode_text_using_autodetect"
   ];
 
   passthru.tests = {
