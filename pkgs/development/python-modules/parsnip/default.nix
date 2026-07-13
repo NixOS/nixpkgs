@@ -2,9 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   more-itertools,
   numpy,
+
+  # tests
   ase,
   gemmi,
   pycifrw,
