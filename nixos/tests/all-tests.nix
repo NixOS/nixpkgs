@@ -1956,6 +1956,7 @@ in
   weblate = runTest ./web-apps/weblate.nix;
   wg-access-server = runTest ./wg-access-server.nix;
   whisparr = runTest ./whisparr.nix;
+  whisparr-eros = runTest ./whisparr-eros.nix;
   whoami = runTest ./whoami.nix;
   whois = runTest ./whois.nix;
   whoogle-search = runTest ./whoogle-search.nix;
