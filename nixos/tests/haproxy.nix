@@ -1,7 +1,7 @@
 { lib, hostPkgs, ... }:
 {
   name = "haproxy";
-  nodes = {
+  containers = {
     server =
       { pkgs, ... }:
       {
@@ -69,14 +69,12 @@
       };
   };
   testScript = ''
-    import os
+    import subprocess
 
     # Helpers
     def cmd(command):
       print(f"+{command}")
-      r = os.system(command)
-      if r != 0:
-        raise Exception(f"Command {command} failed with exit code {r}")
+      return subprocess.run(command, shell=True, check=True)
 
     def openssl(command):
       cmd(f"${lib.getExe hostPkgs.openssl} {command}")
