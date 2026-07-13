@@ -7384,7 +7384,6 @@ with pkgs;
 
   _surrealdbPackage = ../by-name/su/surrealdb/package.nix;
 
-  icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
   icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
   icingaweb2 = callPackage ../servers/icingaweb2 { };
   icingaweb2Modules = recurseIntoAttrs {
