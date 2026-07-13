@@ -76,9 +76,10 @@ let
 
     dontConfigure = true;
     dontBuild = true;
-    # On Linux the binary is wrapped with buildFHSEnv; completions are
-    # generated there. Here we only need to skip fixup to avoid patchelf/strip.
-    dontFixup = stdenv.hostPlatform.isLinux;
+    # Skip fixup on all platforms: strip discards the vercel/pkg virtual
+    # filesystem appended to the binary (see the comment below), leaving a
+    # binary that fails at runtime with "Pkg: Error reading from file."
+    dontFixup = true;
 
     installPhase = ''
       runHook preInstall
@@ -86,7 +87,13 @@ let
       runHook postInstall
     '';
 
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin shellCompletions;
+    # gt tries to create ~/.config/graphite/aliases on startup and exits 1
+    # with no output when HOME is not writable, which would leave the
+    # completion files empty.
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export HOME=$(mktemp -d)
+      ${shellCompletions}
+    '';
   };
 in
 # The binary is built with vercel/pkg, which appends a virtual filesystem to
