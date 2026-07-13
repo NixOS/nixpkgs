@@ -32,7 +32,7 @@ let
   };
   releaseRev = v: "V${v}";
   fetched =
-    import ../../../../build-support/coq/meta-fetch/default.nix
+    import ../../../../build-support/rocq/meta-fetch/default.nix
       {
         inherit
           lib

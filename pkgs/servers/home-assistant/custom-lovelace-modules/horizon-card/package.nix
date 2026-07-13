@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "horizon-card";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "rejuvenate";
     repo = "lovelace-horizon-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z2cJ6BIhNnzUo9nIFxVyrPBVWSKf35fyLXK72pE8TJw=";
+    hash = "sha256-Ja4r8x9sNH6W7LoH//zfXDlQb9W7KYFz4Y9UBoqt19s=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-KWbXvivHxoV4xQuY2m/wpajjIZcypeh6nuvRVnrtFM0=";
+    hash = "sha256-Ztb69kAGYteVevzzFOx+62LI2i4iQakI4Fwqb6G2vuM=";
   };
 
   buildPhase = ''
