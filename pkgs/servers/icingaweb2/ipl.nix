@@ -5,16 +5,19 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "icingaweb2-ipl";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-library";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rtaXcJGguVZrdH7y3Ex/hgb+5oC+rrkrhllYHMQr9ns=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     mkdir -p "$out"
@@ -33,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
       helsinki-Jo
     ];
   };
-}
+})
