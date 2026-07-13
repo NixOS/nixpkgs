@@ -58,6 +58,7 @@ let
       Crafter
       evanjs
       johnrichardrinehart
+      yvnth
     ];
     platforms = [
       "aarch64-darwin"
