@@ -10,6 +10,7 @@
   libdrm,
   libevent,
   libyaml,
+  libyuv,
   gst_all_1,
   gtest,
   graphviz,
@@ -32,12 +33,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-JE0OuhsCL9DAYrVC0/6RlvgOdy+ehO6Bv9M8NtgolkI=";
+    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
   };
 
   outputs = [
@@ -84,6 +85,8 @@ stdenv.mkDerivation rec {
 
     # pycamera
     python3Packages.pybind11
+
+    libyuv
 
     # yamlparser
     libyaml
