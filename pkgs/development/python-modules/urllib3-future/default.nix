@@ -77,6 +77,10 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTestPaths = [
     # test connects to the internet
     "test/contrib/test_resolver.py::test_url_resolver"
