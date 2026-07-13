@@ -1943,6 +1943,11 @@
     githubId = 143312793;
     name = "Annin";
   };
+  anntnzrb = {
+    github = "anntnzrb";
+    githubId = 51257127;
+    name = "anntnzrb";
+  };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
     email = "andrew@amorgan.xyz";
@@ -10386,6 +10391,12 @@
     githubId = 273582;
     name = "greg";
   };
+  gregshuflin = {
+    email = "greg@everdayimshuflin.com";
+    github = "neunenak";
+    githubId = 311545;
+    name = "Greg Shuflin";
+  };
   greizgh = {
     email = "greizgh@ephax.org";
     github = "greizgh";
@@ -11444,6 +11455,11 @@
     github = "iand675";
     githubId = 69209;
     name = "Ian Duncan";
+  };
+  IanHollow = {
+    github = "IanHollow";
+    githubId = 72767437;
+    name = "Ian Holloway";
   };
   ianliu = {
     email = "ian.liu88@gmail.com";
@@ -12744,6 +12760,12 @@
     github = "jeremyschlatter";
     githubId = 5741620;
     name = "Jeremy Schlatter";
+  };
+  jeremystucki = {
+    email = "dev@jeremystucki.ch";
+    github = "jeremystucki";
+    githubId = 7629727;
+    name = "Jeremy Stucki";
   };
   jerith666 = {
     email = "github@matt.mchenryfamily.org";
@@ -20308,6 +20330,12 @@
     github = "Nmishin";
     githubId = 4242897;
     name = "Nikolai Mishin";
+  };
+  nmoya = {
+    email = "nikolasmoya@gmail.com";
+    github = "nmoya";
+    githubId = 1767648;
+    name = "Nikolas Moya";
   };
   noaccos = {
     name = "Francesco Noacco";
