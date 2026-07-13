@@ -47,6 +47,9 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "safehouse";
     license = lib.licenses.asl20;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ myzel394 ];
+    maintainers = with lib.maintainers; [
+      myzel394
+      Br1ght0ne
+    ];
   };
 }
