@@ -7,11 +7,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "calendr";
-  version = "1.20.3";
+  version = "1.22.2";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/pakerwreah/Calendr/releases/download/v${finalAttrs.version}/Calendr.zip";
-    hash = "sha256-l3ZEYRW4/17+DxrFbKLPGkZ+ce3Ss06yZBYb4VDGd+Y=";
+    hash = "sha256-gJvVB0PzPrQVVRKb69laYrHnj3dpwRJXhzPdO+zLl7E=";
   };
 
   nativeBuildInputs = [ unzip ];
