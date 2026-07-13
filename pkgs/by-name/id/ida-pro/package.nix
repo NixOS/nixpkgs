@@ -92,7 +92,9 @@ pkgs.stdenv.mkDerivation rec {
     "libQt6WaylandCompositor.so.6"
     "libQt6WlShellIntegration.so.6"
   ];
-  buildInputs = runtimeDependencies ++ (with pkgs; qt6.qtbase.propagatedBuildInputs ++ qt6.qtwayland.propagatedBuildInputs);
+  buildInputs =
+    runtimeDependencies
+    ++ (with pkgs; qt6.qtbase.propagatedBuildInputs ++ qt6.qtwayland.propagatedBuildInputs);
 
   dontWrapQtApps = true;
 
