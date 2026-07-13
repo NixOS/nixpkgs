@@ -24,6 +24,12 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    # https://github.com/wesselhuising/pandantic/issues/44
+    "pandas"
+    "pandas-stubs"
+  ];
+
   dependencies = [
     multiprocess
     pandas
