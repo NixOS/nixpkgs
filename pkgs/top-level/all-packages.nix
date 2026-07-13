@@ -10247,6 +10247,20 @@ with pkgs;
     rocq-core
     ;
 
+  inherit (rocqPackages) coq;
+
+  # Deprecated aliases
+
+  coqPackages = rocqPackages;
+  coqPackages_9_0 = rocqPackages_9_0;
+  coq_9_0 = rocqPackages_9_0.coq;
+  coqPackages_9_1 = rocqPackages_9_1;
+  coq_9_1 = rocqPackages_9_1.coq;
+  coqPackages_9_2 = rocqPackages_9_2;
+  coq_9_2 = rocqPackages_9_2.coq;
+  coqPackages_9_3 = rocqPackages_9_3;
+  coq_9_3 = rocqPackages_9_3.coq;
+
   inherit
     (callPackage ./coq-packages.nix {
       inherit (ocaml-ng)
@@ -10255,13 +10269,6 @@ with pkgs;
         ocamlPackages_4_12
         ocamlPackages_4_14
         ocamlPackages_5_5
-        ;
-      inherit
-        rocqPackages_9_0
-        rocqPackages_9_1
-        rocqPackages_9_2
-        rocqPackages_9_3
-        rocqPackages
         ;
     })
     mkCoqPackages
@@ -10293,16 +10300,6 @@ with pkgs;
     coq_8_19
     coqPackages_8_20
     coq_8_20
-    coqPackages_9_0
-    coq_9_0
-    coqPackages_9_1
-    coq_9_1
-    coqPackages_9_2
-    coq_9_2
-    coqPackages_9_3
-    coq_9_3
-    coqPackages
-    coq
     ;
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {

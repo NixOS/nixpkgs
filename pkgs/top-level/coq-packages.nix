@@ -65,6 +65,8 @@ let
         };
       });
 
+      rocq-core = coq;
+
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 
       aac-tactics = callPackage ../development/rocq-modules/aac-tactics { };
@@ -346,10 +348,6 @@ rec {
   coqPackages_8_18 = mkCoqPackages (mkCoq "8.18" { });
   coqPackages_8_19 = mkCoqPackages (mkCoq "8.19" { });
   coqPackages_8_20 = mkCoqPackages (mkCoq "8.20" { });
-  coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
-  coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
-  coqPackages_9_2 = mkCoqPackages (mkCoq "9.2" rocqPackages_9_2);
-  coqPackages_9_3 = mkCoqPackages (mkCoq "9.3" rocqPackages_9_3);
 
   coq_8_7 = coqPackages_8_7.coq;
   coq_8_8 = coqPackages_8_8.coq;
@@ -365,11 +363,5 @@ rec {
   coq_8_18 = coqPackages_8_18.coq;
   coq_8_19 = coqPackages_8_19.coq;
   coq_8_20 = coqPackages_8_20.coq;
-  coq_9_0 = coqPackages_9_0.coq;
-  coq_9_1 = coqPackages_9_1.coq;
-  coq_9_2 = coqPackages_9_2.coq;
-  coq_9_3 = coqPackages_9_3.coq;
 
-  coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
-  coq = coqPackages.coq;
 }
