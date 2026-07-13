@@ -3,6 +3,7 @@
   fetchFromGitHub,
   ibtool,
   lib,
+  llvmPackages,
   makeBinaryWrapper,
   stdenv,
   xcbuildHook,
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     ibtool
     makeBinaryWrapper
     xcbuildHook
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -35,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-configuration"
     "Release"
   ];
+
+  # TODO: Clean up on `staging`
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     runHook preInstall

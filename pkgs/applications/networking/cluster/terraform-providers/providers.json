@@ -706,11 +706,11 @@
     "vendorHash": "sha256-47xWjlzpQ/EYzjbuuMKQiu5cfYAXdYkXRl+AOEP+sA4="
   },
   "heroku_heroku": {
-    "hash": "sha256-hR4DvSneqG/5P4tYljcuFxQ34AnDIjIt+JMn1BhloeU=",
+    "hash": "sha256-AmHgAlz4J3l9OCjUMVxLMWtKZB1LpNOyX1exUI6fWHA=",
     "homepage": "https://registry.terraform.io/providers/heroku/heroku",
     "owner": "heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.3.2",
+    "rev": "v5.4.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1427,13 +1427,13 @@
     "vendorHash": null
   },
   "vancluever_acme": {
-    "hash": "sha256-AlT7Qe4YGdPUhM1N4OiMyjbmupgqXcQ/6SLz/v+W8lI=",
+    "hash": "sha256-CziwRMh53FPGhXw/TFWJUuI3KtMlwobCVNOgfRyjRLA=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "repo": "terraform-provider-acme",
-    "rev": "v2.48.1",
+    "rev": "v2.48.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-lWBMihP6oX7qPpTuPQQwQS3IDwdyb/rEYqtBsTozb7Q="
+    "vendorHash": "sha256-I6u4huFtk7dXmSyPRX4NxvcUJ4Q2iKuw8qzCdNzYjoQ="
   },
   "venafi_venafi": {
     "hash": "sha256-tCjeApdanKPNEy7snb6QJoCvwjpNa2fdDryoD+7wn8Y=",

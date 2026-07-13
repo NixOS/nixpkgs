@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ani-skip";
-  version = "1.0.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "synacktraa";
     repo = "ani-skip";
     tag = finalAttrs.version;
-    hash = "sha256-VEEG3d6rwTAS7/+gBKHFKIg9zFfBu5eBOu6Z23621gM=";
+    hash = "sha256-8EXJIY/YqTe2H0JDX/feMISCnHl2zs1LnvBkEk7Sss0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D skip.lua $out/share/mpv/scripts/skip.lua
+    install -D integrations/mpv.lua $out/share/mpv/scripts/skip.lua
     install -Dm 755 ani-skip $out/bin/ani-skip
 
     runHook postInstall
