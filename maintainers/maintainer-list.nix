@@ -4645,6 +4645,13 @@
     githubId = 53847249;
     name = "Casey Avila";
   };
+  cassandracomar = {
+    name = "Cassandra Comar";
+    github = "cassandracomar";
+    githubId = 320772;
+    email = "cass@mountclare.net";
+    keys = [ { fingerprint = "104E E74E 24A0 372B EAF5  5533 B019 18F7 7E04 AC99"; } ];
+  };
   castorNova2 = {
     email = "solemnsquire@gmail.com";
     github = "castorNova2";
@@ -14122,6 +14129,14 @@
     githubId = 1180335;
     name = "Kenichi Kamiya";
     keys = [ { fingerprint = "9121 5D87 20CA B405 C63F  24D2 EF6E 574D 040A E2A5"; } ];
+  };
+  kacper-uminski = {
+    name = "Kacper Uminski";
+    email = "kacper+nixpkgs@lysator.liu.se";
+    github = "kacper-uminski";
+    githubId = 57466578;
+    matrix = "@kacper.uminski:matrix.org";
+    keys = [ { fingerprint = "3DF9 3DEB CAA9 81FA B3E2  A7F0 87DA 201D E02F 14B1"; } ];
   };
   kaction = {
     name = "Dmitry Bogatov";
