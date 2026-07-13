@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     mv libexec $out
     ln -s $out/libexec/rbenv $out/bin/rbenv
+    mkdir -p $out/share/man/man1
+    gzip -c share/man/man1/rbenv.1 >$out/share/man/man1/rbenv.1.gz
 
     installShellCompletion --zsh completions/_rbenv
     installShellCompletion --bash completions/rbenv.bash
