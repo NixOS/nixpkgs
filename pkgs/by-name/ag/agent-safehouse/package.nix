@@ -2,18 +2,19 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "safehouse";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "eugene1g";
     repo = "agent-safehouse";
     rev = "v" + version;
-    hash = "sha256-Nm04UnyQ2mVLkIIEspDd2vbdcJxZ17MH07fW6PvokJI=";
+    hash = "sha256-2GWxh5J9qqudc2QM/CACXpqJLcNULKSfTAHBzR++UAE=";
   };
 
   postPatch = "patchShebangs scripts bin";
@@ -36,6 +37,9 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Sandbox your local AI agents so they can read/write only what they need";
