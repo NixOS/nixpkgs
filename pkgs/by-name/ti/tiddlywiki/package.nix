@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiddlywiki";
-  version = "5.4.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "tiddlywiki";
     repo = "tiddlywiki5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MvX10TwSRQxB8qqLtnlxCelDL6CDlSHGWccv4Xh630I=";
+    hash = "sha256-nHD8bb78MexdpHpM6n805dfqQwJw3wB78PR7V7AS3Ek=";
   };
 
   nativeBuildInputs = [
