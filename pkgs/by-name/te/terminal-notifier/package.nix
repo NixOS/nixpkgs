@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hd9cI3R2nQK2deBb5CBYz4DTHAEcO4vzqtA5qZwa1Ao=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     ibtool
     makeBinaryWrapper
