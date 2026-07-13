@@ -22,12 +22,6 @@ let
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-linux-arm64.AppImage";
       hash = "sha256-5WUQBFyvMHZyyIH2aImCRUYdzou8BadaH/M4+5DeQdo=";
     };
-
-    x86_64-darwin = fetchurl {
-      url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-mac-x64.dmg";
-      hash = "sha256-BboXYdKT10+SBGhlxW5t1zPZ+0BMC1gUjwTlkQU+/Bk=";
-    };
-
     aarch64-darwin = fetchurl {
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-mac-arm64.dmg";
       hash = "sha256-/9UamFxEJ9NkswgsI8mcfher9nFpVt5Vk0QYFpRXRB4=";
@@ -51,7 +45,6 @@ let
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 
