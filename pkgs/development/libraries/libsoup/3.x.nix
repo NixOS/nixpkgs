@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   gnome,
+  zstd,
   libsysprof-capture,
   sqlite,
   buildPackages,
@@ -24,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.6.6";
+  version = "3.7.1";
 
   outputs = [
     "out"
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Ue0K4G+dWkD0Af9Fni5fZS+aUQt3MOE1nuZtFNSHJ0A=";
+    hash = "sha256-nJbhG7kWQf4hlIATSZynFjk8npM2Vi+f+EnEHU7auA4=";
   };
 
   depsBuildBuild = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     glib.out
     brotli
     libnghttp2
+    zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
