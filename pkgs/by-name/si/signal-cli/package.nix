@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.14.5";
+  version = "0.14.6";
 
   src = fetchFromGitHub {
     owner = "AsamK";
     repo = "signal-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p669Gjn3HYdVNtAA1Bvgc4iL6U9KnG4SLX1/aUKulPY=";
+    hash = "sha256-VJ+/0CvfgtE6VHFeTLKAswTWrnyAL7AYrfCYVJpXDaE=";
   };
 
   nativeBuildInputs = [
