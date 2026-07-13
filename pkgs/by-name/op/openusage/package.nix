@@ -43,7 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.darwin;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ myzel394 ];
+    maintainers = with lib.maintainers; [
+      myzel394
+      Br1ght0ne
+    ];
     mainProgram = "openusage";
   };
 })
