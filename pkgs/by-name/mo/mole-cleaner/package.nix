@@ -44,10 +44,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-hLFlAy4AE1eNOxd4d75Mbo3ZKlwvNK7QV2DNVPd7NHc=";
 
-  subPackages = [
-    "cmd/analyze"
-    "cmd/status"
-  ];
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -60,14 +57,26 @@ buildGoModule (finalAttrs: {
     gawk
   ];
 
-  postInstall = ''
+  buildPhase = ''
+    runHook preBuild
+    go build -p "$NIX_BUILD_CORES" -o analyze ./cmd/analyze
+    go build -p "$NIX_BUILD_CORES" -o status ./cmd/status
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     install -Dm755 mole $out/libexec/mole/mole
     cp -r bin lib $out/libexec/mole/
 
-    mv $out/bin/analyze $out/libexec/mole/bin/analyze-go
-    mv $out/bin/status $out/libexec/mole/bin/status-go
+    install -Dm755 analyze $out/libexec/mole/bin/analyze-go
+    install -Dm755 status $out/libexec/mole/bin/status-go
 
     patchShebangs $out/libexec/mole
+
+    substituteInPlace $out/libexec/mole/mole \
+      --replace-fail 'update_message="$(read_update_message_cache "$msg_cache")"' 'update_message=""'
 
     mkdir -p $out/libexec/mole/nix-bin
     ln -s ${lib.getExe' coreutils "timeout"} $out/libexec/mole/nix-bin/timeout
@@ -80,16 +89,20 @@ buildGoModule (finalAttrs: {
             exit 1
             ;;
         esac
-      ' \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          fd
-        ]
-      }:$out/libexec/mole/nix-bin:/usr/bin:/bin
+        export PATH=${
+          lib.makeBinPath [
+            fd
+          ]
+        }:'"$out"'/libexec/mole/nix-bin:/usr/bin:/bin:''${PATH}
+      '
+
+    runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
+    # Keep buildGoModule's test behavior: tests can rely on their source paths.
+    export GOFLAGS="''${GOFLAGS//-trimpath/}"
     mkdir -p "$TMPDIR/mole-test-bin"
     ln -s ${duForTests} "$TMPDIR/mole-test-bin/du"
     PATH="$TMPDIR/mole-test-bin:$PATH" go test ./...
@@ -97,10 +110,7 @@ buildGoModule (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  versionCheckKeepEnvironment = [
-    "HOME"
-    "PATH"
-  ];
+  versionCheckKeepEnvironment = "HOME PATH";
   versionCheckProgram = "${placeholder "out"}/bin/mo";
   versionCheckProgramArg = "--version";
   installCheckPhase = ''
