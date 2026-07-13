@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "52.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OGyvmedSaWPsyH6mdHhgXN7MvTnK1HzdfTKUhJRlq8I=";
+    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
   };
 
-  cargoHash = "sha256-ZNj1H3Iq+IUSe0McHJjrwPOoR+YRB+rsSmZHMhXsHy0=";
+  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
 
   separateDebugInfo = true;
 
