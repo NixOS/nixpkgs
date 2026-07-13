@@ -382,6 +382,7 @@ let
   # tweaks for the individual packages and "in self" follow
 
   packagesWithMaintainers = with lib.maintainers; {
+    # keep-sorted start block=yes
     data_table = [ jbedo ];
     BiocManager = [ jbedo ];
     ggplot2 = [ jbedo ];
@@ -391,9 +392,11 @@ let
     StructuralVariantAnnotation = [ jbedo ];
     RQuantLib = [ kupac ];
     XLConnect = [ b-rodrigues ];
+    # keep-sorted end
   };
 
   packagesWithRDepends = {
+    # keep-sorted start block=yes
     bayesdfa = [ self.rstantools ];
     spectralGraphTopology = [ self.CVXR ];
     FactoMineR = [ self.car ];
@@ -407,9 +410,11 @@ let
     tipsae = [ self.rstantools ];
     TriDimRegression = [ self.rstantools ];
     bbmix = [ self.rstantools ];
+    # keep-sorted end
   };
 
   packagesWithNativeBuildInputs = {
+    # keep-sorted start block=yes
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     Apollonius = [ pkgs.pkg-config ];
@@ -1064,10 +1069,11 @@ let
       gdal # for gdal-config
     ];
     xdvir = [ pkgs.freetype.dev ];
+    # keep-sorted end
   };
 
   packagesWithBuildInputs = {
-    # sort -t '=' -k 2
+    # keep-sorted start block=yes
     abn = [ pkgs.jags ];
     adbcpostgresql = with pkgs; [
       readline.dev
@@ -1644,9 +1650,11 @@ let
       pkgs.blas
     ];
     XVector = [ pkgs.zlib ];
+    # keep-sorted end
   };
 
   packagesRequiringX = [
+    # keep-sorted start
     "analogueExtra"
     "AnalyzeFMRI"
     "AnnotLists"
@@ -1721,9 +1729,11 @@ let
     "twiddler"
     "uHMM"
     "VecStatGraphs3D"
+    # keep-sorted end
   ];
 
   packagesRequiringHome = [
+    # keep-sorted start
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
@@ -1799,9 +1809,11 @@ let
     "systemPipeShiny"
     "matlab2r"
     "GNOSIS"
+    # keep-sorted end
   ];
 
   packagesToSkipCheck = [
+    # keep-sorted start
     "MsDataHub" # tries to connect to ExperimentHub
     "Rmpi" # tries to run MPI processes
     "ReactomeContentService4R" # tries to connect to Reactome
@@ -1813,10 +1825,12 @@ let
     "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
     "snapcount" # tries to connect to snaptron.cs.jhu.edu
+    # keep-sorted end
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    # keep-sorted start
     "av"
     "NetLogoR"
     "valse"
@@ -1824,14 +1838,18 @@ let
     "HIBAG"
     "HiveR"
     "minired" # deprecated on CRAN
+    # keep-sorted end
 
     # Impure network access during build
+    # keep-sorted start
     "BulkSignalR"
     "waddR"
     "tiledb"
     "switchr"
+    # keep-sorted end
 
     # ExperimentHub dependents, require net access during build
+    # keep-sorted start
     "DuoClustering2018"
     "FieldEffectCrc"
     "GenomicDistributionsData"
@@ -1856,9 +1874,11 @@ let
     "scpdata"
     "signatureSearch"
     "nullrangesData"
+    # keep-sorted end
   ];
 
   otherOverrides = old: new: {
+    # keep-sorted start block=yes newline_separated=yes
     ACME = old.ACME.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
@@ -3194,6 +3214,7 @@ let
         patchShebangs configure
       '';
     });
+    # keep-sorted end
   };
 in
 self
