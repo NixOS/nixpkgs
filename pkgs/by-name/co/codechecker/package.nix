@@ -7,12 +7,10 @@
   clang-tools,
   cppcheck,
   gcc,
-  infer,
   withClang ? false,
   withClangTools ? false,
   withCppcheck ? false,
   withGcc ? false,
-  withInfer ? false,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "codechecker";
@@ -64,7 +62,6 @@ python3Packages.buildPythonApplication rec {
         ++ lib.optional withClangTools clang-tools
         ++ lib.optional withCppcheck cppcheck
         ++ lib.optional withGcc gcc
-        ++ lib.optional withInfer infer
       )
     }
   '';
