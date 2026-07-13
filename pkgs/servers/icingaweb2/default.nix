@@ -7,16 +7,19 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "icingaweb2";
   version = "2.12.6";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iKxvrZcwzUoh+TVsmx8jVjwHeklT1+dqzhY4kBbOB8Q=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -45,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "icingacli";
     platforms = lib.platforms.all;
   };
-}
+})
