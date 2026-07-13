@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Guanran928
       johnrtitor
+      ilkecan
     ];
     mainProgram = "pwvucontrol";
     platforms = lib.platforms.linux;
