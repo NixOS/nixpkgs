@@ -30,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "functions-framework";
-  version = "3.10.1";
+  version = "3.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "functions-framework-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CEH0PokH3lhyJl7OPIpJkaKZxAUp1fYVia89DtGoJ7k=";
+    hash = "sha256-JiDerfEXlamZWzHxZaTJN/QFMXSph5YDtRsZM4hb4hs=";
   };
 
   build-system = [ setuptools ];

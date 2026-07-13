@@ -72,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-mistralai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "msgraph-sdk";
-  version = "1.58.0";
+  version = "1.59.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YF5cDivU3VVnIuCCyQsNY1gvCU5aazRJ6Hok97Af3nE=";
+    hash = "sha256-nZp1oMmJS7Cm3WQcZIcl5QSa1NzpdXcEsI6RxQC1jTU=";
   };
 
   build-system = [ flit-core ];

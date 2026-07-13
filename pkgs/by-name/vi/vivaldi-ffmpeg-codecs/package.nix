@@ -11,19 +11,19 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_82.snap";
-      hash = "sha256-G9RcOuFjkLDJUNlw2G8GiONpWHYvyTnv3Nr0JSdW0As=";
+      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_117.snap";
+      hash = "sha256-YEE7oF8NLGDCQ3gpY5z6B+7xDxcOumjOzwUztJUM+/s=";
     };
     aarch64-linux = fetchurl {
-      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_83.snap";
-      hash = "sha256-6XMdH4dnvYB1FaJLMi/MFnTzkelmOHMedVcIg/Fh7h4=";
+      url = "https://api.snapcraft.io/api/v1/snaps/download/XXzVIXswXKHqlUATPqGCj2w2l7BxosS8_116.snap";
+      hash = "sha256-4RmVOQ9emlRyzAGxeiSLwvkGv+7R/mKLVYm5IWXqLpo=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chromium-codecs-ffmpeg-extra";
 
-  version = "120726";
+  version = "2026-05-18";
 
   src = sources."${stdenv.hostPlatform.system}";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    install -vD chromium-ffmpeg-${finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
+    install -vD chromium-ffmpeg-git-${finalAttrs.version}/chromium-ffmpeg/libffmpeg.so $out/lib/libffmpeg.so
   '';
 
   passthru = {

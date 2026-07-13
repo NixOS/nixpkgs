@@ -11,7 +11,6 @@ let
       pytest-randomly = super.pytest-randomly.overridePythonAttrs {
         doCheck = false;
       };
-      sqlalchemy = self.sqlalchemy_1_4;
     }
   );
 in

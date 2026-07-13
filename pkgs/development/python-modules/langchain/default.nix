@@ -144,6 +144,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

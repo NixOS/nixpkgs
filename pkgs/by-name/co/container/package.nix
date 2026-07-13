@@ -5,23 +5,25 @@
   libarchive,
   xar,
   installShellFiles,
+  makeWrapper,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "0.12.3";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-${finalAttrs.version}-installer-signed.pkg";
-    hash = "sha256-g/NjEmrB8GRYjeOc1rR0NA1InBkmSSosTlnE1Uqm2OM=";
+    hash = "sha256-DKHEKiJpwlV++x2CsbOKxVPmo6PaGxF5xDm87h59ZxQ=";
   };
 
   nativeBuildInputs = [
     libarchive
     xar
     installShellFiles
+    makeWrapper
   ];
 
   dontUnpack = true;
@@ -43,6 +45,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --zsh <($out/bin/${finalAttrs.meta.mainProgram} --generate-completion-script zsh)
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/container \
+      --set-default CONTAINER_INSTALL_ROOT "$out"
+    wrapProgram $out/bin/container-apiserver \
+      --set-default CONTAINER_INSTALL_ROOT "$out"
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -60,6 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "container";
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
+      Br1ght0ne
     ];
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

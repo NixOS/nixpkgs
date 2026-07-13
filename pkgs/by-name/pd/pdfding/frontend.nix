@@ -4,9 +4,7 @@
   fetchzip,
   npmHooks,
 
-  tailwindcss_4,
   nodejs,
-
   pdfding,
 }:
 let
@@ -39,8 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
-    # it is in package.json and thus node_modules but no cli executable
-    tailwindcss_4
   ];
 
   strictDeps = true;
@@ -53,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r --no-preserve=mode pdfding/static $out/pdfding/static
     cp -r --no-preserve=mode ${finalAttrs.passthru.pdfjs} $out/pdfding/static/pdfjs
 
-    tailwindcss -i $out/pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
+    # NOTE: Directly using tailwindcss package from nixpkgs gave a `Trace/BPT trap: 5` error on darwin
+    # Trace/BPT trap: 5 tailwindcss -i $out/pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
+    # It didn't occur when building the package in an interactive ssh session but on nixpkgs-review-gha it failed consistently
+    # https://github.com/NixOS/nixpkgs/pull/540436#issuecomment-4942029413
+
+    node node_modules/@tailwindcss/cli/dist/index.mjs -i pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
     rm $out/pdfding/static/css/input.css
 
     for i in build/pdf.mjs build/pdf.sandbox.mjs build/pdf.worker.mjs web/viewer.mjs;

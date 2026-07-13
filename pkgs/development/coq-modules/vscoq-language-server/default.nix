@@ -82,7 +82,7 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.mit;
   }
   // lib.optionalAttrs (fetched.broken or false) {
-    coqFilter = true;
+    rocqFilter = true;
     broken = true;
   };
 }

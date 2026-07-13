@@ -57,6 +57,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "sdk==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -22,6 +22,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-wumJ8kpr+C2pdw8jYf+IqYTdSB6Iy37yZqPKycYmOSs=";
   };
 
+  patches = [
+    # https://github.com/catppuccin/python/pull/130
+    ./matplotlib-3.11.patch
+  ];
+
   build-system = [ hatchling ];
 
   optional-dependencies = {

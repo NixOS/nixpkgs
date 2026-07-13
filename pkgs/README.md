@@ -183,11 +183,17 @@ To add a package to Nixpkgs:
   Examples:
 
   * nginx: init at 2.0.1
+  * qt6Packages.qtdeclarative: fix build
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
 (using "→" instead of "->" is also accepted)
+
+For package sets with multiple versions, such as `perlPackages` (aliased to
+`perl5Packages`) and `python3Packages` (aliased to `python313Packages` at the
+time of writing), please use the unversioned attribute in your commit message
+unless the change is specific to one version.
 
 Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
 More sophisticated prefixes are also possible:
@@ -196,8 +202,8 @@ More sophisticated prefixes are also possible:
 |--------------------------------------------------------------------------|------------------------------------------------------------|
 | `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
 | `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
-| `python3{9,10}Packages.requests: 1.0.0 -> 2.0.0`                         | `python39Packages.requests`, `python310Packages.requests`  |
-| `python312.pkgs.numpy,python313.pkgs.scipy: fix build`                   | `python312.pkgs.numpy` , `python313.pkgs.scipy`            |
+| `python3Packages.requests: 1.0.0 -> 2.0.0`                               | `python3Packages.requests`                                 |
+| `python3Packagess.{numpy,scipy}: fix build`                              | `python3Packages.numpy` , `python3Packages.scipy`          |
 
 When opening a PR with multiple commits, CI creates a single build job for all detected packages.
 If `passthru.tests` attributes are available, these will be built as well.

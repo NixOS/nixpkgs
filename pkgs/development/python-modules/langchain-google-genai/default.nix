@@ -87,6 +87,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "libs/genai/v";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
