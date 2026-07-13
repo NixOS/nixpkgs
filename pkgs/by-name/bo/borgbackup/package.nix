@@ -124,7 +124,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     versionCheckHook
   ];
 
