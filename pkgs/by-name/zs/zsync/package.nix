@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsync";
-  version = "0.6.3-unstable-2025-05-29";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "cph6";
     repo = "zsync";
-    rev = "a5cb28f923dd3cfdeb65e2930dd1faa727c2abf8";
-    hash = "sha256-gJs1P83AKWGipspeoFCSibZH+X6mmj3aL4+yjGO2YJo=";
+    tag = finalAttrs.version;
+    hash = "sha256-qZSjh23snJHWmrIUxRvpu5pZ1G3rJcnl08WGEEM+0Jw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/c";
@@ -41,9 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+  doCheck = true;
+
+  nativeCheckInputs = [ perl ];
+
   meta = {
-    homepage = "https://github.com/cph6/zsync";
     description = "File distribution system using the rsync algorithm";
+    homepage = "https://github.com/cph6/zsync";
+    changelog = "https://github.com/cph6/zsync/raw/refs/tags/${finalAttrs.src.tag}/c/NEWS";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [
       viric

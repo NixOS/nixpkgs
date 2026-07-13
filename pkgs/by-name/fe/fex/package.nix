@@ -185,7 +185,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     llvmPackages.bintools
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
-        setuptools
+        packaging
         libclang
       ]
     ))
