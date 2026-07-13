@@ -38,6 +38,7 @@ appimageTools.wrapType2 {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
+      desktopName = "Simplenote";
       exec = pname;
       icon = "simplenote";
       genericName = "Note Taking Application";
