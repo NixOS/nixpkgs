@@ -3,11 +3,12 @@
 Note that "The Rocq Prover" (Rocq for short) is the new name of the
 proof assistant formerly known as Coq. The `coq` and `coqPackages`
 derivations currently remain for both older versions of Coq, but also
-some versions of Rocq during the renaming transition. In the latter
-case, the `coq` derivation encompasses the compatibility binaries
-(`coqtop`, `coqc`, etc.) in addition to the `rocq` binary. The packages
-only in `coqPackages` are the ones which currently still depend on these
-compatibility binaries.
+as compatibility aliases for some versions of Rocq. In both cases, the
+`coq` and `rocq-core` attributes exist. In the case of Coq (< 9),
+`rocq-core` is just an alias for `coq`, while in the case of Rocq (>= 9),
+`rocq-core` is the main Rocq derivation, while `coq` provides
+compatibility binaries (`coqc`, `coqtop`, etc.) for packages that still
+depend on them.
 
 ## Rocq derivation: `rocq-core` {#rocq-derivation-rocq}
 
