@@ -5,16 +5,19 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "icingaweb2-thirdparty";
   version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-thirdparty";
-    rev = "v${version}";
-    sha256 = "sha256-vPr6rh/X5G///rqmgIdCYKDLeZMQVNK7FoINONO7Cw8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vPr6rh/X5G///rqmgIdCYKDLeZMQVNK7FoINONO7Cw8=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     mkdir -p "$out"
@@ -33,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
       helsinki-Jo
     ];
   };
-}
+})
