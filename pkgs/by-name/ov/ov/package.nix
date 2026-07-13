@@ -76,7 +76,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "ov";
   };
 })
