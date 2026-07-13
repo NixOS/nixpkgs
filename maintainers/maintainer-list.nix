@@ -75,6 +75,12 @@
     githubId = 54892055;
     name = "David mp";
   };
+  _0hlov3 = {
+    email = "dev@schoenwald.aero";
+    github = "0hlov3";
+    githubId = 36544727;
+    name = "0hlov3";
+  };
   _0nyr = {
     email = "onyr.maintainer@gmail.com";
     github = "0nyr";
