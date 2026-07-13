@@ -22,6 +22,7 @@
   libxrender,
   python3,
   withXorg ? true,
+  withQuartz ? false,
 
   # for passthru.tests
   exiv2,
@@ -75,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
     (lib.withFeature withXorg "x")
-  ];
+  ]
+  ++ optional withQuartz "--with-quartz";
 
   enableParallelBuilding = true;
   strictDeps = true;
