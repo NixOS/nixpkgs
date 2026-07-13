@@ -89,7 +89,27 @@ let
                     "record"
                   ];
                   description = ''
-                    List of roles for this stream
+                    List of roles for this stream.
+
+                    Assigning a role only selects which ffmpeg stream to
+                    capture; it does not enable the corresponding feature.
+                    Each feature must additionally be turned on in the camera
+                    config, and all three default to off:
+
+                    - `audio` runs audio event detection only when
+                      `cameras.<name>.audio.enabled` is `true`
+                    - `detect` runs the object detector only when
+                      `cameras.<name>.detect.enabled` is `true`
+                    - `record` stores recording segments only when
+                      `cameras.<name>.record.enabled` is `true`
+
+                    For example, a camera with the `detect` role but no
+                    `detect.enabled = true` will still capture a detect
+                    stream and run motion detection (motion is on by
+                    default), but will never produce object detections.
+
+                    See the upstream reference for the full set of defaults:
+                    <https://docs.frigate.video/configuration/reference>
                   '';
                 };
               };
@@ -270,6 +290,13 @@ in
       default = { };
       description = ''
         Frigate configuration as a nix attribute set.
+
+        The configuration file served to Frigate is generated from this
+        option and copied into place on every start of the service, so any
+        change made through Frigate's admin UI (the config editor and the
+        per-camera Detect / Motion / Record toggles), the config API, or
+        MQTT config updates is overwritten on the next start. Declare all
+        desired configuration here rather than editing it at runtime.
 
         See the project documentation for how to configure frigate.
         - [Creating a config file](https://docs.frigate.video/guides/getting_started)
