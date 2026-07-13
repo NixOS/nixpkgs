@@ -145,6 +145,8 @@ buildGoModule (finalAttrs: {
     ];
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/mostlygeek/llama-swap";
     changelog = "https://github.com/mostlygeek/llama-swap/releases/tag/${finalAttrs.src.tag}";
