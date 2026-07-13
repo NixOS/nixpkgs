@@ -11,12 +11,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "claude-desktop";
-  version = "1.1.7714";
-  release = "3bd6f69326a0abac98bb269c29140e2a543cad64";
+  version = "1.20186.1";
+  release = "df1d8a339dfabcf359af7144fe142b59ff7d9a0f";
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://downloads.claude.ai/releases/darwin/universal/${finalAttrs.version}/Claude-${finalAttrs.release}.zip";
-    hash = "sha256-JeT0NYGteP0eU0/7AYaN9px4dpu4PiQkecg4WxN4RE4=";
+    hash = "sha256-JQYp6pXMlcDbRpYqwzCVw/ILGndqquTfeqUflhceeGY=";
   };
 
   dontUnpack = true;
