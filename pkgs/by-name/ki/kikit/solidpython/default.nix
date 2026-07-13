@@ -7,7 +7,7 @@
   poetry-core,
   prettytable,
   ply,
-  setuptools,
+  setuptools_80,
   euclid3,
 }:
 buildPythonPackage (finalAttrs: {
@@ -28,7 +28,8 @@ buildPythonPackage (finalAttrs: {
 
   propagatedBuildInputs = [
     ply
-    setuptools
+    # Pinned to v80 due to pkg_resources removal, see https://github.com/SolidCode/SolidPython/issues/216
+    setuptools_80
     euclid3
 
     prettytable
