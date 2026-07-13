@@ -14,10 +14,10 @@ index 1903f758f..c40e6d3b1 100644
 -    FillMaskPipeline,
 -    ImageClassificationPipeline,
 -    ObjectDetectionPipeline,
--    QuestionAnsweringPipeline,
+-    QuestionAnsweringPipeline,  # ty: ignore[unresolved-import]
 -    TextClassificationPipeline,
 -    TextGenerationPipeline,
--    VisualQuestionAnsweringPipeline,
+-    VisualQuestionAnsweringPipeline,  # ty: ignore[unresolved-import]
 -    ZeroShotClassificationPipeline,
 -)
  
