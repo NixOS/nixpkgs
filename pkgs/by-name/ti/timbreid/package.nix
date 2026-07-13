@@ -4,7 +4,7 @@
   fetchurl,
   unzip,
   puredata,
-  fftw,
+  fftwSinglePrec,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,29 +16,30 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "14k2xk5zrzrw1zprdbwx45hrlc7ck8vq4drpd3l455i5r8yk4y6b";
   };
 
+  sourceRoot = ".";
+
   nativeBuildInputs = [ unzip ];
   buildInputs = [
     puredata
-    fftw
+    fftwSinglePrec
   ];
 
-  unpackPhase = ''
-    mkdir source
-    cd source
-    unzip $src
-  '';
+  makeFlags = [
+    "tIDLib.o"
+    "all"
+  ];
 
-  buildPhase = ''
-    make tIDLib.o all
-  '';
+  enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/
     cp -r *.pd $out/
     cp -r *.pd_linux $out/
     cp -r audio/ $out/
     cp -r data/ $out/
     cp -r doc/ $out/
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collection of audio feature analysis externals for puredata";
     homepage = "http://williambrent.conflations.com/pages/research.html";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
