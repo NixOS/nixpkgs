@@ -21,14 +21,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.51.0";
+  version = "4.51.3";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-/S+UIYSntUb0fyR6T/Egj6LX9TCI1l0h8gPHMntiTYU=";
+    hash = "sha256-JdUoV4bp+pI8neyxHte1z7CULBwdNdLG/CaZFPmvDeg=";
   };
 
   postPatch = ''
