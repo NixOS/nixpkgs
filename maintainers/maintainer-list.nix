@@ -18912,6 +18912,11 @@
     githubId = 45770;
     name = "Mitsuhiro Nakamura";
   };
+  mnixry = {
+    github = "mnixry";
+    githubId = 32300164;
+    name = "Mix";
+  };
   MNThomson = {
     github = "MNThomson";
     githubId = 73045936;
