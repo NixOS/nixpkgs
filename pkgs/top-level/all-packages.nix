@@ -2099,8 +2099,6 @@ with pkgs;
 
   gnugrep = callPackage ../tools/text/gnugrep { };
 
-  gnupatch = callPackage ../tools/text/gnupatch { };
-
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
