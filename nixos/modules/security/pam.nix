@@ -1422,7 +1422,6 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
