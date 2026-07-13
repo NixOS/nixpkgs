@@ -13,7 +13,8 @@ let
   defaultVersion =
 
     lib.switch coq.coq-version [
-      (case "9.1" "1.3.2+9.1")
+      (case "9.2" "1.3.3+9.2")
+      (case "9.1" "1.3.3+9.1")
       (case "9.0" "1.3.2+9.0")
       (case "8.20" "1.3.2+8.20")
       (case "8.19" "1.3.2+8.19")
@@ -23,6 +24,8 @@ let
     ] null;
 
   release = {
+    "1.3.3+9.2".hash = "sha256-2KE0mXpGTvoJXLoWsDTHKGrXKF0y8XEUSCXUQ4q+0YA=";
+    "1.3.3+9.1".hash = "sha256-iDOZii/JMXqtVGvuh3I1R4YxjqWKcAwCLWTPYca2Dik=";
     "1.3.2+9.1".hash = "sha256-tf+Hrfv/ZrLXryTjJchvLfydxzjkXB2hbL7P280Clzw=";
     "1.3.2+9.0".hash = "sha256-/UHtK9fjpHTbra4/Cnsjt8fg1fvxx7U6kGjQPm15NwM=";
     "1.3.2+8.20".hash = "sha256-RuX2aInSjwebs/aEOoisNxqcIPqDA2kWehN9tFYqOx4=";
