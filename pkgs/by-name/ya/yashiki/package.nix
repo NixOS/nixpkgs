@@ -61,7 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/typester/yashiki/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = with lib.maintainers; [ anntnzrb ];
+    maintainers = with lib.maintainers; [
+      anntnzrb
+      Br1ght0ne
+    ];
     mainProgram = "yashiki";
     platforms = lib.platforms.darwin;
   };
