@@ -5186,8 +5186,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hrsh7th";
         repo = "nvim-cmp";
-        rev = "a1d504892f2bc56c2e79b65c6faded2fd21f3eca";
-        hash = "sha256-uzfM8DLRKshESsYmUAbSfXtos9COWpe/fVkxNJPIUFw=";
+        rev = "2ffe79f1f021def8dd1fcd81deb16f1bb0d989f3";
+        hash = "sha256-YN8KAXVv1AFc3DajWVIl+EppOx/s3vdxiKMlb/lj5qc=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
