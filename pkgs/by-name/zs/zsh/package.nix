@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zsh";
-  version = "5.9.1";
+  version = "5.9.2";
   outputs = [
     "out"
     "doc"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-XSC+wD+YHcTpoJ7CRedBU4j/ZB95xcXEFrUELljYKA0=";
+    sha256 = "sha256-NvpzQ3S0R4NYLOwJvNZ4IuL5ksd57BYkq1WW3weNL4E=";
   };
 
   patches = [
