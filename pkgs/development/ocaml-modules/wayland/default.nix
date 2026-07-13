@@ -12,15 +12,15 @@
   eio_main,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "wayland";
-  version = "2.2";
+  version = "2.3";
 
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {
-    url = "https://github.com/talex5/ocaml-wayland/releases/download/v${version}/wayland-${version}.tbz";
-    hash = "sha256-D4ggYKTP6UJO05dna44qqpMdhGEL6ynLLsnDVdGBliU=";
+    url = "https://github.com/talex5/ocaml-wayland/releases/download/v${finalAttrs.version}/wayland-${finalAttrs.version}.tbz";
+    hash = "sha256-EGJ6lPTO+XFHmRUo/NJG+PJ8y/MCbq/ezplbU+6UaKA=";
   };
 
   propagatedBuildInputs = [
@@ -48,4 +48,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "wayland-scanner-ocaml";
   };
-}
+})
