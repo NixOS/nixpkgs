@@ -1,0 +1,14 @@
+diff --git a/filterpy/discrete_bayes/discrete_bayes.py b/filterpy/discrete_bayes/discrete_bayes.py
+index 084ba8c..c465835 100644
+--- a/filterpy/discrete_bayes/discrete_bayes.py
++++ b/filterpy/discrete_bayes/discrete_bayes.py
+@@ -19,8 +19,7 @@ from __future__ import (absolute_import, division, print_function,
+                         unicode_literals)
+ 
+ import numpy as np
+-from scipy.ndimage.filters import convolve
+-from scipy.ndimage.interpolation import shift
++from scipy.ndimage import convolve, shift
+ 
+ 
+ def normalize(pdf):
