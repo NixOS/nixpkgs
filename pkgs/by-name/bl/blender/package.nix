@@ -133,10 +133,6 @@ stdenv'.mkDerivation (finalAttrs: {
     # https://projects.blender.org/blender/blender/commit/470127ede2448de50a6936b8484b3c382c76d596
     ./fix-quite-clog-warning.patch
   ]
-  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
-  ++ lib.optionals rocmSupport [
-    ./hiprt-3-compat.patch
-  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin.patch
   ];
@@ -157,7 +153,6 @@ stdenv'.mkDerivation (finalAttrs: {
     + (lib.optionalString rocmSupport ''
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
-      substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
     '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -205,8 +200,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
   ++ lib.optionals rocmSupport [
-    (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
     (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
   ]
   ++ lib.optionals waylandSupport [
