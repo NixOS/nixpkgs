@@ -22,6 +22,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-iKC6vIT8fVFv/Yx3YJUSCHyTOZ7X860Ak0l/+7lrU9Y=";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
