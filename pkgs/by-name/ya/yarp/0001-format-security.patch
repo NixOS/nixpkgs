@@ -1,0 +1,13 @@
+diff --git i/src/libYARP_companion/src/yarp/companion/impl/Companion.cmdSplit.cpp w/src/libYARP_companion/src/yarp/companion/impl/Companion.cmdSplit.cpp
+index a9024cb03..f4860ac62 100644
+--- i/src/libYARP_companion/src/yarp/companion/impl/Companion.cmdSplit.cpp
++++ w/src/libYARP_companion/src/yarp/companion/impl/Companion.cmdSplit.cpp
+@@ -111,7 +111,7 @@ int Companion::cmdSplit(int argc, char *argv[])
+             inData->mutex.unlock();
+             if (siz != 0)
+             {
+-                yCInfo(COMPANION, std::string("Received a Bottle of "+std::to_string(siz)+" elements.").c_str());
++                yCInfo(COMPANION, "Received a Bottle of %z elements.", siz);
+                 outPort = new BufferedPort<Bottle> [siz];
+                 for (size_t i = 0; i < siz; i++)
+                 {

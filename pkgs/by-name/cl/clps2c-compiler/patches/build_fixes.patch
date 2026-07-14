@@ -1,0 +1,193 @@
+diff --git a/CLPS2C-Compiler/Program.cs b/CLPS2C-Compiler/Program.cs
+index 6991896..a086433 100644
+--- a/CLPS2C-Compiler/CLPS2C-Compiler/Program.cs
++++ b/CLPS2C-Compiler/CLPS2C-Compiler/Program.cs
+@@ -1166,7 +1166,7 @@ namespace CLPS2C_Compiler
+                 string Value_1 = "";
+                 string Value_2 = "";
+                 // Handle a bit differently in case there's a label at the start
+-                if (command.Type.EndsWith(':'))
++                if (command.Type.EndsWith(":"))
+                 {
+                     OpCode = command.Data[0].ToUpper();
+                     Register = command.Data[1];
+@@ -1201,7 +1201,7 @@ namespace CLPS2C_Compiler
+                     }
+
+                     Output = $"lui {Register},0x{Value_1}; {OpCode} {Register},{Value_2}({Register})";
+-                    if (command.Type.EndsWith(':'))
++                    if (command.Type.EndsWith(":"))
+                     {
+                         Output = $"{command.FullLine.Substring(0, command.FullLine.IndexOf(':'))}: {Output}";
+                     }
+@@ -1589,7 +1589,7 @@ namespace CLPS2C_Compiler
+
+             while (IfIndex != -1)
+             {
+-                int ExtraIfCount = commands[IfIndex].FullLine.Split("&&", StringSplitOptions.None).Length - 1;
++                int ExtraIfCount = commands[IfIndex].FullLine.Split(new string[] { "&&" }, StringSplitOptions.None).Length - 1;
+                 for (int i = 0; i < ExtraIfCount; i++)
+                 {
+                     // Add more IF commands
+@@ -1807,7 +1807,7 @@ namespace CLPS2C_Compiler
+                 for (int j = 0; j < commands[i].Data.Count; j++)
+                 {
+                     string Target = commands[i].Data[j];
+-                    if (Target.StartsWith('+') || Target.StartsWith(','))
++                    if (Target.StartsWith("+") || Target.StartsWith(","))
+                     {
+                         Target = Target.Substring(1).TrimStart();
+                     }
+@@ -1815,14 +1815,14 @@ namespace CLPS2C_Compiler
+                     if (IsVarDeclared(Target, listSets))
+                     {
+                         List<string> ListValues = GetSetValueFromTarget(Target, commands[i].ID, listSets);
+-                        if (commands[i].Data[j].StartsWith('+') || commands[i].Data[j].StartsWith(','))
++                        if (commands[i].Data[j].StartsWith("+") || commands[i].Data[j].StartsWith(","))
+                         {
+                             ListValues[0] = commands[i].Data[j][0] + ListValues[0];
+                         }
+
+                         for (int k = 1; k < ListValues.Count; k++)
+                         {
+-                            if (ListValues[k].StartsWith('+') || ListValues[k].StartsWith(','))
++                            if (ListValues[k].StartsWith("+") || ListValues[k].StartsWith(","))
+                             {
+                                 ListValues[k] = ListValues[k][0] + ListValues[k].Substring(1).TrimStart();
+                             }
+@@ -1834,7 +1834,7 @@ namespace CLPS2C_Compiler
+                         continue;
+                     }
+
+-                    if (commands[i].Data[j].StartsWith('+') || commands[i].Data[j].StartsWith(','))
++                    if (commands[i].Data[j].StartsWith("+") || commands[i].Data[j].StartsWith(","))
+                     {
+                         commands[i].Data[j] = commands[i].Data[j][0] + Target;
+                     }
+@@ -1912,7 +1912,7 @@ namespace CLPS2C_Compiler
+
+             for (i = i + 1; i < command.Data.Count; i++)
+             {
+-                if (!command.Data[i].StartsWith('+'))
++                if (!command.Data[i].StartsWith("+"))
+                 {
+                     break;
+                 }
+@@ -1940,12 +1940,12 @@ namespace CLPS2C_Compiler
+
+             for (i = i + 1; i < command.Data.Count; i++)
+             {
+-                if (command.Data[i].StartsWith(','))
++                if (command.Data[i].StartsWith(","))
+                 {
+                     ListOffs.Add(TmpAddress.ToString("X8"));
+                     TmpAddress = 0;
+                 }
+-                else if (!command.Data[i].StartsWith('+'))
++                else if (!command.Data[i].StartsWith("+"))
+                 {
+                     ListOffs.Add(TmpAddress.ToString("X8"));
+                     TmpAddress = 0;
+@@ -1980,7 +1980,7 @@ namespace CLPS2C_Compiler
+
+             for (i = i + 1; i < command.Data.Count; i++)
+             {
+-                if (!command.Data[i].StartsWith('+'))
++                if (!command.Data[i].StartsWith("+"))
+                 {
+                     break;
+                 }
+@@ -2008,7 +2008,7 @@ namespace CLPS2C_Compiler
+
+             for (i = i + 1; i < command.Data.Count; i++)
+             {
+-                if (!command.Data[i].StartsWith('+'))
++                if (!command.Data[i].StartsWith("+"))
+                 {
+                     break;
+                 }
+@@ -2040,7 +2040,7 @@ namespace CLPS2C_Compiler
+         {
+             string Value = "";
+             uint Sum = 0;
+-            if (command.Data[i].StartsWith('"'))
++            if (command.Data[i].StartsWith("\""))
+             {
+                 // string
+                 Value = command.Data[i];
+@@ -2059,7 +2059,7 @@ namespace CLPS2C_Compiler
+             for (i = i + 1; i < command.Data.Count; i++)
+             {
+                 string Element = command.Data[i];
+-                if (!Element.StartsWith('+') || Element == "+")
++                if (!Element.StartsWith("+") || Element == "+")
+                 {
+                     // without +, or just '+'
+                     SetError(ERROR.WRONG_SYNTAX, command);
+@@ -2072,7 +2072,7 @@ namespace CLPS2C_Compiler
+                     // string
+                     if (Sum > 0)
+                     {
+-                        if (Value.EndsWith('"'))
++                        if (Value.EndsWith("\""))
+                         {
+                             Value = Value.TrimEnd('"') + Sum.ToString() + '"';
+                         }
+@@ -2089,7 +2089,7 @@ namespace CLPS2C_Compiler
+                         return "";
+                     }
+                     string Tmp = GetSubstringInQuotes(Element, false);
+-                    if (Value.EndsWith('"'))
++                    if (Value.EndsWith("\""))
+                     {
+                         Value = Value.TrimEnd('"') + Tmp + '"';
+                     }
+@@ -2112,7 +2112,7 @@ namespace CLPS2C_Compiler
+
+             if (Sum > 0)
+             {
+-                if (Value.EndsWith('"'))
++                if (Value.EndsWith("\""))
+                 {
+                     Value = Value.TrimEnd('"') + Sum.ToString() + '"';
+                 }
+diff --git a/CLPS2C-Compiler/Util.cs b/CLPS2C-Compiler/Util.cs
+index 4560c73..7f82ae6 100644
+--- a/CLPS2C-Compiler/CLPS2C-Compiler/Util.cs
++++ b/CLPS2C-Compiler/CLPS2C-Compiler/Util.cs
+@@ -48,7 +48,7 @@ namespace CLPS2C_Compiler
+                 // ([^ \t\n\r\f\v(+,]+) - Any other word. This is \S, and '(', '+', ','
+                 MatchCollection Matches = Regex.Matches(line, @"(\(.*\))|(""(?:\\.|[^""])*""?)|(\+\s*((""(?:\\.|[^""])*""?)|([^+""]+?))?(?=\+|$| |,))|(,(""?)([^,""]+?)\8(?=,|$| |\+))|([^ \t\n\r\f\v(+,]+)");
+                 Type = Matches[0].Value.ToUpper();
+-                Data = Matches.Skip(1).Take(Matches.Count - 1).Select(item => item.Value).ToList(); // Data has every word except first
++                Data = Matches.Cast<Match>().Skip(1).Take(Matches.Count - 1).Select(item => item.Value).ToList(); // Data has every word except first
+             }
+
+             public void AppendToTraceback(string file, string fullLine, int lineIdx)
+@@ -165,7 +165,7 @@ namespace CLPS2C_Compiler
+                 else
+                 {
+                     // It's a comment, count new lines
+-                    int newLinesCount = match.Value.Split(Program._newLine).Length - 1;
++                    int newLinesCount = match.Value.Split(new string[] { Program._newLine }, StringSplitOptions.None).Length - 1;
+                     return string.Concat(Enumerable.Repeat(Program._newLine, newLinesCount));
+                 }
+             });
+@@ -486,7 +486,7 @@ namespace CLPS2C_Compiler
+             for (int i = 0; i < Output.Count; i++)
+             {
+                 string Element = Output[i];
+-                if (Element.StartsWith('+'))
++                if (Element.StartsWith("+"))
+                 {
+                     Element = Element.Substring(1).TrimStart();
+                 }
+@@ -496,7 +496,7 @@ namespace CLPS2C_Compiler
+                     List<string> RecursiveValues = GetSetValueFromTarget(Element, SetID, listSets);
+                     if (RecursiveValues.Count != 0)
+                     {
+-                        if (Output[i].StartsWith('+'))
++                        if (Output[i].StartsWith("+"))
+                         {
+                             RecursiveValues[0] = "+" + RecursiveValues[0];
+                         }

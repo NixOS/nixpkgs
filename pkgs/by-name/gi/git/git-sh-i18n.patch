@@ -1,0 +1,23 @@
+diff --git a/git-sh-i18n.sh b/git-sh-i18n.sh
+index e1d917fd27..e90f8e1414 100644
+--- a/git-sh-i18n.sh
++++ b/git-sh-i18n.sh
+@@ -26,7 +26,7 @@ then
+ elif test -n "$GIT_INTERNAL_GETTEXT_TEST_FALLBACKS"
+ then
+ 	: no probing necessary
+-elif type gettext.sh >/dev/null 2>&1
++elif type @gettext@/bin/gettext.sh >/dev/null 2>&1
+ then
+ 	# GNU libintl's gettext.sh
+ 	GIT_INTERNAL_GETTEXT_SH_SCHEME=gnu
+@@ -43,7 +43,8 @@ export GIT_INTERNAL_GETTEXT_SH_SCHEME
+ case "$GIT_INTERNAL_GETTEXT_SH_SCHEME" in
+ gnu)
+ 	# Use libintl's gettext.sh, or fall back to English if we can't.
+-	. gettext.sh
++	. @gettext@/bin/gettext.sh
++	export PATH=@gettext@/bin:$PATH
+ 	;;
+ gettext_without_eval_gettext)
+ 	# Solaris has a gettext(1) but no eval_gettext(1)

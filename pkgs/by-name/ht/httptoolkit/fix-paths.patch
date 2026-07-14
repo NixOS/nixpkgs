@@ -1,0 +1,60 @@
+diff --git a/httptoolkit-ctl b/httptoolkit-ctl
+index 0878247..d299b71 100644
+--- a/httptoolkit-ctl
++++ b/httptoolkit-ctl
+@@ -1,10 +1,5 @@
+ #!/bin/sh
+ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+-APP_DIR="$(dirname "$SCRIPT_DIR")"
+ export HTK_DESKTOP_RESOURCES="$SCRIPT_DIR"
+-if [ "$(uname)" = "Darwin" ]; then
+-    export HTK_DESKTOP_EXE="$APP_DIR/MacOS/HTTP Toolkit"
+-else
+-    export HTK_DESKTOP_EXE="$APP_DIR/httptoolkit"
+-fi
++export HTK_DESKTOP_EXE="@out@/bin/httptoolkit"
+ exec "$SCRIPT_DIR/httptoolkit-server/bin/httptoolkit-server" ctl "$@"
+diff --git a/httptoolkit-mcp b/httptoolkit-mcp
+index c27b25a..c7b3f07 100644
+--- a/httptoolkit-mcp
++++ b/httptoolkit-mcp
+@@ -1,10 +1,5 @@
+ #!/bin/sh
+ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+-APP_DIR="$(dirname "$SCRIPT_DIR")"
+ export HTK_DESKTOP_RESOURCES="$SCRIPT_DIR"
+-if [ "$(uname)" = "Darwin" ]; then
+-    export HTK_DESKTOP_EXE="$APP_DIR/MacOS/HTTP Toolkit"
+-else
+-    export HTK_DESKTOP_EXE="$APP_DIR/httptoolkit"
+-fi
++export HTK_DESKTOP_EXE="@out@/bin/httptoolkit"
+ exec "$SCRIPT_DIR/httptoolkit-server/bin/httptoolkit-server" mcp "$@"
+diff --git a/package.json b/package.json
+index e6a9ef4..f8d7ec1 100644
+--- a/package.json
++++ b/package.json
+@@ -58,8 +58,8 @@
+     ],
+     "extraResources": [
+       "httptoolkit-server/**/*",
+-      "httptoolkit-ctl{,.*}",
+-      "httptoolkit-mcp{,.*}"
++      "httptoolkit-ctl",
++      "httptoolkit-mcp"
+     ],
+     "artifactName": "HttpToolkit-${version}-${arch}.${ext}",
+     "mac": {
+diff --git a/src/index.ts b/src/index.ts
+index 8a63c58..0511575 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -392,7 +392,7 @@ if (!amMainInstance) {
+             ...process.env,
+ 
+             HTK_SERVER_TOKEN: AUTH_TOKEN,
+-            HTK_DESKTOP_EXE: app.getPath('exe'),
++            HTK_DESKTOP_EXE: '@out@/bin/httptoolkit',
+             HTK_DESKTOP_RESOURCES: RESOURCES_PATH,
+             NODE_SKIP_PLATFORM_CHECK: '1',
+             OPENSSL_CONF: undefined, // Not relevant to us, and if set this can crash Node.js

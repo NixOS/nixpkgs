@@ -1,0 +1,13 @@
+--- a/configure.ac	2017-06-12 06:48:15.000000000 +0200
++++ b/configure.ac	2017-06-12 06:50:06.000000000 +0200
+@@ -76,6 +76,10 @@
+ CXXFLAGS="$CXXFLAGS $ticcutils_CFLAGS"
+ LIBS="$LIBS $ticcutils_LIBS"
+ 
++PKG_CHECK_MODULES([libxml2], [libxml-2.0 >= 2.6.16] )
++CXXFLAGS="$CXXFLAGS $libxml2_CFLAGS"
++LIBS="$LIBS $libxml2_LIBS"
++
+ AC_CONFIG_FILES([
+   Makefile
+   mbt.pc

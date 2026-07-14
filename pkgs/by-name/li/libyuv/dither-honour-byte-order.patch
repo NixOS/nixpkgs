@@ -1,0 +1,32 @@
+diff '--color=auto' -ruN a/source/row_common.cc b/source/row_common.cc
+--- a/source/row_common.cc	2025-07-15 17:55:24.611751521 +0200
++++ b/source/row_common.cc	2025-07-15 18:01:57.808312551 +0200
+@@ -104,8 +104,13 @@
+ #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || \
+     defined(_M_IX86) || defined(__arm__) || defined(_M_ARM) ||     \
+     (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
++#define WRITE16(p, v) *(uint16_t*)(p) = v
+ #define WRITEWORD(p, v) *(uint32_t*)(p) = v
+ #else
++static inline void WRITE16(uint8_t* p, uint16_t v) {
++  p[0] = (uint8_t)(v & 255);
++  p[1] = (uint8_t)((v >> 8) & 255);
++}
+ static inline void WRITEWORD(uint8_t* p, uint32_t v) {
+   p[0] = (uint8_t)(v & 255);
+   p[1] = (uint8_t)((v >> 8) & 255);
+@@ -408,10 +413,10 @@
+     uint8_t b1 = STATIC_CAST(uint8_t, clamp255(src_argb[4] + dither1) >> 3);
+     uint8_t g1 = STATIC_CAST(uint8_t, clamp255(src_argb[5] + dither1) >> 2);
+     uint8_t r1 = STATIC_CAST(uint8_t, clamp255(src_argb[6] + dither1) >> 3);
+-    *(uint16_t*)(dst_rgb + 0) =
+-        STATIC_CAST(uint16_t, b0 | (g0 << 5) | (r0 << 11));
+-    *(uint16_t*)(dst_rgb + 2) =
+-        STATIC_CAST(uint16_t, b1 | (g1 << 5) | (r1 << 11));
++    WRITE16((dst_rgb + 0),
++        STATIC_CAST(uint16_t, b0 | (g0 << 5) | (r0 << 11)));
++    WRITE16((dst_rgb + 2),
++        STATIC_CAST(uint16_t, b1 | (g1 << 5) | (r1 << 11)));
+     dst_rgb += 4;
+     src_argb += 8;
+   }

@@ -1,0 +1,90 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6edcc88..6f5601d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,11 +47,62 @@ set(ISPELL_SOURCES
+ 	xgets.c
+ )
+ 
++set(ISPELL_HEADERS
++  config.h
++  defhash.h
++  exp_table.h
++  fields.h
++  ispell.h
++  libispell.h
++  local.h
++  msgs.h
++  proto.h
++  version.h
++)
++
+ add_library(${ISPELL_TARGET_NAME} SHARED ${ISPELL_SOURCES})
+ 
++install(
++  FILES
++  ${ISPELL_HEADERS}
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++)
++
++install(TARGETS ${ISPELL_TARGET_NAME}
++  EXPORT ${ISPELL_TARGET_NAME}Targets
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++)
++
+ install(TARGETS ${ISPELL_TARGET_NAME}
+   EXPORT ${ISPELL_TARGET_NAME}LibraryDepends
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ )
++
++install(
++  EXPORT ${ISPELL_TARGET_NAME}Targets
++  FILE ${ISPELL_TARGET_NAME}Targets.cmake
++  DESTINATION "${CMAKE_INSTALL_DATADIR}/${ISPELL_TARGET_NAME}/cmake"
++  NAMESPACE ${ISPELL_TARGET_NAME}::
++)
++
++install(
++  EXPORT ${ISPELL_TARGET_NAME}LibraryDepends
++  FILE ${ISPELL_TARGET_NAME}LibraryDepends.cmake
++  DESTINATION "${CMAKE_INSTALL_DATADIR}/${ISPELL_TARGET_NAME}/cmake"
++  NAMESPACE ${ISPELL_TARGET_NAME}::
++)
++
++configure_package_config_file(
++  ${ISPELL_TARGET_NAME}Config.cmake.in
++  "${CMAKE_CURRENT_BINARY_DIR}/${ISPELL_TARGET_NAME}Config.cmake"
++  INSTALL_DESTINATION "${CMAKE_INSTALL_DATADIR}/${ISPELL_TARGET_NAME}/cmake"
++)
++
++install(
++  FILES "${CMAKE_CURRENT_BINARY_DIR}/${ISPELL_TARGET_NAME}Config.cmake"
++  DESTINATION "${CMAKE_INSTALL_DATADIR}/${ISPELL_TARGET_NAME}/cmake"
++)
+diff --git a/ISpellConfig.cmake.in b/ISpellConfig.cmake.in
+index 052194b..cb71737 100644
+--- a/ISpellConfig.cmake.in
++++ b/ISpellConfig.cmake.in
+@@ -6,13 +6,13 @@
+ 
+ @PACKAGE_INIT@
+ 
+-include("${CMAKE_CURRENT_LIST_DIR}/@ISPELL_TARGET_NAME@LibraryDepends.cmake")
++include("${CMAKE_CURRENT_LIST_DIR}/ISpellLibraryDepends.cmake")
+ 
+-set(ISPELL_LIBRARIES "@ISPELL_TARGET_NAME@")
+-get_target_property(ISPELL_INCLUDE_DIRS "@ISPELL_TARGET_NAME@" INTERFACE_INCLUDE_DIRECTORIES)
++set(ISPELL_LIBRARIES "ISpell")
++get_target_property(ISPELL_INCLUDE_DIRS "ISpell::ISpell" INTERFACE_INCLUDE_DIRECTORIES)
+ 
+ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.18.0)
+-    add_library(@ISpell_TARGET_NAME@::@ISpell_TARGET_NAME@ ALIAS @ISpell_TARGET_NAME@)
++  add_library(ISpell ALIAS ISpell::ISpell)
+ endif()
+ 
+-check_required_components(@ISpell_TARGET_NAME@)
++check_required_components(ISpell)

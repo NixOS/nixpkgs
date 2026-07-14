@@ -1,0 +1,14 @@
+diff --git a/CMake/aocl-utils.pc.in b/CMake/aocl-utils.pc.in
+index 18ce5eb..bcdc39b 100644
+--- a/CMake/aocl-utils.pc.in
++++ b/CMake/aocl-utils.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@AU_INSTALL_LIB_DIR@
+-includedir=${prefix}/@AU_INSTALL_INCLUDE_DIR@
++libdir=@AU_INSTALL_LIB_DIR@
++includedir=@AU_INSTALL_INCLUDE_DIR@
+ 
+ Name: @PROJECT_FULL_NAME@
+ Description: @AU_DESCRIPTION@

@@ -1,0 +1,15 @@
+--- a/Makefile
++++ b/Makefile
+@@ -8,10 +8,10 @@
+ INSDIR	= /usr/bin
+ 
+ ttaenc: $(patsubst %.c, %.o, $(wildcard *.c))
+-	gcc $^ -o $@ $(CFLAGS)
++	$(CC) $^ -o $@ $(CFLAGS)
+ 
+ %.o:	%.c
+-	gcc -c $(CFLAGS) $<
++	$(CC) -c $(CFLAGS) $<
+ 
+ install:
+ 	[ -d "$(INSDIR)" ] || mkdir $(INSDIR)

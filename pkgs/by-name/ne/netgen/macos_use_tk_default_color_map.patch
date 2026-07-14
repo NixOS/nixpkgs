@@ -1,0 +1,80 @@
+diff --git a/ng/Togl2.1/togl.c b/ng/Togl2.1/togl.c
+index 78faa6c1..522a71f1 100644
+--- a/ng/Togl2.1/togl.c
++++ b/ng/Togl2.1/togl.c
+@@ -3018,7 +3018,6 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+ 
+     dpy = Tk_Display(tkwin);
+     scrnum = Tk_ScreenNumber(tkwin);
+-
+     /* 
+      * Windows and Mac OS X need the window created before OpenGL context
+      * is created.  So do that now and set the window variable. 
+@@ -3140,7 +3139,7 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+         goto error;
+     }
+ #endif
+-#if defined(TOGL_WGL) || defined(TOGL_AGL) || defined(TOGL_NSOPENGL)
++#if defined(TOGL_WGL)
+     if (togl->VisInfo == NULL) {
+         /* 
+          * Create a new OpenGL rendering context. And check to share lists.
+@@ -3417,7 +3416,6 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+     DescribePixelFormat(togl->tglGLHdc, (int) togl->PixelFormat, sizeof (pfd),
+             &pfd);
+ #endif
+-
+     /* 
+      * find a colormap
+      */
+@@ -3432,7 +3430,8 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+             cmap = DefaultColormap(dpy, scrnum);
+         }
+ #elif defined(TOGL_AGL) || defined(TOGL_NSOPENGL)
+-        cmap = DefaultColormap(dpy, scrnum);
++        /* macOS: get colormap from Tk */
++        cmap = Tk_Colormap(tkwin);
+ #endif
+     } else {
+         /* Colormap for CI mode */
+@@ -3457,10 +3456,11 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+ #elif defined(TOGL_WGL)
+             cmap = Win32CreateCiColormap(togl);
+ #elif defined(TOGL_AGL) || defined(TOGL_NSOPENGL)
+-            /* need to figure out how to do this correctly on Mac... */
+-            cmap = DefaultColormap(dpy, scrnum);
++            /* macOS: use Tk default colormap */
++            cmap = Tk_Colormap(tkwin);
+ #endif
+         } else {
++#if defined(TOGL_X11)
+             if (togl->VisInfo->visual == DefaultVisual(dpy, scrnum)) {
+                 /* share default/root colormap */
+                 cmap = Tk_Colormap(tkwin);
+@@ -3470,14 +3470,25 @@ Togl_MakeWindow(Tk_Window tkwin, Window parent, ClientData instanceData)
+                         XRootWindow(dpy, togl->VisInfo->screen),
+                         togl->VisInfo->visual, AllocNone);
+             }
++#else
++            /* Windows, AGL, NSOPENGL: use Tk default colormap */
++            cmap = Tk_Colormap(tkwin);
++#endif
+         }
+     }
+ 
+     /* Make sure Tk knows to switch to the new colormap when the cursor is over
+      * this window when running in color index mode. */
++#if defined(TOGL_X11)
+     (void) Tk_SetWindowVisual(tkwin, togl->VisInfo->visual,
+             togl->VisInfo->depth, cmap);
+-
++#elif defined(TOGL_WGL)
++    /* Windows: use default visual */
++    (void) Tk_SetWindowVisual(tkwin, DefaultVisual(dpy, scrnum),
++            DefaultDepth(dpy, scrnum), cmap);
++#elif defined(TOGL_AGL) || defined(TOGL_NSOPENGL)
++    /* Macos: use Tk default colormap */
++#endif
+ #ifdef TOGL_WGL
+     /* Install the colormap */
+     SelectPalette(togl->tglGLHdc, ((TkWinColormap *) cmap)->palette, TRUE);

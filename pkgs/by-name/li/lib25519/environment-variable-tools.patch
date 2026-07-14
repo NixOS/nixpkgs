@@ -1,0 +1,48 @@
+diff --git a/configure b/configure
+index 04042b2..30d1ea9 100755
+--- a/configure
++++ b/configure
+@@ -210,6 +210,17 @@ for arch in sorted(os.listdir('compilers')):
+     with open('compilers/%s' % arch) as f:
+       for c in f.readlines():
+         c = c.strip()
++        if env_cc := os.getenv('CC'):
++          c_as_list= c.split()
++          # check if the compiler we're testing has the name inside the last
++          # part of the CC env var
++          # i.e. gcc == x86_64-linux-unknown-gnu-gcc
++          # or gcc == gcc
++          if c_as_list[0] == env_cc.split("-")[-1]:
++            c_as_list[0] = env_cc
++          c = ' '.join(c_as_list)
++          log('patched command as %s' % c)
++
+         cv = compilerversion(c)
+         if cv == None:
+           log('skipping %s compiler %s' % (arch,c))
+diff --git a/scripts-build/checknamespace b/scripts-build/checknamespace
+index ae11bed..bd9cb85 100755
+--- a/scripts-build/checknamespace
++++ b/scripts-build/checknamespace
+@@ -36,7 +36,7 @@ def doit(d):
+   obj2U = {}
+ 
+   try:
+-    p = subprocess.Popen(['nm','-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
++    p = subprocess.Popen([os.getenv('NM', 'nm'),'-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
+     out,err = p.communicate()
+   except Exception as e:
+     warn('nm failure: %s' % e)
+diff --git a/scripts-build/staticlib b/scripts-build/staticlib
+index 7683233..0445bc3 100755
+--- a/scripts-build/staticlib
++++ b/scripts-build/staticlib
+@@ -3,6 +3,6 @@
+ lib="$1"
+ 
+ rm -f package/lib/"$lib".a
+-ar cr package/lib/"$lib".a ofiles/*.o
+-ranlib package/lib/"$lib".a || :
++${AR:-ar} cr package/lib/"$lib".a ofiles/*.o
++${RANLIB:-ranlib} package/lib/"$lib".a || :
+ chmod 644 package/lib/"$lib".a

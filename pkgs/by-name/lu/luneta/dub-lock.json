@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "arsd-official": {
+      "version": "7.2.0",
+      "sha256": "1m546r6l0pkk80y5f3ff8im08hp59nwzjb5ikjhfiswvdizpwjlh"
+    },
+    "fuzzyd": {
+      "version": "2.2.0-beta",
+      "sha256": "0wzih4yrlrrj12ls9hd27gnxrj4j4c0ha9xprdfc7azszlv16j6g"
+    },
+    "ncurses": {
+      "version": "1.0.0",
+      "sha256": "0ivl88vp2dy9rpv6x3f9jlyqa7aps2x1kkyx80w2d4vcs31pzmb2"
+    },
+    "riverd-loader": {
+      "version": "1.0.2",
+      "sha256": "0c94551bscnia7vpixaq4xd2anprkd7pkf0q0anyadv5kqa8xgip"
+    },
+    "riverd-ncurses": {
+      "version": "1.0.5",
+      "sha256": "1wgdschv6hpdjykf5bblxphnhnpy2kvw8hq8h5iaygi9zr7jf286"
+    }
+  }
+}

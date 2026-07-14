@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+  gem 'asmrepl'
+  # Extra dependencies
+  gem 'racc', '~> 1.8'
+  gem 'rbs', '~> 3.9'

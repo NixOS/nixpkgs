@@ -1,0 +1,21 @@
+index 9d3ba82..dabf566 100644
+--- a/tests/test_integration_services.py
++++ b/tests/test_integration_services.py
+@@ -137,7 +137,7 @@ async def test_review_summarize_service_version_check(
+     await setup_mock_frigate_config_entry(hass, client=client)
+ 
+     # Verify service is not available (should not be registered for version < 0.17)
+-    with pytest.raises(Exception, match="service_not_found"):
++    with pytest.raises(Exception, match="Action frigate.review_summarize not found"):
+         await hass.services.async_call(
+             "frigate",
+             SERVICE_REVIEW_SUMMARIZE,
+@@ -156,7 +156,7 @@ async def test_review_summarize_service_no_integration(
+     # Don't set up any Frigate integration
+ 
+     # When no integration is configured, the service won't exist
+-    with pytest.raises(Exception, match="service_not_found"):
++    with pytest.raises(Exception, match="Action frigate.review_summarize not found"):
+         await hass.services.async_call(
+             "frigate",
+             SERVICE_REVIEW_SUMMARIZE,

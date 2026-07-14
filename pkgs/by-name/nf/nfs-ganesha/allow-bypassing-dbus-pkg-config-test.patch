@@ -1,0 +1,44 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 73276dff6..94027f5cb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -974,21 +974,27 @@ endif(USE_EFENCE)
+
+ gopt_test(USE_DBUS)
+ if(USE_DBUS)
+-  find_package(PkgConfig)
+-  # pkg_check_modules doesn't fatal error on REQUIRED, so handle it ourselves
+-  pkg_check_modules(DBUS ${USE_DBUS_REQUIRED} dbus-1)
+-  if(NOT DBUS_FOUND)
+-    if(USE_DBUS_REQUIRED)
+-      message(FATAL_ERROR "Cannot find DBUS libs but requested on command line")
+-    else(USE_DBUS_REQUIRED)
+-      message(WARNING "Cannot find DBUS libs. Disabling DBUS support")
+-      set(USE_DBUS OFF)
+-    endif(USE_DBUS_REQUIRED)
+-  else(NOT DBUS_FOUND)
++  if(DBUS_NO_PKGCONFIG)
+     set(SYSTEM_LIBRARIES ${DBUS_LIBRARIES} ${SYSTEM_LIBRARIES})
+     LIST(APPEND CMAKE_LIBRARY_PATH ${DBUS_LIBRARY_DIRS})
+     link_directories (${DBUS_LIBRARY_DIRS})
+-  endif(NOT DBUS_FOUND)
++  else(DBUS_NO_PKGCONFIG)
++    find_package(PkgConfig)
++    # pkg_check_modules doesn't fatal error on REQUIRED, so handle it ourselves
++    pkg_check_modules(DBUS ${USE_DBUS_REQUIRED} dbus-1)
++    if(NOT DBUS_FOUND)
++      if(USE_DBUS_REQUIRED)
++        message(FATAL_ERROR "Cannot find DBUS libs but requested on command line")
++      else(USE_DBUS_REQUIRED)
++        message(WARNING "Cannot find DBUS libs. Disabling DBUS support")
++        set(USE_DBUS OFF)
++      endif(USE_DBUS_REQUIRED)
++    else(NOT DBUS_FOUND)
++      set(SYSTEM_LIBRARIES ${DBUS_LIBRARIES} ${SYSTEM_LIBRARIES})
++      LIST(APPEND CMAKE_LIBRARY_PATH ${DBUS_LIBRARY_DIRS})
++      link_directories (${DBUS_LIBRARY_DIRS})
++    endif(NOT DBUS_FOUND)
++  endif(DBUS_NO_PKGCONFIG)
+ endif(USE_DBUS)
+
+ if(USE_CB_SIMULATOR AND NOT USE_DBUS)

@@ -1,0 +1,12 @@
+diff --git a/3rd_party/bergamot-translator/3rd_party/marian-dev/src/microsoft/quicksand.h b/3rd_party/bergamot-translator/3rd_party/marian-dev/src/microsoft/quicksand.h
+index 87de194..85e85a1 100755
+--- a/3rd_party/bergamot-translator/3rd_party/marian-dev/src/microsoft/quicksand.h
++++ b/3rd_party/bergamot-translator/3rd_party/marian-dev/src/microsoft/quicksand.h
+@@ -5,6 +5,7 @@
+ #include <unordered_set>
+ #include <vector>
+ #include <set>
++#include <cstdint>
+ 
+ namespace marian {
+ 

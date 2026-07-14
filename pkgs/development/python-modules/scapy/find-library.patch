@@ -1,0 +1,12 @@
+diff -uNr a/scapy/libs/winpcapy.py b/scapy/libs/winpcapy.py
+--- a/scapy/libs/winpcapy.py	1970-01-01 01:00:01.000000000 +0100
++++ b/scapy/libs/winpcapy.py	2022-08-12 17:57:52.830224862 +0200
+@@ -33,7 +33,7 @@
+ else:
+     # Try to load libpcap
+     SOCKET = c_int
+-    _lib_name = find_library("pcap")
++    _lib_name = "@libpcap_file@"
+     if not _lib_name:
+         raise OSError("Cannot find libpcap.so library")
+     _lib = CDLL(_lib_name)

@@ -1,0 +1,13 @@
+diff --git a/packages/cli-repl/src/cli-repl.ts b/packages/cli-repl/src/cli-repl.ts
+index b00c52e1..7a096d6d 100644
+--- a/packages/cli-repl/src/cli-repl.ts
++++ b/packages/cli-repl/src/cli-repl.ts
+@@ -159,7 +159,7 @@ export class CliRepl implements MongoshIOProvider {
+     this.config = {
+       userId: id,
+       telemetryAnonymousId: id,
+-      enableTelemetry: true,
++      enableTelemetry: false,
+     };
+ 
+     this.getCryptLibraryPaths = options.getCryptLibraryPaths;
