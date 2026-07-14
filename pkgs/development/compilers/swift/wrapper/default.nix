@@ -45,6 +45,11 @@ stdenv.mkDerivation (
             --replace-fail \
               "-resource-dir=$out/resource-root" \
               "-resource-dir=${lib.getLib swift}/lib/swift/clang"
+          # Swift bundles Clang 16, which predates -mtls-dialect=gnu2
+          # support (added in Clang 19.1). The cc-wrapper adds it based
+          # on the system Clang version, so strip it here.
+          substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
+            --replace-fail "-mtls-dialect=gnu2" ""
         ''
         # We need the libc++ headers corresponding to the LLVM version of
         # Swift’s Clang.
