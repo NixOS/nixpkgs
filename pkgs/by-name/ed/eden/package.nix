@@ -10,13 +10,13 @@
   cubeb,
   enet,
   fetchFromGitea,
-  fetchpatch,
   fetchurl,
   ffmpeg-headless,
   fmt,
   frozen-containers,
   gamemode,
   glslang,
+  gtk3,
   httplib,
   kdePackages,
   libopus,
@@ -42,6 +42,7 @@
   zlib,
   zstd,
   writeScript,
+  wrapGAppsHook3,
   callPackage,
 }:
 
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6.qttools
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -165,6 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
         pipewire
       ]
     })
+
+    gappsWrapperArgs+=(
+        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      )
   '';
 
   passthru = {
