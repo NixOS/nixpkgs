@@ -1,12 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  testers,
-  flytectl,
+  versionCheckHook,
 }:
+
 buildGoModule (finalAttrs: {
   pname = "flytectl";
   version = "0.9.8";
@@ -28,16 +28,12 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/flyteorg/flyte/flytestdlib/version.Version=v${finalAttrs.version}"
     "-X github.com/flyteorg/flyte/flytestdlib/version.Build=${finalAttrs.src.tag}"
     "-X github.com/flyteorg/flyte/flytestdlib/version.BuildTime=1970-01-01"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  # Tests require network and file system access
-  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd flytectl \
@@ -46,11 +42,11 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/flytectl completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "flytectl version";
-    version = "v${finalAttrs.version}";
-  };
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line interface for Flyte, a cloud-native workflow orchestration platform";
