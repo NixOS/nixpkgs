@@ -11,16 +11,16 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyturbojpeg";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
-    tag = "v${version}";
-    hash = "sha256-rMn5NmiwKhyj4U9kyyRf9ZheVnETpixZoL/AVlBlImQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LgUPcRBRjqKhg0SLaZiRG8/QoJxShSvAAmQsuHwfoZM=";
   };
 
   patches = [
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "turbojpeg" ];
 
   meta = {
-    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
+    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
