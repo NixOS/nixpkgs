@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  nix-update-script,
   nodejs,
   nixosTests,
   yarn-berry_4,
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       basic-functionality = nixosTests.outline;
     };
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
     # alias for nix-update to be able to find and update this attribute
     inherit (finalAttrs) offlineCache;
   };
