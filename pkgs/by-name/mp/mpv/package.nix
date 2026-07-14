@@ -117,6 +117,8 @@ symlinkJoin {
   passthru.tests.mpv-scripts-should-not-collide = buildEnv {
     name = "mpv-scripts-env";
     paths = lib.pipe mpvScripts [
+      # filters "throw" aliases
+      (lib.filterAttrs (key: script: (builtins.tryEval (lib.isDerivation script)).success))
       # filters "override" "overrideDerivation" "recurseForDerivations"
       (lib.filterAttrs (key: script: lib.isDerivation script))
       # replaces unfree and meta.broken scripts with decent placeholders
