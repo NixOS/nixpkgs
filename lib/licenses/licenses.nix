@@ -1404,9 +1404,8 @@ lib.mapAttrs mkLicense (
     };
 
     stk = {
-      shortName = "stk";
-      fullName = "Synthesis Tool Kit 4.3";
-      url = "https://github.com/thestk/stk/blob/master/LICENSE";
+      spdxId = "MIT-STK";
+      fullName = "MIT-STK License";
     };
 
     sudo = {
