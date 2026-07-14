@@ -27,22 +27,22 @@
   scikit-build-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.8.0";
+  version = "10.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pikepdf";
     repo = "pikepdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-ih5QC6VVl7dGvamp3FRzahnpEDjdO8gGFNVX19Bu8LE=";
+    hash = "sha256-ZNynqKNmUO8wGoT3Ml2sS2kOGJD37JRaHzBV9igvoHw=";
   };
 
   patches = [
@@ -101,6 +101,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${finalAttrs.src.tag}/docs/releasenotes/version${lib.versions.major finalAttrs.version}.md";
   };
-}
+})
