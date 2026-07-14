@@ -1,7 +1,8 @@
 { lib, ... }:
 let
   noop = pkgs: pkgs.writeShellScript "noop" "echo 'Unimplemented!'";
-  root = "/tmp/vars-demo";
+  rootHost = "/tmp/vars-demo";
+  rootTarget = "/tmp/vars-demo"; # Absolute in the context of the target system!
   mkBackendScript =
     name: text: pkgs:
     pkgs.writeScript name ''
@@ -24,24 +25,24 @@ in
     generatorBackends.example = {
       get = mkBackendScript "get" ''
         out=''${out:?} # Make shellcheck happy
-        cat ${root}/generators/"$1"/files/"$2" > "$out"
+        cat ${rootHost}/generators/"$1"/files/"$2" > "$out"
       '';
       set = mkBackendScript "set" ''
         in=''${in:?} # Make shellcheck happy
-        mkdir -p ${root}/generators/"$1"/files/
-        cat "$in" > ${root}/generators/"$1"/files/"$2"
+        mkdir -p ${rootHost}/generators/"$1"/files/
+        cat "$in" > ${rootHost}/generators/"$1"/files/"$2"
       '';
       exists = mkBackendScript "exists" ''
-        if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
+        if [[ ! -f ${rootHost}/generators/"$1"/files/"$2" ]]; then
           exit 42
         fi
       '';
       delete = mkBackendScript "delete" ''
-        rm -rf ${root}/generators/"$1"/files/"$2"
+        rm -rf ${rootHost}/generators/"$1"/files/"$2"
       '';
       list = mkBackendScript "list" ''
-        if [[ -d "${root}/generators" ]]; then
-          for generator in "${root}/generators"/*; do
+        if [[ -d "${rootHost}/generators" ]]; then
+          for generator in "${rootHost}/generators"/*; do
             [[ -d "$generator" ]] || continue
             files="$generator/files"
             [[ -d "$files" ]] || continue
@@ -53,8 +54,40 @@ in
         fi
       '';
 
-      deploy = noop;
-      fixup = noop; # This one's optional, but I wanted to make sure that works
+      fixup = noop;
+
+      deploy = mkBackendScript "deploy" ''
+        echo "Not implemented :(" 1>&2 
+        exit 1
+      '';
+
+      deployLocal = mkBackendScript "deployLocal" ''
+        if [[ ! -d "$1" ]]; then
+          echo "System root not found" 1>&2 
+          exit 1
+        fi
+
+        rm -rf "$1/${rootTarget}"
+        if [[ -d "${rootHost}/generators" ]]; then
+          for generator in "${rootHost}/generators"/*; do
+            [[ -d "$generator" ]] || continue
+            files="$generator/files"
+            [[ -d "$files" ]] || continue
+            for file in "$files"/*; do
+              [[ -e "$file" ]] || continue
+              dir="$1/${rootTarget}/$(basename "$generator")"
+              mkdir -p "$dir"
+              cp "$file" "$dir/$(basename "$file")"
+            done
+          done
+        fi
+      '';
+
+      fileModule =
+        { generator, name, ... }:
+        {
+          path = "${rootTarget}/${generator.name}/${name}";
+        };
     };
   };
 }
