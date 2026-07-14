@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation {
   pname = "sox";
-  version = "unstable-2021-05-09";
+  version = "14.4.2-unstable-2021-05-09";
 
   src = fetchgit {
     # not really needed, but when this src was updated from `fetchurl ->
