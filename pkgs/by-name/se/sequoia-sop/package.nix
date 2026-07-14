@@ -63,7 +63,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-sop";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sop/-/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      anish
+    ];
     mainProgram = "sqop";
   };
 })
