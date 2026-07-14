@@ -19,6 +19,10 @@ buildHomeAssistantComponent rec {
     hash = "sha256-6JLcWBZU5YXgdcZUuCIs2KAJJJ8U7nawYwOgSjsNajc=";
   };
 
+  ignoreVersionRequirement = [
+    "pymodbus"
+  ];
+
   dependencies = [
     pymodbus
     async-timeout
