@@ -7,6 +7,7 @@
   rustPlatform,
   sqlite,
   pkg-config,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -51,6 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
 
