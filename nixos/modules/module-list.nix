@@ -358,6 +358,7 @@
   ./programs/wayland/mangowc.nix
   ./programs/wayland/miracle-wm.nix
   ./programs/wayland/niri.nix
+  ./programs/wayland/pinnacle.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/uwsm.nix
@@ -1343,6 +1344,7 @@
   ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nomad.nix
+  ./services/networking/nordvpn.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
   ./services/networking/ntp/chrony.nix

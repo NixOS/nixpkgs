@@ -81,6 +81,11 @@ buildPythonPackage rec {
     "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
+    # ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1032)
+    "tests/test_crl.py"
+    "tests/test_live.py"
+    "tests/test_ocsp.py"
+    "tests/test_sse.py"
   ];
 
   disabledTests =

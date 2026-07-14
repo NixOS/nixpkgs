@@ -8,7 +8,6 @@
   libtool,
   cmake,
   pkg-config,
-  python3,
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -24,6 +23,7 @@
   dbus,
   apple-sdk_15,
   nix-update-script,
+  wget,
 }:
 
 let
@@ -49,52 +49,54 @@ let
     hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
   };
   radaeSrc = fetchFromGitHub {
-    owner = "drowe67";
-    repo = "radae";
-    rev = "5d640a028ab2b8e4ff23ed7136caee396cdcb844";
-    # upstream repository archive fetching is broken
-    forceFetchGit = true;
-    hash = "sha256-+Sd+FWycEJabT3RN/zyKXS2Xzr060/ekYdzg6s1gQcM=";
+    owner = "peterbmarks";
+    repo = "radae_nopy";
+    rev = "d72ec84e795493249db44d5939eb9b05438f956a";
+    hash = "sha256-ziEhYZarzQtQ1akAxF54kcX6o38gJeUJ08jipSWXnxQ=";
   };
-  radeInteg = fetchFromGitHub {
-    owner = "drowe67";
-    repo = "radae";
-    rev = "7bd3ae2401fcba58e314755576a2940085835312";
-    hash = "sha256-WVYKvttiNh6uEzw0b27winyDfzzGkEEhYq7DIwfZW74=";
+  rnnoiseSrc = fetchFromGitHub {
+    owner = "xiph";
+    repo = "rnnoise";
+    rev = "70f1d256acd4b34a572f999a05c87bf00b67730d";
+    nativeBuildInputs = [ wget ];
+    postFetch = ''
+      cd $out
+      export NIX_SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=$NIX_SSL_CERT_FILE
+      ./download_model.sh
+      substituteInPlace autogen.sh \
+        --replace-fail "./download_model.sh" ""
+    '';
+    hash = "sha256-t/AwOCuHb5Oahy1fDI3Sc9M08Xz3dSAavhYatRC1OIk=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7SOGz2+MzAkXd5JDKasSJcKVXcnuYk+C0S9N/NPRfOM=";
+    hash = "sha256-TjE/iYg+VFvbZH7/1q1V4t0SgcS44pLVet4Pgt6L5HA=";
   };
-
-  patches = [
-    ./no-framework.patch
-  ];
 
   postPatch = ''
     cp -R ${ebur128Src} ebur128
     cp -R ${radaeSrc} radae
-    cp -R ${radeInteg} rade_integ
-    chmod -R u+w ebur128 radae rade_integ
+    cp -R ${rnnoiseSrc} rnnoise
+    chmod -R u+w ebur128 radae rnnoise
     substituteInPlace cmake/BuildEbur128.cmake \
       --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
       --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
       --replace-fail "git apply" "patch -p1 <"
     substituteInPlace cmake/BuildRADE.cmake \
       --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
-      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
+      --replace-fail "GIT_REPOSITORY https://github.com/peterbmarks/radae_nopy/" "URL $(realpath radae)" \
       --replace-fail "GIT_TAG main" ""
-    substituteInPlace cmake/BuildRADEForIntegrations.cmake \
-      --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
-      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath rade_integ)" \
-      --replace-fail "GIT_TAG ms-disable-python-gc" ""
+    substituteInPlace cmake/BuildRNNoise.cmake \
+      --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath rnnoise)" \
+      --replace-fail "GIT_TAG main" ""
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
@@ -113,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     cmake
     pkg-config
-    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (macdylibbundler.overrideAttrs {
@@ -136,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
     hamlib_4
     wxwidgets_3_2
-    python3.pkgs.numpy
   ]
   ++ (
     if stdenv.hostPlatform.isLinux then

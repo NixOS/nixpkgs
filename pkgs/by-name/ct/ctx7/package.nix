@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctx7";
-  version = "0.5.3";
+  version = "0.5.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upstash";
     repo = "context7";
     tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-J3FS0HPpkuriuxEyY1dluwdMovdvgWUTFgBxVUlf+GA=";
+    hash = "sha256-yyz4UraRm1JR/C7J2ib0nBU6zsNpKCWIWduTu7OlebM=";
   };
 
   nativeBuildInputs = [
