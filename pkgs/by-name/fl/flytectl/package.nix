@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "flytectl";
-  version = "0.9.8";
+  version = "1.16.8";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flyteorg";
     repo = "flyte";
-    tag = "flytectl/v${finalAttrs.version}";
-    hash = "sha256-p6fU+BLvhwK+4zDNBy4jwtvIll+s4jXmpYIF1mfeoB4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C1VrRdjX33NRqBEAYnmxav9UNECyyQDd+XKtJwYoWFI=";
   };
 
-  vendorHash = "sha256-h4L8BFzRiph4SBffVRH9TU5j7k+CZGshOV160mENAL0=";
+  vendorHash = "sha256-FJPvi+mfCUQFUu7Ikr2FmvuxEyi7GEer8ceOF9UulBE=";
 
   sourceRoot = "${finalAttrs.src.name}/flytectl";
 
@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-X github.com/flyteorg/flyte/flytestdlib/version.Version=v${finalAttrs.version}"
-    "-X github.com/flyteorg/flyte/flytestdlib/version.Build=${finalAttrs.src.tag}"
-    "-X github.com/flyteorg/flyte/flytestdlib/version.BuildTime=1970-01-01"
+    "-X github.com/flyteorg/flyte/flytestdlib/version.Build=${finalAttrs.src.rev}"
+    "-X github.com/flyteorg/flyte/flytestdlib/version.BuildTime=1970-01-01T00:00:00Z"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
