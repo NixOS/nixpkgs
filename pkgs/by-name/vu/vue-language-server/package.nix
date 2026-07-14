@@ -6,11 +6,15 @@
   pnpmConfigHook,
   pnpm_11,
   nodejs,
+  nodejs-slim_latest,
   nix-update-script,
   makeBinaryWrapper,
 }:
 let
-  pnpm = pnpm_11;
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627.
+  pnpm = pnpm_11.override {
+    nodejs-slim = nodejs-slim_latest;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
