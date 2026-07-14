@@ -403,7 +403,7 @@ rec {
   };
 
   simple-dark-gray-bottom = mkNixBackground {
-    pname = "simple-dark-gray";
+    pname = "simple-dark-gray-bottom";
     version = "2018-08-28";
     description = "Simple dark gray background for NixOS, specifically bootloaders and graphical login";
     src = fetchurl {
