@@ -54,7 +54,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://flyte.org/";
     changelog = "https://github.com/flyteorg/flyte/releases/tag/flytectl%2Fv${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.mcuste ];
+    maintainers = [
+      lib.maintainers.mcuste
+      lib.maintainers.ethancedwards8
+    ];
     mainProgram = "flytectl";
     platforms = lib.platforms.unix;
   };
