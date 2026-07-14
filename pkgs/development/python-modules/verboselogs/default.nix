@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "verboselogs";
   version = "1.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-hcIdbn0gdkdJ33KcOx6uv0iMXW0x+i880SoROi+qX4I=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
