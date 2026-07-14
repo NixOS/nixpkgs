@@ -94,6 +94,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       sentry-sdk
       url-normalize
       whitenoise
+      zipstream-ng
     ]
     ++ celery.optional-dependencies.redis
     ++ django-storages.optional-dependencies.s3;
