@@ -10,7 +10,6 @@ let
   cfg = config.services.xandikos;
 
   inherit (lib)
-    literalExpression
     mkDefault
     mkEnableOption
     mkIf
@@ -18,60 +17,95 @@ let
     mkOption
     mkPackageOption
     mkRemovedOptionModule
+    mkRenamedOptionModule
     ;
 
+  inherit (lib.cli) toCommandLineShell;
+  inherit (lib.generators) mkValueStringDefault;
+
   inherit (lib.types)
-    listOf
+    attrsOf
+    bool
+    int
     nullOr
+    oneOf
     port
     str
     submodule
     ;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xandikos" "port" ] [ "services" "xandikos" "settings" "port" ])
+    (mkRenamedOptionModule
+      [ "services" "xandikos" "routePrefix" ]
+      [ "services" "xandikos" "settings" "route-prefix" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "xandikos" "address" ]
+      [ "services" "xandikos" "settings" "listen-address" ]
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "xandikos"
+      "extraOptions"
+    ] "Use ${options.services.xandikos.settings} instead.")
+  ];
+
   options = {
     services.xandikos = {
       enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
 
       package = mkPackageOption pkgs "xandikos" { };
 
-      address = mkOption {
-        type = str;
-        default = "localhost";
-        description = ''
-          The IP address on which Xandikos will listen.
-          By default listens on localhost.
-        '';
-      };
+      settings = mkOption {
+        type = submodule {
+          freeformType = attrsOf (
+            nullOr (oneOf [
+              str
+              int
+              bool
+            ])
+          );
+          options = {
+            port = mkOption {
+              type = port;
+              default = 8080;
+              description = "The port of the Xandikos web application";
+            };
 
-      port = mkOption {
-        type = port;
-        default = 8080;
-        description = "The port of the Xandikos web application";
-      };
+            route-prefix = mkOption {
+              type = str;
+              default = "/";
+              description = ''
+                Path to Xandikos.
+                Useful when Xandikos is behind a reverse proxy.
+              '';
+            };
 
-      routePrefix = mkOption {
-        type = str;
-        default = "/";
-        description = ''
-          Path to Xandikos.
-          Useful when Xandikos is behind a reverse proxy.
-        '';
-      };
+            directory = mkOption {
+              type = str;
+              default = "/var/lib/xandikos";
+              description = "Path to where Xandikos stores its internal data.";
+            };
 
-      extraOptions = mkOption {
-        default = [ ];
-        type = listOf str;
-        example = literalExpression ''
-          [ "--autocreate"
-            "--defaults"
-            "--current-user-principal user"
-            "--dump-dav-xml"
-          ]
-        '';
-        description = ''
-          Extra command line arguments to pass to xandikos.
-        '';
+            listen-address = mkOption {
+              type = str;
+              default = "localhost";
+              description = ''
+                The IP address on which Xandikos will listen.
+              '';
+            };
+          };
+        };
+        default = { };
+        example = {
+          autocreate = true;
+          defaults = true;
+          current-user-principal = "user";
+          dump-dav-xml = true;
+        };
+        description = "Arguments passed to Xandikos";
       };
 
       domain = mkOption {
@@ -116,6 +150,7 @@ in
         RuntimeDirectory = "xandikos";
         StateDirectory = "xandikos";
         StateDirectoryMode = "0700";
+        RequiresMountsFor = [ cfg.settings.directory ];
         PrivateDevices = true;
         # Sandboxing
         CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
@@ -132,12 +167,14 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         ExecStart = ''
-          ${cfg.package}/bin/xandikos \
-            --directory /var/lib/xandikos \
-            --listen-address ${cfg.address} \
-            --port ${toString cfg.port} \
-            --route-prefix ${cfg.routePrefix} \
-            ${lib.concatStringsSep " " cfg.extraOptions}
+          ${cfg.package}/bin/xandikos ${
+            toCommandLineShell (optionName: {
+              option = if (builtins.stringLength optionName) > 1 then "--${optionName}" else "-${optionName}";
+              sep = null;
+              explicitBool = false;
+              formatArg = mkValueStringDefault { };
+            }) cfg.settings
+          }
         '';
       };
     };
@@ -152,8 +189,8 @@ in
           "warnings"
         ])
         {
-          locations."${cfg.routePrefix}" = {
-            proxyPass = mkDefault "http://${cfg.address}:${toString cfg.port}/";
+          locations."${cfg.settings.route-prefix}" = {
+            proxyPass = mkDefault "http://${cfg.settings.listen-address}:${toString cfg.settings.port}/";
             recommendedProxySettings = mkDefault true;
           };
         }
