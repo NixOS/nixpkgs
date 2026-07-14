@@ -12,6 +12,7 @@
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   dbus,
+  draco,
   embree,
   fetchFromGitHub,
   fetchzip,
@@ -49,6 +50,7 @@
   makeWrapper,
   manifold,
   mesa,
+  meshoptimizer,
   nix-update-script,
   onetbb,
   openal,
@@ -116,12 +118,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FnReSNsP8U1/4jSgZN3cMQV2qkP7OZPh0f/9JA1lAxs=";
+    hash = "sha256-V2+Oc7GT31JvWccffzUaingEs8CtSFaazgQ+YdZUB7M=";
   };
 
   patches = [
@@ -129,31 +131,33 @@ stdenv'.mkDerivation (finalAttrs: {
     # ceres-solver dependency propagates eigen 3 and appears to be incompatible
     # with more recent versions.
     ./eigen-3-compat.patch
-    # Required due to `-Werror=format-security` in nixpkgs
-    # https://projects.blender.org/blender/blender/commit/470127ede2448de50a6936b8484b3c382c76d596
-    ./fix-quite-clog-warning.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin.patch
   ];
 
-  postPatch =
-    (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      : > build_files/cmake/platform/platform_apple_xcode.cmake
-      substituteInPlace source/creator/CMakeLists.txt \
-        --replace-fail '${"$"}{LIBDIR}/python' \
-                  '${python3}' \
-        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
-      substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
-                  '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
-        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
-                  '${lib.getLib brotli}/lib/libbrotlidec.dylib'
-    '')
-    + (lib.optionalString rocmSupport ''
-      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
-    '');
+  postPatch = ''
+    substituteInPlace intern/ghost/intern/GHOST_SystemPathsUnix.cc \
+      --replace-fail \
+        'static const char *static_libs_path = PREFIX "/" BLENDER_INSTALL_LIBDIR;' \
+        'static const char *static_libs_path = BLENDER_INSTALL_LIBDIR;'
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    : > build_files/cmake/platform/platform_apple_xcode.cmake
+    substituteInPlace source/creator/CMakeLists.txt \
+      --replace-fail '${"$"}{LIBDIR}/python' \
+                '${python3}' \
+      --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
+    substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+      --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
+                '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
+      --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
+                '${lib.getLib brotli}/lib/libbrotlidec.dylib'
+  '')
+  + (lib.optionalString rocmSupport ''
+    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
+    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+  '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
@@ -247,6 +251,7 @@ stdenv'.mkDerivation (finalAttrs: {
     alembic
     boost
     ceres-solver
+    draco
     ffmpeg_7
     fftw
     fftwFloat
@@ -264,6 +269,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     manifold
+    meshoptimizer
     opencolorio
     openexr
     openimageio
