@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
         libxrandr
         xdg-utils
         p7zip
+        unzip
 
         # GTK filepicker
         gsettings-desktop-schemas

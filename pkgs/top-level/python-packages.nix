@@ -1595,6 +1595,8 @@ self: super: with self; {
 
   autobahn = callPackage ../development/python-modules/autobahn { };
 
+  autobean = callPackage ../development/python-modules/autobean { };
+
   autocommand = callPackage ../development/python-modules/autocommand { };
 
   autodocsumm = callPackage ../development/python-modules/autodocsumm { };
