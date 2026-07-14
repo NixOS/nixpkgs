@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "versiontools";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1xhl6kl7f4srgnw6zw4lr8j2z5vmrbaa83nzn2c9r2m1hwl36sd9";
   };
+
+  build-system = [ setuptools ];
 
   doCheck = (!isPy3k);
 
