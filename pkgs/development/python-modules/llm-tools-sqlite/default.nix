@@ -22,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-VAmK4cXzZWTWCU92TwMdhNJPvYPZ88t5BZe8vo60SZY=";
   };
 
+  patches = [
+    ./fix-test.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [ llm ];
