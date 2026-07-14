@@ -2,16 +2,19 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "varint";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "a6ecc02377ac5ee9d65a6a8ad45c9ff1dac8ccee19400a5950fb51d594214ca5";
   };
+
+  build-system = [ setuptools ];
 
   # No tests are available
   doCheck = false;
