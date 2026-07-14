@@ -50,8 +50,11 @@ buildPythonPackage (finalAttrs: {
     patch -p1 -d "$out/lib/python"*/site-packages < ${./subprocess-pythonpath.patch}
   '';
 
+  # 3.14.0 dependency check fails with pandas >= 3.0. But the code changes required are minimal
+  # (strings are now `str` instead of `numpy.object`.)
   pythonRelaxDeps = [
     "cryptography"
+    "pandas"
   ];
 
   dependencies = [
