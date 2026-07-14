@@ -11,7 +11,6 @@
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
-  nix-update-script,
 }:
 let
   yarn-berry = yarn-berry_4;
@@ -183,11 +182,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://losslesscut.app/";
+    changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       shelvacu
