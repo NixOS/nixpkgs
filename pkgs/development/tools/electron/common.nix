@@ -106,12 +106,6 @@ in
 
   src = null;
 
-  patches =
-    base.patches
-    ++ lib.optionals (lib.versions.major info.version == "40") [
-      ./40-angle-patchdir.patch
-    ];
-
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
 

@@ -4858,10 +4858,7 @@ with pkgs;
       in
       {
         electron_39 = electron_39-bin;
-        electron_40 = getElectronPkg {
-          src = electron-source.electron_40;
-          bin = electron_40-bin;
-        };
+        electron_40 = electron_40-bin;
         electron_41 = getElectronPkg {
           src = electron-source.electron_41;
           bin = electron_41-bin;
