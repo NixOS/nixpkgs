@@ -19469,6 +19469,8 @@ self: super: with self; {
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
+  starlark = callPackage ../development/python-modules/starlark { };
+
   starlette = callPackage ../development/python-modules/starlette { };
 
   starlette-admin = callPackage ../development/python-modules/starlette-admin { };
