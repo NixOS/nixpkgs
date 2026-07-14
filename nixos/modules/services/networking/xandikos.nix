@@ -10,6 +10,7 @@ let
   cfg = config.services.xandikos;
 
   inherit (lib)
+    getExe
     mkDefault
     mkEnableOption
     mkIf
@@ -173,7 +174,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         ExecStart = ''
-          ${cfg.package}/bin/xandikos ${
+          ${getExe cfg.package} ${
             toCommandLineShell (optionName: {
               option = if (builtins.stringLength optionName) > 1 then "--${optionName}" else "-${optionName}";
               sep = null;
