@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "material-maker";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "RodZill4";
     repo = "material-maker";
     rev = finalAttrs.version;
-    hash = "sha256-jSbauK9eXoTW2xjZsipWcPs/8qmK8ztmT+doCgu8zrU=";
+    hash = "sha256-/oBAbdYNfIeNKnv1NGP05Nk5G8gov1yqRsG0jnFMW/Y=";
   };
 
   nativeBuildInputs = [ godot_4_6 ];
