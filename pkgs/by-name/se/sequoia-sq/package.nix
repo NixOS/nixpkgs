@@ -79,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       minijackson
       doronbehar
       dvn0
+      anish
     ];
     mainProgram = "sq";
   };
