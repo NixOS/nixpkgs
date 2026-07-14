@@ -957,6 +957,7 @@ in
   lldap = runTest ./lldap.nix;
   local-content-share = runTest ./local-content-share.nix;
   locale = runTest ./locale.nix;
+  localed-keyboard = runTest ./localed-keyboard.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
