@@ -186510,6 +186510,7 @@ self: {
       testHaskellDepends = [ base ];
       description = "Read Parquet datasets from HuggingFace into dataframes";
       license = lib.meta.getLicenseFromSpdxId "MIT";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -576232,8 +576233,6 @@ self: {
       ];
       description = "Hot reload and reload-surviving values with GHCi";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 

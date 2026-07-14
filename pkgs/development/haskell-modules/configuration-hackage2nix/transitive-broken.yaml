@@ -677,6 +677,7 @@ dont-distribute-packages:
  - datafix
  - dataflow
  - dataframe
+ - dataframe-huggingface
  - dataframe-lazy
  - dataframe-parquet
  - dataframe-parquet-th
