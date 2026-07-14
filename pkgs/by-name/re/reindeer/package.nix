@@ -19,6 +19,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-nJU9ClYxRkAfFkOq1V7k34pjdqJntDr3gJekUibq304=";
+  patches = [
+    # increase_nofile_limit caps at kern.maxfilesperproc on macOS,
+    # which can be lower than an already-raised soft limit (a-la nix).
+    # we restore the OG limit
+    ./fix-rlimit-lowering.patch
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
