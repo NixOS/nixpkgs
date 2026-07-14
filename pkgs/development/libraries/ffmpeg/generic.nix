@@ -123,7 +123,7 @@
   withOpenjpeg ? withHeadlessDeps, # JPEG 2000 de/encoder
   withOpenmpt ? withHeadlessDeps, # Tracked music files decoder
   withOpus ? withHeadlessDeps, # Opus de/encoder
-  withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin, # libplacebo video processing library
+  withPlacebo ? withFullDeps, # libplacebo video processing library
   withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux, # Pulseaudio input support
   withQrencode ? withFullDeps && lib.versionAtLeast version "7", # QR encode generation
   withQuirc ? withFullDeps && lib.versionAtLeast version "7", # QR decoding
@@ -160,7 +160,7 @@
   withVorbis ? withHeadlessDeps, # Vorbis de/encoding, native encoder exists
   withVpl ? withFullDeps && stdenv.hostPlatform.isLinux, # Hardware acceleration via intel libvpl
   withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform, # VP8 & VP9 de/encoding
-  withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin,
+  withVulkan ? withHeadlessDeps && (!stdenv.hostPlatform.isDarwin || withFullDeps),
   withVvenc ? withFullDeps && lib.versionAtLeast version "7.1", # H.266/VVC encoding
   withWebp ? withHeadlessDeps, # WebP encoder
   withWhisper ? withFullDeps && lib.versionAtLeast version "8.0", # Whisper speech recognition
@@ -1059,7 +1059,7 @@ stdenv.mkDerivation (
         addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
       ''
       # https://trac.ffmpeg.org/ticket/10809
-      + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
+      + optionalString (versionAtLeast version "5.0" && withVulkan && stdenv.hostPlatform.isLinux) ''
         patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${
           lib.makeLibraryPath [ vulkan-loader ]
         }
