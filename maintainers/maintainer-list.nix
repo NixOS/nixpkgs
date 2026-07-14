@@ -11890,12 +11890,6 @@
     name = "Silvan Mosberger";
     keys = [ { fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170"; } ];
   };
-  iniw = {
-    email = "git@vini.cat";
-    github = "iniw";
-    githubId = 30220881;
-    name = "Vinicius Deolindo";
-  };
   insipx = {
     email = "github@andrewplaza.dev";
     github = "insipx";
@@ -30299,6 +30293,12 @@
     github = "wineee";
     githubId = 22803888;
     name = "Lu Hongxu";
+  };
+  wini = {
+    email = "dev@vini.cat";
+    github = "iniw";
+    githubId = 30220881;
+    name = "Vinicius Deolindo";
   };
   winpat = {
     email = "patrickwinter@posteo.ch";
