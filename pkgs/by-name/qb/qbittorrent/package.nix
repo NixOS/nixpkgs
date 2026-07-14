@@ -6,6 +6,7 @@
   guiSupport ? true,
   lib,
   libtorrent-rasterbar,
+  llvmPackages,
   nix-update-script,
   openssl,
   pkg-config,
@@ -35,7 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     qt6.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   buildInputs = [
     boost
@@ -52,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DVERBOSE_CONFIGURE=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Work around ld64's libc++ hardening issue.
+    # TODO: Remove once #536365 reaches this branch.
+    "-DCMAKE_LINKER_TYPE=LLD"
   ]
   ++ lib.optionals (!guiSupport) [
     "-DGUI=OFF"
