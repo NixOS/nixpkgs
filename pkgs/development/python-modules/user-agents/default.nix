@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   ua-parser,
 }:
 
 buildPythonPackage rec {
   pname = "user-agents";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI is missing devices.json
   src = fetchFromGitHub {
@@ -18,7 +19,9 @@ buildPythonPackage rec {
     sha256 = "0pcbjqj21c2ixhl414bh2h8khi8y1igzfpkyqwan1pakix0lq45a";
   };
 
-  propagatedBuildInputs = [ ua-parser ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ua-parser ];
 
   meta = {
     description = "Python library to identify devices by parsing user agent strings";
