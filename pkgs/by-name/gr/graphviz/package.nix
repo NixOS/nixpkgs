@@ -22,7 +22,7 @@
   libxrender,
   python3,
   withXorg ? true,
-  withQuartz ? false,
+  withQuartz ? stdenv.hostPlatform.isDarwin,
 
   # for passthru.tests
   exiv2,

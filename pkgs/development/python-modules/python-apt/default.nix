@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "apt";
+  pname = "python-apt";
   version = "3.1.0";
 
   pyproject = true;

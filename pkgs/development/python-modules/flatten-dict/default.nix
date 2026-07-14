@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
 }:
 
@@ -19,6 +20,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

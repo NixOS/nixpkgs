@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   prek,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -21,6 +22,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   nativeCheckInputs = [
     prek

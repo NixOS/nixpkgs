@@ -17,10 +17,8 @@
   runtimeShell,
   # List of Node.js runtimes the package should support
   nodeRuntimes ? [
-    # Node.js 20.x has reached EOL and is marked as insecure in Nixpkgs, thus omitted here
     "node24"
   ],
-  nodejs_20,
   nodejs_24,
 }:
 
@@ -28,7 +26,7 @@
 assert builtins.all (
   x:
   builtins.elem x [
-    "node20"
+    # Node.js 20.x has reached EOL and was removed from Nixpkgs, thus omitted here
     "node24"
   ]
 ) nodeRuntimes;
@@ -250,9 +248,6 @@ buildDotnetModule (finalAttrs: {
     export GITHUB_ACTIONS_RUNNER_TRACE=1
     mkdir -p _layout/externals
   ''
-  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} _layout/externals/node20
-  ''
   + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
     ln -s ${nodejs_24} _layout/externals/node24
   '';
@@ -293,9 +288,6 @@ buildDotnetModule (finalAttrs: {
     # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-  ''
-  + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
-    ln -s ${nodejs_20} $out/lib/externals/node20
   ''
   + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
     ln -s ${nodejs_24} $out/lib/externals/node24

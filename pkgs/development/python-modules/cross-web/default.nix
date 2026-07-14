@@ -10,6 +10,7 @@
   hatchling,
   httpx,
   litestar,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
@@ -34,6 +35,10 @@ buildPythonPackage (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-JxwzTU17jCQMFNCtmcZVAZQnwDZjHNxCGNdKhkCMoPs=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

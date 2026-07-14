@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-AkdWWiw1FMs/uuJNSocMBpReXY2mrxouQfWuu4ntRWY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyanglianwater/_version.py \
+      --replace-fail '__version__ = "0.0.0"' '__version__ = "${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

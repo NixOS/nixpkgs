@@ -40,6 +40,9 @@ lib.extendMkDerivation {
     {
       name = "typst-package-${finalAttrs.pname}-${finalAttrs.version}";
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       dontBuild = true;
 
       installPhase =

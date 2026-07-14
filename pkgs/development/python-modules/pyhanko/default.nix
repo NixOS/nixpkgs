@@ -153,6 +153,10 @@ buildPythonPackage (finalAttrs: {
 
       build-system = [ setuptools ];
 
+      nativeBuildInputs = [
+        pyprojectVersionPatchHook
+      ];
+
       dependencies = [
         certomancer
         pyhanko-certvalidator

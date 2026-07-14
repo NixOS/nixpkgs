@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "libvalkey-py";
+  pname = "libvalkey";
   version = "4.0.1";
   pyproject = true;
 

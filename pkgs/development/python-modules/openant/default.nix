@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "openant-unstable";
+  pname = "openant";
   version = "1.3.1";
   pyproject = true;
 

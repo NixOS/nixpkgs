@@ -23,6 +23,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "caio"
+  ];
+
   dependencies = [ caio ];
 
   nativeCheckInputs = [

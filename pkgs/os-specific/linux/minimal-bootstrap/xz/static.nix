@@ -12,7 +12,6 @@
   gawk,
   gnutar,
   gzip,
-  musl,
 }:
 let
   pname = "xz";
@@ -30,7 +29,6 @@ bash.runCommand "${pname}-${version}"
     nativeBuildInputs = [
       binutils
       gcc
-      musl
       gnumake
       gnused
       gnugrep
@@ -39,7 +37,7 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    disallowedReferences = [ musl ];
+    disallowedReferences = [ gcc ];
 
     passthru.tests.get-version =
       result:
@@ -66,10 +64,8 @@ bash.runCommand "${pname}-${version}"
     cd xz-${version}
 
     # Configure
-    export CC=musl-gcc
     export CFLAGS="-g0 -O2 -DNDEBUG"
     export CXXFLAGS="$CFLAGS"
-    export LDFLAGS=-static
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
@@ -87,7 +83,7 @@ bash.runCommand "${pname}-${version}"
       --disable-assembler
 
     # Build
-    make -j $NIX_BUILD_CORES LDFLAGS=-all-static
+    make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip

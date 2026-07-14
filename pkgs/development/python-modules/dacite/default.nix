@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   pytestCheckHook,
   pythonAtLeast,
@@ -18,6 +19,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-mAPqWvBpkTbtzHpwtCSDXMNkoc8/hbRH3OIEeK2yStU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-version-in-setup.py.patch";
+      url = "https://github.com/konradhalas/dacite/commit/daad7e4a15569321d3cf118f8083a71a65d7e044.patch";
+      hash = "sha256-5udIgEf2P9SCZVGnPg/rMtFtkPJyLw9RWvVO47BddK8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -17,6 +17,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Jwj07yAl9LrHRy1y3cjipObqEcwP+j+a5dcvXj02kgA=";
   };
 
+  postPatch = ''
+    substituteInPlace AWSIoTPythonSDK/__init__.py \
+      --replace-fail '__version__ = "1.5.4"' '__version__ = "${finalAttrs.version}"'
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   # Module has no tests

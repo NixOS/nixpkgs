@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jEw6L2/139oo4sGprl9Xp0DTarxAK1bEF2ak2kHWSAs=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+  patches = [
     (fetchpatch {
       name = "libcxx-compat.patch";
       url = "https://github.com/awesomized/libmemcached/commit/547460c12287a34a5993045157a0e13e14203f92.patch";

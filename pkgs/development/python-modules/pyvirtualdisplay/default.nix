@@ -21,7 +21,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  vncdo,
+  vncdotool,
 }:
 
 buildPythonPackage rec {
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     psutil
     pytest-timeout
     pytestCheckHook
-    (vncdo.overridePythonAttrs { doCheck = false; })
+    (vncdotool.overridePythonAttrs { doCheck = false; })
     xorg-server
     xmessage
     xvfb

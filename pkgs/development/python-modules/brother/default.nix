@@ -4,6 +4,7 @@
   fetchFromGitHub,
   freezegun,
   dacite,
+  pyprojectVersionPatchHook,
   pysnmp,
   pytest-asyncio,
   pytest-error-for-skips,
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-7m0fakQCckIpG8Tc09P81xzHlIgeal9L2BwerUvBuX8=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 

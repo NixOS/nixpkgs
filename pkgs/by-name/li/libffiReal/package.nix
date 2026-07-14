@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.5.2";
+  version = "3.7.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-86MIKiOzfCk6T80QUxR7Nx8v+R+n6hsqUuM1Z2usgtw=";
+    hash = "sha256-IlXFpjjftRv2fCChKnu3DRf+senqurrAX1VzFG9YZDY=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/libffi/libffi/pull/944
     ./freebsd-tsan-pthread.patch
   ];
+
+  # To workaround https://github.com/libffi/libffi/issues/993, we empty the test file:
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin "echo 'int main (void) { return 0; }' > testsuite/libffi.call/i128-1.c";
 
   strictDeps = true;
   outputs = [

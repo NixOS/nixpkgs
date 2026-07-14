@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
   isPyPy,
   pythonOlder,
 
@@ -18,7 +17,6 @@
   # dependencies
   aiohappyeyeballs,
   aiosignal,
-  async-timeout,
   attrs,
   backports-zstd,
   frozenlist,
@@ -35,7 +33,6 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isa-l,
   isal,
   proxy-py,
   pytest-codspeed,
@@ -114,8 +111,7 @@ buildPythonPackage (finalAttrs: {
     blockbuster
     freezegun
     gunicorn
-    # broken on aarch64-darwin
-    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
+    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub

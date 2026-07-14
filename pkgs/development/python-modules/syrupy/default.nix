@@ -5,6 +5,7 @@
   hatchling,
   hypothesis,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest,
   pytest-xdist,
   invoke,
@@ -23,6 +24,11 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    # the commit updating the version happens only after tagging
+    pyprojectVersionPatchHook
+  ];
 
   buildInputs = [ pytest ];
 

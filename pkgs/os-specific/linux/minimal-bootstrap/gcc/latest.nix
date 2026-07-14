@@ -126,10 +126,12 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --with-native-system-header-dir=/include \
-      --with-sysroot=${musl} \
+      --with-native-system-header-dir=${musl}/include \
+      --with-sysroot=/ \
       --enable-languages=c,c++ \
       --enable-checking=release \
+      --enable-static \
+      --disable-shared \
       --disable-bootstrap \
       --disable-dependency-tracking \
       --disable-libsanitizer \
@@ -144,8 +146,7 @@ bash.runCommand "${pname}-${version}"
       --disable-multilib \
       --disable-nls \
       --disable-plugin \
-      --without-isl \
-      --disable-shared
+      --without-isl
 
     # Build
     make -j $NIX_BUILD_CORES
@@ -155,4 +156,14 @@ bash.runCommand "${pname}-${version}"
 
     # libstdc++ gdb pretty-printers + man pages are unused downstream.
     rm -rf $out/share/gcc-*/python $out/share/man $out/share/info
+
+    if [ -d "$out/lib64" ]; then
+      shopt -s dotglob
+      for lib in $out/lib64/*; do
+        mv --no-clobber "$lib" "$out/lib/"
+      done
+      shopt -u dotglob
+      rm -rf "$out/lib64"
+      ln -s lib "$out/lib64"
+    fi
   ''

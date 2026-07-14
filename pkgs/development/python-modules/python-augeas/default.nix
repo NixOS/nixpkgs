@@ -10,7 +10,7 @@
   setuptools,
 }:
 buildPythonPackage (finalAttrs: {
-  pname = "augeas";
+  pname = "python-augeas";
   version = "1.2.0";
   pyproject = true;
 

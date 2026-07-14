@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   libpng,
-  openmpCheckPhaseHook,
+  checkPhaseThreadLimitHook,
   glib, # just passthru
 
   # for passthru.tests
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    openmpCheckPhaseHook
+    checkPhaseThreadLimitHook
     __flattenIncludeHackHook
   ];
 

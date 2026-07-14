@@ -42,6 +42,8 @@ buildPythonPackage rec {
     hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 
+  env.CGAL_PYTHON_MODULE_VERSION = version;
+
   dontUseCmakeConfigure = true;
 
   build-system = [

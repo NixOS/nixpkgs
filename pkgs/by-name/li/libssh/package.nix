@@ -8,6 +8,9 @@
   openssl,
   libsodium,
 
+  withGssapi ? false,
+  krb5,
+
   # for passthru.tests
   ffmpeg,
   sshping,
@@ -28,20 +31,29 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
-  # Don’t build examples, which are not installed and require additional dependencies not
-  # included in `buildInputs` such as libx11.
-  cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
+  cmakeFlags = [
+    # Don’t build examples, which are not installed and require additional dependencies not
+    # included in `buildInputs` such as libx11.
+    "-DWITH_EXAMPLES=OFF"
+
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
+  ];
 
   buildInputs = [
     zlib
     openssl
     libsodium
-  ];
+  ]
+  ++ lib.optional withGssapi krb5;
 
   nativeBuildInputs = [
     cmake

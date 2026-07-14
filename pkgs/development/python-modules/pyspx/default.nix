@@ -20,6 +20,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.5.0"' 'version="${version}"'
+  '';
+
   build-system = [
     cffi
     setuptools

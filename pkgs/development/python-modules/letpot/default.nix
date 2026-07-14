@@ -6,6 +6,7 @@
   freezegun,
   lib,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -21,6 +22,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-w4WS0AyNd4dNtA/fBKieDW2YXwBFltRkJvaGemRjsv4=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

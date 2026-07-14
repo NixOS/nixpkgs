@@ -60,7 +60,7 @@ let
     yubico
     setuptools
     jinja2
-    augeas
+    python-augeas
     samba
     ifaddr
   ];

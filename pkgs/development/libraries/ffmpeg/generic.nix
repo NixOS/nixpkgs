@@ -249,7 +249,6 @@
   celt,
   chromaprint,
   codec2,
-  clang,
   dav1d,
   davs2,
   fdk_aac,
@@ -805,6 +804,10 @@ stdenv.mkDerivation (
       "--cc=${stdenv.cc.targetPrefix}clang"
       "--cxx=${stdenv.cc.targetPrefix}clang++"
     ]
+    ++ optionals withCudaLLVM [
+      # Unwrapped compiler because it will be retargeted and used freestanding with --cuda-device-only.
+      "--nvcc=${lib.getExe buildPackages.clang.cc}"
+    ]
     ++ optionals withMetal [
       "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
       "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -834,7 +837,6 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang.cc ]
     ++ optionals withCudaNVCC [ cuda_nvcc ]
     # TODO: Clean up on `staging`.
     ++ optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];

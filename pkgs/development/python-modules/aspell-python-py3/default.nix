@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "aspell-python";
+  pname = "aspell-python-py3";
   version = "1.15";
   pyproject = true;
 

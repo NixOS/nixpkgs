@@ -22,6 +22,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-+OYMe63sX5TtvJpNn6dzvnephlhS/MyFXmUerYZqF5A=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
+
   build-system = [
     setuptools
   ];

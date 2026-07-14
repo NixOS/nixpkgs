@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
-  version = "1.6.5";
+  version = "1.6.6";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NP2CTDbvn1dVlNVXJyhBLduMUi9ga2yRPvi1qACq/E4=";
+    hash = "sha256-dn0idSVM4O/q6sZEGf+fTwrUcNE072cvXFVrKrt4a8s=";
   };
 
   depsBuildBuild = [
