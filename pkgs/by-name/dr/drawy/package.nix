@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "drawy";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Y6CAdHgcCK9lIae+CwqSGml+FAvVzLzyIAKdw85dKmQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lFI4q5/RKA49rcI2iSJuwYfShgOjM+EAfXM+5ZSG8SA=";
   };
 
   __structuredAttrs = true;
