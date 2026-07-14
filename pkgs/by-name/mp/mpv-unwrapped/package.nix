@@ -37,6 +37,7 @@
   libva,
   libvdpau,
   libxkbcommon,
+  llvmPackages,
   lua,
   makeBinaryWrapper,
   libgbm,
@@ -162,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     buildPackages.darwin.sigtool
     swift
+    llvmPackages.lld
     makeBinaryWrapper
   ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
@@ -233,6 +235,9 @@ stdenv.mkDerivation (finalAttrs: {
   # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
   env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
+    # Work around ld64's libc++ hardening issue.
+    # TODO: Remove once #536365 reaches this branch.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
