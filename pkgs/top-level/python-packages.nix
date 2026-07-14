@@ -18732,6 +18732,8 @@ self: super: with self; {
 
   slidge = callPackage ../development/python-modules/slidge { };
 
+  slidge-style-parser = callPackage ../development/python-modules/slidge-style-parser { };
+
   slip10 = callPackage ../development/python-modules/slip10 { };
 
   slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
