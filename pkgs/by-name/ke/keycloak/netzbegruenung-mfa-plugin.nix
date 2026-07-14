@@ -3,9 +3,12 @@
   maven,
   lib,
   fetchFromGitHub,
+  pname,
+  module,
+  description,
 }:
 maven.buildMavenPackage (finalAttrs: {
-  pname = "keycloak-2fa-sms-authenticator";
+  inherit pname;
   version = "26.6.5";
 
   src = fetchFromGitHub {
@@ -31,15 +34,14 @@ maven.buildMavenPackage (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 sms-authenticator/target/netzbegruenung.sms-authenticator-v${finalAttrs.version}.jar \
-      $out/keycloak-2fa-sms-authenticator.jar
+    install -Dm644 ${module}/target/netzbegruenung.${module}-v${finalAttrs.version}.jar $out/${pname}.jar
     runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/netzbegruenung/keycloak-mfa-plugins";
     changelog = "https://github.com/netzbegruenung/keycloak-mfa-plugins/releases/tag/v${finalAttrs.version}";
-    description = "Keycloak authentication provider for 2FA via SMS";
+    inherit description;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anish ];
   };
