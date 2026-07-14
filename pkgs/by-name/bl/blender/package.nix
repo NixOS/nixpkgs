@@ -86,6 +86,11 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
+  level-zero,
+  intel-compute-runtime,
+  intel-llvm,
+  intel-graphics-compiler,
+  oneapiSupport ? false,
 }:
 
 let
@@ -158,6 +163,10 @@ stdenv'.mkDerivation (finalAttrs: {
   + (lib.optionalString rocmSupport ''
     substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
     substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+  '')
+  + (lib.optionalString oneapiSupport ''
+    substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
+      --replace-fail ''\'''${cycles_kernel_runtime_lib_target_path}' '"''${CMAKE_INSTALL_LIBDIR}"'
   '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -177,7 +186,8 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
+    (lib.cmakeBool "WITH_CYCLES_ONEAPI_BINARIES" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
@@ -204,6 +214,13 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
+  ]
+  ++ lib.optionals oneapiSupport [
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
+    (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
+    (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
@@ -236,10 +253,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm.dev
     makeWrapper
     python3Packages.wrapPython
   ]
+  ++ lib.optional oneapiSupport addDriverRunpath
+  ++ lib.optional (!oneapiSupport) llvmPackages.llvm.dev
   ++ lib.optionals cudaSupport [
     addDriverRunpath
     cudaPackages.cuda_nvcc
@@ -289,6 +307,10 @@ stdenv'.mkDerivation (finalAttrs: {
     rubberband
     zlib
     zstd
+  ]
+  ++ lib.optionals oneapiSupport [
+    intel-compute-runtime
+    intel-llvm
   ]
   ++ lib.optional embreeSupport embree
   ++ lib.optional rocmSupport rocmPackages.clr
@@ -370,10 +392,10 @@ stdenv'.mkDerivation (finalAttrs: {
         --add-flags '--python-use-system-env'
     '';
 
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
+  # Set RUNPATH so that libs in /run/opengl-driver(-32)/lib can be
   # found. See the explanation in libglvnd.
   postFixup =
-    lib.optionalString cudaSupport ''
+    lib.optionalString (cudaSupport || oneapiSupport) ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         addDriverRunpath "$program"
       done
