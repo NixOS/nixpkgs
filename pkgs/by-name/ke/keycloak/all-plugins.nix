@@ -7,9 +7,11 @@
   junixsocket-native-common,
 }:
 {
+  apple-identity-provider-keycloak = callPackage ./apple-identity-provider-keycloak { };
   keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
   keycloak-discord = callPackage ./keycloak-discord { };
   keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
+  keycloak-home-idp-discovery = callPackage ./keycloak-home-idp-discovery { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
   keycloak-orgs = callPackage ./keycloak-orgs { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
