@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   include,
   rpcgen,
@@ -39,6 +41,9 @@ mkDerivation {
     "etc/shells"
     "include/paths.h"
     "include/gssapi"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "contrib/arm-optimized-routines"
   ]
   ++ extraSrc;
 

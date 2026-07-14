@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   fetchpatch,
   include,
@@ -32,6 +34,9 @@ mkDerivation {
     "sys/libkern"
     "sys/crypto"
     "include/gssapi"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "contrib/arm-optimized-routines"
   ]
   ++ extraSrc;
 
