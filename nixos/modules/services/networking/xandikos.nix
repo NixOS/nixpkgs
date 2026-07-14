@@ -6,10 +6,27 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xandikos;
+
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    ;
+
+  inherit (lib.types)
+    listOf
+    nullOr
+    port
+    str
+    submodule
+    ;
 in
 {
   options = {
@@ -19,7 +36,7 @@ in
       package = mkPackageOption pkgs "xandikos" { };
 
       address = mkOption {
-        type = types.str;
+        type = str;
         default = "localhost";
         description = ''
           The IP address on which Xandikos will listen.
@@ -28,13 +45,13 @@ in
       };
 
       port = mkOption {
-        type = types.port;
+        type = port;
         default = 8080;
         description = "The port of the Xandikos web application";
       };
 
       routePrefix = mkOption {
-        type = types.str;
+        type = str;
         default = "/";
         description = ''
           Path to Xandikos.
@@ -44,7 +61,7 @@ in
 
       extraOptions = mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = listOf str;
         example = literalExpression ''
           [ "--autocreate"
             "--defaults"
@@ -58,7 +75,7 @@ in
       };
 
       domain = mkOption {
-        type = types.nullOr types.str;
+        type = nullOr str;
         description = ''
           If non-null, enables an nginx reverse proxy virtual host at this FQDN for xandikos.
         '';
