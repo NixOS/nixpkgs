@@ -47,7 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = [ ];
+    maintainers = [
+      lib.maintainers.magicquark
+    ];
     license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
     platforms = lib.platforms.unix;
