@@ -240,13 +240,18 @@ def parse_args(
         }
     )
 
-    if args.help or args.action is None:
+    if args.help:
         if WITH_SHELL_FILES:
             r = run(["man", "8", EXECUTABLE], check=False)
             parser.exit(r.returncode)
         else:
             parser.print_help()
             parser.exit()
+
+    if args.action is None:
+        parser.error(
+            f"No valid subcommands. Type {parser.prog} --help for more information"
+        )
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
