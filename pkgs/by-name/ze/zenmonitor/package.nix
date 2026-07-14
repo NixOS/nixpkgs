@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "zenmonitor";
-  version = "unstable-2025-06-12";
+  version = "1.5.0-unstable-2025-06-12";
 
   src = fetchFromGitHub {
     owner = "detiam";
