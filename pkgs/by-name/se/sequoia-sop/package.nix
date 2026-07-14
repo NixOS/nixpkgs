@@ -35,15 +35,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "cli" ];
 
-  env.ASSET_OUT_DIR = "/tmp/";
+  env.ASSET_OUT_DIR = "target";
 
   # Install manual pages
   postInstall = ''
-    installManPage /tmp/man-pages/*.*
+    installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
     installShellCompletion --cmd sqop \
-      --bash /tmp/shell-completions/sqop.bash \
-      --fish /tmp/shell-completions/sqop.fish \
-      --zsh /tmp/shell-completions/_sqop
+      --bash ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sqop.bash \
+      --fish ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sqop.fish \
+      --zsh ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_sqop
     # Also elv and powershell are generated there
   '';
 
