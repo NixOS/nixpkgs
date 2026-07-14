@@ -11915,6 +11915,8 @@ self: super: with self; {
     callPackage ../development/python-modules/nvidia-cutlass-dsl-libs-base
       { };
 
+  nvidia-dlfw-inspect = callPackage ../development/python-modules/nvidia-dlfw-inspect { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };
