@@ -53,7 +53,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "odm-4-unstable-2026-07-13";
+  version = "0.5.1-unstable-2026-07-13";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -187,7 +187,10 @@ buildPythonPackage (finalAttrs: {
     );
 
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
+      extraArgs = [
+        "--version=branch"
+        "--version-regex=v(.*)"
+      ];
     };
   };
 
