@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   dbus,
   gnupg,
@@ -23,6 +24,15 @@ python3.pkgs.buildPythonApplication {
     rev = "6335c85d9a790a6472e3de6eff87a15208caa5dc";
     hash = "sha256-SSmI3HJCUWuwFXCu3Zg66X18POlzp3ADRj7HeE8GRio=";
   };
+
+  patches = [
+    # Fix startup crash on Python 3.14
+    # https://github.com/mdellweg/pass_secret_service/pull/44
+    (fetchpatch {
+      url = "https://github.com/mdellweg/pass_secret_service/commit/b88e7bac743c9037b012149b13ebfdaa279b8a5d.patch";
+      hash = "sha256-BCLPKZ6a8nj1W04YaEmrVtDVFIEgm7yt72hN0YAnWGU=";
+    })
+  ];
 
   # Need to specify session.conf file for tests because it won't be found under
   # /etc/ in check phase.
