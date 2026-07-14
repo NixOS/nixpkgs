@@ -4177,6 +4177,8 @@ self: super: with self; {
 
   deepsearch-toolkit = callPackage ../development/python-modules/deepsearch-toolkit { };
 
+  deepspeed = callPackage ../development/python-modules/deepspeed { };
+
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
   deepwave = callPackage ../development/python-modules/deepwave { };
