@@ -4,9 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  nixosTests,
   opentelemetry-collector-builder,
-  pkgs,
   go,
   git,
   cacert,
@@ -17,12 +15,10 @@ let
   builder = "${opentelemetry-collector-builder}/bin/ocb";
 
   # Keep the version in sync with the builder.
-  rev = opentelemetry-collector-builder.src.rev;
-
-  version = lib.removePrefix "cmd/builder/v" rev;
+  version = "0.151.0";
 
   # This is a weird meta-repo where all the open-telemetry collectors are.
-  src = fetchFromGitHub {
+  releasesSrc = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
@@ -39,7 +35,10 @@ let
       hash,
     }:
     stdenv.mkDerivation {
-      inherit name;
+      # Inherit the version from the builder, so that updates there trigger
+      # a rebuild here.
+      inherit version;
+      pname = "${name}-src";
 
       nativeBuildInputs = [
         cacert
@@ -47,7 +46,7 @@ let
         go
       ];
 
-      inherit src;
+      src = releasesSrc;
 
       outputHash = hash;
       outputHashMode = "recursive";
@@ -117,11 +116,16 @@ let
             --zsh <($out/bin/${name} completion zsh)
         '';
 
-        passthru.tests = {
-          version = testers.testVersion {
-            inherit package version;
-            command = "${name} -v";
+        passthru = {
+          tests = {
+            version = testers.testVersion {
+              inherit package version;
+              command = "${name} -v";
+            };
           };
+          # The updatescript for the builder updates the releases
+          updateScript = null;
+          inherit releasesSrc;
         };
 
         meta = {
