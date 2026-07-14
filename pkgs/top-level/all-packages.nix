@@ -10269,12 +10269,6 @@ with pkgs;
 
   molbar = with python3Packages; toPythonApplication molbar;
 
-  nwchem = callPackage ../applications/science/chemistry/nwchem {
-    blas = blas-ilp64;
-    lapack = lapack-ilp64;
-    scalapack = scalapack-ilp64;
-  };
-
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
