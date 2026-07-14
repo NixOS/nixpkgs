@@ -8,7 +8,6 @@
   withNvenc ? false,
   atk,
   cairo,
-  cudatoolkit,
   cudaPackages,
   ffmpeg,
   gdk-pixbuf,
@@ -142,7 +141,7 @@ effectiveBuildPythonApplication rec {
     pandoc
     udevCheckHook
   ]
-  ++ lib.optional withNvenc cudatoolkit;
+  ++ lib.optionals withNvenc [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     libx11
