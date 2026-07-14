@@ -7,6 +7,7 @@
   flex,
   byacc,
   csu,
+  libcompiler_rt,
   extraSrc ? [ ],
 }:
 
@@ -55,6 +56,7 @@ mkDerivation {
   buildInputs = [
     include
     libsys
+    libcompiler_rt
   ];
 
   extraNativeBuildInputs = [

@@ -9,6 +9,7 @@
   i18n,
   libsys,
   llvmPackages,
+  libcompiler_rt,
   extraSrc ? [ ],
 }:
 
@@ -52,6 +53,7 @@ mkDerivation {
   buildInputs = [
     include
     libsys
+    libcompiler_rt
   ];
 
   extraNativeBuildInputs = [
