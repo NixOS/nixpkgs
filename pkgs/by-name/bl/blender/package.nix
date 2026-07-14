@@ -86,10 +86,20 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
+  level-zero,
+  intel-compute-runtime,
+  intel-llvm,
+  oneapiSupport ? false,
 }:
 
 let
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv' =
+    if cudaSupport then
+      cudaPackages.backendStdenv
+    else if oneapiSupport then
+      intel-llvm.stdenv
+    else
+      stdenv;
 
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
@@ -177,7 +187,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
@@ -236,10 +246,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm.dev
     makeWrapper
     python3Packages.wrapPython
   ]
+  ++ lib.optional oneapiSupport level-zero
+  ++ lib.optional (!oneapiSupport) llvmPackages.llvm.dev
   ++ lib.optionals cudaSupport [
     addDriverRunpath
     cudaPackages.cuda_nvcc
@@ -290,6 +301,7 @@ stdenv'.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
+  ++ lib.optional oneapiSupport intel-compute-runtime
   ++ lib.optional embreeSupport embree
   ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
