@@ -1,0 +1,92 @@
+--- a/src/rlimit.rs
++++ b/src/rlimit.rs
+@@ -12,9 +12,88 @@
+ //! `rlimit` crate handles the OPEN_MAX quirk where requesting `RLIM_INFINITY`
+ //! is silently capped at `kern.maxfilesperproc`.
+ 
++#[cfg(target_os = "macos")]
++fn kern_maxfilesperproc() -> std::io::Result<u64> {
++    use std::{
++        io, mem,
++        os::raw::{c_char, c_int, c_void},
++    };
++
++    unsafe extern "C" {
++        fn sysctlbyname(
++            name: *const c_char,
++            oldp: *mut c_void,
++            oldlenp: *mut usize,
++            newp: *mut c_void,
++            newlen: usize,
++        ) -> c_int;
++    }
++
++    let mut value: c_int = 0;
++    let mut length = mem::size_of_val(&value);
++    let result = unsafe {
++        sysctlbyname(
++            b"kern.maxfilesperproc\0".as_ptr().cast(),
++            (&mut value as *mut c_int).cast(),
++            &mut length,
++            std::ptr::null_mut(),
++            0,
++        )
++    };
++    if result == -1 {
++        return Err(io::Error::last_os_error());
++    }
++    if value < 0 {
++        return Err(io::Error::new(
++            io::ErrorKind::InvalidData,
++            "kern.maxfilesperproc was negative",
++        ));
++    }
++    Ok(value as u64)
++}
++
+ pub fn raise_nofile_limit() {
++    if !rlimit::Resource::NOFILE.is_supported() {
++        return;
++    }
++
++    let (before, hard) = match rlimit::Resource::NOFILE.get() {
++        Ok(limits) => limits,
++        Err(err) => {
++            log::warn!("failed to read RLIMIT_NOFILE: {err}");
++            return;
++        }
++    };
++
++    // The helper clamps to kern.maxfilesperproc even when the current soft
++    // limit is already higher, which would lower the existing limit.
++    #[cfg(target_os = "macos")]
++    match kern_maxfilesperproc() {
++        Ok(maximum) if before > maximum => {
++            log::debug!(
++                "RLIMIT_NOFILE soft limit {before} already exceeds kern.maxfilesperproc {maximum}; leaving it unchanged"
++            );
++            return;
++        }
++        Ok(_) => {}
++        Err(err) => {
++            log::warn!(
++                "failed to read kern.maxfilesperproc: {err}; leaving RLIMIT_NOFILE unchanged"
++            );
++            return;
++        }
++    }
++
+     match rlimit::increase_nofile_limit(rlimit::INFINITY) {
+-        Ok(new_limit) => log::debug!("RLIMIT_NOFILE soft limit set to {new_limit}"),
++        Ok(new_limit) if new_limit >= before => {
++            log::debug!("RLIMIT_NOFILE soft limit set to {new_limit}");
++        }
++        Ok(new_limit) => match rlimit::Resource::NOFILE.set(before, hard) {
++            Ok(()) => log::debug!("RLIMIT_NOFILE soft limit restored to {before}"),
++            Err(err) => log::warn!(
++                "RLIMIT_NOFILE soft limit was reduced to {new_limit} and could not be restored to {before}: {err}"
++            ),
++        },
+         Err(err) => log::warn!("failed to raise RLIMIT_NOFILE: {err}"),
+     }
+ }
