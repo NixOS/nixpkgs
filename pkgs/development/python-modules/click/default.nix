@@ -16,23 +16,19 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.4.2";
+  version = "8.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-66JFGGwPXeCU7Fbqsrsq3giv6qsea1ZKGmZYPu9rcog=";
+    hash = "sha256-LcnAI4hyiuaJ4qnFnbAR5Cft/yvW5tAIjY6qc6K/Nrw=";
   };
 
   build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlags = [
-    "-Wignore::pytest.PytestRemovedIn10Warning"
-  ];
 
   disabledTests = [
     # for some reason the tests fail to execute cat, even though they run with less just fine,
