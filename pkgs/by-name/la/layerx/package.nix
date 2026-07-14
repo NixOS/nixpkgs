@@ -10,14 +10,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "layerx";
-  version = "1.5.0";
+  version = "1.5.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deveshctl";
     repo = "layerx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bkz0ETQEdy0GOlyGFmP8y80NdmNgRvLV0xRf/zd91ZY=";
+    hash = "sha256-2FttqXnc6o8EXbLBk7BpLS0Xf6ZozydD7a5gFspPQoo=";
   };
 
   vendorHash = "sha256-7wbyz6fKB3HMFhKJVIWrOIczLfqF4yInyszdh2Ky8WU=";

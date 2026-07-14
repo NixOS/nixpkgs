@@ -20,13 +20,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.33.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VXhu50KERPb4FDdcNDMftBqZVk2ipIphhejAE1wMSOk=";
+    hash = "sha256-LGjBuZ7kbtABunEk2YyCKILsPS/0FlS/6Mf/2qVpseI=";
   };
 
   postPatch = ''

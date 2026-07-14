@@ -13,9 +13,6 @@
   json_c,
   libvirt,
 
-  withVMIFS ? true,
-  fuse,
-
   legacyKVM ? false,
   libkvmi,
 
@@ -67,13 +64,11 @@ stdenv.mkDerivation {
     libvirt
   ]
   ++ lib.optionals xenSupport [ xen ]
-  ++ lib.optionals (!legacyKVM) [ libkvmi ]
-  ++ lib.optionals withVMIFS [ fuse ];
+  ++ lib.optionals (!legacyKVM) [ libkvmi ];
 
   configureFlags =
     lib.optionals (!xenSupport) [ "--disable-xen" ]
-    ++ lib.optionals legacyKVM [ "--enable-kvm-legacy" ]
-    ++ lib.optionals withVMIFS [ "--enable-vmifs" ];
+    ++ lib.optionals legacyKVM [ "--enable-kvm-legacy" ];
 
   # libvmi uses dlopen() for the xen libraries, however autoPatchelfHook doesn't work here
   postFixup = lib.optionalString xenSupport ''

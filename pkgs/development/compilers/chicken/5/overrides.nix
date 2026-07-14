@@ -78,19 +78,8 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.fuse old)
-    // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        (
-          if stdenv.cc.isClang then
-            "-Wno-error=incompatible-function-pointer-types"
-          else
-            "-Wno-error=incompatible-pointer-types"
-        )
-      ];
-    };
+  # requires fuse2
+  fuse = broken;
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
@@ -129,18 +118,8 @@ in
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
   magic-pipes = addToBuildInputs pkgs.chickenPackages_5.chickenEggs.regex;
-  mdh =
-    old:
-    (addToBuildInputs pkgs.pcre old)
-    // {
-      postPatch = ''
-        substituteInPlace bmgsubs.c \
-          --replace-fail "char   *gotamatch();" "char *gotamatch(char *, int, int (*)(char *, int));" \
-          --replace-fail "int bmg_search(char *, int, int (*)());" "int bmg_search(char *, int, int (*)(char *, int));" \
-          --replace-fail "int	(*action)();" "int (*action)(char *, int);" \
-          --replace-fail "int (*action)();" "int (*action)(char *, int);"
-      '';
-    };
+  # requires PCRE
+  mdh = broken;
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];

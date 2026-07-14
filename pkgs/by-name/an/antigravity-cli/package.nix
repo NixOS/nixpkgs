@@ -6,8 +6,9 @@
   versionCheckHook,
 }:
 let
-  wholeVersion = "1.0.12-6156052174077952"; # unfortunately this has dumb versioning
-  version = builtins.head (lib.splitString "-" wholeVersion);
+  version = "1.0.12";
+  buildId = "6156052174077952";
+  wholeVersion = "${version}-${buildId}";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 

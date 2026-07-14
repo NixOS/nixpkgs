@@ -65,6 +65,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-deepseek==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

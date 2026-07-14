@@ -2,23 +2,22 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
   simpleMode ? true,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "bentopdf";
-  # We intentionally don't update the version, due to:
-  # https://github.com/NixOS/nixpkgs/issues/484067
-  # nixpkgs-update: no auto update
-  version = "1.11.2";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "alam00000";
     repo = "bentopdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-br4My0Q4zoA+ZIrXM4o4oQjZ7IpSdwg+iKiAUdc2B/s=";
+    hash = "sha256-rbThEonDXFGcudgdMtDrQHq84Wh4IvOZZBn4kXvrhoI=";
   };
-  npmDepsHash = "sha256-UNNNYO7e7qdumI0/ka2ieFZzKURPl1V3981vHCPcVfY=";
+  npmDepsHash = "sha256-RT6ifx24mNfNS8oO93vyW+zbKQGCx21RqBQrAXK8dAY=";
+  npmDepsFetcherVersion = 2;
 
   npmBuildFlags = [
     "--"
@@ -37,8 +36,11 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests.bentopdf) caddy nginx;
+  passthru = {
+    tests = {
+      inherit (nixosTests.bentopdf) caddy nginx;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

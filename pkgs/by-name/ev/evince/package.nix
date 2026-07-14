@@ -126,6 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DHAVE_STDLIB_H"
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/evince.thumbnailer \
+      --replace-fail "TryExec=evince-thumbnailer" "TryExec=$out/bin/evince-thumbnailer" \
+      --replace-fail "Exec=evince-thumbnailer" "Exec=$out/bin/evince-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';

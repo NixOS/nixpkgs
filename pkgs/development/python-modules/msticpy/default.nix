@@ -1,5 +1,12 @@
 {
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   attrs,
   azure-common,
   azure-core,
@@ -11,12 +18,9 @@
   azure-monitor-query,
   beautifulsoup4,
   bokeh,
-  buildPythonPackage,
-  cache,
   cryptography,
   deprecated,
   dnspython,
-  fetchFromGitHub,
   folium,
   geoip2,
   html5lib,
@@ -26,9 +30,8 @@
   ipywidgets,
   keyring,
   lxml,
-  markdown,
-  msal-extensions,
   msal,
+  msal-extensions,
   msrest,
   msrestazure,
   nest-asyncio,
@@ -40,7 +43,6 @@
   pygments,
   pyjwt,
   pyyaml,
-  setuptools,
   tldextract,
   tqdm,
   typing-extensions,
@@ -49,23 +51,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "msticpy";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aX5Nd0tNuweBp2SqGwe4/Z4LcdJaX3p5LLNQAOdGVGo=";
+    hash = "sha256-utE77oSCAAYKmsyf8ZPep7spUSIoJXBU6NzeLpDIvUs=";
   };
+
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "azure-kusto-data"
     "bokeh"
+    "nest_asyncio"
+    "pandas"
   ];
-
-  build-system = [ setuptools ];
-
   dependencies = [
     attrs
     azure-common

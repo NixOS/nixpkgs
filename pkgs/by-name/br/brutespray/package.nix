@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "brutespray";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "x90skysn3k";
     repo = "brutespray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ckw5U0TAF8NI3B8jyk7iPJ8T+9YEwFxoa9dJqb7kygI=";
+    hash = "sha256-Da43ngdqRsJW8Ippbu1vZ1vT0ushwg3h/3Ep5BQmoR0=";
   };
 
-  vendorHash = "sha256-bzyvh7Ty9kl/fZwxYGH2G60wZvp607/+KflaFiZgs60=";
+  vendorHash = "sha256-zmNhYW+r5WBgv2sEZgnvTEO/yfqfQuHX26kvIwJ7ygs=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

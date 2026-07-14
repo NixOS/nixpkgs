@@ -80,6 +80,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpointsqlite==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

@@ -45,12 +45,9 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
-  disabledTests = [
-    # test is broken for tmux 3.7a and later
-    # https://github.com/tmux-python/libtmux/issues/697
-    "test_new_window_name_invalid_on_3_7"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # basename for sleep is coreutils, not sleep
+    "test_break_pane_no_name_uses_natural_name"
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
     "test_new_session_width_height"
     # AssertionError: assert '' == '$'

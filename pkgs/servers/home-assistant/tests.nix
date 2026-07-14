@@ -53,6 +53,7 @@ let
       "frontend"
       "homeassistant_hardware"
     ];
+    influxdb = getComponentDeps "isal";
     intelliclima = getComponentDeps "intellifire";
     logbook = getComponentDeps "alexa";
     lovelace = getComponentDeps "frontend" ++ [
@@ -111,16 +112,16 @@ let
   };
 
   extraDisabledTestPaths = {
-    bluetooth = [
-      # [2026.7.1] Fails to replace HCI device after advertisement became stale
-      "tests/components/bluetooth/test_manager.py::test_switching_adapters_based_on_stale_with_discovered_interval"
+    ecovacs = [
+      # [2026.7.2] Outdated snapshots
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_room_from_not_current_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_no_map"
+      "tests/components/ecovacs/test_vacuum.py::test_clean_area_invalid_map_id"
     ];
-    influxdb = [
-      # These tests fail because they check for the number of warnings in the
-      # logs and there is an extra warning in the logs:
-      # `WARNING:aiohttp_fast_zlib:zlib_ng and isal are not available, falling back to zlib, performance will be degraded.`
-      "tests/components/influxdb/test_sensor.py::test_state_for_no_results"
-      "tests/components/influxdb/test_sensor.py::test_state_matches_first_query_result_for_multiple_return"
+    izone = [
+      # [2026.7.2] Failed: Description not found for placeholder `host` in component.izone.config.step.confirm.description
+      "tests/components/izone/test_config_flow.py::test_not_found"
+      "tests/components/izone/test_config_flow.py::test_found"
     ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
@@ -135,6 +136,14 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
+    netatmo = [
+      # [2026.7.2] Language string mismatch (id vs ID)
+      "tests/components/netatmo/test_media_source.py::test_async_browse_media"
+    ];
+    wmspro = [
+      # [2026.7.2] Outdated snapshot
+      "tests/components/wmspro/test_number.py::test_number_update"
+    ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
@@ -142,10 +151,6 @@ let
   };
 
   extraDisabledTests = {
-    bsblan = [
-      # [2026.7.1] outdated snapshot
-      "test_diagnostics"
-    ];
     conversation = lib.optionals stdenv.hostPlatform.isAarch64 [
       # intent fixture mismatch on aarch64
       "test_error_no_device_on_floor"
@@ -158,23 +163,9 @@ let
       # disabled via nixos-was-never-supported.patch
       "test_deprecated_installation_issue_core"
     ];
-    opendisplay = [
-      # [2026.6.0] Failed: Description not found for placeholder `reason` in component.opendisplay.exceptions.device_not_found.message
-      # https://github.com/home-assistant/core/pull/172909
-      "test_upload_image_device_not_in_range"
-    ];
     smlight = [
       # [2026.7.1] outdated snapshot
       "test_entry_diagnostics"
-    ];
-    teslemetry = [
-      # [2026.6.4] http://github.com/home-assistant/core/commit/a33a92982af19e682a0d0fa7bec0cb16929c00d1
-      "test_sensors"
-      "test_sensors_streaming"
-    ];
-    yardian = [
-      # [2026.6.1] failing snapshot
-      "test_all_entities"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox

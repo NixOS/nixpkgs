@@ -7,15 +7,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rnsapi";
-  version = "0-unstable-2026-07-06";
+  version = "0-unstable-2026-07-09";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "attermann";
     repo = "ReticulumAPI";
-    rev = "9dc2a562c7e8695fb08c5204a403052a19af03d2";
-    hash = "sha256-8WsQyJtxkXVaObBHQCQ2VrqJUApSyePL1IVUoTE4XPk=";
+    rev = "1f20cf5d2f00894389c864d1e018d771191a9809";
+    hash = "sha256-IB67sLjOlaiAI8089ODAUNZRahvhLuiOxdGZ+4B24IE=";
   };
 
   build-system = [
@@ -48,6 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/attermann/ReticulumAPI";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "reticulum-api";
+    mainProgram = "rnsapid";
   };
 })

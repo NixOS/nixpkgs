@@ -40,14 +40,15 @@ buildEnv (finalAttrs: {
   derivationArgs = {
     strictDeps = true;
     nativeBuildInputs = [ makeBinaryWrapper ];
-    postBuild =
-      let
-        args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-      in
-      ''
-        wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-      '';
   };
+
+  postBuild =
+    let
+      args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
+    in
+    ''
+      wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+    '';
 
   passthru = {
     inherit installedExtensions;
@@ -62,6 +63,11 @@ buildEnv (finalAttrs: {
         man = finalAttrs.finalPackage;
       };
     };
+
+    tests = lib.mapAttrs (
+      _: test:
+      if test.passthru or { } ? "override" then test.passthru.override finalAttrs.finalPackage else test
+    ) postgresql.tests;
 
     withJIT = recurse (_: installedExtensions ++ [ postgresql.jit ]);
     withoutJIT = recurse (_: lib.remove postgresql.jit installedExtensions);

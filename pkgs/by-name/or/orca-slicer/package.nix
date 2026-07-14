@@ -63,13 +63,13 @@ in
 # with --cores 32 on clang).
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NJvJAQfkacMjMIirAoOND/G1GaXeMcNleiGQKoe+654=";
+    hash = "sha256-gUwLC0XkeohEdL0EScdOrA8MWXGuR8kUfezoQsk9i/A=";
   };
 
   __structuredAttrs = true;
@@ -111,7 +111,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gtk3
     hicolor-icon-theme
     libsecret
@@ -137,11 +137,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./patches/dont-link-opencv-world-orca.patch
     # The changeset from https://github.com/OrcaSlicer/OrcaSlicer/pull/7650, can be removed when that PR gets merged
     # Allows disabling the update nag screen
-    #(fetchpatch {
-    #  name = "pr-7650-configurable-update-check.patch";
-    #  url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/d10a06ae11089cd1f63705e87f558e9392f7a167.patch";
-    #  hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
-    #})
+    (fetchpatch {
+      name = "pr-7650-configurable-update-check.patch";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/300df7c99b0a2173f645c8bf40e8758eb5f2c486.patch";
+      hash = "sha256-hgQeagPhS3aNQoFSq0S+Ch60ygm81uHMIvGopw/AZT8=";
+    })
 
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./patches/no-ilmbase.patch
@@ -238,6 +238,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       ovlach
       pinpox
       liberodark
+      zraexy
     ];
     mainProgram = "orca-slicer";
     platforms = lib.platforms.linux;

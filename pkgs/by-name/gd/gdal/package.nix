@@ -309,6 +309,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!usePoppler) [
     "test_pdf_jpx_compression"
+  ]
+  ++ lib.optionals (!useNetCDF) [
+    # writes the Zarr tile-presence cache (.gmac) via the netCDF driver, which
+    # is absent in the minimal build
+    "test_zarr_read_simple_sharding"
   ];
   postCheck = ''
     popd # autotest

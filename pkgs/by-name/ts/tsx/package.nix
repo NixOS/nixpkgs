@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";
-    homepage = "https://tsx.is";
+    homepage = "https://tsx.hirok.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sdedovic

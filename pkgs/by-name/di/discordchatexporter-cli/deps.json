@@ -26,8 +26,8 @@
   },
   {
     "pname": "Deorcify",
-    "version": "1.1.0",
-    "hash": "sha256-R3V/9z/dP0LyhMNh+SiHD5j+XGr/DxPo4qwaKB+Fbak="
+    "version": "2.0.1",
+    "hash": "sha256-1Yl9KIEXNHHOUhmyYS65jx1AljPt7i4wvGGlxfm/XxA="
   },
   {
     "pname": "Gress",
@@ -51,8 +51,8 @@
   },
   {
     "pname": "PowerKit",
-    "version": "1.2.0",
-    "hash": "sha256-93mls5CuiOsNRqH+E+MQ/LSV7X2W8o+jOnPP1vvgdp0="
+    "version": "2.0.1",
+    "hash": "sha256-mqXd34gelLM26cAlHCBWOkAhyVlzrRKr2NH2kiGf8qk="
   },
   {
     "pname": "RazorBlade",

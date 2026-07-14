@@ -3,14 +3,15 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
-  nodejs_22,
-  pnpm_8,
+  nodejs-slim_22,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
 }:
 
 let
+  pnpm = pnpm_9.override { nodejs-slim = nodejs-slim_22; };
   version = "1.15.0";
 
   src = fetchFromGitHub {
@@ -26,34 +27,49 @@ let
 
     strictDeps = true;
 
-    pnpmRoot = "frontend";
+    sourceRoot = "${src.name}/frontend";
 
     nativeBuildInputs = [
-      nodejs_22
-      pnpm_8
+      nodejs-slim_22
+      pnpm
       pnpmConfigHook
     ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/frontend";
-      pnpm = pnpm_8;
-      fetcherVersion = 3;
-      hash = "sha256-E2tUZXhcufuztXS+Z//uZk9omvaPrevNbGqVd41Lwhw=";
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        postPatch
+        ;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-wFrMoSeD87H1yfMD0jBcw60DKDeh4yjka5aWyHuQssA=";
     };
+
+    postPatch = ''
+      substituteInPlace "package.json" "apps/remark42/package.json" \
+        --replace-fail "pnpm@8.15.9" "pnpm@${pnpm.version}"
+
+      substituteInPlace "apps/remark42/package.json" \
+        --replace-fail '"pnpm": "8.*"' '"pnpm": "9.*"'
+    '';
 
     buildPhase = ''
       runHook preBuild
-      pushd "$pnpmRoot"
+
       pnpm --filter ./apps/remark42 --fail-if-no-match run build
-      popd
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/web
-      cp -r "$pnpmRoot/apps/remark42/public/." $out/web/
+      cp -r "apps/remark42/public/." $out/web/
+
       runHook postInstall
     '';
   });

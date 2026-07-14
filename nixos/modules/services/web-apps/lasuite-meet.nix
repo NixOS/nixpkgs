@@ -50,7 +50,6 @@ let
     environment = pythonEnvironment;
 
     serviceConfig = {
-      RuntimeDirectory = "lasuite-meet";
       StateDirectory = "lasuite-meet";
       WorkingDirectory = "/var/lib/lasuite-meet";
 
@@ -382,6 +381,8 @@ in
         '';
 
         serviceConfig = {
+          # needs to be here so that cronjobs don't nuke it
+          RuntimeDirectory = "lasuite-meet";
           BindReadOnlyPaths = "${cfg.package}/share/static:/var/lib/lasuite-meet/static";
 
           ExecStart = utils.escapeSystemdExecArgs (

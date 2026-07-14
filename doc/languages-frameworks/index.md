@@ -60,7 +60,6 @@ android.section.md
 astal.section.md
 beam.section.md
 chicken.section.md
-rocq.section.md
 cosmic.section.md
 crystal.section.md
 cuda.section.md
@@ -96,6 +95,7 @@ pkg-config.section.md
 python.section.md
 qt.section.md
 r.section.md
+rocq.section.md
 ruby.section.md
 rust.section.md
 scheme.section.md

@@ -7,15 +7,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "nexttrace";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5J0P+HlfSt6wd/q7L/+6h7auQQBJkaA1NO053w32S8Y=";
+    sha256 = "sha256-yjG/nXnZs5ks80Q5Qq9TsN57nuSrPvp/jlYV3FXJqMk=";
   };
-  vendorHash = "sha256-9g0OZczhIhM96eYFyAMxajpIkRgNUkn6QUZtl3O/xSM=";
+  vendorHash = "sha256-u5UTl3zNlnv0qk/Z60h1csp44ypn1V6i/aAThtTn3eg=";
 
   buildInputs = [ libpcap ];
 

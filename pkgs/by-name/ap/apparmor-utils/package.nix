@@ -12,7 +12,6 @@
 
   # apparmor deps
   apparmor-parser,
-  apparmor-teardown,
 }:
 let
   inherit (python3Packages) libapparmor;
@@ -75,8 +74,6 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     wrapProgram $out/bin/aa-remove-unknown \
      --prefix PATH : ${lib.makeBinPath [ gawk ]}
-
-    ln -s ${lib.getExe apparmor-teardown} $out/bin/aa-teardown
   '';
 
   meta = libapparmor.meta // {

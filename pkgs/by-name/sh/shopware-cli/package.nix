@@ -11,12 +11,12 @@
 
 buildGoModule (finalAttrs: {
   pname = "shopware-cli";
-  version = "0.15.11";
+  version = "0.15.12";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "shopware";
     tag = finalAttrs.version;
-    hash = "sha256-N+V1ta+NM2PpS2BS7wSpS8JaZFRMdVy6fM8HtGh7PjA=";
+    hash = "sha256-9T04G88OPjdgHKWpuRAma5HGudVfep0cN5tR+MHL28Q=";
   };
 
   nativeBuildInputs = [

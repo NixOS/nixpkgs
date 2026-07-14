@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ta-lib";
-  version = "0.6.4";
+  version = "0.7.1";
   src = fetchFromGitHub {
     owner = "TA-Lib";
     repo = "ta-lib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aTRiScPNWsGDwJvumZXlMilvSDYZVDWgpeZ2F/S5WgQ=";
+    hash = "sha256-tme5YuTWdf4lCsWXF97kSeka7Vmqte0vTjwtaUNN+kA=";
   };
   nativeBuildInputs = [ autoreconfHook ];
   meta = {

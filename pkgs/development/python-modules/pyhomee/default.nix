@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyhomee";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taraman17";
     repo = "pyHomee";
     tag = "v${version}";
-    hash = "sha256-SH31V/9Z1fw63K7SLQeBQcpQ0DnDVOrngggBNsG5Kk4=";
+    hash = "sha256-9oXMDvYN43qNbzNlbkEjBekmmRyHIOKgYUXpI2W3jdo=";
   };
 
   build-system = [ setuptools ];

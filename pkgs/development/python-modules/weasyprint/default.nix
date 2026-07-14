@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   fontconfig,
   glib,
   harfbuzz,
@@ -55,6 +56,11 @@ buildPythonPackage (finalAttrs: {
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+    (fetchpatch2 {
+      name = "fix-unicode-test";
+      url = "https://github.com/Kozea/WeasyPrint/commit/b2efb459fbe7f7fd35ab9078734121cb87d3d65a.patch?full_index=1";
+      hash = "sha256-uixfpg9fvkdNmSTqz/M1c1vkV/mJDqOs7zDAunn2rEY=";
+    })
   ];
 
   build-system = [ flit-core ];
@@ -105,9 +111,17 @@ buildPythonPackage (finalAttrs: {
 
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Test include some emoji characters that require a custom fontconfig configuration to be found.
+  # Custom font configuration for tests
   preCheck = ''
-    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ twemoji-color-font ]; }}
+    export FONTCONFIG_FILE=${
+      makeFontsConf {
+        # include some emoji characters
+        fontDirectories = [ twemoji-color-font ];
+
+        # Darwin builds without sandbox can pollute the build
+        impureFontDirectories = [ ];
+      }
+    }
   '';
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly

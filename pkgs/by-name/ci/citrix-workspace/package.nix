@@ -280,6 +280,15 @@ stdenv.mkDerivation rec {
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
             ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
           ]
+          ++ lib.optionals (isWfica program) [
+            # wfica is an X11 client (it runs under XWayland). On a Wayland
+            # session Mesa's EGL loader otherwise auto-selects the Wayland
+            # platform for wfica's startup OpenGL probe and segfaults in
+            # wl_proxy_create_wrapper; pin the client to X11 (user-overridable).
+            # See https://github.com/NixOS/nixpkgs/issues/540102
+            "--set-default GDK_BACKEND x11"
+            "--set-default EGL_PLATFORM x11"
+          ]
         );
 
       wrap = program: ''

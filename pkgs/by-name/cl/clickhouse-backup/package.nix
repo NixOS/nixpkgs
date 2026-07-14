@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "clickhouse-backup";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "Altinity";
     repo = "clickhouse-backup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tcNQoNxzlRcXcSyGWOzCmGtV34ZSzfnyi98QAIWwYF0=";
+    hash = "sha256-HlVngChgU+Do6e5gfP1fg1R/fSGfB8kjG2Ul+N7eJkE=";
   };
 
   vendorHash = "sha256-HN0H2YFj7k/T2ff1GCrjfE9PO6MtdR/SWKZL/FoqHZ8=";
