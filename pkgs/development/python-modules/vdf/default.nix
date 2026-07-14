@@ -9,15 +9,17 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vdf";
   version = "3.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
@@ -48,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
-}
+})
