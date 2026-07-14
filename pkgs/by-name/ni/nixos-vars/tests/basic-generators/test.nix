@@ -1,7 +1,7 @@
 let
   sources = import ../../npins;
   pkgs' = import sources.nixpkgs { };
-  nix-vars = pkgs: pkgs.python314Packages.callPackage ../../nix-vars.nix { };
+  nix-vars = pkgs: pkgs.python314Packages.callPackage ../../package.nix { };
 in
 
 pkgs'.testers.runNixOSTest {
@@ -51,5 +51,12 @@ pkgs'.testers.runNixOSTest {
     t.assertIn("Successfully (re)run 1 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g derived"))
     t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g example"))
     t.assertIn("Successfully (re)run 2 generator(s).", machine.succeed("nix-vars generate -f /etc/nixos/config2.nix -g example -g derived"))
+
+    machine.succeed("mkdir /tmp/system")
+    machine.succeed("nix-vars deploy -l /tmp/system -f /etc/nixos/config2.nix")
+    t.assertIn("< Hewwo placeholder!! >", machine.succeed("cat /tmp/system/tmp/vars-demo/derived/derived2"))
+
+    # We haven't yet implemented this!
+    machine.fail("nix-vars deploy -f /etc/nixos/config2.nix")
   '';
 }
