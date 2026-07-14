@@ -11,8 +11,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.22";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
+    pname = "venstarcolortouch";
+    inherit (finalAttrs) version;
     hash = "sha256-R9BJmZcseYlFLcoDUxfH3M0FO5GVsDtw7smK2dmLlNo=";
   };
 
