@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage (finalATtrs: {
+buildPythonPackage (finalAttrs: {
   pname = "llm-tools-sqlite";
   version = "0.1";
   pyproject = true;
