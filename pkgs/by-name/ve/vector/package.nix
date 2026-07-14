@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.56.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ge3epfB8xErF+2I1jW3OvHS+mHnGSSU6vOz2v/sSMW4=";
+    hash = "sha256-x4yfC/qAMRM7X19usonsp8GSJHwIsn0zoX0owLn2EXs=";
   };
 
-  cargoHash = "sha256-iwd6GCbI3PiM1ksAxDEZglueGWYCkEbJ3N76wn13TPY=";
+  cargoHash = "sha256-H26tUF+i/79t7W2BVjh2bVRCGZK8rgazHzlTF4L2jyA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -85,12 +85,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_LTO = "fat";
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
-
-  # https://github.com/vectordotdev/vector/pull/25406
-  postPatch = ''
-    substituteInPlace lib/vector-config/src/schema/visitors/merge.rs \
-      --replace-fail 'destination.merge(source);' 'Mergeable::merge(destination, source);'
-  '';
 
   doCheck = true;
   checkType = "debug";
