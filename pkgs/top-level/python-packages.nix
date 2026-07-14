@@ -10794,8 +10794,6 @@ self: super: with self; {
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
-  more-properties = callPackage ../development/python-modules/more-properties { };
-
   morecantile = callPackage ../development/python-modules/morecantile { };
 
   moreorless = callPackage ../development/python-modules/moreorless { };
