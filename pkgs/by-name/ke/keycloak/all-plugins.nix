@@ -1,4 +1,6 @@
 {
+  lib,
+  config,
   callPackage,
   fetchMavenArtifact,
   junixsocket-common,
@@ -9,7 +11,6 @@
   keycloak-discord = callPackage ./keycloak-discord { };
   keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
-  keycloak-metrics-spi = callPackage ./keycloak-metrics-spi { };
   keycloak-orgs = callPackage ./keycloak-orgs { };
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
@@ -39,4 +40,7 @@
       version = "1.0.1";
       hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
     }).passthru.jar;
+}
+// lib.optionalAttrs config.allowAliases {
+  keycloak-metrics-spi = throw "keycloak.plugins.keycloak-metrics-spi has been removed in favor of Keycloak's native metrics."; # Added 2026-07-14
 }
