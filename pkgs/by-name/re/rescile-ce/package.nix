@@ -1,9 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, patchelf
-, testers
-,
+{
+  lib,
+  stdenv,
+  fetchurl,
+  patchelf,
+  testers,
 }:
 
 let
@@ -11,13 +11,18 @@ let
 
   # Map Nix host platforms to the upstream pre-built binaries
   platform =
-    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then {
-      url = "https://updates.rescile.com/v${version}/rescile-ce-linux-amd64";
-      hash = "sha256-NJyCGTFhNk2rm04WyVKxZ/1n/P+61BU/BkW56gR50zc=";
-    } else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then {
-      url = "https://updates.rescile.com/v${version}/rescile-ce-darwin-arm64";
-      hash = "sha256-Pwjlajyl+YJ2X1fgYgbJOvV4hAdH7LUDEXkakYmFReE=";
-    } else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then
+      {
+        url = "https://updates.rescile.com/v${version}/rescile-ce-linux-amd64";
+        hash = "sha256-NJyCGTFhNk2rm04WyVKxZ/1n/P+61BU/BkW56gR50zc=";
+      }
+    else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+      {
+        url = "https://updates.rescile.com/v${version}/rescile-ce-darwin-arm64";
+        hash = "sha256-Pwjlajyl+YJ2X1fgYgbJOvV4hAdH7LUDEXkakYmFReE=";
+      }
+    else
+      throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -67,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rescile.com";
     license = lib.licenses.unfreeRedistributable;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ ]; # Add your GitHub handle here if you are maintaining it!
-    platforms = [ "x86_64-linux" "aarch64-darwin" ];
+    maintainers = [ ]; # Add your GitHub handle here if you are maintaining it!
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "rescile-ce";
   };
 })
