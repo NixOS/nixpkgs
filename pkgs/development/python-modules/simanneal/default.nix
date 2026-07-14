@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
-  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -22,8 +22,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "simanneal" ];
 
