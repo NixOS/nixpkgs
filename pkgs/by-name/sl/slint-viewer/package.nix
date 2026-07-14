@@ -36,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
   ];
 
+  buildFeatures = [ "gettext" ];
+
   nativeBuildInputs = [
     autoPatchelfHook
     pkg-config
