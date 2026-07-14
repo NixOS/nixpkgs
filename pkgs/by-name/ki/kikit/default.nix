@@ -4,6 +4,7 @@
   lib,
   bats,
   fetchFromGitHub,
+  fetchpatch,
   python,
   buildPythonApplication,
   callPackage,
@@ -46,6 +47,14 @@ buildPythonApplication (finalAttrs: {
       rm "$out/kikit/_version.py"
     '';
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-stencil-arc-numpy2.patch";
+      url = "https://github.com/yaqwsx/KiKit/commit/036ca08fc380dd2c5b8b3ba2adc4215f4114e975.patch?full_index=1";
+      hash = "sha256-AmvH822nAubqVhl1PEKvE0Ij/K0NrBsSvnMUJXgxmfI=";
+    })
+  ];
 
   build-system = [
     setuptools

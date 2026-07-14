@@ -4,6 +4,8 @@
   fetchFromGitHub,
   testers,
   spicetify-cli,
+  nodejs,
+  esbuild,
 }:
 buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
@@ -28,6 +30,17 @@ buildGoModule (finalAttrs: {
     "-X 'main.version=${finalAttrs.version}'"
   ];
 
+  nativeBuildInputs = [
+    nodejs
+    esbuild
+  ];
+
+  postBuild = ''
+    esbuild ./src/jsHelper/spicetifyWrapper/index.js \
+      --bundle --minify --target=chrome108 --format=iife \
+      --outfile=spicetifyWrapper.js
+  '';
+
   postInstall =
     /*
       jsHelper and css-map.json are required at runtime
@@ -39,7 +52,9 @@ buildGoModule (finalAttrs: {
       mkdir -p $out/share/spicetify
 
       cp -r $src/jsHelper $out/share/spicetify/jsHelper
+      chmod -R u+w $out/share/spicetify/jsHelper
       cp $src/css-map.json $out/share/spicetify/css-map.json
+      cp spicetifyWrapper.js $out/share/spicetify/jsHelper/spicetifyWrapper.js
 
       mv $out/bin/cli $out/share/spicetify/spicetify
 

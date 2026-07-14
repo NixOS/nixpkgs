@@ -288,6 +288,7 @@ stdenv.mkDerivation {
           nginx-etag-compression
           nginx-globalredirect
           nginx-http3
+          nginx-lua
           nginx-proxyprotocol
           nginx-pubhtml
           nginx-sso

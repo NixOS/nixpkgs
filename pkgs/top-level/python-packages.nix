@@ -4756,6 +4756,8 @@ self: super: with self; {
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
+  django-rest-knox = callPackage ../development/python-modules/django-rest-knox { };
+
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
@@ -11937,6 +11939,8 @@ self: super: with self; {
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };
 
+  nvidia-dlprofviewer = callPackage ../development/python-modules/nvidia-dlprofviewer { };
+
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
@@ -16279,6 +16283,8 @@ self: super: with self; {
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-textual-snapshot = callPackage ../development/python-modules/pytest-textual-snapshot { };
+
+  pytest-ticket = callPackage ../development/python-modules/pytest-ticket { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 

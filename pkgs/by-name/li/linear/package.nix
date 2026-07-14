@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://linear.app/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      iniw
+      wini
       pradyuman
     ];
     platforms = lib.platforms.darwin;
