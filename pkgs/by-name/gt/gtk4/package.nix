@@ -63,6 +63,7 @@
   broadwaySupport ? true,
   testers,
   darwinMinVersionHook,
+  llvmPackages,
 }:
 
 let
@@ -129,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     shaderc # for glslc
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ]
   ++ finalAttrs.setupHooks;
 
@@ -221,6 +226,14 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     NIX_LDFLAGS = "-lexecinfo";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # workaround for ld64 hardening issue
+    #
+    # TODO: Clean up on `staging`
+
+    CC_LD = "lld";
+    OBJC_LD = "lld";
   };
 
   postPatch = ''
