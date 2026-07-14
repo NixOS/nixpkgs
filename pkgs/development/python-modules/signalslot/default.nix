@@ -37,10 +37,6 @@ buildPythonPackage (finalAttrs: {
     six
   ];
 
-  pythonRemoveDeps = [
-    "weakrefmethod" # needed until https://github.com/Numergy/signalslot/pull/17
-  ];
-
   nativeCheckInputs = [
     eventlet
     mock
