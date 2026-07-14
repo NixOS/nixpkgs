@@ -29,6 +29,7 @@
   microsoft-gsl,
   boost,
   ada,
+  cmark-gfm,
   libavif,
   libheif,
   libjxl,
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
+    cmark-gfm
     (tdlib.override { tde2eOnly = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
