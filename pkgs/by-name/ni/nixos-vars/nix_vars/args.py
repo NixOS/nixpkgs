@@ -13,7 +13,8 @@ class VarsArgs:
 	disable_sandbox: bool
 	dry_run: bool
 	yes: bool
-	generators: List[str]
+	local: Optional[str]  # "deploy" only
+	generators: List[str]  # "generate" only
 	command: str  # gotta figure out how to type this properly
 	verbose: str
 
@@ -22,6 +23,8 @@ class VarsArgs:
 		# I wish we had proper sum types...
 		if "generators" not in d:
 			d["generators"] = []
+		if "local" not in d:
+			d["local"] = None
 
 		args = VarsArgs(**d)
 

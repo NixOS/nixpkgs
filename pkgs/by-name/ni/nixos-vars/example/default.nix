@@ -8,13 +8,13 @@ let
   config = import "${sources.nixpkgs}/nixos/lib/eval-config.nix" {
     modules = [
       ../nix_vars/nix/module.nix
-      ./config.nix
+      ./config
     ];
   };
 in
 import ../nix_vars/nix/jsonify.nix {
   # inherit config;
-  config = import ./config.nix;
+  config = import ./config;
   pkgsTarget = pkgs;
   pkgsHost = pkgs;
 }
