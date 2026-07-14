@@ -7,7 +7,7 @@
   icalendar-searcher,
   lxml,
   manuel,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   python,
   radicale,
   recurring-ical-events,
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     proxy-py
     pyfakefs
     pytest-asyncio
-    pytestCheckHook
+    pytest9_0CheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
