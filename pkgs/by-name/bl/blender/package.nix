@@ -337,6 +337,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps = python3Packages;
     in
     [
+      ps.cattrs
       ps.materialx
       ps.numpy
       ps.openshadinglanguage
