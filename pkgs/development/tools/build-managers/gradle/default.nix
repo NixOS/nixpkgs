@@ -307,7 +307,7 @@ let
               '';
         };
       };
-      passthru.jdk = defaultJava;
+      passthru.jdk = java;
       passthru.wrapped = callPackage wrapGradle {
         gradle-unwrapped = mkGradle genArgs;
       };

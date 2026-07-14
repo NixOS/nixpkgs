@@ -6252,6 +6252,12 @@
     github = "darkyzhou";
     githubId = 7220778;
   };
+  darshancode2005 = {
+    name = "Darshan Thakare";
+    email = "darshanthakaregsoc2023@gmail.com";
+    github = "DarshanCode2005";
+    githubId = 143271270;
+  };
   daru-san = {
     name = "Daru";
     email = "zadarumaka@proton.me";
@@ -11889,12 +11895,6 @@
     githubId = 20525370;
     name = "Silvan Mosberger";
     keys = [ { fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170"; } ];
-  };
-  iniw = {
-    email = "git@vini.cat";
-    github = "iniw";
-    githubId = 30220881;
-    name = "Vinicius Deolindo";
   };
   insipx = {
     email = "github@andrewplaza.dev";
@@ -24404,6 +24404,12 @@
     githubId = 20300874;
     name = "Mohammad Rafiq";
   };
+  rsahwe = {
+    email = "rsahwe@gmx.net";
+    github = "rsahwe";
+    githubId = 201613730;
+    name = "rsahwe";
+  };
   rseichter = {
     email = "nixos.org@seichter.de";
     github = "rseichter";
@@ -30299,6 +30305,12 @@
     github = "wineee";
     githubId = 22803888;
     name = "Lu Hongxu";
+  };
+  wini = {
+    email = "dev@vini.cat";
+    github = "iniw";
+    githubId = 30220881;
+    name = "Vinicius Deolindo";
   };
   winpat = {
     email = "patrickwinter@posteo.ch";
