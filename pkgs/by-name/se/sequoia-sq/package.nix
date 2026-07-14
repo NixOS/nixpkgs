@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
-  env.ASSET_OUT_DIR = "/tmp/";
+  env.ASSET_OUT_DIR = "target";
 
   # key store daemon binds a loopback socket
   __darwinAllowLocalNetworking = true;
@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = true;
 
   postInstall = ''
-    installManPage /tmp/man-pages/*.*
+    installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
     installShellCompletion \
       --cmd sq \
-      --bash /tmp/shell-completions/sq.bash \
-      --fish /tmp/shell-completions/sq.fish \
-      --zsh /tmp/shell-completions/_sq
+      --bash ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.bash \
+      --fish ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.fish \
+      --zsh ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_sq
   '';
 
   passthru.updateScript = nix-update-script { };
