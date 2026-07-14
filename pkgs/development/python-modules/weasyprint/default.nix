@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "68.1-unstable-2026-05-18";
+  version = "69.0";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -42,10 +42,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
-    # Includes upstream's Ghostscript 10.07-compatible rasterization tests.
-    # Drop the pin when the next WeasyPrint release is packaged.
-    rev = "2cb9b3d2378c67e2bfde646344ca4c2cb7c0f25f";
-    hash = "sha256-zQ8gvYy72ROMwprT5dWA3N1vC7y+6ZKNwKESwtPS21w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kd5ei3dBty8VL0ATPz8LZFP+UTUq7yTjuDtO1s/fdxg=";
   };
 
   patches = [
@@ -115,16 +113,10 @@ buildPythonPackage (finalAttrs: {
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
-  # Upstream still reports the last release version from weasyprint.__version__.
-  # Remove when the next release is packaged.
-  preVersionCheck = ''
-    version=68.1
-  '';
-
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/commits/${finalAttrs.src.rev}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${finalAttrs.src.tag}";
     description = "Converts web documents to PDF";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;

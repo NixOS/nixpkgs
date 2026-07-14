@@ -8,7 +8,7 @@
   installShellFiles,
   makeBinaryWrapper,
   opentxl,
-  jre,
+  jre_headless,
 }:
 let
   versions = lib.importJSON ./versions.json;
@@ -112,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
     # Create wrappers
     for file in *.jar; do
-      makeWrapper ${lib.getExe jre} "$out/bin/''${file%.jar}" \
+      makeWrapper ${lib.getExe jre_headless} "$out/bin/''${file%.jar}" \
         --add-flags "-jar $out/share/java/$file"
     done
     popd

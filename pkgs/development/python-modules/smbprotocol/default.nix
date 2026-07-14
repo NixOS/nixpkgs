@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "smbprotocol";
-  version = "1.16.1";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "smbprotocol";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mxsvfn0O4f+SnofBVxKgmJ/e0iM7c/XjONDEtMVHvkc=";
+    hash = "sha256-Mqv4vngO2tPXThsB/Z4RW7v09sfqZdqRKDW70GqjHH4=";
   };
 
   build-system = [ setuptools ];

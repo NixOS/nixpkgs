@@ -19,27 +19,17 @@
   jaraco-functools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ldap";
-  version = "3.4.5";
+  version = "3.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
-    tag = "python-ldap-${version}";
-    hash = "sha256-olRu5HacRKaAcNbQczA+UCbDxhySUOO7qH0KdWlSbT0=";
+    tag = "python-ldap-${finalAttrs.version}";
+    hash = "sha256-uSP8c5gid5TBenBaNVdlteHatkctAafz6yFHuIYKiTY=";
   };
-
-  patches = [
-    # https://github.com/python-ldap/python-ldap/pull/605
-    ./python-3.14.patch
-  ];
-
-  postPatch = ''
-    # unused in 3.4.5; https://github.com/python-ldap/python-ldap/pull/597
-    sed -i "/setuptools-scm/d" pyproject.toml
-  '';
 
   build-system = [
     distutils
@@ -80,8 +70,8 @@ buildPythonPackage rec {
     description = "Python modules for implementing LDAP clients";
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
-    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
+    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.psfl;
     maintainers = [ ];
   };
-}
+})

@@ -100,6 +100,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "libs/langchain-mongodb/v";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

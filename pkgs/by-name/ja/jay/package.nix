@@ -2,33 +2,34 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitHub,
-  libGL,
-  libinput,
-  pkgconf,
-  xkeyboard_config,
-  libgbm,
-  pango,
-  udev,
-  libglvnd,
-  vulkan-loader,
   autoPatchelfHook,
+  fetchFromGitHub,
   installShellFiles,
+  libGL,
+  libgbm,
+  libglvnd,
+  libinput,
   nix-update-script,
+  pango,
+  pkgconf,
+  sqlite,
+  udev,
+  vulkan-loader,
+  xkeyboard_config,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tC2V1BgUGsUMpZsKXjFSS8Mp28LrNI/QNu761zpgAkc=";
+    sha256 = "sha256-bdvcGO1E9fkmKiXQxc3nvISwjIAegY8g37HmxXolsmU=";
   };
 
-  cargoHash = "sha256-96vCkZR/8dgZH0hJPeKzP7jQZ41W7XTi9yMnxFaIhoY=";
+  cargoHash = "sha256-5yjMPDh7liaa9+KntfdCzUXz4vWzTcAhFmXrnVZ+pjM=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -38,16 +39,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     libGL
-    xkeyboard_config
     libgbm
-    pango
-    udev
     libinput
+    pango
+    sqlite
+    udev
+    vulkan-loader
+    xkeyboard_config
   ];
 
   runtimeDependencies = [
     libglvnd
-    vulkan-loader
   ];
 
   checkFlags = [

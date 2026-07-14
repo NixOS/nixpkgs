@@ -5,7 +5,7 @@
   isPyPy,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # propagates
   markupsafe,
@@ -20,19 +20,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mako";
-  version = "1.3.10";
+  version = "1.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "mako";
-    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-lxGlYyKbrDpr2LHcsqTow+s2l8+g+63M5j8xJt++tGo=";
+    tag = "rel_${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-YIMmP8CIGUlgnB8/96lR9yDvEZTES766dSN0vT0JfbM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ markupsafe ];
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315
@@ -59,12 +59,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/sqlalchemy/mako/releases/tag/${finalAttrs.src.tag}";
     description = "Super-fast templating language";
     mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
-    changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

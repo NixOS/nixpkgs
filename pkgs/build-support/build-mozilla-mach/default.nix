@@ -58,6 +58,7 @@ in
   pkg-config,
   pkgsCross, # wasm32 rlbox
   python3,
+  python313,
   runCommand,
   rustc,
   rust-cbindgen,
@@ -303,6 +304,9 @@ buildStdenv.mkDerivation {
 
   inherit src unpackPhase;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta =
     meta
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -340,6 +344,29 @@ buildStdenv.mkDerivation {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
       ./140-bindgen-string-view.patch
     ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
+      # https://github.com/mozilla/cbindgen/issues/1165
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
+      ./153-cbindgen-0.29.4-compat.patch
+    ]
+    ++
+      # Fixes `ld.lld: error: undefined symbol: FREEBL_GetVector`
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2047651
+      lib.optionals
+        (
+          lib.versionAtLeast version "153"
+          && lib.versionOlder version "154"
+          # We don't set --with-system-nss on Darwin, so it should be
+          # unaffected.
+          && !stdenv.hostPlatform.isDarwin
+        )
+        [
+          (fetchpatch {
+            name = "link-freebl-explicitly-for-system-nss-builds.patch";
+            url = "https://hg-edge.mozilla.org/mozilla-central/raw-rev/1a56071ddc0fe97a55c3b825e1dd33c8422b9fc1";
+            hash = "sha256-+HiU7RMPmV7I7SIzjP0Q6iSDJL/vBjc3UcwUTg57lNQ=";
+          })
+        ]
     ++ extraPatches;
 
   postPatch = ''
@@ -364,7 +391,7 @@ buildStdenv.mkDerivation {
     makeBinaryWrapper
     nodejs
     perl
-    python3
+    (if lib.versionAtLeast version "143.0" then python3 else python313)
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc

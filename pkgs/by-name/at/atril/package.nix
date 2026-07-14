@@ -88,6 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/atril.thumbnailer \
+      --replace-fail "TryExec=atril-thumbnailer" "TryExec=$out/bin/atril-thumbnailer" \
+      --replace-fail "Exec=atril-thumbnailer" "Exec=$out/bin/atril-thumbnailer"
+  '';
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
     odd-unstable = true;

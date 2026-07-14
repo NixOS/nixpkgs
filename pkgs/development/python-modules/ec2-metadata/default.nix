@@ -3,18 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  requests,
+  urllib3,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ec2-metadata";
-  version = "2.17.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ec2_metadata";
     inherit (finalAttrs) version;
-    hash = "sha256-rZilr9j09J9ojkiZ3FBSV9oyNzSHYezusPx/x9AMyQ0=";
+    hash = "sha256-EtfiaM4MsWv27cS+1VF/EPwJAGqsw8NP80IdrpC7COo=";
   };
 
   build-system = [
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    requests
+    urllib3
   ];
 
   pythonImportsCheck = [
@@ -35,6 +35,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/adamchainz/ec2-metadata/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _9999years ];
-    mainProgram = "ec2-metadata";
+    mainProgram = "imds";
   };
 })

@@ -31,6 +31,7 @@
   sqlite,
   xz,
   zlib,
+  withZstd ? !withMinimalDeps,
   zstd,
 
   # platform-specific dependencies
@@ -133,7 +134,6 @@ let
     getLib
     optionals
     optionalString
-    replaceStrings
     ;
 
   withLibxcrypt =
@@ -291,7 +291,7 @@ let
     ++ optionals withExpat [
       expat
     ]
-    ++ optionals (passthru.pythonAtLeast "3.14") [
+    ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd
     ]
     ++ optionals bluezSupport [
@@ -427,15 +427,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
-  ]
-  ++ optionals (pythonAtLeast "3.14" && pythonOlder "3.15") [
-    # https://github.com/python/cpython/issues/146264
-    # https://github.com/python/cpython/pull/146265
-    ./3.14/hacl-static-ldeps-for-static-modules.patch
-  ]
-  ++ optionals (version == "3.13.10" || version == "3.14.1") [
-    # https://github.com/python/cpython/issues/142218
-    ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let

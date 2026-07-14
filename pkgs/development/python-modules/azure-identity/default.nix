@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.25.1";
+  version = "1.25.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_identity";
     inherit version;
-    hash = "sha256-h8qDKIg95gNkQ+HDe0Do3I+3SJgkD2EHHgnS42k2FFY=";
+    hash = "sha256-qyPA1jAV9QtjDvbGzzlecmL0Oc4G5dB6ZOh0xyT42eY=";
   };
 
   build-system = [ setuptools ];

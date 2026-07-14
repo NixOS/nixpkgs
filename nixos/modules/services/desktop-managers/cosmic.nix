@@ -84,6 +84,7 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
           cosmic-reader

@@ -23,20 +23,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zigpy";
-  version = "1.5.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = finalAttrs.version;
-    hash = "sha256-AbVVv/3a/FZuk+VWLereCF7NEwu4u8HjZrsXsfarSZA=";
+    hash = "sha256-EQ77zEitOV3m+Jc/UrRpWFHrQm+4qA+jdBrHd4dCySg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
+
+    # do not install development tools
+    rm -r tools
   '';
 
   build-system = [ setuptools ];

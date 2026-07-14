@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmserve";
-  version = "0.0.8";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "AlexsJones";
     repo = "llmserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j4ko8AkrIOWlM1Tkl/pGMI1PzQc6yImCAZXEmO/NBko=";
+    hash = "sha256-V0DtCjTQhgfO/WQy/OZc2ayDY9nl2YzstCnsoRAJDFo=";
   };
 
-  cargoHash = "sha256-jwCQSm4k1YofCn2r5IX+knXbTo70bsAVHIxojeLpkqI=";
+  cargoHash = "sha256-5svPhLTpWfJgDVNyoytF42efiXzSZ2vbbrglSuNl3Ck=";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
@@ -8,6 +9,7 @@
   pnpmBuildHook,
   nodejs-slim,
   pnpm_10,
+  installShellFiles,
   nix-update-script,
   nixosTests,
 }:
@@ -63,6 +65,15 @@ buildGoModule {
   inherit version src;
 
   vendorHash = "sha256-WXbXD75acK4woS7UC0G73pY48aGmp1l0spDc3sGYXMg=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd filebrowser \
+      --bash <($out/bin/filebrowser completion bash) \
+      --fish <($out/bin/filebrowser completion fish) \
+      --zsh  <($out/bin/filebrowser completion zsh )
+  '';
 
   excludedPackages = [ "tools" ];
 

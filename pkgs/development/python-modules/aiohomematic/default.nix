@@ -17,18 +17,19 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohomematic";
-  version = "2026.5.11";
+  version = "2026.7.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
-    tag = version;
-    hash = "sha256-Ua7/sLhL0mbZvJwx+TNfXoP+z+jE2TyCO3DqsFpPe6A=";
+    tag = finalAttrs.version;
+    hash = "sha256-dshlAmjzv13Q9AijApEDNvhI3jLzDMLBs8KDtElzqJ4=";
   };
 
   build-system = [ setuptools ];
@@ -55,11 +56,11 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with HomeMatic devices";
     homepage = "https://github.com/SukramJ/aiohomematic";
-    changelog = "https://github.com/SukramJ/aiohomematic/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/SukramJ/aiohomematic/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
       fab
     ];
   };
-}
+})

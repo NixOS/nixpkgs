@@ -100,6 +100,9 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
   version = "2026.516.143833";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
@@ -113,11 +116,6 @@ stdenv'.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
     npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
-
-    # use generated package-lock.json as upstream does not provide one
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-    '';
 
     installPhase = ''
       runHook preInstall
@@ -226,7 +224,6 @@ stdenv'.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
     cudaPackages.cuda_cudart
   ]
   ++ lib.optionals isDarwin [
@@ -277,9 +274,9 @@ stdenv'.mkDerivation (finalAttrs: {
 
   env = {
     # needed to trigger CMake version configuration
-    BUILD_VERSION = "${finalAttrs.version}";
+    BUILD_VERSION = finalAttrs.version;
     BRANCH = "master";
-    COMMIT = "";
+    COMMIT = finalAttrs.src.rev;
   };
 
   # copy webui where it can be picked up by build
@@ -311,9 +308,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = lib.optionals isLinux [ udevCheckHook ];
 
   passthru = {
-    tests = lib.optionalAttrs isLinux {
-      sunshine = nixosTests.sunshine;
-    };
+    tests = { inherit (nixosTests) sunshine; };
     updateScript = ./updater.sh;
   };
 

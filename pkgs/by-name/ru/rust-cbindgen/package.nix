@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-cbindgen";
-  version = "0.29.3";
+  version = "0.29.4";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d0rY7Sk37s8HEZlQq9Sbjj1P+DgygD0Yjx8cXlFKEIA=";
+    hash = "sha256-leeHOwpzXuzg2cTjXehBnCsS+dvU4eIIFtWKeCee20U=";
   };
 
-  cargoHash = "sha256-UeierkQpfCiB5ES9ZW9hO+0AcI9Ip8qSJ/Nd+I1xrmQ=";
+  cargoHash = "sha256-f6YoDoiVoh0BVPYHFO1FsdI4OCsF+LY72QaD57StdIQ=";
 
   nativeCheckInputs = [
     cmake

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pathspec";
-  version = "1.0.4";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AhDiroohqRN8DUcFeMsOWVr4ftqm6/Ev8XbxSgLg5kU=";
+    hash = "sha256-F9tezVJBBKEg4XOBTJA2epapjQfEWy4QwvORn/+Rv1o=";
   };
 
   nativeBuildInputs = [ flit-core ];

@@ -46,11 +46,13 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.26.11";
+  version = "1.28.4";
 
   outputs = [
     "out"
@@ -61,9 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/FD4hdQfXQQHzgh27HI12ee4LUjbL0vHLF8kSkrHkmM=";
+    hash = "sha256-qJiv1XZhcrAEnmeBVY4GiQmL+HudgrhGxlLlccAdYNg=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [
     pkg-config
@@ -86,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableWayland [
     wayland-scanner
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -158,6 +165,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
 
+  # Fix for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CC_LD = "lld";
+    OBJC_LD = "lld";
+  };
+
   postPatch = ''
     patchShebangs \
       scripts/meson-pkg-config-file-fixup.py \
@@ -190,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
     glEnabled = enableGl;
     waylandEnabled = enableWayland;
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

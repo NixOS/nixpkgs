@@ -20,6 +20,9 @@
   libxkbcommon,
   libdecor,
   withMinecraftPatch ? false,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 let
   version = "3.4";
@@ -58,7 +61,11 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -86,6 +93,9 @@ stdenv.mkDerivation {
   cmakeFlags = [
     # Static linking isn't supported
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) {

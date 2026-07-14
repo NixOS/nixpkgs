@@ -72,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
+
   buildPhase = ''
     runHook preBuild
 

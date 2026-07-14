@@ -69,6 +69,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-ollama==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

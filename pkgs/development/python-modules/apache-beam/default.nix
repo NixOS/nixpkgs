@@ -66,7 +66,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.74.0";
+  version = "2.75.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -74,13 +74,15 @@ buildPythonPackage (finalAttrs: {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-30abjaQFYNQ798GhS+MRMDkBbgsJyr6CYb9ymENLrfA=";
+    hash = "sha256-jlY46uVYECZGrT4hCd2eo6QoM4zUm+veGcgcPsHdD5A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "distlib==0.4.2" "distlib" \
+      --replace-fail "cython>=3.2.5,<4" "cython" \
       --replace-fail "==" ">="
 
     substituteInPlace setup.py \

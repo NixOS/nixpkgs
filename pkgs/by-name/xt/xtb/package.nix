@@ -89,9 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

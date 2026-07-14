@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "subcat";
-  version = "1.6.0-unstable-2026-06-28";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {

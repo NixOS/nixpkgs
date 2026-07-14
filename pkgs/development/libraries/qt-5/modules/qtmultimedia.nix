@@ -9,6 +9,8 @@
   gst_all_1,
   libpulseaudio,
   wayland,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 qtModule {
@@ -17,7 +19,13 @@ qtModule {
     qtbase
     qtdeclarative
   ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
+  ];
   buildInputs =
     with gst_all_1;
     [
@@ -38,5 +46,7 @@ qtModule {
   qmakeFlags = [ "GST_VERSION=1.0" ];
   env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     NIX_LDFLAGS = "-lobjc";
+    # TODO: Clean up on `staging`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 }

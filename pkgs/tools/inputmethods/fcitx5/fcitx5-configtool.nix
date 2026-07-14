@@ -11,20 +11,16 @@
   qtsvg,
   qtwayland,
   qtdeclarative,
-  qtx11extras ? null,
   kitemviews,
   kwidgetsaddons,
-  qtquickcontrols2 ? null,
   kcmutils,
   kcoreaddons,
   kdeclarative,
   kirigami ? null,
-  kirigami2 ? null,
   isocodes,
   xkeyboard-config,
   libxkbfile,
   libplasma ? null,
-  plasma-framework ? null,
   wrapQtAppsHook,
   kcmSupport ? true,
 }:
@@ -64,26 +60,14 @@ stdenv.mkDerivation rec {
     xkeyboard-config
     libxkbfile
   ]
-  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-    qtx11extras
-  ]
-  ++ lib.optionals kcmSupport (
-    [
-      qtdeclarative
-      kcoreaddons
-      kdeclarative
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtquickcontrols2
-      plasma-framework
-      kirigami2
-    ]
-    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-      kcmutils
-      libplasma
-      kirigami
-    ]
-  );
+  ++ lib.optionals kcmSupport [
+    qtdeclarative
+    kcoreaddons
+    kdeclarative
+    kcmutils
+    libplasma
+    kirigami
+  ];
 
   meta = {
     description = "Configuration Tool for Fcitx5";

@@ -2,38 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
+  setuptools,
   mock,
   pyserial,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylacrosse";
-  version = "0.4";
-  format = "setuptools";
+  version = "0.5";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
-    tag = version;
-    hash = "sha256-jrkehoPLYbutDfxMBO/vlx4nMylTNs/gtvoBTFHFsDw=";
+    tag = finalAttrs.version;
+    hash = "sha256-z2OlYFFK/+BONg22+Vk0kQQ0KJoQnRkjP7OUS/TVpfI=";
   };
-
-  patches = [
-    # Migrate to pytest, https://github.com/hthiery/python-lacrosse/pull/17
-    (fetchpatch2 {
-      url = "https://github.com/hthiery/python-lacrosse/commit/cc2623c667bc252360a9b5ccb4fc05296cf23d9c.patch?full_index=1";
-      hash = "sha256-LKryLnXMKj1lVClneyHNVOWM5KPPhOGy0/FX/7Qy/jU=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version = version," "version = '${version}',"
+      --replace "version = version," "version = '${finalAttrs.version}',"
   '';
 
-  propagatedBuildInputs = [ pyserial ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial ];
 
   nativeCheckInputs = [
     mock
@@ -49,4 +45,4 @@ buildPythonPackage rec {
     license = with lib.licenses; [ lgpl2Plus ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

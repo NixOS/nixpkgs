@@ -40,6 +40,8 @@ buildNpmPackage (finalAttrs: {
     ONNXRUNTIME_NODE_INSTALL = "skip";
     ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
   };
 
   makeCacheWritable = true;

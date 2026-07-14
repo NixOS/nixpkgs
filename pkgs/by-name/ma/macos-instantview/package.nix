@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "instantview";
-  version = "3.22R0002";
+  version = "3.24R0004";
 
   src = fetchurl {
     url = "https://www.siliconmotion.com/downloads/macOS_InstantView_V${finalAttrs.version}.dmg";
-    hash = "sha256-PdgX9zCrVYtNbuOCYKVo9cegCG/VY7QXetivVsUltbg=";
+    hash = "sha256-lozVykKK1edUQlwxNKy/GyMKjsQaXeR9XVoau72Bwhg=";
   };
 
   nativeBuildInputs = [ _7zz ];
@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
@@ -27,8 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Extract the DMG using 7zip
     7zz x "$src" -oextracted -y
 
-    # Move the extracted contents to $out
-    cp -r extracted/* "$out/Applications/"
+    cp -r extracted/*.app "$out/Applications/"
 
     runHook postInstall
   '';

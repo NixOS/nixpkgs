@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
-  version = "26.6.22";
+  version = "26.7.4";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = finalAttrs.version;
-    hash = "sha256-OgNscshw445uf2PtiYVlyCfx/l2BNZyZK5QwQSunCQ0=";
+    hash = "sha256-gwpobBTugTTTtd/mWVoyiU0E/NjWCTfMnMF0reWLKrA=";
   };
 
-  cargoHash = "sha256-USdDHcWexjAllH/kOZVc4XMehESoIozkvvOw47ZeBD8=";
+  cargoHash = "sha256-EH3uIjz2M+Ytkx/gD0gwslUrDVPvm5+hwOGoDtAdblg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,17 +40,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gobject-introspection
     gdk-pixbuf
-    libxkbcommon
   ];
 
   runtimeDependencies = [
     vulkan-loader
+    libxkbcommon
   ];
 
   doCheck = false; # there are no cli tests
   cargoBuildFlags = [
     "--package"
-    "lockbook-linux"
+    "lockbook-desktop"
   ];
 
   desktopItems = makeDesktopItem {
@@ -67,7 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   postInstall = ''
-    mv $out/bin/lockbook-linux $out/bin/lockbook-desktop
     install -D docs/graphics/logo.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
   '';
 

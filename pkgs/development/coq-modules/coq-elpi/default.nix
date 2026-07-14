@@ -1,7 +1,8 @@
 {
   lib,
-  mkCoqDerivation,
+  mkRocqDerivation,
   which,
+  dune,
   coq,
   stdlib,
   version ? null,
@@ -33,7 +34,9 @@ let
   propagatedBuildInputs_wo_elpi = [
     coq.ocamlPackages.findlib
   ];
-  derivation = mkCoqDerivation {
+  derivation = mkRocqDerivation.override { dune = dune.override { version = "3.21.1"; }; } {
+    useCoq = true;
+    namePrefix = [ "coq" ];
     pname = "elpi";
     repo = "coq-elpi";
     owner = "LPCIC";

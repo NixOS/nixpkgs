@@ -143,6 +143,11 @@ buildPythonPackage (finalAttrs: {
     "test_resample_stereo"
   ];
 
+  disabledTestPaths = [
+    # matplotlib 3.11 exceeds tolerances for image comparison
+    "tests/test_display.py"
+  ];
+
   meta = {
     description = "Python library for audio and music analysis";
     homepage = "https://github.com/librosa/librosa";

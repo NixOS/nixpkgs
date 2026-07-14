@@ -74,6 +74,7 @@ let
 
   needUserConfig =
     stdenv.hostPlatform != stdenv.buildPlatform
+    || enablePython
     || useMpi
     || (stdenv.hostPlatform.isDarwin && enableShared);
 
@@ -422,6 +423,8 @@ stdenv.mkDerivation {
     "dev"
   ];
   setOutputFlags = false;
+
+  strictDeps = true;
 
   __structuredAttrs = true;
 }

@@ -54,14 +54,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "plover";
-  version = "5.3.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "plover";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1NpZmUDq806geKANqswPYglHwInxum/c/Hxq7JhTpbc=";
+    hash = "sha256-qaEuzPVqh+e3qq778VdUaRufGzOx9HyUnygIbA0+6kw=";
   };
 
   postPatch = ''

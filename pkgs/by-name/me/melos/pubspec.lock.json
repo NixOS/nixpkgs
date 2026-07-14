@@ -64,11 +64,11 @@
       "dependency": "transitive",
       "description": {
         "name": "build",
-        "sha256": "a156715e7cd728130c592f30552575908aae5b100005fbc1f0fb16b3c03a3d10",
+        "sha256": "45d14a0fb23e018d8287c32fc98d726ce466b231928ed9b9200f29bd3ccd39ae",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.0.6"
+      "version": "4.0.7"
     },
     "built_collection": {
       "dependency": "transitive",

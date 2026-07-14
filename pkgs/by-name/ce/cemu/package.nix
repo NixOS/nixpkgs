@@ -181,6 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
       zhaofengli
       baduhai
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 })

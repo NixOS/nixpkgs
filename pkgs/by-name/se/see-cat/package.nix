@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "see-cat";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "guilhermeprokisch";
     repo = "see";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BlceC8XgKvSLOTKHlfQHxn0rhaFKL8rHqUcYBNntB5s=";
+    hash = "sha256-3uyQW1PxLYxpissm96io5IrZ6uU4S4MdcS+O56CftxA=";
   };
 
-  cargoHash = "sha256-ccSuJqENO8DElZM5Nz+/rt7yAIMipcVJ3qOi9JR0CQY=";
+  cargoHash = "sha256-Sba5l5Jx/F+Iux3TYT3gMWBkN9yyVQ1n3MZCNl7q0u8=";
 
   meta = {
     description = "Cute cat(1) for the terminal";

@@ -7,19 +7,19 @@
 
 buildDotnetModule {
   pname = "depotdownloader";
-  version = "2.7.4-unstable-2024-12-01";
+  version = "3.4.0-unstable-2026-05-14";
 
   src = fetchFromGitHub {
     owner = "Iluhadesu";
     repo = "DepotDownloader";
-    rev = "a9f58e5513b72bd00b623a83e1460b3c5db49248";
-    hash = "sha256-+QfwKQJzyXqUvTn8kKP7lYHvbtRtdJ7jc/W7E87tV7w=";
+    rev = "0ab6676c51f27d3b9e63278e3c18484d4d2bf063";
+    hash = "sha256-qC9EakT1tu8NNwbmj7HmYgcIoEUlMRRHNGnKggVNDgk=";
   };
 
   projectFile = "DepotDownloader.sln";
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   meta = {
     description = "Fork of DepotDownloader to be used by BSManager";

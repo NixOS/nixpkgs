@@ -130,7 +130,10 @@ bash.runCommand "${pname}-${version}"
 
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
-    export CFLAGS_FOR_TARGET="-Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CFLAGS="-O1"
+    export CXXFLAGS="-O1"
+    export CFLAGS_FOR_TARGET="-O0 -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+    export CXXFLAGS_FOR_TARGET="$CFLAGS_FOR_TARGET"
     export C_INCLUDE_PATH="${musl}/include"
     export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
     export LIBRARY_PATH="${musl}/lib"
@@ -152,7 +155,9 @@ bash.runCommand "${pname}-${version}"
       --disable-libstdcxx-pch \
       --disable-lto \
       --disable-multilib \
-      --disable-nls
+      --disable-nls \
+      --disable-libsanitizer \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES

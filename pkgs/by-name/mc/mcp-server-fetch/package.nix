@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-fetch";
-  version = "2026.6.16";
+  version = "2026.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {

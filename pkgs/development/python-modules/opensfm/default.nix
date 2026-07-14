@@ -3,52 +3,65 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  runCommand,
-  srcOnly,
-  bashNonInteractive,
-  cmake,
-  ceres-solver,
-  suitesparse,
-  metis,
-  eigen,
+  pythonAtLeast,
+
+  # build-system
+  ninja,
+  scikit-build-core,
   setuptools,
-  pkg-config,
-  pybind11,
-  numpy,
-  pyyaml,
-  flask,
-  fpdf2,
-  opencv-python,
-  lapack,
-  gtest,
+
+  # nativeBuildInputs
+  cmake,
+
+  # buildInputs
+  bashNonInteractive,
+  ceres-solver,
+  eigen,
   gflags,
   glog,
-  pytestCheckHook,
-  networkx,
-  pillow,
+  gtest,
+  lapack,
+  metis,
+  pybind11,
+  suitesparse,
+
+  # dependencies
+  cloudpickle,
   exifread,
+  flask,
+  fpdf2,
+  joblib,
+  matplotlib,
+  networkx,
+  numpy,
+  opencv-python,
+  pillow,
   pyproj,
   python-dateutil,
-  joblib,
-  xmltodict,
-  cloudpickle,
+  pyyaml,
   scipy,
-  sphinx,
-  matplotlib,
-  scikit-build-core,
-  ninja,
+  xmltodict,
+
+  # tests
+  pytestCheckHook,
+
+  # passthru
+  runCommand,
+  srcOnly,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "0.5.1-unstable-2026-05-04";
+  version = "odm-4-unstable-2026-07-01";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = "OpenSfM";
-    rev = "1dc5b95b5c8c4cadd653bdc9f6eb97c0ac1602ba";
-    sha256 = "sha256-K3+H8QSzTxIGAtYDGqOuJFTVaqk+B/R/MDMepJ/bRxY=";
+    rev = "a677b6f0648ff3caf439aebbe9aad0ca8abc175b";
+    hash = "sha256-Bxpfaj87N2QxP/AczpP3fOl6G8ciMJq5jaaIn7oGR9g=";
   };
 
   patches = [
@@ -80,9 +93,9 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   build-system = [
-    setuptools
-    scikit-build-core
     ninja
+    scikit-build-core
+    setuptools
   ];
 
   nativeBuildInputs = [
@@ -90,34 +103,34 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    ceres-solver
-    suitesparse
-    metis
-    eigen
-    lapack
-    gflags
-    gtest
-    glog
-    pybind11
     bashNonInteractive # for patchShebangs
+    ceres-solver
+    eigen
+    gflags
+    glog
+    gtest
+    lapack
+    metis
+    pybind11
+    suitesparse
   ];
 
   dependencies = [
-    numpy
-    scipy
-    pyyaml
+    cloudpickle
+    exifread
     flask
     fpdf2
-    opencv-python
-    networkx
-    pillow
+    joblib
     matplotlib
-    exifread
+    networkx
+    numpy
+    opencv-python
+    pillow
     pyproj
     python-dateutil
-    joblib
+    pyyaml
+    scipy
     xmltodict
-    cloudpickle
   ];
 
   nativeCheckInputs = [
@@ -139,6 +152,11 @@ buildPythonPackage (finalAttrs: {
     # flaky
     "test_match_candidates_from_metadata_bow"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.UnpicklingError: global 'numpy._core.numeric._frombuffer' is forbidden
+    "test_run_all"
+    "test_shot_view_ref_count"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_reconstruction_incremental"
     "test_reconstruction_triangulation"
@@ -146,26 +164,32 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "opensfm" ];
 
-  # https://opensfm.org/docs/using.html#quickstart
-  passthru.tests = lib.genAttrs' [ "berlin" "lund" ] (
-    name:
-    lib.nameValuePair "integration-test-${name}" (
-      runCommand "opensfm-integration-test-${name}"
-        {
-          nativeBuildInputs = [ finalAttrs.finalPackage ];
-        }
-        ''
-          set -euo pipefail
-          opensfm --help
-          cp -r ${srcOnly finalAttrs.finalPackage}/data/${name} data
-          chmod -R +w data/
-          bash -x $(command -v opensfm_run_all) data/
-          if [[ -s data/camera_models.json && -s data/undistorted/reconstruction.json ]]; then
-            touch $out
-          fi
-        ''
-    )
-  );
+  passthru = {
+    # https://opensfm.org/docs/using.html#quickstart
+    tests = lib.genAttrs' [ "berlin" "lund" ] (
+      name:
+      lib.nameValuePair "integration-test-${name}" (
+        runCommand "opensfm-integration-test-${name}"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            set -euo pipefail
+            opensfm --help
+            cp -r ${srcOnly finalAttrs.finalPackage}/data/${name} data
+            chmod -R +w data/
+            bash -x $(command -v opensfm_run_all) data/
+            if [[ -s data/camera_models.json && -s data/undistorted/reconstruction.json ]]; then
+              touch $out
+            fi
+          ''
+      )
+    );
+
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;

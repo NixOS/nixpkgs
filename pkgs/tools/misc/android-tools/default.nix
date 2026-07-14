@@ -14,10 +14,9 @@
   brotli,
   lz4,
   zstd,
+  libusb1,
   pcre2,
-  fetchpatch2,
   fmt,
-  udev,
 }:
 
 let
@@ -26,21 +25,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "35.0.2";
+  version = "36.0.1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-0sMiIoAxXzbYv6XALXYytH42W/4ud+maNWT7ZXbwQJc=";
+    hash = "sha256-OOioS3OUgBQd4INr9tWBszOax9U9D3zowESjNoyML48=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://raw.githubusercontent.com/nmeum/android-tools/0c4d79943e23785589ce1881cbb5a9bc76d64d9b/patches/extras/0003-extras-libjsonpb-Fix-incompatibility-with-protobuf-v.patch";
-      stripLen = 1;
-      extraPrefix = "vendor/extras/";
-      hash = "sha256-PO6ZKP54ri2ujVa/uFXgMy/zMQjjIo4e/EPW2Cu6a1Q=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -56,22 +46,15 @@ stdenv.mkDerivation rec {
     brotli
     lz4
     zstd
+    libusb1
     pcre2
     fmt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  ];
   propagatedBuildInputs = [ pythonEnv ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
   '';
-
-  cmakeFlags = [
-    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
-    (lib.cmakeBool "protobuf_MODULE_COMPATIBLE" true)
-    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" stdenv.hostPlatform.isLinux)
-    (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
-  ];
 
   meta = {
     description = "Android SDK platform tools";

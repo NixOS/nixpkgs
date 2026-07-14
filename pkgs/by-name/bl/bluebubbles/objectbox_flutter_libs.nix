@@ -19,11 +19,11 @@ let
   };
 
   objectbox-c = fetchzip {
-    name = "objectbox-linux-4.0.2";
-    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.0.2/objectbox-linux-${arch}.tar.gz";
+    name = "objectbox-linux-4.3.0";
+    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.3.0/objectbox-linux-${arch}.tar.gz";
     hash = selectSystem {
-      x86_64-linux = "sha256-v51/m+v/FjryZuJphVb35jKgQk6DtEu+uHEzUzmeKMo=";
-      aarch64-linux = "sha256-trpF71hpJA6+DFQ3cTKOyyjtLKf8aFHf6JWb6Jxm4eo=";
+      x86_64-linux = "sha256-VaDUQcTk0ArmeKFpdKN35WEGL8QX89k8KPHTRP9xadI=";
+      aarch64-linux = "sha256-vnsxkNiYoZIBfw6IcYg4cFgsdRyHGDbyA0y8J4NuYE0=";
     };
     stripRoot = false;
     meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library

@@ -8,12 +8,13 @@
   pythonOlder,
   setuptools,
   time-machine,
+  zha,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "1.2.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-mDcvVwqzSmszaJDahzkRNteiO4C/eU+BqTdBpWj5yGw=";
+    hash = "sha256-FI0T8kxyZiZBrYd4yW8kpc44DZ6OthqEwxVJBf3ocEg=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    zha
     zigpy
   ];
 

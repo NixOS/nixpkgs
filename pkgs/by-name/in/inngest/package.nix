@@ -10,14 +10,14 @@
   testers,
 }:
 let
-  version = "1.34.0";
+  version = "1.36.0";
   websiteRev = "159c0ac611e85ec85ffe0a8c8bf2c4a0330bdb38";
 
   src = fetchFromGitHub {
     owner = "inngest";
     repo = "inngest";
     tag = "v${version}";
-    hash = "sha256-DMJEhgKj2glNtJmsLc3oyDZr5H/COFLrcogcgaYiLjU=";
+    hash = "sha256-KyH9Bj3n7RwARDcb3l5nerYGIIk2mgXPZWLhyNMm+f0=";
   };
 
   website = fetchFromGitHub {
@@ -99,7 +99,10 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/inngest/inngest/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.sspl;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = with lib.maintainers; [ kikos0 ];
+    maintainers = with lib.maintainers; [
+      albertchae
+      kikos0
+    ];
     mainProgram = "inngest";
     platforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
   };

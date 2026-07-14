@@ -3,9 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
+  pythonOlder,
   hatch-vcs,
   hatchling,
   python-dateutil,
+  typing-extensions,
   tzdata,
   hypothesis,
   pyprojectVersionPatchHook,
@@ -36,6 +38,10 @@ buildPythonPackage rec {
   dependencies = [
     python-dateutil
     tzdata
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    # typing.TypeIs arrived in Python 3.13.
+    typing-extensions
   ];
 
   nativeCheckInputs = [

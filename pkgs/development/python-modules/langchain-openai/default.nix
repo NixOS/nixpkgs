@@ -98,6 +98,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-openai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

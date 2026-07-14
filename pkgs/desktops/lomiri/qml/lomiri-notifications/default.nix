@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   cmake,
   dbus,
@@ -13,28 +12,19 @@
   qtdeclarative,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-rGs+MTt/Z+Gk3jSxU7tfNAUdypG/HJ4pDqvC+U722Eg=";
+    hash = "sha256-9K9+zS2MDqARTlGH2bu363ysrCg82D53sBkKiLSXBoI=";
   };
-
-  patches = [
-    # Remove when version > 1.3.2
-    (fetchpatch {
-      name = "0001-lomiri-notifications-support-qt6-and-newer-lomiri-api.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/55e9b61d2214edb31613d67fa66284acfa171dc5.patch";
-      excludes = [
-        "debian/*"
-      ];
-      hash = "sha256-BURficKpFd15RyNFWyZ+hqxFHnIbv4krFpTARQ86Ykw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -76,8 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
     # In case anything still depends on deprecated hints
-    (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true)
+    (lib.strings.cmakeBool "ENABLE_UBUNTU_COMPAT" (!withQt6))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

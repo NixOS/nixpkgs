@@ -63,7 +63,7 @@ let
       - `config.node.pkgs.<name>` or `config.nodes.foo.nixpkgs.pkgs.<name>` to refer
         to the Nixpkgs used on the VM guest(s).
       - `hostPkgs.<name>` when invoking commands on the VM host (e.g. in Python
-        `os.system("foo")`)
+        `subprocess.run(["foo"])`)
     - Since the runTest argument is a module instead of a function, arguments
       must be passed as option definitions.
       You may declare explicit `options` for the test parameter(s), or use the
@@ -154,6 +154,7 @@ in
     containers = runTest ./nixos-test-driver/containers.nix;
     nspawn-daemon-reexec-dbus = runTest ./nspawn-daemon-reexec-dbus.nix;
     skip-typecheck = runTest ./nixos-test-driver/skip-typecheck.nix;
+    console-timeout = runTest ./nixos-test-driver/console-timeout.nix;
     options-doc-regression = import ./nixos-test-driver/options-doc-regression.nix { inherit pkgs; };
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
@@ -168,6 +169,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    efivars = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/efivars.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
@@ -1003,7 +1005,6 @@ in
   matrix-conduit = runTest ./matrix/conduit.nix;
   matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = runTest ./matrix/synapse.nix;
-  matrix-synapse-workers = runTest ./matrix/synapse-workers.nix;
   matrix-tuwunel = runTest ./matrix/tuwunel.nix;
   matter-server = runTest ./matter-server.nix;
   matterjs-server = runTest ./matterjs-server.nix;
@@ -1204,6 +1205,7 @@ in
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
+  nordvpn = runTest ./nordvpn.nix;
   noto-fonts = runTest ./noto-fonts.nix;
   noto-fonts-cjk-qt-default-weight = runTest ./noto-fonts-cjk-qt-default-weight.nix;
   novacomd = handleTestOn [ "x86_64-linux" ] ./novacomd.nix { };
@@ -1850,6 +1852,7 @@ in
   wasabibackend = runTest ./wasabibackend.nix;
   wastebin = runTest ./wastebin.nix;
   watchdogd = runTest ./watchdogd.nix;
+  watt = runTest ./watt.nix;
   webhook = runTest ./webhook.nix;
   weblate = runTest ./web-apps/weblate.nix;
   wg-access-server = runTest ./wg-access-server.nix;

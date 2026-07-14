@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  setuptools_80,
   aiohttp,
   mashumaro,
   aiofiles,
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mCa2Mabw+Y5QAdiFquw7NP3K9HgDj+wZJbln2ugTp0Q=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     aiohttp

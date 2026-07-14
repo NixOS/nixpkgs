@@ -48,6 +48,9 @@
   darwinSupport ? config.vim.darwin or false, # Enable Darwin support
   ftNixSupport ? config.vim.ftNix or true, # Add nix indentation support from vim-nix (not needed for basic syntax highlighting)
   sodiumSupport ? config.vim.sodium or true, # Enable sodium based encryption
+
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -169,7 +172,9 @@ stdenv.mkDerivation {
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
   ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
-  ++ lib.optional waylandSupport wayland-scanner;
+  ++ lib.optional waylandSupport wayland-scanner
+  # TODO: Clean up on `staging`
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   buildInputs = [
     ncurses
@@ -196,7 +201,10 @@ stdenv.mkDerivation {
   ++ lib.optional sodiumSupport libsodium;
 
   # error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
+  # workaround for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec -fuse-ld=lld";
 
   preConfigure = lib.optionalString ftNixSupport ''
     cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim

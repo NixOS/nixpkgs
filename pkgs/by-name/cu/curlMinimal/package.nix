@@ -84,7 +84,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.20.0";
+  version = "8.21.0";
 
   src = fetchurl {
     urls = [
@@ -93,15 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
+    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
   };
-
-  patches = [
-    # https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23
-    # According to <https://curl.se/mail/distros-2026-05/0000.html>, this fixes
-    # a performance regression, causing high CPU usage
-    ./fix-wakeup-consumption.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

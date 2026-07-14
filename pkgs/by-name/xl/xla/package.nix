@@ -235,6 +235,9 @@ in
       runHook postInstall
     '';
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Machine learning compiler for GPUs, CPUs, and ML accelerators";
     homepage = "https://github.com/openxla/xla";

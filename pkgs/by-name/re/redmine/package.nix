@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchurl,
   bundlerEnv,
-  ruby_3_4,
+  ruby_4_0,
   makeWrapper,
   nixosTests,
   openssl,
@@ -15,11 +15,11 @@
 }:
 
 let
-  version = "6.1.3";
+  version = "7.0.0";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    ruby = ruby_3_4;
+    ruby = ruby_4_0;
     gemdir = ./.;
     groups = [
       "development"
@@ -41,7 +41,7 @@ let
             unpackPhase
             nativeBuildInputs
             ;
-          hash = "sha256-rUNsf7DUVueD9revOR6Mab36XnVEmjL4bVv6TIMMqjM=";
+          hash = "sha256-Xw0VWl3qZLvNNmRFHuWkltC1XfoIaHJKWM8Po4FSmoQ=";
         };
         dontBuild = false;
         nativeBuildInputs = [
@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YdswCMf9GKOvxVntZW/Tj9+N+CIKxpWYsxkJUYMZC3o=";
+    hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

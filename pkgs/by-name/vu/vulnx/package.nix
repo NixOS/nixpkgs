@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vulnx";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "vulnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HejAK/KXpQ9HouA3JpX7MoMzMUoMmKX7eEKwMGfgSx4=";
+    hash = "sha256-oIoLInhErN1AojJ8GLLfxsp4Yy/S0UjnCESrVfOGp/4=";
   };
 
-  vendorHash = "sha256-WVskArdIieEof/GDlzEZbY4QDYfAQyP0+Le24q+Kfu0=";
+  vendorHash = "sha256-xAdaTu/DRtolP6tXge42ntJvq7Wi9gDErRfX1HZposc=";
 
   subPackages = [ "cmd/vulnx/" ];
 

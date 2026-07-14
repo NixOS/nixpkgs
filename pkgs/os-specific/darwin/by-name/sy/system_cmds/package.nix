@@ -18,7 +18,7 @@ let
 
   libplatform = sourceRelease "libplatform";
 
-  xnu = sourceRelease "xnu";
+  xnu = sourceRelease "xnu"; # Can’t use xnuHeaders because adv_cmds is a transitive dependency of xnuHeaders.
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "system_cmds-deps-private-headers";
@@ -71,10 +71,11 @@ let
       install -D -t "$out/include/sys" \
         '${xnu}/bsd/sys/csr.h' \
         '${xnu}/bsd/sys/event_private.h' \
-        '${xnu}/bsd/sys/pgo.h' \
         '${xnu}/bsd/sys/kdebug_private.h' \
         '${xnu}/bsd/sys/kern_memorystatus.h' \
+        '${xnu}/bsd/sys/pgo.h' \
         '${xnu}/bsd/sys/proc_info_private.h' \
+        '${xnu}/bsd/sys/proc_private.h' \
         '${xnu}/bsd/sys/reason.h' \
         '${xnu}/bsd/sys/resource.h' \
         '${xnu}/bsd/sys/resource_private.h' \

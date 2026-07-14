@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   mkAppleDerivation,
   sourceRelease,
   stdenvNoCC,
@@ -23,8 +22,12 @@ let
         '${dyld}/include/mach-o/dyld_priv.h'
 
       substituteInPlace "$out/include/mach-o/dyld_priv.h" \
-        --replace-fail ', bridgeos(3.0)' "" \
-        --replace-fail '//@VERSION_DEFS@' 'const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };'
+        --replace-fail ', bridgeos(3.0)' ""
+
+      cat <<EOF > "$out/include/mach-o/dyld_version_defines.h"
+      #pragma once
+      const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };
+      EOF
     '';
   };
 in

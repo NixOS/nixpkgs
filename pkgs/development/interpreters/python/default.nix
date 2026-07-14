@@ -16,14 +16,14 @@
     passthruFun = import ./passthrufun.nix args;
 
     sources = {
-      python313 = {
+      python314 = {
         sourceVersion = {
           major = "3";
-          minor = "13";
-          patch = "13";
+          minor = "14";
+          patch = "6";
           suffix = "";
         };
-        hash = "sha256-Krkf9AF4PMymT3XRDIgulXvf1g4r9acvhCF5Nym3inE=";
+        hash = "sha256-FDsd3e+uw70uIeO4ObNKK3+5hCJyiDxXZCDWBenzDGM=";
       };
     };
 
@@ -54,25 +54,25 @@
       inherit passthruFun;
     };
 
-    python313 = callPackage ./cpython (
-      {
-        self = __splicedPackages.python313;
-        inherit passthruFun;
-      }
-      // sources.python313
-    );
-
-    python314 = callPackage ./cpython {
-      self = __splicedPackages.python314;
+    python313 = callPackage ./cpython {
+      self = __splicedPackages.python313;
       sourceVersion = {
         major = "3";
-        minor = "14";
-        patch = "4";
+        minor = "13";
+        patch = "14";
         suffix = "";
       };
-      hash = "sha256-2SPFEwPjjiSRNvwb3zVo1W7LAyFO/e9IUWF209f6rvg=";
+      hash = "sha256-Y55DJDxiCjCPloIT354A8vj2IzL3rbqnp+65eDBXxpA=";
       inherit passthruFun;
     };
+
+    python314 = callPackage ./cpython (
+      {
+        self = __splicedPackages.python314;
+        inherit passthruFun;
+      }
+      // sources.python314
+    );
 
     python315 = callPackage ./cpython {
       self = __splicedPackages.python315;
@@ -96,7 +96,7 @@
           # strip down that python version as much as possible
           withMinimalDeps = true;
         }
-        // sources.python313
+        // sources.python314
       )).overrideAttrs
         (old: {
           # TODO(@Artturin): Add this to the main cpython expr

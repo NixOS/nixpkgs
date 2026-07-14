@@ -52,10 +52,6 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  preCheck = ''
-    export OMP_NUM_THREADS=1
-  '';
-
   disabledTestPaths =
     lib.optionals stdenv.hostPlatform.isDarwin [
       # These tests may fail if multiple builds run them at the same time due

@@ -12,9 +12,12 @@
   setuptools,
   types-psutil,
   types-setuptools,
+  ast-serialize,
+
+  # nativeBuildInputs + propagates
+  librt,
 
   # propagates
-  librt,
   mypy-extensions,
   tomli,
   typing-extensions,
@@ -33,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.20.1";
+  version = "2.1.0";
   pyproject = true;
 
   # relies on several CPython internals
@@ -43,12 +46,16 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-MQZZyGu6xFh3wO+0lWED+mingjK92v/onljtp9gylmM=";
+    hash = "sha256-sm/pxQGxH5XuPH7B8i3fpp30KaFU9aSp6BT67UcDPvU=";
   };
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
+
+  nativeBuildInputs = [
+    librt
+  ];
 
   build-system = [
     mypy-extensions
@@ -57,6 +64,7 @@ buildPythonPackage rec {
     types-psutil
     types-setuptools
     typing-extensions
+    ast-serialize
   ];
 
   dependencies = [

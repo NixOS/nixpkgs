@@ -5,10 +5,7 @@
 }:
 (symlinkJoin {
   pname = "nodejs";
-  inherit (nodejs-slim) version meta;
-  passthru = nodejs-slim.passthru // {
-    inherit (nodejs-slim) src;
-  };
+  inherit (nodejs-slim) version passthru meta;
   paths = [
     nodejs-slim
     nodejs-slim.npm

@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "8.1";
+  version = "8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "RestrictedPython";
     tag = version;
-    hash = "sha256-UcmH1I2p+XmQm4Y5M+Ms/LMSchor6GD6V9dxippa4HI=";
+    hash = "sha256-Ck5YDtjYs7rZk+MC+eKrQVCQX1EYlxC6m4kD5+QjfjE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 78.1.1,< 81" setuptools
+      --replace-fail "setuptools >= 78.1.1,< 82" setuptools
   '';
 
   build-system = [ setuptools ];

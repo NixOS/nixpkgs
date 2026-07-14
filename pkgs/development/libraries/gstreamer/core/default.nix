@@ -33,6 +33,8 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -40,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.11";
+  version = "1.28.4";
 
   outputs = [
     "bin"
@@ -52,13 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LgvRktBDjqYGpvdqlcjhZUIWdlb/7Cwrw6r27gg3+/Y=";
+    hash = "sha256-9a3H6PRIwQJgs7JaoQHJ1UBnTI2aVMK3eobQTys7UN0=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     meson
@@ -83,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -116,6 +123,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
 
+  # Fix for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CC_LD = "lld";
+    OBJC_LD = "lld";
+  };
+
   postPatch = ''
     patchShebangs \
       gst/parse/get_flex_version.py \
@@ -144,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {

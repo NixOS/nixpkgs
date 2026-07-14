@@ -23,6 +23,9 @@
   withWebKit ? stdenv.hostPlatform.isDarwin,
   webkitgtk_4_1,
   libpng,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-support-webkitgtk-41.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -89,12 +96,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webviewwebkit"
   ];
 
-  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    SEARCH_LIB = toString [
-      "${libGLU.out}/lib"
-      "${libGL.out}/lib"
-    ];
-  };
+  env =
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      SEARCH_LIB = toString [
+        "${libGLU.out}/lib"
+        "${libGL.out}/lib"
+      ];
+    }
+    # TODO: Clean up on `staging`.
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_CFLAGS_LINK = "-fuse-ld=lld";
+    };
 
   preConfigure = ''
     substituteInPlace configure --replace \

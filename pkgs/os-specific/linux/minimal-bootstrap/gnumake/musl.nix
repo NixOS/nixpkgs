@@ -4,6 +4,7 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   tinycc,
   gnumakeBoot,
   gnupatch,
@@ -37,6 +38,7 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
+      coreutils
       tinycc.compiler
       gnumakeBoot
       gnupatch
@@ -58,6 +60,13 @@ bash.runCommand "${pname}-${version}"
     # Unpack
     tar xzf ${src}
     cd make-${version}
+
+    # Defeat parallel-build automake regen race, see gnused/default.nix.
+    touch Makefile.in Makefile aclocal.m4 config.h.in configure 2>/dev/null || true
+    for f in */Makefile.in; do touch "$f" 2>/dev/null || true; done
+    chmod +x configure config.guess config.sub install-sh missing compile \
+      depcomp mkinstalldirs help2man 2>/dev/null || true
+    [ -d build-aux ] && chmod +x build-aux/* 2>/dev/null || true
 
     # Patch
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}

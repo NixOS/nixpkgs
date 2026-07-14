@@ -5,7 +5,7 @@
   pytestCheckHook,
   fetchpatch2,
   six,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     done;
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ six ];
 

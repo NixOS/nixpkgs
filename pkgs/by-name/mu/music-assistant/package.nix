@@ -40,7 +40,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.4";
+  version = "2.9.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-PiSBghhlxknijRqghkO8wn1CB2XqaJrjrvGNvZUlNbo=";
+    hash = "sha256-lEbWQi6iUvqL2MXk/ZqkdX4Ou5pFWIVi6qfSyWCs8uQ=";
   };
 
   patches = [
@@ -88,11 +88,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    # Undo Python 3.14 only syntax
-    substituteInPlace music_assistant/controllers/streams/controller.py \
-      --replace-fail "except BrokenPipeError, ConnectionResetError, ConnectionError:" "except (BrokenPipeError, ConnectionResetError, ConnectionError):" \
-      --replace-fail "except BrokenPipeError, ConnectionResetError:" "except (BrokenPipeError, ConnectionResetError):"
-
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "==" ">="
@@ -151,6 +146,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       gql
       ifaddr
       librosa
+      markdownify
       mashumaro
       modern-colorthief
       music-assistant-frontend

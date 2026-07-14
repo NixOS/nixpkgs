@@ -4,6 +4,7 @@
   buildPythonPackage,
   cryptography,
   cython,
+  deprecated,
   eventlet,
   fetchFromGitHub,
   geomet,
@@ -17,6 +18,7 @@
   pyyaml,
   scales,
   sure,
+  tomli,
   twisted,
   setuptools,
   distutils,
@@ -24,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cassandra-driver";
-  version = "3.29.3";
+  version = "3.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cassandra-python-driver";
     tag = finalAttrs.version;
-    hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
+    hash = "sha256-4ElOiADaldT/TyLqg/5ijFk9Ygb3GEF37P2d8WdAxkw=";
   };
 
   pythonRelaxDeps = [ "geomet" ];
@@ -40,11 +42,13 @@ buildPythonPackage (finalAttrs: {
     distutils
     setuptools
     cython
+    tomli
   ];
 
   buildInputs = [ libev ];
 
   dependencies = [
+    deprecated
     geomet
   ];
 

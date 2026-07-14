@@ -2,19 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "flatdict";
-  version = "4.0.1";
-  format = "setuptools";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "flatdict";
-    rev = version;
-    hash = "sha256-CWsTiCNdIKSQtjpQC07lhZoU1hXT/MGpXdj649x2GlU=";
+    tag = version;
+    hash = "sha256-sLeW92F473H90+EMHaIWPt9ETqSeL/DoLmlMAg9Thj4=";
   };
+
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   pythonImportsCheck = [ "flatdict" ];
 

@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "24.16.0";
-  sha256 = "2ff84a6de70b6165290111b0fc656ded1ad207a799816fe720cc7c31232df30f";
+  version = "24.18.0";
+  sha256 = "e94afde24db08e0c564ee7110a2d5aab51ee0059382c9fd8233c54eec47b28f9";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -56,13 +56,6 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
-
-      # Patch for nghttp2 1.69 support
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
-        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
-        excludes = [ "tools/nix/*" ];
-      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [

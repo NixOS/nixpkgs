@@ -14,18 +14,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunkit";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "krunkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-43XqNofzKi310nhxTNo/Gj5didVa/u/gV05hglecLtk=";
+    hash = "sha256-aC/p+MoCG05hyADZaz+bbONLXTcR7uJIcMrZOn4Rjbg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-Yb2jyK4UBJCeVXSKl4UABnlMj+7SKpOIi49tD/itHYo=";
+    hash = "sha256-ptMqyCiIJsQfjFyislyc3pR0BGpwnu8Ba3OcQYLJPtM=";
   };
 
   nativeBuildInputs = [
@@ -52,15 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   passthru = {
-    tests.boot = callPackage ./boot-test.nix {
-      krunkit = finalAttrs.finalPackage;
-    };
+    tests.boot = lib.optional stdenv.isDarwin (
+      callPackage ./boot-test.nix { krunkit = finalAttrs.finalPackage; }
+    );
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Launch configurable virtual machines with libkrun";
-    homepage = "https://github.com/containers/krunkit";
+    homepage = "https://github.com/libkrun/krunkit";
     license = lib.licenses.asl20;
     platforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [ quinneden ];

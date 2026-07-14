@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "2.3.3.260113";
+  version = "3.0.3.260530";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     tag = "v${version}";
-    hash = "sha256-DJS3aG79IZowiTqHeOEgDdlH9Z1SXrbZ7yplCrFTtzw=";
+    hash = "sha256-vPXz4ibNbFE2B14pkGPN5EDAwhA92VgFXzMLR9da6WQ=";
   };
 
   build-system = [ poetry-core ];
@@ -78,12 +78,19 @@ buildPythonPackage rec {
     # Missing dependencies, error and warning checks
     "test_all_read_without_lxml_dtype_backend" # pyarrow.orc
     "test_orc" # pyarrow.orc
+    "test_iceberg" # pyiceberg
     "test_plotting" # UserWarning: No artists with labels found to put in legend.
     "test_spss" # FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
     "test_show_version"
     # FutureWarning: In the future `np.bool` will be defined as the corresponding...
     "test_timedelta_cmp"
     "test_timestamp_cmp"
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated
+    "test_timedelta_properties_methods"
+    "test_sparse_dtype"
+    "test_sparse_dtype_fill_value_subtype_compatibility"
+    "test_isna"
+    "test_timedelta_range"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'

@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "-C link-args=-lz"
       "-C link-args=-lzstd"
     ];
+    EXPECTED_SCHEDULERS = lib.concatStringsSep " " finalAttrs.passthru.schedulers;
   };
 
   hardeningDisable = [
@@ -64,7 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   __structuredAttrs = true;
-  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
 
   doInstallCheck = true;
   installCheckPhase = ''

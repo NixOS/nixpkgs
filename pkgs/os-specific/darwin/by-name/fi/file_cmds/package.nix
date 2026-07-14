@@ -70,12 +70,6 @@ let
       typedef int32_t user32_time_t;
       typedef int64_t user64_addr_t;
       typedef int64_t user64_time_t;
-      #elif defined(__x86_64__)
-      /* https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/i386/types.h#L128-L142 */
-      typedef int32_t user32_addr_t;
-      typedef int32_t user32_time_t;
-      typedef int64_t user64_addr_t __attribute__((aligned(8)));
-      typedef int64_t user64_time_t __attribute__((aligned(8)));
       #else
       #error "Tried to build file_cmds for an unsupported architecture"
       #endif

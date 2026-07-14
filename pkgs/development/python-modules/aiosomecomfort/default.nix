@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiosomecomfort";
-  version = "0.0.36";
+  version = "0.0.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkmer";
     repo = "AIOSomecomfort";
     tag = version;
-    hash = "sha256-Da2Nvke01S7Pt+md2G5RRJqyUc6M3tcj4qsdSJVoQds=";
+    hash = "sha256-xyGJsSgxE/UwTEfA2BzVHvgqG1c47/SokLHrysPkFAU=";
   };
 
   build-system = [

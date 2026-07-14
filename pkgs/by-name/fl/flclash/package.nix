@@ -83,6 +83,7 @@ flutter335.buildFlutterApplication {
       genericName = "FlClash";
       desktopName = "FlClash";
       categories = [ "Network" ];
+      startupWMClass = "com.follow.clash";
       keywords = [
         "FlClash"
         "Clash"

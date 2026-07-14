@@ -347,7 +347,7 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             os.path.basename(bootspec.toplevel) + "-secrets"
         )
 
-        if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
+        if subprocess.run([bootspec.initrdSecrets, initrd_secrets_path_temp]).returncode != 0:
             print(
                 f'warning: failed to create initrd secrets for "{label}"',
                 file=sys.stderr,
@@ -621,7 +621,7 @@ def install_bootloader() -> None:
     paths[config_file_path] = True
 
     for dest_path, source_path in config("additionalFiles").items():
-        dest_path = os.path.join(limine_install_dir, dest_path)
+        dest_path = os.path.join(str(config("efiMountPoint")), dest_path)
 
         copy_file(source_path, dest_path)
 

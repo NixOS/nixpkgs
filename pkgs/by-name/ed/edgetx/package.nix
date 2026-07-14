@@ -34,7 +34,7 @@ let
       pillow
       lz4
       jinja2
-      libclang
+      clang
     ]
   );
 

@@ -33,12 +33,28 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/bzip2 --help
-        mkdir $out
-      '';
+    passthru.tests = {
+      get-version =
+        result:
+        bash.runCommand "${pname}-get-version-${version}" { } ''
+          ${result}/bin/bzip2 --help
+          mkdir $out
+        '';
+
+      compress =
+        result:
+        bash.runCommand "${pname}-compress-${version}" { } ''
+          printf 'bootstrap\n' > input
+          ${result}/bin/bzip2 -k input
+          ${result}/bin/bunzip2 -c input.bz2 > bunzip2-output
+          read -r bunzip2Output < bunzip2-output
+          test "$bunzip2Output" = bootstrap
+          ${result}/bin/bzcat input.bz2 > bzcat-output
+          read -r bzcatOutput < bzcat-output
+          test "$bzcatOutput" = bootstrap
+          mkdir $out
+        '';
+    };
 
     meta = {
       description = "High-quality data compression program";
@@ -58,12 +74,15 @@ bash.runCommand "${pname}-${version}"
       -j $NIX_BUILD_CORES \
       CC=musl-gcc \
       CFLAGS=-static \
-      bzip2 bzip2recover
+      bzip2
 
     # Install
-    make install -j $NIX_BUILD_CORES PREFIX=$out
+    mkdir -p $out/bin
+    cp bzip2 $out/bin/bzip2
+    ln -s bzip2 $out/bin/bunzip2
+    ln -s bzip2 $out/bin/bzcat
 
     # Strip
     # Ignore failures, because strip may fail on non-elf files.
-    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
+    strip --strip-debug $out/bin/bzip2 || true
   ''

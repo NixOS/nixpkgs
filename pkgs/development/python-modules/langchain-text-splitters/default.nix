@@ -53,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-text-splitters==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

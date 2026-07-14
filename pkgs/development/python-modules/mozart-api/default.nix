@@ -18,13 +18,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mozart-api";
-  version = "5.3.1.108.2";
+  version = "6.2.0.44.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mozart_api";
     inherit (finalAttrs) version;
-    hash = "sha256-ilUSGgc4m6iMBUuSI7qt7c4DAE8cOPTzLGeQ4JQAB8U=";
+    hash = "sha256-HJKxw49hGjVedjpCzxfbL8v6b6MXXqE96hlL5U64r5Y=";
   };
 
   build-system = [ poetry-core ];

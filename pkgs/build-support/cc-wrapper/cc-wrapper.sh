@@ -44,7 +44,7 @@ while (( "$n" < "$nParams" )); do
 
     case "$p" in
         -[cSEM] | -MM) dontLink=1 ;;
-        -cc1) cc1=1 ;;
+        -cc1 | -fc1 ) cc1=1 ;;
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
@@ -185,9 +185,19 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
-# Add the flags for the C compiler proper.
-extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
-extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+# Add the flags for the compiler proper. Flang reads its user-supplied
+# flags from the Fortran-specific NIX_FFLAGS_COMPILE channel so that
+# C-only flags injected by setup hooks (e.g. -frandom-seed= from
+# reproducible-builds.sh, which Flang does not accept) never reach the
+# Fortran driver. This mirrors the NIX_GNATFLAGS_COMPILE channel that
+# the Ada/GNAT wrapper uses for the same reason.
+if [ "@isFlang@" = 1 ]; then
+    extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_FFLAGS_COMPILE_@suffixSalt@)
+    extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_FFLAGS_COMPILE_BEFORE_@suffixSalt@)
+else
+    extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
+    extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+fi
 
 if [ "$dontLink" != 1 ]; then
     linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)

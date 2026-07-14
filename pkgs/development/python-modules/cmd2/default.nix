@@ -46,6 +46,8 @@ buildPythonPackage rec {
     # Don't require vim for tests, it causes lots of rebuilds
     "test_find_editor_not_specified"
     "test_transcript"
+    # Removed upstream after rich 15 update
+    "test_from_ansi_wrapper"
   ];
 
   pythonImportsCheck = [ "cmd2" ];

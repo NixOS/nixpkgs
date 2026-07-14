@@ -90,6 +90,8 @@ buildPythonPackage rec {
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
+    # redis-py response mismatch
+    "test_hgetall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287

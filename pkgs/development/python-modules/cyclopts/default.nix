@@ -84,6 +84,9 @@ buildPythonPackage (finalAttrs: {
     # Building docs
     "build_succeeds"
     # timeouts under heavy concurrency
+    "test_behavior[zsh-root-subcommands]"
+    "test_behavior[zsh-subcommand-prefix]"
+    "test_path_completion_action"
     "test_requires_equals_eq_form_value_completion"
   ];
 

@@ -22,6 +22,7 @@
   libxrender,
   python3,
   withXorg ? true,
+  withQuartz ? false,
 
   # for passthru.tests
   exiv2,
@@ -39,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphviz";
-  version = "12.2.1";
+  version = "14.1.2";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    rev = finalAttrs.version;
-    hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
+    tag = finalAttrs.version;
+    hash = "sha256-LkyiKl0ulS9ujEdVLfyeoc4CtjITd6CAc35IUtlHSfw=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
     (lib.withFeature withXorg "x")
-  ];
+  ]
+  ++ optional withQuartz "--with-quartz";
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -136,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://graphviz.org";
+    changelog = "https://gitlab.com/graphviz/graphviz/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Graph visualization tools";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;

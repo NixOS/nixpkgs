@@ -95,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-4yqTBR8gv5q6uyuDq7Bgs1275YBQ87aaTYkNFtamVek=";
+    fetcherVersion = 4;
+    hash = "sha256-1QIGx0Zm6v4FIR1EYgXQzmBMZBa9Bi24vouT1K6v9EQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
