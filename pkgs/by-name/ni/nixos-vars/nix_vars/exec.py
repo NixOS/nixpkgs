@@ -187,10 +187,13 @@ def deploy_secrets(
 	config: VarsConfig,
 	backend: VarsGeneratorBackend,
 ):
-	binary = build_binary(backend.deploy)
+	local = args.local is not None and backend.deployLocal is not None
+	script = backend.deployLocal if local else backend.deploy
+
+	binary = build_binary(script)
 	try:
 		subprocess.run(
-			[binary],
+			[binary, args.local] if local else [binary],
 			capture_output=not args.verbose,
 			text=True,
 			check=True,

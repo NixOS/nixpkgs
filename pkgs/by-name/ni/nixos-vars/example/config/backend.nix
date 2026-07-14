@@ -1,6 +1,6 @@
 let
-  noop = pkgs: pkgs.writeShellScript "noop" "echo 'Unimplemented!'";
-  root = "/tmp/vars-demo";
+  rootHost = "/tmp/vars-demo";
+  rootTarget = "/tmp/deployed-vars-demo";
   mkScript =
     name: text: pkgs:
     pkgs.lib.getExe (
@@ -34,21 +34,21 @@ in
     generatorBackends.example = {
       get = mkScript "get" ''
         out=''${out:?} # Make shellcheck happy
-        cat ${root}/generators/"$1"/files/"$2" > "$out"
+        cat ${rootHost}/generators/"$1"/files/"$2" > "$out"
       '';
       set = mkScript "set" ''
         in=''${in:?} # Make shellcheck happy
-        mkdir -p ${root}/generators/"$1"/files/
-        cat "$in" > ${root}/generators/"$1"/files/"$2"
+        mkdir -p ${rootHost}/generators/"$1"/files/
+        cat "$in" > ${rootHost}/generators/"$1"/files/"$2"
       '';
       exists = mkScript "exists" ''
-        if [[ ! -f ${root}/generators/"$1"/files/"$2" ]]; then
+        if [[ ! -f ${rootHost}/generators/"$1"/files/"$2" ]]; then
           exit 42
         fi
       '';
 
       delete = mkScript "delete" ''
-        rm -rf ${root}/generators/"$1"/files/"$2"
+        rm -rf ${rootHost}/generators/"$1"/files/"$2"
       '';
 
       # This example showcases that scripts can be written in any language
@@ -56,7 +56,7 @@ in
         pkgs:
         pkgs.writers.writePython3 "list" { } ''
           from pathlib import Path
-          base = Path("${root}/generators")
+          base = Path("${rootHost}/generators")
           if base.exists():
               for generator in base.iterdir():
                   for file in (generator / "files").iterdir():
@@ -65,32 +65,37 @@ in
 
       fixup = mkScript "fixup" "";
 
-      deploy = noop;
-    };
-
-    prompts.example.description = "Your name";
-    prompts.example.type = "multiline";
-
-    generators.example = {
-      prompts = [ "example" ];
-      files.example = { };
-      script = mkScript "gen-example" ''
-        # Make shellcheck happy
-        out=''${out:?}         
-        prompts=''${prompts:?}
-        echo "Hewwo $(cat "$prompts/example")!" > "$out/example"
+      deploy = mkScript "deploy" ''
+        echo "Not implemented :(" 1>&2 
+        exit 1
       '';
-    };
 
-    generators.derived = {
-      dependencies = [ "example" ];
-      files.derived = { };
-      script =
-        pkgs:
-        pkgs.writeShellScript "gen-derived" ''
-          ${pkgs.coreutils}/bin/cat $in/example/example \
-            | ${pkgs.lib.getExe pkgs.cowsay} > $out/derived
-        '';
+      deployLocal = mkScript "deployLocal" ''
+        if [[ ! -d "$1" ]]; then
+          echo "System root not found" 1>&2 
+          exit 1
+        fi
+
+        if [[ -d "${rootHost}/generators" ]]; then
+          for generator in "${rootHost}/generators"/*; do
+            [[ -d "$generator" ]] || continue
+            files="$generator/files"
+            [[ -d "$files" ]] || continue
+            for file in "$files"/*; do
+              [[ -e "$file" ]] || continue
+              dir="$1/${rootTarget}/$(basename "$generator")"
+              mkdir -p "$dir"
+              cp "$file" "$dir/$(basename "$file")"
+            done
+          done
+        fi
+      '';
+
+      fileModule =
+        { generator, name, ... }:
+        {
+          path = "${rootTarget}/${generator.name}/${name}";
+        };
     };
   };
 }

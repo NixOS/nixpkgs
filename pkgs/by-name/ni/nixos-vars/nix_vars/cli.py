@@ -105,6 +105,13 @@ def main() -> None:
 	common_args(gc_parser)
 	deploy_parser = subparsers.add_parser("deploy", help="Deploy secrets")
 	common_args(deploy_parser)
+	deploy_parser.add_argument(
+		"-l",
+		"--local",
+		type=str,
+		metavar="<sytem-root>",
+		help="Deploy to a locally attached filesystem",
+	)
 
 	args = parser.parse_args()
 	args = VarsArgs.from_dict(vars(args))
