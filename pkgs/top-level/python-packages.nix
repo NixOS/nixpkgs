@@ -20230,6 +20230,8 @@ self: super: with self; {
 
   thttp = callPackage ../development/python-modules/thttp { };
 
+  thumbhash = callPackage ../development/python-modules/thumbhash { };
+
   tianshou = callPackage ../development/python-modules/tianshou { };
 
   tidalapi = callPackage ../development/python-modules/tidalapi { };
