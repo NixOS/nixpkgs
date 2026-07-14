@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "venstarcolortouch";
   version = "0.22";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-R9BJmZcseYlFLcoDUxfH3M0FO5GVsDtw7smK2dmLlNo=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Project has no tests
   doCheck = false;
