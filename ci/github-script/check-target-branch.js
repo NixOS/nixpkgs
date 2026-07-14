@@ -25,6 +25,16 @@ async function checkTargetBranch({ github, context, core, dry }) {
    *   changed: string[],
    *   removed: string[],
    *  },
+   *  attrdiffByKernel: Record<string, {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  }>,
+   *  attrdiffByPlatform: Record<string, {
+   *   added: string[],
+   *   changed: string[],
+   *   removed: string[],
+   *  }>,
    *  labels: Record<string, boolean>,
    *  rebuildCountByKernel: Record<string, number>,
    *  rebuildsByKernel: Record<string, string[]>,
@@ -89,13 +99,13 @@ async function checkTargetBranch({ github, context, core, dry }) {
     ...Object.values(changed.rebuildCountByKernel),
   )
   const rebuildsAllTests =
-    changed.attrdiff.changed.includes('nixosTests.simple')
+    changed.attrdiff.changed.includes('nixosTests.simple-container') ||
+    changed.attrdiff.changed.includes('nixosTests.simple-vm')
 
-  // https://github.com/NixOS/nixpkgs/pull/481205#issuecomment-3790123921
-  // These should go to staging-nixos instead of master,
-  // but release-xx.xx (not staging-xx.xx) when backported
+  // https://github.com/NixOS/nixpkgs/pull/521157
+  // These should go to master and release-xx.xx when backported
   let isExemptKernelUpdate = false
-  if (prInfo.changed_files === 1 && base.startsWith('release-')) {
+  if (prInfo.changed_files === 1) {
     const changedFiles = (
       await github.rest.pulls.listFiles({
         ...context.repo,
@@ -105,7 +115,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
     isExemptKernelUpdate =
       changedFiles.length === 1 &&
       changedFiles[0].filename ===
-        'pkgs/os-specific/linux/kernel/kernels-org.json'
+        'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
   }
 
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
@@ -141,19 +151,19 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'COMMENT',
+      event: 'REQUEST_CHANGES',
       reviewKey,
     })
-
-    throw new Error('This PR is against the wrong branch.')
   } else if (rebuildsAllTests && !isExemptKernelUpdate) {
     let branchText
     if (base === 'master' && maxRebuildCount >= 500) {
       branchText = '(probably either `staging-nixos` or `staging`)'
     } else if (base === 'master') {
       branchText = '(probably `staging-nixos`)'
+    } else if (maxRebuildCount >= 500) {
+      branchText = `(probably either \`staging-nixos-${split(base).version}\` or \`staging-${split(base).version}\`)`
     } else {
-      branchText = `(probably \`staging-${split(base).version}\`)`
+      branchText = `(probably \`staging-nixos-${split(base).version}\`)`
     }
     const body = [
       `The PR's base branch is set to \`${base}\`, but this PR rebuilds all NixOS tests.`,
@@ -169,11 +179,9 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'COMMENT',
+      event: 'REQUEST_CHANGES',
       reviewKey,
     })
-
-    throw new Error('This PR is against the wrong branch.')
   } else if (
     maxRebuildCount >= 500 &&
     !isExemptKernelUpdate &&
@@ -194,7 +202,7 @@ async function checkTargetBranch({ github, context, core, dry }) {
       core,
       dry,
       body,
-      event: 'COMMENT',
+      event: 'REQUEST_CHANGES',
       reviewKey,
     })
   } else {

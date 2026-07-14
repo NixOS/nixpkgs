@@ -12,7 +12,6 @@ let
     mkOption
     mkIf
     mkForce
-    cli
     concatStringsSep
     optionalString
     escapeShellArgs

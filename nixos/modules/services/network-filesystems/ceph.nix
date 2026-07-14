@@ -481,6 +481,15 @@ in
         "/run/ceph".d = defaultConfig // {
           mode = "0770";
         };
+        # Ceph daemons log to files under `/var/log/ceph` by default
+        # (`log_to_file = true`, `log_file = /var/log/ceph/$cluster-$name.log`).
+        # The daemons run as the unprivileged `ceph` user under
+        # `ProtectSystem=full` and cannot create this directory themselves, and
+        # Ceph silently discards its logs if the directory is missing; it does
+        # not even warn; the `::open()` failure in `Log::reopen_log_file()` is
+        # ignored, see https://github.com/ceph/ceph/blob/v20.2.1/src/log/Log.cc#L165-L174.
+        # Create the directory so logging works out of the box.
+        "/var/log/ceph".d = defaultConfig;
         "/var/lib/ceph".d = defaultConfig;
         "/var/lib/ceph/mgr".d = lib.mkIf (cfg.mgr.enable) defaultConfig;
         "/var/lib/ceph/mon".d = lib.mkIf (cfg.mon.enable) defaultConfig;

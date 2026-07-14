@@ -6,50 +6,49 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
   xdg-utils,
+  darwin,
 }:
 
 let
+  inherit (stdenv.hostPlatform) isLinux isDarwin system;
+
+  pnpm = pnpm_11;
+
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "darwin";
+    "aarch64-darwin" = "darwin-arm64";
   };
 
-  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
-
-  desktopEntry = makeDesktopItem {
-    name = "siyuan";
-    desktopName = "SiYuan";
-    comment = "Refactor your thinking";
-    icon = "siyuan";
-    exec = "siyuan %U";
-    categories = [ "Utility" ];
-  };
+  platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.5.8";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mXDro4m2QZEUcljpQNC5JqhVbRZgBVU1Wfiq1JtS0B0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K31h2noDpTn7vCXj16K2dxRPww5z+HC/nA4Gn5MAVms=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-i7eq8RDbuv+FzreClW8JFocUs7R8A02cOZ8NaAGBMfA=";
+    vendorHash = "sha256-fZLVqrWTWUHo6BhixB6+krXaM7WCiZpusHA8T2SicgQ=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -69,25 +68,23 @@ stdenv.mkDerivation (finalAttrs: {
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
       "-s"
-      "-w"
-      "-X"
-      "github.com/siyuan-note/siyuan/kernel/util.Mode=prod"
+      "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
     tags = [ "fts5" ];
   };
 
-  # this should contain a 'packages' key, but it doesn't...
-  # we can remove it because it's not needed to build
-  postPatch = ''
-    rm pnpm-workspace.yaml
-  '';
-
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm
+  ]
+  ++ lib.optionals isLinux [
+    pnpmBuildHook
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -96,11 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      postPatch
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-Dp684KKAb8Ge2PyPhBFgIB17Fs6swAF/Fw2z9SN4Aio=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-1QIGx0Zm6v4FIR1EYgXQzmBMZBa9Bi24vouT1K6v9EQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -114,26 +110,40 @@ stdenv.mkDerivation (finalAttrs: {
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  postBuild = ''
+    electronBuilderArgs=(
+      --dir
+      --config electron-builder-${platformId}.yml
+      -c.electronDist=electron-dist
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
 
-    pnpm build
-
-    npm exec electron-builder -- \
-        --dir \
-        --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version}
-
-    runHook postBuild
+    npm exec electron-builder -- "''${electronBuilderArgs[@]}"
   '';
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString isDarwin ''
+    mkdir -p $out/Applications $out/bin
 
+    cp -R build/mac*/*.app $out/Applications/SiYuan.app
+
+    cat > $out/bin/siyuan << EOF
+    #!${stdenv.shell}
+    exec open -na "$out/Applications/SiYuan.app" --args "\$@"
+    EOF
+    chmod +x $out/bin/siyuan
+  ''
+  + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
+
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
@@ -145,20 +155,26 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
-
+  ''
+  + ''
     runHook postInstall
   '';
 
-  desktopItems = [ desktopEntry ];
+  desktopItems = lib.optional isLinux (makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  });
 
-  passthru = {
-    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+      "--subpackage=kernel"
+    ];
   };
 
   meta = {
@@ -169,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       ltrump
+      myul
     ];
     platforms = lib.attrNames platformIds;
   };

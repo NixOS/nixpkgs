@@ -7,9 +7,11 @@
   libgpg-error,
   makeBinaryWrapper,
   texinfo,
-  xcbuild,
   common-updater-scripts,
   writers,
+  re-plistbuddy,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +30,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gettext-0.25.patch
-
-    # Fix the build with xcbuild’s inferior `PlistBuddy(8)`.
-    ./fix-with-xcbuild-plistbuddy.patch
   ];
 
   # use pregenerated nib files because generating them requires XCode
@@ -40,6 +39,8 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
     # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
     cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
+    substituteInPlace macosx/copyInfoPlist.sh \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
 
   strictDeps = true;
@@ -47,9 +48,9 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeBinaryWrapper
     texinfo
-
-    # for `PlistBuddy(8)`
-    xcbuild
+    re-plistbuddy
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
   ];
 
   configureFlags = [
@@ -58,6 +59,11 @@ stdenv.mkDerivation rec {
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
   ];
+
+  # Fix for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     mkdir -p $out/Applications $out/bin

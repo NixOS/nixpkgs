@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "minify";
-  version = "2.24.10";
+  version = "2.24.13";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = "minify";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mpSnELFSaSg+BCzGQs2gmKA91imtRq6UZNIxzBvueTc=";
+    hash = "sha256-wmK+4ryM4pONuDuq5V+Y5/qd0II0QiTJ0pq/3PYQSWQ=";
   };
 
-  vendorHash = "sha256-Mbqzgn6GvdIFqeZPEHJoyxXvrivzpq77BbRQALwWnsI=";
+  vendorHash = "sha256-1a3DrkBj2R22933blXpI2UzMZSc/SN3zn89bBihxWFk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

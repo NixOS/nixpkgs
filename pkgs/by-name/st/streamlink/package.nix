@@ -7,21 +7,28 @@
   extras ? [
     "decompress"
   ],
+  fetchpatch2,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "8.2.0";
+  version = "8.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZFI+mUAd307n8J9VF4fcEnER7rmsjYsOgDeWbv3XoaU=";
+    hash = "sha256-9HfpSTM2vLfDorEO6nKmCumn9J6WitoNTQG/946sRLs=";
   };
 
   patches = [
     (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
+    })
+    # remove when bumping to >8.4.0
+    (fetchpatch2 {
+      name = "fix-read-timeout-test.patch";
+      url = "https://github.com/streamlink/streamlink/commit/a1875a2c85cef47ddf6b1375c3651d52c8e799a1.patch?full_index=1";
+      hash = "sha256-9C4NedVyuk0ed3JvpKtvxei3Wo+r4SPlQXbBpoRXZ4k=";
     })
   ];
 
@@ -58,7 +65,7 @@ python3Packages.buildPythonApplication rec {
       urllib3
       websocket-client
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     decompress = urllib3.optional-dependencies.brotli ++ urllib3.optional-dependencies.zstd;

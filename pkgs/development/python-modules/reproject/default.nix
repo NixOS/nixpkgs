@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.19.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "reproject";
     tag = "v${version}";
-    hash = "sha256-30u/APFJiMA1fY50jKLE7MdXMDmUMMZ+ER6mmhx7CJc=";
+    hash = "sha256-IuGVipAb4x63U2k9tNHhps5Gbk+3Hi/1ZkeMTZ/vaiU=";
   };
 
   build-system = [

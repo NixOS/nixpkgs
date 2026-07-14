@@ -17,6 +17,7 @@
   fetchpatch,
   makeWrapper,
   coq2html,
+  dune,
 }@args:
 let
   lib = import ../build-support/coq/extra-lib.nix { inherit (args) lib; };
@@ -26,14 +27,14 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-      coqPackages = self // {
+      rocqPackages = self // {
         recurseForDerivations = false;
       };
     in
     {
-      inherit coqPackages lib;
+      inherit rocqPackages lib;
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
@@ -41,7 +42,16 @@ let
           fetchurl
           ;
       };
-      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
+      mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
+      mkCoqDerivation =
+        args:
+        self.mkRocqDerivation (
+          {
+            useCoq = true;
+            namePrefix = [ "coq" ];
+          }
+          // args
+        );
 
       coq = coq.overrideAttrs (oldAttrs: {
         passthru = (oldAttrs.passthru or { }) // {
@@ -68,8 +78,11 @@ let
           callPackage ../development/coq-modules/bignums { }
         else
           null;
+      CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
+      ceres-bs = callPackage ../development/coq-modules/ceres-bs { };
+      CertiRocq = callPackage ../development/coq-modules/CertiRocq { };
       Cheerios = callPackage ../development/coq-modules/Cheerios { };
       coinduction = callPackage ../development/coq-modules/coinduction { };
       CoLoR = callPackage ../development/coq-modules/CoLoR (
@@ -85,8 +98,8 @@ let
           lib
           stdenv
           ;
-        ocamlPackages = ocamlPackages_4_14;
       };
+      ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
       coq-elpi = callPackage ../development/coq-modules/coq-elpi { };
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
@@ -148,10 +161,12 @@ let
       mathcomp-boot = self.mathcomp.boot;
       mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
+      mathcomp-finite-group = self.mathcomp.fingroup;
       mathcomp-fingroup = self.mathcomp.fingroup;
       mathcomp-algebra = self.mathcomp.algebra;
       mathcomp-solvable = self.mathcomp.solvable;
       mathcomp-field = self.mathcomp.field;
+      mathcomp-group-representation = self.mathcomp.character;
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel { };
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics { };
@@ -237,6 +252,7 @@ let
       );
       Velisarios = callPackage ../development/coq-modules/Velisarios { };
       Verdi = callPackage ../development/coq-modules/Verdi { };
+      verified-extraction = callPackage ../development/coq-modules/verified-extraction { };
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };
@@ -247,10 +263,6 @@ let
             version =
               with lib.versions;
               lib.switch self.coq.version [
-                {
-                  case = range "8.19" "8.20";
-                  out = "3.15";
-                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
@@ -283,7 +295,7 @@ let
         let
           v = set.${name} or null;
         in
-        lib.optional (!v.meta.coqFilter or false) (
+        lib.optional (!v.meta.rocqFilter or false) (
           lib.nameValuePair name (
             if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
           )
@@ -358,6 +370,6 @@ rec {
   coq_9_1 = coqPackages_9_1.coq;
   coq_9_2 = coqPackages_9_2.coq;
 
-  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_1;
   coq = coqPackages.coq;
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   cargo,
   meson,
   ninja,
@@ -8,6 +9,7 @@
   rustc,
   stdenv,
   systemdLibs,
+  useWrappedDaemon ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oo7-server";
@@ -28,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     systemdLibs
   ];
+
+  postFixup = lib.optionalString useWrappedDaemon ''
+    substituteInPlace "$out/share/systemd/user/oo7-daemon.service" \
+      --replace-fail "$out/libexec/oo7-daemon" "/run/wrappers/bin/oo7-daemon"
+  '';
 
   meta = {
     inherit (oo7.meta)

@@ -25,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bL3hQmERXNwGmDoi7+wLv/TkppGhG6cO47k1iZvJGzY=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Remove when updating past 1.17.0. Fixes `pkgsMusl.spdlog` build.
+      url = "https://github.com/gabime/spdlog/commit/0f7562a0f9273cfc71fddc6ae52ebff7a490fa04.patch";
+      name = "tests-timezone-Provide-DST-rules-when-setting-TZ-on-POSIX-systems";
+      hash = "sha256-jsw3AgTXeRdU2ncuzAkYp6SPrBKntz2I3NLOjAPkW78=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
   # Required to build tests, even if they aren't executed
   buildInputs = [ catch2_3 ];

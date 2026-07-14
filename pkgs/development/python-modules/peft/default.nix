@@ -29,7 +29,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peft";
   version = "0.18.1";
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qlM8yEN/CJZbSAGNCltS4JQSzstVXRVqu47qZbLPVNc=";
   };
 
@@ -70,12 +70,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests" ];
 
-  # These tests fail when MPS devices are detected
-  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
-    "gpu"
-    "test_save_load"
-    "test_resume_training_model_with_topk_weights"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # RuntimeError: Failed to initialize cpuinfo!
+      "test_randlora_dtypes"
+      "test_shira_dtypes"
+      "test_vblora_dtypes"
+      "test_vera_dtypes"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # These tests fail when MPS devices are detected
+      "gpu"
+      "test_save_load"
+      "test_resume_training_model_with_topk_weights"
+    ];
 
   disabledTestPaths = [
     # ValueError: Can't find 'adapter_config.json'
@@ -113,8 +121,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/huggingface/peft";
     description = "State-of-the art parameter-efficient fine tuning";
-    changelog = "https://github.com/huggingface/peft/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/peft/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

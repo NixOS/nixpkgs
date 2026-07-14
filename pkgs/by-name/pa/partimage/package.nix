@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Opensource disk backup software";
     homepage = "https://www.partimage.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

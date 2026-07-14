@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   pythonRelaxDeps = [
+    "openapi-spec-validator"
     "rich"
     "setuptools"
     "tenacity"

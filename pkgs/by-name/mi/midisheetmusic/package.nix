@@ -77,10 +77,10 @@ stdenv.mkDerivation {
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   installPhase = ''
-    mkdir -p $out/share/applications $out/share/pixmaps $out/bin
+    mkdir -p $out/share/applications $out/bin
 
     cp deb/midisheetmusic.desktop $out/share/applications
-    cp NotePair.png $out/share/pixmaps/midisheetmusic.png
+    install -D NotePair.png $out/share/icons/hicolor/256x256/apps/midisheetmusic.png
     cp bin/Debug/MidiSheetMusic.exe $out/bin/.MidiSheetMusic.exe
 
     makeWrapper ${mono}/bin/mono $out/bin/midisheetmusic.mono.exe \

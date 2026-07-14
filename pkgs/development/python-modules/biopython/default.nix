@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   setuptools,
   numpy,
 }:
@@ -15,6 +16,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-k6ULWGpNLOxoqy+Z0D71g8V2HY+6VTXLjoHaeB0Nkv8=";
   };
+
+  patches = [
+    # Numpy 2.4 compatibility
+    (fetchpatch {
+      url = "https://github.com/biopython/biopython/pull/5161.patch";
+      hash = "sha256-oN0nNlhvshIgNrmm+tIeCAJx1U/OqhdL4tj51DV2CHU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -33,8 +42,6 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    # https://github.com/biopython/biopython/issues/5135
-    broken = lib.versionAtLeast numpy.version "2.4";
     description = "Python library for bioinformatics";
     longDescription = ''
       Biopython is a set of freely available tools for biological computation

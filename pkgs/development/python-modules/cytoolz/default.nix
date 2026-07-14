@@ -5,7 +5,6 @@
   pytestCheckHook,
   cython,
   setuptools,
-  setuptools-git-versioning,
   toolz,
 }:
 
@@ -27,10 +26,9 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
-    setuptools-git-versioning
   ];
 
   dependencies = [ toolz ];

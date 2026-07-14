@@ -1,31 +1,42 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
+  qt5,
+  setuptools,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anyqt";
   version = "0.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ales-erjavec";
     repo = "anyqt";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-iDUgu+x9rnpxpHzO7Rf2rJFXsheivrK7HI3FUbomkTU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pyqt5
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  # All of these fail because Qt modules cannot be imported
-  disabledTestPaths = [
+  preCheck = ''
+    export QT_PLUGIN_PATH="${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM=offscreen
+  '';
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_qabstractitemview.py"
     "tests/test_qaction_set_menu.py"
     "tests/test_qactionevent_action.py"
@@ -43,7 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyQt/PySide compatibility layer";
     homepage = "https://github.com/ales-erjavec/anyqt";
+    changelog = "https://github.com/ales-erjavec/anyqt/releases/tag/${finalAttrs.version}";
     license = [ lib.licenses.gpl3Only ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
-}
+})

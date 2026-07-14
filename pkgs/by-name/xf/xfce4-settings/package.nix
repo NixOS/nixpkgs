@@ -18,6 +18,8 @@
   libxfce4ui,
   libxfce4util,
   libxklavier,
+  libxml2,
+  bashNonInteractive,
   withXrandr ? true,
   upower,
   # Disabled by default on upstream and actually causes issues:
@@ -34,15 +36,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-settings";
-  version = "4.20.3";
+  version = "4.20.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "xfce";
     repo = "xfce4-settings";
     tag = "xfce4-settings-${finalAttrs.version}";
-    hash = "sha256-dQyALVooaie2vkETghddKM4HqAZQmx3E9UJ+ChKtydc=";
+    hash = "sha256-EAiu29wctXg0EjdFVJOl+0nh1A0l2E44v+i/o5l/PQ8=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -50,9 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-dev-tools
     wayland-scanner
     wrapGAppsHook3
+    libxml2
   ];
 
   buildInputs = [
+    bashNonInteractive
     xfce4-exo
     garcon
     glib
@@ -72,9 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withUpower [ upower ]
   ++ lib.optionals withColord [ colord ];
 
+  strictDeps = true;
+
   configureFlags = [
-    "--enable-maintainer-mode"
-    "--enable-pluggable-dialogs"
     "--enable-sound-settings"
     (lib.enableFeature withXrandr "xrandr")
   ]

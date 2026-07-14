@@ -1,6 +1,7 @@
 {
   lib,
   runCommand,
+  runCommandLocal,
   testers,
   treefmt,
   nixfmt,
@@ -31,6 +32,28 @@ let
     settings = nixfmtExampleConfig;
     runtimeInputs = [ nixfmt ];
   };
+
+  wellFormattedTree = runCommandLocal "well-formatted-project" { } ''
+    mkdir "$out"
+    cat > "$out/file.nix" <<EOF
+    {
+      foo = "bar";
+      attrs = { };
+      list = [ ];
+    }
+    EOF
+  '';
+
+  unformattedTree = runCommandLocal "unformatted-project" { } ''
+    mkdir "$out"
+    cat > "$out/file.nix" <<EOF
+    {
+      foo="bar";
+      attrs={};
+      list=[];
+    }
+    EOF
+  '';
 in
 {
   buildConfigEmpty = testEqualContents {
@@ -68,14 +91,26 @@ in
     '';
   };
 
+  nixfmtExampleCheckPasses = nixfmtExamplePackage.check wellFormattedTree;
+
+  nixfmtExampleCheckFails = testers.testBuildFailure' {
+    drv = nixfmtExamplePackage.check unformattedTree;
+    expectedBuilderExitCode = 1;
+    expectedBuilderLogEntries = [
+      "diff --git a/file.nix b/file.nix"
+      "-  foo=\"bar\";"
+      "+  foo = \"bar\";"
+      "-  attrs={};"
+      "+  attrs = { };"
+      "-  list=[];"
+      "+  list = [ ];"
+    ];
+  };
+
   runNixfmtExample =
     runCommand "run-nixfmt-example"
       {
         nativeBuildInputs = [ nixfmtExamplePackage ];
-        passAsFile = [
-          "input"
-          "expected"
-        ];
         input = ''
           {
             foo="bar";
@@ -90,18 +125,19 @@ in
             list = [ ];
           }
         '';
+        __structuredAttrs = true;
       }
       ''
         export XDG_CACHE_HOME=$(mktemp -d)
         # The example config assumes the tree root has a .git/index file
         mkdir .git && touch .git/index
 
-        # Copy the input file, then format it using the wrapped treefmt
-        cp $inputPath input.nix
+        # Create the input file, then format it using the wrapped treefmt
+        printf "%s" "$input" > input.nix
         treefmt
 
         # Assert that input.nix now matches expected
-        if diff -u $expectedPath input.nix; then
+        if diff -u <(printf "%s" "$expected") input.nix; then
           touch $out
         else
           echo

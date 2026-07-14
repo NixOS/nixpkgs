@@ -8,7 +8,7 @@
   pytestCheckHook,
   pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.7.13";
   pname = "textstat";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "textstat";
     repo = "textstat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VMWwhwyGMFaKNLHoDG3gw1/jzSYCDBH3Yq4pE4JZTTo=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "tests/"
   ];
 
-  NLTK_DATA = nltk.data.cmudict;
+  env.NLTK_DATA = nltk.data.cmudict;
 
   meta = {
     description = "Python package to calculate readability statistics of a text object";
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

@@ -2,13 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  google-api-core,
   google-auth,
   google-cloud-core,
   google-cloud-iam,
   google-cloud-kms,
   google-cloud-testutils,
+  google-crc32c,
   google-resumable-media,
+  grpc-google-iam-v1,
+  grpcio,
+  grpcio-status,
   mock,
+  opentelemetry-api,
+  proto-plus,
   protobuf,
   pytestCheckHook,
   pytest-asyncio,
@@ -18,29 +25,41 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.8.0";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
-    repo = "python-storage";
-    tag = "v${version}";
-    hash = "sha256-CHku6tiELE3deP6ZCRx/ekn60FmF3gO51cOAF1DkQrI=";
+    repo = "google-cloud-python";
+    tag = "google-cloud-storage-v${version}";
+    hash = "sha256-4rmrRvYW9FOpvYY4a+vbDzQRcLXfFHGSCnv7yL6S1FM=";
   };
 
-  pythonRelaxDeps = [ "google-auth" ];
+  sourceRoot = "${src.name}/packages/google-cloud-storage";
 
   build-system = [ setuptools ];
 
   dependencies = [
+    google-api-core
     google-auth
     google-cloud-core
+    google-crc32c
     google-resumable-media
     requests
   ];
 
   optional-dependencies = {
+    grpc = [
+      google-api-core
+      grpc-google-iam-v1
+      grpcio
+      grpcio-status
+      proto-plus
+      protobuf
+    ]
+    ++ google-api-core.optional-dependencies.grpc;
     protobuf = [ protobuf ];
+    tracing = [ opentelemetry-api ];
   };
 
   nativeCheckInputs = [
@@ -77,6 +96,16 @@ buildPythonPackage rec {
     "test_update_user_agent_when_default_clientinfo_provided"
     "test_update_user_agent_when_none_clientinfo_provided"
     "test_update_user_agent_with_existing_user_agent"
+    "test_403_permission_cache_fallback"
+    "test_404_on_blob_bucket_deleted"
+    "test_404_on_blob_but_bucket_exists"
+    "test_cache_eviction_on_bucket_404"
+    "test_cache_eviction_on_bucket_delete"
+    "test_cache_stampede_protection"
+    "test_disable_bucket_md_env_flag"
+    "test_lru_bounded_capacity_eviction"
+    "test_sequential_cache_priming"
+    "test_sequential_cache_priming_multi_region"
   ];
 
   disabledTestPaths = [
@@ -100,8 +129,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Google Cloud Storage API client library";
-    homepage = "https://github.com/googleapis/python-storage";
-    changelog = "https://github.com/googleapis/python-storage/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-storage/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };

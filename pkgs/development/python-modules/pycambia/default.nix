@@ -2,39 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   openssl,
   pkg-config,
   pytestCheckHook,
   rustPlatform,
 }:
-let
-  cargoLockPatch = (
-    fetchpatch {
-      name = "cargo.lock.patch";
-      url = "https://github.com/KyokoMiki/pycambia/commit/00446e13c20a461c323b119e16f3f57489ba662d.patch";
-      hash = "sha256-N7F67VRxfndoN8NllmGKEePOh3mgbjlNaToUvxh+IrE=";
-    }
-  );
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycambia";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyokoMiki";
     repo = "pycambia";
-    tag = version;
-    hash = "sha256-ZflLy6Qa4tBlPZkTya3ELu463qcnRcMS57a6FfHpSNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5UHWAIR+qo16UUsi9D0e6W8UmQ4HUujNWLfJpyIrCUI=";
   };
 
-  patches = [ cargoLockPatch ];
-
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-jmdf+Idg9PR4jgZ7bexPsAyGj86vGxLseTWXnhzP7+E=";
-    patches = [ cargoLockPatch ];
+    inherit (finalAttrs) src;
+    hash = "sha256-w7n/W7PDC3+DPCb//X462mowhEPw0k3HA1raAeu4t/c=";
   };
 
   buildInputs = [ openssl ];
@@ -55,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ undefined-landmark ];
   };
-}
+})

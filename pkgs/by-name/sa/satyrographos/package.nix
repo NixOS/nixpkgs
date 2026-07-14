@@ -40,7 +40,7 @@ ocamlPackages.buildDunePackage {
     changelog = "https://github.com/na4zagin3/satyrographos/releases/tag/${src.rev}";
     description = "Package manager for SATySFi";
     homepage = "https://github.com/na4zagin3/satyrographos";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "satyrographos";
     license = lib.licenses.lgpl3Plus;
   };

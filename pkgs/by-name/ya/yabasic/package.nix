@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.91.4";
 
   src = fetchurl {
-    url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
+    url = "https://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
     hash = "sha256-3JUTNOFmZpSlAx40BHAT6YQgYLxdVPPXLwyfzDoYdlc=";
   };
 

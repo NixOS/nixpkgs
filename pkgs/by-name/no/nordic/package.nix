@@ -149,13 +149,11 @@ stdenvNoCC.mkDerivation {
   '';
 
   postFixup = ''
-    # Propagate sddm theme dependencies to user env otherwise sddm
-    # does not find them. Putting them in buildInputs is not enough.
-
     mkdir -p $sddm/nix-support
 
-    printWords ${kdePackages.breeze-icons} ${kdePackages.libplasma} ${kdePackages.plasma-workspace} \
-      >> $sddm/nix-support/propagated-user-env-packages
+    # avoid .dev outputs propagation
+    printWords ${kdePackages.breeze-icons.out} ${kdePackages.libplasma.out} ${kdePackages.plasma-workspace.out} \
+      >> $sddm/nix-support/propagated-build-inputs
   '';
 
   meta = {

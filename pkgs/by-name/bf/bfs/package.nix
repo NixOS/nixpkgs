@@ -30,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     liburing
   ];
 
-  configureFlags = [ "--enable-release" ];
+  # The configure script is not from GNU autotools, so most options injected by Nix are not supported
+  configurePhase = ''
+    runHook preConfigure
+    ./configure --prefix=$out --enable-release
+    runHook postConfigure
+  '';
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {

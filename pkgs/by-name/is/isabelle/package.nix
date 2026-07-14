@@ -13,6 +13,8 @@
   vampire,
   eprover-ho,
   cvc5,
+  libpoly,
+  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -102,15 +104,26 @@ let
     '';
   };
 
-  cvc5' = cvc5.overrideAttrs {
-    version = "1.2.0";
-    src = fetchFromGitHub {
-      owner = "cvc5";
-      repo = "cvc5";
-      tag = "cvc5-1.2.0";
-      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
-    };
-  };
+  cvc5' =
+    (cvc5.override {
+      libpoly = libpoly.overrideAttrs {
+        version = "0.2.0";
+        __intentionallyOverridingVersion = true;
+      };
+      symfpu = symfpu.overrideAttrs {
+        version = "0-unstable-2019-05-17";
+        __intentionallyOverridingVersion = true;
+      };
+    }).overrideAttrs
+      {
+        version = "1.2.0";
+        src = fetchFromGitHub {
+          owner = "cvc5";
+          repo = "cvc5";
+          tag = "cvc5-1.2.0";
+          hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+        };
+      };
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -266,6 +279,11 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$TMP # The build fails if home is not set
     setup_name=$(basename contrib/isabelle_setup*)
 
+    # Stop Isabelle trying to use `/tmp`.
+    user_home="$(bin/isabelle getenv -b ISABELLE_HOME_USER)"
+    mkdir -p "$user_home/etc"
+    echo 'ISABELLE_TMP_PREFIX="$TMPDIR/isabelle"' > "$user_home/etc/settings"
+
     #The following is adapted from https://isabelle.sketis.net/repos/isabelle/file/Isabelle2021-1/Admin/lib/Tools/build_setup
     TARGET_DIR="contrib/$setup_name/lib"
     rm -rf "$TARGET_DIR"
@@ -317,7 +335,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Generic proof assistant";
-
     longDescription = ''
       Isabelle is a generic proof assistant.  It allows mathematical formulas
       to be expressed in a formal language and provides tools for proving those
@@ -333,6 +350,9 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.jvanbruegge
       lib.maintainers.sempiternal-aurora
     ];
+    # need to compile the heaps for host on build
+    # which requires us to use the host polyml toolchain
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -41,16 +41,12 @@
   pkgsi686Linux,
   fetchurl,
   fetchzip,
-  kernel ? null,
-  kernelModuleMakeFlags ? [ ],
-  perl,
-  nukeReferences,
   which,
   libarchive,
   jq,
-  # Whether to build the libraries only (i.e. not the kernel module or
-  # nvidia-settings).  Used to support 32-bit binaries on 64-bit
-  # Linux.
+  zstd,
+  # Whether to build only userspace libraries (without bin/modsrc/firmware
+  # outputs). Used to support 32-bit binaries on 64-bit Linux.
   libsOnly ? false,
   # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it’s in downloaded binary
@@ -65,7 +61,6 @@
   acceptLicense ? config.nvidia.acceptLicense or false,
 }:
 
-assert !libsOnly -> kernel != null;
 assert lib.versionOlder version "391" -> sha256_32bit != null;
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
@@ -96,7 +91,6 @@ let
           --clean "$patch" > "$out"
       '';
 
-  nameSuffix = lib.optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
   i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
 
@@ -143,7 +137,6 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "${finalAttrs.pname}-${finalAttrs.version}${nameSuffix}";
   pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
 
   builder = ./builder.sh;
@@ -201,30 +194,12 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]
   ++ lib.optional i686bundled "lib32"
-  ++ lib.optional (!libsOnly) "bin"
+  ++ lib.optionals (!libsOnly) [
+    "bin"
+    "modsrc"
+  ]
   ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
-
-  kernel = if libsOnly then null else kernel.dev;
-  kernelVersion = if libsOnly then null else kernel.modDirVersion;
-
-  makeFlags = lib.optionals (!libsOnly) (
-    kernelModuleMakeFlags
-    ++ [
-      "IGNORE_PREEMPT_RT_PRESENCE=1"
-      "NV_BUILD_SUPPORTS_HMM=1"
-      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
-    ]
-  );
-
-  hardeningDisable = [
-    "pic"
-    "format"
-  ];
 
   dontStrip = true;
   dontPatchELF = true;
@@ -233,15 +208,12 @@ stdenv.mkDerivation (finalAttrs: {
   libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
 
   nativeBuildInputs = [
-    perl
-    nukeReferences
-    which
     libarchive
     jq
   ]
-  ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
-
-  disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
+  # NVIDIA has changed the compression format of their driver to zstd since version 530.30.02
+  # https://forums.developer.nvidia.com/t/linux-solaris-and-freebsd-driver-530-30-02-beta/244406
+  ++ (if (lib.versionAtLeast version "530") then [ zstd ] else [ which ]);
 
   passthru =
     let
@@ -274,9 +246,21 @@ stdenv.mkDerivation (finalAttrs: {
         );
     in
     {
+      mod =
+        if !libsOnly then
+          callPackage ./kernel-modules.nix {
+            open = false;
+            nvidia_x11 = finalAttrs.finalPackage;
+            # build files already patched when building the main package, so no need to patch them again
+            patches = [ ];
+            inherit broken;
+          }
+        else
+          { };
       open = lib.mapNullable (
         hash:
-        callPackage ./open.nix {
+        callPackage ./kernel-modules.nix {
+          open = true;
           inherit hash;
           nvidia_x11 = finalAttrs.finalPackage;
           patches =
@@ -339,11 +323,15 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode
+      binaryFirmware
+    ];
     maintainers = with lib.maintainers; [
       kiskae
       edwtjo
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-    inherit broken;
+    broken = broken && brokenOpen;
   };
 })

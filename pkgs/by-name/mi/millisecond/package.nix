@@ -23,13 +23,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "millisecond";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "gaheldev";
     repo = "Millisecond";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SMGcSlbOfBX5gAwB7CaHRthf9EN5QWAN9ZzrcbQXtm8=";
+    hash = "sha256-zoobnsBUg6Bky2Rhh7qEM+MxjpaR4eF+pEkhGMizuSM=";
   };
 
   strictDeps = true;

@@ -5,6 +5,7 @@
   nix-update-script,
   apple-sdk_15,
   versionCheckHook,
+  llvmPackages,
 }:
 
 let
@@ -19,20 +20,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.23.0";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PvKvevsSyRb6OfPWc2+1Bcfj2ngmgeP1URBoBiVeEdk=";
+    hash = "sha256-5tyc/yYzdV/3JTtujuj7le/14XkC7TlN/nZg7tOZsNg=";
   };
+
+  nativeBuildInputs = [
+    # TODO: Remove once #536365 reaches this branch
+    llvmPackages.lld
+  ];
 
   buildInputs = [
     apple-sdk_15
   ];
 
   makeFlags = [ target ];
+
+  # TODO: Remove once #536365 reaches this branch
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     runHook preInstall
@@ -51,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Highly customizable macOS status bar replacement";
     homepage = "https://github.com/FelixKratz/SketchyBar";
+    changelog = "https://github.com/FelixKratz/SketchyBar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     mainProgram = "sketchybar";
     maintainers = with lib.maintainers; [

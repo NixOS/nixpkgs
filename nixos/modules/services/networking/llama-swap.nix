@@ -166,7 +166,6 @@ in
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";
         ProtectHostname = true;
-        ProcSubset = "pid";
         WorkingDirectory = "/tmp";
       };
     };

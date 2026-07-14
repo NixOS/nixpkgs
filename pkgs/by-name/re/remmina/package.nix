@@ -40,8 +40,6 @@
   wayland,
   # The themes here are soft dependencies; only icons are missing without them.
   adwaita-icon-theme,
-  withKf5Wallet ? stdenv.hostPlatform.isLinux,
-  libsForQt5,
   withLibsecret ? stdenv.hostPlatform.isLinux,
   withWebkitGtk ? false,
   webkitgtk_4_1,
@@ -51,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.41";
+  version = "1.4.43";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0KUwZ81CyuLa05Cwe7wJrTbM1Dp9mAzNBI5pR7FKTOU=";
+    hash = "sha256-7nY2NhlWp+4FTTmeam1B+sotqis0lSwhozSC8I14aMI=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ]
   ++ lib.optionals withLibsecret [ libsecret ]
-  ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
   ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
   ++ lib.optionals withVte [ vte ];
 
@@ -115,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
-    "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
   ]

@@ -11,13 +11,13 @@
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailman_web";
   version = "0.0.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3wnduej6xMQzrjGhGXQznfJud/Uoy3BDduukRJeahL8=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
       m1cr0man
     ];
   };
-}
+})

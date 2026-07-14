@@ -16,23 +16,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lrzip";
-  version = "0.651";
+  version = "0.660";
 
   src = fetchFromGitHub {
     owner = "ckolivas";
     repo = "lrzip";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
+    hash = "sha256-6nNGmruJBim34EqbgJ+hnLTfylEz6t6jLh3O9RcUY34=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Building the ASM/x86 directory creates an empty archive,
-    # which fails on darwin, so remove it
-    # https://github.com/ckolivas/lrzip/issues/193
-    # https://github.com/Homebrew/homebrew-core/pull/85360
-    substituteInPlace lzma/Makefile.am --replace "SUBDIRS = C ASM/x86" "SUBDIRS = C"
-    substituteInPlace configure.ac --replace "-f elf64" "-f macho64"
-  '';
 
   nativeBuildInputs = [
     autoreconfHook

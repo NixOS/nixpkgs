@@ -1,7 +1,7 @@
 {
   aiofiles,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.12.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-ieGjdccvk97jWKP9bnE+KCkOocNJSWEOqCPxoXv5oOs=";
+    hash = "sha256-/Y4wSiaXpQXn0V+g56rL62fdE7SWl9L4sBeEL3nkGD8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail setuptools==80.10.2 setuptools
+      --replace-fail setuptools==82.0.1 setuptools
   '';
 
   build-system = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioimmich" ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
     syrupy

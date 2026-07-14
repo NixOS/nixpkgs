@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -16,18 +16,20 @@
   ffmpeg,
   gst-thumbnailers,
   glycin-loaders,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "constrict";
-  version = "25.12.1";
+  version = "26.2";
   pyproject = false; # Built with meson
 
-  src = fetchFromGitHub {
-    owner = "Wartybix";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "Constrict";
     tag = finalAttrs.version;
-    hash = "sha256-ZSiBlejNFakz+/3qj3n+ekB5l9JOk3MiQ8PRZOdxtLQ=";
+    hash = "sha256-SkfutiBi0Y7gNx5PyTaSzVw/5rU/0ULxbtf2606i2wA=";
   };
 
   nativeBuildInputs = [
@@ -67,10 +69,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Compresses your videos to your chosen file size";
-    homepage = "https://github.com/Wartybix/Constrict";
-    changelog = "https://github.com/Wartybix/Constrict/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://gitlab.gnome.org/World/Constrict";
+    changelog = "https://gitlab.gnome.org/World/Constrict/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "constrict";
     teams = [ lib.teams.gnome-circle ];

@@ -4,19 +4,22 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-asyncio,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncio-throttle";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hallazzang";
     repo = "asyncio-throttle";
-    rev = "v${version}";
-    sha256 = "1hsjcymdcm0hf4l68scf9n8j7ba89azgh96xhxrnyvwxfs5acnmv";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u1qminadb29zh90k+L5KSK0jkU2OaWQocRBU1qpnUsM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -31,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -6,16 +6,16 @@
   rustfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zbus_xmlgen";
-  version = "5.2.0";
+  version = "5.4.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-CFXOPUWjbzNkE8mb+AC4ZtdvV0MSb/eBr1C0WyreAoU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-qfn1DZjRrOStoEHt5HOekW9N2K6S0M/w+iWZ42OPaME=";
   };
 
-  cargoHash = "sha256-ggKuTcsUMhfhY39i/iZj7oPrsFchRdcko1oDE+XQLfE=";
+  cargoHash = "sha256-ECxn6C6Qrv7xPp+MJR9IIJAEO+Xp83udy9Zv/QlUCrE=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
   nativeCheckInputs = [ rustfmt ];
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
   };
-}
+})

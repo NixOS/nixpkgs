@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of special mathematical functions";
     homepage = "https://github.com/JuliaLang/openspecfun";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

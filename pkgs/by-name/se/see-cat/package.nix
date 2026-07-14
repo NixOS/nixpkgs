@@ -2,24 +2,19 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "see-cat";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "guilhermeprokisch";
     repo = "see";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-VCUrPCaG2fKp9vpFLzNLcfCBu2NiwdY2+bo1pd7anZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3uyQW1PxLYxpissm96io5IrZ6uU4S4MdcS+O56CftxA=";
   };
 
-  cargoHash = "sha256-Yw6zRvwT+y3CFb6WwKBiMSWz8igLQ7JmyGalHdRDGL0=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  cargoHash = "sha256-Sba5l5Jx/F+Iux3TYT3gMWBkN9yyVQ1n3MZCNl7q0u8=";
 
   meta = {
     description = "Cute cat(1) for the terminal";

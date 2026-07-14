@@ -1,40 +1,57 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   rust-jemalloc-sys-unprefixed,
   sqlite,
+  bash,
+  coreutils,
   iproute2,
   iptables,
   nix-update-script,
 }:
 let
   binPath = lib.makeBinPath [
+    bash
+    coreutils
     iproute2
     iptables
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.93";
+  version = "0.2.102";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-ZYcGW6Ssauf5BUs75KBV+4Zub2ZCVN29cWTxeNi87cI=";
+    hash = "sha256-E3msw4yG5RxKapHBvhGEVlsJiLgysCgjAtOrJ8fGES0=";
   };
 
-  cargoHash = "sha256-0Ml8tgWghxhDJzUMMD+YGwy3fyFjKcNjbV8MDJW8rZk=";
+  cargoHash = "sha256-w+1JLxvflb8PQqNi5MnxoEcWctuaC6Ux3oNYJzB6oaE=";
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
       --replace-fail 'PATH=' 'PATH=${binPath}:'
+
+    substituteInPlace binaries/geph5-client/src/vpn/linux.rs \
+      --replace-fail 'Command::new("sh")' 'Command::new("${bash}/bin/sh")' \
+      --replace-fail '/usr/bin/env ' '${lib.getExe' coreutils "env"} '
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  postInstall = ''
+    rm -rf "$out/lib"
+  '';
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
@@ -49,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [
     "aws_lambda"
-    "windivert"
+    # "windivert" # Only on Windows
   ];
 
   checkFlags = [
@@ -62,7 +79,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
     "--skip=tests::ping_pong"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot connect to the internet within the macOS sandbox
+    "--skip=tests::test_successful_ping"
+    "--skip=tests::test_failed_ping"
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    for program in $out/bin/*; do
+      wrapProgram "$program" --prefix PATH : ${binPath}
+    done
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -76,7 +104,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/geph-official/geph5";
     changelog = "https://github.com/geph-official/geph5/releases/tag/geph5-client-v${finalAttrs.version}";
     mainProgram = "geph5-client";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin; # VPN mode is not yet available on macOS.
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       penalty1083

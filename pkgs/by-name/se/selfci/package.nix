@@ -1,6 +1,6 @@
 {
   lib,
-  fetchgit,
+  fetchFromRadicle,
   nix-update-script,
   rustPlatform,
   git,
@@ -9,22 +9,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "selfci";
-  version = "0-unstable-2026-01-17";
+  version = "0.5.0";
 
-  src = fetchgit {
-    url = "https://radicle.dpc.pw/z2tDzYbAXxTQEKTGFVwiJPajkbeDU.git";
-    rev = "83e693dada851ce0da32713869d3da02c52ed257";
-    hash = "sha256-f0BfHvIQnhhiPie3a+9MeEGzZ+/KcgrbKBneu8Jo+xs=";
+  src = fetchFromRadicle {
+    seed = "radicle.dpc.pw";
+    repo = "z2tDzYbAXxTQEKTGFVwiJPajkbeDU";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Q9Enq02uJbcpr7pohh+uiGNus++TkUxCvO4KwX8fkk=";
   };
 
-  cargoHash = "sha256-Z3f35HIZiNeKeDNFPUVkFvL2OpMWzqRvxOL5/hUEzJw=";
+  cargoHash = "sha256-zgDbf0po0YJCRo4GyVce2YSzoFjBTWsKX86/aH3uZlY=";
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  patches = [
-    ./Cargo.toml.patch
   ];
 
   doCheck = false;
@@ -38,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Minimalistic local-first Unix-philosophy-abiding CI";
-    homepage = "https://app.radicle.xyz/nodes/radicle.dpc.pw/rad%3Az2tDzYbAXxTQEKTGFVwiJPajkbeDU";
+    homepage = "https://radicle.network/nodes/radicle.dpc.pw/rad%3Az2tDzYbAXxTQEKTGFVwiJPajkbeDU";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       dvn0

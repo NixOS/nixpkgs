@@ -7,13 +7,13 @@
 }:
 mkLibretroCore {
   core = "melonds";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "melonds";
-    rev = "7a3c11ff970cd36ca806961fae6db94b30dd5401";
-    hash = "sha256-YGkRdth7qdATcZpJkBd5MGOJFG1AbeJhAnyir+ssZYA=";
+    rev = "c9550d18923fe86a5ad9faa159399b55c12b47f1";
+    hash = "sha256-xvBdt/TMxZOrC//DLHRWRMqIibt7dNsfLM/FeMTRA60=";
   };
 
   extraBuildInputs = [

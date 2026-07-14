@@ -4,28 +4,51 @@
   backintime-common,
   python3,
   polkit,
+  meld ? null,
+  meldSupport ? true,
+  kdePackages ? null,
+  kompareSupport ? false,
   which,
   su,
   coreutils,
   util-linux,
   qt6,
+  man,
+  asciidoctor,
+  keyringBackends ?
+    ps: with ps; [
+      secretstorage
+      keyrings-alt
+      keyring-pass
+    ],
 }:
 
 let
   python' = python3.withPackages (
-    ps: with ps; [
+    ps:
+    with ps;
+    [
       pyqt6
       backintime-common
+      dbus-python
+      keyring
       packaging
     ]
+    ++ (keyringBackends ps)
   );
+  diffProgram =
+    if meldSupport then
+      "${lib.getBin meld}/bin"
+    else if kompareSupport then
+      "${lib.getBin kdePackages.kompare}/bin"
+    else
+      "";
 in
 stdenv.mkDerivation {
   inherit (backintime-common)
     version
     src
     installFlags
-    meta
     dontAddPrefix
     ;
 
@@ -36,6 +59,8 @@ stdenv.mkDerivation {
     backintime-common
     qt6.qtbase
     qt6.qtwayland
+    man
+    asciidoctor
   ];
 
   nativeBuildInputs = backintime-common.nativeBuildInputs or [ ] ++ [
@@ -46,14 +71,16 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     patchShebangs --build updateversion.sh
+    patchShebangs --build doc/manpages/build_manpages.sh
     cd qt
     substituteInPlace qttools_path.py \
-      --replace "__file__, os.pardir, os.pardir" '"${backintime-common}/${python'.sitePackages}/backintime"'
+      --replace-fail "Path(__file__).parent.parent" '"${backintime-common}/${python'.sitePackages}/backintime"'
   '';
 
   preFixup = ''
     wrapQtApp "$out/bin/backintime-qt" \
-      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH"
+      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH" \
+      --prefix PATH : "${diffProgram}:$PATH"
 
     substituteInPlace "$out/share/polkit-1/actions/net.launchpad.backintime.policy" \
       --replace-fail "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
@@ -77,4 +104,15 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/backintime-qt_polkit" \
       --prefix PATH : "${lib.getBin polkit}/bin:$PATH"
   '';
+
+  meta = {
+    inherit (backintime-common.meta)
+      homepage
+      description
+      license
+      maintainers
+      platforms
+      longDescription
+      ;
+  };
 }

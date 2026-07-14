@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.43.4";
+  version = "0.43.8";
 in
 buildGoModule {
   pname = "geesefs";
@@ -15,12 +15,12 @@ buildGoModule {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    hash = "sha256-mel9gvmlMzA9WEst7Xx49O4LqmzVXzPJU45ddfO4GkI=";
+    hash = "sha256-NDe3GnB0xVly6Elfpa60+Wx3RyWhfPfssf1l7Tt20zY=";
   };
 
   # hashes differ per architecture otherwise.
   proxyVendor = true;
-  vendorHash = "sha256-p+shpYrPxYLXpW6A4a/5qM90KH+pcMCqZOPoYTE77f0=";
+  vendorHash = "sha256-mvzt/pk+S7DRcU6T3fBBQw1uvluO/tfeFmONucMv7t8=";
 
   subPackages = [ "." ];
 

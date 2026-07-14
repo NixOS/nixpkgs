@@ -130,6 +130,7 @@ let
 
     passthru = rec {
       inherit release version;
+      isTcl9 = lib.versions.major version == "9";
       libPrefix = "tcl${release}";
       libdir = "lib/${libPrefix}";
       tclPackageHook = callPackage (
@@ -139,8 +140,20 @@ let
           propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
           meta = {
             inherit (meta) maintainers platforms;
+            license = lib.licenses.mit;
           };
         } ./tcl-package-hook.sh
+      ) { };
+      tclRequiresCheckHook = callPackage (
+        { buildPackages }:
+        makeSetupHook {
+          name = "tcl-requires-check-hook";
+          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          meta = {
+            inherit (meta) maintainers platforms;
+            license = lib.licenses.mit;
+          };
+        } ./tcl-requires-check-hook.sh
       ) { };
       # verify that Tcl's clock library can access tzdata
       tests.tzdata = runCommand "${pname}-test-tzdata" { } ''

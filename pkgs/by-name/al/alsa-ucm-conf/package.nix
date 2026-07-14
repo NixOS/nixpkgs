@@ -9,12 +9,16 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.15.1";
+  version = "1.2.16";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JGxdWdIXtvf0ehH9EPG3ZtJavLDZyZavMHm7nJrFobA=";
+    hash = "sha256-rLyXLW5x7fo0Xnav3xDDmf0PHzz5DYSv20z1G/xKZUg=";
   };
+
+  patches = [
+
+  ];
 
   dontBuild = true;
 
@@ -54,6 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       roastiek
       mvs
+      nick-linux
     ];
 
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

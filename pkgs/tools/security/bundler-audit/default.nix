@@ -6,7 +6,6 @@
 }:
 
 bundlerEnv rec {
-  name = "${pname}-${version}";
   pname = "bundler-audit";
   version = (import ./gemset.nix).bundler-audit.version;
 

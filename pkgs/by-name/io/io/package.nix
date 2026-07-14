@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   version = "2019.05.22-alpha";
 
   src = fetchFromGitHub {
-    owner = "stevedekorte";
+    owner = "IoLanguage";
     repo = "io";
     tag = "2019.05.22-alpha";
     fetchSubmodules = true;

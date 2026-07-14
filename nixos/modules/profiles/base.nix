@@ -53,6 +53,9 @@
   # Include support for various filesystems and tools to create / manipulate them.
   boot.supportedFilesystems = lib.mkMerge [
     [
+      "ext2"
+      "ext3"
+      "ext4"
       "btrfs"
       "cifs"
       "f2fs"

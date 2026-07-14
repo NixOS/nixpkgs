@@ -9,18 +9,22 @@
 
 buildPythonPackage rec {
   pname = "aiosomecomfort";
-  version = "0.0.35";
+  version = "0.0.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkmer";
     repo = "AIOSomecomfort";
     tag = version;
-    hash = "sha256-zhCpV11nzRpWiCPNgeBfBzXgLM2NAw1p9R0ACD3u/mk=";
+    hash = "sha256-xyGJsSgxE/UwTEfA2BzVHvgqG1c47/SokLHrysPkFAU=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
   ];
 
   dependencies = [

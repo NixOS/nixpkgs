@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libbsd,
   libgcrypt,
-  xxHash,
+  xxhash,
   pkg-config,
   glib,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     linuxHeaders
     sqlite
     util-linux
-    xxHash
+    xxhash
   ];
 
   makeFlags = [

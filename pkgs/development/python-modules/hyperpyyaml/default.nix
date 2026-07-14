@@ -26,6 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-/7OrIR61zQYl2+RjiOOlaqUGWBieon5fe8sgmEvKowo=";
   };
 
+  postPatch = ''
+    # https://github.com/speechbrain/HyperPyYAML/pull/33
+    substituteInPlace hyperpyyaml/core.py \
+      --replace-fail \
+        "    hparams = yaml.load(yaml_stream, Loader=loader)" \
+        "    if not hasattr(loader, 'max_depth'):
+            loader.max_depth = 0
+        hparams = yaml.load(yaml_stream, Loader=loader)"
+  '';
+
+  # https://github.com/speechbrain/HyperPyYAML/pull/33
+  pythonRelaxDeps = [ "ruamel.yaml" ];
+
   build-system = [
     setuptools
   ];
@@ -40,8 +53,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hyperpyyaml" ];
 
   meta = {
-    # https://github.com/speechbrain/HyperPyYAML/pull/32
-    broken = lib.versionAtLeast ruamel-yaml.version "0.19";
     description = "Extensions to YAML syntax for better python interaction";
     homepage = "https://github.com/speechbrain/HyperPyYAML";
     changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/${src.tag}";

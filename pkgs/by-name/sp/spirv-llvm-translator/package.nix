@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  srcOnly,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -16,6 +17,11 @@ let
   llvmMajor = lib.versions.major llvm.version;
 
   versions = {
+    "22" = rec {
+      version = "22.1.3";
+      rev = "v${version}";
+      hash = "sha256-u/OytBH9LgAyGF9PX+5lmAbGPQ7iVv52w8mwQ+6fi/s=";
+    };
     "21" = rec {
       version = "21.1.0";
       rev = "v${version}";
@@ -79,7 +85,7 @@ stdenv.mkDerivation {
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
     # RPATH of binary /nix/store/.../bin/llvm-spirv contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
+    "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${srcOnly spirv-headers}"
   ]
   ++ lib.optional (
     lib.toInt llvmMajor >= 19

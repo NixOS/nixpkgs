@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Kerberos AP-REQ hijacking tool with DNS unsecure updates abuse";
     homepage = "https://github.com/almandin/krbjack";
-    changelog = "https://github.com/almandin/krbjack/releases/tag/${finalAttrs.version}}";
+    changelog = "https://github.com/almandin/krbjack/releases/tag/${finalAttrs.version}";
     license = lib.licenses.beerware;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "krbjack";

@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       based on the NetX project.
     '';
     homepage = "https://github.com/adoptopenjdk/icedtea-web";
+    license = lib.licenses.WITH lib.licenses.gpl2Only lib.licenses.classpathException20;
     platforms = lib.platforms.linux;
   };
 })

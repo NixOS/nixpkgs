@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  isPy27,
   pytest,
 }:
 
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "inflection";
   version = "0.5.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

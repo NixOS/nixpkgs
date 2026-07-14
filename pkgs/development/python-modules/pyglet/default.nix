@@ -46,7 +46,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       cat > pyglet/lib.py <<EOF
       import ctypes
       def load_library(*names, **kwargs):
@@ -95,7 +95,7 @@ buildPythonPackage rec {
           raise Exception("Could not load library {}".format(names))
       EOF
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       cat > pyglet/lib.py <<EOF
       import os
       import ctypes
@@ -133,7 +133,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = # libEGL only available on Linux (despite meta.platforms on libGL)
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       export PYGLET_HEADLESS=True
     '';
 

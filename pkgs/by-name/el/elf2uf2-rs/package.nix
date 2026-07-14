@@ -7,12 +7,12 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elf2uf2-rs";
   version = "2.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-e0i8ecjfNZxQgX5kDU1T8yAGUl4J7mbgG+ueBFsyTNA=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
       moni
     ];
   };
-}
+})

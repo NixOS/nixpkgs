@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dynarmic";
-  version = "6.7.0-unstable-2026-01-04";
+  version = "6.7.0-unstable-2026-05-19";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
     repo = "dynarmic";
-    rev = "526227eebe1efff3fb14dbf494b9c5b44c2e9c1f";
-    hash = "sha256-WG9mUFUnhEEF0+qsQzslTAj1nox3jaz6rVKs245EtV4=";
+    rev = "c5f5b0d7fca772b7d2d4d8ba0975ce8653f4b055";
+    hash = "sha256-ecEVqQHP2pwyqAl1s1HKBxaqSLmfOdcQP2rKbla+RLM=";
   };
 
   patches = [

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2025.2.5";
+  version = "2026.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p/U1BkTUbZjunH5ntLQWkzCKoPXpsYjY8GlLJ9yU46I=";
+    hash = "sha256-Jg4NiMmpA8Zc/jT76Bh2T0Sj+W5yLho2Rc5NWWrdIrE=";
   };
 
   build-system = [ hatchling ];

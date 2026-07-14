@@ -40,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/asg017/sqlite-vec";
     changelog = "https://github.com/asg017/sqlite-vec/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.anmonteiro ];
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,49 +1,44 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+  setuptools,
   argostranslate,
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+let
+  inherit (stdenv.hostPlatform) isLinux isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
+in
+buildPythonPackage (finalAttrs: {
   pname = "translatehtml";
-  version = "1.5.2";
+  version = "1.5.3";
+  pyproject = true;
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6b30ceb8b6f174917e2660caf2d2ccbaa71d8d24c815316edf56b061d678820d";
+  src = fetchFromGitHub {
+    owner = "argosopentech";
+    repo = "translate-html";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A94N/nfYSVwi0M3SpNFqlXrRNOCpIi9agOCAlH66QcI=";
   };
 
-  patches = [
-    # https://github.com/argosopentech/translate-html/pull/15
-    (fetchpatch {
-      url = "https://github.com/argosopentech/translate-html/commit/b1c2d210ec1b5fcd0eb79f578bdb5d3ed5c9963a.patch";
-      hash = "sha256-U65vVuRodMS32Aw6PZlLwaCos51P5B88n5hDgJNMZXU=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
+  dependencies = [
     argostranslate
     beautifulsoup4
   ];
 
-  postPatch = ''
-    ln -s */requires.txt requirements.txt
-
-    substituteInPlace requirements.txt  \
-      --replace "==" ">="
-  '';
-
-  # required for import check to work (argostranslate)
-  env.HOME = "/tmp";
-
-  pythonImportsCheck = [ "translatehtml" ];
-
-  doCheck = false; # no tests
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck = lib.optional (!isAarch64Linux) "translatehtml";
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  doCheck = !isAarch64Linux;
 
   meta = {
     description = "Translate HTML using Beautiful Soup and Argos Translate";
@@ -51,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

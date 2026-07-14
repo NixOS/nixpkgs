@@ -31,6 +31,7 @@
   sqlite,
   xz,
   zlib,
+  withZstd ? !withMinimalDeps,
   zstd,
 
   # platform-specific dependencies
@@ -133,7 +134,6 @@ let
     getLib
     optionals
     optionalString
-    replaceStrings
     ;
 
   withLibxcrypt =
@@ -165,21 +165,56 @@ let
         );
       }
       // __splices;
+      # When we override the interpreter we also need to override the spliced
+      # versions of the interpreter. NOTE: In lua-5/interpreter.nix, this
+      # filter is different - we take every attribute from @inputs, besides
+      # derivations. That filter causes cross compilations issues for Python
+      # See e.g:
+      #
+      # pkgsCross.armv7l-hf-multiplatform.buildPackages.python3Packages.bcrypt
+      #
+      # And the following Nixpkgs issues/PRs:
+      #
+      # - https://github.com/NixOS/nixpkgs/issues/48046
+      # - https://github.com/NixOS/nixpkgs/pull/480005 (Wrong PR)
+      # - https://github.com/NixOS/nixpkgs/pull/482866 (Correct fix)
+      # - https://github.com/NixOS/nixpkgs/pull/498251 (Re-adds this @inputs filter)
+      inputs' = lib.filterAttrs (
+        n: v:
+        (builtins.elem (builtins.typeOf v) [
+          "int"
+          "bool"
+          "string"
+          "path"
+          "null"
+        ])
+        || n == "packageOverrides"
+      ) inputs;
       override =
         attr:
         let
-          python = attr.override {
-            self = python;
-          };
+          python = attr.override (
+            inputs'
+            // {
+              self = python;
+            }
+          );
         in
         python;
-    in
-    passthruFun rec {
-      inherit self sourceVersion packageOverrides;
-      implementation = "cpython";
-      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
-      executable = libPrefix;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      abiFlags = lib.optionalString (!enableGIL) "t" + lib.optionalString enableDebug "d";
+      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
+    in
+    passthruFun {
+      inherit
+        self
+        sourceVersion
+        packageOverrides
+        libPrefix
+        pythonVersion
+        ;
+      implementation = "cpython";
+      executable = "python${pythonVersion}${abiFlags}";
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)
@@ -193,7 +228,7 @@ let
       pythonABITags = [
         "abi3"
         "none"
-        "cp${sourceVersion.major}${sourceVersion.minor}${lib.optionalString (!enableGIL) "t"}"
+        "cp${sourceVersion.major}${sourceVersion.minor}${abiFlags}"
       ];
     };
 
@@ -256,7 +291,7 @@ let
     ++ optionals withExpat [
       expat
     ]
-    ++ optionals (passthru.pythonAtLeast "3.14") [
+    ++ optionals (withZstd && passthru.pythonAtLeast "3.14") [
       zstd
     ]
     ++ optionals bluezSupport [
@@ -392,10 +427,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
-  ]
-  ++ optionals (version == "3.13.10" || version == "3.14.1") [
-    # https://github.com/python/cpython/issues/142218
-    ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
@@ -822,6 +853,7 @@ stdenv.mkDerivation (finalAttrs: {
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
+    donationPage = "https://www.python.org/psf/donations/";
     description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

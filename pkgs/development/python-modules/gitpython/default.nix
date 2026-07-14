@@ -8,16 +8,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gitpython";
-  version = "3.1.46";
+  version = "3.1.50";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
-    tag = version;
-    hash = "sha256-ymuJlxGEmWwvmVFYiIW23k5Gl2h09ugFLPosnUWg5S0=";
+    tag = finalAttrs.version;
+    hash = "sha256-oHJrN/iYaAZUNPgOLS+8Ekr1eLES8APfXynmR4OySwk=";
   };
 
   postPatch = ''
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
-    changelog = "https://github.com/gitpython-developers/GitPython/blob/${src.tag}/doc/source/changes.rst";
+    changelog = "https://github.com/gitpython-developers/GitPython/blob/${finalAttrs.src.tag}/doc/source/changes.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

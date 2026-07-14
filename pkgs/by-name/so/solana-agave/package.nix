@@ -18,27 +18,21 @@
   llvm,
   llvmPackages,
   rocksdb,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "solana-agave";
-  version = "2.3.12";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "anza-xyz";
     repo = "agave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-25UgiC5jAnlNE8Z7WrQRIviCuFp4zg57ddYA4h0qJ6U=";
+    hash = "sha256-lbkuywAuLeTIoe/5zbKmxCbnNcEx96BiX6ftNJHutZE=";
   };
 
-  cargoHash = "sha256-SVngabz9mrYNn7DlL7Rh7llvO4GmJdt5vpXVcjwqtNg=";
-
-  # For the same reason as discussed in solana-cli derivation (crossbeam softlink), the no_atomic file is missing
-  # and either must somehow be rendered unneeded (using an upstream package) or replaced. A cleaner, non-behavior-changing,
-  # solution would be to commit the file to the repo fork (replacing the softlink).
-  cargoPatches = [
-    ./crossbeam-epoch.patch
-  ];
+  cargoHash = "sha256-lQl8q0xMpXOmUirqL3Eyb4JcmYGSZK6pPMxQHOav9Zk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -100,4 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "agave";
   };
+
+  passthru.updateScript = nix-update-script { };
 })

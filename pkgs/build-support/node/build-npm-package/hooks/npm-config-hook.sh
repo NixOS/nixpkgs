@@ -95,9 +95,9 @@ npmConfigHook() {
     fi
 
     export CACHE_MAP_PATH="$TMP/MEOW"
-    @prefetchNpmDeps@ --map-cache
+    npmDeps="$npmDeps" @prefetchNpmDeps@ --map-cache
 
-    @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
+    npmDeps="$npmDeps" @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
 
     local cachePath
 

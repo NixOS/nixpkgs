@@ -289,7 +289,6 @@
                   "node24"
                 ]);
               default = [
-                "node20"
                 "node24"
               ];
               description = ''

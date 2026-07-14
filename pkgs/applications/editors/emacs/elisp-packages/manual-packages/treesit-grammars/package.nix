@@ -15,9 +15,9 @@ let
 
   # Usage:
   # treesit-grammars.with-grammars (p: [ p.tree-sitter-bash p.tree-sitter-c ... ])
-  with-grammars = fn: grammarPackage (fn pkgs.tree-sitter.builtGrammars);
+  with-grammars = fn: grammarPackage (fn pkgs.tree-sitter-grammars.derivations);
 
-  with-all-grammars = grammarPackage pkgs.tree-sitter.allGrammars;
+  with-all-grammars = grammarPackage pkgs.tree-sitter-grammars.allGrammars;
 in
 {
   inherit with-grammars with-all-grammars;

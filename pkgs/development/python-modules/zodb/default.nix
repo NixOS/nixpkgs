@@ -25,19 +25,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zodb";
-  version = "6.2";
+  version = "6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zodb";
     tag = finalAttrs.version;
-    hash = "sha256-R6qf/9Sr70OsZzes+haT/J6RIz6Wlof/l6rQRl3snHI=";
+    hash = "sha256-XeLCzX6qBBAO2HgEtc2+/2z6DRn0UQjI036y+DbcKmQ=";
   };
 
   postPatch = ''
     # remove broken test
     rm -vf src/ZODB/tests/testdocumentation.py
+    # remove setuptools version check
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 78.1.1,< 81" "setuptools"
   ''
   + lib.optionalString (pythonAtLeast "3.14") ''
     # remove broken under python 3.14

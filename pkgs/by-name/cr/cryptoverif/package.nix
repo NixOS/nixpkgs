@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.12";
 
   src = fetchurl {
-    url = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
+    url = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
     hash = "sha256-d3MIYb57+95bB493hdtHiGnTOronYaQo1Qqq1TcJh1c=";
   };
 

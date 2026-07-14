@@ -76,7 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     muparser
     eigen
-    glew
+    # MeshLab renders through Qt's xcb platform, which creates a GLX context,
+    # and calls glewInit() against it. The default EGL-enabled glew is built
+    # EGL-only (no GLX dispatch table), so glewInit can't read GL_VERSION and
+    # the app fails to launch with "GLEW initialization failed: Missing GL
+    # version". See https://github.com/NixOS/nixpkgs/issues/531470
+    (glew.override { enableEGL = false; })
     gmp
     levmar
     qhull
@@ -153,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       nim65s
       yzx9
     ];
+    teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 })

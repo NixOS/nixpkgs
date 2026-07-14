@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pip-audit";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fnIwtXFswKcfz/8VssL4UVukwkq6CC63NCyqqbqziO8=";
+    hash = "sha256-+R8X7KIQz6Gm88IigZmMagz5l1eJ2bO8zAUNZqunotI=";
   };
 
   pythonRelaxDeps = [ "cyclonedx-python-lib" ];

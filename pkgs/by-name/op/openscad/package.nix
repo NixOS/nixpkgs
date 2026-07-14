@@ -120,13 +120,16 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
-    versionCheckHook
-  ];
+  ]
+  # versionCheckHook doesn't detect any output on darwin, even though the binary works.
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
 
   buildInputs = [
     eigen
     boost
-    glew
+    # OpenSCAD's GLX offscreen renderer needs GLEW's GLXEW symbols (`__GLXEW_SGIX_pbuffer`, `__GLXEW_SGIX_fbconfig`)
+    # which are not found in the default EGL-enabled glew and causes the build failure in https://github.com/NixOS/nixpkgs/issues/530529
+    (glew.override { enableEGL = false; })
     opencsg
     cgal_5
     mpfr

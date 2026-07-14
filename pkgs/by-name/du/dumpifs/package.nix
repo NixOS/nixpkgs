@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postUnpack = ''
-    rm source/{dumpifs,exMifsLzo,uuu,zzz}
+    rm ${finalAttrs.src.name}/{dumpifs,exMifsLzo,uuu,zzz}
   '';
 
   patches = [ ./package.patch ];

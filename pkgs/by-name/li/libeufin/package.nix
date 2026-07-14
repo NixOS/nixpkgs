@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   src = fetchgit {
-    url = "https://git.taler.net/libeufin.git/";
+    url = "https://git-www.taler.net/libeufin.git/";
     tag = "v${finalAttrs.version}";
     hash = "sha256-bt1NBoiN52CX2Itg8lQ/b0V/MZulBTaD8luNlH4Mwss=";
     fetchSubmodules = true;
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = {
-    homepage = "https://git.taler.net/libeufin.git/";
+    homepage = "https://git-www.taler.net/libeufin.git";
     description = "Integration and sandbox testing for FinTech APIs and data formats";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ atemu ];

@@ -57,8 +57,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Container runtime written in Rust";
-    homepage = "https://containers.github.io/youki/";
-    changelog = "https://github.com/containers/youki/releases/tag/v${finalAttrs.version}";
+    homepage = "https://youki-dev.github.io/youki/";
+    changelog = "https://github.com/youki-dev/youki/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ builditluc ];
     platforms = lib.platforms.linux;

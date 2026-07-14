@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   bzip2,
   xz,
@@ -12,6 +13,7 @@
 mkDerivation {
   pname = "karchive";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     qttools
   ];

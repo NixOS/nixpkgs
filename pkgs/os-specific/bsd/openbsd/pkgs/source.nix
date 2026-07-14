@@ -7,6 +7,6 @@
 fetchcvs {
   cvsRoot = "anoncvs@anoncvs.fr.openbsd.org/cvs";
   module = "src";
-  tag = "OPENBSD_${lib.replaceStrings [ "." ] [ "_" ] version}-RELEASE";
-  sha256 = "sha256-hzdATew6h/FQV72SWtg3YvUXdPoGjm2SoUS7m3c3fSU=";
+  tag = "OPENBSD_${lib.replaceStrings [ "." ] [ "_" ] version}_BASE";
+  sha256 = "sha256-n6pkgjCvqAGpZzLZnsO8FT7HMtBH3i7SLfhFBqQ9jmE=";
 }

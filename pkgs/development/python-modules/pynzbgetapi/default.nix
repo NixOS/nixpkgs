@@ -29,7 +29,6 @@ buildPythonPackage rec {
   meta = {
     description = "Basic Python NZBGet API client";
     homepage = "https://github.com/voltron4lyfe/pynzbgetapi";
-    changelog = "https://github.com/voltron4lyfe/pynzbgetapi/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };

@@ -15,11 +15,11 @@
 
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
-    hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
+    hash = "sha256-1YX9O2E8ZhUfwySejtRPdwIMtebB5jWmFtP5+CRgUSo=";
   };
 
   # Thanks to the live-bootstrap project!
@@ -88,6 +88,7 @@ bash.runCommand "${pname}-${version}"
       CC=tcc
 
     # Build
+    # NOTE: parallel build (-j) under tcc here is unstable and broke a previous run.
     make AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
 
     # Install

@@ -7,13 +7,13 @@
 }:
 mkLibretroCore rec {
   core = "fbalpha2012";
-  version = "0-unstable-2025-12-12";
+  version = "0-unstable-2026-04-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "fbalpha2012";
-    rev = "c547d8cf3f7748f4094cee658a5d31ec1b79ece4";
-    hash = "sha256-owy8IuJ/dAEbUH7hGCR3oLiI4tYuwsNfRYRl6LmyYfc=";
+    rev = "95fa35582b1ca7ce68de3313615794c8c9d8d7c0";
+    hash = "sha256-9F970HETDJsttoQOlqg2dFMzff/drR7G8MxXaSlWTHI=";
   };
 
   sourceRoot = "${src.name}/svn-current/trunk";
@@ -24,7 +24,7 @@ mkLibretroCore rec {
       minizip-src = runCommand "minizip-src" { } ''
         mkdir $out
         unpackFile ${zlib.src}
-        cp */contrib/minizip/{unzip.*,ioapi.*,crypt.h} $out/
+        cp */contrib/minizip/{unzip.*,ioapi.*,ints.h,crypt.h} $out/
       '';
     in
     ''

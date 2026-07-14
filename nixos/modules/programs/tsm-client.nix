@@ -71,7 +71,7 @@ let
     {
       freeformType = attrsOf (either scalarType (listOf scalarType));
       # Client system-options file directives are explained here:
-      # https://www.ibm.com/docs/en/storage-protect/8.1.27?topic=commands-processing-options
+      # https://www.ibm.com/docs/en/storage-protect/8.2.1?topic=utilities-processing-options
       options.servername = mkOption {
         type = servernameType;
         default = name;

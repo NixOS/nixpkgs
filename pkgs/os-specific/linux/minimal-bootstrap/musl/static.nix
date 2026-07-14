@@ -6,6 +6,7 @@
   bash,
   gcc,
   binutils,
+  findutils,
   gnumake,
   gnugrep,
   gnused,
@@ -15,11 +16,11 @@
 }:
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
-    hash = "sha256-qaEYu+hNh2TaDqDSizqz+uhHf8fkCF2QECuFlvx8deQ=";
+    hash = "sha256-1YX9O2E8ZhUfwySejtRPdwIMtebB5jWmFtP5+CRgUSo=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -29,6 +30,7 @@ bash.runCommand "${pname}-${version}"
     nativeBuildInputs = [
       gcc
       binutils
+      findutils
       gnumake
       gnused
       gnugrep
@@ -90,4 +92,8 @@ bash.runCommand "${pname}-${version}"
     sed -i 's|/bin/sh|${lib.getExe bash}|' $out/bin/*
     ln -s ../lib/libc.so $out/bin/ldd
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
+
+    # Strip
+    # Ignore failures, because strip may fail on non-elf files.
+    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
   ''

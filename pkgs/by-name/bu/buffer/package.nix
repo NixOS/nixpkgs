@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.10.2";
+  version = "2026.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
     tag = finalAttrs.version;
-    hash = "sha256-JO/ZvsTWNneyniXm5+0ZTE41zpvMtayxWGdOxYXxxxQ=";
+    hash = "sha256-O2Kuw3UMHUP+PIyeXlgtUJC9/85tMk3ZL5SvWb+7gdU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-odCUktrdV66Gyq7gKhrOhlcNNXkgpl4tLCsNgmlG27I=";
+    hash = "sha256-ipZgmk5Lb5LX6O6dSDVTetLN41VNJcAFJ+fNfkQnksc=";
   };
 
   nativeBuildInputs = [

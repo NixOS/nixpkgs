@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/thliebig/openEMS/commit/e02e2a8414355482145240e4c2b2464d7a26dd9e.patch";
       hash = "sha256-y3pvim/8XUKF5k7shj0D+8P6tdfSZ3E/gxTogbRtxdo=";
     })
+    # boost 1.89 removed the boost_system stub library
+    ./boost-1.89.patch
   ];
 
   nativeBuildInputs = [

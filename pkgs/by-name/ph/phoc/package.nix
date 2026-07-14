@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitLab,
+  callPackage,
   meson,
   ninja,
   pkg-config,
@@ -35,19 +36,23 @@ let
     repo = "gvdb";
     rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
     hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.51.0";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "phoc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6glG5QvphanjBvf9xKiXjkVceWBQ8EjFkRywdfYc7E4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P81D3gCC4Q1JQPUlAtLbMZdlVOPpJJ1/rLX7zijFcc0=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [
@@ -101,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
     updateScript = nix-update-script { };
   };
 

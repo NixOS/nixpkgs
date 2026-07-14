@@ -20,17 +20,17 @@ let
     .${system} or (throw "Unsupported system: ${system}");
 
   packageHashes = {
-    x86_64-linux = "sha256-B+LKXK7DFakiFNdanaqMeGxnfxoEI4caNtxnyZEcWgQ=";
-    aarch64-linux = "sha256-FMYIO1miEulnz9logtXxau2mIuR1zS8oCG04DMx0HyQ=";
-    x86_64-darwin = "sha256-I3Z1QqIu0iJBZWq6fUWouGfTYzNr/wj+0UFfq0wSy4Y=";
-    aarch64-darwin = "sha256-AL1TUJO5jSNhjfZ/rLo9Do22oqVhpLqiRdGnvVaqvog=";
+    x86_64-linux = "sha256-eVI8/JNCTVVbNJPH6gfg+0guH9mXLymoO+oLp9dkvwA=";
+    aarch64-linux = "sha256-84ESEqr07JxqcxxRWrUFKmS+Uvws3RsVtC9EgXqCqdw=";
+    x86_64-darwin = "sha256-X/Hl/vIsepm/jf6srSYim6Ucy3TN0XQgdOluep6Ohrw=";
+    aarch64-darwin = "sha256-0WpDjZJhw/jB55G5IUdgvwOaYlqRCY5itk5sVjogYn4=";
   };
 
   packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.5.1";
+  version = "4.0.2";
 
   # Use fetchurl rather than fetchzip as these tarballs are built by the project
   # and not by GitHub (and thus are stable) - this simplifies the update script

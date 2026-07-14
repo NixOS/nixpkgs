@@ -11,7 +11,6 @@ let
     mkOption
     mkEnableOption
     mkIf
-    mkMerge
     types
     optionalString
     ;

@@ -6,7 +6,7 @@
   file,
   zlib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typecode-libmagic";
   version = "21.5.31";
   format = "setuptools";
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aboutcode-org";
     repo = "scancode-plugins";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nGgFjp1N1IM/Sm4xLJw5WiZncc369/LqNcwFJBS1EQs=";
   };
 
-  sourceRoot = "${src.name}/builtins/typecode_libmagic-linux";
+  sourceRoot = "${finalAttrs.src.name}/builtins/typecode_libmagic-linux";
 
   propagatedBuildInputs = [ plugincode ];
 
@@ -42,7 +42,8 @@ buildPythonPackage rec {
     description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/typecode_libmagic-linux";
     license = lib.licenses.asl20;
-    maintainers = [ ];
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

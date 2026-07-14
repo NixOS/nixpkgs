@@ -24,7 +24,7 @@ The Emacs package comes with some extra helpers to make it easier to configure. 
 }
 ```
 
-You can install it like any other package via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provides a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.
+You can install it like any other package via `nix-env -iA myEmacs`. However, this will only install those packages. It will not `configure` them for us. To do this, we need to provide a configuration file. Luckily, it is possible to do this from within Nix! By modifying the above example, we can make Emacs load a custom config file. The key is to create a package that provides a `default.el` file in `/share/emacs/site-start/`. Emacs knows to load this file automatically when it starts.  Similarly, for `early-init.el`, you can create a package that provides an `early-default.el` file in `/share/emacs/site-start/`.
 
 ```nix
 {

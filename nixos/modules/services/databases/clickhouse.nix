@@ -13,7 +13,7 @@ let
 in
 {
 
-  meta.maintainers = [ "thevar1able" ];
+  meta.maintainers = with lib.maintainers; [ thevar1able ];
 
   ###### interface
 

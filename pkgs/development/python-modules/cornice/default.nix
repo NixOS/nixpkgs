@@ -8,7 +8,6 @@
   pytestCheckHook,
   pytest-cache,
   webtest,
-  marshmallow,
   colander,
 }:
 
@@ -35,7 +34,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cache
     webtest
-    marshmallow
     colander
   ];
   pythonImportsCheck = [ "cornice" ];

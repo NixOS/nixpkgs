@@ -9,6 +9,7 @@ let
   efi = config.boot.loader.efi;
   limineInstallConfig = pkgs.writeText "limine-install.json" (
     builtins.toJSON {
+      inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
       efiBootMgrPath = pkgs.efibootmgr;
       liminePath = cfg.package;
@@ -28,7 +29,7 @@ let
       resolution = cfg.resolution;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
-      timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
+      timeout = if config.boot.loader.timeout == null then "no" else config.boot.loader.timeout;
       enableEditor = cfg.enableEditor;
       extraConfig = cfg.extraConfig;
       extraEntries = cfg.extraEntries;
@@ -204,6 +205,17 @@ in
       '';
     };
 
+    extraInstallCommands = lib.mkOption {
+      default = "";
+      type = lib.types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
+      '';
+    };
+
     secureBoot = {
       enable = lib.mkEnableOption null // {
         description = ''
@@ -224,16 +236,22 @@ in
         '';
       };
 
-      createAndEnrollKeys = lib.mkEnableOption null // {
-        internal = true;
-        description = ''
-          Creates secure boot signing keys and enrolls them during bootloader installation.
+      autoGenerateKeys = lib.mkEnableOption null // {
+        description = "Generate keys automatically when none exists during bootloader installation";
+      };
 
-          ::: {.note}
-          This is used for automated nixos tests.
-          NOT INTENDED to be used on a real system.
-          :::
-        '';
+      autoEnrollKeys = {
+        enable = lib.mkEnableOption null // {
+          description = "Enroll automatically generated keys";
+        };
+        extraArgs = lib.mkOption {
+          default = [
+            "--microsoft"
+            "--firmware-builtin"
+          ];
+          type = lib.types.listOf lib.types.str;
+          description = "Extra arguments passed to sbctl";
+        };
       };
 
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
@@ -290,9 +308,25 @@ in
 
         brandingColor = lib.mkOption {
           default = null;
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.str;
           description = ''
-            Color index of the title at the top of the screen in the range of 0-7 (Limine defaults to 6 (cyan)).
+            Color of the title at the top of the screen in RRGGBB format (Limine defaults to #00AAAA (cyan)).
+          '';
+        };
+
+        helpColor = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the help text displayed beside keybinds in RRGGBB format (Limine defaults to #00AA00 (dark green)).
+          '';
+        };
+
+        helpColorBright = lib.mkOption {
+          default = null;
+          type = lib.types.nullOr lib.types.str;
+          description = ''
+            Color of the bright help text used for the auto-boot countdown digit in RRGGBB format (Limine defaults to #55FF55 (bright green)).
           '';
         };
 
@@ -420,14 +454,25 @@ in
 
       system = {
         boot.loader.id = "limine";
-        build.installBootLoader = pkgs.replaceVarsWith {
-          src = ./limine-install.py;
-          isExecutable = true;
-          replacements = {
-            python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
-            configPath = limineInstallConfig;
-          };
-        };
+        build.installBootLoader =
+          let
+            install = pkgs.replaceVarsWith {
+              src = ./limine-install.py;
+              isExecutable = true;
+              replacements = {
+                python3 = pkgs.python3.withPackages (python-packages: [ python-packages.psutil ]);
+                configPath = limineInstallConfig;
+              };
+            };
+
+            final = pkgs.writeScript "limine-install.sh" ''
+              #!${pkgs.runtimeShell}
+              set -euo pipefail
+              ${install} "$@"
+              ${cfg.extraInstallCommands}
+            '';
+          in
+          final;
       };
     })
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable) {
@@ -447,6 +492,10 @@ in
         {
           assertion = cfg.efiSupport;
           message = "Secure boot is only supported on EFI systems.";
+        }
+        {
+          assertion = !cfg.enableEditor;
+          message = "Editor is unconditionally disabled by Limine.";
         }
       ];
 
@@ -476,13 +525,25 @@ in
 
         script = ''
           fwupd_efi=(${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi)
-          ${lib.getExe cfg.secureBoot.sbctl} sign -o /run/fwupd-efi/$(basename "$fwupd_efi").signed "$fwupd_efi"
+          for efi in "''${fwupd_efi[@]}"; do
+            ${lib.getExe cfg.secureBoot.sbctl} sign -o "/run/fwupd-efi/$(basename "$efi").signed" "$efi"
+          done
         '';
       };
 
       services.fwupd.uefiCapsuleSettings = {
         DisableShimForSecureBoot = true;
       };
+    })
+    (lib.mkIf (cfg.enable && cfg.secureBoot.enable && cfg.secureBoot.autoEnrollKeys.enable) {
+      assertions = [
+        {
+          assertion = cfg.secureBoot.autoGenerateKeys;
+          message = "autoEnrollKeys doesn't do anything without autoGenerateKeys.";
+        }
+      ];
+
+      boot.loader.limine.secureBoot.autoGenerateKeys = true;
     })
   ];
 }

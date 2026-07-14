@@ -11,25 +11,26 @@
   sqlite-vec,
   frigate,
   nixosTests,
+  go2rtc,
 }:
 
 let
-  version = "0.17.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-K41tWnj0u+Fw+G++aPFfMa0uFYEvvZ0r6xNPQ7J1cYs=";
+    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python313Packages.python.override {
-    packageOverrides = self: super: {
+  python3Packages = python313Packages.overrideScope (
+    self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
         src = fetchFromGitHub {
@@ -42,9 +43,10 @@ let
 
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
-    };
-  };
-  python3Packages = python.pkgs;
+    }
+  );
+
+  inherit (python3Packages) python;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -100,6 +102,9 @@ python3Packages.buildPythonApplication rec {
     # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resultion in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''
@@ -164,6 +169,7 @@ python3Packages.buildPythonApplication rec {
     importlib-metadata
     importlib-resources
     joserfc
+    keras # via tensorflow.keras
     librosa
     markupsafe
     memray
@@ -237,9 +243,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  # interpreter crash in onnxruntime on aarch64-linux
-  doCheck = !(stdenv.hostPlatform.system == "aarch64-linux");
-
   preCheck = ''
     # Unavailable in the build sandbox
     substituteInPlace frigate/const.py \
@@ -250,6 +253,11 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Test needs network access
     "test_plus_labelmap"
+    # Expects go2rtc on :1984
+    "test_admin_can_access_any_stream"
+    "test_restricted_role_can_access_allowed_camera"
+    "test_stream_alias_allowed_for_owning_camera"
+    "test_unconfigured_role_can_access_any_stream"
   ];
 
   passthru = {

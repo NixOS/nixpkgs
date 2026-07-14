@@ -20,12 +20,12 @@ diff --git a/libtests/qutil.cc b/libtests/qutil.cc
 index 78ae82c8e3..daa9281a19 100644
 --- a/libtests/qutil.cc
 +++ b/libtests/qutil.cc
-@@ -766,8 +766,6 @@
+@@ -802,8 +802,6 @@
          hex_encode_decode_test();
-         std::cout << "---- rename/delete" << std::endl;
+         std::cout << "---- rename/delete" << '\n';
          rename_delete_test();
--        std::cout << "---- timestamp" << std::endl;
+-        std::cout << "---- timestamp" << '\n';
 -        timestamp_test();
-         std::cout << "---- is_long_long" << std::endl;
+         std::cout << "---- is_long_long" << '\n';
          is_long_long_test();
-         std::cout << "---- memory usage" << std::endl;
+         std::cout << "---- memory usage" << '\n';

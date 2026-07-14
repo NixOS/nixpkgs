@@ -17,12 +17,9 @@ in
 let
   inherit (builtins)
     attrNames
-    concatStrings
     filter
-    genList
     isNull
     length
-    stringLength
     toJSON
     ;
   inherit (pkgs.lib)

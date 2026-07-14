@@ -1,11 +1,12 @@
 {
   lib,
-  buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchNpmDeps,
   libredirect,
   nodejs,
-  python312,
+  npmHooks,
+  python3,
   gettext,
   nixosTests,
   pretix,
@@ -13,18 +14,25 @@
 }:
 
 let
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      django = super.django_4;
+      chardet = super.chardet_5;
+      django = super.django_5;
 
-      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
           tag = "v${version}";
           hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
         };
+        disabledTests = [
+          # error message mismatch
+          "test_validation_failed_message"
+          # fails dns resolution
+          "test_response_when_auth_server_response_return_404"
+        ];
       });
 
       stripe = super.stripe.overridePythonAttrs rec {
@@ -43,39 +51,19 @@ let
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };
-
+  pythonPackages = python.pkgs;
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.2.0";
+  version = "2026.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
-    tag = "v${version}";
-    hash = "sha256-S8HcCtTBTU9oU7X+XD6avSZVtlRkXeF7pIqnggqJRPs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yKJGJziMpOB8ttz0n4USay03wJTId77bYT7id4OgoIE=";
   };
-
-  npmDeps = buildNpmPackage {
-    pname = "pretix-node-modules";
-    inherit version src;
-
-    sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-n4Gd4DKdP4b6LT34uy9aJDWcTz9okk4imq6vtw1cC+k=";
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp -R node_modules $out/
-
-      runHook postInstall
-    '';
-  };
-in
-python.pkgs.buildPythonApplication rec {
-  inherit pname version src;
-  pyproject = true;
 
   patches = [
     # Discover pretix.plugin entrypoints during build and add them into
@@ -83,64 +71,36 @@ python.pkgs.buildPythonApplication rec {
     ./plugin-build.patch
   ];
 
-  pythonRelaxDeps = [
-    "beautifulsoup4"
-    "bleach"
-    "celery"
-    "css-inline"
-    "django-bootstrap3"
-    "django-compressor"
-    "django-formset-js-improved"
-    "django-i18nfield"
-    "django-localflavor"
-    "django-phonenumber-field"
-    "dnspython"
-    "drf_ujson2"
-    "importlib-metadata"
-    "kombu"
-    "markdown"
-    "oauthlib"
-    "phonenumberslite"
-    "pillow"
-    "protobuf"
-    "pycparser"
-    "pycryptodome"
-    "pyjwt"
-    "pypdf"
-    "python-bidi"
-    "qrcode"
-    "redis"
-    "reportlab"
-    "requests"
-    "sentry-sdk"
-    "sepaxml"
-    "ua-parser"
-    "webauthn"
-  ];
-
-  pythonRemoveDeps = [
-    "vat_moss_forked" # we provide a patched vat-moss package
-  ];
-
   postPatch = ''
-    NODE_PREFIX=src/pretix/static.dist/node_prefix
-    mkdir -p $NODE_PREFIX
-    cp -R ${npmDeps}/node_modules $NODE_PREFIX/
-    chmod -R u+w $NODE_PREFIX/
-
     # unused
     sed -i "/setuptools-rust/d" pyproject.toml
 
+    # unbreak dependency relaxation
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
 
-    # npm ci would remove and try to reinstall node_modules
+    # we take care of the npm build
     substituteInPlace src/pretix/_build.py \
-      --replace-fail "npm ci" "npm install"
+      --replace-fail "npm ci" "true" \
+      --replace-fail "npm run build" "true"
   '';
 
-  build-system = with python.pkgs; [
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-DJCvNcgDIY71Q9qg4Ng7SAM9i9wHhHOdJonpt5t/Xx8=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  preBuild = ''
+    npm run build
+  '';
+
+  build-system = with pythonPackages; [
     gettext
     nodejs
     setuptools
@@ -148,7 +108,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       arabic-reshaper
       babel
@@ -229,11 +189,52 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ plugins;
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = with pythonPackages; {
     memcached = [
       pylibmc
     ];
   };
+
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "celery"
+    "css-inline"
+    "cryptography"
+    "django-bootstrap3"
+    "django-compressor"
+    "django-filter"
+    "django-formset-js-improved"
+    "django-i18nfield"
+    "django-localflavor"
+    "django-phonenumber-field"
+    "dnspython"
+    "drf_ujson2"
+    "importlib_metadata"
+    "kombu"
+    "markdown"
+    "oauthlib"
+    "phonenumberslite"
+    "pillow"
+    "protobuf"
+    "pycparser"
+    "pycryptodome"
+    "pyjwt"
+    "pypdf"
+    "python-bidi"
+    "qrcode"
+    "redis"
+    "reportlab"
+    "requests"
+    "sentry-sdk"
+    "sepaxml"
+    "ua-parser"
+    "webauthn"
+  ];
+
+  pythonRemoveDeps = [
+    "vat_moss_forked" # we provide a patched vat-moss package
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -248,7 +249,7 @@ python.pkgs.buildPythonApplication rec {
   dontStrip = true; # no binaries
 
   nativeCheckInputs =
-    with python.pkgs;
+    with pythonPackages;
     [
       libredirect.hook
       pytestCheckHook
@@ -261,7 +262,7 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
-    ++ lib.concatAttrValues optional-dependencies;
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     "--reruns=3"
@@ -270,6 +271,11 @@ python.pkgs.buildPythonApplication rec {
   disabledTests = [
     # unreliable around day changes
     "test_order_create_invoice"
+  ];
+
+  disabledTestPaths = [
+    # too expensive
+    "src/tests/e2e"
   ];
 
   preCheck = ''
@@ -286,12 +292,11 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit
-      npmDeps
       python
       ;
     plugins = lib.recurseIntoAttrs (
       lib.packagesFromDirectoryRecursive {
-        inherit (python.pkgs) callPackage;
+        inherit (pythonPackages) callPackage;
         directory = ./plugins;
       }
     );
@@ -299,6 +304,8 @@ python.pkgs.buildPythonApplication rec {
       inherit (nixosTests) pretix;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Ticketing software that cares about your event—all the way";
@@ -318,4 +325,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "pretix-manage";
     platforms = lib.platforms.linux;
   };
-}
+})

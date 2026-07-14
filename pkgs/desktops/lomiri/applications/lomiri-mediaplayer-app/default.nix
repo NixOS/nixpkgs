@@ -116,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Media Player application for Ubuntu Touch devices";
-    homepage = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app/-/blob/${
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/blob/${
       if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [

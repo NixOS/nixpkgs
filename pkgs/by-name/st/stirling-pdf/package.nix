@@ -7,6 +7,7 @@
 
   cargo,
   cargo-tauri,
+  go-task,
   gradle_8,
   makeBinaryWrapper,
   nodejs,
@@ -15,14 +16,16 @@
   wrapGAppsHook3,
 
   glib-networking,
-  jre,
+  jdk25,
   libsoup_3,
   openssl,
   webkitgtk_4_1,
 
   nix-update-script,
+  nixosTests,
 
-  isDesktopVariant, # set in all-packages.nix
+  isDesktopVariant ? false,
+  withAdditionalFeatures ? true,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
@@ -31,21 +34,25 @@ assert isDesktopVariant -> !buildWithFrontend;
 
 let
   gradle = gradle_8;
+  jre = jdk25;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.4.5";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Fk6tuuoTI5ziZ6GjbrRdlvNdToEPb3f155T1OL47XQs=";
+    hash = "sha256-Qod8x8aB6qDxbRTE5rWUoqVka5kizfXJAWkKo5lhnFQ=";
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
+
+    # upstream probably forgot to commit the lockfile after a bump
+    ./fix-cargo-lock.patch
   ];
 
   npmRoot = "frontend";
@@ -54,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-cVVxbkXD5sz6YmHOwbXj1GYRa2s9PmRFtuNsz2tLRhI=";
+    hash = "sha256-y+mviHatwhdIGCOKir1nnG/0Zm8oSoLKW345tU9upls=";
   };
 
   cargoRoot = "frontend/src-tauri";
@@ -68,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-lO2IdJUAnhpSnF4vTEn4EdnyrxIXyEUvpNl0VWd2fFs=";
+    hash = "sha256-Tx6twcyFupNOzuXbW8uUulMJFObyPg/i2U0QnvyhIRQ=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -78,25 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  # we'll trigger it manually in postBuild
-  dontTauriBuild = true;
+  env = {
+    PUPPETEER_SKIP_DOWNLOAD = "1";
+    DISABLE_ADDITIONAL_FEATURES = if withAdditionalFeatures then "false" else "true";
+  };
 
-  env.PUPPETEER_SKIP_DOWNLOAD = "1";
-
-  # disable spotless because it tries to fetch files not in deps.json
-  # and also because it slows down the build process
   gradleFlags = [
-    "-x"
-    "spotlessApply"
-    "-DDISABLE_ADDITIONAL_FEATURES=true"
+    "-PnoSpotless" # disable spotless because it tries to fetch files not in deps.json and also because it slows down the build process
   ]
   ++ lib.optionals buildWithFrontend [ "-PbuildWithFrontend=true" ];
 
   doCheck = true;
 
   nativeBuildInputs = [
+    go-task
     gradle
-    gradle.jdk # one of the tests also require that the `java` command is available on the command line
+    jre # one of the tests also require that the `java` command is available on the command line
     makeBinaryWrapper
   ]
   ++ lib.optionals (buildWithFrontend || isDesktopVariant) [
@@ -120,14 +124,21 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  postBuild = lib.optionalString isDesktopVariant ''
-    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/src-tauri/libs
-    mkdir -p ./frontend/src-tauri/runtime/
-    ln -s ${jre} ./frontend/src-tauri/runtime/jre
+  dontUseGradleBuild = isDesktopVariant; # we'll use the buildPhase from cargo-tauri-hook for the desktop app
 
-    # Unset these, since tauriBuildHook would recursively call them
-    unset preBuild postBuild
-    tauriBuildHook
+  # prepare the resources before building the desktop app
+  preBuild = lib.optionals isDesktopVariant ''
+    MODE=desktop task frontend:prepare
+
+    # this simulates what the desktop:jlink:jar would do
+    gradle bootJar
+    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/src-tauri/libs
+
+    # creates as minimal jre via jlink
+    task desktop:jlink:runtime
+
+    substituteInPlace frontend/src-tauri/stirling-pdf.desktop \
+      --replace-fail 'MimeType=application/pdf;' 'MimeType=application/pdf;x-scheme-handler/stirlingpdf;'
   '';
 
   # we use the installPhase from cargo-tauri-hook when we're building the desktop variant
@@ -141,20 +152,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # tauri installs the jre without preserving symlinks
-  # so we just symlink it again into the install location
-  # on darwin, we also create a wrapper for the binary inside the app bundle
-  postInstall = lib.optionalString isDesktopVariant ''
-    res_dir="$out/lib/Stirling-PDF/"
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      res_dir="$out/Applications/Stirling-PDF.app/Contents/Resources"
-      makeWrapper "$out/Applications/Stirling-PDF.app/Contents/MacOS/stirling-pdf" "$out/bin/stirling-pdf"
-    ''}
-    rm -r "$res_dir/runtime/jre"
-    ln -s ${jre} "$res_dir/runtime/jre"
+  postInstall = lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
+    makeWrapper "$out/Applications/Stirling-PDF.app/Contents/MacOS/stirling-pdf" "$out/bin/stirling-pdf"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) stirling-pdf-desktop; };
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
@@ -162,9 +167,12 @@ stdenv.mkDerivation (finalAttrs: {
       "Powerful, open-source PDF editing platform "
       + (if isDesktopVariant then "runnable as a desktop app" else "hostable as a web app");
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit; # TODO: figure out what proper licensing should be
     mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      staticdev
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource

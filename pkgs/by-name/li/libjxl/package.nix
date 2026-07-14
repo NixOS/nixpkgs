@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "bin"
     "dev"
+    "benchmark"
   ];
 
   src = fetchFromGitHub {
@@ -150,20 +152,26 @@ stdenv.mkDerivation rec {
       --replace 'sh$' 'sh( -e$|$)'
   '';
 
-  postInstall =
-    lib.optionalString enablePlugins ''
-      GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
-      GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
-        gdk-pixbuf-query-loaders --update-cache
-    ''
-    # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p "$out/bin"
-      makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
-        --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
-    '';
+  # Move `benchmark_xl` into a separate output to avoid a file collision
+  # with the `benchmark_xl` binary provided by `jpegli`.
+  postInstall = ''
+    moveToOutput "bin/benchmark_xl" "$benchmark"
+  ''
+  + lib.optionalString enablePlugins ''
+    GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+  '';
 
-  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
+  env = lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
+    CXXFLAGS = "-mfp16-format=ieee";
+  };
 
   # FIXME x86_64-darwin:
   # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690

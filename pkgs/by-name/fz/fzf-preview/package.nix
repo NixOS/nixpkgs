@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation {
   pname = "fzf-preview";
-  version = "0-unstable-2025-06-26";
+  version = "0-unstable-2026-02-22";
 
   src = fetchFromGitHub {
-    owner = "niksingh710";
+    owner = "semi710";
     repo = "fzf-preview";
-    rev = "5f6e936d1c3943192f9bdade71cff8879bdab3a6";
-    hash = "sha256-vDgYv9PjQQYcMKG97ryncd30JPplnEqAKBp5hAE0E+o=";
+    rev = "5e5a5a5c4258fa86300cb56224e31416ff7401b5";
+    hash = "sha256-ZjBoTsZ2ymfhmUbMpMWT1MB20kLf0BILnCDu75F6WEQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -79,10 +79,10 @@ stdenv.mkDerivation {
       be simple, fast, and highly compatible, making it a useful tool for anyone
       leveraging fzf for file navigation or search.
     '';
-    homepage = "https://github.com/niksingh710/fzf-preview";
+    homepage = "https://github.com/semi710/fzf-preview";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      niksingh710
+      semi710
     ];
     mainProgram = "fzf-preview";
     platforms = lib.platforms.unix;

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://pypi.python.org/pypi/pdfkit";
+    homepage = "https://pypi.org/project/pdfkit/";
     description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
     license = lib.licenses.mit;
   };

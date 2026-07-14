@@ -9,7 +9,6 @@ let
   inherit (lib) types;
   inherit (lib.attrsets)
     filterAttrs
-    mapAttrs
     mapAttrs'
     mapAttrsToList
     nameValuePair

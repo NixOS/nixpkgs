@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "screenly-cli";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "screenly";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Icx0Nkn0ScbNTmXllkUj6DPhGqzh8HnIQPpej4ABJac=";
+    hash = "sha256-1Trq1LFmKtzCCuqOT3DeL5KAPtHWi/glmhLBTR2vdVg=";
   };
 
-  cargoHash = "sha256-XYXWbwuoPqL93R8Bre26kBPxkiXpJ0Dg06cBOyDK8ok=";
+  cargoHash = "sha256-VPl9/5GkMI2oZQ9ZUwpMcW9+3SCbCpLCVrBiXneCakQ=";
 
   nativeBuildInputs = [
     pkg-config

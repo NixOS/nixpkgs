@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.4";
 
   src = fetchFromGitHub {
-    owner = "jamesbrink";
+    owner = "utensils";
     repo = "nxv";
     tag = "v${finalAttrs.version}";
     hash = "sha256-714babrR7inR+zkFSk8eqho4GIvUn6ITj7S54i5UcBI=";
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       commit to use with `nix shell nixpkgs/<commit>#package`.
     '';
     homepage = "https://nxv.urandom.io";
-    changelog = "https://github.com/jamesbrink/nxv/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/utensils/nxv/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "nxv";

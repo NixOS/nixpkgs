@@ -15,14 +15,14 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpustat";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "arduano";
     repo = "gpustat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/emilk/egui/issues/2486
   postFixup = ''
     wrapProgram $out/bin/gpustat \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}:/run/opengl-driver/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}:/run/opengl-driver/lib"
   '';
 
   meta = {
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gpustat";
     platforms = lib.platforms.linux;
   };
-}
+})

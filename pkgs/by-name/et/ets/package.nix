@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
     description = "Command output timestamper";
     homepage = "https://github.com/gdubicki/ets/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cameronfyfe ];
+    maintainers = [ ];
     mainProgram = "ets";
   };
 })

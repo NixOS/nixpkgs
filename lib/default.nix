@@ -73,7 +73,7 @@ let
       types = callLibs ./types.nix;
 
       # constants
-      licenses = callLibs ./licenses.nix;
+      licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
       systems = callLibs ./systems;
 

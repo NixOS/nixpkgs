@@ -12,14 +12,6 @@
 let
   withCommas = lib.replaceStrings [ "." ] [ "," ];
 
-  # simulate "haxelib dev $libname ."
-  simulateHaxelibDev = libname: ''
-    devrepo=$(mktemp -d)
-    mkdir -p "$devrepo/${withCommas libname}"
-    echo $(pwd) > "$devrepo/${withCommas libname}/.dev"
-    export HAXELIB_PATH="$HAXELIB_PATH:$devrepo"
-  '';
-
   installLibHaxe =
     {
       libname,

@@ -1,19 +1,23 @@
 {
   stdenv,
   lib,
-  fetchurl,
   cmake,
-  perl,
+  fetchFromGitLab,
   gnuplot,
+  nix-update-script,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcerf";
-  version = "3.2";
+  version = "3.3";
 
-  src = fetchurl {
-    url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${finalAttrs.version}/libcerf-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-6o0RDXPsJKZDBCyjlARhzLsbZUHiExDstwq05NwUSu8=";
+  src = fetchFromGitLab {
+    domain = "jugit.fz-juelich.de";
+    owner = "mlz";
+    repo = "libcerf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EPloejabyLzLP+GIPSIsh6dZDk2WodSEU6CPoICRxnM=";
   };
 
   nativeBuildInputs = [
@@ -21,15 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  passthru.tests = {
-    inherit gnuplot;
+  passthru = {
+    tests = {
+      inherit gnuplot;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
     homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.all;
   };
 })

@@ -51,8 +51,6 @@ buildPythonPackage rec {
     pyarrow-hotfix
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     pytestCheckHook
   ];

@@ -48,6 +48,12 @@ else
         -executable \
         -print0 | xargs --no-run-if-empty --null install --target $out/tests;
     fi
+    # Real (non-test) binaries that integration tests may exec via
+    # CARGO_BIN_EXE_<name>.
+    if [ -d target/cargo-bin-exe ]; then
+      mkdir -p $out/bin
+      cp -rP target/cargo-bin-exe/* $out/bin
+    fi
 
     runHook postInstall
   ''

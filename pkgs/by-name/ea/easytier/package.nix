@@ -7,26 +7,28 @@
   nixosTests,
   nix-update-script,
   installShellFiles,
+  mold,
   withQuic ? false, # with QUIC protocol support
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.5.0";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XnEfxWDKUTQFWYKtqetI7sLbOmGqw2BqpU5by1ajZGA=";
+    hash = "sha256-lwqpOVKFm85AiBb7NWLAkjSrWSe5pzF0AuEmmDo+v0k=";
   };
 
-  cargoHash = "sha256-ueDulcv7DnwvMWYayc3hzBVtldX6gg7fP7YQpdUPq7c=";
+  cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
     installShellFiles
+    mold
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;

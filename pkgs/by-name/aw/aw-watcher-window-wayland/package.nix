@@ -9,13 +9,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "aw-watcher-window-wayland";
-  version = "0-unstable-2025-12-31";
+  version = "0-unstable-2026-06-29";
 
   src = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "aw-watcher-window-wayland";
-    rev = "aea9aca029bd33d373bf53946a16dc05ef81e0b3";
-    hash = "sha256-3o3IVf2YeZ1qGokezPvuLnUaqiA/uzm4wCXvgNHIMW4=";
+    rev = "24aecc62973a0bae784c7c4f3e179a50c989892b";
+    hash = "sha256-LJ+8snTq/l1Pstw686jxNSFaq3hXloWtODgh7+YsdwU=";
   };
 
   cargoHash = "sha256-WWT8tOrHPf5x3bXsVPt32VKut4qK+K8gickBfEc0zmk=";

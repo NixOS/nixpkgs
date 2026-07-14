@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "deep-chainmap";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "deep_chainmap";
     inherit version;
-    hash = "sha256-Cw6Eiey501mzeigfdwnMuZH28abG4rcoACUGlmkzECA=";
+    hash = "sha256-lrCg6GGxjq/Y3t1c1HpJuaP+XVvVrOcB5aVaem5E/I8=";
   };
 
   build-system = [ flit-core ];

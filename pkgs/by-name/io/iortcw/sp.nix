@@ -19,9 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "iortcw";
     repo = "iortcw";
-    rev = finalAttrs.version;
-    sha256 = "0g5wgqb1gm34pd05dj2i8nj3qhsz0831p3m7bsgxpjcg9c00jpyw";
+    tag = finalAttrs.version;
+    hash = "sha256-3F8JAEuPydufXqeOGwYCX0M8pEVRyFZAu2TUFxZ+vDw=";
   };
+
+  # Constexpr is a reserved keyword since C++11 that can't be overwritten. Replacing constexpr with
+  # const_expr is necessary in this case for the build to function.
+  postPatch = ''
+    substituteInPlace code/tools/lcc/src/{c.h,init.c,simp.c,stmt.c} \
+      --replace-fail 'constexpr' 'const_expr'
+  '';
 
   enableParallelBuilding = true;
 

@@ -246,7 +246,10 @@ in
       systemPackages = [ cfg.package ];
     };
 
-    security.polkit.enable = lib.mkDefault true;
+    security.polkit = {
+      enable = lib.mkDefault true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
 
     services = {
       dbus.packages = [ cfg.package ];

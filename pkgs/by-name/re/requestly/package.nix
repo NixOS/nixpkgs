@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://requestly.io";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "requestly";
   };
 }

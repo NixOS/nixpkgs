@@ -54,6 +54,11 @@ buildPythonPackage {
     hash = "sha256-qBzcIUmgnGy/Xn/B+7UrLrRhCvCkapL+ymqGS2sMVgA=";
   };
 
+  patches = [
+    # https://github.com/Layout-Parser/layout-parser/pull/230
+    ./pandas-v3.patch
+  ];
+
   propagatedBuildInputs = [
     numpy
     opencv-python

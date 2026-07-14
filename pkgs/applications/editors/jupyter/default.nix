@@ -16,7 +16,7 @@ let
       (oldAttrs: {
         inherit (python3.pkgs.notebook) version;
         pname = "jupyter";
-        meta = oldAttrs.meta // {
+        meta = python3.pkgs.notebook.meta // {
           mainProgram = "jupyter";
         };
       });

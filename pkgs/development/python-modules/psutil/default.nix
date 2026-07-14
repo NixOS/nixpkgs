@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.2.1";
+  version = "7.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giampaolo";
     repo = "psutil";
     tag = "release-${version}";
-    hash = "sha256-HGIFf7E356o0OcgLOPjACmrPXneQt/8IhzyudKKuLdg=";
+    hash = "sha256-plBv24QgNzmVMV2lFxCbNwHKtd620thJayWdjs4estw=";
   };
 
   postPatch = ''

@@ -87,7 +87,6 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [
       matejc
-      ftrvxmtrx
     ];
     teams = [ lib.teams.enlightenment ];
   };

@@ -31,12 +31,14 @@
   playwright-driver,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   markdown,
   nh3,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 buildPythonPackage rec {
   pname = "django-filingcabinet";
   version = "0.17-unstable-2025-08-14";
@@ -96,9 +98,14 @@ buildPythonPackage rec {
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";
+    inherit
+      pname
+      version
+      src
+      pnpm
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-p+RpEDVbdYmeSD4bB0oUMrTpsVDGYkqME13awnoTNd0=";
   };
 
   postBuild = ''

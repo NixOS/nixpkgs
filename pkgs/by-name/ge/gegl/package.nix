@@ -29,7 +29,7 @@
   gexiv2,
   libwebp,
   luajit,
-  openexr_2,
+  openexr,
   suitesparse,
   withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit,
   gimp,
@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.64";
+  version = "0.4.70";
 
   outputs = [
     "out"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DeHJ3SLBYNXkvfw4jSkvA0R8ymJYVBuaEv7Xg9DPfGA=";
+    hash = "sha256-R/UNnDrs03XetIwR6/6tUtFi5PwWKks9RGGCd/H67AI=";
   };
 
   nativeBuildInputs = [
@@ -77,8 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     libraw
     libwebp
     gexiv2
-    openexr_2
+    openexr
     suitesparse
+    vala
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -93,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     babl
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dmrg=disabled" # not sure what that is

@@ -5,7 +5,7 @@
     maintainers = [ mic92 ];
   };
 
-  nodes.machine =
+  containers.machine =
     { ... }:
     {
       services.telegraf.enable = true;

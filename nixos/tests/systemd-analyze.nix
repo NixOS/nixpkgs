@@ -44,7 +44,7 @@
     # We copy the main graph into the $out (toplevel), and we also copy
     # the entire output directory with additional data
     with subtest("Copying the resulting data into $out"):
-        machine.copy_from_vm("systemd-analyze/", "")
-        machine.copy_from_vm("systemd-analyze/systemd-analyze.svg", "")
+        machine.copy_from_machine("systemd-analyze/", "")
+        machine.copy_from_machine("systemd-analyze/systemd-analyze.svg", "")
   '';
 }

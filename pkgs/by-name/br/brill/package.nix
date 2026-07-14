@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,10 +15,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf          -t $out/share/fonts/truetype
     install -Dm644 *agreement.pdf -t $out/share/licenses/brill
     install -Dm644 *use.pdf       -t $out/share/doc/brill
 

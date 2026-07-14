@@ -11,6 +11,7 @@
   apple-sdk_15,
   withAdditionalGuestAgents ? false,
   lima-additional-guestagents,
+  llvmPackages,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   testers,
@@ -20,10 +21,13 @@
   jq,
 }:
 
+let
+  source = callPackage ./source.nix { };
+in
 buildGoModule (finalAttrs: {
-  pname = "lima";
+  pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
 
-  inherit (callPackage ./source.nix { }) version src vendorHash;
+  inherit (source) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -32,7 +36,16 @@ buildGoModule (finalAttrs: {
     # For checkPhase, and installPhase(required to build completion)
     writableTmpDirAsHomeHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+    llvmPackages.lld
+  ];
+
+  # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' llvmPackages.lld "ld64.lld"}";
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -158,13 +171,7 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  meta = {
-    homepage = "https://github.com/lima-vm/lima";
+  meta = source.meta // {
     description = "Linux virtual machines with automatic file sharing and port forwarding";
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhduy
-    ];
   };
 })

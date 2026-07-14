@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ktfmt";
-  version = "0.61";
+  version = "0.63";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ktfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WY3d25c8VLsgeNBV/lSlOL+C3XtM9lfRYqMz3Z0mT3s=";
+    hash = "sha256-wAnlUEPFyilAbEXN6DGXHXeYfZgx2tlp4vDENP4O2Hw=";
   };
 
   patches = ./remove-idea-plugin.patch;

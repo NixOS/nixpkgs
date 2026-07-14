@@ -57,7 +57,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorg-server";
-  version = "21.1.21";
+  # `xvfb` inherits `version` and `src` from here, leading to many rebuilds. If
+  # necessary, these can be moved out of lockstep in order to merge updates
+  # quickly.
+  version = "21.1.24";
 
   outputs = [
     "out"
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xorg-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wMvlVFs/ZFuuYCS4MNHRFUqVY1BoOk5Ssv/1sPoatRk=";
+    hash = "sha256-Gk6zbKZcw7G5NlZtZ3qXhuE8Ec1YBulRrFXz9c45hK8=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -149,8 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxkb_bin_dir=${xkbcomp}/bin"
     "-Dxkb_dir=${xkeyboard-config}/share/X11/xkb"
     "-Dxkb_output_dir=$out/share/X11/xkb/compiled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+
     "-Dxcsecurity=true"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -173,6 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace hw/xquartz/mach-startup/stub.c \
       --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
   '';
+
+  # avoid linux rebuilds
+  ${if stdenv.hostPlatform.isDarwin then "hardeningDisable" else null} = [ "strictflexarrays1" ];
 
   # default X install symlinks this to Xorg, we want XQuartz
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -241,7 +246,9 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariantMitDisclaimerXserver # 1780-1793
     ];
     mainProgram = "X";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     pkgConfigModules = [ "xorg-server" ];
     platforms = lib.platforms.unix;
   };

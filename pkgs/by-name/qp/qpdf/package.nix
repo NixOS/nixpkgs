@@ -11,7 +11,6 @@
   # for passthru.tests
   cups-filters,
   pdfmixtool,
-  pdfslicer,
   python3,
   testers,
   versionCheckHook,
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "12.2.0";
+  version = "12.3.2";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tzOZVQ/XO2mWNtz3mFTdrpdD2PvvCwje5nbEyiIkcZw=";
+    hash = "sha256-qHc9v3VYrxbOhpsPbaaO7foumI2AdeFN9Z9Zbs4XtKg=";
   };
 
   outputs = [
@@ -80,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       cups-filters
       pdfmixtool
-      pdfslicer
       ;
   };
 

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Integrate large language models into the command line";
     homepage = "https://github.com/efugier/smartcat";
-    changelog = "https://github.com/efugier/smartcat/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/efugier/smartcat/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     mainProgram = "sc";

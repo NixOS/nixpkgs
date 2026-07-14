@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "webexpythonsdk";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "WebexCommunity";
     repo = "WebexPythonSDK";
     tag = "v${version}";
-    hash = "sha256-iRhl/JCktS+6yJhvMZ6Vv7oOF5ZVrPQiI4Bstsub0bM=";
+    hash = "sha256-2yyGR5gCJVRsEnoPAr8tkMeG19vTfATl/ybuMydnplU=";
   };
 
   build-system = [

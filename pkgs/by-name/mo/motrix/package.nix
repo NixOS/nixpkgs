@@ -33,7 +33,7 @@ appimageTools.wrapType2 {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "motrix";
   };
 }

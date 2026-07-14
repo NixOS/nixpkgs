@@ -19,6 +19,7 @@
   glib,
   networkmanager,
   json-glib,
+  glib-networking,
   libadwaita,
   libportal-gtk4,
   libpulseaudio,
@@ -58,10 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-rtsp-server
-    gst_all_1.gst-vaapi
     pipewire
     networkmanager
     json-glib
+    # Not stricly required according to configure phase log, but putting it
+    # here adds gio modules to the GIO_EXTRA_MODULES environment variables - as
+    # required for TLS. See https://github.com/NixOS/nixpkgs/issues/502092
+    glib-networking
     libadwaita
     libportal-gtk4
     libpulseaudio

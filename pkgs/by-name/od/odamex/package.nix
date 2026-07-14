@@ -5,7 +5,7 @@
 
   cmake,
   copyDesktopItems,
-  deutex,
+  python3,
   makeDesktopItem,
   makeWrapper,
   pkg-config,
@@ -18,7 +18,7 @@
   cpptrace,
   curl,
   expat,
-  fltk,
+  fltk_1_4,
   libdwarf,
   libselinux,
   libsepol,
@@ -30,7 +30,7 @@
   portmidi,
   wayland-scanner,
   waylandpp,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   xorgproto,
   zstd,
@@ -43,20 +43,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
-  version = "12.1.0";
+  version = "12.2.0";
 
   src = fetchFromGitHub {
     owner = "odamex";
     repo = "odamex";
     tag = finalAttrs.version;
-    hash = "sha256-kLI1gdGH5NXJ8YI1tR0N5W6yvGZ+7302z0QLl2j+b0k=";
+    hash = "sha256-cRQtY4C0gjzheE4cG8aPjzAoPf/Hm05a6tidsbce7uM=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     copyDesktopItems
-    deutex
+    python3
     makeWrapper
     pkg-config
   ]
@@ -71,12 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     cpptrace
     curl
     expat
-    fltk
+    fltk_1_4
     libdwarf
     libsysprof-capture
     pcre2
     portmidi
-    wxGTK32
+    wxwidgets_3_2
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -131,11 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
           for name in odamex odalaunch odasrv; do
             for size in 96 128 256 512; do
               install -Dm644 ../media/icon_"$name"_"$size".png \
-                $out/share/icons/hicolor/"$size"x"$size"/"$name".png
+                $out/share/icons/hicolor/"$size"x"$size"/apps/"$name".png
             done
-
-            install -Dm644 ../media/icon_"$name"_128.png \
-              $out/share/pixmaps/"$name".png
           done
         ''
     }
@@ -194,7 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/odamex/odamex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "odalaunch";
   };

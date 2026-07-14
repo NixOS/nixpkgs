@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XpLnujfD5FjsRY5cIB4t65kstgEclj5qhRKmNNjYARY=";
+    hash = "sha256-S6BkIHh5LfY907LpyPg48qPs9CjHUY1ZIcBTDVNRKs8=";
   };
 
   build-system = [ setuptools ];

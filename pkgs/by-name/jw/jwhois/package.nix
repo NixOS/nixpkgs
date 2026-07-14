@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   lynx,
 }:
 
@@ -17,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./connect.patch
     ./service-name.patch
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/jwhois/raw/422e2326397c7a48df61acb8ef649864a874272b/f/jwhois-4.0-gcc15-fix.patch";
+      hash = "sha256-bBZk2GUu8Y66u4u+zJxY/fxzzc2y17ECEJO6uNz9ngw=";
+    })
   ];
 
   postPatch = ''

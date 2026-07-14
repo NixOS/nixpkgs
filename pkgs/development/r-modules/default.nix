@@ -531,6 +531,10 @@ let
       cargo
       rustc
     ];
+    waysign = with pkgs; [
+      cargo
+      rustc
+    ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [
       fftw.dev
@@ -696,7 +700,7 @@ let
       pkg-config
     ];
     n1qn1 = [ pkgs.gfortran ];
-    odbc = [ pkgs.unixODBC ];
+    odbc = [ pkgs.unixodbc ];
     opencv = [ pkgs.pkg-config ];
     pak = [ pkgs.curl.dev ];
     pander = with pkgs; [
@@ -761,7 +765,9 @@ let
     ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = with pkgs; [ zlib.dev ];
+    Rhdf5lib = with pkgs; [
+      cmake
+    ];
     Rhpc = with pkgs; [
       zlib
       bzip2.dev
@@ -817,7 +823,10 @@ let
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
-    RProtoBuf = [ pkgs.protobuf ];
+    RProtoBuf = with pkgs; [
+      protobuf
+      abseil-cpp.dev
+    ];
     rsamplr = with pkgs; [
       cargo
       rustc
@@ -858,6 +867,10 @@ let
       rustc
     ];
     arcpbf = with pkgs; [
+      cargo
+      rustc
+    ];
+    tinyimg = with pkgs; [
       cargo
       rustc
     ];
@@ -962,6 +975,7 @@ let
       fontconfig.dev
       freetype.dev
     ];
+    rlas = [ pkgs.pkg-config ];
     TAQMNGR = [ pkgs.zlib.dev ];
     TDA = [ pkgs.gmp ];
     tesseract = with pkgs; [
@@ -1223,10 +1237,16 @@ let
       xz.dev
       zlib.dev
     ];
+    fs = [ pkgs.libuv ];
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive ];
+    lpsymphony = with pkgs; [
+      symphony
+      cgl
+      clp
+    ];
     gdalcubes = with pkgs; [
       proj.dev
       gdal
@@ -1246,6 +1266,10 @@ let
     cartogramR = with pkgs; [
       fftw.dev
       pkg-config
+    ];
+    Rhdf5lib = with pkgs; [
+      curl
+      zlib.dev
     ];
     GRAB = [ pkgs.zlib.dev ];
     jqr = [ pkgs.jq.out ];
@@ -1537,7 +1561,13 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     markets = [ pkgs.gsl ];
-    rlas = [ pkgs.boost ];
+    rlas = with pkgs; [
+      boost
+      gdal
+      proj
+      sqlite
+      geos
+    ];
     bgx = [ pkgs.boost ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
@@ -1724,6 +1754,7 @@ let
     "ceramic"
     "connections"
     "covidmx"
+    "ggiraph"
     "csodata"
     "DiceView"
     "facmodTS"
@@ -1858,7 +1889,9 @@ let
     });
 
     vegan3d = old.vegan3d.overrideAttrs (attrs: {
-      RGL_USE_NULL = "true";
+      env = (attrs.env or { }) // {
+        RGL_USE_NULL = "true";
+      };
     });
 
     # it can happen that the major version of arrow-cpp is ahead of the
@@ -1940,6 +1973,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    fixest = old.fixest.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1969,6 +2006,10 @@ let
     });
 
     ironseed = old.ironseed.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    ramr = old.ramr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
@@ -2034,13 +2075,6 @@ let
 
     fio = old.fio.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
-    });
-
-    hypeR = old.hypeR.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace NAMESPACE R/db_msig.R --replace-fail \
-        "msigdbr_show_species" "msigdbr_species"
-      '';
     });
 
     alcyon = old.alcyon.overrideAttrs (attrs: {
@@ -2189,7 +2223,9 @@ let
     });
 
     nanonext = old.nanonext.overrideAttrs (attrs: {
-      NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
+      env = (attrs.env or { }) // {
+        NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
+      };
     });
 
     clustermq = old.clustermq.overrideAttrs (attrs: {
@@ -2197,7 +2233,9 @@ let
     });
 
     Cairo = old.Cairo.overrideAttrs (attrs: {
-      NIX_LDFLAGS = "-lfontconfig";
+      env = (attrs.env or { }) // {
+        NIX_LDFLAGS = "-lfontconfig";
+      };
     });
 
     curl = old.curl.overrideAttrs (attrs: {
@@ -2250,6 +2288,10 @@ let
         pkgs.cargo
         pkgs.rustc
       ];
+    });
+
+    waysign = old.waysign.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
@@ -2432,6 +2474,10 @@ let
       '';
     });
 
+    RProtoBuf = old.RProtoBuf.overrideAttrs (attrs: {
+      configureFlags = [ "ac_cv_prog_cxx_cxx11=" ];
+    });
+
     JavaGD = old.JavaGD.overrideAttrs (attrs: {
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
@@ -2509,7 +2555,9 @@ let
     });
 
     RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
-      LIBAPPARMOR_HOME = pkgs.libapparmor;
+      env = (attrs.env or { }) // {
+        LIBAPPARMOR_HOME = pkgs.libapparmor;
+      };
     });
 
     # Append cargo path to path variable
@@ -2524,17 +2572,21 @@ let
     });
 
     RMySQL = old.RMySQL.overrideAttrs (attrs: {
-      MYSQL_DIR = "${pkgs.libmysqlclient}";
-      PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
-      NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
+      env = (attrs.env or { }) // {
+        MYSQL_DIR = "${pkgs.libmysqlclient}";
+        PKGCONFIG_CFLAGS = "-I${pkgs.libmysqlclient.dev}/include/mysql";
+        NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
+      };
       preConfigure = ''
         patchShebangs configure
       '';
     });
 
     devEMF = old.devEMF.overrideAttrs (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
-      NIX_LDFLAGS = "-lX11";
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_LINK = "-L${pkgs.libxft.out}/lib -lXft";
+        NIX_LDFLAGS = "-lX11";
+      };
     });
 
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
@@ -2542,11 +2594,15 @@ let
     });
 
     slfm = old.slfm.overrideAttrs (attrs: {
-      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
+      env = (attrs.env or { }) // {
+        PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
+      };
     });
 
     SamplerCompare = old.SamplerCompare.overrideAttrs (attrs: {
-      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
+      env = (attrs.env or { }) // {
+        PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
+      };
     });
 
     FLAMES = old.FLAMES.overrideAttrs (attrs: {
@@ -2557,13 +2613,17 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+      env = (attrs.env or { }) // {
+        PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+      };
     });
 
     websocket = old.websocket.overrideAttrs (attrs: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+      env = (attrs.env or { }) // {
+        PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+      };
     });
 
     Rserve = old.Rserve.overrideAttrs (attrs: {
@@ -2594,11 +2654,13 @@ let
         patchShebangs configure
       '';
 
-      R_MAKEVARS_SITE = lib.optionalString (pkgs.stdenv.system == "aarch64-linux") (
-        pkgs.writeText "Makevars" ''
-          CXX14PICFLAGS = -fPIC
-        ''
-      );
+      env = (attrs.env or { }) // {
+        R_MAKEVARS_SITE = lib.optionalString (pkgs.stdenv.system == "aarch64-linux") (
+          pkgs.writeText "Makevars" ''
+            CXX14PICFLAGS = -fPIC
+          ''
+        );
+      };
     });
 
     acs = old.acs.overrideAttrs (attrs: {
@@ -2611,7 +2673,9 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-      NIX_LDFLAGS = "-lfontconfig -lfreetype";
+      env = (attrs.env or { }) // {
+        NIX_LDFLAGS = "-lfontconfig -lfreetype";
+      };
     });
 
     magick = old.magick.overrideAttrs (attrs: {
@@ -2640,7 +2704,9 @@ let
       preConfigure = ''
         export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
       '';
-      TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
+      env = (attrs.env or { }) // {
+        TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
+      };
     });
 
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {
@@ -2854,8 +2920,10 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+      env = (attrs.env or { }) // {
+        PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
+        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+      };
     });
 
     ChemmineOB = old.ChemmineOB.overrideAttrs (attrs: {
@@ -2918,7 +2986,10 @@ let
     );
 
     lpsymphony = old.lpsymphony.overrideAttrs (attrs: {
-      preConfigure = ''
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail '--libs SYMPHONY' '--libs symphony' \
+          --replace-fail '--cflags SYMPHONY' '--cflags symphony'
         patchShebangs configure
       '';
     });
@@ -2970,7 +3041,7 @@ let
       postPatch = ''
         substituteInPlace src/Makefile --replace-fail \
           "all:\$(PROG) ../inst/bwa clean" \
-          "all:\$(PROG) ../inst/bwa" \
+          "all:\$(PROG) ../inst/bwa"
       '';
     });
 
@@ -3019,7 +3090,9 @@ let
     ChIPXpress = old.ChIPXpress.override { hydraPlatforms = [ ]; };
 
     rgl = old.rgl.overrideAttrs (attrs: {
-      RGL_USE_NULL = "true";
+      env = (attrs.env or { }) // {
+        RGL_USE_NULL = "true";
+      };
     });
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
@@ -3051,7 +3124,9 @@ let
     dbarts = old.dbarts.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     geomorph = old.geomorph.overrideAttrs (attrs: {
-      RGL_USE_NULL = "true";
+      env = (attrs.env or { }) // {
+        RGL_USE_NULL = "true";
+      };
     });
 
     gpuMagic = old.gpuMagic.overrideAttrs (_: {
@@ -3074,7 +3149,13 @@ let
 
     Rhdf5lib =
       let
-        hdf5 = pkgs.hdf5_1_10;
+        hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
+          cmakeFlags = attrs.cmakeFlags ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
+          buildInputs = attrs.buildInputs ++ [ pkgs.curl.dev ];
+          postInstall = attrs.postInstall or "" + ''
+            cp src/libhdf5.settings $dev/lib
+          '';
+        });
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
         propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
@@ -3105,9 +3186,11 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    redland = old.redland.overrideAttrs (_: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.redland}/include -I${pkgs.librdf_raptor2}/include/raptor2 -I${pkgs.librdf_rasqal}/include/rasqal";
-      PKGCONFIG_LIBS = "-L${pkgs.redland}/lib -L${pkgs.librdf_raptor2}/lib -L${pkgs.librdf_rasqal}/lib -lrdf -lraptor2 -lrasqal";
+    redland = old.redland.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        PKGCONFIG_CFLAGS = "-I${pkgs.redland}/include -I${pkgs.librdf_raptor2}/include/raptor2 -I${pkgs.librdf_rasqal}/include/rasqal";
+        PKGCONFIG_LIBS = "-L${pkgs.redland}/lib -L${pkgs.librdf_raptor2}/lib -L${pkgs.librdf_rasqal}/lib -lrdf -lraptor2 -lrasqal";
+      };
     });
 
     textshaping = old.textshaping.overrideAttrs (attrs: {

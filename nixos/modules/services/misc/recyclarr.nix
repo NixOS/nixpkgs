@@ -10,7 +10,7 @@ let
   cfg = config.services.recyclarr;
   format = pkgs.formats.yaml { };
   stateDir = "/var/lib/recyclarr";
-  configPath = "${stateDir}/config.json";
+  configPath = "${stateDir}/config.yml";
   secretsReplacement = utils.genJqSecretsReplacement {
     loadCredential = true;
   } cfg.configuration configPath;
@@ -25,24 +25,24 @@ in
       type = format.type;
       default = { };
       example = {
-        sonarr = [
-          {
+        sonarr = {
+          sonarr-main = {
             instance_name = "main";
             base_url = "http://localhost:8989";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/sonarr-api_key";
             };
-          }
-        ];
-        radarr = [
-          {
+          };
+        };
+        radarr = {
+          radarr-main = {
             instance_name = "main";
             base_url = "http://localhost:7878";
             api_key = {
               _secret = "/run/credentials/recyclarr.service/radarr-api_key";
             };
-          }
-        ];
+          };
+        };
       };
       description = ''
         Recyclarr YAML configuration as a Nix attribute set.
@@ -98,7 +98,6 @@ in
     systemd.services.recyclarr = {
       description = "Recyclarr Service";
 
-      # YAML is a JSON super-set
       preStart = secretsReplacement.script;
 
       serviceConfig = {
@@ -106,7 +105,11 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "recyclarr";
-        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --app-data ${stateDir} --config ${configPath}";
+        Environment = [
+          "RECYCLARR_CONFIG_DIR=${stateDir}"
+          "RECYCLARR_DATA_DIR=${stateDir}"
+        ];
+        ExecStart = "${lib.getExe cfg.package} ${cfg.command} --config ${configPath}";
         LoadCredential = secretsReplacement.credentials;
 
         ProtectSystem = "strict";
@@ -151,4 +154,6 @@ in
       };
     };
   };
+
+  meta.maintainers = [ lib.maintainers.josephst ];
 }

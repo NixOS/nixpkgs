@@ -5,7 +5,6 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -13,16 +12,18 @@ let
     sanitizeDerivationName
     ;
   inherit (lib.lists)
-    filter
-    foldr
-    foldl'
+    all
+    concatLists
     concatMap
     elemAt
-    all
-    partition
-    groupBy
-    take
+    filter
     foldl
+    foldl'
+    foldr
+    groupBy
+    partition
+    reverseList
+    take
     ;
 in
 
@@ -370,7 +371,11 @@ rec {
 
     :::
   */
-  concatMapAttrs = f: v: foldl' mergeAttrs { } (attrValues (mapAttrs f v));
+  concatMapAttrs =
+    f: v:
+    listToAttrs (
+      concatLists (reverseList (mapAttrsToList (name: value: attrsToList (f name value)) v))
+    );
 
   /**
     Update or set specific paths of an attribute set.
@@ -1612,13 +1617,15 @@ rec {
       binaryMerge =
         start: end:
         # assert start < end; # Invariant
-        if end - start >= 2 then
-          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
-          # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start (start + (end - start) / 2) // binaryMerge (start + (end - start) / 2) end
+        if end - start == 1 then
+          # Base case - there will be exactly 1 element due to the invariant, in
+          # which case we just return it directly
+          elemAt list start
         else
-          # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
-          elemAt list start;
+          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
+          # Relies on floor for odd results
+          # The invariant is satisfied because each half will have at least 1 element
+          binaryMerge start ((start + end) / 2) // binaryMerge ((start + end) / 2) end;
     in
     if list == [ ] then
       # Calling binaryMerge as below would not satisfy its invariant
@@ -1798,22 +1805,28 @@ rec {
     :::
   */
   matchAttrs =
-    pattern: attrs:
+    let
+      recurse =
+        pattern: attrs:
+        all (
+          # Compare equality between `pattern` & `attrs`.
+          attr:
+          # Missing attr, not equal.
+          attrs ? ${attr}
+          && (
+            let
+              lhs = pattern.${attr};
+              rhs = attrs.${attr};
+            in
+            # Simple equality check is primarily for non-attrsets, but we run it
+            # on attrsets too, since it may let us avoid recursing
+            lhs == rhs || isAttrs lhs && isAttrs rhs && recurse lhs rhs
+          )
+        ) (attrNames pattern);
+    in
+    pattern:
     assert isAttrs pattern;
-    all (
-      # Compare equality between `pattern` & `attrs`.
-      attr:
-      # Missing attr, not equal.
-      attrs ? ${attr}
-      && (
-        let
-          lhs = pattern.${attr};
-          rhs = attrs.${attr};
-        in
-        # If attrset check recursively
-        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs else lhs == rhs
-      )
-    ) (attrNames pattern);
+    recurse pattern;
 
   /**
     Override only the attributes that are already present in the old set

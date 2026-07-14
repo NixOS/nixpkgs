@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gogup";
-  version = "1.1.3";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "nao1215";
     repo = "gup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R/LTBvutafDTCY39FvUh0dXWwzRKywTlN2G+Qa/rbf8=";
+    hash = "sha256-XRwYvXrg6sF15mvRpldru+mNBu1qKzntoLnhx5+CtOk=";
   };
 
-  vendorHash = "sha256-tFuZ30GjP2GpRjCUXJRexJYXUNDTNktBMKi7ntu3bWM=";
+  vendorHash = "sha256-uvyt/JVHX/R44NOZ8Hl0Jwzge9v3bph/Jy9kX4vNReQ=";
   doCheck = false;
 
   ldflags = [

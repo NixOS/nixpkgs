@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       This tool suite powers the Web-based analysis available at https://dnsviz.net/
     '';
+    homepage = "https://github.com/dnsviz/dnsviz";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jojosch ];
   };

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   gsl,
   swig,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     gsl
   ];
 
+  patches = [
+    # Fix gcc 15 -Wincompatible-pointer-types errors in arraycopy.c.
+    (fetchpatch2 {
+      url = "https://src.fedoraproject.org/rpms/pygsl/raw/c35177ef7f8f5104a2b96a87d909248140ee6009/f/pygsl-incompatible-pointer.patch";
+      hash = "sha256-o7hZScnRqD7rxRn2EOxoys2F1U4GVOS9BmcxjTsh/vc=";
+    })
+  ];
+
   build-system = [
     meson-python
     numpy
@@ -48,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygsl/pygsl";
     changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

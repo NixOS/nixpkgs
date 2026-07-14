@@ -43,14 +43,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.00";
+  version = "26.01";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-p914FrQPb+h1a+7YIL8ms2YoIfoS1hTCeLLeBF4DjwY=";
-        unfree = "sha256-CIgPhjRSE9A0ABQQx1YTZgO+DNb3BDxRo5xOQmuzBuI=";
+        free = "sha256-52+Gg66MOFmwYUVB0OO4PAtZJtQOkoVpxV7F9xBGy58=";
+        unfree = "sha256-w0fk8EDusUYiOfrmIiUq+xevlwfQxMhjdPzfkHkOkR8=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Command line archiver utility";
+    description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
     license =
       with lib.licenses;

@@ -30,6 +30,7 @@
   # tests
   freezegun,
   pytest-asyncio,
+  pytest-benchmark,
   pytestCheckHook,
 
   withContribRequires ? false,
@@ -37,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     tag = "v${version}";
-    hash = "sha256-M+ojGXJOnrBipjSA9hd3++yTS70kCjPru9FG/rm7zI8=";
+    hash = "sha256-OAyBYzMEFyVMlxN5UjrKk1x2rSayLyAIAC5h96JeqK0=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -79,6 +80,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytest-asyncio
+    pytest-benchmark
     pytestCheckHook
   ];
 

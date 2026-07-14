@@ -86,6 +86,9 @@ let
       install -m777 -D chromedriver $out/bin/chromedriver
       runHook postInstall
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = {

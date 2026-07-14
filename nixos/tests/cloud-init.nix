@@ -60,7 +60,7 @@ in
     lewo
     illustris
   ];
-  nodes.machine = {
+  nodes.unnamed = {
     virtualisation.qemu.options = [
       "-cdrom"
       "${metadataDrive}/metadata.iso"

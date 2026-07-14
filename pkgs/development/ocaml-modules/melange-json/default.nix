@@ -7,13 +7,13 @@
   ppxlib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "melange-json";
   version = "2.0.0";
   src = fetchFromGitHub {
     owner = "melange-community";
     repo = "melange-json";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vgcvPRc2vEHE1AtHyttvs1T0LcoeTOFfmPUCz95goT0=";
   };
 
@@ -29,4 +29,4 @@ buildDunePackage rec {
       lib.maintainers.vog
     ];
   };
-}
+})

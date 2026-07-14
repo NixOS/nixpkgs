@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "refurb";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gFN3+buXHYPF8lM1HVnNKk2BnVbDLHvMcHMlibifYqE=";
+    hash = "sha256-e1+q3jpJsyGwInFPrgKmXJ68aYr08H18ciYMi9KcxoY=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -57,6 +57,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "refurb";
     homepage = "https://github.com/dosisod/refurb";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = with lib.maintainers; [ knl ];
+    maintainers = [ ];
   };
 })

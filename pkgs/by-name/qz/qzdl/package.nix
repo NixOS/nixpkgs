@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     homepage = "https://zdl.vectec.net";
     license = lib.licenses.gpl3Only;
     inherit (libsForQt5.qtbase.meta) platforms;
-    maintainers = [ lib.maintainers.azahi ];
+    maintainers = [ ];
     mainProgram = "zdl";
   };
 }

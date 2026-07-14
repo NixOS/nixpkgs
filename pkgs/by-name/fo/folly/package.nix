@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch2,
 
   cmake,
   ninja,
@@ -142,6 +143,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/facebook/folly/pull/2561
     ./memset-memcpy-aarch64.patch
+
+    # `.align 64` is invalid on x86_64 Mach-O, where `.align` takes a
+    # power-of-two exponent (64 means 2^64). The guard only excluded
+    # aarch64, so add !__APPLE__ to also skip x86_64-darwin.
+    ./memset-benchmark-darwin.patch
+
+    # Use feature detection directly instead of private standard library
+    # macros to detect the presence of ASAN and otherwise fallback to
+    # _not_ having ASAN.
+    (fetchpatch2 {
+      url = "https://github.com/facebook/folly/commit/fdde9bc360d525a1b2889b9ba89d671c3a13e72e.patch?full_index=1";
+      hash = "sha256-+1XJRAl4o9YubjqdIgQZpyrMmcb2imBfQUmiHNmFMRE=";
+    })
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -174,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
 
     # very strict timing constraints, will fail under load
+    "logging_async_file_writer_test.AsyncFileWriter.discard"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
     "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"

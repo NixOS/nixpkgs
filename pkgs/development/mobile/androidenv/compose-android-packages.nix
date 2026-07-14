@@ -298,7 +298,8 @@ let
   # Returns true if the given version exists.
   hasVersion =
     packages: package: version:
-    lib.hasAttrByPath [ package (toString version) ] packages;
+    lib.hasAttrByPath [ package (toString version) ] packages
+    || lib.hasAttrByPath [ package "${(toString version)}.0" ] packages;
 
   # Displays a nice error message that includes the available options if a version doesn't exist.
   # Note that allPackages can be a list of package sets, or a single package set. Pass a list if
@@ -322,7 +323,7 @@ let
         }.
       ''
     else
-      packageSet.${package}.${toString version};
+      packageSet.${package}.${toString version} or packageSet.${package}."${toString version}.0";
 
   # Returns true if we should link the specified plugins.
   shouldLink =
@@ -546,12 +547,25 @@ lib.recurseIntoAttrs rec {
     }
   ) platformVersions';
 
-  sources = map (
-    version:
-    deployAndroidPackage {
-      package = checkVersion allArchives.packages "sources" version;
-    }
-  ) platformVersions';
+  # Google is not including sources for API 37+. If the user requests them, don't fail.
+  sources = lib.filter (source: source != null) (
+    map (
+      version:
+      let
+        package =
+          let
+            version' = builtins.tryEval (checkVersion allArchives.packages "sources" version);
+          in
+          if version'.success then version'.value else null;
+      in
+      if package == null then
+        null
+      else
+        deployAndroidPackage {
+          inherit package;
+        }
+    ) platformVersions'
+  );
 
   system-images = lib.flatten (
     map (
@@ -784,7 +798,7 @@ lib.recurseIntoAttrs rec {
             done
           ''}
 
-          find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
+          find "$ANDROID_HOME/${cmdline-tools-package.path}/bin" -type f -executable | while read i; do
               ln -s $i $out/bin
           done
 

@@ -10,17 +10,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "evil-winrm-py";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adityatelange";
     repo = "evil-winrm-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IACFPPlkgyJh78p6Jy740CQqcySkMTV/8VVPSRJKTPI=";
+    hash = "sha256-arfH7z7QGZPenyHLAubuG1VOJArUxI4wlQgV+iU7CvU=";
   };
 
-  pythonRelaxDeps = [ "pypsrp" ];
+  pythonRelaxDeps = true;
 
   # Removes the additional binary ewp
   postPatch = ''

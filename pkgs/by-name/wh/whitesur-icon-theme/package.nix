@@ -31,13 +31,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-08-02";
+    version = "2025-12-27";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
       tag = version;
-      hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
+      hash = "sha256-5AWyuqREKpgBCXPplpkdrcInDTZfjVIm/JtTleOmaNY=";
     };
 
     nativeBuildInputs = [
@@ -68,6 +68,11 @@ lib.checkListOfEnum "${pname}: theme variants"
       jdupes --link-soft --recurse $out/share
 
       runHook postInstall
+    '';
+
+    # Drop dangling symlinks from the upstream icon set.
+    postFixup = ''
+      find $out/share/icons -xtype l -delete
     '';
 
     meta = {

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "petsctools";
-  version = "2025.3";
+  version = "2026.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "petsctools";
     tag = finalAttrs.version;
-    hash = "sha256-5SV34KhympX58lWfFaQo5lVOeafcc/Y8HvYtZtY+4Eo=";
+    hash = "sha256-IMDPjhyehOkyifSJ7nOJQbZu21w6Xyyz9fv/WLDpEgQ=";
   };
 
   build-system = [
@@ -42,6 +42,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.petsc4py;
+
+  disabledTests = [
+    # Expects a double slash when PETSC_ARCH is empty.
+    "test_get_petsc_dirs"
+  ];
 
   meta = {
     homepage = "https://github.com/firedrakeproject/petsctools";

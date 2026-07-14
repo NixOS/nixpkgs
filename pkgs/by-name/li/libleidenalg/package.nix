@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libleidenalg";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "vtraag";
     repo = "libleidenalg";
     tag = finalAttrs.version;
-    hash = "sha256-ptfX31/1cUHLluc+Y+g28s4BEoGC0LqC9HH0cpkJRJQ=";
+    hash = "sha256-27n8Wdzu0H2Fym3aiZkE+16dgrkSK59+YWOfs+iPzI8=";
   };
 
   nativeBuildInputs = [

@@ -8,20 +8,25 @@
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
-  version = "0.2.1";
+  version = "0.3.1";
   src = fetchFromGitHub {
     owner = "sheeki03";
     repo = "tirith";
     tag = "v${final.version}";
-    hash = "sha256-zm39lMApUtSrIcXZ7JGeR6ayqtg7dljfRGBYi8zH4UI=";
+    hash = "sha256-RdStW5ubqypdmFqNk9DHtUp5jHnZdXiWW/lAlSaBb3c=";
   };
 
-  cargoHash = "sha256-1363uY+um9U2zT2ss7Ysm8SOb2zf1SuRbc43P1bVlls=";
+  cargoHash = "sha256-/V2vv02x0zSsJCcJMSttG9eekRZMK7KTk6m2VYePFa8=";
 
   cargoBuildFlags = [
     "-p"
     "tirith"
   ];
+
+  postPatch = ''
+    # The bash_preexec_enforce tests require a shell with job control
+    rm crates/tirith/tests/bash_preexec_enforce.rs
+  '';
 
   checkFlags = [
     # requires a fully functional shell environment, generating init scripts needs a patch under nix to work at build time
@@ -34,6 +39,7 @@ rustPlatform.buildRustPackage (final: {
   ];
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tirith \

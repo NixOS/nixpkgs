@@ -37,16 +37,16 @@
   testers,
   wgpu-py,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wgpu-py";
-  version = "0.29.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
-    tag = "v${version}";
-    hash = "sha256-drXO3NHIuK34tbOZjxOCz1lnlcrfx6mADZ2WlEc9vDU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qy5tBlmA9mwEkk87WhIa5UxbXYNVFct6CrUWKm3Fy5s=";
   };
 
   postPatch =
@@ -142,10 +142,10 @@ buildPythonPackage rec {
   meta = {
     description = "WebGPU for Python";
     homepage = "https://github.com/pygfx/wgpu-py";
-    changelog = "https://github.com/pygfx/wgpu-py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pygfx/wgpu-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
 
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

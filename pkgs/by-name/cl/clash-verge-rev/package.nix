@@ -13,17 +13,17 @@
 let
   pname = "clash-verge-rev";
   # Please keep service version in sync
-  version = "2.4.6";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-s/dUy9vYxdUlAahVPkoOHjoF+WCl3xhJOubZtS1PB5o=";
+    hash = "sha256-2X2QlWo12qM7RT0wjf1Xlmh3We2wZR/kJnSxIxVst9Y=";
   };
 
-  pnpm-hash = "sha256-7xNaLlnXLty80x1d25pBeLZUu0r3R+87DYoJ6rTHSTA=";
-  vendor-hash = "sha256-1b0vmx0apWSNlaTMR58eufinBuIC7/F3UG3C8X62/gE=";
+  pnpm-hash = "sha256-Z0ToQUPyttebDOjpdisAtjIKM026x9ZtIVPOeq4163A=";
+  vendor-hash = "sha256-nF9d1OWpn3rf4EPhD4vqQbKEp/J5pc7J7XJDgAjd0DA=";
 
   service = callPackage ./service.nix {
     inherit

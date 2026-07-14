@@ -7,12 +7,12 @@
   dotslash,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dotslash";
   version = "0.5.7";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VFesGum2xjknUuCwIojntdst5dmhvZb78ejJ2OG1FVI=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dotslash";
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

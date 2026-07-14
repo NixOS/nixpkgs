@@ -9,7 +9,7 @@
   libjack2,
   libsigcxx,
   libxml2,
-  wxGTK32,
+  wxwidgets_3_2,
 
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     libjack2
     libsigcxx
     libxml2
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   preConfigure = ''

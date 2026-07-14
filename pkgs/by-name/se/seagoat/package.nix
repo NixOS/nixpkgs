@@ -30,6 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "chromadb"
     "psutil"
     "setuptools"
+    "stop-words"
     "ollama"
   ];
 

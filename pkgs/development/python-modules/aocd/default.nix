@@ -14,6 +14,7 @@
   pytest-socket,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   requests,
   requests-mock,
   rich,
@@ -61,6 +62,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "tests/"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # argparse prog detection changed in 3.14
+    "test_main_user_ambiguous"
   ];
 
   pythonImportsCheck = [ "aocd" ];

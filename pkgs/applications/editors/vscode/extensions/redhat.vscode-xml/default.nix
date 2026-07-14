@@ -11,22 +11,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-FnMTpDXC/UIMPfcBbpZRo/T0LljFP0+syv2aTZjOczc=";
+          hash = "sha256-cP/oFn19CZ/G3kjdHNZGqXvoDE1qUtg6xrg/2MO14Lo=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-bPkRzOpd7nlIg3oLvrfIrcvrxJqnRhNZNzgao8ga+OM=";
+          hash = "sha256-wtk8SasxXEQ3pCJpVTWR8wcY/bNaIZmImbAtrFWYWOo=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-UnRWxjmicfizn8SUspkhjjiYDJDFGI4ItIPLTnRZEy0=";
+          hash = "sha256-XYdwVoDqK+88ZYUm6APyamFNx6XlYjy0R4CIhSMuRmU=";
         };
       };
     in
     {
       publisher = "redhat";
       name = "vscode-xml";
-      version = "0.29.0";
+      version = "0.29.3";
     }
     // sources.${stdenvNoCC.hostPlatform.system} or { };
 

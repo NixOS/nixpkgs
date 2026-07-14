@@ -59,16 +59,22 @@
         virthost.succeed("virsh vol-create-as zfs_storagepool disk1 25MB")
 
       with subtest("check if nixos install iso boots, network and autostart works"):
+        # The guest runs sshd on port 22. We use passt-based networking to
+        # forward guest port 22 to host port 2222 and `nc -z` to assert that
+        # the host port can only be connected to once the guest is running.
+        virthost.fail("nc -z localhost 2222")
         virthost.succeed(
-          "virt-install -n nixos --osinfo nixos-unstable --memory 1024 --graphics none --disk `find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole --autostart"
+          "virt-install -n nixos --osinfo nixos-unstable --memory 1024 --graphics none --network default --network passt,portForward=2222:22 --disk `find ${nixosInstallISO}/iso -type f | head -n1`,readonly=on --import --noautoconsole --autostart"
         )
         virthost.succeed("virsh domstate nixos | grep running")
         virthost.wait_until_succeeds("ping -c 1 nixos")
+        virthost.succeed("nc -z localhost 2222")
         virthost.succeed("virsh ${virshShutdownCmd} nixos")
         virthost.wait_until_succeeds("virsh domstate nixos | grep 'shut off'")
         virthost.shutdown()
         virthost.wait_for_unit("multi-user.target")
         virthost.wait_until_succeeds("ping -c 1 nixos")
+        virthost.succeed("nc -z localhost 2222")
 
       with subtest("test if hooks are linked and run"):
         virthost.succeed("ls /var/lib/libvirt/hooks/qemu.d/is_working")

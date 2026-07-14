@@ -8,22 +8,25 @@
   requests,
   requests-mock,
   sqlite-utils,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "github-to-sqlite";
   version = "2.9";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "dogsheep";
     repo = "github-to-sqlite";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-KwLaaZxBBzRhiBv4p8Imb5XI1hyka9rmr/rxA6wDc7Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     sqlite-utils
     pyyaml
     requests
@@ -43,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarcasticadmin ];
   };
-}
+})

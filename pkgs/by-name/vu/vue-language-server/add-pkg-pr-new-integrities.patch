@@ -1,0 +1,32 @@
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -870 +870 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-core@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-GntAKmJ45uB5NUKeEw15qGpNmL9i81HmTv2OtqreAxT2uQb5Adurtx5VouR150tRhnkXoYUiVPzYGs++U+WLfg==, tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-core@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -877 +877 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-dom@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-vbZgliMbBuVO1sYRhbczWWcQlwd8e+Wj6tGBh1PvRws6aJLu7nhMPb0LJU9wrW5EKFcjckGpwMtH3aOK/8padw==, tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-dom@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -884 +884 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-sfc@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-e10xJOKE+jTmuoManPxtkRCUgu+IzpV67ZEcddzdE5+Va4gQuPTm4dzCYo0yEztyBH57AuhN8P3H1hC5SxyFuw==, tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-sfc@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -891 +891 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-ssr@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-FxLmgdj7z0ljbHiT+PR4PtX+XNA+Pfb1Ror+9AP01fmHKGFb9ZVKqx0vBq4a2TtZXcgn5740IHiD0lovufBlFA==, tarball: https://pkg.pr.new/vuejs/core/@vue/compiler-ssr@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -898 +898 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/reactivity@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-U4sPiVx/HN+SU/3nRxSvebg7diEsDK1x+xnbCoNy1IwVpNuogxyRz/L9bOGBIB9vlMmgmxsntDBltZVzoelwcQ==, tarball: https://pkg.pr.new/vuejs/core/@vue/reactivity@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -902 +902 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/runtime-core@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-qKrCQUE2loNGO+zZ8S8TuSn2p0zaDTPZTom1RvaIVsriAYpd5AZdiy7b7PwT1OxdHK/OM3sZ1vvjysmQDUJLRg==, tarball: https://pkg.pr.new/vuejs/core/@vue/runtime-core@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -906 +906 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/runtime-dom@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-k6YZlI+NYcDvj98OEmEpNteTX1q9l1dL2KCUCwCDmyAw2Re9Yz1J4JFEEnLCMz0+YSKoXg12lGj9lYVsuS6osw==, tarball: https://pkg.pr.new/vuejs/core/@vue/runtime-dom@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -910 +910 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/server-renderer@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-yTJTHlRXU1qOXkQutMIF0w+s7zIfMACmiTrJQ4LZ50OAXKiWmt93nrSjXh6ePOP+KeRqvAOFBsZhlmnfxHHh/A==, tarball: https://pkg.pr.new/vuejs/core/@vue/server-renderer@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -919 +919 @@
+-    resolution: {tarball: https://pkg.pr.new/vuejs/core/@vue/shared@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-HCZjsf5q9+i2SxsraMsFVQvoSzW3/K6CC9Myg1CZJxP2MH+n6RYGqvJSEnjBCO3tX+JxLSrm06aYhn5FIZhhEw==, tarball: https://pkg.pr.new/vuejs/core/@vue/shared@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
+@@ -1660 +1660 @@
+-    resolution: {tarball: https://pkg.pr.new/vue@e1bc0eb02e22bc0c236e1471c11d96a368764b72}
++    resolution: {integrity: sha512-lSY4wGk59hpvPBRJ1femqnUMekvvWGZsy4ggQBTJ8Z6fhDxO6U/w2l+M5vU93qsw2mcf9v+iuzLbEIc41y6B9w==, tarball: https://pkg.pr.new/vue@e1bc0eb02e22bc0c236e1471c11d96a368764b72}

@@ -2,23 +2,26 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
-  version = "2.0.8";
+  version = "2.0.27";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
-    rev = finalAttrs.version;
     owner = "github";
     repo = "mona-sans";
-    sha256 = "sha256-L1KlduItf1jBrw08NwbJvZFemLY8JHRXq2UDl9Wlq70=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P5Dy38iS0Cly+Rcjg3EQSZozvdfsXwa6yz+IdgrSq4M=";
   };
 
-  installPhase = ''
-    install -D -m444 -t $out/share/fonts/opentype fonts/static/otf/*.otf
-    install -D -m444 -t $out/share/fonts/truetype fonts/static/ttf/*.ttf fonts/variable/*.ttf
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Variable font from GitHub";

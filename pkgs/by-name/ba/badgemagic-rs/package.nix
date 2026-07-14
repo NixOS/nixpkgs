@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/fossasia/badgemagic-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
-    mainProgram = "badgemagic-rs";
+    mainProgram = "badgemagic";
   };
 }

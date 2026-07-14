@@ -14,6 +14,7 @@
   ruamel-yaml,
   semver,
   setuptools,
+  setuptools-scm,
   toml,
   traitlets,
 }:
@@ -30,9 +31,12 @@ buildPythonPackage rec {
     hash = "sha256-9ZRew9DspRENxhqpWFTSdP8KcQQHA4vMMECLikt+nsw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     docker
     entrypoints

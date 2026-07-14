@@ -1,6 +1,6 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_12_6,
+  cargo-pgrx_0_18_0,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -9,19 +9,19 @@
 
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
-  cargo-pgrx = cargo-pgrx_0_12_6;
+  cargo-pgrx = cargo-pgrx_0_18_0;
 
   pname = "timescaledb_toolkit";
-  version = "1.21.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-gGGSNvvJprqLkVwPr7cfmGY1qEUTXMdqdvwPYIzXaTA=";
+    hash = "sha256-we2w2rYGRC9Did9oocgCWbIUxb8a/g0BlCHXQUe1f8I=";
   };
 
-  cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
+  cargoHash = "sha256-R6daWAQssopVps+IqF94dGBcZMC/u1J4eEg6WouAwOo=";
   buildAndTestSubdir = "extension";
 
   postInstall = ''
@@ -46,8 +46,8 @@ buildPgrxExtension (finalAttrs: {
       lib.versionOlder postgresql.version "15"
       ||
         # Check after next package update.
-        lib.warnIf (finalAttrs.version != "1.21.0")
-          "Is postgresql18Packages.timescaledb_toolkit still broken?"
-          (lib.versionAtLeast postgresql.version "18");
+        lib.warnIf (finalAttrs.version != "1.23.0")
+          "Is postgresql19Packages.timescaledb_toolkit still broken?"
+          (lib.versionAtLeast postgresql.version "19");
   };
 })

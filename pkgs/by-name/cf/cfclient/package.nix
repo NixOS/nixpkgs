@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cfclient";
-  version = "2025.2";
+  version = "2025.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitcraze";
     repo = "crazyflie-clients-python";
     tag = finalAttrs.version;
-    hash = "sha256-LCGTMLIfGH59KFwQACyuEQTh/zkGgzXd3e6MkFTgKhA=";
+    hash = "sha256-+3RZRShELL2iXxz95eRhK5UPp5NZ1yJO4NDlZ7cDTjI=";
   };
 
   strictDeps = true;

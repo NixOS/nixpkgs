@@ -136,7 +136,7 @@ let
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
     (cuda_nvprune.__spliced.buildHost or cuda_nvprune)
-    cuda_cccl # block_load.cuh
+    cccl # block_load.cuh
     cuda_cudart # cuda.h
     cuda_cupti # cupti.h
     cuda_nvcc # See https://github.com/google/jax/issues/19811
@@ -626,7 +626,7 @@ buildPythonPackage {
       -e "s/'gast[^']*',/'gast',/" \
       -e "/'libclang[^']*',/d" \
       -e "/'keras[^']*')\?,/d" \
-      -e "s/'protobuf[^']*',/'protobuf',/" \
+      -e "s/'protobuf[^']*',/'protobuf',/"
   '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.10";
+  version = "0.6.11";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
     tag = version;
-    hash = "sha256-DRA4NTAHg2iB/D1CU9pJEpsZwX9GW3X5gpxbIwP54Ko=";
+    hash = "sha256-jBc7+hoG1x7KDYPbexPRwnll9qz4qA3Y1w7A7DuES2Y=";
   };
 
   nativeBuildInputs = [

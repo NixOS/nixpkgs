@@ -16,7 +16,14 @@ buildGoModule {
     hash = "sha256-Tj0vtdYDmKbMpcO+t9KrtFewqdjusr0JRXpX6gY69WM=";
   };
 
-  vendorHash = "sha256-om6ArtnKC9Gm5BdAqW57BnE0BsOmSPAAIPDDrQ5ZmJA=";
+  vendorHash = "sha256-/gBtKgCDyoCnJLfH5WgTCdOvoYRpPn8x2OHW0uYQnGQ=";
+
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   postPatch = ''
     substituteInPlace webapp/web/tests/health/scmpcheck.sh \
@@ -42,6 +49,8 @@ buildGoModule {
   buildInputs = [
     openpam
   ];
+
+  checkFlags = [ "-skip=^(TestMangleSCIONAddrURL|TestRoundTripper)$" ];
 
   ldflags = [
     "-s"

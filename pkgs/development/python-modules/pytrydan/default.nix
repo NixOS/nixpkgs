@@ -15,16 +15,16 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytrydan";
-  version = "0.8.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pytrydan";
-    tag = "v${version}";
-    hash = "sha256-OHC+Ul64BYCsgoFDxI1hPjBGkd/pQ0j0c9Pt5lWg1E0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vxIY+BCo3o4FBI1otiMx3swWTxtmEgYfVCWQAq2OuUM=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
@@ -52,9 +52,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interface with V2C EVSE Trydan";
     homepage = "https://github.com/dgomes/pytrydan";
-    changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dgomes/pytrydan/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pytrydan";
   };
-}
+})

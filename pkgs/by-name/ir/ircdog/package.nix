@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.5.5";
 
   src = fetchFromGitHub {
-    owner = "goshuirc";
+    owner = "ergochat";
     repo = "ircdog";
     tag = "v${finalAttrs.version}";
     hash = "sha256-maF53Z0FHAhGmnOnMsX0dDnmckPNBY4Bcm4OBM/x4hQ=";

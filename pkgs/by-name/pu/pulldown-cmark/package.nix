@@ -4,16 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pulldown-cmark";
-  version = "0.13.1";
+  version = "0.13.4";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-iQjA2mt1l0mP8yevWwjrfN/u9FXBnIv+ObjMSOsqlhw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-XMKUFbPsYhYIxMxEvUJT38Jr03lzy9afRqe6tIj9lls=";
   };
 
-  cargoHash = "sha256-D7ig9MofwFvurZDtpozn4xz63tCFQ2HrWcM/x1GzhqI=";
+  cargoHash = "sha256-JgGvRSUE6UXf0pSl6x6SC7gGgTEoq2E3t0tPrueuIEE=";
 
   meta = {
     description = "Pull parser for CommonMark written in Rust";
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ CobaltCause ];
     mainProgram = "pulldown-cmark";
   };
-}
+})

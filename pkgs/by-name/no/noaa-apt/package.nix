@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      trepetti
       tmarkus
     ];
     platforms = lib.platforms.all;

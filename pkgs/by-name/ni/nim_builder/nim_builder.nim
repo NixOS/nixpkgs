@@ -1,7 +1,33 @@
 # SPDX-FileCopyrightText: 2021 Nixpkgs/NixOS contributors
 ## Custom Nim builder for Nixpkgs.
 
-import std/[os, osproc, parseutils, sequtils, streams, strutils]
+import std/[json, os, osproc, parseutils, sequtils, streams, strutils, tables]
+
+proc getEnvBool(key: string; default = false): bool =
+  ## Parse a boolean environmental variable.
+  let val = getEnv(key)
+  if val == "": default
+  else: parseBool(val)
+
+type
+  BuilderAttrs = object
+    structuredAttrs: bool
+    outputs: Table[string, string]
+    nimFlags: seq[string]
+    nimDefines: seq[string]
+    nimRelease: bool
+    nimbleFile: string
+    nimDoc: bool
+    nimCopySources: bool
+
+proc getSeq(n: JsonNode): seq[string] =
+  if not n.isNil: result = n.to(seq[string])
+
+proc getEnvOutputs(): Table[string, string] =
+  let outputs = splitWhitespace getEnv("outputs")
+  doAssert(outputs.len > 0)
+  for output in outputs:
+    result[output] = getEnv(output)
 
 proc findNimbleFile(): string =
   ## Copied from Nimble.
@@ -21,18 +47,40 @@ proc findNimbleFile(): string =
   elif hits == 0:
     quit("Could not find a file with a .nimble extension in " & dir)
 
-proc getEnvBool(key: string; default = false): bool =
-  ## Parse a boolean environmental variable.
-  let val = getEnv(key)
-  if val == "": default
-  else: parseBool(val)
-
 proc getNimbleFilePath(): string =
   ## Get the Nimble file for the current package.
   if existsEnv"nimbleFile":
     getEnv"nimbleFile"
   else:
     findNimbleFile()
+
+proc init[T: BuilderAttrs](_: typedesc[T]): T =
+  ## populated based on __structuredAttrs when possible
+  let attrFile = getEnv("NIX_ATTRS_JSON_FILE")
+  if attrFile != "":
+    result.structuredAttrs = true
+    let jsonAttrs = parseJson(readFile(attrFile))
+    result.outputs = jsonAttrs{"outputs"}.to(Table[string, string])
+    result.nimDefines = jsonAttrs{"nimDefines"}.getSeq()
+    result.nimFlags = jsonAttrs{"nimFlags"}.getSeq()
+    result.nimRelease = jsonAttrs{"nimRelease"}.getBool(true)
+    result.nimDoc = jsonAttrs{"nimDoc"}.getBool()
+    result.nimCopySources = jsonAttrs{"nimCopySources"}.getBool()
+    result.nimbleFile = jsonAttrs{"nimbleFile"}.getStr()
+  else:
+    result.outputs = getEnvOutputs()
+    result.nimFlags = getEnv("nimFlags").split
+    result.nimDefines = getEnv("nimDefines").split
+    result.nimRelease = getEnvBool("nimRelease", true)
+    result.nimDoc = getEnvBool("nimDoc")
+    result.nimCopySources = getEnvBool("nimCopySources")
+
+
+  if result.nimbleFile == "":
+    result.nimbleFile = getNimbleFilePath()
+
+
+let attrs = BuilderAttrs.init()
 
 proc getNimbleValue(filePath, key: string; default = ""): string =
   ## Extract a string value from the Nimble file at ``filePath``.
@@ -64,44 +112,40 @@ proc getNimbleValues(filePath, key: string): seq[string] =
     if s.len > 0 and s[0] == '"':
       s = s.unescape()
 
+proc getNimbleValue(attrs: BuilderAttrs, key: string, default = ""): string =
+  attrs.nimbleFile.getNimbleValue(key, default)
+
+proc getNimbleValues(attrs: BuilderAttrs, key: string): seq[string] =
+  attrs.nimbleFile.getNimbleValues(key)
+
 proc getOutputDir(name: string): string =
-  ## Return the output directory for output `name`.
-  ## If `name` is not a valid output then the first output
-  ## is returned as a default.
-  let outputs = splitWhitespace getEnv("outputs")
-  doAssert(outputs.len > 0)
-  if outputs.contains name:
-    result = getEnv(name)
-  if result == "":
-    result = getEnv("out")
-  if result == "":
-    result = getEnv(outputs[0], "/dev/null")
+  let outDir = attrs.outputs.getOrDefault("out", "/dev/null")
+  if name == "out": outDir
+  else: attrs.outputs.getOrDefault(name, outDir)
 
 proc configurePhase*() =
   ## Generate "config.nims" which will be read by the Nim
   ## compiler during later phases.
   const configFilePath = "config.nims"
   echo "generating ", configFilePath
-  let
-    nf = getNimbleFilePath()
-    mode =
-      if fileExists configFilePath: fmAppend
-      else: fmWrite
+  let mode =
+    if fileExists configFilePath: fmAppend
+    else: fmWrite
   var cfg = newFileStream(configFilePath, mode)
   proc switch(key, val: string) =
     cfg.writeLine("\nswitch(", key.escape, ",", val.escape, ")")
-  switch("backend", nf.getNimbleValue("backend", "c"))
+  switch("backend", attrs.getNimbleValue("backend", "c"))
   switch("nimcache", getEnv("NIX_BUILD_TOP", ".") / "nimcache")
-  if getEnvBool("nimRelease", true):
+  if attrs.nimRelease:
     switch("define", "release")
-  for def in getEnv("nimDefines").split:
+  for def in attrs.nimDefines:
     if def != "":
       switch("define", def)
   for input in getEnv("NIX_NIM_BUILD_INPUTS").split:
     if input != "":
       for nimbleFile in walkFiles(input / "*.nimble"):
         let inputSrc = normalizedPath(
-            input / nimbleFile.getNimbleValue("srcDir", "."))
+            input / attrs.getNimbleValue("srcDir", "."))
         echo "found nimble input ", inputSrc
         switch("path", inputSrc)
   close(cfg)
@@ -113,15 +157,14 @@ proc buildPhase*() =
   proc before(idx: int) =
     echo "build job ", idx, ": ", cmds[idx]
   let
-    nf = getNimbleFilePath()
-    bins = nf.getNimbleValues("bin")
-    srcDir = nf.getNimbleValue("srcDir", ".")
+    bins = attrs.getNimbleValues("bin")
+    srcDir = attrs.getNimbleValue("srcDir", ".")
     binDir = getOutputDir("bin") / "bin"
   if bins != @[]:
     for bin in bins:
       cmds.add("nim compile $# --parallelBuild:$# --outdir:$# $#" %
-          [getenv("nimFlags"), getenv("NIX_BUILD_CORES","1"), binDir, normalizedPath(srcDir / bin)])
-  if getEnvBool"nimDoc":
+          [attrs.nimFlags.join(" "), getenv("NIX_BUILD_CORES","1"), binDir, normalizedPath(srcDir / bin)])
+  if attrs.nimDoc:
     echo "generating documentation"
     let docDir = getOutputDir("doc") / "doc"
     for path in walkFiles(srcDir / "*.nim"):
@@ -135,14 +178,13 @@ proc buildPhase*() =
 proc installPhase*() =
   ## Install the Nim sources if ``nimCopySources`` is
   ## set in the environment.
-  if getEnvBool"nimCopySources":
+  if attrs.nimCopySources:
     let
-      nf = getNimbleFilePath()
-      srcDir = nf.getNimbleValue("srcDir", ".")
-      devDir = getOutputDir "dev"
+      srcDir = attrs.getNimbleValue("srcDir", ".")
+      devDir = getOutputDir("dev")
     echo "Install ", srcDir, " to ", devDir
     copyDir(normalizedPath(srcDir), normalizedPath(devDir / srcDir))
-    copyFile(nf, devDir / nf.extractFilename)
+    copyFile(attrs.nimbleFile, devDir / attrs.nimbleFile.extractFilename)
 
 proc checkPhase*() =
   ## Build and run the tests in ``tests``.
@@ -150,7 +192,7 @@ proc checkPhase*() =
   proc before(idx: int) =
     echo "check job ", idx, ": ", cmds[idx]
   for path in walkPattern("tests/t*.nim"):
-    cmds.add("nim r $# $#" % [getenv("nimFlags"), path])
+    cmds.add("nim r $# $#" % [attrs.nimFlags.join(" "), path])
   let err = execProcesses(
     cmds, n = 1,
     beforeRunEvent = before)

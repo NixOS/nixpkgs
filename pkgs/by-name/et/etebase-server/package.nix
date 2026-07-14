@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/etesync/server";
     description = "Etebase (EteSync 2.0) server so you can run your own";
     mainProgram = "etebase-server";
-    changelog = "https://github.com/etesync/server/blob/${finalAttrs.version}/ChangeLog.md";
+    changelog = "https://github.com/etesync/server/blob/v${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       felschr

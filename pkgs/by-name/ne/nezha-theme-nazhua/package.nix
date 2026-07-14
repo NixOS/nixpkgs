@@ -1,38 +1,22 @@
 {
   lib,
-  stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  fetchYarnDeps,
-  nodejs,
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-nazhua";
-  version = "0.8.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "hi2shark";
     repo = "nazhua";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kXiFvVSwOXn/MDwQIBmN+1wp8wO4P9hw1zcYcTBHmXA=";
+    hash = "sha256-lyrkWJDMMMellM8lIaZMvxXJT54gjjP4gnwxMcytrdA=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-/CQsG3iQdPyKHdApeMzq4w90NsMBdLXUP2lya8vtK5Q=";
-  };
-
-  nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
-    # Needed for executing package.json scripts
-    nodejs
-  ];
+  npmDepsHash = "sha256-V+fdXp2QevPRYQQ4j5w9OQro6w3qnyi7imhgzGdUiVs=";
 
   # Copied from .github/workflows/release.yml
   env = {

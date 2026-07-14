@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocb-stubblr";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchzip {
     url = "https://github.com/pqwy/ocb-stubblr/releases/download/v${version}/ocb-stubblr-${version}.tbz";
     name = "src.tar.bz";
-    sha256 = "0hpds1lkq4j8wgslv7hnirgfrjmqi36h5rarpw9mwf24gfp5ays2";
+    hash = "sha256-Zd9a2EFT5j944xCFmWD4Td21VB7uGHZoNE4yvgfI9y0=";
   };
 
   patches = [ ./pkg-config.patch ];

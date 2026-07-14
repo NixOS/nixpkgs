@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -23,4 +24,9 @@ stdenv.mkDerivation rec {
     libcec_platform
     tinyxml
   ];
+
+  meta = {
+    homepage = "https://github.com/xbmc/kodi-platform";
+    license = lib.licenses.gpl2Plus;
+  };
 }

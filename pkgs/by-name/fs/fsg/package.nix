@@ -7,7 +7,7 @@
   pkg-config,
   libGLU,
   libGL,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   xorgproto,
   runtimeShell,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # use correct wx-config for cross-compiling
   postPatch = ''
     substituteInPlace makefile \
-      --replace-fail 'wx-config' "${lib.getExe' wxGTK32 "wx-config"}"
+      --replace-fail 'wx-config' "${lib.getExe' wxwidgets_3_2 "wx-config"}"
   '';
 
   hardeningDisable = [ "format" ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     glib
     libGLU
     libGL
-    wxGTK32
+    wxwidgets_3_2
     libx11
     xorgproto
   ];

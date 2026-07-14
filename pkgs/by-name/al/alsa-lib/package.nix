@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
-  version = "1.2.15.1";
+  version = "1.2.16";
 
   src = fetchurl {
     url = "mirror://alsa/lib/alsa-lib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-f5g8qJykIIcsoW6Kn4+X+2PbbBxuJYW5Fzegi7A/Vmw=";
+    hash = "sha256-EiseMWbVX+GbzeZWU116NvKrEOZscsatL0PyD/3tCpY=";
   };
 
   patches = [
@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       "alsa-topology"
     ];
     platforms = with lib.platforms; linux ++ freebsd;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

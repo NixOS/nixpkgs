@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 })

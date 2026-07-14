@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2026.3.1";
+  version = "2026.12.2";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F+zCchil+Rf1fT7nRBCz5mC1m5oYpiRqWylhpJTr1cw=";
+    hash = "sha256-kSc8+McxHQ6Vh7M+AUDx6zre7zjjq0w5A8QZhLZ3wGw=";
     fetchSubmodules = true;
   };
 
@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SLANG_RHI_ENABLE_VULKAN" false)
     (lib.cmakeBool "SLANG_RHI_ENABLE_METAL" false)
     (lib.cmakeBool "SLANG_RHI_ENABLE_WGPU" false)
+    # Disable DXC (DirectX Compiler) for now; wiring up directx-shader-compiler
+    # as a proper dependency is left for a future PR
+    (lib.cmakeBool "SLANG_ENABLE_DXIL" false)
   ]
   ++ lib.optionals withGlslang [
     (lib.cmakeBool "SLANG_USE_SYSTEM_SPIRV_TOOLS" true)

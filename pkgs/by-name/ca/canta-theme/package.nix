@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     patchShebangs .

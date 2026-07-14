@@ -4,8 +4,12 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  typing-extensions,
   libopus,
   pynacl,
+  pytestCheckHook,
+  pytest-asyncio,
+  looptime,
   withVoice ? true,
   ffmpeg,
 }:
@@ -26,6 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    typing-extensions
   ]
   ++ lib.optionals withVoice [
     libopus
@@ -40,8 +45,16 @@ buildPythonPackage rec {
       --replace-fail 'executable: str = "ffmpeg"' 'executable: str="${ffmpeg}/bin/ffmpeg"'
   '';
 
-  # Only have integration tests with discord
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    looptime
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: There is no current event loop
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [
     "disnake"

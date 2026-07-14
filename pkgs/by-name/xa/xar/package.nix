@@ -31,13 +31,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
-  version = "501";
+  version = "503";
 
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "xar";
     rev = "xar-${finalAttrs.version}";
-    hash = "sha256-Fq+Re0LCBIGhW2FR+pgV8SWtaDOEFgTh+rQ8JFWK/k0=";
+    hash = "sha256-QdK7NTN3A/EWr+vdfT5ZLTdX+wOmfnqvL5yJeiiPwtM=";
   };
 
   # Update patch set with
@@ -48,11 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   # …
   #   rm -r ../pkgs/by-name/xa/xar/patches
   #   git format-patch --zero-commit --output-directory ../pkgs/by-name/xa/xar/patches main
-  patches =
-    # Avoid Darwin rebuilds on staging-next
-    lib.filter (
-      p: stdenv.hostPlatform.isDarwin -> baseNameOf p != "0020-Fall-back-to-readlink-on-Linux.patch"
-    ) (lib.filesystem.listFilesRecursive ./patches);
+  patches = lib.filesystem.listFilesRecursive ./patches;
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "26.01.36711.4";
+  version = "26.22.38646.4";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     tag = finalAttrs.version;
-    hash = "sha256-77fVA2T6niK2a9i6v6sAR98fHnExbHqRdHexKBkqd7M=";
+    hash = "sha256-YjCRbYsq44U+pwdTnyA5lffJtSHVK2u3R2XRRNb6l9c=";
   };
 
   nativeBuildInputs = [

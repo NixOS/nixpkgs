@@ -114,7 +114,7 @@
           machine.wait_for_text("alice@machine")
           machine.send_chars("test-wayland\n")
           machine.wait_for_file("/tmp/test-wayland-exit-ok")
-          machine.copy_from_vm("/tmp/test-wayland.out")
+          machine.copy_from_machine("/tmp/test-wayland.out")
           machine.screenshot("foot_wayland_info")
 
           # please actually register that we want to close the window
@@ -135,7 +135,7 @@
           machine.wait_for_text("alice@machine")
           machine.send_chars("test-x11\n")
           machine.wait_for_file("/tmp/test-x11-exit-ok")
-          machine.copy_from_vm("/tmp/test-x11.out")
+          machine.copy_from_machine("/tmp/test-x11.out")
           machine.screenshot("alacritty_glinfo")
 
           # please actually register that we want to close the window

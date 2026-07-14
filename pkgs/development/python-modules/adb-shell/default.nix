@@ -4,6 +4,7 @@
   aiofiles,
   async-timeout,
   buildPythonPackage,
+  setuptools,
   cryptography,
   fetchFromGitHub,
   isPy3k,
@@ -15,21 +16,23 @@
   rsa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adb-shell";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "adb_shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     pyasn1
     rsa
@@ -50,7 +53,7 @@ buildPythonPackage rec {
     pycryptodome
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "adb_shell" ];
 
@@ -60,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

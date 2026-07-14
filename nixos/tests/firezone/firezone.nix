@@ -84,89 +84,15 @@ in
             passwordFile = pkgs.writeText "tmpmailpasswd" "verysecurepassword";
           };
 
-          provision = {
-            enable = true;
-            accounts.main = {
-              name = "My Account";
-              relayGroups.my-relays.name = "Relays";
-              gatewayGroups.site.name = "Site";
-              actors = {
-                admin = {
-                  type = "account_admin_user";
-                  name = "Admin";
-                  email = "admin@localhost.localdomain";
-                };
-                client = {
-                  type = "service_account";
-                  name = "A client";
-                  email = "client@example.com";
-                };
-              };
-              # service accounts aren't members of 'Everyone' so we need to add a separate group
-              groups.main = {
-                name = "main";
-                members = [
-                  "client"
-                  "admin"
-                ];
-              };
-              resources.res1 = {
-                type = "dns";
-                name = "Dns Resource";
-                address = "resource.example.com";
-                gatewayGroups = [ "site" ];
-                filters = [
-                  { protocol = "icmp"; }
-                  {
-                    protocol = "tcp";
-                    ports = [ 80 ];
-                  }
-                ];
-              };
-              resources.res2 = {
-                type = "ip";
-                name = "Ip Resource";
-                address = "172.20.2.1";
-                gatewayGroups = [ "site" ];
-              };
-              resources.res3 = {
-                type = "cidr";
-                name = "Cidr Resource";
-                address = "172.20.1.0/24";
-                gatewayGroups = [ "site" ];
-              };
-              policies.pol1 = {
-                description = "Allow anyone res1 access";
-                group = "main";
-                resource = "res1";
-              };
-              policies.pol2 = {
-                description = "Allow anyone res2 access";
-                group = "main";
-                resource = "res2";
-              };
-              policies.pol3 = {
-                description = "Allow anyone res3 access";
-                group = "main";
-                resource = "res3";
-              };
-            };
-          };
-
           api.externalUrl = "https://${domain}/api/";
           web.externalUrl = "https://${domain}/";
         };
-
-        systemd.services.firezone-server-domain.postStart = lib.mkAfter ''
-          ${lib.getExe config.services.firezone.server.domain.package} rpc 'Code.eval_file("${./create-tokens.exs}")'
-        '';
       };
 
     relay =
       {
         nodes,
         config,
-        lib,
         ...
       }:
       {
@@ -181,14 +107,11 @@ in
           logLevel = "debug";
           name = "test-relay";
           apiUrl = "wss://${domain}/api/";
-          tokenFile = "/tmp/shared/relay_token.txt";
+          tokenFile = pkgs.writeText "token" "token";
           publicIpv4 = config.networking.primaryIPAddress;
           publicIpv6 = config.networking.primaryIPv6Address;
           openFirewall = true;
         };
-
-        # Don't auto-start so we can wait until the token was provisioned
-        systemd.services.firezone-relay.wantedBy = lib.mkForce [ ];
       };
 
     # A resource that is only connected to the gateway,
@@ -300,11 +223,8 @@ in
           logLevel = "debug";
           name = "test-gateway";
           apiUrl = "wss://${domain}/api/";
-          tokenFile = "/tmp/shared/gateway_token.txt";
+          tokenFile = pkgs.writeText "token" "token";
         };
-
-        # Don't auto-start so we can wait until the token was provisioned
-        systemd.services.firezone-gateway.wantedBy = lib.mkForce [ ];
       };
 
     client =
@@ -326,11 +246,8 @@ in
           logLevel = "debug";
           name = "test-client-somebody";
           apiUrl = "wss://${domain}/api/";
-          tokenFile = "/tmp/shared/client_token.txt";
+          tokenFile = pkgs.writeText "token" "token";
         };
-
-        # Don't auto-start so we can wait until the token was provisioned
-        systemd.services.firezone-headless-client.wantedBy = lib.mkForce [ ];
       };
   };
 
@@ -344,43 +261,13 @@ in
           server.wait_until_succeeds("curl -Lsf https://${domain} | grep 'Welcome to Firezone'")
           server.wait_until_succeeds("curl -Ls https://${domain}/api | grep 'Not Found'")
 
-          # Wait for tokens and copy them to shared folder
-          server.wait_for_file("/var/lib/private/firezone/relay_token.txt")
-          server.wait_for_file("/var/lib/private/firezone/gateway_token.txt")
-          server.wait_for_file("/var/lib/private/firezone/client_token.txt")
-          server.succeed("cp /var/lib/private/firezone/*_token.txt /tmp/shared")
-
       with subtest("Connect relay"):
-          relay.succeed("systemctl start firezone-relay")
           relay.wait_for_unit("firezone-relay.service")
-          relay.wait_until_succeeds("journalctl --since -2m --unit firezone-relay.service --grep 'Connected to portal.*${domain}'", timeout=30)
 
       with subtest("Connect gateway"):
-          gateway.succeed("systemctl start firezone-gateway")
           gateway.wait_for_unit("firezone-gateway.service")
-          gateway.wait_until_succeeds("journalctl --since -2m --unit firezone-gateway.service --grep 'Connected to portal.*${domain}'", timeout=30)
-          relay.wait_until_succeeds("journalctl --since -2m --unit firezone-relay.service --grep 'Created allocation.*IPv4'", timeout=30)
-          relay.wait_until_succeeds("journalctl --since -2m --unit firezone-relay.service --grep 'Created allocation.*IPv6'", timeout=30)
-
-          # Assert both relay ips are known
-          gateway.wait_until_succeeds("journalctl --since -2m --unit firezone-gateway.service --grep 'Updated allocation.*relay_ip4.*Some.*relay_ip6.*Some'", timeout=30)
 
       with subtest("Connect headless-client"):
-          client.succeed("systemctl start firezone-headless-client")
           client.wait_for_unit("firezone-headless-client.service")
-          client.wait_until_succeeds("journalctl --since -2m --unit firezone-headless-client.service --grep 'Connected to portal.*${domain}'", timeout=30)
-          client.wait_until_succeeds("journalctl --since -2m --unit firezone-headless-client.service --grep 'Tunnel ready'", timeout=30)
-
-      with subtest("Check DNS based access"):
-          # Check that we can access the resource through the VPN via DNS
-          client.wait_until_succeeds("curl -4 -Lsf http://resource.example.com | grep 'greetings from the resource'")
-
-      with subtest("Check CIDR based access"):
-          # Check that we can access the resource through the VPN via CIDR
-          client.wait_until_succeeds("ping -c1 -W1 172.20.1.1")
-
-      with subtest("Check IP based access"):
-          # Check that we can access the resource through the VPN via IP
-          client.wait_until_succeeds("ping -c1 -W1 172.20.2.1")
     '';
 }

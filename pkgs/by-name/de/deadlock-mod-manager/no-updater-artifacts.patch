@@ -7,6 +7,6 @@ index ed05fce..e1649e0 100644
      },
      "active": true,
 -    "createUpdaterArtifacts": true,
-     "targets": "all",
+     "targets": ["deb", "rpm"],
      "icon": [
        "icons/32x32.png",

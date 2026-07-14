@@ -13,7 +13,6 @@
   httpx,
   packaging,
   pyyaml,
-  shellingham,
   tqdm,
   typer,
   typing-extensions,
@@ -26,6 +25,9 @@
   toml,
   fastai,
   fastcore,
+  # gradio
+  gradio,
+  requests,
   # mcp
   mcp,
 
@@ -35,20 +37,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.4.1";
+  version = "1.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-At3FN+dplQ3L9B4vDZrEvREdwgepUvzWC7yeU6L5XY8=";
+    hash = "sha256-Q9N0QnxV8oJcxUsJzv4wX8Z6FkNdEfUH5BEVoZolsRY=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "typer-slim" "typer"
-  '';
 
   build-system = [ setuptools ];
 
@@ -59,7 +56,6 @@ buildPythonPackage (finalAttrs: {
     httpx
     packaging
     pyyaml
-    shellingham
     tqdm
     typer
     typing-extensions
@@ -78,6 +74,10 @@ buildPythonPackage (finalAttrs: {
       toml
       fastai
       fastcore
+    ];
+    gradio = [
+      gradio
+      requests
     ];
     hf_xet = [
       hf-xet

@@ -19,13 +19,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-f1jsOErriS1I/iUS4CzJ3+Dz8SMUve/ccb3KaE+L7U8=";
   };
 
-  nativebuildInputs = [ boost ];
+  nativeBuildInputs = [ boost ];
   buildInputs = [
     gtest
     zlib
   ];
 
+  # Latest boost do not need system as a linking flag
+  postPatch = ''
+    sed -i 's/system filesystem/filesystem/' config.mk
+  '';
+
   patches = [
+    # getHostVersion use an empty parameter list. This is now an error for GC
+    ./getHostVersion.patch
+
     # pclose is called on a NULL value. This is no longer allowed since
     #  https://github.com/bminor/glibc/commit/64b1a44183a3094672ed304532bedb9acc707554
     ./stdio-pclose.patch

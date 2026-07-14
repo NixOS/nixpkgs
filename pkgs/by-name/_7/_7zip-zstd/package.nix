@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zip-zstd";
-  version = "25.01-v1.5.7-R4";
+  version = "26.02-v1.5.7-R2";
 
   src = fetchFromGitHub {
     owner = "mcmilk";
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if enableUnfree then
-        "sha256-qP4L5PIG7CHsmYbRock+cbCOGdgujUFG4LHenvvlqzw="
+        "sha256-Y1l+PiZyHZX4KnqANogn4iVhhEjsezGckkeXtO0RHDY="
       else
-        "sha256-R9AUWL35TPh0anyRDhnF28ZYG9FeOxntVIwnnW9e2xA=";
+        "sha256-0m4Q4920/tIatY28E5d89hYvp6Z0zE2v55rUSwig1+0=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     "MSYSTEM=1"
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -76,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   buildPhase =
@@ -103,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preBuild
 
       for component in Bundles/{Alone,Alone2,Alone7z,Format7zF,SFXCon} UI/Console; do
-        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} $makeFlags
+        make -j $NIX_BUILD_CORES -C CPP/7zip/$component -f ${makefile} "''${makeFlags[@]}"
       done
 
       runHook postBuild

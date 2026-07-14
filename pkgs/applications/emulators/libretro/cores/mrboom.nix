@@ -5,13 +5,13 @@
 }:
 mkLibretroCore rec {
   core = "mrboom";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2026-03-31";
 
   src = fetchFromGitHub {
     owner = "Javanaise";
     repo = "mrboom-libretro";
-    rev = "d011acfbdb2d93ed38bd684ccfa0db79bda1c932";
-    hash = "sha256-DjTSrp38MwdEtUZPTgZYEZHWgv48IN1oHkKsVqmOwII=";
+    rev = "96f89550a3518dffe2e7561c971119a39d90de97";
+    hash = "sha256-EcRXh39mldlI6fcrV1gaL/r1SGvrFe7jo35iQ47nTmo=";
     fetchSubmodules = true;
   };
 

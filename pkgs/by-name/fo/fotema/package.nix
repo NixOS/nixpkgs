@@ -1,5 +1,6 @@
 {
   lib,
+  applyPatches,
   clangStdenv,
   fetchFromGitHub,
   rustPlatform,
@@ -31,18 +32,26 @@
 # opencv-binding-generator *really* wants to execute `clang` itself...
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "fotema";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "blissd";
     repo = "fotema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+fo3g4+dtZlOVpHW0W0ZSBEi5fIR/c1aGAJHVysjJUY=";
+    hash = "sha256-g1CxgK8gaX24TFnlGUons3ve8Ow9YaiMh1kMwlcP/F8=";
   };
 
+  patches = [
+    # Bump ffmpeg-next 8.0.0 -> 8.1.0 in Cargo.lock for ffmpeg 8.1 compatibility.
+    ./cargo-lock-bump-ffmpeg-next.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-WBKEjNyItMTpkBalLf6OUrbeUiSw6lWO5adR8l4q/bY=";
+    inherit (finalAttrs) pname version;
+    src = applyPatches {
+      inherit (finalAttrs) src patches;
+    };
+    hash = "sha256-AEZY1QODq4F+CTrJce14qA6XSZjv29wSwIqUjZPWJo4=";
   };
 
   nativeBuildInputs = [

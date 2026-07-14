@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     zstd
     uthash
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     bpftools
     elfutils
     libbpf
@@ -153,7 +153,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       # Fix the bash completion location
       installShellCompletion --bash $out/etc/bash_completion.d/sysdig
       rm $out/etc/bash_completion.d/sysdig
@@ -187,8 +187,7 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    broken =
-      kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
+    broken = kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };

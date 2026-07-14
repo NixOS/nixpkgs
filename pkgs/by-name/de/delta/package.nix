@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "delta";
-  version = "0.18.2";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
     tag = finalAttrs.version;
-    hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
+    hash = "sha256-vW2mPAxlPXdwqyK/QhU/DOx6MD9u6DDVCDm0OEWm4AQ=";
   };
 
-  cargoHash = "sha256-qF55A1CENoHu3LBtNRc/n2PKYxMls7pdn2d56Mp18Qs=";
+  cargoHash = "sha256-CC2ncgujdcn1CJxU16beCjfQ1HR2+f6D8qYbZULEm7g=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,7 +44,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installShellCompletion --cmd delta \
-      etc/completion/completion.{bash,fish,zsh}
+      --bash <($out/bin/delta --generate-completion bash) \
+      --fish <($out/bin/delta --generate-completion fish) \
+      --zsh <($out/bin/delta --generate-completion zsh)
   '';
 
   # test_env_parsing_with_pager_set_to_bat sets environment variables,

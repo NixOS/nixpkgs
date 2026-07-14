@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "skaffold";
-  version = "2.17.1";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cbpfz0IXFopCeKNDwx8mB/1quhcOO3IWStsFmKeNPYg=";
+    hash = "sha256-mFJOveUkOJC7bIzxrjQgDKhCf0WvOTgSDqBSIVgZZzw=";
   };
 
   vendorHash = null;

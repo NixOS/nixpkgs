@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.18";
 
   src = fetchurl {
-    url = "http://www.ladspa.org/download/cmt_${finalAttrs.version}.tgz";
+    url = "https://www.ladspa.org/download/cmt_${finalAttrs.version}.tgz";
     sha256 = "sha256-qC+GNt4fSto4ahmaAXqc13Wkm0nnFrEejdP3I8k99so=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   preBuild = ''
     cd src

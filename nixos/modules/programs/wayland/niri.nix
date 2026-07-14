@@ -40,6 +40,17 @@ in
 
         systemd.packages = [ cfg.package ];
 
+        # Restarting the compositor kills the graphical session; same
+        # treatment as the display-manager modules.
+        systemd.user.services.niri = {
+          restartIfChanged = false;
+          # Defining the unit here generates a drop-in; without this it
+          # would carry the NixOS default Environment="PATH=coreutils:…",
+          # clobbering the PATH that niri-session imported into the user
+          # manager and breaking spawn actions that rely on it.
+          enableDefaultPath = false;
+        };
+
         xdg.portal = {
           enable = lib.mkDefault true;
 

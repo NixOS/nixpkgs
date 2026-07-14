@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubecm";
-  version = "0.35.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "sunny0826";
     repo = "kubecm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QShGRgszcsutSA9sOBXNvAwdTIqHOsMYQQPIXfA8z/M=";
+    hash = "sha256-5wTxVzpvwD6jx6Cfa0ChIi8wQCrnqzZM2jvwGpQdq50=";
   };
 
   vendorHash = "sha256-TyJpFN8JEWpzCHKUX3iYUHhTOOAp5I1YEzhUkWPXx8A=";

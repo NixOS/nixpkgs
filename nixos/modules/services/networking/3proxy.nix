@@ -59,6 +59,7 @@ in
                 "dnspr"
                 "tcppm"
                 "udppm"
+                "auto"
               ];
               example = "proxy";
               description = ''
@@ -72,6 +73,7 @@ in
                 - `"dnspr"`: Caching DNS proxy (default port 53).
                 - `"tcppm"`: TCP portmapper.
                 - `"udppm"`: UDP portmapper.
+                - `"auto"`: Proxy with protocol autoselection between proxy / socks / tlspr.
               '';
             };
             bindAddress = lib.mkOption {

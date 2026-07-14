@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.0";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z39mP9rQAaGmERfUMPULfPUi473tY";
     tag = "releases/${finalAttrs.version}";
     hash = "sha256-2/pLlhilJyrZl9eLFWIh4YxlJwBbzjmb1Cg1xFSSl5k=";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     zlib
   ];
@@ -66,16 +66,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Radicle terminal user interface";
-    homepage = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z39mP9rQAaGmERfUMPULfPUi473tY";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z39mP9rQAaGmERfUMPULfPUi473tY/tree/CHANGELOG.md";
+    homepage = "https://radicle.network/nodes/seed.radicle.dev/rad:z39mP9rQAaGmERfUMPULfPUi473tY";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z39mP9rQAaGmERfUMPULfPUi473tY/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad-tui";
   };
 })

@@ -6,6 +6,7 @@
   django,
   pytestCheckHook,
   pytest-django,
+  pytest-xdist,
   setuptools,
 }:
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     django-environ
     pytestCheckHook
     pytest-django
+    pytest-xdist
   ];
 
   pythonImportsCheck = [ "guardian" ];

@@ -16,14 +16,14 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.15";
+  version = "1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
     tag = version;
-    hash = "sha256-YhYCCGMj5q+QeXWElysONbFkCVkcQeOPy/Tk4+fyNLk=";
+    hash = "sha256-C7TwGlbTwpcJ0rE7notWzZHthWzXKMPbHq00zMhfHeA=";
   };
 
   build-system = [ setuptools ];

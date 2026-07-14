@@ -27,13 +27,13 @@ let
 
   pname = "intiface-central";
 
-  version = "3.0.0";
+  version = "3.0.4+40";
 
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     tag = "v${version}";
-    hash = "sha256-yKWaXkSjg7LMIKIeRfviu4SmStxl9BSXncJSxXJeU0Y=";
+    hash = "sha256-RMllaThwCp2mRl0ecMtj3z6DC4uhdLqYNPI8lZChmhI=";
   };
 
   rustDep = rustPlatform.buildRustPackage {
@@ -46,7 +46,7 @@ let
       ln -s ${buttplug} ../../buttplug
     '';
 
-    cargoHash = "sha256-HpmGmMMocLQ5/DJq8PJ5u04DipSlrReJ/3l76L9j8Yk=";
+    cargoHash = "sha256-2KmwfvSDIaLvGda/EofUxGPRevv+/UQOUdSPRF2LEJw=";
 
     nativeBuildInputs = [ pkg-config ];
 
@@ -61,15 +61,15 @@ let
   buttplug_dart = fetchFromGitHub {
     owner = "buttplugio";
     repo = "buttplug_dart";
-    tag = "v1.0.0-beta1";
-    hash = "sha256-cJJU/DRTuQawdfi0aMyi7Vfmv4GtUj7nEBRNYEuZ8JQ=";
+    tag = "v1.0.0";
+    hash = "sha256-nm9TdEL9+80hCbaPnpAJTQ0w1t40vWYcxyilQTwvEBU=";
   };
 
   buttplug = fetchFromGitHub {
     owner = "buttplugio";
     repo = "buttplug";
-    tag = "intiface_engine-4.0.0";
-    hash = "sha256-F3mMQviTeyw9Wlrf8vcbJ9oGTYoKCIpPbj2jayQlpeg=";
+    tag = "intiface_engine_4.0.2";
+    hash = "sha256-4tzGZEsqfCnz/ZX6qNx/Hku6yDK0g6gyep6p6WZGoQk=";
   };
 in
 flutter338.buildFlutterApplication {
@@ -146,9 +146,8 @@ flutter338.buildFlutterApplication {
     ln -s ${buttplug} ../buttplug
   '';
 
-  # without this, only the splash screen will be shown and the logs will contain the
-  # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
-  extraWrapProgramArgs = "--chdir $out/app/intiface-central";
+  # without this, only the splash screen will be shown
+  extraWrapProgramArgs = "--set FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR $out/app/intiface-central/lib";
 
   postInstall = ''
     install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/icons/hicolor/512x512/apps/intiface-central.png

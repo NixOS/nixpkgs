@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bundlewrap";
-  version = "5.0.2";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
     tag = finalAttrs.version;
-    hash = "sha256-kU76WvT4VE/78HTMjByoDHgkrg/5MlS5vnc6z6lAANw=";
+    hash = "sha256-gncxzeAlfob0dXZ1iqMwqG5h+OyGxvPhrS0MZ+x0mbo=";
   };
 
   build-system = [ setuptools ];

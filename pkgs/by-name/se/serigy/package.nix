@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "serigy";
-  version = "2.0.0";
+  version = "2.1.1";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Serigy";
     tag = finalAttrs.version;
-    hash = "sha256-0Dc/Y0GYXMNFQ1rWCQaCZzN1Z8lMwdj0wO47pLUV5mM=";
+    hash = "sha256-WOourIlF2Z1YP34d9VCuX7kysJxeMBz2enOaGu73r8o=";
   };
 
   nativeBuildInputs = [

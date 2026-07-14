@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "troi";
-  version = "2025.08.06.3";
+  version = "2026.03.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "troi-recommendation-playground";
     tag = "v${version}";
-    hash = "sha256-qLnXaNb1Kon+XPJYCPe31EgXpukIfzTa+LADOzFjE9Q=";
+    hash = "sha256-wZeWdps60cOO5aIPZLGjZMsgEqAjnKuA56WKXVg9nuo=";
   };
 
   build-system = [

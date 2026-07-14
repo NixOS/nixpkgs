@@ -2,8 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
+  pyserial-asyncio-fast,
   setuptools,
   zigpy,
 }:
@@ -22,19 +24,31 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' ""
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     zigpy
   ];
 
+  # lacking zigpy 2.0 compat
+  # https://github.com/zigpy/zigpy-xbee/pull/179
+  doCheck = false;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    pyserial-asyncio-fast
+  ];
+
+  disabledTests = [
+    "test_connect" # Attempts to test ioctl
   ];
 
   meta = {

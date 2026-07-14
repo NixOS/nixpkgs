@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pythonImportsCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails on macOS with Trace/BPT trap: 5 - something to do with recursion depth
     "test_cubic_cubic"
   ];

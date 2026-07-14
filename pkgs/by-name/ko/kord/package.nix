@@ -22,7 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
-  cargoHash = "sha256-DpZsi2eIhuetHnLLYGAvv871mbPfAIUevqBLaV8ljGA=";
+  cargoHash = "sha256-ciam95rUUh9iKmhTadqWCy1rU4otuRiQkWg0lGRHzng=";
+
+  cargoPatches = [
+    # bump coreaudio-sys past 0.2.11; bindgen 0.61 panics on apple-sdk-14 anonymous enums
+    ./update-coreaudio-sys.patch
+  ];
 
   patches = [
     # Fixes build issues due to refactored Rust compiler feature annotations.
@@ -34,6 +39,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       excludes = [ "Cargo.*" ];
     })
   ];
+
+  # concat_idents feature gate was removed in rust 1.90; never invoked here.
+  postPatch = ''
+    substituteInPlace src/lib.rs --replace-fail '#![feature(concat_idents)]' ""
+  '';
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]

@@ -57,7 +57,8 @@ lib.extendMkDerivation {
 
         # some hooks need name-version, but we've overridden name above for the nix package
         beamModuleName = args.name;
-      };
+      }
+      // (args.env or { });
 
       __darwinAllowLocalNetworking = true;
 

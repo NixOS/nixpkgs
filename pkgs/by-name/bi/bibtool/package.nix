@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Perl for running test suite.
   buildInputs = [ perl ];
 
+  # Uses K&R function definitions, which are not supported by GCC >= 14.
+  # https://github.com/ge-ne/bibtool/pull/96
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   installTargets = [
     "install"
     "install.man"

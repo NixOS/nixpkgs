@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  erlang,
+  beamPackages,
   pam,
   perl,
   autoreconfHook,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    erlang
+    beamPackages.erlang
     pam
     perl
   ];

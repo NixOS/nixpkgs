@@ -96,6 +96,8 @@ python.pkgs.buildPythonPackage {
     # Tests
     fido2
     litellm
+    requests-hardened
+    thefuzz
   ];
 
   configurePhase = ''

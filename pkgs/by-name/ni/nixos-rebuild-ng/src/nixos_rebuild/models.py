@@ -7,6 +7,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, ClassVar, Self, TypedDict, override
 
+from . import nix
 from .process import Remote, run_wrapper
 from .utils import Args
 
@@ -58,9 +59,31 @@ class BuildAttr:
 
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
-        if not (attr or file):
-            return cls("<nixpkgs/nixos>", None)
-        return cls(Path(file or "default.nix"), attr)
+        # We use, in this order:
+        #   1. the --file argument (can be a directory, implying /system.nix)
+        #   2. system.nix in the cwd, but only if --attr is used
+        #   3. the <nixos-system> Nix path entry
+        #   4. /etc/nixos/system.nix
+        #   5. the <nixpkgs/nixos> Nix path entry (uses configuration.nix)
+
+        if file:
+            fpath = Path(file)
+            if fpath.is_dir() and (fpath / "system.nix").exists():
+                return cls(fpath / "system.nix", attr)
+            # Backward compatibility
+            elif fpath.is_dir() and (fpath / "default.nix").exists():
+                return cls(fpath / "default.nix", attr)
+            return cls(fpath, attr)
+        elif attr and Path("system.nix").exists():
+            return cls(Path("system.nix"), attr)
+        elif attr and Path("default.nix").exists():
+            # Backward compatibility
+            return cls(Path("default.nix"), attr)
+        elif nix.find_file("nixos-system"):
+            return cls("<nixos-system>", attr)
+        elif Path("/etc/nixos/system.nix").exists():
+            return cls(Path("/etc/nixos/system.nix"), attr)
+        return cls("<nixpkgs/nixos>", attr)
 
 
 @dataclass(frozen=True)

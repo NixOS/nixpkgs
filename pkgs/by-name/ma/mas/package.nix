@@ -3,14 +3,17 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
+  jq,
   libarchive,
   p7zip,
-  testers,
-  mas,
+  versionCheckHook,
+  zsh,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
-  version = "5.1.0";
+  version = "7.0.0";
+
+  __structuredAttrs = true;
 
   src =
     let
@@ -19,11 +22,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         {
           x86_64-darwin = {
             arch = "x86_64";
-            hash = "sha256-G7o0nHsf6Ay2k3quMs45KH9h4yEpbvyGPm/u86naWcM=";
+            hash = "sha256-m8od4ftuoZyeC517fIUkkCDJ7WWp1DTC70CJai8zlfk=";
           };
           aarch64-darwin = {
             arch = "arm64";
-            hash = "sha256-XZM0YeFLHYhoEqQLaG1Jz3OWcT9DILqFEcgqI3yvDk8=";
+            hash = "sha256-vCGKhUyF2eHJVJapayYoe7ZgVrlWiLkPkdBPpi7SG3U=";
           };
         }
         .${stdenvNoCC.hostPlatform.system}
@@ -57,6 +60,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin usr/local/opt/mas/bin/mas
+    install -D --mode=755 usr/local/opt/mas/libexec/bin/mas "$out/libexec/bin/mas"
+
+    substituteInPlace "$out/bin/mas" \
+      --replace-fail "#!/bin/zsh" "#!${lib.getExe zsh}" \
+      --replace-fail "/usr/bin/jq" "${lib.getExe jq}"
 
     installManPage usr/local/opt/mas/share/man/man1/mas.1
     installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
@@ -65,12 +73,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = mas;
-      command = "mas version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Mac App Store command line interface";

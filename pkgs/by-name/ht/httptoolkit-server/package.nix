@@ -1,30 +1,33 @@
 {
   lib,
-  nodejs_22,
+
   buildNpmPackage,
   fetchFromGitHub,
   writeShellScriptBin,
-  nss,
+
   cmake,
+  nodejs_24,
+  nss,
   pkg-config,
-  openssl,
+
   libdatachannel,
+  openssl,
   plog,
 }:
 
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
   # update together with httptoolkit
   # nixpkgs-update: no auto update
-  version = "1.24.2";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
     tag = "v${version}";
-    hash = "sha256-tcUQe4YIUpQ9I5nq66K7LO84mLFo8YAdHY/c2HROSpk=";
+    hash = "sha256-pCEz5bgpzEjGeBoOp3fb/WBW+loCzjvCckJTEwK0o7U=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -32,7 +35,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-8cNGJdT8ndXa72ETttU2PjA8nfn+MTWesVVlA8GA1qQ=";
+    npmDepsHash = "sha256-B/W6kD6x10bfsuehRb9oObi+Gf3Hovm0jMNLcbuigeo=";
 
     dontBuild = true;
 
@@ -65,8 +68,8 @@ let
     ];
 
     buildInputs = [
-      openssl
       libdatachannel
+      openssl
       plog
     ];
 
@@ -79,14 +82,14 @@ let
       # don't use static libs and don't use FetchContent
       # don't try to link plog (it's headers-only)
       substituteInPlace CMakeLists.txt \
-          --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
-          --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
-          --replace-fail 'datachannel-static' 'datachannel' \
-          --replace-fail 'plog::plog' ""
+        --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
+        --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
+        --replace-fail 'datachannel-static' 'datachannel' \
+        --replace-fail 'plog::plog' ""
 
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
-          --replace-fail '!this.downloaded' 'false'
+        --replace-fail '!this.downloaded' 'false'
     '';
 
     installPhase = ''
@@ -102,7 +105,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-vhTe7EccEX57h7LDtNaaLaNR8xHSOlbnLtGrs7qT7pY=";
+  npmDepsHash = "sha256-OO1QI2KNbZo/2Bl6xC6oORVfDtBqjr2tuQmk6s70znM=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -117,8 +120,8 @@ buildNpmPackage' {
   postConfigure = ''
     # make sure `oclif-dev' doesn't fetch `node` binary to bundle with the app
     substituteInPlace node_modules/@oclif/dev-cli/lib/tarballs/node.js --replace-fail \
-        'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) {' \
-        'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) { return;'
+      'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) {' \
+      'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) { return;'
 
     # manually place our prebuilt `node-datachannel` binary into its place, since we used '--ignore-scripts'
     ln -s ${nodeDatachannel}/build node_modules/node-datachannel/build
@@ -152,12 +155,12 @@ buildNpmPackage' {
 
     # disable updating functionality
     substituteInPlace $out/share/httptoolkit-server/node_modules/@oclif/plugin-update/lib/commands/update.js \
-        --replace-fail "await this.skipUpdate()" "'cannot update nix based package'"
+      --replace-fail "await this.skipUpdate()" "'cannot update nix based package'"
 
     # the app determines if it's in production by checking if HTTPTOOLKIT_SERVER_BINPATH is set to anything
     makeWrapper $out/share/httptoolkit-server/bin/run $out/bin/httptoolkit-server \
-        --set HTTPTOOLKIT_SERVER_BINPATH dummy \
-        --prefix PATH : ${lib.makeBinPath [ nss.tools ]}
+      --set HTTPTOOLKIT_SERVER_BINPATH dummy \
+      --prefix PATH : ${lib.makeBinPath [ nss.tools ]}
 
     runHook postInstall
   '';

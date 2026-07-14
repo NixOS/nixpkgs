@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "papi";
 
   src = fetchurl {
-    url = "http://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
+    url = "https://icl.utk.edu/projects/papi/downloads/papi-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-qb/4nM85kV1yngiuCgxqcc4Ou+mEEemi6zyDyNsK85w=";
   };
 

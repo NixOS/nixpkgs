@@ -154,11 +154,6 @@ in
             mode = "755";
             inherit (cfg) user group;
           };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."L+" = mkIf (cfg.serverConfig != { }) {
-            mode = "1400";
-            inherit (cfg) user group;
-            argument = "${configFile}";
-          };
         };
       };
       services.qbittorrent = {
@@ -176,6 +171,12 @@ in
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
+
+          # the config file has to be writable, so we have to do this weird dance
+          ExecStartPre = lib.mkIf (cfg.serverConfig != { }) ''
+            ${pkgs.coreutils}/bin/install -Dm600 ${configFile} "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"
+          '';
+
           ExecStart = utils.escapeSystemdExecArgs (
             [
               (getExe cfg.package)

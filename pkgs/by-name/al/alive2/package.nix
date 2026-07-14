@@ -34,6 +34,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
   strictDeps = true;
 
+  cmakeFlags = [
+    (lib.cmakeFeature "BUILD_TV" "1")
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail '-Werror' "" \
@@ -55,6 +59,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp alive $out/bin/
     cp alive-jobserver $out/bin/
+    cp alive-tv $out/bin/
     rm -rf $out/bin/CMakeFiles $out/bin/*.o
     runHook postInstall
   '';

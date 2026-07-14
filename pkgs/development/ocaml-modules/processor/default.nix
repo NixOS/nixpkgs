@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "processor";
   version = "0.1-unstable-2024-07-23";
 
@@ -23,8 +23,8 @@ buildDunePackage rec {
     description = "CPU topology and affinity for ocaml-multicore";
     homepage = "https://haesbaert.github.io/ocaml-processor/processor/index.html";
     downloadPage = "https://github.com/haesbaert/ocaml-processor";
-    changelog = "https://github.com/haesbaert/ocaml-processor/releases/tag/v${version}";
+    changelog = "https://github.com/haesbaert/ocaml-processor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
-}
+})

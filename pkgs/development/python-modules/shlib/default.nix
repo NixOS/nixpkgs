@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "shlib";
-  version = "1.8";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "shlib";
     tag = "v${version}";
-    hash = "sha256-0BWTaHKGVKYIPQ9ifVWp2VZkSH3Gg/NgP3gPhkmw5S4=";
+    hash = "sha256-ymX5Vz4QYrKX9GTsQMWtdLM4z0KtaSfZp0iTkCb/8aI=";
   };
 
   postPatch = ''

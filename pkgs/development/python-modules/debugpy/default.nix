@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.20";
+  version = "1.8.21";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
-    hash = "sha256-0h2VQU5eYb0heXSFmKnwAFW0jcWc+bYllhwxfdzkGWc=";
+    hash = "sha256-7XM476tfL6QLCHB1kwlbN/dmlgnjuTE+ulQ9yOHfgEE=";
   };
 
   patches = [
@@ -121,11 +121,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
-    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -133,9 +129,6 @@ buildPythonPackage rec {
   postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
-
-  # Override default arguments in pytest.ini
-  pytestFlags = [ "--timeout=0" ];
 
   disabledTests = [
     # hanging test (flaky)

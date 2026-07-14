@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "petervanderdoes";
-    repo = "gitflow";
+    repo = "gitflow-avh";
     rev = finalAttrs.version;
     sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/petervanderdoes/gitflow";
+    homepage = "https://github.com/petervanderdoes/gitflow-avh";
     description = "Extend git with the Gitflow branching model";
     mainProgram = "git-flow";
     longDescription = ''

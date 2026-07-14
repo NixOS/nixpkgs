@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ _1000teslas ];
+    maintainers = with lib.maintainers; [ sledgehammervampire ];
   };
 })

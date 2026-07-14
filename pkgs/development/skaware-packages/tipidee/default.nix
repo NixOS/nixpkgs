@@ -6,8 +6,8 @@
 
 skawarePackages.buildPackage {
   pname = "tipidee";
-  version = "0.0.6.0";
-  sha256 = "sha256-4q3YvhCJAi43kCQbk6xKWj5Y2tZF9dkZ+MunRM1KFwI=";
+  version = "0.0.7.2";
+  sha256 = "sha256-x34St9s/3FbcI9s3ncpmhhbnQmA/6Gf6K9yNTxrKj5s=";
 
   description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
 

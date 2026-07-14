@@ -164,14 +164,6 @@ in
 
         assertions = [
           {
-            assertion = lib.pathExists (toString (genAssetsDrv cfg.assets) + "/share/v2ray");
-            message = ''
-              Packages in `assets` has no preset paths included.
-              Please set `assetsPath` instead.
-            '';
-          }
-
-          {
             assertion = !((config.services.dae.config != null) && (config.services.dae.configFile != null));
             message = ''
               Option `config` and `configFile` could not be set

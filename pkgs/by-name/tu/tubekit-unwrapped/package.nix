@@ -23,6 +23,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/reconquest/tubekit";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
   };
 })

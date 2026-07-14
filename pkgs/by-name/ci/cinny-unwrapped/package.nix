@@ -2,44 +2,27 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  giflib,
-  python3,
-  pkg-config,
-  pixman,
-  nodejs_22,
-  cairo,
-  pango,
-  stdenv,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "cinny-unwrapped";
   # Remember to update cinny-desktop when bumping this version.
-  version = "4.10.5";
+  version = "4.12.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
-    tag = "v${version}";
-    hash = "sha256-Napy3AcsLRDZPcBh3oq1U30FNtvoNtob0+AZtZSvcbM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RjPdq9xNvUbJESV7CqxmgfqAx+MoKZbhUtJNTcH9aUk=";
   };
 
-  nodejs = nodejs_22;
+  npmDepsHash = "sha256-CU8AVRuMFOGI0/LbN0LGysBk+qc2XQYxQGfrrH72stc=";
 
-  npmDepsHash = "sha256-2Lrd0jAwAH6HkwLHyivqwaEhcpFAIALuno+MchSIfxo=";
-
-  nativeBuildInputs = [
-    python3
-    pkg-config
+  # Skip rebuilding native modules since they're not needed for the web app
+  npmRebuildFlags = [
+    "--ignore-scripts"
   ];
-
-  buildInputs = [
-    pixman
-    cairo
-    pango
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall
@@ -55,8 +38,9 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       abbe
       rebmit
+      ryand56
     ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
   };
-}
+})

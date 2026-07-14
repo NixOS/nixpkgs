@@ -96,6 +96,10 @@ buildPythonPackage rec {
     "test_sync_proxy_close"
     # ResourceWarning: Async generator 'httpx._content.ByteStream.__aiter__' was garbage collected before it had been exhausted. Surround its use in 'async with aclosing(...):' to ensure that it gets cleaned up as soon as you're done using it.
     "test_write_timeout" # trio variant
+    # chardet v6 recognizes the wrong encoding
+    "test_client_decode_text_using_autodetect"
+    "test_client_decode_text_using_explicit_encoding"
+    "test_response_decode_text_using_autodetect"
   ];
 
   disabledTestPaths = [ "tests/test_main.py" ];

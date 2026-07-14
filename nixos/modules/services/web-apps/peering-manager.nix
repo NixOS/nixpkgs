@@ -350,7 +350,7 @@ in
           after = [ "peering-manager.service" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkg}/bin/peering-manager grab_prefixes";
+            ExecStart = "${pkg}/bin/peering-manager get_irr_data";
           };
         };
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   ncurses,
   pulseaudio,
 }:
@@ -19,6 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
+  patches = [
+    # gcc15, remove after next release
+    (fetchpatch {
+      url = "https://github.com/dj1yfk/qrq/commit/f17363df923cd9d4607478a7406e0c4d3e044aae.patch";
+      hash = "sha256-EzGP6ExqiK30Vb4f8Q06zIP5Bebnw/jWvaAOb3juZMU=";
+      stripLen = 2;
+      extraPrefix = "";
+    })
+  ];
+
   buildInputs = [
     ncurses
     pulseaudio
@@ -33,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace qrq.c \
       --replace-fail '[80]' '[4000]' \
       --replace-fail '80,' '4000,'
+    substituteInPlace Makefile \
+      --replace-fail 'CC=gcc' 'CC=${stdenv.cc.targetPrefix}cc'
   '';
 
   meta = {

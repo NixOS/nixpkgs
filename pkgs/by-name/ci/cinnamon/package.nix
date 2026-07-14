@@ -10,6 +10,7 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
+  fetchpatch,
   gcr,
   gdk-pixbuf,
   gettext,
@@ -74,18 +75,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.6.7";
+  version = "6.6.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     tag = finalAttrs.version;
-    hash = "sha256-UP/8FIgTCdQrE+kvG0nLo+oqYo8x/lm3RPKOXnTFJaE=";
+    hash = "sha256-ByPn2VV40y+3/FW/KPIsLt43FhVxQAQldCK26KNKdjw=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    # util.js: Adapt to GIR 2.0
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/3a2d558aa575f0ea364c5b4e30d2eb3ee604ee58.patch";
+      hash = "sha256-+uAGuQJ0VsIvMvPFafyoXmU4MiHfbbRXLzeW/n62ucw=";
+    })
+
+    # cinnamon-calendar-server.py: Allow ICal 4.0
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/dcf2d986c1ec167b0a8005ef2ca427317438c8d7.patch";
+      hash = "sha256-4sCZShUOXPaJoumiuEG558e0l8CIehH0P+C9OouG3vI=";
+    })
   ];
 
   buildInputs = [

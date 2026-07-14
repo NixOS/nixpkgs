@@ -4,6 +4,7 @@
   attr,
   autoconf,
   automake,
+  pkg-config,
   bash,
   bc,
   coreutils,
@@ -28,23 +29,27 @@
   util-linux,
   which,
   writeScript,
+  writeShellScript,
   xfsprogs,
+  gitMinimal,
+  nix-update,
   runtimeShell,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfstests";
-  version = "2023.05.14";
+  version = "2026.05.17";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+    hash = "sha256-vfK4PcPdd1121lcjhjP63RyS6YdFfgZ6Nsauv02b1S8=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    pkg-config
   ];
   buildInputs = [
     acl
@@ -62,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace "cp include/install-sh ." "cp -f include/install-sh ."
+      --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
     # Patch the destination directory
     sed -i include/builddefs.in -e "s|^PKG_LIB_DIR\s*=.*|PKG_LIB_DIR=$out/lib/xfstests|"
@@ -153,6 +158,24 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }:$PATH
     exec ./check "$@"
+  '';
+  passthru.updateScript = writeShellScript "update-xfstests" ''
+    set -euo pipefail
+    export PATH=${
+      lib.makeBinPath [
+        coreutils
+        gitMinimal
+        gawk
+        nix-update
+      ]
+    }:$PATH
+    VERSION="$(git ls-remote --tags --refs https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git \
+      | awk '{ print $2 }' \
+      | grep '^refs/tags/v' \
+      | sed 's|^refs/tags/v||' \
+      | sort -V \
+      | tail -n1)"
+    exec nix-update --version "$VERSION" xfstests "$@"
   '';
 
   meta = {

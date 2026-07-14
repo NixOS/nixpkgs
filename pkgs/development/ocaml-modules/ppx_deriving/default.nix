@@ -36,12 +36,12 @@ let
     ."${version}";
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_deriving";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-${lib.optionalString (lib.versionOlder version "6.0") "v"}${version}.${
+    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${finalAttrs.version}/ppx_deriving-${lib.optionalString (lib.versionOlder version "6.0") "v"}${finalAttrs.version}.${
       if lib.versionAtLeast version "6.1.1" then "tar.gz" else "tbz"
     }";
     inherit hash;
@@ -71,4 +71,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.maurer ];
     license = lib.licenses.mit;
   };
-}
+})

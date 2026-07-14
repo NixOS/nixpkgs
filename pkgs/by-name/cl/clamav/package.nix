@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clamav";
-  version = "1.4.3";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/clamav-${finalAttrs.version}.tar.gz";
-    hash = "sha256-2HTKvz1HZbNbUY71NWWKHm7HSAIAah1hP58SSqE0MhA=";
+    hash = "sha256-80AYzyLwW92dGhV0ygcZPj4DDKUgUMPlwiDiOjIxSWU=";
   };
 
   patches = [
@@ -67,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
+    "-DCVD_CERTS_DIRECTORY=${placeholder "out"}/share/clamav/certs"
   ];
 
-  # Seems to only fail on x86_64-darwin with sandboxing
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
-  __darwinAllowLocalNetworking = true;
+  # Fails on darwin with sandboxing
+  doCheck = !(stdenv.hostPlatform.isDarwin);
 
   checkInputs = [
     python3.pkgs.pytest

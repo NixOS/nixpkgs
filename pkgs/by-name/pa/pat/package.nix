@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pat";
-  version = "0.19.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "la5nta";
     repo = "pat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hpbSjxePAXuqQAlNTAfknh+noZgdILtNG57OWVJO02M=";
+    hash = "sha256-AYaHslPYNSl/s0d7gBxmC7IRvDGEezxzbABJSgRFuPg=";
   };
 
-  vendorHash = "sha256-8XPnY99arnDDeGlzPv4sw6pwxXkSsxSzNFtz+IeKeq4=";
+  vendorHash = "sha256-HkCXbJJFOlcp0Q9XcM1HC64EDWe/rn/nMpdpNOpgYFM=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux [ libax25 ];
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libax25;
 
   # Needed by wl2k-go go module for libax25 to include support for Linux' AX.25 stack by linking against libax25.
   # ref: https://github.com/la5nta/wl2k-go/blob/abe3ae5bf6a2eec670a21672d461d1c3e1d4c2f3/transport/ax25/ax25.go#L11-L17

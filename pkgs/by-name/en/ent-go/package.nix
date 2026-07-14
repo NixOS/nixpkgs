@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ent-go";
-  version = "0.14.3";
+  version = "0.14.6";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "ent";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rKGzYOdNaSbFyHIuytuppYjpiTz1/tcvXel1SjtwEhA=";
+    sha256 = "sha256-pkD8MYyinvuKCtSpHGfFE9y8GRP40qdeyjhB32yeiK4=";
   };
 
-  vendorHash = "sha256-ec5tA9TsDKGnHVZWilLj7bdHrd46uQcNQ8YCK/s6UAY=";
+  vendorHash = "sha256-CCjZv9ef/F+Cx6qmIkG/isX2Dd8WO/1mtjsJ4d8E3m0=";
 
   patches = [
     # patch in version information so we don't get "version = "(devel)";"

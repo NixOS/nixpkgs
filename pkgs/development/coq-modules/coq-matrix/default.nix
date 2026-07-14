@@ -17,7 +17,7 @@ mkCoqDerivation {
       }
     ] null;
   release = {
-    "1.0.6".sha256 = "sha256-XsM3fSstvB6GE5OqT7CFro+RWiYEgJsoQ5gXd74VaK0=";
+    "1.0.6".hash = "sha256-XsM3fSstvB6GE5OqT7CFro+RWiYEgJsoQ5gXd74VaK0=";
   };
   meta = {
     homepage = "https://github.com/zhengpushi/CoqMatrix";

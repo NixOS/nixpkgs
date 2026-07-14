@@ -42,7 +42,6 @@ buildDunePackage rec {
       ocamlLgplLinkingException
     ];
     maintainers = with lib.maintainers; [
-      anmonteiro
       dandellion
     ];
   };

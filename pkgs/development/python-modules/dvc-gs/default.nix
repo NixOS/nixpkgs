@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dvc-gs";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dvc_gs";
     inherit (finalAttrs) version;
-    hash = "sha256-c5aTwNglCjkHS6Fsfc51K7Wn/5NEQtYIH/z9ftkxO5o=";
+    hash = "sha256-QhhWD/HVGW/Qx5FiZVzXnFE0+mHr40o6UH+vB0kibu4=";
   };
 
   # Prevent circular dependency

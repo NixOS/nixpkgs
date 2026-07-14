@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.14-3";
+  version = "0.1.15-2";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xycHf/3szP0NkSylAOxSQbaxt7Wc52Qg9N7g/YT+vT8=";
+    hash = "sha256-63tXnbDgsOrTsrudBIaQUNKNGllrjy7GDqp7xhSgMeA=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     librsvg
   ];
 
-  cargoHash = "sha256-Ci/k4g0Zrtzx2IhKt5MjLtim/2qZA4wLIO3AtQ+TkpY=";
+  cargoHash = "sha256-wxYPpJql8uKndkXxbiizb7em2zxt3YNCC0aUq1LgNMo=";
 
   passthru.updateScript = nix-update-script { };
 

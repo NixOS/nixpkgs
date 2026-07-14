@@ -2,22 +2,25 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  iana-etc,
+  libredirect,
   buildGoModule,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   esbuild,
+  nix-update-script,
 }:
 let
   lockedEsbuild = esbuild.overrideAttrs (
     finalAttrs: prevAttrs: {
-      version = "0.19.11";
+      version = "0.21.5";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     }
@@ -25,16 +28,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "syncyomi";
-  version = "1.1.4";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "SyncYomi";
     repo = "SyncYomi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pU3zxzixKoYnJsGpfvC/SVWIu0adsaiiVcLn0IZe64w=";
+    hash = "sha256-Dk6s5NXa9NY33/d4F9GDB5T1nKu8/OSEOY5cpIXz7ZA=";
   };
 
-  vendorHash = "sha256-fzPEljXFskr1/qzTsnASFNNc+8vA7kqO21mhMqwT44w=";
+  vendorHash = "sha256-7AySGQBQHaTp2M1uj5581ZqcpzgexI1KvanWMOc6rx0=";
 
   web = stdenvNoCC.mkDerivation (webFinalAttrs: {
     pname = "${finalAttrs.pname}-web";
@@ -48,15 +51,15 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-hRMHvfzfjOzvcCHFhDLxuq2qZ3mi4/333nEcQANbJ/o=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-i4ji/NjK6/hpqrma+DJ2x5kKq/YEN3Cy8mKQLy1M+dU=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     env.ESBUILD_BINARY_PATH = lib.getExe lockedEsbuild;
@@ -78,6 +81,12 @@ buildGoModule (finalAttrs: {
     cp -r $web/* web/dist
   '';
 
+  nativeCheckInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libredirect.hook ];
+
+  preCheck = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
+  '';
+
   ldflags = [
     "-s"
     "-w"
@@ -88,12 +97,17 @@ buildGoModule (finalAttrs: {
     mv $out/bin/SyncYomi $out/bin/syncyomi
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open-source project to synchronize Tachiyomi manga reading progress and library across multiple devices";
     homepage = "https://github.com/SyncYomi/SyncYomi";
     changelog = "https://github.com/SyncYomi/SyncYomi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ eriedaberrie ];
+    maintainers = with lib.maintainers; [
+      eriedaberrie
+      miniharinn
+    ];
     mainProgram = "syncyomi";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

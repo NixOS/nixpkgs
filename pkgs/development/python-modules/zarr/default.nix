@@ -23,50 +23,36 @@
   cupy,
   # cli
   typer,
-  # test
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov,
-  pytest-accept ? null, # TODO: Package
-  rich,
-  mypy,
-  numpydoc,
-  hypothesis,
-  pytest-xdist,
-  tomlkit,
-  uv,
-  # remote_tests
-  botocore,
-  s3fs,
-  moto,
-  requests,
   # optional
+  rich,
   universal-pathlib,
-  # docs
-  mkdocs-material,
-  mkdocs,
-  mkdocstrings,
-  mkdocstrings-python,
-  mike,
-  mkdocs-redirects,
-  markdown-exec ? null, # TODO: Package
-  griffe-inherited-docstrings ? null, # TODO: Package,
-  ruff,
-  towncrier,
-  astroid,
+
+  # test
+  hypothesis,
+  numpydoc,
+  pytest-asyncio,
+  pytestCheckHook,
+  tomlkit,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "zarr";
-  version = "3.1.5";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zarr-developers";
     repo = "zarr-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Kx8gN1JiaY4eHmwpdilvJ8+NdnzxhDvn7YZjphgtZw=";
+    hash = "sha256-WExQT/Je+esq0dv9HtPxGt7ioJgIwW8cGNuPwM+ANEc=";
   };
+
+  # Avoid requiring pytest-benchmark - we don't care about these
+  preBuild = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--benchmark-columns", "min,mean,stddev,outliers,rounds,iterations",' "" \
+      --replace-fail '"--benchmark-disable",' "" \
+  '';
 
   build-system = [
     hatchling
@@ -94,73 +80,29 @@ buildPythonPackage (finalAttrs: {
       cli = [
         typer
       ];
-      # Development extras
-      test = [
-        #pytest
-        pytest-asyncio
-        pytest-cov
-        pytest-accept
-        rich
-        mypy
-        numpydoc
-        hypothesis
-        # From some reason the existence of pytest-xdist makes the tests fail
-        # depending on $NIX_BUILD_CORES
-        #pytest-xdist
-        packaging
-        tomlkit
-        uv
-      ];
-      remote_tests = [
-        botocore
-        s3fs
-        moto
-        requests
-      ]
-      ++ moto.optional-dependencies.server
-      ++ moto.optional-dependencies.s3;
       optional = [
         rich
         universal-pathlib
       ];
-      docs = [
-        # Doc building
-        mkdocs-material
-        mkdocs
-        mkdocstrings
-        mkdocstrings-python
-        mike
-        mkdocs-redirects
-        markdown-exec
-        griffe-inherited-docstrings
-        ruff
-        towncrier # Changelog generation
-        # Optional dependencies to run examples
-        rich
-        s3fs
-        astroid
-        #pytest
-      ]
-      ++ mkdocs-material.optional-dependencies.imaging
-      ++ markdown-exec.optional-dependencies.ansi
-      ++ numcodecs.optional-dependencies.msgpack;
     };
   };
 
   nativeCheckInputs = [
+    hypothesis
+    numpydoc
+    pytest-asyncio
     pytestCheckHook
+    tomlkit
   ]
-  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli
-  # Not adding `passthru.optional-dependencies.remote{,_tests}` since the
-  # existence of these Python modules triggers tests that fail in the sandbox
-  # due to failed network requests.
-  ++ finalAttrs.finalPackage.passthru.optional-dependencies.test;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli;
 
   disabledTestPaths = [
     # requires uv and then fails at setting up python envs
     "tests/test_examples.py::test_scripts_can_run[script_path0]"
     # Requires zarr==2.x to generate zarr stores for the tests
     "tests/test_regression"
+    # See also preBuild above.
+    "tests/benchmarks/"
   ];
 
   pythonImportsCheck = [ "zarr" ];

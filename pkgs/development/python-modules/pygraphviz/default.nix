@@ -3,41 +3,59 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
+  stdenv,
   graphviz,
   coreutils,
   pkg-config,
   setuptools,
+  swig,
   pytest,
 }:
 
-buildPythonPackage rec {
+let
+  # TODO: remove once #540793 makes it to master
+  graphviz' = graphviz.override { withQuartz = stdenv.hostPlatform.isDarwin; };
+in
+buildPythonPackage (finalAttrs: {
   pname = "pygraphviz";
-  version = "1.14";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
-    tag = "pygraphviz-${version}";
-    hash = "sha256-RyUmT2djj2GnVG82xO9HULMAJZb2LYMUGDRvCwaYBg8=";
+    tag = "pygraphviz-${finalAttrs.version}";
+    hash = "sha256-AxiaKEmVjofAi6LV1ozOPERqZyOhmBWMLV3GYlhSuNo=";
   };
 
   patches = [
     # pygraphviz depends on graphviz executables and wc being in PATH
     (replaceVars ./path.patch {
       path = lib.makeBinPath [
-        graphviz
+        graphviz'
         coreutils
       ];
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "swig>4.1.0"' ""
+  '';
+
+  env.GRAPHVIZ_PREFIX = graphviz';
+
+  build-system = [
     setuptools
   ];
 
-  buildInputs = [ graphviz ];
+  nativeBuildInputs = [
+    graphviz' # for dot
+    pkg-config
+    swig
+  ];
+
+  buildInputs = [ graphviz' ];
 
   nativeCheckInputs = [ pytest ];
 
@@ -50,6 +68,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygraphviz" ];
 
   meta = {
+    changelog = "https://github.com/pygraphviz/pygraphviz/releases/tag/pygraphviz-${finalAttrs.version}";
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
     license = lib.licenses.bsd3;
@@ -58,4 +77,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

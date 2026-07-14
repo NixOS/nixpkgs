@@ -4,11 +4,14 @@
   rustPlatform,
   pkg-config,
   openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jocalsend";
   version = "1.618033988";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitea {
     domain = "git.kittencollective.com";
@@ -27,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://git.kittencollective.com/nebkor/joecalsend";

@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-docklike-plugin";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "panel-plugins";
     repo = "xfce4-docklike-plugin";
     tag = "xfce4-docklike-plugin-${finalAttrs.version}";
-    hash = "sha256-1R9qQKqn/CIV36GYmyg54t3xiY23qUs5EMLxvAIavK8=";
+    hash = "sha256-p4uRdxwV8cfRPQ3eGfa4/Wt3Im7hgze3UvK9a7pW94o=";
   };
 
   strictDeps = true;

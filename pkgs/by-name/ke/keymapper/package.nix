@@ -47,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/houmain/keymapper";
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
     platforms = lib.platforms.linux;
   };

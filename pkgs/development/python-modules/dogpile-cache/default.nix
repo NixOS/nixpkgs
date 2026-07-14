@@ -3,12 +3,11 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytest-xdist,
   pytestCheckHook,
   mako,
   decorator,
-  stdenv,
   stevedore,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,25 +26,19 @@ buildPythonPackage rec {
   dependencies = [
     decorator
     stevedore
-    typing-extensions
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mako
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: <dogpile.cache.api.NoValue object> != 'some value 1'
-    "test_expire_override"
+  disabledTestPaths = [
     # flaky
-    "test_get_value_plus_created_long_create"
-    "test_get_value_plus_created_registry_safe_cache_quick"
-    "test_get_value_plus_created_registry_safe_cache_slow"
-    "test_get_value_plus_created_registry_unsafe_cache"
-    "test_quick"
-    "test_return_while_in_progress"
-    "test_slow"
+    "tests/cache/test_dbm_backend.py"
+    # timing sensitive
+    "tests/test_lock.py::ConcurrencyTest"
   ];
 
   meta = {

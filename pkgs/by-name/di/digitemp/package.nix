@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   stdenv,
 }:
@@ -14,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "19zka5fcdxhhginaspak76l984iqq9v2j6qrwvi5mvca7bcj8f72";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/bcl/digitemp/commit/fa56b0f78d12f97ac44e0a367d413a9e88611d1c.patch?full_index=1";
+      hash = "sha256-1xyVcZKVPtQDPw48i+4Jv9fQCOq46IQZA2wCa5ukr00=";
+    })
+  ];
 
   enableParallelBuilding = true;
 

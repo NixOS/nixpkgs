@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jboynyc";
     repo = "textnets";
     tag = "v${version}";
-    hash = "sha256-GbJH+6EqfP+miqpYitnBwNDO6uQQq3h9Fy58nVaF1vw=";
+    hash = "sha256-0KBKpA4nnHxem65tZTtZcXl/EVS1ifWOXGT7a/750Gk=";
   };
 
   build-system = [

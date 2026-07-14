@@ -16,6 +16,7 @@
   zenity,
   makeDesktopItem,
   copyDesktopItems,
+  imagemagick,
 }:
 let
   icon = fetchurl {
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     makeBinaryWrapper
     copyDesktopItems
+    imagemagick
   ];
 
   buildInputs = [
@@ -70,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 ${icon} $out/share/pixmaps/Vital.png
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    magick ${icon} -resize 128x128 $out/share/icons/hicolor/128x128/apps/Vital.png
 
     # copy each output to its destination (individually)
     mkdir -p $out/{bin,lib/{clap,vst,vst3}}

@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
           message = ''
             We cannot download the commercial version automatically, as you require a license.
             Once you bought a license, you need to add your downloaded version to the nix store.
-            You can do this by using "nix-prefetch-url file:///\$PWD/${commercialName}" in the
-            directory where yousaved it.
+            You can do this by using "nix-prefetch-url file:///$PWD/${commercialName}" in the
+            directory where you saved it.
           '';
           name = commercialName;
           sha256 =

@@ -8,20 +8,19 @@
 
 buildNimPackage (finalAttrs: {
   pname = "nimmm";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "joachimschmidt557";
     repo = "nimmm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yq91rQlX6bfYHHw72+8m53PCD7hViLe56jAwPTeBBcg=";
+    hash = "sha256-NK2OH5eAlcityUdz9p95Y7iNOX39ed0Krdns1+2NKLU=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
     termbox
-    pcre
   ];
 
   meta = {

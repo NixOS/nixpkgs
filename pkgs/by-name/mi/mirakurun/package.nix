@@ -73,6 +73,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Resource manager for TV tuners";
+    homepage = "https://github.com/Chinachu/Mirakurun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
   };

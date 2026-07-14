@@ -5,7 +5,7 @@
   aiohttp,
   dask,
   distributed,
-  setuptools,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/dask-gateway";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dask
     distributed

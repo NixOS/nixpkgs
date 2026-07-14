@@ -21,18 +21,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mqoYdHpVnivDTblvoaACyCE7Y25cfLj1m0Q5D33zEfk=";
+    hash = "sha256-uCzxv3jyBIFXYoEk2q26rB0Me3MAt1NiINulA1FjQtA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-kArrsHW+cFZQQgIEL+7Os8ixKtuIZAByEr6D4XDmfRE=";
+    hash = "sha256-vqTySi22Gi4WrkNolAIFFbpSmIzjgbIcmW0gkStK6H4=";
   };
 
   nativeBuildInputs = [
@@ -51,12 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    onnxruntime
     openssl
   ];
 
   env = {
     ORT_STRATEGY = "system";
     ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+    ORT_PREFER_DYNAMIC_LINK = "1";
   };
 
   passthru = {

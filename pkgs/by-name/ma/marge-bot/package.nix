@@ -1,36 +1,35 @@
 {
   lib,
-  python3,
   fetchFromGitLab,
+  python3Packages,
   git,
   openssh,
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "marge-bot";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
     rev = finalAttrs.version;
-    hash = "sha256-FKUWVJqkhdxlWcOvyACQo/At0qW9Li+l25+9oCnA4nM=";
+    hash = "sha256-nTVfsprCTa2S/F8GDdDw5SwQw+OrGkHrX/QwU1FZDsw=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
+  build-system = with python3Packages; [
+    hatchling
+    uv-build
   ];
 
-  propagatedBuildInputs =
-    (with python3.pkgs; [
+  dependencies =
+    (with python3Packages; [
       configargparse
-      maya
       pyyaml
       requests
       python-gitlab
-      hatchling
     ])
     ++ [
       git
@@ -38,10 +37,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ];
 
   nativeCheckInputs =
-    (with python3.pkgs; [
+    (with python3Packages; [
       pytest-cov-stub
       pytestCheckHook
-      pendulum
+      python-dateutil
+      time-machine
     ])
     ++ [
       git

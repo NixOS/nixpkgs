@@ -10,7 +10,7 @@
   libxml2,
   libjack2,
   libsndfile,
-  wxGTK32,
+  wxwidgets_3_2,
   libsigcxx,
   libsamplerate,
   rubberband,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libjack2
     libsndfile
-    wxGTK32
+    wxwidgets_3_2
     libsigcxx
     libsamplerate
     rubberband

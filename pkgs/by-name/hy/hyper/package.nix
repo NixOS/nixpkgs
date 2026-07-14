@@ -112,7 +112,6 @@ stdenv.mkDerivation rec {
     homepage = "https://hyper.is/";
     maintainers = with lib.maintainers; [
       puffnfresh
-      fabiangd
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;

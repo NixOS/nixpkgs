@@ -25,16 +25,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.28.2";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-iX5hEaQwCW9MuyafjXml8jV3EDnxRNUlOoy3Cur/Iyw=";
+    hash = "sha256-jbB0nmXtc95Ac+YfmyELh6n5OTRMmeDPT4OFIlJNrZc=";
   };
 
-  cargoHash = "sha256-KljaAzYHbny7KHOO51MotdmNpHCKWdt6kc/FIpFN6c0=";
+  cargoHash = "sha256-m/KoXNJh00zYKZo7MIJsBvo4zldfKdofrUh8AItJqXI=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -78,9 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # TODO: Investigate this.
   doCheck = !stdenv.hostPlatform.isDarwin;
   # Random failures when running tests in parallel.
-  preCheck = ''
-    export NIX_BUILD_CORES=1
-  '';
+  dontUseCargoParallelTests = true;
 
   # skip failing tests
   checkFlags = [
@@ -89,7 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=suite::cli_exact::check_updates_some"
     "--skip=suite::cli_exact::check_updates_with_update"
     # rustup-init is not used in nix rustup
-    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+    "--skip=suite::cli_rustup_init_ui"
+    # reaches out to the network to test TLS roots, which can't be done in the
+    # build sandbox
+    "--skip=suite::static_roots::store_static_roots"
   ];
 
   postInstall = ''

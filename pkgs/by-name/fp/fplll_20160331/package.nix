@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   ];
   meta = {
     description = "Lattice algorithms using floating-point arithmetic";
+    homepage = "https://github.com/fplll/fplll";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

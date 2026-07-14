@@ -58,9 +58,9 @@ let
   patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
     ls -d \
       $out/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/bin/*/linux/*/lib/python3.8/lib-dynload/* \
+      $out/*/bin/*/linux/*/lib/python3.*/lib-dynload/* \
       $out/*/plugins/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/plugins/*/bin/*/linux/*/lib/python3.8/lib-dynload/* |
+      $out/*/plugins/*/bin/*/linux/*/lib/python3.*/lib-dynload/* |
     xargs patchelf \
       --replace-needed libssl.so.10 libssl.so \
       --replace-needed libssl.so.1.1 libssl.so \

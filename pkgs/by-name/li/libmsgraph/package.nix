@@ -7,7 +7,7 @@
   meson,
   ninja,
   pkg-config,
-  uhttpmock_1_0,
+  uhttpmock,
   libxml2,
   glib,
   gnome-online-accounts,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    uhttpmock_1_0
+    uhttpmock
     libxml2
   ];
 

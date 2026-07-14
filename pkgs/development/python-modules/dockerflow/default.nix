@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "dockerflow";
-  version = "2026.01.26";
+  version = "2026.03.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "python-dockerflow";
     tag = version;
-    hash = "sha256-wtofNcpsOAq2yQJf6n+DcVfzY+IQ2k6S8r2zHIWAosg=";
+    hash = "sha256-cNf9qsoIJY5aRsQ82WZPmOrq2V6Siidp2B36JFTnMVw=";
   };
 
   build-system = [

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.21.1";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "evcxr";
     repo = "evcxr";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-8dV+NNtU4HFerrgRyc1kO+MSsMTJJItTtJylEIN014g=";
@@ -91,7 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Evaluation context for Rust";
-    homepage = "https://github.com/google/evcxr";
+    homepage = "https://github.com/evcxr/evcxr";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       protoben

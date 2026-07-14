@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rnhmjoj
-      sbruder
       snaki
     ];
     mainProgram = "vspipe";

@@ -33,7 +33,6 @@ let
     maintainers = with lib.maintainers; [
       khaneliman
       timstott
-      sebtm
       bdd
     ];
     platforms = [

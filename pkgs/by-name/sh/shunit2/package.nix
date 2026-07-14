@@ -10,14 +10,14 @@
   ncurses,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "shunit2";
   version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "kward";
     repo = "shunit2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IZHkgkVqzeh+eEKCDJ87sqNhSA+DU6kBCNDdQaUEeiM=";
   };
 
@@ -102,4 +102,4 @@ resholve.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "shunit2";
   };
-}
+})

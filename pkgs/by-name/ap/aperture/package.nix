@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aperture";
-  version = "0.3-beta";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "aperture";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PsmaNJxWkXiFDA7IGhT+Kx1GUvv23c8L8Jz21/b48oo=";
+    hash = "sha256-XVLpIuBCavCbHcSMPFmxNxtdkr+jYy/AYjffzyKSYOg=";
   };
 
-  vendorHash = "sha256-rrDLdE7c6ykhdqOfRpuxyRO4xqYp3LZvovAppzy1wVw=";
+  vendorHash = "sha256-I7StCuL8UifVXBvchG0VRWA5nZc+nwIpK6+PQfkVGGo=";
 
   subPackages = [ "cmd/aperture" ];
 

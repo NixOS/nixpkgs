@@ -14,6 +14,7 @@
   prompt-toolkit,
   setuptools,
   tkinter,
+  tstr,
   watchdog,
 }:
 
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     pygments
     prompt-toolkit
     setuptools
+    tstr
     watchdog
   ];
 

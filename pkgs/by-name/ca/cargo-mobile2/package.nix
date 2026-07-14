@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mobile2";
-  version = "0.22.2";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "cargo-mobile2";
     rev = "cargo-mobile2-v${finalAttrs.version}";
-    hash = "sha256-pSp7w823Jjjg0PEnCc7jVLBbOgvR7JAjtD8OK5voC0A=";
+    hash = "sha256-DjoWjdgfNHLZkaWUjPq4tNrmHsifKKhBaRjK25WRdiE=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-aci1QF/O2J6Yix4UkxPCVW+c+xoqm7AvdhlkF7y1GqA=";
+  cargoHash = "sha256-m+9wPfheH9t7zxTsW7vHe4td/gyeC/nXFDHRGjK5XBg=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [

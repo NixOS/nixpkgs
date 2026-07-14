@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp -r . $out
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
-      --set PATH ${
+      --prefix PATH ${
         lib.makeBinPath [
           (placeholder "out")
           coreutils

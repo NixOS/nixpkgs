@@ -5,8 +5,10 @@
   fetchurl,
   cmake,
   pkg-config,
+  installShellFiles,
   libusb1,
   openssl,
+  stdenv,
 }:
 
 let
@@ -16,26 +18,27 @@ let
     hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
   };
 
   cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
 
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   nativeBuildInputs = [
     # required by libz-sys, no option for dynamic linking
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -45,6 +48,12 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd probe-rs \
+      --bash <(SHELL=bash $out/bin/probe-rs complete install -m) \
+      --fish <(SHELL=fish $out/bin/probe-rs complete install -m) \
+      --zsh <(SHELL=zsh $out/bin/probe-rs complete install -m)
   '';
 
   checkFlags = [
@@ -76,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
-    changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/probe-rs/probe-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -86,4 +95,4 @@ rustPlatform.buildRustPackage rec {
       newam
     ];
   };
-}
+})

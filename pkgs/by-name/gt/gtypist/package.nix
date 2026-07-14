@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     wrapProgram "$out/bin/typefortune" \
-      --prefix PATH : "${fortune}/bin" \
+      --prefix PATH : "${fortune}/bin"
   '';
 
   meta = {

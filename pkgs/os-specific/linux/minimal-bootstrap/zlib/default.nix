@@ -13,11 +13,11 @@
 }:
 let
   pname = "zlib";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.xz";
-    hash = "sha256-OO+WuN/lENQnB9nHgYd5FHklQRM+GHCEFGO/pz+IPjI=";
+    hash = "sha256-16BlR4Ok2lKdG7eTt62cMxgCCvd2Z7yuNfldDkKnkvM=";
   };
 in
 bash.runCommand "${pname}-${version}"

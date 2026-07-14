@@ -3,27 +3,27 @@
   buildPythonPackage,
   chameleon,
   fetchFromGitHub,
+  gitpython,
   importlib-metadata,
   lingva,
   numpy,
   polib,
   pytest-cov-stub,
-  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "holidays";
-  version = "0.89";
+  version = "0.100";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vacanza";
     repo = "python-holidays";
-    tag = "v${version}";
-    hash = "sha256-g7f0364Xxz+jTjgA8y0nEPbzNalQdMLdwoBZ2odq1W0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PY2N/UysRcz8AWQQ8cA4WlY0jVV6mpxhzVE65uLuWPg=";
   };
 
   build-system = [
@@ -32,15 +32,15 @@ buildPythonPackage rec {
     # l10n
     lingva
     chameleon
+    gitpython
     polib
   ];
 
   postPatch = ''
     patchShebangs scripts/l10n/*.py
 
-    # generating l10n files imports holidays before distinfo metadata exists
     substituteInPlace holidays/version.py \
-      --replace-fail 'version("holidays")' '"${version}"'
+      --replace-fail 'version("holidays")' '"${finalAttrs.version}"'
   '';
 
   preBuild = ''
@@ -56,7 +56,6 @@ buildPythonPackage rec {
     numpy
     polib
     pytest-cov-stub
-    pytest-xdist
     pytestCheckHook
   ];
 
@@ -65,11 +64,11 @@ buildPythonPackage rec {
   meta = {
     description = "Generate and work with holidays in Python";
     homepage = "https://github.com/vacanza/python-holidays";
-    changelog = "https://github.com/vacanza/holidays/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/vacanza/holidays/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       jluttine
     ];
   };
-}
+})

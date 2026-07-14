@@ -3,25 +3,20 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
-  copyDesktopItems,
-  curl,
-  perl,
   pkg-config,
   protobuf,
   fontconfig,
-  freetype,
   libgit2,
   openssl,
   sqlite,
   zlib,
   zstd,
+  glib,
   alsa-lib,
   libxkbcommon,
   wayland,
-  libglvnd,
   libxcb,
   stdenv,
-  makeFontsConf,
   vulkan-loader,
   envsubst,
   nix-update-script,
@@ -30,23 +25,18 @@
   buildFHSEnv,
   cargo-bundle,
   git,
-  apple-sdk_15,
-  darwinMinVersionHook,
   makeBinaryWrapper,
   nodejs,
   libGL,
   libx11,
   libxext,
   livekit-libwebrtc,
+  lld,
   testers,
   writableTmpDirAsHomeHook,
 
-  withGLES ? false,
   buildRemoteServer ? true,
-  zed-editor,
 }:
-
-assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
   channel = "stable";
@@ -75,6 +65,9 @@ let
           glibc
           # required by at least https://github.com/zed-industries/package-version-server
           openssl
+          # required by at least the Codex CLI agent
+          libcap
+          zlib
         ])
         ++ additionalPkgs pkgs;
 
@@ -102,12 +95,10 @@ let
         '';
       };
     };
-
-  gpu-lib = if withGLES then libglvnd else vulkan-loader;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.225.13";
+  version = "1.10.0";
 
   outputs = [
     "out"
@@ -120,54 +111,58 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ozuycL8dnBtgyYYjsz9C+CDtZQzbXWWZVOkxbOs7hho=";
+    hash = "sha256-KLoowntT7rrUWJdZ+uA2qvKih+Ygo58RIxd5jR7fFYE=";
   };
 
   postPatch = ''
+    # Disable upstream's rustflags overrides to avoid linker issues
+    rm .cargo/config.toml
+
     # Dynamically link WebRTC instead of static
-    substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+    substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
 
     # The generate-licenses script wants a specific version of cargo-about eventhough
     # newer versions work just as well.
     substituteInPlace script/generate-licenses \
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # webrtc-sys expects glib headers to be in the sysroot, so we have to point it in the right direction
+    substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
+      --replace-fail 'builder.include(&glib_path);' 'builder.include("${lib.getInclude glib}/include/glib-2.0");' \
+      --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
+  cargoHash = "sha256-HzDxvX72H3nLmfI0nIGZISpoF5vTiPj+hT/pz/6MUF4=";
 
-  cargoHash = "sha256-G5U0APQNNEe2qpshqX4QpQGbqIAHllatbbsaVAhDoG0=";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
-    curl
-    perl
     pkg-config
     protobuf
-    rustPlatform.bindgenHook
     cargo-about
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+    lld
+    rustPlatform.bindgenHook
+  ];
 
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    curl
-    fontconfig
-    freetype
     libgit2
-    openssl
     sqlite
     zlib
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    openssl
+    glib
     alsa-lib
     libxkbcommon
     wayland
@@ -178,10 +173,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_15
-    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-    # https://developer.apple.com/documentation/screencapturekit
-    (darwinMinVersionHook "12.3")
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [
@@ -192,41 +185,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui_platform/runtime_shaders" ];
 
   # Some crates define extra types or enum values in test configuration which then lead
   # to type checking errors in other crates unless this feature is enabled.
-  # gpui/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # gpui_platform/runtime_shaders is required on darwin for the same reason as buildFeatures above:
   # without it, build.rs invokes the proprietary Metal shader compiler.
   checkFeatures = [
     "visual-tests"
   ]
   ++ finalAttrs.buildFeatures;
 
-  # cargo-nextest does not support the `=` syntax for parameters, so all test skips must be defined
-  # as two separate arguments
-  checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails on Linux since v0.225, possibly related to https://github.com/zed-industries/zed/pull/48800
-    "--skip"
-    "zed::tests::test_window_edit_state_restoring_enabled"
-  ];
-
   env = {
     ALLOW_MISSING_LICENSES = true;
+    OPENSSL_NO_VENDOR = true;
+    LIBGIT2_NO_VENDOR = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    FONTCONFIG_FILE = makeFontsConf {
-      fontDirectories = [
-        "${finalAttrs.src}/assets/fonts/plex-mono"
-        "${finalAttrs.src}/assets/fonts/plex-sans"
-      ];
-    };
     # Setting this environment variable allows to disable auto-updates
     # https://zed.dev/docs/development/linux#notes-for-packaging-zed
     ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
-    RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   preBuild = ''
@@ -234,8 +220,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
-    patchelf --add-rpath ${wayland}/lib $out/libexec/*
+    patchelf $out/libexec/zed-editor --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        vulkan-loader
+        wayland
+      ]
+    }
     wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
@@ -256,21 +247,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/zed target/release/zed
 
     pushd crates/zed
-
     # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
     sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
     export CARGO_BUNDLE_SKIP_BUILD=true
     app_path=$(cargo bundle --release | xargs)
-
-    # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
-    # Remove closing tags from Info.plist (last two lines)
-    head -n -2 $app_path/Contents/Info.plist > Info.plist
-    # Append extensions
-    cat resources/info/*.plist >> Info.plist
-    # Add closing tags
-    printf "</dict>\n</plist>\n" >> Info.plist
-    mv Info.plist $app_path/Contents/Info.plist
-
     popd
 
     mkdir -p $out/Applications $out/bin
@@ -287,7 +267,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm755 $release_target/zed $out/libexec/zed-editor
     install -Dm755 $release_target/cli $out/bin/zeditor
 
-    install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+    install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/512x512@2/apps/zed.png
     install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
     # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
@@ -339,9 +319,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         package = finalAttrs.finalPackage.remote_server;
         command = "${finalAttrs.remoteServerExecutableName} version";
       };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      withGles = zed-editor.override { withGLES = true; };
     };
   };
 
@@ -353,6 +330,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
+      mjm
+      schembriaiden
     ];
     mainProgram = "zeditor";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

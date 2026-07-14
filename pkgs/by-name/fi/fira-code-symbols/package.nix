@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -13,13 +14,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-7y51blEn0Osf8azytK08zJgtfVX/CIWQkiOoRzYKIa4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "FiraCode unicode ligature glyphs in private use area";
@@ -29,7 +24,7 @@ stdenvNoCC.mkDerivation {
       See https://github.com/tonsky/FiraCode/issues/211.
     '';
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

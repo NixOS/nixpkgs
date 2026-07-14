@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "20250730";
+  version = "20260624";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     tag = "releases/${version}";
-    hash = "sha256-85Dj+r6heusvT3+y3SNYBBa5h/tje0G4XHmfJpCwkMY=";
+    hash = "sha256-7wI7GKMdj28ef6M8eqkeuLytliU0D3arE0IXk5uhVfg=";
   };
 in
 python3Packages.buildPythonApplication {

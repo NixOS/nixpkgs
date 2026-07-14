@@ -49,7 +49,7 @@ stdenv'.mkDerivation (finalAttrs: {
   pname = "uhd";
   # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
   #
-  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
+  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --arg commit true
   #
   version = "4.9.0.1";
 

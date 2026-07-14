@@ -48,22 +48,34 @@ let
     ];
   };
 
-  chromeDir =
-    {
-      x86_64-linux = "chrome-linux64";
-      aarch64-linux = "chrome-linux";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  # Playwright's upstream chromium-headless-shell zips use different directory
+  # names per architecture (chrome-headless-shell-linux64 vs chrome-linux).
+  chrome =
+    let
+      browsers = playwright-driver.selectBrowsers {
+        withChromiumHeadlessShell = true;
+        withChromium = false;
+        withFirefox = false;
+        withWebkit = false;
+        withFfmpeg = false;
+      };
+      chromeDir =
+        {
+          x86_64-linux = "chrome-headless-shell-linux64";
+        }
+        .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    in
+    "${browsers}/chromium_headless_shell-*/${chromeDir}/chrome-headless-shell";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.5";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S6MjWXiB3eJLy5V1kQsGD1zzce/trIGUwadDlDxZMiE=";
+    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
   };
 
   patches = [
@@ -77,12 +89,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
     */
     ./01-localfont.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/linkwarden/linkwarden/blob/main/package.json#L3
+    ./02-yarn-4.14-support.patch
   ];
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-TCjTG3nbS7uTJA9eVe0imR6+s73yu2FU8Vk3nwRKd4c=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
   };
 
   nativeBuildInputs = [
@@ -131,7 +147,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postBuild = ''
     substituteInPlace node_modules/next/dist/server/image-optimizer.js \
-      --replace-fail 'this.cacheDir = (0, _path.join)(distDir, "cache", "images");' 'this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, "cache", "images");'
+      --replace-fail "this.cacheDir = (0, _path.join)(distDir, 'cache', 'images');" "this.cacheDir = (0, _path.join)(process.env.LINKWARDEN_CACHE_DIR, 'cache', 'images');"
   '';
 
   installPhase = ''
@@ -181,7 +197,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines_6}/lib/libquery_engine.node" \
       --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines_6}/bin/query-engine" \
       --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines_6}/bin/schema-engine" \
-      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/${chromeDir}/chrome \
+      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${chrome} \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \

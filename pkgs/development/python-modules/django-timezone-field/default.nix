@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "django-timezone-field";
-  version = "7.2.1";
+  version = "7.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mfogel";
     repo = "django-timezone-field";
     tag = version;
-    hash = "sha256-iOdWgLj6qzMYusfpG/aCBk3ca9Ge7Kx2p9herJtpORs=";
+    hash = "sha256-EGjBzKTYXTShrPIHfBIm1LqzYGuxew7ptvlGppXOYSY=";
   };
 
   build-system = [ poetry-core ];

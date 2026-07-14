@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.37.2";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xs8UmHKtu+fzNrw77JAifkxDOAx1w/UUKK/4rhWjf2I=";
+    hash = "sha256-0f1MM9iXjYuj7Anu6TMVtAjo3fg0IeOyrKfpeODrvA8=";
   };
 
-  cargoHash = "sha256-iEWdN6xVXrZiAcsung9LrsTsJdx3cnlr6x3NMrKSi+k=";
+  cargoHash = "sha256-oDAA4lFfp/zMQ2gm595OgnNyP3tiPSC1M0hiozOH/ss=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs)
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-jAzIaLRACIDjsn8bHTr3erBoC/02jz8xhyHpFxwH+Y4=";
+    hash = "sha256-aZSBKEVftMfPuIOnwc/ykbjdmb3Np+gJl1Jq9yv4pck=";
   };
 
   nativeBuildInputs = [

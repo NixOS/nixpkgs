@@ -8,6 +8,7 @@
   darwin,
   ninja,
   pkg-config,
+  python3,
   writableTmpDirAsHomeHook,
 
   # buildInputs
@@ -29,13 +30,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlcompressor";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLCompressor";
     tag = finalAttrs.version;
-    hash = "sha256-u+2cfCNjMUXo+7/qBUU4BdDQcUyeQfd9kvARi3AAK48=";
+    hash = "sha256-vSGadtUm6AEWEaNr3gCybEtc7NY3s3SQi8UVXoRsKCA=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    python3
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [ darwin.sigtool ];
@@ -93,6 +95,20 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+    # Highway is vendored as a submodule and built in single-target static
+    # dispatch mode (HWY_COMPILE_ONLY_STATIC), so exactly one SIMD target must
+    # be picked at build time. Accepted values: SSE2 / SSE4 / AVX2 / NEON.
+    #
+    # We pick SSE2 on x86_64 because that's the only SIMD extension guaranteed
+    # by nixpkgs' baseline x86_64-linux platform.
+    # Users who know their CPU supports more can opt in per-package:
+    #
+    #   zlcompressor.overrideAttrs (old: {
+    #     cmakeFlags = (old.cmakeFlags or []) ++ [ "-DZL_HWY_STATIC_TARGET=AVX2" ];
+    #   })
+    (lib.cmakeFeature "ZL_HWY_STATIC_TARGET" (
+      if clangStdenv.hostPlatform.isAarch64 then "NEON" else "SSE2"
+    ))
     # set the version for in the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
   ];

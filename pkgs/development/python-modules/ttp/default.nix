@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp";
     tag = version;
-    hash = "sha256-W1y84zHRhB8UGUfO5jV2k9epd9kaXUPqzT71URjm4TQ=";
+    hash = "sha256-A0McQRpSjr0EYIrHQExtBqMe+AmL+IGWaRHeexyvtvg=";
   };
 
   nativeBuildInputs = [ poetry-core ];

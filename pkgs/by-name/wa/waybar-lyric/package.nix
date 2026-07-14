@@ -1,24 +1,27 @@
 {
   stdenv,
   lib,
+  ffmpeg,
+  makeWrapper,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   installShellFiles,
+  withEmbeddedLyric ? false,
 }:
 buildGoModule (finalAttrs: {
   pname = "waybar-lyric";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Nadim147c";
     repo = "waybar-lyric";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2zK0dQtqjbZJYqTOnDtTxnoXeW+zOhWK7RcinhZ5ob4=";
+    hash = "sha256-5tMRAq37CZQYemXfJwmj9cj1gR5i9Zii9fqTPDCw45A=";
   };
 
-  vendorHash = "sha256-TeAZDSiww9/v3uQl8THJZdN/Ffp+FsZ3TsRStE3ndKA=";
+  vendorHash = "sha256-zVyUxpAqsWY3/dXlBhPX/o41UP5Afn38JauQsWUqLMk=";
 
   ldflags = [
     "-s"
@@ -26,13 +29,24 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd waybar-lyric \
-      --bash <($out/bin/waybar-lyric _carapace bash) \
-      --fish <($out/bin/waybar-lyric _carapace fish) \
-      --zsh <($out/bin/waybar-lyric _carapace zsh)
-  '';
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
+
+  propagatedBuildInputs = lib.optional withEmbeddedLyric ffmpeg;
+
+  postInstall =
+    lib.optionalString withEmbeddedLyric ''
+      wrapProgram $out/bin/waybar-lyric \
+        --prefix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd waybar-lyric \
+        --bash <($out/bin/waybar-lyric _carapace bash) \
+        --fish <($out/bin/waybar-lyric _carapace fish) \
+        --zsh <($out/bin/waybar-lyric _carapace zsh)
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

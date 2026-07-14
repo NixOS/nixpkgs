@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonAtLeast,
   typing-extensions,
 }:
 
@@ -14,15 +14,21 @@ buildPythonPackage rec {
   version = "4.1.0";
   pyproject = true;
 
-  # https://github.com/ReactiveX/RxPY/issues/737
-  disabled = pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "RxPY";
     tag = "v${version}";
     hash = "sha256-napPfp72gqy43UmkPu1/erhjmJbZypHZQikmjIFVBqA=";
   };
+
+  patches = [
+    # Upstream PR: https://github.com/ReactiveX/RxPY/pull/728
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/ReactiveX/RxPY/commit/78f4a594ca2b0e27ad93ec0e1b1c0d56d5d6540d.patch";
+      hash = "sha256-1GQm/4BTd5ZnIqfEUSb0Ja3w0y1R9EoFpzwua7gpIzo=";
+    })
+  ];
 
   build-system = [ poetry-core ];
 

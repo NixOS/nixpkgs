@@ -8,13 +8,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "voikko-fi";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "voikko";
     repo = "corevoikko";
     tag = "rel-voikko-fi-${finalAttrs.version}";
-    hash = "sha256-0MIQ54dCxyAfdgYWmmTVF+Yfa15K2sjJyP1JNxwHP2M=";
+    hash = "sha256-yYV8DHhILpcAG9gbEO67fdrX44Z2hOqkLbp9bBTSNuk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/voikko-fi";

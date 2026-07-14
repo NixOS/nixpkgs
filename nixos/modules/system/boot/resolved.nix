@@ -185,7 +185,11 @@ in
       # added with order 501 to allow modules to go before with mkBefore
       system.nssDatabases.hosts = (mkOrder 501 [ "resolve [!UNAVAIL=return]" ]);
 
-      systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-resolved.service"
+        "systemd-resolved-monitor.socket"
+        "systemd-resolved-varlink.socket"
+      ];
 
       systemd.services.systemd-resolved = {
         wantedBy = [ "sysinit.target" ];
@@ -219,6 +223,10 @@ in
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";
 
+      # Since we explicitly provide a resolv.conf, disable resolvconf
+      networking.resolvconf.enable = false;
+
+      # ... but we still set the package for correct compatibility.
       networking.resolvconf.package = config.systemd.package;
 
       nix.firewall.extraNftablesRules = [
@@ -244,7 +252,12 @@ in
         tmpfiles.settings.systemd-resolved-stub."/etc/resolv.conf".L.argument =
           "/run/systemd/resolve/stub-resolv.conf";
 
-        additionalUpstreamUnits = [ "systemd-resolved.service" ];
+        additionalUpstreamUnits = [
+          "systemd-resolved.service"
+          "systemd-resolved-monitor.socket"
+          "systemd-resolved-varlink.socket"
+        ];
+
         users.systemd-resolve = { };
         groups.systemd-resolve = { };
         storePaths = [ "${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved" ];

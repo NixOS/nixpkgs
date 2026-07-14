@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mdds";
-  version = "2.1.1";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "mdds";
     repo = "mdds";
     rev = finalAttrs.version;
-    hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    hash = "sha256-8xI0RmxMDvXp2rPWEd6Yu2i7q3ba8nSLBMF8SKjdIBs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -93,6 +93,8 @@ buildPythonPackage rec {
     "test_driver_version"
     # AssertionError: assert [call('WATCH'..., 'test-tag')] ==...
     "test_global_keyprefix_transaction"
+    # Broken on latest redis-py, see https://github.com/celery/kombu/issues/2362
+    "test_connparams_health_check_interval_supported"
   ];
 
   meta = {

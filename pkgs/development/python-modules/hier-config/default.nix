@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hier-config";
-  version = "3.4.1";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netdevops";
     repo = "hier_config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XIRR73H2OnTqDNrwP/GkMVUGnCyWSecwMj/AOeRvpyQ=";
+    hash = "sha256-reOfBIl5+kEEqOT+ZS40FDsNA/xkhLGfcf1LEbIpVlI=";
   };
 
   build-system = [ poetry-core ];
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module to handle hierarchical configurations";
     homepage = "https://github.com/netdevops/hier_config";
-    changelog = "https://github.com/netdevops/hier_config/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/netdevops/hier_config/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

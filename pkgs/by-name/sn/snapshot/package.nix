@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   libglycin,
+  libglycin-gtk4,
   glycin-loaders,
   cargo,
   desktop-file-utils,
@@ -25,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "49.1";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NVj2+ODTiylQtrrZue7COCSb7f7c5w+1iijK1pRebOk=";
+    hash = "sha256-7J2vmIPrkDMJEbtR5rae7YydvdVDjoZK3JDuVaX+nu0=";
   };
 
   cargoVendorDir = "vendor";
@@ -37,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cargo
     desktop-file-utils
-    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -48,7 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    libglycin
     libglycin.setupHook
+    libglycin-gtk4
     glycin-loaders
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
@@ -65,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
-      "'src' / rust_target / meson.project_name()" \
-      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+      "'cp', cargo_target / rust_target / meson.project_name()" \
+      "'cp', cargo_target / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   preFixup = ''

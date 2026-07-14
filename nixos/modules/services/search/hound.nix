@@ -11,7 +11,7 @@ let
     name = "hound-config.json";
     text = builtins.toJSON cfg.settings;
     checkPhase = ''
-      ${cfg.package}/bin/houndd -check-conf -conf $out
+      ${cfg.package}/bin/houndd -check-config -conf $out
     '';
   };
 in

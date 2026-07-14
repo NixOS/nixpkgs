@@ -1,37 +1,42 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   replaceVars,
   pkg-config,
   glib,
   shadow,
   gobject-introspection,
   polkit,
-  systemd,
+  systemdLibs,
   coreutils,
   meson,
   mesonEmulatorHook,
   dbus,
+  json_c,
   ninja,
   python3,
   vala,
   gettext,
   libxcrypt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accountsservice";
-  version = "23.13.9";
+  version = "26.13.3";
 
   outputs = [
     "out"
     "dev"
   ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${finalAttrs.version}.tar.xz";
-    sha256 = "rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "accountsservice";
+    repo = "accountsservice";
+    tag = finalAttrs.version;
+    hash = "sha256-ZIfkBlEaITX2rDcV5al4e2IFP238MXOlWeGoh+3+DoQ=";
   };
 
   patches = [
@@ -73,8 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     gettext
     glib
+    json_c
     polkit
-    systemd
+    systemdLibs
     libxcrypt
   ];
 
@@ -97,9 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+
+    substituteInPlace meson.build \
+      --replace-fail "run_command(['./generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
   '';
 
+  passthru.tests = { inherit (nixosTests) accountsservice; };
+
   meta = {
+    changelog = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/releases/${finalAttrs.src.tag}";
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = lib.licenses.gpl3Plus;

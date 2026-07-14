@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Analyze dump files produced by Zebra/Quagga or MRT";
     license = lib.licenses.hpnd;
     maintainers = with lib.maintainers; [ lewo ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.unix;
     mainProgram = "bgpdump";
   };
 })

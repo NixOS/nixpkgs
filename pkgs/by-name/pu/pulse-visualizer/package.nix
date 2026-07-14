@@ -6,12 +6,14 @@
   ninja,
   pkg-config,
   sdl3,
+  sdl3-image,
   libpulseaudio,
   pipewire,
   fftwFloat,
   freetype,
   glew,
   libGL,
+  curl,
   yaml-cpp,
   libebur128,
   clang,
@@ -19,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pulse-visualizer";
-  version = "1.2.2";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "Audio-Solutions";
     repo = "pulse-visualizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OnZDNNDmN+OgsfzyPOtlpy8alt62WA6BNhNPJTtrHsU=";
+    hash = "sha256-IzJXFbsbpRszJEpU98exK4EKGU8kHH51BZzokJwzPzU=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3
+    sdl3-image
     libpulseaudio
     pipewire
     fftwFloat
     freetype
     glew
     libGL
+    curl
     yaml-cpp
     libebur128
   ];

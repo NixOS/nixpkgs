@@ -55,6 +55,7 @@ bash.runCommand "${pname}-${version}"
       --disable-dependency-tracking
 
     # Build
+    # NOTE: parallel build (-j) under tinycc-bootstrappable is unstable; keep serial.
     make
 
     # Install

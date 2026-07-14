@@ -83,6 +83,12 @@
     "project_path": "pim/akonadi-contacts",
     "repo_path": "pim/akonadi-contacts"
   },
+  "akonadi-e2e-tests": {
+    "description": "Test suite for end-to-end testing of Akonadi Resources against real servers.",
+    "name": "akonadi-e2e-tests",
+    "project_path": "pim/akonadi-e2e-tests",
+    "repo_path": "pim/akonadi-e2e-tests"
+  },
   "akonadi-exchange": {
     "description": "Akonadi plugin for Exchange groupware functionality",
     "name": "akonadi-exchange",
@@ -406,6 +412,12 @@
     "name": "aurorae",
     "project_path": "base/aurorae",
     "repo_path": "plasma/aurorae"
+  },
+  "auto-chmod": {
+    "description": "Replaces the cryptic \"permission denied\" error when running a non-executable file with a prompt asking if you want to make it executable and run it.",
+    "name": "auto-chmod",
+    "project_path": "system/auto-chmod",
+    "repo_path": "system/auto-chmod"
   },
   "automoc": {
     "description": "Automoc",
@@ -948,7 +960,7 @@
     "repo_path": "multimedia/dragon"
   },
   "drawy": {
-    "description": "Your handy, infinite, brainstorming tool!",
+    "description": "Your handy, infinite brainstorming tool!",
     "name": "drawy",
     "project_path": "graphics/drawy",
     "repo_path": "graphics/drawy"
@@ -1169,11 +1181,11 @@
     "project_path": "third-party/gpgme",
     "repo_path": null
   },
-  "gpgmepp": {
+  "gpgmepp-legacy": {
     "description": "GPGME++ Library",
-    "name": "gpgmepp",
-    "project_path": "unmaintained/gpgmepp",
-    "repo_path": "unmaintained/gpgmepp"
+    "name": "gpgmepp-legacy",
+    "project_path": "unmaintained/gpgmepp-legacy",
+    "repo_path": "unmaintained/gpgmepp-legacy"
   },
   "granatier": {
     "description": "Granatier is a clone of the classic Bomberman game",
@@ -1475,6 +1487,12 @@
     "project_path": "kdesdk/kapptemplate",
     "repo_path": "sdk/kapptemplate"
   },
+  "kapsule": {
+    "description": "Incus-based container management with native KDE/Plasma integration",
+    "name": "kapsule",
+    "project_path": "kde-linux/kapsule",
+    "repo_path": "kde-linux/kapsule"
+  },
   "karchive": {
     "description": "Qt addon providing access to numerous types of archives",
     "name": "karchive",
@@ -1498,6 +1516,12 @@
     "name": "kartesio",
     "project_path": "edu/kartesio",
     "repo_path": "education/kartesio"
+  },
+  "karton": {
+    "description": "Libvirt-based Virtual Machine Manager for KDE.",
+    "name": "karton",
+    "project_path": "system/karton",
+    "repo_path": "system/karton"
   },
   "kasts": {
     "description": "Kirigami-based podcast player",
@@ -1696,6 +1720,12 @@
     "name": "kconfig",
     "project_path": "frameworks/kconfig",
     "repo_path": "frameworks/kconfig"
+  },
+  "kconfigeditor": {
+    "description": "Graphical editor for KConfig files",
+    "name": "kconfigeditor",
+    "project_path": "system/kconfigeditor",
+    "repo_path": "system/kconfigeditor"
   },
   "kconfigwidgets": {
     "description": "Widgets for KConfig",
@@ -2471,6 +2501,12 @@
     "project_path": "libs/kdocumentstore",
     "repo_path": "libraries/kdocumentstore"
   },
+  "kdominate": {
+    "description": "KDominate is a tactical game for one or two players, where players place and convert tiles with the goal of controlling the majority of the board.",
+    "name": "kdominate",
+    "project_path": "games/kdominate",
+    "repo_path": "games/kdominate"
+  },
   "kdots": {
     "description": "Game to catch your opponent's dots by placing your dots on the game board where the lines cross",
     "name": "kdots",
@@ -2506,6 +2542,12 @@
     "name": "keepsecret",
     "project_path": "utilities/keepsecret",
     "repo_path": "utilities/keepsecret"
+  },
+  "kemoji": {
+    "description": "Framework providing an emoji dictionary, model, search and basic components for use in applications.",
+    "name": "kemoji",
+    "project_path": "libraries/kemoji",
+    "repo_path": "libraries/kemoji"
   },
   "kemoticons": {
     "description": "KEmoticons",
@@ -2873,11 +2915,23 @@
     "project_path": "libs/kirigami-addons",
     "repo_path": "libraries/kirigami-addons"
   },
+  "kirigami-app-components": {
+    "description": "Kirigami addons and modules necessary to do a full featured KDE application, such as integration with configurable keyboard shortcuts and standard actions.",
+    "name": "kirigami-app-components",
+    "project_path": "libraries/kirigami-app-components",
+    "repo_path": "libraries/kirigami-app-components"
+  },
   "kirigami-gallery": {
     "description": "Kirigami component gallery application",
     "name": "kirigami-gallery",
     "project_path": "kdesdk/kirigami-gallery",
     "repo_path": "sdk/kirigami-gallery"
+  },
+  "kirigami-workbench": {
+    "description": "Kirigami Workbench is designed for learning and prototyping with QML and Kirigami, whether you're experimenting for the first time or developing and testing a user interface",
+    "name": "kirigami-workbench",
+    "project_path": "sdk/kirigami-workbench",
+    "repo_path": "sdk/kirigami-workbench"
   },
   "kiriki": {
     "description": "Kiriki is an addictive and fun dice game",
@@ -2920,6 +2974,12 @@
     "name": "kitinerary-workbench",
     "project_path": "pim/kitinerary-workbench",
     "repo_path": "pim/kitinerary-workbench"
+  },
+  "kjar": {
+    "description": "OpenJDK SDK as a runnable Flatpak with a Kirigami interface",
+    "name": "kjar",
+    "project_path": "system/kjar",
+    "repo_path": "system/kjar"
   },
   "kjobwidgets": {
     "description": "KJobWidgets",
@@ -3053,6 +3113,12 @@
     "project_path": "pim/kmbox",
     "repo_path": "pim/kmbox"
   },
+  "kmcpclientinspector": {
+    "description": "App which allows the user to inspect apps which implement MCP protocol support.",
+    "name": "kmcpclientinspector",
+    "project_path": "sdk/kmcpclientinspector",
+    "repo_path": "sdk/kmcpclientinspector"
+  },
   "kmediaplayer": {
     "description": "KMediaPlayer",
     "name": "kmediaplayer",
@@ -3068,8 +3134,8 @@
   "kmime": {
     "description": "Library to assist handling MIME data",
     "name": "kmime",
-    "project_path": "pim/kmime",
-    "repo_path": "pim/kmime"
+    "project_path": "frameworks/kmime",
+    "repo_path": "frameworks/kmime"
   },
   "kmines": {
     "description": "KMines is the classic Minesweeper game",
@@ -5363,6 +5429,12 @@
     "project_path": "graphics/optiimage",
     "repo_path": "graphics/optiimage"
   },
+  "os-autoinst-distri-kdelinux": {
+    "description": "End-to-end tests for KDE Linux using openQA",
+    "name": "os-autoinst-distri-kdelinux",
+    "project_path": "kde-linux/os-autoinst-distri-kdelinux",
+    "repo_path": "kde-linux/os-autoinst-distri-kdelinux"
+  },
   "osx-patches": {
     "description": "Fixes for KDE problems that occur on Apple OS X",
     "name": "osx-patches",
@@ -5404,6 +5476,12 @@
     "name": "oxygen-transparent",
     "project_path": "unmaintained/oxygen-transparent",
     "repo_path": "unmaintained/oxygen-transparent"
+  },
+  "package-compatibility-helper": {
+    "description": "Provides support for running or finding alternatives to certain application package types on Linux",
+    "name": "package-compatibility-helper",
+    "project_path": "kde-linux/package-compatibility-helper",
+    "repo_path": "kde-linux/package-compatibility-helper"
   },
   "packagekit-qt": {
     "description": null,
@@ -7847,6 +7925,12 @@
     "project_path": "websites/l10n-kde-org",
     "repo_path": "websites/l10n-kde-org"
   },
+  "websites-labplot-org": {
+    "description": "Website for Labplot - labplot.org",
+    "name": "websites-labplot-org",
+    "project_path": "websites/labplot-org",
+    "repo_path": "websites/labplot-org"
+  },
   "websites-lakademy-kde-org": {
     "description": "Website for LaKademy - lakademy.kde.org",
     "name": "websites-lakademy-kde-org",
@@ -7966,6 +8050,12 @@
     "name": "websites-libregraphicsmeeting-org-2026",
     "project_path": "websites/libregraphicsmeeting-org-2026",
     "repo_path": "websites/libregraphicsmeeting-org-2026"
+  },
+  "websites-linux-kde-org": {
+    "description": "Website for KDE Linux - linux.kde.org",
+    "name": "websites-linux-kde-org",
+    "project_path": "websites/linux-kde-org",
+    "repo_path": "websites/linux-kde-org"
   },
   "websites-lists-kde-org": {
     "description": "Necessary code to redirect from lists.kde.org to appropriate mail archives",

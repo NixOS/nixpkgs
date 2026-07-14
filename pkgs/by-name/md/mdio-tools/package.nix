@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mdio-tools";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "wkz";
     repo = "mdio-tools";
     tag = finalAttrs.version;
-    hash = "sha256-NomChJrYwMDPXNw5r2p11kGfYUvJBHCdLXy1SA8kOaM=";
+    hash = "sha256-QjBNVXrhIfz9l7ysbHlldCP6VknWolvIs4qCGUOCWx8=";
   };
 
   nativeBuildInputs = [

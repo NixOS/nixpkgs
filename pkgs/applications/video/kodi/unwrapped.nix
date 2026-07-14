@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   fetchzip,
   autoconf,
   automake,
@@ -254,6 +255,18 @@ stdenv.mkDerivation (
       hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
     };
 
+    patches = [
+      # TexturePacker has some conditionals on GIFLIB 5, which break with
+      # GIFLIB 6. This has been extended to support all versions >= 5 upstream,
+      # but has not yet made it into a release.
+      # https://github.com/xbmc/xbmc/pull/28016
+      (fetchpatch {
+        name = "texturepacker-giflib-6.patch";
+        url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
+        hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
+      })
+    ];
+
     # make  derivations declared in the let binding available here, so
     # they can be overridden
     inherit
@@ -287,7 +300,6 @@ stdenv.mkDerivation (
       tinyxml-2
       taglib
       libssh
-      gtest
       ncurses
       spdlog
       alsa-lib
@@ -405,6 +417,10 @@ stdenv.mkDerivation (
       waylandpp.bin
     ];
 
+    nativeCheckInputs = [
+      gtest
+    ];
+
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
@@ -445,9 +461,23 @@ stdenv.mkDerivation (
       "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
     ];
 
-    # 14 tests fail but the biggest issue is that every test takes 30 seconds -
-    # I'm guessing there is a thing waiting to time out
-    doCheck = false;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    checkPhase = ''
+      runHook preCheck
+
+      make -j $NIX_BUILD_CORES kodi-test
+
+      ./kodi-test --gtest_filter=-${
+        lib.concatStringsSep ":" [
+          "TestCPUInfo.GetCPUFrequency"
+          "TestNetwork.PingHost"
+          "TestSystemInfo.GetOsName"
+          "TestSystemInfo.GetOsPrettyNameWithVersion"
+        ]
+      }
+
+      runHook postCheck
+    '';
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")

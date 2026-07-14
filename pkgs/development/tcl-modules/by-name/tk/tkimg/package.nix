@@ -1,20 +1,20 @@
 {
   lib,
-  fetchsvn,
+  fetchzip,
   tcl,
   tcllib,
   tk,
   libx11,
+  zlib,
 }:
 
 tcl.mkTclDerivation rec {
   pname = "tkimg";
-  version = "623";
+  version = "2.1.1";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/tkimg/code/trunk";
-    rev = version;
-    sha256 = "sha256-6GlkqYxXmMGjiJTZS2fQNVSimcKc1BZ/lvzvtkhty+o=";
+  src = fetchzip {
+    url = "mirror://sourceforge/tkimg/tkimg/Img-${version}.tar.gz";
+    hash = "sha256-TRtE2/BVrYgkdKtbF06UjLvokokgLGQ/EKDLxhz2Ckw=";
   };
 
   configureFlags = [
@@ -26,6 +26,7 @@ tcl.mkTclDerivation rec {
   buildInputs = [
     libx11
     tcllib
+    zlib
   ];
 
   meta = {

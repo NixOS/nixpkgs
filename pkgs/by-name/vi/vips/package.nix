@@ -49,7 +49,7 @@
   withDevDoc ?
     !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isFreeBSD
-    && !(stdenv.hostPlatform.isRiscV && stdenv.isLinux),
+    && !(stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.isLinux),
 
   # passthru
   testers,
@@ -58,7 +58,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.18.0";
+  version = "8.18.3";
 
   outputs = [
     "bin"
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libvips";
     repo = "libvips";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gAFB1VkOc+OBE8IvtKo5A/v2xqb/4RwV1Q8yU12HYOA=";
+    hash = "sha256-P8qjbCcpWNgKthZrXd+GykfPoU2x6avMNoYX1I+YE+k=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''

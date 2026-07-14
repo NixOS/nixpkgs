@@ -3,29 +3,44 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  llvmPackages,
   installShellFiles,
   writableTmpDirAsHomeHook,
   gitMinimal,
   nixosTests,
   buildPackages,
+  tzdata,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.24.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QE0zsQa7JRSXbCBe9yGGGW2ZNo0kp+JD0/5jIyN0OIQ=";
+    hash = "sha256-pStNE8SMMVavL3ld6RO+5QQRJPXpqlU3asccS2tUoMQ=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     writableTmpDirAsHomeHook
   ];
+
+  env = {
+    TZDIR = "${tzdata}/share/zoneinfo";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Work around ld64's libc++ hardening issue.
+    #
+    # TODO: Remove once #536365 reaches this branch.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   postInstall = ''
     presetdir=$out/share/starship/presets/
@@ -44,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  cargoHash = "sha256-CYRm8wvKK7HIPI1yxTWLV/wpK++mHVT9BvDVX96VFr0=";
+  cargoHash = "sha256-IO/H75FKU3/2oAJ8AKerGujMDfun8w4fV7gETMxWOt0=";
 
   nativeCheckInputs = [
     gitMinimal
@@ -62,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      danth
       Frostman
       da157
       sigmasquadron

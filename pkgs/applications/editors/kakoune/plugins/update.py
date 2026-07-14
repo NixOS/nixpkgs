@@ -40,6 +40,7 @@ let
           submodules = value.src.fetchSubmodules or false;
           sha256 = value.src.outputHash;
           rev = value.src.rev;
+          tag = value.src.tag or null;
         }}
       else
         null;

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -59,6 +60,8 @@ buildPythonPackage rec {
     sqlalchemy
     sqlmodel
   ];
+
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   env = {
     PGDATABASE = "pgvector_python_test";

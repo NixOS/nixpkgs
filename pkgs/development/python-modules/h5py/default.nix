@@ -79,6 +79,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "h5py" ];
 
+  passthru = {
+    # To evaluate more easily *Support flags of it from within Python Packages.
+    inherit hdf5;
+  };
+
   meta = {
     changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";
     description = "Pythonic interface to the HDF5 binary data format";

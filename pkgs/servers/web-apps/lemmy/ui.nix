@@ -3,7 +3,7 @@
   stdenvNoCC,
   libsass,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   buildInputs = [
@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   extraBuildInputs = [ libsass ];
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
     hash = pinData.uiPNPMDepsHash;
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   pname = "msp-debug-stack-bin";
   version = "3.15.1.1";
   src = fetchurl {
-    url = "http://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPDS/3_15_1_001/export/MSP430_DLL_Developer_Package_Rev_3_15_1_1.zip";
+    url = "https://software-dl.ti.com/msp430/msp430_public_sw/mcu/msp430/MSPDS/3_15_1_001/export/MSP430_DLL_Developer_Package_Rev_3_15_1_1.zip";
     sha256 = "1m1ssrwbhqvqwbp3m4hnjyxnz3f9d4acz9vl1av3fbnhvxr0d2hb";
   };
   sourceRoot = ".";

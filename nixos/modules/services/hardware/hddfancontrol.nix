@@ -10,7 +10,7 @@ let
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ philipwilk ];
+  meta.maintainers = with lib.maintainers; [ jadewilk ];
 
   imports = [
     (lib.mkRemovedOptionModule [

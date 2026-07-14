@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     configobj
-    gpgme
+    gpg
     notmuch2
     python-magic
     standard-mailcap

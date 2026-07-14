@@ -50,6 +50,7 @@ let
       postBuild = ''
         wrapProgram $out/bin/yosys \
           --set YOSYS_PATH $out/share/yosys \
+          --set YOSYS_PLUGIN_PATH ${pluginPath} \
           ${module_flags}
       '';
       meta.mainProgram = "yosys";

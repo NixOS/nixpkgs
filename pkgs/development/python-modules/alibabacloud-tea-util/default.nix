@@ -6,14 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-tea-util";
   version = "0.3.14";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "alibabacloud_tea_util";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-cI58n2RkGjyeDlZjZdLyNnX418Kj4pcdlALO7eBAjNs=";
   };
 
@@ -32,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

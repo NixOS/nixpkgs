@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource-deployments";
-  version = "1.0.0b1";
+  version = "1.0.0b2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_resource_deployments";
     inherit version;
-    hash = "sha256-c1m0JliCbn5/8T5tuwxJDpX8yV28oiTSuFz3GtdTXx0=";
+    hash = "sha256-RVBRTFK4uwZH213SRLSUs0gl0cV8CRph0RZOGQQOw+I=";
   };
 
   build-system = [ setuptools ];

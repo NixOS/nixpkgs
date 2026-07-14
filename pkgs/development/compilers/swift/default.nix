@@ -15,7 +15,8 @@ let
     inherit stdenv;
 
     swift-unwrapped = callPackage ./compiler {
-      inherit (llvmPackages) stdenv;
+      # TODO: Clean up on `staging`
+      inherit (llvmPackages) stdenv lld;
       inherit (darwin) DarwinTools sigtool;
     };
 

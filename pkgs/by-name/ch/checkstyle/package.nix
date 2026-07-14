@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
-  version = "13.2.0";
+maven.buildMavenPackage (finalAttrs: {
+  version = "13.7.0";
   pname = "checkstyle";
 
   src = fetchFromGitHub {
     owner = "checkstyle";
     repo = "checkstyle";
-    tag = "checkstyle-${version}";
-    hash = "sha256-f9jJK9zp7sm8VEn30qQA73+ynARJWY3BxbSMEppEDlk=";
+    tag = "checkstyle-${finalAttrs.version}";
+    hash = "sha256-BrgjkqkVnLYMlouyopUoCTby2z4YWZl4UK7m3Ktm5bE=";
   };
 
-  mvnHash = "sha256-+l3ubVFWx1QVTSgwVv0yGVyh8RPnxyHBU/vKE4sBRoE=";
+  mvnHash = "sha256-IKO61ugVjF03zA6pCwYKmwMVx/Ogy8hrt70ArOUm0NA=";
 
   nativeBuildInputs = [
     maven
@@ -31,7 +31,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/checkstyle
-    install -Dm644 target/checkstyle-${version}-all.jar $out/share/checkstyle/checkstyle-all.jar
+    install -Dm644 target/checkstyle-${finalAttrs.version}-all.jar $out/share/checkstyle/checkstyle-all.jar
 
     makeWrapper ${jre}/bin/java $out/bin/checkstyle \
       --add-flags "-jar $out/share/checkstyle/checkstyle-all.jar"
@@ -50,7 +50,7 @@ maven.buildMavenPackage rec {
       Conventions, but is highly configurable.
     '';
     homepage = "https://checkstyle.org/";
-    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
@@ -62,4 +62,4 @@ maven.buildMavenPackage rec {
     ];
     inherit (jre.meta) platforms;
   };
-}
+})

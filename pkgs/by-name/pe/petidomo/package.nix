@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ddNw0fq2MQLJd6YCmIkf9lvq9/Xscl94Ds8xR1hfjXQ=";
   };
 
+  patches = [
+    # https://github.com/peti/petidomo/pull/1
+    ./fix-gcc15.patch
+  ];
+
   buildInputs = [
     flex
     bison
@@ -38,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://petidomo.sourceforge.net/";
     description = "Simple and easy to administer mailing list server";
     license = lib.licenses.gpl3Plus;
-
+    mainProgram = "petidomo";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.peti ];
   };

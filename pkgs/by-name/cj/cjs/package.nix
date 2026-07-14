@@ -8,7 +8,7 @@
   glib,
   readline,
   libsysprof-capture,
-  spidermonkey_128,
+  spidermonkey_140,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cjs";
-  version = "128.1";
+  version = "140.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     tag = finalAttrs.version;
-    hash = "sha256-YJwzFKEOnwBTJUPagXk1PCYmQqVqr7Zu7aVaJCPgirU=";
+    hash = "sha256-zbYcKzTuDLnFEVeSXgoZDUK8Wx3gysGSqZyXjKrBStI=";
   };
 
   outputs = [
@@ -52,14 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_128
+    spidermonkey_140
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = lib.optionals stdenv.hostPlatform.isMusl [
+  mesonFlags = [
+    # This is just a copy of gjs so we don't run tests here.
+    "-Dskip_gtk_tests=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dprofiler=disabled"
   ];
 

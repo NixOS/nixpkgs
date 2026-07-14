@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "neuron";
   version = "8.2.7";
 
-  # format is for pythonModule conversion
-  format = "other";
+  # pyproject is for pythonModule conversion
+  pyproject = false;
 
   nativeBuildInputs = [
     cmake

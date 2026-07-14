@@ -7,27 +7,41 @@
   vimPlugins,
   autoPatchelfHook,
   stdenv,
+  llvmPackages,
 }:
 vimUtils.buildVimPlugin rec {
   pname = "codediff.nvim";
-  version = "2.33.0";
+  version = "2.49.2";
 
   src = fetchFromGitHub {
     owner = "esmuellert";
     repo = "codediff.nvim";
     tag = "v${version}";
-    hash = "sha256-bgWalQ1S0kcKAHU1vCDEHdvswhDziz10HARk/0zMN+Y=";
+    hash = "sha256-kT5plTJP4VfN6mFkq6voDTmr9LaZ37W80UU3QUGlKkY=";
   };
 
   dependencies = [ vimPlugins.nui-nvim ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
   dontUseCmakeConfigure = true;
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace libvscode-diff/CMakeLists.txt \
+      --replace-fail 'COMMAND brew --prefix libomp' 'COMMAND echo ${llvmPackages.openmp}'
+  '';
+
   buildPhase = ''
     runHook preBuild
     make
     runHook postBuild
+  '';
+
+  # Cleanup
+  preInstall = ''
+    rm -rf build
   '';
 
   # The plugin detects Nix and tries to download libgomp at runtime.

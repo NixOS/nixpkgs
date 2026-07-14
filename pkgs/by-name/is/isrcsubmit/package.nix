@@ -35,9 +35,7 @@ python3Packages.buildPythonApplication {
       musicbrainzngs
       discid
     ]
-    ++ lib.optional withKeyring [
-      keyring
-    ];
+    ++ lib.optional withKeyring keyring;
 
   pythonImportsCheck = [ "isrcsubmit" ];
 

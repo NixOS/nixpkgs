@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IfROK9q7Huf45Bu5ltEKx9rzXHjEmBd9sMAPWAogqRQ=";
   };
 
+  patches = [
+    # https://gitlab.gnome.org/GNOME/folks/-/merge_requests/81
+    ./fix-docs-build-with-eds-3.59.patch
+  ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection

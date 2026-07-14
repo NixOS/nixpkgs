@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "git-pkgs";
-  version = "0.11.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "git-pkgs";
     repo = "git-pkgs";
     tag = "v${version}";
-    hash = "sha256-XjW3qwybTmzW2CNgu1Edgs5ZZ9xl3+uS4sT8VWD3jyQ=";
+    hash = "sha256-4Q95ONe6tcrUk7TsxR347PAFQ/HuMjcqNfCLo6oZtws=";
   };
 
-  vendorHash = "sha256-/LJwq17f7SAjSV2ZcLrdaKZYf9RVJ9wtYqEsW0ubT1Q=";
+  vendorHash = "sha256-YjKktBQT62htk/nqZp9quKEg4eI3vTz6AY64o9IT3/4=";
 
   subPackages = [ "." ];
 
@@ -24,13 +24,10 @@ buildGoModule rec {
     "-X github.com/git-pkgs/git-pkgs/cmd.version=${version}"
   ];
 
-  # Tries to access the internet.
-  doCheck = false;
-
   nativeBuildInputs = [ installShellFiles ];
 
   postBuild = ''
-    go run scripts/generate-man.go
+    go run scripts/generate-man/main.go
     installManPage man/*.1
   '';
 

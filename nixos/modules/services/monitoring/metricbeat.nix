@@ -8,7 +8,6 @@
 let
   inherit (lib)
     attrValues
-    literalExpression
     mkEnableOption
     mkPackageOption
     mkIf

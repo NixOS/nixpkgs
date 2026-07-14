@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3";
 
   src = fetchFromGitHub {
-    owner = "Acolarh";
+    owner = "nielssp";
     repo = "ctodo";
     rev = "v${finalAttrs.version}";
     sha256 = "0mqy5b35cbdwfpbs91ilsgz3wc4cky38xfz9pnr4q88q1vybigna";

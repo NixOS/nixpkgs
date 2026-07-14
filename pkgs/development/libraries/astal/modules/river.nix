@@ -1,7 +1,16 @@
-{ buildAstalModule, json-glib }:
+{
+  buildAstalModule,
+  json-glib,
+  wl,
+  wl-vapi-gen,
+}:
 buildAstalModule {
   name = "river";
-  buildInputs = [ json-glib ];
+  nativeBuildInputs = [ wl-vapi-gen ];
+  buildInputs = [
+    json-glib
+    wl
+  ];
   meta.description = "Astal module for River using IPC";
 
   postUnpack = ''

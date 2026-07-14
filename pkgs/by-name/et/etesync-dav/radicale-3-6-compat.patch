@@ -49,7 +49,7 @@ index 1ccc6dd..0f68561 100644
      def delete(self, href=None):
          """Delete an item.
 diff --git a/etesync_dav/radicale/web.py b/etesync_dav/radicale/web.py
-index 869624f..6b4c515 100644
+index 869624f..ff335a7 100644
 --- a/etesync_dav/radicale/web.py
 +++ b/etesync_dav/radicale/web.py
 @@ -12,6 +12,8 @@
@@ -61,7 +61,7 @@ index 869624f..6b4c515 100644
  from radicale import web
  
  from etesync_dav.mac_helpers import has_ssl
-@@ -31,6 +33,8 @@ class Web(web.BaseWeb):
+@@ -31,8 +33,10 @@ class Web(web.BaseWeb):
              environ["wsgi.url_scheme"] = "https"
          body = list(app(environ, start_response))[0]
          ret_response.append(body)
@@ -69,4 +69,31 @@ index 869624f..6b4c515 100644
 +            ret_response.append(None)  # xml_request field
          return tuple(ret_response)
  
-     def get(self, environ, base_prefix, path, user):
+-    def get(self, environ, base_prefix, path, user):
++    def get(self, environ, base_prefix, path, user, *args, **kwargs):
+         return self._call(environ, base_prefix, path, user)
+ 
+-    def post(self, environ, base_prefix, path, user):
++    def post(self, environ, base_prefix, path, user, *args, **kwargs):
+         return self._call(environ, base_prefix, path, user)
+diff --git a/etesync_dav/radicale_main/server.py b/etesync_dav/radicale_main/server.py
+index b593661..a258f7d 100644
+--- a/etesync_dav/radicale_main/server.py
++++ b/etesync_dav/radicale_main/server.py
+@@ -53,12 +53,12 @@ elif os.name == "nt":
+ 
+ 
+ class MyApplication(Application):
+-    def do_POST(self, environ, base_prefix, path, user):
++    def do_POST(self, environ, base_prefix, path, user, *args, **kwargs):
+         """Manage POST request."""
+         # Dispatch .web URL to web module
+         if path == "/.web" or path.startswith("/.web/"):
+-            return self._web.post(environ, base_prefix, path, user)
++            return self._web.post(environ, base_prefix, path, user, *args, **kwargs)
+ 
+-        return super().do_POST(environ, base_prefix, path, user)
++        return super().do_POST(environ, base_prefix, path, user, *args, **kwargs)
+ 
+ 
+ def format_address(address):

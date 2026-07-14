@@ -8,7 +8,6 @@
   humanize,
   lxml,
   parse-type,
-  pysingleton,
   pytest-mock,
   pytestCheckHook,
   pyyaml,
@@ -17,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.18.3";
+  version = "0.18.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
     tag = "v${version}";
-    hash = "sha256-UjJz9ysejz5DBewMwoVof1+JU8tbGbBa3z1quuN1TWg=";
+    hash = "sha256-pnZ/vqjMd1Q/wF1W6joYrIulZSXAzS2G3E5Ke5VSAQg=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     humanize
     lxml
     parse-type
-    pysingleton
     pyyaml
     tag-expressions
   ];

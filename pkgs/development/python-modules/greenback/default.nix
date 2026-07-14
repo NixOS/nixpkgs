@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Use anyio and asyncio from synchronous code";
     homepage = "https://github.com/oremanj/greenback";
-    changelog = "https://github.com/oremanj/greenback/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/oremanj/greenback/blob/${src.tag}/docs/source/history.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ taranarmo ];
   };

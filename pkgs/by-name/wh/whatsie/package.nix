@@ -2,64 +2,37 @@
   fetchFromGitHub,
   lib,
   stdenv,
-  makeDesktopItem,
-  copyDesktopItems,
+  cmake,
   libx11,
   libxcb,
-  qt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsie";
-  version = "4.16.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "keshavbhatt";
     repo = "whatsie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F6hQY3Br0iFDYkghBgRAyzLW6QhhG8UHOgkEgDjeQLg=";
+    hash = "sha256-GVXwZZFfPqAmBrP95zleHc2PpMMBj/8xZdW4JpFdYVs=";
   };
-
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "whatsie";
-      desktopName = "Whatsie";
-      icon = "whatsie";
-      exec = "whatsie";
-      comment = finalAttrs.meta.description;
-    })
-  ];
 
   buildInputs = [
     libx11
     libxcb
-    qt5.qtwebengine
+    qt6.qtwebengine
   ];
 
   nativeBuildInputs = [
-    copyDesktopItems
-    qt5.wrapQtAppsHook
-    qt5.qmake
+    cmake
+    qt6.wrapQtAppsHook
   ];
 
-  strictDeps = false;
+  strictDeps = true;
 
   enableParallelBuilding = true;
-
-  preBuild = ''
-    export QT_WEBENGINE_ICU_DATA_DIR=${qt5.qtwebengine.out}/resources
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 whatsie -t $out/bin
-    install -Dm644 $src/snap/gui/icon.svg $out/share/icons/hicolor/scalable/apps/whatsie.svg
-
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://github.com/keshavbhatt/whatsie";

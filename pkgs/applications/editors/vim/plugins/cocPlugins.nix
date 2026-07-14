@@ -10,7 +10,6 @@ let
     # keep-sorted start
     "coc-basedpyright"
     "coc-clangd"
-    "coc-cmake"
     "coc-css"
     "coc-diagnostic"
     "coc-docker"

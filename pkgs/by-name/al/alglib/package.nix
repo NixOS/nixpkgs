@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alglib3";
-  version = "4.07.0";
+  version = "4.08.0";
 
   src = fetchurl {
     url = "https://www.alglib.net/translator/re/alglib-${finalAttrs.version}.cpp.gpl.tgz";
-    sha256 = "sha256-y4mlU+4gKwqUFgUHKoVxAjdq5EsMzSJeT6Dg4Llwi/A=";
+    sha256 = "sha256-mKPtCE+wLFagvBVDida8oQCyO7N0klWkyHFjkip3aoY=";
   };
 
   nativeBuildInputs = [

@@ -7,13 +7,13 @@
 let
   fingers = crystal.buildCrystalPackage rec {
     format = "shards";
-    version = "2.6.1";
+    version = "2.7.1";
     pname = "fingers";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
       rev = "${version}";
-      sha256 = "sha256-f18y4Jq5Ab/5KZKv8woMTkFGEY2/f5KeRH0sf6R1l1U=";
+      sha256 = "sha256-4aA60127Pv1jk7jzEhlU3NmPDmUbp9nE/8yYKkcMUb4=";
     };
 
     shardsFile = ./shards.nix;
@@ -29,6 +29,10 @@ let
     # Unhandled exception: Missing ENV key: "TMUX" (KeyError)
     doCheck = false;
     doInstallCheck = false;
+
+    meta = {
+      homepage = "https://github.com/Morantron/tmux-fingers";
+    };
   };
 in
 mkTmuxPlugin {

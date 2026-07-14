@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.92";
 
   src = fetchFromGitHub {
-    owner = "intel";
+    owner = "md-raid-utilities";
     repo = "ledmon";
     rev = "v${finalAttrs.version}";
     sha256 = "1lz59606vf2sws5xwijxyffm8kxcf8p9qbdpczsq1b5mm3dk6lvp";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/intel/ledmon";
+    homepage = "https://github.com/md-raid-utilities/ledmon";
     description = "Enclosure LED Utilities";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl2Only ];

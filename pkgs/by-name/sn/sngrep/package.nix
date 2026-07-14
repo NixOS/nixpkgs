@@ -4,42 +4,49 @@
   autoconf,
   automake,
   fetchFromGitHub,
+  libgcrypt,
   libpcap,
   ncurses,
   openssl,
-  pcre,
+  pcre2,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sngrep";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = "sngrep";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nvuT//FWJAa6DzmjBsBW9s2p1M+6Zs4cVmpK4dVemnE=";
+    hash = "sha256-4DLbQ3OOMvJw37n3jVuztG49HlPbWrfxByi6g6AvELQ=";
   };
 
   nativeBuildInputs = [
     autoconf
     automake
+    pkg-config
   ];
 
   buildInputs = [
+    libgcrypt
     libpcap
     ncurses
-    ncurses
     openssl
-    pcre
+    pcre2
   ];
 
   configureFlags = [
-    "--with-pcre"
+    "--with-pcre2"
     "--enable-unicode"
     "--enable-ipv6"
     "--enable-eep"
     "--with-openssl"
+  ];
+
+  patches = [
+    ./fix-sng_strncpy-declaration.patch
   ];
 
   preConfigure = ''

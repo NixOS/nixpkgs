@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uhooapi";
-  version = "1.2.7";
+  version = "1.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getuhoo";
     repo = "uhooapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3t9c4KomP5aQlU80AeQ5FK7XtgLWs7PdeDIwscf+k3g=";
+    hash = "sha256-SsnRHG9ePbcmaGULlXIemfbLaEUo+8x+tBZam/MBWnU=";
   };
 
   build-system = [ setuptools ];

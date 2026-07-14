@@ -32,7 +32,7 @@ in
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = "Extra arguments to pass to IIO-Niri.";
+      description = "Extra arguments to pass to `iio-niri listen`.";
     };
   };
 
@@ -49,7 +49,7 @@ in
       after = [ cfg.niriUnit ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${getExe cfg.package} ${escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${getExe cfg.package} listen ${escapeShellArgs cfg.extraArgs}";
         Restart = "on-failure";
       };
     };

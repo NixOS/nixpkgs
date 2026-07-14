@@ -22,16 +22,15 @@
   camlp-streams,
   odoc,
 }:
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocamlformat-mlx-lib";
-  version = "0.28.1.1";
-  minimalOcamlVersion = "4.08";
+  version = "0.28.1.2";
 
   src = fetchFromGitHub {
     owner = "ocaml-mlx";
     repo = "ocamlformat-mlx";
-    tag = version;
-    hash = "sha256-WmY8H8Ved7/f8gTnOxoogokC0Up4BOBdM0Q6mQmZGvc=";
+    tag = finalAttrs.version;
+    hash = "sha256-IxX8FD7v9evHFTCnTJBtnUMUUTWI34zIifpciuJCuhs=";
   };
 
   propagatedBuildInputs = [
@@ -67,4 +66,4 @@ buildDunePackage rec {
     ];
     license = lib.licenses.mit;
   };
-}
+})

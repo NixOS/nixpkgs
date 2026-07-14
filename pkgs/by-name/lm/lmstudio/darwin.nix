@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchurl,
-  undmg,
   darwin,
   meta,
   pname,
@@ -9,6 +8,7 @@
   url,
   hash,
   passthru,
+  _7zz,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    undmg
     darwin.sigtool
+    _7zz
   ];
 
   sourceRoot = ".";
@@ -38,8 +38,10 @@ stdenv.mkDerivation {
     local indexJs="$out/Applications/LM Studio.app/Contents/Resources/app/.webpack/main/index.js"
     substituteInPlace "$indexJs" --replace-quiet "'/Applications'" "'/'"
 
-    # Re-sign the app bundle after patching, otherwise macOS reports it as damaged
-    codesign --force --deep --sign - "$out/Applications/LM Studio.app"
+    # Re-sign the main executable, otherwise macOS reports the app as damaged
+    appBundle="$out/Applications/LM Studio.app"
+    mainExe="$appBundle/Contents/MacOS/LM Studio"
+    codesign --force --sign - "$mainExe"
 
     runHook postInstall
   '';
@@ -48,22 +50,10 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   # undmg doesn't support APFS and 7zz does break the xattr. Took that approach from https://github.com/NixOS/nixpkgs/blob/a3c6ed7ad2649c1a55ffd94f7747e3176053b833/pkgs/by-name/in/insomnia/package.nix#L52
-  unpackCmd = ''
-    echo "Creating temp directory"
-    mnt=$(TMPDIR=/tmp mktemp -d -t nix-XXXXXXXXXX)
-    function finish {
-      echo "Ejecting temp directory"
-      /usr/bin/hdiutil detach $mnt -force
-      rm -rf $mnt
-    }
-    # Detach volume when receiving SIG "0"
-    trap finish EXIT
-    # Mount DMG file
-    echo "Mounting DMG file into \"$mnt\""
-    /usr/bin/hdiutil attach -nobrowse -mountpoint $mnt $curSrc
-    # Copy content to local dir for later use
-    echo 'Copying extracted content into "sourceRoot"'
-    cp -a $mnt/LM\ Studio.app $PWD/
+  # NOTE (djmaxus): even with hdiutil, a check `xattr -lr LM\ Studio.app` returns nothing,
+  # meaning that xattrs are lost anyway? So, I brought back simple 7zip unpacking
+  unpackPhase = ''
+    7zz x -snld $src
   '';
 
   inherit passthru;

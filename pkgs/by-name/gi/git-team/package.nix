@@ -8,16 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-team";
-  version = "1.8.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "hekmekk";
     repo = "git-team";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-+j5d1tImVHaTx63uzLdh2YNCFa1ErAVv4OMwxOutBQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0nDt4i6RK6/guLVNpgZE1HRJjIu9YIzaA296s5aAKF4=";
   };
 
-  vendorHash = "sha256-NTOUL1oE2IhgLyYYHwRCMW5yCxIRxUwqkfuhSSBXf6A=";
+  proxyVendor = true;
+  vendorHash = "sha256-5rS4EgY4x6zSoBF4ylg4R9rcI6Ia5bmx04k+Bc+8PlQ=";
 
   nativeBuildInputs = [
     go-mockery_2

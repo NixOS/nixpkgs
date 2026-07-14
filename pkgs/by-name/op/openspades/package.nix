@@ -101,9 +101,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/yvt/openspades/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      azahi
-    ];
+    maintainers = [ ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken =
       stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

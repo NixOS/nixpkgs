@@ -26,6 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "-p substudy" ];
 
+  checkFlags = [
+    # flaky: relies on sqlite ms timestamps differing across 3 quick inserts
+    "--skip=cache::tests::test_cache"
+  ];
+
   preCheck = ''
     # That's to make sure the `test_ai_request_static`
     # test has access to the cache at `$HOME/.cache`

@@ -7,18 +7,21 @@
   pkg-config,
   stdenv,
   wrapGAppsHook3,
+  libjack2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.48";
+  version = "6.6.30";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat.github.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OxogOY86SclLMv+Tp4skXIuz9RrWdNGY7oGhySJ9scI=";
+    hash = "sha256-D6XnrN+pvUpgUcgyU8pEtuOx2cIMoSm8Px0+f5xi1aM=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -29,34 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     gtk3
     libpulseaudio
+    libjack2
   ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp makefiles/makefile.defs.linux.pulse-gcc makefile.defs
-
-    runHook postConfigure
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dt $out/bin praat
-    install -Dm444 main/praat.desktop -t $out/share/applications
-    install -Dm444 main/praat-32.ico $out/share/icons/hicolor/32x32/apps/praat.ico
-    install -Dm444 main/praat-256.ico $out/share/icons/hicolor/256x256/apps/praat.ico
-    install -Dm444 main/praat-480.png $out/share/icons/hicolor/480x480/apps/praat.png
-    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
-
-    runHook postInstall
-  '';
+  buildFlags = [ "PRAAT_AUDIO=pulse" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mv $out/share/applications/org.praat.Praat.desktop $out/share/applications/praat.desktop
+  '';
 
   meta = {
     description = "Doing phonetics by computer";

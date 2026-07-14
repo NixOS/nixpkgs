@@ -2,11 +2,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  versionCheckHook,
   elkhound,
   ocaml-ng,
   perl,
   which,
-  fetchpatch,
 }:
 
 let
@@ -18,38 +18,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weidu";
-  version = "249.00";
+  version = "251";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = "weidu";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
+    rev = "v${finalAttrs.version}.00";
+    sha256 = "sha256-oVQYESBqp0fJ+ECLGQOPCECnDpGMR8U5ijvTVPc8z4g=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/WeiDUorg/weidu/commit/bb90190d8bf7d102952c07d8288a7dc6c7a3322e.patch";
-      hash = "sha256-Z4hHdMR1dYjJeERJSqlYynyPu2CvE6+XJuCr9ogDmvk=";
-    })
-  ];
-
   postPatch = ''
-    substitute sample.Configuration Configuration \
-      --replace-fail /usr/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace-fail /usr/local/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace-fail elkhound ${lib.getExe elkhound}
+    substituteInPlace Configuration \
+      --replace-fail ' = elkhound' ' = ${lib.getExe elkhound}'
 
     mkdir -p obj/{.depend,x86_LINUX}
-
-    # undefined reference to `caml_hash_univ_param'
-    sed -i "20,21d;s/old_hash_param/hash_param/" hashtbl-4.03.0/myhashtbl.ml
   '';
 
   nativeBuildInputs = [
     elkhound
     ocaml'
     perl
+    versionCheckHook
     which
   ];
 
@@ -70,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "InfinityEngine Modding Engine";

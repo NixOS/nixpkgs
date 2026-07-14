@@ -20,7 +20,7 @@
                   from selenium import webdriver
                   from selenium.webdriver.common.by import By
                   from selenium.webdriver.firefox.options import Options
-                  from selenium.webdriver.support.relative_locator import locate_with
+                  from selenium.webdriver.support import expected_conditions as EC
                   from selenium.webdriver.support.ui import WebDriverWait
 
                   options = Options()
@@ -35,13 +35,12 @@
                   wait = WebDriverWait(driver, 60)
 
                   # There should have been a redirect
-                  url = driver.current_url
-                  assert url == "http://prometheus:9090/query"
+                  wait.until(EC.url_to_be("http://prometheus:9090/query"))
 
-                  assert len(driver.find_elements(
-                    By.CLASS_NAME, "mantine-AppShell-header")) > 0
-                  assert len(driver.find_elements(
-                    By.CLASS_NAME, "mantine-AppShell-main")) > 0
+                  wait.until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, "mantine-AppShell-header")))
+                  wait.until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, "mantine-AppShell-main")))
 
                   # Do a Prometheus query
                   query_box = driver.find_element(
@@ -53,10 +52,9 @@
                   driver.find_element(
                     By.XPATH, "//span[contains(text(),'Execute')]").click()
 
-                  # Find query result table
-                  table_tr_elements = driver.find_elements(
-                    By.CLASS_NAME, "mantine-Table-tr")
-                  assert len(table_tr_elements) == 1
+                  # Wait for query result table
+                  wait.until(EC.presence_of_element_located(
+                    (By.CLASS_NAME, "mantine-Table-tr")))
 
                   # Navigate to target health page
                   driver.find_element(
@@ -65,16 +63,14 @@
                   driver.find_element(
                     By.LINK_TEXT, "Target health").click()
 
-                  url = driver.current_url
-                  assert url == "http://prometheus:9090/targets"
+                  wait.until(EC.url_to_be("http://prometheus:9090/targets"))
 
                   # Click on the prometheus job dropdown button
-                  prometheus_job_dropdown = driver.find_element(
+                  driver.find_element(
                     By.CLASS_NAME, "mantine-Accordion-chevron").click()
 
-                  targets_healthy = len(driver.find_elements(
-                    By.CSS_SELECTOR, "div[class^='_healthOk']"))
-                  assert targets_healthy == 1
+                  wait.until(EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, "div[class^='_healthOk']")))
 
                   targets_errored = len(driver.find_elements(
                     By.CSS_SELECTOR, "div[class^='_healthErr']"))
@@ -92,15 +88,13 @@
                   driver.find_element(
                     By.LINK_TEXT, "Runtime & build information").click()
 
-                  url = driver.current_url
-                  assert url == "http://prometheus:9090/status"
+                  wait.until(EC.url_to_be("http://prometheus:9090/status"))
 
-                  # Find table
-                  version_th_element = driver.find_element(
-                    By.XPATH, "//th[text()='version']")
-                  version_td_element = driver.find_element(
-                    locate_with(By.TAG_NAME, "td").near(version_th_element))
-                  assert version_td_element.text == "${pkgs.prometheus.version}"
+                  # Find table and verify version
+                  wait.until(EC.text_to_be_present_in_element(
+                    (By.XPATH,
+                     "//tr[th[text()='version']]/td"),
+                    "${pkgs.prometheus.version}"))
 
                   driver.close()
                 '';

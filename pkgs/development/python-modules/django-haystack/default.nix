@@ -7,6 +7,7 @@
   geopy,
   packaging,
   pysolr,
+  pythonAtLeast,
   python-dateutil,
   requests,
   setuptools-scm,
@@ -58,6 +59,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    # crashes in threading during tests
+    broken = pythonAtLeast "3.14";
     description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     changelog = "https://github.com/django-haystack/django-haystack/releases/tag/v${version}";

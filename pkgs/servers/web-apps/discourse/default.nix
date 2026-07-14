@@ -39,7 +39,7 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
@@ -53,14 +53,16 @@
 }:
 
 let
-  version = "2025.12.1";
+  version = "2026.1.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-1s6ixKLlNd9osdG+qGIpo6kjEv3c/yDfJ6+APj6QQvM=";
+    sha256 = "sha256-kQYDKZIMsWByuCZQfUlwhoIew5QykVylRMh6xvrHIBY=";
   };
+
+  pnpm = pnpm_10;
 
   ruby = ruby_3_3;
 
@@ -303,10 +305,9 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
-      inherit version src;
-      pnpm = pnpm_9;
-      fetcherVersion = 1;
-      hash = "sha256-/GJQqbmBXn5SSdxQ3TBQEUGe6Qm7aJ1ogoYqOFD5Pm0=";
+      inherit version src pnpm;
+      fetcherVersion = 3;
+      hash = "sha256-xft/2x0iti0yJ53uI9q2+FSvKgWWfKQzlMlPFz3RZsE=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -320,7 +321,7 @@ let
       moreutils
       nodejs-slim_22
       pnpmConfigHook
-      pnpm_9
+      pnpm
     ];
 
     outputs = [
@@ -534,7 +535,10 @@ let
     meta = {
       homepage = "https://www.discourse.org/";
       platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ talyz ];
+      maintainers = with lib.maintainers; [
+        leona
+        talyz
+      ];
       license = lib.licenses.gpl2Plus;
       description = "Open source discussion platform";
     };

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/enroot";
     changelog = "https://github.com/NVIDIA/enroot/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     mainProgram = "enroot";
   };
 })

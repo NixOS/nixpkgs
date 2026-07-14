@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ant,
   jdk,
+  imagemagick,
   makeWrapper,
   wrapGAppsHook3,
   makeDesktopItem,
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     copyDesktopItems
     stripJavaArchivesHook
+    imagemagick
   ];
 
   dontWrapGApps = true;
@@ -45,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p $out/share/icons/hicolor/96x96/apps
     install -Dm644 pattypan.jar -t $out/share/pattypan
-    install -Dm644 src/pattypan/resources/logo.png $out/share/pixmaps/pattypan.png
+    magick src/pattypan/resources/logo.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/pattypan.png
     runHook postInstall
   '';
 

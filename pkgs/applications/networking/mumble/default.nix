@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   qt5,
   cmake,
@@ -78,6 +77,8 @@ let
           "-D CMAKE_UNITY_BUILD=ON" # Upstream uses this in their build pipeline to speed up builds
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
+          "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102
+          "-D use-timestamps=OFF"
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -93,6 +94,7 @@ let
           license = lib.licenses.bsd3;
           maintainers = with lib.maintainers; [
             felixsinger
+            hax404
             lilacious
           ];
           platforms = lib.platforms.linux ++ (overrides.platforms or [ ]);
@@ -136,7 +138,7 @@ let
         "-D update=OFF"
         "-D overlay-xcompile=OFF"
         "-D oss=OFF"
-        "-D warnings-as-errors=OFF" # conversion error workaround
+        "-D warnings-as-errors=OFF" # `std::wstring_convert` deprecation workaround
         # building the overlay on darwin does not work in nipxkgs (yet)
         # also see the patch below to disable scripts the build option misses
         # see https://github.com/mumble-voip/mumble/issues/6816
@@ -151,7 +153,6 @@ let
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
       patches = [
-        ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
       ];
 
@@ -165,6 +166,7 @@ let
           --source-dir=$NIX_BUILD_TOP/source/ \
           --binary-dir=$out \
           --only-appbundle \
+          --no-overlay \
           --version "${source.version}"
 
         mkdir -p $out/Applications $out/bin
@@ -216,14 +218,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.857";
+    version = "1.5.901";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       tag = "v${version}";
-      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
+      hash = "sha256-UBJH7EwfWvInuSD6ZALOKeVnWdfh/rmq8GVLG5URjOQ=";
       fetchSubmodules = true;
     };
   };

@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ristretto";
-  version = "0.13.4";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "ristretto";
     tag = "ristretto-${finalAttrs.version}";
-    hash = "sha256-X0liZddeEOxlo0tyn3Irvo0+MTnMFuvKY2m4h+/EI2E=";
+    hash = "sha256-3Jlm0fqFKOQF9DG1hqc7P2MrILDe/gKkxkT9WPRflBo=";
   };
 
   strictDeps = true;

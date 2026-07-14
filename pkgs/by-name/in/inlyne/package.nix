@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inlyne";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Inlyne-Project";
     repo = "inlyne";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
+    hash = "sha256-bUM9Mn/C9l6s6ucoLRo25m4PbbW3gp5d3AvO/9GTJcI=";
   };
 
-  cargoHash = "sha256-jSUqpryUgOL0qo0gbbH4s24krrPsLOSNc6FQUEUeeUQ=";
+  cargoHash = "sha256-IaaojW5PYSUwyh1iv2HrDidIV8keEykKHY61rpcCAPc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeLibraryPath [
           libGL
           libx11
+          libxkbcommon
         ]
       }
   '';

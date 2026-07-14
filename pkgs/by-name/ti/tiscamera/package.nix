@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiscamera";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = "tiscamera";
     rev = "v-tiscamera-${finalAttrs.version}";
-    hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
+    hash = "sha256-3qAPUcP+Rh1aA1qNWq0NWMpJftinm32r52esikH804Y=";
   };
 
   postPatch = ''

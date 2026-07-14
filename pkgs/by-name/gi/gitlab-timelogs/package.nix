@@ -8,12 +8,12 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlab-timelogs";
   version = "0.7.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DNMJczR4yaglIOcNmb2E1g+UP0VeJaIb5TvdKUcWzc0=";
   };
 
@@ -37,11 +37,11 @@ rustPlatform.buildRustPackage rec {
       gitlab-timelogs is not associated with the official GitLab project!
     '';
     homepage = "https://github.com/phip1611/gitlab-timelogs";
-    changelog = "https://github.com/phip1611/gitlab-timelogs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/phip1611/gitlab-timelogs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       blitz
       phip1611
     ];
   };
-}
+})

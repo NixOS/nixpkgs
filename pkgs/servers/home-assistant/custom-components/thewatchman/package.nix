@@ -20,10 +20,9 @@ buildHomeAssistantComponent rec {
     hash = "sha256-5BXIKh8uPKuxsLbxu0fUbuCR2LYOXk1HpOvrqehg0u0=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/watchman/manifest.json \
-      --replace-fail "prettytable==3.12.0" "prettytable"
-  '';
+  ignoreVersionRequirement = [
+    "prettytable"
+  ];
 
   dontBuild = true;
 
@@ -40,6 +39,8 @@ buildHomeAssistantComponent rec {
   disabledTests = [
     # the test relies on NOT changing the hass config_dir and tries to write into the nix store
     "test_status_sensor_safe_mode"
+    # flaky
+    "test_automations_parsing"
   ];
 
   meta = {

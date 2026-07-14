@@ -62,13 +62,14 @@
           machine.wait_until_succeeds("${eval "Main.runState"} | grep -q 'true,..2'")
 
       with subtest("Check if Cinnamon components actually start"):
-          for i in ["csd-media-keys", "cinnamon-killer-daemon", "xapp-sn-watcher", "nemo-desktop"]:
-            machine.wait_until_succeeds(f"pgrep -f {i}")
+          # https://unix.stackexchange.com/a/74186
+          for i in ["[c]sd-media-keys", "[c]innamon-killer-daemon", "[x]app-sn-watcher", "[n]emo-desktop"]:
+            machine.wait_until_succeeds(f"pgrep -f \"{i}\"")
           machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
           machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
 
       with subtest("Check if sessionPath option actually works"):
-          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.dup_default\\(\\).get_search_path\\(\\)"} | grep gpaste")
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/nemo-desktop)/environ"
@@ -103,6 +104,10 @@
           machine.wait_for_text('(Esc|123)')
           machine.sleep(2)
           machine.screenshot("cinnamon_virtual_keyboard")
+
+      # Only can be tested after opening the above apps.
+      with subtest("Check if x-d-p actually starts"):
+          machine.wait_until_succeeds("pgrep -xf \"${pkgs.xdg-desktop-portal}/libexec/xdg-desktop-portal\"")
 
       with subtest("Check if Cinnamon has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep -E 'cinnamon|nemo'")

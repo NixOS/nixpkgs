@@ -2,17 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bsdiff4";
   version = "1.2.6";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KrV9AaeLOeKeWszJz+rUEwmC3tncy8QmG9DpxR1rdR0=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "bsdiff4" ];
 
@@ -24,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Binary diff and patch using the BSDIFF4-format";
     homepage = "https://github.com/ilanschnell/bsdiff4";
-    changelog = "https://github.com/ilanschnell/bsdiff4/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/ilanschnell/bsdiff4/blob/${finalAttrs.version}/CHANGELOG.txt";
     license = lib.licenses.bsdProtection;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

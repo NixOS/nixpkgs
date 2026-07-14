@@ -5,6 +5,7 @@
   qtdeclarative,
   qtsvg,
   qtwayland,
+  kxmlgui,
 }:
 mkKdeDerivation rec {
   pname = "marknote";
@@ -19,6 +20,7 @@ mkKdeDerivation rec {
     qtdeclarative
     qtsvg
     qtwayland
+    kxmlgui
   ];
 
   meta.license = [ lib.licenses.gpl2Plus ];

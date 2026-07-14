@@ -1,16 +1,24 @@
 diff --git a/hotspot/src/os/linux/vm/os_linux.cpp b/hotspot/src/os/linux/vm/os_linux.cpp
-index c477851c1b..ff5e28d95b 100644
+index 4cd90ba9..6d659c5d 100644
 --- a/hotspot/src/os/linux/vm/os_linux.cpp
 +++ b/hotspot/src/os/linux/vm/os_linux.cpp
-@@ -368,13 +368,13 @@ void os::init_system_properties_values() {
- //        ...
- //        7: The default directories, normally /lib and /usr/lib.
+@@ -364,20 +364,20 @@ void os::init_system_properties_values() {
+   //        ...
+   //        7: The default directories, normally /lib and /usr/lib.
  #if defined(AMD64) || defined(_LP64) && (defined(SPARC) || defined(PPC) || defined(S390))
--#define DEFAULT_LIBPATH "/usr/lib64:/lib64:/lib:/usr/lib"
-+#define DEFAULT_LIBPATH ""
+-  #define DEFAULT_LIBPATH "/usr/lib64:/lib64:/lib:/usr/lib"
++  #define DEFAULT_LIBPATH ""
  #else
--#define DEFAULT_LIBPATH "/lib:/usr/lib"
-+#define DEFAULT_LIBPATH ""
+ #if defined(AARCH64)
+   // Use 32-bit locations first for AARCH64 (a 64-bit architecture), since some systems
+   // might not adhere to the FHS and it would be a change in behaviour if we used
+   // DEFAULT_LIBPATH of other 64-bit architectures which prefer the 64-bit paths.
+-  #define DEFAULT_LIBPATH "/lib:/usr/lib:/usr/lib64:/lib64"
++  #define DEFAULT_LIBPATH ""
+ #else
+-  #define DEFAULT_LIBPATH "/lib:/usr/lib"
++  #define DEFAULT_LIBPATH ""
+ #endif // AARCH64
  #endif
  
  // Base path of extensions installed on the system.
@@ -19,7 +27,7 @@ index c477851c1b..ff5e28d95b 100644
  #define EXTENSIONS_DIR  "/lib/ext"
  #define ENDORSED_DIR    "/lib/endorsed"
  
-@@ -437,13 +437,13 @@ void os::init_system_properties_values() {
+@@ -440,13 +440,13 @@ void os::init_system_properties_values() {
                                                       strlen(v) + 1 +
                                                       sizeof(SYS_EXT_DIR) + sizeof("/lib/") + strlen(cpu_arch) + sizeof(DEFAULT_LIBPATH) + 1,
                                                       mtInternal);

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jug";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "jug";
     tag = "v${version}";
-    hash = "sha256-zERCY9JxceBmhJbytfsm/6rDwipqQ1XjzY/2QFsEEEg=";
+    hash = "sha256-YjBhA+yEdMQ/4yYf25kkXwbvw+ta9Nb4CX8Rnr0du6k=";
   };
 
   build-system = [ setuptools ];

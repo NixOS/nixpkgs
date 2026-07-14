@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Workbench for writing toy implementations of distributed systems";
     homepage = "https://github.com/jepsen-io/maelstrom";
-    changelog = "https://github.com/jepsen-io/maelstrom/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/jepsen-io/maelstrom/releases/tag/v${finalAttrs.version}";
     mainProgram = "maelstrom";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.epl10;

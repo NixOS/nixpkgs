@@ -26,7 +26,8 @@
   latex2html,
   texinfo,
   texliveSmall,
-  enableDocs ? true,
+  # Error: while running example drawTropicalCurve from d2t_singular/tropical_lib.doc:610
+  enableDocs ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,11 @@ stdenv.mkDerivation rec {
     "--enable-gfanlib"
     "--with-ntl=${ntl}"
     "--with-flint=${flint}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # omalloc does not support pagesizes >= 16K
+    # https://github.com/Singular/Singular/blob/spielwiese/omalloc/configure.ac
+    "--disable-omalloc"
   ]
   ++ lib.optionals enableDocs [
     "--enable-doc-build"

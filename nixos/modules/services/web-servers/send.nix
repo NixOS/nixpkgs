@@ -46,6 +46,22 @@ in
         };
       };
 
+      environmentFile = mkOption {
+        default = null;
+        description = ''
+          Environment file (see {manpage}`systemd.exec(5)` "EnvironmentFile="
+          section for the syntax) passed to the service. This option is the
+          recommended way to pass secrets to Send.
+
+          This is especially important for users using a cloud storage backend.
+
+          A list of environment variables recognized by Send can be found here:
+          <https://github.com/timvisee/send/blob/master/docs/docker.md>
+        '';
+        example = "/run/secrets/send";
+        type = with types; nullOr path;
+      };
+
       dataDir = lib.mkOption {
         type = types.path;
         readOnly = true;
@@ -159,6 +175,7 @@ in
         LoadCredential = lib.optionalString (
           cfg.redis.passwordFile != null
         ) "redis-password:${cfg.redis.passwordFile}";
+        EnvironmentFile = cfg.environmentFile;
 
         # Hardening
         RestrictAddressFamilies = [

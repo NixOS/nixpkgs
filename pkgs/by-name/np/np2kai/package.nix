@@ -15,48 +15,53 @@
   pkg-config,
   SDL2,
   SDL2_ttf,
-  SDL2_mixer,
 
   enable16Bit ? true,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  # HAXM build succeeds but the binary segfaults, seemingly due to the missing HAXM kernel module
-  # Enable once there is a HAXM kernel module option in NixOS? Or somehow bind it to the system kernel having HAXM?
-  # Or leave it disabled by default?
-  # https://github.com/intel/haxm/blob/master/docs/manual-linux.md
-  enableHAXM ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "np2kai";
-  version = "0.86rev22-unstable-2025-09-13";
+  version = "0.86rev22-unstable-2026-02-08";
 
   src = fetchFromGitHub {
     owner = "AZO234";
     repo = "NP2kai";
-    rev = "02b08deb3833305251fb3ee6c5d59b0efb5b52ff";
-    hash = "sha256-5aGlqYS05rUh+mD9TdCC9H+5JkOQCTn45UlEu7xcxLw=";
+    rev = "44c8a8c61640f2d5476af5224dbd88a36079f45d";
+    hash = "sha256-zLhUkUojsjMYN75jsPa3OHOdv79MmMVvwlvuYC6NZqA=";
   };
 
-  # Don't require Git
-  # Use SDL2(_*) targets for correct includedirs
-  # Add return type in ancient code
+  patches = [
+    # https://github.com/AZO234/NP2kai/pull/202
+    ./1001-CMakeLists.txt-Fix-CMAKE_CXX_FLAGS_-RELEASE-DEBUG.patch
+    ./1002-sdl-x-fontmng.c-Fix-GlyphMetrics-calls.patch
+    ./1003-sdl-np2.c-Fix-wrong-order-of-arguments-to-fgets-call.patch
+  ];
+
+  # - Don't require Git
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'if(NOT git_result EQUAL 0)' 'if(FALSE)' \
-      --replace-fail "\''${SDL2_DEFINE}" "" \
-      --replace-fail "\''${SDL2_INCLUDE_DIR}" "" \
-      --replace-fail "\''${SDL2_LIBRARY}" "SDL2::SDL2" \
-      --replace-fail "\''${SDL2_MIXER_DEFINE}" "" \
-      --replace-fail "\''${SDL2_MIXER_INCLUDE_DIR}" "" \
-      --replace-fail "\''${SDL2_MIXER_LIBRARY}" "SDL2_mixer::SDL2_mixer" \
-      --replace-fail "\''${SDL2_TTF_DEFINE}" "" \
-      --replace-fail "\''${SDL2_TTF_INCLUDE_DIR}" "" \
-      --replace-fail "\''${SDL2_TTF_LIBRARY}" "SDL2_ttf::SDL2_ttf" \
-
-    substituteInPlace x/cmserial.c \
-      --replace-fail 'convert_np2tocm(UINT port, UINT8* param, UINT32* speed) {' 'int convert_np2tocm(UINT port, UINT8* param, UINT32* speed) {'
-    substituteInPlace x/gtk2/gtk_menu.c \
-      --replace-fail 'xmenu_visible_item(MENU_HDL hdl, const char *name, BOOL onoff)' 'int xmenu_visible_item(MENU_HDL hdl, const char *name, BOOL onoff)'
+      --replace-fail 'if(NOT git_result EQUAL 0)' 'if(FALSE)'
+  ''
+  # Directory included is <SDL2_ttf>/include/SDL2
+  + ''
+    substituteInPlace {sdl,x}/fontmng.c \
+      --replace-fail '<SDL2_ttf/SDL_ttf.h>' '<SDL_ttf.h>'
+  ''
+  # https://github.com/AZO234/NP2kai/issues/203
+  # This really needs to be adjusted abit to really be POSIX-compliant & still Windows-compatible, but at least on Linux this should be fine...
+  + ''
+    substituteInPlace network/net.c \
+      --replace-fail 'np2net_hThreadR = NULL' 'np2net_hThreadR = 0' \
+      --replace-fail 'np2net_hThreadW = NULL' 'np2net_hThreadW = 0'
+  ''
+  # Stub out the IDE dialogue when the target doesn't support IDE
+  # https://github.com/AZO234/NP2kai/issues/204
+  + ''
+    echo '#ifdef SUPPORT_IDEIO' > tmp
+    cat x/gtk2/dialog_ide.c >> tmp
+    echo '#endif' >> tmp
+    mv tmp x/gtk2/dialog_ide.c
   '';
 
   strictDeps = true;
@@ -73,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     SDL2
     SDL2_ttf
-    SDL2_mixer
   ]
   ++ lib.optionals enableX11 [
     fontconfig
@@ -84,20 +88,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SDL" true)
-    (lib.cmakeBool "BUILD_X" enableX11)
-    (lib.cmakeBool "BUILD_HAXM" enableHAXM)
-    (lib.cmakeBool "BUILD_I286" enable16Bit)
+    (lib.strings.cmakeBool "BUILD_SDL" true)
+    (lib.strings.cmakeBool "BUILD_X" enableX11)
+    (lib.strings.cmakeBool "BUILD_I286" enable16Bit)
+    (lib.strings.cmakeBool "BUILD_HAXM" false)
 
-    (lib.cmakeBool "USE_SDL" true)
-    (lib.cmakeBool "USE_SDL2" true)
-    (lib.cmakeBool "USE_SDL_MIXER" true)
-    (lib.cmakeBool "USE_SDL_TTF" true)
-    (lib.cmakeBool "USE_X" enableX11)
-    (lib.cmakeBool "USE_HAXM" enableHAXM)
+    (lib.strings.cmakeBool "USE_SDL3" false) # WIP, doesn't really seem to build yet
+    (lib.strings.cmakeBool "USE_SDL2" true)
+    (lib.strings.cmakeBool "USE_SDL" true)
+    (lib.strings.cmakeBool "USE_SDL_TTF" true)
+    (lib.strings.cmakeBool "USE_X" enableX11)
+    (lib.strings.cmakeBool "USE_HAXM" false)
   ];
-
-  enableParallelBuilding = true;
 
   env = {
     NP2KAI_VERSION = finalAttrs.version;

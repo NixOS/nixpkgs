@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "6.0.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FUhmbp4P9zQFlSf3ss17zs4ZaPUi0CbVceq3ZJeIXBY=";
+    hash = "sha256-eora/+zJf60trmANEqAhYAQXfEMifyw5gLPKcqBW46w=";
   };
 
-  vendorHash = "sha256-R4chuOzpy/aEB5i5owZV3M7ByqnrXzxLaCeUOcjzQKE=";
+  vendorHash = "sha256-t4l8872bniTmNIW4ias1gImURJgrR6htXkncqfrJ+AU=";
 
   nativeBuildInputs = [
     stuffbin
@@ -78,7 +78,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
-      raitobezarius
       hougo
     ];
     license = lib.licenses.agpl3Only;

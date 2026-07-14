@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.01";
 
   src = fetchFromGitHub {
-    owner = "cntools";
+    owner = "collabora";
     repo = "libsurvive";
     tag = "v${finalAttrs.version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
   ];
 
-  # https://github.com/cntools/libsurvive/issues/272
+  # https://github.com/collabora/libsurvive/issues/272
   postPatch = ''
     substituteInPlace survive.pc.in \
       libs/cnkalman/cnkalman.pc.in libs/cnkalman/libs/cnmatrix/cnmatrix.pc.in \
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open Source Lighthouse Tracking System";
-    homepage = "https://github.com/cntools/libsurvive";
+    homepage = "https://github.com/collabora/libsurvive";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;

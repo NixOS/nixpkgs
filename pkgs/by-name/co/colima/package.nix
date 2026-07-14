@@ -5,7 +5,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  lima,
+  krunkit,
+  lima-full,
   makeWrapper,
   procps,
   qemu,
@@ -15,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "colima";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = "colima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WYwHqMPHRF17j7EfZzxHAMV0JPGZKLfJCn0axpuh5sc=";
+    hash = "sha256-FBFL3VO6t7SaGnZBT2qBD1DbRg14klBpiPiaELbRfIY=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -36,7 +37,7 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-UAnQZyZ4EcIZz55jXUjkJDjq3s0uLPBnwUPyNcBV6aE=";
+  vendorHash = "sha256-j1RuG3CTGfVNfT/v+C2pZgb58c9cxa2op3LA/F5rNWo=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log
@@ -60,13 +61,14 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
-        lib.makeBinPath [
-          # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
-          (lima.override {
-            withAdditionalGuestAgents = true;
-          })
-          qemu
-        ]
+        lib.makeBinPath (
+          [
+            # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+            lima-full
+            qemu
+          ]
+          ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        )
       }
 
     installShellCompletion --cmd colima \

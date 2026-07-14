@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "markitdown_mcp"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "MCP server for the markitdown library";

@@ -22,6 +22,10 @@ in
       '';
     };
 
+    resizeHelper.enable = mkEnableOption "lvresize_fs_helper" // {
+      default = true;
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.lvm2;
@@ -51,7 +55,7 @@ in
   config = mkMerge [
     {
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
-      environment.etc."lvm/lvm.conf".text = "config {}";
+      environment.etc."lvm/lvm.conf".text = lib.mkBefore "config {}";
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.packages = [ cfg.package.out ];
@@ -59,6 +63,8 @@ in
       systemd.packages = [ cfg.package ];
 
       services.udev.packages = [ cfg.package.out ];
+      environment.etc."lvm/lvm.conf".text =
+        mkIf cfg.resizeHelper.enable "global/lvresize_fs_helper_executable = ${pkgs.lvm2.scripts}/libexec/lvresize_fs_helper";
     })
     (mkIf config.boot.initrd.services.lvm.enable {
       # We need lvm2 for the device-mapper rules
@@ -71,9 +77,7 @@ in
       systemd.sockets."dm-event".wantedBy = [ "sockets.target" ];
       systemd.services."lvm2-monitor".wantedBy = [ "sysinit.target" ];
 
-      environment.etc."lvm/lvm.conf".text = ''
-        dmeventd/executable = "${cfg.package}/bin/dmeventd"
-      '';
+      environment.etc."lvm/lvm.conf".text = "dmeventd/executable = ${cfg.package}/bin/dmeventd";
       services.lvm.package = mkDefault pkgs.lvm2_dmeventd;
     })
     (mkIf cfg.boot.thin.enable {

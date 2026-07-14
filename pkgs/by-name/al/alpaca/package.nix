@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "9.2.0";
+  version = "9.2.4";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-/FpeizUrO7WSfcOfBkM0IIdu0rc7UvLXXP2y/tunxeo=";
+    hash = "sha256-rZ1H4QfxkBo+fVFCDODaio+1NEwRVjIY388Q9sR8qO4=";
   };
 
   postPatch = ''

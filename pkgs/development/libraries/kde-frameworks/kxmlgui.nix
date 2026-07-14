@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qttools,
   attica,
@@ -21,7 +22,10 @@ mkDerivation {
     "out"
     "dev"
   ];
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     attica
     kglobalaccel

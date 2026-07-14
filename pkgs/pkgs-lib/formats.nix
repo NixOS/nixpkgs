@@ -23,6 +23,7 @@ let
     pipe
     singleton
     strings
+    toJSON
     toPretty
     types
     versionAtLeast
@@ -37,6 +38,7 @@ let
     toKeyValue
     toLua
     mkLuaInline
+    toPlist
     ;
 
   inherit (lib.types)
@@ -81,6 +83,8 @@ let
       str
       ;
   };
+
+  json2x = pkgs.buildPackages.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
@@ -127,6 +131,8 @@ optionalAttrs allowAliases aliases
 
   php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
 
+  configobj = (import ./formats/configobj/default.nix { inherit lib pkgs; }).format;
+
   json =
     { }:
     {
@@ -140,12 +146,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
+            # NIX_ATTRS_JSON_FILE won't have `value` if it's null, but jq returns null for missing properties anyway
+            # jsonNull test keeps this in check
             ''
-              jq . "$valuePath" > $out
+              jq .value "$NIX_ATTRS_JSON_FILE" > $out
             ''
         ) { };
 
@@ -163,12 +171,16 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal_0_17 ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2yaml "$valuePath" "$out"
+              json2yaml ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_1Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
             ''
         ) { };
 
@@ -186,12 +198,16 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2yaml "$valuePath" "$out"
+              json2yaml ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_2Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
             ''
         ) { };
 
@@ -242,12 +258,23 @@ optionalAttrs allowAliases aliases
             description = "section of an INI file (attrs of " + atom.description + ")";
           };
 
-        maybeToList =
+        maybeCoerceList =
           listToValue:
           if listToValue != null then
             mapAttrs (key: val: if isList val then listToValue val else val)
           else
             id;
+        maybeCoerceAllLists =
+          listToValue:
+          if listToValue != null then
+            mapAttrs (_: mapAttrs (key: val: if isList val then listToValue val else val))
+          else
+            id;
+
+        ignoredArgs = [
+          "listToValue"
+          "atomsCoercedToLists"
+        ];
       in
       {
         ini =
@@ -278,13 +305,8 @@ optionalAttrs allowAliases aliases
             generate =
               name: value:
               pipe value [
-                (mapAttrs (_: maybeToList listToValue))
-                (toINI (
-                  removeAttrs args [
-                    "listToValue"
-                    "atomsCoercedToLists"
-                  ]
-                ))
+                (maybeCoerceAllLists listToValue)
+                (toINI (removeAttrs args ignoredArgs))
                 (pkgs.writeText name)
               ];
           };
@@ -333,15 +355,10 @@ optionalAttrs allowAliases aliases
                 ...
               }:
               pkgs.writeText name (
-                toINIWithGlobalSection
-                  (removeAttrs args [
-                    "listToValue"
-                    "atomsCoercedToLists"
-                  ])
-                  {
-                    globalSection = maybeToList listToValue globalSection;
-                    sections = mapAttrs (_: maybeToList listToValue) sections;
-                  }
+                toINIWithGlobalSection (removeAttrs args ignoredArgs) {
+                  globalSection = maybeCoerceList listToValue globalSection;
+                  sections = maybeCoerceAllLists listToValue sections;
+                }
               );
           };
 
@@ -349,7 +366,7 @@ optionalAttrs allowAliases aliases
           {
             listsAsDuplicateKeys ? false,
             ...
-          }@args:
+          }:
           let
             atom = iniAtom {
               inherit listsAsDuplicateKeys;
@@ -388,7 +405,7 @@ optionalAttrs allowAliases aliases
     // {
       generate =
         name: value:
-        lib.warn
+        warn
           "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
           rawFormat.generate
           name
@@ -440,37 +457,36 @@ optionalAttrs allowAliases aliases
         attrsOf atom;
 
       generate =
-        name: value:
         let
-          transformedValue =
+          transformValue =
             if listToValue != null then
-              mapAttrs (key: val: if isList val then listToValue val else val) value
+              mapAttrs (key: val: if isList val then listToValue val else val)
             else
-              value;
+              id;
+          finalArgs = removeAttrs args [ "listToValue" ];
         in
-        pkgs.writeText name (toKeyValue (removeAttrs args [ "listToValue" ]) transformedValue);
+        name: value: pkgs.writeText name (toKeyValue finalArgs (transformValue value));
 
     };
 
   toml =
     { }:
-    json { }
-    // {
+    {
       type = types.toml;
 
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, remarshal }:
+          { runCommand }:
           runCommand name
             {
-              nativeBuildInputs = [ remarshal ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              nativeBuildInputs = [ json2x ];
+              inherit value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2toml "$valuePath" "$out"
+              json2x toml --unwrap value "$NIX_ATTRS_JSON_FILE" "$out"
             ''
         ) { };
 
@@ -487,8 +503,7 @@ optionalAttrs allowAliases aliases
   */
   cdn =
     { }:
-    json { }
-    // {
+    {
       type = serializableValueWith { typeName = "CDN"; };
 
       generate =
@@ -498,11 +513,13 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ json2cdn ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              value = toJSON value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -542,9 +559,6 @@ optionalAttrs allowAliases aliases
     [Tuple]: <https://hexdocs.pm/elixir/Tuple.html>
   */
   elixirConf =
-    {
-      elixir ? pkgs.elixir,
-    }:
     let
       toElixir =
         value:
@@ -597,6 +611,8 @@ optionalAttrs allowAliases aliases
           elixirMap value
         else if _elixirType == "tuple" then
           tuple value
+        else if _elixirType == "charlist" then
+          charlist value
         else
           abort "formats.elixirConf: should never happen (_elixirType = ${_elixirType})";
 
@@ -610,13 +626,17 @@ optionalAttrs allowAliases aliases
 
       tuple = values: "{${listContent values}}";
 
+      charlist = value: "~c\"${value}\"";
+
       toConf =
-        values:
         let
           keyConfig =
             rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
           keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
+        in
+        values:
+        let
           rootConfigs = flatten (mapAttrsToList keyConfigs values);
         in
         ''
@@ -625,6 +645,9 @@ optionalAttrs allowAliases aliases
           ${concatStringsSep "\n" rootConfigs}
         '';
     in
+    {
+      elixir ? pkgs.elixir,
+    }:
     {
       type =
         let
@@ -672,6 +695,12 @@ optionalAttrs allowAliases aliases
             _elixirType = "atom";
           };
 
+          # Make an Elixir charlist out of a string.
+          mkCharlist = value: {
+            inherit value;
+            _elixirType = "charlist";
+          };
+
           # Make an Elixir tuple out of a list.
           mkTuple = value: {
             inherit value;
@@ -712,6 +741,12 @@ optionalAttrs allowAliases aliases
                 check = isElixirType "atom";
               });
 
+              charlist = elixirOr (mkOptionType {
+                name = "elixirCharlist";
+                description = "elixir charlist";
+                check = isElixirType "charlist";
+              });
+
               tuple = elixirOr (mkOptionType {
                 name = "elixirTuple";
                 description = "elixir tuple";
@@ -734,12 +769,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -783,14 +818,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -801,7 +836,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
       # Alias for mkLuaInline
-      lib.mkRaw = lib.mkLuaInline;
+      lib.mkRaw = mkLuaInline;
     };
 
   nixConf =
@@ -825,14 +860,12 @@ optionalAttrs allowAliases aliases
             float
             str
             path
-            package
+            types.package
           ]);
         in
         attrsOf atomType;
       generate =
-        name: value:
         let
-
           # note that list type has been omitted here as the separator varies, see `nix.settings.*`
           mkValueString =
             v:
@@ -860,8 +893,8 @@ optionalAttrs allowAliases aliases
           mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
 
           isExtra = key: hasPrefix "extra-" key;
-
         in
+        name: value:
         pkgs.writeTextFile {
           inherit name;
           # workaround for https://github.com/NixOS/nix/issues/9487
@@ -874,7 +907,7 @@ optionalAttrs allowAliases aliases
             ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
             ${extraOptions}
           '';
-          checkPhase = lib.optionalString checkConfig (
+          checkPhase = optionalString checkConfig (
             if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
               ''
                 echo "Ignoring validation for cross-compilation"
@@ -929,9 +962,11 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = builtins.toJSON (value._imports or [ ]);
-              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
-              pythonGen = ''
+              imports = value._imports or [ ];
+              # value must be an attrset, type would verify that,
+              # otherwise removeAttrs will fail.
+              value = removeAttrs value [ "_imports" ];
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
@@ -953,27 +988,21 @@ optionalAttrs allowAliases aliases
                     else:
                         return repr(value)
 
-                with open(os.environ["importsPath"], "r") as f:
-                    imports = json.load(f)
-                    if imports is not None:
-                        for i in imports:
+                with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                    attrs = json.load(f)
+                    if attrs["imports"] is not None:
+                        for i in attrs["imports"]:
                             print(f"import {i}")
                         print()
 
-                with open(os.environ["valuePath"], "r") as f:
-                    for key, value in json.load(f).items():
+                    for key, value in attrs["value"].items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "imports"
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -986,7 +1015,13 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = serializableValueWith { typeName = "XML"; };
+        type =
+          attrsOf (serializableValueWith {
+            typeName = "XML";
+          })
+          // {
+            description = "XML value";
+          };
 
         generate =
           name: value:
@@ -1002,25 +1037,24 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                value = builtins.toJSON value;
-                pythonGen = ''
+                inherit value;
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
 
-                  with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${
+                  with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                      value = json.load(f).get("value")
+                      assert type(value) is dict, "value must be an attrset"
+                      print(xmltodict.unparse(value, full_document=${
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };
@@ -1051,11 +1085,10 @@ optionalAttrs allowAliases aliases
         in
         valueType;
 
-      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+      generate = name: value: pkgs.writeText name (toPlist { inherit escape; } value);
     };
 
   hcl1 =
-    args:
     let
       # Helper function to recursively transform values for HCL1 canonicalization
       # Rule: If an attribute value is an attribute set, wrap it in a list
@@ -1071,6 +1104,7 @@ optionalAttrs allowAliases aliases
           value;
       jsonFormat = json { };
     in
+    args:
     jsonFormat
     // {
       generate = name: value: jsonFormat.generate name (mapAttrs (_: transform) value);

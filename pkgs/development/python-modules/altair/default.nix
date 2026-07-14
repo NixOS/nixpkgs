@@ -32,14 +32,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "altair";
-  version = "6.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Qc51L4tL1pRDpWwadxPpTE4tDH3FTO/wH67FtXMN7k=";
+    hash = "sha256-6507I+4ItjZezbprKn4r/oeaS1U7CF8+JKkHRmDC8js=";
   };
 
   build-system = [ hatchling ];

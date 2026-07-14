@@ -6,7 +6,7 @@
   asysocks,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unidns";
   version = "0.0.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "unidns";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uhTb27HeBaoI4yURpNf1+D6bWIXSsmYzUyk0RJmgbjQ=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Basic async DNS library";
     homepage = "https://github.com/skelsec/unidns";
-    changelog = "https://github.com/skelsec/unidns/releases/${src.tag}";
+    changelog = "https://github.com/skelsec/unidns/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

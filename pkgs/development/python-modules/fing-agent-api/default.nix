@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fing-agent-api";
-  version = "1.0.3";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fingltd";
     repo = "fing-agent-pyapi";
     tag = finalAttrs.version;
-    hash = "sha256-tkFTkWYvWw/x2k+jT6lu/Takacm6aDX4hn8thnGZf5g=";
+    hash = "sha256-RUV6/iSA82/aQoWfsp/3iPnqwJ4xjMbO/NR/ut4qORU=";
   };
 
   build-system = [ setuptools ];

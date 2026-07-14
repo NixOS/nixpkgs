@@ -305,7 +305,7 @@ let
 
   mergedCudaLibraries = with cudaPackages; [
     cuda_cudart # cuda_runtime.h, -lcudart
-    cuda_cccl
+    cccl
     libcurand # curand_kernel.h
     libcusparse # cusparse.h
     libcusolver # cusolverDn.h
@@ -335,14 +335,14 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qsAvcOB8ugGlBqBrLfNHqaIUcxLwaXBTg8xWRnGyd94=";
+    hash = "sha256-7E67xVRlKmm+Hbp5nphhwH8SQC9LpCFNBfF2ZAOt79k=";
   };
 
   patches = [
@@ -367,7 +367,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools" \
+      --replace-fail "grpcio-tools==1.78.0" "grpcio"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -602,6 +603,23 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       # find_isa Function invoked with incorrect arguments for function named:
       # find_isa
       "x86_64-darwin"
+    ];
+    knownVulnerabilities = [
+      "CVE-2026-25960"
+      "CVE-2026-27893"
+      "CVE-2026-41523"
+      "CVE-2026-44222"
+      "CVE-2026-44223"
+      "CVE-2026-47155"
+      "CVE-2026-48746"
+      "CVE-2026-53923"
+      "CVE-2026-54232"
+      "CVE-2026-54233"
+      "CVE-2026-54234"
+      "CVE-2026-54235"
+      "CVE-2026-54236"
+      "CVE-2026-55514"
+      "CVE-2026-55574"
     ];
   };
 })

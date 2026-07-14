@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "meteo-lt-pkg";
-  version = "0.4.0";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brunas";
     repo = "meteo_lt-pkg";
     tag = "v${version}";
-    hash = "sha256-JYuWO9w0JHjmx4pnjh/WSKJNxVePkqWzPew0wd06uJ8=";
+    hash = "sha256-OjIBgIOSJ65ryIF4D/UUUa1Oq0sPkKnaQEJeviimqhE=";
   };
 
   build-system = [ setuptools ];

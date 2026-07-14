@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
   };
 
+  patches = [
+    # https://github.com/johang/btfs/pull/103
+    ./disable-macfuse-extensions.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

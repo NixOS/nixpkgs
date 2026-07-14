@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableMpi mpi
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ];
 
   postInstall = ''

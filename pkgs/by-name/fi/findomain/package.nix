@@ -1,15 +1,19 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
+  nix-update-script,
   openssl,
+  pkg-config,
+  rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findomain";
   version = "10.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "findomain";
@@ -25,9 +29,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -37,12 +41,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage findomain.1
   '';
 
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fastest and cross-platform subdomain enumerator";
     homepage = "https://github.com/Findomain/Findomain";
-    changelog = "https://github.com/Findomain/Findomain/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Findomain/Findomain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findomain";
   };
 })

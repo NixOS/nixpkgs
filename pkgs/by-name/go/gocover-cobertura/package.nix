@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gocover-cobertura";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "boumenot";
     repo = "gocover-cobertura";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9KYNK6YV+iYB5Mmporzzw0aYTPCanvX7JALoP72dMtU=";
+    sha256 = "sha256-7NrdoAUwbN6S19elYkYEiDbxIFVOaAnT7CbYZej/cfs=";
   };
 
   deleteVendor = true;
-  vendorHash = "sha256-tPCiU7UVltYaHM1JVRje6EeG6Thn+3qm5I3MjKvD1/o=";
+  vendorHash = null;
 
   ldflags = [
     "-s"

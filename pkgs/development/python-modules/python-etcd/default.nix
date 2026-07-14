@@ -8,9 +8,9 @@
   urllib3,
   dnspython,
   pytestCheckHook,
-  etcd_3_4,
   mock,
   pyopenssl,
+  python,
 }:
 
 buildPythonPackage {
@@ -25,7 +25,12 @@ buildPythonPackage {
     hash = "sha256-osiSeBdZBT3w9pJUBxD7cI9/2T7eiyj6M6+87T8bTj0=";
   };
 
-  patches = [ ./remove-getheader-usage.patch ];
+  patches = [
+    ./remove-getheader-usage.patch
+  ]
+  ++ lib.optionals (python.pythonAtLeast "3.14") [
+    ./Fix-multiprocessing-errors-for-python-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,7 +41,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    etcd_3_4
     mock
     pyopenssl
   ];
@@ -50,6 +54,14 @@ buildPythonPackage {
         --replace-fail "assertEquals" "assertEqual"
     done
   '';
+
+  disabledTestPaths = [
+    # these tests expect that etcd is at version 3.4, which has been dropped in
+    # Nixpkgs due to it being unmaintained.
+    "src/etcd/tests/integration/test_simple.py"
+    "src/etcd/tests/integration/test_ssl.py"
+    "src/etcd/tests/test_auth.py"
+  ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Seems to be failing because of network restrictions

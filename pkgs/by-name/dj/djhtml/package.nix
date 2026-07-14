@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "djhtml";
-  version = "3.0.10";
+  version = "3.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rtts";
     repo = "djhtml";
     tag = finalAttrs.version;
-    hash = "sha256-7K7/Zm6ORfza9AD+Jyl+0Q5zlxgF+WpH3a1O18VpT5k=";
+    hash = "sha256-l3qxPwnEyJ0sZWquaol0bOX7QvImLc8IRTfyE2yqXCo=";
   };
 
   build-system = [ python3Packages.setuptools ];

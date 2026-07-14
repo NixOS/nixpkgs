@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     "ZLESS_PROG=zless"
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) {
+    NIX_CFLAGS_LINK = "-no-pie";
+  };
+
   nativeCheckInputs = [
     less
     perl

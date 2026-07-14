@@ -9,10 +9,10 @@
   libaio,
   makeWrapper,
   odbcSupport ? true,
-  unixODBC,
+  unixodbc,
 }:
 
-assert odbcSupport -> unixODBC != null;
+assert odbcSupport -> unixodbc != null;
 
 let
   inherit (lib) optional optionals optionalString;
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
     (lib.getLib stdenv.cc.cc)
   ]
   ++ optional stdenv.hostPlatform.isLinux libaio
-  ++ optional odbcSupport unixODBC;
+  ++ optional odbcSupport unixodbc;
 
   nativeBuildInputs = [
     makeWrapper

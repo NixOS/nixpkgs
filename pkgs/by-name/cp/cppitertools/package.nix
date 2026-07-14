@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppitertools";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "ryanhaining";
     repo = "cppitertools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mii4xjxF1YC3H/TuO/o4cEz8bx2ko6U0eufqNVw5LNA=";
+    hash = "sha256-1lHpy+9e17lP/58EEIzrmyBwbmMD665ypDJtkSFrN9E=";
   };
 
   __structuredAttrs = true;
@@ -25,13 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
   # tests. The CMake system defines tests and install targets, including a
   # cppitertools-config.cmake, which is really helpful for downstream consumers
   # to detect this package since it has no pkg-config.
-  # However the CMake system also specifies the entire source repo as an install
-  # target, including support files, the build directory, etc.
-  # We can't simply take cppitertools-config.cmake for ourselves because before
-  # install it's placed in non-specific private CMake subdirectory of the build
-  # directory.
-  # Therefore, we instead simply patch CMakeLists.txt to make the target that
-  # installs the entire directory non-default, and then install the headers manually.
 
   strictDeps = true;
 
@@ -47,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   # files that are also in that repo.
   cmakeBuildDir = "cmake-build";
 
-  includeInstallDir = "${placeholder "out"}/include/cppitertools";
   cmakeInstallDir = "${placeholder "out"}/share/cmake";
 
   # This version of cppitertools considers itself as having used the default value,
@@ -58,12 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Dcppitertools_INSTALL_CMAKE_DIR=${finalAttrs.cmakeInstallDir}" ];
 
-  prePatch = ''
-    # Mark the `.` install target as non-default.
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+  prePatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # Required for tests.
     cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
   '';
@@ -77,11 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    # Install the -config.cmake files.
     cmake --install . "--prefix=$out"
-    # Install the headers.
-    mkdir -p "$includeInstallDir"
-    cp -r ../*.hpp ../internal "$includeInstallDir"
     runHook postInstall
   '';
 

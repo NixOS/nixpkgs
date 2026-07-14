@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "featherpad";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-h/Opw4PmIEZdIx+gXoXriA0h1YxyImiZJFFPr1KUo/A=";
+    hash = "sha256-BPZkVmOxVJ8VoQ9+0Ca63pDIOfdwsaO24AEq0jkYCY0=";
   };
 
   nativeBuildInputs = [

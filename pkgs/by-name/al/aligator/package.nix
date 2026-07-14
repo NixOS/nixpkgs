@@ -14,9 +14,9 @@
 
   # buildInputs
   fmt,
+  mimalloc,
 
   # propagatedBuildInputs
-  suitesparse,
   crocoddyl,
   pinocchio,
 
@@ -27,14 +27,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OyCJa2iTkCxVLooSKdVgBd0y7rHObo4vFcc56t48TSY=";
+    hash = "sha256-8DO+lfM4mk4bA/IOEJlLaOp9snCUBHiw7RRcYEwJC7c=";
   };
+
+  # aligator 0.19.0 expect gbenchmark 1.9.5, which is not merged yet:
+  # https://github.com/NixOS/nixpkgs/pull/506375
+  postPatch = ''
+    substituteInPlace \
+        bench/lqr.cpp \
+        bench/se2-car.cpp \
+        bench/talos-walk.cpp \
+        bench/croc-talos-arm.cpp \
+        bench/gar-riccati.cpp \
+      --replace-fail \
+        "benchmark::Benchmark" \
+        "benchmark::internal::Benchmark"
+  '';
 
   outputs = [
     "doc"
@@ -52,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+    mimalloc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -60,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     crocoddyl
     pinocchio
-    suitesparse
   ];
 
   checkInputs = [

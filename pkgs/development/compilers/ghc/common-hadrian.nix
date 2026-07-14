@@ -238,51 +238,39 @@
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
       ]
-      ++ lib.optionals (lib.versionOlder version "9.12.1") [
+      ++ lib.optionals (lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "ghc-ppc-support-elf-v2-on-powerpc64-big-endian.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/ead75532c9dc915bfa9ebaef0ef5d148e793cc0a.patch";
           # ghc-platform was split out of ghc-boot in ddcdd88c2c95445a87ee028f215d1e876939a4d9
-          postFetch = lib.optionalString (lib.versionOlder version "9.10.1") ''
+          postFetch = lib.optionalString (lib.versionOlder version "9.10") ''
             substituteInPlace $out \
               --replace-fail 'libraries/ghc-platform/src/GHC' 'libraries/ghc-boot/GHC'
           '';
           hash =
-            if lib.versionOlder version "9.10.1" then
+            if lib.versionOlder version "9.10" then
               "sha256-5SVSW1aYoItqHli5QjnudH4zGporYNLDeEo4gZksBZw="
             else
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
         })
       ]
-      ++
-        lib.optionals
-          (
-            (lib.versions.majorMinor version == "9.12" && lib.versionOlder version "9.12.3")
-            || (lib.versions.majorMinor version != "9.12" && lib.versionOlder version "9.14.1")
-          )
-          [
-            (fetchpatch {
-              name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
-              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
-              hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder version "9.12") [
+        (fetchpatch {
+          name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
+          hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
+        })
+      ]
       # Fix build with gcc15
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
-      ++
-        lib.optionals
-          (
-            lib.versionOlder version "9.12.3"
-            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.12")
-          )
-          [
-            (fetchpatch {
-              name = "ghc-hp2ps-c-gnu17.patch";
-              url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
-              hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder version "9.10") [
+        (fetchpatch {
+          name = "ghc-hp2ps-c-gnu17.patch";
+          url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
+          hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
+        })
+      ]
       # Fix subword division regression in 9.12.3 https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15264
       ++ lib.optionals (version == "9.12.3") [
         (fetchpatch {
@@ -304,7 +292,7 @@
       ]
 
       # Unreleased or still in-progress upstream cross fixes
-      ++ lib.optionals (lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.15") [
+      ++ lib.optionals (lib.versionAtLeast version "9.10" && lib.versionOlder version "9.15") [
         # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
         (fetchpatch {
           name = "include-modern-utimbuf.patch";
@@ -321,7 +309,34 @@
       ]
 
       # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
-      ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
+      ++
+        lib.optionals
+          (
+            lib.versionOlder version "9.12.4"
+            || (lib.versionAtLeast version "9.14" && lib.versionOlder version "9.15.20260129")
+          )
+          [
+            ./ghc-9.6-or-later-docs-sphinx-9.patch
+          ]
+
+      # Fixes rts/Types.h missing from the install when targeting javascript
+      # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15740, krank:ignore-line
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/27033. krank:ignore-line
+      ++
+        lib.optionals
+          (
+            version == "9.12.3"
+            # TODO(@sternenseemann): 9.14.2 will likely also have this patch
+            || (lib.versionAtLeast version "9.14" && lib.versionOlder version "9.15.20260127")
+          )
+          [
+            (fetchpatch {
+              name = "ghc-9.12.3-ghcjs-install-rts-types.h.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/5b1be555be4f0989d78c274991c5046d7ac6d25e.patch";
+              hash = "sha256-pv4NDyQ6FlZgmTYZ4Ghis4qggt7nCDMhqGaFxTxVPac=";
+              includes = [ "rts/rts.cabal" ];
+            })
+          ]
 
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
@@ -361,7 +376,7 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+assert lib.assertMsg (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
   "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let
@@ -670,6 +685,11 @@ stdenv.mkDerivation (
     # `--with` flags for libraries needed for RTS linker
     configureFlags = [
       "--datadir=$doc/share/doc/ghc"
+    ]
+    # ghc 9.10 and later use c17 by default. we use gnu17 on darwin for older
+    # ghc versions to match this and fix build issues with newer clang.
+    ++ lib.optionals (hostPlatform.isDarwin && lib.versionOlder version "9.10") [
+      "CFLAGS=-std=gnu17"
     ]
     ++ lib.optionals enableTerminfo [
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"

@@ -5,14 +5,14 @@
   cudf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mccs";
   version = "1.1+19";
 
   src = fetchFromGitHub {
     owner = "AltGr";
     repo = "ocaml-mccs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xvcqPXyzVGXXFYRVdFPaCfieFEguWffWVB04ImEuPvQ=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

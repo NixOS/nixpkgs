@@ -15,7 +15,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "rumqttd-${finalAttrs.version}";
     hash = "sha256-WFhVSFAp5ZIqranLpU86L7keQaReEUXxxGhvikF+TBw=";
   };
-  cargoHash = "sha256-UP1uhG+Ow/jN/B8i//vujP7vpoQ5PjYGCrXs0b1bym4=";
+
+  # Bump vendored `metrics` past 0.24.2 which fixes a borrow-checker error
+  # under newer rustc (https://github.com/rust-lang/rust/issues/141402).
+  cargoPatches = [ ./bump-metrics.patch ];
+
+  cargoHash = "sha256-rVJBYOleIHFNwWNrz0JU8rwiMv9E1QfPjDvtrfXvWlQ=";
 
   buildAndTestSubdir = "rumqttd";
 

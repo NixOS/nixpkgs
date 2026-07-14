@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://al.chemy.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "alchemy";
   };

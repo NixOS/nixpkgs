@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   libconfuse,
@@ -10,11 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "genimage";
-  version = "19";
+  version = "20";
 
-  src = fetchurl {
-    url = "https://public.pengutronix.de/software/genimage/genimage-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-fsT8uGVmKosv8gKEgZBE/6hBN788oW+3SXASkbwB8Qg=";
+  src = fetchFromGitHub {
+    owner = "pengutronix";
+    repo = "genimage";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6pKqvpoEQWebubl6K5FzEAv2aUsBXgOBEAdcCwARkrU=";
   };
 
   nativeBuildInputs = [

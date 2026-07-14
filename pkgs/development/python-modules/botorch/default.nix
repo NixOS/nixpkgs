@@ -12,8 +12,8 @@
   gpytorch,
   linear-operator,
   multipledispatch,
+  ninja,
   pyre-extensions,
-  pyro-ppl,
   scipy,
   threadpoolctl,
   torch,
@@ -23,20 +23,23 @@
   pymoo,
 
   # tests
+  jax,
+  numpyro,
   pytestCheckHook,
   pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "botorch";
-  version = "0.17.0";
+  version = "0.18.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "botorch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NDdXsmVdrTEXMXXVf89EkGXVOYnEcXwtzarB5niTNaw=";
+    hash = "sha256-tUTtImqPlbS8g1oLoTTCCWQbeLwLop13qPjFrQeMtb8=";
   };
 
   build-system = [
@@ -48,8 +51,8 @@ buildPythonPackage (finalAttrs: {
     gpytorch
     linear-operator
     multipledispatch
+    ninja
     pyre-extensions
-    pyro-ppl
     scipy
     threadpoolctl
     torch
@@ -63,6 +66,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    jax
+    numpyro
     pytestCheckHook
   ];
 
@@ -82,9 +87,18 @@ buildPythonPackage (finalAttrs: {
     # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
     "test_optimize_acqf_mixed_binary_only"
   ]
-  ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # stuck tests on hydra
     "test_moo_predictive_entropy_search"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_append_features"
+    "test_delattr_ctx"
+    "test_input_perturbation"
+    "test_module_rollback_ctx"
+    "test_parameter_rollback_ctx"
+    "test_zero_grad_ctx"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # RuntimeError: required keyword attribute 'value' has the wrong type

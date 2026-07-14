@@ -29,6 +29,7 @@
   numpy,
   objsize,
   orjson,
+  pillow,
   proto-plus,
   protobuf,
   pyarrow,
@@ -65,20 +66,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
-  version = "2.71.0";
+  version = "2.75.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pIuRaBN1lmC3EMuUnBovl/pBmNwsDZ/vh/OM/sD9SrI=";
+    hash = "sha256-jlY46uVYECZGrT4hCd2eo6QoM4zUm+veGcgcPsHdD5A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/sdks/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "distlib==0.4.2" "distlib" \
+      --replace-fail "cython>=3.2.5,<4" "cython" \
       --replace-fail "==" ">="
 
     substituteInPlace setup.py \
@@ -86,10 +90,12 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "cryptography"
     "envoy-data-plane"
     "httplib2"
     "jsonpickle"
     "objsize"
+    "protobuf"
     "pyarrow"
   ];
 
@@ -119,6 +125,7 @@ buildPythonPackage (finalAttrs: {
     numpy
     objsize
     orjson
+    pillow
     proto-plus
     protobuf
     pyarrow
@@ -188,7 +195,6 @@ buildPythonPackage (finalAttrs: {
 
     # These tests depend on the availability of specific servers backends.
     "apache_beam/runners/portability/flink_runner_test.py"
-    "apache_beam/runners/portability/samza_runner_test.py"
     "apache_beam/runners/portability/spark_runner_test.py"
 
     # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
@@ -240,6 +246,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # ConnectionResetError: [Errno 104] Connection reset by peer
+    "test_process_exits_on_unsafe_hard_delete_with_manager"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pip
+    "test_populate_requirements_cache_uses_find_links"
+
     # AssertionError: Lists differ:
     # ['pickled_main_session', 'submission_environment_dependencies.txt'] != ['pickled_main_session']
     "test_main_session_staged_when_using_cloudpickle"

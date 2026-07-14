@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # from https://github.com/fhanau/Efficient-Compression-Tool/issues/145
+    ./ect-gcc-15-O3-fix.patch
+  ];
+
   # devendor libpng
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

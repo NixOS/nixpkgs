@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  openssl,
   pytestCheckHook,
 }:
 
@@ -27,11 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/ssl/gen.sh \
+      --replace-fail "c_rehash certs" "#c_rehash certs"
+  '';
+
   build-system = [
     hatchling
   ];
 
   nativeCheckInputs = [
+    openssl
     pytestCheckHook
   ];
 
@@ -44,6 +51,10 @@ buildPythonPackage rec {
 
     # paho.mqtt not in top-level dir to get caught by this
     export PYTHONPATH=".:$PYTHONPATH"
+
+    pushd tests/ssl
+    HOME="$(mktemp -d)" ./gen.sh
+    popd
   '';
 
   disabledTests = [

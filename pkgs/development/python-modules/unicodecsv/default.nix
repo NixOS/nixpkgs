@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
     homepage = "https://github.com/jdunck/python-unicodecsv";
     maintainers = with lib.maintainers; [ koral ];
+    license = lib.licenses.bsd2WithViews;
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   blueprint-compiler,
   meson,
   ninja,
@@ -17,7 +18,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "slobdict";
-  version = "1.0.0";
+  version = "1.2.0";
 
   pyproject = false; # built with meson
 
@@ -25,11 +26,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "MuntashirAkon";
     repo = "SlobDict";
     tag = finalAttrs.version;
-    hash = "sha256-V6EmEpxUMZUN9lHSNs4nZBZI2QNxUUWWODukm01lYxY=";
+    hash = "sha256-4u0VqaPDpyflWkN119IOVqKxpsskou3ou1dqpuRSaHI=";
   };
 
   nativeBuildInputs = [
     blueprint-compiler
+    glib
     gobject-introspection
     meson
     ninja
@@ -62,13 +64,28 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pymorphy3
     # python-romkan-ng not packaged
     xxhash
+
+    # Deps for cli mode
+    pygments
+    rich
+    premailer
+    cssutils
+    markdownify
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;
 
+  postBuild = ''
+    glib-compile-schemas --strict ../gnome-extension/slobdict@muntashir.dev/schemas
+  '';
+
   postInstall = ''
     chmod +x $out/bin/slobdict
+
+    mkdir -p $out/share/gnome-shell/extensions/slobdict@muntashir.dev
+    cp -r ../gnome-extension/slobdict@muntashir.dev/schemas $out/share/gnome-shell/extensions/slobdict@muntashir.dev
+    cp ../gnome-extension/slobdict@muntashir.dev/{extension.js,metadata.json} $out/share/gnome-shell/extensions/slobdict@muntashir.dev
   '';
 
   preFixup = ''
@@ -76,6 +93,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  passthru = {
+    extensionPortalSlug = "slobdict";
+    extensionUuid = "slobdict@muntashir.dev";
+  };
 
   meta = {
     homepage = "https://github.com/MuntashirAkon/SlobDict";

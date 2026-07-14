@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "goresym";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "goresym";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VYC9D27/4Up0zIO2wdstdQM8+5FwK+i+nxN8FoYpW4Q=";
+    hash = "sha256-zDa+NxoC9mAaITWEHzejJykWVnoqnlLQtzbu0vs3NoQ=";
   };
 
   subPackages = [ "." ];
@@ -39,6 +39,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mandiant/GoReSym";
     changelog = "https://github.com/mandiant/GoReSym/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

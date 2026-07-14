@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "balatro-mod-manager";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "skyline69";
     repo = "balatro-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ISEgmyGA96r+OolKc/8qiKee43ruNonmWdqfM4pr3p8=";
+    hash = "sha256-cazd6Cns87cjwBORQIsAD5rBes7eTGCAz7bytZO+TsQ=";
   };
 
   nodeModules = stdenv.mkDerivation {
@@ -50,10 +50,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-97O4DrnjZO2mhSrCQz9xbcRCSaxMNNa4NaLNPlmecJg=";
+    outputHash =
+      {
+        x86_64-linux = "sha256-SQCF05uuJg16Il7SvCXlzkm64wJyPfNzVqfgDj7YldI=";
+        aarch64-linux = "sha256-YobKPWe+0StlyJkYEeUmNzYAinGwR042HWpdwWOCt6Q=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
-  cargoHash = "sha256-TPZf4jtv/3mIpe6ASzPkIusQC/iPFpYN51XiiH6pkZc=";
+  cargoHash = "sha256-m27OdD+hpj1fGiTbe9VmdY+2EFBZKJ3o/4WMdpCpRSw=";
 
   dontUseCargoParallelTests = true;
   checkFlags = [
@@ -95,8 +100,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "A mod manager for the game Balatro";
     homepage = "https://balatro-mod-manager.dasguney.com/";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mhdask ];
+    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.aarch64);
+    maintainers = with lib.maintainers; [
+      mhdask
+      ryand56
+    ];
     mainProgram = "BMM";
   };
 })

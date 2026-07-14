@@ -24,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k54tCCGZ0ix112u8oxuHPl3LDNV6Fp5s79iVE85b33k=";
+    hash = "sha256-qQesB6xYzAHMEmscdzoBLJqj36NLd5K1EaPLJlkSFOU=";
   };
 
   build-system = [

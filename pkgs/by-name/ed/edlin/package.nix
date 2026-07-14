@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edlin";
-  version = "2.21";
+  version = "2.24";
 
   src =
     let
@@ -14,12 +14,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://sourceforge/freedos-edlin/freedos-edlin/${version}/edlin-${version}.tar.bz2";
-      hash = "sha256-lQ/tw8dvEKV81k5GV05o49glOmfYcEeJBmgPUmL3S2I=";
+      hash = "sha256-zj5kCDdEkjzDiun/5xL8yX2SVsnZc3hrzIAYUo4Vj+c=";
     };
 
   postInstall = ''
     mkdir -p $out/share/doc/edlin-${finalAttrs.version}/
-    cp AUTHORS ChangeLog README TODO edlin.htm $out/share/doc/edlin-${finalAttrs.version}/
+    cp AUTHORS ChangeLog README TODO edlin.html $out/share/doc/edlin-${finalAttrs.version}/
   '';
 
   meta = {

@@ -36,7 +36,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ zowoq ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 }

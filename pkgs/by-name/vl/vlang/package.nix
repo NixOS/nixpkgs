@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "0.4.11";
+  version = "0.5.1";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -25,12 +25,12 @@ let
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.4.11";
+    version = "0.5.1";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "a17f1105aa18b604ed8dac8fa5ca9424362c6e15";
-      hash = "sha256-DAsVr1wtRfGbKO74Vfq7ejci+zQabSWeir8njbHYV3o=";
+      rev = "f461dfebcdfac3c75fdf28fec80c07f0a7a9a53d";
+      hash = "sha256-GsciyAqCVbLpC6L+HFX90+1yX1Iq/GIBZIIzLVXbFN0=";
     };
 
     # patch the ptrace reference for darwin
@@ -48,8 +48,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "5a1c9d82669e765493abe19488eaef0252c97dac";
-    hash = "sha256-d/HGVYbbMv7cmF3I4LzD6N0gXSd8CJlPp0la3nPe1dw=";
+    rev = "6ecbf4c519de2ca4cb26432bb2653c9cb9f17309";
+    hash = "sha256-tFOI9Dh1yvFtsWHr4JvFUonbI6la3aj47YmfuFt3unI=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-K5B/fjdCYLE14LPg3ccS+sGC8CS7jZiuuxYkHvljGFA=";
+    hash = "sha256-f9YtL2+gWvFI/fX09CtQlPRLDZT7D6K8bRQvXApXByU=";
   };
 
   propagatedBuildInputs = [
@@ -107,6 +107,11 @@ stdenv.mkDerivation {
     ln -s $out/lib/v $out/bin/v
     wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
 
+    # gen_vc is a V-maintainer tool for pushing bootstrap C files to the vc
+    # repo; it requires network/SSH access and a v.mod root that doesn't exist
+    # in the installed layout, so it cannot be built in the Nix sandbox.
+    rm $out/lib/cmd/tools/gen_vc.v
+
     mkdir -p $HOME/.vmodules;
     ln -sf ${markdown} $HOME/.vmodules/markdown
     $out/lib/v -v build-tools
@@ -120,6 +125,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://vlang.io/";
+    changelog = "https://github.com/vlang/v/releases/tag/${version}";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

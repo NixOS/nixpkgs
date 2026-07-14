@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,14 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-HSxP5/sLHQTujBVt1u93625EXEc42lxpt8W1//6ngWM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -Dm644 fonts/variable/*.ttf -t $out/share/fonts/truetype
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
-  '';
+  preInstall = "rm -r fonts/old";
 
   meta = {
     description = "Slab serif typeface designed by Alessio Laiso";

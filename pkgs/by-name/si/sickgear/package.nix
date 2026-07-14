@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sickgear";
-  version = "3.34.11";
+  version = "3.34.13";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     tag = "release_${finalAttrs.version}";
-    hash = "sha256-7Jfm/NM5ij/YofU1bpQ8npX6exR1/W6PxvPpulauoMw=";
+    hash = "sha256-jOQktr7KG/C/ap/cLGMCwWnceirGo3TuwxXNewE5I78=";
   };
 
   dontBuild = true;

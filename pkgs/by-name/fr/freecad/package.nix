@@ -15,6 +15,7 @@
   libspnav,
   libxmu,
   medfile,
+  mpi,
   ninja,
   ode,
   opencascade-occt,
@@ -55,13 +56,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.2";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       tag = finalAttrs.version;
-      hash = "sha256-J//O/ABMFa3TFYwR0wc8d1UTA5iSFnEP2thOjuCN+uE=";
+      hash = "sha256-7/VEbs8YDM1Xwc819ab6av5fgRSIbbB6LeCM0V08vRU=";
       fetchSubmodules = true;
     };
 
@@ -84,6 +85,7 @@ freecad-utils.makeCustomizable (
       libxmu
       libspnav
       medfile
+      mpi
       ode
       xercesc
       yaml-cpp
@@ -100,30 +102,17 @@ freecad-utils.makeCustomizable (
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-      ./0002-FreeCad-OndselSolver-pkgconfig.patch
-
-      # https://github.com/FreeCAD/FreeCAD/pull/21710
-      ./0003-FreeCad-fix-font-load-crash.patch
-
-      # Fix build for boost 1.89 or later, remove once FreeCad 1.1 is released
-      # based on https://github.com/FreeCAD/FreeCAD/commit/0f6d00d2a547df0f5c2ba5ef0f79044a49b0a2d
-      ./0004-FreeCad-fix-boost-189-build.patch
-
       (fetchpatch {
-        url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
-        hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
-      })
-      # Inform Coin to use EGL when on Wayland
-      # https://github.com/FreeCAD/FreeCAD/pull/21917
-      (fetchpatch {
-        url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
-        hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
+        # https://github.com/FreeCAD/FreeCAD/pull/30899
+        # fix COIN3D_MICRO_VERSION regex for coin 4.0.10
+        url = "https://github.com/FreeCAD/FreeCAD/commit/e3e56059865849c6b1c85161f69183ad872414e3.patch";
+        hash = "sha256-qe0wn7DwvQT/pmrSCa44+orMetztpw8DZ+NhDJEYAMw=";
       })
     ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
-        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+        --replace-fail 'self.gmsh_bin = ""' 'self.gmsh_bin = "${lib.getExe gmsh}"'
     '';
 
     cmakeFlags = [
@@ -149,6 +138,12 @@ freecad-utils.makeCustomizable (
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
       ];
 
+    postInstall = ''
+      substituteInPlace $out/share/thumbnailers/FreeCAD.thumbnailer \
+        --replace-fail "TryExec=freecad-thumbnailer" "TryExec=$out/bin/freecad-thumbnailer" \
+        --replace-fail "Exec=freecad-thumbnailer" "Exec=$out/bin/freecad-thumbnailer"
+    '';
+
     postFixup = ''
       mv $out/share/doc $out
       ln -s $out/doc $out/share/doc
@@ -165,6 +160,9 @@ freecad-utils.makeCustomizable (
         ];
       };
     };
+
+    # 6.9k object files, cuts down build time from 2-3 hours to 15 minutes
+    requiredSystemFeatures = [ "big-parallel" ];
 
     meta = {
       homepage = "https://www.freecad.org";

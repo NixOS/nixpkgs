@@ -19,7 +19,7 @@ buildOctavePackage rec {
       bsd2
       gpl3Plus
     ];
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Geometry toolbox for 2D/3D geometric computing";
   };
 }

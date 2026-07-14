@@ -8,19 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-source-record";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-record";
     rev = version;
-    sha256 = "sha256-rVlySyk59u9MKdfrdJdxbJ9DNfKNjjdy86Is2SxCXXU=";
+    sha256 = "sha256-EykXa+7iVTnyCbT8rmadF3OP9Dmc1A4zxi4RukhuZ8s=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   cmakeFlags = [ "-DBUILD_OUT_OF_TREE=On" ];
 

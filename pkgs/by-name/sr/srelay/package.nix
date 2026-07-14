@@ -14,7 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1sn6005aqyfvrlkm5445cyyaj6h6wfyskfncfmds55x34hfyxpvl";
   };
 
-  patches = [ ./arm.patch ];
+  patches = [
+    ./arm.patch
+    ./signal-handler.patch
+  ];
 
   buildInputs = [ libxcrypt ];
 

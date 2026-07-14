@@ -8,9 +8,10 @@
   markdown,
   setuptools,
   setuptools-scm,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "systemrdl-compiler";
   version = "1.32.2";
 
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "systemrdl-compiler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1Dx6WxSzGaZxwRzXR/bjfZSU7TsvTYNVN0NaK3qQ7eo=";
   };
 
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     antlr4-python3-runtime
     colorama
     markdown
+    typing-extensions
   ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
@@ -42,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

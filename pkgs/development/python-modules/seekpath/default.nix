@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  flit-core,
   numpy,
   scipy,
   spglib,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.utf-8";
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     numpy

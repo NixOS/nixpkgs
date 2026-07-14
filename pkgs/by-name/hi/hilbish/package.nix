@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "2.3.4";
 
   src = fetchFromGitHub {
-    owner = "Rosettea";
+    owner = "sammy-ette";
     repo = "Hilbish";
     tag = "v${finalAttrs.version}";
     hash = "sha256-rEBUrDdJBCywuSmsxFLl4+uSwz06km2nztH5aCGcGiE=";
@@ -38,8 +38,8 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Interactive Unix-like shell written in Go";
     mainProgram = "hilbish";
-    changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/Rosettea/Hilbish";
+    changelog = "https://github.com/sammy-ette/Hilbish/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/sammy-ette/Hilbish";
     maintainers = with lib.maintainers; [ moni ];
     license = lib.licenses.mit;
   };

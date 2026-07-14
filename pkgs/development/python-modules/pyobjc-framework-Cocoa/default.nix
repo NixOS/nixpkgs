@@ -5,6 +5,9 @@
   lib,
   pyobjc-core,
   setuptools,
+  # TODO: Clean up on `staging`.
+  stdenv,
+  llvmPackages,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +28,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     darwin.DarwinTools # sw_vers
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   # See https://github.com/ronaldoussoren/pyobjc/pull/641. Unfortunately, we
@@ -43,6 +50,8 @@ buildPythonPackage rec {
     "-I${darwin.libffi.dev}/include"
     "-Wno-error=unused-command-line-argument"
   ];
+  # TODO: Clean up on `staging`.
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   pythonImportsCheck = [
     "Cocoa"

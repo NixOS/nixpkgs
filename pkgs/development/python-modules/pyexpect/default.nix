@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyexpect" ];
 
   meta = {
-    changelog = "https://dwt/pyexpect/releases/tag/${version}";
+    changelog = "https://github.com/dwt/pyexpect/releases/tag/${version}";
     description = "Minimal but very flexible implementation of the expect pattern";
     homepage = "https://github.com/dwt/pyexpect";
     license = lib.licenses.isc;

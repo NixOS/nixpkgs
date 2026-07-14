@@ -3,6 +3,7 @@
   stdenv,
   mkDerivation,
   propagate,
+  cmake,
   extra-cmake-modules,
   kcoreaddons,
   qttools,
@@ -12,7 +13,10 @@
 
 mkDerivation {
   pname = "kauth";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = lib.optional enablePolkit polkit-qt ++ [ qttools ];
   propagatedBuildInputs = [ kcoreaddons ];
   patches = [

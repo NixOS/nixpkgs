@@ -20,8 +20,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     python-socketio
-    python-socketio.optional-dependencies.client
-  ];
+  ]
+  ++ python-socketio.optional-dependencies.client;
 
   pythonImportsCheck = [ "uptime_kuma_api" ];
 

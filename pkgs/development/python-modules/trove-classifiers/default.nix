@@ -10,13 +10,13 @@
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2026.1.14.14";
+    version = "2026.5.20.19";
     pyproject = true;
 
     src = fetchPypi {
       pname = "trove_classifiers";
       inherit version;
-      hash = "sha256-AEklRaFAKwnUhYYFuhkOozJD02HisBycKWzga1wzJfM=";
+      hash = "sha256-bmEZk5h8qTJpaK1wRScz2t0xRxWZ05iWBFsolwqbuB4=";
     };
 
     postPatch = ''

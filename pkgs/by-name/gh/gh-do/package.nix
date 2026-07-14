@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-do";
-  version = "0.5.4";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "gh-do";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TzdaQ/E9D3gB1Q84SCRetLoA95c/BjJlgfZGbntjCVU=";
+    hash = "sha256-V88ijuj2s2vxqDFoQkL9CSllCIqUsYcSNBth3MQUhYw=";
   };
 
   vendorHash = "sha256-TPHDiMzJtXXRBFd8lacXeMC+AB1Gc1pMyJPJeVLCkKo=";

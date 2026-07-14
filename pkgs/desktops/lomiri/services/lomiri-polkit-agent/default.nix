@@ -18,19 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
     tag = finalAttrs.version;
-    hash = "sha256-JKU2lm5wco9aC2cu3lgJ9OfGAzKQO/wQXFPEdb9Uz3Y=";
+    hash = "sha256-e7aPQ0c5uDz69D2RTWGodRKfPi2vBZbHk6ua4YLbC0s=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/17 merged & in release
-    ./1001-Fix-compat-with-libnotify-0.8.8.patch
-  ];
 
   strictDeps = true;
 

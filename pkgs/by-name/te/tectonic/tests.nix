@@ -94,7 +94,7 @@ lib.mapAttrs networkRequiringTestPkg {
 
   workspace = ''
     tectonic -X new
-    cat Tectonic.toml | grep "${tectonic.bundleUrl}"
+    cat Tectonic.toml | grep "${tectonic.unwrapped.TECTONIC_BUNDLE_LOCKED}"
   '';
 
   /**

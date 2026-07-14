@@ -3,10 +3,10 @@
   buildPythonPackage,
   docker,
   fetchFromGitHub,
+  hatchling,
   lib,
   msgpack,
   orjson,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
   requests,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pysignalr";
-  version = "1.3.0";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baking-bad";
     repo = "pysignalr";
     tag = version;
-    hash = "sha256-3VZuS5q4b85Kuk2B00AeVpLGO232GN8tlfu6UaGmzjE=";
+    hash = "sha256-/Wa2ZeIuvF/4hM79N0rL0DxrBV60BM8/4uvV6ma79Xk=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

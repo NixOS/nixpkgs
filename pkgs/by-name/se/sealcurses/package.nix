@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation {
   pname = "sealcurses";
-  version = "0-unstable-2024-12-02"; # No release yet
+  version = "0-unstable-2026-03-22"; # No release yet
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = "sealcurses";
-    rev = "310348a6b88678a47d371c7edfcc1e8c76ca1677";
-    hash = "sha256-SEK3w6pVrYi+h2l5RuULpORYPnm8H78lEVR01cMkku0=";
+    rev = "35c2e0332301f7aa14d3a849b30a844d65fa81bd";
+    hash = "sha256-ILskZo5BNw4JK6n0ig2ULkUI7k9mdPjuk4VVEB7jx8c=";
   };
 
   nativeBuildInputs = [

@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $out/share/applications/software.Browsers.template.desktop $out/share/applications/software.Browsers.desktop
     substituteInPlace \
         $out/share/applications/software.Browsers.desktop \
-        --replace-fail 'Exec=€ExecCommand€' 'Exec=${finalAttrs.pname} %u'
+        --replace-fail 'Exec=€ExecCommand€' 'Exec=${finalAttrs.meta.mainProgram} %u'
     cp -r resources $out
     for size in 16 32 128 256 512; do
       install -m 444 \

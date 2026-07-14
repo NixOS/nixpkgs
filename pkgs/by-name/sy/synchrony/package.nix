@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
@@ -12,26 +12,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "synchrony";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "relative";
     repo = "synchrony";
     rev = finalAttrs.version;
-    hash = "sha256-nJ6H1SZAQCG6U3BPEPmm+BGQa8Af+Vb1E+Lv8lIqDBE=";
+    hash = "sha256-D+XibmfMd3jZUEnHqStOuvcrEhDvodey0GXQ57RvJ38=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_11;
     fetcherVersion = 3;
-    hash = "sha256-c6wtu/3tNCobLqJaB3hB9HP34ObijBQ/9ZcIzGetaT0=";
+    hash = "sha256-geA40z7KH4kluCgz1EmmYqeGkBjEXgmrUDsUewpD7Xc=";
   };
 
   buildPhase = ''

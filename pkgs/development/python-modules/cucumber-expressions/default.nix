@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "cucumber-expressions";
-  version = "19.0.0";
+  version = "19.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "cucumber-expressions";
     tag = "v${version}";
-    hash = "sha256-0KuHvByHYx7/mjySfWIKp1+ZYw+XNO25eoo5DhPcUsY=";
+    hash = "sha256-RosIA8LaXdpnqJYfowB4d1gWZTd8OfuetiBLNYX5dRc=";
   };
 
   sourceRoot = "${src.name}/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.0,<0.10.0" uv_build
+      --replace-fail "uv_build>=0.11.0,<0.12.0" uv_build
   '';
 
   build-system = [ uv-build ];

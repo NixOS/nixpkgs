@@ -5,22 +5,32 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tdl";
-  version = "0.19.0";
+  version = "0.20.3";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EYS4EK0NmNHnvjMkf5AHrYpZeGw+n2ovFDLanbqpF4Y=";
+    hash = "sha256-uVg4SXq+E+pzKFzCt7nn99sTCLj7CXaWnjIidKPA2Kk=";
   };
 
-  vendorHash = "sha256-GpqgH23eK0h2BYxjN5TNUWEOT72smYdUoD1Iy6L2jL4=";
+  vendorHash = "sha256-tg6GQ3SVDJnKUCrOuI+iJ/cJeiNNki9+ZF21r0t5rQA=";
+
+  postPatch = ''
+    rm go.work go.work.sum
+    go mod edit -replace github.com/iyear/tdl/core=./core
+    go mod edit -replace github.com/iyear/tdl/extension=./extension
+  '';
 
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/iyear/tdl/pkg/consts.Version=${finalAttrs.version}"
   ];
+
+  env.GOGC = "50";
+
+  buildFlags = [ "-p=1" ];
 
   # Filter out the main executable
   subPackages = [ "." ];

@@ -15,7 +15,7 @@ let
 in
 {
   meta = {
-    maintainers = teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 
   imports = [
@@ -220,10 +220,14 @@ in
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     services.accounts-daemon.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.gnome.glib-networking.enable = true;
+    services.gnome.gnome-keyring.enable = mkDefault true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));

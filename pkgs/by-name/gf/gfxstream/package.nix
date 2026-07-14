@@ -13,6 +13,8 @@
   vulkan-headers,
   vulkan-loader,
   libx11,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
   buildInputs = [
     aemu
@@ -60,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-framework QuartzCore"
       "-needed-lvulkan"
     ];
+    # TODO: Clean up on `staging`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   # dlopens libvulkan.

@@ -78,7 +78,18 @@ in
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  # requires fuse2
+  fuse = broken;
+  isaac =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.libffi old)
+    // {
+      postPatch = ''
+        substituteInPlace rand.h \
+          --replace-fail '/*_ randctx *r, word flag _*/' 'randctx *r, word flag' \
+          --replace-fail '/*_ randctx *r _*/' 'randctx *r'
+      '';
+    };
   gl-math = old: {
     env.NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"
@@ -107,15 +118,8 @@ in
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
   magic-pipes = addToBuildInputs pkgs.chickenPackages_5.chickenEggs.regex;
-  mdh =
-    old:
-    (addToBuildInputs pkgs.pcre old)
-    // {
-      env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=implicit-function-declaration"
-        "-Wno-error=implicit-int"
-      ];
-    };
+  # requires PCRE
+  mdh = broken;
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
@@ -193,7 +197,19 @@ in
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
-  xlib = addToPropagatedBuildInputs pkgs.libx11;
+  xlib =
+    old:
+    (addToPropagatedBuildInputs pkgs.libx11 old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
+      ];
+    };
   yaml = addToBuildInputs pkgs.libyaml;
   zlib = addToBuildInputs pkgs.zlib;
   zmq = addToBuildInputs pkgs.zeromq;
@@ -294,6 +310,7 @@ in
   hypergiant = broken;
   iup = broken;
   kiwi = broken;
+  libyaml = broken;
   lmdb-ht = broken;
   mpi = broken;
   oauthtoothy = broken;

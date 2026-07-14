@@ -94,7 +94,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace mkosi/{run,__init__}.py \
-      --replace-fail '@MKOSI_SANDBOX@' "\"$out/bin/mkosi-sandbox\""
+      --replace-fail '@MKOSI_SANDBOX@' "$out/bin/mkosi-sandbox"
   '';
 
   nativeBuildInputs = [

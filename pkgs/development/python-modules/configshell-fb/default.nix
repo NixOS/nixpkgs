@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "configshell-fb";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "configshell-fb";
     tag = "v${version}";
-    hash = "sha256-B5VEihg97r8BsKJdk1+LGyKb64QC+u/3ftumFXYTn6s=";
+    hash = "sha256-q/Tx/9BBnxW6busbrigeesxNa5NvBgfKYDNeDquDTOc=";
   };
 
   build-system = [

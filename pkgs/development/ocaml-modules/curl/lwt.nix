@@ -14,7 +14,6 @@ buildDunePackage (finalAttrs: {
     lwt
   ];
 
-  checkInputs = [ ];
   doCheck = true;
 
   meta = curl.meta // {

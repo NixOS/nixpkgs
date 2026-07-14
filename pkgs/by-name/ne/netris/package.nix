@@ -41,6 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Free networked version of T*tris";
+    homepage = "https://github.com/naclander/netris";
     mainProgram = "netris";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ patryk27 ];

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
     ];
     maintainers = with lib.maintainers; [
-      _1000teslas
+      sledgehammervampire
       tmarkus
     ];
   };

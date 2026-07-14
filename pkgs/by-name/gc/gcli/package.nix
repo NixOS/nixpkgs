@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcli";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "herrhotzenplotz";
     repo = "gcli";
     rev = "v${version}";
-    hash = "sha256-2L6/ZYxRY2xrTxr/oD02xCRqdk7VWrPlFwr8wU8C2x8=";
+    hash = "sha256-KTXAmwLTOGvFlJ52w6PplVlF72CC5JJheGlhJirh2+I=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Portable Git(Hub|Lab|ea) CLI tool";
     homepage = "https://herrhotzenplotz.de/gcli/";
-    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/${version}";
+    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     mainProgram = "gcli";
     maintainers = with lib.maintainers; [ kenran ];

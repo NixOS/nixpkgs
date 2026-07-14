@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/mmb/weechat-otr";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
     description = "WeeChat script for Off-the-Record messaging";
     knownVulnerabilities = [
       "There is no upstream release since 2018-03."

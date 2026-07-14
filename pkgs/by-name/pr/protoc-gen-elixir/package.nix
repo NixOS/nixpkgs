@@ -5,17 +5,17 @@
   nix-update-script,
 }:
 let
-  inherit (beamPackages) mixRelease fetchMixDeps erlang;
+  inherit (beamPackages) mixRelease fetchMixDeps;
 in
 mixRelease rec {
   pname = "protoc-gen-elixir";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "elixir-protobuf";
     repo = "protobuf";
     tag = "v${version}";
-    hash = "sha256-kyS9KZENdoEuB64k48RegtZQa57/RDnm8bY+piAAk2w=";
+    hash = "sha256-hxtG7w+cL02yM2pZ4aL8/nse8qFULP8IhkpX6cCXwwA=";
   };
 
   mixFodDeps = fetchMixDeps {

@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
     "--without-libfam"
   ];
 
+  # gcc 15 C23 default breaks K&R () prototypes and errors on -Wincompatible-pointer-types
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     autoreconfHook
     groff

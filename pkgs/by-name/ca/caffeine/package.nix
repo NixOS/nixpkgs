@@ -1,28 +1,58 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
+  stdenv,
+  fetchFromGitHub,
+  apple-sdk,
+  darwin,
+  xcbuildHook,
+  llvmPackages,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caffeine";
   version = "1.1.4";
 
-  src = fetchurl {
-    url = "https://github.com/IntelliScape/caffeine/releases/download/${finalAttrs.version}/Caffeine.dmg";
-    hash = "sha256-GtNMMpmgyGaHPE/rQyw+ERhjda229DxfSBrp1G0G1yM=";
+  src = fetchFromGitHub {
+    owner = "IntelliScape";
+    repo = "caffeine";
+    tag = finalAttrs.version;
+    hash = "sha256-AmBPY5ZVWBq2ZesNvvJ/Do5XgPjb5R1ESNJm7tx0M6k=";
   };
 
-  sourceRoot = ".";
+  # xcbuild routes image.png resources through CopyPNGFile, which requires the
+  # Apple-only copypng tool that is unavailable in the nixpkgs toolchain.
+  # Treat these PNGs as generic files so xcbuild copies them directly.
+  postPatch = ''
+    substituteInPlace Caffeine.xcodeproj/project.pbxproj \
+      --replace-fail \
+        "lastKnownFileType = image.png;" \
+        "lastKnownFileType = file;"
+  '';
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [
+    xcbuildHook
+    darwin.autoSignDarwinBinariesHook
+    # TODO: Remove once #536365 reaches this branch
+    llvmPackages.lld
+  ];
+
+  buildInputs = [
+    apple-sdk
+  ];
+
+  xcbuildFlags = [
+    "-target Caffeine"
+    "-configuration Release"
+  ];
+
+  # TODO: Remove once #536365 reaches this branch
+  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    cp -r Products/Release/Caffeine.app $out/Applications
 
     runHook postInstall
   '';
@@ -36,6 +66,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

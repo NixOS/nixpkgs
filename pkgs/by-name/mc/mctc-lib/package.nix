@@ -10,6 +10,7 @@
   pkg-config,
   python3,
   jonquil,
+  openmpCheckPhaseHook,
 }:
 
 assert (
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     pkg-config
     python3
+    openmpCheckPhaseHook
   ]
   ++ lib.optionals (buildType == "meson") [
     meson
@@ -50,7 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (buildType == "cmake") cmake;
 
-  buildInputs = [
+  propagatedBuildInputs = [
+    # jonquil (and the toml-f it propagates) appears in mctc-lib.pc's Requires.private, so it must
+    # be propagated for pkg-config consumers (e.g. dftd4) to resolve mctc-lib
     jonquil
   ];
 
@@ -60,10 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
 
   postPatch = ''
     patchShebangs --build config/install-mod.py

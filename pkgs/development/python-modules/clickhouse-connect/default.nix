@@ -52,11 +52,13 @@ buildPythonPackage rec {
     pytest-dotenv
   ]
   ++ optional-dependencies.sqlalchemy
-  ++ optional-dependencies.numpy;
+  ++ optional-dependencies.numpy
+  ++ optional-dependencies.pandas;
 
-  # these tests require a running clickhouse instance
+  # These tests require a running ClickHouse instance or a reachable HTTP endpoint.
   disabledTestPaths = [
     "tests/integration_tests"
+    "tests/unit_tests/test_driver/test_httpclient.py"
   ];
 
   pythonImportsCheck = [

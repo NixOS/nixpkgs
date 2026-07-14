@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "huion-switcher";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "whot";
     repo = "huion-switcher";
     tag = finalAttrs.version;
-    hash = "sha256-+cMvBVtJPbsJhEmOh3SEXZrVwp9Uuvx6QmUCcpenS20=";
+    hash = "sha256-tdXebOUTu/O1piLt9VJaR1KC2J5tzdNh2rcy80vYtZ0=";
   };
 
   buildInputs = [ udev ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udevCheckHook
   ];
 
-  cargoHash = "sha256-yj55FMdf91ZG95yuMt3dQFhUjYM0/sUfFKB+W+5xEfo=";
+  cargoHash = "sha256-H/E3qE9ELZQPxfO6DYEGksl6mACMCYYGJ8CysBS6+/c=";
 
   postInstall = ''
     mv huion-switcher.{man,1}

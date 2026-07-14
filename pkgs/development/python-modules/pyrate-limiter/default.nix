@@ -14,6 +14,7 @@
   redis,
 
   # test
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
@@ -22,20 +23,15 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "4.0.2";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
     tag = "v${version}";
-    hash = "sha256-xWxe70J69g9Tq35GjdJeT7MjUdoSEGj8w1cIKvLxJss=";
+    hash = "sha256-DT4WyGrayI12Sid6yLOit68vW/YT4cHsRYjd4oo0/J8=";
   };
-
-  postPatch = ''
-    # tests cause too many connections to the postgres server and crash/timeout
-    sed -i "/create_postgres_bucket,/d" tests/conftest.py
-  '';
 
   build-system = [
     hatchling
@@ -60,12 +56,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
+    filelock
     pytestCheckHook
     pytest-asyncio
     pytest-xdist
+    redis
     redisTestHook
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine

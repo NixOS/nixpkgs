@@ -44,16 +44,12 @@ let
           defaultGateway6 = {
             address = "fd00:1234:5678:1::1";
             interface = "enp1s0";
-            source = "fd00:1234:5678:1::3";
+            source = "fd00:1234:5678:1::3"; # implicit dependency on enp2s0
           };
           interfaces.enp1s0.ipv6.addresses = [
             {
               address = "fd00:1234:5678:1::2";
               prefixLength = 64;
-            }
-            {
-              address = "fd00:1234:5678:1::3";
-              prefixLength = 128;
             }
           ];
           interfaces.enp1s0.ipv4.addresses = [
@@ -74,6 +70,12 @@ let
             {
               address = "192.168.2.2";
               prefixLength = 24;
+            }
+          ];
+          interfaces.enp2s0.ipv6.addresses = [
+            {
+              address = "fd00:1234:5678:1::3";
+              prefixLength = 128;
             }
           ];
         };
@@ -106,6 +108,41 @@ let
         with subtest("Test default addresses"):
             client.succeed("ip -4 route show default | grep -q 'src 192.168.1.3'")
             client.succeed("ip -6 route show default | grep -q 'src fd00:1234:5678:1::3'")
+      '';
+    };
+    dynamicInterface = {
+      name = "dynamicInterface";
+      nodes.machine = clientConfig {
+        networking.interfaces.usb0 = {
+          ipv6.addresses = lib.singleton {
+            address = "fd::1";
+            prefixLength = 127;
+          };
+        };
+        networking.defaultGateway6 = {
+          address = "fd::";
+          interface = "usb0";
+          source = "fd::1";
+        };
+      };
+      testScript = ''
+        with subtest("Network comes up without usb0"):
+          machine.wait_for_unit("network.target")
+
+        with subtest("multi-user.target does not hang"):
+          machine.require_unit_state("multi-user.target", "active")
+
+        with subtest("usb0 is configured when plugged in"):
+          machine.succeed("ip link add usb0 type sit local 1.2.3.4")
+          machine.wait_until_succeeds("ip addr show dev usb0 | grep -q fd::1")
+
+        with subtest("Network is now online"):
+          machine.systemctl("start network-online.target")
+          machine.require_unit_state("network-online.target", "active")
+
+        with subtest("Default gateway is now set"):
+          machine.succeed("ip -6 route show default | grep -q 'via fd::'")
+          machine.succeed("ip -6 route show default | grep -q 'src fd::1'")
       '';
     };
     routeType = {
@@ -434,6 +471,38 @@ let
             router.wait_until_succeeds("ping -c 1 192.168.1.1")
             router.wait_until_succeeds("ping -c 1 192.168.1.2")
             router.wait_until_succeeds("ping -c 1 192.168.1.3")
+      '';
+    };
+    ipvlan = {
+      name = "IPVLAN";
+      nodes.client = {
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          ipvlans = {
+            ipvlan1.interface = "enp1s0";
+            ipvlan2.interface = "enp1s0";
+          };
+        };
+      };
+      testScript = ''
+        with subtest("Wait for networking to come up"):
+            client.wait_for_unit("network.target")
+
+        with subtest("Can move IPVLANs to separate network namespaces"):
+            client.succeed("ip netns add ns1 && ip link set dev ipvlan1 netns ns1")
+            client.succeed("ip netns add ns2 && ip link set dev ipvlan2 netns ns2")
+
+        with subtest("Can configure the IPVLAN interfaces"):
+            client.succeed("ip netns exec ns1 ip addr add 192.168.1.1/24 dev ipvlan1")
+            client.succeed("ip netns exec ns2 ip addr add 192.168.1.2/24 dev ipvlan2")
+            client.succeed("ip netns exec ns1 ip link set dev ipvlan1 up")
+            client.succeed("ip netns exec ns2 ip link set dev ipvlan2 up")
+
+        with subtest("IPVLAN interfaces can ping each other"):
+            client.succeed("ip netns exec ns1 ping -c 1 192.168.1.2")
+            client.succeed("ip netns exec ns2 ping -c 1 192.168.1.1")
       '';
     };
     fou = {

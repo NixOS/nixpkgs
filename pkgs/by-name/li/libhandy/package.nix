@@ -68,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     glade
   ];
 
+  checkInputs = [
+    librsvg
+  ];
+
   nativeCheckInputs = [
     xvfb-run
     at-spi2-atk
@@ -75,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     hicolor-icon-theme
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"

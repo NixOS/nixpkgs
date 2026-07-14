@@ -22,10 +22,12 @@ let
           tag = "v${version}";
           hash = "sha256-3BbQeCaAhlz9h5GnhficNubJHu4kTpnCDM4oKzlti0w=";
         };
-        dependencies = oldAttrs.dependencies ++ [
-          super.six
-          super.requests.optional-dependencies.socks
-        ];
+        dependencies =
+          oldAttrs.dependencies
+          ++ [
+            super.six
+          ]
+          ++ super.requests.optional-dependencies.socks;
         doCheck = false;
       });
     };

@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  tetex,
+  texliveMedium,
 }:
 
 stdenv.mkDerivation {
   pname = "mmixware";
-  version = "1.0-unstable-2021-06-18";
+  version = "1.0-unstable-2025-06-30";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";
     owner = "mmix";
     repo = "mmixware";
-    rev = "7c790176d50d13ae2422fa7457ccc4c2d29eba9b";
-    sha256 = "sha256-eSwHiJ5SP/Nennalv4QFTgVnM6oan/DWDZRqtk0o6Z0=";
+    rev = "9205420225f4227462e37e298ee482a5c37e9c23";
+    sha256 = "sha256-u6eGc+R9xsr4sMslj1ytgSUY54qSOONEc3QtbY2r+8A=";
   };
 
   hardeningDisable = [ "format" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     "-std=gnu17"
   ];
 
-  nativeBuildInputs = [ tetex ];
+  nativeBuildInputs = [ texliveMedium ];
   enableParallelBuilding = true;
 
   makeFlags = [

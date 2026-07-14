@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ko";
-  version = "0.18.1";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = "ko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o/Hin6GDFki1ynZ/rDQOhcNUTtQVvXZTAApxAaerRCU=";
+    hash = "sha256-HO2ByHyAVWM96JMegerysB13SqbZw/hE8uH5FHsHJao=";
   };
 
-  vendorHash = "sha256-gYDYKNLTmJT0JvQ4wi/5p/3YmaaS4Re/wFqZxRbRVpg=";
+  vendorHash = "sha256-f9eSrBhevZ+eS/ct28GoDfoGu1NT+hVLvZwi2euqBe0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -14,14 +14,14 @@
 }:
 buildPythonPackage rec {
   pname = "requests-hardened";
-  version = "1.2.0";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saleor";
     repo = "requests-hardened";
     tag = "v${version}";
-    hash = "sha256-J4xQY2W5upJQ3hrA2hjkw8voLpxNPpekNwmyMKKAVAo=";
+    hash = "sha256-tvSS3z1fhQdcxvsj5vK//mr5xYeIrLl+6/gtnWsiETk=";
   };
 
   build-system = [ poetry-core ];

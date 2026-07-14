@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   six,
   pytestCheckHook,
 }:
@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pystardict";
   version = "0.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lig";
@@ -20,12 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-VWOxggAKifN5f6nSN1xsSbg0hpKzrHDw+UqnAOzsXj0=";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

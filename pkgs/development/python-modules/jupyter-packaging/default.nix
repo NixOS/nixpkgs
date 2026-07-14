@@ -31,9 +31,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecation
     packaging
     setuptools
@@ -45,7 +45,11 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlags = [ "-Wignore::DeprecationWarning" ];
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    # The 'wheel' package is no longer the canonical location of the 'bdist_wheel' command, and will be removed in a future release. Please update to setuptools v70.1 or later which contains an integrated version of this command.
+    "-Wignore::FutureWarning"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

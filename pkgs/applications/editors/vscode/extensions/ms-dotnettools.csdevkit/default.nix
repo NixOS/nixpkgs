@@ -16,19 +16,19 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-7BC+pL9rT/lG60F4mYPMLS9BTjMvJq3pzkpp/Dk5bak=";
+        hash = "sha256-N3W/cvqAzf7Z9jMjiHN9zWrHXZjIqD1RnuZbZ/yQx8g=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-aB/VNj361Z38rmIzwYc8JSCaFyYGkIxxCcBZE6YBSjU=";
+        hash = "sha256-1zz9xrMALIOXzMpArWSwO12WmRE+0ldbIwUFH1G2GQI=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-ajOmvfdpiXN+qpT7u6mEnKL9VAeWUxFrECain6Pc/qM=";
+        hash = "sha256-3PoSbp8M2X4bhSQyxvNC7jtNDVNEuEKeYRZQMFOmbtQ=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-6MtUbdL8Q94/trh/B714n0ZMUhtUvjRPOLHFzvqQq2s=";
+        hash = "sha256-F4CsyiX46SpjilJNV+qYps1JAw09pVruLmW+muN9/B4=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -38,7 +38,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csdevkit";
     publisher = "ms-dotnettools";
-    version = "1.80.7";
+    version = "3.10.14";
     inherit (extInfo) hash arch;
   };
   sourceRoot = "extension"; # This has more than one folder.
@@ -63,7 +63,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     substituteInPlace dist/extension.js \
       --replace-fail 'e.extensionPath,"cache"' 'require("os").tmpdir(),"'"$ext_unique_id"'"' \
-      --replace-fail 't.setExecuteBit=async function(e){if("win32"!==process.platform){const t=i.join(e[a.SERVICEHUB_CONTROLLER_COMPONENT_NAME],"Microsoft.VisualStudio.Code.ServiceController"),r=i.join(e[a.SERVICEHUB_HOST_COMPONENT_NAME],(0,a.getServiceHubHostEntrypointName)()),n=[(0,a.getServerPath)(e),t,r,(0,c.getReliabilityMonitorPath)(e)];await Promise.all(n.map((e=>(0,o.chmod)(e,"0755"))))}}' 't.setExecuteBit=async function(e){}'
+      --replace-fail 't.setExecuteBit=async function(e){if("win32"!==process.platform){const t=o.join(e[a.SERVICEHUB_CONTROLLER_COMPONENT_NAME],"Microsoft.VisualStudio.Code.ServiceController"),r=o.join(e[a.SERVICEHUB_HOST_COMPONENT_NAME],(0,a.getServiceHubHostEntrypointName)()),n=[(0,a.getServerPath)(e),t,r,(0,c.getReliabilityMonitorPath)(e)];await Promise.all(n.map((e=>(0,i.chmod)(e,"0755"))))}}' 't.setExecuteBit=async function(e){}'
   '';
 
   preFixup = ''
@@ -134,7 +134,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Official Visual Studio Code extension for C# from Microsoft";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ggg ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

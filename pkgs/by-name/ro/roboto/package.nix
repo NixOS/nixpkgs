@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,13 +15,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-vfn4KmOHHSVYT9XK+mDz5f4s8LnkCAY/IyTa3Rmir2k=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 unhinted/static/*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  sourceRoot = "${finalAttrs.src.name}/unhinted/static";
 
   meta = {
     homepage = "https://github.com/googlefonts/roboto-3-classic";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch, # Added for applying patch
   meson,
   ninja,
   nix-update-script,
@@ -55,15 +56,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
-  version = "15.0.0";
+  version = "15.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wayland";
     repo = "weston";
     rev = finalAttrs.version;
-    hash = "sha256-7FbQkXazsf6FkkNbE+Q6ilKACFa/CoOL2Q1oXHuaVX8=";
+    hash = "sha256-c6h8GQt1S3t2+K+8A4ncxBtWLtaV61EABdYA55o9i4o=";
   };
+
+  patches = [
+    # backend-vnc, gitlab-ci: Update to Neat VNC 1.0.0, aml 1.0.0
+    # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/2064
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/8a1c91e771312d1e0d0cd92495ef717402784dae.patch";
+      hash = "sha256-9eBONM7OfzHhCuT8Wnq534KS51q2VtUyOOLjYHohEds=";
+      excludes = [ ".gitlab-ci.yml" ];
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [

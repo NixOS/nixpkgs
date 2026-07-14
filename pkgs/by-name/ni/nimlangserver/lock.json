@@ -184,11 +184,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/2ksmfd7p93a1a7ibcv3qzsk8h3c3shz7-source",
-      "rev": "845b6af28b9f68f02d320e03ad18eccccea7ddb9",
-      "sha256": "1c55kl05pbavm9v5dv42n43sql9qcrblhh3hnp99p5xmlv20c9vf",
+      "path": "/nix/store/y97vkzpip50iy91xdgv7v7kg04afxn7x-source",
+      "rev": "8b51e99b4a57fcfb31689230e75595f024543024",
+      "sha256": "00bg4chz69hllj9ig3qd38ps9l3hcziwj9kgykhbdcavgw5llzbg",
       "srcDir": "",
-      "url": "https://github.com/status-im/nim-unittest2/archive/845b6af28b9f68f02d320e03ad18eccccea7ddb9.tar.gz",
+      "url": "https://github.com/status-im/nim-unittest2/archive/8b51e99b4a57fcfb31689230e75595f024543024.tar.gz",
       "subDir": "",
       "packages": [
         "unittest2"

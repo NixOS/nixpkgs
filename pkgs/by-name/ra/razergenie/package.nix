@@ -74,9 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      f4814n
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

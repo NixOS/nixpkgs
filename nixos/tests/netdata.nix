@@ -6,7 +6,6 @@
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       cransom
-      raitobezarius
     ];
   };
 

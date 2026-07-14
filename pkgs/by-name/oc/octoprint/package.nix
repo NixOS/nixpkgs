@@ -172,7 +172,7 @@ let
 
             # hardcore path to ffmpeg and hide related settings
             (replaceVars ./ffmpeg-path.patch {
-              ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+              ffmpeg = "${pkgs.ffmpeg-headless}/bin/ffmpeg";
             })
           ];
 

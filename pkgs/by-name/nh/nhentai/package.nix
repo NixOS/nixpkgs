@@ -57,6 +57,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "tabulate"
     "urllib3"
   ];
 

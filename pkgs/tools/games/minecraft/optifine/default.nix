@@ -8,7 +8,7 @@
 
 # The `versions.json` can be automatically updated and committed with a commit summary.
 # To do so, change directory to nixpkgs root, and do:
-# $ nix-shell ./maintainers/scripts/update.nix --argstr package optifinePackages.optifine-latest --argstr commit true
+# $ nix-shell ./maintainers/scripts/update.nix --argstr package optifinePackages.optifine-latest --arg commit true
 
 lib.recurseIntoAttrs (
   lib.mapAttrs (name: value: callPackage ./generic.nix value) (lib.importJSON ./versions.json)

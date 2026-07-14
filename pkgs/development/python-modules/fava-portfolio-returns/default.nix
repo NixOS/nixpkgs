@@ -28,7 +28,7 @@ let
 
     src = "${src}/frontend";
 
-    npmDepsHash = "sha256-MDoZC5IAR9puWMLBhLb5HRoagBPyNiyJ+0879ljCNUo=";
+    npmDepsHash = "sha256-/9sCyhGUOZ/muwJNKABy7ouPJa5ieVXjIFCSWw9AyRo=";
 
     postPatch = ''
       substituteInPlace package.json \

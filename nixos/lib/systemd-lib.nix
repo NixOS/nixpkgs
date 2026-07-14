@@ -67,7 +67,9 @@ rec {
   mkPathSafeName = replaceStrings [ "@" ":" "\\" "[" "]" ] [ "-" "-" "-" "" "" ];
 
   # a type for options that take a unit name
-  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
+  # note: redundantly escaping backslash in the bracket expression makes the regex
+  # slightly more portable even though POSIX doesn't require it.
+  unitNameType = types.strMatching "[a-zA-Z0-9@%:_.\\\\-]+[.](service|socket|device|mount|automount|swap|target|path|timer|scope|slice)";
 
   makeUnit =
     name: unit:
@@ -76,16 +78,13 @@ rec {
         {
           preferLocalBuild = true;
           allowSubstitutes = false;
-          # unit.text can be null. But variables that are null listed in
-          # passAsFile are ignored by nix, resulting in no file being created,
-          # making the mv operation fail.
-          text = optionalString (unit.text != null) unit.text;
-          passAsFile = [ "text" ];
+          text = unit.text or "";
+          __structuredAttrs = true;
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          mv "$textPath" "$out/$name"
+          printf "%s" "$text" > "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -277,6 +276,21 @@ rec {
     optional (
       attr ? ${name} && !(hasPrefix "@" attr.${name})
     ) "Systemd ${group} field `${name}' is not a systemd credential";
+
+  assertRouteMetricOrTriple =
+    name: group: attr:
+    let
+      isMetric = n: 0 <= n && 4294967295 >= n;
+
+      parts = splitString ":" attr.${name};
+      partsValid =
+        length parts == 3 && all (p: (match "[0-9]+" p) != null && isMetric (toIntBase10 p)) parts;
+      valid = (isInt attr.${name} && isMetric attr.${name}) || partsValid;
+    in
+    optional (attr ? ${name} && !valid) (
+      "Systemd ${group} field `${name}' must either be an integer in the range [0,4294967295]"
+      + " or a string containing three integers separated with `:`"
+    );
 
   checkUnitConfig =
     group: checks: attrs:

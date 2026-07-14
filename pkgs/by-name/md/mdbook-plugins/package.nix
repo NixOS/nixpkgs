@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-plugins";
-  version = "0.3.4";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "RustForWeb";
     repo = "mdbook-plugins";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-28Olgft2IQvvJEQ9oqj5o96MT8rILUESQiTOtpc2xLw=";
+    hash = "sha256-Dv2HL8dLV8wOZp+Lhy5qgsZO9sZWOVVIhQZe6JE+F40=";
   };
 
-  cargoHash = "sha256-5Mok7E85DKmo0NIdUZJhinLCWKk+G0tIBKcTy71kUxk=";
+  cargoHash = "sha256-5vyOxKhTbUFi1kUhm3OlhnEXoSYLdRMIWTTPSVXAvsA=";
 
   nativeBuildInputs = [
     pkg-config

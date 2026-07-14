@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   apple-sdk_14,
   ncurses,
@@ -16,6 +17,8 @@
   # This can be set to one of the `darwin.xcode_*` packages as well.
   # If set, this should be a path to Xcode.app, e.g. `"/Applications/Xcode.app"`.
   withXcodePath ? null,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 # Try to match MacVim's documented script interface compatibility
@@ -24,6 +27,9 @@ let
   ruby = ruby_3_4;
 in
 
+let
+  common = callPackage ./common.nix { inherit stdenv; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
@@ -44,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
   ];
   buildInputs = [
     # MacVim references up to MAC_OS_VERSION_14_0 in its source
@@ -182,9 +190,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # macvim obj-c log macro triggers -Wformat-security (seems like a bug? it's a string literal!)
-  hardeningDisable = [ "format" ];
+  hardeningDisable = common.hardeningDisable ++ [ "format" ];
   # os_log also enables -Werror,-Wformat by default
-  env.NIX_CFLAGS_COMPILE = "-DOS_LOG_FORMAT_WARNINGS";
+  # TODO: Clean up on `staging`
+  env.NIX_CFLAGS_COMPILE = "-DOS_LOG_FORMAT_WARNINGS -fuse-ld=lld";
 
   # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
   # it's not clear what system-level components it may require, so for now we'll just allow full

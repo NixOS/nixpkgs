@@ -2,6 +2,7 @@
   lib,
   stdenv,
   config,
+  nix-update-script,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -27,6 +28,7 @@
   libxkbcommon,
   wayland,
   fontconfig,
+  dbus,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   jackSupport ? stdenv.hostPlatform.isLinux,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
@@ -38,7 +40,7 @@
 }:
 let
   pname = "space-station-14-launcher";
-  version = "0.37.1";
+  version = "0.39.1";
 in
 buildDotnetModule rec {
   inherit pname;
@@ -51,7 +53,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-83eBAT+NuwwpC30Xc5bJEs++tTYlY3akMaizQgNHOsA=";
+    hash = "sha256-u3tsPWAFMckWSHhiPqL50i9BMxR+VrLnpUSWGRRu9AA=";
     fetchSubmodules = true;
   };
 
@@ -99,6 +101,7 @@ buildDotnetModule rec {
     libxkbcommon
     wayland
     fontconfig.lib
+    dbus
   ]
   ++ lib.optional alsaSupport alsa-lib
   ++ lib.optional jackSupport libjack2
@@ -130,6 +133,8 @@ buildDotnetModule rec {
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico ${pname} $out
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";

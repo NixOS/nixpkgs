@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Minimalistic mocking library";
-    homepage = "https://pypi.python.org/pypi/MiniMock";
+    homepage = "https://pypi.org/project/MiniMock/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

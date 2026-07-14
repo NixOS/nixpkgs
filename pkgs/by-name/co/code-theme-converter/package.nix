@@ -38,6 +38,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Convert any Visual Studio Code Theme to Sublime Text 3 or IntelliJ IDEA";
     homepage = "https://github.com/tobiastimm/code-theme-converter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

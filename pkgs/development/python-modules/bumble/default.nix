@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "bumble";
-  version = "0.0.223";
+  version = "0.0.232";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bumble";
     tag = "v${version}";
-    hash = "sha256-Iei2RBk7Tpb8yeTKdtftJfbG3DwuGjvBZuhhs+nMKcU=";
+    hash = "sha256-NT8WNfkYHorjNfsZWry63Uuxk7zyOQDOHTqxZxJNypI=";
   };
 
   build-system = [
@@ -77,6 +77,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlags = [ "--asyncio-mode=auto" ];
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # tests require networking

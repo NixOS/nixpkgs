@@ -485,7 +485,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    ymarkus
     savyajha
   ];
 }

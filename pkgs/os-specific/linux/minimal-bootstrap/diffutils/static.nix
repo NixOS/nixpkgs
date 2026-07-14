@@ -69,6 +69,7 @@ bash.runCommand "${pname}-${version}"
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
       --disable-dependency-tracking \
+      --disable-nls \
       CC=musl-gcc \
       CFLAGS=-static \
       ac_cv_path_PR_PROGRAM=pr
@@ -77,5 +78,8 @@ bash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install-strip
+
+    # Remove documentation not needed in the bootstrap chain.
+    rm -rf $out/share
   ''

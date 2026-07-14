@@ -38,6 +38,6 @@ buildPythonPackage rec {
     mainProgram = "nkdfu";
     homepage = "https://github.com/Nitrokey/nkdfu";
     license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ ];
   };
 }

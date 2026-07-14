@@ -1,6 +1,15 @@
 --- a/kill.c
 +++ b/kill.c
-@@ -175,7 +175,7 @@ static void notify_dbus(const char* body)
+@@ -153,7 +153,7 @@ static void notify_spawn_subprocess(const char* script, char* const argv[], cons
+     }
+ 
+     debug("%s: exec %s\n", __func__, script);
+-    execv(script, argv);
++    execvp(script, argv);
+     warn("%s: exec %s failed: %s\n", __func__, script, strerror(errno));
+     exit(1);
+ }
+@@ -177,7 +177,7 @@ static void notify_dbus(const char* body)
          body2,
          NULL
      };

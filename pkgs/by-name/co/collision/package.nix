@@ -21,13 +21,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.11.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
-    rev = "v${version}";
-    hash = "sha256-OCFy7DFSRsqiw+b6zlJy9Us44zQXf150zVDu3GmclOk=";
+    tag = "v${version}";
+    hash = "sha256-GcCqItSHUhhS0yrOM8bMzkVsVHyC97c+yccw5ZP61IU=";
   };
 
   postPatch = ''
@@ -100,9 +100,6 @@ crystal.buildCrystalPackage rec {
         supportedFeatures = [ "silent" ];
       }
     ];
-    shardLock = runCommand "shard.lock" { inherit src; } ''
-      cp $src/shard.lock $out
-    '';
   };
 
   meta = {
