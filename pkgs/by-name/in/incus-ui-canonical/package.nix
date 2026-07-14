@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchFromGitHub,
   fetchYarnDeps,
@@ -18,16 +18,16 @@ let
     hash = "sha256-f0vd/Xp/kBbZkg6CBM4cZPlwg5WUL/zv3mCAEmugzCE=";
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "incus-ui-canonical";
-  version = "0.21.3";
+  version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
     tag = "incus-${finalAttrs.version}";
-    hash = "sha256-fyeh7KX2Cvo2YmUNnmzeWkTGgGrJHhjbq39AmnwhgAs=";
+    hash = "sha256-EMf723WZKyVYDpvdmzjdp61rIZVsoj6gRMiMF323K/A=";
   };
 
   offlineCache = fetchYarnDeps {

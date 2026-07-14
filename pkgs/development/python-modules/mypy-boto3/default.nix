@@ -255,8 +255,8 @@ in
       "sha256-PVskBSuwqSfNybHDtLLfVpDG0dwR/Q1LhrHz1imsR8A=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.43.38"
-      "sha256-3STwHJJpbVZa1ACznoyPLvYMpBGL7xxS1+5h0bx40+Y=";
+    buildMypyBoto3Package "cloudwatch" "1.43.46"
+      "sha256-xUMPa6CSx3wYLfGZMV05ulf2yX+p3ToM7aOd55U7AUE=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.43.0"
@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.45"
-      "sha256-xT9yYnd7XfKbajmSfMOjaqYF7YnzwXOe1wtb5vy/wSI=";
+    buildMypyBoto3Package "ec2" "1.43.46"
+      "sha256-XDJPpDHlw2q0YJGM9SMsBd/Ww2JWiAsq+5xulibZCJs=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -622,8 +622,8 @@ in
       "sha256-9P8m5QYikdsimepaivrYcb/tP1iThyPZWFMkyo24+bo=";
 
   mypy-boto3-inspector2 =
-    buildMypyBoto3Package "inspector2" "1.43.42"
-      "sha256-MjSPOIJu0hdJ68eBwjppu/V+dM5pdAx+Ls7AiJY11Jo=";
+    buildMypyBoto3Package "inspector2" "1.43.46"
+      "sha256-pus2RROpJt39PoOX0OsK4GyU0qUcKVqRzuk039VEAM0=";
 
   mypy-boto3-internetmonitor =
     buildMypyBoto3Package "internetmonitor" "1.43.0"
@@ -766,8 +766,8 @@ in
       "sha256-gYTCgaRwH3zKi6gg4MC8DUwXQT+jZO6lqc/vi+JUahU=";
 
   mypy-boto3-lambda =
-    buildMypyBoto3Package "lambda" "1.43.42"
-      "sha256-mLDdcUFNxg9ZjaL7HiGX6Dv0hEIFID8k+CLh9jq9TZs=";
+    buildMypyBoto3Package "lambda" "1.43.46"
+      "sha256-mM1VwviZXBkkjd5PBEpJKZSDCoyV6VH26erz78gJKSk=";
 
   mypy-boto3-lex-models =
     buildMypyBoto3Package "lex-models" "1.43.3"
@@ -786,8 +786,8 @@ in
       "sha256-efpFIYAdYkvWBlj0tLsQagps6XJfO4XLjlfwKS2vi3s=";
 
   mypy-boto3-license-manager =
-    buildMypyBoto3Package "license-manager" "1.43.0"
-      "sha256-DGbHoepZkxN9ICxqnda/6mBJxiTH9X8gU/wT+xMGs3g=";
+    buildMypyBoto3Package "license-manager" "1.43.46"
+      "sha256-WYv6TjbNNEhrumvLT1QPBgaFUP/w4+7a5gY63n0tjmQ=";
 
   mypy-boto3-license-manager-linux-subscriptions =
     buildMypyBoto3Package "license-manager-linux-subscriptions" "1.43.0"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.39"
-      "sha256-xjqIi2ZTAZusw3FDL2AQx871Yg0VM++K32w+ht74F34=";
+    buildMypyBoto3Package "quicksight" "1.43.46"
+      "sha256-WmYr7ycG07ZhbhQL/DHVmiMl0/997F6Dt3P33624V5M=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.33"
-      "sha256-dTc7cVfvrRoCxP9rUBRYTw8UhQdges7IERfXSRXHxd0=";
+    buildMypyBoto3Package "sagemaker" "1.43.46"
+      "sha256-yBA9PXosbtOQVPoOTv6C2gfOf6SHkR/3oQosTugp6Is=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
