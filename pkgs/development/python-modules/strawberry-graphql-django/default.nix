@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
 
   # build-system
   hatchling,
@@ -48,6 +49,10 @@ buildPythonPackage rec {
     # django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the required STATIC_URL setting.
     echo 'STATIC_URL = "static/"' >> tests/django_settings.py
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     hatchling
