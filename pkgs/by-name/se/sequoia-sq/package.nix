@@ -10,6 +10,7 @@
   openssl,
   cacert,
   sqlite,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,6 +55,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   doCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   postInstall = ''
     installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
