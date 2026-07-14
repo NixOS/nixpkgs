@@ -47,8 +47,7 @@ let
     let
       callLibs = file: import file { lib = self; };
     in
-    builtins
-    // {
+    {
 
       # often used, or depending on very little
       trivial = callLibs ./trivial.nix;
@@ -109,6 +108,21 @@ let
       # flakes
       flakes = callLibs ./flakes.nix;
 
+      inherit (builtins)
+        getContext
+        hasContext
+        convertHash
+        hashString
+        parseDrvName
+        placeholder
+        fromJSON
+        fromTOML
+        toFile
+        toJSON
+        toString
+        toXML
+        tryEval
+        ;
       inherit (self.trivial)
         id
         const
