@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "utils";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "haaksmash";
@@ -17,6 +18,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "07pr39cfw5ayzkp6h53y7lfpd0w19pphsdzsf100fsyy3npavgbr";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
