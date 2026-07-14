@@ -18,6 +18,8 @@
   pkg-config,
   testers,
   python3,
+  libxml2,
+  zlib,
 }:
 
 let
@@ -145,9 +147,15 @@ in
         llvmPackages.llvm
         gtest
         boost
+        libxml2
+        zlib
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+
+      mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
+
+      disallowedRequisites = [ (lib.getLib llvmPackages.llvm) ];
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;
