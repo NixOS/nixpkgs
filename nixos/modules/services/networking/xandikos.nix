@@ -138,6 +138,13 @@ in
   meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
   config = mkIf cfg.enable {
+    users.users.xandikos = {
+      isSystemUser = true;
+      group = "xandikos";
+    };
+
+    users.groups.xandikos = { };
+
     systemd.services.xandikos = {
       description = "A Simple Calendar and Contact Server";
       after = [ "network.target" ];
@@ -146,7 +153,6 @@ in
       serviceConfig = {
         User = "xandikos";
         Group = "xandikos";
-        DynamicUser = "yes";
         RuntimeDirectory = "xandikos";
         StateDirectory = "xandikos";
         StateDirectoryMode = "0700";
