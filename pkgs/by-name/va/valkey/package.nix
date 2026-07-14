@@ -65,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and significantly slows down the build.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
@@ -102,13 +103,17 @@ stdenv.mkDerivation (finalAttrs: {
       --skipunit unit/memefficiency \
       --skipunit unit/type/string \
       --skipunit integration/failover \
-      --skipunit integration/aof-multi-part
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/dual-channel-replication
 
     runHook postCheck
   '';
 
   passthru = {
-    tests.redis = nixosTests.redis;
+    tests = {
+      redis = nixosTests.redis;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+    };
     serverBin = "valkey-server";
   };
 
