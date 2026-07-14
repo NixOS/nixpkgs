@@ -17,7 +17,6 @@
   keycloak-remember-me-authenticator = callPackage ./keycloak-remember-me-authenticator { };
   keycloak-restrict-client-auth = callPackage ./keycloak-restrict-client-auth { };
   keycloak-secrets-vault-provider = callPackage ./keycloak-secrets-vault-provider { };
-  scim-for-keycloak = callPackage ./scim-for-keycloak { };
   scim-keycloak-user-storage-spi = callPackage ./scim-keycloak-user-storage-spi { };
 
   # junixsocket provides Unix domain socket support for JDBC connections,
@@ -45,4 +44,5 @@
 }
 // lib.optionalAttrs config.allowAliases {
   keycloak-metrics-spi = throw "keycloak.plugins.keycloak-metrics-spi has been removed in favor of Keycloak's native metrics."; # Added 2026-07-14
+  scim-for-keycloak = throw "keycloak.plugins.scim-for-keycloak has been removed as it is end-of-life upstream."; # Added 2026-07-14
 }
