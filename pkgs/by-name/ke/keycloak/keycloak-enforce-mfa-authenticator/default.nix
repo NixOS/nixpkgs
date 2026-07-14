@@ -4,39 +4,43 @@
   lib,
   fetchFromGitHub,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-enforce-mfa-authenticator";
-  version = "26.4.10";
+  version = "26.6.5";
 
   src = fetchFromGitHub {
     owner = "netzbegruenung";
     repo = "keycloak-mfa-plugins";
-    tag = "v${version}";
-    hash = "sha256-J7t/SRfK/LTcW7Y+D6bkHcXK+lKqUYLEqSpNWJUC3kQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SR0jnnS7zz0c9hyXkNw/p+fT2lfUTzHWDfpIRskSneQ=";
   };
 
   mvnHash =
     let
       mvnHashes = {
-        "aarch64-darwin" = "sha256-eRlu24SYe+PBOTKoAQPd5MoM7VUxHZx4/uiW6mV2PZI=";
-        "aarch64-linux" = "sha256-4P9qM3X99dEy3ssr1+vp65QUJikRfE4EoK6LOta9IFs=";
-        "x86_64-linux" = "sha256-wxgEHC1xJahyoizozvRfRZAWTjrYmYNM42yk+ZRke5A=";
+        "aarch64-darwin" = "sha256-D7inbJCs8r2RWY4TJMmxpiDPxy+o3xvdklzWNd5uZXk=";
+        "aarch64-linux" = "sha256-DS8LfIneN05OG201CK2bIUSV0fSUdku78Vt3FIZFmwQ=";
+        "x86_64-linux" = "sha256-k60cKLwN/VyWrErjIpgOvC+uYNbF2hkmCwO8MFVxvrI=";
       };
     in
     mvnHashes.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   installPhase = ''
     runHook preInstall
-    install -Dm644 enforce-mfa/target/netzbegruenung.enforce-mfa-v${version}.jar \
+    install -Dm644 enforce-mfa/target/netzbegruenung.enforce-mfa-v${finalAttrs.version}.jar \
       $out/keycloak-enforce-mfa-authenticator.jar
     runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/netzbegruenung/keycloak-mfa-plugins";
+    changelog = "https://github.com/netzbegruenung/keycloak-mfa-plugins/releases/tag/v${finalAttrs.version}";
     description = "Keycloak authenticator that enforces MFA";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anish ];
   };
-}
+})
