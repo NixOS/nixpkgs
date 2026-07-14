@@ -9,6 +9,7 @@
 {
   apple-identity-provider-keycloak = callPackage ./apple-identity-provider-keycloak { };
   keycloak-2fa-app-authenticator = callPackage ./keycloak-2fa-app-authenticator { };
+  keycloak-2fa-email-authenticator = callPackage ./keycloak-2fa-email-authenticator { };
   keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
   keycloak-discord = callPackage ./keycloak-discord { };
   keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
