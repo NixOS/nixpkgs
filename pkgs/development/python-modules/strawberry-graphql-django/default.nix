@@ -33,7 +33,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "strawberry-django";
+  pname = "strawberry-graphql-django";
   version = "0.86.0";
   pyproject = true;
 

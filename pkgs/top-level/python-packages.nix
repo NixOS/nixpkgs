@@ -19575,9 +19575,9 @@ self: super: with self; {
 
   stravaweblib = callPackage ../development/python-modules/stravaweblib { };
 
-  strawberry-django = callPackage ../development/python-modules/strawberry-django { };
-
   strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
+
+  strawberry-graphql-django = callPackage ../development/python-modules/strawberry-graphql-django { };
 
   strct = callPackage ../development/python-modules/strct { };
 
