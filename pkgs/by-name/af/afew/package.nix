@@ -9,17 +9,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "afew";
-  version = "3.0.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
+    hash = "sha256-d6WfXt4K5nLawwdsWXHgy0+nMJXqxs9QQ0xmVeX1m3Q=";
   };
 
   nativeBuildInputs = with python3Packages; [
     sphinxHook
-    setuptools_80
+    setuptools
     setuptools-scm
   ];
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   propagatedBuildInputs = with python3Packages; [
     chardet
     dkimpy
-    notmuch
+    notmuch2
     setuptools
   ];
 
