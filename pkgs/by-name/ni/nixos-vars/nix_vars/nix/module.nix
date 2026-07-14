@@ -87,20 +87,37 @@ let
           environments live live CDs, where the target system is not yet up and
           running (even if nixos-install has successfully completed).
         '';
+
+        fileModule = lib.mkOption {
+          type = lib.types.deferredModule;
+          internal = true;
+          default = { };
+          description = ''
+            A module to be imported in every
+            vars.generators.<name>.files.<name> submodule. Used by backends to
+            define the `path` attribute.
+          '';
+        };
       };
     }
   );
 
-  fileModule = lib.types.submodule (
-    { name, ... }:
+  fileModule =
+    { name, backend, ... }:
     {
+      imports = [ backend.fileModule ];
       options = {
         name = lib.mkOption {
-          description = "name of the generated file ";
+          description = "name of the generated file";
           type = safeName;
           readOnly = true;
           default = name;
           defaultText = "Name of the file";
+        };
+
+        path = lib.mkOption {
+          description = "Path to the generated file; usually set by the backend";
+          type = lib.types.path;
         };
 
         deploy = lib.mkOption {
@@ -127,11 +144,10 @@ let
           default = true;
         };
       };
-    }
-  );
+    };
 
   generatorModule = lib.types.submodule (
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         name = lib.mkOption {
@@ -167,8 +183,20 @@ let
             A set of files to generate. The generator 'script' is expected to
             produce exactly these files under $out.
           '';
-          type = lib.types.attrsOf fileModule;
           default = { };
+          type = lib.types.attrsOf (
+            lib.types.submoduleWith {
+              modules = [ fileModule ];
+              specialArgs =
+                let
+                  backend = cfg.generatorBackends.${config.backend};
+                in
+                {
+                  inherit backend;
+                  generator = config;
+                };
+            }
+          );
         };
 
         script = delayedPackage ''
