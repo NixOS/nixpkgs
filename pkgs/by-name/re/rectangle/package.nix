@@ -199,10 +199,11 @@ stdenv.mkDerivation (finalAttrs: {
     ) masShortcutSources}
 
     nixLog "linking MASShortcut dylib"
+    # `-fuse-ld=lld`: fix for ld64 hardening issue
+    # TODO: Clean up on `staging`
     clang -dynamiclib "''${masObjFiles[@]}" \
       -framework AppKit -framework Carbon -framework Foundation \
       -install_name "@rpath/MASShortcut.framework/MASShortcut" \
-      # TODO: Clean up on `staging`
       -fuse-ld=lld \
       -o "$buildDir/libMASShortcut.dylib"
 
