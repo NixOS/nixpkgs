@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  patchelf,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, patchelf
+, testers
+,
 }:
 
 let
@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (platform) url hash;
   };
 
-  # Since we are downloading a bare binary, we prevent Nix from trying to unpack it like a tarball
+  # These MUST be top-level attributes
+  strictDeps = true;
+  __structuredAttrs = true;
+
   dontUnpack = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ patchelf ];
