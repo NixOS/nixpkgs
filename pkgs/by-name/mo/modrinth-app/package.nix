@@ -41,6 +41,8 @@ symlinkJoin {
 
   strictDeps = true;
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
@@ -91,7 +93,7 @@ symlinkJoin {
 
     glibPostInstallHook
     gappsWrapperArgsHook
-    wrapGAppsHook
+    wrapProgram "$out/bin/ModrinthApp" "''${gappsWrapperArgs[@]}"
   '';
 
   meta = {
