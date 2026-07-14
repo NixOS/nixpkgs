@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  setuptools,
   mock,
   pytestCheckHook,
   nix-update-script,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "vdf";
   version = "3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ValvePython";
@@ -27,6 +28,8 @@ buildPythonPackage rec {
       hash = "sha256-kLAbbB0WHjxq4rokLoGTPx43BU44EshteR59Ey9JnXo=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
