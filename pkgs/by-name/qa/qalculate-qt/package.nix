@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zeHpTe4DlurFqdsrJBlXSl+vXCOdhJRCjHLDpFf2u1o=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = with qt6; [
     qmake
     pkg-config
