@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lM+j1KtH3U/lbPXnKALAP75YokDufbdz8s8bjb0VXUY=";
+    hash = "sha256-+6QVRp0zDJIIv23YlAI/cspHuGc+YcWdPfJZIOxQRW8=";
   };
 
-  cargoHash = "sha256-3z1Qm/eeVlH0/x3C8PSSPIlQaRKk1U6mRlEiKk0AaVQ=";
+  cargoHash = "sha256-I6hPpRpILV+iU9erfVBQOXuICx4IvWvGyHWdep7jRm4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,6 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   env.ASSET_OUT_DIR = "/tmp/";
+
+  # key store daemon binds a loopback socket
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 
