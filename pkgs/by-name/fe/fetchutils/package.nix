@@ -6,9 +6,9 @@
   scdoc,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fetchutils";
-  version = "unstable-2021-03-16";
+  version = "0.1.0-unstable-2021-03-16";
 
   src = fetchFromGitHub {
     owner = "kiedtl";
@@ -33,9 +33,9 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Collection of small shell utilities to fetch system information";
-    homepage = "https://github.com/lptstr/fetchutils";
+    homepage = "https://github.com/kiedtl/fetchutils";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})
