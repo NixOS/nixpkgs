@@ -15,6 +15,7 @@
   setuptools,
   setuptools-rust,
   sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,6 +33,10 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     setuptools
     setuptools-rust
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
   ];
 
   nativeBuildInputs = [
