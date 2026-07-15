@@ -10,12 +10,12 @@
 }:
 let
   pname = "clickup";
-  version = "3.5.185";
+  version = "3.5.230";
 
   src = fetchurl {
     # Using archive.org because the website doesn't store older versions of the software.
-    url = "https://web.archive.org/web/20260323060753/https://desktop.clickup.com/linux";
-    hash = "sha256-szPbhY1vsEG0Zq4TD2I9qVTa4wAUYfoVA2O2xP4HGeE=";
+    url = "https://web.archive.org/web/20260715180901/https://desktop.clickup.com/linux";
+    hash = "sha256-9d4d/9FP158jHJE6xRCSaxL6kPxYLNad51UNl7RVlCs=";
   };
 
   appimage = appimageTools.wrapType2 {
@@ -47,7 +47,7 @@ stdenvNoCC.mkDerivation {
     install -m 444 -D ${appimageContents}/desktop.desktop $out/share/applications/clickup.desktop
 
     substituteInPlace $out/share/applications/clickup.desktop \
-      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=clickup' \
+      --replace-fail 'Exec=AppRun %U' 'Exec=clickup' \
       --replace-fail 'Icon=desktop' 'Icon=clickup'
 
     wrapProgram $out/bin/${pname} \
