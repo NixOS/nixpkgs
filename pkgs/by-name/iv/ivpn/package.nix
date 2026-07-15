@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn";
-  version = "3.15.6";
+  version = "3.15.13";
 
   buildInputs = [ wirelesstools ];
 
@@ -15,13 +15,13 @@ buildGoModule (finalAttrs: {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
+    hash = "sha256-F5MhJ09ioqL4Xf4r2cdXUKmkK8ebj/qRFWfxKuodH3k=";
   };
 
   __structuredAttrs = true;
 
   modRoot = "cli";
-  vendorHash = "sha256-Qm3OZq3W8GyfkYP674Jzse7wDPWgXfc0bi8ZpYl4T1I=";
+  vendorHash = "sha256-Q3CbeKrenZr1kGFhSrXW7dcnn3iGKWhWO2qofqAFwgk=";
 
   proxyVendor = true; # .c file
 
