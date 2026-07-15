@@ -39,6 +39,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     hash = "sha256-IgK517JorAf9ERcimusF20HgnuETBNKgnGaOxWBuV/M=";
   };
 
+  # Avoid that MAX_JOBS could be ignored with future updates
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"psutil",' ""
+  '';
+
   preConfigure = ''
     export MAX_JOBS="$NIX_BUILD_CORES"
     export NVCC_THREADS=2
