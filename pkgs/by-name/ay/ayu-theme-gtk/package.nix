@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ayu-theme-gtk";
-  version = "unstable-2017-05-12";
+  version = "0-unstable-2017-05-12";
 
   src = fetchFromGitHub {
     owner = "dnordstrom";
