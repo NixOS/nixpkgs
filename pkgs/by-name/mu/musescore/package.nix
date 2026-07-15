@@ -64,6 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wWqFJkXLRi3JtnEW3STTG/jBBIQK1dIYPZdKCiBn0m0=";
   };
 
+  patches = [
+    # Fix for https://github.com/musescore/MuseScore/issues/34091 also reported
+    # downstream at: https://github.com/NixOS/nixpkgs/issues/540783. PR to
+    # track: https://github.com/musescore/MuseScore/pull/34204
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
+      hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
+    })
+  ];
+
   cmakeFlags = [
     (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
