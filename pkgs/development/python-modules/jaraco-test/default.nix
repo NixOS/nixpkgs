@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jaraco-test";
-  version = "5.6.0";
+  version = "5.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.test";
     tag = "v${version}";
-    hash = "sha256-Ym0r92xCh+DNpFexqPlRVgcDGYNvnaJHEs5/RMaUr+s=";
+    hash = "sha256-c8N4Q4zNZolhJ9osBOaorWXNINnuA5PV0y5DHZISHaY=";
   };
 
   postPatch = ''
