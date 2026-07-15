@@ -23,7 +23,7 @@
 
   # Runtime dependencies
 
-  arrow-cpp,
+  ceph-arrow-cpp,
   babeltrace,
   ceph-boost,
   bzip2,
@@ -173,7 +173,7 @@ stdenv.mkDerivation {
   buildInputs =
     cryptoLibsMap.${cryptoStr}
     ++ [
-      arrow-cpp
+      ceph-arrow-cpp
       babeltrace
       ceph-boost
       bzip2
@@ -389,7 +389,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit (ceph-src) version;
     inherit overrideScope;
-    inherit arrow-cpp;
+    arrow-cpp = ceph-arrow-cpp; # remove once we remove version vendoring for this
     pythonEnv = ceph-python-env;
     tests = {
       inherit (nixosTests)

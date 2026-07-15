@@ -4,6 +4,12 @@
 lib.makeScope pkgs.newScope (self: {
   ceph-rocksdb = self.callPackage ./rocksdb.nix { };
 
+  # Ceph's `s3select` code needs `arrow/util/span.h`, which `arrow-cpp` removed
+  # in 24.0.0. We vendor the last `arrow-cpp` version that still ships it.
+  # See: https://github.com/NixOS/nixpkgs/issues/542206
+  # Should be removed when Ceph supports arrow-cpp >= 24.
+  ceph-arrow-cpp = self.callPackage ./arrow-cpp.nix { };
+
   # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
   ceph-python = self.callPackage ({ python312 }: python312) { };
   ceph-python-common = self.callPackage ./python-common.nix { };
