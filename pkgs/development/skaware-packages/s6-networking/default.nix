@@ -25,8 +25,8 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 skawarePackages.buildPackage {
   pname = "s6-networking";
-  version = "2.8.0.0";
-  sha256 = "sha256-rE9lhA/OwWJPe/nGMvtAVThRvJApV/+VayofIoGkXNQ=";
+  version = "2.8.0.1";
+  sha256 = "sha256-bwEcM7oFhs5Y/u4M+FSgsIfpCC/b0kq7eGFIRjgw80E=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-networking-man-pages";
