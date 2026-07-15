@@ -1,23 +1,25 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
+{ lib
+, python3Packages
+, fetchPypi
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "turnstone";
-  version = "1.6.8";
+  version = "1.7.4";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1axaic8053xh1a0fya0y24f8knrwxx2lz6pnqk570cb071pcr4dm";
+    hash = "sha256-+QKBufoklp4HgNdhFQ7mq0AoBN8P7xUXBjov/hK+LL0=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
+  nativeBuildInputs = [
+    python3Packages.pythonRelaxDepsHook
+  ];
+
+  build-system = with python3Packages; [
     hatchling
   ];
 
@@ -31,11 +33,13 @@ python3Packages.buildPythonApplication rec {
     "cryptography"
     "mcp"
     "openai"
+    "pydantic-settings"
     "starlette"
   ];
 
   dependencies = with python3Packages; [
     alembic
+    altair
     anthropic
     bcrypt
     croniter
@@ -57,15 +61,21 @@ python3Packages.buildPythonApplication rec {
     starlette
     structlog
     uvicorn
+    vl-convert-python
   ];
 
-  doCheck = false;
+  doCheck = false; # tests require a running LLM backend
+
+  passthru.tests = {
+    inherit (nixosTests) turnstone;
+  };
 
   meta = {
     description = "Self-hosted AI orchestration platform with tool use and agent routing";
     homepage = "https://github.com/turnstonelabs/turnstone";
     license = lib.licenses.asl20;
     mainProgram = "turnstone-server";
-    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ timvherpen ];
   };
 }
