@@ -61,10 +61,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace postlicyd/policy_tokens.sh \
-                      --replace /bin/bash ${bash}/bin/bash;
+                      --replace-fail /bin/bash ${bash}/bin/bash;
 
     substituteInPlace postlicyd/*_tokens.sh \
-      --replace "unsigned int" "size_t"
+      --replace-fail "unsigned int" "size_t"
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare -Wno-error=format-truncation";
@@ -73,6 +73,21 @@ stdenv.mkDerivation {
     "DESTDIR=$(out)"
     "prefix="
   ];
+
+  doCheck = true;
+  checkPhase = ''
+    (
+      cd tests;
+      for t in tst-*; do
+        if [ "$t" == "tst-spf" ]; then
+          echo skipping $t due to known glibc malloc assertion error
+        else
+          echo running test $t;
+          ./$t;
+        fi
+      done
+    )
+  '';
 
   meta = {
     description = "Collection of postfix-related tools";
