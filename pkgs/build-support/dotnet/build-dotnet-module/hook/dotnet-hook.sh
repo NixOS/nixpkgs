@@ -9,6 +9,38 @@ dotnetConfigurePhase() {
 
   runHook preConfigure
 
+  local -a _rawProjectFiles=()
+  concatTo _rawProjectFiles dotnetProjectFiles
+  local -a _convertedProjectFiles=()
+  for f in "${_rawProjectFiles[@]}"; do
+    if [[ "$f" == *.cs || "$f" == *.fs ]]; then
+      dotnet project convert "$f"
+      local baseName="${f##*/}"
+      local baseNameNoExt="${baseName%.*}"
+      local dirName="$(dirname "$f")"
+      _convertedProjectFiles+=("$dirName/$baseNameNoExt/$baseNameNoExt.csproj")
+    else
+      _convertedProjectFiles+=("$f")
+    fi
+  done
+  dotnetProjectFiles=("${_convertedProjectFiles[@]}")
+
+  local -a _rawTestProjectFiles=()
+  concatTo _rawTestProjectFiles dotnetTestProjectFiles
+  local -a _convertedTestProjectFiles=()
+  for f in "${_rawTestProjectFiles[@]}"; do
+    if [[ "$f" == *.cs || "$f" == *.fs ]]; then
+      dotnet project convert "$f"
+      local baseName="${f##*/}"
+      local baseNameNoExt="${baseName%.*}"
+      local dirName="$(dirname "$f")"
+      _convertedTestProjectFiles+=("$dirName/$baseNameNoExt/$baseNameNoExt.csproj")
+    else
+      _convertedTestProjectFiles+=("$f")
+    fi
+  done
+  dotnetTestProjectFiles=("${_convertedTestProjectFiles[@]}")
+
   local -a projectFiles flags runtimeIds
   concatTo projectFiles dotnetProjectFiles dotnetTestProjectFiles
   concatTo flags dotnetFlags dotnetRestoreFlags
