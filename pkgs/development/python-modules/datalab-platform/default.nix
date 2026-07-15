@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -72,6 +73,9 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     qt5.qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt5.qtwayland
   ];
 
   build-system = [
@@ -136,6 +140,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "guidata"
+    "numpy"
     "plotpy"
     "scipy"
   ];
