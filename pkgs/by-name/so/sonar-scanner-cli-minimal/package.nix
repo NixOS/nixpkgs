@@ -10,8 +10,11 @@ sonar-scanner-cli.override {
     jdk = jdk_headless;
     modules = [
       "java.base"
+      "java.desktop"
       "java.logging"
+      "java.management"
       "java.naming"
+      "java.net.http"
       "java.sql"
       "java.xml"
       "jdk.crypto.ec"
