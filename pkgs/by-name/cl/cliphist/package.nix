@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/sentriz/cliphist";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ klea ];
     mainProgram = "cliphist";
   };
 })
