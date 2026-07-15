@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   setuptools,
 }:
 
@@ -19,6 +20,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonImportsCheck = [ "gepa" ];
 
