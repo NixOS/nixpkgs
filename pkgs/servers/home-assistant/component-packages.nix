@@ -7370,7 +7370,8 @@
       ];
     "wattwaechter" =
       ps: with ps; [
-      ]; # missing inputs: aio-wattwaechter
+        aio-wattwaechter
+      ];
     "waze_travel_time" =
       ps: with ps; [
         pywaze
@@ -8868,6 +8869,7 @@
     "watergate"
     "watts"
     "watttime"
+    "wattwaechter"
     "waze_travel_time"
     "weather"
     "weatherflow"
