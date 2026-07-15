@@ -4,6 +4,7 @@
   buildPythonPackage,
   setuptools,
   aenum,
+  pytestCheckHook,
   python,
 }:
 
@@ -27,11 +28,13 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ aenum ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m dbf.test
-    runHook postCheck
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    sed -i '/^import tempfile$/a tempdir = tempfile.mkdtemp()' dbf/test.py
   '';
+
+  enabledTestPaths = [ "dbf/test.py" ];
 
   pythonImportsCheck = [ "dbf" ];
 
