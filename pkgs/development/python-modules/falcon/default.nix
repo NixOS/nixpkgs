@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "4.2.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
     tag = version;
-    hash = "sha256-Vi7J607PsjwxAKYNCiVGxSRYIbKHgrGvRX9Ent3+LQo=";
+    hash = "sha256-f+UoGYyrg8OZow4qONqzXuDVnrZalqUNDyavDoQ7QHE=";
   };
 
   build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];

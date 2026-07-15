@@ -5,7 +5,6 @@
   hatchling,
   hypothesis,
   pydantic,
-  pyprojectVersionPatchHook,
   pytest,
   pytest-xdist,
   invoke,
@@ -13,22 +12,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "syrupy";
-  version = "5.2.0";
+  version = "5.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tivRKADRYyyNmNOOd0w2qTseA3t7TMwkAkQ/Kr6wp6U=";
+    hash = "sha256-aFwYJsDviI7j7xeEdtDGy0t4JCLMr/z57Gjl9mQo0SE=";
   };
 
   build-system = [ hatchling ];
-
-  nativeBuildInputs = [
-    # the commit updating the version happens only after tagging
-    pyprojectVersionPatchHook
-  ];
 
   buildInputs = [ pytest ];
 

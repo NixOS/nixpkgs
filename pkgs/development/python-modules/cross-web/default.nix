@@ -70,6 +70,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
+  pytestFlags = [
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "cross_web" ];
 
   preCheck = ''

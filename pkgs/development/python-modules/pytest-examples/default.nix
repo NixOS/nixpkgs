@@ -44,6 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_examples" ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # Fails with AssertionError because formatting is different than expected
     "test_black_error"

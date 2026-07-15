@@ -161,6 +161,7 @@ mapAliases {
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   dask-yarn = throw "'dask-yarn' has been removed due to lack of upstream maintenance"; # added 2026-07-06
+  dataclasses-serialization = throw "'dataclasses-serialization' has been removed due to lack of upstream maintenance."; # added 2026-07-14
   datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
@@ -386,6 +387,7 @@ mapAliases {
   modeled = "'modeled' has been removed because it is unmaintained"; # Added 2026-01-19
   monarchmoney = throw "'monarchmoney' has been renamed to/replaced by 'monarchmoneycommunity'"; # Added 2026-03-05
   monkeytype = throw "'monkeytype' has been removed as it was unmaintained upstream"; # Added 2026-04-19
+  more-properties = "'more-properties' has been removed to due lack of upstream maintenance"; # Added 2026-07-14
   moretools = "'moretools' has been removed because it is unmaintained"; # Added 2026-01-19
   mpd2 = warnAlias "'mpd2' has been renamed to 'python-mpd2'"; # Added 2026-06-14
   mpire = throw "'mpire' has been removed because it is unused in Nixpkgs"; # Added 2026-06-22
@@ -516,6 +518,7 @@ mapAliases {
   pysuez = throw "'pysuez' has been renamed to/replaced by 'pysuezv2'"; # Converted to throw 2025-10-29
   pytado = throw "'pytado' has been renamed to/replaced by 'python-tado'"; # Converted to throw 2025-10-29
   pytedee-async = aiotedee; # added 2025-07-06
+  pytest-cram = throw "'pytest-cram' was removed becaused it was unmaintained"; # added 2026-07-14
   pytest-kafka = throw "'pytest-kafka' was removed because it is no longer used"; # added 2026-06-17
   pytest-pep8 = throw "'pytest-pep8' has been renamed to/replaced by 'pytestpep8'"; # Converted to throw 2025-10-29
   pytest-subtests = throw "'pytest-subtests' has been integrated into pytest 9."; # Added 2026-01-21
@@ -631,6 +634,7 @@ mapAliases {
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
   steamship = throw "'steamship' has been removed because it is broken and unmaintained upstream"; # Added 2026-05-06
+  strawberry-django = strawberry-graphql-django; # Added 2026-07-14
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   subunit = python-subunit; # added 2026-06-21
   supafunc = throw "'supafunc' has been replaced by 'supabase-functions'"; # Added 2026-03-08

@@ -4,22 +4,22 @@
   lib,
   python,
   setuptools,
+  pyprojectVersionPatchHook,
 }:
 
-let
-  version = "2026.4.4";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "regex";
-  inherit version;
+  version = "2026.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrabarnett";
     repo = "mrab-regex";
-    tag = version;
-    hash = "sha256-vLhukoQc50XOgv74hBQS36w+T+27y5GTTDetZ2JV8r4=";
+    tag = finalAttrs.version;
+    hash = "sha256-x9XjtIUjm1eV0GS0216ZimHx6DNxtxZV5pQ6dbkEfTc=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 
@@ -46,4 +46,4 @@ buildPythonPackage {
     ];
     maintainers = [ lib.maintainers.dwoffinden ];
   };
-}
+})

@@ -30,6 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # for some reason the tests fail to execute cat, even though they run with less just fine,
     # even adding coreutils to nativeCheckInputs explicitly does not change anything

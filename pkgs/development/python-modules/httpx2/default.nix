@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httpx2";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "httpx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T5As4cdZRHkWszzaDZX8G8Z35TkaBsB/oy92FtOhuBY=";
+    hash = "sha256-vIWAUjHPyafbeeUc2OvGpkiOoTj1fTniRnQiKSdkm6s=";
   };
 
   postPatch = ''
@@ -102,6 +102,13 @@ buildPythonPackage (finalAttrs: {
     # network access
     "test_async_proxy_close"
     "test_sync_proxy_close"
+    # uvicorn access logging mismatch
+    "test_logging_request"
+    "test_logging_redirect_chain"
+    # chardet shenanigans (Windows-1252 == WINDOWS-1252 cmp)
+    "test_client_decode_text_using_autodetect"
+    "test_client_decode_text_using_explicit_encoding"
+    "test_response_decode_text_using_autodetect"
   ];
 
   passthru.tests = {

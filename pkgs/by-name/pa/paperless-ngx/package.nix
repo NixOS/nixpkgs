@@ -109,6 +109,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "bleach"
     "celery"
     "django-allauth"
     "django-auditlog"
@@ -119,6 +120,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "redis"
     "scikit-learn"
     "tika-client"
+    "tqdm"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"

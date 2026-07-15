@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.4.7";
+  version = "3.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "charset_normalizer";
     tag = version;
-    hash = "sha256-dOdJ4f98smCYdskp3BwtQG6aOyK+2a73+x580FKRWDk=";
+    hash = "sha256-YOskF90ach/qEwnMeYDEEO2H4DOoz/LZApXDRU9mvnM=";
   };
 
   postPatch = ''
     substituteInPlace _mypyc_hook/backend.py \
-      --replace-fail "mypy>=1.4.1,<=1.20" "mypy"
+      --replace-fail "mypy>=1.4.1,<2.2" "mypy"
   '';
 
   build-system = [

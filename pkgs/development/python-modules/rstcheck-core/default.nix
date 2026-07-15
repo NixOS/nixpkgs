@@ -29,9 +29,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
-  };
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
 
   dependencies = [
     docutils
@@ -45,8 +43,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # https://github.com/rstcheck/rstcheck-core/issues/84
-    "test_check_yaml_returns_error_on_bad_code_block"
+    # severity was bumped from severe/4 to error/3
+    "test_include_directive_error_without_sphinx"
   ];
 
   pythonImportsCheck = [ "rstcheck_core" ];

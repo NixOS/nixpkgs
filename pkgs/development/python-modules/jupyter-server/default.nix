@@ -34,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.17.0";
+  version = "2.20.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-w46omFZpZMiItHcq4e1Y7KhFkuiCUdLPxNFx+B9+mdU=";
+    hash = "sha256-tXeLozfYAVo9wrgIA+zdWsGNN5f932GlDqX7RytOvhQ=";
   };
 
   build-system = [
