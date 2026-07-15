@@ -1,0 +1,34 @@
+diff --git a/rc.apparmor.functions b/rc.apparmor.functions
+index 96cb23d33..4401fc420 100644
+--- a/rc.apparmor.functions
++++ b/rc.apparmor.functions
+@@ -31,7 +31,10 @@
+ 
+ # Some nice defines that we use
+ 
+-PARSER=/sbin/apparmor_parser
++PATH="@PATH@${PATH:+:$PATH}"
++export PATH
++
++PARSER=$(command -v apparmor_parser)
+ PARSER_OPTS=
+ # Suppress warnings when booting in quiet mode
+ if [ "${QUIET:-no}" = yes ] || [ "${quiet:-n}" = y ]; then
+@@ -50,7 +53,7 @@ ADDITIONAL_PROFILE_DIR=
+ if [ -n "$ADDITIONAL_PROFILE_DIR" ] && [ -d "$ADDITIONAL_PROFILE_DIR" ]; then
+ 	PROFILE_DIRS="$PROFILE_DIRS $ADDITIONAL_PROFILE_DIR"
+ fi
+-AA_STATUS=/usr/sbin/aa-status
++AA_STATUS=$(command -v aa-status)
+ SECURITYFS=/sys/kernel/security
+ SFS_MOUNTPOINT="${SECURITYFS}/apparmor"
+ 
+@@ -91,7 +94,7 @@ is_container_with_internal_policy() {
+ 	local ns_name
+ 
+ 	# WSL needs to be detected explicitly
+-	if [ -x /usr/bin/systemd-detect-virt ] && \
++	if command -v systemd-detect-virt >/dev/null 2>&1 && \
+ 	   [ "$(systemd-detect-virt --container)" = "wsl" ]; then
+ 		return 0
+ 	fi

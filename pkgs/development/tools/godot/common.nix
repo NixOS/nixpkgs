@@ -38,6 +38,7 @@
   libxkbcommon,
   libxrandr,
   libxrender,
+  llvmPackages,
   makeWrapper,
   mbedtls,
   miniupnpc,
@@ -398,6 +399,8 @@ let
             "-I${lib.getDev harfbuzz-icu}/include/harfbuzz"
             "-I${lib.getDev recastnavigation}/include/recastnavigation"
           ];
+          # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+          NIX_CFLAGS_LINK = "--ld-path=${lib.getExe' llvmPackages.lld "ld64.lld"}";
         };
 
         preConfigure = lib.optionalString (editor && withMono) ''
@@ -643,6 +646,8 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin (
           [
             darwin.sigtool
+            # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+            llvmPackages.lld
           ]
           ++ lib.optionals (!editor) [
             strip-nondeterminism

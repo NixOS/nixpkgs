@@ -8,11 +8,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "vita3k";
-  version = "3821";
+  version = "4064";
 
   src = fetchurl {
     url = "https://github.com/Vita3K/Vita3K-builds/releases/download/${version}/Vita3K-x86_64.AppImage";
-    sha256 = "sha256-U2sGt8zHGODes2DB7qK5xJVAhkxyQ6ku/UCmd1D1184=";
+    sha256 = "sha256-QUzu+7BqiJ8gWWugwyMyKyQ3bXzmAx/zSxJ2+AeVQB4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,9 @@ appimageTools.wrapType2 rec {
         --replace-fail "Exec=Vita3K" "Exec=vita3k"
       cp -r ${appimageContents}/usr/share/icons $out/share
       wrapProgram $out/bin/vita3k \
-        --set APPIMAGE 1
+        --set APPIMAGE 1 \
+        --unset QT_PLUGIN_PATH \
+        --unset QML2_IMPORT_PATH
     '';
 
   passthru.updateScript = nix-update-script { };
