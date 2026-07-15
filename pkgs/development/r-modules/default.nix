@@ -2857,19 +2857,50 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    redatamx = old.redatamx.overrideAttrs (attrs: {
-      preConfigure =
-        let
-          redatam-core = pkgs.fetchzip {
-            url = "https://redatam-core.s3.us-west-2.amazonaws.com/core-dev/linux/redatamx-core-linux-20241222.zip";
-            hash = "sha256-CagDpv7v5fj/NgaC5fmYc5UuKuBVlT3gauH2ItVnIIY=";
+    redatamx = old.redatamx.overrideAttrs (
+      finalAttrs: previousAttrs:
+      let
+        fetchCore =
+          { platform, hash }:
+          pkgs.fetchzip {
+            name = "redatam-core-${platform}-${finalAttrs.version}";
+            url = "https://redatam-core.s3.us-west-2.amazonaws.com/core-dev/${platform}/redatamx-core-${platform}-${finalAttrs.version}-final.zip";
+            inherit hash;
           };
-        in
-        ''
-          mkdir -p ./inst/redengine/
-          cp ${redatam-core}/lib/libredengine-1.0.0-rc2.so ./inst/redengine/libredengine-1.0.0-rc2.so
+      in
+      {
+        passthru = (previousAttrs.passthru or { }) // {
+          redatam-core-per-system = {
+            "x86_64-linux" = fetchCore {
+              platform = "linux";
+              hash = "sha256-LNusDc4K6B+kAd+qWo789eiQG0dToEwu/RWwoFEjgRo=";
+            };
+            "aarch64-darwin" = fetchCore {
+              platform = "macos-arm64";
+              hash = "sha256-l7qLjM6jDtytAPgY7qVuVPEE6HUnZ1fPFxAzS6VnFY4=";
+            };
+          };
+
+          redatam-core = finalAttrs.passthru.redatam-core-per-system.${stdenv.hostPlatform.system};
+        };
+
+        # upstream is checking for the wrong filename, so it tries and fails to download redatam-core
+        # even if it's already installed to the target location, so let's just disable the check
+        postPatch = ''
+          substituteInPlace configure \
+            --replace-fail '[ ! -e inst/redengine/$engine_file ]' 'false'
         '';
-    });
+
+        preConfigure = ''
+          install -Dm755 ${finalAttrs.passthru.redatam-core}/lib/libredengine* -t ./inst/redengine/
+        '';
+
+        meta = (previousAttrs.meta or { }) // {
+          platforms = lib.attrNames finalAttrs.passthru.redatam-core-per-system;
+          license = lib.licenses.unfree; # See https://github.com/ideasybits/redatamx4r/blob/main/inst/License.txt
+        };
+      }
+    );
 
     redland = old.redland.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
