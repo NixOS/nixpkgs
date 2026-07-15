@@ -6,7 +6,7 @@
   bzip2,
   zstd,
   stdenv,
-  rocksdb,
+  callPackage,
   nix-update-script,
   testers,
   matrix-continuwuity,
@@ -14,28 +14,7 @@
   liburing,
   nixosTests,
 }:
-let
-  rocksdb' =
-    (rocksdb.override {
-      # rocksdb does not support prefixed jemalloc, which is required on darwin
-      enableJemalloc = !stdenv.hostPlatform.isDarwin;
-      jemalloc = rust-jemalloc-sys-unprefixed;
-    }).overrideAttrs
-      (
-        final: old: {
-          version = "11.1.1";
-          src = fetchFromGitea {
-            domain = "forgejo.ellis.link";
-            owner = "continuwuation";
-            repo = "rocksdb";
-            rev = "3756b2b905e13216d8b56bcc783d814e7b073aff";
-            hash = "sha256-rSv4fr2bf9JJwdodgeuPCuceeh7k97KVxrAOC0wyPQY=";
-          };
 
-          patches = [ ];
-        }
-      );
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
   version = "26.7.1";
@@ -64,12 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
+    ROCKSDB_INCLUDE_DIR = "${finalAttrs.rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${finalAttrs.rocksdb}/lib";
   };
 
+  rocksdb = callPackage ./rocksdb.nix { }; # make used rocksdb version available (e.g., for backup scripts)
+
   passthru = {
-    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
