@@ -594,8 +594,6 @@ rec {
           done
           ${postBuild}
         '';
-      }
-      // {
         ${if !args ? meta then "pos" else null} =
           if args ? pname then
             builtins.unsafeGetAttrPos "pname" args
