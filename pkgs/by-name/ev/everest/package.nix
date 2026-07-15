@@ -67,9 +67,6 @@ buildDotnetModule {
   # Needed for ILAsm projects: https://github.com/NixOS/nixpkgs/issues/370754#issuecomment-2571475814
   linkNugetPackages = true;
 
-  # Microsoft.NET.Sdk complains: The process cannot access the file xxx because it is being used by another process.
-  enableParallelBuilding = false;
-
   preBuild = ''
     # See .azure-pipelines/prebuild.ps1
     sed -i 's|0\.0\.0-dev|1.${version}.0-nixos-${lib.substring 0 5 rev}|' Celeste.Mod.mm/Mod/Everest/Everest.cs

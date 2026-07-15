@@ -44,8 +44,6 @@ buildDotnetModule rec {
   executable = "ArchiSteamFarm";
   installPath = "${placeholder "out"}/lib/ArchiSteamFarm";
 
-  enableParallelBuilding = false;
-
   useAppHost = false;
   dotnetFlags = [
     # useAppHost doesn't explicitly disable this

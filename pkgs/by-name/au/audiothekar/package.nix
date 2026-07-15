@@ -20,11 +20,6 @@ buildDotnetModule rec {
 
   projectFile = "Audiothekar.sln";
 
-  # > Unable to use package assets cache due to I/O error. This can occur when
-  # > the same project is built more than once in parallel. Performance may be
-  # > degraded, but the build result will not be impacted.
-  enableParallelBuilding = false;
-
   doCheck = false;
 
   nugetDeps = ./deps.json;

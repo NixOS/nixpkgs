@@ -34,8 +34,6 @@ buildDotnetModule (finalAttrs: {
 
   gameHashes = callPackage ./game-hashes { };
 
-  enableParallelBuilding = false;
-
   # If the whole solution is published, there seems to be a race condition where
   # it will sometimes publish the wrong version of a dependent assembly, for
   # example: Microsoft.Extensions.Hosting.dll 6.0.0 instead of 8.0.0.

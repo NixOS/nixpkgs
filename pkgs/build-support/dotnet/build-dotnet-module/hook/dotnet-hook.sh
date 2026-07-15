@@ -115,6 +115,11 @@ dotnetBuildPhase() {
     local useRuntime=
     _dotnetIsSolution "$projectFile" || useRuntime=1
 
+    if [[ -v dotnetSelfContainedBuild && -z "${useRuntime:-}" ]]; then
+      echo "Building a solution with selfContainedBuild specified is not supported"
+      exit 1
+    fi
+
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
       if [[ -n $useRuntime ]]; then
@@ -197,6 +202,11 @@ dotnetCheckPhase() {
   for projectFile in "${testProjectFiles[@]-${projectFiles[@]}}"; do
     local useRuntime=
     _dotnetIsSolution "$projectFile" || useRuntime=1
+
+    if [[ -v dotnetSelfContainedBuild && -z "${useRuntime:-}" ]]; then
+      echo "Building a solution with selfContainedBuild specified is not supported"
+      exit 1
+    fi
 
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
@@ -369,6 +379,11 @@ dotnetInstallPhase() {
     local useRuntime=
     _dotnetIsSolution "$projectFile" || useRuntime=1
 
+    if [[ -v dotnetSelfContainedBuild && -z "${useRuntime:-}" ]]; then
+      echo "Building a solution with selfContainedBuild specified is not supported"
+      exit 1
+    fi
+
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()
       if [[ -n $useRuntime ]]; then
@@ -395,6 +410,11 @@ dotnetInstallPhase() {
 
     local useRuntime=
     _dotnetIsSolution "$projectFile" || useRuntime=1
+
+    if [[ -v dotnetSelfContainedBuild && -z "${useRuntime:-}" ]]; then
+      echo "Building a solution with selfContainedBuild specified is not supported"
+      exit 1
+    fi
 
     for runtimeId in "${runtimeIds[@]}"; do
       local runtimeIdFlags=()

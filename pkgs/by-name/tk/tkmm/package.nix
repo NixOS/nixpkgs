@@ -58,7 +58,6 @@ buildDotnetModule (finalAttrs: {
     libxrandr
   ];
 
-  enableParallelBuilding = false;
   dotnetFlags = [
     ''-p:DefineConstants="READONLY_FS"''
   ];
