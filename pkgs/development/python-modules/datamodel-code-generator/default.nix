@@ -3,16 +3,21 @@
   argcomplete,
   black,
   buildPythonPackage,
+  email-validator,
   fetchFromGitHub,
   genson,
   graphql-core,
+  grpcio-tools,
   hatch-vcs,
   hatchling,
   httpx,
+  hypothesis,
+  hypothesis-jsonschema,
   inflect,
   inline-snapshot,
   isort,
   jinja2,
+  msgspec,
   openapi-spec-validator,
   packaging,
   prance,
@@ -20,6 +25,7 @@
   pydantic,
   pysnooper,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
   pyyaml,
   time-machine,
@@ -28,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.55.0";
+  version = "0.68.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-zsLJv7gKhmnEIS/AUvnBzm+07QFQoMdiFo/PkfRyHek=";
+    hash = "sha256-fYnI7S4FJ927qZXyAsWQzxhLTrcpscYqJunmcSt/gkk=";
   };
 
   pythonRelaxDeps = [
@@ -52,6 +58,8 @@ buildPythonPackage rec {
     argcomplete
     black
     genson
+    hypothesis
+    hypothesis-jsonschema
     inflect
     isort
     jinja2
@@ -65,6 +73,7 @@ buildPythonPackage rec {
     debug = [ pysnooper ];
     graphql = [ graphql-core ];
     http = [ httpx ];
+    protobuf = [ grpcio-tools ];
     ruff = [ ruff ];
     validation = [
       openapi-spec-validator
@@ -76,8 +85,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    email-validator
     inline-snapshot
+    msgspec
     pytest-mock
+    pytest-timeout
     pytestCheckHook
     time-machine
   ]
@@ -93,7 +105,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/koxudaxi/datamodel-code-generator";
-    changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${src.tag}";
+    changelog = "https://github.com/koxudaxi/datamodel-code-generator/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "datamodel-code-generator";
