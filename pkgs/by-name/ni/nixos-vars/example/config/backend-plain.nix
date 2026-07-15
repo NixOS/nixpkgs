@@ -12,26 +12,8 @@ let
 in
 {
   vars = {
-    defaultPromptBackend = "example";
-    promptBackends.example.script = mkScript "prompt" ''
-      out=''${out:?} # Make shellcheck happy
-      if [[ "$1" == "line" ]]; then
-        read -rp "$2: " text
-        echo -n "$text" > "$out"
-      elif [[ "$1" == "hidden" ]]; then
-        read -srp "$2: " text
-        echo ""
-        echo -n "$text" > "$out"
-      elif [[ "$1" == "multiline" ]]; then
-        echo "<$2>" > "$out"
-        $EDITOR "$out"
-      else
-        exit 1
-      fi
-    '';
-
-    defaultGeneratorBackend = "example";
-    generatorBackends.example = {
+    defaultGeneratorBackend = "plain";
+    generatorBackends.plain = {
       get = mkScript "get" ''
         out=''${out:?} # Make shellcheck happy
         cat ${rootHost}/generators/"$1"/files/"$2" > "$out"

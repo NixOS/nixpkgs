@@ -30,7 +30,7 @@ import {jsonify} {{
 	config = (import {args.file.resolve()}){"" if args.attr is None else f".{args.attr}"};
 }}
 """
-		evalCommand = ["--impure", "--expr", expr]
+		evalCommand = ["--impure", "--show-trace", "--expr", expr]
 
 	try:
 		result = subprocess.run(

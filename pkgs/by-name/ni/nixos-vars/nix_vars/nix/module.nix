@@ -88,6 +88,17 @@ let
           running (even if nixos-install has successfully completed).
         '';
 
+        generatorModule = lib.mkOption {
+          type = lib.types.deferredModule;
+          internal = true;
+          default = { };
+          description = ''
+            A module to be imported in every vars.generators.<name> submodule.
+            Can be used by backends in order to add additional per-generator
+            configuration options.
+          '';
+        };
+
         fileModule = lib.mkOption {
           type = lib.types.deferredModule;
           internal = true;
@@ -95,7 +106,10 @@ let
           description = ''
             A module to be imported in every
             vars.generators.<name>.files.<name> submodule. Used by backends to
-            define the `path` attribute.
+            define the `path` attribute. The module will have the following
+            additional arguments passed to it:
+            - `generator`, containing the generator the file belongs to
+            - `backend`, containing the backend associated with said generator
           '';
         };
       };
@@ -148,7 +162,11 @@ let
 
   generatorModule = lib.types.submodule (
     { name, config, ... }:
+    let
+      backend = cfg.generatorBackends.${config.backend};
+    in
     {
+      imports = lib.mapAttrsToList (_: b: b.generatorModule) cfg.generatorBackends;
       options = {
         name = lib.mkOption {
           description = ''
@@ -187,14 +205,10 @@ let
           type = lib.types.attrsOf (
             lib.types.submoduleWith {
               modules = [ fileModule ];
-              specialArgs =
-                let
-                  backend = cfg.generatorBackends.${config.backend};
-                in
-                {
-                  inherit backend;
-                  generator = config;
-                };
+              specialArgs = {
+                inherit backend;
+                generator = config;
+              };
             }
           );
         };
