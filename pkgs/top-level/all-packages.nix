@@ -2089,8 +2089,6 @@ with pkgs;
 
   gnucap-full = gnucap.withPlugins (p: [ p.verilog ]);
 
-  gnugrep = callPackage ../tools/text/gnugrep { };
-
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
