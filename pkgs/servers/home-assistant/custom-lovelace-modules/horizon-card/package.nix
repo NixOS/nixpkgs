@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "horizon-card";
-  version = "1.4.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rejuvenate";
     repo = "lovelace-horizon-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3HYAo5BRnWmI8OWrWmA1V1ctPC1zlcFLAFuSfsDhtjo=";
+    hash = "sha256-pUZoraOD4jLxun/I3OkIgcy45es3a0Sdh5GTEG2oNK4=";
   };
 
   patches = [
