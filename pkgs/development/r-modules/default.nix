@@ -476,12 +476,14 @@ let
       pkgs.hostname
     ];
     Rhpc = with pkgs; [
-      zlib
-      bzip2.dev
-      icu
-      xz.dev
       mpi
-      pcre.dev
+      # deps for `R CMD config --ldflags`
+      bzip2
+      icu
+      libdeflate
+      xz
+      zlib
+      zstd
     ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
@@ -492,13 +494,6 @@ let
     Rpoppler = [ pkgs.pkg-config ];
     Rsubbotools = [ pkgs.gsl ]; # for gsl-config
     Rsymphony = [ pkgs.pkg-config ];
-    SAVE = with pkgs; [
-      zlib
-      bzip2
-      icu
-      xz
-      pcre
-    ];
     SQLFormatteR = with pkgs; [
       cargo
       rustc
@@ -1156,12 +1151,13 @@ let
     archive = [ pkgs.libarchive ];
     arrangements = with pkgs; [ gmp.dev ];
     asciicast = with pkgs; [
-      bzip2.dev
-      icu.dev
+      # deps for `R CMD config --ldflags`
+      bzip2
+      icu
       libdeflate
-      xz.dev
-      zlib.dev
-      zstd.dev
+      xz
+      zlib
+      zstd
     ];
     audio = [ pkgs.portaudio ];
     bamsignals = with pkgs; [
@@ -1335,11 +1331,13 @@ let
     libstable4u = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     littler = with pkgs; [
+      # deps for `R CMD config --ldflags`
+      bzip2
+      icu
+      libdeflate
       xz
       zlib
-      bzip2
       zstd
-      icu
     ];
     lpsymphony = with pkgs; [
       symphony
@@ -1431,11 +1429,13 @@ let
     ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rJava = with pkgs; [
-      zlib
+      # deps for `R CMD config --ldflags`
       bzip2
+      icu
+      libdeflate
       xz
       zstd
-      icu
+      zlib
     ];
     raer = with pkgs; [
       zlib.dev
@@ -1464,14 +1464,6 @@ let
     rcdd = [ pkgs.gmp ];
     rcontroll = [ pkgs.gsl.dev ];
     redux = [ pkgs.hiredis ];
-    registr = with pkgs; [
-      icu.dev
-      zlib.dev
-      bzip2.dev
-      xz.dev
-      libdeflate
-      zstd.dev
-    ];
     resultant = with pkgs; [
       gmp
       mpfr
@@ -1646,12 +1638,13 @@ let
     units = [ pkgs.udunits ];
     unix = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libapparmor ];
     unrtf = with pkgs; [
-      bzip2.dev
-      icu.dev
+      # deps from $(LIBS) (same as `R CMD config --ldflags`)
+      bzip2
+      icu
       libdeflate
-      xz.dev
-      zlib.dev
-      zstd.dev
+      xz
+      zlib
+      zstd
     ];
     vapour = [ pkgs.proj ];
     vcfR = with pkgs; [ zlib.dev ];
