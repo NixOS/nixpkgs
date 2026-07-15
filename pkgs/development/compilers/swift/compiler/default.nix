@@ -126,7 +126,8 @@ let
         # support (added in Clang 19.1). The cc-wrapper adds it based
         # on the system Clang version, so strip it here.
         substituteInPlace $out/nix-support/add-local-cc-cflags-before.sh \
-          --replace-fail "-mtls-dialect=gnu2" ""
+          --replace-quiet "'-mtls-dialect=gnu2'" "" \
+          --replace-quiet " -mtls-dialect=gnu2" ""
       '';
   });
 
