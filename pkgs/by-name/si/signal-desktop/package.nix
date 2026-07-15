@@ -4,6 +4,7 @@
   lib,
   nodejs_24,
   pnpm_10,
+  pnpm_11,
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -32,22 +33,25 @@ assert lib.warnIf (commandLineArgs != "")
   true;
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
   electron = electron_42;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
-  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
+    pnpm = pnpm_10;
+    inherit nodejs;
+  };
 
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.15.0";
+  version = "8.18.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-SiOgNUll6J+EZNlmM6yhXakOc5qFCFRE/GczhaH57Vo=";
+    hash = "sha256-fynCFGmch3UecT5esNfVVlf0+xDrCdCBGw2HMMqBzWw=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -63,15 +67,27 @@ let
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
     pname = "signal-desktop-sticker-creator";
-    inherit version;
-    src = src + "/sticker-creator";
+    inherit src version;
+
+    pnpmRoot = "sticker-creator";
+    pnpmWorkspaces = [ "signal-art-creator" ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname src version;
+      inherit (finalAttrs)
+        pname
+        src
+        version
+        postPatch
+        pnpmWorkspaces
+        ;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-WmDSa4PrASaqs8X68LYaPBeE+i+Jh3FfWF30SseN74Y=";
+      hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
     };
+
+    postPatch = ''
+      rm sticker-creator/pnpm-lock.yaml
+    '';
 
     strictDeps = true;
     nativeBuildInputs = [
@@ -83,7 +99,7 @@ let
 
     installPhase = ''
       runHook preInstall
-      cp -r dist $out
+      cp -r sticker-creator/dist $out
       runHook postInstall
     '';
   });
@@ -113,9 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./force-90-days-expiration.patch
-
-    # Drop once https://github.com/NixOS/nixpkgs/pull/520553 and https://github.com/NixOS/nixpkgs/pull/525241 land.
-    ./dont-assert-unicode-17-emoji.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
     # Signal ships the Apple emoji set without a licence and upstream
@@ -149,6 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config/production.json \
       --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
+    # pnpm 11 verifies node_modules before every `pnpm run`, which fails
+    # after nixpkgs swaps in the prebuilt native modules below.
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail "verifyDepsBeforeRun: prompt" "verifyDepsBeforeRun: false"
+
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
@@ -172,13 +190,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-/z+P9mb7Cm3FzzMpV6Da6THcHd73JgPuuB0Gx8KwKcc=";
+    hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1781737260;
+    SOURCE_DATE_EPOCH = 1783606680;
   };
 
   preBuild = ''
@@ -232,6 +250,14 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
+
+    # @signalapp/windows-ucv is imported on all platforms, but its TypeScript
+    # output is normally produced by its preinstall script. pnpmConfigHook runs
+    # `pnpm install --ignore-scripts`, so build it explicitly.
+    pushd packages/windows-ucv
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/windows-ucv/dist/index.js
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
