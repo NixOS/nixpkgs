@@ -1127,6 +1127,8 @@ let
 
         letters = callPackage ../development/ocaml-modules/letters { };
 
+        libabsolute = callPackage ../development/ocaml-modules/libabsolute { };
+
         libc = callPackage ../development/ocaml-modules/libc { };
 
         lilv = callPackage ../development/ocaml-modules/lilv {
