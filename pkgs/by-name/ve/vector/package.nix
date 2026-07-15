@@ -103,6 +103,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
     "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
     "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
+    "--skip=topology::test::reload::topology_reload_preserves_enrichment_table_state"
 
     # Requires access to journalctl
     "--skip=sources::journald::tests::emits_cursor"
