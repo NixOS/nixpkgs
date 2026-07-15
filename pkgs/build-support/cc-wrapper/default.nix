@@ -413,14 +413,6 @@ in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
 
-# Ensure bintools matches
-assert libc_bin == bintools.libc_bin;
-assert libc_dev == bintools.libc_dev;
-assert libc_lib == bintools.libc_lib;
-assert nativeTools == bintools.nativeTools;
-assert nativeLibc == bintools.nativeLibc;
-assert nativePrefix == bintools.nativePrefix;
-
 stdenvNoCC.mkDerivation {
   pname = targetPrefix + (if name != "" then name else "${ccName}-wrapper");
   version = optionalString (cc != null) ccVersion;
@@ -490,9 +482,21 @@ stdenvNoCC.mkDerivation {
   # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
   dontCheckForBrokenSymlinks = true;
 
-  unpackPhase = ''
-    src=$PWD
-  '';
+  # Ensure bintools matches. This is done here rather than at top level
+  # so that evaluating the derivation's metadata (such as `name`)
+  # doesn't force the comparisons, which cause the outPaths of the
+  # compared derivations to be computed and thus .drv files to be
+  # written to the store.
+  unpackPhase =
+    assert libc_bin == bintools.libc_bin;
+    assert libc_dev == bintools.libc_dev;
+    assert libc_lib == bintools.libc_lib;
+    assert nativeTools == bintools.nativeTools;
+    assert nativeLibc == bintools.nativeLibc;
+    assert nativePrefix == bintools.nativePrefix;
+    ''
+      src=$PWD
+    '';
 
   wrapper = ./cc-wrapper.sh;
 
