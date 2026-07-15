@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "clickhouse-driver";
   version = "0.2.10";
-  format = "setuptools";
+  pyproject = true;
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
@@ -28,12 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-veFkmXAp8b6/Npt7f1EhMfM9OKlLugKtlXS+zMHWAro=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cython
+  ];
+
+  dependencies = [
     clickhouse-cityhash
     lz4
     pytz
