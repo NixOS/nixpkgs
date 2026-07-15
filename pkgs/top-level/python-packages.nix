@@ -12747,8 +12747,6 @@ self: super: with self; {
 
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
-  pandas-ta = callPackage ../development/python-modules/pandas-ta { };
-
   pandera = callPackage ../development/python-modules/pandera { };
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
