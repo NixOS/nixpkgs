@@ -319,7 +319,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
-      "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
       "aarch64-linux"

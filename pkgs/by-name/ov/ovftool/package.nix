@@ -99,11 +99,6 @@ let
       fileName = "VMware-ovftool-${version}-lin.x86_64.zip";
       hash = "sha256-LIOXCiEswBJirbds47nFKvOW+tg0D/cay3SeM+hsjjM=";
     };
-    "x86_64-darwin" = rec {
-      version = "5.1.0-25410048";
-      fileName = "VMware-ovftool-${version}-mac.x64.zip";
-      hash = "sha256-gDSraL+B3As+QxT2GlAmL8KjsIelxAd2e4iSRaXOTtI=";
-    };
   };
 
   ovftoolSystem = ovftoolSystems.${stdenv.system} or (throw "unsupported system ${stdenv.system}");

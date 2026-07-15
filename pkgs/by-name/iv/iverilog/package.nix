@@ -96,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     badPlatforms = [
       # Several tests fail with:
       # ==> Failed - running iverilog.
-      "x86_64-darwin"
     ];
   };
 })

@@ -87,15 +87,6 @@ let
       USE_OPENMP = true;
     };
 
-    x86_64-darwin = {
-      BINARY = 64;
-      TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = setDynamicArch true;
-      NO_AVX512 = !enableAVX512;
-      USE_OPENMP = false;
-      MACOSX_DEPLOYMENT_TARGET = "10.7";
-    };
-
     x86_64-linux = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";

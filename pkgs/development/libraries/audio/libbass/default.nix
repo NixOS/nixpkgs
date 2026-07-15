@@ -27,7 +27,6 @@ let
         x86_64-linux = "libs/x86_64/libbass.so";
         armv7l-linux = "libs/armhf/libbass.so";
         aarch64-linux = "libs/aarch64/libbass.so";
-        x86_64-darwin = "libbass.dylib";
         aarch64-darwin = "libbass.dylib";
       };
       url = {
@@ -52,7 +51,6 @@ let
         x86_64-linux = "libs/x86_64/libbass_fx.so";
         armv7l-linux = "libs/armhf/libbass_fx.so";
         aarch64-linux = "libs/aarch64/libbass_fx.so";
-        x86_64-darwin = "libbass_fx.dylib";
         aarch64-darwin = "libbass_fx.dylib";
       };
       url = {
@@ -80,7 +78,6 @@ let
         x86_64-linux = "libs/x86_64/libbassmidi.so";
         armv7l-linux = "libs/armhf/libbassmidi.so";
         aarch64-linux = "libs/aarch64/libbassmidi.so";
-        x86_64-darwin = "libbassmidi.dylib";
         aarch64-darwin = "libbassmidi.dylib";
       };
       url = {
@@ -105,7 +102,6 @@ let
         x86_64-linux = "libs/x86_64/libbassmix.so";
         armv7l-linux = "libs/armhf/libbassmix.so";
         aarch64-linux = "libs/aarch64/libbassmix.so";
-        x86_64-darwin = "libbassmix.dylib";
         aarch64-darwin = "libbassmix.dylib";
       };
       url = {

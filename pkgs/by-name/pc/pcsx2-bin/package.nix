@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lgpl3Plus
     ];
     maintainers = with lib.maintainers; [ matteopacini ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

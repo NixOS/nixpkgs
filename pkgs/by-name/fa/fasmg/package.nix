@@ -32,10 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
             bin = "fasmg.x64";
             asm = "source/linux/x64/fasmg.asm";
           };
-          x86_64-darwin = {
-            bin = "source/macos/x64/fasmg";
-            asm = "source/macos/x64/fasmg.asm";
-          };
           x86-linux = {
             bin = "fasmg";
             asm = "source/linux/fasmg.asm";

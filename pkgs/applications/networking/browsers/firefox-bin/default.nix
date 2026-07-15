@@ -41,7 +41,6 @@ let
     aarch64-linux = "linux-aarch64";
     # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};

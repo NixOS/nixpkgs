@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

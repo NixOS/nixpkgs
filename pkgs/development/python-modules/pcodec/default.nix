@@ -50,7 +50,6 @@ buildPythonPackage rec {
     ];
     badPlatforms = [
       # Illegal instruction: 4
-      "x86_64-darwin"
     ];
   };
 }

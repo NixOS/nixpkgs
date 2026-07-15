@@ -27,7 +27,6 @@ let
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     mainProgram = "jetbrains-toolbox";
   };
@@ -60,7 +59,6 @@ let
       hash = selectSystem {
         x86_64-linux = "sha256-GhrN3oGdNqE4cYJmSAeRATk2yS6AVF6z+/VIb7ttoJc=";
         aarch64-linux = "sha256-vI0niFirdAnYKF7+1+ACD31i86PgpPXUfKPkHttusRo=";
-        x86_64-darwin = "sha256-E58+mSFTptDE0Vb2xpfFgDOQrAB9LHi1pR+Hd7TlSYQ=";
         aarch64-darwin = "sha256-islydrfr1j2OlC3wyzGss+NlzjcyrMydYSv6fjFf4D0=";
       };
     in

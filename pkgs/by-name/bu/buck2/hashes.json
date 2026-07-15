@@ -7,10 +7,6 @@
     "buck2": "sha256-IqDsyQ7Omy7QujT85oKrWwyirG7gwfupdxzvRoMRmQs=",
     "rust-project": "sha256-iFSko4FTvAVlKUxJE/6FzR6H7V2SryRfEi7nRhfyhxQ="
   },
-  "x86_64-darwin": {
-    "buck2": "sha256-G/xarAld9dXanZl7Ivcuoer3YsytmFXWED44u2U4q8g=",
-    "rust-project": "sha256-jbvvqPI7+qpONhk8UZfSiFpMGCGWRr85BocA58d+C7Y="
-  },
   "aarch64-linux": {
     "buck2": "sha256-VKV1vltATu3tAPmMiifba7MV9kNFH754FDda6i8cQrU=",
     "rust-project": "sha256-oqxHdbNzQn1KHObboAd4/LTbilIJgLqMiWCgHLaPFrc="

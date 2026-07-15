@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; aarch64 ++ x86;
     badPlatforms = [
       # clang++: error: clang frontend command failed with exit code 139
-      "x86_64-darwin"
     ];
   };
 })

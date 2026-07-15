@@ -12,7 +12,6 @@ let
       x86_64-linux = "amd64";
       aarch64-linux = "arm64";
       armv7l-linux = "arm";
-      x86_64-darwin = "amd64";
       aarch64-darwin = "arm64";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

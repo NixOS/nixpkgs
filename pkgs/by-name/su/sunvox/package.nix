@@ -21,7 +21,6 @@ let
     "i686-linux" = "linux_x86";
     "aarch64-linux" = "linux_arm64";
     "armv7l-linux" = "arm_armhf_raspberry_pi";
-    "x86_64-darwin" = "macos";
     "aarch64-darwin" = "macos";
   };
   bindir =

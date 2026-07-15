@@ -15,7 +15,6 @@ let
       # https://github.com/anyproto/anytype-heart/blob/f33a6b09e9e4e597f8ddf845fc4d6fe2ef335622/pkg/lib/localstore/ftsearch/ftsearchtantivy.go#L3
       x86_64-linux = "linux-amd64-musl";
       aarch64-linux = "linux-arm64-musl";
-      x86_64-darwin = "darwin-amd64";
       aarch64-darwin = "darwin-arm64";
     }
     .${stdenv.hostPlatform.system}
@@ -89,7 +88,6 @@ buildGoModule (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     broken = stdenv.hostPlatform.isDarwin;

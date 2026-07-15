@@ -19,10 +19,6 @@ let
       url = "https://download.jetbrains.com/go/goland-2026.1.4-aarch64.tar.gz";
       hash = "sha256-7s98kY08aKjdRGQLDkffeVhgj1FWurLmTTYmtb5Qx6c=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2026.1.4.dmg";
-      hash = "sha256-RbvcLpLVyeL4B1DJ2/9Ub/6Cz6fJGXMPCHsJ705GsAo=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/go/goland-2026.1.4-aarch64.dmg";
       hash = "sha256-y7mEke0z0MvQs+kMtrmrq7EeAtJUbgo6sGZrOB0MraM=";

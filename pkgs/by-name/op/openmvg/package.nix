@@ -95,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     badPlatforms = [
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [
       mdaiter

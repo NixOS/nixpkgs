@@ -14,7 +14,6 @@ let
     {
       x86_64-linux = "linux-amd64";
       aarch64-linux = "linux-aarch64";
-      x86_64-darwin = "macos-amd64";
       aarch64-darwin = "macos-aarch64";
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -22,7 +21,6 @@ let
   packageHashes = {
     x86_64-linux = "sha256-eVI8/JNCTVVbNJPH6gfg+0guH9mXLymoO+oLp9dkvwA=";
     aarch64-linux = "sha256-84ESEqr07JxqcxxRWrUFKmS+Uvws3RsVtC9EgXqCqdw=";
-    x86_64-darwin = "sha256-X/Hl/vIsepm/jf6srSYim6Ucy3TN0XQgdOluep6Ohrw=";
     aarch64-darwin = "sha256-0WpDjZJhw/jB55G5IUdgvwOaYlqRCY5itk5sVjogYn4=";
   };
 
