@@ -40,7 +40,7 @@
   extraPythonPackages ? ps: [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
   version = "2.4.7";
 
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tZ1+DRVCzwaWeur9mwc/zE34H2xdqk96upqWfqNTl3g=";
   };
 
@@ -141,6 +141,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";
+    changelog = "https://dev.gajim.org/gajim/gajim/-/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       raskin
@@ -151,4 +152,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "gajim";
   };
-}
+})
