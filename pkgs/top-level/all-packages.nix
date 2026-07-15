@@ -7689,6 +7689,10 @@ with pkgs;
     ipuVersion = "ipu6epmtl";
   };
 
+  ipu75xa-camera-hal = ipu7x-camera-hal.override {
+    ipuVersion = "ipu75xa";
+  };
+
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
