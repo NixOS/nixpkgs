@@ -2,9 +2,7 @@
   lib,
   vscode-utils,
   vscode-extension-update-script,
-  jq,
   harper,
-  moreutils,
   ...
 }:
 
@@ -21,16 +19,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     hash = "sha256-/brjx/yY4JLLboI6dLwF/eyX7yhRyMlohhGNFGIrm54=";
   };
 
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
+  executableConfig."harper.path".package = harper;
 
   postInstall = ''
-    cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."harper.path".default = "${lib.getExe harper}"' package.json | sponge package.json
-
-    rm ./bin/harper-ls
+    rm "$out/$installPrefix"/bin/harper-ls
   '';
 
   passthru.updateScript = vscode-extension-update-script { };
