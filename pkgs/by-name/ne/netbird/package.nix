@@ -73,13 +73,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.74.2";
+  version = "0.74.3";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+BGWZzw6a8Fp8NlhtbX81OA3hCTcQ9r6nLuXTsbXCZ8=";
+    hash = "sha256-JXmtoHe0CwO1nKOPi82+cxhJ3tf3XZUCpDstk8U6s94=";
   };
 
   overrideModAttrs = final: prev: {

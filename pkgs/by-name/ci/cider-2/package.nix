@@ -5,28 +5,27 @@
   dpkg,
   autoPatchelfHook,
   makeWrapper,
+  gsettings-desktop-schemas,
+  dconf,
 
   # Required dependencies for autoPatchelfHook
   alsa-lib,
-  asar,
   gtk3,
   libgbm,
   libGL,
   nspr,
   nss,
-  widevine-cdm,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cider-2";
   version = "4.0.9.1";
 
   src = fetchurl {
-    url = "https://repo.cider.sh/apt/pool/main/cider-v${version}-linux-x64.deb";
+    url = "https://repo.cider.sh/apt/pool/main/cider-v${finalAttrs.version}-linux-x64.deb";
     hash = "sha256-MsA6lK3PsyOEx938FgJFx8l9oqwoM3FzIK5goF73lTs=";
   };
 
   nativeBuildInputs = [
-    asar
     dpkg
     autoPatchelfHook
     makeWrapper
@@ -56,34 +55,29 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/lib/cider/Cider
 
+    # The prefixes that follow LD_LIBRARY_PATH are typically injected via wrapGAppsHook3.
+    # We append them manually instead to avoid a double-wrapping.
+    makeWrapper $out/lib/cider/Cider $out/bin/cider-2 \
+      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
+      --add-flags "--no-sandbox --disable-gpu-sandbox" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+      --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules" \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+
     runHook postInstall
   '';
 
-  postInstall = ''
-    ${lib.getExe asar} extract $out/lib/cider/resources/app.asar ./cider-build
-
-    ${lib.getExe asar} pack ./cider-build $out/lib/cider/resources/app.asar
-    rm -rf ./cider-build
-
-    # Install Widevine CDM for DRM support
-    ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/lib/cider/
-  '';
-
   postFixup = ''
-    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
-      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
-      --add-flags "--no-sandbox --disable-gpu-sandbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}"
-
-    mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-warn 'Exec=cider' 'Exec=${pname}' \
-      --replace-warn 'Exec=/usr/lib/cider/Cider' 'Exec=${pname}'
+    mv $out/share/applications/cider.desktop $out/share/applications/cider-2.desktop
+    substituteInPlace $out/share/applications/cider-2.desktop \
+      --replace-fail Exec=cider Exec=cider-2
 
     install -Dm444 $out/share/pixmaps/cider.png \
       $out/share/icons/hicolor/256x256/apps/cider.png
 
-    rm -r $out/share/pixmaps
+    rm -r $out/share/{pixmaps,lintian}
   '';
 
   passthru.updateScript = ./updater.sh;
@@ -95,8 +89,9 @@ stdenv.mkDerivation rec {
     mainProgram = "cider-2";
     maintainers = with lib.maintainers; [
       amadejkastelic
+      antoineco
       l0r3v
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

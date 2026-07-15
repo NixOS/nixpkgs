@@ -7,8 +7,8 @@
 
 skawarePackages.buildPackage {
   pname = "skalibs";
-  version = "2.15.0.0";
-  sha256 = "sha256-f96W6K+0GRWToVMoiD6cdybJaJHPBxIiFGgh6Mh/gAc=";
+  version = "2.15.1.0";
+  sha256 = "sha256-+ckF50k1xv6RHH40Tj6J1fvSAUwaBGULUksVzptWNdE=";
 
   description = "Set of general-purpose C programming libraries";
 
@@ -50,6 +50,8 @@ skawarePackages.buildPackage {
     # child has successfully exec'ed. That happens with old glibcs
     # and some virtual platforms.
     "--with-sysdep-posixspawnearlyreturn=no"
+
+    "--with-sysdep-selectinfinite=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
   ];
 
   postInstall = ''

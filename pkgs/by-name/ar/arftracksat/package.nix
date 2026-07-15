@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "arftracksat";
-  version = "unstable-2025-09-15";
+  version = "1.0-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "arf20";

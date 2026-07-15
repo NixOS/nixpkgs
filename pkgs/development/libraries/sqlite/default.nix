@@ -132,7 +132,8 @@ stdenv.mkDerivation rec {
   '';
 
   # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # The tests are only defined for Darwin, Linux, Windows, and OpenBSD, not any other unix-like OS.
+  doCheck = stdenv.hostPlatform.isLinux;
   # When tcl is not available, only run test targets that don't need it.
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 

@@ -2,7 +2,7 @@
 # When updating this package, please verify at least these build (assuming x86_64-linux):
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 # Ideally also verify:
-# nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
+# nix build .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
   version = "26.1.4";

@@ -2007,6 +2007,12 @@
     githubId = 14838767;
     name = "Jacopo Scannella";
   };
+  antoineco = {
+    email = "hello@acotten.com";
+    github = "antoineco";
+    githubId = 3299086;
+    name = "Antoine Cotten";
+  };
   anton-4 = {
     name = "Anton";
     github = "Anton-4";
@@ -6796,6 +6802,13 @@
     github = "DerHalbGrieche";
     githubId = 77843198;
     name = "Vasilis Manetas";
+  };
+  Deric-W = {
+    email = "robo-eric@gmx.de";
+    github = "Deric-W";
+    githubId = 42873573;
+    name = "Eric Wolf";
+    keys = [ { fingerprint = "ADAA B6F3 A955 5589 D66C  CE61 80D2 DA42 8A4A 537F"; } ];
   };
   DerickEddington = {
     email = "derick.eddington@pm.me";
