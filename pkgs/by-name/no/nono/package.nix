@@ -9,6 +9,7 @@
   dbus,
 
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -112,6 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
   );
 
+  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
     homepage = "https://github.com/always-further/nono";
