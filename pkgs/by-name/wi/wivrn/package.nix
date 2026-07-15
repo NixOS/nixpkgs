@@ -56,13 +56,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "26.6.1";
+  version = "26.6.2";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eXU7hYLYchAb6AbCyINfTmOp0NdxK35Kg9tcid2ucg4=";
+    hash = "sha256-5e0XeP5DCdVrSQeDgNuCZP5McRbwybnpKuJw9cxHNPI=";
   };
 
   monado = applyPatches {

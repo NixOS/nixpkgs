@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     maintainers = with lib.maintainers; [ ahoneybun ];
-    license = [ lib.licenses.gpl2Only ];
+    license = lib.licenses.gpl2Only;
     platforms = [
       "i686-linux"
       "x86_64-linux"

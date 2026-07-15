@@ -2,7 +2,7 @@
 # When updating this package, please verify at least these build (assuming x86_64-linux):
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 # Ideally also verify:
-# nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
+# nix build .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
   version = "26.1.4";
@@ -28,7 +28,7 @@ rec {
     '';
     homepage = "https://www.mesa3d.org/";
     changelog = "https://docs.mesa3d.org/relnotes/${version}.html";
-    license = with lib.licenses; [ mit ]; # X11 variant, in most files
+    license = lib.licenses.mit; # X11 variant, in most files
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       k900

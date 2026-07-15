@@ -144,7 +144,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   };
 
   meta = {
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "nixtamal";
     outputsToInstall = [

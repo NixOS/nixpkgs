@@ -2015,8 +2015,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.84.2";
-          hash = "sha256-UBoZ6DxT5d7zeTycgmuLomzoVcB7iAnflfxAup6QslI=";
+          version = "6.85.3";
+          hash = "sha256-EsQ+95Wo/5F9mEMQ7X36vBgUWlsz5BCOm+7QrGHuepc=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -5113,8 +5113,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.17.3";
-          hash = "sha256-heFcGOe10r7y23xyFc/nFKk/nsrX4wc5fT9e4GKGhW0=";
+          version = "3.18.0";
+          hash = "sha256-ybMejIJER9HHVh1z+tazgvQ0UIa8eKoJBb7JOLU1Kpw=";
         };
 
         meta = {

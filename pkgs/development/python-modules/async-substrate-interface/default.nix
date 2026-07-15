@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "async-substrate-interface";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "latent-to";
     repo = "async-substrate-interface";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-39QL0h47ubKI26rIYxniNlchNAFEkPtKw6MyKuu2AXY=";
+    hash = "sha256-JEyB2UyvtTWIszuJ8Hf9S6WzK+Hb4L1L36E/KywfkYw=";
   };
 
   # On darwin the sandbox isolation is not as strict as on linux,

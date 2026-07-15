@@ -197,7 +197,6 @@ buildNpmPackage rec {
       gepbird
       kashw2
       mattpolzin
-      redyf
       water-sucks
       starsep
     ];

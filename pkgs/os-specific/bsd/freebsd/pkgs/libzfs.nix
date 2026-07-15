@@ -81,6 +81,6 @@ mkDerivation {
 
   meta = {
     platforms = lib.platforms.freebsd;
-    license = with lib.licenses; [ cddl ];
+    license = lib.licenses.cddl;
   };
 }
