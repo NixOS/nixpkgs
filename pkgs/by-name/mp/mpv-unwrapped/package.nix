@@ -21,7 +21,6 @@
   libarchive,
   libass,
   libbluray,
-  libbs2b,
   libcaca,
   libcdio,
   libcdio-paranoia,
@@ -66,7 +65,6 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   archiveSupport ? true,
   bluraySupport ? true,
-  bs2bSupport ? true,
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
@@ -180,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals archiveSupport [ libarchive ]
   ++ lib.optionals bluraySupport [ libbluray ]
-  ++ lib.optionals bs2bSupport [ libbs2b ]
   ++ lib.optionals cacaSupport [ libcaca ]
   ++ lib.optionals cddaSupport [
     libcdio
