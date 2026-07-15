@@ -2555,7 +2555,8 @@
       ];
     "helty" =
       ps: with ps; [
-      ]; # missing inputs: pyhelty
+        pyhelty
+      ];
     "heos" =
       ps: with ps; [
         pyheos
@@ -8164,6 +8165,7 @@
     "hdfury"
     "hdmi_cec"
     "hegel"
+    "helty"
     "heos"
     "here_travel_time"
     "hikvision"
