@@ -54,7 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/dovi_tool";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(?!libdovi-)(.*)$"
+    ];
+  };
 
   meta = {
     description = "CLI tool combining multiple utilities for working with Dolby Vision";
