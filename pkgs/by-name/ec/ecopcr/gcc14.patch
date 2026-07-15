@@ -1,0 +1,12 @@
+diff --git a/src/ecogrep.c b/src/ecogrep.c
+index 8d45312..d9fe676 100644
+--- a/src/ecogrep.c
++++ b/src/ecogrep.c
+@@ -5,6 +5,7 @@
+ #include <getopt.h>
+ #include <stdlib.h>
+ #include <sys/stat.h>
++#include <unistd.h>
+ 
+ 
+ #define VERSION "0.1"

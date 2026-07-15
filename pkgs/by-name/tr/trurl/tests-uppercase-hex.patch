@@ -1,0 +1,96 @@
+--- a/tests.json
++++ b/tests.json
+@@ -749,6 +749,7 @@
+                 "query=user=me"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://curl.se/hello?user%3dme\n",
+             "stderr": "",
+@@ -761,6 +762,22 @@
+                 "--url",
+                 "https://curl.se/hello",
+                 "--set",
++                "query=user=me"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://curl.se/hello?user%3Dme\n",
++            "stderr": "",
++            "returncode": 0
++        }
++    },
++    {
++        "input": {
++            "arguments": [
++                "--url",
++                "https://curl.se/hello",
++                "--set",
+                 "fragment= hello"
+             ]
+         },
+@@ -2132,6 +2149,7 @@
+                 "query:=a&b&a%26b"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "http://localhost/ABC%5c%5c?a&b&a%26b\n",
+             "returncode": 0,
+@@ -2141,6 +2159,26 @@
+     {
+         "input": {
+             "arguments": [
++                "-s",
++                "scheme:=http",
++                "-s",
++                "host:=localhost",
++                "-s",
++                "path:=/ABC%5C%5C",
++                "-s",
++                "query:=a&b&a%26b"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "http://localhost/ABC%5C%5C?a&b&a%26b\n",
++            "returncode": 0,
++            "stderr": ""
++        }
++    },
++    {
++        "input": {
++            "arguments": [
+                 "-g",
+                 "{query:b}\\t{query-all:a}\\n{:query:b}\\t{:query-all:a}",
+                 "https://example.org/foo?a=1&b=%23&a=%26#hello"
+@@ -2825,11 +2863,27 @@
+                 "path=%61"
+             ]
+         },
++        "excludes": ["uppercase-hex"],
+         "expected": {
+             "stdout": "https://example.com/one/tao/%2fB/%2561\n",
+             "stderr": "",
+             "returncode": 0
+         }
++    },
++    {
++        "input": {
++            "arguments": [
++                "https://example.com/one/t%61o/%2F%42/",
++                "--append",
++                "path=%61"
++            ]
++        },
++        "required": ["uppercase-hex"],
++        "expected": {
++            "stdout": "https://example.com/one/tao/%2FB/%2561\n",
++            "stderr": "",
++            "returncode": 0
++        }
+     },
+     {
+         "input": {

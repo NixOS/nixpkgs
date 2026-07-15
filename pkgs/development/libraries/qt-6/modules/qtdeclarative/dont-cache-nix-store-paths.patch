@@ -1,0 +1,17 @@
+--- a/src/qml/common/qv4compileddata.cpp
++++ b/src/qml/common/qv4compileddata.cpp
+@@ -178,6 +178,14 @@ bool CompilationUnit::saveToDisk(const QUrl &unitUrl, QString *errorString)
+         return false;
+     }
+ 
++    if (unitUrl.path().startsWith(QStringLiteral("@nixStore@"))) {
++        // We don't store bytecode for bare QML files in the nix store as the
++        // paths will change every time the application updates, filling caches
++        // endlessly with junk.
++        *errorString = QStringLiteral("Refusing to save bytecode for bare @nixStore@ path.");
++        return false;
++    }
++
+     return SaveableUnitPointer(unitData()).saveToDisk<char>(
+             [&unitUrl, errorString](const char *data, quint32 size) {
+                 const QString cachePath = localCacheFilePath(unitUrl);
