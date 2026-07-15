@@ -1734,10 +1734,10 @@
   };
 
   nim = {
-    version = "0.6.2-unstable-2026-03-21";
+    version = "0.6.2-unstable-2026-07-03";
     url = "github:alaviss/tree-sitter-nim";
-    rev = "3878440d9398515ae053c6f6024986e69868bb74";
-    hash = "sha256-mdAT1jTFeVP8TYi4H36sjd826KmxHQ1EZ+8gd37NGfY=";
+    rev = "ac72ba30d16edf0be021588a9301ede4accd6cf4";
+    hash = "sha256-1jr8tKdKvKTKCUSEvC+vRGw+W1Rl3WMbv0ZS3u7H1GA=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
