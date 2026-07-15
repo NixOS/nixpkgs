@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitLab,
   cairo,
+  clang-tools,
   cmake,
   boost,
   curl,
@@ -81,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!minimal) [
     glib # for glib-mkenums
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
 
   buildInputs = [

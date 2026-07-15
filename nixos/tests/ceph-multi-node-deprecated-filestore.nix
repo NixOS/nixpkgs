@@ -1,3 +1,4 @@
+# Tests the legacy FileStore OSD backend.
 { lib, ... }:
 let
   cfg = {
@@ -159,6 +160,7 @@ let
       # Start the ceph-mgr daemon, it has no deps and hardly any setup
       monA.succeed(
           "ceph auth get-or-create mgr.${cfg.monA.name} mon 'allow profile mgr' osd 'allow *' mds 'allow *' > /var/lib/ceph/mgr/ceph-${cfg.monA.name}/keyring",
+          "sync",  # to ensure shell redirection above is durable
           "systemctl start ceph-mgr-${cfg.monA.name}",
       )
       monA.wait_for_unit("ceph-mgr-a")
@@ -194,20 +196,23 @@ let
           'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
       )
 
-      # Initialize the OSDs with regular filestore
+      # We `sync` so that the config survives the forced crashes below.
       osd0.succeed(
           "ceph-osd -i ${cfg.osd0.name} --mkfs --osd-uuid ${cfg.osd0.uuid}",
           "chown -R ceph:ceph /var/lib/ceph/osd",
+          "sync",
           "systemctl start ceph-osd-${cfg.osd0.name}",
       )
       osd1.succeed(
           "ceph-osd -i ${cfg.osd1.name} --mkfs --osd-uuid ${cfg.osd1.uuid}",
           "chown -R ceph:ceph /var/lib/ceph/osd",
+          "sync",
           "systemctl start ceph-osd-${cfg.osd1.name}",
       )
       osd2.succeed(
           "ceph-osd -i ${cfg.osd2.name} --mkfs --osd-uuid ${cfg.osd2.uuid}",
           "chown -R ceph:ceph /var/lib/ceph/osd",
+          "sync",
           "systemctl start ceph-osd-${cfg.osd2.name}",
       )
       monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
@@ -258,7 +263,7 @@ let
     '';
 in
 {
-  name = "basic-multi-node-ceph-cluster";
+  name = "basic-multi-node-ceph-cluster-deprecated-filestore";
   meta = with lib.maintainers; {
     maintainers = [ lejonet ];
   };

@@ -41,8 +41,8 @@ buildPythonPackage rec {
     runHook preCheck
 
     stestr run -e <(echo "
-    # test counts warnings which no longer matches in python 3.11
-    oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation
+    # list is not deduped
+    oslo_i18n.tests.test_gettextutils.GettextTest.test_get_available_languages
     ")
 
     runHook postCheck
