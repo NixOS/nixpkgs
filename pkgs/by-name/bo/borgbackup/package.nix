@@ -165,6 +165,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "borg";
     maintainers = with lib.maintainers; [
       dotlambda
+      noahbiewesch
     ];
   };
 })
