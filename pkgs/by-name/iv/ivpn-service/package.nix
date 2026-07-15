@@ -17,11 +17,11 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
-  version = "3.15.6";
+  version = "3.15.13";
 
   buildInputs = [
     wirelesstools
-    (finalAttrs.passthru.liboqs)
+    liboqs
   ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
+    hash = "sha256-F5MhJ09ioqL4Xf4r2cdXUKmkK8ebj/qRFWfxKuodH3k=";
   };
 
   strictDeps = true;
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
 
   modRoot = "daemon";
   subPackages = [ "." ];
-  vendorHash = "sha256-YDvZVmResoieSBIp/yuZDvI9GSz3M6Bi5KksHOljuR0=";
+  vendorHash = "sha256-tygPc2hyKfiA3mTOlQMi97Zd/Ka1AtYbZqYOTmHZISA=";
 
   proxyVendor = true; # .c file
 
@@ -107,35 +107,6 @@ buildGoModule (finalAttrs: {
         ]
       }
   '';
-
-  # IVPN pins this to an older incompatible version, so we vendor it at that
-  # Lives in passthru so end-users can override it
-  passthru.liboqs = liboqs.overrideAttrs (
-    final: prev: {
-      version = "0.10.0";
-      src = fetchFromGitHub {
-        owner = "open-quantum-safe";
-        repo = "liboqs";
-        tag = "${final.version}";
-        hash = "sha256-BFDa5NUr02lFPcT4Hnb2rjGAi+2cXvh1SHLfqX/zLlI=";
-      };
-      # the main derivations patches don't apply onto the older version
-      patches = [ ];
-      # manually do what the main derivations pkg-config patch does (unbreak invalid path)
-      postPatch = ''
-        substituteInPlace src/liboqs.pc.in \
-          --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' \
-          'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
-          --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
-          'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
-      '';
-      # This matches IVPNs build script at $src/daemon/References/common/kem-helper/build.sh
-      cmakeFlags = (prev.cmakeFlags or [ ]) ++ [
-        "-DOQS_USE_OPENSSL=OFF"
-        "-DOQS_MINIMAL_BUILD=KEM_kyber_1024;KEM_classic_mceliece_348864"
-      ];
-    }
-  );
 
   meta = {
     description = "Official IVPN Desktop app service daemon";
