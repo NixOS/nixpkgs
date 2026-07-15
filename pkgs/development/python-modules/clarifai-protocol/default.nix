@@ -15,7 +15,6 @@ let
     "aarch64-linux" = "manylinux_2_17_aarch64.manylinux2014_aarch64";
     "x86_64-linux" = "manylinux_2_17_x86_64.manylinux2014_x86_64";
     "aarch64-darwin" = "macosx_11_0_universal2";
-    "x86_64-darwin" = "macosx_11_0_universal2";
   };
 
   key =

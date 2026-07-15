@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wassima";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "wassima";
     tag = finalAttrs.version;
-    hash = "sha256-uH8UBsdqnPbGyQX/Tn5Ct3vcbfLEyUC8pDSCM4PwWZg=";
+    hash = "sha256-19y1dohS1WikfxRGOrgIqwdfBdGe7MDo9MTSXnNjfWA=";
   };
 
   build-system = [ hatchling ];

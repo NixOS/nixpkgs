@@ -23,7 +23,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-${arch}.dylib";
         hash =
           {
-            x86_64-darwin = "sha256-c0enRIXFN+dMDdxTQ3hFv0almTF0dfrSHILNigJp2Js=";
             aarch64-darwin = "sha256-jmuob0qslYhxiE2ShfTwY4RJAKBLJSUb+VBEM0sQPbo=";
           }
           .${stdenvNoCC.hostPlatform.system};

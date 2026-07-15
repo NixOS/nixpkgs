@@ -30,7 +30,6 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "VESTA";
@@ -115,7 +114,6 @@ stdenvNoCC.mkDerivation (
   }
   // {
     "x86_64-linux" = linuxArgs;
-    "x86_64-darwin" = darwinArgs;
   }
   .${stdenvNoCC.hostPlatform.system} or { }
 )

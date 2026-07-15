@@ -33,6 +33,6 @@ stdenvNoCC.mkDerivation rec {
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ mikroskeem ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
   };
 }

@@ -14,7 +14,6 @@ let
   target =
     {
       "aarch64-darwin" = "arm64";
-      "x86_64-darwin" = "x86";
     }
     .${system} or (throw "Unsupported system: ${system}");
 in
