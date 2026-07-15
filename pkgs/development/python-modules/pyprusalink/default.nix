@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pyprusalink";
     tag = version;
-    hash = "sha256-y+onh52ES2WvfBYjksLBbnZKkm41BBXEc2ORLw9yfGM=";
+    hash = "sha256-qgcwbpQxjaoG/XDRv0kjryT0MqswYb7s6lhWKGHQB/4=";
   };
 
   nativeBuildInputs = [ setuptools ];
