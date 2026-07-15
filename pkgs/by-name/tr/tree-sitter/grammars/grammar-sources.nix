@@ -1493,6 +1493,18 @@
     };
   };
 
+  linkerscript = {
+    version = "1.0.0";
+    url = "github:tree-sitter-grammars/tree-sitter-linkerscript";
+    hash = "sha256-Do8MIcl5DJo00V4wqIbdVC0to+2YYwfy08QWqSLMkQA=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        fiona
+      ];
+    };
+  };
+
   llvm = {
     version = "1.1.0-unstable-2025-08-22";
     url = "github:benwilliamgraham/tree-sitter-llvm";
