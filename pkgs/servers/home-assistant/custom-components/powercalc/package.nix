@@ -17,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "bramstroker";
   domain = "powercalc";
-  version = "1.21.2";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant-powercalc";
     tag = "v${version}";
-    hash = "sha256-D8gFEhitQjryZLLcP2ZsXNqWLvPyayuoYGq5C0B2D5w=";
+    hash = "sha256-JToHHnteIH6uJEZSl22hBsUxkf7Cj0s1sPaAcKmaFao=";
   };
 
   dependencies = [ numpy ];
