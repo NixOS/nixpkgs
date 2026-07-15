@@ -70,14 +70,14 @@ let
       (self: super: {
         octoprint-pisupport = self.buildPythonPackage rec {
           pname = "OctoPrint-PiSupport";
-          version = "2023.10.10";
+          version = "2025.7.23";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
             rev = version;
-            hash = "sha256-VSzDoFq4Yn6KOn+RNi1uVJHzH44973kd/VoMjqzyBRA=";
+            hash = "sha256-bXjRGxIwi+UnVts2HO9viOJqa2AmZ/CL7wuoyzRbAEw=";
           };
 
           # requires octoprint itself during tests
