@@ -1,0 +1,12 @@
+diff --git a/aarg.h b/aarg.h
+index a212870..907671c 100644
+--- a/aarg.h
++++ b/aarg.h
+@@ -5,6 +5,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <unistd.h>
++#include <string.h>
+ #include <map>
+ #include <string>
+ #include <sstream>

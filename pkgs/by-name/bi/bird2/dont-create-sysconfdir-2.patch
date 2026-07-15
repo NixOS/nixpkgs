@@ -1,0 +1,6 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -165,2 +165,2 @@
+ install: all
+-	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir) $(DESTDIR)/$(runstatedir)
++	$(INSTALL) -d $(DESTDIR)/$(sbindir) $(DESTDIR)/$(sysconfdir)

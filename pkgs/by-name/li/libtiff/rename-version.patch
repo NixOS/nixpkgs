@@ -1,0 +1,13 @@
+diff --git a/cmake/AutotoolsVersion.cmake b/cmake/AutotoolsVersion.cmake
+index f93f5cf0..fd33df59 100644
+--- a/cmake/AutotoolsVersion.cmake
++++ b/cmake/AutotoolsVersion.cmake
+@@ -41,7 +41,7 @@ set(LIBTIFF_VERSION "${LIBTIFF_MAJOR_VERSION}.${LIBTIFF_MINOR_VERSION}.${LIBTIFF
+ set(LIBTIFF_VERSION_FULL "${LIBTIFF_VERSION}${LIBTIFF_ALPHA_VERSION}")
+ 
+ # Get release version from file VERSION
+-FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" LIBTIFF_RELEASE_VERSION)
++FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt" LIBTIFF_RELEASE_VERSION)
+ 
+ # Package date - get it from file RELEASE-DATE
+ FILE(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/RELEASE-DATE" LIBTIFF_RELEASE_DATE)

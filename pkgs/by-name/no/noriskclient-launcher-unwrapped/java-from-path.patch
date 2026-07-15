@@ -1,0 +1,34 @@
+diff --git a/src-tauri/src/minecraft/downloads/java_download.rs b/src-tauri/src/minecraft/downloads/java_download.rs
+index 25ab9b2..d1af896 100644
+--- a/src-tauri/src/minecraft/downloads/java_download.rs
++++ b/src-tauri/src/minecraft/downloads/java_download.rs
+@@ -9,6 +9,7 @@ use flate2::read::GzDecoder;
+ use futures::future::try_join_all;
+ use log::{debug, error, info};
+ use reqwest;
++use std::env;
+ use std::fs::File;
+ use std::io::Cursor;
+ use std::path::PathBuf;
+@@ -526,6 +527,21 @@ impl JavaDownloadService {
+             ],
+         };
+ 
++        let target = format!("openjdk-{}", version);
++        match env::var_os("PATH") {
++            Some(paths) => {
++                for path in env::split_paths(&paths) {
++                    if let Some(path_str) = path.to_str() {
++                        if path_str.contains(&target) {
++                            debug!("Found Java binary at: {:?}", path);
++                            return Ok(path)
++                        }
++                    }
++                }
++            }
++            none => debug!("PATH is not defined"),
++        }
++
+         // Try all possible paths
+         for java_binary in java_binary_paths {
+             debug!("Checking for Java binary at: {:?}", java_binary);

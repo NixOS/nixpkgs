@@ -1,0 +1,48 @@
+From 2e3ea5ab32ed356c45e0a7a8db37924a77a1c949 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 20 Dec 2025 12:51:13 +0100
+Subject: [PATCH] Fix wcwidth declaration
+
+The wcwidth function is declared in `wchar.h` on POSIX systems which
+is not included in the default Autoconf includes. Because of this
+HAVE_DECL_WCWIDTH would be configured to 0.
+
+Since C23 functions with no arguments in prototypes are treated as
+taking no arguments. This results in mismatched declaration since in
+wchar.h the functions is declared as taking wchar_t.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ configure.ac | 2 +-
+ mbswidth.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 7d756ee..a1ecbe2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -61,7 +61,7 @@ AC_CHECK_HEADER(wchar.h,[
+ 	AC_DEFINE(HAVE_WCHAR_H, 1, [Define if you have the <wchar.h> header file.])],
+ 	[ac_have_wchar_h=no])
+ AC_CHECK_FUNCS(mbtowc wcwidth mbrtowc mbsinit,,ac_widec_funcs=no)
+-AC_CHECK_DECLS(wcwidth)
++AC_CHECK_DECLS(wcwidth, [], [], [#include <wchar.h>])
+ AC_CHECK_TYPE(wchar_t,,ac_widec_funcs=no)
+ 
+ if test x$ac_widec_funcs = xyes -a x$ac_have_wchar_h = xyes; then
+diff --git a/mbswidth.c b/mbswidth.c
+index 031e6b7..54a2cb5 100644
+--- a/mbswidth.c
++++ b/mbswidth.c
+@@ -63,7 +63,7 @@
+ #	warn "this configure-time declaration test was not run"
+ #endif
+ #if !HAVE_DECL_WCWIDTH
+-int wcwidth ();
++int wcwidth (wchar_t);
+ #endif
+ 
+ #ifndef wcwidth
+-- 
+2.51.2
+

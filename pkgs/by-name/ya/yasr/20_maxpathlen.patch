@@ -1,0 +1,11 @@
+--- a/yasr/config.c.orig	2011-11-28 03:56:58.764995828 +0100
++++ a/yasr/config.c	2011-11-28 03:57:00.048967703 +0100
+@@ -60,7 +60,7 @@
+   int args, arg[16], *argp;
+   int i, key, ln = 0, mode = 0;
+   char *home, *ptr, *s;
+-  char confname[MAXPATHLEN];
++  char confname[strlen(PACKAGE_DATA_DIR) + 10 + 1];
+ 
+   if ((home = getenv("HOME")) != NULL)
+   {

@@ -1,0 +1,12 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -46,7 +46,8 @@ GETTEXT_PACKAGE=dbus-test-runner
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Name of the default gettext domain])
+ 
+-AM_GLIB_GNU_GETTEXT
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.21])
+ 
+ ###########################
+ # gcov coverage reporting

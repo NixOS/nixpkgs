@@ -1,0 +1,21 @@
+diff --git a/js/gdm/loginDialog.js b/js/gdm/loginDialog.js
+index 28db1a9de..805b686bf 100644
+--- a/js/gdm/loginDialog.js
++++ b/js/gdm/loginDialog.js
+@@ -46,6 +46,7 @@ const _FADE_ANIMATION_TIME = 250;
+ const _SCROLL_ANIMATION_TIME = 500;
+ const _TIMED_LOGIN_IDLE_THRESHOLD = 5.0;
+ const _CONFLICTING_SESSION_DIALOG_TIMEOUT = 60;
++const _LOGO_ICON_HEIGHT = 48;
+ 
+ export const UserListItem = GObject.registerClass({
+     Signals: {'activate': {}},
+@@ -908,7 +909,7 @@ export const LoginDialog = GObject.registerClass({
+             const scaleFactor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+             const texture = this._textureCache.load_file_async(
+                 this._logoFile,
+-                -1, -1,
++                -1, _LOGO_ICON_HEIGHT,
+                 scaleFactor, resourceScale);
+             this._logoBin.add_child(texture);
+         }

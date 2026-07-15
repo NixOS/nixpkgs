@@ -1,0 +1,39 @@
+diff --git a/package-lock.json b/package-lock.json
+index c0db8fd5..d98f8cfe 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -18303,12 +18303,15 @@
+             }
+         },
+         "node_modules/nice-napi/node_modules/node-addon-api": {
+-            "version": "3.2.1",
+-            "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-3.2.1.tgz",
+-            "integrity": "sha512-mmcei9JghVNDYydghQmeDX8KoAm0FAiYyIcUt/N4nhyAipB17pllZQDOJD2fotxABnt4Mdz+dKTO7eftLg4d0A==",
++            "version": "8.7.0",
++            "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.7.0.tgz",
++            "integrity": "sha512-9MdFxmkKaOYVTV+XVRG8ArDwwQ77XIgIPyKASB1k3JPq3M8fGQQQE3YpMOrKm6g//Ktx8ivZr8xo1Qmtqub+GA==",
+             "dev": true,
+             "license": "MIT",
+-            "optional": true
++            "optional": true,
++            "engines": {
++                "node": "^18 || ^20 || >= 21"
++            }
+         },
+         "node_modules/nice-try": {
+             "version": "1.0.5",
+diff --git a/package.json b/package.json
+index 2eecf247..94a0cf8d 100644
+--- a/package.json
++++ b/package.json
+@@ -116,5 +116,10 @@
+         "tinycolor2": "1.6.0",
+         "tslib": "2.0.0",
+         "uuid": "9.0.0"
++    },
++    "overrides": {
++        "nice-napi": {
++            "node-addon-api": "^8.0.0"
++        }
+     }
+ }

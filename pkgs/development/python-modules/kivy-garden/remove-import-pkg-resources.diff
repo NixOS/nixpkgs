@@ -1,0 +1,37 @@
+diff --git a/ez_setup.py b/ez_setup.py
+index b02f3f17b0..de90a8e805 100644
+--- a/ez_setup.py
++++ b/ez_setup.py
+@@ -124,32 +124,6 @@
+                    to_dir=os.curdir, download_delay=15):
+     # making sure we use the absolute path
+     to_dir = os.path.abspath(to_dir)
+-    was_imported = 'pkg_resources' in sys.modules or \
+-        'setuptools' in sys.modules
+-    try:
+-        import pkg_resources
+-    except ImportError:
+-        return _do_download(version, download_base, to_dir, download_delay)
+-    try:
+-        pkg_resources.require("setuptools>=" + version)
+-        return
+-    except pkg_resources.VersionConflict:
+-        e = sys.exc_info()[1]
+-        if was_imported:
+-            sys.stderr.write(
+-            "The required version of setuptools (>=%s) is not available,\n"
+-            "and can't be installed while this script is running. Please\n"
+-            "install a more recent version first, using\n"
+-            "'easy_install -U setuptools'."
+-            "\n\n(Currently using %r)\n" % (version, e.args[0]))
+-            sys.exit(2)
+-        else:
+-            del pkg_resources, sys.modules['pkg_resources']    # reload ok
+-            return _do_download(version, download_base, to_dir,
+-                                download_delay)
+-    except pkg_resources.DistributionNotFound:
+-        return _do_download(version, download_base, to_dir,
+-                            download_delay)
+ 
+ def download_file_powershell(url, target):
+     """

@@ -1,0 +1,21 @@
+diff -Naur source-old/src/main.cpp source-new/src/main.cpp
+--- source-old/src/main.cpp	1969-12-31 21:00:01.000000000 -0300
++++ source-new/src/main.cpp	2022-10-23 22:30:00.463905363 -0300
+@@ -286,13 +286,10 @@
+     // Platform specific settings
+     vymPlatform = QSysInfo::prettyProductName();
+ 
+-#if defined(Q_OS_WINDOWS)
+-    // Only Windows 10 has tar. Older windows versions not supported.
+-    zipToolPath = "tar";
+-#else
+-    zipToolPath = "/usr/bin/zip";
+-    unzipToolPath = "/usr/bin/unzip";
+-#endif
++    // Nixpkgs-specific hack
++    zipToolPath = "@zipPath@";
++    unzipToolPath = "@unzipPath@";
++
+     iconPath = vymBaseDir.path() + "/icons/";
+     flagsPath = vymBaseDir.path() + "/flags/";
+ 

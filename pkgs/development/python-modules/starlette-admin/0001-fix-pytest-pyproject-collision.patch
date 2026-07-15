@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 3e170b4..e2c6c77 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -183,9 +183,6 @@ parallel = true
+ concurrency = ["thread", "greenlet"]
+ source = ["starlette_admin", "tests"]
+ 
+-[tool.pytest]
+-asyncio_mode = "auto"
+-
+ [tool.pytest.ini_options]
+ asyncio_mode="auto"
+ asyncio_default_fixture_loop_scope="function"

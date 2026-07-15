@@ -1,0 +1,60 @@
+diff --git a/SamTFE/Sources/Engine/Engine.cpp b/SamTFE/Sources/Engine/Engine.cpp
+index 6febab8..5963e34 100644
+--- a/SamTFE/Sources/Engine/Engine.cpp
++++ b/SamTFE/Sources/Engine/Engine.cpp
+@@ -742,53 +742,8 @@
+   CPrintF(TRANSV("Running %d-bit version\n"), sys_iGameBits);
+ 
+ #ifdef PLATFORM_UNIX
+-#if defined(__OpenBSD__) || defined(__FreeBSD__)
+-  int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/local/bin/", (size_t) 15 );
+-#elif defined(__NetBSD__)
+-  int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/pkg/bin/", (size_t) 13 );
+-#else
+-  int _isystempath = strncmp((const char *)strExePath, (const char *) "/usr/bin/", (size_t) 9 );
+-#endif
+-  if( _isystempath == 0 ) {
+-       sys_iSysPath = 1; // using system path
+-  } else {
+-       sys_iSysPath = 0; // using standarted path
+-  }
+-
+-  // get library path for mods
+-  _fnmModLibPath = "";
+-#if defined(__OpenBSD__) || defined(__FreeBSD__)
+-  if( sys_iSysPath == 1 ) {
+-    _fnmModLibPath = "/usr/local/lib/" + strGameID + "/";
+-#elif defined(__NetBSD__)
+-  if( sys_iSysPath == 1 ) {
+-    _fnmModLibPath = "/usr/pkg/lib/" + strGameID + "/";
+-#else
+-  if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/aarch64-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/aarch64-linux-gnu/" + strGameID + "/"; 
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/arm-linux-gnueabihf/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/arm-linux-gnueabihf/" + strGameID + "/";
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/riscv64-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/riscv64-linux-gnu/" + strGameID + "/";
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/s390x-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/s390x-linux-gnu/" + strGameID + "/"; 
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/powerpc64-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/powerpc64-linux-gnu/" + strGameID + "/"; 
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib/x86_64-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/x86_64-linux-gnu/" + strGameID + "/";
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib/i386-linux-gnu/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/i386-linux-gnu/" + strGameID + "/";
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 64 && _pFileSystem->IsDirectory((const char *) "/usr/lib64/" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib64/" + strGameID + "/";
+-  } else if( sys_iSysPath == 1 && sys_iGameBits == 32 && _pFileSystem->IsDirectory((const char *) "/usr/lib//" + strGameID)) {
+-    _fnmModLibPath = "/usr/lib/" + strGameID + "/";
+-#endif
+-  } else if( sys_iSysPath == 0 ) {
+-    _fnmModLibPath = _fnmApplicationPath;
+-  } else {
+-    CPrintF(TRANSV("ERROR: Game libraries not ound!\n"));
+-    FatalError(TRANSV("Failed to search game libraries installed!\nPlease reinstall the game.\nSee the log for more details.\nGame log is here: ~/.local/share/Serious-Engine/%s/SeriousSam.log"),(const char *) strGameID);
+-  }
++  sys_iSysPath = 1; // using system path
++  _fnmModLibPath = _fnmApplicationPath + "lib/" + strGameID + "/";
+ 
+   if( sys_iSysPath == 1 ) { // search game data
+     CTFileName _fnm_usr_TestFile, _fnm_local_TestFile, _fnm_home_TestFile;

@@ -1,0 +1,17 @@
+diff --git a/bitmask.pro b/bitmask.pro
+index f377bb4..3c71a71 100644
+--- a/bitmask.pro
++++ b/bitmask.pro
+@@ -4,9 +4,9 @@ QT += quickcontrols2 svg
+ CONFIG += qt staticlib
+ CONFIG += c++17 strict_c++
+ CONFIG += qtquickcompiler
+-CONFIG+=force_debug_info
+-CONFIG+=debug_and_release
+-#CONFIG+=release
++#CONFIG+=force_debug_info
++#CONFIG+=debug_and_release
++CONFIG+=release
+ windows:CONFIG -= console
+ unix:DEBUG:CONFIG += debug
+ lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")

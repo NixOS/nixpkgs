@@ -1,0 +1,55 @@
+diff --git a/3party/CMakeLists.txt b/3party/CMakeLists.txt
+index 2146a5fdcf..9fc67abfb3 100644
+--- a/3party/CMakeLists.txt
++++ b/3party/CMakeLists.txt
+@@ -41,9 +41,6 @@
+   # Add pugixml library.
+   add_subdirectory(pugixml)
+ 
+-  # Add protobuf library.
+-  add_subdirectory(protobuf)
+-
+   if (NOT PLATFORM_LINUX)
+     add_subdirectory(freetype)
+     add_subdirectory(icu)
+@@ -55,6 +52,9 @@
+   target_include_directories(utf8cpp INTERFACE "${OMIM_ROOT}/3party/utfcpp/source")
+ endif()
+ 
++# Add protobuf library.
++add_subdirectory(protobuf)
++
+ add_subdirectory(agg)
+ add_subdirectory(bsdiff-courgette)
+ add_subdirectory(glaze)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 096d31389e..c6e4aabdeb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -212,26 +212,6 @@
+   message(STATUS "==> Python Virtual Environment detected : ${PYTHON_VENV_PATH}"  "  ==>  "  "Using python command: ${Python3_EXECUTABLE}" )
+ endif()
+ 
+-execute_process(
+-    COMMAND ${Python3_EXECUTABLE} -c "import google.protobuf; 
+-print(google.protobuf.__version__)"
+-    RESULT_VARIABLE PROTOBUF_CHECK
+-    OUTPUT_VARIABLE PROTOBUF_VERSION
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-    ERROR_QUIET
+-)
+-
+-if(PROTOBUF_CHECK EQUAL 0)
+-    if(PROTOBUF_VERSION VERSION_LESS "3.20.0" OR PROTOBUF_VERSION VERSION_GREATER_EQUAL "4.0.0")
+-        message(FATAL_ERROR "Python protobuf ${PROTOBUF_VERSION} found, but version (>=3.20, <4.0) is required")
+-    else()
+-        message(STATUS "Python protobuf ${PROTOBUF_VERSION} found (>=3.20, <4.0)")
+-    endif()
+-else()
+-    message(FATAL_ERROR "Python protobuf not found. Install version (>=3.20, <4.0)")
+-endif()
+-
+-
+ add_subdirectory(libs)
+ 
+ if (PLATFORM_DESKTOP)

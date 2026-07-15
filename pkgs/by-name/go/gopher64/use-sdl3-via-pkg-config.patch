@@ -1,0 +1,86 @@
+--- a/build.rs
++++ b/build.rs
+@@ -63,14 +63,7 @@
+         .include("parallel-rdp/parallel-rdp-standalone/volk")
+         .include("parallel-rdp/parallel-rdp-standalone/vulkan")
+         .include("parallel-rdp/parallel-rdp-standalone/vulkan-headers/include")
+-        .include("parallel-rdp/parallel-rdp-standalone/util")
+-        .include(
+-            std::path::PathBuf::from(std::env::var("DEP_SDL3_OUT_DIR").unwrap()).join("include"),
+-        )
+-        .include(
+-            std::path::PathBuf::from(std::env::var("DEP_SDL3_TTF_OUT_DIR").unwrap())
+-                .join("include"),
+-        );
++        .include("parallel-rdp/parallel-rdp-standalone/util");
+ 
+     let mut retroachievements_build = cc::Build::new();
+     retroachievements_build
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4782,12 +4782,6 @@
+ ]
+ 
+ [[package]]
+-name = "rpkg-config"
+-version = "0.1.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5a2d2f3481209a6b42eec2fbb49063fb4e8d35b57023401495d4fe0f85c817f0"
+-
+-[[package]]
+ name = "rspolib"
+ version = "0.1.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -5002,28 +4996,10 @@
+ ]
+ 
+ [[package]]
+-name = "sdl3-src"
+-version = "3.4.8"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "997bff4c8d3d9d1e846d7ad8caa33e6fe18a07ec9dc474e1efbbb20923d87bd9"
+-
+-[[package]]
+ name = "sdl3-sys"
+ version = "0.6.5+SDL-3.4.8"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "51ca7a36c908d1d2b6c259d426a5000fbb70e764dcc430f6a373cc151f614f68"
+-dependencies = [
+- "cc",
+- "cmake",
+- "rpkg-config",
+- "sdl3-src",
+-]
+-
+-[[package]]
+-name = "sdl3-ttf-src"
+-version = "3.2.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f28923d2ce72ff317d8eb7cec97ddfb8f351c330d7bcbf8c76e91332122c93b3"
+ 
+ [[package]]
+ name = "sdl3-ttf-sys"
+@@ -5031,10 +5007,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c30da3dcd7e062f19350b47a532f7629c42801b801687535fd31e8ba2adfd71d"
+ dependencies = [
+- "cmake",
+- "rpkg-config",
+  "sdl3-sys",
+- "sdl3-ttf-src",
+ ]
+ 
+ [[package]]
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -19,8 +19,8 @@
+ slint = { version = "1.16", default-features = false, features = ["compat-1-2", "std", "unstable-winit-030", "backend-winit", "renderer-skia", "accessibility"], optional = true }
+ open = "5.3"
+ sha2 = "0.11"
+-sdl3-sys = { version = "0.6", features = ["build-from-source-static"] }
+-sdl3-ttf-sys = { version = "0.6", features = ["build-from-source-static", "no-sdlttf-harfbuzz", "no-sdlttf-plutosvg"] }
++sdl3-sys = { version = "0.6" }
++sdl3-ttf-sys = { version = "0.6" }
+ rfd = {version = "0.17", optional = true }
+ tokio = {version = "1.46", features = ["rt-multi-thread", "macros", "fs", "process"] }
+ spin_sleep = "1.3"
