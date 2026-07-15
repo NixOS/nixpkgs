@@ -1521,7 +1521,7 @@ with haskellLib;
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_4_1 = doDistribute (dontCheck super.haskeline_0_8_4_1);
+  haskeline_0_8_5_0 = doDistribute (dontCheck super.haskeline_0_8_5_0);
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -2840,9 +2840,6 @@ with haskellLib;
   # 2026-05-17: allow hedgehog 1.6
   # https://github.com/hedgehogqa/haskell-hedgehog-classes/pull/65
   hedgehog-classes = doJailbreak super.hedgehog-classes;
-
-  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
   # Missing test files in sdist
   # https://github.com/vmchale/lzlib/issues/1
