@@ -62,6 +62,8 @@ rec {
     let
       # prevent infinite recursion for the default stdenv value
       defaultStdenv = stdenv;
+      defaultPassAsFile = [ "buildCommand" ];
+      removedNames = [ "passAsFile" ];
     in
     {
       # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
@@ -79,7 +81,7 @@ rec {
       {
         enableParallelBuilding = true;
         inherit buildCommand name;
-        passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
+        passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
       }
       // {
         ${if !derivationArgs ? meta then "pos" else null} =
@@ -93,7 +95,7 @@ rec {
         ${if runLocal then "preferLocalBuild" else null} = true;
         ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs removedNames
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
