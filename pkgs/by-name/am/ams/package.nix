@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/alsamodular/ams.git";
-    sha256 = "0qdyz5llpa94f3qx1xi1mz97vl5jyrj1mqff28p5g9i5rxbbk8z9";
+    hash = "sha256-6aO5Vs8lplcuEs7hGmT2stB90q8h9tDxcCSpS2n5vmE=";
     tag = "Release-${finalAttrs.version}";
   };
 
