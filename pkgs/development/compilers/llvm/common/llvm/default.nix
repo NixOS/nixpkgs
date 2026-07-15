@@ -234,6 +234,18 @@ stdenv.mkDerivation (
         # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
         # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
         (getVersionFile "llvm/sdag-freeze-condition-in-select-of-load-fold.patch")
+      ]
+      ++ lib.optionals (lib.versions.major release_version == "22") [
+        # Same issue and fix as above, for LLVM 22. While LLVM 22 was EOL at
+        # the time of the LLVM PR, and was thus not backported upstream, the
+        # backport was made to Rust's LLVM fork on LLVM 22.1. Accordingly, we
+        # fetch the patch from there.
+        (fetchpatch {
+          name = "llvm-22-sdag-freeze-condition-in-select-of-load-fold.patch";
+          url = "https://github.com/rust-lang/llvm-project/commit/abcef279cd33492fe8301c8873fc535fa4dbf0d5.patch";
+          stripLen = 1;
+          hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
+        })
       ];
 
     nativeBuildInputs = [
