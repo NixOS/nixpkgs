@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinyauth";
-  version = "5.0.7";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "steveiliop56";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VeII5jSNUJpGZgqons1o1fp6KXxDOBhSMciSqtQfaC4=";
+    hash = "sha256-GDyU994vb6vh1RQOoEGQLDTXYztIOLFKA9FNHEqAR2I=";
   };
 
-  vendorHash = "sha256-XP+kVfcDKWAvBdrvGjiTdWh7jNe6qiDsgVjPrFFPoDU=";
+  vendorHash = "sha256-rlMttXywppA39Vip6pIos4tY5434vvtN8dbhVn+S2Kg=";
 
   subPackages = [ "cmd/tinyauth" ];
 
@@ -77,7 +77,7 @@ buildGoModule (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-FRACDa1akm+JnYIRwNXRcomzDIMCIAlJDbjMyS77sNA=";
+    outputHash = "sha256-YWxBdP9esvdgJYHkgI8p5nQTBRu/OBcB1DjXwPhNrGQ=";
   };
 
   passthru = {
