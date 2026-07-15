@@ -11,14 +11,14 @@
   freeglut,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsnav";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "jtsiomb";
     repo = "fsnav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bt1QRqtJkVFR1uMzmB3OUyqyzUyJdQyQdbMOfMyWJOc=";
   };
 
@@ -37,13 +37,11 @@ stdenv.mkDerivation rec {
     freeglut
   ]);
 
-  preBuild = ''
-    makeFlagsArray+=(
-      "PREFIX=$out"
-      "CC=$CC"
-      "CXX=$CXX"
-    )
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -59,5 +57,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-
-}
+})
