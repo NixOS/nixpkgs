@@ -1,11 +1,4 @@
 { _cuda, lib }:
-let
-  jetsonSubset =
-    cudaCapabilities: lib.intersectLists _cuda.db.jetsonCudaCapabilities cudaCapabilities;
-  jetsonArchSubset =
-    archName: cudaCapabilities:
-    lib.intersectLists (_cuda.db.cudaArchNameToJetsonCapabilities.${archName} or [ ]) cudaCapabilities;
-in
 {
   /**
     Returns whether a capability should be built by default for a particular CUDA version.
@@ -117,7 +110,7 @@ in
     # Type
 
     ```
-    _cudaCapabilitiesAreArchitectureSpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    _cudaCapabilitiesIncludeArchitectureSpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
     ```
 
     # Inputs
@@ -126,7 +119,7 @@ in
 
     : The list of CUDA capabilities to check
   */
-  _cudaCapabilitiesAreArchitectureSpecific =
+  _cudaCapabilitiesIncludeArchitectureSpecific =
     cudaCapabilities:
     lib.intersectLists _cuda.db.architectureSpecificCudaCapabilities cudaCapabilities != [ ];
 
@@ -138,7 +131,7 @@ in
     # Type
 
     ```
-    _cudaCapabilitiesAreFamilySpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    _cudaCapabilitiesIncludeFamilySpecific :: (cudaCapabilities :: [CudaCapability]) -> Bool
     ```
 
     # Inputs
@@ -147,7 +140,7 @@ in
 
     : The list of CUDA capabilities to check
   */
-  _cudaCapabilitiesAreFamilySpecific =
+  _cudaCapabilitiesIncludeFamilySpecific =
     cudaCapabilities:
     lib.intersectLists _cuda.db.familySpecificCudaCapabilities cudaCapabilities != [ ];
 
@@ -159,7 +152,7 @@ in
     # Type
 
     ```
-    _cudaCapabilitiesAreJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    _cudaCapabilitiesIncludeJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
     ```
 
     # Inputs
@@ -168,7 +161,8 @@ in
 
     : The list of CUDA capabilities to check
   */
-  _cudaCapabilitiesAreJetson = cudaCapabilities: jetsonSubset cudaCapabilities != [ ];
+  _cudaCapabilitiesIncludeJetson =
+    cudaCapabilities: _cuda.lib.getJetsonCudaCapabilities cudaCapabilities != [ ];
 
   /**
     Returns whether a list of CUDA capabilities includes any Jetson capability belonging to the
@@ -179,7 +173,7 @@ in
     # Type
 
     ```
-    _cudaCapabilitiesAreJetsonArch
+    _cudaCapabilitiesIncludeJetsonArch
       :: (archName :: String)
       -> (cudaCapabilities :: [CudaCapability])
       -> Bool
@@ -195,8 +189,9 @@ in
 
     : The list of CUDA capabilities to check
   */
-  _cudaCapabilitiesAreJetsonArch =
-    archName: cudaCapabilities: jetsonArchSubset archName cudaCapabilities != [ ];
+  _cudaCapabilitiesIncludeJetsonArch =
+    archName: cudaCapabilities:
+    _cuda.lib.getJetsonCudaCapabilitiesForArch archName cudaCapabilities != [ ];
 
   /**
     Returns the Jetson capabilities within a list of CUDA capabilities.
@@ -204,7 +199,7 @@ in
     # Type
 
     ```
-    cudaCapabilitiesJetsonSubset :: (cudaCapabilities :: [CudaCapability]) -> [CudaCapability]
+    getJetsonCudaCapabilities :: (cudaCapabilities :: [CudaCapability]) -> [CudaCapability]
     ```
 
     # Inputs
@@ -213,17 +208,45 @@ in
 
     : The list of CUDA capabilities to filter
   */
-  cudaCapabilitiesJetsonSubset = jetsonSubset;
+  getJetsonCudaCapabilities =
+    cudaCapabilities: lib.intersectLists _cuda.db.jetsonCudaCapabilities cudaCapabilities;
 
   /**
-    Returns whether a list of CUDA capabilities includes any Jetson capability.
-
-    This is the stable public API for `_cudaCapabilitiesAreJetson`.
+    Returns the Jetson capabilities within a list of CUDA capabilities that belong to the given
+    micro-architecture.
 
     # Type
 
     ```
-    cudaCapabilitiesAreJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
+    getJetsonCudaCapabilitiesForArch
+      :: (archName :: String)
+      -> (cudaCapabilities :: [CudaCapability])
+      -> [CudaCapability]
+    ```
+
+    # Inputs
+
+    `archName`
+
+    : The micro-architecture name (e.g. `"Ampere"`, `"Blackwell"`)
+
+    `cudaCapabilities`
+
+    : The list of CUDA capabilities to filter
+  */
+  getJetsonCudaCapabilitiesForArch =
+    archName: cudaCapabilities:
+    lib.intersectLists (_cuda.db.cudaArchNameToJetsonCapabilities.${archName} or [ ]) cudaCapabilities;
+
+  /**
+    Returns whether a list of CUDA capabilities includes any Jetson capability.
+
+    This is the stable public API for `_cudaCapabilitiesIncludeJetson`.
+
+    # Type
+
+    ```
+    cudaCapabilitiesIncludeJetson :: (cudaCapabilities :: [CudaCapability]) -> Bool
     ```
 
     # Inputs
@@ -232,18 +255,19 @@ in
 
     : The list of CUDA capabilities to check
   */
-  cudaCapabilitiesAreJetson = cudaCapabilities: jetsonSubset cudaCapabilities != [ ];
+  cudaCapabilitiesIncludeJetson =
+    cudaCapabilities: _cuda.lib.getJetsonCudaCapabilities cudaCapabilities != [ ];
 
   /**
     Returns whether a list of CUDA capabilities includes any Jetson capability belonging to the
     given micro-architecture.
 
-    This is the stable public API for `_cudaCapabilitiesAreJetsonArch`.
+    This is the stable public API for `_cudaCapabilitiesIncludeJetsonArch`.
 
     # Type
 
     ```
-    cudaCapabilitiesAreJetsonArch
+    cudaCapabilitiesIncludeJetsonArch
       :: (archName :: String)
       -> (cudaCapabilities :: [CudaCapability])
       -> Bool
@@ -259,8 +283,9 @@ in
 
     : The list of CUDA capabilities to check
   */
-  cudaCapabilitiesAreJetsonArch =
-    archName: cudaCapabilities: jetsonArchSubset archName cudaCapabilities != [ ];
+  cudaCapabilitiesIncludeJetsonArch =
+    archName: cudaCapabilities:
+    _cuda.lib.getJetsonCudaCapabilitiesForArch archName cudaCapabilities != [ ];
 
   /**
     A predicate which, given a package, returns true if the package has a free license or one of NVIDIA's licenses.

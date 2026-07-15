@@ -123,7 +123,7 @@ bootstrapData
   /**
     The micro-architecture names that have at least one Jetson capability.
 
-    This is the set of valid `archName` values for `_cuda.lib.cudaCapabilitiesAreJetsonArch`.
+    This is the set of valid `archName` values for `_cuda.lib.cudaCapabilitiesIncludeJetsonArch`.
 
     # Type
 
