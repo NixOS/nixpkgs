@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "unstable-2025-12-20";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "AliEmreSenel";
     repo = "zenpower3";
     tag = "v${version}";
-    hash = "sha256-NvCBog1rAAjbhT9dMOjsmio6lVZ9h36XvOiE7znJdTo=";
+    hash = "sha256-ro40bIMPkM3rLraZaKqzB8a14zgldMIW4jSUr5GbELo=";
   };
 
   hardeningDisable = [ "pic" ];
