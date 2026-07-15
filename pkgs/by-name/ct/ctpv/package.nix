@@ -8,6 +8,7 @@
   atool,
   bat,
   chafa,
+  coreutils,
   delta,
   ffmpeg,
   ffmpegthumbnailer,
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
           atool # for archive files
           bat
           chafa # for image files on Wayland
+          coreutils
           delta # for diff files
           ffmpeg
           ffmpegthumbnailer
