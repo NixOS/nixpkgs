@@ -108,6 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-a8P1YxLNMkYka01+8MhBO+uSzGbR186sumlQk5LuGfY=";
       stripLen = 2;
     })
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/11263
+    (fetchpatch {
+      name = "GStreamer-SA-2026-0022.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/6db6dd058ebc3607452311b7dc47b0359b40b293.patch";
+      sha256 = "sha256-gaBUpEdZB0PrnI1IR53jtM0kecHpUIzavUdADN1NNlQ=";
+      stripLen = 2;
+    })
   ];
 
   strictDeps = true;
