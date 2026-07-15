@@ -1765,6 +1765,8 @@ let
 
         piaf = callPackage ../development/ocaml-modules/piaf { };
 
+        picasso = callPackage ../development/ocaml-modules/picasso { };
+
         piqi = callPackage ../development/ocaml-modules/piqi { };
 
         piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
