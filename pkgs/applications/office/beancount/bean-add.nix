@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation {
@@ -18,10 +19,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = with python3Packages; [ python ];
 
-  installPhase = ''
-    mkdir -p $out/bin/
-    cp bean-add $out/bin/bean-add
-    chmod +x $out/bin/bean-add
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installBin bean-add
   '';
 
   meta = {
