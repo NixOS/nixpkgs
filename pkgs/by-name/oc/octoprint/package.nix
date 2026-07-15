@@ -54,14 +54,14 @@ let
       (self: super: {
         octoprint-firmwarecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FirmwareCheck";
-          version = "2021.10.11";
+          version = "2025.7.23";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FirmwareCheck";
             rev = version;
-            hash = "sha256-wqbD82bhJDrDawJ+X9kZkoA6eqGxqJc1Z5dA0EUwgEI=";
+            hash = "sha256-QPchpyeotB5IKbfES74CJlhw3sz8Q1df/+n5dpbrHSs=";
           };
           doCheck = false;
         };
