@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/2ec8457ab33d539b6f1fecc998360c0b8b05ed4f.diff";
       hash = "sha256-YHbYBwXMm4rTKpmMW6I3LUafhA4RuNUdXqUBUAXwXpE=";
     })
+
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/0db9162641d9709c63c92a13e66fd88905180e89.diff";
+      hash = "sha256-eoS35Zxb+frQTTTNCaZ4TV/QZjaK45mW1OzzIlXQ1C0=";
+    })
   ]
   # The cmake options are sufficient for turning on static building, but not
   # for disabling shared building, just trim the shared lib from the CMake
