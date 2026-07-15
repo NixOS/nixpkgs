@@ -7723,10 +7723,10 @@ with self;
 
   CryptOpenSSLX509 = buildPerlPackage {
     pname = "Crypt-OpenSSL-X509";
-    version = "1.915";
+    version = "2.1.3";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.915.tar.gz";
-      hash = "sha256-xNvBbE/CloV4I3v8MkWH/9eSSacQFQJlLbnjjUSJUX8=";
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-2.1.3.tar.gz";
+      hash = "sha256-CtllF1dGroRrBRCwOKofltLduMhg/pfOpvvcegVfn54=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
