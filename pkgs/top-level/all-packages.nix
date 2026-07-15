@@ -2091,8 +2091,6 @@ with pkgs;
 
   gnugrep = callPackage ../tools/text/gnugrep { };
 
-  gnupatch = callPackage ../tools/text/gnupatch { };
-
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
 
@@ -2321,6 +2319,7 @@ with pkgs;
       clojure = clojupyter.definition;
       octave = octave-kernel.definition;
       r = r-ark-kernel.definition;
+      ruby = iruby.definition;
       # wolfram = wolfram-for-jupyter-kernel.definition; # unfree
     };
   };
@@ -6713,7 +6712,6 @@ with pkgs;
     s6-portable-utils-man-pages
     s6-rc
     s6-rc-man-pages
-    sdnotify-wrapper
     skalibs
     skalibs_2_10
     tipidee
