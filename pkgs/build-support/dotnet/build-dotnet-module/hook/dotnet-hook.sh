@@ -13,7 +13,7 @@ dotnetConfigurePhase() {
   concatTo _rawProjectFiles dotnetProjectFiles
   local -a _convertedProjectFiles=()
   for f in "${_rawProjectFiles[@]}"; do
-    if [[ "$f" == *.cs || "$f" == *.fs ]]; then
+    if [[ "$f" == *.cs ]]; then
       dotnet project convert "$f"
       local baseName="${f##*/}"
       local baseNameNoExt="${baseName%.*}"
