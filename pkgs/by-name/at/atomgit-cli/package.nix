@@ -11,6 +11,8 @@
 }:
 
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "atomgit-cli";
   version = "0.5.0";
 
@@ -42,9 +44,7 @@ buildGoModule (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/ag \
       --prefix PATH : ${
-        lib.makeBinPath (
-          [ gitMinimal ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ]
-        )
+        lib.makeBinPath ([ gitMinimal ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ])
       }
   '';
 
