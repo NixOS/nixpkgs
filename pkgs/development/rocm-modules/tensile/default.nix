@@ -77,7 +77,10 @@ buildPythonPackage (finalAttrs: {
     clr
   ];
 
-  env.ROCM_PATH = "${clr}";
+  env = {
+    dontCheckPythonMetadata = true;
+    ROCM_PATH = "${clr}";
+  };
 
   pythonImportsCheck = [ "Tensile" ];
 

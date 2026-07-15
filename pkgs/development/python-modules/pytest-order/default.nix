@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-order";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-order";
     tag = "v${version}";
-    hash = "sha256-V1qJGkXn+HhuK5wiwkkJBEbfnv23R4x9Cv0J6ZTj5xE=";
+    hash = "sha256-LLQy5dO3OWmm7W9eI8yfrOFVp9MQOU+pjoAyWl03tZ0=";
   };
 
   build-system = [ setuptools ];

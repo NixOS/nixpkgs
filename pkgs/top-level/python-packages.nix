@@ -3887,17 +3887,6 @@ self: super: with self; {
 
   cython_0 = callPackage ../development/python-modules/cython/0.nix { };
 
-  cython_3_1 = self.cython.overrideAttrs rec {
-    version = "3.1.8";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "cython";
-      repo = "cython";
-      tag = version;
-      hash = "sha256-U/vxKpLT4BvjpIfwvZTJ93oiZJT7fvh+doz51KPRGAs=";
-    };
-  };
-
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   cyvest = callPackage ../development/python-modules/cyvest { };
@@ -3992,8 +3981,6 @@ self: super: with self; {
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
-
-  dataclasses-serialization = callPackage ../development/python-modules/dataclasses-serialization { };
 
   dataconf = callPackage ../development/python-modules/dataconf { };
 
@@ -7800,6 +7787,8 @@ self: super: with self; {
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
+  hypothesis-jsonschema = callPackage ../development/python-modules/hypothesis-jsonschema { };
+
   hypothesis_6_136 = callPackage ../development/python-modules/hypothesis/hypothesis_6_136.nix { };
 
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
@@ -10793,8 +10782,6 @@ self: super: with self; {
   mopidyapi = callPackage ../development/python-modules/mopidyapi { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
-
-  more-properties = callPackage ../development/python-modules/more-properties { };
 
   morecantile = callPackage ../development/python-modules/morecantile { };
 
@@ -16060,8 +16047,6 @@ self: super: with self; {
 
   pytest-cov-stub = callPackage ../development/python-modules/pytest-cov-stub { };
 
-  pytest-cram = callPackage ../development/python-modules/pytest-cram { };
-
   pytest-datadir = callPackage ../development/python-modules/pytest-datadir { };
 
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
@@ -16324,9 +16309,13 @@ self: super: with self; {
 
   pytest8_3CheckHook = pytestCheckHook.override { pytest = pytest_8_3; };
 
+  pytest9_0CheckHook = pytestCheckHook.override { pytest = pytest_9_0; };
+
   pytest_7 = callPackage ../development/python-modules/pytest/7.nix { };
 
   pytest_8_3 = callPackage ../development/python-modules/pytest/8_3.nix { };
+
+  pytest_9_0 = callPackage ../development/python-modules/pytest/9_0.nix { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
@@ -19469,6 +19458,8 @@ self: super: with self; {
 
   starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
+  starlark = callPackage ../development/python-modules/starlark { };
+
   starlette = callPackage ../development/python-modules/starlette { };
 
   starlette-admin = callPackage ../development/python-modules/starlette-admin { };
@@ -19571,9 +19562,9 @@ self: super: with self; {
 
   stravaweblib = callPackage ../development/python-modules/stravaweblib { };
 
-  strawberry-django = callPackage ../development/python-modules/strawberry-django { };
-
   strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
+
+  strawberry-graphql-django = callPackage ../development/python-modules/strawberry-graphql-django { };
 
   strct = callPackage ../development/python-modules/strct { };
 

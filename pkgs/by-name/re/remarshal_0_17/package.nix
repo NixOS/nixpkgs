@@ -59,6 +59,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     u-msgpack-python
   ];
 
+  pythonRelaxDeps = [ "cbor2" ];
+
   nativeCheckInputs = [ pythonPackages.pytestCheckHook ];
 
   # nixpkgs-update: no auto update

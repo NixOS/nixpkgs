@@ -22,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.19.0";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-RuGy1xND0U5MB9fmCQLmc8eN77miwoK3CtgPuFAq3i4=";
+    hash = "sha256-uajQf8otXRDZMiC8V6aFFh1yrx/HYoXVXFZN2qhi5YQ=";
   };
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:

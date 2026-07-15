@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.29.5";
+  version = "3.29.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
     tag = finalAttrs.version;
-    hash = "sha256-rpkRk3SwpUWNdjyLCk6FMwNvEhHMSOKWnn096thkhWE=";
+    hash = "sha256-sRJQa7vmMf9aWXT5QdYAZQHM0oIFFZM9P2tQ2x5T79Y=";
   };
 
   build-system = [

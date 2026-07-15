@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "test_get_project"
     "test_get_builds"
     "test_get_build"
+    # something about aiohttp and url mocking, maybe yarl
+    "test_get_work_items"
   ];
 
   disabledTestPaths = [

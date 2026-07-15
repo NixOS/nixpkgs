@@ -17,8 +17,6 @@
   # but that’s not really a concern for nixpkgs, so use them by default.
   # See: https://github.com/KhronosGroup/MoltenVK/blob/main/README.md#metal_private_api
   enablePrivateAPIUsage ? true,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,11 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
   ];
 
-  nativeBuildInputs = [
-    xcbuildHook
-    # TODO: Clean up on `staging`
-    llvmPackages.lld
-  ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   outputs = [
     "out"
@@ -119,11 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional enablePrivateAPIUsage "-DMVK_USE_METAL_PRIVATE_API=1"
   );
-
-  # Fix for ld64 hardening issue
-  #
-  # TODO: Clean up on `staging`
-  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   env.NIX_LDFLAGS = toString [
     "-lglslang"

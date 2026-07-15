@@ -58,6 +58,12 @@ buildPythonPackage (finalAttrs: {
     yarl
   ];
 
+  disabledTests = [
+    # snapshot has different dict key ordering
+    "test_assert_called_exact_count_failure"
+    "test_assert_called_regex_matchers_display"
+  ];
+
   disabledTestPaths = [
     # requires a running Docker daemon
     "tests/test_examples.py"

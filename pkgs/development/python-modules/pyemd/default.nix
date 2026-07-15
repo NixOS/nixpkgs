@@ -6,6 +6,7 @@
   numpy,
   oldest-supported-numpy,
   packaging,
+  pot,
   pytestCheckHook,
   setuptools-scm,
   setuptools,
@@ -13,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyemd";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tCta57LRWx1N7mOBDqeYo5IX6Kdre0nA62OoTg/ZAP4=";
+    hash = "sha256-FZaflENcK+mOajakkwfINm49/BpnASrMMG6SyQtQP+U=";
   };
 
   build-system = [
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     packaging
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    pot
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
