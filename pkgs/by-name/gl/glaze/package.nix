@@ -6,8 +6,16 @@
   openssl,
   enableSIMD ? stdenv.hostPlatform.avx2Support,
   enableSSL ? false,
-  enableInterop ? true,
+  # Deprecated, remove after 26.05
+  enableInterop ? null,
 }:
+
+assert lib.warnIf (enableInterop != null) ''
+  glaze: `enableInterop` no longer has any effect and will be removed. Upstream
+  dropped the experimental FFI interop implementation and the
+  `glaze_BUILD_INTEROP` CMake option in 6.0.0, so please drop it from your
+  override.
+'' true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glaze";
@@ -27,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "glaze_DISABLE_SIMD_WHEN_SUPPORTED" (!enableSIMD))
     (lib.cmakeBool "glaze_ENABLE_SSL" enableSSL)
-    (lib.cmakeBool "glaze_BUILD_INTEROP" enableInterop)
     (lib.cmakeBool "glaze_ENABLE_FUZZING" (!stdenv.hostPlatform.isMusl))
   ];
 
