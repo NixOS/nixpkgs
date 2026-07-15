@@ -16,6 +16,7 @@ class Version:
         self.name: str = name
         self.hash: str | None = None
         self.build_number: int | None = None
+        self.url: str | None = None
 
     @property
     def full_name(self):
@@ -39,7 +40,7 @@ class VersionManager:
         """
 
         url = f"{self.base_url}/versions"
-        response = requests.get(url, HEADER)
+        response = requests.get(url, headers=HEADER)
 
         try:
             response.raise_for_status()
@@ -54,7 +55,7 @@ class VersionManager:
         for version_name in release_versions:
             version_id = version_name["version"]["id"]
 
-        # we only want versions that are no pre-releases
+            # we only want versions that are not pre-releases
             if ("pre" in version_id) or ("rc" in version_id):
                 continue
 
@@ -73,7 +74,7 @@ class VersionManager:
 
         for version in self.versions:
             url = f"{self.base_url}/versions/{version.name}/builds/latest"
-            response = requests.get(url, HEADER)
+            response = requests.get(url, headers=HEADER)
 
             # check that we've got a good response
             try:
@@ -83,9 +84,11 @@ class VersionManager:
                 print(e)
                 return
 
-            # the latest build in from the api
+            # the latest build from the api
             latest_build = response.json()['id']
             version.build_number = latest_build
+            # Grab the url from the api
+            version.url = response.json()['downloads']['server:default']['url']
 
     def generate_version_hashes(self):
         """
@@ -94,9 +97,8 @@ class VersionManager:
 
         print("Fetching version hashes")
         for version in self.versions:
-            version.build_number
             url = f"{self.base_url}/versions/{version.name}/builds/{version.build_number}"
-            response = requests.get(url, HEADER)
+            response = requests.get(url, headers=HEADER)
 
             # check that we've got a good response
             try:
@@ -115,7 +117,7 @@ class VersionManager:
 
     def versions_to_json(self):
         return json.dumps(
-            {version.name: {'hash': version.hash, 'version': version.full_name}
+            {version.name: {'hash': version.hash, 'version': version.full_name, 'url': version.url}
                 for version in self.versions},
             indent=4
         )
