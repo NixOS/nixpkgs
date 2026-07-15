@@ -46,7 +46,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/versity/versitygw";
     changelog = "https://github.com/versity/versitygw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ genga898 ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      genga898
+    ];
     mainProgram = "versitygw";
   };
 })
