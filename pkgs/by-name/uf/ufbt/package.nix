@@ -15,6 +15,7 @@
   llvmPackages,
   heatshrink,
   protobuf,
+  makeWrapper,
 }:
 let
   flipper-sdk = fetchzip {
@@ -56,7 +57,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "ufbt";
   version = "0.2.6";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -70,45 +71,32 @@ python3Packages.buildPythonApplication rec {
     ln -s ${gcc-arm-13-2}/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-py3
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-git-versioning
+  nativeBuildInputs = [
+    python3Packages.setuptools-git-versioning
+    makeWrapper
   ];
+  propagatedBuildInputs = [ ufbt-python ];
+  dontWrapPythonPrograms = true;
+  __structuredAttrs = true;
 
-  dependencies = with python3Packages; [
-    pyserial
-    oslex
-    ansi
-    protobuf
-    pyelftools
-    colorlog
-  ];
-  makeWrapperArgs = [
-    "--set FBT_NOENV 1"
-    "--set UFBT_SDK_PATH ${flipper-sdk}"
-    "--set UFBT_OPENOCD ${lib.getExe openocd}"
-    "--set UFBT_DFUUTIL ${lib.getExe dfu-util}"
-    "--set UFBT_CLANGD ${lib.getExe llvmPackages.clang-unwrapped}"
-    "--set UFBT_PROTOC ${lib.getExe protobuf}"
-    "--set UFBT_HEATSHRINK ${lib.getExe heatshrink}"
-    "--set UFBT_TOOLCHAIN_BINDIR ${gcc-arm-13-2}/bin"
-    "--prefix PYTHONPATH : ${scons}/lib/python${python3.pythonVersion}/site-packages"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ufbt-python
-        gcc-arm-13-2
-        dfu-util
-        openocd
-        llvmPackages.clang-unwrapped
-        heatshrink
-      ]
-    }"
-    "--set UFBT_HOME .ufbt_state"
-  ];
-  meta = {
+postFixup = ''
+    wrapProgram "$out/bin/ufbt" \
+      --set FBT_NOENV "1" \
+      --set UFBT_SDK_PATH "${flipper-sdk}" \
+      --set UFBT_OPENOCD "${lib.getBin openocd}/bin/openocd" \
+      --set UFBT_DFUUTIL "${lib.getBin dfu-util}/bin/dfu-util" \
+      --set UFBT_CLANGD "${lib.getBin llvmPackages.clang-unwrapped}/bin/clangd" \
+      --set UFBT_PROTOC "${lib.getBin protobuf}/bin/protoc" \
+      --set UFBT_HEATSHRINK "${lib.getBin heatshrink}/bin/heatshrink" \
+      --set UFBT_TOOLCHAIN_BINDIR "${gcc-arm-13-2}/bin" \
+      --prefix PYTHONPATH : "${scons}/lib/python${python3.pythonVersion}/site-packages" \
+      --prefix PATH : "${lib.makeBinPath [ ufbt-python gcc-arm-13-2 dfu-util openocd llvmPackages.clang-unwrapped heatshrink ]}" \
+      --set UFBT_HOME ".ufbt_state"
+  '';
+  meta = with lib; {
     description = "Micro Flipper Build Tool";
     homepage = "https://github.com/flipperdevices/flipperzero-ufbt";
-    license = lib.licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pignated ];
     platforms = [
       "x86_64-linux"
