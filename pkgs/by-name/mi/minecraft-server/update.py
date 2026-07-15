@@ -110,6 +110,32 @@ def group_major_releases(releases: List[Version]) -> Dict[str, List[Version]]:
     return groups
 
 
+def slugify(version: str) -> str:
+    return version.replace(".", "-")
+
+
+def get_changelog_url(version: str) -> Optional[str]:
+    """
+    Attempt to resolve the Minecraft changelog article URL.
+    Returns the URL if it exists, otherwise None.
+    """
+    url = f"https://www.minecraft.net/en-us/article/minecraft-java-edition-{slugify(version)}"
+
+    # our request is denied without a human user-agent
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+    }
+
+    try:
+        response = requests.head(url, headers=headers, timeout=3)
+        if response.status_code == 200:
+            return url
+    except requests.RequestException as e:
+        pass
+
+    return None
+
+
 def get_latest_major_releases(releases: List[Version]) -> Dict[str, Version]:
     """
     Return a dictionary containing the latest version for each major release.
@@ -118,8 +144,12 @@ def get_latest_major_releases(releases: List[Version]) -> Dict[str, Version]:
     """
     return {
         major_release: max(
-            (release for release in releases if get_major_release(release.id) == major_release),
-            key=lambda x: tuple(map(int, x.id.split('.'))),
+            (
+                release
+                for release in releases
+                if get_major_release(release.id) == major_release
+            ),
+            key=lambda x: tuple(map(int, x.id.split("."))),
         )
         for major_release in group_major_releases(releases)
     }
@@ -153,7 +183,101 @@ def generate() -> Dict[str, Dict[str, str]]:
     return servers
 
 
+def get_latest(servers: Dict[str, Dict[str, str]]) -> str | None:
+    return max(
+        (v.get("version") for v in servers.values()),
+        key=lambda x: tuple(map(int, x.split("."))) if x is not None else (),
+    )
+
+
+def generate_commit(
+    previous_servers: Dict[str, Dict[str, str]],
+    servers: Dict[str, Dict[str, str]],
+    versions_file: Path,
+) -> List[Dict[str, str | list[str]]]:
+    actions = []
+    commit_body_lines = []
+
+    old_latest = get_latest(previous_servers)
+    new_latest = get_latest(servers)
+
+    for major_version, server in servers.items():
+        version = server.get("version")
+        previous_server = previous_servers.get(major_version)
+
+        if version is None:
+            continue
+
+        attribute = f"minecraftServers.vanilla-{slugify(major_version)}"
+
+        if not previous_server:
+            # this version didn't exist before
+            # check if its now the latest version
+            if version == new_latest:
+                action = f"{old_latest} -> {new_latest}"
+                attribute = "minecraft-server"
+            else:
+                action = f"init {version}"
+
+        else:
+            previous_version = previous_server.get("version")
+            if previous_version == version:
+                continue
+
+            action = f"{previous_version} -> {version}"
+
+        actions.append(action)
+
+        commit_body_lines.append(f"{attribute}: {action}")
+
+        changelog_url = get_changelog_url(version)
+        if changelog_url:
+            commit_body_lines.append(f"Release notes: {changelog_url}")
+
+    if not commit_body_lines:
+        return []
+
+    if len(actions) == 1:
+        commit_message = commit_body_lines[0]
+
+        # the body should only be the release notes to avoid repeatition
+        # if the release notes don't exist this will be blank
+        commit_body = "\n".join(commit_body_lines[1:]).strip()
+    else:
+        detailed_message = f"minecraft-server: {', '.join(actions)}"
+
+        commit_message = (
+            detailed_message
+            if len(detailed_message) <= 72
+            else "minecraft-server: update multiple versions"
+        )
+
+        commit_body = "\n".join(commit_body_lines).strip()
+
+    commit_json = {
+        "attrPath": "minecraftServers.vanilla",
+        "files": [str(versions_file)],
+        "commitMessage": commit_message,
+    }
+
+    if commit_body:
+        commit_json["commitBody"] = commit_body
+
+    return [commit_json]
+
+
 if __name__ == "__main__":
-    with open(Path(__file__).parent / "versions.json", "w") as file:
-        json.dump(generate(), file, indent=2)
+    versions_file = Path(__file__).parent / "versions.json"
+
+    with open(versions_file, "r") as file:
+        previous_servers = json.load(file)
+
+    servers = generate()
+
+    commit_json = generate_commit(previous_servers, servers, versions_file)
+
+    with open(versions_file, "w") as file:
+        json.dump(servers, file, indent=2)
         file.write("\n")
+
+    print(json.dumps(commit_json))
