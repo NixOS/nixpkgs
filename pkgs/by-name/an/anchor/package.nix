@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +19,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-oEgWfklxjP8+TxrhDKJgcTsanpqJpEiHXJyir8neYj8=";
 
+  # Upstream patch to fix cargo metadata discovery on macOS Nix sandboxes.
+  # Replaces fragile subprocess-cwd approach with in-process manifest path
+  # resolution. Remove on next version bump (included in v1.1.3+).
+  # See: https://github.com/otter-sec/anchor/pull/4757
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/otter-sec/anchor/commit/25bf2112b67d84e5bc406d7eac2919c90d8e54ed.patch";
+      hash = "sha256-q5OGNoUGPuCNHgaZNo9fmUxqQnFH2MhRW4ZefX+Of0Y=";
+    })
+  ];
+
   # Only build the anchor-cli package
   cargoBuildFlags = [
     "-p"
@@ -30,16 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "anchor-cli"
   ];
-
-  # These tests use tempdir + cargo metadata subprocess which fails on Darwin
-  # sandboxes due to getcwd() differences (XNU vs Linux). Tracked upstream at
-  # https://github.com/otter-sec/anchor/issues/4751
-  checkFlags = map (t: "--skip=${t}") (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "program::tests::discover_solana_programs_finds_sibling_programs_from_nested_member"
-      "program::tests::discover_solana_programs_lists_all_members_from_nested_member"
-    ]
-  );
 
   meta = {
     description = "Solana Sealevel Framework";
