@@ -3,6 +3,7 @@
   stdenv,
   kernel,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AliEmreSenel";
     repo = "zenpower3";
-    rev = "dc4f1e2d2f5e26ad5b314497485419cb240e7134";
+    tag = "v${version}";
     hash = "sha256-NvCBog1rAAjbhT9dMOjsmio6lVZ9h36XvOiE7znJdTo=";
   };
 
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     inherit (src.meta) homepage;
