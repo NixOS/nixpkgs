@@ -11,7 +11,7 @@
   buildPackages,
 
   # apparmor deps
-  apparmor-parser,
+  apparmor-init,
 }:
 let
   inherit (python3Packages) libapparmor;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication {
     cd utils
 
     substituteInPlace aa-remove-unknown \
-      --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+      --replace-fail "/lib/apparmor/rc.apparmor.functions" "${apparmor-init}/lib/apparmor/rc.apparmor.functions"
     substituteInPlace Makefile \
       --replace-fail "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
     sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' Makefile
