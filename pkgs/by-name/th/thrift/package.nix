@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gGAO+D0A/hEoHMm6OvRBc1Mks9y52kfd0q/Sg96pdW4=";
+    hash = "sha256-+o/2exHsunjQBGjXrNQ1pQ5TKV53++qCxIMeVyOh5QY=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
