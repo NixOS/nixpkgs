@@ -172,6 +172,7 @@ let
         jobs.manual
         jobs.tests.lib-tests.x86_64-linux
         jobs.tests.pkgs-lib.formats-tests.x86_64-linux
+        jobs.tests.eval-perf.x86_64-linux
         jobs.stdenv.x86_64-linux
         jobs.cargo.x86_64-linux
         jobs.go.x86_64-linux
