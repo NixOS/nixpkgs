@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
   __structuredAttrs = true;
 
-postFixup = ''
+  postFixup = ''
     wrapProgram "$out/bin/ufbt" \
       --set FBT_NOENV "1" \
       --set UFBT_SDK_PATH "${flipper-sdk}" \
@@ -90,7 +90,16 @@ postFixup = ''
       --set UFBT_HEATSHRINK "${lib.getBin heatshrink}/bin/heatshrink" \
       --set UFBT_TOOLCHAIN_BINDIR "${gcc-arm-13-2}/bin" \
       --prefix PYTHONPATH : "${scons}/lib/python${python3.pythonVersion}/site-packages" \
-      --prefix PATH : "${lib.makeBinPath [ ufbt-python gcc-arm-13-2 dfu-util openocd llvmPackages.clang-unwrapped heatshrink ]}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          ufbt-python
+          gcc-arm-13-2
+          dfu-util
+          openocd
+          llvmPackages.clang-unwrapped
+          heatshrink
+        ]
+      }" \
       --set UFBT_HOME ".ufbt_state"
   '';
   meta = with lib; {
