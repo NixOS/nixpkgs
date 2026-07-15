@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   click,
   six,
   pytestCheckHook,
@@ -10,14 +11,16 @@
 buildPythonPackage rec {
   pname = "click-configfile";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lb7sE77pUOmPQ8gdzavvT2RAkVWepmKY+drfWTUdkNE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     six
   ];
