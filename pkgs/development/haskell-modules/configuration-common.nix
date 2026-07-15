@@ -3050,6 +3050,13 @@ with haskellLib;
       + "/libssh2";
   } super.libssh2;
 
+  # 2026-07-14: Hackage release is outdated: https://github.com/eyeinsky/rapid/pull/2
+  rapid = appendPatch (fetchpatch {
+    name = "bump-bounds.patch";
+    url = "https://github.com/eyeinsky/rapid/commit/a441461859d5e28508980707205db13ba9b53161.patch";
+    sha256 = "sha256-WYtys6Bblr7VDagUGHB5ujzscsSu5WxoIlZQSBQw/hc=";
+  }) super.rapid;
+
   # 2025-8-19: dontCheck because of: https://github.com/ucsd-progsys/liquid-fixpoint/issues/760
   # i.e. tests assume existence of .git and also fail for some versions of CVC5,
   # including the current one in nixpkgs.

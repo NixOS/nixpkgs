@@ -5232,7 +5232,6 @@ broken-packages:
   - Range # failure in job https://hydra.nixos.org/build/233235824 at 2023-09-02
   - rangemin # failure in job https://hydra.nixos.org/build/233244031 at 2023-09-02
   - rank-product # failure in job https://hydra.nixos.org/build/233239589 at 2023-09-02
-  - rapid # failure in job https://hydra.nixos.org/build/307521428 at 2025-09-19
   - rapid-term # failure in job https://hydra.nixos.org/build/233251731 at 2023-09-02
   - Rasenschach # failure in job https://hydra.nixos.org/build/234445901 at 2023-09-13
   - rating-chgk-info # failure in job https://hydra.nixos.org/build/233598034 at 2023-09-02
