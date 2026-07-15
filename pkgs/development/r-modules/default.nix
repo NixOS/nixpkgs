@@ -488,7 +488,10 @@ let
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     RmecabKo = [ pkgs.mecab ]; # for mecab-config
-    Rmpi = [ pkgs.prrte ];
+    Rmpi = with pkgs; [
+      pkg-config
+      prrte
+    ];
     RoBMA = [ pkgs.pkg-config ];
     RoBSA = [ pkgs.pkg-config ];
     Rpoppler = [ pkgs.pkg-config ];
