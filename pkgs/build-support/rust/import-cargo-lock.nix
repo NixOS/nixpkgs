@@ -26,6 +26,46 @@ let
     readFile
     removePrefix
     ;
+
+  # Parse a git source into different components.
+  parseGit =
+    src:
+    let
+      parts = match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
+      type = elemAt parts 2; # rev, tag or branch
+      value = elemAt parts 3;
+    in
+    if parts == null then
+      null
+    else
+      {
+        url = elemAt parts 0;
+        sha = elemAt parts 4;
+      }
+      // optionalAttrs (type != null) { inherit type value; };
+
+  nameGitSha =
+    pkg:
+    let
+      gitParts = parseGit pkg.source;
+    in
+    {
+      name = "${pkg.name}-${pkg.version}";
+      value = gitParts.sha;
+    };
+
+  # Replaces values inherited by workspace members.
+  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {
+    libraries = with python3Packages; [
+      tomli
+      tomli-w
+    ];
+    flakeIgnore = [
+      "E501"
+      "W503"
+    ];
+  } (readFile ./replace-workspace-values.py);
+
 in
 {
   # Cargo lock file
@@ -55,23 +95,6 @@ in
 assert (lockFile == null) != (lockFileContents == null);
 
 let
-  # Parse a git source into different components.
-  parseGit =
-    src:
-    let
-      parts = match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
-      type = elemAt parts 2; # rev, tag or branch
-      value = elemAt parts 3;
-    in
-    if parts == null then
-      null
-    else
-      {
-        url = elemAt parts 0;
-        sha = elemAt parts 4;
-      }
-      // optionalAttrs (type != null) { inherit type value; };
-
   # shadows args.lockFileContents
   lockFileContents = if lockFile != null then readFile lockFile else args.lockFileContents;
 
@@ -97,16 +120,6 @@ let
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = listToAttrs (map nameGitSha (filter (pkg: hasPrefix "git+" pkg.source) depPackages));
-
-  nameGitSha =
-    pkg:
-    let
-      gitParts = parseGit pkg.source;
-    in
-    {
-      name = "${pkg.name}-${pkg.version}";
-      value = gitParts.sha;
-    };
 
   # Convert the attrset provided through the `outputHashes` argument to a
   # a mapping from git commit SHA -> output hash.
@@ -154,18 +167,6 @@ let
     "https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
   }
   // extraRegistries;
-
-  # Replaces values inherited by workspace members.
-  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {
-    libraries = with python3Packages; [
-      tomli
-      tomli-w
-    ];
-    flakeIgnore = [
-      "E501"
-      "W503"
-    ];
-  } (readFile ./replace-workspace-values.py);
 
   # Fetch and unpack a crate.
   mkCrate =
