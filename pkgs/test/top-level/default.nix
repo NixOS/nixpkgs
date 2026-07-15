@@ -65,6 +65,22 @@ lib.recurseIntoAttrs {
     assert lib.all (p: p.stdenv.buildPlatform != p.stdenv.hostPlatform) pkgsCross;
     pkgs.emptyFile;
 
+  # libiconv should be an alias for darwin.libiconv. This used to be an
+  # assertion in the darwin stdenv bootstrap, but comparing two derivations
+  # forces their outPaths, which would write the .drv closure of the
+  # bootstrap to the store on every evaluation of the Nixpkgs top level
+  # (see https://github.com/NixOS/nixpkgs/pull/539613).
+  darwinLibiconvAlias =
+    let
+      pkgsDarwin = nixpkgsFun {
+        localSystem = {
+          system = "aarch64-darwin";
+        };
+      };
+    in
+    assert pkgsDarwin.libiconv == pkgsDarwin.darwin.libiconv;
+    pkgs.emptyFile;
+
   # appendOverlays must preserve splicing so that cross-compilation
   # works in NixOS modules (which go through appendOverlays via nixpkgs.nix).
   appendOverlaysPreservesSplicing =
