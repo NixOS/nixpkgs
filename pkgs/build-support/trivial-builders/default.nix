@@ -550,6 +550,10 @@ rec {
             else
               f path
           );
+        defaultPassAsFile = [
+          "buildCommand"
+          "paths"
+        ];
       in
       finalAttrs:
       args@{
@@ -576,10 +580,7 @@ rec {
       {
         enableParallelBuilding = true;
         inherit name allowSubstitutes preferLocalBuild;
-        passAsFile = [
-          "buildCommand"
-          "paths"
-        ];
+        passAsFile = defaultPassAsFile;
         paths = mapPaths (path: "${path}${stripPrefix}") paths;
         buildCommand = ''
           mkdir -p $out
