@@ -5,7 +5,7 @@
   cmake,
   openssl,
   enableSIMD ? stdenv.hostPlatform.avx2Support,
-  enableSSL ? true,
+  enableSSL ? false,
   enableInterop ? true,
 }:
 
