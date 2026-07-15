@@ -422,6 +422,8 @@ self: super: with self; {
 
   aiomealie = callPackage ../development/python-modules/aiomealie { };
 
+  aiomelcloudhome = callPackage ../development/python-modules/aiomelcloudhome { };
+
   aiomisc = callPackage ../development/python-modules/aiomisc { };
 
   aiomisc-pytest = callPackage ../development/python-modules/aiomisc-pytest { };
