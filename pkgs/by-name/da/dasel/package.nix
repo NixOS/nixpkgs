@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
-    if [[ $($out/bin/dasel version) == "v${finalAttrs.version}" ]]; then
+    if [[ $($out/bin/dasel version) == "${finalAttrs.version}" ]]; then
       echo '{ "my": { "favourites": { "colour": "blue" } } }' \
         | $out/bin/dasel -i json 'my.favourites.colour = "red"' \
         | grep "red"
