@@ -3950,6 +3950,12 @@
     githubId = 144260188;
     matrix = "@boralg:matrix.org";
   };
+  borgvall = {
+    email = "joroehl@gmx.de";
+    github = "Borgvall";
+    githubId = 1449771;
+    name = "Johannes Röhl";
+  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
