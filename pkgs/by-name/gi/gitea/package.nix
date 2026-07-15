@@ -13,14 +13,14 @@
   openssh,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   stdenv,
   sqliteSupport ? true,
   nixosTests,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "gitea-frontend";
@@ -30,7 +30,7 @@ let
       inherit (finalAttrs) pname version src;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-FroVRhNzCLtbW9Z0s6xr4l0mIX+hY4KOomZAhPILWlY=";
+      hash = "sha256-VAXSj+AYV6uEdCAD/sEzeydqn4cqNL+ITfrGq41jaLI=";
     };
 
     nativeBuildInputs = [
@@ -53,18 +53,18 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gitea";
-  version = "1.26.4";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xfLhiQMygYKgSMrvmH2V/LIMeaA4ovOeUDT4RUwhvgo=";
+    hash = "sha256-Pn1V4U43d4lTKRO7AftgKDDWls2z+3IeZgPBaKZlbow=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-VyzfBZnxnubNIdf+xwLav4W4DgapcLLKN1aKrZ9NbDg=";
+  vendorHash = "sha256-YRBMGWKIZgMxOXaXG2bIBj1XzkhSwiMyfRy+yQGw+Bo=";
 
   outputs = [
     "out"
@@ -79,14 +79,14 @@ buildGoModule (finalAttrs: {
   overrideModAttrs = _: {
     postPatch = ''
       substituteInPlace go.mod \
-        --replace-fail "go 1.26.3" "go 1.26"
+        --replace-fail "go 1.26.4" "go 1.26.0"
     '';
   };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
     substituteInPlace go.mod \
-      --replace-fail "go 1.26.3" "go 1.26"
+      --replace-fail "go 1.26.4" "go 1.26.0"
   '';
 
   subPackages = [ "." ];
@@ -112,6 +112,7 @@ buildGoModule (finalAttrs: {
     mkdir -p $out
     cp -R ./options/locale $out/locale
 
+    mv $out/bin/gitea{.dev,}
     wrapProgram $out/bin/gitea \
       --prefix PATH : ${
         lib.makeBinPath [
