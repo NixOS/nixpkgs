@@ -10,6 +10,7 @@
   liblo,
   libx11,
   libxv,
+  llvmPackages,
   pkg-config,
   portmidi,
   libxpm,
@@ -30,7 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
+  ]
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   buildInputs = [
     ffmpeg
@@ -51,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxv
   ];
+
+  # TODO: Remove once #536365 reaches this branch
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   meta = {
     description = "X Jack Video Monitor";
