@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/manic-systems/tack";
     description = "flake-like toml nix pins, lazily fetched and transformed";
     mainProgram = "tack";
-    license = [ lib.licenses.eupl12 ];
+    license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [
       amaanq
       atagen

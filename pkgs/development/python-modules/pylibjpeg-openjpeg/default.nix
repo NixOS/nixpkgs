@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/${src.tag}";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     # darwin: numerous test failures, test dependency pydicom is marked as unsupported
     broken = stdenv.hostPlatform.isDarwin;

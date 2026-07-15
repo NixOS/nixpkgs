@@ -14,7 +14,7 @@ let
     repo = "twemoji";
     tag = "v14.0.2";
     hash = "sha256-YoOnZ5uVukzi/6bLi22Y8U5TpplPzB7ji42l+/ys5xI=";
-    meta.license = [ lib.licenses.cc-by-40 ];
+    meta.license = lib.licenses.cc-by-40;
   };
 in
 

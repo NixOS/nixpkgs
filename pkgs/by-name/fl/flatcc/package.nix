@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
     changelog = "https://github.com/dvidelabs/flatcc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
 })
