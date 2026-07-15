@@ -30328,6 +30328,11 @@
     githubId = 50072577;
     keys = [ { fingerprint = "309D A29B 4070 FDFD C01A  3AB4 9E60 CB44 5C4B BC4C"; } ];
   };
+  vicrodh = {
+    github = "vicrodh";
+    githubId = 103399283;
+    name = "Victor RH";
+  };
   videl = {
     email = "thibaut.smith@mailbox.org";
     github = "videl";
