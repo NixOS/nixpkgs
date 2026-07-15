@@ -7,7 +7,9 @@
   libpng,
   libjpeg,
   libogg,
+  libsm,
   libx11,
+  libxext,
   flac,
   glew,
   openal,
@@ -78,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     libogg
+    libsm
+    libxext
     flac
     openal
     libmad
