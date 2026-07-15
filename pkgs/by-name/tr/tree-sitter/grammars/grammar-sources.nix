@@ -292,9 +292,9 @@
   };
 
   cmake = {
-    version = "0.7.2";
+    version = "0.7.4";
     url = "github:uyha/tree-sitter-cmake";
-    hash = "sha256-mR+gA7eWigC2zO1gMHzOgRagsfK1y/NBsn3mAOqR35A=";
+    hash = "sha256-tLC3WHEQS2GqUr+5Q884fc+tDCTxx6Jxg83T9wPlHw4=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -606,9 +606,9 @@
   };
 
   elm = {
-    version = "5.9.0";
+    version = "5.9.2";
     url = "github:elm-tooling/tree-sitter-elm";
-    hash = "sha256-vaeGViXob7AYyJj93AUJWBD8Zdfs4zXdKikvBZ3GptU=";
+    hash = "sha256-NJRmII48Zo2xKxZmL88Dxskf352fGaCp8B14+x1XJHw=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1796,9 +1796,9 @@
   };
 
   ocaml = {
-    version = "0.24.2";
+    version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-e08lrKCyQRpb8pnLV6KK4ye53YBjxQ52nnDIzH+7ONc=";
+    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1808,7 +1808,7 @@
     language = "ocaml_interface";
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-ocaml";
-    hash = "sha256-e08lrKCyQRpb8pnLV6KK4ye53YBjxQ52nnDIzH+7ONc=";
+    hash = "sha256-fRC7sd/INCESwYCiRsuOJkOnqWnNUpjwrNoEzlaOscA=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2089,9 +2089,9 @@
   };
 
   powershell = {
-    version = "0.26.3";
+    version = "0.26.5";
     url = "github:airbus-cert/tree-sitter-powershell";
-    hash = "sha256-ETuZcVSvHF5ILN6+xjWlQM5IiT/+dtxdSckrHJSJSWk=";
+    hash = "sha256-U/SdC2d5BOmxCCPlLSbOERogrZKfOGRWwbRuBa6C0pU=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2241,9 +2241,9 @@
   };
 
   r = {
-    version = "1.2.0";
+    version = "1.3.0";
     url = "github:r-lib/tree-sitter-r";
-    hash = "sha256-SkCLFIUvJWTtg4m5NMfHbBKald470Kni2mhj2Oxc5ZU=";
+    hash = "sha256-KSmrEe1W7gAowfVz9wVqfgm7p1ekMiLLrjdPuMX0Rb8=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2317,9 +2317,9 @@
   };
 
   robot = {
-    version = "1.3.0";
+    version = "1.4.0";
     url = "github:Hubro/tree-sitter-robot";
-    hash = "sha256-GJTZMIOrEXsfVzVigF2XKKDxchkOGv0zEya5o9k5ZnY=";
+    hash = "sha256-U89K9S7zkUZ0CoT2FgvKIvQ3ApjRe59YoWrks/iQ0FM=";
     meta = {
       license = lib.licenses.isc;
       maintainers = with lib.maintainers; [

@@ -104,7 +104,10 @@ buildNpmPackage (finalAttrs: {
     downloadPage = "https://www.npmjs.com/package/@earendil-works/pi-coding-agent";
     changelog = "https://github.com/earendil-works/pi/blob/main/packages/coding-agent/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ munksgaard ];
+    maintainers = with lib.maintainers; [
+      munksgaard
+      bryanhonof
+    ];
     mainProgram = "pi";
   };
 })

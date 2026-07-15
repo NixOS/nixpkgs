@@ -9,8 +9,8 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
-  pname = "peakrdl";
+buildPythonPackage (finalAttrs: {
+  pname = "peakrdl-cli";
   version = "1.5.0";
 
   pyproject = true;
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "PeakRDL";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SqLhOzx0gUVG8k4ikNbx8p1vO/ZqTQ/KAtidRWM2SZI=";
   };
-  sourceRoot = "${src.name}/peakrdl-cli";
+  sourceRoot = "${finalAttrs.src.name}/peakrdl-cli";
 
   build-system = [
     setuptools
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "peakrdl";
   };
-}
+})

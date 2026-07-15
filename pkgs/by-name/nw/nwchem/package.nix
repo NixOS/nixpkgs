@@ -10,9 +10,9 @@
   gfortran,
   perl,
   mpi,
-  blas,
-  lapack,
-  scalapack,
+  blas-ilp64,
+  lapack-ilp64,
+  scalapack-ilp64,
   libxc,
   python3,
   tcsh,
@@ -20,10 +20,11 @@
   autoconf,
   libtool,
   makeWrapper,
+  mpich,
 }:
 
-assert blas.isILP64 == lapack.isILP64;
-assert blas.isILP64 == scalapack.isILP64;
+assert blas-ilp64.isILP64 == lapack-ilp64.isILP64;
+assert blas-ilp64.isILP64 == scalapack-ilp64.isILP64;
 
 let
   versionGA = "5.8.2"; # Fixed by nwchem
@@ -48,16 +49,19 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwchem";
   version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
-    rev = "v${version}-release";
+    tag = "v${finalAttrs.version}-release";
     hash = "sha256-2qc4kLb/WmUJuJGonIyS7pgCfyt8yXdcpDAKU0RMY58=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -72,13 +76,15 @@ stdenv.mkDerivation rec {
     makeWrapper
     gfortran
     which
+    mpich
+    python3
+    openssh
   ];
   buildInputs = [
     tcsh
-    openssh
-    blas
-    lapack
-    scalapack
+    blas-ilp64
+    lapack-ilp64
+    scalapack-ilp64
     libxc
     python3
   ];
@@ -134,12 +140,12 @@ stdenv.mkDerivation rec {
     export PYTHONHOME="${python3}"
     export PYTHONVERSION=${lib.versions.majorMinor python3.version}
 
-    export BLASOPT="-L${blas}/lib -lblas"
-    export LAPACK_LIB="-L${lapack}/lib -llapack"
-    export BLAS_SIZE=${if blas.isILP64 then "8" else "4"}
+    export BLASOPT="-L${blas-ilp64}/lib -lblas"
+    export LAPACK_LIB="-L${lapack-ilp64}/lib -llapack"
+    export BLAS_SIZE=${if blas-ilp64.isILP64 then "8" else "4"}
     export USE_SCALAPACK="y"
-    export SCALAPACK="-L${scalapack}/lib -lscalapack"
-    export SCALAPACK_SIZE=${if scalapack.isILP64 then "8" else "4"}
+    export SCALAPACK="-L${scalapack-ilp64}/lib -lscalapack"
+    export SCALAPACK_SIZE=${if scalapack-ilp64.isILP64 then "8" else "4"}
 
     export LIBXC_INCLUDE="${lib.getDev libxc}/include"
     export LIBXC_MODDIR="${lib.getDev libxc}/include"
@@ -166,7 +172,7 @@ stdenv.mkDerivation rec {
     ln -s ${gaSrc} src/tools/ga-${versionGA}.tar.gz
     cd src
     make nwchem_config
-    ${lib.optionalString (!blas.isILP64) "make 64_to_32"}
+    ${lib.optionalString (!blas-ilp64.isILP64) "make 64_to_32"}
   '';
 
   postBuild = ''
@@ -236,4 +242,4 @@ stdenv.mkDerivation rec {
     homepage = "https://nwchemgit.github.io";
     license = lib.licenses.ecl20;
   };
-}
+})
