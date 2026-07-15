@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python set of utility functions and objects";
     homepage = "https://github.com/haaksmash/pyutils";
-    license = with lib.licenses; [ lgpl3Only ];
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -16,8 +16,8 @@
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2026.06.12",
-    "hash": "sha256-JTUxakTv9MVbMQArJJC995kSCD37Xs1rvLmDoyQhHf4="
+    "rev": "2026.06.24",
+    "hash": "sha256-mjvWki4rUSvSYCmqM2eLDwbsKHkSSnq4noZYJDby1rY="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
@@ -31,8 +31,8 @@
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2026.06.10",
-    "hash": "sha256-WZnGdl0lt8nOKKZsqPIcSRTVXYEixGKDHtMPveOvE5E="
+    "rev": "2026.07.08",
+    "hash": "sha256-mwFBB75vSCLiL1XQ0yR/Tf9ykTevdyAIYtYnusF77T0="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",

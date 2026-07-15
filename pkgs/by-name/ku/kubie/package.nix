@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Shell independent context and namespace switcher for kubectl";
     mainProgram = "kubie";
     homepage = "https://github.com/kubie-org/kubie";
-    license = with lib.licenses; [ zlib ];
+    license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ illiusdope ];
   };
 })

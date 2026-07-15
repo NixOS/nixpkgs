@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     description = "Plugin for beets to perform regex replacements during import";
     homepage = "https://github.com/edgars-supe/beets-importreplace";
     maintainers = with lib.maintainers; [ pyrox0 ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
