@@ -1616,6 +1616,11 @@ lib.mapAttrs mkLicense (
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
     };
 
+    wordnet = {
+      spdxId = "WordNet";
+      fullName = "WordNet License";
+    };
+
     wtfpl = {
       spdxId = "WTFPL";
       fullName = "Do What The F*ck You Want To Public License";
