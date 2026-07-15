@@ -598,8 +598,8 @@ in
       "sha256-UHDodWN6MLV54LA31Pc7vlMr7a0tVrmCfVjXl96cjsE=";
 
   mypy-boto3-healthlake =
-    buildMypyBoto3Package "healthlake" "1.43.33"
-      "sha256-KBy7YsMMoTw7A+HPAA4hFKJ/cesmuBuiucPuCGkTlgI=";
+    buildMypyBoto3Package "healthlake" "1.43.49"
+      "sha256-oPQuxAKSUTpHGyq1J80W57cISh+d+4IGN8ClJdhkfnw=";
 
   mypy-boto3-iam =
     buildMypyBoto3Package "iam" "1.43.29"
