@@ -17,7 +17,7 @@
   imagemagick,
   jq,
   poppler-utils,
-  ueberzug,
+  ueberzugpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
           imagemagick
           jq # for json files
           poppler-utils # for pdf files
-          ueberzug # for image files on X11
+          ueberzugpp # for image files on X11
         ]
       }";
   '';
