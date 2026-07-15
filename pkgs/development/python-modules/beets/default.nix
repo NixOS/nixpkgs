@@ -509,6 +509,7 @@ buildPythonPackage (finalAttrs: {
       doronbehar
       lovesegfault
       pjones
+      staticdev
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";
