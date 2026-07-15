@@ -8,7 +8,7 @@
   rustPlatform,
   rustc,
   sd,
-  wasm-bindgen-cli_0_2_108,
+  wasm-bindgen-cli_0_2_125,
   wasm-pack,
   writeScript,
   extraBuildEnv ? { },
@@ -24,7 +24,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.36";
+  version = "1.3.58";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -35,7 +35,7 @@ buildNpmPackage (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-o75r8LFgG3BT3IIPiD9x6gY3fRDoxJ3ZTBPAYr3hLWI=";
+    hash = "sha256-44iid/vsx3rKt/NGCgdZweJHW24ysQ7qSRq8Hayng9c=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -47,11 +47,11 @@ buildNpmPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-NYPxaVYEaJVcsRX6wLVJd+/UUJrNel0zTPYGdEv8a+U=";
+    hash = "sha256-dyDNhDNbcssV4mTzGZkysTftgFfKXNLX2S0jmkX5JR4=";
   };
   cargoRoot = "../rust";
 
-  npmDepsHash = "sha256-eGu+s8g0nGijYfjo8RkT5/iBfbwk5cBMacbe/gO03NI=";
+  npmDepsHash = "sha256-JZnF6MfEkm4HCslEgpAuCrSYQYnt8tNPUTFRb1CIVe4=";
 
   nativeBuildInputs = [
     binaryen
@@ -60,7 +60,7 @@ buildNpmPackage (finalAttrs: {
     rustc
     rustc.llvmPackages.lld
     nodejs
-    wasm-bindgen-cli_0_2_108
+    wasm-bindgen-cli_0_2_125
     wasm-pack
   ];
 
