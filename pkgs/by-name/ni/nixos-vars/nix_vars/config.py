@@ -140,7 +140,7 @@ class VarsConfig:
 			)
 
 		if missingGeneratorBackends := referencedGeneratorBackends - set(
-			result.generators.keys()
+			result.generatorBackends.keys()
 		):
 			missingList = ", ".join(sorted(missingGeneratorBackends))
 			raise VarsError(
