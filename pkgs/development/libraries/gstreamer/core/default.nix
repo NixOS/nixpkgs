@@ -33,8 +33,6 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 let
@@ -86,10 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -122,14 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "libunwind" withLibunwind)
     (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
-
-  # Fix for ld64 hardening issue
-  #
-  # TODO: Clean up on `staging`
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    CC_LD = "lld";
-    OBJC_LD = "lld";
-  };
 
   postPatch = ''
     patchShebangs \
