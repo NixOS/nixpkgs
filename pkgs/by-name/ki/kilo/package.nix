@@ -191,8 +191,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    badPlatforms = [
-      # Broken due to Bun requiring AVX when run via Rosetta 2 on Apple Silicon.
-    ];
   };
 })

@@ -53,8 +53,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nesting";
     maintainers = with lib.maintainers; [ commiterate ];
-    badPlatforms = [
-      # Only supports AArch64 for Darwin.
-    ];
   };
 })

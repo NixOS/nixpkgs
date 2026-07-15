@@ -48,8 +48,5 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       flokli
     ];
-    badPlatforms = [
-      # Illegal instruction: 4
-    ];
   };
 }

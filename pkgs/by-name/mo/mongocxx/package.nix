@@ -59,6 +59,5 @@ stdenv.mkDerivation (finalAttrs: {
       "libbsoncxx"
     ];
     platforms = lib.platforms.all;
-    badPlatforms = [ ]; # needs sdk >= 10.14
   };
 })

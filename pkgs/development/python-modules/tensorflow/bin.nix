@@ -240,7 +240,6 @@ buildPythonPackage (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = [ ];
-    badPlatforms = [ ];
     # unsupported combination
     broken = stdenv.hostPlatform.isDarwin && cudaSupport;
   };
