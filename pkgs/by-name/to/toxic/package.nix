@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toxic";
-  version = "0.16.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "toxic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HNZKQPNwKLvtT/0EJlDaJnGI04gpJqXHKjd/85H3zH8=";
+    hash = "sha256-0uKb31rIbKNsE2yGr0jliPnjuogfVnVTzwsIX90MVsM=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
