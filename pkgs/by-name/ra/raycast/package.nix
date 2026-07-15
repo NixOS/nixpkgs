@@ -21,11 +21,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
         hash = "sha256-muX6PPanjU+ElCQhIfo7Y7cChbTO8Q/gH12ULvBK43s=";
       };
-      x86_64-darwin = fetchurl {
-        name = "Raycast.dmg";
-        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=x86_64";
-        hash = "sha256-E8VGFydX5GXE3graZUSzN0S2JGbBXM/LD+DLm9waAus=";
-      };
     }
     .${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
 
@@ -85,7 +80,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -25,10 +25,6 @@ let
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-arm/cli_mac_arm64.tar.gz";
       hash = "sha256-U/cwihF/cP5+7KSmkAToI5yOoYydguR5ZrKQMytpuCk=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-x64/cli_mac_x64.tar.gz";
-      hash = "sha256-A8YjMmFUiHKxdlR+OpOPQGKC+68z/83vtjw1yiJGt6g=";
-    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -12,10 +12,6 @@ let
       url = "https://web.archive.org/web/20231109221336id_/https://ftp.perforce.com/perforce/r23.1/bin.linux26x86_64/helix-core-server.tgz";
       sha256 = "b68c4907cf9258ab47102e8f0e489c11d528a8f614bfa45e3a2fa198639e2362";
     };
-    "x86_64-darwin" = fetchurl {
-      url = "https://web.archive.org/web/20231109221937id_/https://ftp.perforce.com/perforce/r23.1/bin.macosx1015x86_64/helix-core-server.tgz";
-      sha256 = "fcbf09787ffc29f7237839711447bf19a37ae18a8a7e19b2d30deb3715ae2c11";
-    };
   };
 in
 stdenv.mkDerivation {

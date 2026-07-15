@@ -12,7 +12,6 @@ let
 in
 {
   aarch64-darwin = any-darwin;
-  x86_64-darwin = any-darwin;
   x86_64-linux = {
     version = "2.11.3";
     src = fetchurl {

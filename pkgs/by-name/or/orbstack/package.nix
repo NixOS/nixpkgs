@@ -13,10 +13,6 @@ let
       arch = "arm64";
       hash = "sha256-W8FxnDyYfExgxlvp/dZbRzCZDhaX7Byxwz5rujG/krU=";
     };
-    x86_64-darwin = {
-      arch = "amd64";
-      hash = "sha256-8woVgREEpJT+IGaVsash/PruEuye+8uhKaADTrtoMZs=";
-    };
   };
   sources = lib.mapAttrs (
     system:
