@@ -106,6 +106,19 @@ Return t if the test passes.  Otherwise, return nil."
   with-packages-default-is-loaded
   with-packages-early-default-is-loaded-before-default)
 
+(defun with-packages-unwrapped-site-start-is-loaded-quietly ()
+  (and (with-packages-unwrapped-site-start-is-loaded)
+       (not (save-excursion
+              (with-current-buffer "*Messages*"
+                (goto-char (point-min))
+                (save-match-data
+                  (re-search-forward (rx line-start
+                                         "Loading"
+                                         (zero-or-more not-newline)
+                                         "site-start")
+                                     nil
+                                     t)))))))
+
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
@@ -123,6 +136,7 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
   with-packages-early-default-is-loaded
   with-packages-default-is-loaded
   with-packages-early-default-is-loaded-before-default
+  with-packages-unwrapped-site-start-is-loaded-quietly
   with-packages-no-jit-native-comp)
 
 (provide 'with-packages)
