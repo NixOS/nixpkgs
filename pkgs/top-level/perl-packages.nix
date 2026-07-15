@@ -38734,7 +38734,7 @@ with self;
     meta = {
       description = "Bindings allowing Xapian to be used from Perl";
       homepage = "https://xapian.org";
-      license = [ lib.licenses.gpl2Plus ];
+      license = lib.licenses.gpl2Plus;
     };
   };
 

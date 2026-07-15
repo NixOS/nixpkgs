@@ -243,7 +243,7 @@ lib.makeScope pkgs.newScope (
         broken = lib.versionOlder gimp.version "3";
         description = "Suite of gimp plugins for texture synthesis";
         homepage = "https://github.com/bootchk/resynthesizer";
-        license = [ lib.licenses.gpl3Plus ];
+        license = lib.licenses.gpl3Plus;
       };
     };
 

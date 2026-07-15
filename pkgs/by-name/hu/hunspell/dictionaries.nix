@@ -884,7 +884,7 @@ rec {
     meta = {
       description = "Hunspell dictionary for Russian, updated version as used in Mozilla products";
       homepage = "https://github.com/Goudron/ru-spelling-dictionary";
-      license = [ lib.licenses.mpl20 ];
+      license = lib.licenses.mpl20;
     };
   };
 
