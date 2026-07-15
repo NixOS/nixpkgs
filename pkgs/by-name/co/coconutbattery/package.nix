@@ -36,7 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

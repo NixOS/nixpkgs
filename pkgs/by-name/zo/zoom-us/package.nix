@@ -66,10 +66,6 @@ let
       name = "zoomusInstallerFull.pkg";
       hash = "sha256-HReyDktQ+EiHM857kgvzQD8tSHtSFYrAfv1YSTVFCLw=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-F7v+j4M6pQ3sIBW5rWoIQ0gdtgtTPlUiUe2ffcc5sd8=";
-    };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
       hash = "sha256-OxzJtNqV50C2kPonXylvyOL3/3ItChkpDw7KIOzDiPw=";

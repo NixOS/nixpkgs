@@ -30,10 +30,4 @@
     ext = "pkg";
     hash = "sha256-wfK9cV2Ul3LGmqTwerS1+BR0BuhmCFZdXtWykwJqWCM=";
   };
-  x86_64-darwin = {
-    os = "MacOSX";
-    name = "x86_64";
-    ext = "pkg";
-    hash = "sha256-4xgulHc4AtGr2CV1NIX02N0y75k5s9AXgX6jK6hXW9s=";
-  };
 }

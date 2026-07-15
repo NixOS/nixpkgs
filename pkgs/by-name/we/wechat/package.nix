@@ -19,7 +19,6 @@ let
     mainProgram = "wechat";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
@@ -43,7 +42,6 @@ let
     in
     {
       aarch64-darwin = any-darwin;
-      x86_64-darwin = any-darwin;
       # use https://web.archive.org/save to archive the Linux versions
       # add `if_` at the end of timestamps to avoid toolbar insertion
       # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine

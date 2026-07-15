@@ -24,7 +24,6 @@ let
     };
   sources = {
     "x86_64-linux" = fetchBinary "linux-x64";
-    "x86_64-darwin" = fetchBinary "osx-x64";
   };
 in
 stdenv.mkDerivation {

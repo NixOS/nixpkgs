@@ -40,7 +40,6 @@ let
     {
       x86_64-linux = "linux_x64";
       aarch64-linux = "linux_arm64";
-      x86_64-darwin = "darwin_x64";
       aarch64-darwin = "darwin_arm64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -211,7 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [ mistyttm ];

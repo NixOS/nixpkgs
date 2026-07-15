@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
     maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ ];
   };
 }
