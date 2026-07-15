@@ -1781,6 +1781,7 @@ let
     "PKbioanalysis"
     "PSCBS"
     "Patterns"
+    "PhIPData"
     "Quartet"
     "RKorAPClient"
     "R_cache"
@@ -1845,15 +1846,9 @@ let
 
   packagesToSkipCheck = [
     # keep-sorted start
-    "CTdata" # tries to connect to ExperimentHub
-    "MsDataHub" # tries to connect to ExperimentHub
-    "PhIPData" # tries to download something from a DB
     "ReactomeContentService4R" # tries to connect to Reactome
-    "Rmpi" # tries to run MPI processes
     "coMethDMR" # tries to connect to ExperimentHub
-    "data_table" # fails to rename shared library before check
     "multiMiR" # tries to connect to DB
-    "pbdMPI" # tries to run MPI processes
     "rfaRm" # tries to connect to Ebi
     "snapcount" # tries to connect to snaptron.cs.jhu.edu
     # keep-sorted end
