@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  llvmPackages,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,18 +21,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  # TODO: Remove once #536365 reaches this branch
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+  ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
       "-framework"
       "AppKit"
-    ];
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+    ]
+  );
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd topgrade \
