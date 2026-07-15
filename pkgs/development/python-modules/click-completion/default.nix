@@ -11,14 +11,17 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-completion";
   version = "0.5.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5bf816b81367e638a190b6e91b50779007d14301b3f9f3145d68e3cade7bce86";
+    pname = "click-completion";
+    inherit (finalAttrs) version;
+    hash = "sha256-W/gWuBNn5jihkLbpG1B3kAfRQwGz+fMUXWjjyt57zoY=";
   };
 
   build-system = [ setuptools ];
@@ -41,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbode ];
   };
-}
+})
