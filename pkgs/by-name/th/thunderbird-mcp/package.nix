@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thunderbird-mcp";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "TKasperczyk";
     repo = "thunderbird-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VIJUMMiJ2NCdMfxK4E/FAQ4P2ryS6KlxhPj749JH6sE=";
+    hash = "sha256-jrmHqToe+lJTpoG1QYaYHVk84PaO5zKAXLwr3Opl0A4=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildNpmPackage (finalAttrs: {
   forceEmptyCache = true;
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-6irpujYRk/OvoTA43CvtoaOmHvK4coMFXRfXhGrjFNk=";
+  npmDepsHash = "sha256-D0DAjK/u59rOKNf5kCu/OYkch+4lZYgdHkuib0sqtIw=";
 
   doCheck = true;
 
