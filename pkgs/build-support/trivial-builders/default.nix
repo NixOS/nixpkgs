@@ -82,8 +82,6 @@ rec {
         enableParallelBuilding = true;
         inherit buildCommand name;
         passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
-      }
-      // {
         ${if !derivationArgs ? meta then "pos" else null} =
           let
             args = builtins.attrNames derivationArgs;
