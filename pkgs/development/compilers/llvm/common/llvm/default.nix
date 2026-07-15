@@ -230,6 +230,10 @@ stdenv.mkDerivation (
         # segfaulting code. The patch was made to LLVM 23, but the tests have
         # many conflicts, so we vendor a version-specific modified version.
         #
+        # This should be backported to older LLVM versions as well, but this
+        # has not yet been done in order to ship the more important fixes
+        # quickly.
+        #
         # Rust issue: https://github.com/rust-lang/rust/issues/159035
         # LLVM issue: https://github.com/llvm/llvm-project/issues/208611
         # LLVM PR: https://github.com/llvm/llvm-project/pull/208683
