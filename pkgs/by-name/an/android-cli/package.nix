@@ -14,10 +14,6 @@ let
       url = "https://dl.google.com/android/cli/${version}/linux_x86_64/android-cli";
       hash = "sha256-TmwLwLKqnMCxWwtX8m50KflmisfeG3PjZsBs7z9vccU=";
     };
-    x86_64-darwin = {
-      url = "https://dl.google.com/android/cli/${version}/darwin_x86_64/android-cli";
-      hash = "sha256-ThBobULyevoKlp/22tdUqnBBccX6FbPDNrSwwuK4wnw=";
-    };
     aarch64-darwin = {
       url = "https://dl.google.com/android/cli/${version}/darwin_arm64/android-cli";
       hash = "sha256-E3PC0Ivf6MoYRQu56dSD/49LI8DJZhXL27/o6daH0Sg=";
@@ -75,7 +71,6 @@ stdenv.mkDerivation {
     teams = with teams; [ android ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "android";
