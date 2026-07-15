@@ -57,7 +57,11 @@ let
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang++
       '';
-      passthru.isClang = true;
+      passthru = {
+        isClang = true;
+        langC = true;
+        langCC = true;
+      };
     }
   );
 
@@ -296,6 +300,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     isClang = true;
+    langC = true;
+    langCC = true;
 
     inherit unified-runtime;
 
