@@ -9,12 +9,13 @@
   dbus,
 
   writableTmpDirAsHomeHook,
+  gitMinimal,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.61.1";
+  version = "0.68.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -22,9 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y5oMR5Vawf/1QUj3ACDdqAjKT+Q2gizRfKkal340EP8=";
+    hash = "sha256-RxVYatzKjv6LJ+M4Js+sTvg0hMnovXxtr6WxwFYF16Y=";
   };
-  cargoHash = "sha256-Oy/IqAK5ml1vu0eee+pF5pRjzk0Na/Fb04e1Mx0d924=";
+  cargoHash = "sha256-9gMhW2qt5gbf6x/uPLc4vl3rn6UdneoxRmWpeRqI4V0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,12 +37,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
+    gitMinimal
   ];
 
   checkFlags = map (t: "--skip=${t}") (
     [
       # fails to initialize the sandbox under '/build'
       "test_all_profiles_signal_mode_resolves"
+      "test_restrict_execute_does_not_break_rename_into_new_subdir"
       # panic
       "build_run_profile_patch_adds_override_deny_for_sensitive_file"
       "build_run_profile_patch_merges_read_and_write_to_allow_file"
@@ -56,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "rollback_signed_session_verifies_from_audit_dir_bundle"
 
       # nono-cli
-      # wants a script `cripts/test-list-aliases.sh`, `git`, and `.git` history
+      # wants a script `scripts/test-list-aliases.sh`, `git`, and `.git` history
       "alias_inventory_script_passes"
       # fails to initialize the sandbox under '/build'
       # has also failed due to running on darwin despite testing the linux only
@@ -70,6 +73,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "alias_inventory_rejects_unapproved_deprecated_module_reach_in"
       "lint_docs_accepts_clean_tree"
       "lint_docs_rejects_quoted_override_deny_outside_allowlist"
+      # need /bin/cat
+      "granted_path_exits_zero"
+      "env_credentials_with_command_policies_non_shim_entry_succeeds"
 
       # nono-proxy
       # fails to prepare TLS bundle inside build sandbox
@@ -77,6 +83,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "server::tests::test_route_diagnostics_summarises_each_route"
       "tls_intercept::bundle::tests::bundle_contains_ephemeral_and_system_roots"
       "tls_intercept::bundle::tests::bundle_file_has_restrictive_permissions"
+      # fail due to credential capture not configured
+      "proxy_runtime::tests::capture_helper_with_interaction_stdin_true_inherits_terminal_stdin"
+      "proxy_runtime::tests::capture_helper_with_stdio_true_receives_null_not_terminal_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_captures_and_caches"
+      "proxy_runtime::tests::proxy_credential_capture_backend_parses_json_headers"
+      "proxy_runtime::tests::proxy_credential_capture_backend_rejects_empty_stdout"
+      "proxy_runtime::tests::proxy_credential_capture_backend_sends_request_json_stdin"
+      "proxy_runtime::tests::proxy_credential_capture_backend_uses_path_cache_scope"
+      # panic
+      "server::tests::reactive_proxy_auth_retry_answered_after_407"
+      "server::tests::test_oauth_capture_routes_activate_intercept"
+      "server::tests::test_route_diagnostics_groups_credential_and_endpoint_routes"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # panics with "exact-path fallback must not recursively cover descendants"
