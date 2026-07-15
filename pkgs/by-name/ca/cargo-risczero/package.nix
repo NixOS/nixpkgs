@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cargo extension to help create, manage, and test RISC Zero projects";
     mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 })

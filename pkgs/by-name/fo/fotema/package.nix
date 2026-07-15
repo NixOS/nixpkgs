@@ -102,7 +102,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Photo gallery for Linux";
     homepage = "https://github.com/blissd/fotema";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "fotema";
