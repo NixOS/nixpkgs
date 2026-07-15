@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "davit";
-  version = "0.1.13";
+  version = "0.1.19";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/wouterdebie/davit/releases/download/v${finalAttrs.version}/Davit-${finalAttrs.version}.zip";
-    hash = "sha256-x3OjT+h/dB232gw8UW1iklrjNACEi22MtyJCU8eciks=";
+    hash = "sha256-XWij8/6/3TebhWBIleiec+xEZ6ma6Yvlnw5JeTJJ0HQ=";
   };
 
   sourceRoot = ".";
