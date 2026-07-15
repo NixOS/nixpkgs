@@ -27,6 +27,11 @@ let
     removePrefix
     ;
 
+  hasGitPrefix = hasPrefix "git+";
+  hasSparsePrefix = hasPrefix "sparse+";
+  hasRegistryPrefix = hasPrefix "registry+";
+  removeRegistryPrefix = removePrefix "registry+";
+
   # Parse a git source into different components.
   parseGit =
     src:
@@ -119,7 +124,7 @@ let
   depCrates = deepSeq gitShaOutputHash (map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
-  namesGitShas = listToAttrs (map nameGitSha (filter (pkg: hasPrefix "git+" pkg.source) depPackages));
+  namesGitShas = listToAttrs (map nameGitSha (filter (pkg: hasGitPrefix pkg.source) depPackages));
 
   # Convert the attrset provided through the `outputHashes` argument to a
   # a mapping from git commit SHA -> output hash.
@@ -173,11 +178,10 @@ let
     pkg:
     let
       gitParts = parseGit pkg.source;
-      registryIndexUrl = removePrefix "registry+" pkg.source;
+      registryIndexUrl = removeRegistryPrefix pkg.source;
     in
     if
-      (hasPrefix "registry+" pkg.source || hasPrefix "sparse+" pkg.source)
-      && hasAttr registryIndexUrl registries
+      (hasRegistryPrefix pkg.source || hasSparsePrefix pkg.source) && hasAttr registryIndexUrl registries
     then
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
