@@ -9107,6 +9107,12 @@
     githubId = 41450706;
     name = "fin-w";
   };
+  fiona = {
+    email = "mail@fiona.hamburg";
+    github = "Fiona42069";
+    githubId = 260108682;
+    name = "fiona";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
