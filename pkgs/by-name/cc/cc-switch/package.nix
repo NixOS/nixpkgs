@@ -124,7 +124,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/farion1231/cc-switch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "cc-switch";
-    maintainers = with lib.maintainers; [ imcvampire ];
+    maintainers = with lib.maintainers; [
+      imcvampire
+      kenis1108
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
