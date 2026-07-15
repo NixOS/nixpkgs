@@ -30,10 +30,11 @@ let
     set  -g history-limit   ${toString cfg.historyLimit}
 
     ${optionalString cfg.newSession ''
-      # Use -A to make new-session idempotent: attach if session "0" exists,
-      # otherwise create it. This prevents duplicate sessions when multiple
+      # Use -A to make new-session idempotent: attach if tmux
+      # is running and,there is an existing session, otherwise
+      # create one.  This prevents duplicate sessions when multiple
       # configs (e.g., system and user) both enable newSession.
-      new-session -A -s 0
+      new-session -A
     ''}
 
     ${optionalString cfg.reverseSplit ''
