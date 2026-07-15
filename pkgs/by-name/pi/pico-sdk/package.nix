@@ -50,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "tests.withSubmodules"
+      ];
+    };
     tests = {
       withSubmodules = pico-sdk.override { withSubmodules = true; };
     };
