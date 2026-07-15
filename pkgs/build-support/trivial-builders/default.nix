@@ -106,6 +106,14 @@ rec {
     ];
 
     extendDrvArgs =
+      let
+        defaultPassAsFile = [ "text" ];
+        removedDerivationNames = [
+          "passAsFile"
+          "meta"
+          "passthru"
+        ];
+      in
       finalAttrs:
       {
         name,
@@ -140,7 +148,7 @@ rec {
               Ensure that the path starts with a / and specifies at least the filename.
             '';
           destination;
-        passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
+        passAsFile = defaultPassAsFile ++ derivationArgs.passAsFile or [ ];
 
         buildCommand = ''
           target=$out$destination
@@ -171,11 +179,7 @@ rec {
           // derivationArgs.meta or { };
         passthru = passthru // derivationArgs.passthru or { };
       }
-      // removeAttrs derivationArgs [
-        "passAsFile"
-        "meta"
-        "passthru"
-      ];
+      // removeAttrs derivationArgs removedDerivationNames;
 
     # `writeTextFile`'s set pattern doesn't have ellipses.
     inheritFunctionArgs = false;
