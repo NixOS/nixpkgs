@@ -42,14 +42,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.4.7.1";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
-    tag = "${finalAttrs.version}+win";
-    hash = "sha256-/X2Xp1ZnPLTZc1Hf4Kp6R/+mezU6qoUhaT9OskYlnOY=";
+    tag = finalAttrs.version;
+    hash = "sha256-3/HQNizXLjeQpCdEK14LMflyNUKF1BI8eli3BGxiH40=";
   };
 
   pyproject = true;
@@ -59,11 +59,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     adwaita-icon-theme
     gtksourceview5
     glib-networking
+    gstreamer
+    gst-plugins-base
   ]
   ++ lib.optionals enableJingle [
     farstream
-    gstreamer
-    gst-plugins-base
     gst-libav
     gst-plugins-good
     libnice
