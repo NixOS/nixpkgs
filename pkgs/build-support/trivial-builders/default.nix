@@ -538,6 +538,19 @@ rec {
     ];
 
     extendDrvArgs =
+      let
+        mapPaths =
+          f:
+          map (
+            path:
+            if path == null then
+              null
+            else if isList path then
+              mapPaths f path
+            else
+              f path
+          );
+      in
       finalAttrs:
       args@{
         name ?
@@ -560,19 +573,6 @@ rec {
 
           Ensure that the path starts with / and specifies path to the subdirectory.
         '';
-      let
-        mapPaths =
-          f:
-          map (
-            path:
-            if path == null then
-              null
-            else if isList path then
-              mapPaths f path
-            else
-              f path
-          );
-      in
       {
         enableParallelBuilding = true;
         inherit name allowSubstitutes preferLocalBuild;
