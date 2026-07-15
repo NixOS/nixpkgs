@@ -432,6 +432,7 @@ let
       pkg-config
       which
     ];
+    JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
     ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
@@ -444,6 +445,7 @@ let
     RDieHarder = [ pkgs.gsl ]; # for gsl-config
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
+    RKHSMetaMod = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     RMariaDB = [ pkgs.libmysqlclient ]; # for mysql_config
     RMySQL = [ pkgs.libmysqlclient ]; # for mysql_config
     RNetCDF = [ pkgs.pkg-config ];
@@ -614,6 +616,7 @@ let
     diversitree = [ pkgs.gsl ]; # for gsl-config
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
+    econetwork = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     enderecobr = with pkgs; [
       cargo
       rustc
@@ -669,10 +672,7 @@ let
       rustc
     ];
     git2r = [ pkgs.pkg-config ];
-    glpkAPI = with pkgs; [
-      gmp
-      glpk
-    ];
+    glpkAPI = [ pkgs.glpk ]; # detects prefix from glpsol binary
     gsl = [ pkgs.gsl ]; # for gsl-config
     gslnls = [ pkgs.gsl ]; # for gsl-config
     h3o = with pkgs; [
@@ -779,6 +779,7 @@ let
       cargo
       rustc
     ];
+    rcontroll = [ pkgs.gsl ]; # for gsl-config
     redux = [ pkgs.pkg-config ];
     reprex = [ pkgs.which ];
     resultant = [ pkgs.pkg-config ];
@@ -786,7 +787,11 @@ let
     rgeos = [ pkgs.geos ]; # for geos-config
     ridge = [ pkgs.gsl ]; # for gsl-config
     rjags = [ pkgs.pkg-config ];
-    rlas = [ pkgs.pkg-config ];
+    rlas = with pkgs; [
+      pkg-config
+      gdal # for gdal-config
+      geos # for geos-config
+    ];
     rmatio = [ pkgs.pkg-config ];
     rnetcarto = [ pkgs.gsl ]; # for gsl-config
     roxigraph = with pkgs; [
@@ -980,7 +985,6 @@ let
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
-    JMcmprsk = [ pkgs.gsl ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
     LOMAR = [ pkgs.gmp ];
@@ -1262,6 +1266,7 @@ let
     gfilogisreg = [ pkgs.gmp.dev ];
     ggiraph = [ pkgs.libpng ];
     git2r = [ pkgs.libgit2 ];
+    glpkAPI = [ pkgs.gmp ];
     gmapR = [ pkgs.zlib ];
     gmp = [ pkgs.gmp ];
     gpg = [ pkgs.gpgme ];
@@ -1462,7 +1467,6 @@ let
     rawrr = [ pkgs.mono ];
     rbedrock = [ pkgs.zlib ];
     rcdd = [ pkgs.gmp ];
-    rcontroll = [ pkgs.gsl.dev ];
     redux = [ pkgs.hiredis ];
     registr = with pkgs; [
       icu.dev
@@ -1491,11 +1495,8 @@ let
     ridge = [ pkgs.gsl ];
     rjags = [ pkgs.jags ];
     rlas = with pkgs; [
-      boost
-      gdal
       proj
       sqlite
-      geos
     ];
     rmatio = [ pkgs.zlib ];
     rmumps = with pkgs; [ zlib.dev ];
