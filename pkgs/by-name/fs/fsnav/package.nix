@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
     freetype
     libpng
     libjpeg
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libGLU
     freeglut
-  ];
+  ]);
 
   preBuild = ''
     makeFlagsArray+=(
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aaravrav ];
     mainProgram = "fsnav";
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 
