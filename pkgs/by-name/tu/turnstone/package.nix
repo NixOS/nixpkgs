@@ -1,14 +1,15 @@
-{ lib
-, python3Packages
-, fetchPypi
-, nixosTests
-,
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "turnstone";
   version = "1.7.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -75,7 +76,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/turnstonelabs/turnstone";
     license = lib.licenses.asl20;
     mainProgram = "turnstone-server";
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ timvherpen ];
   };
 }
