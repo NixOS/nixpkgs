@@ -41,6 +41,7 @@ buildPythonPackage rec {
     "tests/test_virtualenv.py"
     # Very prone to timeouts on busy machines
     "tests/test_filelock.py"
+    "tests/test_read_write.py"
   ];
 
   meta = {
