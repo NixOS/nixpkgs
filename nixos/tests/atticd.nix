@@ -26,6 +26,18 @@ in
       ];
     };
 
+    postgres = {
+      services.atticd = {
+        enable = true;
+        inherit environmentFile;
+        database.createLocally = true;
+      };
+
+      environment.systemPackages = [
+        pkgs.attic-client
+      ];
+    };
+
     s3 = {
       services.atticd = {
         enable = true;
@@ -79,6 +91,23 @@ in
           local.succeed(f"attic login local http://localhost:8080 {token}")
           local.succeed("attic cache create test-cache")
           local.succeed("attic push test-cache ${environmentFile}")
+
+      with subtest("PostgreSQL metadata survives a restart"):
+          postgres.wait_for_unit("postgresql.service")
+          postgres.wait_for_unit("atticd.service")
+          postgres.succeed(
+              "test \"$(sudo -u postgres psql -tAc \"select datdba::regrole::text from pg_database where datname = 'atticd'\")\" = atticd",
+              "test \"$(sudo -u postgres psql -tAc \"select count(*) from pg_tables where schemaname not in ('pg_catalog', 'information_schema')\" atticd)\" -gt 0",
+              "test ! -e /var/lib/atticd/server.db",
+          )
+
+          token = postgres.succeed("atticd-atticadm make-token --sub stop --validity 1y --create-cache '*' --pull '*' --push '*' --delete '*' --configure-cache '*' --configure-cache-retention '*'").strip()
+          postgres.succeed(f"attic login postgres http://localhost:8080 {token}")
+          postgres.succeed("attic cache create test-cache")
+          postgres.succeed("attic push test-cache ${environmentFile}")
+          postgres.succeed("systemctl restart atticd.service")
+          postgres.wait_for_unit("atticd.service")
+          postgres.succeed("attic cache info test-cache")
 
       with subtest("s3 storage push"):
           s3.wait_for_unit("garage.service")
