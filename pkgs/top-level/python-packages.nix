@@ -5900,6 +5900,8 @@ self: super: with self; {
 
   fasttext = callPackage ../development/python-modules/fasttext { };
 
+  fasttransform = callPackage ../development/python-modules/fasttransform { };
+
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
@@ -13402,6 +13404,8 @@ self: super: with self; {
   plugp100 = callPackage ../development/python-modules/plugp100 { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
+
+  plum-dispatch = callPackage ../development/python-modules/plum-dispatch { };
 
   plum-py = callPackage ../development/python-modules/plum-py { };
 
