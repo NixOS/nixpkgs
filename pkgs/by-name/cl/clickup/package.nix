@@ -56,35 +56,38 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "update-clickup";
-    runtimeInputs = [
-      curl
-      common-updater-scripts
-    ];
-    text = ''
-      upstream_version="$(curl --silent --location --range 0-0 --dump-header - --output /dev/null https://desktop.clickup.com/linux | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
+  passthru = {
+    packageSource = src;
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-clickup";
+      runtimeInputs = [
+        curl
+        common-updater-scripts
+      ];
+      text = ''
+        upstream_version="$(curl --silent --location --range 0-0 --dump-header - --output /dev/null https://desktop.clickup.com/linux | grep --only-matching --extended-regexp '[0-9]+\.[0-9]+\.[0-9]+')"
 
-      current_version="$(nix-instantiate --eval --strict -A clickup.version | tr -d '"')"
+        current_version="$(nix-instantiate --eval --strict -A clickup.version | tr -d '"')"
 
-      if [[ "$current_version" = "$upstream_version" ]]; then
-        echo "clickup is already up-to-date at $current_version"
-        exit 0
-      fi
+        if [[ "$current_version" = "$upstream_version" ]]; then
+          echo "clickup is already up-to-date at $current_version"
+          exit 0
+        fi
 
-      echo "Updating clickup from $current_version to $upstream_version"
+        echo "Updating clickup from $current_version to $upstream_version"
 
-      echo "Saving new version to archive.org..."
-      archived_url="$(curl --silent --max-time 600 --output /dev/null --dump-header - "https://web.archive.org/save/https://desktop.clickup.com/linux" | grep --ignore-case '^location:' | tr -d '\r' | cut -d' ' -f2)"
+        echo "Saving new version to archive.org..."
+        archived_url="$(curl --silent --max-time 600 --output /dev/null --dump-header - "https://web.archive.org/save/https://desktop.clickup.com/linux" | grep --ignore-case '^location:' | tr -d '\r' | cut -d' ' -f2)"
 
-      if [[ -z "$archived_url" || "$archived_url" != *"web.archive.org/web/"* ]]; then
-        echo "error: failed to archive URL on archive.org" >&2
-        exit 1
-      fi
+        if [[ -z "$archived_url" || "$archived_url" != *"web.archive.org/web/"* ]]; then
+          echo "error: failed to archive URL on archive.org" >&2
+          exit 1
+        fi
 
-      update-source-version clickup "$upstream_version" "" "$archived_url"
-    '';
-  });
+        update-source-version --source-key=passthru.packageSource clickup "$upstream_version" "" "$archived_url"
+      '';
+    });
+  };
 
   meta = {
     description = "All in one project management solution";
