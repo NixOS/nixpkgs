@@ -59,6 +59,7 @@
   aacgain,
   beautifulsoup4,
   chromaprint,
+  dbus-python,
   discogs-client,
   ffmpeg,
   flac,
@@ -363,7 +364,10 @@ buildPythonPackage (finalAttrs: {
         mbsubmit = { };
         mbsync = { };
         mbpseudo = { };
-        metasync.testPaths = [ ];
+        metasync = {
+          propagatedBuildInputs = [ dbus-python ];
+          testPaths = [ ];
+        };
         missing.testPaths = [ ];
         mpdstats.propagatedBuildInputs = [ mpd2 ];
         mpdupdate = {
@@ -405,7 +409,7 @@ buildPythonPackage (finalAttrs: {
         substitute = {
           testPaths = [ ];
         };
-        tidal = { };
+        tidal.propagatedBuildInputs = [ requests-oauthlib ];
         the = { };
         titlecase.propagatedBuildInputs = [ titlecase ];
         thumbnails = {
