@@ -13,6 +13,8 @@
   setuptools,
   unidiff,
   writableTmpDirAsHomeHook,
+  withGibberish ? true,
+  withWordList ? true,
 }:
 
 buildPythonPackage rec {
@@ -31,11 +33,20 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    gibberish-detector
     pyyaml
-    pyahocorasick
     requests
-  ];
+  ]
+  ++ lib.optionals withGibberish optional-dependencies.gibberish
+  ++ lib.optionals withWordList optional-dependencies.word_list;
+
+  optional-dependencies = {
+    gibberish = [
+      gibberish-detector
+    ];
+    word_list = [
+      pyahocorasick
+    ];
+  };
 
   nativeCheckInputs = [
     mock
