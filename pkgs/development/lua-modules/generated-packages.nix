@@ -471,15 +471,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "compat53";
-      version = "0.15.0-1";
+      version = "0.15.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/compat53-0.15.0-1.rockspec";
-          sha256 = "0389ghggjdbfxxa6nrb7364z55dmb832qyb8v4474nzcws0b0aqf";
+          url = "mirror://luarocks/compat53-0.15.1-1.rockspec";
+          sha256 = "0x2vpfvsb6qqybx42aawa1mvnzlhlndy9z99g1707lixd4849fkl";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.15.0.zip";
-        sha256 = "164hcigjz7my1zlgccdbvsld89bvz6y16v82rjc8n2qa8ah5j45d";
+        url = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.15.1.zip";
+        sha256 = "03gfs74lj58qd9mrd9y0bz5f6mq9qd8my5bb2xg5lx6wvagdlvim";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
