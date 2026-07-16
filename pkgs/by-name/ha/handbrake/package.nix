@@ -88,23 +88,18 @@
 }:
 
 let
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "HandBrake";
       repo = "HandBrake";
       # uses version commit for logic in version.txt
-      rev = "4ce99a885cde39b3511016efdb5124726819defb";
-      hash = "sha256-oWXNiRK0wbmINnjM3GrOIawcSULTuy3yANfgW8li9F0=";
+      rev = "9eb6c936803e8b071035b1a77662cb0db58441ea";
+      hash = "sha256-f4kBFeW1yVFLlXGAimWsZx+9PKlgR6xrXUZG+CBh28A=";
     };
 
     patches = [
-      # Only needed so the subsequent patch applies
-      (fetchpatch2 {
-        url = "https://github.com/HandBrake/HandBrake/commit/c8e16778a330881af36fa32004f887bd73874d15.patch";
-        hash = "sha256-i3/X9opDzsZIO7bjLHHZltuQH93uENRF0t7FP7DDdBM=";
-      })
       # Update x265 submodule to v4.2, drop in next release
       (fetchpatch2 {
         url = "https://github.com/HandBrake/HandBrake/commit/432514bf839e7280511e4a7afc35fb4868ef4d0b.patch";
@@ -115,6 +110,14 @@ let
           "contrib/x265_12bit/module.defs"
         ];
         hash = "sha256-xwIY1pO9mKbrQFjQCENuvntIoiZTHeUVg8axrl3zxxo=";
+      })
+      # Update ffmpeg to v8.1.2, drop if backported
+      (fetchpatch2 {
+        url = "https://github.com/HandBrake/HandBrake/commit/02b704c5cf2e73d227fbb5be151501b232b0e5f2.patch?full_index=1";
+        excludes = [
+          "contrib/ffmpeg/module.defs"
+        ];
+        hash = "sha256-fSfLXH+aRwVv9BrDT1oNBHD2VUbAnN3jVu3CJeoaAKg=";
       })
     ];
   };
@@ -150,6 +153,7 @@ let
       "${src}/contrib/ffmpeg/A22-fix-d3d11-static-pool-size-error.patch"
       "${src}/contrib/ffmpeg/A23-movenc-set-the-chapters-track-language-to-the-same-a.patch"
       "${src}/contrib/ffmpeg/A24-movenc-use-version-2-audio-descriptor-for-2-channels.patch"
+      "${src}/contrib/ffmpeg/A26-avformat-movenc-fix-mov_create_dvd_sub_decoder_speci.patch"
     ];
   });
 
@@ -173,12 +177,12 @@ let
   });
 
   svt-av1-hb = svt-av1.overrideAttrs (old: rec {
-    version = "4.0.1";
+    version = "4.1.0";
     src = fetchFromGitLab {
       owner = "AOMediaCodec";
       repo = "SVT-AV1";
-      rev = "v${version}";
-      hash = "sha256-7krVkLZxgolqPTkuyKAx07BekAPacftcGZ44lQTQFZQ=";
+      tag = "v${version}";
+      hash = "sha256-NPJG1SsRlG9kGtUwdJa/uP6DAtF09nCctzeorrvjAhQ=";
     };
     postPatch = (old.postPatch or "") + ''
       pushd ..
