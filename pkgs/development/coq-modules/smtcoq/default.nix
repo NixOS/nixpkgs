@@ -43,36 +43,12 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.version [
-      {
-        case = isEq "8.19";
-        out = "SMTCoq-2.2+8.19";
-      }
-      {
-        case = isEq "8.18";
-        out = "SMTCoq-2.2+8.18";
-      }
-      {
-        case = isEq "8.17";
-        out = "SMTCoq-2.2+8.17";
-      }
-      {
-        case = isEq "8.16";
-        out = "SMTCoq-2.2+8.16";
-      }
-      {
-        case = isEq "8.15";
-        out = "SMTCoq-2.2+8.15";
-      }
-      {
-        case = isEq "8.14";
-        out = "SMTCoq-2.2+8.14";
-      }
-      {
-        case = isEq "8.13";
-        out = "SMTCoq-2.2+8.13";
-      }
+    lib.switch coq.coq-version [
+      (case (range "8.13" "8.19") "SMTCoq-2.2+${coq.coq-version}")
     ] null;
 
   propagatedBuildInputs = [
