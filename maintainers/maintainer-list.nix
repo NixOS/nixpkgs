@@ -25998,6 +25998,12 @@
     github = "silicalet";
     githubId = 188071249;
   };
+  siliconwitch = {
+    name = "Raj Nakarja";
+    email = "raj@siliconwitchery.com";
+    github = "siliconwitch";
+    githubId = 7815190;
+  };
   silky = {
     name = "Noon van der Silk";
     email = "noonsilk+nixpkgs@gmail.com";
