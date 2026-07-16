@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "general-sam";
-  version = "1.0.3";
+  version = "1.0.4.post0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ModelTC";
     repo = "general-sam-py";
     rev = "v${version}";
-    hash = "sha256-++6Z9Ocee4QFN1u0nK/g9uGdmB1UYnfHhhJj74zboCE=";
+    hash = "sha256-bpJL6kpcpMWNNUOSLUnRLsAi7yp3fl0WKzvfXiGwYeE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-8HHIM1Abz5KxnVphFFNJp6L3D6iPeoB7qVmxy11CUZs=";
+    hash = "sha256-kmc1sGlSTQHdLaW7fDk0AmkEDmttEEljVEsc6inLRuw=";
   };
 
   build-system = [
