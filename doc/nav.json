@@ -628,8 +628,11 @@
           "file": "functions.md"
         },
         {
-          "id-prefix": "auto-generated",
           "file": "functions/library.md"
+        },
+        {
+          "collection": "lib-functions.json",
+          "type": "nixdoc"
         },
         {
           "file": "functions/generators.section.md"

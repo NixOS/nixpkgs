@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "groups": [
+    { "id": "asserts", "description": "assertion functions" },
+    { "id": "attrsets", "description": "attribute set functions" },
+    { "id": "strings", "description": "string manipulation functions" },
+    { "id": "versions", "description": "version string functions" },
+    { "id": "trivial", "description": "miscellaneous functions" },
+    { "id": "fixedPoints", "description": "explicit recursion functions" },
+    { "id": "lists", "description": "list manipulation functions" },
+    { "id": "debug", "description": "debugging functions" },
+    { "id": "options", "description": "NixOS / nixpkgs option handling" },
+    { "id": "path", "description": "path functions" },
+    {
+      "id": "fetchers",
+      "description": "functions which can be reused across fetchers"
+    },
+    { "id": "filesystem", "description": "filesystem functions" },
+    { "id": "fileset" },
+    { "id": "sources", "description": "source filtering functions" },
+    { "id": "cli", "description": "command-line serialization functions" },
+    {
+      "id": "generators",
+      "description": "functions that create file formats from nix data structures"
+    },
+    {
+      "id": "gvariant",
+      "description": "GVariant formatted string serialization functions"
+    },
+    {
+      "id": "customisation",
+      "description": "Functions to customise (derivation-related) functions, derivations, or attribute sets"
+    },
+    { "id": "meta", "description": "functions for derivation metadata" },
+    {
+      "id": "derivations",
+      "description": "miscellaneous derivation-specific functions"
+    }
+  ],
+  "sources": [
+    { "path": "lib.trivial", "file": "lib/trivial.nix", "groups": ["trivial"] },
+    {
+      "path": "lib.fixedPoints",
+      "file": "lib/fixed-points.nix",
+      "groups": ["fixedPoints"]
+    },
+    {
+      "path": "lib.attrsets",
+      "file": "lib/attrsets.nix",
+      "groups": ["attrsets"]
+    },
+    { "path": "lib.lists", "file": "lib/lists.nix", "groups": ["lists"] },
+    { "path": "lib.strings", "file": "lib/strings.nix", "groups": ["strings"] },
+    {
+      "path": "lib.customisation",
+      "file": "lib/customisation.nix",
+      "groups": ["customisation"]
+    },
+    {
+      "path": "lib.derivations",
+      "file": "lib/derivations.nix",
+      "groups": ["derivations"]
+    },
+    { "path": "lib.meta", "file": "lib/meta.nix", "groups": ["meta"] },
+    {
+      "path": "lib.versions",
+      "file": "lib/versions.nix",
+      "groups": ["versions"]
+    },
+    { "path": "lib.cli", "file": "lib/cli.nix", "groups": ["cli"] },
+    {
+      "path": "lib.gvariant",
+      "file": "lib/gvariant.nix",
+      "groups": ["gvariant"]
+    },
+    {
+      "path": "lib.generators",
+      "file": "lib/generators.nix",
+      "groups": ["generators"]
+    },
+    { "path": "lib.asserts", "file": "lib/asserts.nix", "groups": ["asserts"] },
+    { "path": "lib.debug", "file": "lib/debug.nix", "groups": ["debug"] },
+    {
+      "path": "lib.fetchers",
+      "file": "lib/fetchers.nix",
+      "groups": ["fetchers"]
+    },
+    { "path": "lib.path", "file": "lib/path/default.nix", "groups": ["path"] },
+    {
+      "path": "lib.filesystem",
+      "file": "lib/filesystem.nix",
+      "groups": ["filesystem"]
+    },
+    {
+      "path": "lib.fileset",
+      "file": "lib/fileset/default.nix",
+      "groups": ["fileset"]
+    },
+    {
+      "path": "lib.sources",
+      "file": "lib/sources.nix",
+      "groups": ["sources"],
+      "mode": "deep",
+      "include": [
+        "pathIsGitRepo",
+        "commitIdFromGitRepo",
+        "cleanSource",
+        "cleanSourceWith",
+        "cleanSourceFilter",
+        "pathHasContext",
+        "canCleanSource",
+        "urlToName",
+        "shortRev",
+        "revOrTag",
+        "repoRevToName",
+        "sourceByRegex",
+        "sourceFilesBySuffices",
+        "sourceByGlobs",
+        "trace"
+      ]
+    },
+    { "path": "lib.options", "file": "lib/options.nix", "groups": ["options"] }
+  ]
+}
