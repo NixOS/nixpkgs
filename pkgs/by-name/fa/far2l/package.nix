@@ -58,6 +58,8 @@
   withMTP ? true,
   libmtp,
   libusb1,
+  withGitGutter ? true,
+  git,
   withArclite ? true, # Archive support with custom 7z plugin
   _7zz, # 7zip plugin (only used if withArclite is true)
   withAlign ? true, # Align plugin
@@ -149,6 +151,8 @@ stdenv.mkDerivation rec {
     ]
     # ADB plugin
     ++ lib.optional withADB android-tools
+    #  GitGutter plugin
+    ++ lib.optional withGitGutter git
     #  MTP plugin
     ++ lib.optionals withMTP [
       libmtp
@@ -194,6 +198,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "IMAGEVIEWER" withImageViewer)
     (lib.cmakeBool "ADB" withADB)
     (lib.cmakeBool "MTP" withMTP)
+    (lib.cmakeBool "GITGUTTER" withGitGutter)
     (lib.cmakeBool "PYTHON" withPython)
     (lib.cmakeBool "ARCLITE" withArclite)
 
@@ -219,6 +224,8 @@ stdenv.mkDerivation rec {
     bzip2
     gnutar
   ]
+  # Git for GitGutter plugin
+  ++ lib.optional withGitGutter git
   # Tools for ADB plugin
   ++ lib.optional withADB android-tools;
 
