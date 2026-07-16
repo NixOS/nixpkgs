@@ -10,21 +10,21 @@
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "9.1.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "tag-expressions";
     tag = "v${version}";
-    hash = "sha256-jkuez7C3YDGmv484Lmc5PszVbnVXkcC12RryvTJkxxg=";
+    hash = "sha256-GXgFACoes5g8E+I24tYuI3KVzFhZaFB3Gr4TJXKBpQs=";
   };
 
   sourceRoot = "${src.name}/python";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.10.0,<0.11.0" uv_build
+      --replace-fail "uv_build>=0.11.0,<0.12.0" uv_build
   '';
 
   build-system = [
