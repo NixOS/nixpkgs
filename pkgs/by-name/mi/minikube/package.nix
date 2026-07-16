@@ -9,6 +9,8 @@
   libvirt,
   withQemu ? false,
   qemu,
+  withVfkit ? false,
+  vfkit,
   makeWrapper,
   writableTmpDirAsHomeHook,
   OVMF,
@@ -74,7 +76,9 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false \
       --prefix PATH : ${
         lib.makeBinPath (
-          lib.optionals withQemu [ qemu ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
+          lib.optionals withQemu [ qemu ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
+          ++ lib.optionals (withVfkit && stdenv.hostPlatform.isDarwin) [ vfkit ]
         )
       } \
       ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${
