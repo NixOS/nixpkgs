@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  click,
   numpy,
   setuptools,
   pyparsing,
@@ -26,17 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  patches = [
-    # Use non-strict xfail for failing tests
-    # https://github.com/mapbox/snuggs/pull/28
-    (fetchpatch {
-      url = "https://github.com/sebastic/snuggs/commit/3b8e04a35ed33a7dd89f0194542b22c7bde867f4.patch";
-      hash = "sha256-SfW4l4BH94rPdskRVHEsZM0twmlV9IPftRU/BBZsjBU=";
-    })
-  ];
-
   dependencies = [
-    click
     numpy
     pyparsing
   ];
