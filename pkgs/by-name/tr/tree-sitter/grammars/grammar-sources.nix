@@ -3109,9 +3109,9 @@
   };
 
   wit = {
-    version = "1.3.0";
+    version = "1.4.0";
     url = "github:bytecodealliance/tree-sitter-wit";
-    hash = "sha256-FG73R38Bw60+aT5YB/xpENCnQwoGMVjXRLjP1GdJEn4=";
+    hash = "sha256-63xH63s6lgticgRtMz7LCL1ThuXegn7qFCZgeQqIZH4=";
     # Fails strict schema validation due to Neovim ecosystem extensions
     excludeBrokenTreeSitterJson = true;
     meta = {
