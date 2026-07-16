@@ -207,6 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       bjornfor
       raskin
+      xoconoch
     ];
     mainProgram = "openscad";
   };
