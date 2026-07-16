@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomelcloudhome";
-  version = "0.1.9";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "aiomelcloudhome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aYaV7+Lj7LShO0HqoUjSFAMTOHY5piMdSACOVizGgco=";
+    hash = "sha256-OmeKkxx9/+3QYWMlv5fLplSVEOW3fPYurgBoqle8OFI=";
   };
 
   build-system = [ hatchling ];
