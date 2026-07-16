@@ -28,10 +28,9 @@ appimage_hash=$(manifest_hash '.x86_64.AppImage' "$linux_manifest")
 dmg_hash=$(manifest_hash '-latest.dmg' "$mac_manifest")
 arm64_dmg_hash=$(manifest_hash '-arm64.dmg' "$mac_manifest")
 
-# The three platforms share one version but have distinct hashes. --system picks
+# The two platforms share one version but have distinct hashes. --system picks
 # which source (and therefore which hash) update-source-version rewrites; passing
 # the hash explicitly avoids a download. The version is written on the first call,
 # so the darwin calls need --ignore-same-version to not early-exit as "unchanged".
 update-source-version lens "$version" "$appimage_hash" --system=x86_64-linux
-update-source-version lens "$version" "$dmg_hash" --system=x86_64-darwin --ignore-same-version
 update-source-version lens "$version" "$arm64_dmg_hash" --system=aarch64-darwin --ignore-same-version

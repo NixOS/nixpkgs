@@ -21,13 +21,7 @@ let
       "s390x"
     else
       throw "Unsupported arch: ${stdenv.hostPlatform.system}";
-  platform =
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      "macos_arm64"
-    else if stdenv.hostPlatform.isDarwin then
-      "macos"
-    else
-      "linux_${arch}";
+  platform = if stdenv.hostPlatform.isDarwin then "macos_arm64" else "linux_${arch}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibmcloud-cli";

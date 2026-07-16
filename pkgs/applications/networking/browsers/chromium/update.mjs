@@ -170,7 +170,6 @@ async function fetch_chromedriver_binaries(version) {
   const url = (platform) => `https://storage.googleapis.com/chrome-for-testing-public/${version}/${platform}/chromedriver-${platform}.zip`
   return {
     version,
-    hash_darwin: await prefetch(url('mac-x64')),
     hash_darwin_aarch64: await prefetch(url('mac-arm64')),
   }
 }

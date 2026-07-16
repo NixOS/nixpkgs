@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhelty";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ebaschiera";
     repo = "pyhelty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w7RbTXab6CPQ4yispLa8t/wcx0bZQ1rXiXPhpqVH17k=";
+    hash = "sha256-mNUiVly29UIrD4woLY7IX45Ts5VXNmZw9toJ4zb39Jw=";
   };
 
   build-system = [ hatchling ];
