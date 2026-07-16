@@ -50,6 +50,6 @@ python3Packages.buildPythonPackage {
     homepage = "https://github.com/aws/mcp-proxy-for-aws";
     license = lib.licenses.asl20;
     mainProgram = "mcp-proxy-for-aws";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ loganphinney ];
   };
 }
