@@ -6,25 +6,25 @@
 
 buildGoModule (finalAttrs: {
   pname = "cnspec";
-  version = "13.28.0";
+  version = "13.29.2";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9AlHvxWdmJIdfvmok9n+6g0k5A4Rts2+G5pO9xbYWSQ=";
+    hash = "sha256-Y/yc2GsQ7yRzKVMblsWlY9Emct9BBa9WmqY2zBiaAsQ=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-LTzg76RQOV0d3Xk4Q8NvBnmTQv4QhJutNoJPw0gCCII=";
+  vendorHash = "sha256-c1EvqdU7xNnihRzX+BhGC2Q644qZOwsu1FKa4KNJbHU=";
 
   subPackages = [ "apps/cnspec" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=go.mondoo.com/cnspec.Version=${finalAttrs.version}"
+    "-X=go.mondoo.com/cnspec/v${(lib.versions.major finalAttrs.version)}.Version=${finalAttrs.version}"
   ];
 
   meta = {
