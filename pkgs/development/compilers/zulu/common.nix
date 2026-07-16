@@ -32,16 +32,14 @@
   ffmpeg,
 }:
 let
-  dist =
-    dists.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  dist = dists.${stdenv.hostPlatform.system} or (builtins.head (builtins.attrValues dists));
 
   arch =
     {
       "aarch64" = "aarch64";
       "x86_64" = "x64";
     }
-    .${stdenv.hostPlatform.parsed.cpu.name}
-      or (throw "Unsupported architecture: ${stdenv.hostPlatform.parsed.cpu.name}");
+    .${stdenv.hostPlatform.parsed.cpu.name} or "unsupported";
 
   platform =
     {
