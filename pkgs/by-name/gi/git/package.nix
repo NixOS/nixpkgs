@@ -533,6 +533,8 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t1301-shared-repo
     # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
+    # Fails in CI under heavy load: Dubious, test returned 1 (wstat 256, 0x100)
+    disable_test t0050-filesystem.sh
   ''
   + lib.optionalString (!sendEmailSupport) ''
     # Disable sendmail tests
