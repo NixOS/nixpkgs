@@ -1,0 +1,85 @@
+diff --git a/usr.sbin/smtpd/smtpd.c b/usr.sbin/smtpd/smtpd.c
+index 2365b1ee..b1b6bcec 100644
+--- a/usr.sbin/smtpd/smtpd.c
++++ b/usr.sbin/smtpd/smtpd.c
+@@ -1224,6 +1224,7 @@ fork_proc_backend(const char *key, const char *conf, const char *procname,
+ 	char		path[PATH_MAX];
+ 	char		name[PATH_MAX];
+ 	char		*arg;
++	char		*proc_path;
+ 
+ 	if (strlcpy(name, conf, sizeof(name)) >= sizeof(name)) {
+ 		log_warnx("warn: %s-proc: conf too long", key);
+@@ -1234,7 +1235,12 @@ fork_proc_backend(const char *key, const char *conf, const char *procname,
+ 	if (arg)
+ 		*arg++ = '\0';
+ 
+-	if (snprintf(path, sizeof(path), PATH_LIBEXEC "/%s-%s", key, name) >=
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
++
++	if (snprintf(path, sizeof(path), "%s/%s-%s", proc_path, key, name) >=
+ 	    (ssize_t)sizeof(path)) {
+ 		log_warn("warn: %s-proc: exec path too long", key);
+ 		return (-1);
+@@ -1387,6 +1393,7 @@ fork_filter_process(const char *name, const char *command, const char *user, con
+ 	int		 sp[2], errfd[2];
+ 	struct passwd	*pw;
+ 	struct group	*gr;
++	char		*proc_path;
+ 	char		 exec[_POSIX_ARG_MAX];
+ 	int		 execr;
+ 
+@@ -1455,7 +1462,12 @@ fork_filter_process(const char *name, const char *command, const char *user, con
+-	if (command[0] == '/')
+-		execr = snprintf(exec, sizeof(exec), "exec %s", command);
+-	else
+-		execr = snprintf(exec, sizeof(exec), "exec %s/%s", 
+-		    PATH_LIBEXEC, command);
++	if (command[0] == '/') {
++		execr = snprintf(exec, sizeof(exec), "exec %s", command);
++	} else {
++		proc_path = getenv("OPENSMTPD_PROC_PATH");
++		if (proc_path == NULL) {
++			proc_path = PATH_LIBEXEC;
++		}
++		execr = snprintf(exec, sizeof(exec), "exec %s/%s",
++		    proc_path, command);
++	}
+ 	if (execr >= (int) sizeof(exec))
+ 		fatalx("%s: exec path too long", name);
+ 
+diff --git a/usr.sbin/smtpd/table.c b/usr.sbin/smtpd/table.c
+index e62b47af..2ee186bf 100644
+--- a/usr.sbin/smtpd/table.c
++++ b/usr.sbin/smtpd/table.c
+@@ -229,17 +229,23 @@ table_create(struct smtpd *conf, const char *backend, const char *name,
+ 	struct table		*t;
+ 	struct table_backend	*tb;
+ 	char			 path[LINE_MAX];
++	const char		*proc_path;
+ 	size_t			 n;
+ 	struct stat		 sb;
+ 
+ 	if (name && table_find(conf, name))
+ 		fatalx("table_create: table \"%s\" already defined", name);
+ 
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
++
+ 	if ((tb = table_backend_lookup(backend)) == NULL) {
+-		if ((size_t)snprintf(path, sizeof(path), PATH_LIBEXEC"/table-%s",
+-			backend) >= sizeof(path)) {
+-			fatalx("table_create: path too long \""
+-			    PATH_LIBEXEC"/table-%s\"", backend);
++		if ((size_t)snprintf(path, sizeof(path), "%s/table-%s",
++			proc_path, backend) >= sizeof(path)) {
++			fatalx("table_create: path too long \"%s/table-%s\"",
++				proc_path, backend);
+ 		}
+ 		if (stat(path, &sb) == 0) {
+ 			tb = table_backend_lookup("proc");

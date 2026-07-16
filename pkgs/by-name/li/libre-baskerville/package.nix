@@ -1,0 +1,38 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installFonts,
+}:
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "libre-baskerville";
+  version = "1.000";
+
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Libre-Baskerville";
+    rev = "2fba7c8e0a8f53f86efd3d81bc4c63674b0c613f";
+    hash = "sha256-1EXi1hxFpc7pFsLbEj1xs9LqjeIf3XBol/8HdKNROUU=";
+  };
+
+  nativeBuildInputs = [ installFonts ];
+
+  postInstall = ''
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md FONTLOG.txt
+  '';
+
+  meta = {
+    description = "Webfont family optimized for body text";
+    longDescription = ''
+      Libre Baskerville is a webfont family optimized for body text. It's Based
+      on 1941 ATF Baskerville Specimens but it has a taller x-height, wider
+      counters and less contrast that allow it to work on small sizes in any
+      screen.
+    '';
+    homepage = "http://www.impallari.com/projects/overview/libre-baskerville";
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ pancaek ];
+    platforms = lib.platforms.all;
+  };
+})

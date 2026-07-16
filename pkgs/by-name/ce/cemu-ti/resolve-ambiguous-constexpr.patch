@@ -1,0 +1,13 @@
+diff --git a/mainwindow.cpp b/mainwindow.cpp
+index f03a743e..70c29a45 100644
+--- a/mainwindow.cpp
++++ b/mainwindow.cpp
+@@ -970,7 +970,7 @@ void MainWindow::showEvent(QShowEvent *e) {
+ DockWidget *MainWindow::redistributeFindDock(const QPoint &pos) {
+     QWidget *child = childAt(pos);
+     if (QTabBar *tabBar = findSelfOrParent<QTabBar *>(child)) {
+-        child = childAt({pos.x(), tabBar->mapTo(this, QPoint{}).y() - 1});
++        child = childAt(QPoint({pos.x(), tabBar->mapTo(this, QPoint{}).y() - 1}));
+     }
+     return findSelfOrParent<DockWidget *>(child);
+ }

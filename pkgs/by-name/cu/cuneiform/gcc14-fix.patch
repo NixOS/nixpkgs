@@ -1,0 +1,170 @@
+diff --git a/cuneiform_src/Kern/ctb/src/ctb_oper.c b/cuneiform_src/Kern/ctb/src/ctb_oper.c
+index 2aedd58..3d7ec65 100644
+--- a/cuneiform_src/Kern/ctb/src/ctb_oper.c
++++ b/cuneiform_src/Kern/ctb/src/ctb_oper.c
+@@ -61,6 +61,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #define MAXPATH 256
+ #include<string.h>
+ #include<sys/stat.h>
++#include<ctype.h>
+ #include "ctb.h"
+ 
+ /// extern fuxntions and data
+diff --git a/cuneiform_src/Kern/dif/src/diffr.c b/cuneiform_src/Kern/dif/src/diffr.c
+index f0d89db..7d0d898 100644
+--- a/cuneiform_src/Kern/dif/src/diffr.c
++++ b/cuneiform_src/Kern/dif/src/diffr.c
+@@ -105,7 +105,7 @@ extern uchar BUFFER[256];        /* 
+ extern uchar LOCAL[50];          /* координаты     ног             */
+ extern uchar LOCAL_W[50];        /* ширины         ног             */
+ extern uchar end1,beg2;          /* конец 1 и начало 2-ой ног инп  */
+-extern broken_ii;		/* флаг двух палок			*/
++extern uchar broken_ii;		/* флаг двух палок			*/
+ extern int16_t dnri_hook; // bottom right hook in small russian italic II,III
+ extern int16_t uple_hook; // bottom left  hook in small russian italic II,III
+ extern int16_t up_jack  ; // upper jack
+diff --git a/cuneiform_src/Kern/hdebug/__snp.c b/cuneiform_src/Kern/hdebug/__snp.c
+index cbf3353..8682cb1 100644
+--- a/cuneiform_src/Kern/hdebug/__snp.c
++++ b/cuneiform_src/Kern/hdebug/__snp.c
+@@ -986,11 +986,11 @@ extern "C" {
+ 	void SnpDrawLine(Point16* start, Point16* end, int32_t skew,
+ 			uint32_t rgb_color, int16_t pen_width, Handle key )
+ 	{
+-		LDPUMA_DrawLine(NULL,start,end,skew,rgb_color,pen_width,key );
++		LDPUMA_DrawLine(NULL,start,end,skew,rgb_color,pen_width,(long int)key );
+ 	};
+ 	void SnpHideLines(Handle key)
+ 	{
+-		LDPUMA_DeleteLines(NULL,key);
++		LDPUMA_DeleteLines(NULL,(long int)key);
+ 	};
+ 	void SnpUpdateViews(void)
+ 	{
+diff --git a/cuneiform_src/Kern/leo/src/leo_dll.c b/cuneiform_src/Kern/leo/src/leo_dll.c
+index da09092..25bc167 100644
+--- a/cuneiform_src/Kern/leo/src/leo_dll.c
++++ b/cuneiform_src/Kern/leo/src/leo_dll.c
+@@ -60,6 +60,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include <ctype.h>
+ /*#include <io.h>*/
+ 
++#include "cfcompat.h"
+ #include "leo_tune.h"
+ #include "cpu.h"
+ #define PC_TYPE 0
+diff --git a/cuneiform_src/Kern/loc/src/loc.c b/cuneiform_src/Kern/loc/src/loc.c
+index e416b33..4b817ad 100644
+--- a/cuneiform_src/Kern/loc/src/loc.c
++++ b/cuneiform_src/Kern/loc/src/loc.c
+@@ -63,6 +63,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include <unistd.h>
+ #endif
+ #include "loc.h"
++#include "cfcompat.h"
+ #include "struct.h"
+ #include <sys/stat.h>
+ 
+diff --git a/cuneiform_src/Kern/rbal/src/linbam.c b/cuneiform_src/Kern/rbal/src/linbam.c
+index cd34fab..a0a93d6 100644
+--- a/cuneiform_src/Kern/rbal/src/linbam.c
++++ b/cuneiform_src/Kern/rbal/src/linbam.c
+@@ -65,7 +65,7 @@
+ #include "lang_def.h"	// 08.09.2000 E.P.
+ #include "minmax.h"
+ 
+-extern line_BL;
++extern Bool line_BL;
+ extern CSTR_line lin_str;
+ 
+ static void set_basint(void);
+diff --git a/cuneiform_src/Kern/rblock/sources/c/ltmain.c b/cuneiform_src/Kern/rblock/sources/c/ltmain.c
+index 0653b6b..1c99b28 100644
+--- a/cuneiform_src/Kern/rblock/sources/c/ltmain.c
++++ b/cuneiform_src/Kern/rblock/sources/c/ltmain.c
+@@ -583,7 +583,7 @@ void PageStrings2 (void)
+ 
+ void LayoutPart1 (void)
+ {
+-extern SheetsCorrectRoots();
++// extern SheetsCorrectRoots();
+ # ifdef LT_DEBUG
+     switch (layout)
+     {
+diff --git a/cuneiform_src/Kern/rblock/sources/c/ltroots.c b/cuneiform_src/Kern/rblock/sources/c/ltroots.c
+index e68abd5..7efee82 100644
+--- a/cuneiform_src/Kern/rblock/sources/c/ltroots.c
++++ b/cuneiform_src/Kern/rblock/sources/c/ltroots.c
+@@ -69,6 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ # include <fcntl.h>
+ # include <stdio.h>
++# include <unistd.h>
+ /*# include <crtdbg.h>*/
+ #include <assert.h>
+ 
+@@ -126,7 +127,7 @@ Bool RootsLoadFile (char * pFilename)
+         return (FALSE);
+     }
+ 
+-    while (read (hFile, &RootRecord, sizeof (ROOT)) == sizeof (ROOT))
++    while (read ((int)hFile, &RootRecord, sizeof (ROOT)) == sizeof (ROOT))
+     {
+         RootRecord.bReached   = FALSE;
+ 
+@@ -143,14 +144,14 @@ Bool RootsLoadFile (char * pFilename)
+         {
+             ErrorNoEnoughMemory ("in LTROOTS.C,RootsLoadFile,part 1");
+             nRoots = 0;
+-            close (hFile);
++            close ((int)hFile);
+             return (FALSE);
+         }
+ 
+         pRoots [nRoots - 1] = RootRecord;
+     }
+ 
+-    close (hFile);
++    close ((int)hFile);
+     return (TRUE);
+ }
+ # endif
+diff --git a/cuneiform_src/Kern/rstr/src/diffr.c b/cuneiform_src/Kern/rstr/src/diffr.c
+index 3427806..c4ad6aa 100644
+--- a/cuneiform_src/Kern/rstr/src/diffr.c
++++ b/cuneiform_src/Kern/rstr/src/diffr.c
+@@ -168,7 +168,7 @@ extern uchar BUFFER[256];        /* 
+ extern uchar LOCAL[50];        	/* координаты     ног          		*/
+ extern uchar LOCAL_W[50];      	/* ширины         ног          		*/
+ extern uchar end1,beg2;        	/* конец 1 и начало 2-ой ног инп	*/
+-extern broken_ii;		/* флаг двух палок			*/
++extern uchar broken_ii;		/* флаг двух палок			*/
+ extern int16_t dnri_hook; // bottom right hook in small russian italic II,III
+ extern int16_t uple_hook; // bottom left  hook in small russian italic II,III
+ extern int16_t up_jack  ; // upper jack
+diff --git a/cuneiform_src/Kern/rstr/src/match_wd.c b/cuneiform_src/Kern/rstr/src/match_wd.c
+index 7a8c7f5..ca5f933 100644
+--- a/cuneiform_src/Kern/rstr/src/match_wd.c
++++ b/cuneiform_src/Kern/rstr/src/match_wd.c
+@@ -341,7 +341,7 @@ param.monitors=*((uint32_t*)points);
+ param.p2_active=1;  //call while p2 pass
+ param.language=3;	// LANG_RUSSIAN
+ 
+-if((rc=setjmp(Control_Point())) != 0)
++if((rc=setjmp(*Control_Point())) != 0)
+   return FALSE;
+ 
+ w=match_string(ln, word, &param);
+diff --git a/cuneiform_src/Kern/rstr/src/rcm.c b/cuneiform_src/Kern/rstr/src/rcm.c
+index 0659b69..45cf362 100644
+--- a/cuneiform_src/Kern/rstr/src/rcm.c
++++ b/cuneiform_src/Kern/rstr/src/rcm.c
+@@ -2648,7 +2648,7 @@ int16_t text_findstat_agressive(char * w) {
+ }
+ 
+ jmp_buf * Control_Point() {
+-	return jumper;
++	return &jumper;
+ }
+ 
+ /////////////

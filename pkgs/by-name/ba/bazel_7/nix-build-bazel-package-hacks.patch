@@ -1,0 +1,49 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+index 53e6494656..22261cd268 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+@@ -55,6 +55,7 @@ import com.google.devtools.build.skyframe.SkyFunctionException.Transience;
+ import com.google.devtools.build.skyframe.SkyKey;
+ import com.google.devtools.build.skyframe.SkyValue;
+ import java.io.IOException;
++import java.util.Collections;
+ import java.util.Map;
+ import java.util.Optional;
+ import java.util.TreeMap;
+@@ -193,16 +194,16 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+       }
+
+       if (shouldUseCachedRepos(env, handler, repoRoot, rule)) {
+-        // Make sure marker file is up-to-date; correctly describes the current repository state
+-        byte[] markerHash = digestWriter.areRepositoryAndMarkerFileConsistent(handler, env);
+-        if (env.valuesMissing()) {
+-          return null;
+-        }
+-        if (markerHash != null) { // repo exist & up-to-date
++        // Nix hack: Skip marker file validation but only for repos that have
++        // been fully initialized. Check for common root files that indicate a
++        // real repo, not an empty dir created by module extensions before the
++        // repository rule has had a chance to run.
++        if (repoRoot.getChild("BUILD").exists() || repoRoot.getChild("BUILD.bazel").exists()
++            || repoRoot.getChild("WORKSPACE").exists() || repoRoot.getChild("WORKSPACE.bazel").exists()
++            || repoRoot.getChild("MODULE.bazel").exists()) {
+           return RepositoryDirectoryValue.builder()
+               .setPath(repoRoot)
+-              .setDigest(markerHash)
+-              .setExcludeFromVendoring(excludeRepoFromVendoring)
++              .setDigest(digestWriter.writeMarkerFile(Collections.emptyMap()))
+               .build();
+         }
+       }
+diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+index 649647c5f2..64d05b530c 100644
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+@@ -165,7 +165,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+     }
+     builder.command(argv);
+     if (params.getEnv() != null) {
+-      builder.environment().clear();
+       builder.environment().putAll(params.getEnv());
+     }
+

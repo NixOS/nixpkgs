@@ -1,0 +1,32 @@
+From 789ec77d09171f22d82006493cafbcf2496b4f8f Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 2 Dec 2023 12:47:00 +0000
+Subject: [PATCH] setup.py: propagate cmakeFlags
+
+---
+ tools/setup_helpers/extension.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/setup_helpers/extension.py b/tools/setup_helpers/extension.py
+index 2415bbae..7c2a9351 100644
+--- a/tools/setup_helpers/extension.py
++++ b/tools/setup_helpers/extension.py
+@@ -1,6 +1,7 @@
+ import distutils.sysconfig
+ import os
+ import platform
++import shlex
+ import subprocess
+ from pathlib import Path
+ 
+@@ -141,6 +142,8 @@ class CMakeBuild(build_ext):
+             f"-DUSE_OPENMP:BOOL={'ON' if _USE_OPENMP else 'OFF'}",
+             f"-DUSE_FFMPEG:BOOL={'ON' if _USE_FFMPEG else 'OFF'}",
+         ]
++        if "cmakeFlags" in os.environ:
++            cmake_args.extend(shlex.split(os.environ["cmakeFlags"]))
+         build_args = ["--target", "install"]
+         # Pass CUDA architecture to cmake
+         if _TORCH_CUDA_ARCH_LIST is not None:
+-- 
+2.42.0

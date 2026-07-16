@@ -1,0 +1,34 @@
+diff --git a/libinput-gestures b/libinput-gestures
+index 78c7c28..1a2c965 100755
+--- a/libinput-gestures
++++ b/libinput-gestures
+@@ -87,11 +87,11 @@ def get_libinput_vers():
+     'Return the libinput installed version number string'
+     # Try to use newer libinput interface then fall back to old
+     # (depreciated) interface.
+-    res = run(('libinput', '--version'), check=False)
++    res = run(('@libinput@', '--version'), check=False)
+     if res:
+         return res.strip(), True
+
+-    res = run(('libinput-list-devices', '--version'), check=False)
++    res = run(('@libinput-list-devices@', '--version'), check=False)
+     return res and res.strip(), False
+
+ def get_devices_list(cmd_list_devices, device_list):
+@@ -694,11 +694,11 @@ def main():
+         sys.exit('libinput helper tools do not seem to be installed?')
+
+     if has_subcmd:
+-        cmd_debug_events = 'libinput debug-events'
+-        cmd_list_devices = 'libinput list-devices'
++        cmd_debug_events = '@libinput@ debug-events'
++        cmd_list_devices = '@libinput@ list-devices'
+     else:
+-        cmd_debug_events = 'libinput-debug-events'
+-        cmd_list_devices = 'libinput-list-devices'
++        cmd_debug_events = '@libinput@-debug-events'
++        cmd_list_devices = '@libinput@-list-devices'
+
+     if args.verbose:
+         # Output various info/version info

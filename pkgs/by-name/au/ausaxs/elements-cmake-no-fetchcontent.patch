@@ -1,0 +1,21 @@
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -229,7 +229,7 @@
+   GIT_SUBMODULES_RECURSE ON
+ )
+ 
+-FetchContent_MakeAvailable(cycfi_infra)
++add_subdirectory(${CMAKE_SOURCE_DIR}/cycfi_infra cycfi_infra_build)
+ target_link_libraries(elements PUBLIC cycfi::infra)
+ 
+ ###############################################################################
+@@ -270,9 +270,7 @@
+ 
+ FetchContent_Declare(
+   asio
+-  GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+-  GIT_TAG asio-1-29-0
+-  GIT_SHALLOW TRUE
++  SOURCE_DIR ${CMAKE_SOURCE_DIR}/asio
+ )
+ FetchContent_MakeAvailable(asio)

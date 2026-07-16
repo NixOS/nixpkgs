@@ -1,0 +1,43 @@
+diff --git a/src/server/build.odin b/src/server/build.odin
+index 1c1f2290..aaf6d2a4 100644
+--- a/src/server/build.odin
++++ b/src/server/build.odin
+@@ -28,7 +28,6 @@ platform_os: map[string]struct{} = {
+ 	"openbsd" = {},
+ 	"wasi"    = {},
+ 	"wasm"    = {},
+-	"haiku"   = {},
+ 	"netbsd"  = {},
+ 	"freebsd" = {},
+ }
+@@ -42,7 +41,6 @@ os_enum_to_string: [runtime.Odin_OS_Type]string = {
+ 	.WASI         = "wasi",
+ 	.JS           = "js",
+ 	.Freestanding = "freestanding",
+-	.Haiku        = "haiku",
+ 	.OpenBSD      = "openbsd",
+ 	.NetBSD       = "netbsd",
+ 	.Orca         = "orca",
+@@ -69,8 +67,6 @@ os_string_to_enum: map[string]runtime.Odin_OS_Type = {
+ 	"freestanding" = .Freestanding,
+ 	"Wasm"         = .JS,
+ 	"wasm"         = .JS,
+-	"Haiku"        = .Haiku,
+-	"haiku"        = .Haiku,
+ 	"Openbsd"      = .OpenBSD,
+ 	"openbsd"      = .OpenBSD,
+ 	"OpenBSD"      = .OpenBSD,
+@@ -125,7 +121,12 @@ skip_file :: proc(filename: string) -> bool {
+
+ // Finds all packages under the provided path by walking the file system
+ // and appends them to the provided dynamic array
+-append_packages :: proc(path: string, pkgs: ^[dynamic]string, skip: map[string]struct{}, allocator := context.temp_allocator) {
++append_packages :: proc(
++	path: string,
++	pkgs: ^[dynamic]string,
++	skip: map[string]struct{},
++	allocator := context.temp_allocator,
++) {
+ 	w := os.walker_create(path)
+ 	defer os.walker_destroy(&w)
+ 	for info in os.walker_walk(&w) {

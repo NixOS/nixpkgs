@@ -1,0 +1,444 @@
+Processing diff for: collectl.conf
+--- a/collectl.conf	2025-08-14 08:42:24.434419733 +0000
++++ b/collectl.conf	2025-08-16 07:56:13.806350456 +0000
+@@ -43,7 +43,7 @@
+ #Ps =      /bin/ps
+ #Rpm =     /bin/rpm
+ #Lspci =   /sbin/lspci
+-#Lctl =    /usr/sbin/lctl
++#Lctl =    /usr/sbin/lctl   # disabled since collectl 4.0.4
+ 
+ #       I n f i n i b a n d    S u p p o r t
+ 
+@@ -55,10 +55,11 @@
+ # variable below.  PQuery for OFED, PCounter for get_pcounter calls and
+ # VStat for ALL non-ofed access of any kind.
+ # can disable either by commenting out the reference to VStat/PQuery below.
+-PQuery =   /usr/sbin/perfquery:/usr/bin/perfquery:/usr/local/ofed/bin/perfquery
+-PCounter = /usr/mellanox/bin/get_pcounter
+-VStat =    /usr/mellanox/bin/vstat:/usr/bin/vstat
+-OfedInfo = /usr/bin/ofed_info:/usr/local/ofed/bin/ofed_info
++# Disable the Infiniband support by default
++# PQuery =   /usr/sbin/perfquery:/usr/bin/perfquery:/usr/local/ofed/bin/perfquery
++# PCounter = /usr/mellanox/bin/get_pcounter
++# VStat =    /usr/mellanox/bin/vstat:/usr/bin/vstat
++# OfedInfo = /usr/bin/ofed_info:/usr/local/ofed/bin/ofed_info
+ 
+ #	D e f a u l t s
+ 
+@@ -116,7 +117,7 @@
+ # size, comment out the Resize line and uncomment TermHeight, setting it to
+ # what you want.
+ #TermHeight = 24
+-Resize=/usr/bin/resize:/usr/X11R6/bin/resize
++Resize=@resize@
+ 
+ # To turn off Time:HiRes/glibc incompatibility checking, the following
+ # should be enabled and set to 0
+@@ -125,7 +126,7 @@
+ # These control environmental monitoring and to use it you MUST have ipmitool
+ # installed (see http://ipmitool.sourceforge.net/).  If not in the path shown
+ # below, you must change it.
+-Ipmitool =  /usr/bin/ipmitool:/usr/local/bin/ipmitool:/opt/hptc/sbin/ipmitool
++Ipmitool = @ipmitool@
+ IpmiCache = /var/run/collectl-ipmicache
+ IpmiTypes = fan,temp,current
+ 
+Processing diff for: collectl
+--- a/collectl	2025-08-14 08:42:24.434419733 +0000
++++ b/collectl	2025-08-16 09:25:20.238548613 +0000
+@@ -69,14 +69,14 @@
+ use IO::Select;
+ use Cwd 'abs_path';
+ 
+-$Cat=          '/bin/cat';
+-$Grep=         '/bin/grep';
+-$Egrep=        '/bin/egrep';
+-$Ps=           '/bin/ps';
+-$Rpm=          '/bin/rpm';
+-$Lspci=        '/sbin/lspci';
+-$Lctl=         '/usr/sbin/lctl';
+-$Dmidecode=    '/usr/sbin/dmidecode';
++$Cat=          '@cat@';
++$Grep=         '@grep@';
++$Egrep=        '@egrep@';
++$Ps=           '@ps@';
++$Rpm=          '@rpm@';
++$Lspci=        '@lspci@';
++$Lctl=         '/usr/sbin/lctl';  # disabled since collectl 4.0.4
++$Dmidecode=    '@dmidecode@';
+ 
+ %TopProcTypes=qw(vsz '' rss '' syst '' usrt '' time '' accum '' rkb '' wkb '' iokb ''
+                  rkbc '' wkbc '' iokbc '' ioall '' rsys '' wsys '' iosys  ''
+@@ -108,7 +108,7 @@
+ $syslogFlag=(eval {require "Sys/Syslog.pm" or die}) ? 1 : 0;
+ 
+ # Always nice to know if we're root
+-$rootFlag=(!$PcFlag && `whoami`=~/root/) ? 1 : 0;
++$rootFlag=(!$PcFlag && `@whoami@`=~/root/) ? 1 : 0;
+ $SrcArch= $Config{"archname"};
+ 
+ $Version=  '4.3.20';
+@@ -126,15 +126,15 @@
+ # we're in the background.  We also need to know if STDOUT connected to a terminal.
+ if (!$PcFlag)
+ {
+-  $MyDir=`pwd`;
+-  $Cat=  'cat';
++  $MyDir=`@pwd@`;
++  $Cat=  '@cat@';
+   $Sep=  '/';
+   $backFlag=(getpgrp()!=tcgetpgrp(0)) ? 1 : 0;
+   $termFlag= (-t STDOUT) ? 1 : 0;
+ }
+ else
+ {
+-  $MyDir=`cd`;
++  $MyDir=`@cd@`;
+   $Cat=  'type';
+   $Sep=  '\\';
+   $backFlag=0;
+@@ -148,7 +148,7 @@
+ # which was recorded with the data file and WILL override in playback mode. 
+ # We also need our host name before calling initRecord() so we can log it at 
+ # startup as well as for naming the logfile.
+-$myHost=($PcFlag) ? `hostname` : `/bin/hostname`;
++$myHost=($PcFlag) ? `@hostname@` : `@hostname@`;
+ $myHost=(split(/\./, $myHost))[0];
+ chomp $myHost;
+ $Host=$myHost;
+@@ -509,12 +509,12 @@
+ 
+   if ($runasUser!~/^\d+$/)
+   {
+-    $runasUid=(split(/:/, `grep ^$runasUser: /etc/passwd`))[2];
++    $runasUid=(split(/:/, `@grep@ ^$runasUser: /etc/passwd`))[2];
+     error("can't find '$runasUser' in /etc/passwd.  Consider UID.")    if !defined($runasUid);
+   }
+   if (defined($runasGroup) && $runasGroup!~/^\d+$/)
+   {
+-    $runasGid=(split(/:/, `grep ^$runasGroup: /etc/group`))[2];
++    $runasGid=(split(/:/, `@grep@ ^$runasGroup: /etc/group`))[2];
+     error("can't find '$runasGroup' in /etc/group.  Consider GID.")    if !defined($runasGid);
+   }
+   $runasUid=$runasUser     if $runasUser=~/^\d+/;
+@@ -1167,19 +1167,19 @@
+ if (!$PcFlag)
+ {
+   # This matches THIS host, but in playback mode will be reset to the target
+-  $Kernel=`uname -r`;
++  $Kernel=`@uname@ -r`;
+   chomp $Kernel;
+   error("collectl no longer supports 2.4 kernels")    if $Kernel=~/^2\.4/;
+ 
+-  $LocalTimeZone=`date +%z`;
++  $LocalTimeZone=`@date@ +%z`;
+   chomp $LocalTimeZone;
+ 
+   # Some distros put lspci in /usr/sbin and others in /usr/bin, so take one last look in
+   # those before complaining, but only if in record mode AND only if looking at interconnects
+   if (!-e $Lspci && $playback eq '' && $subsys=~/x/i)
+   {
+-    $Lspci=(-e '/usr/sbin/lspci') ? '/usr/sbin/lspci' : '/usr/bin/lspci';
+-    if (!-e "/usr/sbin/lspci" && !-e "/usr/bin/lspci")
++    $Lspci='@lspci@';
++    if (!-e "@lspci@")
+     {
+       pushmsg('W', "-sx disabled because 'lspci' not in $Lspci or '/usr/sbin' or '/usr/bin'");
+       pushmsg('W', "If somewhere else, move it or define in collectl.conf");
+@@ -1274,7 +1274,7 @@
+     # it further on so not to worry, but at least record a warning.
+     $pid=`$Cat $PidFile`;
+     chomp $pid;
+-    @ps=`ps axo pid,command`;
++    @ps=`@ps@ axo pid,command`;
+     foreach my $line (@ps)
+     {
+       $line=~s/^\s+//;    # trim leading whitespace for short pids
+@@ -1551,14 +1551,14 @@
+ }
+ 
+ # if -N, set priority to 20
+-`renice 20 $$`    if $niceFlag;
++`@renice@ 20 $$`    if $niceFlag;
+ 
+ # Couldn't find anywhere else to put this one...
+ error("-sT only works with -P for now (too much data)")
+     if $TFlag && !$plotFlag;
+ 
+ # get parent pid so we can check later to see it still there
+-$stat=`cat /proc/$$/stat`;
++$stat=`@cat@ /proc/$$/stat`;
+ $myPpid=(split(/\s+/, $stat))[3];
+ 
+ ###############################
+@@ -2311,7 +2311,7 @@
+     printBriefCounters('T');
+   }
+ 
+-  `stty echo`    if !$PcFlag && $termFlag && !$backFlag;   # in brief mode, we turned it off
++  `@stty@ echo`    if !$PcFlag && $termFlag && !$backFlag;   # in brief mode, we turned it off
+   my $temp=(!$msgFlag) ? '  Try again with -m.' : '';
+   print "No files selected contain the selected data.$temp\n"    if !$numProcessed;
+   exit(0);
+@@ -2453,7 +2453,7 @@
+   open STDIN,  '/dev/null'   or logmsg("F", "Can't read /dev/null: $!");
+   open STDOUT, '>/dev/null'  or logmsg("F", "Can't write to /dev/null: $!");
+   open STDERR, '>/dev/null'  or logmsg("F", "Can't write to /dev/null: $!");
+-  `echo $$ > $PidFile`;
++  `@echo@ $$ > $PidFile`;
+ 
+   # Now that we're set up to start, if '--runas' has been sprecified we need to do a
+   # few things that require privs before actually changing our UID.  Also note the
+@@ -2469,8 +2469,8 @@
+     $logname=(-d $filename) ? $filename : dirname($filename);
+     $logname.="/$myHost-collectl-$yymm.log";
+ 
+-    `chown $runasUid $logname`;
+-    `chgrp $runasGid $logname`    if defined($runasGid);
++    `@chown@ $runasUid $logname`;
++    `@chgrp@ $runasGid $logname`    if defined($runasGid);
+ 
+     # now we can change our process's ownership taking care to do the group first
+     # since we won't be able to change anything once we change our UID.
+@@ -3244,7 +3244,7 @@
+ # close logs cleanly and turn echo back on because when 'brief' we turned it off.
+ closeLogs($subsys);
+ unlink $PidFile       if $daemonFlag;
+-`stty echo`           if !$PcFlag && $termFlag && !$backFlag;
++`@stty@ echo`           if !$PcFlag && $termFlag && !$backFlag;
+ 
+ # clean up when in pure top mode
+ if ($numTop && !$topVertFlag)
+@@ -4350,7 +4350,7 @@
+   if (!-e $temp)
+   {
+     logmsg('W', "Creating directory '$temp'");
+-    `mkdir $temp`;
++    `@mkdir@ $temp`;
+   }
+ 
+   # track number of times same file processed, primarily for options 'a/c'.  in
+@@ -5363,7 +5363,7 @@
+ 
+     # build up the search list being extra neat and leaving
+     # off possible duplicate /etc
+-    $configFile="$BinDir/$ConfigFile;$etcDir/$ConfigFile";
++    $configFile="$BinDir/../etc/$ConfigFile;$etcDir/$ConfigFile";
+     $configFile.=";/etc/$ConfigFile"    if $etcDir ne '/etc';
+   }
+   print "Config File Search Path: $configFile\n"    if $debug & 1;
+@@ -5789,7 +5789,7 @@
+   # what gets stored in /proc/XXX/stat and to make sure we look at the same 
+   # values dynamically as well as staticly, we better pull cmd from the stat
+   # file itself.
+-  @ps=`ps axo pid,ppid,uid,comm,user`;
++  @ps=`@ps@ axo pid,ppid,uid,comm,user`;
+   my $firstFilePass=1;
+   foreach $process (@ps)
+   {
+@@ -6228,7 +6228,7 @@
+   $briefFlag=0;
+   $verboseFlag=1;
+   intervalPrint(time);
+-  `stty echo`    if !$PcFlag && $termFlag && !$backFlag;
++  `@stty@ echo`    if !$PcFlag && $termFlag && !$backFlag;
+ }
+ 
+ sub error
+@@ -6241,7 +6241,7 @@
+     # printText() will try to send error over socket and we want it local.
+     $sockFlag=0    if $serverFlag;
+ 
+-    `stty echo`    if !$PcFlag && $termFlag && !$backFlag;
++    `@stty@ echo`    if !$PcFlag && $termFlag && !$backFlag;
+     logmsg("F", "Error: $text")    if $daemonFlag;
+ 
+     # we can only call printText() when formatit loaded.
+Processing diff for: colmux
+--- a/colmux	2025-08-14 08:42:24.438419919 +0000
++++ b/colmux	2025-08-15 07:38:22.003168089 +0000
+@@ -78,7 +78,7 @@
+ my $License="colmux may be copied only under the terms of either the Artistic License\n";
+ $License.= "or the GNU General Public License, which may be found in the source kit";
+ 
+-my $Ping='/bin/ping';
++my $Ping='@ping@';
+ my $ResizePath='/usr/bin/resize:/usr/X11R6/bin/resize';
+ my $Route='/sbin/route';
+ my $Ifconfig='/sbin/ifconfig';
+@@ -235,7 +235,7 @@
+ $Collectl="sudo $Collectl"    if $sudoFlag;
+ 
+ # ok if host not in known_hosts and when not debugging be sure to turn off motd
+-my $Ssh='/usr/bin/ssh -o StrictHostKeyChecking=no -o BatchMode=yes';
++my $Ssh='@ssh@ -o StrictHostKeyChecking=no -o BatchMode=yes';
+ $Ssh.=" -o ServerAliveInterval=$keepalive"    if $keepalive ne '';
+ $Ssh.=" -q"    unless $debug;
+ 
+@@ -357,7 +357,7 @@
+ # See if any host specs contain 'username@' & reset 'localhost' and
+ # adjust maximum hostname length if necessary.
+ my $hostlen=$hostWidth;
+-my $myhost=`hostname`;
++my $myhost=`@hostname@`;
+ chomp $myhost;
+ 
+ my (%usernames, %sshswitch, %aliases);
+@@ -510,7 +510,7 @@
+       $line=~s/^\s+//;    # can have leading space
+       my $pid=(split(/\s+/, $line))[0];
+       print "Killing ssh with pid: $pid\n"    if $debug & 1;
+-      `kill $pid`;
++      `@kill@ $pid`;
+     }
+     sleep 1;    # wait a tad for ssh in thread to exit
+     close PS;
+@@ -983,7 +983,7 @@
+     $line=~s/^\s+//;
+     my $pid=(split(/\s+/, $line))[0];
+     print "Killing ssh with pid: $pid\n"    if $debug & 1;
+-    `kill $pid`;
++    `@kill@ $pid`;
+   }
+ }
+ 
+@@ -1179,7 +1179,7 @@
+ foreach my $host (keys %files)
+ {
+     print "Killing pid $files{$host}->{pid} for '$host'\n"    if $debug & 1;
+-    `kill -9  $files{$host}->{pid}`;
++    `@kill@ -9  $files{$host}->{pid}`;
+     #close $files{$host}->{fd} or error("Failed to close playback file for '$host'");
+ }
+ 
+Processing diff for: formatit.ph
+--- a/formatit.ph	2025-08-14 08:42:24.438419919 +0000
++++ b/formatit.ph	2025-08-15 07:18:19.548190580 +0000
+@@ -20,19 +20,19 @@
+   $rawPFlag=0;    # always 0 when no files involved
+ 
+   # In some case, we need to know if we're root.
+-  $rootFlag=`whoami`;
++  $rootFlag=`@whoami@`;
+   $rootFlag=($rootFlag=~/root/) ? 1 : 0;
+ 
+   # be sure to remove domain portion if present.  also note we keep the hostname in
+   # two formats, one in it's unaltered form (at least needed by lustre directory 
+   # parsing) as well as all lc because it displays nicer.
+-  $Host=`hostname`;
++  $Host=`@hostname@`;
+   chomp $Host;
+   $Host=(split(/\./, $Host))[0];
+   $HostLC=lc($Host);
+ 
+   # when was system booted?
+-  $uptime=(split(/\s+/, `cat /proc/uptime`))[0];
++  $uptime=(split(/\s+/, `@cat@ /proc/uptime`))[0];
+   $boottime=time-$uptime;
+ 
+   $Distro=cat('/etc/redhat-release')    if -e '/etc/redhat-release';
+@@ -83,11 +83,11 @@
+   if ($subsys=~/y/i && $slabinfoFlag || $slubinfoFlag)
+   {
+     $message='';
+-    $message='/proc/slabinfo'    if $slabinfoFlag && !(eval {`cat /proc/slabinfo 2>/dev/null` or die});
+-    $message='/sys/slab'         if $slubinfoFlag && !(eval {`cat /proc/slubinfo 2>/dev/null` or die});
++    $message='/proc/slabinfo'    if $slabinfoFlag && !(eval {`@cat@ /proc/slabinfo 2>/dev/null` or die});
++    $message='/sys/slab'         if $slubinfoFlag && !(eval {`@cat@ /proc/slubinfo 2>/dev/null` or die});
+     if ($message ne '')
+     {
+-      my $whoami=`whoami`;
++      my $whoami=`@whoami@`;
+       chomp $whoami;
+       disableSubsys('y', "/proc/slabinfo is not readable by $whoami");
+       $interval=~s/(^\d*):\d+/$1:/    if $subsys!~/z/i;    # remove int2 if not needed or we'll get error
+@@ -132,7 +132,7 @@
+ 
+         for (my $i=1; $i<$NumCpus; $i++)
+         {
+-          my $online=`cat /sys/devices/system/cpu/cpu$i/online`;
++          my $online=`@cat@ /sys/devices/system/cpu/cpu$i/online`;
+           chomp $online;
+ 
+           $cpuEnabled[$i]=$online;
+@@ -266,7 +266,7 @@
+   $ibSpeed='??';
+   if (-e '/sys/class/infiniband')
+   {
+-    $line=`cat /sys/class/infiniband/*/ports/1/rate 2>&1`;
++    $line=`@cat@ /sys/class/infiniband/*/ports/1/rate 2>&1`;
+     if ($line=~/\s*(\d+)\s+(\S)/)
+     {
+       $ibSpeed=$1;
+@@ -669,7 +669,7 @@
+     {
+       # Get Luster and SFS Versions before looking at any data structures in the
+       # 'lustreCheck' routines because things change over time
+-      $temp=`cat /proc/fs/lustre/version | grep lustre 2>/dev/null`;
++      $temp=`@cat@ /proc/fs/lustre/version | grep lustre 2>/dev/null`;
+       $temp=~/lustre: (\d+.*)/;
+       $cfsVersion=$1;
+       $sfsVersion='';
+@@ -716,7 +716,7 @@
+         # The first step is to build up a hash of the sizes of all the
+         # existing partitions.  Since we're only doing this once, a 'cat's
+         # overhead should be minimal
+-        @partitions=`cat /proc/partitions`;
++        @partitions=`@cat@ /proc/partitions`;
+         foreach $part (@partitions)
+         {
+           # ignore blank lines and header
+@@ -778,7 +778,7 @@
+     $temp=`head -n 1 /proc/slabinfo`;
+     $temp=~/(\d+\.\d+)/;
+     $SlabVersion=$1;
+-    $NumSlabs=`cat /proc/slabinfo | wc -l`*1;
++    $NumSlabs=`@cat@ /proc/slabinfo | wc -l`*1;
+     chomp $NumSlabs;
+     $NumSlabs-=2;
+ 
+@@ -4127,7 +4127,7 @@
+       $netSpeeds{$netName}='??';
+       if ($line ne '')
+       {
+-        $speed=`cat $line 2>&1`;
++        $speed=`@cat@ $line 2>&1`;
+         chomp $speed;
+         $line=~/.*\/(\S+)\/speed/;
+         my $netName=$1;
+Processing diff for: graphite.ph
+--- a/graphite.ph	2025-08-14 08:42:24.442420106 +0000
++++ b/graphite.ph	2025-08-14 08:44:07.351625049 +0000
+@@ -117,7 +117,7 @@
+   # behavior for -f logs matches that of -A
+   $rawtooFlag=1    if $filename ne '' && !$plotFlag;
+ 
+-  $graphiteMyHost=(!$graphiteFqdnFlag) ? `hostname` : `hostname -f`;
++  $graphiteMyHost=(!$graphiteFqdnFlag) ? `@hostname@` : `@hostname@ -f`;
+   chomp $graphiteMyHost;
+   $graphiteMyHost =~ s/\./$graphiteEscape/g    if $graphiteEscape ne '';
+ 
+Processing diff for: vmsum.ph
+--- a/vmsum.ph	2025-08-14 08:42:24.442420106 +0000
++++ b/vmsum.ph	2025-08-14 08:44:24.184414112 +0000
+@@ -20,8 +20,8 @@
+ my $oneMB=1024*1024;
+ my ($debug, $helpFlag, $instMin, $versionFlag, $zeroFlag);
+ 
+-my $Ssh= '/usr/bin/ssh';
+-my $Ping='/bin/ping';
++my $Ssh= '@ssh@';
++my $Ping='@ping@';
+ my $PingTimeout=1;
+ 
+ # these control writing the vm text file
+@@ -32,7 +32,7 @@
+ 
+ my $lexprFlag=0;
+ my $noNetMsg='';    # if not null, problem with n/w stats (very rare)
+-my $hostname=`hostname`;
++my $hostname=`@hostname@`;
+ chomp $hostname;
+ 
+ sub vmsumInit

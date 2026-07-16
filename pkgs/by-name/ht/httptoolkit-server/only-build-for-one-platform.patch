@@ -1,0 +1,45 @@
+diff --git a/pack.ts b/pack.ts
+index 0212d09..03ce86a 100644
+--- a/pack.ts
++++ b/pack.ts
+@@ -75,39 +75,7 @@ const packageApp = async () => {
+     delete pJson.scripts.prepack; // We don't want to rebuild - all built code will be in the packed content
+     await fs.writeJson(path.join(OUTPUT_DIR, 'package.json'), pJson);
+ 
+-    const buildScript = path.join(OUTPUT_DIR, 'build-release.sh');
+-
+-    // Run build-release in this folder, for each platform. For each bundle, we copy in
+-    // only the relevant platform-specific NSS files.
+-    console.log('Building for Linux x64');
+-    await fs.mkdir(path.join(OUTPUT_DIR, 'nss'));
+-    await fs.copy(path.join(__dirname, 'nss', 'linux'), path.join(OUTPUT_DIR, 'nss', 'linux'));
+-    await spawn(buildScript, ['linux', 'x64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+-
+-    console.log('Building for Linux arm64');
+-    await spawn(buildScript, ['linux', 'arm64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+-
+-    console.log('Building for Darwin x64');
+-    await fs.remove(path.join(OUTPUT_DIR, 'nss', 'linux'));
+-    await fs.copy(path.join(__dirname, 'nss', 'darwin'), path.join(OUTPUT_DIR, 'nss', 'darwin'));
+-    await spawn(buildScript, ['darwin', 'x64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+-
+-    console.log('Building for Darwin arm64');
+-    await spawn(buildScript, ['darwin', 'arm64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+-
+-    console.log('Building for Win32');
+-    await fs.remove(path.join(OUTPUT_DIR, 'nss', 'darwin'));
+-    await fs.copy(path.join(__dirname, 'nss', 'win32'), path.join(OUTPUT_DIR, 'nss', 'win32'));
+-    await spawn(buildScript, ['win32', 'x64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+-
+-    // Oclif builds a nodeless platform-agnostic bundle too (although in our case, nothing is
+-    // really platform agnostic). Not necessary, probably won't work - drop it.
+-    await fs.remove(path.join(
+-        OUTPUT_DIR,
+-        'dist',
+-        `v${pJson.version}`,
+-        `httptoolkit-server-v${pJson.version}.tar.gz`
+-    ));
++    await spawn('npm', ['exec', '--', 'oclif-dev', 'pack', '--targets=linux-x64'], { cwd: OUTPUT_DIR, stdio: 'inherit' });
+ }
+ 
+ packageApp().catch(e => {

@@ -1,0 +1,20 @@
+--- a/runtime/bin/ffi_test/ffi_test_functions_generated.cc
++++ b/runtime/bin/ffi_test/ffi_test_functions_generated.cc
+@@ -11,6 +11,7 @@
+ #include <sys/types.h>
+ 
+ #include <cmath>
++#include <cstdint>
+ #include <iostream>
+ #include <limits>
+ 
+--- a/runtime/bin/ffi_test/ffi_test_functions.cc
++++ b/runtime/bin/ffi_test/ffi_test_functions.cc
+@@ -13,6 +13,7 @@
+ #include <sys/types.h>
+ 
+ #include <cmath>
++#include <cstdint>
+ #include <iostream>
+ #include <limits>
+ 

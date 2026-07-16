@@ -1,0 +1,28 @@
+commit ce474dbca0c95c06a85a3a329fcdbcc97b8ad317
+Author: Stig Palmquist <git@stig.io>
+Date:   2023-11-21 13:27:46 +0100
+
+    Fix t/shell.t compat with Getopt-Long-Descriptive 0.106
+
+diff --git a/t/command/shell.t b/t/command/shell.t
+index ebd67d8..a09afd2 100644
+--- a/t/command/shell.t
++++ b/t/command/shell.t
+@@ -28,7 +28,7 @@ run_ok( $app, [ '--no-help' ], "Don't help me" );
+     cmp_ok($return, '==', 1, 'Exit status is correct');
+     like($stderr, qr/^$/s, 'no stderr');
+     like($stdout, qr{usage: hailo}, 'Got usage header');
+-    like($stdout, qr{progress\s+Display progress}, 'Got --progress');
++    like($stdout, qr{progress\s*(?:\(or -p\))?\s+Display progress}, 'Got --progress');
+     like($stdout, qr{files are assumed to be UTF-8 encoded}, 'Got UTF-8 note');
+     unlike($stdout, qr{examples:}, "no examples on normal output");
+ }
+@@ -75,7 +75,7 @@ run_ok( $app, [ '--no-help' ], "Don't help me" );
+     like($stderr, qr/^$/s, 'no stderr');
+     like($stdout, qr/Unknown option: blah-blah-blah/, 'Unknown option');
+     like($stdout, qr{usage: hailo}, 'Got usage header');
+-    like($stdout, qr{progress\s+Display progress}, 'Got --progress');
++    like($stdout, qr{progress\s*(?:\(or -p\))?\s+Display progress}, 'Got --progress');
+     like($stdout, qr{files are assumed to be UTF-8 encoded}, 'Got UTF-8 note');
+     unlike($stdout, qr{examples:}, "no examples on error");
+ 

@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 8 May 2026 19:34:31 -0400
+Subject: [PATCH] Fall-back-to-scandir
+
+---
+ diff/diffdir.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/diff/diffdir.c b/diff/diffdir.c
+index 7583f98..cc476bc 100644
+--- a/diff/diffdir.c
++++ b/diff/diffdir.c
+@@ -92,8 +92,13 @@ vscandir(struct inodetree *tree, const char *path, struct dirent ***dirp,
+ 		*dirp = NULL;
+ 		return (0);
+ 	}
+-	if ((ret = fdscandir(fd, dirp, select, compar)) < 0)
+-		goto fail;
++	if (__builtin_available(macOS 26.4, *)) {
++		if ((ret = fdscandir(fd, dirp, select, compar)) < 0)
++			goto fail;
++	} else {
++		if ((ret = scandir(path, dirp, select, compar)) < 0)
++			goto fail;
++	}
+ 	RB_INSERT(inodetree, tree, ino);
+ 	close(fd);
+ 	return (ret);
+-- 
+2.51.2
+

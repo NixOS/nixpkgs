@@ -1,0 +1,56 @@
+diff --git a/base_class/string/EST_strcasecmp.c b/base_class/string/EST_strcasecmp.c
+index 72a9b7c..e196c3a 100755
+--- a/base_class/string/EST_strcasecmp.c
++++ b/base_class/string/EST_strcasecmp.c
+@@ -86,7 +86,7 @@ static const unsigned char def_charmap[] = {
+ int
+ EST_strcasecmp(const char *s1, const char *s2, const unsigned char *charmap)
+ {
+-	register const unsigned char *cm = charmap?charmap:def_charmap,
++	const unsigned char *cm = charmap?charmap:def_charmap,
+ 			*us1 = (const unsigned char *)s1,
+ 			*us2 = (const unsigned char *)s2;
+ 	int r;
+@@ -102,7 +102,7 @@ int
+ EST_strncasecmp(const char *s1, const char *s2, size_t n, const unsigned char *charmap)
+ {
+ 	if (n != 0) {
+-		register const unsigned char *cm = charmap?charmap:def_charmap,
++		const unsigned char *cm = charmap?charmap:def_charmap,
+ 				*us1 = (const unsigned char *)s1,
+ 				*us2 = (const unsigned char *)s2;
+ 
+diff --git a/base_class/string/regexp.cc b/base_class/string/regexp.cc
+index 8b8f15f..c6211fa 100644
+--- a/base_class/string/regexp.cc
++++ b/base_class/string/regexp.cc
+@@ -175,7 +175,7 @@ STATIC char *regbranch(int *flagp);
+ STATIC char *regpiece(int *flagp);
+ STATIC char *regatom(int *flagp);
+ STATIC char *regnode(char op);
+-STATIC char *regnext(register char *p);
++STATIC char *regnext(char *p);
+ STATIC void regc(char b);
+ STATIC void reginsert(char op, char *opnd);
+ STATIC void regtail(char *p, char *val);
+diff --git a/base_class/string/regsub.c b/base_class/string/regsub.c
+index 017cea2..ed7cc9b 100644
+--- a/base_class/string/regsub.c
++++ b/base_class/string/regsub.c
+@@ -38,11 +38,11 @@ const hs_regexp *prog;
+ const char *source;
+ char *dest;
+ {
+-	register char *src;
+-	register char *dst;
+-	register char c;
+-	register int no;
+-	register int len;
++	char *src;
++	char *dst;
++	char c;
++	int no;
++	int len;
+ 
+ 	if (prog == NULL || source == NULL || dest == NULL) {
+ 		hs_regerror("NULL parm to regsub");

@@ -1,0 +1,150 @@
+From 6a06cf897cd749dae0f68498893c7b6a45faf381 Mon Sep 17 00:00:00 2001
+From: Paul Joubert <paul@trespaul.com>
+Date: Tue, 29 Jul 2025 23:13:52 +0200
+Subject: [PATCH] patch configure
+
+---
+ configure | 60 +++++++++++++++++++++++++++----------------------------
+ 1 file changed, 30 insertions(+), 30 deletions(-)
+
+diff --git a/configure b/configure
+index ed557fe..d89e384 100755
+--- a/configure
++++ b/configure
+@@ -672,8 +672,8 @@ OS_WIN32_FALSE
+ OS_WIN32_TRUE
+ GTHREAD_LIBS
+ GTHREAD_CFLAGS
+-SOUP24_LIBS
+-SOUP24_CFLAGS
++SOUP30_LIBS
++SOUP30_CFLAGS
+ CAIRO_LIBS
+ CAIRO_CFLAGS
+ GTK_LIBS
+@@ -836,8 +836,8 @@ GTK_CFLAGS
+ GTK_LIBS
+ CAIRO_CFLAGS
+ CAIRO_LIBS
+-SOUP24_CFLAGS
+-SOUP24_LIBS
++SOUP30_CFLAGS
++SOUP30_LIBS
+ GTHREAD_CFLAGS
+ GTHREAD_LIBS
+ GTKDOC_DEPS_CFLAGS
+@@ -1524,9 +1524,9 @@ Some influential environment variables:
+   CAIRO_CFLAGS
+               C compiler flags for CAIRO, overriding pkg-config
+   CAIRO_LIBS  linker flags for CAIRO, overriding pkg-config
+-  SOUP24_CFLAGS
+-              C compiler flags for SOUP24, overriding pkg-config
+-  SOUP24_LIBS linker flags for SOUP24, overriding pkg-config
++  SOUP30_CFLAGS
++              C compiler flags for SOUP30, overriding pkg-config
++  SOUP30_LIBS linker flags for SOUP30, overriding pkg-config
+   GTHREAD_CFLAGS
+               C compiler flags for GTHREAD, overriding pkg-config
+   GTHREAD_LIBS
+@@ -12719,19 +12719,19 @@ $as_echo "yes" >&6; }
+ fi
+ 
+ pkg_failed=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsoup-2.4" >&5
+-$as_echo_n "checking for libsoup-2.4... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsoup-3.0" >&5
++$as_echo_n "checking for libsoup-3.0... " >&6; }
+ 
+-if test -n "$SOUP24_CFLAGS"; then
+-    pkg_cv_SOUP24_CFLAGS="$SOUP24_CFLAGS"
++if test -n "$SOUP30_CFLAGS"; then
++    pkg_cv_SOUP30_CFLAGS="$SOUP30_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-2.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "libsoup-2.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libsoup-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_SOUP24_CFLAGS=`$PKG_CONFIG --cflags "libsoup-2.4" 2>/dev/null`
++  pkg_cv_SOUP30_CFLAGS=`$PKG_CONFIG --cflags "libsoup-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -12739,16 +12739,16 @@ fi
+  else
+     pkg_failed=untried
+ fi
+-if test -n "$SOUP24_LIBS"; then
+-    pkg_cv_SOUP24_LIBS="$SOUP24_LIBS"
++if test -n "$SOUP30_LIBS"; then
++    pkg_cv_SOUP30_LIBS="$SOUP30_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-2.4\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "libsoup-2.4") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libsoup-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libsoup-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_SOUP24_LIBS=`$PKG_CONFIG --libs "libsoup-2.4" 2>/dev/null`
++  pkg_cv_SOUP30_LIBS=`$PKG_CONFIG --libs "libsoup-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -12769,22 +12769,22 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        SOUP24_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsoup-2.4" 2>&1`
++	        SOUP30_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libsoup-3.0" 2>&1`
+         else
+-	        SOUP24_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsoup-2.4" 2>&1`
++	        SOUP30_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libsoup-3.0" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+-	echo "$SOUP24_PKG_ERRORS" >&5
++	echo "$SOUP30_PKG_ERRORS" >&5
+ 
+-	as_fn_error $? "Package requirements (libsoup-2.4) were not met:
++	as_fn_error $? "Package requirements (libsoup-3.0) were not met:
+ 
+-$SOUP24_PKG_ERRORS
++$SOUP30_PKG_ERRORS
+ 
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+ 
+-Alternatively, you may set the environment variables SOUP24_CFLAGS
+-and SOUP24_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables SOUP30_CFLAGS
++and SOUP30_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+ elif test $pkg_failed = untried; then
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+@@ -12795,15 +12795,15 @@ as_fn_error $? "The pkg-config script could not be found or is too old.  Make su
+ is in your PATH or set the PKG_CONFIG environment variable to the full
+ path to pkg-config.
+ 
+-Alternatively, you may set the environment variables SOUP24_CFLAGS
+-and SOUP24_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables SOUP30_CFLAGS
++and SOUP30_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details.
+ 
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+ else
+-	SOUP24_CFLAGS=$pkg_cv_SOUP24_CFLAGS
+-	SOUP24_LIBS=$pkg_cv_SOUP24_LIBS
++	SOUP30_CFLAGS=$pkg_cv_SOUP30_CFLAGS
++	SOUP30_LIBS=$pkg_cv_SOUP30_LIBS
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
+-- 
+2.50.1
+

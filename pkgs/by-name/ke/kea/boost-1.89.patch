@@ -1,0 +1,61 @@
+https://gitlab.isc.org/isc-projects/kea/-/commit/b03071ba6912a08e4cc4cb4db50d9624ce86f41e
+
+From b03071ba6912a08e4cc4cb4db50d9624ce86f41e Mon Sep 17 00:00:00 2001
+From: Francis Dupont <fdupont@isc.org>
+Date: Fri, 29 Aug 2025 00:40:03 +0200
+Subject: [PATCH] [#4085] Proposed update
+
+---
+ meson.build                       | 3 ++-
+ src/lib/asiodns/io_fetch.h        | 1 +
+ src/lib/asiolink/interval_timer.h | 1 +
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 434abf58313..fbd76dce5e5 100644
+--- a/meson.build
++++ b/meson.build
+@@ -189,7 +189,7 @@ message(f'Detected system "@SYSTEM@".')
+ 
+ #### Dependencies
+ 
+-boost_dep = dependency('boost', version: '>=1.66', modules: ['system'])
++boost_dep = dependency('boost', version: '>=1.66')
+ dl_dep = dependency('dl')
+ threads_dep = dependency('threads')
+ add_project_dependencies(boost_dep, dl_dep, threads_dep, language: ['cpp'])
+@@ -200,6 +200,7 @@ boost_headers = [
+     'boost/asio/coroutine.hpp',
+     'boost/asio/io_context.hpp',
+     'boost/asio/ip/address.hpp',
++    'boost/asio/deadline_timer.hpp',
+     'boost/asio/signal_set.hpp',
+     'boost/circular_buffer.hpp',
+     'boost/date_time/posix_time/posix_time_types.hpp',
+diff --git a/src/lib/asiodns/io_fetch.h b/src/lib/asiodns/io_fetch.h
+index 6fcbb78abb0..3053cc2e0a2 100644
+--- a/src/lib/asiodns/io_fetch.h
++++ b/src/lib/asiodns/io_fetch.h
+@@ -16,6 +16,7 @@
+ #include <util/buffer.h>
+ 
+ #include <boost/asio/coroutine.hpp>
++#include <boost/asio/deadline_timer.hpp>
+ #include <boost/shared_array.hpp>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/date_time/posix_time/posix_time_types.hpp>
+diff --git a/src/lib/asiolink/interval_timer.h b/src/lib/asiolink/interval_timer.h
+index 0b1c10c7882..790d132b42a 100644
+--- a/src/lib/asiolink/interval_timer.h
++++ b/src/lib/asiolink/interval_timer.h
+@@ -7,6 +7,7 @@
+ #ifndef ASIOLINK_INTERVAL_TIMER_H
+ #define ASIOLINK_INTERVAL_TIMER_H 1
+ 
++#include <boost/asio/deadline_timer.hpp>
+ #include <boost/shared_ptr.hpp>
+ #include <functional>
+ 
+-- 
+GitLab
+

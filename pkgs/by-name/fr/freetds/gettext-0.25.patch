@@ -1,0 +1,13 @@
+diff --git i/configure.ac w/configure.ac
+index bb07bba1..c4e15d53 100644
+--- i/configure.ac
++++ w/configure.ac
+@@ -20,6 +20,8 @@ AM_INIT_AUTOMAKE([dist-bzip2 parallel-tests subdir-objects foreign])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
+ AC_CONFIG_HEADERS(include/config.h)
+ AC_CONFIG_MACRO_DIR([m4])
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
+ 
+ dnl configuration directory will be /usr/local/etc
+ AC_PREFIX_DEFAULT(/usr/local)

@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f8ff3c2..689c463 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -538,7 +538,7 @@ endif()
+ #This has to cover the versions not already known by CMake
+ set(Boost_ADDITIONAL_VERSIONS 1.47 1.47.0 1.47.1 1.55.0)
+ 
+-set(OD_BOOST_COMPONENTS system filesystem locale program_options thread)
++set(OD_BOOST_COMPONENTS system date_time filesystem locale program_options thread)
+ 
+ if(BUILD_TESTING AND OD_BUILD_TESTING)
+     set(OD_BOOST_COMPONENTS ${OD_BOOST_COMPONENTS} unit_test_framework)

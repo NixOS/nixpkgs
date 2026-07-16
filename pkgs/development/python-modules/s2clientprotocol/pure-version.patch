@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 89131a8..19527df 100755
+--- a/setup.py
++++ b/setup.py
+@@ -13,8 +13,6 @@ from distutils.spawn import find_executable
+ from setuptools import setup
+ from setuptools.command.build_py import build_py
+ 
+-import gameversion_autogen as ver
+-
+ SETUP_DIR = os.path.dirname(os.path.abspath(__file__))
+ PROTO_DIR = os.path.join(SETUP_DIR, 's2clientprotocol')
+ 

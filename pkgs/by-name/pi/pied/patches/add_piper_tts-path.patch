@@ -1,0 +1,29 @@
+diff --git a/lib/main.dart b/lib/main.dart
+index d677fc3..14c6fd9 100644
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -52,9 +52,8 @@ class _MainPageState extends State<MainPage> {
+ 
+   void checkForPiper() async {
+     final Directory appDir = await getDataDir();
+-    Directory piperDir = Directory(path.join(appDir.path, "piper"));
+     setState(() {
+-      piperPresent = piperDir.existsSync();
++      piperPresent = true;
+       if (piperPresent) {
+         title = "Voice Selection";
+       }
+diff --git a/lib/voice_selector.dart b/lib/voice_selector.dart
+index 33944ed..66949e3 100644
+--- a/lib/voice_selector.dart
++++ b/lib/voice_selector.dart
+@@ -363,8 +363,7 @@ class _VoiceSelectorState extends State<VoiceSelector> {
+                                           configString =
+                                               configString.replaceAll(
+                                                   "PIPER_PATH",
+-                                                  path.join(appDir.path,
+-                                                      "piper", "piper"));
++                                                  "piper");
+                                           configString =
+                                               configString.replaceAll(
+                                                   "MODEL_PATH",
