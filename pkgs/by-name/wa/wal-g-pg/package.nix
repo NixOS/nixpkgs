@@ -83,7 +83,8 @@ let
 
       postInstall = ''
         mv $out/bin/mysql $out/bin/wal-g-mysql
-      '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      ''
+      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd wal-g-mysql \
           --bash <($out/bin/wal-g-mysql completion bash) \
           --zsh <($out/bin/wal-g-mysql completion zsh)
