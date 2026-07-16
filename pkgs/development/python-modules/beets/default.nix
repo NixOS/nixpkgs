@@ -88,6 +88,7 @@
   extraNativeBuildInputs ? [ ],
 
   # tests
+  doCheck ? true,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-factoryboy,
@@ -193,6 +194,8 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.finalPackage.passthru.plugins.wrapperBins;
+
+  inherit doCheck;
 
   __darwinAllowLocalNetworking = true;
 
