@@ -419,23 +419,20 @@ buildPythonPackage (finalAttrs: {
         lib.throwIf (finalAttrs.finalPackage.passthru.plugins.builtins.${plugName}.deprecated or false)
           "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
       ) pluginOverrides;
-      all =
-        lib.mapAttrs
-          (
-            n: a:
-            {
-              name = n;
-              enable = !disableAllPlugins;
-              builtin = false;
-              propagatedBuildInputs = [ ];
-              testPaths = [ "test/plugins/test_${n}.py" ];
-              wrapperBins = [ ];
-            }
-            // a
-          )
-          (
-            lib.recursiveUpdate finalAttrs.finalPackage.passthru.plugins.base finalAttrs.finalPackage.passthru.plugins.overrides
-          );
+      all = lib.pipe finalAttrs.finalPackage.passthru.plugins.base [
+        (base: lib.recursiveUpdate base finalAttrs.finalPackage.passthru.plugins.overrides)
+        (lib.mapAttrs (
+          n: a:
+          lib.recursiveUpdate {
+            name = n;
+            enable = !disableAllPlugins;
+            builtin = false;
+            propagatedBuildInputs = [ ];
+            testPaths = [ "test/plugins/test_${n}.py" ];
+            wrapperBins = [ ];
+          } a
+        ))
+      ];
       enabled = lib.filterAttrs (_: p: p.enable) finalAttrs.finalPackage.passthru.plugins.all;
       disabled = lib.filterAttrs (_: p: !p.enable) finalAttrs.finalPackage.passthru.plugins.all;
       disabledTestPaths = lib.flatten (
