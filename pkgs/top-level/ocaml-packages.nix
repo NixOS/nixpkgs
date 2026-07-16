@@ -1155,6 +1155,8 @@ let
 
         lreplay = callPackage ../development/ocaml-modules/lreplay { };
 
+        lrgrep = callPackage ../development/ocaml-modules/lrgrep { };
+
         lru = callPackage ../development/ocaml-modules/lru { };
 
         lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
