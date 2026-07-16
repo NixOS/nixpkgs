@@ -212,6 +212,7 @@ let
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
+          "riscv64" = "riscv64";
         }
         .${platform.parsed.cpu.name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
       );
