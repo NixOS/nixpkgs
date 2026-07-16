@@ -25,6 +25,7 @@ mkCoqDerivation {
   pname = "smtcoq";
   owner = "smtcoq";
 
+  release."SMTCoq-2.3+8.20".hash = "sha256-ScWtdwSpFBf/PryPuvI/SkhgqWyYhcX3FCOqoXNho7Q=";
   release."SMTCoq-2.2+8.19".hash = "sha256-9Wv8AXRRyOHG/cjA/V9tSK55R/bofDMLTkDpuwYWkks=";
   release."SMTCoq-2.2+8.18".hash = "sha256-1iJAruI5Qn9nTZcUDjk8t/1Q+eFkYLOe9Ee0DmK03w8=";
   release."SMTCoq-2.2+8.17".hash = "sha256-kaodsyVUl1+QQagzoBTIjxbdD4X3IaaH0x2AsVUL+Z0=";
@@ -48,6 +49,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.coq-version [
+      (case (isEq "8.20") "SMTCoq-2.3+${coq.coq-version}")
       (case (range "8.13" "8.19") "SMTCoq-2.2+${coq.coq-version}")
     ] null;
 
