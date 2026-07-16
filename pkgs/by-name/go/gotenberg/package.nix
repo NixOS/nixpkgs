@@ -24,7 +24,7 @@ let
 in
 buildGo126Module (finalAttrs: {
   pname = "gotenberg";
-  version = "8.32.0";
+  version = "8.34.0";
 
   outputs = [
     "out"
@@ -35,10 +35,10 @@ buildGo126Module (finalAttrs: {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o29kpKVAlKu6ER7b6ni9DMN3kGzEUnoqvHETXBNhJVs=";
+    hash = "sha256-HFRymNfhQOBzXBWZhiujr8sn4m/hpfjcBGg/3/C67DU=";
   };
 
-  vendorHash = "sha256-kHNjWq53uCVOP3JGc57MK2FKjtlqZpJz7Za+wTb/F1U=";
+  vendorHash = "sha256-njyxP+1S1ebaF9xJ1kBL9HrTWMTdEhu8MwUF6FYKHvs=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${finalAttrs.src}#g' {} \;

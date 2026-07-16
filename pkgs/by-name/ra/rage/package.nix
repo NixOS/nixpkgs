@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rage";
-  version = "0.11.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = "rage";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uBRXdDdfKTlw006LfCrIvbng7b/fhJDHrmHDLLxdmAU=";
+    hash = "sha256-ZfP/vVp/Cl6oelZvxz7B9vNYvXtPH92lnqq3pseHLYo=";
   };
 
-  cargoHash = "sha256-b5x6ESGsF0Mn5dNVagBSopuawbrNcJuMK1//Ns+xuJs=";
+  cargoHash = "sha256-dMzybfNJYrN8aa+Q5RRDRE9f0hKRs+ZmQ7B2YRUtZ/s=";
 
   nativeBuildInputs = [
     installShellFiles
