@@ -78,9 +78,15 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
+    # Upstream's Linux-desktop default builds VR support, which then calls
+    # find_package(OpenXR CONFIG REQUIRED) — no OpenXR input → build fails.
     "-DPICASIM_ENABLE_VR=OFF"
+    # Vendored SDL2 Vulkan backend pulls khronos/vulkan.h which needs xcb/xcb.h;
+    # PicaSim is OpenGL-only.
     "-DSDL_VULKAN=OFF"
+    # Vendored SDL2: skip the pipewire backend (no input).
     "-DSDL_PIPEWIRE=OFF"
+    # Vendored openal-soft: ship no examples/tests.
     "-DALSOFT_EXAMPLES=OFF"
     "-DALSOFT_TESTS=OFF"
   ];
