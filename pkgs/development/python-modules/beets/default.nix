@@ -279,6 +279,8 @@ buildPythonPackage (finalAttrs: {
         bpd = { };
         bpm.testPaths = [ ];
         bpsync = {
+          # plugin retired: https://github.com/beetbox/beets/issues/3862.
+          deprecated = true;
           testPaths = [ ];
         };
         bucket = { };
