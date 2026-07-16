@@ -56,7 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     mate-panel
   ];
 
-  configureFlags = [ "--enable-applets" ];
+  configureFlags = [
+    "--enable-applets"
+    "--sbindir=$(out)/bin"
+  ];
+
+  postPatch = ''
+    # Fixes polkit popup after `nixos-rebuild switch`.
+    substituteInPlace src/gpm-brightness.c \
+      --replace-fail 'SBINDIR "/mate-power-backlight-helper' '"/run/current-system/sw/bin/mate-power-backlight-helper'
+  '';
 
   enableParallelBuilding = true;
 

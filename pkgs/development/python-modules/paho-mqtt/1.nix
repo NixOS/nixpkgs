@@ -1,11 +1,10 @@
 {
-  lib,
-  stdenv,
   buildPythonPackage,
+  esphome,
   fetchFromGitHub,
-  hatchling,
-  openssl,
+  lib,
   pytestCheckHook,
+  setuptools,
 }:
 
 let
@@ -16,45 +15,33 @@ let
     hash = "sha256-SQoNdkWMjnasPjpXQF2yV97MUra8gb27pc3rNoA8Rjw=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paho-mqtt";
-  version = "2.1.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
-    rev = "v${version}";
-    hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/ssl/gen.sh \
-      --replace-fail "c_rehash certs" "#c_rehash certs"
-  '';
-
-  build-system = [
-    hatchling
-  ];
-
-  nativeCheckInputs = [
-    openssl
-    pytestCheckHook
-  ];
-
-  __darwinAllowLocalNetworking = true;
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "paho.mqtt" ];
+
+  doCheck = false;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     ln -s ${testing} paho.mqtt.testing
 
     # paho.mqtt not in top-level dir to get caught by this
     export PYTHONPATH=".:$PYTHONPATH"
-
-    pushd tests/ssl
-    HOME="$(mktemp -d)" ./gen.sh
-    popd
   '';
 
   disabledTests = [
@@ -63,14 +50,13 @@ buildPythonPackage rec {
     "test_01_zero_length_clientid"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
-    changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
+    changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${finalAttrs.src.tag}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";
     homepage = "https://eclipse.org/paho";
     license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [
-      mog
-      dotlambda
-    ];
+    inherit (esphome.meta) maintainers;
   };
-}
+})
