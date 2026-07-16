@@ -2465,8 +2465,9 @@
     "greencell" =
       ps: with ps; [
         aiohasupervisor
+        greencell-client
         paho-mqtt
-      ]; # missing inputs: greencell_client
+      ];
     "greeneye_monitor" =
       ps: with ps; [
         greeneye-monitor
@@ -8154,6 +8155,7 @@
     "graphite"
     "gree"
     "green_planet_energy"
+    "greencell"
     "greeneye_monitor"
     "group"
     "growatt_server"
