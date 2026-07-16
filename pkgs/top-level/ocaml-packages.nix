@@ -788,6 +788,8 @@ let
 
         graphql_ppx = callPackage ../development/ocaml-modules/graphql_ppx { };
 
+        grenier = callPackage ../development/ocaml-modules/grenier { };
+
         gsl = callPackage ../development/ocaml-modules/gsl {
           inherit (pkgs) gsl;
         };
