@@ -6,7 +6,7 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-9LLTgIjOOMvYx4nhy+6X9bEBvqlKeTx//39q+YWXeHw=",
+  vendorHash ? "sha256-K7cHC6IVawJmlCLR45SKEowXw7SfURIePHzj1LvKS84=",
 }:
 
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.14.3";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uk4oWsUxaGdLQzX5JywYzi7pmQHGo06uQdLeOkP4U/s";
+    hash = "sha256-3BKXmrsSsDWFl6MT6c5Q8wcQiApO1vG0KeUtJLm89jU=";
   };
 
   inherit vendorHash;
