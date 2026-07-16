@@ -63,7 +63,7 @@ echo "darwin hash: $darwin_hash"
 # Get current hashes from package.nix
 current_x86_hash=$(grep -A2 'x86_64-linux = fetchurl' "$PACKAGE_NIX" | grep -Po 'hash = "\K[^"]+')
 current_aarch64_hash=$(grep -A2 'aarch64-linux = fetchurl' "$PACKAGE_NIX" | grep -Po 'hash = "\K[^"]+')
-current_darwin_hash=$(grep -A2 'darwinDmg = fetchurl' "$PACKAGE_NIX" | grep -Po 'hash = "\K[^"]+')
+current_darwin_hash=$(grep -A2 'aarch64-darwin = fetchurl' "$PACKAGE_NIX" | grep -Po 'hash = "\K[^"]+')
 
 # Update version and hashes
 sed -i "s|version = \"$current_version\"|version = \"$latest_version\"|" "$PACKAGE_NIX"
