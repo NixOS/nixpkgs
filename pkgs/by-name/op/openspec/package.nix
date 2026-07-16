@@ -13,20 +13,20 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VZZ/ukjciXqiebwei2JizyOnxx0T3IeoowFWElKec4o=";
+    hash = "sha256-lvg10gpx6tB6eSv5iesqhUQqYqkVuU4hpSVfYy/f3bE=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-p44ctVCA3d1CXoq+zzhswVqhScF23ZhvpLUVVcrgQlM=";
+    hash = "sha256-+392kmJ9fWQZW4R7n3sompLirulmA5VfTUWH6IL9MBU=";
   };
 
   nativeBuildInputs = [
