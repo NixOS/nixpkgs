@@ -18504,12 +18504,12 @@ final: prev: {
 
   typst-preview-nvim = buildVimPlugin {
     pname = "typst-preview.nvim";
-    version = "1.4.2-unstable-2026-03-30";
+    version = "1.5.0";
     src = fetchFromGitHub {
       owner = "chomosuke";
       repo = "typst-preview.nvim";
-      rev = "87db18b8d19c8b0eed399f52e4c527ce5afe4817";
-      hash = "sha256-EUYiHzDWJQM9Guk6ZM5GWE/etB+GHM48myRg/BPtOV0=";
+      tag = "v1.5.0";
+      hash = "sha256-UTugVfydwGTmf5RomQ0R72Yf6fSz8gGeY/fg51qW454=";
     };
     meta.homepage = "https://github.com/chomosuke/typst-preview.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
