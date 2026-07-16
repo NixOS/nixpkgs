@@ -97,10 +97,16 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    cmake --install . --prefix "$out"
-    runHook postInstall
-    makeBinaryWrapper "$out/PicaSim" "$out/bin/picasim" --chdir "$out"
+
+    cmake --install . --prefix "$out/opt/PicaSim"
+
+    makeBinaryWrapper "$out/opt/PicaSim/PicaSim" "$out/bin/picasim" \
+      --chdir "$out/opt/PicaSim" \
+      --set SDL_VIDEODRIVER x11 # No native wayland support
+
     install -Dm0644 $src/resources/IconFull.png $out/share/icons/hicolor/512x512/apps/picasim.png
+
+    runHook postInstall
   '';
 
   desktopItems = [
