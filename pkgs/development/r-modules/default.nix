@@ -2190,6 +2190,14 @@ let
       };
     });
 
+    SingleR = old.SingleR.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace src/find_classic_markers.cpp --replace-fail \
+          "Rcpp::IntegerVector val(de_n);" \
+          "Rcpp::IntegerVector val(static_cast<int>(de_n));"
+      '';
+    });
+
     SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
