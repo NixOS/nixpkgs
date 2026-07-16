@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://tamentis.com/projects/mdp/";
     changelog = "https://github.com/tamentis/mdp/releases/tag/v${finalAttrs.version}";
-    license = [ lib.licenses.isc ];
+    license = lib.licenses.isc;
     description = "Manage your passwords with GnuPG and a text editor";
   };
 

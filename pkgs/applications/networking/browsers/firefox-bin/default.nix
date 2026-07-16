@@ -39,7 +39,6 @@ let
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-aarch64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
   };
 

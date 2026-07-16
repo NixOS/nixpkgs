@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  # https://github.com/patriciogonzalezvivo/vera/pull/31/changes
+  patches = [ ./patches/0001-fix-miniaudio-device-id-handling.patch ];
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/glslViewer.thumbnailer \
       --replace-fail "TryExec=glslThumbnailer" "TryExec=$out/bin/glslThumbnailer" \

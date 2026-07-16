@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Create software bill of materials (SBOM) for Rust";
     homepage = "https://github.com/psastras/sbom-rs";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];

@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     description = "Modern GTK4 email client for the GNOME ecosystem";
     homepage = "https://gitlab.gnome.org/jbrummer/stamp";
     maintainers = with lib.maintainers; [ onny ];
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "stamp";
   };

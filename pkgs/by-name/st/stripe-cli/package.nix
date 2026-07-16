@@ -105,7 +105,7 @@ buildGoModule (finalAttrs: {
       Tail your API request logs in real-time
       Create, retrieve, update, or delete API objects.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       RaghavSood
       jk
