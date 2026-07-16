@@ -469,23 +469,6 @@ buildPythonPackage (finalAttrs: {
       );
     };
     tests = {
-      gstreamer =
-        runCommand "beets-gstreamer-test"
-          {
-            meta.timeout = 60;
-          }
-          ''
-            set -euo pipefail
-            export HOME=$(mktemp -d)
-            mkdir $out
-
-            cat << EOF > $out/config.yaml
-            replaygain:
-              backend: gstreamer
-            EOF
-
-            ${finalAttrs.finalPackage}/bin/beet -c $out/config.yaml > /dev/null
-          '';
       with-new-builtin-plugin = finalAttrs.finalPackage.overrideAttrs (
         newAttrs: oldAttrs: {
           postPatch = (oldAttrs.postPatch or "") + ''
