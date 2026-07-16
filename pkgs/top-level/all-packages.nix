@@ -10571,10 +10571,6 @@ with pkgs;
 
   boinc-headless = boinc.override { headless = true; };
 
-  celestia = callPackage ../applications/science/astronomy/celestia {
-    inherit (gnome2) gtkglext;
-  };
-
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
