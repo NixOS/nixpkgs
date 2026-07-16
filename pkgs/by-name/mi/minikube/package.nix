@@ -77,9 +77,9 @@ buildGoModule (finalAttrs: {
           lib.optionals withQemu [ qemu ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
         )
       } \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])
-      }
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libvirt ]
+      }"}
     ln -sv $out/bin/minikube $out/bin/kubectl
 
     installShellCompletion --cmd minikube \
