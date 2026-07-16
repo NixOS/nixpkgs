@@ -198,15 +198,15 @@ watermelon
 - If creating a commit purely for documentation changes, format the commit message in the following way:
 
   ```
-  doc: (documentation summary)
+  doc/component: (documentation summary)
 
   (Motivation for change, relevant links, additional information.)
   ```
 
   Examples:
 
-  * doc: update the kernel config documentation to use `nix-shell`
-  * doc: add information about `nix-update-script`
+  * doc/stdenv: update the kernel config documentation to use `nix-shell`
+  * doc/getting-started: add information about `nix-update-script`
 
     Closes #216321.
 
