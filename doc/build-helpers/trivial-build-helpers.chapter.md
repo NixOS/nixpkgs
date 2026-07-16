@@ -165,7 +165,7 @@ They are useful for creating files from Nix expressions, and are all implemented
 Each of these functions will cause a derivation to be produced.
 When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
 
-:::: {.note}
+::: {.note}
 Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
 If you need to refer to the resulting files somewhere else in a Nix expression, append their path to the derivation's store path.
 
@@ -190,7 +190,7 @@ writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 ''
 ```
-::::
+:::
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
 
