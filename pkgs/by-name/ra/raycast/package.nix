@@ -14,15 +14,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
   version = "1.104.17";
 
-  src =
-    {
-      aarch64-darwin = fetchurl {
-        name = "Raycast.dmg";
-        url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
-        hash = "sha256-muX6PPanjU+ElCQhIfo7Y7cChbTO8Q/gH12ULvBK43s=";
-      };
-    }
-    .${stdenvNoCC.system} or (throw "raycast: ${stdenvNoCC.system} is unsupported.");
+  src = fetchurl {
+    name = "Raycast.dmg";
+    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=arm";
+    hash = "sha256-muX6PPanjU+ElCQhIfo7Y7cChbTO8Q/gH12ULvBK43s=";
+  };
 
   dontPatch = true;
   dontConfigure = true;
@@ -55,15 +51,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version=$(echo "$url" | jq -r '.version')
 
       arm_url="https://releases.raycast.com/releases/$version/download?build=arm"
-      x86_url="https://releases.raycast.com/releases/$version/download?build=x86_64"
-
       arm_hash="sha256-$(curl -sL "$arm_url" | openssl dgst -sha256 -binary | openssl base64)"
-      x86_hash="sha256-$(curl -sL "$x86_url" | openssl dgst -sha256 -binary | openssl base64)"
 
       sed -i -E \
         -e 's|(version = )"[0-9]+\.[0-9]+\.[0-9]+";|\1"'"$version"'";|' \
-        -e '/aarch64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
-        -e '/x86_64-darwin = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$x86_hash"'";|' \
+        -e '/src = fetchurl/,/};/ s|(hash = )"sha256-[A-Za-z0-9+/]+=";|\1"'"$arm_hash"'";|' \
         ./pkgs/by-name/ra/raycast/package.nix
     '';
   });

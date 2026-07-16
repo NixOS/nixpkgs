@@ -19,7 +19,6 @@ update-source-version pdfium-binaries $latestVersion || true
 for system in \
     x86_64-linux \
     aarch64-linux \
-    x86_64-darwin \
     aarch64-darwin; do
     hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url --unpack $(nix-instantiate --eval -E "with import ./. {}; pdfium-binaries.src.url" --system "$system" | tr -d '"')))
     update-source-version pdfium-binaries $latestVersion $hash --system=$system --ignore-same-version
@@ -28,7 +27,6 @@ done
 for system in \
     x86_64-linux \
     aarch64-linux \
-    x86_64-darwin \
     aarch64-darwin; do
     hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url --unpack $(nix-instantiate --eval -E "with import ./. {}; pdfium-binaries-v8.src.url" --system "$system" | tr -d '"')))
     update-source-version pdfium-binaries-v8 $latestVersion $hash --system=$system --ignore-same-version

@@ -55,7 +55,6 @@ let
   # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
   versions.aarch64-darwin = "7.1.0.83064";
-  versions.x86_64-darwin = "7.1.0.83064";
 
   # This is the fallback version so that evaluation can produce a meaningful result.
   versions.x86_64-linux = "7.1.0.3715";
