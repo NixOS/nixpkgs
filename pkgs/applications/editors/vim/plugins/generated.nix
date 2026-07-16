@@ -18770,12 +18770,12 @@ final: prev: {
 
   vague-nvim = buildVimPlugin {
     pname = "vague.nvim";
-    version = "2.1.3";
+    version = "2.1.4";
     src = fetchFromGitHub {
       owner = "vague-theme";
       repo = "vague.nvim";
-      tag = "v2.1.3";
-      hash = "sha256-ULBLMmJQe93N3uOPx6h8wif+38g0OSC7haklfVJyZdA=";
+      tag = "v2.1.4";
+      hash = "sha256-57dHWOUPFIyFdLEs9RDv0cateLRc8XAqT4TmDUSQyV4=";
     };
     meta.homepage = "https://github.com/vague-theme/vague.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
