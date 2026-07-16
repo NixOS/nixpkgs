@@ -212,7 +212,7 @@ let
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
   #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
-  #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
+  #     propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ self.bar ];
   #   });
   # }
   overrideRDepends =
@@ -221,7 +221,7 @@ let
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
         nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
-        propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or [ ]) ++ value;
+        propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ value;
       })
     ) overrides;
 
