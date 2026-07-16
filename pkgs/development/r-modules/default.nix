@@ -397,14 +397,12 @@ let
 
   packagesWithRDepends = {
     # keep-sorted start block=yes
-    FactoMineR = [ self.car ];
     TriDimRegression = [ self.rstantools ];
     bayesdfa = [ self.rstantools ];
     bbmix = [ self.rstantools ];
     disbayes = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
-    pander = [ self.codetools ];
     pliman = [ self.EBImage ];
     rmsb = [ self.rstantools ];
     spectralGraphTopology = [ self.CVXR ];
