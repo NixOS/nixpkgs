@@ -384,6 +384,64 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 });
             });
         """
+        intersection_observer_js = """
+function createObserver() {
+  const content = document.querySelector(".content");
+  const headings = content.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+  const links = new Map();
+  document.querySelectorAll("ol li a").forEach((a) => {
+    links.set(a.hash.slice(1), a);
+  });
+  const visible = new Set();
+
+  function setActive(link) {
+    document
+      .querySelectorAll("ol.toc a.active, ol.toc a.active-trail")
+      .forEach((a) => a.classList.remove("active", "active-trail"));
+
+    link.classList.add("active");
+
+    let li = link.closest("li")?.parentElement.closest("li");
+    for (; li; li = li.parentElement.closest("li")) {
+      li.querySelector(":scope > details > summary > a")?.classList.add(
+        "active-trail",
+      );
+    }
+  }
+
+  const handleIntersect = (entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) visible.add(entry.target);
+      else visible.delete(entry.target);
+    }
+
+    const current = [...visible]
+      .filter((h) => links.has(h.id))
+      .sort(
+        (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
+      )[0];
+
+    if (!current) return;
+
+    const link = links.get(current.id);
+    if (link) setActive(link);
+  };
+
+  const observer = new IntersectionObserver(handleIntersect, {
+    root: content,
+    rootMargin: "0px 0px -70% 0px",
+    threshold: 0,
+  });
+
+  [...headings]
+    .filter((h) => h.id && links.has(h.id))
+    .forEach((h) => observer.observe(h));
+}
+
+document.addEventListener("DOMContentLoaded", createObserver);
+        """
+
         header_content = ""
         if self._html_params.header:
             with open(self._html_params.header) as header_file:
@@ -403,6 +461,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f"<script>{close_menu_js}</script>",
+            f"<script>{intersection_observer_js}</script>",
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
             f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
