@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromCodeberg,
-  pythonAtLeast,
   openssl,
   rsa,
   pyaes,
   cryptg,
+  hatchling,
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
@@ -14,24 +14,27 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "telethon";
-  version = "1.42.0";
+  version = "1.44.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "Lonami";
     repo = "Telethon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
+    hash = "sha256-NzLlDwxzLWyySluUazQGPDukT71awCrJZEbjd5T9K/g=";
   };
-
-  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace telethon/crypto/libssl.py --replace-fail \
       "ctypes.util.find_library('ssl')" "'${lib.getLib openssl}/lib/libssl.so'"
   '';
 
+  preCheck = ''
+    python setup.py gen
+  '';
+
   build-system = [
+    hatchling
     setuptools
   ];
 
