@@ -13,8 +13,8 @@
   openssl,
   cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.5";
+  version = "2026.7.8";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHZXd9u+FbwOs60yrmg5oSnQoHskVCi29TRgu0RKOpM=";
+    hash = "sha256-kjmPqK82z2c18hO0PyZaiSh8Yy5djUPHZO2uskHEdgs=";
   };
 
-  cargoHash = "sha256-JXipQn9gN5cJx6PSpDYHuxjYLNRyAwpjSaROxqSvIog=";
+  cargoHash = "sha256-tzdyKsZizTC3kC9V1LiSxmwC2G9JScXiW7wdL3bB0DI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # gix spawns git-upload-pack by name in file:// clone tests.
     git
     rustPlatform.bindgenHook
+    tzdata
   ];
 
   # disable warnings as errors for aws-lc-sys in checkPhase
@@ -113,7 +114,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -121,7 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];
