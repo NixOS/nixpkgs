@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.9.2";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-sQ1zsQ/6OHGPkofiKhusCrpW2XnO+PpMvH1M2OG5Huw=";
+    hash = "sha256-228hxjKkxE0ILzP8dnIS21R3AW9Y0+wutgcYlQdCgXc=";
   };
 
   buildInputs = [
@@ -69,21 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.LANG = "C.UTF-8";
-
-  # Remove after next release
-  patches = [
-    (fetchpatch {
-      name = "add-missing-header.patch";
-      url = "https://github.com/fooyin/fooyin/commit/7b171c0da2b9289468696424fe51f76e1c365bb5.patch";
-      hash = "sha256-Uvggz2F6DuWYAg20qi8uHkshzCnTLrchambQ/yDyIfA=";
-    })
-  ];
-
-  # Fix compatibility with Qt 6.10.1 - should be fixed in next release
-  postPatch = ''
-    substituteInPlace src/utils/starrating.cpp \
-      --replace-fail '.arg(alignment);' '.arg(alignment.toInt());'
-  '';
 
   meta = {
     description = "Customisable music player";
