@@ -116,6 +116,9 @@ buildGoModule rec {
 
     # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
     git init
+
+    # Introduced in v16 Makefile
+    export GITEA_ROOT="$PWD"
   '';
 
   checkFlags =
@@ -124,6 +127,7 @@ buildGoModule rec {
         "TestPassword" # requires network: api.pwnedpasswords.com
         "TestCaptcha" # requires network: hcaptcha.com
         "TestDNSUpdate" # requires network: release.forgejo.org
+        "TestMigrateRepository" # requires network: codeberg.org
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
         "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
