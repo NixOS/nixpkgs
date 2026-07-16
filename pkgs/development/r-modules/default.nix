@@ -852,6 +852,7 @@ let
     sphereTessellation = [ pkgs.pkg-config ];
     stpphawkes = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     string2path = [ pkgs.cargo ];
+    stringfish = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
     survSNP = [ pkgs.gsl ]; # for gsl-config
     surveyvoi = [ pkgs.pkg-config ];
@@ -1568,6 +1569,7 @@ let
     spp = with pkgs; [ zlib.dev ];
     ssh = with pkgs; [ libssh ];
     strawr = [ pkgs.curl ];
+    stringfish = [ pkgs.pcre2 ];
     stringi = [ pkgs.icu74 ];
     stsm = [ pkgs.gsl ];
     surveyvoi = with pkgs; [
