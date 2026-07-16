@@ -218,6 +218,9 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     gl2ps
   ]
+  ++ lib.optionals ((lib.versionAtLeast finalAttrs.version "9.6.0") && stdenv.hostPlatform.isLinux) [
+    libxcursor
+  ]
   ++ lib.optionals withQt6 [ qt6.qttools ]
   # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
