@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clpeak";
-  version = "2.0.13";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "krrishnarraj";
     repo = "clpeak";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-tybt85jxoaWLUuZNFAla+2t0rLSanapc9w3lgez9uPI=";
+    hash = "sha256-wrO+pJFTX+wgjR4aOptuoBZiPgxduF/TQr3lmJJ8cd0=";
   };
 
   nativeBuildInputs = [ cmake ];
