@@ -119,6 +119,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "numpy"
     "scipy"
   ];
 
