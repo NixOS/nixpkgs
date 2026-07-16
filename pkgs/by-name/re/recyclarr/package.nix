@@ -18,7 +18,7 @@ buildDotnetModule (finalAttrs: {
     hash = "sha256-Uu6fBKODzKGYA6vSJPw0OV/+bi3y2F/SHfrdd5pdyzs=";
   };
 
-  projectFile = "Recyclarr.slnx";
+  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
   nugetDeps = ./deps.json;
 
   postPatch = ''
@@ -39,12 +39,8 @@ buildDotnetModule (finalAttrs: {
 
   dotnetBuildFlags = [
     "-p:DisableGitVersionTask=true"
-    "/m:1"
   ];
 
-  dotnetInstallFlags = [
-    "/m:1"
-  ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
@@ -61,7 +57,11 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''RECYCLARR_CONFIG_DIR="$TMPDIR/recyclarr" recyclarr --version'';
+      version = "v${finalAttrs.version}";
+    };
   };
 
   meta = {
