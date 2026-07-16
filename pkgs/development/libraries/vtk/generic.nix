@@ -227,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
         with python3Packages;
         [
           numpy
-          wslink
           matplotlib
         ]
         ++ lib.optional mpiSupport (mpi4py.override { inherit mpi; });
