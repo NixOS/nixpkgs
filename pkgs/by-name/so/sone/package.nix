@@ -26,22 +26,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sone";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "lullabyX";
     repo = "sone";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dVAVMcEr9cUPJetcVj9y9Lkj6LevJH0M7WYui43IjnY=";
+    hash = "sha256-JhzO4n6bR9Mb5U8hr6DuRm2xCjTVPasA86d6d/EG5Ig=";
   };
 
-  cargoHash = "sha256-gsg/aKy+RpJFF6Q2P5O7btoeY4Q/A9D/w3s1nLvnp1Q=";
+  cargoHash = "sha256-sLw31tCdmNLubsWySwGS5cp935wpqkwmM8/YCuQnM98=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-vOfDSTu7AnZINejVwnIXdZJYlmHSljJpddRRQqlI7ko=";
+    hash = "sha256-JCvImjN73oImtPKstbqqBsKHDW9iLPJMQsNm5I4Ws7k=";
   };
 
   nativeBuildInputs = [

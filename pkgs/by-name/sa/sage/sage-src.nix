@@ -130,6 +130,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/926f32aab22f81ddb9fda874a20fee84c7bfacc3.patch?full_index=1";
       hash = "sha256-EMn/fr5WlRQtFj5GHo02kczasmKaiqFfRSVZo2uvOPI=";
     })
+
+    # work around https://github.com/ipython/ipython/issues/15207, which
+    # will likely be properly fixed in IPython 9.16.
+    ./patches/ipython-9_15-workaround.patch
+
+    # work around https://github.com/scipy/scipy/issues/25471, which is
+    # fixed as part of SciPy 1.18.1.
+    ./patches/scipy-1_18-workaround.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
