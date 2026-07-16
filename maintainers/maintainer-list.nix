@@ -21219,12 +21219,6 @@
     githubId = 19862;
     name = "KJ Ørbekk";
   };
-  orbitz = {
-    email = "mmatalka@gmail.com";
-    github = "orbitz";
-    githubId = 75299;
-    name = "Malcolm Matalka";
-  };
   orhun = {
     email = "orhunparmaksiz@gmail.com";
     github = "orhun";
