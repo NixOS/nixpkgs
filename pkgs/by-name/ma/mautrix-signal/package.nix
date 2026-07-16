@@ -20,14 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "26.06";
-  tag = "v0.2606.0";
+  version = "26.07";
+  tag = "v0.2607.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     inherit tag;
-    hash = "sha256-DSOf6kyNcsknwKM77vUQs6pWX8hMo4mU9dOGai62QR0=";
+    hash = "sha256-l6IIL2bClC6t5+P0/AkFIjkD/eDpQnnmA8x4i5ROaY4=";
   };
 
   buildInputs =
@@ -46,7 +46,7 @@ buildGoModule rec {
     CGO_LDFLAGS = toString [ cppStdLib ];
   };
 
-  vendorHash = "sha256-e9Et97QEn12kkiqrQTaDtwECLhwvxwDUF6IcWoL/+Mg=";
+  vendorHash = "sha256-0ifGza94s4+ED5OrlrqoDKIDZIYJWJhB2q3LJRpKiJs=";
 
   ldflags = [
     "-X"
