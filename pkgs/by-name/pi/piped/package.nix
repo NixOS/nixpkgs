@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -42,7 +42,9 @@ buildNpmPackage rec {
     hash = "sha256-o5NKMMIVPkKiPx++ALcZ+3oN80DMQHPwQqGT4f4q5P8=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
