@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
           lib.optionals miniaudioNeedsPkgconfigs [
             "$(pkg-config --libs ${toString miniaudioPkgconfigs})"
           ]
-          ++ lib.optionals coreaudioSupport [ "-framework CoreAudio" ]
+          ++ lib.optionals coreaudioSupport [
+            "-framework CoreFoundation"
+            "-framework CoreAudio"
+            "-framework AudioToolbox"
+          ]
         )
       }"
   '';
