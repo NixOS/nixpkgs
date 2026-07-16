@@ -1126,7 +1126,9 @@ let
     ];
     V8 = with pkgs; [
       nodejs-slim_22.libv8
-      icu78 # use same icu version as in pkgs/development/web/nodejs/nodejs.nix
+      # This should be the same icu version as the one used by nodejs
+      # See: pkgs/development/web/nodejs/nodejs.nix
+      icu
     ];
     VariantAnnotation = with pkgs; [
       zlib.dev
