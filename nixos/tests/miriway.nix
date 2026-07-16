@@ -33,12 +33,11 @@
           add-wayland-extensions=all
           enable-x11=
 
-          ctrl-alt=t:foot --maximized
-          ctrl-alt=a:env WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty --option window.startup_mode=\"maximized\"
-
-          shell-component=dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
-
           shell-component=foot --maximized
+        '';
+        settings = ''
+          command_ctrl_alt=t:foot --maximized
+          command_ctrl_alt=a:env WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty --option window.startup_mode=\"maximized\"
         '';
       };
 
@@ -59,8 +58,9 @@
         etc."xdg/foot/foot.ini".source = (pkgs.formats.ini { }).generate "foot.ini" {
           main = {
             font = "inconsolata:size=16";
+            initial-color-theme = "light";
           };
-          colors = rec {
+          colors-light = rec {
             foreground = "000000";
             background = "ffffff";
             regular2 = foreground;
