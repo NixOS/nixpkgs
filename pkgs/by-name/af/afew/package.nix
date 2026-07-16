@@ -9,12 +9,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "afew";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-d6WfXt4K5nLawwdsWXHgy0+nMJXqxs9QQ0xmVeX1m3Q=";
+    hash = "sha256-LPKSD4aMAREtf5Y4A9oa6Sh5lv/uuLpamcP35SBgA/M=";
   };
 
   nativeBuildInputs = with python3Packages; [
