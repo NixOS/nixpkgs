@@ -6,16 +6,16 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-laGQWJbke+q0dAdqR8opXw4oQm6wdJJT0/t/A9c7d9s=";
+    hash = "sha256-svJA9QyqwpY1xzOQ09qFlZwrGp3HZXW9T2AICVJfqOs=";
   };
 
-  cargoHash = "sha256-+T9aGsewRHdmKMtZisXv4st+9kBTNtEZnPraLz8S4e8=";
+  cargoHash = "sha256-QJr6kM520OWxje7Q5FZWgJH1IS8j+Jv1vNf7VyCINNA=";
 
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
