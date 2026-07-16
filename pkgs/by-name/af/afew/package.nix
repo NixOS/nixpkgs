@@ -17,10 +17,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-LPKSD4aMAREtf5Y4A9oa6Sh5lv/uuLpamcP35SBgA/M=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    sphinxHook
-    setuptools
-    setuptools-scm
+  build-system = [
+    python3Packages.setuptools
+    python3Packages.setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    python3Packages.sphinxHook
   ];
 
   sphinxBuilders = [
@@ -28,11 +31,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "man"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    chardet
-    dkimpy
-    notmuch2
-    setuptools
+  dependencies = [
+    python3Packages.chardet
+    python3Packages.dkimpy
+    python3Packages.notmuch2
   ];
 
   nativeCheckInputs = [
