@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutecosmic";
-  version = "0.1-unstable-2026-03-25";
+  version = "0.1-unstable-2026-07-11";
 
   src = fetchFromGitHub {
     owner = "IgKh";
     repo = "cutecosmic";
-    rev = "441c5ac05b85dd7afeaf02689af7de7428717c6b";
-    hash = "sha256-NMRP9QeN+57pUyA0/xynITJyWrCu/Eg2ZvGzDBzfmvQ=";
+    rev = "3f518924fbccc1b62f4d9e8db6c9eda7490959c9";
+    hash = "sha256-bombgw+vxn8LQ60ZWMrIJuwejsyJd+2dNkAjQBzVj3w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
