@@ -2,7 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchPypi,
 }:
+let
+  # Due to bug:
+  # https://github.com/codecov/codecov-cli/issues/721
+  click_8_2 = python3Packages.click.overridePythonAttrs (old: rec {
+    version = "8.2.1";
+    src = fetchPypi {
+      pname = "click";
+      inherit version;
+      hash = "sha256-J8SRzAXZaNJx1aHbE+O1oYRjbZ2TDxSMULA48NBkYgI=";
+    };
+  });
+in
 
 python3Packages.buildPythonApplication rec {
   pname = "codecov-cli";
@@ -21,12 +34,11 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
-    "click"
     "responses"
   ];
 
   dependencies = with python3Packages; [
-    click
+    click_8_2
     ijson
     pyyaml
     responses

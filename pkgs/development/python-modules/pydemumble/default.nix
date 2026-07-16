@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pydemumble";
-  version = "0.0.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "pydemumble";
     tag = "v${version}";
-    hash = "sha256-JAUMTOYGHu64L0zLK2dzf0poHrGGiE29WoAR5kRsR+s=";
+    hash = "sha256-c6jKnWsB8Do076eiMQXNo0JNCiLNh9iMohEnBAf+YW8=";
     fetchSubmodules = true;
   };
 
