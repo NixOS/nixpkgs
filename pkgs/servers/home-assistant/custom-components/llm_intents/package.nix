@@ -13,13 +13,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "skye-harris";
   domain = "llm_intents";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "llm_intents";
     tag = finalAttrs.version;
-    hash = "sha256-UYWt+PpG0M1DE1nHqLJ/npp29JyfNz19Pyb1Jv3LM48=";
+    hash = "sha256-WqPemaBKTiOiO3nT0PDQqhRMjvLAA3WNOGM1stbapBE=";
   };
 
   dependencies = [
