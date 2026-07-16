@@ -12,19 +12,32 @@
       lib.warn "tkremind is deprecated and should be removed; use withGui instead." tkremind
     else
       true,
+  writeText,
 }:
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "06.02.07";
+  version = "06.02.08";
 
-  src = fetchFromGitea {
-    domain = "git.skoll.ca";
-    owner = "Skollsoft-Public";
-    repo = "Remind";
-    rev = version;
-    hash = "sha256-5Cg7UdftyzjQg7pdewc7z8SfA3jtXQdPboXs9V/vDDo=";
-  };
+  src =
+    let
+      domain = "git.skoll.ca";
+      netrc = writeText "netrc" ''
+        machine ${domain}
+        login notabot
+        password notabot
+      '';
+    in
+    fetchFromGitea {
+      inherit domain;
+      owner = "Skollsoft-Public";
+      repo = "Remind";
+      rev = version;
+      hash = "sha256-+5ms52n5W2fmW7YhloB67vI0gF4+q8i1CyciSvY5lg0=";
+      netrcPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        cp ${netrc} netrc
+      '';
+    };
 
   propagatedBuildInputs = lib.optionals withGui [
     tclPackages.tcllib
