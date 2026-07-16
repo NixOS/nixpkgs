@@ -10,9 +10,10 @@ let
 in
 
 python3Packages.buildPythonPackage {
+  __structuredAttrs = true;
   inherit pname version;
-  pyproject = true;
 
+  pyproject = true;
   disabled = python3Packages.pythonOlder "3.10";
 
   src = fetchFromGitHub {
