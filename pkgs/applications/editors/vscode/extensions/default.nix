@@ -2592,8 +2592,8 @@ let
         mktplcRef = {
           publisher = "jnoortheen";
           name = "nix-ide";
-          version = "0.5.9";
-          hash = "sha256-hPOcp6Yksgfu1+In21/gJ3MthV8JUV5WaRpYHvo5GGk=";
+          version = "0.5.10";
+          hash = "sha256-5rNqQRFLryzeIezUiqgvSY8Vz5n48367RHQrFDxpoD8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
