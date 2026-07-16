@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "function-runner";
-  version = "9.2.0";
+  version = "9.2.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Shopify";
     repo = "function-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+y4XQ4Oq4RdAMAD2mNtBAVb+8TqDbCNalXNo56UUOD4=";
+    hash = "sha256-IhlQEeKGWcE2lVhcLbOqUQU+DboxMDc/9eDlzlfcprg=";
   };
 
-  cargoHash = "sha256-2XkfABzi55J/uO/2zO5QLLNx8pIb+YqowNPdJeMNdDI=";
+  cargoHash = "sha256-mf1kIDsNIk5oXIuvki9zt3D7qJOUtPOvDC8jbLjCMtE=";
 
   nativeBuildInputs = [
     pkg-config
