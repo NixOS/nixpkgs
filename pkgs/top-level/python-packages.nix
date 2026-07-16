@@ -4255,6 +4255,8 @@ self: super: with self; {
 
   depyf = callPackage ../development/python-modules/depyf { };
 
+  derivative = callPackage ../development/python-modules/derivative { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
@@ -9512,6 +9514,8 @@ self: super: with self; {
   lifx-async = callPackage ../development/python-modules/lifx-async { };
 
   lifx-emulator-core = callPackage ../development/python-modules/lifx-emulator-core { };
+
+  liger-kernel = callPackage ../development/python-modules/liger-kernel { };
 
   lightgbm = callPackage ../development/python-modules/lightgbm { };
 
@@ -15833,6 +15837,8 @@ self: super: with self; {
 
   pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
 
+  pysindy = callPackage ../development/python-modules/pysindy { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
@@ -19044,6 +19050,8 @@ self: super: with self; {
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+  spectral-derivatives = callPackage ../development/python-modules/spectral-derivatives { };
+
   speechbrain = callPackage ../development/python-modules/speechbrain { };
 
   speechrecognition = callPackage ../development/python-modules/speechrecognition { };
@@ -19780,6 +19788,8 @@ self: super: with self; {
   swh-storage = callPackage ../development/python-modules/swh-storage { };
 
   swh-web-client = callPackage ../development/python-modules/swh-web-client { };
+
+  swi-tools = callPackage ../development/python-modules/swi-tools { };
 
   swift = callPackage ../development/python-modules/swift { };
 

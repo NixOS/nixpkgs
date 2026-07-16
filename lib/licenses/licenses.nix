@@ -387,6 +387,13 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    cc-by-nc-30-igo = {
+      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
+      # spdxId = "CC-BY-NC-3.0-IGO";
+      fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
+      free = false;
+    };
+
     cc-by-nc-40 = {
       spdxId = "CC-BY-NC-4.0";
       fullName = "Creative Commons Attribution Non Commercial 4.0 International";
@@ -929,6 +936,11 @@ lib.mapAttrs mkLicense (
       fullName = "Intel Simplified Software License";
       url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
       free = false;
+    };
+
+    jpl-image = {
+      fullName = "JPL Image Use Policy";
+      spdxId = "JPL-image";
     };
 
     knuth = {
