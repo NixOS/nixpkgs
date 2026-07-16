@@ -7,6 +7,10 @@ let
 
   machineNames = map machineSafe manImplementations;
 
+  emptyManualPages = pkgs.runCommand "empty-man-pages" { } ''
+    mkdir -p "$out/share/man"
+  '';
+
   makeConfig = useImpl: {
     # Note: mandoc currently can't index symlinked section directories.
     # So if a man section comes from one package exclusively (e. g.
@@ -47,11 +51,26 @@ in
       name = machineSafe i;
       value = makeConfig i;
     }) manImplementations
+    ++ [
+      {
+        name = "empty_man_db_cache";
+        value.documentation.man = {
+          enable = true;
+          cache.enable = true;
+          man-db.manualPages = emptyManualPages;
+        };
+      }
+    ]
   );
 
   testScript = ''
     import re
     start_all()
+
+    with subtest("Test empty build-time man-db cache"):
+      empty_man_db_cache.succeed(
+        "test -d $(grep '^MANDB_MAP ' /etc/man_db.conf | cut -d' ' -f3)"
+      )
 
     def match_man_k(page, section, haystack):
       """

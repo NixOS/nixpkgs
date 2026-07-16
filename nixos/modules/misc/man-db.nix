@@ -89,6 +89,7 @@ in
                     preferLocalBuild = true;
                   }
                   ''
+                    mkdir -p "$out"
                     echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
                     mandb -C man.conf -pscq
                   ''
