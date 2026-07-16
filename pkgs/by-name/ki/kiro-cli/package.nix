@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
         hash = "sha256-39hKSRi1l5ruSqObViksJkufiCOvLTaIkQzT3sNQFQQ=";
       };
-      x86_64-darwin = darwinDmg;
       aarch64-darwin = darwinDmg;
     }
     .${system} or (throw "Unsupported system: ${system}");
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

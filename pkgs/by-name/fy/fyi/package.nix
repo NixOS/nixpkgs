@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/dnkl/fyi/releases/tag/${finalAttrs.version}";
     description = "Command line utility to create desktop notifications";
     homepage = "https://codeberg.org/dnkl/fyi";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "fyi";
     maintainers = with lib.maintainers; [ marnym ];
     platforms = lib.platforms.linux;

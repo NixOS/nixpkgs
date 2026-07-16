@@ -15,10 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     {
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-x64-${finalAttrs.version}.zip";
-        hash = "sha256-nxfnPz2oxsYUsT2Q9ADDxVq5xcJvkNDQTBX8EkGUF4g=";
-      };
       aarch64-darwin = fetchurl {
         url = "https://github.com/tiddly-gittly/TidGi-Desktop/releases/download/v${finalAttrs.version}/TidGi-darwin-arm64-${finalAttrs.version}.zip";
         hash = "sha256-bSJFM67+KVECUqjwu1HYipn+zOps1ahNzM721yZL52c=";
@@ -70,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ klchen0112 ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

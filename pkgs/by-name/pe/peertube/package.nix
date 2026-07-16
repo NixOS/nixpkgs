@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       # feasible, looking for maintainer to help out
-      # "x86_64-darwin" "aarch64-darwin"
+      # "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [
       immae

@@ -73,10 +73,6 @@ stdenv.mkDerivation {
         url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
         sha256 = sha256.aarch64-linux;
       };
-      x86_64-darwin = fetchurl {
-        url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-        sha256 = sha256.x86_64-darwin;
-      };
       aarch64-darwin = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
         sha256 = sha256.aarch64-darwin;
@@ -151,7 +147,6 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "julia";

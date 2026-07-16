@@ -43,12 +43,10 @@ stdenvNoCC.mkDerivation (
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [
           richar
-          redyf
           xiaoxiangmoe
         ];
         platforms = [
           "aarch64-darwin"
-          "x86_64-darwin"
           "x86_64-linux"
         ];
         sourceProvenance = [ lib.sourceTypes.binaryBytecode ];

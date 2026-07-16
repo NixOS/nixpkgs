@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   postPatch = ''
     # 3 sed statements from below derived from AUR
     # Disable boost-stacktrace_backtrace, requires an optional boost lib that's only built in Debianland
@@ -41,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+    qt6.qttools
     qt6.wrapQtAppsHook
     wrapGAppsHook3
     pandoc
@@ -51,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtsvg
-    qt6.qttools
     xercesc
     xalanc
   ];
@@ -66,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source beer recipe creation tool";
     mainProgram = "brewtarget";
     homepage = "https://www.brewtarget.beer";
+    changelog = "https://github.com/Brewtarget/brewtarget/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [

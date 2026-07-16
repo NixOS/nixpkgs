@@ -18,7 +18,6 @@ let
   targets = {
     x86_64-linux = "x86_64-linux";
     aarch64-linux = "aarch64-linux";
-    x86_64-darwin = "x86_64-macos";
     aarch64-darwin = "aarch64-macos";
     riscv32-linux = "rv32-linux";
     riscv64-linux = "rv64-linux";

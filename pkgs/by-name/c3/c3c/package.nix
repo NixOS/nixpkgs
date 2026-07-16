@@ -59,7 +59,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   doCheck =
     lib.elem llvmPackages.stdenv.system [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ]
     && checks;

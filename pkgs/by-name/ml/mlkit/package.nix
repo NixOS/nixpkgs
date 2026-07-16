@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/melsman/mlkit/blob/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [ athas ];

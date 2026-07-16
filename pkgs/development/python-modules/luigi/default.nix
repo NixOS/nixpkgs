@@ -53,6 +53,6 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://github.com/spotify/luigi";
     changelog = "https://github.com/spotify/luigi/releases/tag/${finalAttrs.version}";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
   };
 })

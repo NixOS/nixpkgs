@@ -218,6 +218,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ];
 
   passthru = {
+    inherit cudaPackages;
     gpuCheck = effectiveStdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;

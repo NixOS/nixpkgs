@@ -4,7 +4,7 @@
 
 Branch to merge into: **master** or **release-$nixos-version**
 
-Build the affected Nix packages and run their tests on the following platforms: **x86_64-linux**, **aarch64-linux**, **x86_64-darwin**, and **aarch64-darwin**.
+Build the affected Nix packages and run their tests on the following platforms: **x86_64-linux**, **aarch64-linux**, and **aarch64-darwin**.
 If you lack the necessary hardware for these platforms, you may need to ask others for assistance with the builds.
 Alternatively, you can request access to the Nix community builder for all platforms [here](https://github.com/NixOS/aarch64-build-box) and [here](https://nix-community.org/community-builder/).
 

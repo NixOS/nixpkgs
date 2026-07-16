@@ -9,11 +9,10 @@
 let
   format = "wheel";
   pyShortVersion = "cp" + builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-  platforms = rec {
+  platforms = {
     aarch64-darwin =
       if pyShortVersion == "cp314" then "macosx_10_15_universal2" else "macosx_10_13_universal2";
     aarch64-linux = "manylinux_2_26_aarch64";
-    x86_64-darwin = aarch64-darwin;
     x86_64-linux = "manylinux2014_x86_64.manylinux_2_17_x86_64";
   };
   platform = platforms.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");

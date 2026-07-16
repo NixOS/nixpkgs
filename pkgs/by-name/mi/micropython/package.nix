@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
           "armv6l-linux" = "Linux";
           "riscv64-linux" = "Linux";
           "powerpc64le-linux" = "Linux";
-          "x86_64-darwin" = "Darwin";
           "aarch64-darwin" = "Darwin";
         }
         .${stdenv.hostPlatform.system} or stdenv.hostPlatform.parsed.kernel.name

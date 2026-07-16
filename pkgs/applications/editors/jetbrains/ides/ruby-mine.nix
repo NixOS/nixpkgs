@@ -19,10 +19,6 @@ let
       url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.4-aarch64.tar.gz";
       hash = "sha256-oSu19pkGVWt31vWBdAffSZsu4QzsUznVbUSwDy98nug=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.4.dmg";
-      hash = "sha256-BLo2weIJK8gQAcMtAiETM7FMdhw9aoFIGh5Yqjv3k7s=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/ruby/RubyMine-2026.1.4-aarch64.dmg";
       hash = "sha256-4wEnwcPRtwp0wxePUMiLow6sMxirwndRMdmJL8LBh9k=";
