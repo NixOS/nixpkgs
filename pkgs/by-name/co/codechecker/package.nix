@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchPypi,
   makeWrapper,
   python3Packages,
@@ -16,19 +17,28 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "codechecker";
-  version = "6.28.0";
+  version = "6.28.2";
   pyproject = true;
 
   strictDeps = true;
   __structuredAttrs = true;
 
+  patches = [
+    # Change lxml-stubs to types-lxml
+    (fetchpatch {
+      url = "https://github.com/Ericsson/codechecker/commit/4d3dbc7e8248c4b1ddaa3885c26521458712de55.patch";
+      hash = "sha256-wWXEzsYaBtP3N+63k6QAkZVHCMM1qhmrUv2QPyM4Xfo=";
+    })
+  ];
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wxV+/hzsk7RrzWTXNz5HyweYdFFI1upNS508QRPCefo=";
+    hash = "sha256-7ZmrY/fEPW+hm4sPyXEHOu0T2x0ruRMKhOGwSSVFbfc=";
   };
 
   build-system = with python3Packages; [
     setuptools
+    types-setuptools
   ];
 
   dependencies = with python3Packages; [
@@ -49,6 +59,7 @@ python3Packages.buildPythonApplication rec {
     types-pyyaml
     sarif-tools
     types-psutil
+    types-lxml
   ];
 
   pythonRelaxDeps = true;
