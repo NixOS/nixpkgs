@@ -423,6 +423,7 @@ in
   convos = runTest ./convos.nix;
   coredns = runTest ./coredns.nix;
   corerad = runTest ./corerad.nix;
+  corosync-qnetd = runTest ./corosync-qnetd.nix;
   corteza = runTest ./corteza.nix;
   cosmic = runTest {
     imports = [ ./cosmic ];

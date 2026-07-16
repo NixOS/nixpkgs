@@ -496,6 +496,7 @@
   ./services/blockchain/ethereum/erigon.nix
   ./services/blockchain/ethereum/geth.nix
   ./services/blockchain/ethereum/lighthouse.nix
+  ./services/cluster/corosync-qnetd.nix
   ./services/cluster/corosync/default.nix
   ./services/cluster/druid/default.nix
   ./services/cluster/hadoop/default.nix
