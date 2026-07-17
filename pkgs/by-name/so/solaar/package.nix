@@ -111,6 +111,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       spinus
       ysndr
       oxalica
+      ilkecan
     ];
     platforms = lib.platforms.linux;
   };
