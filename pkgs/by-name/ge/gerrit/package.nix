@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gerrit";
-  version = "3.13.6";
+  version = "3.13.8";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${finalAttrs.version}.war";
-    hash = "sha256-nGKl5KNundR+FkiQ5CO/qBezOSNAHDHcPsssm1lZAhk=";
+    hash = "sha256-7/S+SuXItnBabW0e5h/n9tezhW5sV/Ix8CmEOdx9EYA=";
   };
 
   buildCommand = ''
