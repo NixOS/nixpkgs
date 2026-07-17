@@ -14,7 +14,7 @@ builtins.mapAttrs (_: callPackage ./generic.nix) rec {
     hash = "sha256-22EK2fVJ4Ku1rz49XGcpxY2HRDllTN8K/qQlsuqJXzU=";
   };
   wordpress_7_0 = {
-    version = "7.0.1";
-    hash = "sha256-3BBZLam1gMdSVjKFDgzO03GxMIGFOsKa/pO11bsA25g=";
+    version = "7.0.2";
+    hash = "sha256-1KTSGd6mTGxo5i8v/D8zHFR1UQJG1sRPYftS83fSlbk=";
   };
 }
