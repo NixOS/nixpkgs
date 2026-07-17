@@ -395,6 +395,14 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
         per_page: 100,
       })
+
+      // label commits with the label ai-assisted if they
+      // indicate they used AI
+      const assistedByPattern = /Assisted-by: (?!nix-init)/im
+      evalLabels['ai-assisted'] = prCommits.some((c) =>
+        assistedByPattern.test(c.commit.message),
+      )
+
       const commitSubjects = prCommits.map(
         (c) => c.commit.message.split('\n')[0],
       )
