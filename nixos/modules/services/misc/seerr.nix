@@ -155,6 +155,10 @@ in
         assertion = localPostgresql -> cfg.database.user == "seerr";
         message = "services.seerr.database.user must be \"seerr\" when services.seerr.database.createLocally is true.";
       }
+      {
+        assertion = localPostgresql -> builtins.match "[a-zA-Z_][a-zA-Z0-9_-]*" cfg.database.name != null;
+        message = "services.seerr.database.name must be a valid PostgreSQL identifier when services.seerr.database.createLocally is true.";
+      }
     ];
 
     services.postgresql = lib.mkIf localPostgresql {
@@ -163,10 +167,15 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensureDBOwnership = true;
         }
       ];
     };
+
+    systemd.services.postgresql-setup.postStart = lib.mkIf localPostgresql (
+      lib.mkAfter ''
+        psql -tAc 'ALTER DATABASE "${cfg.database.name}" OWNER TO "${cfg.database.user}";'
+      ''
+    );
 
     systemd.services.seerr = {
       description = "Seerr, a requests manager for Jellyfin";

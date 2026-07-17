@@ -46,5 +46,13 @@
             "test \"$(sudo -u postgres psql -tAc "
             "\"select count(*) from information_schema.tables where table_schema = 'public'\" seerr)\" -gt 0"
         )
+        postgres.succeed("systemctl restart seerr.service")
+        postgres.wait_for_unit("seerr.service")
+        postgres.wait_for_open_port(5055)
+        postgres.succeed(
+            "test \"$(sudo -u postgres psql -tAc "
+            "\"select count(*) from information_schema.tables where table_schema = 'public'\" seerr)\" -gt 0",
+            "curl --fail http://localhost:5055/",
+        )
   '';
 }
