@@ -566,9 +566,13 @@ class BaseMachine(ABC):
             retry(window_is_visible, timeout)
 
     @contextmanager
+    @abstractmethod
     def _managed_screenshot(self) -> Generator[Path]:
-        raise MachineError(f"Screenshots are not supported by {type(self).__name__}")
-        yield Path()
+        """
+        Take a screenshot and yield the screenshot filepath.
+        The file will be deleted when leaving the generator.
+        """
+        ...
 
     def screenshot(self, filename: str) -> None:
         """
@@ -1549,6 +1553,35 @@ class NspawnMachine(BaseMachine):
         self._notify_leader_pid: int | None = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
+
+    @contextmanager
+    def _managed_screenshot(self) -> Generator[Path]:
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_path = Path(shared_td)
+            xwd_path = shared_path / "screen.xwd"
+            ppm_path = shared_path / "screen.ppm"
+            machine_xwd_path = Path("/tmp/shared") / shared_path.name / xwd_path.name
+
+            self.succeed(
+                make_command(
+                    [
+                        "xwd",
+                        "-root",
+                        "-silent",
+                        "-display",
+                        ":0",
+                        "-out",
+                        machine_xwd_path,
+                    ]
+                )
+            )
+            with ppm_path.open("wb") as ppm:
+                ret = subprocess.run(["xwdtopnm", xwd_path], stdout=ppm)
+            if ret.returncode != 0:
+                raise MachineError(
+                    f"Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
+                )
+            yield ppm_path
 
     def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
