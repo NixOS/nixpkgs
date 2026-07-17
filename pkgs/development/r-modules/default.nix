@@ -981,6 +981,7 @@ let
     HiCDCPlus = [ pkgs.zlib.dev ];
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
+    HiSpaR = [ pkgs.armadillo ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw.dev ];
