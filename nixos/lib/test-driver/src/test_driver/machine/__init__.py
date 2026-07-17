@@ -1505,6 +1505,8 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_x")
 
+        # Keep this separate from nspawn's authenticated X probe: QEMU tests may
+        # install the session user's Xauthority cookie only after this returns.
         def check_x(_last_try: bool) -> bool:
             cmd = (
                 "journalctl -b SYSLOG_IDENTIFIER=systemd | "
@@ -1649,6 +1651,19 @@ class NspawnMachine(BaseMachine):
         self._notify_leader_pid: int | None = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
+
+    def wait_for_x(self, timeout: Duration = dt.timedelta(minutes=15)) -> None:
+        """
+        Wait until it is possible to connect to the X server.
+        """
+        _warn_if_numeric_duration(timeout, "wait_for_x")
+
+        def check_x(_last_try: bool) -> bool:
+            status, _ = self.execute("xwininfo -root >/dev/null 2>&1")
+            return status == 0
+
+        with self.nested("waiting for the X11 server"):
+            retry(check_x, as_timedelta(timeout))
 
     def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
