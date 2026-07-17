@@ -17444,6 +17444,12 @@
     githubId = 24750154;
     name = "Matei Dibu";
   };
+  mate-linux = {
+    email = "mdontsov2010@gmail.com";
+    github = "MATE-linux";
+    githubId = 202146672;
+    name = "Matvey Dontsov";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";

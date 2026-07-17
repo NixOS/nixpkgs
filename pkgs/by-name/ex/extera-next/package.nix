@@ -66,9 +66,7 @@ flutter341.buildFlutterApplication (
       description = "A feature-rich [matrix] client made in Flutter";
       homepage = "https://extera.xyz/";
       license = lib.licenses.agpl3Plus;
-      maintainers = with lib.maintainers; [
-        MATE-linux
-      ];
+      maintainers = with lib.maintainers; [ mate-linux ];
       badPlatforms = lib.platforms.darwin;
       platforms = lib.platforms.linux;
     }
