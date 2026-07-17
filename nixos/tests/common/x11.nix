@@ -1,19 +1,38 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
+let
+  isHeadless = config.boot.isNspawnContainer;
+in
 {
   imports = [
     ./auto.nix
   ];
 
-  services.xserver.enable = true;
+  services.xserver = lib.mkMerge [
+    {
+      enable = true;
+
+      # Use IceWM as the window manager.
+      windowManager.icewm.enable = true;
+    }
+    (lib.mkIf isHeadless {
+      # nspawn containers have no physical display device, so use a headless
+      # X server for graphical tests.
+      videoDrivers = [ "dummy" ];
+      resolutions = [
+        {
+          x = 1024;
+          y = 768;
+        }
+      ];
+    })
+  ];
 
   # Automatically log in.
   test-support.displayManager.auto.enable = true;
 
-  # Use IceWM as the window manager.
   # Don't use a desktop manager.
   services.displayManager.defaultSession = lib.mkDefault "none+icewm";
-  services.xserver.windowManager.icewm.enable = true;
 
   environment.etc = {
     # Help with OCR
