@@ -91,7 +91,11 @@ pythonPackages.buildPythonApplication rec {
       firmware/glasgow.ihex firmware/glasgow.ihex
 
     # Ensure the compiled firmware is exactly the same as the one shipped in the repo.
-    cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex
+    if ! cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex; then
+      echo >&2 "Firmware doesn't reproduce!"
+      diff -u software/glasgow/hardware/firmware.ihex firmware/glasgow.ihex
+      exit 1
+    fi
 
     cd software
     export PDM_BUILD_SCM_VERSION="${pdmVersion}"

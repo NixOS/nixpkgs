@@ -1629,12 +1629,6 @@
     githubId = 382798;
     name = "amfl";
   };
-  amiddelk = {
-    email = "amiddelk@gmail.com";
-    github = "amiddelk";
-    githubId = 1358320;
-    name = "Arie Middelkoop";
-  };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
     github = "AmineChikhaoui";
@@ -21225,12 +21219,6 @@
     githubId = 19862;
     name = "KJ Ørbekk";
   };
-  orbitz = {
-    email = "mmatalka@gmail.com";
-    github = "orbitz";
-    githubId = 75299;
-    name = "Malcolm Matalka";
-  };
   orhun = {
     email = "orhunparmaksiz@gmail.com";
     github = "orhun";
@@ -26667,12 +26655,6 @@
     name = "David Falk";
     github = "spreetin";
     githubId = 7392173;
-  };
-  sprock = {
-    email = "rmason@mun.ca";
-    github = "sprock";
-    githubId = 6391601;
-    name = "Roger Mason";
   };
   sputn1ck = {
     email = "kon@kon.ninja";
