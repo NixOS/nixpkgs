@@ -606,9 +606,9 @@
   };
 
   elm = {
-    version = "5.9.2";
+    version = "5.9.4";
     url = "github:elm-tooling/tree-sitter-elm";
-    hash = "sha256-NJRmII48Zo2xKxZmL88Dxskf352fGaCp8B14+x1XJHw=";
+    hash = "sha256-HFfpwThgWdd+pz8Ub042pKDKyFcuokHRGljhZ2xZFQU=";
     meta = {
       license = lib.licenses.mit;
     };
