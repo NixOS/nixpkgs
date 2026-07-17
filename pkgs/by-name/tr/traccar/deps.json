@@ -2083,22 +2083,22 @@
   "com/google/protobuf#protobuf-bom/4.33.2": {
    "pom": "sha256-bKXx5DgMUyPLEDsDTt8RYMn7tnau3l2ZifTe8XLHxNg="
   },
-  "com/google/protobuf#protobuf-bom/4.35.0": {
-   "pom": "sha256-N0ORfVkkN06cmyW4kft2o4vwV3fDVz3iJupGKybhBiU="
+  "com/google/protobuf#protobuf-bom/4.33.6": {
+   "pom": "sha256-GGpoENQV4YYUVTMTCLB1x/mmpzlow0YyHiv6ytPpsVs="
   },
   "com/google/protobuf#protobuf-java-util/4.33.2": {
    "jar": "sha256-gQ7PiV/eieDw8Lw08/7Av6lJyBc+lBwV+fK7nw7XZEo=",
    "pom": "sha256-vMXSp16QONMEfq0iqeLJBsX1eLX6JjNgTP/ciZioxbQ="
   },
-  "com/google/protobuf#protobuf-java/4.35.0": {
-   "jar": "sha256-QAYhqPCqxS+rfsiPSS7dNW9aQ1XKqPkgKPIXqLXkrDs=",
-   "pom": "sha256-JS1Zwa0O2QkShr8qHHHIvPXTtGURPScHg6UnT7EYYjE="
+  "com/google/protobuf#protobuf-java/4.33.6": {
+   "jar": "sha256-wkskZOz+msHUTjqP4oH8oJ5q0spz29aJ3X1tcZ35h7U=",
+   "pom": "sha256-/61VaM9LJIhTM7ZqBdBnr4y5DVWXatfjBjCw1ahDTS4="
   },
   "com/google/protobuf#protobuf-parent/4.33.2": {
    "pom": "sha256-yMIhEseGDm7dx+ywHOkXb8u0BJ7aWwomvj1LufvYAhE="
   },
-  "com/google/protobuf#protobuf-parent/4.35.0": {
-   "pom": "sha256-Wzx1NNKw5BBatwbkEFQOBN5n2u9zJm6j/cvzeepNqDU="
+  "com/google/protobuf#protobuf-parent/4.33.6": {
+   "pom": "sha256-jIBUwnp0ZtkWePDh3Q4HtPkznVps45q++Y02bMGhnVk="
   },
   "com/google/re2j#re2j/1.8": {
    "jar": "sha256-e1LHIVbdf5izI3pbNcHTT7o4GyEEjIkgiROtgKRd+9c=",
