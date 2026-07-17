@@ -51,7 +51,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pyca";
   version = "4.5";
   pyproject = true;
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "opencast";
     repo = "pyCA";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
@@ -80,7 +80,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace pyca/ui/__init__.py \
       --replace-fail \
         'static_folder=' \
-        'static_folder="${frontend}/static") #'
+        'static_folder="${finalAttrs.passthru.frontend}/static") #'
   '';
 
   pythonImportsCheck = [ "pyca" ];
@@ -106,4 +106,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})
