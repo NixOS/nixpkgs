@@ -1,0 +1,33 @@
+From 7a0d0e625dd9e92159a145a26dd68ef3b61fde6e Mon Sep 17 00:00:00 2001
+From: Sergey Volkov <taranarmo@gmail.com>
+Date: Sun, 29 Jun 2025 10:54:00 +0200
+Subject: [PATCH] replace `ndarray.tostring` with `ndarray.tobytes`
+
+`ndarray.tostring` is deprecated since numpy 1.19 and removed in numpy 2.3
+https://numpy.org/doc/stable/release/2.3.0-notes.html
+---
+ hickle/tests/test_06_load_astropy.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hickle/tests/test_06_load_astropy.py b/hickle/tests/test_06_load_astropy.py
+index 628a4b3..b630bfd 100755
+--- a/hickle/tests/test_06_load_astropy.py
++++ b/hickle/tests/test_06_load_astropy.py
+@@ -166,7 +166,7 @@ def test_astropy_time_array(h5_data,compression_kwargs):
+         assert reloaded.format == t1.format
+         assert reloaded.scale == t1.scale
+         for index in range(len(t1)):
+-             assert reloaded.value[index].tostring() == t1.value[index].tostring()
++             assert reloaded.value[index].tobytes() == t1.value[index].tobytes()
+         del h_dataset.attrs['np_dtype']
+ 
+         reloaded = load_astropy.load_astropy_time_dataset(h_dataset,b'astropy_time',t1.__class__)
+@@ -174,7 +174,7 @@ def test_astropy_time_array(h5_data,compression_kwargs):
+         assert reloaded.format == t1.format
+         assert reloaded.scale == t1.scale
+         for index in range(len(t1)):
+-            assert reloaded.value[index].tostring() == t1.value[index].tostring()
++            assert reloaded.value[index].tobytes() == t1.value[index].tobytes()
+         loop_counter += 1
+ 
+ 

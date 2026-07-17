@@ -1,0 +1,10 @@
+--- a/Libraries/plist/Sources/Format/Encoding.cpp
++++ b/Libraries/plist/Sources/Format/Encoding.cpp
+@@ -11,6 +11,7 @@
+ #include <plist/Format/unicode.h>
+ 
+ #include <cassert>
++#include <cstdlib> /* abort() */
+ 
+ #if defined(__linux__)
+ #include <endian.h>

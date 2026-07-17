@@ -1,0 +1,41 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  testtools,
+  testresources,
+  pbr,
+  python-subunit,
+  fixtures,
+  python,
+}:
+
+buildPythonPackage rec {
+  pname = "testrepository";
+  version = "0.0.21";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Nor89+CQs8aIvddUol9kvDFOUSuBb4xxufn8F9w3o9k=";
+  };
+
+  nativeCheckInputs = [ testresources ];
+  buildInputs = [ pbr ];
+  propagatedBuildInputs = [
+    fixtures
+    python-subunit
+    testtools
+  ];
+
+  checkPhase = ''
+    ${python.interpreter} ./testr
+  '';
+
+  meta = {
+    description = "Database of test results which can be used as part of developer workflow";
+    mainProgram = "testr";
+    homepage = "https://pypi.org/project/testrepository/";
+    license = lib.licenses.bsd2;
+  };
+}

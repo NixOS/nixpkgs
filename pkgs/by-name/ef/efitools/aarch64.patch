@@ -1,0 +1,16 @@
+diff --git a/Make.rules b/Make.rules
+index 903a5a4..59eca2f 100644
+--- a/Make.rules
++++ b/Make.rules
+@@ -51,11 +51,6 @@ ifeq ($(ARCH),arm)
+   FORMAT = -O binary
+ endif
+ 
+-ifeq ($(ARCH),aarch64)
+-  LDFLAGS += --defsym=EFI_SUBSYSTEM=0x0a
+-  FORMAT = -O binary
+-endif
+-
+ %.efi: %.so
+ 	$(OBJCOPY) -j .text -j .sdata -j .data -j .dynamic -j .dynsym \
+ 		   -j .rel -j .rela -j .rel.* -j .rela.* -j .rel* -j .rela* \

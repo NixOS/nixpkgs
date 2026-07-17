@@ -1,0 +1,62 @@
+diff --git a/tests/unit_tests/test_wandb_settings.py b/tests/unit_tests/test_wandb_settings.py
+index 4089d0719..694715290 100644
+--- a/tests/unit_tests/test_wandb_settings.py
++++ b/tests/unit_tests/test_wandb_settings.py
+@@ -698,7 +698,7 @@ def test_reports_invalid_system_settings(
+ def test_infer_git_root_finds_repo(tmp_path):
+     git_root = tmp_path / "repo"
+     git_root.mkdir()
+-    subprocess.run(["git", "init", str(git_root)], check=True, capture_output=True)
++    subprocess.run(["@git@", "init", str(git_root)], check=True, capture_output=True)
+     subdir = git_root / "subdir"
+     subdir.mkdir()
+ 
+@@ -718,7 +718,7 @@ def test_infer_git_root_no_repo(tmp_path):
+ def test_infer_git_root_skips_if_already_set(tmp_path):
+     git_root = tmp_path / "repo"
+     git_root.mkdir()
+-    subprocess.run(["git", "init", str(git_root)], check=True, capture_output=True)
++    subprocess.run(["@git@", "init", str(git_root)], check=True, capture_output=True)
+ 
+     preset = "/some/other/path"
+     s = Settings(root_dir=str(git_root), git_root=preset)
+@@ -730,7 +730,7 @@ def test_infer_git_root_skips_if_already_set(tmp_path):
+ def test_infer_git_root_skips_if_disable_git(tmp_path):
+     git_root = tmp_path / "repo"
+     git_root.mkdir()
+-    subprocess.run(["git", "init", str(git_root)], check=True, capture_output=True)
++    subprocess.run(["@git@", "init", str(git_root)], check=True, capture_output=True)
+ 
+     s = Settings(root_dir=str(git_root), disable_git=True)
+     s.infer_git_root()
+diff --git a/wandb/cli/cli.py b/wandb/cli/cli.py
+index 0ec7996cc..973b10643 100644
+--- a/wandb/cli/cli.py
++++ b/wandb/cli/cli.py
+@@ -3265,7 +3265,7 @@ def restore(ctx, run, no_git, branch, project, entity):
+     commit, json_config, patch_content, metadata = api.run_config(
+         project, run=run, entity=entity
+     )
+-    repo = metadata.get("git", {}).get("repo")
++    repo = metadata.get("@git@", {}).get("repo")
+     image = metadata.get("docker")
+     restore_message = f"""`wandb restore` needs to be run from the same git repository as the original run.
+ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+@@ -3284,7 +3284,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+ 
+     if commit and git.enabled:
+         wandb.termlog(f"Fetching origin and finding commit: {commit}")
+-        subprocess.check_call(["git", "fetch", "--all"])
++        subprocess.check_call(["@git@", "fetch", "--all"])
+         try:
+             git.repo.commit(commit)
+         except ValueError:
+@@ -3337,7 +3337,7 @@ Run `git clone {repo}` and restore from there or pass the --no-git flag."""
+             # --reject is necessary or else this fails any time a binary file
+             # occurs in the diff
+             exit_code = subprocess.call(
+-                ["git", "apply", "--reject", patch_rel_path], cwd=root
++                ["@git@", "apply", "--reject", patch_rel_path], cwd=root
+             )
+             if exit_code == 0:
+                 wandb.termlog("Applied patch")

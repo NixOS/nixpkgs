@@ -1,0 +1,27 @@
+From 3cf1ca7491bd5b6680e80355d76442ae14db681e Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sun, 29 Mar 2026 13:18:09 +0200
+Subject: [PATCH] build system: fix potential buffer overflow
+
+This could potentially write one byte past the end of line.
+Identified by fortify-headers.
+---
+ scripts/basic/split-include.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/basic/split-include.c b/scripts/basic/split-include.c
+index 6ef29195e..93011d511 100644
+--- a/scripts/basic/split-include.c
++++ b/scripts/basic/split-include.c
+@@ -195,7 +195,7 @@ int main(int argc, const char * argv [])
+ 	ERROR_EXIT( "find" );
+ 
+     line[0] = '\n';
+-    while (fgets(line+1, buffer_size, fp_find))
++    while (fgets(line+1, buffer_size-1, fp_find))
+     {
+ 	if (strstr(list_target, line) == NULL)
+ 	{
+-- 
+2.53.0
+

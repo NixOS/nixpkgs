@@ -1,0 +1,11 @@
+--- a/src/nm-iodine-service.c
++++ b/src/nm-iodine-service.c
+@@ -62,7 +62,7 @@
+ 
+ static const char *iodine_binary_paths[] =
+ {
+-	"/usr/bin/iodine",
++	"@iodine@/bin/iodine",
+ 	"/usr/sbin/iodine",
+ 	"/usr/local/bin/iodine",
+ 	"/usr/local/sbin/iodine",
