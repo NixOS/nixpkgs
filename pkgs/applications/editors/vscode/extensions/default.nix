@@ -4551,8 +4551,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "110.2.1";
-          hash = "sha256-NcidslqM4AVrobOaxW1EBpMoBCTn2Bej86phIVU2psc=";
+          version = "110.3.0";
+          hash = "sha256-vVLnjFOpOmfmkwP0Yz7zONrBgpNDFfFZ0TAAicxdZ64=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -4826,8 +4826,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.23.0";
-          hash = "sha256-xya4Kxjc/uR4LFTZ5fAVOa0/cyHy8XHZkkapmODyMK4=";
+          version = "0.24.1";
+          hash = "sha256-wNlZM9/2K32W4vYPKzLiBCTqhV+SqgZzXGRxKoHoIaM=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";

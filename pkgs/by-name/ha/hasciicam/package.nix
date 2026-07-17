@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hasciicam";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "hasciicam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-agwNuIxO+o4HHkjd3TikYuVNgO0vlDPikcZoLDVLCUc=";
+    hash = "sha256-Zh/yJJHWcD79J2HvUD5h4itg4jlDvpVb4cSwMsB1QOg=";
   };
 
   __structuredAttrs = true;

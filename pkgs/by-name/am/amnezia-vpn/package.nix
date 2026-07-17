@@ -81,7 +81,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.19.0";
+  version = "4.8.21.0";
 
   __structuredAttrs = true;
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-kftLofCyLA6DDfEXRPyy6Zx0JiQUEzpdYpTlvPihPZg=";
+    hash = "sha256-xNmbXLl+71DhzbGdSobkV1aYbj1XqC9A/3VPjDLsF7A=";
     fetchSubmodules = true;
   };
 
