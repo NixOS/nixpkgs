@@ -1584,10 +1584,6 @@ with haskellLib;
   # https://codeberg.org/daniel-casanueva/graphviz/issues/7
   graphviz = doJailbreak super.graphviz;
 
-  # 2026-07-02: allow QuickCheck 2.16
-  # https://github.com/maralorn/haskell-taskwarrior/issues/14
-  taskwarrior = doJailbreak super.taskwarrior;
-
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
   lzma = doJailbreak super.lzma;
@@ -1604,11 +1600,6 @@ with haskellLib;
   # https://github.com/haskell-servant/servant/pull/1875 # krank:ignore-line
   servant-auth-client = doJailbreak super.servant-auth-client;
   servant-auth-server = doJailbreak super.servant-auth-server;
-
-  # 2026-06-28: allow doctest 0.25
-  # https://github.com/haskell-servant/servant/issues/1890
-  servant-auth-docs = doJailbreak super.servant-auth-docs;
-  servant-swagger = doJailbreak super.servant-swagger;
 
   # 2026-06-29: allow doctest 0.25
   # https://github.com/sellout/yaya/issues/91
@@ -1717,10 +1708,6 @@ with haskellLib;
   # 2026-07-02: allow ghc-events 0.21, optparse-applicative 0.19
   # https://github.com/mpickering/eventlog2html/issues/195
   eventlog2html = doJailbreak super.eventlog2html;
-
-  # 2026-07-02: allow ghc-events 0.21, transformers 0.6.3
-  # https://github.com/haskell/ThreadScope/issues/148
-  threadscope = doJailbreak super.threadscope;
 
   # 2026-07-02: allow base 4.21 and template-haskell 2.23
   # https://github.com/luke-clifton/shh/issues/85
