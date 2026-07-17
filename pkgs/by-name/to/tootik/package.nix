@@ -4,6 +4,8 @@
   buildGoModule,
   fetchFromGitHub,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -33,6 +35,11 @@ buildGoModule (finalAttrs: {
   tags = [ "fts5" ];
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   __darwinAllowLocalNetworking = true;
 
