@@ -36,6 +36,11 @@
   onnxSupport ? false,
   onnxruntime,
 
+  osdGtk4Support ? false,
+
+  wrapGAppsHook4,
+  gtk4-layer-shell,
+
   waylandSupport ? stdenv.hostPlatform.isLinux,
   waylandRuntimePackages ? [
     dotool
@@ -73,6 +78,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "paraformer"
       "dolphin"
       "omnilingual"
+    ]
+    ++ lib.optionals osdGtk4Support [
+      "osd-gtk4"
     ];
 
   nativeBuildInputs = [
@@ -87,6 +95,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     shaderc
     vulkan-headers
     vulkan-loader
+  ]
+  ++ lib.optionals osdGtk4Support [
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -99,6 +110,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals onnxSupport [
     onnxruntime
+  ]
+  ++ lib.optionals osdGtk4Support [
+    gtk4-layer-shell
   ];
 
   env = {
@@ -128,6 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       $out/share/voxtype/default-config.toml
 
     wrapProgram $out/bin/voxtype \
+      --prefix PATH : "$out/bin" \
       --prefix PATH : ${
         (lib.makeBinPath (
           [
