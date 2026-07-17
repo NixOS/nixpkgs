@@ -5881,6 +5881,8 @@ self: super: with self; {
 
   fasttext = callPackage ../development/python-modules/fasttext { };
 
+  fasttransform = callPackage ../development/python-modules/fasttransform { };
+
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   faust-cchardet = callPackage ../development/python-modules/faust-cchardet { };
@@ -7163,6 +7165,8 @@ self: super: with self; {
   green = callPackage ../development/python-modules/green { };
 
   greenback = callPackage ../development/python-modules/greenback { };
+
+  greencell-client = callPackage ../development/python-modules/greencell-client { };
 
   greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
 
@@ -13384,6 +13388,8 @@ self: super: with self; {
 
   plugwise = callPackage ../development/python-modules/plugwise { };
 
+  plum-dispatch = callPackage ../development/python-modules/plum-dispatch { };
+
   plum-py = callPackage ../development/python-modules/plum-py { };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
@@ -16788,6 +16794,10 @@ self: super: with self; {
   };
 
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
+
+  python-swisscom-internet-box =
+    callPackage ../development/python-modules/python-swisscom-internet-box
+      { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 

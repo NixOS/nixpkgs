@@ -20,6 +20,7 @@
   mumble,
   unstableGitUpdater,
   bc,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "8d2c2b42a55598d99873203194d13161ec2789c6";
     hash = "sha256-OszPRlS5NTvajDZhtGw2wa275O8YodkIgiBz3POouYs=";
   };
+
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    "NO_STRIP=1"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -54,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     mumble
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 

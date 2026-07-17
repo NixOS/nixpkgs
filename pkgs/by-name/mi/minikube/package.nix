@@ -71,7 +71,11 @@ buildGoModule (finalAttrs: {
 
     installBin out/minikube
 
-    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false \
+      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])
+      }
     ln -sv $out/bin/minikube $out/bin/kubectl
 
     for shell in bash zsh fish; do

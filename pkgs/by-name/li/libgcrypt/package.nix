@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   gettext,
   libgpg-error,
   enableCapabilities ? false,
@@ -23,6 +24,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
     hash = "sha256-fOM8JJIiGgQ2+WqFACFenz49y1/SanV81BXnqEO6vV4=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Remove in next release
+    # https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5
+    # zvkned AES corrupts CBC/CFB/CTR/OCB/XTS output on VLEN>128 hardware
+    (fetchpatch {
+      url = "https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5.patch";
+      hash = "sha256-1LSrIwsN0n5IBRDZ+9MJTEjzY+/T6LQO6hX1ke8hSuc=";
+    })
+  ];
 
   outputs = [
     "bin"
