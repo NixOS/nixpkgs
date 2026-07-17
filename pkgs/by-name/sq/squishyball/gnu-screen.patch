@@ -1,0 +1,20 @@
+diff -Naur a/main.c b/main.c
+--- a/main.c	2016-09-06 13:37:32.259895631 +0200
++++ b/main.c	2016-09-07 01:41:51.014309863 +0200
+@@ -693,6 +693,11 @@
+     }
+ 
+     /* set up terminal */
++    if (!strncmp(getenv("TERM"), "screen", 6)) {
++      char term[256];
++      snprintf(term, sizeof(term), "xterm%s", getenv("TERM") + 6);
++      setenv("TERM", term, 1);
++    }
+     atexit(min_panel_remove);
+     panel_init(pcm, test_files, test_mode, start, end>0 ? end : len, len,
+                beep_mode, restart_mode, tests, running_score);
+@@ -1170,4 +1175,3 @@
+     fprintf(stderr,"Done.\n");
+   return 0;
+ }
+-

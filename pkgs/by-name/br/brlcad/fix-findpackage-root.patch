@@ -1,0 +1,38 @@
+diff --git a/misc/CMake/BRLCAD_ExternalDeps.cmake b/misc/CMake/BRLCAD_ExternalDeps.cmake
+index 1375de50d1..da7f8b2677 100644
+--- a/misc/CMake/BRLCAD_ExternalDeps.cmake
++++ b/misc/CMake/BRLCAD_ExternalDeps.cmake
+@@ -1037,7 +1037,8 @@ macro(find_package_opencv)
+   unset(OpenCV_ROOT)
+ 
+   # If no bundled copy, see what the system has
+-  if(NOT OpenCV_FOUND)
++  #if(NOT OpenCV_FOUND)
++  if(TRUE)
+     set(OpenCV_DIR "${OpenCV_DIR_TMP}")
+     if(F_REQUIRED)
+       find_package(OpenCV REQUIRED)
+@@ -1072,7 +1073,7 @@ macro(find_package_tcl)
+     unset(TTK_STUB_LIBRARY CACHE)
+   endif(RESET_TP)
+ 
+-  set(TCL_ROOT "${CMAKE_BINARY_DIR}")
++  set(TCL_ROOT "${TCL_ROOT};${CMAKE_BINARY_DIR}")
+   if(F_REQUIRED)
+     find_package(TCL REQUIRED)
+   else()
+diff --git a/misc/CMake/BRLCAD_Find_Package.cmake b/misc/CMake/BRLCAD_Find_Package.cmake
+index 930b444bc4..41717d503d 100644
+--- a/misc/CMake/BRLCAD_Find_Package.cmake
++++ b/misc/CMake/BRLCAD_Find_Package.cmake
+@@ -62,8 +62,8 @@ macro(BRLCAD_Find_Package pkg_name)
+     set(${pkg_name}_ROOT "${BRLCAD_EXT_NOINSTALL_DIR}")
+     set(${pkg_upper}_ROOT "${BRLCAD_EXT_NOINSTALL_DIR}")
+   else(F_NOINSTALL)
+-    set(${pkg_name}_ROOT "${CMAKE_BINARY_DIR}")
+-    set(${pkg_upper}_ROOT "${CMAKE_BINARY_DIR}")
++    set(${pkg_name}_ROOT "${${pkg_name}_ROOT};${CMAKE_BINARY_DIR}")
++    set(${pkg_upper}_ROOT "${${pkg_upper}_ROOT};${CMAKE_BINARY_DIR}")
+   endif(F_NOINSTALL)
+ 
+   # Clear the old status value, if any

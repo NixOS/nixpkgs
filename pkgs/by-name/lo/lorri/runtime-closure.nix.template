@@ -1,0 +1,37 @@
+# Nix with sandboxing requires every path used at build time be
+# explicitly declared. If we simply passed in the paths, they
+# would be copied in as sources. Using builtins.storePath we're
+# able to tell Nix that, no, in fact, treat these not as sources
+# to copy, but instead of a regular store path.
+#
+# Include the explicit closure, too, otherwise we'll get mysterious
+# "file not found" errors due to the glibc interpreter being
+# missing.
+let
+  # Magic inspired by Nix's config.nix:
+  # https://github.com/NixOS/nix/blob/f9a2ea44867cd1dbb408bca4df0ced806137b7f7/corepkgs/config.nix.in#L23
+  #
+  # If the dependency is in the Nix store we're using, refer to
+  # it as a literal store path. If it isn't, refer to it "normally".
+  #
+  # This makes sandboxing happy when in a nix-build, and the
+  # evaluation happy when in a «cargo build».
+  tools_build_host = @tools_build_host@;
+
+  # Compare the stringified version of the tools_build_host Nix store
+  # path to the evaluator's stringified Nix store path. Otherwise,
+  # Nix will read the sources in to the /nix/store, and, well,
+  # you can only copy the /nix/store in to the /nix/store so many
+  # times before you run out of disk space.
+  dep = if ("${toString (dirOf tools_build_host)}" == "${toString builtins.storeDir}")
+    then (builtins.trace "using storePath"  builtins.storePath)
+    else (builtins.trace "using toString" toString) # assume we have no sandboxing
+    ;
+
+  tools = dep tools_build_host;
+
+in {
+  path = "${tools}/bin";
+  builder = "${tools}/bin/bash";
+  closure = import @runtime_closure_list@ { inherit dep; };
+}

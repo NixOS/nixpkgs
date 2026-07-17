@@ -1,0 +1,31 @@
+diff --git a/cli-plugins/manager/manager_unix.go b/cli-plugins/manager/manager_unix.go
+index f546dc3849..5e3ae08dbc 100644
+--- a/cli-plugins/manager/manager_unix.go
++++ b/cli-plugins/manager/manager_unix.go
+@@ -2,6 +2,11 @@
+ 
+ package manager
+ 
++import (
++	"os"
++	"path/filepath"
++)
++
+ // defaultSystemPluginDirs are the platform-specific locations to search
+ // for plugins in order of preference.
+ //
+@@ -12,9 +17,8 @@
+ // 3. Platform-specific defaultSystemPluginDirs (as defined below).
+ //
+ // [ConfigFile.CLIPluginsExtraDirs]: https://pkg.go.dev/github.com/docker/cli@v26.1.4+incompatible/cli/config/configfile#ConfigFile.CLIPluginsExtraDirs
+-var defaultSystemPluginDirs = []string{
+-	"/usr/local/lib/docker/cli-plugins",
+-	"/usr/local/libexec/docker/cli-plugins",
+-	"/usr/lib/docker/cli-plugins",
+-	"/usr/libexec/docker/cli-plugins",
++var defaultSystemPluginDirs []string
++
++func init() {
++	defaultSystemPluginDirs = filepath.SplitList(os.Getenv("DOCKER_CLI_PLUGIN_DIRS"))
+ }
+

@@ -1,0 +1,14 @@
+diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
+index 2315928..55a2f1b 100644
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -627,7 +627,8 @@ target_link_libraries(libslic3r
+     ${OCCT_LIBS}
+     Clipper2
+     mcut
+-    opencv_world
++    opencv_core
++    opencv_imgproc
+     ${_cgal_tgt}
+     assimp::assimp
+     )

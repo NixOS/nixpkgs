@@ -1,0 +1,21 @@
+diff --git a/setup.cfg b/setup.cfg
+index d78f2950..50a0f7cd 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -25,9 +25,13 @@ classifier =
+     Programming Language :: Python :: 3 :: Only
+     Programming Language :: Python :: Implementation :: CPython
+ 
+-[files]
+-packages =
+-    novaclient
++[options]
++packages=find:
++
++[options.packages.find]
++exclude =
++    releasenotes
++    releasenotes.*
+ 
+ [entry_points]
+ console_scripts =

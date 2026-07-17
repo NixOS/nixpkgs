@@ -1,0 +1,19 @@
+diff --git a/rpython/translator/platform/darwin.py b/rpython/translator/platform/darwin.py
+index 8c824a8459..f407fb6c07 100644
+--- a/rpython/translator/platform/darwin.py
++++ b/rpython/translator/platform/darwin.py
+@@ -26,12 +26,12 @@ class Darwin(posix.BasePosix):
+     standalone_only = ('-mdynamic-no-pic',)
+     shared_only = ()
+ 
+-    link_flags = (DARWIN_VERSION_MIN,)
++    link_flags = ()
+     cflags = ('-O3',
+               '-fomit-frame-pointer',
+               # The parser turns 'const char *const *includes' into 'const const char **includes'
+               '-Wno-duplicate-decl-specifier',
+-              DARWIN_VERSION_MIN,)
++              )
+ 
+     so_ext = 'dylib'
+     DEFAULT_CC = 'clang'

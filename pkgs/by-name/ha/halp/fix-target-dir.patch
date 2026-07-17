@@ -1,0 +1,13 @@
+--- a/src/helper/args/mod.rs
++++ b/src/helper/args/mod.rs
+@@ -129,9 +129,7 @@ mod tests {
+ 
+     /// Returns the path of the test binary.
+     fn get_test_bin() -> String {
+-        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+-            .join("target")
+-            .join("debug")
++        PathBuf::from("@releaseDir@")
+             .join(format!("{}-test", env!("CARGO_PKG_NAME")))
+             .to_string_lossy()
+             .to_string()

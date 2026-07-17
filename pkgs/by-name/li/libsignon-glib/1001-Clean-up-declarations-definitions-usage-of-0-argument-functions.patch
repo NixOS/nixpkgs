@@ -1,0 +1,201 @@
+From de01c862388005ad142f38a7066593fe59a56fce Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 11 Mar 2026 18:55:19 +0100
+Subject: [PATCH] Clean up declarations/definitions & usage of 0 argument
+ functions
+
+This project doesn't enforce a C standard to use, so the compiler's default C standard is used.
+GCC 15's default C standard is C23, which has removed support for treating a function with an empty parameter list
+as a function that accepts some vague amount of arguments.
+
+() is now treated the same as (void). This was already the intended meaning of such declarations, but
+to have the same behaviour on previous C standards, let's be explicit about the void part.
+
+Since the amount of arguments must now be exactly 0, clean up some calls in tests/check_signon.c that
+relied on the previous meaning of () and passed 2 NULLs to such functions.
+---
+ libsignon-glib/signon-auth-service.c  |  2 +-
+ libsignon-glib/signon-auth-service.h  |  2 +-
+ libsignon-glib/signon-auth-session.c  |  2 +-
+ libsignon-glib/signon-identity-info.c |  2 +-
+ libsignon-glib/signon-identity-info.h |  2 +-
+ libsignon-glib/signon-identity.c      |  4 ++--
+ libsignon-glib/signon-identity.h      |  2 +-
+ libsignon-glib/signon-proxy.c         |  4 ++--
+ tests/check_signon.c                  | 10 +++++-----
+ 9 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/libsignon-glib/signon-auth-service.c b/libsignon-glib/signon-auth-service.c
+index 785ce05..e06de60 100644
+--- a/libsignon-glib/signon-auth-service.c
++++ b/libsignon-glib/signon-auth-service.c
+@@ -138,7 +138,7 @@ _signon_auth_service_finish_query_mechanisms (GObject *source_object,
+  * Returns: an instance of an #SignonAuthService.
+  */
+ SignonAuthService *
+-signon_auth_service_new ()
++signon_auth_service_new (void)
+ {
+     return g_object_new (SIGNON_TYPE_AUTH_SERVICE, NULL);
+ }
+diff --git a/libsignon-glib/signon-auth-service.h b/libsignon-glib/signon-auth-service.h
+index 1deb7e0..d6492ad 100644
+--- a/libsignon-glib/signon-auth-service.h
++++ b/libsignon-glib/signon-auth-service.h
+@@ -34,7 +34,7 @@ G_BEGIN_DECLS
+ #define SIGNON_TYPE_AUTH_SERVICE signon_auth_service_get_type ()
+ G_DECLARE_FINAL_TYPE (SignonAuthService, signon_auth_service, SIGNON, AUTH_SERVICE, GObject)
+ 
+-SignonAuthService *signon_auth_service_new ();
++SignonAuthService *signon_auth_service_new (void);
+ 
+ void signon_auth_service_get_methods (SignonAuthService *auth_service,
+                                       GCancellable *cancellable,
+diff --git a/libsignon-glib/signon-auth-session.c b/libsignon-glib/signon-auth-session.c
+index c308017..ba1ce7d 100644
+--- a/libsignon-glib/signon-auth-session.c
++++ b/libsignon-glib/signon-auth-session.c
+@@ -232,7 +232,7 @@ destroy_proxy (SignonAuthSession *self)
+ }
+ 
+ static GQuark
+-auth_session_object_quark ()
++auth_session_object_quark (void)
+ {
+   static GQuark quark = 0;
+ 
+diff --git a/libsignon-glib/signon-identity-info.c b/libsignon-glib/signon-identity-info.c
+index 8adfa9b..4af58c8 100644
+--- a/libsignon-glib/signon-identity-info.c
++++ b/libsignon-glib/signon-identity-info.c
+@@ -277,7 +277,7 @@ signon_identity_info_to_variant (const SignonIdentityInfo *self)
+  *
+  * Returns: a new #SignonIdentityInfo item.
+  */
+-SignonIdentityInfo *signon_identity_info_new ()
++SignonIdentityInfo *signon_identity_info_new (void)
+ {
+     SignonIdentityInfo *info = g_slice_new0 (SignonIdentityInfo);
+     info->methods = g_hash_table_new_full (g_str_hash, g_str_equal,
+diff --git a/libsignon-glib/signon-identity-info.h b/libsignon-glib/signon-identity-info.h
+index 7305f50..ed60b48 100644
+--- a/libsignon-glib/signon-identity-info.h
++++ b/libsignon-glib/signon-identity-info.h
+@@ -55,7 +55,7 @@ typedef enum {
+ 
+ GType signon_identity_info_get_type (void) G_GNUC_CONST;
+ 
+-SignonIdentityInfo *signon_identity_info_new ();
++SignonIdentityInfo *signon_identity_info_new (void);
+ void signon_identity_info_free (SignonIdentityInfo *info);
+ 
+ SignonIdentityInfo *signon_identity_info_copy (const SignonIdentityInfo *other);
+diff --git a/libsignon-glib/signon-identity.c b/libsignon-glib/signon-identity.c
+index eb58a45..647b364 100644
+--- a/libsignon-glib/signon-identity.c
++++ b/libsignon-glib/signon-identity.c
+@@ -130,7 +130,7 @@ static void identity_process_updated (SignonIdentity *self);
+ static void identity_process_removed (SignonIdentity *self);
+ 
+ static GQuark
+-identity_object_quark ()
++identity_object_quark (void)
+ {
+   static GQuark quark = 0;
+ 
+@@ -576,7 +576,7 @@ signon_identity_new_from_db (guint32 id)
+  * Returns: an instance of an #SignonIdentity.
+  */
+ SignonIdentity*
+-signon_identity_new ()
++signon_identity_new (void)
+ {
+     SignonIdentity *identity;
+ 
+diff --git a/libsignon-glib/signon-identity.h b/libsignon-glib/signon-identity.h
+index f366f8a..f42a8e8 100644
+--- a/libsignon-glib/signon-identity.h
++++ b/libsignon-glib/signon-identity.h
+@@ -36,7 +36,7 @@ G_BEGIN_DECLS
+ G_DECLARE_FINAL_TYPE (SignonIdentity, signon_identity, SIGNON, IDENTITY, GObject)
+ 
+ SignonIdentity *signon_identity_new_from_db (guint32 id);
+-SignonIdentity *signon_identity_new ();
++SignonIdentity *signon_identity_new (void);
+ 
+ guint32 signon_identity_get_id (SignonIdentity *identity);
+ 
+diff --git a/libsignon-glib/signon-proxy.c b/libsignon-glib/signon-proxy.c
+index f37d5c1..4f01443 100644
+--- a/libsignon-glib/signon-proxy.c
++++ b/libsignon-glib/signon-proxy.c
+@@ -46,7 +46,7 @@ signon_proxy_default_init (SignonProxyInterface *iface)
+ }
+ 
+ static GQuark
+-_signon_proxy_ready_quark()
++_signon_proxy_ready_quark (void)
+ {
+   static GQuark quark = 0;
+ 
+@@ -57,7 +57,7 @@ _signon_proxy_ready_quark()
+ }
+ 
+ static GQuark
+-_signon_proxy_error_quark()
++_signon_proxy_error_quark (void)
+ {
+   static GQuark quark = 0;
+ 
+diff --git a/tests/check_signon.c b/tests/check_signon.c
+index 3e1e758..405582e 100644
+--- a/tests/check_signon.c
++++ b/tests/check_signon.c
+@@ -388,7 +388,7 @@ START_TEST(test_auth_session_creation)
+     const gchar *method = NULL;
+ 
+     g_debug("%s", G_STRFUNC);
+-    SignonIdentity *idty = signon_identity_new(NULL, NULL);
++    SignonIdentity *idty = signon_identity_new();
+     fail_unless (idty != NULL, "Cannot create Identity object");
+ 
+     SignonAuthSession *auth_session = signon_identity_create_session(idty,
+@@ -442,7 +442,7 @@ START_TEST(test_auth_session_process_async)
+     gboolean ok;
+ 
+     g_debug("%s", G_STRFUNC);
+-    SignonIdentity *idty = signon_identity_new(NULL, NULL);
++    SignonIdentity *idty = signon_identity_new();
+     fail_unless (idty != NULL, "Cannot create Identity object");
+ 
+     SignonAuthSession *auth_session = signon_identity_create_session(idty,
+@@ -751,7 +751,7 @@ new_identity()
+     GList *acl = g_list_append (NULL, signon_security_context_new_from_values ("*", "*"));
+     guint id = 0;
+ 
+-    identity = signon_identity_new(NULL, NULL);
++    identity = signon_identity_new();
+     fail_unless (SIGNON_IS_IDENTITY (identity));
+ 
+     SignonIdentityInfo *info = signon_identity_info_new ();
+@@ -864,7 +864,7 @@ static void store_credentials_identity_cb (GObject *source_object,
+ START_TEST(test_store_credentials_identity)
+ {
+     g_debug("%s", G_STRFUNC);
+-    SignonIdentity *idty = signon_identity_new(NULL, NULL);
++    SignonIdentity *idty = signon_identity_new();
+     fail_unless (idty != NULL);
+     fail_unless (SIGNON_IS_IDENTITY (idty),
+                  "Failed to initialize the Identity.");
+@@ -911,7 +911,7 @@ START_TEST(test_verify_secret_identity)
+     GList *acl = g_list_append (NULL, signon_security_context_new_from_values ("*", "*"));
+ 
+     g_debug("%s", G_STRFUNC);
+-    SignonIdentity *idty = signon_identity_new(NULL, NULL);
++    SignonIdentity *idty = signon_identity_new();
+     fail_unless (idty != NULL);
+     fail_unless (SIGNON_IS_IDENTITY (idty),
+                  "Failed to initialize the Identity.");
+-- 
+2.51.2
+

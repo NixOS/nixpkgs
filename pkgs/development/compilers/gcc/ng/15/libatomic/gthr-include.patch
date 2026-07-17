@@ -1,0 +1,16 @@
+This change was upstreamed in e5d853bbe9b05d6a00d98ad236f01937303e40c4
+in GCC, but this file was slightly different in GCC 15, so we're
+patching it manually.
+
+diff --git a/libatomic/aclocal.m4 b/libatomic/aclocal.m4
+index 80e24219d7d..581fedcfe13 100644
+--- a/libatomic/aclocal.m4
++++ b/libatomic/aclocal.m4
+@@ -1189,6 +1189,7 @@ AC_SUBST([am__untar])
+
+ m4_include([../config/acx.m4])
+ m4_include([../config/depstand.m4])
++m4_include([../config/gthr.m4])
+ m4_include([../config/lead-dot.m4])
+ m4_include([../config/lthostflags.m4])
+ m4_include([../config/multi.m4])

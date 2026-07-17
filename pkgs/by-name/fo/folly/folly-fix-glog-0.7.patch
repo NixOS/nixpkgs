@@ -1,0 +1,18 @@
+diff --git a/CMake/folly-deps.cmake b/CMake/folly-deps.cmake
+index c72273a73..d0408f2b3 100644
+--- a/CMake/folly-deps.cmake
++++ b/CMake/folly-deps.cmake
+@@ -61,10 +61,9 @@ if(LIBGFLAGS_FOUND)
+   set(FOLLY_LIBGFLAGS_INCLUDE ${LIBGFLAGS_INCLUDE_DIR})
+ endif()
+ 
+-find_package(Glog MODULE)
+-set(FOLLY_HAVE_LIBGLOG ${GLOG_FOUND})
+-list(APPEND FOLLY_LINK_LIBRARIES ${GLOG_LIBRARY})
+-list(APPEND FOLLY_INCLUDE_DIRECTORIES ${GLOG_INCLUDE_DIR})
++find_package(Glog CONFIG REQUIRED)
++set(FOLLY_HAVE_LIBGLOG True)
++list(APPEND FOLLY_LINK_LIBRARIES glog::glog)
+ 
+ find_package(LibEvent MODULE REQUIRED)
+ list(APPEND FOLLY_LINK_LIBRARIES ${LIBEVENT_LIB})

@@ -1,0 +1,39 @@
+From 23ab04a8630225371455d5f4538fd078665bb646 Mon Sep 17 00:00:00 2001
+From: Rich Felker <dalias@aerifal.cx>
+Date: Fri, 13 Sep 2024 17:21:17 -0400
+Subject: statx: add new struct statx fields and corresponding mask macros
+
+---
+ include/sys/stat.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/include/sys/stat.h b/include/sys/stat.h
+index 57d640d7..0c10dc21 100644
+--- a/include/sys/stat.h
++++ b/include/sys/stat.h
+@@ -120,6 +120,9 @@ int lchmod(const char *, mode_t);
+ #define STATX_BASIC_STATS 0x7ffU
+ #define STATX_BTIME 0x800U
+ #define STATX_ALL 0xfffU
++#define STATX_MNT_ID 0x1000U
++#define STATX_DIOALIGN 0x2000U
++#define STATX_MNT_ID_UNIQUE 0x4000U
+ 
+ #define STATX_ATTR_COMPRESSED 0x4
+ #define STATX_ATTR_IMMUTABLE 0x10
+@@ -157,7 +160,11 @@ struct statx {
+ 	uint32_t stx_rdev_minor;
+ 	uint32_t stx_dev_major;
+ 	uint32_t stx_dev_minor;
+-	uint64_t __pad1[14];
++	uint64_t stx_mnt_id;
++	uint32_t stx_dio_mem_align;
++	uint32_t stx_dio_offet_align;
++	uint64_t stx_subvol;
++	uint64_t __pad1[11];
+ };
+ 
+ int statx(int, const char *__restrict, int, unsigned, struct statx *__restrict);
+-- 
+cgit v1.2.1
+

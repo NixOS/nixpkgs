@@ -1,0 +1,10 @@
+--- a/malduck/structure.py
++++ b/malduck/structure.py
+@@ -53,6 +53,7 @@
+             fields.append((field, type_))
+ 
+         class Klass(ctypes.Structure):
++            _layout_ = "ms"
+             _pack_ = self._pack_
+             _fields_ = fields
+ 

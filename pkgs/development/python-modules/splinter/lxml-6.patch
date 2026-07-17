@@ -1,0 +1,42 @@
+diff --git a/tests/fake_django/urls.py b/tests/fake_django/urls.py
+index 2ab75ff..bd736ab 100644
+--- a/tests/fake_django/urls.py
++++ b/tests/fake_django/urls.py
+@@ -52,7 +52,8 @@ def post_form(request):
+ 
+ 
+ def request_headers(request):
+-    body = "\n".join(f"{key}: {value}" for key, value in request.META.items())
++    headers = "\n".join(f"{key}: {value}" for key, value in request.META.items())
++    body = f"<html><body>{headers}</body></html>"
+     return HttpResponse(body)
+ 
+ 
+@@ -67,7 +68,7 @@ def upload_file(request):
+ 
+ 
+ def foo(request):
+-    return HttpResponse("BAR!")
++    return HttpResponse("<html><body>BAR!</body></html>")
+ 
+ 
+ def query_string(request):
+diff --git a/tests/fake_webapp.py b/tests/fake_webapp.py
+index ccd5bab..efc31c5 100644
+--- a/tests/fake_webapp.py
++++ b/tests/fake_webapp.py
+@@ -119,12 +119,12 @@ def upload_file():
+ 
+ @app.route("/headers", methods=["GET"])
+ def request_headers():
+-    return str(request.headers)
++    return f"<html><body>{request.headers}</body></html>"
+ 
+ 
+ @app.route("/foo")
+ def foo():
+-    return "BAR!"
++    return "<html><body>BAR!</body></html>"
+ 
+ 
+ @app.route("/query", methods=["GET"])

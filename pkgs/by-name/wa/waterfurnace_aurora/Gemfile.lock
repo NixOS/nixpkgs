@@ -1,0 +1,88 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.3.0)
+    ccutrer-serialport (1.1.0)
+      ffi (~> 1.9, >= 1.9.3)
+    digest-crc (0.7.0)
+      rake (>= 12.0.0, < 14.0.0)
+    ffi (1.17.2)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86-linux-gnu)
+    ffi (1.17.2-x86-linux-musl)
+    ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
+    homie-mqtt (1.8.0)
+      mqtt-ccutrer (~> 1.0, >= 1.0.3)
+      ruby2_keywords (~> 0.0.5)
+    json (2.16.0)
+    logger (1.7.0)
+    mqtt-ccutrer (1.0.3)
+    mqtt-homeassistant (1.0.3)
+      json (~> 2.0)
+      mqtt-ccutrer (~> 1.0, >= 1.0.3)
+    mqtt-homie-homeassistant (1.1.0)
+      homie-mqtt (~> 1.7)
+      mqtt-homeassistant (~> 1.0, >= 1.0.3)
+    mustermann (3.0.4)
+      ruby2_keywords (~> 0.0.1)
+    net-telnet (0.2.0)
+    net-telnet-rfc2217 (1.0.2)
+      net-telnet (~> 0.2.0)
+    nio4r (2.7.5)
+    puma (6.6.1)
+      nio4r (~> 2.0)
+    rack (3.2.4)
+    rack-protection (4.2.1)
+      base64 (>= 0.1.0)
+      logger (>= 1.6.0)
+      rack (>= 3.0.0, < 4)
+    rack-session (2.1.1)
+      base64 (>= 0.1.0)
+      rack (>= 3.0.0)
+    rackup (2.2.1)
+      rack (>= 3)
+    rake (13.3.1)
+    rmodbus (2.1.3)
+      digest-crc (~> 0.1)
+    ruby2_keywords (0.0.5)
+    sinatra (4.2.1)
+      logger (>= 1.6.0)
+      mustermann (~> 3.0)
+      rack (>= 3.0.0, < 4)
+      rack-protection (= 4.2.1)
+      rack-session (>= 2.0.0, < 3)
+      tilt (~> 2.0)
+    tilt (2.6.1)
+    waterfurnace_aurora (1.5.8)
+      ccutrer-serialport (~> 1.0)
+      mqtt-homie-homeassistant (~> 1.0, >= 1.0.6)
+      net-telnet-rfc2217 (~> 1.0, >= 1.0.1)
+      puma (~> 6.4)
+      rackup (>= 1.0.0, < 3.0.a)
+      rmodbus (~> 2.1)
+      sinatra (>= 2.2.4, < 5.0.a)
+
+PLATFORMS
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  ruby
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
+
+DEPENDENCIES
+  waterfurnace_aurora
+
+BUNDLED WITH
+   2.7.2

@@ -1,0 +1,16 @@
+Replace call to "revolver" with call to internal function.
+Useful when "revolver" is not defined in PATH.
+--- a/revolver
++++ b/revolver
+@@ -255,9 +255,9 @@
+ ###
+ function _revolver_demo() {
+   for style in "${(@k)_revolver_spinners[@]}"; do
+-    revolver --style $style start $style
++    _revolver --style $style start $style
+     sleep 2
+-    revolver stop
++    _revolver stop
+   done
+ }
+ 

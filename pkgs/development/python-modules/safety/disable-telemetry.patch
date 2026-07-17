@@ -1,0 +1,97 @@
+diff --git a/safety/cli.py b/safety/cli.py
+index 14ec46a..3297928 100644
+--- a/safety/cli.py
++++ b/safety/cli.py
+@@ -170,7 +170,7 @@ def configure_logger(ctx, param, debug):
+ @proxy_options
+ @click.option(
+     "--disable-optional-telemetry",
+-    default=False,
++    default=True,
+     is_flag=True,
+     show_default=True,
+     help=CLI_DISABLE_OPTIONAL_TELEMETRY_DATA_HELP,
+diff --git a/safety/safety.py b/safety/safety.py
+index a86c167..ad7fc94 100644
+--- a/safety/safety.py
++++ b/safety/safety.py
+@@ -228,7 +228,7 @@ def fetch_database_url(
+     mirror: str,
+     db_name: str,
+     cached: int,
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     ecosystem: Ecosystem = Ecosystem.PYTHON,
+     from_cache: bool = True,
+     is_open_mirror: bool = False,
+@@ -368,7 +368,7 @@ def fetch_database(
+     full: bool = False,
+     db: Union[Optional[str], bool] = False,
+     cached: int = 0,
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     ecosystem: Optional[Ecosystem] = None,
+     from_cache: bool = True,
+ ) -> Dict[str, Any]:
+@@ -696,7 +696,7 @@ def check(
+     proxy: Optional[Dict[str, Any]] = None,
+     include_ignored: bool = False,
+     is_env_scan: bool = True,
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     params: Optional[Dict[str, Any]] = None,
+     project: Optional[str] = None,
+ ) -> tuple:
+@@ -1686,7 +1686,7 @@ def get_licenses(
+     auth: "Auth",
+     db_mirror: Union[Optional[str], bool] = False,
+     cached: int = 0,
+-    telemetry: bool = True,
++    telemetry: bool = False,
+ ) -> Dict[str, Any]:
+     """
+     Retrieves the licenses from the database.
+@@ -1785,7 +1785,7 @@ def add_local_notifications(
+ 
+ 
+ def get_announcements(
+-    auth: "Auth", telemetry: bool = True, with_telemetry: Any = None
++    auth: "Auth", telemetry: bool = False, with_telemetry: Any = None
+ ) -> List[Dict[str, str]]:
+     """
+     Retrieves announcements from the server.
+diff --git a/safety/scan/finder/handlers.py b/safety/scan/finder/handlers.py
+index 5f8e734..1f55f73 100644
+--- a/safety/scan/finder/handlers.py
++++ b/safety/scan/finder/handlers.py
+@@ -102,7 +102,7 @@ class PythonFileHandler(FileHandler):
+             full=False,
+             db=db,
+             cached=True,
+-            telemetry=True,
++            telemetry=False,
+             ecosystem=Ecosystem.PYTHON,
+             from_cache=False,
+         )
+@@ -112,7 +112,7 @@ class PythonFileHandler(FileHandler):
+             full=True,
+             db=db,
+             cached=True,
+-            telemetry=True,
++            telemetry=False,
+             ecosystem=Ecosystem.PYTHON,
+             from_cache=False,
+         )
+diff --git a/safety/util.py b/safety/util.py
+index 89ad11d..ba9983d 100644
+--- a/safety/util.py
++++ b/safety/util.py
+@@ -319,7 +319,7 @@ def filter_announcements(
+ 
+ 
+ def build_telemetry_data(
+-    telemetry: bool = True,
++    telemetry: bool = False,
+     command: Optional[str] = None,
+     subcommand: Optional[str] = None,
+ ) -> TelemetryModel:
