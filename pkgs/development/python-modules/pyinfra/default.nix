@@ -68,6 +68,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pyinfra" ];
 
+  pythonRelaxDeps = [
+    "paramiko"
+    "types-paramiko"
+  ];
+
   disabledTests = [
     # Test requires SSH binary
     "test_load_ssh_config"
