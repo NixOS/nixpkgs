@@ -94,7 +94,7 @@ buildNpmPackage rec {
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/jitsi-meet-electron
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/jitsi-meet-electron
+      cp -r dist/*-unpacked/resources $out/share/jitsi-meet-electron
 
       makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
           --add-flags $out/share/jitsi-meet-electron/resources/app.asar \

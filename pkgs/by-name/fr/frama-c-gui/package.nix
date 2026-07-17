@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/share/lib/frama-c-gui"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/frama-c-gui"
+    cp -r dist/*-unpacked/resources "$out/share/lib/frama-c-gui"
 
     install -Dm444 static/icon.png $out/share/icons/hicolor/512x512/apps/frama-c-gui.png
 

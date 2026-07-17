@@ -95,7 +95,7 @@ buildNpmPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/share/lib/shogihome"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
+    cp -r dist/*-unpacked/resources "$out/share/lib/shogihome"
 
     install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
 

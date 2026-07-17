@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 public/icon.png $out/share/icons/hicolor/256x256/apps/voicevox.png
 
       mkdir -p $out/share/voicevox
-      cp -r dist_electron/*-unpacked/{locales,resources{,.pak}} $out/share/voicevox
+      cp -r dist_electron/*-unpacked/resources $out/share/voicevox
 
       makeWrapper ${lib.getExe electron} $out/bin/voicevox \
         --add-flags $out/share/voicevox/resources/app.asar \

@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/share/redisinsight"/{app,defaults,static/plugins,static/resources/plugins}
 
-    cp -r release/*-unpacked/{locales,resources{,.pak}} "$out/share/redisinsight/app"
+    cp -r release/*-unpacked/resources "$out/share/redisinsight/app"
     mv "$out/share/redisinsight/app/resources/resources" "$out/share/redisinsight"
 
     # icons

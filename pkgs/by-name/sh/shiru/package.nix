@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/shiru"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shiru"
+    cp -r dist/*-unpacked/resources "$out/share/lib/shiru"
 
     install -Dm644 buildResources/icon.png "$out/share/icons/hicolor/512x512/apps/shiru.png"
 

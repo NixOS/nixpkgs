@@ -69,7 +69,7 @@ buildNpmPackage (finalAttrs: {
     rm -f "$out/share/knockoutcitylauncher/resources/default_app.asar"
 
     mkdir -p "$out/share/knockoutcitylauncher"
-    cp -r dist/*-unpacked/resources{,.pak} "$out/share/knockoutcitylauncher"
+    cp -r dist/*-unpacked/resources "$out/share/knockoutcitylauncher"
 
     makeWrapper ${lib.getExe electron} "$out/bin/knockoutcitylauncher" \
       --add-flag $out/share/knockoutcitylauncher/resources/app.asar \
