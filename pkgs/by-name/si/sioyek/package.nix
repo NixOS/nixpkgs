@@ -8,6 +8,7 @@
   gumbo,
   harfbuzz,
   jbig2dec,
+  llvmPackages,
   mujs,
   mupdf,
   openjpeg,
@@ -42,9 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     qt6.qmake
     qt6.wrapQtAppsHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   qmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CONFIG+=non_portable" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Work around ld64's libc++ hardening issue.
+    # TODO: Remove once #536365 reaches this branch.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   postPatch = ''
     substituteInPlace pdf_viewer_build_config.pro \
