@@ -4380,6 +4380,8 @@ self: super: with self; {
 
   directv = callPackage ../development/python-modules/directv { };
 
+  dirhash = callPackage ../development/python-modules/dirhash { };
+
   dirigera = callPackage ../development/python-modules/dirigera { };
 
   dirsearch = callPackage ../development/python-modules/dirsearch { };
