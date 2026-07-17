@@ -62,6 +62,12 @@
       postgres.succeed("systemctl restart prowlarr.service")
       postgres.wait_for_unit("prowlarr.service")
       postgres.wait_for_open_port(9696)
-      postgres.succeed("curl --fail http://localhost:9696/")
+      postgres.succeed(
+          "test \"$(sudo -u postgres psql -tAc "
+          "\"select count(*) from pg_tables where schemaname = 'public'\" prowlarr-main)\" -gt 0",
+          "test \"$(sudo -u postgres psql -tAc "
+          "\"select count(*) from pg_tables where schemaname = 'public'\" prowlarr-log)\" -gt 0",
+          "curl --fail http://localhost:9696/",
+      )
   '';
 }
