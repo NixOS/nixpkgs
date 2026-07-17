@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "account-utils";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = "account-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9l+y7FLb0IZXXp4RstlhNR6yA7b4b831obFuiVtO9+k=";
+    hash = "sha256-F0jM7qEpUjDjf0FTMfTNbD3WDoBShE0SyhDKzgI2K0k=";
   };
 
   __structuredAttrs = true;
