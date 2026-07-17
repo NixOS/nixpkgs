@@ -38,6 +38,7 @@
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -151,6 +152,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapGApp "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw" \
         --set ORT_STRATEGY "system"
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";
