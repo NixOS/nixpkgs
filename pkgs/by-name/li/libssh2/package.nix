@@ -26,6 +26,31 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/libssh2/libssh2/commit/256d04b60d80bf1190e96b0ad1e91b2174d744b1
     ./CVE-2026-7598.patch
+
+    (fetchurl {
+      name = "CVE-2025-15661.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2025-15661.patch";
+      hash = "sha256-Rz6i/881CbObUDcZbcPlgVPaKizSp6ZRTdmJNJ9HLHE=";
+    })
+
+    (fetchurl {
+      name = "CVE-2026-55199.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2026-55199.patch";
+      hash = "sha256-AFZa5kohha62aE0if5ckmAdJ0TZNcjfP32yDznoEhNo=";
+    })
+
+    (fetchurl {
+      name = "CVE-2026-55200.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/CVE-2026-55200.patch";
+      hash = "sha256-wCAglr8BsBWIhnh3SiFeyKzZmIp8rC5MVfFgoEzp/hE=";
+    })
+
+    # necessary for the fix for CVE-2026-15661
+    (fetchurl {
+      name = "libssh-unconst-backport.patch";
+      url = "https://salsa.debian.org/debian/libssh2/-/raw/1d4906e6ebe85a9da2931ba33677ead96a61f07f/debian/patches/libssh-unconst-backport.patch";
+      hash = "sha256-jc01Fb70GbaD9+RYeSjRaLFBtKLiMPTMuXas21aC0Ag=";
+    })
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion

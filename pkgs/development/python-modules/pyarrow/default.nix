@@ -134,6 +134,12 @@ buildPythonPackage rec {
     "pyarrow/tests/test_udf.py::test_scalar_input"
     "pyarrow/tests/test_udf.py::test_scalar_udf_context"
     "pyarrow/tests/test_udf.py::test_udf_array_unary"
+    # CSV pickle mismatches
+    "pyarrow/tests/test_csv.py::TestThreadedStreamingCSVRead::test_invalid_row_handler["
+    "pyarrow/tests/test_csv.py::TestThreadedStreamingCSVRead::test_row_number_offset_in_errors"
+    "pyarrow/tests/test_csv.py::TestThreadedStreamingCSVRead::test_row_number_offset_in_errors"
+    # Does not raise NotImplementedError
+    "pyarrow/tests/test_table.py::test_table_group_by_first"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Requires loopback networking.

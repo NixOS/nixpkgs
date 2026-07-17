@@ -116,7 +116,6 @@ buildPythonPackage rec {
   preCheck = ''
     cd $TMPDIR
     export HOME=$TMPDIR
-    export OMP_NUM_THREADS=1
   '';
 
   pythonImportsCheck = [ "sklearn" ];

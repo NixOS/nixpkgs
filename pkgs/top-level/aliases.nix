@@ -1629,6 +1629,7 @@ mapAliases {
   openjfx23 = throw "OpenJFX 23 was removed as it has reached its end of life"; # Added 2025-11-04
   openjfx24 = throw "OpenJFX 24 was removed as it has reached its end of life"; # Added 2025-10-04
   openmodelica = throw "'openmodelica' has been removed as it was unmaintained in nixpkgs and depends on insecure&unmtaintained qtwebkit"; # Added 2026-04-26
+  openmpCheckPhaseHook = warnAlias "'openmpCheckPhaseHook' has been renamed to 'checkPhaseThreadLimitHook' to reflect its handling of all known thread-limiting mechanisms during check phase" checkPhaseThreadLimitHook; # Added 2026-07-09
   openmw-tes3mp = throw "'openmw-tes3mp' has been removed due to lack of maintenance upstream"; # Added 2025-08-30
   openssl_3_0 = throw "'openssl_3_0' has been renamed to/replaced by 'openssl_3'"; # Converted to throw 2025-10-27
   opensycl = throw "'opensycl' has been renamed to/replaced by 'adaptivecpp'"; # Converted to throw 2025-10-27

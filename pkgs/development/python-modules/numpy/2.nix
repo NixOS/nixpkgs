@@ -19,6 +19,8 @@
   coreutils,
   lapack,
 
+  checkPhaseThreadLimitHook,
+
   # Reverse dependency
   sage,
 
@@ -86,12 +88,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
-  # we default openblas to build with 64 threads
-  # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
   buildInputs = [
@@ -111,6 +109,10 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     setuptools
     typing-extensions
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   preCheck = ''

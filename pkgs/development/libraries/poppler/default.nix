@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitLab,
   cairo,
+  clang-tools,
   cmake,
   boost,
   curl,
@@ -55,13 +56,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "9d5011815a14c157ba25bb160187842fb81579a5";
-    hash = "sha256-sA5f235IJpzzzHqpwHM3zCZC2Yh0ztA6PZa84j/6tfY=";
+    rev = "f0068e9c530017ad811d1f28b95f9b7f59264e37";
+    hash = "sha256-Xf8duSh0r1o09b5BKB7mBvzrMfXYlzTuTOuK2ZCeItc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "25.10.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "26.06.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [
     "out"
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-a16btk2rsVeHoU2xZ1KRx6+vk4dDjMk6T7f2rsTub+A=";
+    hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!minimal) [
     glib # for glib-mkenums
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
 
   buildInputs = [
@@ -129,18 +137,22 @@ stdenv.mkDerivation (finalAttrs: {
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
     (mkFlag gpgmeSupport "GPGME")
-  ]
-  ++ lib.optionals finalAttrs.finalPackage.doCheck [
-    "-DTESTDATADIR=${testData}"
   ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
 
-  # Workaround #54606
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
-  '';
+  preConfigure =
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
+      # The test data directory needs to be writable during the test phase.
+      mkdir -p $TMPDIR/testdata
+      cp -r --no-preserve=mode ${testData}/* $TMPDIR/testdata
+      cmakeFlagsArray+=(-DTESTDATADIR=$TMPDIR/testdata)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Workaround #54606
+      sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+    '';
 
   # Work around gpgme trying to write to $HOME during qt5 and qt6 tests:
   preCheck = lib.optionalString gpgmeSupport ''

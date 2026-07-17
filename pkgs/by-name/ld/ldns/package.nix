@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldns";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/ldns/ldns-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-q67tKFj76oSk65gz4Z59IzgMwPPZtlSLlivkInb/3LM=";
+    sha256 = "sha256-tST6IZlLboNCAM64wn8bhL2lmC/jVwbwWBlsB525TV0=";
   };
 
   postPatch = ''
