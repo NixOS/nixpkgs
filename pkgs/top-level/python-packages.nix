@@ -5640,6 +5640,8 @@ self: super: with self; {
     inherit (pkgs) example-robot-data;
   };
 
+  excelrd = callPackage ../development/python-modules/excelrd { };
+
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
