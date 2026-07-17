@@ -16,12 +16,12 @@
 
 let
   pname = "autobrr";
-  version = "1.81.0";
+  version = "1.82.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-Xm5cYtQabHkoiVZ6v71qWKIpx44obzr0Om2hahFUyO8=";
+    hash = "sha256-dB/lk05v9L8GAF//N1We3byhsK+156rzRT+r9Q+EVD4=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -46,7 +46,7 @@ let
         ;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-VDW1B8OVFZ72nBl8IYM5nXqit2za1Q8mXI6UhcmEeSo=";
+      hash = "sha256-wlikd38tAfgaSSD9L7DiSXRQFYcfVq5YA1eWs5NE4n8=";
     };
 
     postBuild = ''
@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
     src
     ;
 
-  vendorHash = "sha256-mOsiQXuhhNSbViEFecmlNk549LyfUIuc8FxwDma9XNI=";
+  vendorHash = "sha256-tsGl0uiQV25aemEQvedZUISrlO4IPE+V87nl31m8hZI=";
 
   preBuild = ''
     cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist
