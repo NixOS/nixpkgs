@@ -9081,10 +9081,6 @@ with pkgs;
     mopidy-ytmusic
     ;
 
-  mpg123 = callPackage ../applications/audio/mpg123 {
-    jack = libjack2;
-  };
-
   libmpg123 = mpg123.override {
     libOnly = true;
     withConplay = false;
