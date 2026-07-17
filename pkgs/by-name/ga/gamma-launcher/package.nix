@@ -17,14 +17,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "gamma-launcher";
-  version = "3.0";
+  version = "3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mord3rca";
     repo = "gamma-launcher";
     tag = "v${version}";
-    hash = "sha256-bvlNmpl2L9MAhZMyHwosXrypH1CQrSI1RQwo+sXO7/w=";
+    hash = "sha256-FLxJfP1fl3efRk9iAIAsMUrjQcUNa04GjiAKrYequF8=";
   };
 
   build-system = [ python3Packages.setuptools ];
