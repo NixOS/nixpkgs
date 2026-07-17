@@ -77,7 +77,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i -e 's#static_folder=.*#static_folder="${frontend}/static")#' pyca/ui/__init__.py
+    substituteInPlace pyca/ui/__init__.py \
+      --replace-fail \
+        'static_folder=' \
+        'static_folder="${frontend}/static") #'
   '';
 
   pythonImportsCheck = [ "pyca" ];
