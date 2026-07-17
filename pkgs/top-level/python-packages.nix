@@ -7437,6 +7437,12 @@ self: super: with self; {
 
   hap-python = callPackage ../development/python-modules/hap-python { };
 
+  harbor = callPackage ../development/python-modules/harbor { inherit (pkgs) uv; };
+
+  harbor-atif2otel = callPackage ../development/python-modules/harbor-atif2otel { };
+
+  harbor-langsmith = callPackage ../development/python-modules/harbor-langsmith { };
+
   harbor-rewardkit = callPackage ../development/python-modules/harbor-rewardkit { };
 
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
