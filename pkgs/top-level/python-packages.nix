@@ -17696,6 +17696,8 @@ self: super: with self; {
 
   retrying = callPackage ../development/python-modules/retrying { };
 
+  retryrequests = callPackage ../development/python-modules/retryrequests { };
+
   returns = callPackage ../development/python-modules/returns { };
 
   reuse = callPackage ../development/python-modules/reuse { };
