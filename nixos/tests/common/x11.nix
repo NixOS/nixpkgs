@@ -25,6 +25,12 @@ in
           y = 768;
         }
       ];
+
+      # logind correctly marks an nspawn seat without display hardware as
+      # non-graphical. The dummy X server does not depend on that hardware.
+      displayManager.lightdm.extraConfig = ''
+        logind-check-graphical = false
+      '';
     })
   ];
 
