@@ -40,6 +40,12 @@
         postgres.succeed("systemctl restart radarr.service")
         postgres.wait_for_unit("radarr.service")
         postgres.wait_for_open_port(7878)
-        postgres.succeed("curl --fail http://localhost:7878/")
+        postgres.succeed(
+            "test \"$(sudo -u postgres psql -tAc "
+            "\"select count(*) from pg_tables where schemaname = 'public'\" radarr-main)\" -gt 0",
+            "test \"$(sudo -u postgres psql -tAc "
+            "\"select count(*) from pg_tables where schemaname = 'public'\" radarr-log)\" -gt 0",
+            "curl --fail http://localhost:7878/",
+        )
   '';
 }
