@@ -1,12 +1,18 @@
 {
   lib,
+  bundlerEnv,
   stdenv,
   fetchFromGitHub,
-  ruby,
   zfs,
   freebsd,
   makeWrapper,
 }:
+let
+  rubyEnv = bundlerEnv {
+    name = "zfstools-gems";
+    gemdir = ./.;
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zfstools";
@@ -19,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-z8umKWn8vUb2lLattbtSn4BCHD0W92hRvuL2uvrgm5o=";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ rubyEnv.wrappedRuby ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
