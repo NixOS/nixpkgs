@@ -23,6 +23,8 @@
   enableP4Tests ? true,
   enableGTests ? true,
   enableMultithreading ? false,
+  makeFontsConf,
+  dejavu_fonts,
 }:
 let
   toCMakeBoolean = v: if v then "ON" else "OFF";
@@ -39,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ dejavu_fonts ];
+  };
+
   patches = [
     # Fix gcc-13 build:
     #   https://github.com/p4lang/p4c/pull/4084
@@ -47,11 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/p4lang/p4c/commit/6756816100b7c51e3bf717ec55114a8e8575ba1d.patch";
       hash = "sha256-wWM1qjgQCNMPdrhQF38jzFgODUsAcaHTajdbV7L3y8o=";
     })
+    ./gcc-15.patch
   ];
 
   postFetch = ''
     rm -rf backends/ebpf/runtime/contrib/libbpf
     rm -rf control-plane/p4runtime
+  '';
+
+  # Fixes fontconfig errors.
+  # Mentioned in https://discourse.nixos.org/t/fontconfig-error-no-writable-cache-directories/34447
+  preConfigure = ''
+    export XDG_CACHE_HOME="$TMPDIR/cache"
   '';
 
   cmakeFlags = [
