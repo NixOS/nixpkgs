@@ -9,7 +9,7 @@
   jdk_headless,
   jre_minimal,
   nodejs,
-  protobuf,
+  protobuf_35,
 }:
 let
   jre = jre_minimal.override {
@@ -23,6 +23,8 @@ let
       "jdk.crypto.ec"
     ];
   };
+  protobuf = protobuf_35;
+  protobufJavaVer = import ./protobuf-java-version.nix;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "traccar";
@@ -47,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteAllInPlace build.gradle
+    substituteInPlace build.gradle \
+      --replace-fail "\$protobufVersion" "${protobufJavaVer}"
   '';
 
   env.protocPath = lib.getExe' protobuf "protoc";
@@ -83,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "-jar $out/tracker-server.jar"
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   __darwinAllowLocalNetworking = true;
 
