@@ -40,7 +40,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.9.6";
+  version = "2.9.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-lEbWQi6iUvqL2MXk/ZqkdX4Ou5pFWIVi6qfSyWCs8uQ=";
+    hash = "sha256-Zk9jgcGwksMQo45qzzlE2Dqw1IQr0rsBkzMnFHTdl1U=";
   };
 
   patches = [
