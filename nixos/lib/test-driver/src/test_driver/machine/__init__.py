@@ -528,6 +528,18 @@ class BaseMachine(ABC):
         with self.nested(f"waiting for file '{filename}'"):
             retry(check_file, timeout)
 
+    def wait_for_x(self, timeout: int = 900) -> None:
+        """
+        Wait until it is possible to connect to the X server.
+        """
+
+        def check_x(_last_try: bool) -> bool:
+            status, _ = self.execute("xwininfo -root >/dev/null 2>&1")
+            return status == 0
+
+        with self.nested("waiting for the X11 server"):
+            retry(check_x, timeout)
+
     def get_window_names(self) -> list[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
