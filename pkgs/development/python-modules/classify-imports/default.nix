@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "classify-imports";
-  version = "4.2.0";
+  version = "4.5.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "asottile";
     repo = "classify-imports";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
+    hash = "sha256-ae2z1AARVMS0OgkmqPSm9BYu2WHNOB/iVhq9b4qEPPM=";
   };
 
   build-system = [ setuptools ];
