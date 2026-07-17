@@ -1,0 +1,48 @@
+diff --git a/powerdnsadmin/routes/index.py b/powerdnsadmin/routes/index.py
+index 23d88bb..edfab3f 100644
+--- a/powerdnsadmin/routes/index.py
++++ b/powerdnsadmin/routes/index.py
+@@ -392,11 +392,38 @@ def login():
+         return authenticate_user(user, 'Azure OAuth')
+ 
+     if 'oidc_token' in session:
+-        user_data = json.loads(oidc.get('userinfo').text)
+-        oidc_username = user_data[Setting().get('oidc_oauth_username')]
+-        oidc_first_name = user_data[Setting().get('oidc_oauth_firstname')]
+-        oidc_last_name = user_data[Setting().get('oidc_oauth_last_name')]
+-        oidc_email = user_data[Setting().get('oidc_oauth_email')]
++        try:
++            oidc_metadata = oidc.load_server_metadata()
++        except Exception as e:
++            current_app.logger.warning(
++                'OIDC: unable to load server metadata ({}); '
++                'falling back to relative userinfo endpoint'.format(e))
++            oidc_metadata = {}
++
++        userinfo_endpoint = oidc_metadata.get('userinfo_endpoint')
++        try:
++            if userinfo_endpoint:
++                userinfo_resp = oidc.get(userinfo_endpoint, timeout=15)
++            else:
++                userinfo_resp = oidc.get('userinfo', timeout=15)
++            userinfo_resp.raise_for_status()
++            user_data = userinfo_resp.json()
++        except Exception as e:
++            current_app.logger.error('OIDC: failed to fetch userinfo: {}'.format(e))
++            session.pop('oidc_token', None)
++            return redirect(url_for('index.login'))
++
++        oidc_username = user_data.get(Setting().get('oidc_oauth_username'))
++        oidc_first_name = user_data.get(Setting().get('oidc_oauth_firstname'), '')
++        oidc_last_name = user_data.get(Setting().get('oidc_oauth_last_name'), '')
++        oidc_email = user_data.get(Setting().get('oidc_oauth_email'), '')
++
++        if not oidc_username:
++            current_app.logger.error(
++                'OIDC: username claim "{}" not present in userinfo'.format(
++                    Setting().get('oidc_oauth_username')))
++            session.pop('oidc_token', None)
++            return redirect(url_for('index.login'))
+ 
+         user = User.query.filter_by(username=oidc_username).first()
+         if not user:
