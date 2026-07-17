@@ -5,26 +5,30 @@
   cacert,
   cmake,
   gitMinimal,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aube";
-  version = "1.27.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "aube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lnW5ZLcdkpt662wDSj5YsnL7wILkJw3xoBs+3n7XWGY=";
+    hash = "sha256-87r9qltKUhjnYG9O484OUzKFiO8Xoge9VZ13l6RgrdA=";
   };
 
-  cargoHash = "sha256-Ox3l2VqtHfrAICTj7CL99EL5dXF43snPu7/X1ZFYceM=";
+  cargoHash = "sha256-Cy5Ea/rF2IJ5WppKKI7E1toy9N+bQEArVW9o2pHzBMc=";
 
   nativeBuildInputs = [ cmake ]; # libz-ng-sys
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   postInstall = ''
     rm -f $out/bin/generate-{error-codes,settings}-docs
