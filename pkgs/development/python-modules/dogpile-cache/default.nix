@@ -7,9 +7,7 @@
   pytestCheckHook,
   mako,
   decorator,
-  stdenv,
   stevedore,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +26,6 @@ buildPythonPackage rec {
   dependencies = [
     decorator
     stevedore
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -37,24 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isLinux [
+  disabledTestPaths = [
     # flaky
     "tests/cache/test_dbm_backend.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: <dogpile.cache.api.NoValue object> != 'some value 1'
-    "test_expire_override"
-    # flaky
-    "test_get_value_plus_created_long_create"
-    "test_get_value_plus_created_registry_safe_cache_quick"
-    "test_get_value_plus_created_registry_safe_cache_slow"
-    "test_get_value_plus_created_registry_unsafe_cache"
-    "test_quick"
-    "test_region_set_get_value"
-    "test_region_set_multiple_values"
-    "test_return_while_in_progress"
-    "test_slow"
+    # timing sensitive
+    "tests/test_lock.py::ConcurrencyTest"
   ];
 
   meta = {
