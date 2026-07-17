@@ -466455,8 +466455,6 @@ self: {
       ];
       description = "Module-Lattice-based Key-Encapsulation Mechanism";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
