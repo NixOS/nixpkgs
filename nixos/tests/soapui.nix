@@ -5,7 +5,7 @@
     maintainers = [ ];
   };
 
-  nodes.machine =
+  containers.machine =
     { config, pkgs, ... }:
     {
       imports = [
