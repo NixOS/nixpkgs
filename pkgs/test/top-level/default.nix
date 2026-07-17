@@ -83,6 +83,23 @@ lib.recurseIntoAttrs {
     assert appended.makeWrapper ? __spliced;
     pkgs.emptyFile;
 
+  replaceStdenv =
+    let
+      replacedPkgs = nixpkgsFun {
+        localSystem = {
+          inherit (pkgs.stdenv.buildPlatform) system;
+        };
+        config.replaceStdenv =
+          { pkgs }:
+          pkgs.stdenv
+          // {
+            wasReplaced = true;
+          };
+      };
+    in
+    assert replacedPkgs.stdenv.wasReplaced;
+    pkgs.emptyFile;
+
   massRebuildVariantComposition =
     let
       variants = [
