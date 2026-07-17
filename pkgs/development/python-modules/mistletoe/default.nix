@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mistletoe";
-  version = "1.5.1";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "miyuchina";
     repo = "mistletoe";
     tag = "v${version}";
-    hash = "sha256-h2gKvh3P4pUUPwVYTIjz43/3CwZdWbhO3aJnwFBNR+Q=";
+    hash = "sha256-L3jTPc5TZ/0oBUfoNoB/6QdUhMSlTsS5O6K18JrBhJE=";
   };
 
   pythonImportsCheck = [ "mistletoe" ];
