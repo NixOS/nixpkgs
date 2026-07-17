@@ -434,6 +434,8 @@ in
       ]
       ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
 
+      stopIfChanged = lib.mkIf cfg.softDaemonRestart false;
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
         ExecStartPost = "${cfg.package}/bin/incusd waitready --timeout=${cfg.startTimeout}";
@@ -492,6 +494,7 @@ in
 
       # restarting this service will affect instances
       restartIfChanged = false;
+      stopIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
