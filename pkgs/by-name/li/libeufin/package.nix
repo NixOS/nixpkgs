@@ -34,9 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "install: build install-nobuild-files" "install: install-nobuild-files"
 
@@ -47,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Use gradle repo to download dependencies
     substituteInPlace build.gradle \
       --replace-fail 'mavenCentral()' "gradlePluginPortal()"
-
-    runHook postPatch
   '';
 
   preConfigure = ''
