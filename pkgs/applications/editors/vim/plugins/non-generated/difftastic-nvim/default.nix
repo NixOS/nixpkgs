@@ -8,7 +8,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.0.9";
+  version = "0.1.1";
   src = fetchFromGitHub {
     owner = "clabby";
     repo = "difftastic.nvim";
