@@ -32,7 +32,7 @@
   lapack,
   curl,
   tzdata,
-  withRecommendedPackages ? true,
+  withRecommendedPackages ? false,
   enableStrictBarrier ? false,
   enableMemoryProfiling ? false,
   # R as of writing does not support outputting both .so and .a files; it outputs:
