@@ -40,6 +40,12 @@
         postgres.succeed("systemctl restart sonarr.service")
         postgres.wait_for_unit("sonarr.service")
         postgres.wait_for_open_port(8989)
-        postgres.succeed("curl --fail http://localhost:8989/")
+        postgres.succeed(
+            "test \"$(sudo -u postgres psql -tAc "
+            "\"select count(*) from pg_tables where schemaname = 'public'\" sonarr-main)\" -gt 0",
+            "test \"$(sudo -u postgres psql -tAc "
+            "\"select count(*) from pg_tables where schemaname = 'public'\" sonarr-log)\" -gt 0",
+            "curl --fail http://localhost:8989/",
+        )
   '';
 }
