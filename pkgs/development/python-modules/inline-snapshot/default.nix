@@ -19,16 +19,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inline-snapshot";
-  version = "0.34.2";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
-    tag = version;
-    hash = "sha256-4Uvc925/6RxJRHjP3SZaB7T+gqky5KlL9agHy/14Jd0=";
+    tag = finalAttrs.version;
+    hash = "sha256-Hj32iqjRqODTerDE47dKe7ic+BZndGmWcpxFQEpt5to=";
   };
 
   build-system = [ hatchling ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   optional-dependencies = {
     black = [ black ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "inline_snapshot" ];
 
   disabledTestPaths = [
-    # Tests don't play nice with pytest-xdist
+    # Tests invoke pyright as a Python module, but nixpkgs packages it as a standalone executable.
     "tests/test_typing.py"
     # Sensitive to formatter versions
     "tests/test_docs.py"
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
-    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
