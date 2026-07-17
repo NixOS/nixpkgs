@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   bison,
+  cmake,
   flex,
   perl,
   gmp,
@@ -13,19 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gecode";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "Gecode";
     repo = "gecode";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-i1geBYMO+edZJekKe/zO+kkgd/S4jSiSZnDLfSRlXwc=";
+    hash = "sha256-WhMN7QC+VQfvHUV1LLaW7I7fG++/fznh1ZDUY/Q8zD8=";
   };
 
   enableParallelBuilding = true;
   dontWrapQtApps = true;
   nativeBuildInputs = [
     bison
+    cmake
     flex
   ];
   buildInputs = [
