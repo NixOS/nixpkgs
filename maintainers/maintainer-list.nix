@@ -1629,12 +1629,6 @@
     githubId = 382798;
     name = "amfl";
   };
-  amiddelk = {
-    email = "amiddelk@gmail.com";
-    github = "amiddelk";
-    githubId = 1358320;
-    name = "Arie Middelkoop";
-  };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
     github = "AmineChikhaoui";
@@ -4438,6 +4432,12 @@
       { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; }
     ];
   };
+  caguiclajmg = {
+    email = "jmg.caguicla@guarandoo.me";
+    github = "caguiclajmg";
+    githubId = 32662060;
+    name = "John Mark Gabriel Caguicla";
+  };
   CaiqueFigueiredo = {
     email = "public@caiquefigueiredo.me";
     github = "caiquefigueiredo";
@@ -5612,6 +5612,11 @@
     github = "ConnorNelson";
     githubId = 5953003;
     name = "Connor Nelson";
+  };
+  conny = {
+    github = "ConstantConstantin";
+    githubId = 162139822;
+    name = "Constantin-Paul Hertel";
   };
   conradmearns = {
     email = "conradmearns+github@pm.me";
@@ -21214,12 +21219,6 @@
     githubId = 19862;
     name = "KJ Ørbekk";
   };
-  orbitz = {
-    email = "mmatalka@gmail.com";
-    github = "orbitz";
-    githubId = 75299;
-    name = "Malcolm Matalka";
-  };
   orhun = {
     email = "orhunparmaksiz@gmail.com";
     github = "orhun";
@@ -26656,12 +26655,6 @@
     name = "David Falk";
     github = "spreetin";
     githubId = 7392173;
-  };
-  sprock = {
-    email = "rmason@mun.ca";
-    github = "sprock";
-    githubId = 6391601;
-    name = "Roger Mason";
   };
   sputn1ck = {
     email = "kon@kon.ninja";

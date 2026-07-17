@@ -976,12 +976,12 @@ in
   tokyo-night-tmux = mkTmuxPlugin {
     pluginName = "tokyo-night-tmux";
     rtpFilePath = "tokyo-night.tmux";
-    version = "1.6.6";
+    version = "1.8.1";
     src = pkgs.fetchFromGitHub {
       owner = "janoamaral";
       repo = "tokyo-night-tmux";
-      rev = "caf6cbb4c3a32d716dfedc02bc63ec8cf238f632";
-      hash = "sha256-TOS9+eOEMInAgosB3D9KhahudW2i1ZEH+IXEc0RCpU0=";
+      rev = "a39e00bf01fea05f916e4b7707bad5e64adee02c";
+      hash = "sha256-tmS0MBANSsTg53E2GB0TnjwGcZXboTRFNeDE6Ehn+bM=";
     };
     meta = {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";

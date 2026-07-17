@@ -52,11 +52,15 @@ let
 
         angstrom-unix = callPackage ../development/ocaml-modules/angstrom-unix { };
 
+        ansi = callPackage ../development/ocaml-modules/ansi { };
+
         ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
         ao = callPackage ../development/ocaml-modules/ao { };
 
         apron = callPackage ../development/ocaml-modules/apron { };
+
+        apronext = callPackage ../development/ocaml-modules/apronext { };
 
         argon2 = callPackage ../development/ocaml-modules/argon2 { };
 
@@ -1125,6 +1129,8 @@ let
 
         letters = callPackage ../development/ocaml-modules/letters { };
 
+        libabsolute = callPackage ../development/ocaml-modules/libabsolute { };
+
         libc = callPackage ../development/ocaml-modules/libc { };
 
         lilv = callPackage ../development/ocaml-modules/lilv {
@@ -1762,6 +1768,8 @@ let
         phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
 
         piaf = callPackage ../development/ocaml-modules/piaf { };
+
+        picasso = callPackage ../development/ocaml-modules/picasso { };
 
         piqi = callPackage ../development/ocaml-modules/piqi { };
 

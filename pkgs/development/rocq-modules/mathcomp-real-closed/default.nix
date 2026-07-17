@@ -10,7 +10,7 @@
 mkRocqDerivation {
 
   namePrefix = [
-    "rocq-core"
+    "rocq"
     "mathcomp"
   ];
   pname = "real-closed";

@@ -140,6 +140,23 @@ in
     };
   };
 
+  redhat = buildStyle rec {
+    name = "RedHat";
+    version = "664";
+    src = fetchFromGitHub {
+      owner = "redhat-documentation";
+      repo = "vale-at-red-hat";
+      rev = "v${version}";
+      hash = "sha256-MVC/OJctGo5SYKkrMatNDXCfVgM/KcckHUB70STj3zw=";
+    };
+    stylePath = ".vale/styles/RedHat";
+    meta = {
+      description = "Vale-compatible implementation of the Red Hat documentation style guide";
+      homepage = "https://github.com/redhat-documentation/vale-at-red-hat";
+      license = lib.licenses.mit;
+    };
+  };
+
   write-good = buildStyle rec {
     name = "write-good";
     version = "0.4.1";

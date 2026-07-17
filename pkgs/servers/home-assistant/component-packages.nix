@@ -2465,8 +2465,9 @@
     "greencell" =
       ps: with ps; [
         aiohasupervisor
+        greencell-client
         paho-mqtt
-      ]; # missing inputs: greencell_client
+      ];
     "greeneye_monitor" =
       ps: with ps; [
         greeneye-monitor
@@ -6445,7 +6446,8 @@
       ];
     "swisscom" =
       ps: with ps; [
-      ]; # missing inputs: python-swisscom-internet-box
+        python-swisscom-internet-box
+      ];
     "switch" =
       ps: with ps; [
       ];
@@ -8154,6 +8156,7 @@
     "graphite"
     "gree"
     "green_planet_energy"
+    "greencell"
     "greeneye_monitor"
     "group"
     "growatt_server"
@@ -8727,6 +8730,7 @@
     "sunweg"
     "surepetcare"
     "swiss_public_transport"
+    "swisscom"
     "switch"
     "switch_as_x"
     "switchbee"

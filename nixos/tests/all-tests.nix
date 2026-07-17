@@ -1512,6 +1512,7 @@ in
   rtkit = runTest ./rtkit.nix;
   rtorrent = runTest ./rtorrent.nix;
   rush = runTest ./rush.nix;
+  rustfs = runTest ./rustfs.nix;
   rustical = runTest ./web-apps/rustical.nix;
   rustls-libssl = runTest ./rustls-libssl.nix;
   rxe = runTest ./rxe.nix;
@@ -1843,6 +1844,7 @@ in
   };
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
+  vnstat = runTest ./vnstat.nix;
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
   vscodium = import ./vscodium.nix { inherit runTest; };
   vsftpd = runTest ./vsftpd.nix;

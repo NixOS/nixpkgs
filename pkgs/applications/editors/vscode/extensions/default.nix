@@ -1174,8 +1174,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.23.1";
-          hash = "sha256-B97cImVKnholhZV0ZBru/gpeVSaTHOFfQywwmjk+kq8=";
+          version = "3.24.12";
+          hash = "sha256-2vpFCxF65Y/VfyTHDO0wLAe0+m/lc0+iloEI//FdaQg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1226,8 +1226,8 @@ let
         mktplcRef = {
           name = "databricks";
           publisher = "databricks";
-          version = "2.12.1";
-          hash = "sha256-GKm3rZMvU/5Ii01GjUg7rE15TnOtDTh0LwkDVsuSLfY=";
+          version = "2.12.3";
+          hash = "sha256-/hFBw6STQG4zycS44em1DlaQSpKGP4w7YlH+fu/cHlA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/databricks.databricks/changelog";
@@ -1760,8 +1760,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.44.1";
-          hash = "sha256-OH4i4cGh/ivHQNAI55FHjM9ZjnhMaJSnsuQUnxub9/g=";
+          version = "0.44.2";
+          hash = "sha256-jz1j8KzD5PDZ+P5V7yLo1BEmcW+q+D2nYKzYEf7Sg2w=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2592,8 +2592,8 @@ let
         mktplcRef = {
           publisher = "jnoortheen";
           name = "nix-ide";
-          version = "0.5.9";
-          hash = "sha256-hPOcp6Yksgfu1+In21/gJ3MthV8JUV5WaRpYHvo5GGk=";
+          version = "0.5.10";
+          hash = "sha256-5rNqQRFLryzeIezUiqgvSY8Vz5n48367RHQrFDxpoD8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";

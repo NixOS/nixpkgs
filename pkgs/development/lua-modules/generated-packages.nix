@@ -471,15 +471,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "compat53";
-      version = "0.15.0-1";
+      version = "0.15.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/compat53-0.15.0-1.rockspec";
-          sha256 = "0389ghggjdbfxxa6nrb7364z55dmb832qyb8v4474nzcws0b0aqf";
+          url = "mirror://luarocks/compat53-0.15.1-1.rockspec";
+          sha256 = "0x2vpfvsb6qqybx42aawa1mvnzlhlndy9z99g1707lixd4849fkl";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.15.0.zip";
-        sha256 = "164hcigjz7my1zlgccdbvsld89bvz6y16v82rjc8n2qa8ah5j45d";
+        url = "https://github.com/lunarmodules/lua-compat-5.3/archive/v0.15.1.zip";
+        sha256 = "03gfs74lj58qd9mrd9y0bz5f6mq9qd8my5bb2xg5lx6wvagdlvim";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
@@ -3825,15 +3825,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luarocks-build-treesitter-parser";
-      version = "6.0.2-1";
+      version = "6.1.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luarocks-build-treesitter-parser-6.0.2-1.rockspec";
-          sha256 = "0lwz15983gp29smykm3z6blhfd3ah3yi96j0g6di74nkz2kmfqk7";
+          url = "mirror://luarocks/luarocks-build-treesitter-parser-6.1.1-1.rockspec";
+          sha256 = "1hijvszf33l0yv1lwvp8187p0gwixr0cmf3ryvsvgcgas0fbb6nl";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/lumen-oss/luarocks-build-treesitter-parser/archive/v6.0.2.zip";
-        sha256 = "17877av310icqrv961ffhq852xx90wnpcxvqnylm476pndi1bf0f";
+        url = "https://github.com/lumen-oss/luarocks-build-treesitter-parser/archive/v6.1.1.zip";
+        sha256 = "1fg2fsxwc5qs2ll188s0rmz06gdxzfhwpg5wy6nwlwcg3y6x42ny";
       };
 
       disabled = luaOlder "5.1";
@@ -5011,15 +5011,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "neotest";
-      version = "5.19.0-1";
+      version = "5.19.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/neotest-5.19.0-1.rockspec";
-          sha256 = "1gfxf6v9q19xfn8kyklg2k4mj2fh4w03vyhq0drcmm4901vcvcz1";
+          url = "mirror://luarocks/neotest-5.19.2-1.rockspec";
+          sha256 = "01dlqkl877z7b4rvxbrw56z7804lwdy9k7vzy0zld7lvbhhxi3ha";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neotest/neotest/archive/e37147bca240d5b790bb61dc7d13cea214897079.zip";
-        sha256 = "1pbk3x8yi5hvb275gzz0c8gjykzpam1pcxxlb2l6qr1pzz0kvj7r";
+        url = "https://github.com/nvim-neotest/neotest/archive/4e2cd42c4252ee9d2435571d9adcdbc1d47931fe.zip";
+        sha256 = "01n0fr2k5fqj3xj0gng81d7abjr64b1ad0f0fp5qpc8wxnjk5agj";
       };
 
       disabled = luaOlder "5.1";
