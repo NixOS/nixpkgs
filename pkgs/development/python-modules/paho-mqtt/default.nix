@@ -3,9 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
   openssl,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -28,10 +30,13 @@ buildPythonPackage rec {
     hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/ssl/gen.sh \
-      --replace-fail "c_rehash certs" "#c_rehash certs"
-  '';
+  patches = [
+    (fetchpatch {
+      name = "generate-ssl-certs-in-a-test-fixture.patch";
+      url = "https://github.com/eclipse-paho/paho.mqtt.python/pull/931.diff";
+      hash = "sha256-A7rWwpR4PnCi77F1VqsQKHBxHNrdeHgmVM6BGMeUpjs=";
+    })
+  ];
 
   build-system = [
     hatchling
@@ -40,6 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openssl
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -51,10 +57,6 @@ buildPythonPackage rec {
 
     # paho.mqtt not in top-level dir to get caught by this
     export PYTHONPATH=".:$PYTHONPATH"
-
-    pushd tests/ssl
-    HOME="$(mktemp -d)" ./gen.sh
-    popd
   '';
 
   disabledTests = [
