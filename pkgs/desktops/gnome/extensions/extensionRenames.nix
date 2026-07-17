@@ -20,6 +20,9 @@
   "batterytime@typeof.pw" = "battery-time-2";
   "batime@martin.zurowietz.de" = "battery-time";
 
+  "clipboard-history@Diyar1877" = "clipboard-history";
+  "clipboard-history@alexsaveau.dev" = "clipboard-history-2";
+
   "clipboard-line-cleaner@epiphanius.github.io" = "clipboard-line-cleaner";
   "clipboard-line-cleaner@example.com" = "clipboard-line-cleaner-2";
 
@@ -41,6 +44,9 @@
   "night-light-toggle@egoistpizza.github.com" = "night-light-toggle";
   "nightlighttoggle@sam" = "night-light-toggle-2";
 
+  "panel-scroll@taygun86" = "panel-workspace-scroll";
+  "panel-workspace-scroll@polymeilex.github.io" = "panel-workspace-scroll-2";
+
   "autoselectheadset@josephlbarnett.github.com" = "auto-select-headset";
   "autoselectheadset@Anduril97.github.com" = "auto-select-headset-2";
 
@@ -55,6 +61,9 @@
 
   "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
   "tailscale@joaophi.github.com" = "tailscale-qs-2";
+
+  "workspace-wallpapers@ero" = "workspace-wallpapers";
+  "workspace-wallpapers@jonathan.aljl.eu" = "workspace-wallpapers-2";
 
   # ############################################################################
   # These extensions no longer collide. We preserve the old attribute name for backwards compatibility.

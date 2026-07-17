@@ -12,6 +12,10 @@
     "battery-time@eetumos.github.com",
     "batterytime@typeof.pw"
   ],
+  "clipboard-history": [
+    "clipboard-history@Diyar1877",
+    "clipboard-history@alexsaveau.dev"
+  ],
   "clipboard-line-cleaner": [
     "clipboard-line-cleaner@epiphanius.github.io",
     "clipboard-line-cleaner@example.com"
@@ -44,6 +48,10 @@
     "night-light-toggle@egoistpizza.github.com",
     "nightlighttoggle@sam"
   ],
+  "panel-workspace-scroll": [
+    "panel-scroll@taygun86",
+    "panel-workspace-scroll@polymeilex.github.io"
+  ],
   "persian-calendar": [
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
@@ -66,5 +74,9 @@
   "tailscale-qs": [
     "tailscale-gnome-qs@tailscale-qs.github.io",
     "tailscale@joaophi.github.com"
+  ],
+  "workspace-wallpapers": [
+    "workspace-wallpapers@ero",
+    "workspace-wallpapers@jonathan.aljl.eu"
   ]
 }
