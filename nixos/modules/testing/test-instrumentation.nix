@@ -230,7 +230,14 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xwininfo ];
+    environment.systemPackages = [
+      pkgs.xwininfo
+    ]
+    ++ lib.optional config.boot.isNspawnContainer (
+      # Unlike a QEMU machine, an nspawn container has no monitor that can
+      # capture its display, so the test driver uses `xwd' inside the container.
+      pkgs.xwd
+    );
 
     # Log everything to the serial console.
     services.journald.settings.Journal = {
