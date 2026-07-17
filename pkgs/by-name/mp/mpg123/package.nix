@@ -11,7 +11,7 @@
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
   withJack ? stdenv.hostPlatform.isUnix,
-  jack,
+  libjack2,
   withConplay ? !stdenv.hostPlatform.isWindows,
   perl,
   writeScript,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [
     ]
-    ++ lib.optionals withJack [ jack ]
+    ++ lib.optionals withJack [ libjack2 ]
   );
 
   configureFlags =
