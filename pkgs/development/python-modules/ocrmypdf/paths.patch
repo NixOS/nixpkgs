@@ -1,5 +1,5 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index 5afd6e17..0db47849 100644
+index bcee06fe..cc81c161 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
 @@ -36,7 +36,7 @@ COLOR_CONVERSION_STRATEGIES = frozenset(
@@ -12,7 +12,7 @@ index 5afd6e17..0db47849 100644
  
  log = logging.getLogger(__name__)
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 9f107a07..469aed48 100644
+index b44a72ec..5858de31 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
 @@ -13,7 +13,7 @@ from ocrmypdf._exec._probe import ToolProbe
@@ -30,11 +30,11 @@ index 9f107a07..469aed48 100644
  def convert_single(cwd, infile, outfile, threshold):
 -    args = ['jbig2', '--pdf', '-t', str(threshold), infile]
 +    args = ['@jbig2@', '--pdf', '-t', str(threshold), infile]
-     with open(outfile, 'wb') as fstdout:
+     with outfile.open('wb') as fstdout:
          proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
      proc.check_returncode()
 diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
-index 94bcdbf0..c0ae0fa3 100644
+index 5550ca06..a7718be2 100644
 --- a/src/ocrmypdf/_exec/pngquant.py
 +++ b/src/ocrmypdf/_exec/pngquant.py
 @@ -11,7 +11,7 @@ from subprocess import PIPE
@@ -48,7 +48,7 @@ index 94bcdbf0..c0ae0fa3 100644
  
 @@ -27,7 +27,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
      """
-     with open(input_file, 'rb') as input_stream:
+     with input_file.open('rb') as input_stream:
          args = [
 -            'pngquant',
 +            '@pngquant@',
@@ -56,7 +56,7 @@ index 94bcdbf0..c0ae0fa3 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index 861f2d50..010ef6a6 100644
+index 0ff118b0..e36a2e31 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
 @@ -117,7 +117,7 @@ class TesseractVersion(Version):
