@@ -194,6 +194,7 @@ dont-distribute-packages:
  - baikai
  - baikai-claude
  - baikai-effectful
+ - baikai-kit
  - baikai-openai
  - baikai-trace-otel
  - balkon
@@ -747,6 +748,8 @@ dont-distribute-packages:
  - dhscanner-kbapi
  - dhscanner-kbgen
  - dia-functions
+ - diagnostician-html
+ - diagnostician-terminal
  - diagrams-html5
  - diagrams-reflex
  - diagrams-wx
@@ -1724,6 +1727,7 @@ dont-distribute-packages:
  - http-response-decoder
  - http-tower-hs
  - http2-client-grpc
+ - http2-client-grpc-effectful
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
  - http3
@@ -1782,6 +1786,7 @@ dont-distribute-packages:
  - hylotab
  - hyloutils
  - hyperbole
+ - hyperbole-oauth2
  - hyperpublic
  - ide-backend
  - ide-backend-server
@@ -1790,6 +1795,7 @@ dont-distribute-packages:
  - ideas-statistics
  - identicon-style-squares
  - idna
+ - idnaparse
  - iException
  - ige-mac-integration
  - igrf
@@ -1846,7 +1852,9 @@ dont-distribute-packages:
  - IORefCAS
  - ipatch
  - ipc
+ - ipedb
  - ipld-cid
+ - ipldm
  - ipprint
  - iptadmin
  - irc-fun-bot
@@ -1965,6 +1973,9 @@ dont-distribute-packages:
  - keid-geometry
  - keid-resource-gltf
  - keid-sound-openal
+ - keiro-core
+ - keiro-dsl
+ - keiro-migrations
  - kerry
  - kevin
  - key-vault
@@ -1979,6 +1990,11 @@ dont-distribute-packages:
  - kif-parser
  - kind-integer
  - kind-rational
+ - kioku-cli
+ - kioku-core
+ - kioku-migrate
+ - kioku-migrations
+ - kiroku-store-migrations
  - kit
  - kmeans-par
  - kmeans-vector
@@ -2197,6 +2213,7 @@ dont-distribute-packages:
  - manifold-random
  - Map
  - marionetta
+ - marionette-effectful
  - markdown-pap
  - markdown2svg
  - markov-processes
@@ -2235,8 +2252,6 @@ dont-distribute-packages:
  - meta-par-accelerate
  - MetaObject
  - metaplug
- - metar
- - metar-http
  - Metrics
  - metro
  - metro-socket
@@ -2509,6 +2524,7 @@ dont-distribute-packages:
  - ogma-language-fret-cs
  - ogma-language-fret-reqs
  - ois-input-manager
+ - okf-cli
  - olwrapper
  - om-kubernetes
  - online-csv
@@ -2618,6 +2634,7 @@ dont-distribute-packages:
  - peyotls
  - peyotls-codec
  - pg-entity
+ - pg-migrate-test-support
  - pgmq-config
  - pgmq-effectful
  - pgmq-hasql
@@ -3200,6 +3217,7 @@ dont-distribute-packages:
  - shikumi-cache-redis
  - shikumi-compile
  - shikumi-eval
+ - shikumi-okf
  - shikumi-optimize
  - shikumi-tools
  - shikumi-trace

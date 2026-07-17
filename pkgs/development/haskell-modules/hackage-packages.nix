@@ -98543,6 +98543,7 @@ self: {
       ];
       description = "Shared kit installer for AI-agent skills and subagents";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -197463,6 +197464,7 @@ self: {
         text
       ];
       license = "(Apache-2.0 OR MIT)";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -197489,6 +197491,7 @@ self: {
         text
       ];
       license = "(Apache-2.0 OR MIT)";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -374291,6 +374294,7 @@ self: {
       ];
       description = "Effectful gRPC client built on http2-client-effectful";
       license = lib.meta.getLicenseFromSpdxId "EUPL-1.2";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -382572,6 +382576,7 @@ self: {
       ];
       description = "OAuth2 Support for Hyperbole";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -385026,6 +385031,7 @@ self: {
       ];
       description = "IDNA-aware DNS-name lint and reporter";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "idnaparse";
     }
   ) { };
@@ -397846,6 +397852,7 @@ self: {
       ];
       description = "Build databases with IPE data";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -398049,6 +398056,7 @@ self: {
       ];
       description = "The InterPlanetary Linked Data Model and codec formats";
       license = lib.meta.getLicenseFromSpdxId "AGPL-3.0-or-later";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -414040,6 +414048,7 @@ self: {
       ];
       description = "Core contracts for Keiro packages";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -414118,6 +414127,7 @@ self: {
       ];
       description = "Typed specification toolchain for keiro services";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "keiro-dsl";
     }
   ) { };
@@ -414191,6 +414201,7 @@ self: {
       ];
       description = "Schema migrations for keiro";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "keiro-migrate";
     }
   ) { };
@@ -416211,6 +416222,7 @@ self: {
       ];
       description = "kioku command-line interface";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "kioku";
     }
   ) { };
@@ -416332,6 +416344,7 @@ self: {
       ];
       description = "Reusable agent memory runtime";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -416373,6 +416386,7 @@ self: {
       ];
       description = "The kioku schema migration entry point";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "kioku-migrate";
     }
   ) { };
@@ -416432,6 +416446,7 @@ self: {
       doHaddock = false;
       description = "Schema migrations for kioku";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -416858,6 +416873,7 @@ self: {
       ];
       description = "Schema migrations for kiroku-store";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "kiroku-store-migrate";
     }
   ) { };
@@ -454327,6 +454343,7 @@ self: {
       ];
       description = "Effectful driver for Marionette";
       license = lib.meta.getLicenseFromSpdxId "EUPL-1.2";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -462271,7 +462288,6 @@ self: {
       ];
       description = "METAR from NOAA";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "metar";
     }
   ) { };
@@ -462329,7 +462345,6 @@ self: {
       ];
       description = "HTTP for METAR";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "metar-http";
     }
   ) { };
@@ -507194,6 +507209,7 @@ self: {
       ];
       description = "Command-line interface for Open Knowledge Format bundles";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "okf";
     }
   ) { };
@@ -534148,6 +534164,7 @@ self: {
       ];
       description = "Ephemeral PostgreSQL helpers for pg-migrate tests";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -632524,6 +632541,7 @@ self: {
       ];
       description = "Generate OKF documentation bundles from shikumi programs (EP-31)";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "shikumi-okf-example";
     }
   ) { };
