@@ -990,6 +990,13 @@ let
           # missing optional dependencies: text-translator, not on any ELPA
           dic-lookup-w3m = ignoreCompilationError super.dic-lookup-w3m;
 
+          difftastic = super.difftastic.overrideAttrs (attrs: {
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace difftastic.el \
+                --replace-fail 'difftastic-executable "difft"' 'difftastic-executable "${lib.getExe pkgs.difftastic}"'
+            '';
+          });
+
           # https://github.com/nlamirault/dionysos/issues/17
           dionysos = addPackageRequires super.dionysos [ self.f ];
 
