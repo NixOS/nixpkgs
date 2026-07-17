@@ -74,20 +74,21 @@ let
 
   stagesCross = import ./cross (commonArgs // { inherit crossOverlays bootStages; });
 
-  stagesCustom = import ./custom {
-    inherit
-      localSystem
-      crossSystem
-      config
-      overlays
-      bootStages
-      ;
-  };
+  replaceStdenvStage =
+    vanillaPackages:
+    assert crossSystem == localSystem;
+    {
+      inherit config overlays;
+      stdenv =
+        assert vanillaPackages.stdenv.hostPlatform == localSystem;
+        assert vanillaPackages.stdenv.targetPlatform == localSystem;
+        config.replaceStdenv { pkgs = vanillaPackages; };
+    };
 
 in
 if useCrossStdenv then
   stagesCross
 else if useCustomStdenv then
-  stagesCustom
+  bootStages ++ [ replaceStdenvStage ]
 else
   bootStages
