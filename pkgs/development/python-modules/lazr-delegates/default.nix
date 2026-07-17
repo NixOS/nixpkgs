@@ -29,7 +29,6 @@ buildPythonPackage rec {
   pythonNamespaces = [ "lazr" ];
 
   meta = {
-    broken = lib.versionAtLeast setuptools.version "82"; # pkg_resources at runtime
     description = "Easily write objects that delegate behavior";
     homepage = "https://launchpad.net/lazr.delegates";
     changelog = "https://git.launchpad.net/lazr.delegates/tree/NEWS.rst?h=${version}";
