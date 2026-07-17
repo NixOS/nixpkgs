@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   cargoHash = "sha256-J7ZKWx258bBCNBd061aCeKgTdcWMUF4yzAiIa9l8ZRA=";
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    installManPage docs/wayshot.1.scd docs/wayshot.5.scd docs/wayshot.7.scd
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wayshot \
       --bash <($out/bin/wayshot --completions bash) \
       --fish <($out/bin/wayshot --completions fish) \

@@ -1202,13 +1202,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-DKz+Cs8Jh480SnZsG7x+CE70pCP43GhQa9S1gl5oWl0=",
+    "hash": "sha256-ff8XqDp31pwbPmKe7RFMupwVWuhQoOTizFdTAfW5eek=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v8.2.1",
+    "rev": "v8.2.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PERDJ74FtXhK+HUd9EjYINpmUXVX+kHtkRbFf6gv8Ng="
+    "vendorHash": "sha256-zdAJOPL+4gEsESzG4XHSMhM9JkFPuoMudwNmVr6HJFE="
   },
   "siderolabs_talos": {
     "hash": "sha256-/NACmEpodBNx+Q2M9y3JnKpw9a3Y1eFDdTQ+48MXAc8=",
@@ -1490,13 +1490,13 @@
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
   "vultr_vultr": {
-    "hash": "sha256-TMja+5jeYxIjY/MvJwCR/2rsbHuF7RcPReQSzkksk7Q=",
+    "hash": "sha256-hK4/Pzj0UtWDLQS3cRMC73ZRr20HCWqI+jUlTUHcHaw=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.31.2",
+    "rev": "v2.32.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-OASLdReS245N4y0SQ4WY7kPNPpGTHptQgXlNqPlb3nM="
+    "vendorHash": "sha256-av/hIjHWw64WIJv3LVyVDu6IMUKCsM4VOLFZKB0IXjU="
   },
   "wgebis_mailgun": {
     "hash": "sha256-cz+KSvlm1mFe+NXn4IhiWYWT0/U+UAAA8SCNJgXvIKc=",

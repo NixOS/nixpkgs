@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-index";
-  version = "0.1.10";
+  version = "0.1.11";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "nix-index";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IBVI/4hwq84/vZx7Kr/Ci/P/CzPTsn1/oiCIF2vPHXg=";
+    hash = "sha256-yl/acohrgP0C5w4eozNcWcpCGhmMMjFbzgHsKwXKw00=";
   };
 
-  cargoHash = "sha256-9xzC5PE2nyEtbhWGagCX2yZ0/tfo2v3fatnNU+GdVH8=";
+  cargoHash = "sha256-EJbNptLskphe+xfI8oQ0DVUx6y4dO52eeuPiG6FSQbI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
