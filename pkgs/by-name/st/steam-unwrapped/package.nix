@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam-unwrapped";
-  version = "1.0.0.85";
+  version = "1.0.0.87";
 
   src = fetchurl {
     # use archive url so the tarball doesn't 404 on a new release
     url = "https://repo.steampowered.com/steam/archive/stable/steam_${finalAttrs.version}.tar.gz";
-    hash = "sha256-fy03Si+0E87VuBJRUUViGdkYolWHK0u3cBbLzPOLt/E=";
+    hash = "sha256-ZJN10vk3f4AJqvPi/wmXgEHrkRSJfZxaOIbx2C4nuh8=";
   };
 
   patches = [

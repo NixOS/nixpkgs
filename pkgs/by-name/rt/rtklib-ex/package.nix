@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtklib-ex";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "rtklibexplorer";
     repo = "RTKLIB";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j00VEQvxOiAc3EQX3x2b3RxYkbtvCZ17ugnW6b6ChWU=";
+    hash = "sha256-IGjrLuw3q0J6NXv2+Y3N22+nBu31W63QkmZpuHuvQnc=";
   };
 
   nativeBuildInputs = [
