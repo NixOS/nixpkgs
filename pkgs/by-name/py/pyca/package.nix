@@ -12,6 +12,7 @@ let
     self = python;
     packageOverrides = self: super: {
       # pyca is incompatible with SQLAlchemy 2.0
+      # error: self.assertIn('autocommit', db.get_session().__dict__.keys())
       sqlalchemy = super.sqlalchemy_1_4;
     };
   };
@@ -76,6 +77,15 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "pyca" ];
+
+  nativeCheckInputs = [
+    python3.pkgs.pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Can't pickle a lambda
+    "TestPycaMain"
+  ];
 
   passthru = {
     inherit frontend;
