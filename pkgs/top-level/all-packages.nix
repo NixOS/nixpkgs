@@ -7104,8 +7104,6 @@ with pkgs;
 
   ### DEVELOPMENT / R MODULES
 
-  R = callPackage ../applications/science/math/R { };
-
   rWrapper = callPackage ../development/r-modules/wrapper.nix {
     recommendedPackages = with rPackages; [
       boot
