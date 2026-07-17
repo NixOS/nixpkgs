@@ -53,15 +53,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "odm-4-unstable-2026-07-01";
+  version = "0.5.1-unstable-2026-07-13";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = "OpenSfM";
-    rev = "a677b6f0648ff3caf439aebbe9aad0ca8abc175b";
-    hash = "sha256-Bxpfaj87N2QxP/AczpP3fOl6G8ciMJq5jaaIn7oGR9g=";
+    rev = "238744cdf3b5d50149c50d136a87f7fea25ad5cd";
+    hash = "sha256-3T9wjuuN5AjM/MtSo3xGoHJcvXOI8Keyxcqv7BQavlw=";
   };
 
   patches = [
@@ -187,7 +187,10 @@ buildPythonPackage (finalAttrs: {
     );
 
     updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
+      extraArgs = [
+        "--version=branch"
+        "--version-regex=v(.*)"
+      ];
     };
   };
 
