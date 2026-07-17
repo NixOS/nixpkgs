@@ -2003,7 +2003,7 @@ with pkgs;
 
   exiftool = perlPackages.ImageExifTool;
 
-  expect = tclPackages.expect;
+  expect = tcl8Packages.expect_5;
 
   Fabric = with python3Packages; toPythonApplication fabric;
 
