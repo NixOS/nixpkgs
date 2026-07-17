@@ -5,29 +5,28 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.spectrwm;
 in
 
 {
-  options = {
-    services.xserver.windowManager.spectrwm.enable = mkEnableOption "spectrwm";
+  options.services.xserver.windowManager.spectrwm = {
+    enable = lib.mkEnableOption "spectrwm";
+    package = lib.mkPackageOption pkgs "spectrwm" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [
         {
           name = "spectrwm";
           start = ''
-            ${pkgs.spectrwm}/bin/spectrwm &
+            ${cfg.package}/bin/spectrwm &
             waitPID=$!
           '';
         }
       ];
     };
-    environment.systemPackages = [ pkgs.spectrwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

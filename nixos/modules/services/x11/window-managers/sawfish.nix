@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.sawfish;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.sawfish.enable = mkEnableOption "sawfish";
+  options.services.xserver.windowManager.sawfish = {
+    enable = lib.mkEnableOption "sawfish";
+    package = lib.mkPackageOption pkgs "sawfish" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "sawfish";
       start = ''
-        ${pkgs.sawfish}/bin/sawfish &
+        ${cfg.package}/bin/sawfish &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.sawfish ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
