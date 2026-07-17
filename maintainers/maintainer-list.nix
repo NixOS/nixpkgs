@@ -11411,6 +11411,12 @@
     githubId = 1903556;
     keys = [ { fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3"; } ];
   };
+  hobr = {
+    email = "mail@hobr.site";
+    github = "Hobr";
+    githubId = 13460388;
+    name = "Hobr";
+  };
   hogcycle = {
     email = "nate@gysli.ng";
     github = "hogcycle";
