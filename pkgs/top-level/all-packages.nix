@@ -9778,7 +9778,7 @@ with pkgs;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
 
-  your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
+  your-editor = callPackage ../applications/editors/your-editor { };
 
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
