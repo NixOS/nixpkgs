@@ -11,7 +11,7 @@
     maintainers = [ shlevy ];
   };
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
 
     {
