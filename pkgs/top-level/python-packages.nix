@@ -19132,6 +19132,8 @@ self: super: with self; {
     callPackage ../development/python-modules/sphinx-last-updated-by-git
       { };
 
+  sphinx-llm = callPackage ../development/python-modules/sphinx-llm { };
+
   sphinx-llms-txt = callPackage ../development/python-modules/sphinx-llms-txt { };
 
   sphinx-lv2-theme = callPackage ../development/python-modules/sphinx-lv2-theme { };
