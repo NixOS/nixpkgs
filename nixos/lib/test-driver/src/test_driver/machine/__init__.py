@@ -596,6 +596,118 @@ class BaseMachine(ABC):
         with self.nested(f"waiting for file '{filename}'"):
             retry(check_file, as_timedelta(timeout))
 
+    def get_window_names(self) -> list[str]:
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(
+        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
+        """
+        Wait until an X11 window has appeared whose name matches the given
+        regular expression, e.g., `wait_for_window("Terminal")`.
+        """
+        _warn_if_numeric_duration(timeout, "wait_for_window")
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try: bool) -> bool:
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    f"Last chance to match {regexp} on the window list,"
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("waiting for a window to appear"):
+            retry(window_is_visible, as_timedelta(timeout))
+
+    @contextmanager
+    def _managed_screenshot(self) -> Generator[Path]:
+        raise MachineError(f"Screenshots are not supported by {type(self).__name__}")
+        yield Path()
+
+    def screenshot(self, filename: str) -> None:
+        """
+        Take a picture of the display of the machine, in PNG format.
+        The screenshot will be available in the derivation output.
+        """
+        if "." not in filename:
+            filename += ".png"
+        if "/" not in filename:
+            filename = os.path.join(self.out_dir, filename)
+
+        with self.nested(
+            f"making screenshot {filename}",
+            {"image": os.path.basename(filename)},
+        ):
+            with self._managed_screenshot() as screenshot_path:
+                ret = subprocess.run(
+                    f"pnmtopng '{screenshot_path}' > '{filename}'", shell=True
+                )
+                if ret.returncode != 0:
+                    raise MachineError(
+                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
+                    )
+
+    def get_screen_text_variants(self) -> list[str]:
+        """
+        Return a list of different interpretations of what is currently
+        visible on the machine's screen using optical character
+        recognition. The number and order of the interpretations is not
+        specified and is subject to change, but if no exception is raised at
+        least one will be returned.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+        with self._managed_screenshot() as screenshot_path:
+            return perform_ocr_variants_on_screenshot(screenshot_path)
+
+    def get_screen_text(self) -> str:
+        """
+        Return a textual representation of what is currently visible on the
+        machine's screen using optical character recognition.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+        with self._managed_screenshot() as screenshot_path:
+            return perform_ocr_on_screenshot(screenshot_path)
+
+    def wait_for_text(
+        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
+        """
+        Wait until the supplied regular expressions matches the textual
+        contents of the screen by using optical character recognition (see
+        `get_screen_text` and `get_screen_text_variants`).
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+
+        _warn_if_numeric_duration(timeout, "wait_for_text")
+
+        def screen_matches(last_try: bool) -> bool:
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
+
+            if last_try:
+                self.log(f"Last OCR attempt failed. Text was: {variants}")
+
+            return False
+
+        with self.nested(f"waiting for {regex} to appear on screen"):
+            retry(screen_matches, as_timedelta(timeout))
+
     def wait_for_open_port(
         self,
         port: int,
@@ -1197,84 +1309,6 @@ class QemuMachine(BaseMachine):
             self.send_monitor_command(f"screendump {screenshot_path}")
             yield screenshot_path
 
-    def screenshot(self, filename: str) -> None:
-        """
-        Take a picture of the display of the virtual machine, in PNG format.
-        The screenshot will be available in the derivation output.
-        """
-        if "." not in filename:
-            filename += ".png"
-        if "/" not in filename:
-            filename = os.path.join(self.out_dir, filename)
-
-        with self.nested(
-            f"making screenshot {filename}",
-            {"image": os.path.basename(filename)},
-        ):
-            with self._managed_screenshot() as screenshot_path:
-                ret = subprocess.run(
-                    f"pnmtopng '{screenshot_path}' > '{filename}'", shell=True
-                )
-                if ret.returncode != 0:
-                    raise MachineError(
-                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
-                    )
-
-    def get_screen_text_variants(self) -> list[str]:
-        """
-        Return a list of different interpretations of what is currently
-        visible on the machine's screen using optical character
-        recognition. The number and order of the interpretations is not
-        specified and is subject to change, but if no exception is raised at
-        least one will be returned.
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_variants_on_screenshot(screenshot_path)
-
-    def get_screen_text(self) -> str:
-        """
-        Return a textual representation of what is currently visible on the
-        machine's screen using optical character recognition.
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_on_screenshot(screenshot_path)
-
-    def wait_for_text(
-        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
-    ) -> None:
-        """
-        Wait until the supplied regular expressions matches the textual
-        contents of the screen by using optical character recognition (see
-        `get_screen_text` and `get_screen_text_variants`).
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        _warn_if_numeric_duration(timeout, "wait_for_text")
-
-        def screen_matches(last_try: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
-                if re.search(regex, text) is not None:
-                    return True
-
-            if last_try:
-                self.log(f"Last OCR attempt failed. Text was: {variants}")
-
-            return False
-
-        with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches, as_timedelta(timeout))
-
     def wait_for_console_text(
         self, regex: str, timeout: Duration | None = None
     ) -> None:
@@ -1484,34 +1518,6 @@ class QemuMachine(BaseMachine):
 
         with self.nested("waiting for the X11 server"):
             retry(check_x, as_timedelta(timeout))
-
-    def get_window_names(self) -> list[str]:
-        return self.succeed(
-            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
-        ).splitlines()
-
-    def wait_for_window(
-        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
-    ) -> None:
-        """
-        Wait until an X11 window has appeared whose name matches the given
-        regular expression, e.g., `wait_for_window("Terminal")`.
-        """
-        _warn_if_numeric_duration(timeout, "wait_for_window")
-        pattern = re.compile(regexp)
-
-        def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
-            if last_try:
-                self.log(
-                    f"Last chance to match {regexp} on the window list,"
-                    + " which currently contains: "
-                    + ", ".join(names)
-                )
-            return any(pattern.search(name) for name in names)
-
-        with self.nested("waiting for a window to appear"):
-            retry(window_is_visible, as_timedelta(timeout))
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """
