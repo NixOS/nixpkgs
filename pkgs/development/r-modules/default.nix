@@ -212,7 +212,7 @@ let
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
   #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
-  #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
+  #     propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ self.bar ];
   #   });
   # }
   overrideRDepends =
@@ -221,7 +221,7 @@ let
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
         nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
-        propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or [ ]) ++ value;
+        propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -397,14 +397,12 @@ let
 
   packagesWithRDepends = {
     # keep-sorted start block=yes
-    FactoMineR = [ self.car ];
     TriDimRegression = [ self.rstantools ];
     bayesdfa = [ self.rstantools ];
     bbmix = [ self.rstantools ];
     disbayes = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
-    pander = [ self.codetools ];
     pliman = [ self.EBImage ];
     rmsb = [ self.rstantools ];
     spectralGraphTopology = [ self.CVXR ];
