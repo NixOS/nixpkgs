@@ -104,7 +104,7 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/opt/lx-music-desktop"
-    cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
+    cp -r build/*-unpacked/resources "$out/opt/lx-music-desktop"
     rm "$out/opt/lx-music-desktop/resources/app-update.yml"
 
     for size in 16 32 48 64 128 256 512; do

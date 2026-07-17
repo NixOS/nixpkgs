@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (stdenv.hostPlatform.isLinux) ''
 
     mkdir -p $out/share/wire-desktop
-    cp -r wrap/dist/linux-unpacked/{locales,resources{,.pak}} $out/share/wire-desktop
+    cp -r wrap/dist/*-unpacked/resources $out/share/wire-desktop
 
     makeWrapper ${lib.getExe electron} $out/bin/wire-desktop \
       --add-flags $out/share/wire-desktop/resources/app.asar \

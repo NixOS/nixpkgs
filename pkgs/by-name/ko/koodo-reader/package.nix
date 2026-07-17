@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 ${./mime-types.xml} $out/share/mime/packages/koodo-reader.xml
 
       mkdir -p $out/share/lib/koodo-reader
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/lib/koodo-reader
+      cp -r dist/*-unpacked/resources $out/share/lib/koodo-reader
     ''}
 
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''

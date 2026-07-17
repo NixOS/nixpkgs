@@ -81,7 +81,7 @@ in
         -c.npmRebuild=false
 
       mkdir -p $out/share/bitwarden-directory-connector $out/bin
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/bitwarden-directory-connector
+      cp -r dist/*-unpacked/resources $out/share/bitwarden-directory-connector
 
       makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \

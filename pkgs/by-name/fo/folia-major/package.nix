@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib/folia-major
-    cp -r release/*-unpacked/{locales,resources{,.pak}} $out/lib/folia-major/
+    cp -r release/*-unpacked/resources $out/lib/folia-major/
 
     install -D build/icon.png $out/share/icons/hicolor/512x512/apps/folia-major.png
 

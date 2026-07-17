@@ -259,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 static/icons/logseq.png "$out/share/icons/hicolor/512x512/apps/logseq.png"
 
     mkdir -p $out/share/logseq
-    cp -r static/out/*/{locales,resources{,.pak}} $out/share/logseq
+    cp -r static/out/*/resources $out/share/logseq
 
     makeWrapper ${lib.getExe electron} $out/bin/logseq \
         --add-flags $out/share/logseq/resources/app \

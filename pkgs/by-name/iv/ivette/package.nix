@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/share/lib/ivette"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/ivette"
+    cp -r dist/*-unpacked/resources "$out/share/lib/ivette"
 
     install -Dm444 static/icon.png $out/share/icons/hicolor/512x512/apps/ivette.png
 

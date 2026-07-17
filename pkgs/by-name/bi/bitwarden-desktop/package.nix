@@ -185,7 +185,7 @@ buildNpmPackage (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/opt/Bitwarden
-    cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
+    cp -r apps/desktop/dist/*-unpacked/resources $out/opt/Bitwarden
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --run "ulimit -c 0" \

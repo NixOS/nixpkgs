@@ -126,7 +126,7 @@ buildNpmPackage {
         ''
           # Copy built resources
           mkdir -p $out/share/${packageName}
-          cp -r prod/*-unpacked/{locales,resources{,.pak}} $out/share/${packageName}
+          cp -r prod/*-unpacked/resources $out/share/${packageName}
 
           # Create desktop icon
           mkdir -p $out/share/icons/hicolor/128x128/apps

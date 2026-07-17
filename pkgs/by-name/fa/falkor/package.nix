@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/share/falkor
     substituteInPlace $out/share/applications/falkor.desktop \
       --replace-fail "/opt/Falkor/" ""
-    mv opt/Falkor/{resources,resources.pak,locales} $out/share/falkor
+    mv opt/Falkor/resources $out/share/falkor
 
     makeWrapper ${lib.getExe electron} $out/bin/falkor \
       --argv0 "falkor" \

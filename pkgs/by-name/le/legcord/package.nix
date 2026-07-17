@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/lib/legcord"
-    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/legcord"
+    cp -r ./dist/*-unpacked/resources "$out/share/lib/legcord"
 
     install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/legcord.png"
 

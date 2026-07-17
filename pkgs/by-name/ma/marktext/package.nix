@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     popd
 
-    cp -r build/*-unpacked/{locales,resources{,.pak}} $out/opt/marktext
+    cp -r build/*-unpacked/resources $out/opt/marktext
 
     makeWrapper ${lib.getExe electron} $out/bin/marktext \
       --add-flags $out/opt/marktext/resources/app.asar \

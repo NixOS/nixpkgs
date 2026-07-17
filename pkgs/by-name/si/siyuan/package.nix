@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
 
-    cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
+    cp -r build/*-unpacked/resources $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
         --chdir $out/share/siyuan/resources \

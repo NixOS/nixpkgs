@@ -89,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib/sparkle
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/lib/sparkle/
+    cp -r dist/*-unpacked/resources $out/lib/sparkle/
 
     install -D resources/icon.png $out/share/icons/hicolor/512x512/apps/sparkle.png
 
