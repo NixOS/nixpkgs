@@ -14,7 +14,7 @@ let
 
   pname = "ghostel";
 
-  version = "0.41.0-unstable-2026-07-06";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "dakra";
@@ -69,7 +69,7 @@ melpaBuild {
   '';
 
   passthru = {
-    updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+    updateScript = nix-update-script { };
 
     inherit module;
   };
