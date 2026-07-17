@@ -1215,6 +1215,8 @@ self: super: with self; {
 
   app-model = callPackage ../development/python-modules/app-model { };
 
+  appconfigpy = callPackage ../development/python-modules/appconfigpy { };
+
   appdirs = callPackage ../development/python-modules/appdirs { };
 
   appimage = callPackage ../development/python-modules/appimage { };
