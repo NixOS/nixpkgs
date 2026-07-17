@@ -920,6 +920,11 @@ with haskellLib;
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
 
+  # Hackage release does not contain two files in tests/*.json.gz, which the test script
+  # tries to download from codeberg instead. Tests could be enabled by switching the
+  # source to the upstream on codeberg.
+  mlkem = dontCheck super.mlkem;
+
   # ships broken Setup.hs https://github.com/facebook/Haxl/issues/165
   # https://github.com/facebook/Haxl/pull/164
   haxl = overrideCabal (drv: {
