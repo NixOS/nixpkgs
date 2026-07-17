@@ -8,11 +8,15 @@
   cpio,
   elfutils,
   python3,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "systemtap";
   version = "5.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
     url = "git://sourceware.org/git/systemtap.git";
@@ -30,14 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cpio
+    gettext
     python3
     python3.pkgs.setuptools
   ];
   buildInputs = [
     boost
     elfutils
-    gettext
     python3
+    bashNonInteractive
   ];
   enableParallelBuilding = true;
 
