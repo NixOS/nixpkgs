@@ -18049,6 +18049,8 @@ self: super: with self; {
 
   s3fs = callPackage ../development/python-modules/s3fs { };
 
+  s3torchconnectorclient = callPackage ../development/python-modules/s3torchconnectorclient { };
+
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   sabctools = callPackage ../development/python-modules/sabctools { };
