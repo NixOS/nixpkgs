@@ -10902,6 +10902,8 @@ self: super: with self; {
 
   msg-parser = callPackage ../development/python-modules/msg-parser { };
 
+  msgfy = callPackage ../development/python-modules/msgfy { };
+
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
