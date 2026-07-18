@@ -1,8 +1,7 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
-  {
-    name = "turnstone";
-    meta.maintainers = with lib.maintainers; [ timvherpen ];
+{ pkgs, lib, ... }:
+{
+  name = "turnstone";
+    # meta.maintainers = with lib.maintainers; [ timvherpen ];
 
     nodes.sqlite =
       { pkgs, ... }:
@@ -88,5 +87,4 @@ import ./make-test-python.nix (
       with subtest("postgresql: database exists"):
           postgresql.succeed("sudo -u postgres psql -lqt | grep -q turnstone")
     '';
-  }
-)
+}
