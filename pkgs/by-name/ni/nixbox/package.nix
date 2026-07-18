@@ -1,15 +1,19 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixbox";
-  version = "0.1.0";
+  version = "0.1.8";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-+xOoEV4wUxLmeHZd7W32sVAMu6cCP4/NlSHAURkeCOM=";
+    hash = "sha256-+BYx8GecYy6Kc4zLlqskrF/5ZH/YzIIpTEe7SAhWhqM=";
   };
 
-  cargoHash = "sha256-3YJ56WxmTSNSSe8KhX0SLhMt1MXyDa1XAgUsyHHbLtI=";
+  cargoHash = "sha256-n2+1fXZhOy6CwRKNuEcZiQvS6BE1CKSgITDl/IhyTGc=";
 
   __structuredAttrs = true;
 
