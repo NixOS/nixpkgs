@@ -658,6 +658,8 @@ self: super: with self; {
 
   albucore = callPackage ../development/python-modules/albucore { };
 
+  albumentationsx = callPackage ../development/python-modules/albumentationsx { };
+
   ale-py = callPackage ../development/python-modules/ale-py { };
 
   alectryon = callPackage ../development/python-modules/alectryon { };
