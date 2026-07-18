@@ -3665,8 +3665,8 @@ let
         mktplcRef = {
           name = "just-black";
           publisher = "nur";
-          version = "3.1.1";
-          hash = "sha256-fatJZquCDsLDFGVzBol2D6LIZUbZ6GzqcVEFAwLodW0=";
+          version = "4.0.2";
+          hash = "sha256-gfUavJXIgbNLYJNVrDeEIrpbKkgXs0YJNNb5P4480M0=";
         };
         meta = {
           description = "Dark theme designed specifically for syntax highlighting";
