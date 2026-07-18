@@ -24,8 +24,8 @@ let
     src = fetchFromGitHub {
       owner = "opencast";
       repo = "pyCA";
-      rev = "v${version}";
-      sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
+      tag = "v${version}";
+      hash = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
     };
 
     npmDepsHash = "sha256-0U+semrNWTkNu3uQQkiJKZT1hB0/IfkL84G7/oP8XYY=";
@@ -59,8 +59,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "opencast";
     repo = "pyCA";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
