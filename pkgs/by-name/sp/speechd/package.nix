@@ -5,6 +5,7 @@
   pkg-config,
   fetchurl,
   fetchpatch,
+  testers,
   python3Packages,
   gettext,
   itstool,
@@ -149,7 +150,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests.nixos = nixosTests.speechd;
+  passthru = {
+    tests = lib.optionalAttrs (!libsOnly) {
+      nixos = nixosTests.speechd;
+
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
 
   meta = {
     description =
