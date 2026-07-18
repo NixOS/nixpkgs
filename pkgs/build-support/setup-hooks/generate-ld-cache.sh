@@ -76,11 +76,19 @@ _isELFLoadable() {
     bytes=$(od -A n -N 18 -t u1 "$1" | tr '\n' ' ')
     read -r -a b <<< "$bytes"
     local etype
-    if [ "${b[5]:-0}" -eq 2 ]; then
-        etype=$(( ${b[16]:-0} * 256 + ${b[17]:-0} ))
-    else
+    byte_order="${b[5]:-0}"
+    case "${byte_order}" in
+    1)
         etype=$(( ${b[16]:-0} + ${b[17]:-0} * 256 ))
-    fi
+        ;;
+    2)
+        etype=$(( ${b[16]:-0} * 256 + ${b[17]:-0} ))
+        ;;
+    *)
+        printf "Unknown byte order value: %q\n" "${byte_order}"
+        return 1
+        ;;
+    esac
     [ "$etype" -eq 2 ] || [ "$etype" -eq 3 ]
 }
 
