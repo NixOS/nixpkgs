@@ -5,15 +5,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "groestlcoin-hash";
   version = "1.0.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "groestlcoin_hash";
-    inherit version;
-    sha256 = "31a8f6fa4c19db5258c3c73c071b71702102c815ba862b6015d9e4b75ece231e";
+    inherit (finalAttrs) version;
+    hash = "sha256-Maj2+kwZ21JYw8c8BxtxcCECyBW6hitgFdnkt17OIx4=";
   };
 
   build-system = [ setuptools ];
@@ -26,4 +28,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ gruve-p ];
     license = lib.licenses.mit;
   };
-}
+})
