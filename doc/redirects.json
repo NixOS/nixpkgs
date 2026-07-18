@@ -152,6 +152,9 @@
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "how-channels-work": [
+    "index.html#how-channels-work"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
@@ -395,9 +398,7 @@
     "index.html#pnpm-build-hook-honored-variables"
   ],
   "preface": [
-    "index.html#preface"
-  ],
-  "overview-of-nixpkgs": [
+    "index.html#preface",
     "index.html#overview-of-nixpkgs"
   ],
   "part-using": [
