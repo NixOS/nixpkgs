@@ -89,6 +89,16 @@
       "agpl"
     ]
   },
+  "drawio": {
+    "hash": "sha256-nVcO2V0zo7VdL/o8c6IRbiIqFnGBH7NdqL/eefQ/ip0=",
+    "url": "https://github.com/arnowelzel/drawio-nextcloud/releases/download/v4.3.0/drawio-v4.3.0.tar.gz",
+    "version": "4.3.0",
+    "description": "Integrates the diagrams.net diagram editor with Nextcloud. Users can create and edit .drawio diagrams and .dwb whiteboards directly within the Nextcloud file manager.\n\n**Features:**\n\n- Create and edit diagrams and whiteboards from the Nextcloud \"+\" menu\n- Click any .drawio or .dwb file to open the editor inline\n- Autosave with optimistic conflict detection\n- Inline diagram previews in Text, Collectives, Talk, Notes, and Deck\n- Supports public share links (read-only and editable)\n- Offline mode for privacy-sensitive deployments\n- Configurable editor URL for self-hosted diagrams.net instances",
+    "homepage": "https://github.com/arnowelzel/drawio-nextcloud",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "end_to_end_encryption": {
     "hash": "sha256-NfnIdc2Q8GgfgjqD8PeTS+O5vTWMBld+vCX/6ng/Im8=",
     "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v2.2.1/end_to_end_encryption-v2.2.1.tar.gz",
