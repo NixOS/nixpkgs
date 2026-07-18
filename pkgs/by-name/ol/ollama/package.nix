@@ -302,6 +302,7 @@ goBuild (finalAttrs: {
         -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
         -DFETCHCONTENT_SOURCE_DIR_LLAMA_CPP="$TMPDIR/llama-cpp-src" \
         -DOLLAMA_MLX_BACKENDS="" \
+        $cmakeFlags \
         ${cmakeFlagsCudaArchitectures} \
         ${cmakeFlagsRocmTargets} \
         ${cmakeFlagsBackend}
@@ -393,5 +394,7 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       prusnak
     ];
+    # install TARGETS RUNTIME_DEPENDENCIES is not supported when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

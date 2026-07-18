@@ -45,6 +45,7 @@
           "systemd-tpm2-setup.service"
           "systemd-pcrextend.socket"
           "systemd-pcrextend@.service"
+          "systemd-pcrlogin@.service"
         ];
       }
     )

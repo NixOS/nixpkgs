@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-decorator";
-  version = "5.2.0.20260519";
+  version = "5.2.0.20260712";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_decorator";
     inherit (finalAttrs) version;
-    hash = "sha256-tbI7Lw0RwGdIeAaX00XIpoT8LQx1PwjugGNmDZ16I9k=";
+    hash = "sha256-KJDwX+PGVUa69QAP1fHu1NHJW65VFuI+FzW3taTdmMY=";
   };
 
   build-system = [ setuptools ];

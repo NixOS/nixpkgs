@@ -505,13 +505,7 @@ with pkgs;
     mysql-shell_9
     ;
 
-  mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
-    antlr = antlr4_10;
-    icu = icu77;
-    protobuf = protobuf_25.override {
-      abseil-cpp = abseil-cpp_202407;
-    };
-  };
+  mysql-shell-innovation = mysql-shell_9;
 
   # this is used by most `fetch*` functions
   repoRevToNameMaybe = lib.repoRevToName config.fetchedSourceNameDefault;
@@ -8180,6 +8174,12 @@ with pkgs;
     ubootWandboard
     ;
 
+  # Upstream Barebox:
+  inherit (callPackage ../misc/barebox { })
+    buildBarebox
+    bareboxTools
+    ;
+
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
@@ -10038,9 +10038,7 @@ with pkgs;
 
   openra_2019 = openraPackages_2019.engines.release;
 
-  openraPackages = recurseIntoAttrs (callPackage ../games/openra { });
-
-  openra = openraPackages.engines.release;
+  openraPackages = recurseIntoAttrs (callPackage ../by-name/op/openra/engines { });
 
   papermcServers = callPackages ../games/papermc { };
 
