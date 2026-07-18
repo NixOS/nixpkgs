@@ -3395,13 +3395,6 @@
     githubId = 32903896;
     keys = [ { fingerprint = "CB5C 7B3C 3E6F 2A59 A583  A90A 8A60 0376 7BE9 5976"; } ];
   };
-  benesim = {
-    name = "Benjamin Isbarn";
-    email = "benjamin.isbarn@gmail.com";
-    github = "BeneSim";
-    githubId = 29384538;
-    keys = [ { fingerprint = "D35E C9CE E631 638F F1D8  B401 6F0E 410D C3EE D02"; } ];
-  };
   bengsparks = {
     email = "benjamin.sparks@protonmail.com";
     github = "bengsparks";

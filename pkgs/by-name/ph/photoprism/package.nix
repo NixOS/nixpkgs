@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Personal Photo Management powered by Go and Google TensorFlow";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      benesim
       ipetkov
     ];
     mainProgram = "photoprism";

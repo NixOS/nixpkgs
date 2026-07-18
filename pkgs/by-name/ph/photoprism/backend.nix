@@ -62,7 +62,6 @@ buildGoModule {
     description = "Photoprism's backend";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      benesim
       ipetkov
     ];
   };
