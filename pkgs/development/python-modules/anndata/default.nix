@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatch-vcs,
@@ -16,9 +17,8 @@
   pandas,
   scipy,
   scverse-misc,
-  zarr,
-  pythonOlder,
   typing-extensions,
+  zarr,
 
   # tests
   awkward,
@@ -144,10 +144,10 @@ buildPythonPackage (finalAttrs: {
     # Tests that are seemingly broken. See https://github.com/scverse/anndata/issues/2017.
     "test_concat_dask_sparse_matches_memory"
   ];
-
   __darwinAllowLocalNetworking = true;
 
-  doCheck = false; # use passthru.tests instead to prevent circularity with `scanpy`
+  # Use passthru.tests instead to prevent circularity with `scanpy`
+  doCheck = false;
 
   passthru.tests = finalAttrs.finalPackage.overrideAttrs {
     doInstallCheck = true;
