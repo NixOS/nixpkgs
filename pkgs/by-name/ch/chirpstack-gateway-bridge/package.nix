@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "chirpstack-gateway-bridge";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-gateway-bridge";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zMD5vbdnfkGHhnw7fG88n6JY1RSrj2mMgMICR7n0cUo=";
+    hash = "sha256-3rdpIqiO6D5+JntJm2GQlnH6zh3s3DOzpaxr06PR+K4=";
   };
 
-  vendorHash = "sha256-y1NYYyRS5L7QzV/bcm43EJ2OCHg+vPSTSwhHO0AwqD8=";
+  vendorHash = "sha256-nDbUem9WV2DClrUBTjDvz+jUqqkQI+QGuv8h39EBs9E=";
 
   ldflags = [
     "-s"
