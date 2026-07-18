@@ -8,17 +8,20 @@
   prettytable,
   pycrypto,
   pydub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aigpy";
   version = "2022.7.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-1kQced6YdC/wvegqFVhZfej4+4aemGXvKysKjejP13w=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     mutagen
