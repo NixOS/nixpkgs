@@ -112,7 +112,10 @@ let
       (throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions.")
       (
         throwIf (
-          ((localSystem.isDarwin && localSystem.isx86) || (crossSystem.isDarwin && crossSystem.isx86))
+          lib.elem "x86_64-darwin" [
+            localSystem.system
+            crossSystem.system
+          ]
           && config.allowDeprecatedx86_64Darwin != "force"
         ) x86_64DarwinDeprecationMessage
       );
