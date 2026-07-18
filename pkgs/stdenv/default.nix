@@ -64,10 +64,7 @@ let
       stagesDarwin
     else
       {
-        # switch
         x86_64-solaris = stagesNix;
-        i686-cygwin = stagesNative;
-        x86_64-cygwin = stagesNative;
         x86_64-freebsd = stagesFreeBSD;
       }
       .${localSystem.system} or stagesNative;
