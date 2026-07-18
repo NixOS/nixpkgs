@@ -48,32 +48,26 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  patches =
-    lib.optionals (lib.versionOlder version "128") [
-      # use pkg-config at all systems
-      ./always-check-for-pkg-config.patch
-      ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "128") [
-      # rebased version of the above 2 patches
-      ./always-check-for-pkg-config-128.patch
-      ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
-      # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
-      ./fix-float-i686.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "140") [
-      # mozjs-140.pc does not contain -DXP_UNIX on Linux
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1973994
-      (fetchpatch {
-        url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
-        hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
-      })
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "140" && stdenv.hostPlatform.is32bit) [
-      ./fix-32bit-build.patch
-    ];
+  patches = [
+    # use pkg-config for all systems
+    ./always-check-for-pkg-config-128.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
+    ./fix-float-i686.patch
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "140") [
+    # mozjs-140.pc does not contain -DXP_UNIX on Linux
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1973994
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/mozjs140/raw/49492baa47bc1d7b7d5bc738c4c81b4661302f27/f/9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch";
+      hash = "sha256-SsyO5g7wlrxE7y2+VTHfmUDamofeZVqge8fv2y0ZhuU=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "140" && stdenv.hostPlatform.is32bit) [
+    ./fix-32bit-build.patch
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -85,8 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustc.llvmPackages.llvm # for llvm-objdump
     which
     zip
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "128") [
     rust-cbindgen
     rustPlatform.bindgenHook
   ];
@@ -147,23 +139,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preConfigure =
-    lib.optionalString (lib.versionAtLeast version "128") ''
-      export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
-    ''
-    + ''
-      export LIBXUL_DIST=$out
-      export PYTHON="${buildPackages.python3.interpreter}"
-      export M4=m4
-      export AWK=awk
-      export AS=$CC
-      export AC_MACRODIR=$PWD/build/autoconf/
-      patchShebangs build/cargo-linker
-      # We can't build in js/src/, so create a build dir
-      mkdir obj
-      cd obj/
-      configureScript=../js/src/configure
-    '';
+  preConfigure = ''
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+    export LIBXUL_DIST=$out
+    export PYTHON="${buildPackages.python3.interpreter}"
+    export M4=m4
+    export AWK=awk
+    export AS=$CC
+    export AC_MACRODIR=$PWD/build/autoconf/
+    patchShebangs build/cargo-linker
+    # We can't build in js/src/, so create a build dir
+    mkdir obj
+    cd obj/
+    configureScript=../js/src/configure
+  '';
 
   env = lib.optionalAttrs (lib.versionAtLeast version "140") {
     # '-Wformat-security' ignored without '-Wformat'
@@ -189,8 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
       catap
       bobby285271
     ];
-    # ERROR: Failed to find an adequate linker
-    broken = lib.versionOlder version "128" && stdenv.hostPlatform.isDarwin;
     platforms = lib.platforms.unix;
   };
 })

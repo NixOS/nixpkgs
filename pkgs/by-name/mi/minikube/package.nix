@@ -9,6 +9,8 @@
   libvirt,
   withQemu ? false,
   qemu,
+  withVfkit ? false,
+  vfkit,
   makeWrapper,
   writableTmpDirAsHomeHook,
   OVMF,
@@ -38,14 +40,14 @@ buildGoModule (finalAttrs: {
   + (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
     substituteInPlace \
       pkg/minikube/registry/drvs/qemu2/qemu2.go \
-      --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
-      --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+      --replace-fail "/usr/local/opt/qemu/share/qemu" "${lib.getLib qemu}/share/qemu" \
+      --replace-fail "/opt/homebrew/opt/qemu/share/qemu" "${lib.getLib qemu}/share/qemu"
   '')
   + (lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
     substituteInPlace \
       pkg/minikube/registry/drvs/qemu2/qemu2.go \
-      --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-      --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+      --replace-fail "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+      --replace-fail "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
   '');
 
   nativeBuildInputs = [
@@ -72,16 +74,22 @@ buildGoModule (finalAttrs: {
     installBin out/minikube
 
     wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false \
-      --prefix PATH : ${lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])} \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [ libvirt ])
-      }
+      --prefix PATH : ${
+        lib.makeBinPath (
+          lib.optionals withQemu [ qemu ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
+          ++ lib.optionals (withVfkit && stdenv.hostPlatform.isDarwin) [ vfkit ]
+        )
+      } \
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libvirt ]
+      }"}
     ln -sv $out/bin/minikube $out/bin/kubectl
 
-    for shell in bash zsh fish; do
-      $out/bin/minikube completion $shell > minikube.$shell
-      installShellCompletion minikube.$shell
-    done
+    installShellCompletion --cmd minikube \
+      --bash <($out/bin/minikube completion bash) \
+      --fish <($out/bin/minikube completion fish) \
+      --zsh <($out/bin/minikube completion zsh)
 
     runHook postInstall
   '';
