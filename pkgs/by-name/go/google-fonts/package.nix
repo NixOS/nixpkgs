@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   fonts ? [ ],
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -67,6 +68,10 @@ stdenvNoCC.mkDerivation {
         done
       ''
   );
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://fonts.google.com";
