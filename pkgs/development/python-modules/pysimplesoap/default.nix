@@ -4,13 +4,14 @@
   fetchPypi,
   buildPythonPackage,
   m2crypto,
+  setuptools,
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pysimplesoap";
   version = "1.16.2";
-  format = "setuptools";
+  pyproject = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-sbv00NCt/5tlIZfWGqG3ZzGtYYhJ4n0o/lyyUJFtZ+E=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ m2crypto ];
 
