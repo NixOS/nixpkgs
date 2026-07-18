@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lms";
-  version = "3.78.0";
+  version = "3.79.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uOijIipay4ncE8hP6vJG9vOGiD/Ad6WJHEQ7P1HKi/Y=";
+    hash = "sha256-X9up9m+cSZRgmlVJigdnKkhLTDZtZYTnFhFMs1PAgsM=";
   };
 
   strictDeps = true;
