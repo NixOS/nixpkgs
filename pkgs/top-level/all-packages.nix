@@ -8680,7 +8680,6 @@ with pkgs;
     import ../applications/networking/browsers/firefox/packages/firefox-esr-140.nix
       {
         inherit
-          stdenv
           lib
           callPackage
           fetchurl
