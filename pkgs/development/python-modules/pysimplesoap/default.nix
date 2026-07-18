@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysimplesoap";
   version = "1.16.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "PySimpleSOAP";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-sbv00NCt/5tlIZfWGqG3ZzGtYYhJ4n0o/lyyUJFtZ+E=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
         args:
         fetchDebianPatch (
           {
-            inherit pname version;
+            inherit (finalAttrs) pname version;
             debianRevision = "5";
           }
           // args
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     #  so co-maintainers would be welcome.
     maintainers = [ lib.maintainers.nicoo ];
   };
-}
+})
