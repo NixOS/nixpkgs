@@ -525,37 +525,36 @@ nav.toc-sidebar summary {
   list-style: none;
 }
 
-nav.toc summary::before {
+nav.toc-sidebar summary::before {
   content: "▸";
   flex: none;
   font-size: 0.75em;
 }
-nav.toc details[open] > summary::before {
+nav.toc-sidebar details[open] > summary::before {
   content: "▾";
 }
 
-nav.toc a {
+nav.toc-sidebar a {
   display: block;
   width: 100%;
   padding: 3px 8px;
   border-left: 3px solid transparent;
   border-radius: 3px;
   color: inherit;
-  text-decoration: none;
   transition:
     background-color 120ms ease,
     border-color 120ms ease;
 }
-nav.toc a:hover {
+nav.toc-sidebar a:hover {
   background-color: #f2f2f2;
 }
 
-nav.toc a.active {
+nav.toc-sidebar a.active {
   background-color: #d8d8d8;
   border-left-color: #444;
   font-weight: 600;
 }
-nav.toc a.active-trail {
+nav.toc-sidebar a.active-trail {
   border-left-color: #bbb;
   background-color: #e8e8e8;
 }
