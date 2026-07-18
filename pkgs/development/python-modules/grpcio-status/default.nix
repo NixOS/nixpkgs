@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   googleapis-common-protos,
   grpcio,
   protobuf,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "grpcio-status";
   version = "1.83.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_status";
@@ -26,7 +27,9 @@ buildPythonPackage rec {
       --replace 'protobuf>=4.21.6' 'protobuf'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
