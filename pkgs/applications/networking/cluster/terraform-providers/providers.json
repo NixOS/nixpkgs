@@ -155,13 +155,13 @@
     "vendorHash": "sha256-SO3CX7pZ+q7ytz/55cxTPlW7ByY1zKhxkQxMiqAvm8o="
   },
   "checkly_checkly": {
-    "hash": "sha256-9kcZXbrfl8ovrg1w3bWdta/ABnLtVIfseRptZn5NrgI=",
+    "hash": "sha256-or9qjJdA8sDmPnETyedWtsAWEsF9hJdDmPpX+qncN7E=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.25.0",
+    "rev": "v1.26.0",
     "spdx": null,
-    "vendorHash": "sha256-7XgTkzYBfkpF8Dd4YsgpB+YIfkANsg/60b3AyO8Y8FA="
+    "vendorHash": "sha256-nB77EpptqXhF+7/85h37CRQUk/iyq1ffSc2v2kQwFAQ="
   },
   "ciscodevnet_aci": {
     "hash": "sha256-8QnmISiZGRbW60mN9I6UYWDo6f2HUIFersVs/pDUD3o=",
@@ -851,13 +851,13 @@
     "vendorHash": "sha256-OgKOjLwDQxJiv+VWdOzjMcUDPu9LOuhyTRyLyM39vLM="
   },
   "linode_linode": {
-    "hash": "sha256-aOLto01ntce/l+1ZcQf5Rsdu6ptgpYWpf5JpJ0zRUNs=",
+    "hash": "sha256-N/SVZ1ajNRT53zxdYBT6Hd/wwAuKhEre0QSZUYbkwGA=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.14.1",
+    "rev": "v4.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-dnvv6sSzEUZ4Hbrq/pAgi/O1RyxCx89omCVzvCe70S0="
+    "vendorHash": "sha256-r5T8kmvCb2iBUJqw5m7hrr+ET7U9kIBUbsvEVqZlgrE="
   },
   "loafoe_htpasswd": {
     "hash": "sha256-1HCvAGWsYlcYCA8iOmBb/AawxHPLuoxxQWLzNy0x79M=",
@@ -1184,13 +1184,13 @@
     "vendorHash": "sha256-uCw5Xdqp3VjLj6IytoVfO0atxkT69FNqJmAlA6eCmfs="
   },
   "scaleway_scaleway": {
-    "hash": "sha256-rO5xmAJB2ndhVh7Lkun1Gxi04+I2lGVtkbbCbmngp3E=",
+    "hash": "sha256-NXW3b4E92uqZbzIpRTFKVKbPRghwfRK4akn4KY7C9p0=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
     "owner": "scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.78.0",
+    "rev": "v2.79.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-x2cppxUU58nN7eu+wMxIoS16HezxzkHWI50ck2r34ls="
+    "vendorHash": "sha256-MKYAdMLETD12850TIBqBfHLRNLy15B6ycDUckIapwt8="
   },
   "scottwinkler_shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
