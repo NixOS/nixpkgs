@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   future,
   ipython,
   numpy,
@@ -16,6 +17,8 @@ buildPythonPackage rec {
   pname = "rfcat";
   version = "2.0.1";
   format = "setuptools";
+
+  disabled = pythonAtLeast "3.13"; # rfcat only supports up to python312 due to the limitation of future-1.0.0
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
