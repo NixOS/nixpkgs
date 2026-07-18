@@ -1,17 +1,16 @@
 {
-  lib,
-  stdenv,
-  replaceVars,
   addDriverRunpath,
   callPackage,
-  python313Packages,
   fetchFromGitHub,
   rustPlatform,
-  fetchurl,
   ffmpeg-headless,
-  sqlite-vec,
   frigate,
+  lib,
   nixosTests,
+  python313Packages,
+  replaceVars,
+  sqlite-vec,
+  stdenv,
 }:
 
 let
@@ -47,33 +46,6 @@ let
   );
 
   inherit (python3Packages) python;
-
-  # Tensorflow audio model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
-  tflite_audio_model = fetchurl {
-    url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
-    hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
-  };
-
-  # Tensorflow Lite models
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L115-L117
-  tflite_cpu_model = fetchurl {
-    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
-    hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
-  };
-  tflite_edgetpu_model = fetchurl {
-    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite";
-    hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
-  };
-
-  # TODO: OpenVino model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
-  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
-  coco_91cl_bkgr = fetchurl {
-    url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
-    hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
-  };
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";
@@ -144,16 +116,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace frigate/db/sqlitevecq.py \
       --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
-    # provide default paths for models and maps that are shipped with frigate
+    # hardcoded default models shipped with Frigate
     substituteInPlace frigate/config/config.py \
-      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+      --replace-fail "/cpu_model.tflite" "${frigate.models.tflite.ssdlite_mobiledet_coco_qat_postprocess}" \
+      --replace-fail "/edgetpu_model.tflite" "${frigate.models.edgetpu.ssdlite_mobiledet_coco_qat_postprocess}" \
+      --replace-fail "/openvino-model/ssdlite_mobilenet_v2.xml" "${frigate.models.openvino.ssdlite_mobilenet_v2_coco.model}" \
+      --replace-fail "/openvino-model/coco_91cl_bkgr.txt" "${frigate.models.openvino.ssdlite_mobilenet_v2_coco.labelmap}"
 
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
     substituteInPlace frigate/events/audio.py \
-      --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
+      --replace-fail "/cpu_audio_model.tflite" "${frigate.models.tflite.yamnet_classification_v1.model}" \
       --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
   '';
 
@@ -240,11 +214,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mkdir -p $out/share/frigate
     cp -R {migrations,labelmap.txt,audio-labelmap.txt} $out/share/frigate/
 
-    tar --extract --gzip --file ${tflite_audio_model}
-    cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
-
-    cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
-    sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
+    ln -s ${frigate.models.tflite.yamnet_classification_v1.model} $out/share/frigate/cpu_audio_model.tflite
 
     runHook postInstall
   '';
@@ -272,12 +242,39 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    inherit python;
+    inherit python python3Packages;
     pythonPath =
       (python3Packages.makePythonPath finalAttrs.finalPackage.dependencies)
       + ":${frigate}/${python.sitePackages}";
     web = callPackage ./web.nix {
       inherit (finalAttrs) version src;
+    };
+    models = {
+      # Google Coral Accelerators as Tensorflow Delegate
+      # https://docs.frigate.video/configuration/object_detectors/#edge-tpu-detector
+      edgetpu = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/edgetpu;
+        }
+      );
+      # Intel OpenVINO for CPU/GPU/NPU
+      # https://docs.frigate.video/configuration/object_detectors/#openvino-detector
+      openvino = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/openvino;
+        }
+      );
+      # Tensorflow Lite CPU models
+      # https://docs.frigate.video/configuration/object_detectors/#cpu-detector-not-recommended
+      # https://docs.frigate.video/configuration/audio_detectors/
+      tflite = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/tflite;
+        }
+      );
     };
     tests = {
       inherit (nixosTests) frigate;
