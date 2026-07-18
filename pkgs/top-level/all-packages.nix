@@ -6677,6 +6677,13 @@ with pkgs;
   SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
+  inherit
+    ({
+      scenefx_0_4 = callPackage ../by-name/sc/scenefx/0_4.nix { };
+    })
+    scenefx_0_4
+    ;
+
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
