@@ -1,5 +1,6 @@
 {
   pkgs,
+  stdenv,
   withDoc ? false,
   requireSageTests ? true,
   extraPythonPackages ? ps: [ ],
@@ -12,11 +13,16 @@
 let
   inherit (pkgs) symlinkJoin callPackage mathjax;
 
-  ntl = pkgs.ntl.overrideAttrs (old: {
-    configureFlags = (old.configureFlags or [ ]) ++ [
-      "NTL_THREADS=off"
-    ];
-  });
+  ntl = (
+    if stdenv.hostPlatform.isDarwin then
+      (pkgs.ntl.overrideAttrs (old: {
+        configureFlags = (old.configureFlags or [ ]) ++ [
+          "NTL_THREADS=off"
+        ];
+      }))
+    else
+      pkgs.ntl
+  );
 
   python3 = pkgs.python3 // {
     pkgs = pkgs.python3.pkgs.overrideScope (
