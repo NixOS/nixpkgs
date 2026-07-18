@@ -2,11 +2,14 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "coolify-cli";
   version = "1.4.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "coollabsio";
@@ -23,9 +26,12 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/coollabsio/coolify-cli/internal/version.version=${finalAttrs.version}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "CLI for managing Coolify instances";
