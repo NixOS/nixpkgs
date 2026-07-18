@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Bindings for groestl key derivation function library used in Groestlcoin";
-    homepage = "https://pypi.org/project/groestlcoin_hash/";
+    homepage = "https://github.com/Groestlcoin/groestlcoin-hash-python";
     maintainers = with lib.maintainers; [ gruve-p ];
     license = lib.licenses.mit;
   };
