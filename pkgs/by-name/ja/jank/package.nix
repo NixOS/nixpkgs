@@ -36,15 +36,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "jank";
   version = "unstable-0.1-alpha-2026-05-22";
 
+  # add these two lines to satisfy nix tests
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jank-lang";
     repo = "jank";
-    #rev = "86cd33b8edb7504209719f43391a185b84211a0c";
+    # rev = "86cd33b8edb7504209719f43391a185b84211a0c";
     rev = "7d185b25dacce7950bf7194830aad90c5b1bb6aa";
-    #hash = lib.fakeHash;
+    # hash = lib.fakeHash;
     hash = "sha256-og8BVjFAQwlS2M9js6+5lk6VMZXLuySH+eC5pLvmA8I=";
     fetchSubmodules = true;
 
