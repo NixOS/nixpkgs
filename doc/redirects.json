@@ -11,6 +11,9 @@
   "chap-toolchains": [
     "index.html#chap-toolchains"
   ],
+  "chap-writers": [
+    "index.html#chap-writers"
+  ],
   "cmake-ctest": [
     "index.html#cmake-ctest"
   ],
@@ -139,6 +142,9 @@
   ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "ex-writers-writePython3Bin": [
+    "index.html#ex-writers-writePython3Bin"
   ],
   "first-package-go": [
     "index.html#first-package-go"
@@ -916,6 +922,9 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "ssec-writers-python": [
+    "index.html#ssec-writers-python"
   ],
   "sssec-testing-octave-packages": [
     "index.html#sssec-testing-octave-packages"
