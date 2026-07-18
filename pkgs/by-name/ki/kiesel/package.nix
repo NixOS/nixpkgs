@@ -14,18 +14,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiesel";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromCodeberg {
     owner = "kiesel-js";
     repo = "kiesel";
     tag = finalAttrs.version;
-    hash = "sha256-bddGd3LPmVV8wwoVHYJJKoHS6ssYyU1hQBTGJBQJPgc=";
+    hash = "sha256-X5KpobHnqU8LR+odxeoPyVQbWLO8Yq1Tys7gNQu8/tI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${finalAttrs.src}/pkg/zement";
-    hash = "sha256-SOp8UW0iKniXwzEGGtzX5rFAdVQKDHoEvCupquusvmo=";
+    hash = "sha256-YjbrKfkmhBxRxqg8mllK7eEsZwkFYMWL+z7u1PtjEYw=";
   };
   cargoRoot = "pkg/zement";
   deps = callPackage ./deps.nix { };
