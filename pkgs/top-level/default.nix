@@ -3,12 +3,12 @@
 
     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
 
-    2. Applies the final stage to the given `config` if it is a function
+    2. Evaluates `config`, allowing it to depend on the final package set
 
     3. Defaults to no non-standard config and no cross-compilation target
 
-    4. Uses the above to infer the default standard environment's (stdenv's)
-       stages if no stdenv's are provided
+    4. Uses the above to infer the default standard environment's (stdenv)
+       stages if none are provided
 
     5. Folds the stages to yield the final fully booted package set for the
        chosen stdenv
@@ -49,11 +49,12 @@
   ...
 }@args:
 
-let # Rename the function arguments
-  config0 = config;
-  crossSystem0 = crossSystem;
-
+# The bindings below shadow the function arguments with their elaborated and
+# evaluated counterparts, so keep the arguments as given reachable here.
+let
+  inputs = { inherit localSystem crossSystem config; };
 in
+
 let
   pristineLib = import ../../lib;
 
@@ -104,7 +105,7 @@ let
       https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11
   '';
 
-  checked =
+  validate =
     (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
       (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
@@ -116,7 +117,7 @@ let
         ) x86_64DarwinDeprecationMessage
       );
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  localSystem = lib.systems.elaborate inputs.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
   #
@@ -131,31 +132,29 @@ let
   # Both systems are semantically equivalent as the same vendor and ABI are
   # inferred from the system double in `localSystem`.
   crossSystem =
-    let
-      system = lib.systems.elaborate crossSystem0;
-    in
-    if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
-
-  # Allow both:
-  # { /* the config */ } and
-  # { pkgs, ... } : { /* the config */ }
-  config1 = if lib.isFunction config0 then config0 { inherit lib pkgs; } else config0;
+    if inputs.crossSystem == null then
+      localSystem
+    else
+      let
+        system = lib.systems.elaborate inputs.crossSystem;
+      in
+      if lib.systems.equals system localSystem then localSystem else system;
 
   configEval = lib.evalModules {
     modules = [
       ./config.nix
-      (
-        { options, ... }:
-        {
-          _file = "nixpkgs.config";
-          config = config1;
-        }
-      )
+      {
+        _file = "nixpkgs.config";
+        # Allow both:
+        # { /* the config */ } and
+        # { pkgs, ... } : { /* the config */ }
+        config =
+          if lib.isFunction inputs.config then inputs.config { inherit lib pkgs; } else inputs.config;
+      }
     ];
     class = "nixpkgsConfig";
   };
 
-  # take all the rest as-is
   config =
     let
       failedAssertionsString = lib.concatMapStringsSep "\n" (x: "- ${x.message}") (
@@ -172,7 +171,7 @@ let
   # give `all-packages.nix` all the arguments to this function, even ones that
   # don't concern it, we give it this function to "re-call" nixpkgs, inheriting
   # whatever arguments it doesn't explicitly provide. This way,
-  # `all-packages.nix` doesn't know more than it needs too.
+  # `all-packages.nix` doesn't know more than it needs to.
   #
   # It's OK that `args` doesn't include default arguments from this file:
   # they'll be deterministically inferred. In fact we must *not* include them,
@@ -180,18 +179,17 @@ let
   # substituted with a different argument, the default is re-inferred.
   #
   # To put this in concrete terms, this function is basically just used today to
-  # use package for a different platform for the current platform (namely cross
+  # use packages for a different platform for the current platform (namely cross
   # compiling toolchains and 32-bit packages on x86_64). In both those cases we
   # want the provided non-native `localSystem` argument to affect the stdenv
   # chosen.
   #
-  # NB!!! This thing gets its `config` argument from `args`, i.e. it's actually
-  # `config0`. It is important to keep it to `config0` format (as opposed to the
-  # result of `evalModules`, i.e. the `config` variable above) throughout all
-  # nixpkgs evaluations since the above function `config0 -> config` implemented
-  # via `evalModules` is not idempotent. In other words, if you add `config` to
-  # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
-  # experience here.)
+  # NB!!! This thing gets its `config` argument from `args`, i.e. it is the
+  # original function argument, `inputs.config`. It is important to keep it in
+  # that format (as opposed to the result of `evalModules`, i.e. the `config`
+  # binding above) throughout all nixpkgs evaluations since that evaluation is
+  # not idempotent. In other words, if you add `config` to `newArgs`, expect
+  # strange very hard to debug errors! (Yes, I'm speaking from experience here.)
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstrapping stage pkgs
@@ -247,10 +245,10 @@ let
     if config.attrPathsDisallowedForInternalUse == [ ] then
       fixedPoint
     else
-      # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
+      # See ./stage.nix, which replaces config.attrPathsDisallowedForInternalUse with aborts.
       # To prevent these attributes from causing CI failures we remove them entirely.
       # These attrs are still evaluated but in a different way, see ci/eval/default.nix
       removeInternallyDisallowedAttrPaths fixedPoint;
 
 in
-checked pkgs
+validate pkgs
