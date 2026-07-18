@@ -16,24 +16,14 @@
 }:
 
 let
-  commonArgs = {
-    inherit
-      lib
-      localSystem
-      crossSystem
-      config
-      overlays
-      ;
-  };
-
   useCrossStdenv = crossSystem != localSystem || crossOverlays != [ ];
   useCustomStdenv = !useCrossStdenv && (config.replaceStdenv or null) != null;
 
   # Cross and custom stdenvs extend the local bootstrap stages. Keep
   # replaceStdenv out of those stages so it is applied only by the appended
   # custom stage; cross compilation uses replaceCrossStdenv instead.
-  bootArgs = commonArgs // {
-    crossSystem = if useCrossStdenv then localSystem else crossSystem;
+  bootArgs = {
+    inherit lib localSystem overlays;
     config =
       if useCrossStdenv || useCustomStdenv then removeAttrs config [ "replaceStdenv" ] else config;
   };
@@ -69,7 +59,17 @@ let
       }
       .${localSystem.system} or stagesNative;
 
-  stagesCross = import ./cross (commonArgs // { inherit crossOverlays bootStages; });
+  stagesCross = import ./cross {
+    inherit
+      lib
+      localSystem
+      crossSystem
+      config
+      overlays
+      crossOverlays
+      bootStages
+      ;
+  };
 
   replaceStdenvStage = vanillaPackages: {
     inherit config overlays;
