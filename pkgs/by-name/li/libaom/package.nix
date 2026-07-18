@@ -96,6 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $static $out
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "bin"
