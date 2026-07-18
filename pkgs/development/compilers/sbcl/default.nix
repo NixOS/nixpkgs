@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     texinfo
   ]
-  ++ lib.optionals finalAttrs.doCheck (
+  ++ lib.optionals finalAttrs.finalPackage.doCheck (
     [
       which
       writableTmpDirAsHomeHook
