@@ -27577,6 +27577,7 @@
     name = "Basil Keeler";
   };
   totaltax = {
+    name = "Coen Shields";
     email = "shieldscoen@gmail.com";
     github = "TotalTaxAmount";
     githubId = 64336456;
