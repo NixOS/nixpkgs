@@ -11,20 +11,22 @@
 # This package should be updated together with the main grpc package and other
 # related python grpc packages.
 # nixpkgs-update: no auto update
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio-status";
   version = "1.84.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "grpcio_status";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-XK8ounGEuB9hi19/CUhZ/SVBv0KdIYm7vNcVycLNzuI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6' 'protobuf'
+      --replace-warn 'protobuf>=4.21.6' 'protobuf'
   '';
 
   build-system = [ setuptools ];
@@ -46,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
