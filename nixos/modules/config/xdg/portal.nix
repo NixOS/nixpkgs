@@ -116,6 +116,8 @@ in
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
     in
     mkIf cfg.enable {
+      programs.fuse.enable = true;
+
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
         xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
         should either set `xdg.portal.config` or `xdg.portal.configPackages`
