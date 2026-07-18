@@ -4,6 +4,7 @@
   fetchpatch,
   # Python bits:
   buildPythonPackage,
+  setuptools,
   pytest,
   responses,
   docopt,
@@ -18,7 +19,7 @@
 buildPythonPackage rec {
   pname = "grip";
   version = "4.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joeyespo";
@@ -36,12 +37,14 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [
     pytest
     responses
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docopt
     flask
     markdown
