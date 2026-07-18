@@ -16,8 +16,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rbanffy";
     repo = "pip-chill";
-    tag = "v${version}";
-    hash = "sha256-oWq3UWBL5nsCBUkaElashZKvm7pN3StJNubgU++8YFs=";
+    # The release is tagged in PyPI but not in the git repo, so we have to use
+    # the commit SHA directly
+    rev = "e978cc0a0ced8cce685db92fcf4f5ab3fca6f21e";
+    hash = "sha256-Sn7BfNnslLaVcCJsEMgZaOubD4YfkuO6VhX7aS+7yxg=";
   };
 
   build-system = [ setuptools ];
