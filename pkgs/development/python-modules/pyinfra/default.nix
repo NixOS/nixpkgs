@@ -68,6 +68,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pyinfra" ];
 
+  pythonRelaxDeps = [
+    "paramiko"
+    "types-paramiko"
+  ];
+
   disabledTests = [
     # Test requires SSH binary
     "test_load_ssh_config"
@@ -83,7 +88,10 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
     changelog = "https://github.com/Fizzadar/pyinfra/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ totoroot ];
+    maintainers = with lib.maintainers; [
+      robsliwi
+      totoroot
+    ];
     mainProgram = "pyinfra";
   };
 })
