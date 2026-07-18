@@ -7,12 +7,14 @@
 python3Packages.buildPythonApplication rec {
   pname = "yokadi";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://yokadi.github.io/download/${pname}-${version}.tar.gz";
     hash = "sha256-zF2ffHeU+i7wzu1u4DhQ5zJXr8AjXboiyFAisXNX6TM=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     python-dateutil
@@ -20,6 +22,10 @@ python3Packages.buildPythonApplication rec {
     setproctitle
     icalendar
     colorama
+  ];
+
+  pythonRelaxDeps = [
+    "python-dateutil"
   ];
 
   # Yokadi doesn't have any tests
