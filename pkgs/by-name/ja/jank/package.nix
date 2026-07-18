@@ -85,8 +85,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_LIBDWARF=${libdwarf-lite-src}"
     "-DFETCHCONTENT_SOURCE_DIR_ZSTD=${zstd-src}"
     (lib.cmakeBool "jank_unity_build" true)
-    (lib.cmakeBool "jank_test" finalAttrs.doCheck)
-    # (lib.cmakeBool "jank_force_phase_2" true) # This phase 2 force should only be needed if we're not using CMAKE_BUILD_TYPE=Release. 
+    (lib.cmakeBool "jank_test" finalAttrs.doCheck) 
   ];
 
   # This runs as a bash script just before CMake configures the project
