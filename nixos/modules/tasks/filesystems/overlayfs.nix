@@ -129,7 +129,18 @@ let
             "upperdir=${upperdir}"
             "workdir=${workdir}"
           ]
-          ++ (map (s: "x-systemd.requires-mounts-for=${s}") lowerdir);
+          ++ (map (s: "x-systemd.requires-mounts-for=${s}") (
+            lowerdir
+            ++ lib.optionals (config.overlay.upperdir != null) [
+              # These aren't strictly required, because of the
+              # transitive dependencies through the
+              # preMountService. But it doesn't hurt to have them, and
+              # it would allow that service to be masked in some
+              # cases.
+              upperdir
+              workdir
+            ]
+          ));
       };
     };
 in
