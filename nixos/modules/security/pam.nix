@@ -2,6 +2,7 @@
 # Authentication Modules) system.
 {
   config,
+  options,
   lib,
   utils,
   pkgs,
@@ -365,8 +366,8 @@ let
         };
 
         mysqlAuth = lib.mkOption {
-          default = config.users.mysql.enable;
-          defaultText = lib.literalExpression "config.users.mysql.enable";
+          default = config.users.mysql.enable or false;
+          defaultText = lib.literalExpression "config.users.mysql.enable or false";
           type = lib.types.bool;
           description = ''
             If set, the `pam_mysql` module will be used to
@@ -375,8 +376,8 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
-          defaultText = lib.literalExpression "config.services.fprintd.enable";
+          default = config.services.fprintd.enable or false;
+          defaultText = lib.literalExpression "config.services.fprintd.enable or false";
           type = lib.types.bool;
           description = ''
             If set, fingerprint reader will be used (if exists and
@@ -407,8 +408,8 @@ let
         };
 
         oathAuth = lib.mkOption {
-          default = config.security.pam.oath.enable;
-          defaultText = lib.literalExpression "config.security.pam.oath.enable";
+          default = config.security.pam.oath.enable or false;
+          defaultText = lib.literalExpression "config.security.pam.oath.enable or false";
           type = lib.types.bool;
           description = ''
             If set, the OATH Toolkit will be used.
@@ -534,8 +535,8 @@ let
         };
 
         pamMount = lib.mkOption {
-          default = config.security.pam.mount.enable;
-          defaultText = lib.literalExpression "config.security.pam.mount.enable";
+          default = config.security.pam.mount.enable or false;
+          defaultText = lib.literalExpression "config.security.pam.mount.enable or false";
           type = lib.types.bool;
           description = ''
             Enable PAM mount (pam_mount) system to mount filesystems on user login.
@@ -966,7 +967,7 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.unix.enable;
+                enable = config.services.kanidm.unix.enable or false;
                 control = "sufficient";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
                 settings = {
@@ -975,7 +976,7 @@ let
               }
               {
                 name = "sss";
-                enable = config.services.sssd.enable;
+                enable = config.services.sssd.enable or false;
                 control =
                   if cfg.sssdStrictAccess then "[default=bad success=ok user_unknown=ignore]" else "sufficient";
                 modulePath = "${pkgs.sssd}/lib/security/pam_sss.so";
@@ -1000,7 +1001,7 @@ let
               }
               {
                 name = "systemd_home";
-                enable = config.services.homed.enable;
+                enable = config.services.homed.enable or false;
                 control = "sufficient";
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
@@ -1133,7 +1134,12 @@ let
                 )
                 (
                   let
-                    oath = config.security.pam.oath;
+                    oath =
+                      config.security.pam.oath or {
+                        window = 5;
+                        digits = 6;
+                        usersFile = "/etc/users.oath";
+                      };
                   in
                   {
                     name = "oath";
@@ -1200,14 +1206,14 @@ let
                 # The same principle applies to systemd-homed
                 (lib.optionals
                   (
-                    (cfg.unixAuth || config.services.homed.enable)
+                    (cfg.unixAuth || (config.services.homed.enable or false))
                     && (
                       config.security.pam.enableFscrypt
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
                       || cfg.oo7.enable
-                      || config.services.intune.enable
+                      || config.services.intune.enable or false
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
                       || cfg.failDelay.enable
@@ -1218,7 +1224,7 @@ let
                   [
                     {
                       name = "systemd_home-early";
-                      enable = config.services.homed.enable;
+                      enable = config.services.homed.enable or false;
                       control = "optional";
                       modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
                     }
@@ -1278,7 +1284,7 @@ let
                     }
                     {
                       name = "intune";
-                      enable = config.services.intune.enable;
+                      enable = config.services.intune.enable or false;
                       control = "optional";
                       modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
                     }
@@ -1322,7 +1328,7 @@ let
               ++ [
                 {
                   name = "systemd_home";
-                  enable = config.services.homed.enable;
+                  enable = config.services.homed.enable or false;
                   control = "sufficient";
                   modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
                 }
@@ -1355,7 +1361,7 @@ let
                 }
                 {
                   name = "kanidm";
-                  enable = config.services.kanidm.unix.enable;
+                  enable = config.services.kanidm.unix.enable or false;
                   control = "sufficient";
                   modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
                   settings = {
@@ -1365,7 +1371,7 @@ let
                 }
                 {
                   name = "sss";
-                  enable = config.services.sssd.enable;
+                  enable = config.services.sssd.enable or false;
                   control = "sufficient";
                   modulePath = "${pkgs.sssd}/lib/security/pam_sss.so";
                   settings = {
@@ -1412,7 +1418,7 @@ let
             password = utils.pam.autoOrderRules [
               {
                 name = "systemd_home";
-                enable = config.services.homed.enable;
+                enable = config.services.homed.enable or false;
                 control = "sufficient";
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
@@ -1464,13 +1470,13 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.unix.enable;
+                enable = config.services.kanidm.unix.enable or false;
                 control = "sufficient";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
               }
               {
                 name = "sss";
-                enable = config.services.sssd.enable;
+                enable = config.services.sssd.enable or false;
                 control = "sufficient";
                 modulePath = "${pkgs.sssd}/lib/security/pam_sss.so";
               }
@@ -1519,7 +1525,7 @@ let
               {
                 name = "loginuid";
                 enable = cfg.setLoginUid;
-                control = if config.boot.isContainer then "optional" else "required";
+                control = if (config.boot.isContainer or false) then "optional" else "required";
                 modulePath = "${package}/lib/security/pam_loginuid.so";
               }
               {
@@ -1541,7 +1547,7 @@ let
               }
               {
                 name = "systemd_home";
-                enable = config.services.homed.enable;
+                enable = config.services.homed.enable or false;
                 control = "required";
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
@@ -1634,13 +1640,13 @@ let
               }
               {
                 name = "kanidm";
-                enable = config.services.kanidm.unix.enable;
+                enable = config.services.kanidm.unix.enable or false;
                 control = "optional";
                 modulePath = "${config.services.kanidm.package}/lib/pam_kanidm.so";
               }
               {
                 name = "sss";
-                enable = config.services.sssd.enable;
+                enable = config.services.sssd.enable or false;
                 control = "optional";
                 modulePath = "${pkgs.sssd}/lib/security/pam_sss.so";
               }
@@ -1692,7 +1698,7 @@ let
               }
               {
                 name = "apparmor";
-                enable = cfg.enableAppArmor && config.security.apparmor.enable;
+                enable = cfg.enableAppArmor && (config.security.apparmor.enable or false);
                 control = "optional";
                 modulePath = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so";
                 settings = {
@@ -1736,7 +1742,7 @@ let
               }
               {
                 name = "intune";
-                enable = config.services.intune.enable;
+                enable = config.services.intune.enable or false;
                 control = "optional";
                 modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
               }
@@ -1749,8 +1755,8 @@ let
 
   inherit (pkgs) pam_krb5 pam_ccreds;
 
-  use_ldap = (config.users.ldap.enable && config.users.ldap.loginPam);
-  pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
+  use_ldap = ((config.users.ldap.enable or false) && (config.users.ldap.loginPam or false));
+  pam_ldap = if (config.users.ldap.daemon.enable or false) then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
 
   # Create a limits.conf(5) file.
   makeLimitsConf =
@@ -2091,8 +2097,8 @@ in
 
     security.pam.howdy = {
       enable = lib.mkOption {
-        default = config.services.howdy.enable;
-        defaultText = lib.literalExpression "config.services.howdy.enable";
+        default = config.services.howdy.enable or false;
+        defaultText = lib.literalExpression "config.services.howdy.enable or false";
         type = lib.types.bool;
         description = ''
           Whether to enable the Howdy PAM module.
@@ -2102,8 +2108,8 @@ in
         '';
       };
       control = lib.mkOption {
-        default = config.services.howdy.control;
-        defaultText = lib.literalExpression "config.services.howdy.control";
+        default = config.services.howdy.control or "sufficient";
+        defaultText = lib.literalExpression ''config.services.howdy.control or "sufficient"'';
         type = lib.types.str;
         description = ''
           This option sets the PAM "control" used for this module.
@@ -2113,8 +2119,8 @@ in
 
     security.pam.krb5 = {
       enable = lib.mkOption {
-        default = config.security.krb5.enable;
-        defaultText = lib.literalExpression "config.security.krb5.enable";
+        default = config.security.krb5.enable or false;
+        defaultText = lib.literalExpression "config.security.krb5.enable or false";
         type = lib.types.bool;
         description = ''
           Enables Kerberos PAM modules (`pam-krb5`,
@@ -2565,194 +2571,203 @@ in
 
   ###### implementation
 
-  config = lib.mkIf config.security.pam.enable {
-    assertions = [
+  config = lib.mkIf config.security.pam.enable (
+    lib.mkMerge [
       {
-        assertion = config.users.motd == "" || config.users.motdFile == null;
-        message = ''
-          Only one of users.motd and users.motdFile can be set.
-        '';
-      }
-      {
-        assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
-        message = ''
-          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
-        '';
-      }
-      {
-        assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [ ];
-        message = ''
-          `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
-          Did you forget to set `services.openssh.enable` ?
-        '';
-      }
-      {
-        assertion =
-          with config.security.pam.rssh;
-          enable
-          -> (settings.auth_key_file or null != null || settings.authorized_keys_command or null != null);
-        message = ''
-          security.pam.rssh.enable requires either security.pam.rssh.settings.auth_key_file or
-          security.pam.rssh.settings.authorized_keys_command to be set.
-        '';
-      }
-    ];
+        assertions = [
+          {
+            assertion = config.users.motd == "" || config.users.motdFile == null;
+            message = ''
+              Only one of users.motd and users.motdFile can be set.
+            '';
+          }
+          {
+            assertion = config.security.pam.zfs.enable -> config.boot.zfs.enabled;
+            message = ''
+              `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled`).
+            '';
+          }
+          {
+            assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [ ];
+            message = ''
+              `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
+              Did you forget to set `services.openssh.enable` ?
+            '';
+          }
+          {
+            assertion =
+              with config.security.pam.rssh;
+              enable
+              -> (settings.auth_key_file or null != null || settings.authorized_keys_command or null != null);
+            message = ''
+              security.pam.rssh.enable requires either security.pam.rssh.settings.auth_key_file or
+              security.pam.rssh.settings.authorized_keys_command to be set.
+            '';
+          }
+        ];
 
-    warnings =
-      lib.optional
-        (
-          with config.security.pam.sshAgentAuth;
-          enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles
-        )
-        ''
-          security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
+        warnings =
+          lib.optional
+            (
+              with config.security.pam.sshAgentAuth;
+              enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles
+            )
+            ''
+              security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
 
-          Specifying user-writeable files there result in an insecure configuration:
-          a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
-          See https://github.com/NixOS/nixpkgs/issues/31611
-        ''
-      ++
-        lib.optional
-          (
-            with config.security.pam.rssh;
-            enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
-          )
-          ''
-            security.pam.rssh.settings.auth_key_file will be ignored as
-            security.pam.rssh.settings.authorized_keys_command has been specified.
-            Explictly set the former to null to silence this warning.
-          '';
+              Specifying user-writeable files there result in an insecure configuration:
+              a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
+              See https://github.com/NixOS/nixpkgs/issues/31611
+            ''
+          ++
+            lib.optional
+              (
+                with config.security.pam.rssh;
+                enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
+              )
+              ''
+                security.pam.rssh.settings.auth_key_file will be ignored as
+                security.pam.rssh.settings.authorized_keys_command has been specified.
+                Explictly set the former to null to silence this warning.
+              '';
 
-    environment.systemPackages =
-      # Include the PAM modules in the system path mostly for the manpages.
-      [ package ]
-      ++ lib.optional config.users.ldap.enable pam_ldap
-      ++ lib.optional config.services.kanidm.unix.enable config.services.kanidm.package
-      ++ lib.optional config.services.sssd.enable pkgs.sssd
-      ++ lib.optionals config.security.pam.krb5.enable [
-        pam_krb5
-        pam_ccreds
-      ]
-      ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
-      ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
-      ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+        environment.systemPackages =
+          # Include the PAM modules in the system path mostly for the manpages.
+          [ package ]
+          ++ lib.optional (config.users.ldap.enable or false) pam_ldap
+          ++ lib.optional (config.services.kanidm.unix.enable or false) config.services.kanidm.package
+          ++ lib.optional (config.services.sssd.enable or false) pkgs.sssd
+          ++ lib.optionals config.security.pam.krb5.enable [
+            pam_krb5
+            pam_ccreds
+          ]
+          ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+          ++ lib.optionals (config.security.pam.oath.enable or false) [ pkgs.oath-toolkit ]
+          ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+          ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+          ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
-    security.wrappers = {
-      unix_chkpwd = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${package}/bin/unix_chkpwd";
-      };
-    };
-
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
-
-    systemd =
-      lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
-        {
-          tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
-          services.lastlog2-import = {
-            enable = true;
-            wantedBy = [ "default.target" ];
-            after = [
-              "local-fs.target"
-              "systemd-tmpfiles-setup.service"
-            ];
-            # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
-            # uses unpatched /usr/bin/mv, needs to be fixed on staging
-            # in the meantime, use a service drop-in here
-            serviceConfig.ExecStartPost = [
-              ""
-              "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
-            ];
+        security.wrappers = {
+          unix_chkpwd = {
+            setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${package}/bin/unix_chkpwd";
           };
-          packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
         };
 
-    security.pam.services = {
-      other = {
-        useDefaultRules = false;
-        rules =
-          let
-            rules = utils.pam.autoOrderRules [
+        environment.etc = lib.mapAttrs' makePAMService enabledServices;
+
+        systemd =
+          lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
+            {
+              tmpfiles.packages = [ pkgs.util-linux.lastlog ]; # /lib/tmpfiles.d/lastlog2-tmpfiles.conf
+              services.lastlog2-import = {
+                enable = true;
+                wantedBy = [ "default.target" ];
+                after = [
+                  "local-fs.target"
+                  "systemd-tmpfiles-setup.service"
+                ];
+                # TODO: ${pkgs.util-linux.lastlog}/lib/systemd/system/lastlog2-import.service
+                # uses unpatched /usr/bin/mv, needs to be fixed on staging
+                # in the meantime, use a service drop-in here
+                serviceConfig.ExecStartPost = [
+                  ""
+                  "${lib.getExe' pkgs.coreutils "mv"} /var/log/lastlog /var/log/lastlog.migrated"
+                ];
+              };
+              packages = [ pkgs.util-linux.lastlog ]; # lib/systemd/system/lastlog2-import.service
+            };
+
+        security.pam.services = {
+          other = {
+            useDefaultRules = false;
+            rules =
+              let
+                rules = utils.pam.autoOrderRules [
+                  {
+                    name = "warn";
+                    control = "required";
+                    modulePath = "${package}/lib/security/pam_warn.so";
+                  }
+                  {
+                    name = "deny";
+                    control = "required";
+                    modulePath = "${package}/lib/security/pam_deny.so";
+                  }
+                ];
+              in
               {
-                name = "warn";
-                control = "required";
-                modulePath = "${package}/lib/security/pam_warn.so";
-              }
-              {
-                name = "deny";
-                control = "required";
-                modulePath = "${package}/lib/security/pam_deny.so";
-              }
-            ];
-          in
-          {
-            auth = rules;
-            account = rules;
-            password = rules;
-            session = rules;
+                auth = rules;
+                account = rules;
+                password = rules;
+                session = rules;
+              };
           };
-      };
 
-      # Most of these should be moved to specific modules.
-      i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
-      i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
-      vlock.enable = lib.mkDefault config.console.enable;
-      xlock.enable = lib.mkDefault config.services.xserver.enable;
-      xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
+          # Most of these should be moved to specific modules.
+          i3lock.enable = lib.mkDefault (config.programs.i3lock.enable or false);
+          i3lock-color.enable = lib.mkDefault (config.programs.i3lock.enable or false);
+          vlock.enable = lib.mkDefault (config.console.enable or false);
+          xlock.enable = lib.mkDefault (config.services.xserver.enable or false);
+          xscreensaver.enable = lib.mkDefault (config.services.xscreensaver.enable or false);
 
-      runuser = {
-        rootOK = true;
-        unixAuth = false;
-        setEnvironment = false;
-      };
+          runuser = {
+            rootOK = true;
+            unixAuth = false;
+            setEnvironment = false;
+          };
 
-      /*
-        FIXME: should runuser -l start a systemd session? Currently
-        it complains "Cannot create session: Already running in a
-        session".
-      */
-      runuser-l = {
-        rootOK = true;
-        unixAuth = false;
-      };
-    }
-    // lib.optionalAttrs (config.security.pam.enableFscrypt) {
-      # Allow fscrypt to verify login passphrase
-      fscrypt = { };
-    };
+          /*
+            FIXME: should runuser -l start a systemd session? Currently
+            it complains "Cannot create session: Already running in a
+            session".
+          */
+          runuser-l = {
+            rootOK = true;
+            unixAuth = false;
+          };
+        }
+        // lib.optionalAttrs (config.security.pam.enableFscrypt) {
+          # Allow fscrypt to verify login passphrase
+          fscrypt = { };
+        };
 
-    security.apparmor.includes."abstractions/pam" =
-      concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        attrNames enabledServices
-      )
-      + (
-        let
-          types = concatMap attrValues (catAttrs "rules" (attrValues enabledServices));
-          rules = concatMap attrValues types;
+      }
+      (lib.optionalAttrs (options ? security.apparmor.includes) {
+        security.apparmor.includes."abstractions/pam" =
+          concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
+            attrNames enabledServices
+          )
+          + (
+            let
+              types = concatMap attrValues (catAttrs "rules" (attrValues enabledServices));
+              rules = concatMap attrValues types;
 
-          isDirect = flip elem [
-            "include"
-            "substack"
-          ];
-          activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
+              isDirect = flip elem [
+                "include"
+                "substack"
+              ];
+              activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
 
-          modulePaths = concatMap (
-            rule:
-            if (!hasPrefix "/" rule.modulePath) then
-              throw ''non-absolute PAM modulePath "${rule.modulePath}" is unsupported by apparmor''
-            else
-              [ rule.modulePath ]
-          ) activeRules;
-        in
-        concatLines (map (module: "mr ${module},") (unique modulePaths))
-      );
-
-    security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
-    security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
-  };
+              modulePaths = concatMap (
+                rule:
+                if (!hasPrefix "/" rule.modulePath) then
+                  throw ''non-absolute PAM modulePath "${rule.modulePath}" is unsupported by apparmor''
+                else
+                  [ rule.modulePath ]
+              ) activeRules;
+            in
+            concatLines (map (module: "mr ${module},") (unique modulePaths))
+          );
+      })
+      (lib.optionalAttrs (options ? security.sudo.extraConfig) {
+        security.sudo.extraConfig = optionalSudoConfigForSSHAgentAuth;
+      })
+      (lib.optionalAttrs (options ? security.sudo-rs.extraConfig) {
+        security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
+      })
+    ]
+  );
 }

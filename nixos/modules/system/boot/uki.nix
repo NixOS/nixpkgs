@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -88,7 +89,12 @@ in
         EFIArch = lib.mkOptionDefault efiArch;
       }
       //
-        lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null)
+        lib.optionalAttrs
+          (
+            options ? hardware.deviceTree
+            && config.hardware.deviceTree.enable
+            && config.hardware.deviceTree.name != null
+          )
           {
             DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
           };

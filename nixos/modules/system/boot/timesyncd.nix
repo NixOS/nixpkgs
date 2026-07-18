@@ -22,8 +22,8 @@ in
 
     services.timesyncd = {
       enable = lib.mkOption {
-        default = !config.boot.isContainer;
-        defaultText = lib.literalExpression "!config.boot.isContainer";
+        default = !(config.boot.isContainer or false);
+        defaultText = lib.literalExpression "!(config.boot.isContainer or false)";
         type = lib.types.bool;
         description = ''
           Enables the systemd NTP client daemon.

@@ -471,16 +471,20 @@ in
       let
         obsoleteOpt =
           opts: msgFn:
-          lib.flip map opts (opt: {
-            assertion = lib.attrByPath opt (throw "impossible") config.boot.initrd == "";
-            message = ''
-              ${msgFn (lib.concatStringsSep "." opt)}
-                  Definitions:
-              ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-                (lib.attrByPath opt (throw "impossible") options.boot.initrd).definitionsWithLocations
-              }
-            '';
-          });
+          lib.flip lib.concatMap opts (
+            opt:
+            # Only assert if the option actually exists (it may not with minimal modules)
+            lib.optional (lib.hasAttrByPath opt config.boot.initrd) {
+              assertion = lib.attrByPath opt "" config.boot.initrd == "";
+              message = ''
+                ${msgFn (lib.concatStringsSep "." opt)}
+                    Definitions:
+                ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+                  (lib.attrByPath opt (throw "impossible") options.boot.initrd).definitionsWithLocations
+                }
+              '';
+            }
+          );
       in
       [
         {
@@ -585,7 +589,7 @@ in
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
 
         # For systemd-journald's _HOSTNAME field; needs to be set early, cannot be backfilled.
-        "/etc/hostname".text = config.networking.hostName;
+        "/etc/hostname".text = config.networking.hostName or config.system.nixos.distroId;
 
       }
       // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {

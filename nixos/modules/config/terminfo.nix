@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -27,66 +28,68 @@
     };
   };
 
-  config = {
+  config = lib.mkMerge [
+    {
 
-    # This should not contain packages that are broken or can't build, since it
-    # will break this expression
-    #
-    # can be generated with:
-    # lib.attrNames (lib.filterAttrs
-    #  (_: drv: (builtins.tryEval (lib.isDerivation drv && drv ? terminfo)).value)
-    #  pkgs)
-    environment.systemPackages = lib.mkIf config.environment.enableAllTerminfo (
-      map (x: x.terminfo) (
-        with pkgs.pkgsBuildBuild;
-        [
-          alacritty
-          contour
-          foot
-          ghostty
-          kitty
-          mtm
-          rio
-          rxvt-unicode-unwrapped
-          rxvt-unicode-unwrapped-emoji
-          st
-          tmux
-          wezterm
-          yaft
-        ]
-      )
-    );
+      # This should not contain packages that are broken or can't build, since it
+      # will break this expression
+      #
+      # can be generated with:
+      # lib.attrNames (lib.filterAttrs
+      #  (_: drv: (builtins.tryEval (lib.isDerivation drv && drv ? terminfo)).value)
+      #  pkgs)
+      environment.systemPackages = lib.mkIf config.environment.enableAllTerminfo (
+        map (x: x.terminfo) (
+          with pkgs.pkgsBuildBuild;
+          [
+            alacritty
+            contour
+            foot
+            ghostty
+            kitty
+            mtm
+            rio
+            rxvt-unicode-unwrapped
+            rxvt-unicode-unwrapped-emoji
+            st
+            tmux
+            wezterm
+            yaft
+          ]
+        )
+      );
 
-    environment.pathsToLink = [
-      "/share/terminfo"
-    ];
+      environment.pathsToLink = [
+        "/share/terminfo"
+      ];
 
-    environment.etc.terminfo = {
-      source = "${config.system.path}/share/terminfo";
-    };
+      environment.etc.terminfo = {
+        source = "${config.system.path}/share/terminfo";
+      };
 
-    boot.initrd.systemd.contents = lib.listToAttrs (
-      lib.map
-        (ti: lib.nameValuePair "/etc/terminfo/${ti}" { source = "${pkgs.ncurses}/share/terminfo/${ti}"; })
-        [
-          "l/linux"
-          "v/vt100"
-          "v/vt102"
-          "v/vt220"
-        ]
-    );
+      boot.initrd.systemd.contents = lib.listToAttrs (
+        lib.map
+          (ti: lib.nameValuePair "/etc/terminfo/${ti}" { source = "${pkgs.ncurses}/share/terminfo/${ti}"; })
+          [
+            "l/linux"
+            "v/vt100"
+            "v/vt102"
+            "v/vt220"
+          ]
+      );
 
-    environment.profileRelativeSessionVariables = {
-      TERMINFO_DIRS = [ "/share/terminfo" ];
-    };
+      environment.profileRelativeSessionVariables = {
+        TERMINFO_DIRS = [ "/share/terminfo" ];
+      };
 
-    environment.extraInit = ''
+      environment.extraInit = ''
 
-      # reset TERM with new TERMINFO available (if any)
-      export TERM=$TERM
-    '';
+        # reset TERM with new TERMINFO available (if any)
+        export TERM=$TERM
+      '';
 
-    security =
+    }
+    (lib.optionalAttrs (options ? security.sudo.extraConfig) (
       let
         extraConfig = ''
 
@@ -96,8 +99,9 @@
         '';
       in
       lib.mkIf config.security.sudo.keepTerminfo {
-        sudo = { inherit extraConfig; };
-        sudo-rs = { inherit extraConfig; };
-      };
-  };
+        security.sudo = { inherit extraConfig; };
+        security.sudo-rs = { inherit extraConfig; };
+      }
+    ))
+  ];
 }

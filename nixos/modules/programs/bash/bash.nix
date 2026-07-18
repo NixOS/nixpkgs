@@ -223,7 +223,7 @@ in
 
     users.defaultUserShell = lib.mkDefault pkgs.bashInteractive;
 
-    environment.pathsToLink = lib.optionals cfg.completion.enable [
+    environment.pathsToLink = lib.optionals (cfg.completion.enable or false) [
       "/etc/bash_completion.d"
       "/share/bash-completion"
     ];

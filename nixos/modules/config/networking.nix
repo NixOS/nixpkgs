@@ -174,9 +174,11 @@ in
     # hostname and FQDN correctly:
     networking.hosts =
       let
+        hostName = cfg.hostName or config.system.nixos.distroId;
+        domain = cfg.domain or null;
         hostnames = # Note: The FQDN (canonical hostname) has to come first:
-          lib.optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
-          ++ lib.optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
+          lib.optional (hostName != "" && domain != null) "${hostName}.${domain}"
+          ++ lib.optional (hostName != "") hostName; # Then the hostname (without the domain)
       in
       {
         "127.0.0.2" = hostnames;
@@ -190,7 +192,7 @@ in
         # FQDN so that e.g. "hostname -f" works correctly.
         localhostHosts = pkgs.writeText "localhost-hosts" ''
           127.0.0.1 localhost
-          ${lib.optionalString cfg.enableIPv6 "::1 localhost"}
+          ${lib.optionalString (cfg.enableIPv6 or true) "::1 localhost"}
         '';
         stringHosts =
           let
