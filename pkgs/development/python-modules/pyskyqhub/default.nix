@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyskyqhub";
   version = "0.1.9";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_hub";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
