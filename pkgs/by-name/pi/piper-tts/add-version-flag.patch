@@ -1,0 +1,30 @@
+diff --git a/src/piper/__main__.py b/src/piper/__main__.py
+index f825570..8f0e382 100644
+--- a/src/piper/__main__.py
++++ b/src/piper/__main__.py
+@@ -9,6 +9,7 @@ import time
+ import wave
+ from collections.abc import Iterable
+ from pathlib import Path
++from importlib.metadata import version
+ 
+ from pathvalidate import sanitize_filename
+ 
+@@ -22,6 +23,9 @@ _LOGGER = logging.getLogger(_FILE.stem)
+ def main() -> None:
+     """Run piper text-to-speech engine."""
+     parser = argparse.ArgumentParser()
++    parser.add_argument(
++        "-V", "--version", action="version", version=f"%(prog)s {version('piper-tts')}"
++    )
+     parser.add_argument("-m", "--model", required=True, help="Path to Onnx model file")
+     parser.add_argument("-c", "--config", help="Path to model config file")
+     parser.add_argument(
+@@ -99,6 +103,7 @@ def main() -> None:
+     parser.add_argument(
+         "--debug", action="store_true", help="Print DEBUG messages to console"
+     )
++    #
+     args, unknown_args = parser.parse_known_args()
+     logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
+     _LOGGER.debug(args)

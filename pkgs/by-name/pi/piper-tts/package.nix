@@ -2,6 +2,8 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  testers,
+  nix-update-script,
 
   # build time
   pkg-config,
@@ -27,21 +29,28 @@ let
   };
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "piper-tts";
-  version = "1.4.2";
+  version = "1.6.0";
   pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
-    tag = "v${version}";
-    hash = "sha256-FHO+1d1iJimc6KweY/O6lEvWqGCyUwnDrslEfkxYR7A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QY9/KDLtamGMbAp8FXvN8emreL8leXJiL0PbgOTNjCU=";
   };
 
   patches = [
     # https://github.com/OHF-Voice/piper1-gpl/pull/17
     ./cmake-system-libs.patch
+
+    # Add --version/-V flag; remove once merged upstream.
+    # https://github.com/OHF-Voice/piper1-gpl/pull/239
+    ./add-version-flag.patch
   ];
 
   build-system =
@@ -81,9 +90,9 @@ python3Packages.buildPythonApplication rec {
       onnxruntime
       pathvalidate
     ]
-    ++ lib.optionals withTrain optional-dependencies.train
-    ++ lib.optionals withHTTP optional-dependencies.http
-    ++ lib.optionals withAlignment optional-dependencies.alignment;
+    ++ lib.optionals withTrain finalAttrs.passthru.optional-dependencies.train
+    ++ lib.optionals withHTTP finalAttrs.passthru.optional-dependencies.http
+    ++ lib.optionals withAlignment finalAttrs.passthru.optional-dependencies.alignment;
 
   optional-dependencies = {
     train =
@@ -106,6 +115,17 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
+  doCheck = true;
+
+  nativeCheckInputs = [
+    python3Packages.pytest
+  ];
+
+  checkPhase = ''
+    export NUMBA_CACHE_DIR=$(mktemp -d)/numba-cache
+    pytest tests
+  '';
+
   postInstall = ''
     ln -s ${espeak-ng'}/share/espeak-ng-data $out/${python3Packages.python.sitePackages}/piper/
   ''
@@ -115,12 +135,21 @@ python3Packages.buildPythonApplication rec {
     cp -Rv src/piper/train/vits $train/
   '';
 
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    changelog = "https://github.com/OHF-Voice/piper1-gpl/releases/tag/v${version}";
+    changelog = "https://github.com/OHF-Voice/piper1-gpl/releases/tag/v${finalAttrs.version}";
     description = "Fast, local neural text to speech system";
     homepage = "https://github.com/OHF-Voice/piper1-gpl";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "piper";
   };
-}
+})
