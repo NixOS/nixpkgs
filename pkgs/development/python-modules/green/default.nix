@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   colorama,
   coverage,
   unidecode,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "green";
   version = "4.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +26,9 @@ buildPythonPackage rec {
       --subst-var-by green "$out/bin/green"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     coverage
     unidecode
