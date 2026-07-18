@@ -7,13 +7,16 @@
   gevent,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grequests";
   version = "0.7.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    pname = "grequests";
+    inherit (finalAttrs) version;
     hash = "sha256-XDPxQmjfW4+hEH2FN4Fb5v67rW7FYFJNakBLd3jPa6Y=";
   };
 
@@ -27,10 +30,12 @@ buildPythonPackage rec {
     gevent
   ];
 
+  pythonImportsCheck = [ "grequests" ];
+
   meta = {
     description = "Asynchronous HTTP requests";
     homepage = "https://github.com/kennethreitz/grequests";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ matejc ];
   };
-}
+})
