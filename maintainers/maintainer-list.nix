@@ -17984,6 +17984,12 @@
     name = "meator";
     keys = [ { fingerprint = "7B0F 58A5 E0F1 A2EA 1157  8A73 1A14 CB34 64CB E5BF"; } ];
   };
+  medetcan = {
+    email = "medet@canakus.com";
+    github = "medetcan";
+    githubId = 10031984;
+    name = "Medet Can Akus";
+  };
   meditans = {
     email = "meditans@gmail.com";
     github = "meditans";
