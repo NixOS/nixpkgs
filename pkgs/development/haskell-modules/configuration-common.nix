@@ -920,6 +920,11 @@ with haskellLib;
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
 
+  # Hackage release does not contain two files in tests/*.json.gz, which the test script
+  # tries to download from codeberg instead. Tests could be enabled by switching the
+  # source to the upstream on codeberg.
+  mlkem = dontCheck super.mlkem;
+
   # ships broken Setup.hs https://github.com/facebook/Haxl/issues/165
   # https://github.com/facebook/Haxl/pull/164
   haxl = overrideCabal (drv: {
@@ -1521,7 +1526,7 @@ with haskellLib;
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_4_1 = doDistribute (dontCheck super.haskeline_0_8_4_1);
+  haskeline_0_8_5_0 = doDistribute (dontCheck super.haskeline_0_8_5_0);
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -1583,10 +1588,6 @@ with haskellLib;
   # https://codeberg.org/daniel-casanueva/graphviz/issues/7
   graphviz = doJailbreak super.graphviz;
 
-  # 2026-07-02: allow QuickCheck 2.16
-  # https://github.com/maralorn/haskell-taskwarrior/issues/14
-  taskwarrior = doJailbreak super.taskwarrior;
-
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/lzma/issues/45
   lzma = doJailbreak super.lzma;
@@ -1604,11 +1605,6 @@ with haskellLib;
   servant-auth-client = doJailbreak super.servant-auth-client;
   servant-auth-server = doJailbreak super.servant-auth-server;
 
-  # 2026-06-28: allow doctest 0.25
-  # https://github.com/haskell-servant/servant/issues/1890
-  servant-auth-docs = doJailbreak super.servant-auth-docs;
-  servant-swagger = doJailbreak super.servant-swagger;
-
   # 2026-06-29: allow doctest 0.25
   # https://github.com/sellout/yaya/issues/91
   yaya = doJailbreak super.yaya;
@@ -1620,7 +1616,7 @@ with haskellLib;
 
   # 2026-07-02: allow doctest 0.25
   # https://github.com/sellout/no-recursion/issues/46
-  no-recursion = doJailbreak super.no-recursion;
+  no-recursion = warnAfterVersion "0.4.0.0" (doJailbreak super.no-recursion);
 
   # https://github.com/ghcjs/jsaddle/pull/165
   jsaddle-warp = appendPatch (fetchpatch {
@@ -1716,10 +1712,6 @@ with haskellLib;
   # 2026-07-02: allow ghc-events 0.21, optparse-applicative 0.19
   # https://github.com/mpickering/eventlog2html/issues/195
   eventlog2html = doJailbreak super.eventlog2html;
-
-  # 2026-07-02: allow ghc-events 0.21, transformers 0.6.3
-  # https://github.com/haskell/ThreadScope/issues/148
-  threadscope = doJailbreak super.threadscope;
 
   # 2026-07-02: allow base 4.21 and template-haskell 2.23
   # https://github.com/luke-clifton/shh/issues/85
@@ -2545,8 +2537,8 @@ with haskellLib;
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
-  # 2026-06-17: wai-app-static >=3.1.7.1 && <3.2
-  # https://github.com/diogob/postgres-websockets/issues/115
+  # 2026-07-17: jose < 0.13
+  # https://github.com/diogob/postgres-websockets/issues/116
   postgres-websockets = doJailbreak super.postgres-websockets;
 
   postgrest =
@@ -2844,9 +2836,6 @@ with haskellLib;
   # 2026-05-17: allow hedgehog 1.6
   # https://github.com/hedgehogqa/haskell-hedgehog-classes/pull/65
   hedgehog-classes = doJailbreak super.hedgehog-classes;
-
-  # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
   # Missing test files in sdist
   # https://github.com/vmchale/lzlib/issues/1

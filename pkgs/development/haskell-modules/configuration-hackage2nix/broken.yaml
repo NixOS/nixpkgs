@@ -4083,7 +4083,6 @@ broken-packages:
   - mixpanel-client # failure in job https://hydra.nixos.org/build/233220132 at 2023-09-02
   - mkcabal # failure in job https://hydra.nixos.org/build/233202466 at 2023-09-02
   - ml-w # failure in job https://hydra.nixos.org/build/233251342 at 2023-09-02
-  - mlkem # failure in job https://hydra.nixos.org/build/315098220 at 2025-11-29
   - mltool # failure in job https://hydra.nixos.org/build/233203849 at 2023-09-02
   - mm2 # failure in job https://hydra.nixos.org/build/233260048 at 2023-09-02
   - mmsyn2 # failure in job https://hydra.nixos.org/build/233201519 at 2023-09-02
