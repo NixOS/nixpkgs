@@ -20181,6 +20181,12 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  nightconcept = {
+    email = "dark@nightconcept.net";
+    github = "nightconcept";
+    githubId = 486025;
+    name = "Danny Solivan";
+  };
   nikhilmaddirala = {
     name = "Nikhil Maddirala";
     github = "nikhilmaddirala";
