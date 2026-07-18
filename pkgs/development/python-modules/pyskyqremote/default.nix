@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
+  setuptools,
   websocket-client,
   xmltodict,
 }:
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyskyqremote";
   version = "0.3.26";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-aMgUwgKHgR+NQvRxiUV7GaXehjDIlJJJHwSmHDmzK08=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     websocket-client
     xmltodict
