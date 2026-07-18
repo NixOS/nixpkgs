@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   python-dateutil,
   babelfish,
   rebulk,
@@ -15,14 +16,16 @@
 buildPythonPackage rec {
   pname = "guessit";
   version = "3.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Zhn8u/mgUQ7IwsM3RMQlHK0FB7HVc9Bch13hftxe2+0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     rebulk
     babelfish
     python-dateutil
