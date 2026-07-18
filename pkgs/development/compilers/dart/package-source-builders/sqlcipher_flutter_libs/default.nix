@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     cp -r "$src" "$out"
+  ''
+  + lib.optionalString (lib.versionOlder version "0.7.0") ''
     _replace() {
       # --replace-fail messes with the file if it fails (is empty afterwards) so we do this instead
       if cat "$out/linux/CMakeLists.txt" | grep "$1" >/dev/null 2>/dev/null; then
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
     ${lib.concatMapAttrsStringSep " || " (_: v: ''_replace "${v.url}" "${v.file}"'') artifacts} || \
     (echo "unknown version of sqlcipher, please add to pkgs/development/compilers/dart/package-source-builders/sqlcipher_flutter_libs" && cat linux/CMakeLists.txt | grep "https://storage.*" -o && exit 2)
 
+  ''
+  + ''
     runHook postInstall
   '';
 
