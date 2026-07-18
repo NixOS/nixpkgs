@@ -109,7 +109,7 @@ let
     };
 
   stdenvBootstrapAndPlatforms =
-    self: _:
+    self:
     let
       withFallback =
         thisPkgs:
@@ -163,20 +163,18 @@ let
       "The following attributes were defined both in `pkgs/top-level/all-packages.nix` and elsewhere, most likely in `pkgs/by-name/`: ${lib.concatStringsSep ", " (lib.attrNames conflictingAttrs)}";
     packages;
 
-  aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
+  aliases = self: super: import ./aliases.nix lib self super;
 
   variants =
     self: super:
-    lib.optionalAttrs config.allowVariants (
-      import ./variants.nix {
-        inherit
-          lib
-          nixpkgsFun
-          stdenv
-          overlays
-          ;
-      } self super
-    );
+    import ./variants.nix {
+      inherit
+        lib
+        nixpkgsFun
+        stdenv
+        overlays
+        ;
+    } self super;
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -190,8 +188,7 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  configOverrides =
-    _: super: lib.optionalAttrs allowCustomOverrides ((config.packageOverrides or (_: { })) super);
+  configOverrides = _: super: config.packageOverrides super;
 
   # Convenience attributes for instantiating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
@@ -317,43 +314,44 @@ let
   # See also ./default.nix, which removes these attributes entirely from the end result
   internallyDisallowedAttrPathsOverlay =
     _: prev:
-    # Generally only set by CI, don't want to cause a performance hit for users
-    if config.attrPathsDisallowedForInternalUse == [ ] then
-      { }
-    else
-      lib.updateManyAttrsByPath (map (
-        { attrPath, reason }:
-        {
-          path = attrPath;
-          update =
-            _:
-            abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
-              lib.optionalString (reason != null) ", because ${reason}"
-            }";
-        }
-      ) config.attrPathsDisallowedForInternalUse) prev;
+    lib.updateManyAttrsByPath (map (
+      { attrPath, reason }:
+      {
+        path = attrPath;
+        update =
+          _:
+          abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
+            lib.optionalString (reason != null) ", because ${reason}"
+          }";
+      }
+    ) config.attrPathsDisallowedForInternalUse) prev;
+
+  # Layers the user can opt out of, only applied to the stage that accepts
+  # user-facing overrides.
+  customOverrides =
+    lib.optional config.allowAliases aliases
+    ++ lib.optional config.allowVariants variants
+    ++ lib.optional (config ? packageOverrides) configOverrides;
 
   # The complete chain of package set layers, applied from top to bottom.
   # stdenvOverrides must be last as it brings packages forward from the
   # previous bootstrapping phases which have already been overlaid.
-  toFix = lib.foldl' (lib.flip lib.extends) (_: { }) (
+  toFix = lib.foldl' (lib.flip lib.extends) stdenvBootstrapAndPlatforms (
     [
-      stdenvBootstrapAndPlatforms
       stdenvAdapters
       trivialBuilders
       splice
       autoCalledPackages
       allPackages
       otherPackageSets
-      aliases
-      variants
-      configOverrides
+    ]
+    ++ lib.optionals allowCustomOverrides customOverrides
+    # Generally only set by CI; avoid an empty overlay for normal evaluations.
+    ++ lib.optionals (config.attrPathsDisallowedForInternalUse != [ ]) [
       internallyDisallowedAttrPathsOverlay
     ]
     ++ overlays
-    ++ [
-      stdenvOverrides
-    ]
+    ++ [ stdenvOverrides ]
   );
 
 in

@@ -85,6 +85,21 @@ lib.recurseIntoAttrs {
     assert appended.makeWrapper ? __spliced;
     pkgs.emptyFile;
 
+  bootstrapStagesExcludeCompatibilityLayers =
+    let
+      evaluated = nixpkgsFun {
+        localSystem = {
+          system = "x86_64-linux";
+        };
+      };
+      bootPackages = evaluated.stdenv.__bootPackages;
+    in
+    assert evaluated ? llvmPackages_latest;
+    assert evaluated ? pkgsChecked;
+    assert !(bootPackages ? llvmPackages_latest);
+    assert !(bootPackages ? pkgsChecked);
+    pkgs.emptyFile;
+
   replaceStdenv =
     let
       replacedPkgs = nixpkgsFun {
