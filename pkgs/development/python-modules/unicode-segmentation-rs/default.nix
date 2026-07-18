@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "unicode-segmentation-rs";
-  version = "0.2.4";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "unicode-segmentation-rs";
     tag = "v${version}";
-    hash = "sha256-c/KWCJz8ZbWWE7S+2Uxp3+eQWHXAEZXcVN3C5OrFlrc=";
+    hash = "sha256-FAFj8jXpmCCLGO6Gc6b0iTta5vaAY9a/g01O2AWrTOM=";
   };
 
   postPatch = ''
