@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.6.4";
-  format = "setuptools";
+  pyproject = true;
   pname = "i3-py";
 
   src = fetchPypi {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
 
   # no tests in tarball
   doCheck = false;
+
+  build-system = [ setuptools ];
 
   meta = {
     description = "Tools for i3 users and developers";
