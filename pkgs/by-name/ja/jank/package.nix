@@ -35,7 +35,7 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "jank";
-  version = "unstable-0.1-alpha-2026-05-22";
+  version = "0.1.0";
 
   # add these two lines to satisfy nix tests, and remember to nix fmt before commit
   __structuredAttrs = true;
