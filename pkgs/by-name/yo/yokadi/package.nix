@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yokadi";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://yokadi.github.io/download/${pname}-${version}.tar.gz";
+    url = "https://yokadi.github.io/download/yokadi-${finalAttrs.version}.tar.gz";
     hash = "sha256-zF2ffHeU+i7wzu1u4DhQ5zJXr8AjXboiyFAisXNX6TM=";
   };
 
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.nkpvk ];
   };
-}
+})
