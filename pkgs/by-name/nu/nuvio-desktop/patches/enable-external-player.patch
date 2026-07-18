@@ -1,0 +1,13 @@
+diff --git a/composeApp/src/desktopMain/kotlin/com/nuvio/app/core/build/AppFeaturePolicy.desktop.kt b/composeApp/src/desktopMain/kotlin/com/nuvio/app/core/build/AppFeaturePolicy.desktop.kt
+index a9cf5410..96580b9f 100644
+--- a/composeApp/src/desktopMain/kotlin/com/nuvio/app/core/build/AppFeaturePolicy.desktop.kt
++++ b/composeApp/src/desktopMain/kotlin/com/nuvio/app/core/build/AppFeaturePolicy.desktop.kt
+@@ -8,7 +8,7 @@ actual object AppFeaturePolicy {
+     actual val accountDeletionEnabled: Boolean = false
+     actual val personalMediaAddonCopyEnabled: Boolean = false
+     actual val p2pEnabled: Boolean = true
+-    actual val externalPlayerSupported: Boolean = false
++    actual val externalPlayerSupported: Boolean = true
+     actual val trailerPlaybackMode: TrailerPlaybackMode = TrailerPlaybackMode.EXTERNAL
+     actual val heroTrailerPlaybackSupported: Boolean = false
+     actual val inAppUpdaterEnabled: Boolean = true

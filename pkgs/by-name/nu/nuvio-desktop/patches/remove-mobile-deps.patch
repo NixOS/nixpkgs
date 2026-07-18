@@ -1,0 +1,225 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index d44c8765..a2aa9f0a 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -7,5 +7,5 @@ plugins {
+     alias(libs.plugins.composeMultiplatform) apply false
+     alias(libs.plugins.composeCompiler) apply false
+     alias(libs.plugins.kotlinMultiplatform) apply false
+-    alias(libs.plugins.sentry.android.gradle) apply false
++    // alias(libs.plugins.sentry.android.gradle) apply false
+ }
+diff --git a/composeApp/build.gradle.kts b/composeApp/build.gradle.kts
+index 54177f3b..2ebf3e3d 100644
+--- a/composeApp/build.gradle.kts
++++ b/composeApp/build.gradle.kts
+@@ -406,7 +406,7 @@ fun jpackageCompatibleVersion(version: String): String {
+ 
+ plugins {
+     alias(libs.plugins.kotlinMultiplatform)
+-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
++    // alias(libs.plugins.androidKotlinMultiplatformLibrary)
+     alias(libs.plugins.composeMultiplatform)
+     alias(libs.plugins.composeCompiler)
+     alias(libs.plugins.kotlinxSerialization)
+@@ -983,104 +983,104 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
+ }
+ 
+ kotlin {
+-    android {
+-        namespace = "com.nuvio.app"
+-        compileSdk {
+-            version = release(libs.versions.android.compileSdk.get().toInt()) {
+-                minorApiLevel = libs.versions.android.compileSdkMinor.get().toInt()
+-            }
+-        }
+-        minSdk = libs.versions.android.minSdk.get().toInt()
+-        androidResources.enable = true
+-        withHostTest {}
+-
+-        compilerOptions {
+-            jvmTarget.set(JvmTarget.JVM_11)
+-        }
+-    }
++    // android {
++    //     namespace = "com.nuvio.app"
++    //     compileSdk {
++    //         version = release(libs.versions.android.compileSdk.get().toInt()) {
++    //             minorApiLevel = libs.versions.android.compileSdkMinor.get().toInt()
++    //         }
++    //     }
++    //     minSdk = libs.versions.android.minSdk.get().toInt()
++    //     androidResources.enable = true
++    //     withHostTest {}
++
++    //     compilerOptions {
++    //         jvmTarget.set(JvmTarget.JVM_11)
++    //     }
++    // }
+ 
+     jvm("desktop") {
+         compilerOptions {
+             jvmTarget.set(JvmTarget.JVM_11)
+         }
+     }
+-    
+-    val iosTargets = listOf(
+-        iosArm64(),
+-        iosSimulatorArm64()
+-    )
+-
+-    iosTargets.forEach { iosTarget ->
+-        iosTarget.compilations.getByName("main") {
+-            cinterops {
+-                create("commoncrypto") {
+-                    defFile(project.file("src/nativeInterop/cinterop/commoncrypto.def"))
+-                    compilerOpts("-I${project.projectDir}/src/nativeInterop/cinterop")
+-                }
+-            }
+ 
+-            if (iosDistribution == "full") {
+-                defaultSourceSet.kotlin.srcDir(fullCommonSourceDir)
+-            }
+-            defaultSourceSet.kotlin.srcDir(project.file(iosDistributionSourceDir))
+-            defaultSourceSet.dependencies {
+-                implementation(libs.ktor.client.darwin)
+-                if (iosDistribution == "full") {
+-                    implementation(libs.quickjs.kt)
+-                    implementation(libs.ksoup)
+-                }
+-            }
+-        }
++    // val iosTargets = listOf(
++    //     iosArm64(),
++    //     iosSimulatorArm64()
++    // )
++
++    // iosTargets.forEach { iosTarget ->
++    //     iosTarget.compilations.getByName("main") {
++    //         cinterops {
++    //             create("commoncrypto") {
++    //                 defFile(project.file("src/nativeInterop/cinterop/commoncrypto.def"))
++    //                 compilerOpts("-I${project.projectDir}/src/nativeInterop/cinterop")
++    //             }
++    //         }
++
++    //         if (iosDistribution == "full") {
++    //             defaultSourceSet.kotlin.srcDir(fullCommonSourceDir)
++    //         }
++    //         defaultSourceSet.kotlin.srcDir(project.file(iosDistributionSourceDir))
++    //         defaultSourceSet.dependencies {
++    //             implementation(libs.ktor.client.darwin)
++    //             if (iosDistribution == "full") {
++    //                 implementation(libs.quickjs.kt)
++    //                 implementation(libs.ksoup)
++    //             }
++    //         }
++    //     }
++
++    //     iosTarget.binaries.framework {
++    //         baseName = "ComposeApp"
++    //         isStatic = true
++    //         freeCompilerArgs += listOf("-Xbinary=bundleId=$iosFrameworkBundleId")
++    //     }
++    // }
+ 
+-        iosTarget.binaries.framework {
+-            baseName = "ComposeApp"
+-            isStatic = true
+-            freeCompilerArgs += listOf("-Xbinary=bundleId=$iosFrameworkBundleId")
+-        }
+-    }
+-    
+     sourceSets {
+         val commonMain by getting {
+             kotlin.srcDir(generatedRuntimeConfigDir)
+         }
+-        androidMain {
+-            kotlin.srcDir(project.file(androidDistributionSourceDir))
+-            if (androidDistribution == "full") {
+-                kotlin.srcDir(fullCommonSourceDir)
+-            }
+-
+-            dependencies {
+-                implementation(libs.compose.uiToolingPreview)
+-                implementation(libs.androidx.appcompat)
+-                implementation(libs.androidx.activity.compose)
+-                implementation(libs.androidx.core.splashscreen)
+-                implementation(libs.androidx.work.runtime)
+-                implementation(libs.coil.gif)
+-                implementation("androidx.recyclerview:recyclerview:1.4.0")
+-                implementation("com.squareup.okhttp3:okhttp:4.12.0")
+-                implementation("com.google.code.gson:gson:2.11.0")
+-                implementation("io.github.peerless2012:ass-media:0.4.0-beta01")
+-                implementation(libs.ktor.client.okhttp)
+-                implementation(libs.sentry.android)
+-                implementation(libs.androidx.media3.exoplayer.hls)
+-                implementation(libs.androidx.media3.exoplayer.dash)
+-                implementation(libs.androidx.media3.exoplayer.smoothstreaming)
+-                implementation(libs.androidx.media3.exoplayer.rtsp)
+-                implementation(libs.androidx.media3.datasource)
+-                implementation(libs.androidx.media3.datasource.okhttp)
+-                implementation(libs.androidx.media3.decoder)
+-                implementation(libs.androidx.media3.session)
+-                implementation(libs.androidx.media3.common)
+-                implementation(libs.androidx.media3.container)
+-                implementation(libs.androidx.media3.extractor)
+-                implementation(libs.mpv.android.lib)
+-                implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("lib-*.aar"))))
+-                if (androidDistribution == "full") {
+-                    implementation(files("libs/quickjs-kt-android-1.0.5-nuvio.aar"))
+-                    implementation(libs.ksoup)
+-                }
+-            }
+-        }
++        // androidMain {
++        //     kotlin.srcDir(project.file(androidDistributionSourceDir))
++        //     if (androidDistribution == "full") {
++        //         kotlin.srcDir(fullCommonSourceDir)
++        //     }
++
++        //     dependencies {
++        //         implementation(libs.compose.uiToolingPreview)
++        //         implementation(libs.androidx.appcompat)
++        //         implementation(libs.androidx.activity.compose)
++        //         implementation(libs.androidx.core.splashscreen)
++        //         implementation(libs.androidx.work.runtime)
++        //         implementation(libs.coil.gif)
++        //         implementation("androidx.recyclerview:recyclerview:1.4.0")
++        //         implementation("com.squareup.okhttp3:okhttp:4.12.0")
++        //         implementation("com.google.code.gson:gson:2.11.0")
++        //         implementation("io.github.peerless2012:ass-media:0.4.0-beta01")
++        //         implementation(libs.ktor.client.okhttp)
++        //         implementation(libs.sentry.android)
++        //         implementation(libs.androidx.media3.exoplayer.hls)
++        //         implementation(libs.androidx.media3.exoplayer.dash)
++        //         implementation(libs.androidx.media3.exoplayer.smoothstreaming)
++        //         implementation(libs.androidx.media3.exoplayer.rtsp)
++        //         implementation(libs.androidx.media3.datasource)
++        //         implementation(libs.androidx.media3.datasource.okhttp)
++        //         implementation(libs.androidx.media3.decoder)
++        //         implementation(libs.androidx.media3.session)
++        //         implementation(libs.androidx.media3.common)
++        //         implementation(libs.androidx.media3.container)
++        //         implementation(libs.androidx.media3.extractor)
++        //         implementation(libs.mpv.android.lib)
++        //         implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("lib-*.aar"))))
++        //         if (androidDistribution == "full") {
++        //             implementation(files("libs/quickjs-kt-android-1.0.5-nuvio.aar"))
++        //             implementation(libs.ksoup)
++        //         }
++        //     }
++        // }
+         val desktopMain by getting {
+             kotlin.srcDir(fullPluginSourceDir)
+             dependencies {
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index 884dc8e9..201d19f9 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -29,4 +29,4 @@ dependencyResolutionManagement {
+ }
+ 
+ include(":composeApp")
+-include(":androidApp")
++// include(":androidApp")
