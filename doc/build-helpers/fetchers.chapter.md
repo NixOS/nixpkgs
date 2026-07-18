@@ -853,7 +853,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
-A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
+A number of fetcher functions wrap lower-level fetchers such as `fetchurl`, `fetchzip`, and `fetchgit`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
 ## `fetchFromGitea`, `fetchFromForgejo` and `fetchFromCodeberg` {#fetchfromgitea}
 
@@ -875,6 +875,45 @@ However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any 
 - `rootDir` is set to a non-empty string
 
 When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
+
+## `fetchFromHuggingFace` {#fetchfromhuggingface}
+
+`fetchFromHuggingFace` fetches repositories from Hugging Face Hub. It expects
+`repoId`, exactly one of `rev` or `tag`, and `hash`.
+
+`repoId` must be in the form `repo` or `owner/repo`, so repositories such as
+`gpt2` work as well.
+
+::: {.example #ex-fetchfromhuggingface}
+
+# Fetching a model repository from Hugging Face
+
+```nix
+fetchFromHuggingFace {
+  repoId = "hf-internal-testing/tiny-random-gpt2";
+  rev = "71034c5d8bde858ff824298bdedc65515b97d2b9";
+  backend = "lfs";
+  hash = "sha256-8K9B/C62GW5lXC0c8QQpQ9QAE1UMoG+kYqvGhnWIp64=";
+}
+```
+
+:::
+
+The optional `repoType` argument selects which Hugging Face Hub repository type
+to use:
+
+- `"model"` (default) fetches from `https://huggingface.co/<repo-id>`
+- `"dataset"` fetches from `https://huggingface.co/datasets/<repo-id>`
+- `"space"` fetches from `https://huggingface.co/spaces/<repo-id>`
+
+To use a different Hugging Face Hub instance, use `domain`
+(defaults to `"huggingface.co"`).
+
+The optional `backend` argument defaults to `"xet"`. Because the Xet backend is
+not implemented yet, callers must currently set `backend = "lfs"`, which uses
+`fetchgit` with Git LFS enabled and defaults `fetchSubmodules` to `false`.
+`rootDir`, `sparseCheckout`, and low-level `fetchgit` options such as
+`deepClone`, `fetchTags`, `leaveDotGit`, and `branchName` are also supported.
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
