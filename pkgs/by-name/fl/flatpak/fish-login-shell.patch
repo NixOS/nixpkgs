@@ -1,0 +1,13 @@
+diff --git a/profile/flatpak.fish b/profile/flatpak.fish
+index ee15074b..9277bfc2 100644
+--- a/profile/flatpak.fish
++++ b/profile/flatpak.fish
+@@ -1,4 +1,7 @@
+-if type -q flatpak
++# Fish sources vendor configuration for every shell, including `fish -c`.
++# Descendants inherit XDG_DATA_DIRS, so only initialize it in a login shell
++# instead of invoking `flatpak --installations` for every Fish process.
++if status is-login; and type -q flatpak
+     # Fast-path: skip spawning `flatpak --installations` when the canonical
+     # user installation's exports/share is already present in $XDG_DATA_DIRS.
+     set -x --path XDG_DATA_DIRS $XDG_DATA_DIRS

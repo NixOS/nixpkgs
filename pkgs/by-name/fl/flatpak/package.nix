@@ -115,6 +115,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Flatpak installs flatpak.fish as vendor configuration, which Fish sources
+    # for every shell, including non-interactive `fish -c` processes. Restrict
+    # the integration to login shells: it only changes XDG_DATA_DIRS, which
+    # descendant shells inherit, and avoids repeatedly running Flatpak.
+    ./fish-login-shell.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
