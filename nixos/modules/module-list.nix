@@ -327,6 +327,7 @@
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
+  ./programs/tack.nix
   ./programs/tcpdump.nix
   ./programs/television.nix
   ./programs/throne.nix
