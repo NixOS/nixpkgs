@@ -479,6 +479,8 @@ div.appendix .variablelist .term {
 nav.toc-sidebar {
   height: 100%;
   padding: 0 1rem 2rem;
+  background-color: var(--background);
+  color: var(--main-text-color);
 }
 
 /* menu button, shown on mobile, hidden on desktop */
@@ -546,7 +548,7 @@ nav.toc-sidebar a {
     border-color 120ms ease;
 }
 nav.toc-sidebar a:hover {
-  background-color: #f2f2f2;
+  background-color: #f2f2f2 !important;
 }
 
 nav.toc-sidebar a.active {
@@ -557,6 +559,22 @@ nav.toc-sidebar a.active {
 nav.toc-sidebar a.active-trail {
   border-left-color: #bbb;
   background-color: #e8e8e8;
+}
+
+@media (prefers-color-scheme: dark) {
+  nav.toc-sidebar a:hover {
+    /* hover should win over scroll selectors despite beeing less specific */
+    background-color: #606060 !important;
+  }
+  nav.toc-sidebar a.active {
+    background-color: #373737;
+    border-left-color: #eee;
+    font-weight: 600;
+  }
+  nav.toc-sidebar a.active-trail {
+    border-left-color: #eee;
+    background-color: #323232;
+  }
 }
 
 @media screen and (min-width: 768px) {
