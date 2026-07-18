@@ -3,12 +3,13 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyskyqhub";
   version = "0.1.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
@@ -16,6 +17,8 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [ aiohttp ];
 
