@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "2.4.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "s3tools";
     repo = "s3cmd";
