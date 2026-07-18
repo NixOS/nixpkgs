@@ -10,6 +10,10 @@
 
   # runtime
   espeak-ng,
+  onnxruntime,
+
+  # check
+  gtest,
 
   # extras
   withTrain ? true,
@@ -46,7 +50,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     # https://github.com/OHF-Voice/piper1-gpl/pull/17
+    # This is a strips out cmake file
     ./cmake-system-libs.patch
+
+    # This is a stript out cmake file
+    ./libpiper-cmake-system-libs.patch
+
+    # This is a stript out cmake file
+    ./libpiper-cmake-test.patch
 
     # Add --version/-V flag; remove once merged upstream.
     # https://github.com/OHF-Voice/piper1-gpl/pull/239
@@ -78,16 +89,34 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     espeak-ng'
+    onnxruntime.dev
   ];
 
-  postBuild = lib.optionalString withTrain ''
+  postBuild = ''
+    # Stage the checked-in test voice under the filenames PiperTestAssets
+    # expects, so libpiper's tests don't need to download a model.
+    # FIXME use a packaged piper voice, when they get packaged
+    mkdir -p $TMPDIR/piper-test-model
+    ln -s $(pwd)/tests/test_voice.onnx $TMPDIR/piper-test-model/model.onnx
+    ln -s $(pwd)/tests/test_voice.onnx.json $TMPDIR/piper-test-model/model.onnx.json
+
+    # Build libpiper
+    cmake -S libpiper -B libpiper-build \
+      -DUCD_STATIC_LIB=${espeak-ng'.ucd-tools}/libucd.a \
+      -DONNXRUNTIME_DIR=${onnxruntime} \
+      -DPIPER_TEST_MODEL_DIR=$TMPDIR/piper-test-model \
+      -DPIPER_BUILD_TESTS=ON \
+      -DCMAKE_BUILD_TYPE=Release
+    cmake --build libpiper-build
+  ''
+  + lib.optionalString withTrain ''
     cythonize --inplace src/piper/train/vits/monotonic_align/core.pyx
   '';
 
   dependencies =
     with python3Packages;
     [
-      onnxruntime
+      python3Packages.onnxruntime
       pathvalidate
     ]
     ++ lib.optionals withTrain finalAttrs.passthru.optional-dependencies.train
@@ -117,14 +146,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   doCheck = true;
 
+  checkInputs = [ gtest ];
+
   nativeCheckInputs = [
     python3Packages.pytest
   ];
 
   checkPhase = ''
-    export NUMBA_CACHE_DIR=$(mktemp -d)/numba-cache
-    pytest tests
+    cmake --build libpiper-build --target piper_test
+    ctest --test-dir libpiper-build/tests --output-on-failure
   '';
+
+  outputs = [
+    "out"
+    "libpiper"
+  ];
 
   postInstall = ''
     ln -s ${espeak-ng'}/share/espeak-ng-data $out/${python3Packages.python.sitePackages}/piper/
@@ -144,12 +180,25 @@ python3Packages.buildPythonApplication (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  postFixup = ''
+    # Must run after fixupPhase's automatic dev-output mover
+    # (multiple-outputs.sh _moveToOutput), which otherwise sweeps any
+    # include/ directory it finds into $outputDev (= $out),
+    # regardless of which output we placed it in.
+    install -Dm755 libpiper-build/libpiper.so $libpiper/lib/libpiper.so
+    cp -r libpiper/include $libpiper/include
+  '';
+
   meta = {
     changelog = "https://github.com/OHF-Voice/piper1-gpl/releases/tag/v${finalAttrs.version}";
     description = "Fast, local neural text to speech system";
     homepage = "https://github.com/OHF-Voice/piper1-gpl";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [
+      hexa
+      WiredMic
+    ];
     mainProgram = "piper";
+    outputsToInstall = [ "out" ];
   };
 })
