@@ -16,7 +16,6 @@ let
   suffix = selectSystem {
     x86_64-linux = "linux-x64";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -33,7 +32,6 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -64,7 +62,6 @@ let
       hash = selectSystem {
         x86_64-linux = "sha256-YnG3iw35ZEyGbB9vGdcnj0qkvUfyLuaIEB5l09hkRck=";
         aarch64-linux = "sha256-Z4yY26hXf8++TX5tJcqufsAULTn9oUL90d9tDZj5d/k=";
-        x86_64-darwin = "sha256-oV0tanuk2dzB62uChni9CJtSw3eFECQi3aMBc+ZV7Do=";
         aarch64-darwin = "sha256-6eogi8fMOD5IgRyEdPRxdDa17WytB1JwTpKRzyyhQ2Q=";
       };
     };

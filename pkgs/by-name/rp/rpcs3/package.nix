@@ -117,9 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     openal
-    # RPCS3's X11 swap-interval path uses GLEW's GLXEW symbols, which
-    # are not provided in the default EGL-enabled GLEW build.
-    (glew.override { enableEGL = false; })
+    glew
     vulkan-headers
     vulkan-loader
     libpng

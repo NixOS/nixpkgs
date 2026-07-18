@@ -21,10 +21,6 @@ let
       url = "https://download.jetbrains.com/python/dataspell-2026.1.2-aarch64.tar.gz";
       hash = "sha256-SSmIPF0pDMolxeXL21UaHMbZdtYbChWVxTKZOsPhH+I=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.2.dmg";
-      hash = "sha256-2qzwzGMYuy1qEuTprxwNa5gOPgCZq2MadSKN8FT8w8c=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/python/dataspell-2026.1.2-aarch64.dmg";
       hash = "sha256-MGWufS0nlswdqhACNQWtlXJwfPiYw8wUx7olIxPS15k=";

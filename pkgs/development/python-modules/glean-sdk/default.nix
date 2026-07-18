@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -57,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "glean" ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = true; # fails to build since 2025-12
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = lib.licenses.mpl20;

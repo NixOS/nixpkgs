@@ -14,7 +14,7 @@
   autoAddDriverRunpath,
   effectiveMagma ?
     if cudaSupport then
-      magma-cuda-static
+      magma-cuda-static.override { inherit cudaPackages; }
     else if rocmSupport then
       magma-hip
     else
@@ -81,7 +81,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ? if cudaSupport then triton-cuda else triton,
+  _tritonEffective ? if cudaSupport then triton-cuda.override { inherit cudaPackages; } else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -263,6 +263,9 @@ let
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport
       && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
+    "Triton cudaPackages does not match cudaPackages" =
+      cudaSupport
+      && (_tritonEffective.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
   };
 
   unroll-src = writeShellScript "unroll-src" ''

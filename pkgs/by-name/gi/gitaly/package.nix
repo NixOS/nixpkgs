@@ -98,7 +98,7 @@ buildGoModule (
     meta = {
       homepage = "https://gitlab.com/gitlab-org/gitaly";
       description = "Git RPC service for handling all the git calls made by GitLab";
-      platforms = lib.platforms.linux ++ [ "x86_64-darwin" ];
+      platforms = lib.platforms.linux;
       teams = [ lib.teams.gitlab ];
       license = lib.licenses.mit;
     };

@@ -307,7 +307,11 @@ let
 
         build-system = with final; [ hatchling ];
 
-        propagatedBuildInputs =
+        pythonRelaxDeps = [
+          "structlog"
+        ];
+
+        dependencies =
           with final;
           [
             channels
@@ -329,7 +333,11 @@ let
 
         build-system = with final; [ hatchling ];
 
-        propagatedBuildInputs =
+        pythonRelaxDeps = [
+          "structlog"
+        ];
+
+        dependencies =
           with final;
           [
             cron-converter

@@ -41,12 +41,8 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://download.mochi.cards/releases/Mochi-${version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm64"}.dmg";
-      hash =
-        if stdenv.hostPlatform.isAarch64 then
-          "sha256-2NADaVzkibWjxBymeF1McGEQH6xHaqDMBg080kCI0F8="
-        else
-          "sha256-XM4vQVQ9QtvqyDu2Wx/8/Z+8H2DetfCufJYrX/1JHFw=";
+      url = "https://download.mochi.cards/releases/Mochi-${version}-arm64.dmg";
+      hash = "sha256-2NADaVzkibWjxBymeF1McGEQH6xHaqDMBg080kCI0F8=";
     };
 
     sourceRoot = ".";

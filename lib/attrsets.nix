@@ -1140,7 +1140,7 @@ rec {
 
     For a function that gives you control over what counts as a leaf, see `mapAttrsRecursiveCond`.
 
-    :::{#map-attrs-recursive-example .example}
+    ::: {.example #map-attrs-recursive-example}
     # Map over leaf attributes
 
     ```nix
@@ -1165,7 +1165,7 @@ rec {
     If the predicate returns false, `mapAttrsRecursiveCond` does not recurse, but instead applies the mapping function.
     If the predicate returns true, it does recurse, and does not apply the mapping function.
 
-    :::{#map-attrs-recursive-cond-example .example}
+    ::: {.example #map-attrs-recursive-cond-example}
     # Map over an leaf attributes defined by a condition
 
     Map derivations to their `name` attribute.

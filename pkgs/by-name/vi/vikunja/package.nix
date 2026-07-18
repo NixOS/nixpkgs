@@ -47,6 +47,11 @@ let
       pnpm_10
     ];
 
+    postPatch = ''
+      substituteInPlace src/version.json \
+        --replace-fail '"dev"' '"${finalAttrs.version}"'
+    '';
+
     doCheck = true;
 
     postBuild = ''

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installFonts,
   makeFontsConf,
+  mpvScripts,
   nix-update-script,
 }:
 buildLua (finalAttrs: {
@@ -29,6 +30,9 @@ buildLua (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  # FIXME?: collides with mpvScripts.modernx
+  passthru.dontCollideCheck = lib.hasAttr "modernx" mpvScripts;
 
   meta = {
     description = "Modern OSC UI replacement for MPV that retains the functionality of the default OSC";

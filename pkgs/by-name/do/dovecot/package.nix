@@ -4,5 +4,6 @@ import ./generic.nix {
   patches = _: [
     # Fix loading extended modules.
     ./load-extended-modules.patch
+    ./fix-lua-build.patch
   ];
 }

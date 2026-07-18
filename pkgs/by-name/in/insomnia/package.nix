@@ -16,10 +16,6 @@ let
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
           hash = "sha256-sPl7KXC8Z13LFZvxuKg02iDbtrCxn//Yrr8AOOf3VD4=";
         };
-        x86_64-darwin = {
-          url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
-          hash = "sha256-sPl7KXC8Z13LFZvxuKg02iDbtrCxn//Yrr8AOOf3VD4=";
-        };
         x86_64-linux = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
           hash = "sha256-PlcKBQnkmgU/SsLRKX7ohrGHm7B4hK9FMkplwlbFolI=";
@@ -36,7 +32,6 @@ let
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [
       markus1189

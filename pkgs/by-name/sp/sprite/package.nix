@@ -18,7 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         aarch64-darwin = "sha256-0EbsXuNdSC9lfTR9lQFgGk9nYg200f+tZY8xcXmqTzc=";
-        x86_64-darwin = "sha256-IA3C42wheIATCBlAFVJbq0omjPZv+rQstthCwXDUm5w=";
         aarch64-linux = "sha256-4a7LrFWgxe5wUcPLMDvo2/HmpCnELkJSyr2nAA9RBwk=";
         x86_64-linux = "sha256-FfWZ9PFhorfbf8/YsdcFAnpA2QtA1LqAfQiGrc8sesQ=";
       }

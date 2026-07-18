@@ -59,16 +59,6 @@ let
         "8.5" = "sha256-GpvF7cgcTXLguwQCj0vOwtn7EbUQYqolzt7JPr8RtCM=";
       };
     };
-    "x86_64-darwin" = {
-      system = "amd64";
-      hash = {
-        "8.1" = "sha256-bRoTC959irVHSTbMmBEQPw2O5ecoMj4zJK+a5AT1i7M=";
-        "8.2" = "sha256-6DGh0Ajlxt6L7acen3171gfyUajmb9k6fAY+h56BZCI=";
-        "8.3" = "sha256-KhZ5KD+9lCC+4bSVZPfkvWpWgRmOZ9iL87NfQ/YMWzw=";
-        "8.4" = "sha256-DRU0I60T9ZvIHYU82qbHFmEQwn3Vrp/MGmhiKzOm3og=";
-        "8.5" = "sha256-LrGek8mg9tBhccLGBKeokKsiYSxitxE+MP9sya3H4aY=";
-      };
-    };
   };
 
   makeSource =
@@ -166,7 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

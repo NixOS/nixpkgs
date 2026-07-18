@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Play and Record Sound with Python";
     homepage = "https://python-sounddevice.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/python-sounddevice/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
   };
 }

@@ -82,14 +82,12 @@ if [[ "$product" == "graalvm-ce" ]]; then
     [aarch64-linux]="linux-aarch64"
     [x86_64-linux]="linux-x64"
     [aarch64-darwin]="macos-aarch64"
-    [x86_64-darwin]="macos-x64"
   )
 else
   declare -r -A platforms=(
     [aarch64-linux]="linux-aarch64"
     [x86_64-linux]="linux-amd64"
     [aarch64-darwin]="macos-aarch64"
-    [x86_64-darwin]="macos-amd64"
   )
 fi
 

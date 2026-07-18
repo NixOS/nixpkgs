@@ -19,10 +19,6 @@ let
       url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.4-aarch64.tar.gz";
       hash = "sha256-T9q3/nxv/AA6y7CHWtOhUibR7bnKN8OZmfN3NWYTsIQ=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.4.dmg";
-      hash = "sha256-W7EwYu7S3hs1564tXq8H1Uok/Gwx/8QJO4brUGOfFY4=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/webide/PhpStorm-2026.1.4-aarch64.dmg";
       hash = "sha256-XGcfEWHHeLugvkT/WlQDsVRN33F46b1PCNhINQitqSY=";

@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "JuliaMono-ttf";
-  version = "0.062";
+  version = "0.63";
 
   src = fetchzip {
     url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
     stripRoot = false;
-    hash = "sha256-f9hjo3B4q2WBl0j86fHny8bYUqldYSC0pP4uoWOI8Zk=";
+    hash = "sha256-e1tQPtSnDeFhODCT+qtJd3IuGzUHW9VMZP85Nff9SSk=";
   };
 
   nativeBuildInputs = [ installFonts ];

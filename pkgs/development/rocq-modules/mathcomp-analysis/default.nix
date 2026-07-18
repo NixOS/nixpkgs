@@ -85,7 +85,7 @@ let
           ;
 
         namePrefix = [
-          "rocq-core"
+          "rocq"
           "mathcomp"
         ];
 

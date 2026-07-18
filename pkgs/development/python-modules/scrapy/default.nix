@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.16.0";
+  version = "2.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-s72COXzDuTtRNGenZEZG8QCeq+9LBu6fuT5NOjpVYaY=";
+    hash = "sha256-4FAZJZc8qsMn93XPNYnnbqecA29DWwh5VNNlCsnib7A=";
   };
 
   pythonRelaxDeps = [

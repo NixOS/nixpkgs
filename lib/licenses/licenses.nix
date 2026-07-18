@@ -310,6 +310,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    buddy = {
+      spdxId = "Buddy";
+      fullName = "Buddy License";
+    };
+
     bzip2 = {
       spdxId = "bzip2-1.0.6";
       fullName = "bzip2 and libbzip2 License v1.0.6";
@@ -379,6 +384,13 @@ lib.mapAttrs mkLicense (
     cc-by-nc-30 = {
       spdxId = "CC-BY-NC-3.0";
       fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
+      free = false;
+    };
+
+    cc-by-nc-30-igo = {
+      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
+      # spdxId = "CC-BY-NC-3.0-IGO";
+      fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
       free = false;
     };
 
@@ -926,6 +938,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    jpl-image = {
+      fullName = "JPL Image Use Policy";
+      spdxId = "JPL-image";
+    };
+
     knuth = {
       fullName = "Knuth CTAN License";
       spdxId = "Knuth-CTAN";
@@ -1171,6 +1188,11 @@ lib.mapAttrs mkLicense (
     ngpl = {
       spdxId = "NGPL";
       fullName = "Nethack General Public License";
+    };
+
+    ngrep = {
+      spdxId = "ngrep";
+      fullName = "ngrep License";
     };
 
     nistSoftware = {
@@ -1604,6 +1626,11 @@ lib.mapAttrs mkLicense (
     wadalab = {
       fullName = "Wadalab Font License";
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
+    };
+
+    wordnet = {
+      spdxId = "WordNet";
+      fullName = "WordNet License";
     };
 
     wtfpl = {

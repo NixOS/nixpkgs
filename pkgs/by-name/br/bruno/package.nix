@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "3.5.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-ud1zdA38k5RW6qlmPQGnkYUIHOhiHNYWmlXbEzJsIUk=";
+    hash = "sha256-Lll/ywDkHv0xvLk8iiBEySek7A3dBmfO4V/q2xaNtBQ=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -197,7 +197,6 @@ buildNpmPackage rec {
       gepbird
       kashw2
       mattpolzin
-      redyf
       water-sucks
       starsep
     ];

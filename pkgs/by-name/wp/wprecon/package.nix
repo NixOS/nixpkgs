@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://github.com/blackbinn/wprecon";
     # License Zero Noncommercial Public License 2.0.1
     # https://github.com/blackbinn/wprecon/blob/master/LICENSE
-    license = with lib.licenses; [ unfree ];
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

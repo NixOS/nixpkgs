@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
       lib.replaceString "." "-" finalAttrs.version
     }";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = python.meta.platforms;
     teams = [ lib.teams.python ];
   };

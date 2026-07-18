@@ -808,9 +808,9 @@
   },
   {
     "pname": "Servarr.FFprobe",
-    "version": "5.1.4.112",
-    "hash": "sha256-OdPIvZcrGj0XaqFJQCnrPt0zgPPvB5nd7WpYFF9Bnh0=",
-    "url": "https://pkgs.dev.azure.com/Servarr/7ab38f4e-5a57-4d70-84f4-94dd9bc5d6df/_packaging/783c2dce-dbc3-4218-8816-4a5e12af4d84/nuget/v3/flat2/servarr.ffprobe/5.1.4.112/servarr.ffprobe.5.1.4.112.nupkg"
+    "version": "5.1.10.124",
+    "hash": "sha256-7/xXsQNQGIAF+KtVln2x5QnLs0L1zyDmusyJESOsNP8=",
+    "url": "https://pkgs.dev.azure.com/Servarr/7ab38f4e-5a57-4d70-84f4-94dd9bc5d6df/_packaging/783c2dce-dbc3-4218-8816-4a5e12af4d84/nuget/v3/flat2/servarr.ffprobe/5.1.10.124/servarr.ffprobe.5.1.10.124.nupkg"
   },
   {
     "pname": "SharpZipLib",

@@ -6,38 +6,36 @@
   pnpmConfigHook,
   pnpm_11,
   nodejs,
+  nodejs-slim_latest,
   nix-update-script,
   makeBinaryWrapper,
 }:
 let
-  pnpm = pnpm_11;
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627.
+  pnpm = pnpm_11.override {
+    nodejs-slim = nodejs-slim_latest;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.3.6";
+  version = "3.3.7";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uiYhVVRiHyq+0S8czBY082vsqtCPqj29K9DjH0f+8u4=";
+    hash = "sha256-+jtnbSZFvRwl03iW6u6pZXMuql1LxIQZaPPaQUL+saQ=";
   };
-
-  patches = [ ./add-pkg-pr-new-integrities.patch ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
-      patches
       pname
       src
       version
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    prePnpmInstall = ''
-      pnpm config set --location project --json trustPolicyExclude '["volar-service-pug@0.0.71"]'
-    '';
-    hash = "sha256-6xu+z7rrI+YfmpcL5ycwjjeSAfDkkhSgeKBZO34p9Dw=";
+    hash = "sha256-OAPNM8Ngx9x3XcWIq6pw7LWadcGWhl29AjGjqoIEveo=";
   };
 
   nativeBuildInputs = [

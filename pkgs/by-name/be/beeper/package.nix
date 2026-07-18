@@ -1,5 +1,6 @@
 {
   lib,
+  runCommand,
   fetchurl,
   appimageTools,
   makeWrapper,
@@ -10,13 +11,21 @@
 }:
 let
   pname = "beeper";
-  version = "4.2.957";
+  version = "4.2.985";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-    hash = "sha256-wUGUwWopQ8ox2+UP5hXIIF2XVLQmZyhfb712S8JjTGk=";
+    hash = "sha256-oWJdpZL+Q8/jaI/WJfgXUisPASuvHkxU6rOeJkedHSM=";
   };
+  # Beeper 4.2.985+ ships AppImages without the type-2 magic bytes
+  # (ASCII "AI" + 0x02 at ELF offset 8) that appimageTools.extract requires.
+  linuxSrc = runCommand "Beeper-${version}-appimage" { inherit src; } ''
+    cp $src $out
+    chmod +w $out
+    printf 'AI\x02' | dd of=$out bs=1 seek=8 conv=notrunc status=none
+  '';
   appimageContents = appimageTools.extract {
-    inherit pname version src;
+    inherit pname version;
+    src = linuxSrc;
 
     postExtract = ''
       appRoot="$out/resources/app"
@@ -35,7 +44,6 @@ let
 
       # hide version status element on about page otherwise an error message is shown
       sed -i '$ a\.subview-prefs-about > div:nth-child(2) {display: none;}' $appRoot/build-browser/*.css
-
     '';
   };
 in
@@ -89,6 +97,7 @@ appimageTools.wrapAppImage {
     maintainers = with lib.maintainers; [
       jshcmpbll
       zh4ngx
+      aspauldingcode
     ];
     platforms = [ "x86_64-linux" ];
   };

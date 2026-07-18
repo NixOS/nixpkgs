@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "roam-research";

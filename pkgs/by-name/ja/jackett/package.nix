@@ -39,8 +39,6 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [ openssl ];
   # mono is not available on aarch64-darwin
-  #x86_64-darwin is failed with
-  #System.Net.Sockets.SocketException (13): Permission denied
   doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ mono ];
   testProjectFile = "src/Jackett.Test/Jackett.Test.csproj";

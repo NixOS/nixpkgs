@@ -114,7 +114,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://multiqc.info";
     changelog = "https://github.com/MultiQC/MultiQC/releases/tag/v${finalAttrs.version}/";
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.apraga ];
     mainProgram = "multiqc";
     platforms = lib.platforms.unix;

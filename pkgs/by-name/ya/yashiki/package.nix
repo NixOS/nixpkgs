@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yashiki";
-  version = "0.14.0";
+  version = "0.15.2";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "typester";
     repo = "yashiki";
     tag = "yashiki-v${finalAttrs.version}";
-    hash = "sha256-ePZ8ONdvj3gaQps+5Ua0OLeFdzNdJhoB9yw6pC7qoEQ=";
+    hash = "sha256-nsmUuhi0yy6x6POC4qLbMib4fxS3QRjlK6QgCiVEnyQ=";
   };
 
-  cargoHash = "sha256-JMrftBKyD188SZqEGI4fA/MrfEK8JLKSeEqrQxhSs3U=";
+  cargoHash = "sha256-3JxtsSipMbMxQO58ZLJbQVrOFFC7FoVguNpqdoL+ziQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -42,8 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     cp resources/icon/Assets.car "$app/Contents/Resources/Assets.car"
     substitute Info.plist.template "$app/Contents/Info.plist" \
-      --replace-fail VERSION_PLACEHOLDER "${finalAttrs.version}" \
-      --replace-fail "<string>yashiki-launcher</string>" "<string>yashiki</string>"
+      --replace-fail VERSION_PLACEHOLDER "${finalAttrs.version}"
 
     installShellCompletion --cmd yashiki --zsh completions/zsh/_yashiki
   '';
@@ -62,7 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/typester/yashiki/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = with lib.maintainers; [ anntnzrb ];
+    maintainers = with lib.maintainers; [
+      anntnzrb
+      Br1ght0ne
+    ];
     mainProgram = "yashiki";
     platforms = lib.platforms.darwin;
   };

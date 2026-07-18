@@ -15,7 +15,6 @@ echo "Latest infisical release: $VERSION"
 
 ARCHS=(
     "x86_64-linux:linux_amd64"
-    "x86_64-darwin:darwin_amd64"
     "aarch64-linux:linux_arm64"
     "aarch64-darwin:darwin_arm64"
 )

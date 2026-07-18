@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "ggmorse";
-  version = "0.1.0-unstable-2024-05-31";
+  version = "0-unstable-2024-05-31";
 
   src = fetchFromGitHub {
     owner = "ggerganov";

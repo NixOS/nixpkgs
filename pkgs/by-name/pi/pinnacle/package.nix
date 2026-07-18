@@ -53,6 +53,12 @@ let
     src = pinnacle-src;
     sourceRoot = "${src.name}/api/lua";
     knownRockspec = "${pinnacle-src}/api/lua/rockspecs/pinnacle-api-0.2.4-1.rockspec";
+
+    postConfigure = ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail '"compat53 ~> 0.14"' '"compat53 >= 0.14"'
+    '';
+
     propagatedBuildInputs = with lua54Packages; [
       cqueues
       http

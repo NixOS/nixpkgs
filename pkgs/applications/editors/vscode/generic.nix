@@ -429,7 +429,6 @@ stdenv.mkDerivation (
           # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
           ripgrepSystem =
             {
-              x86_64-darwin = "darwin-x64";
               aarch64-darwin = "darwin-arm64";
               armv7l-linux = "linux-arm";
               aarch64-linux = "linux-arm64";

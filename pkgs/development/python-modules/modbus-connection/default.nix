@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "3.4.1";
+  version = "3.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-jWS6quM+hZTMGNyxopC4RS3mUaYAqD/MOsmTU7sD+pg=";
+    hash = "sha256-Tys1o0hbAONGbb24mQcOz8mM8+numl5RO8zHZKmxLv4=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTests = [
+    # tries to git clone https://github.com/sunspec/models
+    "test_official_model_catalogue_generates_and_imports"
+  ];
 
   pythonImportsCheck = [
     "modbus_connection"

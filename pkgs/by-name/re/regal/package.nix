@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "regal";
-  version = "0.41.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "regal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mrNdzzwgLmP3PNnoVI4vC05rq9vGCnlWHquwXh1HDX0=";
+    hash = "sha256-52kYnkOEhNk491vaoCSgR47frmN/mFCKyHqWnIBcEE8=";
   };
 
-  vendorHash = "sha256-kp0EkieTIzC+nO9fFnUQMP4COCY9wxe4Nb2kSUgnInA=";
+  vendorHash = "sha256-Vl6u/dwtG8RBpSQUrS5rAQ0Hag2R5X6rVQe9PHb/4U8=";
 
   # Only build the main binary, exclude build/lsp/main.go
   subPackages = [ "." ];

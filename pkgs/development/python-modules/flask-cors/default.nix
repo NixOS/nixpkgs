@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     description = "Flask extension adding a decorator for CORS support";
     homepage = "https://github.com/corydolphin/flask-cors";
     changelog = "https://github.com/corydolphin/flask-cors/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
 })

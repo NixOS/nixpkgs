@@ -4,21 +4,21 @@
   fetchFromGitHub,
   buildGoModule,
   nodejs-slim_22,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
 }:
 
 let
-  pnpm = pnpm_9.override { nodejs-slim = nodejs-slim_22; };
-  version = "1.15.0";
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "remark42";
     tag = "v${version}";
-    hash = "sha256-yd/qTRSZj0nZpgK77xP+XHyHcVXlNpyMzdfj6EbVcXQ=";
+    hash = "sha256-VCFpN/8GRziD7sKVw7jK33llo0AGqygW4ghHZxrluJc=";
   };
 
   remark42-web = stdenv.mkDerivation (finalAttrs: {
@@ -41,20 +41,11 @@ let
         version
         src
         sourceRoot
-        postPatch
         ;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-wFrMoSeD87H1yfMD0jBcw60DKDeh4yjka5aWyHuQssA=";
+      hash = "sha256-PInNiI8hcXzQoYWtHUy6BTQKgII7rHzlbSGFc+ixz7k=";
     };
-
-    postPatch = ''
-      substituteInPlace "package.json" "apps/remark42/package.json" \
-        --replace-fail "pnpm@8.15.9" "pnpm@${pnpm.version}"
-
-      substituteInPlace "apps/remark42/package.json" \
-        --replace-fail '"pnpm": "8.*"' '"pnpm": "9.*"'
-    '';
 
     buildPhase = ''
       runHook preBuild

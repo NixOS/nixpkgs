@@ -28,13 +28,11 @@ let
   # exposed like this for update.sh
   x86_64-linux.hash = "sha256-1d6nYhj83LWzglkWoOtAj6lNPkik1qXY5lVpr1iG7No=";
   aarch64-linux.hash = "sha256-LQMNgj1Ml8gShlPS0qgD/a+Fw4SjvvHrw6XAcSLN7q4=";
-  x86_64-darwin.hash = "sha256-H6eJPJdj1rZt1pXRKBUVOJuIhmDHY5SexKkZ8ITARGQ=";
   aarch64-darwin.hash = "sha256-dMlgJgDuxZH1jnvLalmgDUMVCdWQ8AviGt86aeMbGVY=";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.hash;
     aarch64-linux = linuxSource "arm64" aarch64-linux.hash;
-    x86_64-darwin = darwinSource "x64" x86_64-darwin.hash;
     aarch64-darwin = darwinSource "arm64" aarch64-darwin.hash;
   };
 

@@ -8,7 +8,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
-  version = "5.3.1";
+  version = "6.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-smi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lZ9fd8tkwfmWHEAJ8+cwBja3U7vxAVWQWrgope9/VO4=";
+    hash = "sha256-039boJyMEVB3dsOLNzmG4LGnDwF/358snhgFcZklSQc=";
   };
 
   build-system = with python3Packages; [
@@ -53,6 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-smi";
     changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 })

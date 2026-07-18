@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      amiddelk
       luc65r
     ];
     platforms = lib.platforms.unix;

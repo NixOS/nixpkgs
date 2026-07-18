@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "coredis";
-  version = "6.6.1";
+  version = "6.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "coredis";
     tag = finalAttrs.version;
-    hash = "sha256-Jn6tqMpyk849/hwYM0DHuQnGbMltRpTXAVcN5Kt6lk4=";
+    hash = "sha256-1Ks8rfOaz7rZruzp1k3V7UHCtckzomvA76+QRS7RlZo=";
   };
 
   postPatch = ''

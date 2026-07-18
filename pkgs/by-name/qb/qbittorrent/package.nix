@@ -17,6 +17,7 @@
   wrapGAppsHook3,
   zlib,
   nixosTests,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TODO: Remove once #536365 reaches this branch
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -59,6 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
   ]
   ++ lib.optionals (!webuiSupport) [ "-DWEBUI=OFF" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   qtWrapperArgs = lib.optionals trackerSearch [ "--prefix PATH : ${lib.makeBinPath [ python3 ]}" ];
 

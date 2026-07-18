@@ -115,13 +115,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DLDzICjhvIErVm15CLoLnd8WwQl+lcalXhz2xmWposA=";
+    hash = "sha256-20MxwDCU9+SyZDx7PkLSfbW+mTGxGqITQRl7EgzkmkA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -137,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    binaryen
+    extism-js
     nodejs
     pkg-config
     pnpmConfigHook
@@ -174,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
-    pnpm --filter immich... build
+    pnpm --filter immich... --filter immich-web... --filter @immich/plugin-core... build
 
     runHook postBuild
   '';
@@ -196,9 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
       -o -name '*.target.mk' \
     \) -exec rm -r {} +
 
-    mkdir -p "$packageOut/build/plugins"
-    ln -s '${finalAttrs.plugin-core}' "$packageOut/build/plugins/immich-plugin-core"
-    ln -s '${finalAttrs.web}' "$packageOut/build/www"
+    mkdir -p "$packageOut/build/plugins/immich-plugin-core"
+    cp -r packages/plugin-core/{dist,manifest.json} "$packageOut/build/plugins/immich-plugin-core/"
+    cp -r web/build "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
@@ -221,65 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  plugin-core = stdenv.mkDerivation {
-    pname = "immich-plugin-core";
-    inherit (finalAttrs) version src pnpmDeps;
-
-    nativeBuildInputs = [
-      binaryen
-      extism-js
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter @immich/plugin-core... build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cd packages/plugin-core
-      mkdir $out
-      cp -r dist manifest.json $out
-
-      runHook postInstall
-    '';
-  };
-
-  web = stdenv.mkDerivation {
-    pname = "immich-web";
-    inherit (finalAttrs) version src pnpmDeps;
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter immich-web... build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cd web
-      cp -r build $out
-
-      runHook postInstall
-    '';
-  };
 
   passthru = {
     tests = {

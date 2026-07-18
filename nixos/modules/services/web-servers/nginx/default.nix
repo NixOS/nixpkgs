@@ -1617,8 +1617,7 @@ in
           MemoryDenyWriteExecute =
             !(
               (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
-              || cfg.lua.enable
-              || (cfg.package == pkgs.openresty)
+              || (lib.getName cfg.package == "openresty")
             );
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

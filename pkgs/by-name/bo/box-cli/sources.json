@@ -10,10 +10,6 @@
       "filename": "box-linux-arm64",
       "hash": "sha256-V2Sk6C1ZTRWlYQ2bVQTvK6PU8BkBPkmJMjUAo2Ul6+Q="
     },
-    "x86_64-darwin": {
-      "filename": "box-darwin-x64",
-      "hash": "sha256-QI+ecq0O4dkKqdIvkONcYdXsS+EQLFIU35ulKGNSCRE="
-    },
     "aarch64-darwin": {
       "filename": "box-darwin-arm64",
       "hash": "sha256-cyjMUGkWfNOggvtBfVqCijmcAj0P2SuFQORwg9EWbn0="

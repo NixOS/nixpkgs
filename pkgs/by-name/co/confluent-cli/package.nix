@@ -19,7 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
       system = selectSystem {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";
-        x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
     in
@@ -28,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = selectSystem {
         x86_64-linux = "sha256-52zPTIuJOS+MMG1+pA+f0HI7VvBHLsRnSq5zWorHsiQ=";
         aarch64-linux = "sha256-hdhMSZR593rcjch4EVdRshC72aTp1c3dTQBlLCDMsVg=";
-        x86_64-darwin = "sha256-ybzj3fv+7Wdix9ez7cARazhpkxMGi/EO8NbpneWGN4I=";
         aarch64-darwin = "sha256-YOVGl47XOvvHDtm2/VzzLOeFCA6sw8BuDHQWZgzNNtE=";
       };
     };

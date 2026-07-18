@@ -140,6 +140,7 @@ let
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
     '';
 
+    __darwinAllowLocalNetworking = true;
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
       cmocka

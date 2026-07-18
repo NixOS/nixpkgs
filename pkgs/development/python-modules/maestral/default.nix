@@ -41,6 +41,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-mYFiQL4FumJWP2y1u5tIo1CZL027J8/EIYqJQde7G/c=";
   };
 
+  postPatch = ''
+    # is_not_closed was removed from dropbox in https://github.com/dropbox/dropbox-sdk-python/pull/537
+    # Upstream has been archived so we cannot expect a fix - use this workaround to keep the package alive a bit longer
+    substituteInPlace src/maestral/errorhandling.py \
+      --replace-fail "elif session_lookup_error.is_not_closed():" "elif False:"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

@@ -11,7 +11,6 @@ sed -i "s/version = \".*\"/version = \"$latest\"/" "$dir/default.nix"
 for system_platform in \
   "x86_64-linux|manylinux1_x86_64" \
   "aarch64-linux|manylinux2014_aarch64" \
-  "x86_64-darwin|macosx_10_13_x86_64" \
   "aarch64-darwin|macosx_11_0_arm64"
 do
   system="${system_platform%%|*}"

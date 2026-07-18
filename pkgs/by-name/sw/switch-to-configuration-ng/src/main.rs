@@ -2376,7 +2376,7 @@ won't take effect until you reboot the system.
     match logind.list_users() {
         Err(err) => {
             eprintln!("Unable to list users with logind: {err}");
-            die();
+            exit_code = 4;
         }
         Ok(users) => {
             for (uid, name, user_dbus_path) in users {

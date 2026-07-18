@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cssbeautifier";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9hAsBYnIW+PBoBbO527jZh7kvV2ojUil+HCL+vZjriY=";
+    hash = "sha256-LC/RKTQlYQKd6GsXRO+iMcn6/iYCPbyYih3rDKD1yEU=";
   };
 
   nativeBuildInputs = [ setuptools ];

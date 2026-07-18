@@ -5,6 +5,7 @@
   nix-update-script,
   testers,
   ipatool,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,7 +19,13 @@ buildGoModule (finalAttrs: {
     hash = "sha256-ZGy7Oxpjb5ONe//ImAN3bQwl+G9udvaf9V7heLq625c=";
   };
 
-  vendorHash = "sha256-3H7ct0FIvOabXp8ShpRWltdMhyPRyuUAAxtLQTvgzF8=";
+  vendorHash = "sha256-PZDlJIIW+teFu6XuaTLB5eHHSeVJMUVAuq/StvyIVlc=";
+
+  # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
+  proxyVendor = true;
+
+  # Fixes "unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/" on macOS
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
     "-s"

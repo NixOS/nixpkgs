@@ -4,13 +4,12 @@
   gitUpdater,
   jinja2,
   lib,
-  peakrdl,
   setuptools,
   setuptools-scm,
   systemrdl-compiler,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peakrdl-regblock";
   version = "1.3.1";
 
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "PeakRDL-regblock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UyDM8+hnZP5G9JqprBjVaL1kr5NyJXITaBVCfNEs2Cs=";
   };
 
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   dependencies = [
     jinja2
-    peakrdl
     systemrdl-compiler
   ];
 
@@ -42,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

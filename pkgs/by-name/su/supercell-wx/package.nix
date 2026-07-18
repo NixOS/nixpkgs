@@ -126,10 +126,7 @@ buildStdenv.mkDerivation (finalAttrs: {
     boost
     bzip2
     geos
-    # FIXME: split outputs aren't working with find_package. Possibly related to nixpkgs/issues/144170 ?
-    (geographiclib.overrideAttrs {
-      outputs = [ "out" ];
-    })
+    geographiclib
     glew
     glm
     gtest

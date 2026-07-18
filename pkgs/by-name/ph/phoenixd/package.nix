@@ -20,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
         attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       suffix = selectSystem {
         aarch64-darwin = "macos-arm64";
-        x86_64-darwin = "macos-x64";
         x86_64-linux = "linux-x64";
         aarch64-linux = "linux-arm64";
       };
@@ -29,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ACINQ/phoenixd/releases/download/v${finalAttrs.version}/phoenixd-${finalAttrs.version}-${suffix}.zip";
       hash = selectSystem {
         aarch64-darwin = "sha256-eVrwJGjXZNl9e2QGtVVEHjptCMPQgGaxljDEqr7LE7s=";
-        x86_64-darwin = "sha256-vHu+9GwN0jWvjH/bKceZHDPRidVLFLzzMen2Zc+L1ck=";
         x86_64-linux = "sha256-n/yvAisqpnbHs3XV0sHq0sUpq0+mqXmG+3LXRNmrLpI=";
         aarch64-linux = "sha256-mfhLpPXFvkO0mz4okdOXALIk8MR2CQQ8mZ6aI+QgNZs=";
       };
@@ -63,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
   };
 })

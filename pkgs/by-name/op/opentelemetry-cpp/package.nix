@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jfroche
       panicgh

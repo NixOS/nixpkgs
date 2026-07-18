@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "contexttimer";
-  version = "unstable-2024-09-05";
+  version = "0.3.3-unstable-2024-09-05";
   pyproject = true;
 
   src = fetchFromGitHub {

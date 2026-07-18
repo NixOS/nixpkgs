@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lumen";
-  version = "2.30.0";
+  version = "2.31.0";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jnsahaj";
     repo = "lumen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EoxMYlWHmuprjjhvj3GyCxGDIcT/d+JMda9j75pqs+k=";
+    hash = "sha256-RoOCBwmBIOu17h0cB/t69lw1NWGl6chwAEgK4QixsPs=";
   };
 
-  cargoHash = "sha256-qTFRfy+Wutee5SbaMaqcYjXgr6xZKYYBIuyVA7jAGiY=";
+  cargoHash = "sha256-RKSFbsqeR+m/VLs1qu6Ln4bZ9prYj5vUoemuLpSe5+M=";
 
   strictDeps = true;
 

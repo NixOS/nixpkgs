@@ -1512,6 +1512,7 @@ in
   rtkit = runTest ./rtkit.nix;
   rtorrent = runTest ./rtorrent.nix;
   rush = runTest ./rush.nix;
+  rustfs = runTest ./rustfs.nix;
   rustical = runTest ./web-apps/rustical.nix;
   rustls-libssl = runTest ./rustls-libssl.nix;
   rxe = runTest ./rxe.nix;
@@ -1539,7 +1540,7 @@ in
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = runTest ./sfxr-qt.nix;
   sgt-puzzles = runTest ./sgt-puzzles.nix;
-  shadow = runTest ./shadow.nix;
+  shadow = import ./shadow { inherit runTest; };
   shadowsocks = handleTest ./shadowsocks { };
   shadps4 = runTest ./shadps4.nix;
   sharkey = runTest ./web-apps/sharkey.nix;
@@ -1684,6 +1685,7 @@ in
   systemd-journal = runTest ./systemd-journal.nix;
   systemd-journal-gateway = runTest ./systemd-journal-gateway.nix;
   systemd-journal-upload = runTest ./systemd-journal-upload.nix;
+  systemd-localed = runTest ./systemd-localed.nix;
   systemd-lock-handler = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./systemd-lock-handler.nix;
   systemd-machinectl = runTest ./systemd-machinectl.nix;
   systemd-misc = runTest ./systemd-misc.nix;
@@ -1842,6 +1844,7 @@ in
   };
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
+  vnstat = runTest ./vnstat.nix;
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
   vscodium = import ./vscodium.nix { inherit runTest; };
   vsftpd = runTest ./vsftpd.nix;

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.22";
+  version = "2.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy";
     tag = "v${version}";
-    hash = "sha256-4kfuNi+5fO/WH6P+2UUWKOGYSOjAI3S9yOyCArccz+8=";
+    hash = "sha256-k6EZJI+7a7qRAKIJkddGTaR3CE9VIbF4J/WXzE9C+7o=";
   };
 
   nativeBuildInputs = [ flit-core ];

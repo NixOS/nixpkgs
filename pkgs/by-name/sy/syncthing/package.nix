@@ -119,6 +119,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       joko
+      noahbiewesch
       peterhoeg
       zainkergaye
     ];

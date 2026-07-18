@@ -73,7 +73,13 @@ let
   # -large versions in case of clashes
   largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
   otherDicts = lib.filter (
-    d: !(lib.hasAttr "dictFileName" d && lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts))
+    d:
+    !(
+      lib.hasInfix "ru-ru-libreoffice" d.name # conflits with ru-ru-mozilla
+      || (
+        lib.hasAttr "dictFileName" d && lib.elem d.dictFileName (lib.map (d: d.dictFileName) largeDicts)
+      )
+    )
   ) hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
 
