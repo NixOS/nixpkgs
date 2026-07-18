@@ -16,15 +16,17 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grip";
   version = "4.6.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "grip";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CHL2dy0H/i0pLo653F7aUHFvZHTeZA6jC/rwn1KrEW4=";
   };
 
@@ -59,6 +61,8 @@ buildPythonPackage rec {
     py.test -xm "not assumption"
   '';
 
+  pythonImportsCheck = [ "grip" ];
+
   meta = {
     description = "Preview GitHub Markdown files like Readme locally before committing them";
     mainProgram = "grip";
@@ -66,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})
