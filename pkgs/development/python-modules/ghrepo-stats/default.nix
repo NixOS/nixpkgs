@@ -5,12 +5,13 @@
   fetchFromGitHub,
   matplotlib,
   pygithub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
   version = "0.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
@@ -33,6 +34,8 @@ buildPythonPackage rec {
 
   # Module has no tests
   doCheck = false;
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "ghrepo_stats" ];
 
