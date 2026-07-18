@@ -42,9 +42,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jank-lang";
     repo = "jank";
-    rev = "86cd33b8edb7504209719f43391a185b84211a0c";
-    hash = "sha256-+AN13Njo7SRynfYuskkS5QSvnRCsjq/DWl3XG4fXit0=";
+    #rev = "86cd33b8edb7504209719f43391a185b84211a0c";
+    rev = "7d185b25dacce7950bf7194830aad90c5b1bb6aa";
+    #hash = lib.fakeHash;
+    hash = "sha256-og8BVjFAQwlS2M9js6+5lk6VMZXLuySH+eC5pLvmA8I=";
     fetchSubmodules = true;
+
   };
 
   nativeBuildInputs = [
@@ -69,7 +72,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs ./compiler+runtime/bin/ar-merge
   '';
-
+  # new pkgs must fortify to satisfy nixpkgs tests
   hardeningDisable = [ "fortify" ];
 
   cmakeBuildDir = "compiler+runtime/build";
