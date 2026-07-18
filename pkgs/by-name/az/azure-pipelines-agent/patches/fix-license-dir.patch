@@ -1,0 +1,13 @@
+diff --git a/src/Agent.Listener/Configuration/ConfigurationManager.cs b/src/Agent.Listener/Configuration/ConfigurationManager.cs
+index 45dcf280..04a2bdd7 100644
+--- a/src/Agent.Listener/Configuration/ConfigurationManager.cs
++++ b/src/Agent.Listener/Configuration/ConfigurationManager.cs
+@@ -113,7 +113,7 @@ namespace Microsoft.VisualStudio.Services.Agent.Listener.Configuration
+                     WriteSection(StringUtil.Loc("EulasSectionHeader"));
+ 
+                     // Verify the EULA exists on disk in the expected location.
+-                    string eulaFile = Path.Combine(HostContext.GetDirectory(WellKnownDirectory.Root), "license.html");
++                    string eulaFile = Path.Combine(HostContext.GetDirectory(WellKnownDirectory.Bin), "license.html");
+                     ArgUtil.File(eulaFile, nameof(eulaFile));
+ 
+                     // Write elaborate verbiage about the TEE EULA.

@@ -1,0 +1,13 @@
+diff --git a/src/Microsoft.VisualStudio.Services.Agent/Logging.cs b/src/Microsoft.VisualStudio.Services.Agent/Logging.cs
+index 12d78ef8..dd9a07f8 100644
+--- a/src/Microsoft.VisualStudio.Services.Agent/Logging.cs
++++ b/src/Microsoft.VisualStudio.Services.Agent/Logging.cs
+@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudio.Services.Agent
+             base.Initialize(hostContext);
+             _totalLines = 0;
+             _pageId = Guid.NewGuid().ToString();
+-            _pagesFolder = Path.Combine(hostContext.GetDiagDirectory(), PagingFolder);
++            _pagesFolder = Path.Combine(hostContext.GetDirectory(WellKnownDirectory.Diag), PagingFolder);
+             _jobServerQueue = HostContext.GetService<IJobServerQueue>();
+             Directory.CreateDirectory(_pagesFolder);
+         }
