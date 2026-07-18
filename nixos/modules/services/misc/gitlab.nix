@@ -511,7 +511,7 @@ in
             ActionMailer::Base.delivery_method = :sendmail
             ActionMailer::Base.sendmail_settings = {
               location: "/run/wrappers/bin/sendmail",
-              arguments: "-i -t"
+              arguments: ['-i', '-t']
             }
           end
         '';
