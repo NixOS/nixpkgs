@@ -127,7 +127,15 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "--sysconfdir=/etc"
       # Audio method falls back from left to right.
-      "--with-default-audio-method=\"libao,pulse,pipewire,alsa,oss\""
+      ''--with-default-audio-method="${
+        lib.concatStringsSep "," (
+          lib.optional withLibao "libao"
+          ++ lib.optional withPulse "pulse"
+          ++ lib.optional withAlsa "alsa"
+          ++ lib.optional withPipewire "pipewire"
+          ++ lib.optional withOss "oss"
+        )
+      }"''
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
       "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
       (withFeature withPulse "pulse")
