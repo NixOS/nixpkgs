@@ -109,5 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "river";
     platforms = lib.platforms.linux;
+    badPlatforms = [
+      # Runs out of memory (using > 100GiB) while building
+      "aarch64-linux"
+    ];
   };
 })
