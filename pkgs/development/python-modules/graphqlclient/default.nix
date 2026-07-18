@@ -6,14 +6,17 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphqlclient";
   version = "0.2.4";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b6r3ng78qsn7c9zksx4rgdkmp5296d40kbmjn8q614cz0ymyc5k";
+    pname = "graphqlclient";
+    inherit (finalAttrs) version;
+    hash = "sha256-szBfPfiMBIORlXVNQJpJotw628uk6/kTO1ZjdJ4d2Sw=";
   };
 
   build-system = [ setuptools ];
@@ -31,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lde ];
   };
-}
+})
