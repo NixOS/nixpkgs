@@ -3,12 +3,6 @@
   for the meaning of each argument.
 */
 
-let
-
-  homeDir = builtins.getEnv "HOME";
-
-in
-
 {
   # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
   # If neither is passed, assume we are building packages on the current
@@ -19,14 +13,15 @@ in
 
   # These are needed only because nix's `--arg` command-line logic doesn't work
   # with unnamed parameters allowed by ...
-  system ? localSystem.system,
-  crossSystem ? localSystem,
+  system ? null,
+  crossSystem ? null,
 
   # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
   config ?
     let
       configFile = builtins.getEnv "NIXPKGS_CONFIG";
+      homeDir = builtins.getEnv "HOME";
       configFile2 = homeDir + "/.config/nixpkgs/config.nix";
       configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
     in
@@ -49,8 +44,7 @@ in
 
 # If `localSystem` was explicitly passed, legacy `system` should
 # not be passed, and vice-versa.
-assert args ? localSystem -> !(args ? system);
-assert args ? system -> !(args ? localSystem);
+assert !(args ? localSystem && args ? system);
 
 import ./. (
   removeAttrs args [ "system" ]
