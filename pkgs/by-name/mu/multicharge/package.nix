@@ -71,10 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build config/install-mod.py
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";

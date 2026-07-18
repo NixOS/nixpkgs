@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -91,6 +92,31 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-sD/ZAOvMWK2+AGw6wgziDsheH+hwUwhd7i2f65cjFKg=";
   };
+
+  patches = [
+    # Fix build against Poppler >= 26.06 (not yet backported to the 3.12.x branch upstream)
+    # https://github.com/OSGeo/gdal/issues/14714
+    (fetchpatch {
+      name = "0001- poppler-add-compatibility-with-future-26.06.patch";
+      url = "https://github.com/OSGeo/gdal/commit/cbad3ef7824dcad235e95581127dbc4df696d6d3.patch";
+      hash = "sha256-tJsUcBorYDF0eNzKMHDc+qUvovlIQ7WrRsePbmKmIT8=";
+    })
+    (fetchpatch {
+      name = "0002-poppler-add-compatibility-with-future-26.06-continuation.patch";
+      url = "https://github.com/OSGeo/gdal/commit/b3f839f2515b023e4a7cf099b7ce1626ccb24eac.patch";
+      hash = "sha256-XtYUjulIiOknIE5e7AcRCThPvmSLP0QRbONUBF+KTxE=";
+    })
+    (fetchpatch {
+      name = "0003-pdf-fix-build-against-latest-poppler.patch";
+      url = "https://github.com/OSGeo/gdal/commit/581a86960d68e426b50384ed6e45ecb935f0f2a1.patch";
+      hash = "sha256-VsOq+lQ6QhXKHFOeqdGFXRmtFR90FOJyTdYK5NFgB5U=";
+    })
+    (fetchpatch {
+      name = "0004-pdf-fix-build-against-poppler-26.05.99dev.patch";
+      url = "https://github.com/OSGeo/gdal/commit/7b8b8de28bbd200b0fd3b09147fdc68b5bf5ce20.patch";
+      hash = "sha256-BxWMpiUwM3h7Vo9vxJ4H4A8aQfE3jcSRfRYwaLw/60w=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison

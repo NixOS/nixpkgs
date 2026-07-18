@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jq";
-  version = "1.8.1";
+  version = "1.8.2";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${finalAttrs.version}/jq-${finalAttrs.version}.tar.gz";
-    hash = "sha256-K+ZOcSnOyxHVkGKQ66EK9pT7nj5/n8IIoxHcM8qDfrA=";
+    hash = "sha256-cbjW6PX+gfbG0NEQ44kiUfbOdu0JWr0xXibm4Rk6868=";
   };
 
   outputs = [
@@ -30,15 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  patches = [
-    ./musl.patch
-    ./CVE-2026-32316.patch
-    ./CVE-2026-33947.patch
-    ./CVE-2026-33948.patch
-    ./CVE-2026-39979.patch
-    ./CVE-2026-40164.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.is32bit [
+  patches = lib.optionals stdenv.hostPlatform.is32bit [
     # needed because epoch conversion test here is right at the end of 32 bit integer space
     # See also: https://github.com/jqlang/jq/blob/859a8073ee8a21f2133154eea7c2bd5e0d60837f/tests/optional.test#L15-L18
     # "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64" would be preferrable, but breaks with dynamic linking,

@@ -13,6 +13,7 @@ aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md
+check-phase-thread-limit-hook.section.md
 cmake.section.md
 desktop-file-utils.section.md
 gdk-pixbuf.section.md
