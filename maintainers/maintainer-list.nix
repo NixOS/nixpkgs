@@ -14402,6 +14402,12 @@
     github = "keller00";
     githubId = 8452750;
   };
+  kenis1108 = {
+    email = "1836362346@qq.com";
+    github = "kenis1108";
+    githubId = 45393183;
+    name = "kenis";
+  };
   kenran = {
     email = "johannes.maier@mailbox.org";
     github = "kenranunderscore";
@@ -29731,12 +29737,6 @@
     github = "vlinkz";
     githubId = 20145996;
     name = "Victor Fuentes";
-  };
-  vlstill = {
-    email = "xstill@fi.muni.cz";
-    github = "vlstill";
-    githubId = 4070422;
-    name = "Vladimír Štill";
   };
   vmandela = {
     email = "venkat.mandela@gmail.com";

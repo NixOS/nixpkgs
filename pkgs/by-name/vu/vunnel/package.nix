@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
-  version = "0.62.1";
+  version = "0.63.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Np80Yj8zazMBgeHu27N97K543GmKw8gf9Muixu4WBVQ=";
+    hash = "sha256-FU8N4LTdfxpcC47OphM0GqTobYFKyl2AJS9Jv24fT/E=";
     leaveDotGit = true;
   };
 
