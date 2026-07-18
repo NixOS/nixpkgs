@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  # Use LLVM 22 since it's the first LLVM version has all of jank's required changes upstreamed. Few performance regressions expected to be fixed in LLVM 23
+  # Use LLVM 22 since it's the first LLVM version that has all of jank's required changes upstreamed. Few performance regressions expected to be fixed in LLVM 23
   llvmPackages_22,
   cmake,
   ninja,
@@ -85,7 +85,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_LIBDWARF=${libdwarf-lite-src}"
     "-DFETCHCONTENT_SOURCE_DIR_ZSTD=${zstd-src}"
     (lib.cmakeBool "jank_unity_build" true)
-    (lib.cmakeBool "jank_test" finalAttrs.doCheck) 
+    (lib.cmakeBool "jank_test" finalAttrs.doCheck)
   ];
 
   # This runs as a bash script just before CMake configures the project
