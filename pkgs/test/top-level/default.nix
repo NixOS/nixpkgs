@@ -77,9 +77,11 @@ lib.recurseIntoAttrs {
           system = "aarch64-linux";
         };
       };
-      appended = cross.appendOverlays [ ];
+      empty = cross.appendOverlays [ ];
+      appended = cross.appendOverlays [ (_: _: { }) ];
     in
     assert cross.makeWrapper ? __spliced;
+    assert empty.makeWrapper ? __spliced;
     assert appended.makeWrapper ? __spliced;
     pkgs.emptyFile;
 

@@ -81,7 +81,7 @@ in
   # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays,
-}@args:
+}:
 
 let
   stdenvAdapters =
@@ -269,7 +269,7 @@ let
       if extraOverlays == [ ] then
         self.__splicedPackages
       else
-        nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+        nixpkgsFun { overlays = overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
