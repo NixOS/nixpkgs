@@ -112,12 +112,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "324";
+  version = "325";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-+OsGilo9bgNWbg/Jl6/CGAdLXlA8fzfh4HrIN1VMxOE=";
+    hash = "sha256-z8mdVWYo/UHfNIQy/XSDYSMAytIwXk/R3FRm4IsikIc=";
   };
 
   outputs = [
@@ -146,7 +146,7 @@ python.pkgs.buildPythonApplication rec {
   build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
-  # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
+  # To help figuring out what's missing from the list, run: ./pkgs/by-name/di/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
   # Android-specific tools:
