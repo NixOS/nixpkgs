@@ -14402,6 +14402,12 @@
     github = "keller00";
     githubId = 8452750;
   };
+  kenis1108 = {
+    email = "1836362346@qq.com";
+    github = "kenis1108";
+    githubId = 45393183;
+    name = "kenis";
+  };
   kenran = {
     email = "johannes.maier@mailbox.org";
     github = "kenranunderscore";
