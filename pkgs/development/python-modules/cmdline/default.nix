@@ -6,14 +6,16 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmdline";
   version = "0.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "7cf6af53549892b2218c2f56a199dff54a733be5c5515c0fd626812070b0a86a";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-fPavU1SYkrIhjC9WoZnf9UpzO+XFUVwP1iaBIHCwqGo=";
   };
 
   build-system = [ setuptools ];
@@ -22,9 +24,11 @@ buildPythonPackage rec {
   doCheck = false;
   dependencies = [ pyyaml ];
 
+  pythonImportsCheck = [ "cmdline" ];
+
   meta = {
     description = "Utilities for consistent command line tools";
     homepage = "https://github.com/rca/cmdline";
     license = lib.licenses.asl20;
   };
-}
+})
