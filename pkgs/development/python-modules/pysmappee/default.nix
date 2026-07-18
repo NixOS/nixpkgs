@@ -8,12 +8,13 @@
   requests,
   requests-oauthlib,
   schedule,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pysmappee";
   version = "0.2.29";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smappee";
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-Ffi55FZsZUKDcS4qV46NpRK3VP6axzrL2BO+hYW7J9E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cachetools
     paho-mqtt
     pytz
