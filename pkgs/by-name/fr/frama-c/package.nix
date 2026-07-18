@@ -129,11 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      amiddelk
       luc65r
     ];
     platforms = lib.platforms.unix;
     mainProgram = "frama-c";
-    broken = !lib.versionAtLeast ocamlPackages.ocaml.version "4.14";
+    broken =
+      !lib.versionAtLeast ocamlPackages.ocaml.version "4.14"
+      || lib.versionAtLeast ocamlPackages.ocaml.version "5.5";
   };
 })

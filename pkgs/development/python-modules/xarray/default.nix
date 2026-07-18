@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -50,6 +51,22 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-BsgL+Xo9fTMLLdz5AfScnKGuBa76cE85LuUzB4ZNLiY=";
   };
+
+  patches = [
+    # Performance fix
+    (fetchpatch {
+      url = "https://github.com/pydata/xarray/commit/b8bfeca3275045ca82adc3401c38444b1ed12c4a.patch";
+      hash = "sha256-KzN45MqOBPMNEmoG+rb3iwrk/7XFLlTNktQf5uYBWNo=";
+    })
+    # Fix tests with numpy >= 2.5.0
+    (fetchpatch {
+      url = "https://github.com/pydata/xarray/commit/c3a398e856f7fcff1c18bc72bfd1ab9c64d5a2e7.patch";
+      excludes = [
+        "doc/whats-new.rst"
+      ];
+      hash = "sha256-TakZ9RrJHeRksT3oBe7AKyfrjZeZ4oSmbE8axh7EmGg=";
+    })
+  ];
 
   postPatch = ''
     # don't depend on pytest-mypy-plugins

@@ -11,6 +11,8 @@
   libxcb,
   libxml2,
   python3,
+  setxkbmap,
+  xkbcomp,
   libx11,
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
@@ -24,19 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-wUsxsM0xXTg7nbvFMXrrnHherOepj0YI77eferjRgJA=";
+    hash = "sha256-JdS4+HPHDUUOUq5TUX2F5DicHif8wD3cPvMocWhD4S4=";
   };
-
-  patches = [
-    # Disable one Xvfb test as it fails for permission checks.
-    ./disable-x11com.patch
-  ];
 
   outputs = [
     "out"
@@ -64,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ];
-  nativeCheckInputs = [ python3 ];
+  nativeCheckInputs = [
+    python3
+    setxkbmap
+    xkbcomp
+  ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"

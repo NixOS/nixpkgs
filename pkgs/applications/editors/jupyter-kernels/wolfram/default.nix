@@ -7,7 +7,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel wolfram-for-jupyter-kernel.definition'
 
 # Jupyter notebook:
-# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.wolfram = wolfram-for-jupyter-kernel.definition; }'
+# nix shell --impure --expr 'with import <nixpkgs> {}; [ (jupyter.override { definitions.wolfram = wolfram-for-jupyter-kernel.definition; }) ]' -c jupyter-notebook
 
 let
   kernel = callPackage ./kernel.nix { };

@@ -7,33 +7,42 @@
   pkg-config,
   libusb1,
   iproute2,
-  net-tools,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "go-ios";
-  version = "1.0.207";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2GjUrt1F8MrPOITCsuWHHsi/85pfzbLeY+WbPfLYDY4=";
+    sha256 = "sha256-5fMsHSwJUH/JBaZXyB11rHCNOqzHF3MYI9gg29hj0O4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-/aVaTC9lfoXQvhDVQm31HmXBnDYYOv6RH69Nm3I/K7s=";
+  vendorHash = "sha256-Bl9nlRnclqVgFF6mS6DX6oS+1c26DoISqDBY2rMS2yw=";
 
   excludedPackages = [
     "restapi"
+    "test/e2e"
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  ldflags = [
+    "-X main.version=${finalAttrs.version}"
+  ];
+
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'const version = ' 'var version = '
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace ncm/linux_commands.go \
       --replace-fail "ip " "${lib.getExe' iproute2 "ip"} "
-
-    substituteInPlace ios/tunnel/tunnel.go \
-      --replace-fail "ifconfig" "${lib.getExe' net-tools "ifconfig"}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ios/tunnel/tunnel_darwin.go \
+      --replace-fail "ifconfig" "/sbin/ifconfig"
   '';
 
   nativeBuildInputs = [

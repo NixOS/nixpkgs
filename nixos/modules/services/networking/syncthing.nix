@@ -25,10 +25,10 @@ let
     if
       isUnixGui
     # if cfg.guiAddress is a unix socket, tell curl explicitly about it
-    # note that the dot in front of `${path}` is the hostname, which is
+    # note that the syncthing.local in front of `${path}` is the hostname, which is
     # required.
     then
-      "--unix-socket ${lib.strings.removePrefix "unix://" cfg.guiAddress} http://.${path}"
+      "--unix-socket ${lib.strings.removePrefix "unix://" cfg.guiAddress} http://syncthing.local${path}"
     # no adjustments are needed if cfg.guiAddress is a network address
     else
       "${cfg.guiAddress}${path}";

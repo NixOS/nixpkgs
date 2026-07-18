@@ -75,6 +75,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Bandcamp autotagger source for beets (http://beets.io)";
     homepage = "https://github.com/snejus/beetcamp";
+    changelog = "https://github.com/snejus/beetcamp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = [
       lib.maintainers._9999years

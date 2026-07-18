@@ -3,11 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   cython,
-  setuptools,
+  setuptools_80,
 
   # native dependencies
   libuv,
@@ -39,7 +38,7 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    setuptools
+    setuptools_80
   ];
 
   env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;

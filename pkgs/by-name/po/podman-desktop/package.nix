@@ -17,6 +17,7 @@
   gnugrep,
   podman,
   krunkit,
+  extraPackages ? [ ],
 }:
 
 let
@@ -122,7 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       prefixPackages = lib.makeBinPath (
-        [ podman ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        [ podman ]
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        ++ extraPackages
       );
       commonWrapperArgs = "--prefix PATH : ${prefixPackages}";
     in
@@ -138,8 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
           ${commonWrapperArgs}
       ''
-      # Enforce X11 to avoid the Wayland dashboard issue.
-      # Revisit this once issue https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         mkdir -p "$out/share/lib/podman-desktop"
         cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
@@ -155,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
           --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --set XDG_SESSION_TYPE 'x11' \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           ${commonWrapperArgs} \
           --inherit-argv0
       ''

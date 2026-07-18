@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace tests/unit_tests.py \
         --replace-fail \
           'assert os.system("courlan --help") == 0' \
-          'assert os.system("${courlanBinPath} --help") == 0' \
+          'assert subprocess.run(["${courlanBinPath}", "--help"]).returncode == 0' \
         --replace-fail \
           'courlan_bin = "courlan"' \
           'courlan_bin = "${courlanBinPath}"'

@@ -32,10 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://sourceforge.net/projects/buddy/";
     description = "Binary decision diagram package";
-    license = {
-      url = "https://sourceforge.net/p/buddy/gitcode/ci/master/tree/README";
-      fullName = "Buddy License";
-    };
+    license = lib.licenses.buddy;
 
     platforms = lib.platforms.unix; # Once had cygwin problems
   };

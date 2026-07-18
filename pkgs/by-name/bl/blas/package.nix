@@ -3,6 +3,7 @@
   stdenv,
   lapack-reference,
   openblas,
+  openmpCheckPhaseHook,
   isILP64 ? false,
   blasProvider ? openblas,
 }:
@@ -184,6 +185,10 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "dev"
+  ];
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
   ];
 
   meta = (blasProvider'.meta or { }) // {

@@ -27,10 +27,6 @@ let
       url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-linux-arm64.AppImage";
       hash = "sha256-Pw6RPa6T9jN7XAfOqj6lDFzTqhwOT1DgK35cANyBAOE=";
     };
-    x86_64-darwin = {
-      url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-macos-amd64.dmg";
-      hash = "sha256-6qn/3Zly7nvj9XxihUdmkguLWw0a7Y321Xv7EnJzjkc=";
-    };
     aarch64-darwin = {
       url = "https://github.com/freelensapp/freelens/releases/download/v${version}/Freelens-${version}-macos-arm64.dmg";
       hash = "sha256-ARIvUMkkdUK5O6xdplXJ/JkPdezO/16HvO2P21W6y8I=";

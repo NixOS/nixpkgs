@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "toolz"
+    "pandas"
   ];
 
   dependencies = [

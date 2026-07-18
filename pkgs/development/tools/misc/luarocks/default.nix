@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     if test -n "$lua_inc"; then
         appendToVar configureFlags "--with-lua-include=$lua_inc"
     fi
+    lua_lib="${lua}/lib"
+    if test -d "$lua_lib"; then
+        appendToVar configureFlags "--with-lua-lib=$lua_lib"
+    fi
   '';
 
   nativeBuildInputs = [

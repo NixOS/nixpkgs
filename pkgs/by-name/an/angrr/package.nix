@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Auto Nix GC Root Retention";
     homepage = "https://github.com/linyinfeng/angrr";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yinfeng ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "angrr";

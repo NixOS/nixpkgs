@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Backports of various template string utilities";
     homepage = "https://github.com/ilotoki0804/tstr";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

@@ -277,6 +277,13 @@ in
       "services"
       "marathon"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "matrix-appservice-discord"
+      ]
+      "The matrix-appservice-discord package has been removed as it is no longer actively maintained upstream. Use `services.mautrix-discord` instead."
+    )
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ]
       "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver"
@@ -504,7 +511,7 @@ in
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "pam" "enableEcryptfs" ] ''
-      security.pam.enableFscrypt was removed since it was unmaintained in nixpkgs.
+      security.pam.enableEcryptfs was removed since it was unmaintained in nixpkgs.
     '')
     (mkRemovedOptionModule [ "security" "rngd" ] ''
       rngd is not necessary for any device that the kernel recognises

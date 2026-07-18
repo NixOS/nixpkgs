@@ -20,6 +20,7 @@
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
   cmocka,
+  fetchpatch,
 }:
 let
   glibc' =
@@ -139,7 +140,58 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     shellPath = "/bin/nologin";
-    # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
     tests = { inherit (nixosTests) shadow; };
+    # Package the upstream system test framework for use in nixosTests
+    testFramework = stdenv.mkDerivation {
+      name = "shadow-test-framework";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/tests/system";
+      installPhase = ''
+        cp -r . $out/
+      '';
+      dontBuild = true;
+      patches = [
+        # tests: update useradd tests to expect ID 1001
+        (fetchpatch {
+          name = "update-useradd-tests.patch";
+          url = "https://github.com/shadow-maint/shadow/commit/59fbe8415dab17f1e702fbdee96956886c86c737.patch";
+          hash = "sha256-U0+NSCd4AfTuHMddTx9+wNtpdJt9t8+D5ApW0OCNgsY=";
+          stripLen = 2;
+        })
+        # tests: update usermod tests to expect ID 1001
+        (fetchpatch {
+          name = "update-usermod-tests.patch";
+          url = "https://github.com/shadow-maint/shadow/commit/91c2ad44ababca2e32cdb71152b0f7f2a7c546be.patch";
+          hash = "sha256-v1EEvMfUYoE/ZnBM0k/+kUBK3W1dXr588OQzvFmnXLI=";
+          stripLen = 2;
+        })
+        # tests: update groupadd tests to expect GID 1001
+        (fetchpatch {
+          name = "update-groupadd-tests.patch";
+          url = "https://github.com/shadow-maint/shadow/commit/60568eaec13d1e417f56f0e59ac9573c0e3b9a83.patch";
+          hash = "sha256-tLmGeW4Y7UcZqMhW3IXgygKPhCmbZkkW5XTJ7CFz9vg=";
+          stripLen = 2;
+        })
+        # tests: update newgrp tests to expect GID 1002
+        (fetchpatch {
+          name = "update-newgrp-tests.patch";
+          url = "https://github.com/shadow-maint/shadow/commit/49ff9bf33a7b6af57cb26688c3139f014302c9d9.patch";
+          hash = "sha256-1760t4Ezd5Ke4PFZ70Njb+k+1kp17aT/7uqu1PswVss=";
+          stripLen = 2;
+        })
+      ];
+      postPatch = ''
+        # Replace the gshadow existence check in the test framework with a more NixOS-friendly one, since NixOS does not have /etc/gshadow as a regular file
+        substituteInPlace framework/hosts/shadow.py \
+          --replace-fail 'getent gshadow > /dev/null 2>&1' 'test -f /etc/gshadow'
+
+        # Remove the backup entry for gshadow, since it's not being used in the tests running on NixOS
+        sed -i '/{"origin": "\/etc\/gshadow", "backup": "gshadow"}/d' framework/hosts/shadow.py
+
+        # Replace the Debian-specific check in the useradd test with a NixOS-specific one
+        substituteInPlace tests/test_useradd.py \
+          --replace-fail 'if "Debian" in shadow.host.distro_name:' 'if "NixOS" in shadow.host.distro_name:'
+      '';
+    };
   };
 })

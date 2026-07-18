@@ -43,6 +43,10 @@ python3Packages.buildPythonPackage rec {
     python-pskc
   ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   postInstall = ''
     installManPage man/ykman.1
   ''

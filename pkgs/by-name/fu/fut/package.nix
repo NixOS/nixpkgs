@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fut";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "fusionlanguage";
     repo = "fut";
     tag = "fut-${finalAttrs.version}";
-    hash = "sha256-mFNyMo6pQ3LshYy8JDGFalNEgK1A9cxLp/wAnlO1I6k=";
+    hash = "sha256-7TNnxt3r/6pOvzGwWA2IHkEO8PIX2eS1WQPOIHfKhB4=";
   };
 
   buildPhase = ''

@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.sleepfiles.com/OSCAR/";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
-    mainProgram = "OSCAR";
+    mainProgram = "OSCAR20";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       roconnor

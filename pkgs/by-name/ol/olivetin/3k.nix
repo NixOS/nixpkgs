@@ -16,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "olivetin";
-  version = "3000.15.0";
+  version = "3000.17.0";
 
   src = fetchFromGitHub {
     owner = "OliveTin";
     repo = "OliveTin";
     tag = finalAttrs.version;
-    hash = "sha256-AztJqhSJV9hIsnhaYZoIMC8ZE17pUT37nRUdCZ6ZiCA=";
+    hash = "sha256-oLBXDd1grSFEbCvB4bK2XeVOZONSYro/6rvMJkG8eU0=";
   };
 
   modRoot = "service";
@@ -75,7 +75,7 @@ buildGoModule (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-v7aSikl1VSFZdNKnIucs7RdqFWoaVNIH9u27YG9Ei90=";
+    outputHash = "sha256-X602MebKdmdxZ9OEtQ150u+/Z1O9FEvcxRtOhMorqyw=";
   };
 
   webui = buildNpmPackage {

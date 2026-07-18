@@ -88,6 +88,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
+    # https://github.com/PyFilesystem/pyfilesystem2/issues/577
+    broken = lib.versionAtLeast setuptools.version "82";
     description = "Filesystem abstraction";
     homepage = "https://github.com/PyFilesystem/pyfilesystem2";
     changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";

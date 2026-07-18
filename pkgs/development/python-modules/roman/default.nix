@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   pytestCheckHook,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ZtwHlS3V18EqDXJxTTwfUdtOvyQg9GbSArV7sOs1b38=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   pythonImportsCheck = [ "roman" ];
 

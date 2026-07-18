@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3";
 
   src = fetchFromGitHub {
-    owner = "hobarrera";
+    owner = "WhyNotHugo";
     repo = "kbdlight";
     rev = "v${finalAttrs.version}";
     sha256 = "1f08aid1xrbl4sb5447gkip9lnvkia1c4ap0v8zih5s9w8v72bny";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/hobarrera/kbdlight";
+    homepage = "https://github.com/WhyNotHugo/kbdlight";
     description = "Very simple application that changes MacBooks' keyboard backlight level";
     mainProgram = "kbdlight";
     license = lib.licenses.isc;

@@ -79,7 +79,7 @@ ocamlPackages.buildDunePackage {
     mkdir -p $out/share/satysfi/dist/fonts
     cp -r lib-satysfi/dist/ $out/share/satysfi/
     cp -r \
-      ${ipaexfont}/share/fonts/opentype/* \
+      ${ipaexfont}/share/fonts/truetype/* \
       ${lmodern}/share/fonts/opentype/public/lm/* \
       ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
       ${junicode}/share/fonts/truetype/Junicode-{Bold,BoldItalic,Italic}.ttf \

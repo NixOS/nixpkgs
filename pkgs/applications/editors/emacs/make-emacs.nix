@@ -116,6 +116,8 @@
 
   # test
   callPackage,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -252,7 +254,11 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ]
   ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    sigtool
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
+  ];
 
   buildInputs = [
     gnutls
@@ -418,10 +424,15 @@ stdenv.mkDerivation (finalAttrs: {
       NATIVE_FULL_AOT = "1";
       LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
     }
-    // lib.optionalAttrs (variant == "macport") {
-      # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
-      # See https://github.com/NixOS/nixpkgs/issues/127902
-      NIX_CFLAGS_COMPILE = "-isystem ${./macport-noescape-noop}";
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # workaround for ld64 hardening issue
+      #
+      # TODO: Clean up on `staging`
+      NIX_CFLAGS_COMPILE =
+        "-fuse-ld=lld"
+        # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+        # See https://github.com/NixOS/nixpkgs/issues/127902
+        + lib.optionalString (variant == "macport") " -isystem ${./macport-noescape-noop}";
     };
 
   enableParallelBuilding = true;
@@ -466,9 +477,8 @@ stdenv.mkDerivation (finalAttrs: {
       | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
         $out/bin/emacs --batch -l comp --eval "(while argv \
           (comp-trampoline-compile (intern (pop argv))))"
-    mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
-      --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+      --eval "(add-to-list 'native-comp-eln-load-path \"$out/lib/emacs/$siteVersionDir/native-lisp\")" \
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 

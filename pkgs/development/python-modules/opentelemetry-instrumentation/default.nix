@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opentelemetry-instrumentation";
-  version = "0.55b0";
+  version = "0.64b0";
   pyproject = true;
 
   # To avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "open-telemetry";
     repo = "opentelemetry-python-contrib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UM9ezCh3TVwyj257O0rvTCIgfrddobWcVIgJmBUj/Vo=";
+    hash = "sha256-dOcDzJD1xxCN7+Zrn+2mF/gbZjy/XC6uAKDhpfYLf98=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/opentelemetry-instrumentation";

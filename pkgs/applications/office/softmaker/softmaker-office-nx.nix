@@ -6,9 +6,9 @@
   # overridable. This is useful when the upstream archive was replaced
   # and nixpkgs is not in sync yet.
   officeVersion ? {
-    version = "1230";
+    version = "1234";
     edition = "";
-    hash = "sha256-/4qKFnLoou1ZuGkRt+2Yf/FPGOnYhx7fnE+8D3gutaY=";
+    hash = "sha256-00bscKt+4aE94x6wKGqXh6tE2GiDll6F4gWZZBEl2JE=";
   },
 
   ...

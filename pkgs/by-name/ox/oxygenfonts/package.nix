@@ -1,28 +1,20 @@
 {
   lib,
   stdenvNoCC,
-  fetchFromGitHub,
+  fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "oxygenfonts";
-  version = "20160824";
+  version = "5.4.3";
 
-  src = fetchFromGitHub {
-    owner = "vernnobile";
-    repo = "oxygenFont";
-    rev = "62db0ebe3488c936406685485071a54e3d18473b";
-    hash = "sha256-0LKq8nChkDAb6U1sOUyga/DvzpDmIjoRn+2PB9rok4w=";
+  src = fetchzip {
+    url = "https://invent.kde.org/unmaintained/oxygen-fonts/-/archive/v${finalAttrs.version}/oxygen-fonts-v${finalAttrs.version}.zip";
+    hash = "sha256-N8fU5/iqgtFqaqdGuqbEVDsFCmVcHXLodo/T5NZMu8U=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp */Oxygen-Sans.ttf */Oxygen-Sans-Bold.ttf */OxygenMono-Regular.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Desktop/gui font for integrated use with the KDE desktop";
@@ -53,6 +45,7 @@ stdenvNoCC.mkDerivation {
 
     homepage = "https://github.com/vernnobile/oxygenFont";
     license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ VarNepvius ];
     platforms = lib.platforms.all;
   };
-}
+})

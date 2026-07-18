@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.1.0";
+  version = "1.2.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Z5dC3W8QoDBZWBjHwRj9MC8EScDjQwUiUcOPTRDToDA=";
 
   separateDebugInfo = true;
-
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -41,12 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  dontCargoInstall = true;
-
   makeFlags = [
     "prefix=${placeholder "out"}"
     "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
+
+  dontCargoInstall = true;
 
   passthru = {
     tests = {

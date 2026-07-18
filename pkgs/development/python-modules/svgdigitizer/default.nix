@@ -26,20 +26,26 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svgdigitizer";
   version = "0.14.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "echemdb";
     repo = "svgdigitizer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sDMSzoXa8RnygFjveh1SrF+bFit7OMQh2kbiZ478cM4=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  # https://github.com/echemdb/svgdigitizer/issues/298
+  pythonRelaxDeps = [
+    "astropy"
   ];
 
   dependencies = [
@@ -81,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract numerical data points from SVG files";
     homepage = "https://github.com/echemdb/svgdigitizer";
-    changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/echemdb/svgdigitizer/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

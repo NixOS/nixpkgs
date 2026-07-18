@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "High-performance path dispatching library";
     homepage = "https://github.com/c9s/r3";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
   };
 
 })

@@ -81,7 +81,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.19.0";
+  version = "4.8.21.0";
 
   __structuredAttrs = true;
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-kftLofCyLA6DDfEXRPyy6Zx0JiQUEzpdYpTlvPihPZg=";
+    hash = "sha256-xNmbXLl+71DhzbGdSobkV1aYbj1XqC9A/3VPjDLsF7A=";
     fetchSubmodules = true;
   };
 
@@ -109,6 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "int nVersion = 1;" "int nVersion = 0;"
     substituteInPlace client/ui/qautostart.cpp \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
+    # https://github.com/amnezia-vpn/amnezia-client/pull/2372
+    substituteInPlace client/ui/systemtray_notificationhandler.cpp \
+      --replace-fail 'm_systemTrayIcon.show();' ''' \
+      --replace-fail 'setTrayState(Vpn::ConnectionState::Disconnected);' 'setTrayState(Vpn::ConnectionState::Disconnected); m_systemTrayIcon.show();'
+    substituteInPlace client/main.cpp \
+      --replace-fail '#include "version.h"' $'#include "version.h"\n#include <QIcon>' \
+      --replace-fail 'app.setApplicationDisplayName(APPLICATION_NAME);' $'app.setApplicationDisplayName(APPLICATION_NAME);\n    app.setWindowIcon(QIcon::fromTheme("AmneziaVPN"));'
     substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
       --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/icons/hicolor/512x512/apps/AmneziaVPN.png"
     substituteInPlace deploy/data/linux/AmneziaVPN.service \

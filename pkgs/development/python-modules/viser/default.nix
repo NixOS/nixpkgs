@@ -1,7 +1,6 @@
 {
   lib,
 
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -169,6 +168,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [
     "viser"
+  ];
+
+  pythonRelaxDeps = [
+    # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
+    "rich"
   ];
 
   __darwinAllowLocalNetworking = true;

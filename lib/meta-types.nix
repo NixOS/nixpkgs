@@ -160,6 +160,32 @@ lib.fix (self: {
       verify = v: all (func: func v) funcs;
     };
 
+  either =
+    t1: t2:
+    assert isTypeDef t1 && isTypeDef t2;
+    let
+      # Store the functions directly so we don't have to pay the cost of attrset lookups at runtime.
+      v1 = t1.verify;
+      v2 = t2.verify;
+    in
+    {
+      name = "either<${t1.name},${t2.name}>";
+      verify = v: v1 v || v2 v;
+    };
+
+  both =
+    t1: t2:
+    assert isTypeDef t1 && isTypeDef t2;
+    let
+      # Store the functions directly so we don't have to pay the cost of attrset lookups at runtime.
+      v1 = t1.verify;
+      v2 = t2.verify;
+    in
+    {
+      name = "both<${t1.name},${t2.name}>";
+      verify = v: v1 v && v2 v;
+    };
+
   not =
     t:
     assert isTypeDef t;

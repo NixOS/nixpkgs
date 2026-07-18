@@ -3,22 +3,26 @@
   buildPythonPackage,
   fetchPypi,
   makefun,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "decopatch";
   version = "1.4.10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lX9JyT9BUBgsI/j7UdE7syE+DxenngnIzKcFdZi1VyA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ makefun ];
+  dependencies = [ makefun ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

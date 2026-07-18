@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "forecast";
-  version = "0-unstable-2026-01-27";
+  version = "0-unstable-2026-07-12";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "forecast";
-    rev = "b82babc843d5e9c58a6635d3b1941ac185ae4906";
-    hash = "sha256-QoZ854+2/4+VMZbOI/M167qjDPahtzbV/NH8Y46uBs8=";
+    rev = "0de1b7502979eb3704445c98ce8dbb7969e109da";
+    hash = "sha256-9IZDDIhZY+YC0SOie5z0Ed5UAvBcf+soZ0RRz8sr71w=";
   };
 
-  cargoHash = "sha256-di7zjwI0/6NB2cAih3d7iqwSb+o/607jbgJN1MtbZX8=";
+  cargoHash = "sha256-F5AlYm9bzJJUrDiY712dbwpCR3lzvQNFKXHzIDG+TVQ=";
 
   nativeBuildInputs = [
     libcosmicAppHook

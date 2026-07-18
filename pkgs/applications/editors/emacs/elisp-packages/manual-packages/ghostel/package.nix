@@ -14,13 +14,13 @@ let
 
   pname = "ghostel";
 
-  version = "0.41.0-unstable-2026-07-05";
+  version = "0.41.0-unstable-2026-07-06";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
-    rev = "f77efee9172854abc08652637d23adc26faa25a2";
-    hash = "sha256-6ME+aStZ9X1pkTr0uwwhrJXEHu/uLStPHsKtbudXl9I=";
+    rev = "eb806d158df4ff302aee68e91caf257f11d66320";
+    hash = "sha256-Xz3Sy0iR/g5SoEzqJTZo2ymfMPYQ0NvnAOEoXiXhQFE=";
   };
 
   module = stdenv.mkDerivation (finalAttrs: {
@@ -77,7 +77,10 @@ melpaBuild {
   meta = {
     homepage = "https://github.com/dakra/ghostel";
     description = "Terminal emulator powered by libghostty";
-    maintainers = with lib.maintainers; [ vonfry ];
+    maintainers = with lib.maintainers; [
+      rohan-datar
+      vonfry
+    ];
     license = lib.licenses.gpl3Plus;
   };
 }

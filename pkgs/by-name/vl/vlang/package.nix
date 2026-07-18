@@ -6,6 +6,8 @@
   freetype,
   openssl,
   makeWrapper,
+  pkg-config,
+  sqlite,
   upx,
   boehmgc,
   libxdmcp,
@@ -16,7 +18,7 @@
 }:
 
 let
-  version = "0.5.1";
+  version = "0.5.2";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -25,12 +27,12 @@ let
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.5.1";
+    version = "0.5.2";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "f461dfebcdfac3c75fdf28fec80c07f0a7a9a53d";
-      hash = "sha256-GsciyAqCVbLpC6L+HFX90+1yX1Iq/GIBZIIzLVXbFN0=";
+      rev = "7eb8c54a3843e5107d5af06d7a8c3e928f322475";
+      hash = "sha256-Ca8RqMN2BwnwCfjvtGtFAl/qaoSLQTHGmhIk5FN3CO8=";
     };
 
     # patch the ptrace reference for darwin
@@ -48,8 +50,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "6ecbf4c519de2ca4cb26432bb2653c9cb9f17309";
-    hash = "sha256-tFOI9Dh1yvFtsWHr4JvFUonbI6la3aj47YmfuFt3unI=";
+    rev = "ef2f1018c37c1db6e379331b3cd841331b6a6fd2";
+    hash = "sha256-drhDQYm7yiL+EDyslkTb0MGA9NQRrDLVg3IElwXAIIY=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -63,17 +65,21 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-f9YtL2+gWvFI/fX09CtQlPRLDZT7D6K8bRQvXApXByU=";
+    hash = "sha256-0PInqMmb4sNzJwVD9SMhTXzvxMdaC1uIJl7fpdXKESE=";
   };
 
   propagatedBuildInputs = [
     glfw
     freetype
     openssl
+    sqlite
   ]
   ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = [
     binaryen
@@ -103,13 +109,20 @@ stdenv.mkDerivation {
     mkdir -p $out/{bin,lib,share}
     cp -r examples $out/share
     cp -r {cmd,vlib,thirdparty} $out/lib
-    cp v $out/lib
+    cp v v.mod $out/lib
     ln -s $out/lib/v $out/bin/v
-    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+    wrapProgram $out/bin/v \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          stdenv.cc
+          pkg-config
+        ]
+      } \
+      --prefix PKG_CONFIG_PATH : ${lib.getDev sqlite}/lib/pkgconfig
 
     # gen_vc is a V-maintainer tool for pushing bootstrap C files to the vc
-    # repo; it requires network/SSH access and a v.mod root that doesn't exist
-    # in the installed layout, so it cannot be built in the Nix sandbox.
+    # repo; it requires network/SSH access, so it cannot be built in the Nix
+    # sandbox.
     rm $out/lib/cmd/tools/gen_vc.v
 
     mkdir -p $HOME/.vmodules;

@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "mletenay";
   domain = "goodwe";
-  version = "0.9.9.30";
+  version = "0.9.9.31";
 
   src = fetchFromGitHub {
     owner = "mletenay";
     repo = "home-assistant-goodwe-inverter";
     tag = "v${version}";
-    hash = "sha256-/R0HBR1369gjjdCInbFzUaBEclw4PJDmgRGHtlUNvCA=";
+    hash = "sha256-aq3m1+XBE0f/+r3RiSXU1XFq+vUwKs0phis2B34c/8w=";
   };
 
   dependencies = [

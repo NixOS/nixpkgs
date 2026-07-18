@@ -14,6 +14,8 @@
     url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/68f6d131750aa778807119e03eed70286a17b1cb/trunk/archlinux.vim";
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   },
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -37,12 +39,23 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     gettext
     pkg-config
+  ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
   buildInputs = [
     ncurses
     bash
     gawk
   ];
+
+  # workaround for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-fuse-ld=lld";
+  };
 
   strictDeps = true;
 

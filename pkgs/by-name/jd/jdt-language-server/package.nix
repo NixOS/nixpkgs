@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       matt-snider
       wenjinnn
+      yvnth
     ];
     platforms = lib.platforms.all;
     mainProgram = "jdtls";

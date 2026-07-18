@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MjUbfv+3o3f4qsLPxLDeUn+/h5YupMMhC/SecwmCR8Q=";
   };
 
+  patches = [
+    ./poppler-26-compat.patch # https://github.com/OpenBoard-org/OpenBoard/pull/1474
+  ];
+
   postPatch = ''
     substituteInPlace resources/etc/OpenBoard.config \
       --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \

@@ -3,10 +3,12 @@
   stdenv,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch,
   callPackage,
   nixosTests,
   gettext,
-  python3,
+  # tests fail and eventually lock up on 3.14
+  python313Packages,
   ghostscript_headless,
   imagemagickBig,
   jbig2enc,
@@ -42,13 +44,10 @@ let
     ocrmypdf = prev.ocrmypdf_16.override { tesseract = tesseract5; };
   };
 
-  python = python3.override {
-    self = python;
-    packageOverrides = lib.composeManyExtensions [
-      defaultPythonPackageOverrides
-      extraPythonPackageOverrides
-    ];
-  };
+  pythonPackages = python313Packages.overrideScope (
+    final: prev:
+    lib.composeManyExtensions [ defaultPythonPackageOverrides extraPythonPackageOverrides ] final prev
+  );
 
   path = lib.makeBinPath [
     ghostscript_headless
@@ -70,7 +69,7 @@ let
     ];
   };
 in
-python.pkgs.buildPythonApplication (finalAttrs: {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
   pyproject = true;
 
@@ -83,6 +82,15 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-Czh4Knel0IIHsTc3kEnp1153Kv+3721GRCbTYTkeCDg=";
   };
 
+  patches = [
+    # fix tests with latest filelock
+    (fetchpatch {
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/5e1202a4168fbc8e36f816f36eb16dd7636e9d9c.diff";
+      includes = [ "src/*" ];
+      hash = "sha256-ZDC+T4DyOBBV8SCw8xyeYGua1XOhiP7eoZthnSE/Fkk=";
+    })
+  ];
+
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
     if (( $NIX_BUILD_CORES > 3)); then
@@ -93,7 +101,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail '--maxprocesses=16' "--numprocesses=$NIX_BUILD_CORES"
   '';
 
-  build-system = [ python.pkgs.setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
   nativeBuildInputs = [
     gettext
@@ -114,10 +122,11 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
+    "filelock"
   ];
 
   dependencies =
-    with python.pkgs;
+    with pythonPackages;
     [
       babel
       bleach
@@ -183,18 +192,18 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
+    ${pythonPackages.python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
   installPhase =
     let
-      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
+      pythonPath = pythonPackages.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       runHook preInstall
@@ -206,7 +215,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
         --prefix PYTHONPATH : "${pythonPath}" \
         --prefix PATH : "${path}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+      makeWrapper ${lib.getExe pythonPackages.celery} $out/bin/celery \
         --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
         --prefix PATH : "${path}"
 
@@ -218,7 +227,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     find $out/lib/paperless-ngx -type d -name tests -exec rm -rv {} +
   '';
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with pythonPackages; [
     daphne
     factory-boy
     imagehash
@@ -286,9 +295,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     inherit
       nltkDataDir
       path
-      python
       tesseract5
       ;
+    inherit (pythonPackages) python;
     tests = { inherit (nixosTests) paperless; };
     updateScript = nix-update-script {
       extraArgs = [

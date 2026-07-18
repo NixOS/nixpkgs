@@ -10,7 +10,7 @@
 
 let
   pname = "jetbrains-toolbox";
-  version = "3.5.0.84344";
+  version = "3.6.2.85969";
 
   updateScript = ./update.sh;
 
@@ -27,7 +27,6 @@ let
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     mainProgram = "jetbrains-toolbox";
   };
@@ -58,10 +57,9 @@ let
         aarch64 = "-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-u+ATMiioJAmr8wTde4g1hB/DZqPnLZoPNJp6Oiq6m5o=";
-        aarch64-linux = "sha256-5sOJ7nrhNDCtAlrh2yoCUX/nGDm6gM5gV/y592zWQqQ=";
-        x86_64-darwin = "sha256-o2v30FIeVafjKXWjwEY9Mw+rbNfQyXJZUvDF6+DAR58=";
-        aarch64-darwin = "sha256-DDGoHMltZWW/7LtHdDiMwS7HEgs8iPrJqc0XC6YolpY=";
+        x86_64-linux = "sha256-2XvsZ5WrdmDGTigKWJCUJB2VkHj+Z3M8QClp6YoIIRw=";
+        aarch64-linux = "sha256-/8j7vJGTCvj57I1kqUCyBSDoJA8Tr0MUaomhb0Um7vA=";
+        aarch64-darwin = "sha256-esf/AfRDGoWV05KWb7CfJBRQvkcs3bG5/IldcTuNZOA=";
       };
     in
     selectKernel {

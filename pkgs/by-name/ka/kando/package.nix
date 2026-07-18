@@ -69,6 +69,8 @@ buildNpmPackage.override { inherit nodejs; } rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     # use our own node headers since we skip downloading them
     NIX_CFLAGS_COMPILE = "-I${nodejs}/include/node";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    CI = "1";
   };
 
   postConfigure = ''

@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prmt";
-  version = "0.6.0";
+  version = "0.7.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "prmt";
     owner = "3axap4eHko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLxWArZzGU1vjS2DOJ6PyrhYC2XbkAD5SfiFjHTaQfI=";
+    hash = "sha256-5UgHnQl/kfeJm3EHATmcWF4V7C/rhaGnpDa6Ym41Ns4=";
   };
 
-  cargoHash = "sha256-hmtKmnSnSGgivY+dmC4WlMuCJGTVM6GI5k0pZcfzYso=";
+  cargoHash = "sha256-TQHe0FJomKZMSrt/VEhsbVNdxhvYmi/1vQxp4vxtH1U=";
 
   # Fail to run in sandbox environment
   checkFlags = map (t: "--skip=${t}") [

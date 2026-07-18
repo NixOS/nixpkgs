@@ -62,10 +62,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export OMP_NUM_THREADS=1
-  '';
-
   # only the $out dir contains the built cython extensions, so we run the tests inside there
   enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 

@@ -13,19 +13,12 @@
   setuptools-scm,
   pytestCheckHook,
   python,
-  matplotlib,
-  fetchurl,
 
   # native libraries
   ffmpeg-headless,
   freetype,
-  # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still use this argument to define the overridden
-  # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
-  # builds matplotlib with the freetype version they default to, with which all
-  # tests should pass.
-  doCheck ? false,
   qhull,
+  libraqm,
 
   # propagates
   contourpy,
@@ -69,20 +62,23 @@
 
   # Reverse dependency
   sage,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 let
   interactive = enableTk || enableGtk3 || enableQt;
 in
 
-buildPythonPackage rec {
-  version = "3.10.9";
+buildPythonPackage (finalAttrs: {
+  version = "3.11.0";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/WZQjoxod9mOWGZUtgigRW241+ilRuseJgDv2VcwI1g=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aMDHvgGzDcyjY4k09/WR33NAEjXL2/DRqxxx59t/i1c=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -100,7 +96,7 @@ buildPythonPackage rec {
     ''
     + ''
       substituteInPlace pyproject.toml \
-        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+        --replace-fail "setuptools_scm>=7,<10" setuptools_scm
 
       patchShebangs tools
     ''
@@ -111,12 +107,18 @@ buildPythonPackage rec {
         --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals enableGtk3 [ gobject-introspection ]
+  # TODO: Clean up on `staging`.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
   buildInputs = [
     ffmpeg-headless
     freetype
     qhull
+    libraqm
   ]
   ++ lib.optionals enableGtk3 [
     cairo
@@ -158,6 +160,7 @@ buildPythonPackage rec {
   mesonFlags = lib.mapAttrsToList lib.mesonBool {
     system-freetype = true;
     system-qhull = true;
+    system-libraqm = true;
     # Otherwise GNU's `ar` binary fails to put symbols from libagg into the
     # matplotlib shared objects. See:
     # -https://github.com/matplotlib/matplotlib/issues/28260#issuecomment-2146243663
@@ -165,22 +168,21 @@ buildPythonPackage rec {
     b_lto = false;
   };
 
+  # TODO: Clean up on `staging`.
+  env.${if stdenv.hostPlatform.isDarwin then "CC_LD" else null} = "lld";
+  env.${if stdenv.hostPlatform.isDarwin then "CXX_LD" else null} = "lld";
+  env.${if stdenv.hostPlatform.isDarwin then "OBJC_LD" else null} = "lld";
+
   passthru.tests = {
     inherit sage;
-    withOutdatedFreetype = matplotlib.override {
-      doCheck = true;
-      freetype = freetype.overrideAttrs (_: {
-        src = fetchurl {
-          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
-        };
-        patches = [ ];
-      });
-    };
   };
 
   pythonImportsCheck = [ "matplotlib" ];
-  inherit doCheck;
+  # Running the tests requires a specific freetype version, so pixel-to-pixel
+  # comparisons will pass. Since matplotlib depends directly & indirectly on
+  # freetype, this would be too expensive to even test this (correctly) in
+  # `passthru.tests`.
+  doCheck = false;
   nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # https://matplotlib.org/devdocs/devel/testing.html#obtain-the-reference-images
@@ -198,13 +200,14 @@ buildPythonPackage rec {
   meta = {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
-    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
+    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       psfl
       bsd0
     ];
     maintainers = with lib.maintainers; [
       veprbl
+      doronbehar
     ];
   };
-}
+})

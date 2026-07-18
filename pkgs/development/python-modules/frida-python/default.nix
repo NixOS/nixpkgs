@@ -20,10 +20,6 @@ let
         hash = "sha256-00gr7AWA0ynXmZrvNWphPWkkpeDOOqWIZMKe+jbeAFA=";
         platform = "manylinux2014_aarch64";
       };
-      x86_64-darwin = {
-        hash = "sha256-7d7jWTT5yueVBfIYSZoxCDHXcxjom9JP9nfzBJqxd8I=";
-        platform = "macosx_10_13_x86_64";
-      };
       aarch64-darwin = {
         hash = "sha256-AmTFwqjE2huyFwabx6gWdRnymy+pPVqBvlJWzQQb3H4=";
         platform = "macosx_11_0_arm64";
@@ -65,7 +61,6 @@ buildPythonPackage {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

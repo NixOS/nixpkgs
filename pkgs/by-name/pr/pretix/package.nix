@@ -17,6 +17,7 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
+      chardet = super.chardet_5;
       django = super.django_5;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {

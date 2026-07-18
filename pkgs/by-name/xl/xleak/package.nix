@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xleak";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
     repo = "xleak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5amFyNI1cfTu9b5PV7/n4XIXZbFoSnaTyZo7oPpDQL4=";
+    hash = "sha256-+w03XXQVsoMjsrdmw/+2umB3/aq/Nhisxcdi01v1xDY=";
   };
 
-  cargoHash = "sha256-FkSpMwkrnibOWAPbrE9Pycxc4To5jFHbma8YKGgXWSU=";
+  cargoHash = "sha256-ct03BgNozJUERq9pqOw/igVk8wWmqSV4JQ2ysNyH7mk=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

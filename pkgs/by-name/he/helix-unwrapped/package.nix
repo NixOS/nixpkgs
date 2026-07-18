@@ -83,7 +83,6 @@ rustPlatform.buildRustPackage (
       mainProgram = "hx";
       maintainers = with lib.maintainers; [
         aciceri
-        danth
         yusdacra
       ];
     };

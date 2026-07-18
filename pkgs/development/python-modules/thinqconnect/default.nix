@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "thinqconnect";
-  version = "1.0.12";
+  version = "1.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thinq-connect";
     repo = "pythinqconnect";
     tag = version;
-    hash = "sha256-LOIqh/f9NiaBpkJqre1TejdUN0gbguSM3s8faGPcf54=";
+    hash = "sha256-0efPQ0fvBLi+Bp+JbBMRJPYFqRKBVpPQFyQ9rvHpEnY=";
   };
 
   build-system = [ setuptools ];

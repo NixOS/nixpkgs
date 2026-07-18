@@ -24,16 +24,16 @@
 let
   sparkle-service = buildGoModule {
     pname = "sparkle-service";
-    version = "0-unstable-2025-10-24";
+    version = "0-unstable-2026-07-04";
 
     src = fetchFromGitHub {
       owner = "xishang0128";
       repo = "sparkle-service";
-      rev = "fb7006438d6335c7ee9fbf4530b1821428385cab";
-      hash = "sha256-V1HwYbdUunLTWFhfW7EHDDkIQyKFq2mbUysndttIlTE=";
+      rev = "5acde12bde599553ffa3a95179897da60aaaf8a5";
+      hash = "sha256-urBrY+znJ9wNnyCWVrIE+IwIRgKUqgJQz+hrQ848lNI=";
     };
 
-    vendorHash = "sha256-1n4CJT7zh6uxg6fGAVQz/KVKqXelFoTtETFPARcbPb8=";
+    vendorHash = "sha256-gg9hcHyVDVFibVwErwCsJtru3TEFnSCpLbGXSgG6XxU=";
 
     meta.mainProgram = "sparkle-service";
   };
@@ -41,20 +41,20 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.5";
+  version = "1.26.6";
 
   src = fetchFromGitHub {
     owner = "xishang0128";
     repo = "sparkle";
     tag = finalAttrs.version;
-    hash = "sha256-b4SidOlMDSi+DdbuF3LmOMlQTSBxd2CAf9oshYGXWrQ=";
+    hash = "sha256-IFK7rhT3i+Qct0FIEYFbgQpJ5cjS7JMKd2tmOq5ZSNg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-UrMzBinZsTfZigkPMOySJ/Yjskh6Csna1M6XpBpq0vI=";
+    fetcherVersion = 4;
+    hash = "sha256-+OHO0Rvp33QUDRFjKwDpaIzdciwbsjEwoQxmqd4TouA=";
   };
 
   nativeBuildInputs = [

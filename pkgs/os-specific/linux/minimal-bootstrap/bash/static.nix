@@ -63,6 +63,7 @@ bash.runCommand "${pname}-${version}"
       --host=${hostPlatform.config} \
       --without-bash-malloc \
       --disable-dependency-tracking \
+      --disable-nls \
       --enable-static-link \
       CC=musl-gcc
 
@@ -72,5 +73,6 @@ bash.runCommand "${pname}-${version}"
     # Install
     make -j $NIX_BUILD_CORES install-strip
     rm $out/bin/bashbug
+    rm -rf $out/share
     ln -s $out/bin/bash $out/bin/sh
   ''

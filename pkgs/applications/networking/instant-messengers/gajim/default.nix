@@ -38,14 +38,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.4.7";
+  version = "2.5.0";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = finalAttrs.version;
-    hash = "sha256-tZ1+DRVCzwaWeur9mwc/zE34H2xdqk96upqWfqNTl3g=";
+    hash = "sha256-3/HQNizXLjeQpCdEK14LMflyNUKF1BI8eli3BGxiH40=";
   };
 
   pyproject = true;
@@ -55,11 +55,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     adwaita-icon-theme
     gtksourceview5
     glib-networking
+    gstreamer
+    gst-plugins-base
   ]
   ++ lib.optionals enableJingle [
     farstream
-    gstreamer
-    gst-plugins-base
     gst-libav
     gst-plugins-good
     libnice
@@ -135,8 +135,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       vbgl
       haansn08
     ];
+    donationPage = "https://liberapay.com/Gajim";
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
     mainProgram = "gajim";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gajim" finalAttrs.version;
   };
 })

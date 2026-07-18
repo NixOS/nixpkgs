@@ -11,12 +11,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
-  version = "2.1.1";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d13fc48280f6a355bcb155d193f93817c1225475ee9670846a56cbd39e2014d";
+    sha256 = "sha256-HJQOO8WTNsan3hMoFu7C2DMYrg98GF5hmK2SR6iy5ew=";
   };
 
   build-system = with python3.pkgs; [ hatchling ];

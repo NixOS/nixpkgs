@@ -3,6 +3,8 @@
   swiftPackages,
   fetchFromGitHub,
   leveldb,
+  # TODO: Clean up on `staging`.
+  llvmPackages,
   perl,
   actool,
   makeWrapper,
@@ -46,6 +48,8 @@ let
     toPlist {
       CFBundleDevelopmentRegion = "en";
       CFBundleExecutable = "Stats";
+      CFBundleIconFile = "AppIcon";
+      CFBundleIconName = "AppIcon";
       CFBundleIdentifier = "eu.exelban.Stats";
       CFBundleInfoDictionaryVersion = "6.0";
       CFBundleName = "Stats";
@@ -68,7 +72,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "3.0.3";
+  version = "3.0.6";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -77,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exelban";
     repo = "Stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HYuS0mFzzln+EjYUmQgjCPFsF4aGP+4QWalDL0vt3OA=";
+    hash = "sha256-ztBV+nT3TjislSmItyUFSGvs2atKy5+ZrNHlijIFvTw=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     actool
     makeWrapper
     rcodesign
+    # TODO: Clean up on `staging`.
+    llvmPackages.lld
   ];
 
   buildInputs = [ leveldb ];
@@ -124,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
       # The Swift compiler in nixpkgs uses SDK 14 headers (which compile fine), but without
       # this flag the linker records SDK 14 and macOS withholds it (Liquid Glass)
       -Xlinker -platform_version -Xlinker macos -Xlinker 14.0 -Xlinker 26.0
+      # TODO: Clean up on `staging`
+      -use-ld=lld
     )
 
     buildFramework() {
@@ -317,6 +325,7 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx \
       --minimum-deployment-target 14.0 \
       --app-icon AppIcon \
+      --output-partial-info-plist /dev/null \
       "Stats/Supporting Files/Assets.xcassets"
 
     # Copy localization files
@@ -348,8 +357,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/exelban/stats";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       emilytrau
+      kinnrai
     ];
     platforms = lib.platforms.darwin;
   };

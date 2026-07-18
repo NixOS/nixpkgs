@@ -13,7 +13,7 @@ mkHyprlandPlugin (finalAttrs: {
     owner = "micha4w";
     repo = "Hypr-DarkWindow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-By/4CmpJvVvcBoyTtelH7MSLCKRaoXLCpiSfrbZIePc=";
+    hash = "sha256-91l5TD46OMfvmhd1WqWxm42cEnjR1yAj2Qk/73mr3ks=";
   };
 
   installPhase = ''

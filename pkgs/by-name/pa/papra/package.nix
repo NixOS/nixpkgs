@@ -22,20 +22,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "papra";
-  version = "26.5.0";
+  version = "26.6.1";
 
   src = fetchFromGitHub {
     owner = "papra-hq";
     repo = "papra";
     tag = "@papra/app@${finalAttrs.version}";
-    hash = "sha256-BOeApLfB1NR07izBM3ChHqzgGx3xf1NkAXqKVeMzqx4=";
+    hash = "sha256-4Kcfv6bcKM7SXTmKn0cjXjhUXEZSypSFWyr7jIP/4+E=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm;
     fetcherVersion = 4;
-    hash = "sha256-J1syB5X+sI40iPlqDVABqeWDiBjKGP3qQRIh5w3GRUU=";
+    hash = "sha256-1Iv8vvGFQuxBFM8YB8sYulmU4SxE4G9Yyh67BBzEoZo=";
     pnpmWorkspaces = [
       "@papra/app-client..."
       "@papra/app-server..."

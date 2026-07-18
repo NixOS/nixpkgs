@@ -281,6 +281,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       philocalyst
     ];
     platforms = with lib.platforms; linux ++ darwin;
-    badPlatforms = [ "x86_64-darwin" ]; # We weren't able to get hashes here
   };
 })

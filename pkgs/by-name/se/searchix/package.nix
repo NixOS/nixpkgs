@@ -18,13 +18,13 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromCodeberg {
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhWIgx5HGynmsSKPdC4bTVnEoShpZjpG4TAuLFSmKZo=";
+    hash = "sha256-pyBl6y53Efa+4qQ92elA4r+zO7rPxha+4hnmmFTsoaE=";
   };
 
   vendorHash = "sha256-BG6v4HsXtSCmEmzdawH1YfEfDMbXNH8XGMF+jJgy+3w=";

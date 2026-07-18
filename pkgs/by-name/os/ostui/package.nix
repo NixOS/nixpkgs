@@ -8,24 +8,25 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ostui";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromSourcehut {
     owner = "~ser";
     repo = "ostui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zm7j4s+GLILLnH+CjF8JsJB4APYeWV7TyCUkKLW2SGQ=";
+    hash = "sha256-+8YZiFV86SuTYQT+FTMo55dQy/W35hD+mcJp8MUz17s=";
   };
 
-  vendorHash = "sha256-yhoTwouYlv2VkCWmvwvvpbQmrFwzwpraf0EV2Tegq94=";
+  vendorHash = "sha256-cCyOG6nqlw2DPbA1dCuki5cpDy9LmZV/3YGyB3nCreI=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ mpv-unwrapped ];
 
-  buildInputs = [
-    mpv-unwrapped
-  ];
+  postConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace vendor/github.com/gen2brain/go-mpv/purego_linux.go \
+      --replace-warn '"libmpv.so"' '"${lib.getLib mpv-unwrapped}/lib/libmpv.so"' \
+      --replace-warn '"libmpv.so.2"' '"${lib.getLib mpv-unwrapped}/lib/libmpv.so.2"'
+  '';
 
   ldflags = [
     "-s"
@@ -33,9 +34,7 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  env = {
-    CGO_ENABLED = "1";
-  };
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then "0" else "1";
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

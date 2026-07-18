@@ -11,6 +11,7 @@
   gtk3,
   pkg-config,
   wrapGAppsHook3,
+  llvmPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -46,9 +47,17 @@ buildGoModule (finalAttrs: {
     copyDesktopItems
     pkg-config
     wrapGAppsHook3
-  ];
+  ]
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
-  env.CGO_ENABLED = 1;
+  env = {
+    CGO_ENABLED = 1;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   postInstall = ''
     mv $out/bin/Picocrypt $out/bin/picocrypt-gui

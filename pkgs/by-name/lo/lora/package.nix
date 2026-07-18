@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
-    repo = "lora";
+    repo = "Lora-Cyrillic";
     tag = "v${finalAttrs.version}";
     hash = "sha256-v9wE9caI9HTCfO01Yf+s6KajF7WpnL12nu+IuOV7T+w=";
   };
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lora Font: well-balanced contemporary serif with roots in calligraphy";
-    homepage = "https://github.com/cyrealtype/lora";
+    homepage = "https://github.com/cyrealtype/Lora-Cyrillic";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ofalvai ];

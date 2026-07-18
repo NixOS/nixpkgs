@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "scheduler-card";
-  version = "4.0.18";
+  version = "4.0.19";
 
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "scheduler-card";
     tag = "v${version}";
-    hash = "sha256-hxoVds650qcwiwi/9n62A6/jS6AmuaIEssBOU6H8GHo=";
+    hash = "sha256-fHU5qhBbtSkEtHDQacgd6R1U+NV55VtPqfX8M56uUnw=";
   };
 
   postPatch = ''

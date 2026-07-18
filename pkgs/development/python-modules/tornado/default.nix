@@ -18,16 +18,16 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tornado";
-  version = "6.5.4";
+  version = "6.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
-    tag = "v${version}";
-    hash = "sha256-d6lKg8yrQqaCeKxdPjQNzv7Nc23U/v8d5x3sE3trRM4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iE0Tf95zmPoZJhw7FDLzTmv8HaWds3ZU5xzZSMvxFH4=";
   };
 
   build-system = [ setuptools ];
@@ -63,9 +63,10 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://www.tornadoweb.org/en/stable/releases/${finalAttrs.src.tag}.html";
     description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

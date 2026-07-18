@@ -19,6 +19,7 @@
   glslang,
   libogg,
   makeBinaryWrapper,
+  gettext,
 
   # Runtime depends
   sdl3,
@@ -29,19 +30,20 @@
   zlib,
   zstd,
   spirv-cross,
+  libunibreak,
 
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cs66kyNSVjUZUH+ddZGjFwSUQtwqX4uuGQh+ZLv6N6o=";
+    hash = "sha256-xjEfSrtxZBBWUU8nv0fyNAofHSGVTeO3CBR/BhKSGHg=";
     fetchSubmodules = true;
   };
 
@@ -51,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3Packages.python
-    python3Packages.zstandard
     shaderc
     makeWrapper
     makeBinaryWrapper
     cmake
+    gettext
   ];
 
   buildInputs = [
@@ -70,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     mimalloc
     libogg
+    libunibreak
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     glslang
@@ -81,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin " -Dsincos=__builtin_sincos";
 
   mesonFlags = [
-    (lib.mesonEnable "vfs_zip" false)
     (lib.mesonEnable "shader_transpiler_dxbc" false)
     (lib.mesonEnable "package_data" false)
     (lib.mesonBool "b_lto" false)

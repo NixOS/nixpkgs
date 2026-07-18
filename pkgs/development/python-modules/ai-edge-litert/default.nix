@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchurl,
   lib,
+  patchelf,
   python,
   pythonAtLeast,
   stdenv,
@@ -71,6 +72,13 @@ buildPythonPackage {
     # TODO: npu-sdk
   };
 
+  preFixup = ''
+    while IFS= read -r -d "" so; do
+      ${patchelf}/bin/patchelf --replace-needed libopenvino.so.2620 libopenvino.so "$so"
+      ${patchelf}/bin/patchelf --replace-needed libopenvino_tensorflow_lite_frontend.so.2620 libopenvino_tensorflow_lite_frontend.so "$so"
+    done < <(find "$out" -type f \( -name '*.so' -o -name '*.so.*' \) -print0)
+  '';
+
   pythonRemoveDeps = lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/google-ai-edge/LiteRT/pull/5298
     "backports.strenum"
@@ -96,8 +104,5 @@ buildPythonPackage {
       # elftools.common.exceptions.ELFError: Magic number does not match
       lib.systems.inspect.patterns.isDarwin
     ];
-    # Incompatible with the openvino currently shipped in nixpkgs:
-    #   auto-patchelf could not satisfy dependency libopenvino.so.2620
-    broken = true;
   };
 }

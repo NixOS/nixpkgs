@@ -11,20 +11,20 @@
   writeShellApplication,
 }:
 let
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "expert-lsp";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-QpL58+rzXCl8jT/8sbvDmDZtcWz0+ZKg47XC33EwFyE=";
+    hash = "sha256-25ADJtvwZ5hkS9+x9BYsPDnvXIXU+UV+3CoIpFJkziA=";
   };
 
   engineDeps = fetchMixDeps {
     pname = "mix-deps-expert-engine";
 
     inherit src version;
-    hash = "sha256-4l0Tc/6sOcjGVQtzEOG6QP/ss8rqh+AOnwxuJsuCZCk=";
+    hash = "sha256-evYg/yRk6ymV75kuWpY0pFODWWopozjnFHUa9MOFN/A=";
 
     preConfigure = ''
       cd apps/engine
@@ -38,7 +38,7 @@ mixRelease rec {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-q6OOealif+LClT0HlJTojDtvMk4MEtI/EjQHbLntiP8=";
+    hash = "sha256-N2krs4NNWytrN3K8lR5IGGroXVNuBzjks6IoD9D1rPM=";
 
     preConfigure = ''
       cd apps/expert

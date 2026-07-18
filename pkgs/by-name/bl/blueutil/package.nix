@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  llvmPackages,
   testers,
   nix-update-script,
 }:
@@ -17,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Qw5c9dp7wpuOcQSLsg1pfJ+NbrEtme2o6nKD3Ba3A3M=";
   };
 
+  # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+  nativeBuildInputs = [ llvmPackages.lld ];
+
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Werror -mmacosx-version-min=10.9 -framework Foundation -framework IOBluetooth";
+  # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+  env.NIX_CFLAGS_LINK = "--ld-path=${lib.getExe' llvmPackages.lld "ld64.lld"}";
 
   installPhase = ''
     runHook preInstall

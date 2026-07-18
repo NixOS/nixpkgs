@@ -293,8 +293,8 @@ in
                 ''
                   mkdir -p $out
                   if [ -d $package/share/man ]; then
-                    find -L $package/share/man -type f \
-                      | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} \
+                    find -L $package/share/man -type f -print0 \
+                      | xargs -0 ${pkgs.python3.pythonOnBuildForHost.interpreter} \
                           ${generator}/create_manpage_completions.py --directory $out \
                           >/dev/null
                   fi

@@ -94,26 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  # I'm sure this is suboptimal but it seems to work. Points:
-  # - when build is run in the original repo, no specific executable seems to be generated; you run the resulting build with pnpm run start
-  # - this means we need to add a dedicated script - perhaps it is possible to create this from the workers-sdk dir, but I don't know how to do this
-  # - the build process builds a version of miniflare which is used by wrangler; for this reason, the miniflare package is copied also
-  # - pnpm stores all content in the top-level node_modules directory, but it is linked to from a node_modules directory inside wrangler
-  # - as they are linked via symlinks, the relative location of them on the filesystem should be maintained
-  # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,lib}
-    mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r {fixtures,packages,node_modules} $out/lib
-    cp -r tools $out/lib/tools
-    rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
-    rm -rf $out/lib/**/bin $out/lib/**/.bin
-    NODE_PATH_ARRAY=( "$out/lib/node_modules" "$out/lib/packages/wrangler/node_modules" )
+    pnpm config set --location=project injectWorkspacePackages true
+    pnpm --filter=wrangler --prod deploy $out/lib
     makeWrapper ${lib.getExe nodejs} $out/bin/wrangler \
       --inherit-argv0 \
-      --prefix-each NODE_PATH : "$${NODE_PATH_ARRAY[@]}" \
-      --add-flags $out/lib/packages/wrangler/bin/wrangler.js \
+      --set "NODE_PATH" $out/lib/node_modules \
+      --add-flags $out/lib/bin/wrangler.js \
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" # https://github.com/cloudflare/workers-sdk/issues/3264
     runHook postInstall
   '';
@@ -141,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       dezren39
       ryand56
       ezrizhu
+      yuannan
     ];
     mainProgram = "wrangler";
     # Tunneling and other parts of wrangler, which require workerd won't run on

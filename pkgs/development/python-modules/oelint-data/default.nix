@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oelint-data";
-  version = "1.5.8";
+  version = "1.5.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "priv-kweihmann";
     repo = "oelint-data";
     tag = finalAttrs.version;
-    hash = "sha256-cjQAJtslRGZ7FwjlVoxgGVoPmdx6J8qlHcxbl/auf0I=";
+    hash = "sha256-8lz1Y0lbsrFPJNWWaxSVFSpd23L5MODe71n+VknfPy8=";
   };
 
   build-system = [

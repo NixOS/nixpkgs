@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
   version = "unstable-2022-12-01";
 
   src = fetchFromGitHub {
-    owner = "github";
+    owner = "mislav";
     repo = "hub";
     rev = "38bcd4ae469e5f53f01901340b715c7658ab417a";
     hash = "sha256-V2GvwKj0m2UXxE42G23OHXyAsTrVRNw1p5CAaJxGYog=";
@@ -24,15 +24,15 @@ buildGoModule (finalAttrs: {
 
   patches = [
     # Fix `fish` completions
-    # https://github.com/github/hub/pull/3036
+    # https://github.com/mislav/hub/pull/3036
     (fetchpatch {
-      url = "https://github.com/github/hub/commit/439b7699e79471fc789929bcdea2f30bd719963e.patch";
+      url = "https://github.com/mislav/hub/commit/439b7699e79471fc789929bcdea2f30bd719963e.patch";
       hash = "sha256-pR/OkGa2ICR4n1pLNx8E2UTtLeDwFtXxeeTB94KFjC4=";
     })
     # Fix `bash` completions
-    # https://github.com/github/hub/pull/2948
+    # https://github.com/mislav/hub/pull/2948
     (fetchpatch {
-      url = "https://github.com/github/hub/commit/64b291006f208fc7db1d5be96ff7db5535f1d853.patch";
+      url = "https://github.com/mislav/hub/commit/64b291006f208fc7db1d5be96ff7db5535f1d853.patch";
       hash = "sha256-jGFFIvSKEIpTQY0Wz63cqciUk25MzPHv5Z1ox8l7wmo=";
     })
   ];

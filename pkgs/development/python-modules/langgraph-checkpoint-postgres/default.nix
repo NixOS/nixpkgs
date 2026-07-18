@@ -97,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpointpostgres==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

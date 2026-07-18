@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  removeReferencesTo,
   fstrm,
   libevent,
   openssl,
@@ -32,15 +33,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsd";
-  version = "4.14.3";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/nsd/nsd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-limtZNnBsBm74iKW1RSNeuZfWIziZaZCR1B0DwUrsSs=";
+    hash = "sha256-hPG+4ukqna20HZXsxkET5NPe+GIk3ndM2SADrdjE9XA=";
   };
+
+  patches = [
+    # https://github.com/NLnetLabs/nsd/pull/495 -- Without this patch, the build
+    # breaks with { openssl = libressl; bind8Stats = true; }. The patch will be
+    # included in 4.15.1, so we can drop it here on the next update.
+    (fetchurl {
+      url = "https://github.com/NLnetLabs/nsd/commit/15cf8736e3bfa0fd8f426b13637c44e638fa0d40.patch";
+      hash = "sha256-JVazJ83U80ASZypjic0epE92PZd3F1yi8UU6EapdW5U=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals withDnstap [ protobuf ];
 
@@ -57,12 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # TODO: prePatch doesn't actually get executed because patchPhase is overridden
-  prePatch = ''
-    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
-  '';
-
-  patchPhase = ''
+  # Prevent the install script from copying nsd.conf.sample into /etc/nsd.
+  postPatch = ''
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
 
@@ -89,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-nsd_conf_file=${configFile}"
       "--with-configdir=etc/nsd"
     ];
+
+  postFixup = ''
+    find "$out" -type f -exec remove-references-to -t ${openssl.dev} -t ${libevent.dev} '{}' +
+  '';
 
   passthru.tests = {
     inherit (nixosTests) nsd;

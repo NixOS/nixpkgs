@@ -16,7 +16,6 @@ let
   suffix = selectSystem {
     x86_64-linux = "linux-x64";
     aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -33,7 +32,6 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -64,7 +62,6 @@ let
       hash = selectSystem {
         x86_64-linux = "sha256-YnG3iw35ZEyGbB9vGdcnj0qkvUfyLuaIEB5l09hkRck=";
         aarch64-linux = "sha256-Z4yY26hXf8++TX5tJcqufsAULTn9oUL90d9tDZj5d/k=";
-        x86_64-darwin = "sha256-oV0tanuk2dzB62uChni9CJtSw3eFECQi3aMBc+ZV7Do=";
         aarch64-darwin = "sha256-6eogi8fMOD5IgRyEdPRxdDa17WytB1JwTpKRzyyhQ2Q=";
       };
     };
@@ -76,9 +73,10 @@ let
 
     dontConfigure = true;
     dontBuild = true;
-    # On Linux the binary is wrapped with buildFHSEnv; completions are
-    # generated there. Here we only need to skip fixup to avoid patchelf/strip.
-    dontFixup = stdenv.hostPlatform.isLinux;
+    # Skip fixup on all platforms: strip discards the vercel/pkg virtual
+    # filesystem appended to the binary (see the comment below), leaving a
+    # binary that fails at runtime with "Pkg: Error reading from file."
+    dontFixup = true;
 
     installPhase = ''
       runHook preInstall
@@ -86,7 +84,13 @@ let
       runHook postInstall
     '';
 
-    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin shellCompletions;
+    # gt tries to create ~/.config/graphite/aliases on startup and exits 1
+    # with no output when HOME is not writable, which would leave the
+    # completion files empty.
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export HOME=$(mktemp -d)
+      ${shellCompletions}
+    '';
   };
 in
 # The binary is built with vercel/pkg, which appends a virtual filesystem to

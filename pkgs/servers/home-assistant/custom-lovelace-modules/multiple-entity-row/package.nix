@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multiple-entity-row";
-  version = "4.5.1";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "benct";
     repo = "lovelace-multiple-entity-row";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CXRgXyH1NUg7ssQhenqP0tXr1m2qOkHna3Rf30K3SjI=";
+    hash = "sha256-B+FaOITLnNP+rUyDF3bRY+M0xDmWkoTSi+fpWW9khG8=";
   };
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-8YIcQhbYf0e2xO620zVHEk/0sssBmzF/jCq+2za+D6E=";
+    hash = "sha256-LuXzfRV/jXe4jt9whkHRjAUxvLyhzikQ3WoXzpTQWe0=";
   };
 
   nativeBuildInputs = [

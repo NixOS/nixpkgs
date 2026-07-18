@@ -136,6 +136,7 @@ mpack,,,,,,
 neorg,,,,,5.1,GaetanLepage
 neorg-interim-ls,,,,,,
 neotest,,,,,5.1,mrcjkb
+neotest-nix,,,,,,khaneliman
 nginx-lua-prometheus,,,,,,ulysseszhan
 nlua,,,,,,teto
 nui.nvim,,,,,5.1,mrcjkb

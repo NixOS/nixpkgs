@@ -23,13 +23,13 @@ let
     }).overrideAttrs
       (
         final: old: {
-          version = "10.10.1";
+          version = "11.1.1";
           src = fetchFromGitea {
             domain = "forgejo.ellis.link";
             owner = "continuwuation";
             repo = "rocksdb";
-            rev = "10.10.fb";
-            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
+            rev = "3756b2b905e13216d8b56bcc783d814e7b073aff";
+            hash = "sha256-rSv4fr2bf9JJwdodgeuPCuceeh7k97KVxrAOC0wyPQY=";
           };
 
           patches = [ ];
@@ -38,17 +38,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-continuwuity";
-  version = "0.5.10";
+  version = "26.6.2";
 
   src = fetchFromGitea {
     domain = "forgejo.ellis.link";
     owner = "continuwuation";
     repo = "continuwuity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oevEGYlAK/rMJhm200CkwerT5oVak8sJj0Fa6r6+J/Q=";
+    hash = "sha256-GcCjJiUOGX+vF7R4IRgNQs8KpfVj+MXwnhofwSm6gpA=";
   };
 
-  cargoHash = "sha256-uvMiFURXxkLbbbwq4pG5hevsLZHQ1wVfTNvzQRTQWxE=";
+  cargoHash = "sha256-p1Bz7op/qPogBn8bj9pQ7KjRhH2kZao8o0LPqWH2ZYo=";
 
   nativeBuildInputs = [
     pkg-config

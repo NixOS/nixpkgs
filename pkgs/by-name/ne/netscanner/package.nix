@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netscanner";
-  version = "0.6.41";
+  version = "0.6.43";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Chleba";
     repo = "netscanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Srsts0FDLMT01YW5Guv3r8yx5i5ua7bhAFbQ5BMN74=";
+    hash = "sha256-LLzv8+wAlZgXrj1Ldc+uGDfhvDYDtRU25R7UbmGb+ok=";
   };
 
-  cargoHash = "sha256-vlV5SibQlJ/yhJJKweqg6KYinpgZmWUUnyzAS6LBBKw=";
+  cargoHash = "sha256-47bvcj+0ZRcHjyt0cpZ0PT+NRvYdvBQcTTf9tZHci2Q=";
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \

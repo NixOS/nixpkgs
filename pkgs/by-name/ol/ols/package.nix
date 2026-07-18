@@ -17,6 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9tQVyauvXGTkKnQUSYKAhjL5ZZbhglqdcxdcs27P2k4=";
   };
 
+  patches = [
+    # Since Odin removed Haiku support in dev-2026-06 and there is still no update
+    # for ols we're removing the haiku parts so that this builds again
+    ./remove-haiku.patch
+  ];
+
   postPatch = ''
     substituteInPlace build.sh \
       --replace-fail "-microarch:native" ""

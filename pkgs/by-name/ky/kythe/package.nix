@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.0.75";
+  version = "0.0.76";
   pname = "kythe";
 
   src = fetchurl {
     url = "https://github.com/kythe/kythe/releases/download/v${finalAttrs.version}/kythe-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ZFZh3kt32UeqAl8AYbvrwjhqRVWtgyI/3k+Vb4/jAGo=";
+    sha256 = "sha256-7qQw91Y9uAXJnk0aQnymDXrvAc7HZpmGUpz+LCYpY1Y=";
   };
 
   buildInputs = [ binutils ];

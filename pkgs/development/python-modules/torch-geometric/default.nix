@@ -185,10 +185,6 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export OMP_NUM_THREADS=1
-  '';
-
   pytestFlags = [
     # DeprecationWarning: Failing to pass a value to the 'type_params' parameter of
     # 'typing._eval_type' is deprecated, as it leads to incorrect behaviour when calling

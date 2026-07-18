@@ -11,16 +11,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "urbit";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchurl {
     url = "https://github.com/urbit/vere/releases/download/vere-v${finalAttrs.version}/${platform}.tgz";
     sha256 =
       {
-        x86_64-linux = "1vbyh6glh4fqcx8d8x2jp88nzl9922dj709zgwhvy858s2m30ymz";
-        aarch64-linux = "18gc1kyxj4j6vikxpif4a1b6l629m0lnhdzmlwx5i2v0l18drvbp";
-        x86_64-darwin = "02g431xgjw8gwa823kkxnzhg1cgswi3nlkv54mzkjxbhw856qa4z";
-        aarch64-darwin = "06x8mdxmbmhg78jzsf0n83cwmp2czp74ssh616ikqf1r8v5l0h2p";
+        x86_64-linux = "1bm32airwqi6pkxlkd0hwrwd0gwm9x5y05dzgy27yxnbcrnyjcpk";
+        aarch64-linux = "126hw995xipbx9kb4ml8kn6xwkwd96q90cbr3q143ya2wl1sabya";
+        aarch64-darwin = "0dsapvlyfr2cb9c16b46bcnvq75by87ybys96zhf16k92z4rzrfv";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
@@ -42,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = [ lib.maintainers.matthew-levan ];

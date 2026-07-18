@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.1.0";
+  version = "1.2.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -19,10 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-m2cYppfitpBDKK8CC9i/lUrC9rfSYTuqUSZSyIKKGyg=";
   };
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-
   __structuredAttrs = true;
   strictDeps = true;
+
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

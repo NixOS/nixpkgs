@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "moddevices";
+    owner = "mod-audio";
     repo = "lv2bm";
     rev = "v${finalAttrs.version}";
     sha256 = "0vlppxfb9zbmffazs1kiyb79py66s8x9hihj36m2vz86zsq7ybl0";

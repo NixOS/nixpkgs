@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [
       iblech

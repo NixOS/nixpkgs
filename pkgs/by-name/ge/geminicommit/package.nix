@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "geminicommit";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tfkhdyt";
     repo = "geminicommit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BLCnBym69O6s4UnogopcccI5PnniOFJ3BcWFyxEsUUI=";
+    hash = "sha256-OgcbPnZ88snTky8Uzbq2LIwSpMv44JvE75MPbTih7+c=";
   };
 
   vendorHash = "sha256-FFWptw1kSbl7f8DR3FrM0jAfr06NaJT+i/8ZaQjav/E=";

@@ -25,10 +25,6 @@ let
       url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.4-aarch64.tar.gz";
       hash = "sha256-KpF3jCnLKCEeEXkBdB8ZsPPqP9FOVRTwRV/FQLKyh1Q=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.4.dmg";
-      hash = "sha256-2BwgAD0xF9IxRJh+gW4vLzBW13rFQSzQPbEwdmQGvLU=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/rustrover/RustRover-2026.1.4-aarch64.dmg";
       hash = "sha256-Hly4NBv9mg/RMmxCM6m9w5eS/CQ7ycxp7V2VQZwyGQE=";

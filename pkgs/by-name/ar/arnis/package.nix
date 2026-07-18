@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arnis";
-  version = "2.9.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "louis-e";
     repo = "arnis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SJT1dSQ6P5UCglYP5Song/cvisYLVXepsHH6AC5kJK4=";
+    hash = "sha256-mdBicZIHonfVs2r6eNRNdpr8saZ54k1m0czWRqBYvq4=";
   };
 
-  cargoHash = "sha256-h8DuDgRtI9ZUq3hPqso/DZQnGInnilFIuzTPf0qpsbo=";
+  cargoHash = "sha256-G0lEKjF9xNF4zs/+yf/8fvZTRZOH6IGud0tpEB86IXE=";
 
   nativeBuildInputs = [
     cargo-tauri.hook

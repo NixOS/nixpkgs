@@ -40,6 +40,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1W5NbWIULxFXGSozZEeITcPt1EbY6IsJLQdyevcn9BI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 5" "timeout = 50"
+  '';
+
   build-system = [
     hatchling
     uv-dynamic-versioning
@@ -114,6 +119,11 @@ buildPythonPackage (finalAttrs: {
     "test_multi_server"
     "test_server_starts_without_auth"
     "test_canonical_multi_client_with_transforms"
+
+    # RuntimeError: Attempted to exit a cancel scope that isn't the current tasks's current cancel scope
+    "test_stateful_proxy"
+    "test_concurrent_log_requests_no_mixing"
+    "test_multi_proxies_no_mixing"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # floating point error

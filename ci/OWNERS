@@ -41,7 +41,7 @@
 /lib/meta.nix               @alyssais @NixOS/stdenv @llakala
 /lib/meta-types.nix         @infinisil @adisbladis @NixOS/stdenv @llakala
 /lib/source-types.nix       @alyssais @NixOS/stdenv @llakala
-/lib/systems                @alyssais @NixOS/stdenv @llakala
+/lib/systems                @alyssais @NixOS/stdenv
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/types.nix              @infinisil @roberth @hsjobeki @llakala
@@ -182,10 +182,10 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/by-name/an/android*                     @NixOS/android
 
 # Python-related code and docs
-/doc/languages-frameworks/python.section.md   @mweinelt @natsukium
-/maintainers/scripts/update-python-libraries  @mweinelt @natsukium
-/pkgs/by-name/up/update-python-libraries      @mweinelt @natsukium
-/pkgs/development/interpreters/python         @mweinelt @natsukium
+/doc/languages-frameworks/python.section.md   @mweinelt
+/maintainers/scripts/update-python-libraries  @mweinelt
+/pkgs/by-name/up/update-python-libraries      @mweinelt
+/pkgs/development/interpreters/python         @mweinelt
 
 # CUDA
 /pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
@@ -260,7 +260,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses @alyssais @emilazy @jopejoe1 @llakala
+/lib/licenses @alyssais @emilazy @jopejoe1
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000
@@ -506,7 +506,7 @@ pkgs/by-name/oc/octodns/ @anthonyroussel
 pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
-pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 
 # Nim
 /doc/languages-frameworks/nim.section.md  @NixOS/nim

@@ -34,6 +34,7 @@
 
 let
   inherit (stdenv) hostPlatform;
+  rustc = rustPlatform.callPackage ({ rustc }: rustc) { };
 
   accelIsValid = builtins.elem acceleration [
     null
@@ -73,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.4";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BSP8fi4grbEzGOfR4tGCJVjIom/1d2mnFrK8O6BRWL4=";
+    hash = "sha256-3p/e7UZ8BLwT+dpb61NmzX2Z1QxxEgkgjlNzv5lWybM=";
   };
 
   patches = [
@@ -94,22 +95,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+
+    ''
+    # LLVM 21 cannot select the VPDPBUSD intrinsic because its argument types are incorrect.
+    # Fixed by https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d.
+    + lib.optionalString (hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") ''
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/mod.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/repack.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
     ''
     # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
     # Instead, we provide cutlass in buildInputs.
     + lib.optionalString cudaSupport ''
       substituteInPlace mistralrs-flash-attn/build.rs \
         --replace-fail \
-          ".with_cutlass(Some(CUTLASS_COMMIT))" \
+          ".with_cutlass(Some(&cutlass_commit))" \
           ""
 
       substituteInPlace mistralrs-quant/build.rs \
         --replace-fail \
-          'builder = builder.with_cutlass(Some("7d49e6c7e2f8896c47f586706e67e1fb215529dc"));' \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
           ""
     '';
 
-  cargoHash = "sha256-T4TPm31fihx9ZvQ6jme67yrc0osl4c9CiAm4+rISgFs=";
+  cargoHash = "sha256-TULJ3mEAWp1ktPDPeBbUJGHhsEuo5T2qh3/JpS+8+ds=";
 
   nativeBuildInputs = [
     pkg-config

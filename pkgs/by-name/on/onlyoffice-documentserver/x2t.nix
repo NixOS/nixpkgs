@@ -12,7 +12,7 @@
   optipng,
   x265,
   libde265,
-  icu78,
+  icu,
   jdk,
   lib,
   nodejs_22,
@@ -30,9 +30,6 @@
 }:
 
 let
-  # default at the time of writing is still 76,
-  # but libv8 from nodejs_22 needs 78
-  icu = icu78;
   openssl' = openssl.override {
     enableMD2 = true;
     static = true;

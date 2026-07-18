@@ -15,7 +15,6 @@ const browserNames = Object.keys(browserDownloads);
 const hostPlatformBySystem = {
   "x86_64-linux": "ubuntu24.04-x64",
   "aarch64-linux": "ubuntu24.04-arm64",
-  "x86_64-darwin": "mac15",
   "aarch64-darwin": "mac15-arm64",
 };
 

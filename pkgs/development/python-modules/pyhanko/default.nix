@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.35.1";
+  version = "0.35.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mZ9u3mQ8JZIq+G1iwNQST8r7/rCWi/UW0j1xfeV9zFM=";
+    hash = "sha256-CY+YgUu8za5c0t2OKStKvCN9X8hVXT2sN42KSDiyMX8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -66,11 +66,11 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     asn1crypto
     cryptography
+    lxml
     pyhanko-certvalidator
     pyyaml
     requests
     tzlocal
-    lxml
   ];
 
   optional-dependencies = {

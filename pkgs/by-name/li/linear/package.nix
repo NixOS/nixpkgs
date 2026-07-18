@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linear";
-  version = "1.30.2";
+  version = "1.31.1";
 
   src = fetchurl {
     url = "https://releases.linear.app/Linear-${finalAttrs.version}-universal.dmg";
-    hash = "sha256-udtN7sOnbT1B684q/JhPFGq8mYvhc5CbTxuJi6NYFac=";
+    hash = "sha256-haZz9RdbcQiFbCqdy/S25aCsFoSKn3dFAkYL8NgoTYw=";
   };
 
   strictDeps = true;
@@ -41,7 +41,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "App to manage software development and track bugs";
     homepage = "https://linear.app/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ iniw ];
+    maintainers = with lib.maintainers; [
+      wini
+      pradyuman
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

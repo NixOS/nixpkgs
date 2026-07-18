@@ -91,7 +91,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6.2.0
         name: Labels from touched files
         if: |
           github.event_name == 'pull_request_target' &&
@@ -101,7 +101,7 @@ jobs:
           configuration-path: .github/labeler.yml # default
           sync-labels: true
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6.2.0
         name: Labels from touched files (no sync)
         if: |
           github.event_name == 'pull_request_target' &&
@@ -111,7 +111,7 @@ jobs:
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
 
-      - uses: actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
+      - uses: actions/labeler@b8dd2d9be0f68b860e7dae5dae7d772984eacd6d # v6.2.0
         name: Labels from touched files (development branches)
         # Development branches like staging-next, haskell-updates and python-updates get special labels.
         # This is to avoid the mass of labels there, which is mostly useless - and really annoying for

@@ -89,13 +89,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-24";
+  version = "7.1.2-27";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-oSH0dsQ3cuFNYJIIr6LHbv82FbFxxcmkjQ5csTNsYCA=";
+    hash = "sha256-QCC2CO2zkhwlEWymwF739uSNuS7QCqqGIJnF/LtYzVc=";
   };
 
   outputs = [
@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.imagemagick.org/";
-    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/docs/changelog/index.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [
       "ImageMagick"

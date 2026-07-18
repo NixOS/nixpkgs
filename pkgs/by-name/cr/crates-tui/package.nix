@@ -34,13 +34,12 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "TUI for exploring crates.io using Ratatui";
     homepage = "https://github.com/ratatui/crates-tui";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     # See Cargo.toml: workspaces.metadata.dist.targets
     # Other platforms may work but YMMV
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-windows"
     ];
     maintainers = with lib.maintainers; [ pluiedev ];

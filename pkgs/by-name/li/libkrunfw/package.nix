@@ -19,15 +19,16 @@ assert lib.elem variant [
   "tdx"
 ];
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
+  version = "5.5.0";
+
   kernelSrc = fetchurl {
     url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.91.tar.xz";
     hash = "sha256-D/KrnhafnxlIVXRx+7RQ0wGPjFt3yvKI4aOYJYJZeWk=";
   };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
-  version = "5.5.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "libkrun";
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s ${kernelSrc} $(KERNEL_TARBALL)'
+      --replace-fail 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s ${finalAttrs.kernelSrc} $(KERNEL_TARBALL)'
   '';
 
   nativeBuildInputs = [

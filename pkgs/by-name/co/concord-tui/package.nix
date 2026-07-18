@@ -7,19 +7,22 @@
   opus,
   lib,
   stdenv,
+  # TODO: Clean up on `staging`
+  lld,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.2.13";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Acffg3ExqdcqsMJyv1N74Ff1/NrA1gtw8Tpa3KM4r0=";
+    hash = "sha256-3c5jxpJrBr6vYnbcJIYD06d932Da94hXUZA5FLa3kkU=";
   };
 
-  cargoHash = "sha256-CDU9ajRleP/Hr/9DA+8rr+uzv8V3xR9Ki1qtBHhYSpc=";
+  cargoHash = "sha256-6iAyKsS+FoNCKkMvbL70vKSPoAaKQtUDiAQGaEMuxWk=";
 
   buildInputs = [
     opus
@@ -30,11 +33,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lld
   ];
 
   __darwinAllowLocalNetworking = true;
 
   __structuredAttrs = true;
+
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=${lib.getExe' lld "ld64.lld"}";
+  };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Feature-rich TUI client for Discord, written in Rust";
@@ -43,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       Simon-Weij
       neo
+      Br1ght0ne
     ];
     mainProgram = "concord";
   };

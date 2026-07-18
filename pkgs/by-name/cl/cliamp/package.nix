@@ -41,6 +41,11 @@ buildGoModule (finalAttrs: {
     alsa-lib
   ];
 
+  # macOS limits Unix socket paths to 104 bytes; use a shorter TMPDIR.
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export TMPDIR="$(mktemp -d /tmp/cliamp-XXXXXX)"
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/cliamp \
       --prefix PATH : ${
@@ -60,6 +65,7 @@ buildGoModule (finalAttrs: {
     description = "Terminal Winamp - a retro terminal music player inspired by Winamp 2.x";
     homepage = "https://github.com/bjarneo/cliamp";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ supermarin ];
     mainProgram = "cliamp";
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   config,
+  nix-update-script,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -39,7 +40,7 @@
 }:
 let
   pname = "space-station-14-launcher";
-  version = "0.39.0";
+  version = "0.39.1";
 in
 buildDotnetModule rec {
   inherit pname;
@@ -52,7 +53,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-i5jcaB1wa+Toj6orpEQ9sK3EX1CLWadnhTEQDOU7QU4=";
+    hash = "sha256-u3tsPWAFMckWSHhiPqL50i9BMxR+VrLnpUSWGRRu9AA=";
     fetchSubmodules = true;
   };
 
@@ -132,6 +133,8 @@ buildDotnetModule rec {
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico ${pname} $out
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";

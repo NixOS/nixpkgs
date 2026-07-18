@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   attrs,
   chardet,
   humanize,
@@ -23,7 +27,7 @@
   typing-extensions,
   validators,
 
-  # Optional formats
+  # optional-dependencies
   boto3,
   google-api-python-client,
   datasette,
@@ -45,37 +49,31 @@
   visidata,
   tatsu,
 
-  # Tests
-  pytestCheckHook,
+  # tests
+  moto,
+  openpyxl,
   pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   pytest-vcr,
-  moto,
+  pytestCheckHook,
   requests-mock,
-
-  # Tests depending on excel
-  openpyxl,
   xlrd,
+  yattag,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frictionless";
-  version = "5.18.1";
+  version = "5.19.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "frictionlessdata";
     repo = "frictionless-py";
-    tag = "v${version}";
-    hash = "sha256-svspEHcEw994pEjnuzWf0FFaYeFZuqriK96yFAB6/gI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/l+IXcyraXCwdrM7pWr1hvjiIasDzNUQt+mQAXHS+jM=";
   };
-
-  postPatch = ''
-    substituteInPlace frictionless/conftest.py \
-      --replace-fail "from pytest_cov.embed import cleanup_on_sigterm" "" \
-      --replace-fail "cleanup_on_sigterm()" ""
-  '';
 
   build-system = [
     hatchling
@@ -182,50 +180,43 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    moto
+    openpyxl
     pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
     pytest-vcr
-    moto
+    pytestCheckHook
     requests-mock
-
-    # We do not have all packages for the `excel` format to fully function,
-    # but it's required for some of the tests.
-    openpyxl
     xlrd
+    yattag
   ]
   # datasette is transitively broken by asgi-csrf
-  ++ lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "datasette" ]);
+  ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datasette" ]);
 
   disabledTestPaths = [
     # Requires optional dependencies that have not been packaged (commented out above)
     # The tests of other unavailable formats are auto-skipped
-    "frictionless/formats/excel"
-    "frictionless/formats/spss"
-    # Console CLI tests fail due to typer/Click CliRunner output capture issues
-    # result.stdout is empty when error messages are expected
-    "frictionless/console/__spec__/test_console.py"
-    "frictionless/console/commands/__spec__/test_summary.py"
-    # We're well-ahead of requirements for duckdb and sqlalchemy
-    # https://github.com/frictionlessdata/frictionless-py/blob/be08dcf491781a565d230f47e08707e703292d85/pyproject.toml#L84
-    "frictionless/formats/sql/__spec__/duckdb/test_adapter.py"
-    "frictionless/formats/sql/__spec__/duckdb/test_parser.py"
-    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite[duckdb_url]"
-    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_with_metadata[duckdb_url]"
-    "frictionless/indexer/__spec__/test_resource.py::test_resource_index_sqlite_on_progress[duckdb_url]"
+    "frictionless/formats/excel/__spec__/test_mapper.py"
+    "frictionless/formats/excel/parsers/__spec__/test_xls.py"
   ];
 
-  pythonImportsCheck = [
-    "frictionless"
+  disabledTests = [
+    # AssertionError: assert 'cp1258' == 'utf-8'
+    "test_resource_encoding_detection_accent"
+
+    # UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa9 in position 20: invalid start byte
+    "test_remote_loader_latin1"
   ];
+
+  pythonImportsCheck = [ "frictionless" ];
 
   meta = {
     description = "Data management framework for Python that provides functionality to describe, extract, validate, and transform tabular data";
     homepage = "https://github.com/frictionlessdata/frictionless-py";
-    changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/frictionlessdata/frictionless-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
     mainProgram = "frictionless";
   };
-}
+})

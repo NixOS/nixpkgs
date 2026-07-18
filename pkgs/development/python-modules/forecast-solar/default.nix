@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     tag = "v${version}";
-    hash = "sha256-gFa1jq4Dq6fWqL/3eY+OGcJU+T+R6TZs8CX1ynnW+pU=";
+    hash = "sha256-fvmi5kwVAScVlGpxutjH8nl0lJx/VnQEVoj9a1UY7r4=";
   };
 
   build-system = [ poetry-core ];

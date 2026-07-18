@@ -4,14 +4,14 @@
   fetchFromGitHub,
   pytest,
   pytestCheckHook,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-logdog";
   version = "0.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ods";
@@ -20,11 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-Tmoq+KAGzn0MMj29rukDfAc4LSIwC8DoMTuBAppV32I=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
-
-  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

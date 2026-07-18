@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://downloads.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/rnotes.html";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       stepbrobd

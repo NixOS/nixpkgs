@@ -678,6 +678,14 @@ let
           '';
         };
 
+        oo7 = {
+          enable = lib.mkEnableOption ''
+            automatically unlock the user's default Session Keyring using pam_oo7.
+            If the user's login password does not match their keyring password,
+            oo7 will prompt separately after login.
+          '';
+        };
+
         enableUMask = lib.mkOption {
           default = config.security.pam.enableUMask;
           defaultText = lib.literalExpression "config.security.pam.enableUMask";
@@ -1204,6 +1212,7 @@ let
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
+                      || cfg.oo7.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1266,6 +1275,12 @@ let
                       enable = cfg.enableGnomeKeyring;
                       control = "optional";
                       modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                    }
+                    {
+                      name = "oo7";
+                      enable = cfg.oo7.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
                     }
                     {
                       name = "intune";
@@ -1482,6 +1497,12 @@ let
                 settings = {
                   use_authtok = true;
                 };
+              }
+              {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
               }
             ];
 
@@ -1702,6 +1723,15 @@ let
                 };
               }
               {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                settings = {
+                  auto_start = true;
+                };
+              }
+              {
                 name = "gnupg";
                 enable = cfg.gnupg.enable;
                 control = "optional";
@@ -1807,11 +1837,6 @@ let
       pkgs.writeText "motd" config.users.motd
     else
       config.users.motdFile;
-
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
 
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
@@ -2649,7 +2674,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))

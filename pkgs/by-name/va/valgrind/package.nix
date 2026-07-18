@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.26.0";
+  version = "3.27.1";
 
   src = fetchurl {
-    url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-jVTHFwKRBvFkSq2vgCq5aS5T2T3QFcvRnnQZDrpha9c=";
+    url = "https://sourceware.org/pub/valgrind/valgrind-${version}.tar.bz2";
+    hash = "sha256-XViRUuuAccAv6rjOarcZ5DGh+8PisXAPVDJjKouSZNw=";
   };
 
   patches = [
@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=186451";
       hash = "sha256-IGmyHwwGoy00hcz3XxQSDcwcU8zHLBJ9dfqTvWDQ520=";
+    })
+    (fetchpatch {
+      name = "reallocarray-test-musl.patch";
+      url = "https://sourceware.org/git/?p=valgrind.git;a=patch;h=991961ece87e4cdc0771a05c956c55baa437bb07";
+      hash = "sha256-U16384rLXMhLE5Em9z8FKYbshPlnq8l9ejC2+epL7M4=";
     })
 
     # Fix build on armv7l.
@@ -111,6 +116,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl3Plus;
+    mainProgram = "valgrind";
 
     platforms =
       with lib.platforms;

@@ -5,8 +5,7 @@
   dask,
   duckdb,
   fetchFromGitHub,
-  fetchpatch2,
-  hatchling,
+  uv-build,
   hypothesis,
   ibis-framework,
   packaging,
@@ -24,37 +23,17 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "2.16.0";
+  version = "2.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-k7CeM8Q4JgKbkLisAaVrljro4diOf0K0immek6AI0vM=";
+    hash = "sha256-fT3v7T2S7cmv0tX60kjRBrUq+89TG2/Ar9Qh9O4LP8U=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "fix-dask-deprecationwarning.patch";
-      url = "https://github.com/narwhals-dev/narwhals/commit/254655af21872e8127f7fee9a9afbfb279f1eda2.patch?full_index=1";
-      # Exclude unrelated change to non-test code.
-      includes = [ "pyproject.toml" ];
-      hash = "sha256-tgz0b08P36CENOYFBILbicHhdB4BytXgFQk3nIxpw0A=";
-    })
-    (fetchpatch2 {
-      name = "fix-dask-deprecationwarning.patch";
-      url = "https://github.com/narwhals-dev/narwhals/commit/b92d5a840e08bdf7806947ffde27de856900c5ab.patch?full_index=1";
-      hash = "sha256-2lct6/MfViKnRjpEehNKqF6zdZVIkXi7tYxycDh/Hn8=";
-    })
-    (fetchpatch2 {
-      name = "ignore-polars-deprecation-warning-in-tests.patch";
-      url = "https://github.com/narwhals-dev/narwhals/commit/fb798716eb5f8835096d8f88d422baae2b22b3ce.patch?full_index=1";
-      hash = "sha256-pWi0y4S48aADJ1MA3kB9FsLuoA+HfZp5+AgEn69pUuA=";
-    })
-  ];
-
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
@@ -108,6 +87,10 @@ buildPythonPackage rec {
     "test_first_expr_broadcasting"
     # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_unique_expr"
+    # sqlframe issues
+    "test_over_quantile"
+    "test_quantile_expr"
+    "test_join_duplicate_column_names"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [

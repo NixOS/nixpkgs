@@ -19,10 +19,6 @@ let
       url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3.tar.gz";
       hash = "sha256-xAI+UrTheCTWHSdoI4YZvhTlrlc121M+OVFkfzd7a3k=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3-macos.dmg";
-      hash = "sha256-whYAjKkF79mrknHflZnvOOy2bLosYUguelZDSuPt3uY=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/mps/2025.3/MPS-2025.3-macos-aarch64.dmg";
       hash = "sha256-3HnEHOhRRI9IYjBhc5FO7h5j4jBBDtZTVkmO/S1fBEQ=";

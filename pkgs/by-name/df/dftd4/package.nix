@@ -81,10 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       app/tester.py
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
     changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";

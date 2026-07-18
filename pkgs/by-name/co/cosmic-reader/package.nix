@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
+  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
+
   nativeBuildInputs = [
     just
     libcosmicAppHook
@@ -64,7 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/com.system76.CosmicReader.thumbnailer \
+      --replace-fail "TryExec=cosmic-reader" "TryExec=$out/bin/cosmic-reader" \
+      --replace-fail "Exec=cosmic-reader" "Exec=$out/bin/cosmic-reader"
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

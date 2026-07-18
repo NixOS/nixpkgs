@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 
   # tests
@@ -11,36 +11,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = _final: prev: {
-      # Many tests fail with the current version of opentelemetry we have in nixpkgs
-      # vibe.acp.exceptions.InternalError: module '...' has no attribute 'GEN_AI_PROVIDER_NAME'
-      opentelemetry-api = prev.opentelemetry-api.overridePythonAttrs (old: rec {
-        version = "1.40.0";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-1KVy9s+zjlB4w7E45PMCWRxPus24bgBmmM3k2R9d+Jg=";
-        };
-      });
-      opentelemetry-exporter-otlp-proto-http =
-        prev.opentelemetry-exporter-otlp-proto-http.overridePythonAttrs
-          (old: {
-            disabledTests =
-              (old.disabledTests or [ ])
-              ++ lib.optionals stdenv.hostPlatform.isDarwin [
-                # AssertionError: False is not true
-                # self.assertTrue(0.75 < after - before < 1.25)
-                "test_retry_timeout"
-              ];
-          });
-    };
-  };
-  python3Packages = python.pkgs;
-in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2eDu2Fqd6K/ZxWSl/pXSN284z7UquNb+zwkHYe9ZWBw=";
+    hash = "sha256-PODG/SQsZsixBz/j+k8ALBhXS1fPg3v/o6TXkTyzSIQ=";
   };
 
   build-system = with python3Packages; [
@@ -130,6 +103,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       requests
       rich
       rpds-py
+      sentry-sdk
       six
       smmap
       sounddevice

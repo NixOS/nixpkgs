@@ -3,8 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
+  openssl,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -27,12 +30,22 @@ buildPythonPackage rec {
     hash = "sha256-VMq+WTW+njK34QUUTE6fR2j2OmHxVzR0wrC92zYb1rY=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "generate-ssl-certs-in-a-test-fixture.patch";
+      url = "https://github.com/eclipse-paho/paho.mqtt.python/pull/931.diff";
+      hash = "sha256-A7rWwpR4PnCi77F1VqsQKHBxHNrdeHgmVM6BGMeUpjs=";
+    })
+  ];
+
   build-system = [
     hatchling
   ];
 
   nativeCheckInputs = [
+    openssl
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.5.1";
+  version = "4.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "platformdirs";
     tag = version;
-    hash = "sha256-wDhhfS8r0fCYOUJUu2kwH+fyTPmS+aPUiqWN21Fedoc=";
+    hash = "sha256-/aoJquWRn1UQZa96uZba15tDO+IGEHN9/duu9JYXmd4=";
   };
 
   build-system = [
@@ -33,6 +33,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "platformdirs" ];
+
+  preCheck = ''
+    unset XDG_DATA_DIRS
+  '';
 
   meta = {
     description = "Module for determining appropriate platform-specific directories";

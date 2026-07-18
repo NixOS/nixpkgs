@@ -59,7 +59,7 @@
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
-  withCudaLLVM ? withHeadlessDeps,
+  withCudaLLVM ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin, # Cuda isn’t supported on Darwin
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
@@ -367,6 +367,9 @@
   libnpp,
   # Testing
   testers,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }:
 
 /*
@@ -481,9 +484,6 @@ stdenv.mkDerivation (
           hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
-        ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-      ]
       ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
@@ -491,24 +491,18 @@ stdenv.mkDerivation (
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.4") [
-        (fetchpatch2 {
-          name = "lcevcdec-4.0.0-compat.patch";
-          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
-          hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
-        })
-      ]
-      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
-        (fetchpatch2 {
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
-          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
-        })
-      ]
       ++ optionals (lib.versionOlder version "7.1.2") [
         (fetchpatch2 {
           name = "unbreak-svt-av1-3.0.0.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d1ed5c06e3edc5f2b5f3664c80121fa55b0baa95";
           hash = "sha256-2NVkIhQVS1UQJVYuDdeH+ZvWYKVbtwW9Myu5gx7JnbA=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "6" && lib.versionOlder version "7.1.4") [
+        (fetchpatch2 {
+          name = "svt-av1-4.0.0-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
+          hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
       ];
 
@@ -840,8 +834,10 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang ]
-    ++ optionals withCudaNVCC [ cuda_nvcc ];
+    ++ optionals withCudaLLVM [ clang.cc ]
+    ++ optionals withCudaNVCC [ cuda_nvcc ]
+    # TODO: Clean up on `staging`.
+    ++ optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
 
     buildInputs =
       [ ]
@@ -985,12 +981,17 @@ stdenv.mkDerivation (
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-pointer-types"
-        "-Wno-error=int-conversion"
-      ];
-    };
+    env =
+      lib.optionalAttrs stdenv.cc.isGNU {
+        NIX_CFLAGS_COMPILE = toString [
+          "-Wno-error=incompatible-pointer-types"
+          "-Wno-error=int-conversion"
+        ];
+      }
+      # TODO: Clean up on `staging`.
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        NIX_CFLAGS_LINK = "-fuse-ld=lld";
+      };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;

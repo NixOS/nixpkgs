@@ -29,7 +29,7 @@ maven.buildMavenPackage rec {
   version = "0.31.2";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-lemminx";
     repo = "lemminx";
     tag = version;
     hash = "sha256-nV+IXeGEnJ7q2GEH9LKiy8ABePHSIt8GFPj/sZzv71E=";
@@ -126,7 +126,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "XML Language Server";
     mainProgram = "lemminx";
-    homepage = "https://github.com/eclipse/lemminx";
+    homepage = "https://github.com/eclipse-lemminx/lemminx";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ tricktron ];
   };

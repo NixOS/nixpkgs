@@ -69,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Tests need to be able to check locale
-  LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
+  env.LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
+
   nativeCheckInputs = [
     glibcLocales
   ];

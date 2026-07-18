@@ -27,6 +27,7 @@
   pkg-config,
   bison,
   which,
+  llvmPackages,
   jdk,
   blas,
   lapack,
@@ -68,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     tzdata
     which
-  ];
+  ]
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
+
   buildInputs = [
     bzip2
     gfortran
@@ -125,6 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontDisableStatic = static;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   preConfigure = ''
     configureFlagsArray=(

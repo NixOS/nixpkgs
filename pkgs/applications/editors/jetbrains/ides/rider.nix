@@ -31,10 +31,6 @@ let
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.4-aarch64.tar.gz";
       hash = "sha256-GXmyBrqxUpwK4djjwllvK+pnfktDrDHpLJKoe4D2xFo=";
     };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.4.dmg";
-      hash = "sha256-GfQ5WpKunJ+JhE1VcArm3UxZ5udCbfnS1Kw3D4gZorA=";
-    };
     aarch64-darwin = {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.4-aarch64.dmg";
       hash = "sha256-cfwT22BN1jzKZzrZHMQqYFJPGuRwta/sqoOJOp+PfBE=";

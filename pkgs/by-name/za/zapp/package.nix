@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zapp";
-  version = "1.0.1";
+  version = "1.0.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zsa";
     repo = "zapp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KhWL+SsN1z9qpxwHpaqRo3qAk7xAOHVkRAOa02Q2Myc=";
+    hash = "sha256-K+L8Hyw8BFyYoHGofRJrZqwTwth3Q2ypAq3uj8rO57I=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ];
 
-  cargoHash = "sha256-gDyNwHrMdNQdKdr9RGfwFAU8IaUlGrlJxV0WClQ25JM=";
+  cargoHash = "sha256-4MhPi6Ej37M+O7OE5sgzS7zhUhgawLEwxkNRSadwVcI=";
   passthru.updateScript = nix-update-script { };
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

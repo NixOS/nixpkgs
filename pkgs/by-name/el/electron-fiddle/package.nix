@@ -27,6 +27,7 @@ let
 
   patches = [
     ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
 
     # zip extraction fails on newer nodejs versions without this fix
     ./bump-yauzl.patch
@@ -66,6 +67,9 @@ let
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
     '';
 
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
+
     yarnBuildScript = "package";
 
     installPhase = ''
@@ -100,6 +104,8 @@ in
 buildFHSEnv {
   inherit pname version;
   runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
+  passthru = { inherit unwrapped; };
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"

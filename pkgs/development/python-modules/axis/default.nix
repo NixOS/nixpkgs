@@ -4,18 +4,19 @@
   buildPythonPackage,
   faust-cchardet,
   fetchFromGitHub,
-  httpx,
   orjson,
   packaging,
   pythonOlder,
   setuptools,
-  typing-extensions,
+  tomli,
+  tomli-w,
   xmltodict,
+  zeroconf,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "axis";
-  version = "72";
+  version = "74";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -24,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "axis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xNqV3j7fQ+FmOZavVdV907m1ndAhk5HWIV5xE/a8hFI=";
+    hash = "sha256-fWhQe4NklAva4znXUwYhrMdC/VCu4oZgwsyGuGd9csk=";
   };
 
   postPatch = ''
@@ -38,11 +39,12 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     faust-cchardet
-    httpx
     orjson
     packaging
-    typing-extensions
+    tomli
+    tomli-w
     xmltodict
+    zeroconf
   ];
 
   # Tests requires a server on localhost

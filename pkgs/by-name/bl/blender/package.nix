@@ -9,6 +9,7 @@
   ceres-solver,
   cmake,
   config,
+  cudaArches ? cudaPackages.flags.realArches,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   dbus,
@@ -201,6 +202,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
   ]
   ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
@@ -453,7 +455,6 @@ stdenv'.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [

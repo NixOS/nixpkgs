@@ -56,11 +56,12 @@ buildPythonPackage rec {
     # just keep those
     "typing-extensions"
 
-    "urwid"
     "asgiref"
+    "cryptography"
     "pyparsing"
     "ruamel.yaml"
     "tornado"
+    "urwid"
     "wsproto"
   ];
 

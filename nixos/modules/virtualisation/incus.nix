@@ -396,7 +396,7 @@ in
           abi <abi/4.0>,
           include <tunables/global>
 
-          include "/var/lib/incus/security/apparmor/profiles"
+          include if exists "/var/lib/incus/security/apparmor/profiles"
         '';
       };
       includes."abstractions/base" = ''
@@ -445,6 +445,8 @@ in
         "network-online.target"
       ]
       ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
+
+      stopIfChanged = lib.mkIf cfg.softDaemonRestart false;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -504,6 +506,7 @@ in
 
       # restarting this service will affect instances
       restartIfChanged = false;
+      stopIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";

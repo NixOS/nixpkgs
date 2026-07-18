@@ -16,7 +16,6 @@
 let
   suffixMap = {
     aarch64-darwin = "native-mac-aarch64";
-    x86_64-darwin = "native-mac-amd64";
     aarch64-linux = "native-linux-aarch64";
     x86_64-linux = "native-linux-amd64";
   };
@@ -33,7 +32,6 @@ stdenvNoCC.mkDerivation rec {
     sha256 =
       {
         aarch64-darwin = "sha256-UiooqMbxceUepk4uJV8ZSL1o4VLeTZgWs3URQFXFmQs=";
-        x86_64-darwin = "sha256-EvIH0GHrdFtE5m6WqHAu7XDJn/8rElpmSxLrdCx5CKY=";
         aarch64-linux = "sha256-Az/NCaFVrKANJvgIHx9QlW/fPyFVc4XiJ6BZr4ahfxk=";
         x86_64-linux = "sha256-YhygFs8+ffOgoOSpggrYQ+xS19q8koYbN9UnozlLTPY=";
       }
@@ -118,7 +116,6 @@ stdenvNoCC.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

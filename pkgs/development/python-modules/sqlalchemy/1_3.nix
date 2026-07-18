@@ -37,6 +37,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6qAjyqMVrugABHssAQuql3z1YHTAOSm5hARJuJXJJvo=";
   };
 
+  patches = [ ./1.3-0001-fix-create-new-event-loop-if-not-exists.patch ];
+
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
   '';

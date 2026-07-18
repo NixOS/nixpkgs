@@ -20,6 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-jN9nn+rI4TJLrEiEIoVxQ3XnXWSws1FenGUfG3doc94=";
   };
 
+  patches = [
+    # remove once new release with https://github.com/AGProjects/python3-eventlib/pull/4
+    ./0001-fixes-for-python3.14.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

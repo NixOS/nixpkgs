@@ -21,7 +21,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.8.2";
+  version = "1.9.0";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-WS3Au0V2AFUxRoINZvBLDJWvsTn/SyiN6jSLOWb+PQY=";
+    hash = "sha256-Uybm9zTxIMFq82A4eCayeFCia/uW7HjhIquvO9LTfjE=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,6 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     logs
     saturn
     stdint
-    uri
     xdg
   ];
 
@@ -107,6 +106,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
        --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
        nixtamal
 
+    cp -r "$src/meta" "$src/ncl" "$data/share"/*/
+
     for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"; do
        remove-references-to -t "$dep" "$bin/bin/nixtamal"
     done
@@ -143,7 +144,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   };
 
   meta = {
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     mainProgram = "nixtamal";
     outputsToInstall = [

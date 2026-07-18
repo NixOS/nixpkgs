@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Portable Git(Hub|Lab|ea) CLI tool";
     homepage = "https://herrhotzenplotz.de/gcli/";
-    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/${version}";
+    changelog = "https://github.com/herrhotzenplotz/gcli/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     mainProgram = "gcli";
     maintainers = with lib.maintainers; [ kenran ];

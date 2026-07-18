@@ -13,12 +13,12 @@ import * as path from "node:path";
  * @property {string} sha256hash SHA256 hash of the download file, example: "8eb01462dc4f26aba45be4992bda0b145d1ec210c63a6272578af27e59f23bef"
  * @property {string} url Download URL, example: "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.11.2-6251250307170304/linux-arm/Antigravity.tar.gz", "https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.11.2-6251250307170304/darwin-x64/Antigravity.zip"
  */
-/** @typedef {"x86_64-linux" | "aarch64-linux" | "x86_64-darwin" | "aarch64-darwin"} Platform */
+/** @typedef {"x86_64-linux" | "aarch64-linux" | "aarch64-darwin"} Platform */
 /** @typedef {{ version: string; vscodeVersion: string; sources: Record<Platform, { url: string; sha256: string; }> }} Information */
 
 let version = "";
 let vscodeVersion = "";
-async function getLatestInformation(/** @type {"linux-x64" | "linux-arm64" | "darwin-arm64" | "darwin"} */ targetSystem) {
+async function getLatestInformation(/** @type {"linux-x64" | "linux-arm64" | "darwin-arm64"} */ targetSystem) {
   /** @type {UpdateInfo} */
   const latestInfo = await (await fetch(`https://antigravity-auto-updater-974169037036.us-central1.run.app/api/update/${targetSystem}/stable/latest`)).json();
   const newVersion = /\/antigravity\/stable\/([\d.]+)-[\d]+/.exec(latestInfo.url)?.[1] ?? ""; // Current API lack version field now, we need to parse it from the URL temporarily.
@@ -35,7 +35,6 @@ async function getLatestInformation(/** @type {"linux-x64" | "linux-arm64" | "da
 const sources = {
   "x86_64-linux": await getLatestInformation("linux-x64"),
   "aarch64-linux": await getLatestInformation("linux-arm64"),
-  "x86_64-darwin": await getLatestInformation("darwin"),
   "aarch64-darwin": await getLatestInformation("darwin-arm64"),
 };
 /** @type {Information} */

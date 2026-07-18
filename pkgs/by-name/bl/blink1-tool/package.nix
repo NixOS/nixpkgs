@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line client for the blink(1) notification light";
     homepage = "https://blink1.thingm.com/";
-    license = with lib.licenses; [ cc-by-sa-40 ];
+    license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [ cransom ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "blink1-tool";

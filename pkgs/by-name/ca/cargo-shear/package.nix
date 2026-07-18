@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-shear";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchCrate {
     pname = "cargo-shear";
     version = finalAttrs.version;
-    hash = "sha256-Luf6/kG0MgnBDyMLZGUSadPI60DOx5Jra3I3ezOGM4w=";
+    hash = "sha256-69OwhT4vc4xwvuVxZ0C7F/Us01TsuYJnnTKT6PHsOF8=";
   };
 
-  cargoHash = "sha256-d+3ZfygD4CzHLgT45KcCw2rr313eVO7PhGZpgJpbxW8=";
+  cargoHash = "sha256-x0lZ8E/P9IaPSdzUo2O3t5qR2I3959So9uaAm4PBM4E=";
 
   env = {
     # https://github.com/Boshen/cargo-shear/blob/v1.6.2/src/lib.rs#L51-L54
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cargo-shear";
     homepage = "https://github.com/Boshen/cargo-shear";
     changelog = "https://github.com/Boshen/cargo-shear/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cathalmullan ];
   };
 })
