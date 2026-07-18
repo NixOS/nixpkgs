@@ -80,6 +80,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
     libxcb
     libxkbcommon
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    git
   ];
 
   cargoBuildFlags = [
