@@ -83,6 +83,7 @@ mapAliases {
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
   aioshutil = throw "'aioshutil' was removed because uiprotect no longer depends on it"; # added 2026-02-16
   aioxmpp = throw "'aioxmpp' was removed because it depends on aiosasl, which is abandoned and does not work on modern Python versions."; # Added 2026-06-28
+  albumentations = throw "'albumentations' was removed because it is unmaintained since 2025. You may now use albumentationsx"; # added 2026-07-18
   amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = throw "'amazon_kclpy' has been renamed to/replaced by 'amazon-kclpy'"; # Converted to throw 2025-10-29
   amqplib = throw "amqplib has been removed as it was unmaintained upstream"; # Added 2025-11-22
