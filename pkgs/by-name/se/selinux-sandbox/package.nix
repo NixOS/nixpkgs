@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-sandbox";
-  version = "3.10";
+  version = "3.11";
   inherit (policycoreutils) se_url;
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/selinux-sandbox-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4r0T4YT3IYFVoz6pQygdAvRBwpcQQBW+69/G2Npv9cM=";
+    hash = "sha256-MnxiXev62tCi1Ek6PP7ZhS9GA5AhQrLLWHV1Z/LeOt8=";
   };
 
   nativeBuildInputs = [

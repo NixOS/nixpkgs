@@ -17,7 +17,9 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.2.7";
+  version = "8.2.11";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -49,23 +51,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
 
+  # Apple's LibreSSL tries to read this while running `mongod --version`
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (literal "/private/etc/ssl/openssl.cnf"))
+  '';
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-GYyWeVSoRXgrlQqx7R2chxH3+5S4ewbTefWJR9S2Frs=";
+        hash = "sha256-sqFkZ19eYZHQFwVX2zwaKaYXisvoqN25+8DFbyGU2H4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-HTErVesWEWDjheedELdDOwlMrDvhV3JdVGtV3RuSeBI=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
-        hash = "sha256-DeD/v+NP2b8BTReV80+Lz0O9t6e3O9+52sJmTK5NtVY=";
+        hash = "sha256-5AX8pb1jInbQTuE0RqpqqcRXon6wKwdvoDCNDF70krE=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-d8uulXczpq7ZEDmDsbb3o9kaZJ1IYzZ6MkgBLkNU4Mo=";
+        hash = "sha256-M3/x/d2rVKUmIZBQ9hVuT6W9ajZy/Ut5+8aDeXF+HwY=";
       };
     };
     updateScript =
@@ -113,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
-    license = with lib.licenses; [ sspl ];
+    license = lib.licenses.sspl;
     longDescription = ''
       MongoDB CE (Community Edition) is a general purpose, document-based, distributed database.
       It is designed to be flexible and easy to use, with the ability to store data of any structure.

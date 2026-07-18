@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gforth";
-  version = "0.7.9_20260513";
+  version = "0.7.9_20260708";
 
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
     rev = finalAttrs.version;
-    hash = "sha256-hx1/CE18lepkyTnT6yymGwAAJtRM8u7DAhPsKTj0gdo=";
+    hash = "sha256-3lKd50Rlhk9OlKb5ATHH4vTWlo40h3iCz+VQfuo/6ys=";
   };
 
   patches = [ ./use-nproc-instead-of-fhs.patch ];

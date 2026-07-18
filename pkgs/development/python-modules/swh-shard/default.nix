@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swh-shard";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "devel";
     repo = "swh-shard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-97oZ+Wa8GmyL2V4CnlSvaTbQZJ+mPbg6uVmWd0oxv1Q=";
+    hash = "sha256-acspStM+ohWDSqLH/aapWkI/VqAXnJCqeLTJ+lBlDcE=";
   };
 
   build-system = [

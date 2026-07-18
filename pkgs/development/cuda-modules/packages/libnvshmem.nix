@@ -3,7 +3,7 @@
   backendStdenv,
   buildPackages,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cuda_nvml_dev,
@@ -32,7 +32,7 @@
   withIbgda ? true,
   withLibfabric ? true,
   withMpi ? true,
-  withNccl ? true,
+  withNccl ? nccl.meta.available,
   withPmix ? true,
   withUcx ? true,
 }:
@@ -104,7 +104,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvml_dev
     cuda_nvrtc

@@ -255,8 +255,10 @@ let
             ++ lib.optional systemdSupport systemdLibs
             ++ lib.optional valgrindSupport valgrind;
 
-          CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
-          SKIP_PERF_SENSITIVE = 1;
+          env = {
+            CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+            SKIP_PERF_SENSITIVE = 1;
+          };
 
           configureFlags =
             # Disable all extensions

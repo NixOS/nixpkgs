@@ -7,8 +7,7 @@
   mirage-crypto-rng,
   mirage-crypto-pk,
   x509,
-  cstruct,
-  cstruct-unix,
+  ohex,
   eqaf,
   mtime,
   logs,
@@ -21,11 +20,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "awa";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${finalAttrs.version}/awa-${finalAttrs.version}.tbz";
-    hash = "sha256-64gloekVN0YsBwUodrJc6QaNU3PGKMIZMPJWvBfzaj0=";
+    hash = "sha256-xis3+I4cY9gQVSZmMCavIl9qGe7njoRQKfFZ6yh1kQE=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +33,7 @@ buildDunePackage (finalAttrs: {
     mirage-crypto-rng
     mirage-crypto-pk
     x509
-    cstruct
+    ohex
     mtime
     logs
     base64
@@ -44,7 +43,6 @@ buildDunePackage (finalAttrs: {
 
   doCheck = true;
   checkInputs = [
-    cstruct-unix
     cmdliner
     fmt
     mirage-mtime

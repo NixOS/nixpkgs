@@ -1,34 +1,36 @@
 {
   lib,
   stdenv,
+  cmake,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kapow";
-  version = "1.5.10";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "kapow";
     rev = "v${finalAttrs.version}";
-    sha256 = "1fz9fb4w21ax8hjs6dwfn2410ig4lqvzdlijq0jcj3jbgxd4i1gw";
+    hash = "sha256-IWkvAXDcWodrV23/wv3GEQXWdNcaIZDsU3LUtxsD+cA=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    cmake
+    qt6.qmake
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [ libsForQt5.qtbase ];
+  buildInputs = [ qt6.qtbase ];
 
   meta = {
     description = "Punch clock to track time spent on projects";
     mainProgram = "kapow";
     homepage = "https://gottcode.org/kapow/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };

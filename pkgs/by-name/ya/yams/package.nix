@@ -22,7 +22,7 @@ python3Packages.buildPythonPackage rec {
   dependencies = with python3Packages; [
     pyyaml
     psutil
-    mpd2
+    python-mpd2
     requests
   ];
 

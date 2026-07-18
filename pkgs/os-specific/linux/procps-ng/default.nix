@@ -31,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z76m+8OkKlNaAjDJ6JHl3ftNnTlCLUZWWimQ0azhUhY=";
   };
 
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ]
+  ++ lib.optionals (!watchOnly) [
+    "doc"
+  ];
+
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "usrbin_execdir=$(out)/bin" ] ++ lib.optionals watchOnly [ "src/watch" ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
   configureFlags = [

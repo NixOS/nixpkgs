@@ -6,6 +6,7 @@
   decopatch,
   packaging,
   pytest,
+  setuptools_80,
   setuptools-scm,
 }:
 
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-xOGB8bUlyTGjGNSBL6jeZWwsj7d/zPFXHs8Mxf6Of48=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   dependencies = [
     decopatch

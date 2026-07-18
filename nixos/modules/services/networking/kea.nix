@@ -12,12 +12,6 @@ let
 
   chooseNotNull = x: y: if x != null then x else y;
 
-  ctrlAgentConfig = chooseNotNull cfg.ctrl-agent.configFile (
-    format.generate "kea-ctrl-agent.conf" {
-      Control-agent = cfg.ctrl-agent.settings;
-    }
-  );
-
   dhcp4Config = chooseNotNull cfg.dhcp4.configFile (
     format.generate "kea-dhcp4.conf" {
       Dhcp4 = cfg.dhcp4.settings;
@@ -37,47 +31,14 @@ let
   );
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "kea" "ctrl-agent" ] ''
+      https://kb.isc.org/docs/things-to-be-aware-of-when-upgrading-to-kea-3-2#the-kea-control-agent-ca
+    '')
+  ];
+
   options.services.kea = with lib.types; {
     package = lib.mkPackageOption pkgs "kea" { };
-
-    ctrl-agent = lib.mkOption {
-      description = ''
-        Kea Control Agent configuration
-      '';
-      default = { };
-      type = submodule {
-        options = {
-          enable = lib.mkEnableOption "Kea Control Agent";
-
-          extraArgs = lib.mkOption {
-            type = listOf str;
-            default = [ ];
-            description = ''
-              List of additional arguments to pass to the daemon.
-            '';
-          };
-
-          configFile = lib.mkOption {
-            type = nullOr path;
-            default = null;
-            description = ''
-              Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html>.
-
-              Takes preference over [settings](#opt-services.kea.ctrl-agent.settings).
-              Most users should prefer using [settings](#opt-services.kea.ctrl-agent.settings) instead.
-            '';
-          };
-
-          settings = lib.mkOption {
-            type = format.type;
-            default = null;
-            description = ''
-              Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html>.
-            '';
-          };
-        };
-      };
-    };
 
     dhcp4 = lib.mkOption {
       description = ''
@@ -290,7 +251,7 @@ in
         UMask = "0077";
       };
     in
-    lib.mkIf (cfg.ctrl-agent.enable || cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (
+    lib.mkIf (cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (
       lib.mkMerge [
         {
           environment.systemPackages = [ cfg.package ];
@@ -301,58 +262,6 @@ in
           };
           users.groups.kea = { };
         }
-
-        (lib.mkIf cfg.ctrl-agent.enable {
-          assertions = [
-            {
-              assertion = lib.xor (cfg.ctrl-agent.settings == null) (cfg.ctrl-agent.configFile == null);
-              message = "Either services.kea.ctrl-agent.settings or services.kea.ctrl-agent.configFile must be set to a non-null value.";
-            }
-          ];
-
-          environment.etc."kea/ctrl-agent.conf".source = ctrlAgentConfig;
-
-          systemd.services.kea-ctrl-agent = {
-            description = "Kea Control Agent";
-            documentation = [
-              "man:kea-ctrl-agent(8)"
-              "https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html"
-            ];
-
-            wants = [
-              "network-online.target"
-            ];
-            after = [
-              "network-online.target"
-              "time-sync.target"
-            ];
-            wantedBy = [
-              "kea-dhcp4-server.service"
-              "kea-dhcp6-server.service"
-              "kea-dhcp-ddns-server.service"
-            ];
-
-            environment = commonEnvironment;
-
-            restartTriggers = [
-              ctrlAgentConfig
-            ];
-
-            serviceConfig = {
-              ExecStart = utils.escapeSystemdExecArgs (
-                [
-                  (lib.getExe' cfg.package "kea-ctrl-agent")
-                  "-c"
-                  "/etc/kea/ctrl-agent.conf"
-                ]
-                ++ cfg.ctrl-agent.extraArgs
-              );
-              KillMode = "process";
-              Restart = "on-failure";
-            }
-            // commonServiceConfig;
-          };
-        })
 
         (lib.mkIf cfg.dhcp4.enable {
           assertions = [

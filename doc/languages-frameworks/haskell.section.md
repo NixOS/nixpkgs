@@ -679,7 +679,7 @@ Defaults to `false`.
 
 `genericBuilderArgsModifier`
 : This argument accepts a function allowing you to modify the arguments passed
-to `mkDerivation` in order to create the development environment. For example,
+to `mkDerivation` to create the development environment. For example,
 `args: { doCheck = false; }` would cause the environment to not include any test
 dependencies. Defaults to `lib.id`.
 

@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.15.4";
+  version = "5.17.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-MafEl+5uZS490ZZqi74alOnbLfDyMGb5RK5CtyHUS60=";
+    hash = "sha256-OI96936+4Jcx3VuPmHI2tcIssPxC7ofmLwWcvZxMw7E=";
   };
 
   pythonRelaxDeps = [
@@ -53,8 +53,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "checkdmarc" ];
-
-  enabledTestPaths = [ "tests.py" ];
 
   disabledTests = [
     # Tests require network access

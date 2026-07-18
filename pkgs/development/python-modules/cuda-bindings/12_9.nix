@@ -3,8 +3,8 @@
   cudaLibPaths,
 }:
 {
-  version = "12.9.6";
-  sourceHash = "sha256-uRv27h2b6wXC8oOf5k2KxZ0bUFNvNu6XO05FBbJcU1k=";
+  version = "12.9.7";
+  sourceHash = "sha256-782NIynBe3YiBozwt6c/K60wOXwEJlRllLXyC9+XQLc=";
 
   nvidiaLibsPatch = replaceVars ./patch-nvidia-libs-paths_12_9.patch {
     inherit (cudaLibPaths)

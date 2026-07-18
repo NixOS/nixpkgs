@@ -14,26 +14,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiro-cli";
-  version = "2.3.0";
+  version = "2.13.0";
 
   src =
-    let
-      darwinDmg = fetchurl {
-        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
-        hash = "sha256-lHBlzPFeT9m54dbFBXm7l/bJIVcBJqodZ6xKD9XThJc=";
-      };
-    in
     {
       x86_64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-x86_64-linux.tar.gz";
-        hash = "sha256-zLizK/0m9PdIzN4IMicq7/95lWahj7sdLzEEYpv/o+E=";
+        hash = "sha256-8qEnlNv8lQK3SCjYJ/AdfWB/RELpjLI0VQ7n4vKA7DI=";
       };
       aarch64-linux = fetchurl {
         url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/kirocli-aarch64-linux.tar.gz";
-        hash = "sha256-B4NElbGE0M7P6eGrd90UYvoeqN1fEoe+2g1/M1wM3ZY=";
+        hash = "sha256-uKR5ZxuijDgfIJ4DmDVhN5XGHDyOyiRkLcTie2iuzZU=";
       };
-      x86_64-darwin = darwinDmg;
-      aarch64-darwin = darwinDmg;
+      aarch64-darwin = fetchurl {
+        url = "https://desktop-release.q.us-east-1.amazonaws.com/${finalAttrs.version}/Kiro%20CLI.dmg";
+        hash = "sha256-GAK8+adzrEc1kXtHVCNC1aU09C86D9mroSQv7dXvbfo=";
+      };
     }
     .${system} or (throw "Unsupported system: ${system}");
 
@@ -90,12 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiro.dev";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.jamesward ];
+    maintainers = with lib.maintainers; [
+      jamesward
+      pmw
+    ];
     mainProgram = "kiro-cli";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

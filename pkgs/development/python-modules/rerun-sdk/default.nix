@@ -105,14 +105,31 @@ buildPythonPackage {
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTests = [
+    # RuntimeError: MP4 error: MP4 demux: MP4 error: file contains a box with a larger size than it
+    "test_allow_b_frames_opts_in_to_b_frame_inputs"
+    "test_asset_mode_timeline_type_timestamp_applies_to_index_chunk"
+    "test_b_frames_in_stream_mode_raise"
+    "test_custom_entity_path_applies_to_every_chunk"
+    "test_default_mode_produces_video_stream_chunks"
+    "test_stream_mode_chunk_by_gop_false_emits_one_sample_per_chunk"
+    "test_stream_mode_chunk_by_gop_true_packs_multiple_samples"
+    "test_timeline_type_timestamp_produces_timestamp_typed_column"
+
     # ConnectionError: Connection: connecting to server: transport error
+    "test_batch_shape"
+    "test_decode_matrix"
+    "test_fixed_rate_sampling_duplicates_decode_correctly"
     "test_isolated_streams"
+    "test_off_grid_capture_rate_decodes_correctly"
+    "test_roundtrip_parity"
+    "test_save_screenshot"
     "test_send_dataframe_roundtrip"
     "test_server_failed_table_creation_does_not_leak_entry"
     "test_server_version_info"
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"
+    "test_viewer_dies_on_client_close"
 
     # TypeError: 'Snapshot' object is not callable
     "test_chunk_record_batch"
@@ -127,7 +144,9 @@ buildPythonPackage {
 
     # av.InvalidDataError: the mp4 asset is a Git LFS pointer, not the real
     # video (rerun.src is fetched without fetchLFS).
+    "test_anchor_path_decodes_mid_gop_target"
     "test_collect_optimize_video_stream_summary"
+    "test_heuristic_fallback_when_is_keyframe_column_absent"
   ];
 
   disabledTestPaths = [

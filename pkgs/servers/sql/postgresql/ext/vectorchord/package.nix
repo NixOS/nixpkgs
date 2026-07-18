@@ -6,6 +6,8 @@
   nix-update-script,
   postgresql,
   postgresqlTestExtension,
+  rustc,
+  stdenv,
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
@@ -15,16 +17,27 @@ buildPgrxExtension (finalAttrs: {
   version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = "tensorchord";
-    repo = "vectorchord";
+    owner = "supervc-stack";
+    repo = "VectorChord";
     tag = finalAttrs.version;
     hash = "sha256-QL9XGSQFOcrpww03Y5F0JuDbpo0v8oidUqucLxggkqE=";
   };
 
   cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
+  patches = lib.optional (lib.versionOlder rustc.llvm.version "22.0.0" && stdenv.isx86_64) [
+    # Due to a bug in LLVM 21, build fails on x86_64 with:
+    # `rustc-LLVM ERROR: Cannot select: intrinsic %llvm.x86.avx512.vpdpbusd.512`.
+    # This has been fixed in Rust's build of LLVM and LLVM 22 with https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d,
+    # but this is not reflected in nixpkgs' packaging of rustc.
+    # For this reason, we temporarily disable avx512vnni support until this is fixed in nixpkgs.
+    # This might cause a performance penalty, but should not affect correctness.
+    # See https://github.com/NixOS/nixpkgs/pull/537113#issuecomment-4846239887
+    ./0001-disable-avx512vnni.patch
+  ];
+
   # Include upgrade scripts in the final package
-  # https://github.com/tensorchord/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
+  # https://github.com/supervc-stack/VectorChord/blob/0.5.0/crates/make/src/main.rs#L366
   postInstall = ''
     cp sql/upgrade/* $out/share/postgresql/extension/
   '';
@@ -89,9 +102,15 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/supervc-stack/VectorChord/issues/464
+    # Check after next package update.
+    broken = lib.warnIf (
+      finalAttrs.version != "1.1.1"
+    ) "Is postgresql19Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "19");
+    changelog = "https://github.com/supervc-stack/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
-    homepage = "https://github.com/tensorchord/VectorChord";
+    homepage = "https://github.com/supervc-stack/VectorChord";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
       lib.licenses.elastic20

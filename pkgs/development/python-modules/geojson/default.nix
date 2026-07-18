@@ -1,6 +1,5 @@
 {
   lib,
-  fetchpatch,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,23 +8,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "geojson";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "geojson";
     tag = finalAttrs.version;
-    hash = "sha256-0p8FW9alcWCSdi66wanS/F9IgO714WIRQIXvg3f9op8=";
+    hash = "sha256-Gz+hiv0CxitE+upLsiln+H8TtWezpUDaPH80UM7VHTA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "allow-install-python314";
-      url = "https://github.com/jazzband/geojson/commit/2584c0de5651bd694499449f9da5321b15597270.patch";
-      hash = "sha256-64LPEwC1qc83wF48878fH31CVFn2txTmSxxr0cnQbRg=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

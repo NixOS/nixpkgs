@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.tie ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "aarch64-linux"
       "x86_64-linux"
       # Built with GO386=sse2.

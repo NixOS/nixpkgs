@@ -11,15 +11,28 @@
   intel-compute-runtime,
   python3,
   spirv-tools,
-  spirv-headers,
 }:
 
 let
-  llvmVersion = "16.0.6";
+  llvmVersion = "17.0.6";
+
+  spirv-headers = stdenv.mkDerivation {
+    pname = "spirv-headers";
+    version = "1.4.341.0-unstable-2026-04-29";
+
+    src = fetchFromGitHub {
+      owner = "KhronosGroup";
+      repo = "SPIRV-Headers";
+      rev = "b8a32968473ce852a809b9de5f04f02a5a9dfa78";
+      hash = "sha256-k5lAF7TxJ+8cXDnx7lQxG/3IjSTzYcqBl5PYY2gv9E8=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.34.4";
+  version = "2.36.3";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,14 +42,14 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-w20nrn3wo9Dvv3BILYBzuJTTLXqcWaRAF7SiPtryhwk=";
+      hash = "sha256-0GzZQECcngF9b5lZyeIKXeM6w64WzCYFtHOobQKN80o=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
       owner = "llvm";
       repo = "llvm-project";
       tag = "llvmorg-${llvmVersion}";
-      hash = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
+      hash = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     })
     (fetchFromGitHub {
       name = "vc-intrinsics";
@@ -49,24 +62,19 @@ stdenv.mkDerivation rec {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.11";
-      hash = "sha256-ema1jTNMHs3pUituVb1NPllc6cA8eYJHtDOjuEzIDWM=";
+      tag = "v17.0.7";
+      hash = "sha256-7kQlH1Y4pnNvj/CS2qAVbYUl9FQWBuMew7i8CpORfKE=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.24";
-      hash = "sha256-aTcwfQt2WdOA44jfHdD7x7oxt8emSDexgZnI7MPVqvU=";
+      tag = "v17.0.24";
+      hash = "sha256-s/dNWmT3KXdXK0CSVjqEfsY9r8ONAGMZ5KUy9FeqF0E=";
     })
   ];
 
   patches = [
-    # Raise minimum CMake version to 3.5
-    # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
-    # https://github.com/intel/intel-graphics-compiler/pull/364
-    ./bump-cmake.patch
-
     # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
     # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
     # on https://github.com/intel/intel-graphics-compiler/pull/383.

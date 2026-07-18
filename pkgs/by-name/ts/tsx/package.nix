@@ -5,22 +5,23 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_22,
+  nodejs-slim_24,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
+  nodejs-slim = nodejs-slim_24;
+  pnpm' = pnpm_10.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
-  version = "4.21.0";
+  version = "4.23.1";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlVRq637l84xi9Og0ryzYuu+1b/eBq13jQJIptY0u0o=";
+    hash = "sha256-zR3a3AZLPYmnIeiT0SNwN6gVcnR4ObzJsfj7aQ8LOkQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -31,17 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm';
     fetcherVersion = 3;
-    hash = "sha256-7JdL2qz663+y3tzeK0LLn57vSsQ0P0d+FofRimWVjrM=";
+    hash = "sha256-jnCz9u+UMGV20t6fhzk/rVq68K+e5eBvUth6O7jOpQg=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs-slim
     pnpmConfigHook
     pnpm'
   ];
 
   buildInputs = [
-    nodejs_22
+    nodejs-slim
   ];
 
   patchPhase = ''
@@ -55,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     # because tsx uses semantic-release, the package.json has a placeholder
     #  version number. this patches it to match the version of the nix package,
     #  which in turn is the release version in github.
-    substituteInPlace package.json --replace-fail "0.0.0-semantic-release" "${finalAttrs.version}"
+    #
+    # also remove the prepare script, which is just used to generate LLM skills
+    substituteInPlace package.json \
+      --replace-fail "0.0.0-semantic-release" "${finalAttrs.version}" \
+      --replace-fail '"prepare": "skills-npm",' ""
 
     runHook postPatch
   '';
@@ -101,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";
-    homepage = "https://tsx.is";
+    homepage = "https://tsx.hirok.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sdedovic

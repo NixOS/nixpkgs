@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyezvizapi";
-  version = "1.0.4.9";
+  version = "1.0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RenierM26";
     repo = "pyEzvizApi";
     tag = "v${version}";
-    hash = "sha256-hpfsDZzv5rhr8y7PNcprwFoQdVUq0UlN+UtPrkqz4zE=";
+    hash = "sha256-m3rj8ELu8/X/3TPtC1wfN8VOs7eHKb4DNvb7JAoKXfE=";
   };
 
   build-system = [ setuptools ];

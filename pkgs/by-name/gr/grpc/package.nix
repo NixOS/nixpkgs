@@ -25,7 +25,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation (finalAttrs: {
   pname = "grpc";
-  version = "1.80.0"; # N.B: if you change this, please update:
+  version = "1.81.0"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grpc";
     repo = "grpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/dpTRG5JcZY2VAsqOYNIpFW7ouSy/eC2STulP7qdSYg=";
+    hash = "sha256-o1wfHrgD2VE6HcPPEWQPQZXrMh+8+GNoUjbCQoRlIWg=";
     fetchSubmodules = true;
   };
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
     homepage = "https://grpc.io/";
     platforms = lib.platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${finalAttrs.version}";

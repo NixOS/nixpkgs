@@ -50,6 +50,13 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-1qLE1UeP2i0xaOGLniZzdjIkBbme6rctGfcO9Kfoh5E=";
 
   postPatch = ''
+    # Fix hashbrown on rust ≥1.95
+    # (https://github.com/rust-lang/hashbrown/pull/662)
+    substituteInPlace "$cargoDepsCopy"/*/hashbrown-0.16.0/src/lib.rs \
+      --replace-fail 'strict_provenance_lints' 'strict_provenance_lints,trivial_clone'
+    substituteInPlace "$cargoDepsCopy"/*/hashbrown-0.16.0/src/raw/mod.rs \
+      --replace-fail 'T: Copy,' 'T: core::clone::TrivialClone,'
+
     # Force vek to build in unstable mode
     tee "$cargoDepsCopy"/*/vek-*/build.rs > /dev/null <<'EOF'
     fn main() {

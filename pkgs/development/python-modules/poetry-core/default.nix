@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-Rv6JCHsqu5rRvihGaUFcRk/NUT90bnIUM01QxUUkxh4=";
+    hash = "sha256-i9EucMsoX8Z0iyhNDVYaczv1CSY/KaZpMjn/FGzIJU4=";
   };
 
   nativeCheckInputs = [

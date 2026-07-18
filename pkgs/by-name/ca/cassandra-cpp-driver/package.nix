@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.17.1";
 
   src = fetchFromGitHub {
-    owner = "datastax";
-    repo = "cpp-driver";
+    owner = "apache";
+    repo = "cassandra-cpp-driver";
     tag = finalAttrs.version;
     sha256 = "sha256-GuvmKHJknudyn7ahrn/8+kKUA4NW5UjCfkYoX3aTE+Q=";
   };
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       library for Apache Cassandra 2.1+ using exclusively Cassandra’s
       binary protocol and Cassandra Query Language v3.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.x86_64;
     homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
     maintainers = [ lib.maintainers.npatsakula ];

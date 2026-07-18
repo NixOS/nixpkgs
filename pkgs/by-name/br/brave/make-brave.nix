@@ -299,7 +299,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       uskudnik
-      rht
       jefflabonte
       nasirhm
       buckley310
@@ -308,7 +307,6 @@ stdenv.mkDerivation {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "brave";
   };

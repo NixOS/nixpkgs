@@ -28,17 +28,17 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     tag = finalAttrs.version;
-    hash = "sha256-FqpTEGbSwN+2oG/G2Zf80rSfezJP/ogtIkVdIrX4FMU=";
+    hash = "sha256-FJcc8Y+AFAxiTj7JGLAlDkviEwMBpsDjuibJP6hgVNY=";
   };
 
   outputs = [

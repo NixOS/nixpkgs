@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     jre

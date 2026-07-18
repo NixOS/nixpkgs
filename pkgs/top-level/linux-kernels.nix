@@ -92,8 +92,8 @@ in
           ];
         };
 
-        linux_7_0 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.0";
+        linux_7_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.1";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -167,6 +167,7 @@ in
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
+        linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -331,6 +332,8 @@ in
           withNonBTF = true;
           inherit kernel;
         };
+
+        ethercat = callPackage pkgs.ethercat.kernelModule { };
 
         evdi = callPackage ../os-specific/linux/evdi { };
 
@@ -555,7 +558,7 @@ in
         veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
         vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-        vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+        vhba = callPackage ../by-name/cd/cdemu-daemon/vhba.nix { };
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
@@ -619,7 +622,7 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
         nullfsvfs = callPackage ../os-specific/linux/nullfsvfs { };
 
@@ -664,7 +667,7 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_0 = recurseIntoAttrs (packagesFor kernels.linux_7_0);
+    linux_7_1 = recurseIntoAttrs (packagesFor kernels.linux_7_1);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -678,6 +681,7 @@ in
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
+    linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
   };
 
   rpiPackages = {
@@ -733,7 +737,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_7_0;
+    linux_latest = packages.linux_7_1;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

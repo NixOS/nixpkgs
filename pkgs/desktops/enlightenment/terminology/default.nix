@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       matejc
-      ftrvxmtrx
     ];
     teams = [ lib.teams.enlightenment ];
   };

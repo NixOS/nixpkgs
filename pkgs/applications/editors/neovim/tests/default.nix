@@ -9,6 +9,7 @@
 */
 {
   vimUtils,
+  neovimUtils,
   writeText,
   neovim,
   vimPlugins,
@@ -203,23 +204,23 @@ pkgs.lib.recurseIntoAttrs rec {
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs {
-    plugins = [
-      vimPlugins.unicode-vim
-      vimPlugins.fzf-hoogle-vim
-    ];
+  nvim_with_autoconfigure = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        vimPlugins.unicode-vim
+        vimPlugins.fzf-hoogle-vim
+      ];
+    };
     autoconfigure = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
   };
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs {
-    plugins = [
-      pkgs.vimPlugins.hex-nvim
-    ];
+  nvim_with_runtimeDeps = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        pkgs.vimPlugins.hex-nvim
+      ];
+    };
     autowrapRuntimeDeps = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
   };
 
   nvim_with_ftplugin =
@@ -444,4 +445,138 @@ pkgs.lib.recurseIntoAttrs rec {
   '';
 
   inherit (vimPlugins) corePlugins;
+
+  nvim_require_check_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luaexpat luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-luamods"
+        mkdir -p "$out/plugin"
+        cat > "$out/plugin/require-check-luamods.vim" <<'EOF'
+        let g:require_check_luamods_plugin_loaded = 1
+        EOF
+        cat > "$out/lua/require-check-luamods/init.lua" <<'EOF'
+        if vim.g.require_check_luamods_plugin_loaded ~= 1 then
+          error("plugin script was not sourced")
+        end
+        -- lxp: direct C dependency from luaexpat (package.cpath)
+        require("lxp")
+        -- say: transitive dependency of luassert (package.path closure)
+        require("say")
+        return {}
+        EOF
+      '';
+      requiredLuaModules = [
+        luaexpat
+        luassert
+      ];
+    };
+
+  nvim_require_check_passthru_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-passthru-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-passthru-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-passthru-luamods"
+        cat > "$out/lua/require-check-passthru-luamods/init.lua" <<'EOF'
+        require("say")
+        return {}
+        EOF
+      '';
+      passthru.requiredLuaModules = [ luassert ];
+    };
+
+  nvim_require_check_neovim_plugin =
+    let
+      luaPkg = neovim-unwrapped.lua.pkgs.buildLuarocksPackage {
+        pname = "neovim-require-check-fails";
+        version = "0.0.1-1";
+        src = runCommandLocal "neovim-require-check-fails-src" { } ''
+          mkdir -p "$out"
+          cat > "$out/neovim-require-check-fails-0.0.1-1.rockspec" <<'EOF'
+          package = "neovim-require-check-fails"
+          version = "0.0.1-1"
+          source = {
+            url = "."
+          }
+          build = {
+            type = "none"
+          }
+          EOF
+        '';
+      };
+    in
+    testers.testBuildFailure (
+      neovimUtils.buildNeovimPlugin {
+        luaAttr = luaPkg;
+        doCheck = true;
+        postInstall = ''
+          mkdir -p "$out/lua"
+          cat > "$out/lua/require_check_fails.lua" <<'EOF'
+          error("neovimRequireCheckHook required installed module")
+          EOF
+        '';
+      }
+    );
+
+  nvim_require_check_ignores_test_modules = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-ignores-test-modules";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-ignores-test-modules-src" { } ''
+      mkdir -p \
+        "$out/lua/require-check-ignores"/{debug,script,scripts,test,tests,spec,_meta} \
+        "$out/lua/require-check-ignores"
+      cat > "$out/lua/require-check-ignores/init.lua" <<'EOF'
+      return {}
+      EOF
+      for dir in debug script scripts test tests spec _meta; do
+        cat > "$out/lua/require-check-ignores/$dir/failing.lua" <<EOF
+      error("excluded $dir directory was required")
+      EOF
+      done
+      cat > "$out/lua/require-check-ignores/failing_meta.lua" <<'EOF'
+      error("excluded _meta module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing_spec.lua" <<'EOF'
+      error("excluded _spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.spec.lua" <<'EOF'
+      error("excluded .spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.test.lua" <<'EOF'
+      error("excluded .test module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/meta.lua" <<'EOF'
+      error("excluded meta module was required")
+      EOF
+    '';
+  };
+
+  nvim_require_check_rtp_no_duplicate = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-rtp-no-duplicate-test";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-rtp-no-duplicate-src" { } ''
+      mkdir -p "$out/lua/require-check-rtp-dedup"
+      cat > "$out/lua/require-check-rtp-dedup/init.lua" <<'EOF'
+      local target = "lua/require-check-rtp-dedup/init.lua"
+      local matches = vim.api.nvim_get_runtime_file(target, true)
+      if #matches ~= 1 then
+        error(
+          ("expected plugin on runtimepath exactly once, found %d:\n%s"):format(
+            #matches,
+            table.concat(matches, "\n")
+          )
+        )
+      end
+      return {}
+      EOF
+    '';
+  };
 }

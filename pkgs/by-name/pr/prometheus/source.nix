@@ -1,6 +1,6 @@
 {
-  version = "3.11.3";
-  hash = "sha256-JmnVTVW6LsrdiQspKznksyhAYkmCXQcqCLK8q5nZI48=";
-  npmDepsHash = "sha256-6uE8d3+v5wobSyCl8oYlbNQZjRj/WtvVrpzo/PR2hQA=";
-  vendorHash = "sha256-wR1b5jV/2B50OeKokv8Ss+tpSXNjJBsLIZrK7gOb168=";
+  version = "3.13.1";
+  hash = "sha256-DtUdZp/o/tzLjiOZJ3duGqaLoNvkzulbL+wyLnY0dwA=";
+  pnpmDepsHash = "sha256-Z1TYYZhELi+rIiuleN8xR/WiMn9TF4KotFMTOsR2e6Y=";
+  vendorHash = "sha256-yvzQHfe7yd6Sjh1Vd2VxTp3jK8OWoKTmJ2uMyXX3+xs=";
 }

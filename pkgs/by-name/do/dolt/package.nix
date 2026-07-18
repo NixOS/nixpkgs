@@ -7,18 +7,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "dolt";
-  version = "1.86.6";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "dolthub";
     repo = "dolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OVoREOeVTuRMot6nfpxAfnxRFcTLpZWsIRcg/yk/rMg=";
+    hash = "sha256-SyoTBkIjZ1yZQXYo1qcdU18Yo84U1xjkNYU4pYlX748=";
   };
 
   modRoot = "./go";
   subPackages = [ "cmd/dolt" ];
-  vendorHash = "sha256-8Ls+ANNiE1yBgZuAnDp+FcU4rCiWwSKGo2jTjXVbWFo=";
+  vendorHash = "sha256-/NC/yKi/XJB0fhfgeH4Arao0lr+i16YsDGWlS5pmx+0=";
   proxyVendor = true;
   doCheck = false;
 
@@ -29,6 +29,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "dolt";
     homepage = "https://github.com/dolthub/dolt";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })

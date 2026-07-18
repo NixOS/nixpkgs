@@ -90,7 +90,6 @@ buildPythonPackage (finalAttrs: {
     BUILD_TARGET = "rocm";
     PREBUILD_KERNELS = "0";
     ROCM_PATH = "${rocmPackages.clr}";
-    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
   };
 
   build-system = [

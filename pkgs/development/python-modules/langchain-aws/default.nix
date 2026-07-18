@@ -29,14 +29,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.4.6";
+  version = "1.6.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-WSUwPEBZQRyHYDWs0j+RgeP3Mqer5dIRT7eKoRESpsU=";
+    hash = "sha256-MFlC9/9ZC1b5jAkvLRy2alcSYU5+KETJ6rIW05nLR5I=";
   };
 
   postPatch = ''
@@ -90,6 +91,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-aws==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

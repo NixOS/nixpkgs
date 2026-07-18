@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.5.12";
+  version = "2026.7.5";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X4Q7bwRroP8+2GLBfHFy8ru6y2UwBw3CaH43mym0O74=";
+    hash = "sha256-oHZXd9u+FbwOs60yrmg5oSnQoHskVCi29TRgu0RKOpM=";
   };
 
-  cargoHash = "sha256-WFNy0/lP2wEuMRt21HpJZUMDJd6dPNKDY7Pqjx6AXxU=";
+  cargoHash = "sha256-JXipQn9gN5cJx6PSpDYHuxjYLNRyAwpjSaROxqSvIog=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -85,6 +85,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
+
+  # HTTP tests use mock servers that bind to localhost. Without this, darwin builds fail.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage ./man/man1/mise.1
@@ -141,7 +144,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
 })

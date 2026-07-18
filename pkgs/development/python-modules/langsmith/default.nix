@@ -14,6 +14,7 @@
   requests,
   requests-toolbelt,
   uuid-utils,
+  websockets,
   xxhash,
   zstandard,
 
@@ -32,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.7.37";
+  version = "0.8.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E3bszn3w7MaNLVjpgSfEQEyzzqWQp056BjXIcY9YJCM=";
+    hash = "sha256-YQ49pg0+RepwlEHtu8GDUpfnXQF3yFiz6ZeRcnHXSWU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -55,6 +56,7 @@ buildPythonPackage (finalAttrs: {
     requests
     requests-toolbelt
     uuid-utils
+    websockets
     xxhash
     zstandard
   ];
@@ -101,6 +103,9 @@ buildPythonPackage (finalAttrs: {
 
     # google-adk isn't packaged (and has an enormous number of dependencies)
     "tests/unit_tests/wrappers/test_google_adk.py"
+
+    # strands-agents isn't packaged
+    "tests/unit_tests/wrappers/test_strands_agents.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];

@@ -64,6 +64,7 @@
   x11Support ? false,
   ffmpegSupport ? false,
   embedInstallers ? false,
+  smartcardSupport ? false,
 }:
 
 let
@@ -78,6 +79,7 @@ let
       darwinSuffixSalt = stdenv.cc.suffixSalt;
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
+    meta.license = lib.licenses.mit;
   } ./setup-hook-darwin.sh;
 
   # Building Wine with these flags isn't supported on Darwin. Using any of them will result in an evaluation failures
@@ -250,6 +252,9 @@ stdenv.mkDerivation (
         ++ lib.optionals ffmpegSupport [
           pkgs.ffmpeg-headless
         ]
+        ++ lib.optionals smartcardSupport [
+          pkgs.pcsclite
+        ]
       );
 
     inherit patches;
@@ -274,7 +279,8 @@ stdenv.mkDerivation (
       ++ lib.optionals vulkanSupport [ "--with-vulkan" ]
       ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !xineramaSupport) || !x11Support) [
         "--without-x"
-      ];
+      ]
+      ++ lib.optionals smartcardSupport [ "--with-pcsclite" ];
 
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
@@ -359,7 +365,7 @@ stdenv.mkDerivation (
     meta = {
       inherit version;
       homepage = "https://www.winehq.org/";
-      license = with lib.licenses; [ lgpl21Plus ];
+      license = lib.licenses.lgpl21Plus;
       sourceProvenance = with lib.sourceTypes; [
         fromSource
         binaryNativeCode # mono, gecko

@@ -27,6 +27,7 @@
   pkg-config,
   bison,
   which,
+  llvmPackages,
   jdk,
   blas,
   lapack,
@@ -45,7 +46,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.3";
+  version = "4.6.0";
 
   src =
     let
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-qlwe1Ck8cnGsUT1lRnA1asDopq1eQr4BQ2XREVC1uPI=";
+      hash = "sha256-uNybRUNmDHtZa4eTjfUyOUNQNgl2Un00QijuDtEuRew=";
     };
 
   outputs = [
@@ -68,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     tzdata
     which
-  ];
+  ]
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
+
   buildInputs = [
     bzip2
     gfortran
@@ -125,6 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontDisableStatic = static;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   preConfigure = ''
     configureFlagsArray=(

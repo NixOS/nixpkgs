@@ -59,9 +59,10 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "iceberg-python";
+  pname = "pyiceberg";
   version = "0.11.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";

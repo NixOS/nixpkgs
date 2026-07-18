@@ -17,7 +17,6 @@ let
       x86_64-linux = "linux_amd64";
       aarch64-linux = "linux_arm64";
       armv7l-linux = "linux_armv7";
-      x86_64-darwin = "darwin_amd64";
       aarch64-darwin = "darwin_arm64";
     }
     .${system} or throwSystem;
@@ -27,7 +26,6 @@ let
       x86_64-linux = "sha256-H/KISDC58ILi6oZlLY2HdgJR9ksEt+VeJem4VIFhqcY=";
       aarch64-linux = "sha256-kfmMi2HeZG81CocOEK+n+UwfKz245Ya4C6iXT2L85pI=";
       armv7l-linux = "sha256-AZDoQOJMBB1k9r07URj5g8249Od5P039nf3BadzCbPY=";
-      x86_64-darwin = "sha256-B2LeP1hKxifxpGD7BS0Wgd0h+Cf4teFh8ldyqrFhteU=";
       aarch64-darwin = "sha256-c5vWvb8ZhGAnmlZB/kqErC6SEXClg6vNbJheAAmqV/E=";
     }
     .${system} or throwSystem;
@@ -76,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

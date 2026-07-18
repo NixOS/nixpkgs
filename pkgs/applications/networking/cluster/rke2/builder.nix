@@ -46,6 +46,7 @@ lib:
   nixosTests,
 }:
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
   pname = "rke2";
   version = rke2Version;
 

@@ -2,6 +2,9 @@
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
+  "chap-first-package": [
+    "index.html#chap-first-package"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
@@ -105,6 +108,15 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-build-helpers-extendMkDerivation-transformDrv-wrapper": [
+    "index.html#ex-build-helpers-extendMkDerivation-transformDrv-wrapper"
+  ],
+  "ex-first-package-go": [
+    "index.html#ex-first-package-go"
+  ],
+  "ex-modularServiceCompliance-nixos": [
+    "index.html#ex-modularServiceCompliance-nixos"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
@@ -112,6 +124,9 @@
   ],
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
+  ],
+  "ex-pnpm-build-hook": [
+    "index.html#ex-pnpm-build-hook"
   ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
@@ -124,6 +139,9 @@
   ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "first-package-go": [
+    "index.html#first-package-go"
   ],
   "friction-graphics": [
     "index.html#friction-graphics"
@@ -217,6 +235,9 @@
   ],
   "neovim-luarocks-based-plugins": [
     "index.html#neovim-luarocks-based-plugins"
+  ],
+  "neovim-plugin-treesitter-wasm": [
+    "index.html#neovim-plugin-treesitter-wasm"
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
@@ -346,6 +367,33 @@
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
   ],
+  "pnpm-build-hook": [
+    "index.html#pnpm-build-hook"
+  ],
+  "pnpm-build-hook-build-flags": [
+    "index.html#pnpm-build-hook-build-flags"
+  ],
+  "pnpm-build-hook-code-snippet": [
+    "index.html#pnpm-build-hook-code-snippet"
+  ],
+  "pnpm-build-hook-dont": [
+    "index.html#pnpm-build-hook-dont"
+  ],
+  "pnpm-build-hook-exclusive-variables": [
+    "index.html#pnpm-build-hook-exclusive-variables"
+  ],
+  "pnpm-build-hook-flags": [
+    "index.html#pnpm-build-hook-flags"
+  ],
+  "pnpm-build-hook-script": [
+    "index.html#pnpm-build-hook-script"
+  ],
+  "pnpm-build-hook-variables": [
+    "index.html#pnpm-build-hook-variables"
+  ],
+  "pnpm-build-hook-honored-variables": [
+    "index.html#pnpm-build-hook-honored-variables"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -411,6 +459,9 @@
   ],
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
+  ],
+  "sec-meta-identifiers-purl": [
+    "index.html#sec-meta-identifiers-purl"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -586,6 +637,15 @@
   ],
   "chap-overrides": [
     "index.html#chap-overrides"
+  ],
+  "sec-packer": [
+    "index.html#sec-packer"
+  ],
+  "sec-packer-list-plugins": [
+    "index.html#sec-packer-list-plugins"
+  ],
+  "sec-packer-with-plugins": [
+    "index.html#sec-packer-with-plugins"
   ],
   "sec-pkg-override": [
     "index.html#sec-pkg-override"
@@ -869,6 +929,18 @@
   "glibcxxassertions": [
     "index.html#glibcxxassertions"
   ],
+  "tester-modularServiceCompliance": [
+    "index.html#tester-modularServiceCompliance"
+  ],
+  "tester-modularServiceCompliance-inputs": [
+    "index.html#tester-modularServiceCompliance-inputs"
+  ],
+  "tester-modularServiceCompliance-manual": [
+    "index.html#tester-modularServiceCompliance-manual"
+  ],
+  "tester-modularServiceCompliance-return": [
+    "index.html#tester-modularServiceCompliance-return"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -923,6 +995,9 @@
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
   ],
+  "var-meta-donationPage": [
+    "index.html#var-meta-donationPage"
+  ],
   "var-meta-identifiers-cpe": [
     "index.html#var-meta-identifiers-cpe"
   ],
@@ -931,6 +1006,15 @@
   ],
   "var-meta-identifiers-possibleCPEs": [
     "index.html#var-meta-identifiers-possibleCPEs"
+  ],
+  "var-meta-identifiers-purl": [
+    "index.html#var-meta-identifiers-purl"
+  ],
+  "var-meta-identifiers-purlParts": [
+    "index.html#var-meta-identifiers-purlParts"
+  ],
+  "var-meta-identifiers-purls": [
+    "index.html#var-meta-identifiers-purls"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -1040,8 +1124,14 @@
   "tar-files": [
     "index.html#tar-files"
   ],
+  "writableTmpDirAsHomeHook": [
+    "index.html#writableTmpDirAsHomeHook"
+  ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
+  ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -2830,6 +2920,9 @@
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
+  "setup-hook-omp-check": [
+    "index.html#setup-hook-omp-check"
+  ],
   "ninja": [
     "index.html#ninja"
   ],
@@ -3073,19 +3166,28 @@
   "available-versions-and-deprecations-schedule": [
     "index.html#available-versions-and-deprecations-schedule"
   ],
+  "erlang": [
+    "index.html#erlang"
+  ],
   "elixir": [
     "index.html#elixir"
   ],
   "beam-structure": [
     "index.html#beam-structure"
   ],
-  "build-tools": [
+  "beam-build-tools": [
+    "index.html#beam-build-tools",
     "index.html#build-tools"
   ],
-  "build-tools-rebar3": [
+  "beam-build-tools-rebar3": [
+    "index.html#beam-build-tools-rebar3",
     "index.html#build-tools-rebar3"
   ],
-  "build-tools-other": [
+  "beam-build-tools-erlangmk": [
+    "index.html#beam-build-tools-erlangmk"
+  ],
+  "beam-build-tools-mix": [
+    "index.html#beam-build-tools-mix",
     "index.html#build-tools-other"
   ],
   "how-to-install-beam-packages": [
@@ -3102,6 +3204,9 @@
   ],
   "packaging-erlang-applications": [
     "index.html#packaging-erlang-applications"
+  ],
+  "packaging-elixir-applications": [
+    "index.html#packaging-elixir-applications"
   ],
   "rebar3-packages": [
     "index.html#rebar3-packages"
@@ -3911,6 +4016,9 @@
   ],
   "maven": [
     "index.html#maven"
+  ],
+  "maven-4": [
+    "index.html#maven-4"
   ],
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"

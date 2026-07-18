@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rf-protocols";
-  version = "2.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "rf-protocols";
     tag = finalAttrs.version;
-    hash = "sha256-eB9Rcgd2eRs4Wx9Vjw//BT0jPPXN/PS0sukXOwmNnuc=";
+    hash = "sha256-g2e+iQXBaoGO1Yv5v+xpiM+beecErI58Ua5/FODg8Bo=";
   };
 
   build-system = [ setuptools ];

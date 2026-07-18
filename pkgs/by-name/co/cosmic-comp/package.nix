@@ -20,20 +20,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.0.13";
+  version = "1.2.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-sjWNWpwq3fWA7HQV6faP1VTFGfs/e0G0UgHuKk44Kak=";
+    hash = "sha256-yhgjdkAzUipGAo7Jv9hWlhOb/dLXn1/68yX+tRO6UV4=";
   };
 
-  cargoHash = "sha256-G2/nVy9I4iGZiG3+uVMnnqj82Wg2s5/SmNyQERqDhXY=";
+  cargoHash = "sha256-Yi1nVvWmFzlXxHN01BeeGc9YRqrRoVXTqehisOrGWS0=";
+
+  # Only default feature is systemd
+  buildNoDefaultFeatures = !useSystemd;
 
   separateDebugInfo = true;
-
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -50,9 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udev
   ]
   ++ lib.optional useSystemd systemd;
-
-  # Only default feature is systemd
-  buildNoDefaultFeatures = !useSystemd;
 
   makeFlags = [
     "prefix=${placeholder "out"}"

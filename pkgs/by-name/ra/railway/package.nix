@@ -3,26 +3,35 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  makeBinaryWrapper,
   openssl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "railway";
-  version = "4.36.1";
+  version = "5.26.0";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PYTkYCggHvLPWy+YcnLJLdznxglBn4hSvMENAFs5GH0=";
+    hash = "sha256-OImzgztObPJy7hAGYrgMdMZTCeDvHFctO+Zz9WHAysQ=";
   };
 
-  cargoHash = "sha256-ZxU/vq/A6O4ziEfLUSeQlwQLZEMnE1wnpyfyrYvOs5M=";
+  cargoHash = "sha256-EMupuiYuosuH/aSa/rPCuYJNPcoUHbId4NPVLMF8YWc=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
 
   buildInputs = [ openssl ];
 
   env.OPENSSL_NO_VENDOR = 1;
+
+  postInstall = ''
+    wrapProgram $out/bin/railway \
+      --set RAILWAY_NO_AUTO_UPDATE true
+  '';
 
   meta = {
     mainProgram = "railway";

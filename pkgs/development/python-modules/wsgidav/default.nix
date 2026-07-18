@@ -1,5 +1,6 @@
 {
   lib,
+  bcrypt,
   buildPythonPackage,
   cheroot,
   defusedxml,
@@ -7,6 +8,7 @@
   jinja2,
   json5,
   lxml,
+  passlib,
   pytestCheckHook,
   python-pam,
   pyyaml,
@@ -15,28 +17,32 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wsgidav";
-  version = "4.3.3";
+  version = "4.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mar10";
     repo = "wsgidav";
-    tag = "v${version}";
-    hash = "sha256-vUqNC7ixpta0s7wRC5ROSKMa/MsgEBu5rr0XNu69FRw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LsHVCGXgeXjHJt6VfB+uKsYjqCybBRcweTGvoR8tJ1E=";
   };
+
+  pythonRelaxDeps = [ "bcrypt" ];
 
   __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
   dependencies = [
+    bcrypt
     defusedxml
     jinja2
     json5
     cheroot
     lxml
+    passlib
     pyyaml
   ];
 
@@ -55,9 +61,9 @@ buildPythonPackage rec {
   meta = {
     description = "Generic and extendable WebDAV server based on WSGI";
     homepage = "https://wsgidav.readthedocs.io/";
-    changelog = "https://github.com/mar10/wsgidav/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/mar10/wsgidav/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wsgidav";
   };
-}
+})

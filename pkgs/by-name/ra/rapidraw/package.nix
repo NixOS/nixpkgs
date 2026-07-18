@@ -42,20 +42,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.5";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CnH8EuHzHxuXbnOry2gMU/tMqpE8++ztyNPk3HHdZqE=";
+    hash = "sha256-LbAEQwZeFeiKV6lVt8vh+mZpqlJ02RSHs0rZEMeMRc4=";
   };
 
-  cargoHash = "sha256-c2MK1DyonfeZKfZAVWfwVh/In5SqKq7nnFrlz2686SM=";
+  cargoHash = "sha256-vx4+5aMxML5Cp1s7HKHSOYS4d4HaAGO2l6jMZuFPUsQ=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-1A6b63FjNvkAbu62dRXfMjTL1y2wr2gEsZkLqYvTk0w=";
+    hash = "sha256-JtkzeCt21KIEshvoCHWo1QoxUgvVJN1loJrUHgvV4qE=";
   };
 
   nativeBuildInputs = [
@@ -118,11 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
-  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
-  '';
-
   dontWrapGApps = true;
 
   env = {
@@ -141,8 +136,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # The binary links against @rpath/libonnxruntime.*.dylib but has no LC_RPATH entries
-      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
       # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
       mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
       ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"

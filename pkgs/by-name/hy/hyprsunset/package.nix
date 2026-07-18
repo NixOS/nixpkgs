@@ -46,6 +46,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };

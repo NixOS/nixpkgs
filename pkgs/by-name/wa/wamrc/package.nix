@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wamrc";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
     tag = "WAMR-${finalAttrs.version}";
-    hash = "sha256-pNudBKnhdR/Ye0m2tVZB/wSfJZYK8+gdCpCp0rDp0o4=";
+    hash = "sha256-HBew8kbi7AaKrAEZbPIlXqiO+1wDljSzEsE9+FWzxHE=";
   };
 
   nativeBuildInputs = [

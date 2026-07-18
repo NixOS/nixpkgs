@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   buildPackages,
   mtools,
@@ -104,6 +105,31 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-O7jUpnP+wa9zBIEqYa7FQ9Zo1Ii1oVH10nlk+c4iHwg=";
   };
+
+  patches = [
+    # GCC 16 gains stronger analysis for unused variables and emits a warning
+    # (made fatal by -Werror), so the usage of this variable is made
+    # unconditional.
+    (fetchpatch {
+      name = "w89c840-unused-variable.patch";
+      url = "https://github.com/ipxe/ipxe/commit/2d28657ef63217b9a1774605267d84f89d751441.patch";
+      hash = "sha256-p1r1iDOJbss458LlmfpuIkk+6VqthDl0mcK/EfcCqS4=";
+    })
+
+    # GCC 16 adds a warning (made fatal by -Werror) for attributes that do not
+    # apply. Since the regparm attribute only applies for i386, it is dropped
+    # for x86_64.
+    (fetchpatch {
+      name = "x86_64-drop-regparm-attribute.patch";
+      url = "https://github.com/ipxe/ipxe/commit/c18d0a23b634ae001ea877020c0236bfca1468e5.patch";
+      hash = "sha256-spEIdyw30zYiYmhnvYQEVUrr/uMnFqJO/yLWnPb+QMc=";
+    })
+    (fetchpatch {
+      name = "librm-regparm-attribute-only-for-i386.patch";
+      url = "https://github.com/ipxe/ipxe/commit/be35d67a029485f461ce83cbeda15056a52cb069.patch";
+      hash = "sha256-ki6gUPC6njGvu27RsD3f1L0m82NOKj9es0/o0jXCpqk=";
+    })
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;

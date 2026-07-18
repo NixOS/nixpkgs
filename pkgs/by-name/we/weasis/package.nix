@@ -20,7 +20,6 @@ let
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
     "aarch64-linux" = "linux-aarch64";
-    "x86_64-darwin" = "macosx-x86-64";
     "aarch64-darwin" = "macosx-aarch64";
   };
 

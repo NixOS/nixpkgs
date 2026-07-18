@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.99.6";
+  version = "4.99.7";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = version;
-    hash = "sha256-M/2xcii8ibGAI/6f34AE7aEb9fmn+iSWqWqnyDhg4CI=";
+    tag = version;
+    hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
   postPatch = ''
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''

@@ -8,11 +8,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kiwix-apple";
-  version = "3.14.0";
+  version = "3.15.1";
 
   src = fetchurl {
     url = "https://download.kiwix.org/release/kiwix-macos/kiwix-macos_${finalAttrs.version}.dmg";
-    hash = "sha256-rVfoJg8VTyEF6KeMGIOTUijtz8Ot0DerayrPgs6Wje8=";
+    hash = "sha256-3wZ7zavLmLyPYGrdFpnhd8a1paI65yHFdL6JzL1e0e0=";
   };
 
   sourceRoot = ".";

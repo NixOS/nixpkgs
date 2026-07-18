@@ -28,7 +28,7 @@ let
     '';
 
     propagatedBuildInputs = with python3Packages; [
-      xlib
+      python-xlib
       pygobject3.out
       dbus-python.out
     ];

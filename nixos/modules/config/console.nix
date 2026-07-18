@@ -217,7 +217,7 @@ in
           # When imperative, seed /etc/vconsole.conf on first boot from declared
           # defaults so the keymap isn't lost before localectl is ever used
           systemd.tmpfiles.rules = lib.mkIf i18nCfg.imperativeLocale [
-            "C /etc/vconsole.conf - - - - ${vconsoleConf}"
+            "C /etc/vconsole.conf - - - - ${vconsoleConf true}"
           ];
 
           systemd.services.reload-systemd-vconsole-setup = {

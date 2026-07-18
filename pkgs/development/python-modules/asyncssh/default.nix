@@ -6,6 +6,7 @@
   fetchPypi,
   fido2,
   gssapi,
+  ifaddr,
   libnacl,
   libsodium,
   nettle,
@@ -15,17 +16,18 @@
   pytestCheckHook,
   python-pkcs11,
   setuptools,
+  stdenv,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.22.0";
+  version = "2.24.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w85ysBvk+XtA5ihE3ThCJ+X/WkAaN5MAfEL4alyOtTc=";
+    hash = "sha256-QGTFkOWc4ujYKi9m018xINdlgotN9ePb+we0qMJGhsk=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +43,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     bcrypt = [ bcrypt ];
     fido2 = [ fido2 ];
+    ifaddr = [ ifaddr ];
     gssapi = [ gssapi ];
     libnacl = [ libnacl ];
     pkcs11 = [ python-pkcs11 ];
@@ -78,8 +81,14 @@ buildPythonPackage rec {
     "test_connect_timeout_exceeded"
     # Fails in the sandbox
     "test_forward_remote"
-    # (2.21.0) SFTP copy ends up with an empty file
+    # Seems weirdly filesystem specific
+    "test_put_name_too_long"
+    # SFTP copy ends up with an empty file on ZFS
     "test_copy_max_requests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires network access
+    "test_canonicalize_failure"
   ];
 
   pythonImportsCheck = [ "asyncssh" ];

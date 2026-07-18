@@ -21,7 +21,7 @@
   ruby,
   perl,
   tk,
-  jdk,
+  jre_headless,
   bash,
   snobol4,
   coreutils,
@@ -156,8 +156,7 @@ let
         [
           # tlnet-final snapshot; used when texlive.tlpdb is frozen
           # the TeX Live yearly freeze typically happens in mid-March
-          "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
-          "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
+          "mirror://texhistoric/systems/texlive/${toString version.texliveYear}/tlnet-final"
         ]
       else
         [
@@ -203,7 +202,7 @@ let
       runCommand
       writeShellScript
       bash
-      jdk
+      jre_headless
       perl
       python3
       ruby
@@ -625,6 +624,7 @@ let
             meta = meta // {
               description = "TeX Live environment for ${pname}";
               license = licenses.${pname};
+              problems.removal.message = "texlive.combined schemes are deprecated and will be removed from Nixpkgs 27.05. Please switch to texliveSmall or another top level scheme.";
             };
           }
       )

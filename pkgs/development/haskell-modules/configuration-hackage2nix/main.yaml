@@ -453,9 +453,6 @@ package-maintainers:
     - massiv
     - massiv-io
     - massiv-test
-  shlok:
-    - streamly-archive
-    - streamly-lmdb
   slotThe:
     - X11
     - X11-xft

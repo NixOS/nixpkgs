@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-f0SsTwriUo2rD97L+Z/bq7UahOSLjYjH8bbXg/Hx5qE=";
+  cargoHash = "sha256-DE1m/odw90epyR8U9H1pxyJXariIHLXwk+mVYi8cu5A=";
 
   buildInputs = [
     hwdata
@@ -35,6 +35,11 @@ rustPlatform.buildRustPackage {
     protobuf
     addDriverRunpath
     python3Packages.wrapPython
+  ];
+
+  checkFlags = [
+    # This test has a build-machine dependency and will be removed from the normal test suite in the next release
+    "--skip=repositories::hwmon::hwmon_repo::coalescer_tests::fast_device_no_added_latency"
   ];
 
   pythonPath = [ liquidctl ];

@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.9.0";
+  version = "1.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-48tczmRdNExerlVTNMuRNi1dC5XhUSXNBwIGbJ9vFnU=";
+    hash = "sha256-nYfS9HXWTKcvVrq+wm5cgvB7keMAQPmKEe8bI0jngFg=";
   };
 
   postPatch =
@@ -54,6 +54,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "sparsediffpy"
+  ];
   dependencies = [
     clarabel
     cvxopt

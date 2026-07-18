@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.3.2";
+  version = "4.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
     tag = version;
-    hash = "sha256-mGX61fAbFwheamOgK5lq/A/3FmTCuv0UfAlhOUwX2zg=";
+    hash = "sha256-0Mzvb86f1r07PCJqTy9CGUq9Zk2PtAsFfd3SmFlOayk=";
   };
 
   build-system = [ setuptools ];

@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CPRn1F15N4Rjry91Gu+ZXWpKVTOEnHI3TmZn8502QB4=";
+    hash = "sha256-WqfxrVAJvD6Y6ZjkhbvibL6Bps7PL2lx3JBY94Yd6kk=";
   };
 
   postPatch = ''
@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  # electron builds must be writable to support electron fuses
   preBuild = ''
     # Validate electron version matches upstream package.json
     if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
@@ -83,12 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       echo "ERROR: electron version mismatch between package.json and nixpkgs"
       exit 1
     fi
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp -r ${electron.dist}/Electron.app .
-    chmod -R u+w Electron.app
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
+
+    # electron builds must be writable to support electron fuses
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
   '';
@@ -103,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     # can't run it via bunx / npx since fixupPhase was skipped for node_modules
     node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false
 

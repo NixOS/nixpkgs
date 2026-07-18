@@ -29,7 +29,6 @@
   gtk3-x11,
   harfbuzz,
   imagemagick,
-  jansson,
   libxaw,
   libxcursor,
   libxft,
@@ -66,7 +65,7 @@
   # Boolean flags
   withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
-  srcRepo ? false,
+  srcRepo ? true,
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
@@ -80,8 +79,6 @@
   withGpm ? stdenv.hostPlatform.isLinux,
   # https://github.com/emacs-mirror/emacs/blob/emacs-27.2/etc/NEWS#L118-L120
   withImageMagick ? false,
-  # Emacs 30+ has native JSON support
-  withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
   withMotif ? false,
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
@@ -119,6 +116,8 @@
 
   # test
   callPackage,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -165,6 +164,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     patches fetchpatch
+    ++ [
+      ./load-the-early-default-library-after-early-init.el.patch
+    ]
     ++ lib.optionals withNativeCompilation [
       (replaceVars ./native-comp-driver-options-30.patch {
         backendPath = (
@@ -241,6 +243,8 @@ stdenv.mkDerivation (finalAttrs: {
     ""
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -249,15 +253,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals srcRepo [
     autoreconfHook
   ]
-  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ];
+  ++ lib.optionals (withPgtk || withX && (withGTK3 || withXwidgets)) [ wrapGAppsHook3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    sigtool
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
+  ];
 
   buildInputs = [
-    gettext
     gnutls
     (lib.getDev harfbuzz)
-  ]
-  ++ lib.optionals withJansson [
-    jansson
   ]
   ++ [
     libxml2
@@ -345,9 +350,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withWebkitgtk [
     webkitgtk_4_1
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    sigtool
-  ]
   ++ lib.optionals withNS [
     librsvg
   ]
@@ -415,15 +417,22 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withSelinux "selinux")
   ];
 
+  __structuredAttrs = true;
+
   env =
     lib.optionalAttrs withNativeCompilation {
       NATIVE_FULL_AOT = "1";
       LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
     }
-    // lib.optionalAttrs (variant == "macport") {
-      # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
-      # See https://github.com/NixOS/nixpkgs/issues/127902
-      NIX_CFLAGS_COMPILE = "-isystem ${./macport-noescape-noop}";
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # workaround for ld64 hardening issue
+      #
+      # TODO: Clean up on `staging`
+      NIX_CFLAGS_COMPILE =
+        "-fuse-ld=lld"
+        # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+        # See https://github.com/NixOS/nixpkgs/issues/127902
+        + lib.optionalString (variant == "macport") " -isystem ${./macport-noescape-noop}";
     };
 
   enableParallelBuilding = true;
@@ -468,9 +477,8 @@ stdenv.mkDerivation (finalAttrs: {
       | xargs -n $((1000/NIX_BUILD_CORES + 1)) -P $NIX_BUILD_CORES \
         $out/bin/emacs --batch -l comp --eval "(while argv \
           (comp-trampoline-compile (intern (pop argv))))"
-    mkdir -p $out/share/emacs/native-lisp
     $out/bin/emacs --batch \
-      --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp\")" \
+      --eval "(add-to-list 'native-comp-eln-load-path \"$out/lib/emacs/$siteVersionDir/native-lisp\")" \
       -f batch-native-compile $out/share/emacs/site-lisp/site-start.el
   '';
 

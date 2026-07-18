@@ -145,7 +145,6 @@ let
           armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
           armv6l-linux = "./Configure linux-armv4 -march=armv6";
           armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
-          x86_64-darwin = "./Configure darwin64-x86_64-cc";
           aarch64-darwin = "./Configure darwin64-arm64-cc";
           x86_64-linux = "./Configure linux-x86_64";
           x86_64-solaris = "./Configure solaris64-x86_64-gcc";
@@ -385,12 +384,13 @@ let
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-      strictDeps = lib.versionAtLeast version "4.0";
-      __structuredAttrs = lib.versionAtLeast version "4.0";
+      strictDeps = true;
+      __structuredAttrs = true;
 
       meta = {
         homepage = "https://www.openssl.org/";
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
+        donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
@@ -444,8 +444,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.20";
-    hash = "sha256-yAoB38cOzk3CEWiTLDdzkELUBNRszIGlmG3XUxTs2m8=";
+    version = "3.0.21";
+    hash = "sha256-YX4pr45CH0ZklISkk35IxoXkf0ZIgWfJgviLxOwdUi8=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -474,8 +474,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.6";
-    hash = "sha256-3q58gMupnEtPlA7K2zwzOLE8t3QYQJI45X1/MfKjtzY=";
+    version = "3.5.7";
+    hash = "sha256-qMDSilKcpID582z1eS4s0hmEVSo8jkqhGiSqMa6smOg=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -506,8 +506,8 @@ in
   };
 
   openssl_3_6 = common {
-    version = "3.6.2";
-    hash = "sha256-qvUaH+BkOE+BHa6utOxNznNA7IvYkwJ+7mdq8x6DoE8=";
+    version = "3.6.3";
+    hash = "sha256-JDqGZJz28j7rai/yRW4J5dd92QGKVNPZawxr3Wumx/E=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -535,8 +535,8 @@ in
   };
 
   openssl_4_0 = common {
-    version = "4.0.0";
-    hash = "sha256-wyz0mpWcTzRflgaYLdNufSj3xYsZwuJddWJNKz0veaw=";
+    version = "4.0.1";
+    hash = "sha256-LbPzoNbqS1nh8JSs4sjNU23/uHzcOQhMWvoeb3833Qk=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

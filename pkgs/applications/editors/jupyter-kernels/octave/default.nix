@@ -12,7 +12,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel octave-kernel.definition'
 
 # Jupyter notebook:
-# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.octave = octave-kernel.definition; }'
+# nix shell --impure --expr 'with import <nixpkgs> {}; [ (jupyter.override { definitions.octave = octave-kernel.definition; }) ]' -c jupyter-notebook
 
 let
   kernel = callPackage ./kernel.nix {

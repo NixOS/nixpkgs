@@ -8,20 +8,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "build2-bootstrap";
-  version = "0.17.0";
+  version = "0.18.1";
   src = fetchurl {
     url = "https://download.build2.org/${finalAttrs.version}/build2-toolchain-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NyKonqht90JTnQ+Ru0Qp/Ua79mhVOjUHgKY0EbZIv10=";
+    hash = "sha256-pfPqudRSK8InBImVk91scBM0mhuMNyeMiyMhBz4l/xY=";
   };
   patches = [
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
-    # Fix build on newer clang/libcpp
-    (fetchpatch {
-      name = "new-libcpp-fix.patch";
-      url = "https://github.com/build2/build2/commit/7cf9cece1d88cd1be283ab309f9a851bd02b43d0.patch";
-      hash = "sha256-PTo1C6Aa1L9fvjiJ08KtGgVqHMw2ZlW5LSKoripL22g=";
-    })
   ];
 
   sourceRoot = "build2-toolchain-${finalAttrs.version}/build2";
@@ -43,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    build2/b-boot --version
+    b/b-boot --version
     runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D build2/b-boot $out/bin/b
+    install -D b/b-boot $out/bin/b
     runHook postInstall
   '';
 

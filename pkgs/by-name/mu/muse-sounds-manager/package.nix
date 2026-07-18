@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation rec {
   pname = "muse-sounds-manager";
-  version = "2.1.1.912";
+  version = "2.2.1.953";
 
   # Use web.archive.org since upstream does not provide a stable (versioned) URL.
   # To see if there are new versions on the Web Archive, visit
   # http://web.archive.org/cdx/search/cdx?url=https://muse-cdn.com/Muse_Sounds_Manager_x64.tar.gz
   # then replace the date in the URL below with date when the SHA1
-  # changes (currently XF7SCWPIOJ7WVGUVFOKW4UKIQVW4NLFS) and replace
+  # changes (currently CQDUS5RIVPTNZF65NNOVKDG2BCVCXH6H) and replace
   # the version above with the version in the .deb metadata (or in the
   # settings of muse-sounds-manager).
   src = fetchurl {
-    url = "https://web.archive.org/web/20251226185300if_/https://muse-cdn.com/Muse_Sounds_Manager_x64.tar.gz";
-    hash = "sha256-fjdurAqOaiw8qUYm7oO8txHCKrrGSvvnmAxLU84IgSw=";
+    url = "https://web.archive.org/web/20260710024139if_/https://muse-cdn.com/Muse_Sounds_Manager_x64.tar.gz";
+    hash = "sha256-y7fKHh2pG8uT4p0vq20rsW8bSAp1mepkd2sW/06N3EI=";
   };
 
   nativeBuildInputs = [

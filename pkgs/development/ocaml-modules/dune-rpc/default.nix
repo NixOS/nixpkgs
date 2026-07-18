@@ -1,7 +1,7 @@
 {
   lib,
   buildDunePackage,
-  dune_3,
+  dune,
   csexp,
   stdune,
   ocamlc-loc,
@@ -13,9 +13,7 @@
 
 buildDunePackage {
   pname = "dune-rpc";
-  inherit (dune_3) src version;
-
-  duneVersion = "3";
+  inherit (dune) src version;
 
   dontAddPrefix = true;
 
@@ -31,7 +29,7 @@ buildDunePackage {
 
   meta = {
     description = "Library to connect and control a running dune instance";
-    inherit (dune_3.meta) homepage;
+    inherit (dune.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.mit;
   };

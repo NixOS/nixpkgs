@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gluonts";
-  version = "0.16.2";
+  version = "0.16.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "gluonts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
+    hash = "sha256-WQu9QahzbCofC+deso8T93ABJROVLdAegiKtOTxfhT4=";
   };
 
   # pydantic.v1.errors.ConfigError: unable to infer type for attribute "target"

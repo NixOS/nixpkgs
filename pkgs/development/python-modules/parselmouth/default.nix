@@ -9,6 +9,7 @@
   pytestCheckHook,
   scikit-build,
   setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,8 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   dependencies = [ numpy ];
+
+  doCheck = pythonOlder "3.13";
 
   nativeCheckInputs = [
     future

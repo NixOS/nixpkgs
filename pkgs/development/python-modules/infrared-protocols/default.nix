@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "infrared-protocols";
-  version = "2.1.0";
+  version = "6.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "infrared-protocols";
     tag = finalAttrs.version;
-    hash = "sha256-TAeqDCuLSuzAOq2bsHTMYjQ1AyKDRQSAq8cC8oSfY1E=";
+    hash = "sha256-6kyb0a0cCwVSS4evDGg0Z7wLGhDUHnLeXUJ9PW+fhHk=";
   };
 
   build-system = [ setuptools ];

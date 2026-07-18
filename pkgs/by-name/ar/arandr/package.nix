@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  fetchpatch,
   python3Packages,
   gobject-introspection,
   gsettings-desktop-schemas,
@@ -30,9 +31,17 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
 
-  # patch to set mtime=0 on setup.py
-  patches = [ ./gzip-timestamp-fix.patch ];
-  patchFlags = [ "-p0" ];
+  patches = [
+    # patch to set mtime=0 on setup.py
+    ./gzip-timestamp-fix.patch
+
+    # fixes build with setuptools 81+, while keeping it backwards compatible
+    (fetchpatch {
+      name = "arandr-0.1.11-setuptools-81.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-misc/arandr/files/arandr-0.1.11-setuptools-81.patch";
+      hash = "sha256-b9U8b4rdkN5lWDVpv50szaVS0rAZVSy7q6IXNVLvq3A=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection

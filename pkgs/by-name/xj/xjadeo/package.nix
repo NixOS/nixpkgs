@@ -46,8 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libGLU
     liblo
-    libxv
     portmidi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxv
   ];
 
   meta = {
@@ -60,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://xjadeo.sourceforge.net";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mitchmindtree ];
   };
 })

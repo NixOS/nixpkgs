@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jocalsend";
   version = "1.618033988";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitea {
     domain = "git.kittencollective.com";
     owner = "nebkor";
@@ -35,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://git.kittencollective.com/nebkor/joecalsend";
     description = "Rust terminal client for Localsend";
     changelog = "https://git.kittencollective.com/nebkor/joecalsend/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ unfreeRedistributable ];
+    license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "jocalsend";
   };

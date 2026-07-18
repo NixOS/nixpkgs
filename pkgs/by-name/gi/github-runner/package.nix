@@ -17,7 +17,7 @@
   runtimeShell,
   # List of Node.js runtimes the package should support
   nodeRuntimes ? [
-    "node20"
+    # Node.js 20.x has reached EOL and is marked as insecure in Nixpkgs, thus omitted here
     "node24"
   ],
   nodejs_20,
@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.334.0";
+  version = "2.335.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSfzWwIf8Vpc8H0XM1tIqdZhdY/noZCeYLBvdWjqmLA=";
+    hash = "sha256-mFwWhpFzp0pT7WaMpF/N6PGw0IJt3I6/e7GDgw9wA2U=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -211,6 +211,10 @@ buildDotnetModule (finalAttrs: {
     "RepositoryActionWithInvalidWrapperActionfile_Node"
     "RepositoryActionWithWrapperActionfile_PreSteps"
   ]
+  ++ [
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_OmitsDependencies_WhenEmpty"
+    "GitHub.Runner.Common.Tests.Worker.ActionManagerL0.GetDownloadInfoAsync_PropagatesDependencies_WhenPresent"
+  ]
   ++ map (x: "GitHub.Runner.Common.Tests.DotnetsdkDownloadScriptL0.${x}") [
     "EnsureDotnetsdkBashDownloadScriptUpToDate"
     "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
@@ -374,7 +378,6 @@ buildDotnetModule (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -20,16 +20,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.13.2";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "poezio";
     repo = "slixmpp";
-    tag = "slix-${version}";
-    hash = "sha256-hjM1OIFYpHV5SSN32858pyuwOvaAA0tFZWCZI+5n9u4=";
+    tag = "slix-${finalAttrs.version}";
+    hash = "sha256-1jCKaUwWuIxTQGA0WkQMpB3xWW8XEAfAlyrqoTFIhVY=";
   };
 
   patches = [
@@ -71,12 +71,10 @@ buildPythonPackage rec {
     safer-xml-parsing = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    # don't test against pure python version in the source tree
-    rm -rf slixmpp
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Exclude integration tests
@@ -90,8 +88,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      haansn08
+    ];
   };
-}
+})

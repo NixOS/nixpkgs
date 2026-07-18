@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.0-pre98";
 
   src = fetchFromGitHub {
-    owner = "CertainLach";
+    owner = "deltarocks";
     repo = "jrsonnet";
     tag = "v${finalAttrs.version}";
     hash = "sha256-2dNzxZnvnw8TsKnnIlHGpuixrqe4z0a4faOBPv2N+ws=";
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
-    homepage = "https://github.com/CertainLach/jrsonnet";
+    homepage = "https://github.com/deltarocks/jrsonnet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lach

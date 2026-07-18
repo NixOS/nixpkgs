@@ -310,6 +310,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    buddy = {
+      spdxId = "Buddy";
+      fullName = "Buddy License";
+    };
+
     bzip2 = {
       spdxId = "bzip2-1.0.6";
       fullName = "bzip2 and libbzip2 License v1.0.6";
@@ -379,6 +384,13 @@ lib.mapAttrs mkLicense (
     cc-by-nc-30 = {
       spdxId = "CC-BY-NC-3.0";
       fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
+      free = false;
+    };
+
+    cc-by-nc-30-igo = {
+      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
+      # spdxId = "CC-BY-NC-3.0-IGO";
+      fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
       free = false;
     };
 
@@ -573,6 +585,13 @@ lib.mapAttrs mkLicense (
       spdxId = "Elastic-2.0";
       fullName = "Elastic License 2.0";
       free = false;
+    };
+
+    enpl = {
+      fullName = "Emmi AI Non-Production License";
+      url = "https://github.com/Emmi-AI/noether/blob/main/LICENSE.txt";
+      free = false;
+      redistributable = true;
     };
 
     epl10 = {
@@ -919,6 +938,11 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    jpl-image = {
+      fullName = "JPL Image Use Policy";
+      spdxId = "JPL-image";
+    };
+
     knuth = {
       fullName = "Knuth CTAN License";
       spdxId = "Knuth-CTAN";
@@ -1045,6 +1069,11 @@ lib.mapAttrs mkLicense (
       fullName = "MIT License";
     };
 
+    mit-click = {
+      spdxId = "MIT-Click";
+      fullName = "MIT Click License";
+    };
+
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";
@@ -1150,9 +1179,20 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Only if used in Netdata products.
     };
 
+    netboxLimitedUse = {
+      fullName = "NetBox Limited Use License 1.0";
+      free = false;
+      url = "https://github.com/netboxlabs/netbox-branching/blob/8465b9aee69ded23930cfe1a522695bfb8955a5a/LICENSE.md";
+    };
+
     ngpl = {
       spdxId = "NGPL";
       fullName = "Nethack General Public License";
+    };
+
+    ngrep = {
+      spdxId = "ngrep";
+      fullName = "ngrep License";
     };
 
     nistSoftware = {
@@ -1308,6 +1348,17 @@ lib.mapAttrs mkLicense (
     qwtException = {
       spdxId = "Qwt-exception-1.0";
       fullName = "Qwt exception 1.0";
+    };
+
+    reticulum = {
+      # The Reticulum License restricts certain fields of use, notably systems
+      # intended to harm human beings and AI/ML training datasets. Such usage
+      # restrictions are incompatible with the Open Source Definition
+      # (https://opensource.org/osd), in particular "No Discrimination Against
+      # Fields of Endeavor".
+      free = false;
+      fullName = "Reticulum License";
+      url = "https://reticulum.network/license";
     };
 
     ruby = {
@@ -1575,6 +1626,11 @@ lib.mapAttrs mkLicense (
     wadalab = {
       fullName = "Wadalab Font License";
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
+    };
+
+    wordnet = {
+      spdxId = "WordNet";
+      fullName = "WordNet License";
     };
 
     wtfpl = {

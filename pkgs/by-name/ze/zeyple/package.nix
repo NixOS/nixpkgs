@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication {
       --replace-fail 'from configparser import SafeConfigParser' 'from configparser import ConfigParser as SafeConfigParser'
   '';
 
-  propagatedBuildInputs = [ python3Packages.gpgme ];
+  propagatedBuildInputs = [ python3Packages.gpg ];
   installPhase = ''
     runHook preInstall
 

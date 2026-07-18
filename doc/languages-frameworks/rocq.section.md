@@ -51,7 +51,7 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
   * if it is a string of the form `owner:branch` then it tries to download the `branch` of owner `owner` for a project of the same name using the same vcs, and the `version` attribute of the resulting derivation is set to `"dev"`, additionally if the owner is not provided (i.e. if the `owner:` prefix is missing), it defaults to the original owner of the package (see below),
   * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
 * `defaultVersion` (optional). Rocq libraries may be compatible with some specific versions of Rocq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `rocq-core` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `rocqPackages` attribute set.
-* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `hash` attribute (you may put the empty string `""` in order to automatically insert a fake hash, this will trigger an error which will allow you to find the correct hash), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev`, `artifact` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
+* `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `hash` attribute (you may put the empty string `""` to automatically insert a fake hash, this will trigger an error which will allow you to find the correct hash), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev`, `artifact` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
 * `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `hash` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
 * `owner` (optional, defaults to `"rocq-community"`).
@@ -59,7 +59,7 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `releaseArtifact` (optional, defaults to `(v: null)`), provides a default mapping from release names to artifact names (only works for github artifact for now),
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
-* `namePrefix` (optional, defaults to `[ "rocq-core" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
+* `namePrefix` (optional, defaults to `[ "rocq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
 * `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
 * `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
 * `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,
@@ -74,6 +74,8 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variables `COQLIBINSTALL` and `COQPLUGININSTALL` so as to install in the proper subdirectory. Indeed Rocq libraries should be installed in `$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib/`. Such directories are automatically added to the `$ROCQPATH` environment variable by the hook defined in the Rocq derivation.
 * `setROCQBIN` (optional, defaults to `true`), by default, the environment variable `$ROCQBIN` is set to the current Rocq's binary, but one can disable this behavior by setting it to `false`,
+* `useCoq` (optional, defaults to `false`), adds the Coq compatibility binaries to the build environment, which is necessary for some packages that still depend on them and sets `COQBIN` to the path of the `coqc` binary (if `setROCQBIN` is also set to `true`). A wrapper `mkCoqDerivation` is provided that sets this option to `true`.
+* `useCoqifVersion` (optional, defaults to `(x: false)`), adds the Coq compatibility binaries to the build environment if the provided predicate evaluates to true on the version. This can be useful for supporting old package versions that need the Coq compatibility binaries, while newer versions do not.
 * `useMelquiondRemake` (optional, default to `null`) is an attribute set, which, if given, overloads the `preConfigurePhases`, `configureFlags`, `buildPhase`, and `installPhase` attributes of the derivation for a specific use in libraries using `remake` as set up by Guillaume Melquiond for `flocq`, `gappalib`, `interval`, and `coquelicot` (see the corresponding derivation for concrete examples of use of this option). For backward compatibility, the attribute `useMelquiondRemake.logpath` must be set to the logical root of the library (otherwise, one can pass `useMelquiondRemake = {}` to activate this without backward compatibility).
 * `dropAttrs`, `keepAttrs`, `dropDerivationAttrs` are all optional and allow to tune which attribute is added or removed from the final call to `mkDerivation`.
 
@@ -153,7 +155,7 @@ For example, assuming you have a special `mathcomp` dependency you want to use, 
 multinomials.override { mathcomp = my-special-mathcomp; }
 ```
 
-In Nixpkgs, all Rocq derivations take a `version` argument.  This can be overridden in order to easily use a different version:
+In Nixpkgs, all Rocq derivations take a `version` argument.  This can be overridden to easily use a different version:
 
 ```nix
 rocqPackages.multinomials.override { version = "1.5.1"; }

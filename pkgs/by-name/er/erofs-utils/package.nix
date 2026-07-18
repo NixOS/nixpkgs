@@ -4,7 +4,7 @@
   fetchurl,
   autoreconfHook,
   pkg-config,
-  fuse,
+  fuse3,
   util-linux,
   xxhash,
   lz4,
@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "erofs-utils";
-  version = "1.9.1";
+  version = "1.9.2";
   outputs = [
     "out"
     "man"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qe9atnxLjS0+ntcfOc0Ai9plMUKnINijlaNvERDQxDI=";
+    hash = "sha256-2RW0VkapKBdJF8RKLIS6AFsWHoSrcyzV0lYDcVYLjRM=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     libdeflate
   ]
-  ++ lib.optionals fuseSupport [ fuse ]
+  ++ lib.optionals fuseSupport [ fuse3 ]
   ++ lib.optionals selinuxSupport [ libselinux ];
 
   configureFlags = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";
     description = "Userspace utilities for linux-erofs file system";
     changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       nikstur
       jmbaur

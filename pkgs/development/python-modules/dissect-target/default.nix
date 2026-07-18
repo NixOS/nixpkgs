@@ -2,6 +2,7 @@
   lib,
   stdenv,
   asn1crypto,
+  backports-zstd,
   buildPythonPackage,
   defusedxml,
   dissect-btrfs,
@@ -40,19 +41,18 @@
   setuptools-scm,
   structlog,
   yara-python,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.24";
+  version = "3.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     tag = version;
-    hash = "sha256-i1oA7UVo880dHJkf19YRcmPV3Lwp1a8RokfRNDZ9gG0=";
+    hash = "sha256-vFVKnzlzXWvNt2/oNsV2oBBHX+LHzAAzP6gz5fFNTWY=";
     fetchLFS = true;
   };
 
@@ -86,6 +86,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     full = [
       asn1crypto
+      backports-zstd
       dissect-btrfs
       dissect-cim
       dissect-clfs
@@ -104,7 +105,6 @@ buildPythonPackage rec {
       pycryptodome
       ruamel-yaml
       yara-python
-      zstandard
     ];
     yara = [ yara-python ] ++ optional-dependencies.full;
     smb = [ impacket ] ++ optional-dependencies.full;

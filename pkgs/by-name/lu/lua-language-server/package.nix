@@ -15,17 +15,19 @@
 
   versionCheckHook,
   nix-update-script,
+  runCommand,
+  lua-language-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.18.1";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-fD7qFY2xL86x/Ac03HkusvNh9Tn4LiqkJGGXNO0bPO8=";
+    hash = "sha256-c8YxTNmvloN9oabdbl5ZKgXqhxeZ9eVBt3B0Q9wA/GQ=";
     fetchSubmodules = true;
   };
 
@@ -128,7 +130,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.smoke = runCommand "lua-language-server-smoke-test" { } ''
+      export XDG_CACHE_HOME=$(mktemp -d)
+
+      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
+      CONTENT_LENGTH=''${#INIT_REQUEST}
+
+      RESPONSE=$(
+        {
+          printf "Content-Length: %d\r\n\r\n%s" "$CONTENT_LENGTH" "$INIT_REQUEST"
+          sleep 1
+        } | timeout 3  ${lib.getExe lua-language-server} --stdio 2>&1 | head -c 1000
+      ) || true
+
+      echo "$RESPONSE" | grep -q '"capabilities"'
+      touch $out
+    '';
+  };
 
   meta = {
     description = "Language server that offers Lua language support";
@@ -137,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gepbird
+      yvnth
     ];
     mainProgram = "lua-language-server";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

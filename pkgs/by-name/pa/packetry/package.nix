@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "packetry";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "packetry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eDVom0kAL1QwO8BtrJS76VTvxtKs7CP6Ob5BWlE6wOM=";
+    hash = "sha256-mgQmorh/MSSufVyOspVtZhBn4nS1vITAiiDXv+/dc/o=";
   };
 
-  cargoHash = "sha256-he+Y2vBCw5lmYe5x6myIxMKRIohBCLDQ/B1EV+4pKGs=";
+  cargoHash = "sha256-qku45EAnsZetQ3Q0Y5Pr1OL/St0j6DGIjnlohA8+pDs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable test_replay tests as they need a gui
   preCheck = ''
-    sed -i 's:#\[test\]:#[test] #[ignore]:' src/test_replay.rs
+    substituteInPlace src/ui/test_replay.rs \
+      --replace-fail '#[test]' '#[test] #[ignore]'
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

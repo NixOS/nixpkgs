@@ -29,9 +29,13 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "distutils";
-    rev = "5ad8291ff2ad3e43583bc72a4c09299ca6134f09"; # correlate commit from setuptools version
-    hash = "sha256-3Mqpe/Goj3lQ6GEbX3DHWjdoh7XsFIg9WkOCK138OAo=";
+    rev = "f10ac6219960991c98b821cf2544bf9c2864ebc2"; # correlate commit from setuptools version
+    hash = "sha256-KzC7zvrC7fsAQhLFZvep/F+yDRzsBDYtir1EA7gdpGM=";
   };
+
+  postPatch = ''
+    sed -i '/coherent\.licensed/d' pyproject.toml
+  '';
 
   build-system = [ setuptools-scm ];
 
@@ -68,7 +72,12 @@ buildPythonPackage {
   # jaraco-path depends ob pyobjc
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+  disabledTests = [
+    #  TypeError: byte_compile() got an unexpected keyword argument 'dry_run'
+    "test_byte_compile"
+    "test_byte_compile_optimized"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
     #  AssertionError: assert '(?s:foo[^/]*)\\z' == '(?s:foo[^/]*)\\Z'
     "test_glob_to_re"
   ];

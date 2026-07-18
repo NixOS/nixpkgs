@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchCrate,
   pkg-config,
@@ -8,32 +7,38 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfinity";
-  version = "0.3.0";
+  version = "0.4.9";
+  __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-5UhKL6lXli1mGorThv3SFclVKDATmxklZQ+S5hwqQgc=";
+    hash = "sha256-0xEVYHvVOugfE4mQxYt+U7AsejOxm/SnDV8HsmcZxBs=";
   };
 
-  cargoHash = "sha256-ZzVGr/Zj+WKKAUqJEbDZgEL7fHzRiI/aSF6e5sLZY+o=";
+  cargoHash = "sha256-Zc3m+hTotgCqBguUB/KM4BtGsdD4W5MR/ZBg2X/0nNk=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  # Requires network and fs access
-  checkFlags = [
-    "--skip=challenge::tests::test_challenge_exists"
-    "--skip=crates_io::tests::test_get_latest_version"
-    "--skip=dir::tests::test_get_current_dir"
-    "--skip=download::tests::download_file::test_downloads_file"
-    "--skip=download::tests::download_file::test_renames_starter"
+  # Fail to run in sandbox environment
+  checkFlags = map (t: "--skip=${t}") [
+    "challenge::tests::test_challenge_exists"
+    "crates_io::tests::test_get_latest_version"
+    "dir::tests::test_get_current_dir"
+    "download::tests::download_file::test_downloads_file"
+    "download::tests::download_file::test_renames_starter"
   ];
 
   meta = {
     description = "CLI for Rustfinity challenges solving";
-    homepage = "https://github.com/dcodesdev/rustfinity.com/tree/main/crates/cli";
+    homepage = "https://github.com/rustfinity/rustfinity/tree/main/crates/cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "rustfinity";

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fm-tune";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "fm_tune";
     rev = finalAttrs.version;
-    hash = "sha256-pwL2G1Ni1Ixw/N0diSoGGIoVrtmF92mWZ5i57OOvkX4=";
+    hash = "sha256-kjTcg8nvhPgpsopIjYsaIsEszYPh86ilkSXMMk+z3x0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

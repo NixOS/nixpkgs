@@ -3,23 +3,28 @@
   lib,
   python,
   fetchPypi,
+  setuptools,
   msrest,
 }:
 
-buildPythonPackage rec {
-  version = "0.1.25";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "vsts";
+  version = "0.1.25";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "15sgwqa72ynpahj101r2kc15s3dnsafg5gqx0sz3hnqz29h925ys";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-2heRYBIfWzi+Bh2/8pzStg1dApsiBxAkVNd6cRTmT5c=";
   };
 
-  propagatedBuildInputs = [ msrest ];
+  build-system = [ setuptools ];
+
+  dependencies = [ msrest ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "msrest>=0.6.0,<0.7.0" "msrest"
+    substituteInPlace setup.py --replace-fail "msrest>=0.6.0,<0.7.0" "msrest"
   '';
 
   # Tests are highly impure
@@ -27,10 +32,12 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import vsts.version; print(vsts.version.VERSION)'
   '';
 
+  pythonImportsCheck = [ "vsts" ];
+
   meta = {
     description = "Python APIs for interacting with and managing Azure DevOps";
     homepage = "https://github.com/microsoft/azure-devops-python-api";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

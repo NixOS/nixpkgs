@@ -22,21 +22,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "18.3.0";
+  version = "18.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = finalAttrs.version;
-    hash = "sha256-dQh98CIEbxpRga2BbB8X1KtGZ18jvVv4DhyJ1LFNNuw=";
+    hash = "sha256-SFOwIK1rjvbLw5W0d6vzXVUDlUOlBYOu/GMvlwwFDs0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-MNMLOF3j+bGEhDeRln5wLOG6gY+ssSQqrb8vdmyJdtA=";
+    hash = "sha256-mvHHwfeP7k8bvOMFcNTn7wZlumMJ8wx7H+p8SNreIuE=";
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,8 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  llvmPackages,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,7 +29,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TODO: Remove once #536365 reaches this branch
+    llvmPackages.lld
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   postInstall = ''
     installManPage $src/docs/iamb.{1,5}

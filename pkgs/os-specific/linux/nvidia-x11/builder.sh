@@ -142,7 +142,7 @@ installPhase() {
 
     if [ -n "$firmware" ]; then
         # Install the GSP firmware
-        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

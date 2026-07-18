@@ -12,7 +12,7 @@
 
   # nativeBuildInputs for GUI
   gobject-introspection,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 
   # dependencies (required for most functionality)
   pyicu,
@@ -20,7 +20,7 @@
   enableGui ? false,
   # for GUI only
   pygobject3,
-  gtk3,
+  gtk4,
   enableCmd ? false,
   prompt-toolkit,
   tqdm,
@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyglossary";
-  version = "5.3.0";
+  version = "5.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ilius";
     repo = "pyglossary";
     tag = finalAttrs.version;
-    hash = "sha256-Gg2D2nWhG8j4+NtzSzgmsdKd5UK8PherM8Hi1b2GAqg=";
+    hash = "sha256-Q2QS/Kg4iN1WMFTADfoqN9UC9da/5Bcp7ZjiZ5V3InM=";
   };
 
   build-system = [
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals enableGui [
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   dependencies = [
@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableGui [
-    gtk3
+    gtk4
   ];
 
   # Many issues with the tests: They require `cd tests` in `preCheck`; Some of

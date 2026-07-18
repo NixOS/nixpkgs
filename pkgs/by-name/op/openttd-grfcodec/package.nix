@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
     homepage = "http://openttd.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ToxicFrog ];
+    maintainers = [ ];
   };
 })

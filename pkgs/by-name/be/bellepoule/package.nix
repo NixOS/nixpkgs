@@ -19,13 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bellepoule";
-  version = "5.5";
+  version = "5.7";
 
   src =
     (fetchgit {
       url = "https://git.launchpad.net/bellepoule";
-      rev = finalAttrs.version;
-      hash = "sha256-SNL6yaaKk/GU8+EvHki4ysMuCHEQxFjPd3iwVIdJtCs=";
+      # No tag available on launchpad for this version
+      rev = "06516d698fde9662d95cf6a8758eb1fbcc89e983";
+      hash = "sha256-9bbFzi9JPryJK2zv4O1TUDaeoB9GVV7LRNn6Xl8lajg=";
     }).overrideAttrs
       (oldAttrs: {
         env = oldAttrs.env or { } // {

@@ -21,16 +21,17 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab";
-  version = "4.5.7";
+  version = "4.5.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
-    tag = "v${version}";
-    hash = "sha256-kJ9DWfb9VWEPfpG17E3KIvGqWlr0iO2a094Ne7LS1U8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OtytFZdgGzbQF3icglwRpAn0HhJNyjI6oNS01gfpzkA=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +44,9 @@ buildPythonPackage rec {
   '';
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    inherit src;
-    sourceRoot = "${src.name}/jupyterlab/staging";
-    hash = "sha256-2YGs0clj44BSEGdp3wChw97jFSMiAeMnCv3PNhdnEeA=";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/jupyterlab/staging";
+    hash = "sha256-wgqwEl01VinYU5haL1X8Na1lNNcyqCfRaRBze4ypPPo=";
   };
 
   preBuild = ''
@@ -85,11 +86,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyterlab" ];
 
   meta = {
-    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
     license = lib.licenses.bsd3;
     homepage = "https://jupyter.org/";
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
-}
+})

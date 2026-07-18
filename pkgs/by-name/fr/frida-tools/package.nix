@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frida-tools";
-  version = "14.6.1";
+  version = "14.10.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "frida_tools";
-    hash = "sha256-EwpoRBHT6NyR1sHV4oEXqu5R/Wcud4n3DWxEkeZXdzM=";
+    hash = "sha256-eixUS1RdCVBA//vTdoooekJjQ9rYkJW0ok9LIDgtkmo=";
   };
 
   build-system = with python3Packages; [
@@ -35,7 +35,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (client tools)";
     homepage = "https://www.frida.re/";
-    maintainers = with lib.maintainers; [ s1341 ];
+    maintainers = with lib.maintainers; [
+      s1341
+      eyjhb
+    ];
     license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31

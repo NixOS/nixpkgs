@@ -2,12 +2,12 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fuse,
   makeWrapper,
   openssl,
   pandoc,
   pkg-config,
   libfido2,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +20,8 @@ buildGoModule (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-uQLFcabN418m1dvogJ71lJeTF3F9JycK/8qCPaXblSU=";
   };
+
+  patches = [ ./0001-mount.go-try-fusermount3-suid-wrapper-and-fallback-t.patch ];
 
   vendorHash = "sha256-dvOROh5TsMl+52RvKmDG4ftNv3WF19trgttu5BGWktU=";
 
@@ -55,13 +57,11 @@ buildGoModule (finalAttrs: {
     popd
   '';
 
-  # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
-  # as the setuid wrapper is required to use gocryptfs as non-root on NixOS
   postInstall = ''
-    wrapProgram $out/bin/gocryptfs \
-      --suffix PATH : ${lib.makeBinPath [ fuse ]}
     ln -s $out/bin/gocryptfs $out/bin/mount.fuse.gocryptfs
   '';
+
+  passthru.tests.gocryptfs = nixosTests.gocryptfs;
 
   meta = {
     description = "Encrypted overlay filesystem written in Go";

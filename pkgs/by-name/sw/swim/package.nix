@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swim";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "swim";
     rev = "v${version}";
-    hash = "sha256-l0iEzctt3WHW7m3wnr5WdthqBlGSh0SxHCQlM6it0Ds=";
+    hash = "sha256-5/yIucyErZpY5iN/6r8JNAfsrYPxh+lBHDBD6cnjbHQ=";
   };
 
-  cargoHash = "sha256-k3sWg/oG5+ckxa10Jt/AncbyoB8kaOcG3xKPg1fl/ME=";
+  cargoHash = "sha256-+znzedDuB7hMzaRtAvLNUC9gG0Q2R8Fn61D64udAyAM=";
 
   nativeBuildInputs = [ pkg-config ];
 

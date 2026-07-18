@@ -14,7 +14,7 @@
   libglvnd,
   libxext,
   libxrandr,
-  mailspring,
+  openssl,
   libx11,
   libice,
   libxrender,
@@ -59,16 +59,17 @@ let
       libglvnd
       libxext
       libxrandr
-      mailspring
       libx11
       libice
       libxrender
+      openssl
     ];
 
     installPhase = ''
       bash $src --target $name --noexec
       mkdir -p $out/bin $out/lib/unigine/superposition/
       cp -r $name/* $out/lib/unigine/superposition/
+      ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
       echo "exec $out/lib/unigine/superposition/Superposition" >> $out/bin/superposition
       chmod +x $out/bin/superposition
        wrapProgram $out/lib/unigine/superposition/Superposition \
@@ -116,11 +117,11 @@ buildFHSEnv {
     libglvnd
     libxext
     libxrandr
-    mailspring
     libx11
     libice
     libxrender
     openal
+    openssl
   ];
   runScript = "superposition";
 

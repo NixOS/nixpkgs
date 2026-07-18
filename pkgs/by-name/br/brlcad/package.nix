@@ -46,8 +46,68 @@ let
     owner = "BRL-CAD";
     repo = "bext";
     rev = "f9074f84c87605f89d912069cee1b1e710ead635"; # must match brlcad_bext_init() in CMakeLists.txt
-    hash = "sha256-jCBw4aDk/bmz2Woe9qIA88mgLRRZSu7zDYM5pi3MbP8=";
+    hash = "sha256-wOzrHiEA+IVUnchSRRUAzIwKkGWtyvnrInnADi3KgiI=";
     fetchSubmodules = true;
+    # remove unneeded subprojects to reduce NAR size
+    postFetch =
+      let
+        subprojectsToRemove = toString [
+          "appleseed"
+          "astyle"
+          "boost"
+          "clipper2"
+          "deflate"
+          "eigen"
+          "embree"
+          "expat"
+          "flexbison"
+          "fmt"
+          "gdal"
+          "geogram"
+          "gte"
+          "icu"
+          "ispc"
+          "jpeg"
+          "lief"
+          "llvm"
+          "lmdb"
+          "lz4"
+          "minizip-ng"
+          "mmesh"
+          "ncurses"
+          "netpbm"
+          "onetbb"
+          "opencolorio"
+          "opencv"
+          "openexr"
+          "openimageio"
+          "openmesh"
+          "osl"
+          "ospray"
+          "patchelf"
+          "plief"
+          "png"
+          "poissonrecon"
+          "proj"
+          "pugixml"
+          "pystring"
+          "qt"
+          "rkcommon"
+          "sqlite3"
+          "stepcode"
+          "tiff"
+          "tinygltf"
+          "xerces-c"
+          "xmltools"
+          "yaml-cpp"
+          "zstd"
+        ];
+      in
+      ''
+        for name in ${subprojectsToRemove}; do
+          rm -r $out/$name
+        done
+      '';
   };
 in
 

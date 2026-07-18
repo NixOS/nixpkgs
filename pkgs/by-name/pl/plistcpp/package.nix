@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   meta = {
     maintainers = [ ];
     description = "CPP bindings for Plist";
+    homepage = "https://github.com/matthewbauer/PlistCpp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

@@ -66,6 +66,8 @@
   gst-plugins-good,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 let
@@ -78,7 +80,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.26.11";
+  version = "1.28.4";
 
   outputs = [
     "out"
@@ -87,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AB3rCHbV10PNNEir90onrew/2FABL8sbAJlIYb1sEUU=";
+    hash = "sha256-yCXqc3xZzqDkoMQdojiARf9d0y0WIiCsk6eoLuSgTmE=";
   };
 
   patches = [
@@ -97,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
@@ -134,6 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
   )
   ++ lib.optionals enableWayland [
     wayland-protocols
+  ]
+  # TODO: Clean up on `staging`
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -262,6 +271,13 @@ stdenv.mkDerivation (finalAttrs: {
       # linking error on Darwin
       # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
       "-lncurses";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Fix for ld64 hardening issue
+    #
+    # TODO: Clean up on `staging`
+    CC_LD = "lld";
+    OBJC_LD = "lld";
   };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
@@ -292,7 +308,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {

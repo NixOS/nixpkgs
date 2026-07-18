@@ -17,12 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "roadrecon";
-  version = "1.7.4";
+  version = "2.0.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-V/McstT+2LAlNe4HHQ0xNfAIM0ExFstyEL3qQrEfkoQ=";
+    hash = "sha256-wzr0J6tGhsZdjTDeIeSzCRTquiw4iZ8FxqFEl1fC2iU=";
   };
 
   pythonRelaxDeps = [

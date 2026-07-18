@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "theharvester";
-  version = "4.11.0";
+  version = "4.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = finalAttrs.version;
-    hash = "sha256-BA3YDnd4Wdzwe32dVuazEA9gcFthTBa7ao6jjata5/I=";
+    hash = "sha256-/tXRqlM4m46R+iy5Dfmwn0ulJbgmpYTTRHRzyoUKa9A=";
   };
 
   pythonRelaxDeps = true;

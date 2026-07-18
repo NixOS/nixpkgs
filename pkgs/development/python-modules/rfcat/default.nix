@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Swiss Army knife of sub-GHz ISM band radio";
     homepage = "https://github.com/atlas0fd00m/rfcat";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
     changelog = "https://github.com/atlas0fd00m/rfcat/releases/tag/v${version}";
   };
 }

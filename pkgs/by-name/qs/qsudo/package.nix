@@ -6,18 +6,18 @@
   sudo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qsudo";
   version = "2020.03.27";
 
   src = fetchFromGitHub {
     owner = "project-trident";
     repo = "qsudo";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "06kg057vwkvafnk69m9rar4wih3vq4h36wbzwbfc2kndsnn47lfl";
   };
 
-  sourceRoot = "${src.name}/src-qt5";
+  sourceRoot = "${finalAttrs.src.name}/src-qt5";
 
   nativeBuildInputs = [
     libsForQt5.qmake
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

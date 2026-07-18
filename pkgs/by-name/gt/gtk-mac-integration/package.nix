@@ -9,6 +9,8 @@
   gtk ? gtk3,
   gtk3,
   gobject-introspection,
+  # TODO: Clean up on `staging`
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
     pkg-config
     gtk-doc
     gobject-introspection
+    # TODO: Clean up on `staging`
+    llvmPackages.lld
   ];
   buildInputs = [ glib ];
   propagatedBuildInputs = [ gtk ];
@@ -35,6 +39,13 @@ stdenv.mkDerivation rec {
   preAutoreconf = ''
     gtkdocize
   '';
+
+  # Fix for ld64 hardening issue
+  #
+  # TODO: Clean up on `staging`
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   meta = {
     description = "Provides integration for GTK applications into the Mac desktop";

@@ -15,8 +15,6 @@
   environment.corePackages = lib.mkForce [ ];
   # Contains bash completions
   nix.enable = lib.mkDefault false;
-  # The fuse{,3} package contains a runtime dependency on bash.
-  programs.fuse.enable = lib.mkDefault false;
   documentation.man.man-db.enable = lib.mkDefault false;
   # autovt depends on bash
   console.enable = lib.mkDefault false;

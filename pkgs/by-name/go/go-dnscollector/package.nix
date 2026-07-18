@@ -6,22 +6,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-dnscollector";
-  version = "2.2.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "dmachard";
-    repo = "go-dnscollector";
+    repo = "DNS-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hqSfL3R0fp7uYBGoD1Wu0ZNLq1VnOvcN0n8zzfRXTfA=";
+    hash = "sha256-Gm5PXEEgw98NnsfKN8JxhyTqEL9KSA6L2CgRTRJirdY=";
   };
 
-  vendorHash = "sha256-i1Ogo5zRYaEgiYMMTUjI2WiL2gABw2r31/WslXLzowI=";
+  vendorHash = "sha256-pEex5xu3Cf6vqFp7YLwk+Ku+Yc0coOGLXP7/NUtDYbg=";
 
   subPackages = [ "." ];
 
   meta = {
     description = "Ingesting, pipelining, and enhancing your DNS logs with usage indicators, security analysis, and additional metadata";
-    homepage = "https://github.com/dmachard/go-dnscollector";
+    homepage = "https://github.com/dmachard/DNS-collector";
     changelog = "https://github.com/dmachard/DNS-collector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shift ];

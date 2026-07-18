@@ -27,7 +27,7 @@ let
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
     description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
@@ -147,7 +147,7 @@ flutter341.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/app_icons/icon-red.png $out/share/pixmaps/mangayomi.png
+    install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
   '';
 
   extraWrapProgramArgs = ''

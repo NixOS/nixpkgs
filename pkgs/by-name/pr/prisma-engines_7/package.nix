@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://www.prisma.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    mainProgram = "prisma";
+    mainProgram = "schema-engine";
     maintainers = with lib.maintainers; [
       aqrln
     ];

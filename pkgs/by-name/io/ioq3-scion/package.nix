@@ -22,6 +22,7 @@ ioquake3.overrideAttrs (old: {
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
   meta = {
     description = "ioquake3 with support for path aware networking";
+    homepage = "https://github.com/lschulz/ioq3-scion";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;
   };

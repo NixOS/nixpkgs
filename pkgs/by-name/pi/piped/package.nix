@@ -1,27 +1,27 @@
 {
   lib,
   buildNpmPackage,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 buildNpmPackage rec {
   pname = "piped";
-  version = "0-unstable-2024-11-04";
+  version = "0-unstable-2026-07-06";
 
   src = fetchFromGitHub {
     owner = "TeamPiped";
     repo = "piped";
-    rev = "7866c06801baef16ce94d6f4dd0f8c1b8bc88153";
-    hash = "sha256-o3TwE0s5rim+0VKR+oW9Rv3/eQRf2dgRQK4xjZ9pqCE=";
+    rev = "335b10d0c02e407b4ba9113e32912b0d783ad455";
+    hash = "sha256-vcXmsgDZJ3v/1XNXtU3v9GWlDJBatXK9peTPVQe5De0=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm ];
   npmConfigHook = pnpmConfigHook;
 
   installPhase = ''
@@ -36,19 +36,21 @@ buildNpmPackage rec {
       pname
       version
       src
+      pnpm
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-IB/suR1I1hNip1qpIcUCP0YyUEDV2EwE5F2WXW8OhmU=";
+    fetcherVersion = 4;
+    hash = "sha256-55nG7tfXtxnyfZop+8Wg8rSFOHQi0TjRc0QT16erX1E=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     homepage = "https://github.com/TeamPiped/Piped";
     description = "Efficient and privacy-friendly YouTube frontend";
-    maintainers = [ lib.maintainers.lucasew ];
-    license = [ lib.licenses.agpl3Plus ];
+    maintainers = [ ];
+    license = lib.licenses.agpl3Plus;
   };
 
 }

@@ -1,6 +1,6 @@
 {
   lib,
-  flutter341,
+  flutter344,
   makeDesktopItem,
   copyDesktopItems,
   fetchFromGitHub,
@@ -10,15 +10,15 @@
   _experimental-update-script-combinators,
 }:
 
-flutter341.buildFlutterApplication (finalAttrs: {
+flutter344.buildFlutterApplication (finalAttrs: {
   pname = "tts-mod-vault";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "markomijic";
     repo = "TTS-Mod-Vault";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vreamzu+jzlgzjbEro5kE5bM1k6cL6XCG6Tsv+LEiyI=";
+    hash = "sha256-4DRDYRPHDuUrtGoZi+oEqkbv2LYn+qPkJI8Ep6IkUYo=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

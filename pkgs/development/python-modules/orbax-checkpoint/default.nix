@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.11.40";
+  version = "0.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z1T1mt12kdY6EMY+95m12kW9nHcGj77f87i4PY9ibBU=";
+    hash = "sha256-yE8M8f2c+4lTL56LrS57vU/MMM3NgYCZOuHZWbdODh0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -121,6 +121,7 @@ buildPythonPackage (finalAttrs: {
     "test_named_sharding"
 
     # ValueError: cannot reshape array of size 1 into shape (0,2)
+    "ArrayHandlerCallbackTest"
     "test_get_leaf_memory_per_device"
     "test_memory_size"
     "test_number_of_broadcasts"
@@ -152,14 +153,16 @@ buildPythonPackage (finalAttrs: {
     "orbax/checkpoint/_src/testing/oss/multiprocess_test.py"
     "orbax/checkpoint/experimental/emergency/"
 
-    # ImportError: cannot import name 'tiering_service_pb2' from
-    # 'orbax.checkpoint.experimental.tiering_service.proto'
-    # (the protobuf module is not generated from the .proto file)
-    "orbax/checkpoint/experimental/tiering_service/server_test.py"
+    # Some modules in this directory also require the unpackaged `fire` module.
+    "orbax/checkpoint/experimental/tiering_service/"
 
     # ValueError: Distributed system is not available; please initialize it via `jax.distributed.initialize()` at the start of your program.
     "orbax/checkpoint/_src/handlers/array_checkpoint_handler_test.py"
+    "orbax/checkpoint/checkpoint_manager_slice_test.py"
+    "orbax/checkpoint/experimental/v1/_src/handlers/pytree_handler_partial_save_test.py"
     "orbax/checkpoint/experimental/v1/_src/layout/safetensors_layout_multiprocess_test.py"
+    "orbax/checkpoint/experimental/v1/_src/partial/saving_multihost_test.py"
+    "orbax/checkpoint/experimental/v1/_src/synchronization/multihost_test.py"
 
     # import file mismatch:
     # imported module 'registry_test' has this __file__ attribute:
@@ -187,6 +190,7 @@ buildPythonPackage (finalAttrs: {
     "orbax/checkpoint/_src/checkpointers/async_checkpointer_test.py"
     "orbax/checkpoint/_src/checkpointers/checkpointer_test.py"
     "orbax/checkpoint/_src/handlers/pytree_checkpoint_handler_test.py"
+    "orbax/checkpoint/_src/handlers/standard_checkpoint_handler_test.py"
     "orbax/checkpoint/_src/metadata/empty_values_test.py"
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
@@ -197,9 +201,12 @@ buildPythonPackage (finalAttrs: {
     "orbax/checkpoint/_src/tree/utils_test.py"
     "orbax/checkpoint/checkpoint_manager_test.py"
     "orbax/checkpoint/experimental/v1/_src/handlers/pytree_handler_test.py"
+    "orbax/checkpoint/experimental/v1/_src/loading/validation_test.py"
+    "orbax/checkpoint/experimental/v1/_src/saving/validation_test.py"
+    "orbax/checkpoint/experimental/v1/_src/testing/save_load_test.py"
     "orbax/checkpoint/single_host_test.py"
+    "orbax/checkpoint/testing/local_path_test.py"
     "orbax/checkpoint/transform_utils_test.py"
-    "orbax/checkpoint/_src/handlers/standard_checkpoint_handler_test.py"
   ];
 
   pythonImportsCheck = [

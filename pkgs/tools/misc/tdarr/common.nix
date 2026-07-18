@@ -6,7 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  ffmpeg,
+  jellyfin-ffmpeg,
   handbrake,
   mkvtoolnix,
   ccextractor,
@@ -24,6 +24,8 @@
   tesseract4,
   perl,
   apprise,
+  openssl,
+  nixosTests,
 }:
 {
   pname,
@@ -38,7 +40,6 @@ let
     {
       x86_64-linux = "linux_x64";
       aarch64-linux = "linux_arm64";
-      x86_64-darwin = "darwin_x64";
       aarch64-darwin = "darwin_arm64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -51,7 +52,7 @@ let
 
   binPath = lib.makeBinPath (
     [
-      ffmpeg
+      jellyfin-ffmpeg
       mkvtoolnix
     ]
     ++ includeInPath
@@ -77,10 +78,10 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${ffmpeg}/bin/ffmpeg"
+      "${jellyfin-ffmpeg}/bin/ffmpeg"
       "--set-default"
       "ffprobePath"
-      "${ffmpeg}/bin/ffprobe"
+      "${jellyfin-ffmpeg}/bin/ffprobe"
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
@@ -100,7 +101,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.74.01";
+  version = "2.81.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -129,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxfixes
     apprise
+    openssl
   ];
 
   postPatch = ''
@@ -197,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
       command = [ ./update-hashes.sh ];
       supportedFeatures = [ "commit" ];
     };
+    tests.nixos = nixosTests.tdarr;
   }
   // passthru;
 
@@ -207,7 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [ mistyttm ];

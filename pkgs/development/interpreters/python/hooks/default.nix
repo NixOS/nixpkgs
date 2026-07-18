@@ -143,6 +143,24 @@ in
         inherit (pythonOnBuildForHost.pkgs) installer;
       };
 
+  pyprojectVersionPatchHook = callPackage (
+    { makePythonHook }:
+    makePythonHook {
+      name = "pyproject-version-patch-hook.sh";
+      substitutions = {
+        pythonInterpreter =
+          (pythonOnBuildForHost.withPackages (ps: [
+            ps.packaging
+            ps.tomlkit
+          ])).interpreter;
+        script = ./pyproject-version-patch-hook.py;
+      };
+      meta = {
+        maintainers = [ lib.maintainers.dotlambda ];
+      };
+    } ./pyproject-version-patch-hook.sh
+  ) { };
+
   pytestCheckHook = callPackage (
     {
       makePythonHook,

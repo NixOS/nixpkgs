@@ -84,7 +84,7 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.20.0";
+  version = "8.21.0";
 
   src = fetchurl {
     urls = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
+    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -115,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     CXX = "${stdenv.cc.targetPrefix}c++";
@@ -276,6 +277,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex

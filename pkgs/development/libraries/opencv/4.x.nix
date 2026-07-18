@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -58,7 +59,7 @@
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  ffmpeg-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -88,6 +89,9 @@
 
   bzip2,
   callPackage,
+
+  # TODO: Clean up on `staging`.
+  llvmPackages,
 }@inputs:
 
 let
@@ -300,9 +304,21 @@ effectiveStdenv.mkDerivation {
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
     ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
   ]
-  ++ optionals enableCuda [
-    ./cuda_opt_flow.patch
-  ];
+  ++ optionals enableCuda (
+    [
+      ./cuda_opt_flow.patch
+    ]
+    ++ optionals (cudaPackages.cudaAtLeast "13.2") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4097
+      (fetchpatch {
+        name = "fix-cuda-13-2-compat";
+        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
+      })
+    ]
+  );
 
   postPatch =
     # This prevents cmake from using libraries in impure paths (which
@@ -373,7 +389,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
@@ -421,7 +437,7 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals enableCuda [
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl # <thrust/*>
+    cudaPackages.cccl # <thrust/*>
     cudaPackages.libnpp # npp.h
     nvidia-optical-flow-sdk
   ]
@@ -457,6 +473,10 @@ effectiveStdenv.mkDerivation {
   )
   ++ optionals enableCuda [
     cudaPackages.cuda_nvcc
+  ]
+  # TODO: Clean up on `staging`.
+  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
+    llvmPackages.lld
   ];
 
   env = {
@@ -546,6 +566,10 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals (enabledModules != [ ]) [
     (cmakeFeature "BUILD_LIST" (concatStringsSep "," enabledModules))
+  ]
+  # TODO: Clean up on `staging`.
+  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
+    (cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   postBuild = optionalString enableDocs ''

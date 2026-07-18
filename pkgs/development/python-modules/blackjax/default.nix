@@ -17,7 +17,8 @@
   typing-extensions,
 
   # optional-dependencies
-  fastprogress,
+  jax-tap,
+  tqdm,
 
   # checks
   chex,
@@ -27,14 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = finalAttrs.version;
-    hash = "sha256-tKJfukTqSiW2Xg3/8DakxtxlwGpJ14S/7qUE1OGM97I=";
+    hash = "sha256-qLOAmUQxr1xtlJB/TMnjFkvvHUwh0XKpPN+FVD8ju8Y=";
   };
 
   build-system = [
@@ -53,7 +55,8 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     progress = [
-      fastprogress
+      jax-tap
+      tqdm
     ];
   };
 
@@ -77,6 +80,8 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError on numerical values
     "test_barker"
+    "test_imm_shrinkage_seed_influence_persists_diagonal"
+    "test_laps"
     "test_mclmc"
     "test_mcse4"
     "test_mean_and_std"

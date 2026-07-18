@@ -23,17 +23,13 @@ let
 
 in
 {
-  ### Documentation
-  # meta.doc = ./onedrive.xml;
-
-  ### Interface
+  meta.doc = ./onedrive.md;
 
   options.services.onedrive = {
     enable = lib.mkEnableOption "OneDrive service";
 
     package = lib.mkPackageOption pkgs "onedrive" { };
   };
-  ### Implementation
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];

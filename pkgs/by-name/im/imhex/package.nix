@@ -23,6 +23,7 @@
   nix-update-script,
   autoPatchelfHook,
   makeWrapper,
+  llvmPackages,
 }:
 
 let
@@ -61,7 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   buildInputs = [
     capstone
@@ -98,9 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_NLOHMANN_JSON" true)
     (lib.cmakeBool "USE_SYSTEM_YARA" true)
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "@executable_path/../Frameworks")
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
   postPatch = ''
@@ -122,10 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         mkdir -p $out/Applications
         mv $out/imhex.app $out/Applications
-        install_name_tool \
-          -change "$out/lib/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
-          "@executable_path/../Frameworks/libimhex.${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}" \
-          "$out/Applications/imhex.app/Contents/MacOS/imhex"
         makeWrapper "$out/Applications/imhex.app/Contents/MacOS/imhex" "$out/bin/imhex"
       ''
     else
@@ -136,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       kashw2
       cafkafk

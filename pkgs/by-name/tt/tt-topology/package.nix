@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "tt-topology";
-  version = "1.2.13";
+  version = "1.2.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-topology";
     tag = "v${version}";
-    hash = "sha256-hjUQMBTShdbl/tRlFF55P3kQDHi5gsGQVcGZSDgA0as=";
+    hash = "sha256-M12MdXyEwyvXscp7roE19mWZ4+/miTAyzUH3SUtOohE=";
   };
 
   build-system = with python3Packages; [
@@ -60,6 +60,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/tenstorrent/tt-topology";
     changelog = "https://github.com/tenstorrent/tt-topology/blob/${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 }

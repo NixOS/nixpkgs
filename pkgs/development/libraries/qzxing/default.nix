@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
   testers,
   qmake,
   qtmultimedia,
@@ -52,7 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = {

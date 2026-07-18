@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -38,7 +39,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals libdrm.meta.available [
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
     libgbm
     playwright-driver.browsers
   ];

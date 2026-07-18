@@ -9,27 +9,28 @@
   copyDesktopItems,
   dart-sass,
   makeWrapper,
-  nodejs-slim_20,
+  nodejs-slim_24,
   pkg-config,
   yarnConfigHook,
 
-  electron,
+  electron_41,
   libsecret,
   sqlite,
 }:
 
 let
-  nodejs = nodejs-slim_20;
+  electron = electron_41;
+  nodejs = nodejs-slim_24;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.70.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
-    owner = "RedisInsight";
+    owner = "redis";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
+    hash = "sha256-YnBy++KshDVNw3p1gf7gHydQyyh03fkSULhnZsqZMxs=";
   };
 
   patches = [
@@ -42,21 +43,21 @@ stdenv.mkDerivation (finalAttrs: {
   baseOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-base-offline-cache";
     inherit (finalAttrs) src patches;
-    hash = "sha256-m3relh3DZGReEi4dVOJcIXU9QVClisXw+f7K5i25x24=";
+    hash = "sha256-lfCasq3C0jD4wNpguxSOxwrR0Sx3ZfwK95Ib31TShSQ=";
   };
 
   innerOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-inner-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight";
-    hash = "sha256-rqmrETlc2XoZDM4GP1+qI4eK4oGmtpmc6TVvAam2+W8=";
+    hash = "sha256-vdBSquVsIeMh5eZMRxYdVz3iuhM27RgEtI6FZqjCP74=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-api-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight/api";
-    hash = "sha256-KFtmq3iYAnsAi5ysvGCzBk9RHV7EE7SIPbzPza7vBdA=";
+    hash = "sha256-8u4igcegknwydNsVLcPv6E5/uwQJpwNWhIpCujfoXqk=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     npm rebuild --verbose --no-progress
     cd redisinsight
     npm rebuild --verbose --no-progress
+    export npm_config_nodedir=${nodejs}
     cd api
     npm rebuild --verbose --no-progress
     cd ../..
@@ -115,14 +117,19 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace node_modules/sass/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
+    yarn --cwd redisinsight/api generate:api-client
     yarn --offline build:prod
 
     # TODO: Generate defaults. Currently broken because it requires network access.
     # yarn --offline --cwd=redisinsight/api build:defaults
 
+    # Electron dist needs to be writable during the build.
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
     yarn --offline electron-builder \
       --dir \
-      -c.electronDist=${electron.dist} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version} \
       -c.npmRebuild=false # we've already rebuilt the native libs using the electron headers
 
@@ -167,11 +174,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Developer GUI for Redis";
-    homepage = "https://github.com/RedisInsight/RedisInsight";
+    homepage = "https://github.com/redis/RedisInsight";
     license = lib.licenses.sspl;
     maintainers = with lib.maintainers; [
       tomasajt
     ];
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.redis ];
   };
 })

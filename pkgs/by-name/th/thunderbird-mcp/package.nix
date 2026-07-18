@@ -7,24 +7,30 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thunderbird-mcp";
-  version = "0.5.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "TKasperczyk";
     repo = "thunderbird-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3o1NskuMc4vQzjaUYgoFL7JZ46Enr6qdPcnePjtul2s=";
+    hash = "sha256-jrmHqToe+lJTpoG1QYaYHVk84PaO5zKAXLwr3Opl0A4=";
   };
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  preInstall = "mkdir node_modules/";
   forceEmptyCache = true;
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-LbEnmABmAoTCTPNNbocl+n2TtFC3FOFwwTnyATxvM3k=";
+  npmDepsHash = "sha256-D0DAjK/u59rOKNf5kCu/OYkch+4lZYgdHkuib0sqtIw=";
+
+  doCheck = true;
+
+  # Tests use local mock servers.
+  __darwinAllowLocalNetworking = true;
+
+  checkPhase = "npm test";
 
   passthru.updateScript = nix-update-script { };
 

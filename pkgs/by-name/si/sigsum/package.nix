@@ -8,7 +8,7 @@
 
 buildGo125Module (finalAttrs: {
   pname = "sigsum";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitLab {
     domain = "git.glasklar.is";
@@ -16,7 +16,7 @@ buildGo125Module (finalAttrs: {
     owner = "core";
     repo = "sigsum-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+opDvVUG2OVJ/V1lHPXl2rxk4CCaXxc+4xBguvGqO1o=";
+    hash = "sha256-ZiU5eEI2pKknpjc3HU9EqQu6u1ZD/N7sOD0DyTma0/g=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildGo125Module (finalAttrs: {
       --replace-fail "info.Main.Version" '"${finalAttrs.version}"'
   '';
 
-  vendorHash = "sha256-s5IUDGA/8Qv6XhvqJG396EZt7HTaG/BMknPj8uYhVZc=";
+  vendorHash = "sha256-BaN9NslTvVyIp1Gi0N3UKdTXCd5opdL6Fb0AVoy9diM=";
 
   ldflags = [
     "-s"

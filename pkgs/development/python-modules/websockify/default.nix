@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   jwcrypto,
   numpy,
   pytestCheckHook,
@@ -11,19 +12,23 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "websockify";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "novnc";
     repo = "websockify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jwcrypto
     numpy
     redis
@@ -32,6 +37,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # this test failed on macos
@@ -44,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
-    homepage = "https://github.com/kanaka/websockify";
-    changelog = "https://github.com/novnc/websockify/releases/tag/${src.tag}";
+    homepage = "https://github.com/novnc/websockify";
+    changelog = "https://github.com/novnc/websockify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})

@@ -27,7 +27,6 @@
   libwebp,
   libxdmcp,
   pango,
-  pcre,
   pcre2,
   wayland,
   wayland-protocols,
@@ -80,7 +79,6 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxdmcp
     pango
-    pcre
     pcre2
     wayland
     wayland-protocols
@@ -89,6 +87,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

@@ -109,6 +109,71 @@ This includes build-related flags and metadata.
 }
 ```
 
+## Overriding the Grammar Set
+
+Use `pkgs.tree-sitter-grammars.overrideScope` when adding a grammar or replacing a grammar that another package should consume.
+`pkgs.tree-sitter-grammars` is the scoped package set used for grammar overrides and scoped helpers such as `derivations`, `allGrammars`, and `withPlugins`.
+
+```nix
+let
+  grammars = pkgs.tree-sitter-grammars.overrideScope (
+    final: prev: {
+      tree-sitter-foolang = pkgs.tree-sitter.buildGrammar {
+        language = "foolang";
+        version = "0.42.0";
+        src = pkgs.fetchFromGitHub {
+          owner = "example";
+          repo = "tree-sitter-foolang";
+          rev = "v0.42.0";
+          hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        };
+      };
+
+      tree-sitter-rust = prev.tree-sitter-rust.overrideAttrs (_: {
+        version = "custom";
+        src = pkgs.fetchFromGitHub {
+          owner = "example";
+          repo = "tree-sitter-rust";
+          rev = "custom";
+          hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        };
+      });
+    }
+  );
+in
+grammars.withPlugins (p: [
+  p.tree-sitter-foolang
+  p.tree-sitter-rust
+])
+```
+
+The scoped `withPlugins` helper receives derivations from the same overridden scope, so added or replaced grammars are visible.
+
+The set also carries package-set helpers (`callPackage`, `newScope`, `overrideScope`, …) alongside the grammars, so do not iterate it directly.
+Use one of its grammar-only views instead; each reflects any `overrideScope`:
+
+- `pkgs.tree-sitter-grammars.derivations` — attrset of every grammar derivation, including grammars marked broken.
+- `pkgs.tree-sitter-grammars.allGrammars` — list of the non-broken grammar derivations.
+- `pkgs.tree-sitter-grammars.withPlugins` — build a grammar link farm.
+
+```nix
+builtins.attrValues pkgs.tree-sitter-grammars.derivations
+```
+
+`pkgs.tree-sitter.builtGrammars` remains the plain attribute set generated directly from [grammar-sources.nix](grammar-sources.nix); use it when you specifically want the stock grammars without any scope overrides.
+
+## Building WebAssembly Parsers
+
+`buildGrammar` builds a native `$out/parser`.
+To build grammars as WebAssembly instead, use the `wasi32` cross package set, which installs `$out/parser.wasm`:
+
+```nix
+pkgsCross.wasi32.tree-sitter.builtGrammars.tree-sitter-nix
+```
+
+The Wasm build compiles `parser.c` and a C `scanner.c`.
+Grammars with C++ external scanners are rejected; use the native `buildGrammar` for those.
+
 ## Updating
 
 All grammar sources have a default update script defined.
@@ -121,5 +186,5 @@ nix-shell maintainers/scripts/update.nix --argstr package tree-sitter-grammars.t
 Or, to update all grammars:
 
 ```shell
-nix-shell maintainers/scripts/update.nix --argstr path tree-sitter-grammars --argstr keep-going true
+nix-shell maintainers/scripts/update.nix --argstr path tree-sitter-grammars --arg keep-going true
 ```

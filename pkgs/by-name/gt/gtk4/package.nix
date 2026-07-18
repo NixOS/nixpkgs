@@ -60,6 +60,7 @@
   compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   cups,
   libexecinfo,
+  llvmPackages,
   broadwaySupport ? true,
   testers,
   darwinMinVersionHook,
@@ -95,11 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
   };
 
-  patches = lib.optional stdenv.hostPlatform.is32bit (fetchpatch {
-    name = "fix-32bit-VkImage-null.patch";
-    url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
-    hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
-  });
+  patches = [
+    (fetchpatch {
+      name = "fix-32bit-VkImage-null.patch";
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
+      hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -127,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     shaderc # for glslc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+    llvmPackages.lld
   ]
   ++ finalAttrs.setupHooks;
 
@@ -219,6 +226,10 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     NIX_LDFLAGS = "-lexecinfo";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove when NixOS/nixpkgs#536365 reaches master.
+    NIX_CFLAGS_LINK = "--ld-path=${lib.getExe' llvmPackages.lld "ld64.lld"}";
   };
 
   postPatch = ''

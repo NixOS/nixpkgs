@@ -400,7 +400,25 @@ rec {
     condition: passthru: drv:
     let
       commonAttrs =
-        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
+        drv
+        // listToAttrs (
+          outputsList
+          ++ [
+            {
+              name = "all";
+              value = map (x: x.value) outputsList;
+            }
+          ]
+        )
+        // passthru
+        // {
+          drvPath =
+            assert condition;
+            drv.drvPath;
+          outPath =
+            assert condition;
+            drv.outPath;
+        };
 
       outputsList = map (outputName: {
         name = outputName;
@@ -422,15 +440,7 @@ rec {
         };
       }) (drv.outputs or [ "out" ]);
     in
-    commonAttrs
-    // {
-      drvPath =
-        assert condition;
-        drv.drvPath;
-      outPath =
-        assert condition;
-        drv.outPath;
-    };
+    commonAttrs;
 
   /**
     Strip a derivation of all non-essential attributes, returning
@@ -554,7 +564,7 @@ rec {
 
     # Examples
 
-    :::{#ex-makeScope .example}
+    :::{.example #ex-makeScope}
     # Create an interdependent package set on top of `pkgs`
 
     The functions in `foo.nix` and `bar.nix` can depend on each other, in the sense that `foo.nix` can contain a function that expects `bar` as an attribute in its argument.
@@ -583,7 +593,7 @@ rec {
     ```
     :::
 
-    :::{#ex-makeScope-callPackage .example}
+    :::{.example #ex-makeScope-callPackage}
     # Using `callPackage` from a scope
 
     ```nix

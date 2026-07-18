@@ -1,39 +1,44 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
-  buildNpmPackage,
+  stdenvNoCC,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_24,
+  pnpmBuildHook,
+  nodejs-slim,
   pnpm_10,
+  installShellFiles,
   nix-update-script,
   nixosTests,
 }:
 
 let
-  version = "2.63.5";
+  version = "2.63.18";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    rev = "v${version}";
-    hash = "sha256-/X/TztbZDC1hkRL97jkm6Ak8QmKFDMycekLl6NVPS0k=";
+    tag = "v${version}";
+    hash = "sha256-0j0i6bKKbyUi4O0wBT+xYjvywjRzAGd0/13Yh/dG5GA=";
   };
 
-  frontend = buildNpmPackage rec {
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "filebrowser-frontend";
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    nativeBuildInputs = [ pnpm_10 ];
-    npmConfigHook = pnpmConfigHook;
-    npmDeps = pnpmDeps;
-    nodejs = nodejs_24;
+    nativeBuildInputs = [
+      nodejs-slim
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_10
+    ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit
+      inherit (finalAttrs)
         pname
         version
         src
@@ -52,14 +57,23 @@ let
 
       runHook postInstall
     '';
-  };
+  });
 
 in
 buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-ofeQkbvBfCpu2g1CLAwUZAZISyAOz+0smEZRx/koj/8=";
+  vendorHash = "sha256-BXw+fURCh1qNlwWo49aXIpSM339bV3Gwn9Ov8HLEVF0=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd filebrowser \
+      --bash <($out/bin/filebrowser completion bash) \
+      --fish <($out/bin/filebrowser completion fish) \
+      --zsh  <($out/bin/filebrowser completion zsh )
+  '';
 
   excludedPackages = [ "tools" ];
 
@@ -87,6 +101,7 @@ buildGoModule {
   meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
+    changelog = "https://github.com/filebrowser/filebrowser/releases/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";

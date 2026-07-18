@@ -167,6 +167,28 @@ in
           elemType = str;
           lazy = false;
         }).description == "attribute set of string";
+      assert (attrListOf str).description == "attribute list of string";
+      assert (attrListOf int).description == "attribute list of signed integer";
+      assert (attrListOf bool).description == "attribute list of boolean";
+      assert (attrListOf (either int str)).description == "attribute list of (signed integer or string)";
+      assert (attrListOf (nullOr str)).description == "attribute list of (null or string)";
+      assert (attrListOf (listOf str)).description == "attribute list of list of string";
+      assert
+        (attrListOf (attrsOf int)).description == "attribute list of attribute set of signed integer";
+      assert (attrListOf (attrListOf str)).description == "attribute list of attribute list of string";
+      assert (attrListOf ints.positive).description == "attribute list of (positive integer, meaning >0)";
+      assert
+        (attrListOf (enum [
+          "a"
+          "b"
+        ])).description == "attribute list of (one of \"a\", \"b\")";
+      assert
+        (attrListOf (strMatching "[0-9]+")).description
+        == "attribute list of string matching the pattern [0-9]+";
+      assert
+        (attrListOf (nonEmptyListOf str)).description == "attribute list of non-empty (list of string)";
+      assert (attrListOf (submodule { })).description == "attribute list of (submodule)";
+
       assert (coercedTo str abort int).description == "signed integer or string convertible to it";
       assert (coercedTo int abort str).description == "string or signed integer convertible to it";
       assert (coercedTo bool abort str).description == "string or boolean convertible to it";

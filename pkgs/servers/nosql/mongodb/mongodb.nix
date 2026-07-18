@@ -39,7 +39,7 @@ let
       pyyaml
       cheetah3
       psutil
-      setuptools
+      setuptools_80
       distutils
       packaging
       pymongo

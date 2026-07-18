@@ -29,10 +29,15 @@ if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
 
-    for outputName in "${!outputs[@]}"; do
-        # ex: out=/nix/store/...
-        export "$outputName=${outputs[$outputName]}"
-    done
+    _exportOutputsByName() {
+        local outputName
+        for outputName in "${!outputs[@]}"; do
+            # ex: out=/nix/store/...
+            export "$outputName=${outputs[$outputName]}"
+        done
+    }
+
+    _exportOutputsByName
 else
     __structuredAttrs=
     : "${outputs:=out}"

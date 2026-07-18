@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   attrs,
   buildPythonPackage,
+  clang-tools,
+  cmake,
   fetchFromGitHub,
   hypothesis,
   jbig2dec,
@@ -9,23 +12,24 @@
   lxml,
   withMupdf ? false,
   mupdf-headless,
+  nanobind,
+  ninja,
   numpy,
   packaging,
   pillow,
   psutil,
-  pybind11,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   python-xmp-toolkit,
   qpdf,
-  setuptools,
   replaceVars,
+  scikit-build-core,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "10.5.1";
+  version = "10.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +42,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-x17cRef8rB5UQQws48G/IqeSp4B3CaLzIoUIQ8fJeUg=";
+    hash = "sha256-ih5QC6VVl7dGvamp3FRzahnpEDjdO8gGFNVX19Bu8LE=";
   };
 
   patches = [
@@ -54,17 +58,23 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "shims_enabled = not cflags_defined" "shims_enabled = False"
-  '';
-
   buildInputs = [ qpdf ];
 
   build-system = [
-    pybind11
-    setuptools
+    cmake
+    nanobind
+    ninja
+    scikit-build-core
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
+
+  dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
     attrs

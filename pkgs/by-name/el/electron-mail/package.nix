@@ -10,20 +10,16 @@
 
 let
   pname = "electron-mail";
-  version = "5.3.6";
+  version = "5.3.8";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-      hash = "sha256-3BWrVMlSUMMmuj6EAmqVtlHGCcminuVHkyPnc3TvgpM=";
+      hash = "sha256-twqB1D3zLlZJuxQWD4dGF70w57yYv6i3abGBidERsss=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
-      hash = "sha256-z7j5WrU1F+iX8UDLWS5sXLwHjobPKJZFKXTcHTOQ/Eo=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-x64.dmg";
-      hash = "sha256-7i0p7mBkzViXGdUrHXTrDDGdIy81p2YIei5Qsk8G5GU=";
+      hash = "sha256-V32Wi0oCU9dLfzqxg3OdseiILX7wPiBGNz7KuG0vlZY=";
     };
   };
 
@@ -45,7 +41,6 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };

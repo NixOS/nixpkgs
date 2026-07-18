@@ -14,7 +14,6 @@ let
   codeiumHashes = {
     x86_64-linux = "sha256-IeNK7UQtOhqC/eQv7MAya4jB1WIGykSR7IgutZatmHM=";
     aarch64-linux = "sha256-ujTFki/3V79El2WCkG0PJhbaMT0knC9mrS9E7Uv9HD4=";
-    x86_64-darwin = "sha256-r2KloEQsUku9sk8h76kwyQuMTHcq/vwfTSK2dkiXDzE=";
     aarch64-darwin = "sha256-1jNH0Up8mAahDgvPF6g42LV+RVDVsPqDM54lE2KYY48=";
   };
 
@@ -30,7 +29,6 @@ let
           {
             x86_64-linux = "linux_x64";
             aarch64-linux = "linux_arm";
-            x86_64-darwin = "macos_x64";
             aarch64-darwin = "macos_arm";
           }
           .${system} or throwSystem;

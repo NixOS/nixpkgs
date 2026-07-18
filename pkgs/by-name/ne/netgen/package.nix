@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2505";
+  version = "6.2.2605";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
+    hash = "sha256-067PzJymS6ayVoenaXEdvK3fraLTKPJTC54Aok1UUtg=";
   };
 
   patches = [
@@ -60,11 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch2 {
       url = "${patchSource}/include_stdlib.patch";
       hash = "sha256-W+NgGBuy/UmzVbPTSqR8FRUlyN/9dl9l9e9rxKklmIc=";
-    })
-    # Fix build with pybind11 3.x.
-    (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/commit/ceacae3844ed2f0c48c8b6a3a82904b16c594f41.patch?full_index=1";
-      hash = "sha256-uSlkKxuOoUt4n601vadEZogSF47zdWNOIk1Nr9Ra3AU=";
     })
     ./ensure_python_before_getting_gil.patch
     ./macos_use_tk_default_color_map.patch
@@ -146,6 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+  ) "-flax-vector-conversions";
 
   __darwinAllowLocalNetworking = true;
 

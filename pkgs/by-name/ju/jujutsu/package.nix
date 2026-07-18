@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.41.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-id35e2kzyHyXCRy0aomkd1l0K7qzD0RnzdAzxKUGiso=";
+    hash = "sha256-XgBq2ZN34iWlwKVgW7Syr46KUdt7pJuSDd/J6QWJwwQ=";
   };
 
-  cargoHash = "sha256-zWfdIac+SsNdfXAfD4NVTl7YfXzAlrK82KNduFgG1EA=";
+  cargoHash = "sha256-bEvpTd+FAHrD+CZN7+AuCuThyJ5LtufQR7OrGpjrWK0=";
 
   nativeBuildInputs = [
     installShellFiles

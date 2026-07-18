@@ -18,6 +18,8 @@
   blas,
   lapack,
 
+  openmpCheckPhaseHook,
+
   # Reverse dependency
   sage,
 
@@ -93,7 +95,6 @@ buildPythonPackage (finalAttrs: {
   # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
   preBuild = ''
@@ -108,6 +109,10 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     setuptools
     typing-extensions
+  ];
+
+  propagatedNativeBuildInputs = [
+    openmpCheckPhaseHook
   ];
 
   preCheck = ''

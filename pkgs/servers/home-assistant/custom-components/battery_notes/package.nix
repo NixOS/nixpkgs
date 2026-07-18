@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "andrew-codechimp";
   domain = "battery_notes";
-  version = "3.4.6";
+  version = "3.4.8";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HA-Battery-Notes";
     tag = version;
-    hash = "sha256-KcMQLwIm0rr5cEAKLXte/F/Iar3qnznDv76S+bsX9Ok=";
+    hash = "sha256-Kc4ATfEEi8SRvl10msLotmBa3/RNff2yD4moRPsk8j8=";
   };
 
   # has no tests

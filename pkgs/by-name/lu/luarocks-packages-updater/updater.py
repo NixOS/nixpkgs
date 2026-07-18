@@ -66,6 +66,44 @@ FOOTER = (
     + "\n"
 )
 
+LICENSE_NORMALIZATION = {
+    "AGPL-3.0": "lib.licenses.agpl3Only",
+    "Apache 2": "lib.licenses.asl20",
+    "Apache 2.0": "lib.licenses.asl20",
+    "Apache-2.0": "lib.licenses.asl20",
+    "Apache License Version 2": "lib.licenses.asl20",
+    "BSD": "lib.licenses.free", # Too unspecific
+    "BSD-2-Clause": "lib.licenses.bsd2",
+    "BSD-3-Clause": "lib.licenses.bsd3",
+    "GPL-2+": "lib.licenses.gpl2Plus",
+    "GPL-2.0": "lib.licenses.gpl2Only",
+    "GPL-2.0+": "lib.licenses.gpl2Plus",
+    "GPL-2.0-only": "lib.licenses.gpl2Only",
+    "GPL-2.0-or-later": "lib.licenses.gpl2Plus",
+    "GPL-3.0": "lib.licenses.gpl3Only",
+    "GPL-3.0-only": "lib.licenses.gpl3Only",
+    "GPL-3.0-or-later": "lib.licenses.gpl3Plus",
+    "GPLv3+ and other free licenses": "lib.licenses.AND [ lib.licenses.gpl3Plus lib.licenses.free ]",
+    "ISC": "lib.licenses.isc",
+    "LGPL": "lib.licenses.free", # Too unspecific
+    "LGPL-2.0": "lib.licenses.lgpl2Only",
+    "LGPL-2.1": "lib.licenses.lgpl21Only",
+    "LGPL-3.0": "lib.licenses.lgpl3Only",
+    "MIT": "lib.licenses.mit",
+    "MIT <http://opensource.org/licenses/MIT>": "lib.licenses.mit",
+    "MIT/X11": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/X license": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/ICU": "lib.licenses.AND [ lib.licenses.mit lib.licenses.unicode-30 ]",
+    "MPL-2.0": "lib.licenses.mpl20",
+    "Unlicense": "lib.licenses.unlicense",
+    "2-clause BSD": "lib.licenses.bsd2",
+    "Two-clause BSD": "lib.licenses.bsd2",
+    "Public domain": "lib.licenses.publicDomain",
+    "UNKNOWN": "lib.licenses.unfree"
+}
+
+LICENSE_FULL_NAME_RE = re.compile(r'(?P<indent>\s*)license\.fullName = "(?P<license>[^"]+)";')
+
 
 @dataclass
 class LuaPlugin:
@@ -105,6 +143,18 @@ def extract_rev(nix_expr: str) -> str | None:
     return None
 
 
+def normalize_license_metadata(nix_expr: str) -> str:
+    def replace(match: re.Match[str]) -> str:
+        license_full_name = match.group("license")
+        license_attr = LICENSE_NORMALIZATION.get(license_full_name)
+        if license_attr is None:
+            return match.group(0)
+        indent = match.group("indent")
+        return f"{indent}license = {license_attr};"
+
+    return LICENSE_FULL_NAME_RE.sub(replace, nix_expr)
+
+
 def commit_files(repo, message: str, files: list[Path]) -> None:
     worktree = repo.working_tree_dir
     paths = [str(path) for path in files]
@@ -129,7 +179,7 @@ def commit_files(repo, message: str, files: list[Path]) -> None:
 class LuaEditor(nixpkgs_plugin_update.Editor):
     def create_parser(self):
         parser = super().create_parser()
-        parser.set_defaults(proc=1)
+        parser.set_defaults(proc=1, update_only=None)
         return parser
 
     def get_current_plugins(self, _config: FetchConfig, _nixpkgs: str):
@@ -470,6 +520,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
         output = run_luarocks(cmd)
         ## FIXME: luarocks nix command output isn't formatted properly
+        output = normalize_license_metadata(output)
         output = "callPackage(\n" + output.strip() + ") {};\n\n"
         return (plug, output, None)
     except subprocess.CalledProcessError as e:

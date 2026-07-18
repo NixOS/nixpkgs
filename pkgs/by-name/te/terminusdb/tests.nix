@@ -19,7 +19,7 @@ buildNpmPackage {
 
   sourceRoot = "${terminusdb.src.name}/tests";
 
-  npmDepsHash = "sha256-R2kbwHhlja5mH2AGpyiiVCz3YmSWF9cWptOTdcZb0PM=";
+  npmDepsHash = "sha256-AkTKdkKTCWExd3U1fkoXoF9znbIGzVGtQl06wfIVOeM=";
 
   # Test-only JS adjustments live here so the runtime package stays untouched
   postPatch = ''

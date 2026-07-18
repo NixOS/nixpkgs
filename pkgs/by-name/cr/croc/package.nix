@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "croc";
-  version = "10.4.3";
+  version = "10.4.6";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cQgGs4vv7RGa9reM3QoYDW6PdREx+rIzg4uXXrahPSg=";
+    hash = "sha256-+KG1PHUymeoAj92UAn/sitQF6xC1xwl+cdisxy2ZtPs=";
   };
 
-  vendorHash = "sha256-qS+jjchXysIj4ZcZoUWg8W0uyYTYPPy8DdhZEP/uZGg=";
+  vendorHash = "sha256-rwGunSDIgetBsk97LxQz0WHpzMDMMESHC1OhBWRuVjI=";
 
   subPackages = [ "." ];
 
@@ -70,8 +70,8 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       equirosa
-      SuperSandro2000
       ryan4yin
+      kaynetik
     ];
     mainProgram = "croc";
   };

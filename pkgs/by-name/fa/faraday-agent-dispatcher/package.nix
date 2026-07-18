@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -21,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail '"pytest-runner",' ""  '';
 
   pythonRelaxDeps = [
+    "pytenable"
     "python-socketio"
   ];
 
@@ -28,13 +30,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "python-owasp-zap-v2.4"
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools-scm
-  ];
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    python3.pkgs.python-owasp-zap-v2-4
-  ];
+  nativeBuildInputs = with python3.pkgs; [ python-owasp-zap-v2-4 ];
 
   dependencies = with python3.pkgs; [
     aiohttp
@@ -57,11 +55,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3.pkgs; [
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     "test_execute_agent"
@@ -74,14 +69,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "tests/unittests/test_import_official_executors.py"
   ];
 
-  pythonImportsCheck = [
-    "faraday_agent_dispatcher"
-  ];
+  pythonImportsCheck = [ "faraday_agent_dispatcher" ];
 
   meta = {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
-    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-dispatcher";

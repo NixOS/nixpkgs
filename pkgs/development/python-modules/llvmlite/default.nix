@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   isPyPy,
-  pythonAtLeast,
 
   setuptools,
 
@@ -26,7 +24,7 @@ in
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.46.0";
+  version = "0.47.0";
   pyproject = true;
 
   disabled = isPyPy;
@@ -35,7 +33,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-mQFNfcOLmFYvYQGcgLi7G6iJDoTCm7hJfPh5hH9jPGc=";
+    hash = "sha256-YEIdIdbk19JHYtgL2gWjnAUYu13CH+7ikoyBUkOPpws=";
   };
 
   build-system = [ setuptools ];

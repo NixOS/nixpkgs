@@ -28,14 +28,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-03-31";
+  version = "0-unstable-2026-07-07";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "577474d89ee61aef4a48145cdec82a638d874751";
+    rev = "fff02ca501c3b457f99b467a86061d2b150c51f2";
     fetchSubmodules = true;
-    hash = "sha256-LNQJAYILUZ9LZ4E4soh7tr5Zy+rntHz1Gd66lyPPkdk=";
+    hash = "sha256-q351PUvUy9jbqcAgQfkZqgrEuc4X/Y/H9N8b9+60mjY=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-waXq0U2Ud7FhlJn3evO7bZSBsOAA39ObiVWHycNQXmA=";
+  cargoHash = "sha256-jY7lTOfbT74tAZ7he1xudCN7BUxZBzY+8+e1d2g2v4I=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -161,6 +161,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
       SuperSandro2000
+      yvnth
     ];
   };
 })

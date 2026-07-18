@@ -24,7 +24,6 @@
   mpfr,
   nlohmann_json,
   opencascade-occt_7_6,
-  pcre,
   zlib,
 
   # python deps
@@ -101,7 +100,6 @@ buildPythonPackage rec {
     mpfr
     nlohmann_json
     opencascade-occt
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -210,6 +208,6 @@ buildPythonPackage rec {
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
     license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ autra ];
+    teams = [ lib.teams.geospatial ];
   };
 }

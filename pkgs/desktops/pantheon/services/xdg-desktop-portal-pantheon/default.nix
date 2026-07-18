@@ -19,15 +19,15 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xdg-desktop-portal-pantheon";
-  version = "8.2.0";
+  version = "8.2.0-unstable-2026-06-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
-    tag = version;
-    hash = "sha256-LmPLjOZVVHKMfYTEyOH2IkB/fw47pK0VqdWrckdBQ6w=";
+    rev = "c5f6fa1179bfa51429ddf4b2d268c7f2295dfff8";
+    hash = "sha256-gHWvY205Jy69LpNtqCr+prtalf7bSVZ971sGbhMuqnA=";
   };
 
   nativeBuildInputs = [

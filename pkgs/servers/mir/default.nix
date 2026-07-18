@@ -5,9 +5,9 @@ let
 in
 {
   mir = common {
-    version = "2.26.0";
-    hash = "sha256-gADqNNkaYj8KQ67wWzUWT4LuTQh1S+w/qLhVDKdBH4Q=";
-    cargoHash = "sha256-bG2p5Gz34yQJLI1Wuejq6o+jXLn6O2eZE1XGddvxkV4=";
+    version = "2.28.0";
+    hash = "sha256-sSxV20loRXQfGWMI1zAzrAwww00bc/BQqJaFB8whH5E=";
+    cargoHash = "sha256-AHB4OYP2kU47EsutOxYa693pMLgyXuF1p+mLXg2cIGs=";
   };
 
   mir_2_15 = common {

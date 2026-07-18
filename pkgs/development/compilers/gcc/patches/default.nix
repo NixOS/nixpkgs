@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  is13,
   langC,
   langAda,
   langObjC,
@@ -139,16 +140,6 @@ optionals noSysDirs (
   atLeast14 && stdenv.hostPlatform.isDarwin && langAda
 ) ../patches/14/gcc-darwin-remove-coreservices.patch
 
-# Use absolute path in GNAT dylib install names on Darwin
-++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
-  {
-    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-    "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
-  }
-  .${majorVersion} or [ ]
-)
-
 # Here we apply patches by Iains (https://github.com/iains)
 # GitHub's "compare" API produces unstable diffs, so we resort to reusing
 # diffs from the Homebrew repo.
@@ -184,6 +175,21 @@ optionals noSysDirs (
   }
   .${majorVersion} or [ ]
 )
+
+# Use absolute path in GNAT dylib install names on Darwin
+++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
+  {
+    "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
+    "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
+    # After the Iains patch, GCC 13 and 14 share the same patch.
+    "13" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
+  }
+  .${majorVersion} or [ ]
+)
+
+++ optional (
+  langAda && is13 && canApplyIainsDarwinPatches
+) ./13/gnat13-aarch64-darwin-trampoline.patch
 
 ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";

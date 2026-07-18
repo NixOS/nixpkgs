@@ -21,16 +21,46 @@ let
         (toPythonModule finalPackage)
         gunicorn
       ]
-      ++ finalPackage.optional-dependencies.redis
-      ++ lib.optionals cfg.celery.enable [ celery ]
       ++ lib.optionals (
         cfg.settings.database.backend == "postgresql"
       ) finalPackage.optional-dependencies.postgres;
+  };
+
+  pretalxManageWrapper = pkgs.writeShellApplication {
+    name = "pretalx-manage";
+    runtimeInputs = with pkgs; [
+      util-linux
+    ];
+    text = ''
+      cd ${cfg.settings.filesystem.data}
+      set -a
+      ${lib.concatMapStringsSep "\n" (file: ''
+        . ${lib.escapeShellArg file}
+      '') cfg.environmentFiles}
+      set +a
+      export PRETALX_CONFIG_FILE=${configFile}
+      exec runuser ${
+        lib.cli.toCommandLineShellGNU { } {
+          inherit (cfg) user;
+          preserve-environment = true;
+        }
+      } -- ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
+    '';
+    excludeShellChecks = [
+      # Not following: /run/agenix/pretalx-env was not specified as input
+      "SC1091"
+    ];
   };
 in
 
 {
   meta.maintainers = pkgs.pretalx.meta.maintainers;
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "pretalx" "celery" "enable" ] ''
+      Celery is now always required.
+    '')
+  ];
 
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
@@ -110,15 +140,6 @@ in
     };
 
     celery = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        example = false;
-        description = ''
-          Whether to set up celery as an asynchronous task runner.
-        '';
-      };
-
       extraArgs = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ ];
@@ -255,10 +276,8 @@ in
           celery = {
             backend = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = lib.optionalString cfg.celery.enable "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
-              defaultText = lib.literalExpression ''
-                optionalString config.services.pretalx.celery.enable "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1"
-              '';
+              default = "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
+              defaultText = lib.literalExpression "redis+socket://\${config.services.redis.servers.pretalx.unixSocket}?virtual_host=1";
               description = ''
                 URI to the celery backend used for the asynchronous job queue.
               '';
@@ -266,10 +285,8 @@ in
 
             broker = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = lib.optionalString cfg.celery.enable "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
-              defaultText = lib.literalExpression ''
-                optionalString config.services.pretalx.celery.enable "redis+socket://''${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2"
-              '';
+              default = "redis+socket://${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
+              defaultText = lib.literalExpression "redis+socket://\${config.services.redis.servers.pretalx.unixSocket}?virtual_host=2";
               description = ''
                 URI to the celery broker used for the asynchronous job queue.
               '';
@@ -325,18 +342,7 @@ in
     # https://docs.pretalx.org/administrator/installation/
 
     environment.systemPackages = [
-      (pkgs.writeScriptBin "pretalx-manage" ''
-        cd ${cfg.settings.filesystem.data}
-        sudo=exec
-        if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
-        fi
-        set -a
-        ${lib.concatMapStringsSep "\n" (file: ". ${lib.escapeShellArg file}") cfg.environmentFiles}
-        set +a
-        export PRETALX_CONFIG_FILE=${configFile}
-        $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
-      '')
+      pretalxManageWrapper
     ];
 
     services.logrotate.settings.pretalx = {
@@ -370,6 +376,15 @@ in
                 access_log off;
                 more_set_headers 'Content-Disposition: attachment; filename="$1"';
                 expires 7d;
+                types {
+                  # prevent xss through file uploads
+                  text/plain html;
+                  text/plain htm;
+                  text/plain svg;
+                  text/plain svgz;
+                  text/plain js;
+                  text/plain mjs;
+                }
               '';
             };
             "/static/" = {
@@ -508,23 +523,21 @@ in
           };
         };
 
-        pretalx-worker = lib.mkIf cfg.celery.enable (
-          lib.recursiveUpdate commonUnitConfig {
-            description = "pretalx asynchronous job runner";
-            after = [
-              "network.target"
-              "redis-pretalx.service"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-              "postgresql.target"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-              "mysql.service"
-            ];
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
-          }
-        );
+        pretalx-worker = lib.recursiveUpdate commonUnitConfig {
+          description = "pretalx asynchronous job runner";
+          after = [
+            "network.target"
+            "redis-pretalx.service"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+            "postgresql.target"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+            "mysql.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
+        };
 
         nginx.serviceConfig.SupplementaryGroups = lib.mkIf cfg.nginx.enable [ "pretalx" ];
       };

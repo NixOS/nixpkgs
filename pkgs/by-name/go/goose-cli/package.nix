@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.28.0";
 
   src = fetchFromGitHub {
-    owner = "block";
+    owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
     hash = "sha256-/1TtsnNiLoTkvyeFR282qSpo+Jt3pvFxduJ7lyzsTXI=";
@@ -181,7 +181,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Open-source, extensible AI agent that goes beyond code suggestions - install, execute, edit, and test with any LLM";
-    homepage = "https://github.com/block/goose";
+    homepage = "https://github.com/aaif-goose/goose";
     mainProgram = "goose";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

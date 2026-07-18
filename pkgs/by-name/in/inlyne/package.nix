@@ -21,21 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inlyne";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Inlyne-Project";
     repo = "inlyne";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
+    hash = "sha256-bUM9Mn/C9l6s6ucoLRo25m4PbbW3gp5d3AvO/9GTJcI=";
   };
 
-  cargoHash = "sha256-6TwMZNYvW1bBE+9PJUXQxP5Uz7VYsjyLabmaxcX9Mbk=";
-
-  cargoPatches = [
-    # update metrics dependency to fix Rust 1.94 compatibility
-    ./update-metrics.patch
-  ];
+  cargoHash = "sha256-IaaojW5PYSUwyh1iv2HrDidIV8keEykKHY61rpcCAPc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -83,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeLibraryPath [
           libGL
           libx11
+          libxkbcommon
         ]
       }
   '';

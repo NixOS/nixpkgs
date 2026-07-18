@@ -77,7 +77,7 @@ let
   inherit (cudaPackages)
     libcublas
     cuda_nvcc
-    cuda_cccl
+    cccl
     cuda_cudart
     libcufft
     ;
@@ -255,7 +255,7 @@ let
     buildInputs =
       [ ]
       ++ lib.optionals with_cublas [
-        cuda_cccl
+        cccl
         cuda_cudart
         libcublas
         libcufft
@@ -337,7 +337,7 @@ let
   pname = "local-ai";
   version = "2.28.0";
   src = fetchFromGitHub {
-    owner = "go-skynet";
+    owner = "mudler";
     repo = "LocalAI";
     tag = "v${version}";
     hash = "sha256-Hpz0dGkgasSY/FGO7mDzqsLjXut0LdQ9PUXGaURUOlY=";

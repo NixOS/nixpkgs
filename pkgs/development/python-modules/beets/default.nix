@@ -59,6 +59,7 @@
   aacgain,
   beautifulsoup4,
   chromaprint,
+  dbus-python,
   discogs-client,
   ffmpeg,
   flac,
@@ -70,7 +71,7 @@
   librosa,
   mp3gain,
   mp3val,
-  mpd2,
+  python-mpd2,
   pyacoustid,
   pylast,
   pyxdg,
@@ -88,6 +89,7 @@
   extraNativeBuildInputs ? [ ],
 
   # tests
+  doCheck ? true,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-factoryboy,
@@ -113,12 +115,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.11.0";
+  version = "2.12.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fi6D0P2GtEO41VL6UKAArRedZVxw97yqDUAoilktUho=";
+    hash = "sha256-u2qoZ0/qWq9YUcwbOpsqtIjX5BZ2z2wj00X59Pf+/fk=";
   };
   pyproject = true;
 
@@ -193,6 +195,8 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.finalPackage.passthru.plugins.wrapperBins;
+
+  inherit doCheck;
 
   __darwinAllowLocalNetworking = true;
 
@@ -275,7 +279,11 @@ buildPythonPackage (finalAttrs: {
         bench.testPaths = [ ];
         bpd = { };
         bpm.testPaths = [ ];
-        bpsync.testPaths = [ ];
+        bpsync = {
+          # plugin retired: https://github.com/beetbox/beets/issues/3862.
+          deprecated = true;
+          testPaths = [ ];
+        };
         bucket = { };
         chroma = {
           propagatedBuildInputs = [ pyacoustid ];
@@ -288,10 +296,15 @@ buildPythonPackage (finalAttrs: {
           propagatedBuildInputs = [ requests ];
           testPaths = [ ];
         };
-        discogs.propagatedBuildInputs = [
-          discogs-client
-          requests
-        ];
+        discogs = {
+          propagatedBuildInputs = [
+            discogs-client
+            requests
+          ];
+          singlePluginTest.config = {
+            user_token = "test";
+          };
+        };
         duplicates.testPaths = [ ];
         edit = { };
         embedart = {
@@ -334,7 +347,10 @@ buildPythonPackage (finalAttrs: {
           testPaths = [ ];
         };
         limit = { };
-        listenbrainz = { };
+        listenbrainz.singlePluginTest.config = {
+          token = "test";
+          username = "test";
+        };
         loadext = {
           propagatedBuildInputs = [ requests ];
           testPaths = [ ];
@@ -348,11 +364,14 @@ buildPythonPackage (finalAttrs: {
         mbsubmit = { };
         mbsync = { };
         mbpseudo = { };
-        metasync.testPaths = [ ];
+        metasync = {
+          propagatedBuildInputs = [ dbus-python ];
+          testPaths = [ ];
+        };
         missing.testPaths = [ ];
-        mpdstats.propagatedBuildInputs = [ mpd2 ];
+        mpdstats.propagatedBuildInputs = [ python-mpd2 ];
         mpdupdate = {
-          propagatedBuildInputs = [ mpd2 ];
+          propagatedBuildInputs = [ python-mpd2 ];
           testPaths = [ ];
         };
         musicbrainz = { };
@@ -363,11 +382,14 @@ buildPythonPackage (finalAttrs: {
         plexupdate = { };
         random = { };
         replace = { };
-        replaygain.wrapperBins = [
-          aacgain
-          ffmpeg
-          mp3gain
-        ];
+        replaygain = {
+          singlePluginTest.config.backend = "gstreamer";
+          wrapperBins = [
+            aacgain
+            ffmpeg
+            mp3gain
+          ];
+        };
         rewrite.testPaths = [ ];
         scrub.testPaths = [ ];
         smartplaylist = { };
@@ -375,7 +397,10 @@ buildPythonPackage (finalAttrs: {
           propagatedBuildInputs = [ soco ];
           testPaths = [ ];
         };
-        spotify = { };
+        spotify.singlePluginTest.setup = ''
+          mkdir -p $HOME/.config/beets
+          echo '{"access_token":"test"}' > $HOME/.config/beets/spotify_token.json
+        '';
         subsonicplaylist = {
           propagatedBuildInputs = [ requests ];
           testPaths = [ ];
@@ -384,7 +409,7 @@ buildPythonPackage (finalAttrs: {
         substitute = {
           testPaths = [ ];
         };
-        tidal = { };
+        tidal.propagatedBuildInputs = [ requests-oauthlib ];
         the = { };
         titlecase.propagatedBuildInputs = [ titlecase ];
         thumbnails = {
@@ -416,23 +441,24 @@ buildPythonPackage (finalAttrs: {
         lib.throwIf (finalAttrs.finalPackage.passthru.plugins.builtins.${plugName}.deprecated or false)
           "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
       ) pluginOverrides;
-      all =
-        lib.mapAttrs
-          (
-            n: a:
-            {
-              name = n;
-              enable = !disableAllPlugins;
-              builtin = false;
-              propagatedBuildInputs = [ ];
-              testPaths = [ "test/plugins/test_${n}.py" ];
-              wrapperBins = [ ];
-            }
-            // a
-          )
-          (
-            lib.recursiveUpdate finalAttrs.finalPackage.passthru.plugins.base finalAttrs.finalPackage.passthru.plugins.overrides
-          );
+      all = lib.pipe finalAttrs.finalPackage.passthru.plugins.base [
+        (base: lib.recursiveUpdate base finalAttrs.finalPackage.passthru.plugins.overrides)
+        (lib.mapAttrs (
+          n: a:
+          lib.recursiveUpdate {
+            name = n;
+            enable = !disableAllPlugins;
+            builtin = false;
+            propagatedBuildInputs = [ ];
+            singlePluginTest = {
+              config = { };
+              setup = "";
+            };
+            testPaths = [ "test/plugins/test_${n}.py" ];
+            wrapperBins = [ ];
+          } a
+        ))
+      ];
       enabled = lib.filterAttrs (_: p: p.enable) finalAttrs.finalPackage.passthru.plugins.all;
       disabled = lib.filterAttrs (_: p: !p.enable) finalAttrs.finalPackage.passthru.plugins.all;
       disabledTestPaths = lib.flatten (
@@ -443,23 +469,6 @@ buildPythonPackage (finalAttrs: {
       );
     };
     tests = {
-      gstreamer =
-        runCommand "beets-gstreamer-test"
-          {
-            meta.timeout = 60;
-          }
-          ''
-            set -euo pipefail
-            export HOME=$(mktemp -d)
-            mkdir $out
-
-            cat << EOF > $out/config.yaml
-            replaygain:
-              backend: gstreamer
-            EOF
-
-            ${finalAttrs.finalPackage}/bin/beet -c $out/config.yaml > /dev/null
-          '';
       with-new-builtin-plugin = finalAttrs.finalPackage.overrideAttrs (
         newAttrs: oldAttrs: {
           postPatch = (oldAttrs.postPatch or "") + ''
@@ -497,7 +506,66 @@ buildPythonPackage (finalAttrs: {
           -c $out/config.yaml \
           mpdstats --help 2> $out/mpdstats-help-stderr || true
       '';
-    };
+    }
+    # Build and start beets once for each supported built-in plugin. Keeping the
+    # plugins isolated makes missing optional dependencies visible.
+    // lib.pipe finalAttrs.finalPackage.passthru.plugins.all [
+      # Deprecated plugins are not useful regression targets.
+      (lib.filterAttrs (_: pluginAttrs: !(pluginAttrs.deprecated or false)))
+      (lib.concatMapAttrs (
+        pluginName: pluginAttrs:
+        let
+          testConfig = {
+            plugins = [ pluginName ];
+          }
+          # Some plugins do not accept an empty attribute set as config.
+          // lib.optionalAttrs (pluginAttrs.singlePluginTest.config != { }) {
+            ${pluginName} = pluginAttrs.singlePluginTest.config;
+          };
+          beetsWithSinglePlugin = beets.override {
+            disableAllPlugins = true;
+            pluginOverrides = {
+              ${pluginName}.enable = true;
+            };
+            # The runCommand below is the relevant check; avoid running
+            # the full upstream test suite once per plugin. NOTE that
+            # testing whether any plugin's `testPaths` is incorrect, is
+            # done for all plugins via the `beets-minimal` derivation.
+            doCheck = false;
+          };
+        in
+        {
+          "with-single-plugin-${pluginName}" = beetsWithSinglePlugin;
+          "single-plugin-${pluginName}" = runCommand "beets-single-plugin-${pluginName}-test" { } ''
+            set -euo pipefail
+            export HOME=$(mktemp -d)
+            ${pluginAttrs.singlePluginTest.setup}
+            mkdir $out
+
+            cat <<'EOF' > $out/config.yaml
+            ${lib.generators.toYAML { } testConfig}
+            EOF
+
+            status=0
+            ${lib.getExe beetsWithSinglePlugin} \
+              -c "$out/config.yaml" \
+              --help > "$out/stdout" 2> "$out/stderr" || status=$?
+
+            # beet exits successfully when a plugin fails to load, so its
+            # stderr must also be checked for the diagnostic.
+            if (( status != 0 )) || grep -Fq "error loading plugin" "$out/stderr"; then
+              {
+                printf '%s\n' '----- stdout -----'
+                cat "$out/stdout"
+                printf '%s\n' '----- stderr -----'
+                cat "$out/stderr"
+              } >&2
+              exit 1
+            fi
+          '';
+        }
+      ))
+    ];
   };
 
   meta = {
@@ -509,6 +577,7 @@ buildPythonPackage (finalAttrs: {
       doronbehar
       lovesegfault
       pjones
+      staticdev
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";

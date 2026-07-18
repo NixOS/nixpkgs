@@ -13,6 +13,7 @@
   pipewire,
   virglrenderer,
   libkrunfw,
+  nix-update-script,
   rustc,
   withBlk ? false,
   withNet ? false,
@@ -34,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.17.4";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Th4vCg3xHb6lbo26IDZES7tLOUAJTebQK2+h3xSYX7U=";
+    hash = "sha256-g4u34sGdgv6mRRry9b5TAXSx+pmVwCNSD3YNtr6qRxo=";
   };
 
   outputs = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-0xpAyNe1jF1OMtc7FXMsejqIv0xKc1ktEvm3rj/mVFU=";
+    hash = "sha256-rxdaqEKDDMxFwRuX6kLhqGyFXJTz+Bx4mJJhYL5nPgU=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -104,9 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
+  passthru.updateScript = nix-update-script {
+    attrPath = "libkrun";
+  };
+
   meta = {
     description = "Dynamic library providing Virtualization-based process isolation capabilities";
-    homepage = "https://github.com/containers/libkrun";
+    homepage = "https://github.com/libkrun/libkrun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nickcao

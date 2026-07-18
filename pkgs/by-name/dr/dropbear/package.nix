@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   zlib,
   libxcrypt,
   enableSCP ? false,
@@ -15,17 +15,23 @@ let
     SFTPSERVER_PATH = sftpPath;
     DROPBEAR_PATH_SSH_PROGRAM = "${placeholder "out"}/bin/dbclient";
   };
-
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "dropbear";
-  version = "2025.89";
+  version = "2026.92";
 
-  src = fetchurl {
-    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-DR98pxHPwzbcioXmcsq5z9giOgL+LaCkp661jJ4RNjQ=";
+  src = fetchFromGitHub {
+    owner = "mkj";
+    repo = "dropbear";
+    tag = "DROPBEAR_${finalAttrs.version}";
+    hash = "sha256-xXjKWj6tMW/Qlq4DttxKAqOwsER2QEeb1Qw3Gllu2QQ=";
   };
+
+  patches = [
+    # Allow sessions to inherit the PATH from the parent dropbear.
+    # Otherwise they only get the usual /bin:/usr/bin kind of PATH
+    ./pass-path.patch
+  ];
 
   env.CFLAGS = lib.pipe (lib.attrNames dflags) [
     (map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
@@ -55,27 +61,38 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postInstall = lib.optionalString enableSCP ''
-    ln -rs $out/bin/scp $out/bin/dbscp
-  '';
-
-  patches = [
-    # Allow sessions to inherit the PATH from the parent dropbear.
-    # Otherwise they only get the usual /bin:/usr/bin kind of PATH
-    ./pass-path.patch
-  ];
-
   buildInputs = [
     zlib
     libxcrypt
   ];
 
+  postInstall = lib.optionalString enableSCP ''
+    ln -rs $out/bin/scp $out/bin/dbscp
+  '';
+
   meta = {
-    description = "Small footprint implementation of the SSH 2 protocol";
+    description = "Small memory footprint ssh server/client suitable for memory-constrained environments";
+    longDescription = ''
+      Dropbear is particularly useful for "embedded"-type Linux (or other Unix) systems, such as wireless routers.
+
+      ## Features
+
+      * Implements X11 forwarding, and authentication-agent forwarding for OpenSSH clients
+      * Can run from inetd or standalone
+      * Compatible with OpenSSH ~/.ssh/authorized_keys public key authentication
+      * Multi-hop mode uses SSH TCP forwarding to tunnel through multiple SSH hosts in a single command:
+
+      ```shell
+      dbclient user1@hop1,user2@hop2,destination
+      ```
+    '';
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
-    changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${finalAttrs.version}/CHANGES";
+    changelog = "https://github.com/mkj/dropbear/releases/tag/DROPBEAR_${finalAttrs.version}";
+    downloadPage = "https://matt.ucc.asn.au/dropbear/releases";
     license = lib.licenses.mit;
-    maintainers = [ ];
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })

@@ -6,7 +6,6 @@
   pkg-config,
   boost186,
   libsodium,
-  miniupnpc,
   openssl,
   python3,
   randomx,
@@ -39,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.6";
+  version = "0.18.5.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-A7EqamADbTyK6l26foSXfZLH94OUUMsgi7jdsKRubXU=";
+    hash = "sha256-clw+7mZenWp58iA7fuEp4BPFH3KUwL53cC4IChIVh7w=";
   };
 
   patches = [
@@ -69,7 +68,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost186 # uses boost/asio/io_service.hpp
     libsodium
-    miniupnpc
     openssl
     randomx
     rapidjson

@@ -32,11 +32,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.14";
+  version = "1.2.16";
 
   src = fetchurl {
     url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
+    hash = "sha256-CSOZ1eh0mh1eGI45MVdSHOxLdWk7YOu3m7znKM/yIyw=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
   };
 })

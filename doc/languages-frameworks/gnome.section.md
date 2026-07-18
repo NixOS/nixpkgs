@@ -105,7 +105,7 @@ Given the requirements above, the package expression would become messy quickly:
 }
 ```
 
-Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that automate this. They work in conjunction with other setup hooks that populate environment variables, and will then wrap all executables in `bin` and `libexec` directories using said variables.
+Fortunately, we have a [family of hooks]{#ssec-gnome-hooks-wrapgappshook} that automate this. They work in conjunction with other setup hooks that populate environment variables, and will then wrap all executables in `bin` and `libexec` directories using said variables. If a package has multiple outputs, these hooks will work on `outputBin` by default, or on the outputs listed in `wrapGAppsInOutputs` if set.
 
 - [`wrapGAppsHook3`]{#ssec-gnome-hooks-wrapgappshook3} for GTK 3 apps. For convenience, it also adds `dconf.lib` for a GIO module implementing a GSettings backend using `dconf`, `gtk3` for GSettings schemas, and `librsvg` for GdkPixbuf loader to the closure.
 - [`wrapGAppsHook4`]{#ssec-gnome-hooks-wrapgappshook4} for GTK 4 apps. Same as `wrapGAppsHook3` but replaces `gtk3` with `gtk4`.
