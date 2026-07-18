@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  # Use LLVM 22 since it's the first LLVM version has all of jank's required changes upstreamed. Few performance regressions expected to be fixed in LLVM 23
   llvmPackages_22,
   cmake,
   ninja,
