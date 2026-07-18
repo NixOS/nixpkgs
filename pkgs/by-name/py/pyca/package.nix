@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   buildNpmPackage,
   fetchFromGitHub,
   jq,
@@ -8,14 +8,14 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
       # pyca is incompatible with SQLAlchemy 2.0
       # error: self.assertIn('autocommit', db.get_session().__dict__.keys())
       sqlalchemy = super.sqlalchemy_1_4;
-    };
-  };
+    }
+  );
+  inherit (pythonPackages) python;
 
   frontend = buildNpmPackage rec {
     pname = "pyca";
@@ -51,7 +51,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication (finalAttrs: {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pyca";
   version = "4.5";
   pyproject = true;
@@ -63,9 +63,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-cTkWkOmgxJZlddqaSYKva2wih4Mvsdrd7LD4NggxKQk=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with pythonPackages; [ setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with pythonPackages; [
     pycurl
     python-dateutil
     configobj
@@ -86,7 +86,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "pyca" ];
 
   nativeCheckInputs = [
-    python3.pkgs.pytestCheckHook
+    pythonPackages.pytestCheckHook
   ];
 
   disabledTests = [
