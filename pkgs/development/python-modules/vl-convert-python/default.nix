@@ -11,21 +11,22 @@
 }:
 buildPythonPackage rec {
   pname = "vl-convert-python";
-  version = "1.9.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vl-convert";
     tag = "v${version}";
-    hash = "sha256-W23cau2VzpvfO6DRa/40UVv4j8AbsNLfAfDaMkTyj6w=";
+    hash = "sha256-dmfY05i5nCiM2felvBcSuVyY8G70HhpJP3KrRGQ7wq8=";
   };
 
   patches = [ ./libffi-sys-system-feature.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-P228JMS5K0TbZYyPgKhIbZ1NviwO1jHO5dClFYerNbI=";
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-t952WH6zq7POVvdX3fI7kXXfPiaAXjfsvoqI/aq5Fn0=";
   };
 
   buildAndTestSubdir = "vl-convert-python";
@@ -55,6 +56,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/vega/vl-convert";
     changelog = "https://github.com/vega/vl-convert/releases/tag/v${version}";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ antonmosich ];
   };
 }
