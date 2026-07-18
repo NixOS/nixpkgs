@@ -8,8 +8,8 @@
   boost183,
   llvmPackages,
   gmp,
-  emacs,
-  jre_headless,
+  emacs-nox,
+  jre8_headless,
   tcl,
   tk,
 }:
@@ -25,6 +25,8 @@ let
     url = "https://github.com/layus/mozart2/releases/download/v2.0.0-beta.1/bootcompiler.jar";
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
+  emacs = emacs-nox;
+  jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
 stdenv.mkDerivation {
   inherit pname version;
