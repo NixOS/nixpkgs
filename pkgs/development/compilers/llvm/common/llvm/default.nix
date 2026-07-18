@@ -20,6 +20,7 @@
   version,
   release_version,
   zlib,
+  zstd,
   which,
   sysctl,
   buildLlvmPackages,
@@ -276,6 +277,7 @@ stdenv.mkDerivation (
     propagatedBuildInputs = [
       ncurses
       zlib
+      zstd
     ];
 
     nativeCheckInputs = [
@@ -521,6 +523,10 @@ stdenv.mkDerivation (
         # triple. The result of this is that a single clang build can be used for
         # multiple targets.
         (lib.cmakeFeature "LLVM_BINUTILS_INCDIR" "${libbfd.plugin-api-header}/include")
+      ]
+      ++ optionals (zstd != null) [
+        (lib.cmakeFeature "LLVM_ENABLE_ZSTD" "FORCE_ON")
+        (lib.cmakeBool "LLVM_USE_STATIC_ZSTD" stdenv.hostPlatform.isStatic)
       ]
       ++ optionals stdenv.hostPlatform.isDarwin [
         (lib.cmakeBool "LLVM_ENABLE_LIBCXX" true)
