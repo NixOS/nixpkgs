@@ -156,15 +156,8 @@ let
   };
 
   config =
-    let
-      failedAssertionsString = lib.concatMapStringsSep "\n" (x: "- ${x.message}") (
-        lib.filter (x: !x.assertion) configEval.config.assertions
-      );
-    in
-    if failedAssertionsString != "" then
-      throw "Failed assertions:\n${failedAssertionsString}"
-    else
-      lib.showWarnings configEval.config.warnings configEval.config;
+    lib.asserts.checkAssertWarn configEval.config.assertions configEval.config.warnings
+      configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
