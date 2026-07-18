@@ -1919,10 +1919,6 @@ let
       '';
     });
 
-    BigDataStatMeth = old.BigDataStatMeth.overrideAttrs (_: {
-      preConfigure = "patchShebangs configure";
-    });
-
     BiocParallel = old.BiocParallel.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
@@ -1955,14 +1951,6 @@ let
           (attrs.env.NIX_CFLAGS_COMPILE or "")
           + lib.optionalString stdenv.hostPlatform.isDarwin " -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
       };
-    });
-
-    Colossus = old.Colossus.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
-    });
-
-    Cyclops = old.Cyclops.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
     });
 
     FLAMES = old.FLAMES.overrideAttrs (attrs: {
@@ -2018,9 +2006,6 @@ let
         # needed to avoid "log limit exceeded" on Hydra
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
       };
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     PICS = old.PICS.overrideAttrs (attrs: {
@@ -2074,16 +2059,8 @@ let
       ];
     });
 
-    RPesto = old.RPesto.overrideAttrs (_: {
-      preConfigure = "patchShebangs configure";
-    });
-
     RProtoBuf = old.RProtoBuf.overrideAttrs (attrs: {
       configureFlags = [ "ac_cv_prog_cxx_cxx11=" ];
-    });
-
-    RSQLite = old.RSQLite.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     RVowpalWabbit = old.RVowpalWabbit.overrideAttrs (attrs: {
@@ -2104,22 +2081,6 @@ let
           "all:\$(PROG) ../inst/bwa clean" \
           "all:\$(PROG) ../inst/bwa"
       '';
-    });
-
-    RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
-      patchPhase = "patchShebangs configure";
-    });
-
-    RcppCGAL = old.RcppCGAL.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
-    });
-
-    RcppGetconf = old.RcppGetconf.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    RcppParallel = old.RcppParallel.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
     });
 
     Rdisop = old.Rdisop.overrideAttrs (_: {
@@ -2184,10 +2145,6 @@ let
       hardeningDisable = [ "format" ];
     });
 
-    SQLFormatteR = old.SQLFormatteR.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     SamplerCompare = old.SamplerCompare.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
@@ -2202,10 +2159,6 @@ let
       '';
     });
 
-    SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     SynExtend = old.SynExtend.overrideAttrs (attrs: {
       # build might fail due to race condition
       enableParallelBuilding = false;
@@ -2215,7 +2168,6 @@ let
       preConfigure = ''
         export V8_PKG_CFLAGS="$(pkg-config --cflags v8)";
         export V8_PKG_LIBS="$(pkg-config --libs v8)";
-        patchShebangs configure
       '';
 
       env = (attrs.env or { }) // {
@@ -2304,32 +2256,10 @@ let
         '';
       });
 
-    acs = old.acs.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
     alcyon = old.alcyon.overrideAttrs (attrs: {
       configureFlags = [
         "--enable-force-openmp"
       ];
-    });
-
-    arcgisgeocode = old.arcgisgeocode.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
-    });
-
-    arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    arcgisutils = old.arcgisutils.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
-    });
-
-    arcpbf = old.arcpbf.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     # it can happen that the major version of arrow-cpp is ahead of the
@@ -2345,60 +2275,13 @@ let
       src = pkgs.arrow-cpp.src;
       name = "r-arrow-${pkgs.arrow-cpp.version}";
       prePatch = "cd r";
-      postPatch = ''
-        patchShebangs configure
-      '';
       buildInputs = attrs.buildInputs ++ [
         pkgs.arrow-cpp
       ];
     });
 
-    astgrepr = old.astgrepr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    awdb = old.awdb.overrideAttrs (attrs: {
-      postPatch = ''
-        patchShebangs configure
-      '';
-    });
-
-    b32 = old.b32.overrideAttrs (_: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    b64 = old.b64.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    bigPLSR = old.bigPLSR.overrideAttrs (_: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    cartogramR = old.cartogramR.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    caugi = old.caugi.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    ciflyr = old.ciflyr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     cisPath = old.cisPath.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
-    });
-
-    clarabel = old.clarabel.overrideAttrs (attrs: {
-      postPatch = ''
-        patchShebangs configure
-      '';
-    });
-
-    clustermq = old.clustermq.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
     });
 
     covidsymptom = old.covidsymptom.overrideAttrs (attrs: {
@@ -2409,26 +2292,13 @@ let
       enableParallelBuilding = false;
     });
 
-    curl = old.curl.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
     data_table = old.data_table.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
       };
-      patchPhase = "patchShebangs configure";
-    });
-
-    datefixR = old.datefixR.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     dbarts = old.dbarts.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
-
-    enderecobr = old.enderecobr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
 
     exifr = old.exifr.overrideAttrs (attrs: {
       postPatch = ''
@@ -2445,10 +2315,6 @@ let
       '';
     });
 
-    fcl = old.fcl.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     findpython = old.findpython.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace "R/find_python_cmd.r" \
@@ -2458,28 +2324,13 @@ let
       '';
     });
 
-    fio = old.fio.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    fixest = old.fixest.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     float = old.float.overrideAttrs (attrs: {
       enableParallelBuilding = false;
     });
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
-    gadjid = old.gadjid.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     gdtools = old.gdtools.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
       env = (attrs.env or { }) // {
         NIX_LDFLAGS = "-lfontconfig -lfreetype";
       };
@@ -2502,10 +2353,6 @@ let
       env = (attrs.env or { }) // {
         RGL_USE_NULL = "true";
       };
-    });
-
-    gmailr = old.gmailr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     gmapR = old.gmapR.overrideAttrs (attrs: {
@@ -2534,10 +2381,6 @@ let
       '';
     });
 
-    h3o = old.h3o.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     harbinger = old.harbinger.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         LC_ALL = "en_US.UTF-8";
@@ -2547,26 +2390,6 @@ let
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
       nativeBuildInputs = attrs.nativeBuildInputs ++ [ new.Rhdf5lib.hdf5 ];
       buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
-    });
-
-    heck = old.heck.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    httpuv = old.httpuv.overrideAttrs (_: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    httr2 = old.httr2.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    ijtiff = old.ijtiff.overrideAttrs (_: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     immunotation =
@@ -2607,42 +2430,12 @@ let
         '';
       });
 
-    instantiate = old.instantiate.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    ironseed = old.ironseed.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     iscream = old.iscream.overrideAttrs (attrs: {
       # https://huishenlab.github.io/iscream/articles/htslib.html
       # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
       propagatedBuildInputs =
         builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
         ++ [ pkgs.htslib ];
-    });
-
-    jqr = old.jqr.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    keyring = old.keyring.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    libdeflate = old.libdeflate.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    libgeos = old.libgeos.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     littler = old.littler.overrideAttrs (attrs: {
@@ -2661,19 +2454,11 @@ let
         substituteInPlace configure \
           --replace-fail '--libs SYMPHONY' '--libs symphony' \
           --replace-fail '--cflags SYMPHONY' '--cflags symphony'
-        patchShebangs configure
       '';
     });
 
     luajr = old.luajr.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
-      postPatch = "patchShebangs configure";
-    });
-
-    magick = old.magick.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     metahdep = old.metahdep.overrideAttrs (attrs: {
@@ -2684,9 +2469,6 @@ let
     });
 
     mongolite = old.mongolite.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
       env = (attrs.env or { }) // {
         PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
         PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
@@ -2697,10 +2479,6 @@ let
       env = (attrs.env or { }) // {
         NIX_LDFLAGS = "-lnng -lmbedtls -lmbedx509 -lmbedcrypto";
       };
-    });
-
-    nanoparquet = old.nanoparquet.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     nearfar =
@@ -2727,16 +2505,6 @@ let
       enableParallelBuilding = false;
     });
 
-    ocf = old.ocf.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    odbc = old.odbc.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
     oligo = old.oligo.overrideAttrs (_: {
       hardeningDisable = [ "format" ];
     });
@@ -2758,23 +2526,9 @@ let
       };
     });
 
-    orbweaver = old.orbweaver.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    otelsdk = old.otelsdk.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     pak = old.pak.overrideAttrs (attrs: {
       preConfigure = ''
-        patchShebangs configure
-        patchShebangs src/library/curl/configure
-        patchShebangs src/library/keyring/configure
-        patchShebangs src/library/pkgdepends/configure
-        patchShebangs src/library/ps/configure
-        patchShebangs src/library/tsitter/configure
-        patchShebangs src/library/tstoml/configure
+        patchShebangs src/library/*/configure
       '';
     });
 
@@ -2784,34 +2538,6 @@ let
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.cctools}/bin/\1"#g' $file
         done
       '';
-    });
-
-    pingr = old.pingr.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
-    });
-
-    pkgdepends = old.pkgdepends.overrideAttrs (attrs: {
-      postPatch = ''
-        patchShebangs configure
-      '';
-    });
-
-    protolite = old.protolite.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    prqlr = old.prqlr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    ps = old.ps.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    purrr = old.purrr.overrideAttrs (attrs: {
-      patchPhase = "patchShebangs configure";
     });
 
     quarto = old.quarto.overrideAttrs (attrs: {
@@ -2837,10 +2563,6 @@ let
       '';
     });
 
-    ramr = old.ramr.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     rawrr = old.rawrr.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace "R/zzz.R" "R/dotNetAssembly.R" --replace-warn \
@@ -2856,10 +2578,6 @@ let
         substituteInPlace "R/rawrr.R" --replace-warn \
           "Sys.which(\"mono\")" "\"${lib.getBin pkgs.mono}/bin/mono\""
       '';
-    });
-
-    rbm25 = old.rbm25.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     redatamx = old.redatamx.overrideAttrs (
@@ -2944,10 +2662,6 @@ let
       patches = [ ./patches/rhdf5filters.patch ];
     });
 
-    rlang = old.rlang.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
     rmarkdown = old.rmarkdown.overrideAttrs (_: {
       preConfigure = ''
         substituteInPlace R/pandoc.R \
@@ -2959,7 +2673,6 @@ let
       env = (attrs.env or { }) // {
         LIBCLANG_PATH = "${lib.getLib pkgs.libclang}/lib";
       };
-      postPatch = "patchShebangs configure";
     });
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
@@ -2971,32 +2684,10 @@ let
       };
     });
 
-    rpf = old.rpf.overrideAttrs (attrs: {
-      patchPhase = "patchShebangs configure";
-    });
-
-    rrd = old.rrd.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    rsgeo = old.rsgeo.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    rshift = old.rshift.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
       };
-    });
-
-    rtiktoken = old.rtiktoken.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
 
     rvisidata = old.rvisidata.overrideAttrs (attrs: {
@@ -3006,10 +2697,6 @@ let
         substituteInPlace R/tmux.r --replace-fail \
           "return(\"vd\")" "return(\"${lib.getBin pkgs.visidata}/bin/vd\")"
       '';
-    });
-
-    rzmq = old.rzmq.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
@@ -3023,16 +2710,6 @@ let
       env = (attrs.env or { }) // {
         PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
       };
-    });
-
-    socratadata = old.socratadata.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    sodium = old.sodium.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
@@ -3052,10 +2729,6 @@ let
       '';
     });
 
-    surtvep = old.surtvep.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     symengine = old.symengine.overrideAttrs (_: {
       preConfigure = ''
         rm configure
@@ -3064,14 +2737,6 @@ let
         all: $(SHLIB)
         EOF
       '';
-    });
-
-    systemfonts = old.systemfonts.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
-    });
-
-    tergo = old.tergo.overrideAttrs (attrs: {
-      patchPhase = "patchShebangs configure";
     });
 
     tesseract = old.tesseract.overrideAttrs (_: {
@@ -3086,7 +2751,6 @@ let
     });
 
     timeless = old.timeless.overrideAttrs (attrs: {
-      preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
@@ -3099,20 +2763,6 @@ let
         pkgs.rustPlatform.cargoSetupHook
         pkgs.cargo
       ];
-    });
-
-    tok = old.tok.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    tomledit = old.tomledit.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    torch = old.torch.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
     });
 
     trajeR = old.trajeR.overrideAttrs (attrs: {
@@ -3140,22 +2790,10 @@ let
       '';
     });
 
-    unsum = old.unsum.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
     vegan3d = old.vegan3d.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         RGL_USE_NULL = "true";
       };
-    });
-
-    waysign = old.waysign.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    webfakes = old.webfakes.overrideAttrs (_: {
-      postPatch = "patchShebangs configure";
     });
 
     websocket = old.websocket.overrideAttrs (attrs: {
@@ -3165,38 +2803,10 @@ let
       };
     });
 
-    x13binary = old.x13binary.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
-    xactonomial = old.xactonomial.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    xml2 = old.xml2.overrideAttrs (attrs: {
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
     xslt = old.xslt.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
       };
-    });
-
-    yaml12 = old.yaml12.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    ymd = old.ymd.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
-    });
-
-    zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
-      postPatch = "patchShebangs configure";
     });
     # keep-sorted end
   };
