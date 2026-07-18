@@ -63,7 +63,7 @@ let
           homepage = "https://github.com/HansKristian-Work/vkd3d-proton";
           description = "Fork of VKD3D, which aims to implement the full Direct3D 12 API on top of Vulkan";
           license = lib.licenses.lgpl21Plus;
-          maintainers = [ ];
+          maintainers = with lib.maintainers; [ borgvall ];
           platforms = if isWindows then lib.platforms.windows else wine.meta.platforms;
         };
       }
