@@ -29,11 +29,7 @@ buildGoModule (finalAttrs: {
     "cmd/aeroflare"
     "cmd/aeroflare-ci"
   ];
-  passthru.tests.version = pkgs.runCommand "aeroflare-version" { } ''
-    ${finalAttrs.finalPackage}/bin/aeroflare version \
-      | grep "^aeroflare version ${finalAttrs.version}$"
-    touch "$out"
-  '';
+  versionCheckProgramArg = "version";
 
   meta = with lib; {
     description = "The OCI-based Nix-Binary-Cache written in Go";
