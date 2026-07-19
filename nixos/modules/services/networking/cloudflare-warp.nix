@@ -39,6 +39,15 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    # Load D-Bus policies so the GUI client can communicate with the system daemon
+    services.dbus.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
+    systemd.user.services.warp-taskbar = {
+      description = "Cloudflare WARP Taskbar";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+    };
+
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedUDPPorts = [ cfg.udpPort ];
     };
