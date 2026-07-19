@@ -99,7 +99,7 @@
   capstone,
   valgrindSupport ? false,
   valgrind-light,
-  brlttySupport ? !minimal,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
   brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,

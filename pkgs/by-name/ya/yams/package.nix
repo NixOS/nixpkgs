@@ -35,6 +35,6 @@ python3Packages.buildPythonPackage rec {
     description = "Last.FM scrobbler for MPD";
     mainProgram = "yams";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ccellado ];
+    maintainers = [ ];
   };
 }
