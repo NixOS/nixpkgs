@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -19,6 +20,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "altgraph" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/ronaldoussoren/altgraph/tags${finalAttrs.version}";
