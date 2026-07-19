@@ -8,6 +8,7 @@
   cffi,
   numpy,
   scipy,
+  pytestCheckHook,
   nix-update-script,
 }:
 
@@ -41,12 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clarabel" ];
 
-  # no tests but run the same examples as .github/workflows/pypi.yaml
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postCheck = ''
     python examples/python/example_sdp.py
     python examples/python/example_qp.py
-    runHook postCheck
   '';
 
   passthru.updateScript = nix-update-script { };
