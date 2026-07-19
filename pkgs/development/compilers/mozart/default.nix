@@ -16,25 +16,26 @@
 
 let
   stdenv = llvmPackages.stdenv;
-  pname = "mozart2";
-  version = "2.0.1";
 
   # This is a workaround to avoid using sbt.
   # I guess it is acceptable to fetch the bootstrapping compiler in binary form.
   bootcompiler = fetchurl {
     url = "https://github.com/layus/mozart2/releases/download/v2.0.0-beta.1/bootcompiler.jar";
-    sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
+    hash = "sha256-X8Lby0vhsFO0IWZw2r5aXFRRWCaMaBXQMfn9B5EK8ME=";
   };
   emacs = emacs-nox;
-  jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mozart2";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "https://github.com/mozart/mozart2/releases/download/v${version}/${pname}-${version}-Source.zip";
-    sha256 = "1mad9z5yzzix87cdb05lmif3960vngh180s2mb66cj5gwh5h9dll";
+    url = "https://github.com/mozart/mozart2/releases/download/v${finalAttrs.version}/mozart2-${finalAttrs.version}-Source.zip";
+    hash = "sha256-lLYEC+SvSGbMqkIDFOCzG5g0XKy0gNXYQT3+78tPTdU=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     ./patch-limits.diff
@@ -53,6 +54,7 @@ stdenv.mkDerivation {
     cmake
     makeWrapper
     unzip
+    jre8_headless
   ];
 
   cmakeFlags = [
@@ -72,7 +74,6 @@ stdenv.mkDerivation {
     boost183
     gmp
     emacs
-    jre_headless
     tcl
     tk
   ];
@@ -101,4 +102,4 @@ stdenv.mkDerivation {
     broken = stdenv.hostPlatform.isDarwin;
   };
 
-}
+})
