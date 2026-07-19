@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "any-listen";
-  version = "0.7.0-beta.28";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "any-listen";
     repo = "any-listen-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IGb96chZ9tOMkUOIPbTMoyCDeEsV299paHRmNeW6I8w=";
+    hash = "sha256-1ZNCDkzf1VG26TZp4ASN6/4UUU6MEfW7bOVjt+llmTA=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit pnpm;
     fetcherVersion = 3;
     sourceRoot = "source/any-listen";
-    hash = "sha256-vvkrTNM4sUJ5W9Mrcomkci7U0OZ116RMLju5zYvyBrQ=";
+    hash = "sha256-wyl7HKrJIyo5a3qjpM84uqT9SMgPXmn1P4OV6Esurkc=";
   };
 
   nativeBuildInputs = [
@@ -149,10 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform private music playback service";
     homepage = "https://github.com/any-listen/any-listen-desktop";
     changelog = "https://github.com/any-listen/any-listen-desktop/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.unfreeRedistributable;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ msdone ];
     mainProgram = "any-listen";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

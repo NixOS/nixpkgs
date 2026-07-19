@@ -1,8 +1,6 @@
-diff --git a/packages/desktop/src/renderer/winMain/main.ts b/packages/desktop/src/renderer/winMain/main.ts
-index c6e7a7e..ad8c721 100644
 --- a/packages/desktop/src/renderer/winMain/main.ts
 +++ b/packages/desktop/src/renderer/winMain/main.ts
-@@ -126,6 +126,8 @@ export const createWindow = () => {
+@@ -129,6 +129,8 @@
    }
    browserWindow = new BrowserWindow(options)
  
@@ -11,7 +9,7 @@ index c6e7a7e..ad8c721 100644
    const winURL = import.meta.env.DEV
      ? `http://localhost:${DEV_SERVER_PORTS['view-main']}`
      : `file://${path.join(encodePath(__dirname), '../view-main/index.html')}`
-@@ -138,8 +140,8 @@ export const createWindow = () => {
+@@ -140,7 +142,7 @@
      )
    }
  
@@ -20,4 +18,3 @@ index c6e7a7e..ad8c721 100644
  
    if (appState.envParams.cmdParams.odt) handleOpenDevTools(browserWindow.webContents)
  
-   // browserWindow.webContents.openDevTools()
