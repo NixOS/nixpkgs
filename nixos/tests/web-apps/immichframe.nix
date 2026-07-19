@@ -11,7 +11,10 @@ in
 {
   name = "immichframe";
 
-  meta.maintainers = with lib.maintainers; [ numinit ];
+  meta.maintainers = with lib.maintainers; [
+    numinit
+    jfly
+  ];
 
   enableOCR = true;
 
