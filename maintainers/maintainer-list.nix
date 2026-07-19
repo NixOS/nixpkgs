@@ -12075,6 +12075,14 @@
     githubId = 17727163;
     keys = [ { fingerprint = "FBAA B86A 101B 4C5F D4F1  25D2 E93D DAC1 7E5D 6CA1"; } ];
   };
+  itzemoji = {
+    name = "Cyril";
+    email = "no-reply@itzemoji.com";
+    github = "itzemoji";
+    matrix = "@itzemoji:matrix.org";
+    githubId = 157407989;
+    keys = [ { fingerpint = "0BBF 82C7 DD69 E57B 5BF6  88DB 2B69 366C C04B 4ED3"; } ];
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
