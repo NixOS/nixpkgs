@@ -13,7 +13,6 @@
   brotli,
   buildGoModule,
   coreutils,
-  fetchpatch,
   forgejo,
   git,
   gzip,
@@ -80,9 +79,6 @@ buildGoModule rec {
     git
     openssh
     writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "16") [
-    coreutils
   ];
 
   patches = [
