@@ -34,6 +34,8 @@ default-package-overrides:
   - futhark-manifest == 1.8.0.0
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
+  # 2026-07-19: ghcide/haskell-debugger don't yet support hie-bios 0.20
+  - hie-bios < 0.20
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
   # Note: When removing this, also remove hnix-store-core from maintainers/scripts/haskell/update-stackage.sh
