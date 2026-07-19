@@ -7492,6 +7492,8 @@ self: super: with self; {
 
   hepdata-converter = callPackage ../development/python-modules/hepdata-converter { };
 
+  hepdata-lib = callPackage ../development/python-modules/hepdata-lib { };
+
   hepdata-validator = callPackage ../development/python-modules/hepdata-validator { };
 
   hepmc3 = toPythonModule (pkgs.hepmc3.override { inherit python; });
