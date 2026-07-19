@@ -16,6 +16,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-HY9ejLfT6gj3vUMSzbNZ4QlpB+liigTtNDBNWCy8X38=";
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Translate bash scripts to fish";
     mainProgram = "babelfish";
