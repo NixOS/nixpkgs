@@ -1,0 +1,34 @@
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -12,7 +12,7 @@
+   android_system_font:
+     git:
+       url: https://github.com/re7gog/android_system_font.git
+-      ref: master
++      ref: 077e15d7d0acb82283b89dfd82f4984b27b28f95
+   app_links: ^7.0.0
+   archive: ^4.0.9
+   async: ^2.13.0
+@@ -50,7 +50,7 @@
+   flutter_typeahead: ## Custom fork from flutter_typeahead since the package is not maintain well.
+     git:
+       url: https://github.com/famedly/flutter_typeahead.git
+-      ref: main
++      ref: 3e209e67aa6e780cba61ced06cf49d2babbbcaa4
+   flutter_vodozemac: ^0.5.0
+   flutter_web_auth_2: ^5.0.1
+   flutter_webrtc: 1.4.0
+@@ -70,10 +70,9 @@
+   linkify: ^5.0.0
+   material: ^1.0.1
+   matrix:
+-    path: ../matrix-dart-sdk
+-    #git:
+-    #  url: https://github.com/ExteraApp/matrix-dart-sdk.git
+-    #  ref: main
++    git:
++      url: https://github.com/ExteraApp/matrix-dart-sdk.git
++      ref: 1bb1be699f8315215968ee5235faa3b9112fa85b
+   mime: ^2.0.0
+   native_imaging: ^0.4.0
+   opus_caf_converter_dart: ^1.0.1
