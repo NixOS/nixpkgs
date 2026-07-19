@@ -11976,6 +11976,12 @@
     githubId = 16307070;
     name = "iosmanthus";
   };
+  ipetkov = {
+    name = "Ivan Petkov";
+    github = "ipetkov";
+    githubId = 1638690;
+    email = "nixpkgs@ipetkov.dev";
+  };
   ipsavitsky = {
     email = "ipsavitsky234@gmail.com";
     github = "ipsavitsky";
