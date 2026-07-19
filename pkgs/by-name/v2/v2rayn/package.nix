@@ -112,7 +112,7 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ andrewzah ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
