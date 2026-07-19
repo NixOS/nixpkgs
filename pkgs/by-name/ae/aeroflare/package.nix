@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   meta = with lib; {
     description = "OCI-based Nix-Binary-Cache written in Go";
     homepage = "https://github.com/itzemoji/aeroflare";
-    changelog = "https://github.com/itzemoji/aeroflare/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/itzemoji/aeroflare/blob/${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ itzemoji ];
