@@ -3992,10 +3992,6 @@ with pkgs;
 
   mono6 = callPackage ../development/compilers/mono/6.nix { };
 
-  mozart2 = callPackage ../development/compilers/mozart { };
-
-  mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
-
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
   buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
