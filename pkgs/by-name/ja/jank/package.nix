@@ -37,16 +37,13 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "jank";
   version = "0.1.0";
 
-  # add these two lines to satisfy nix tests, and remember to nix fmt before commit
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jank-lang";
     repo = "jank";
-    # rev = "86cd33b8edb7504209719f43391a185b84211a0c";
     rev = "7d185b25dacce7950bf7194830aad90c5b1bb6aa";
-    # hash = lib.fakeHash;
     hash = "sha256-og8BVjFAQwlS2M9js6+5lk6VMZXLuySH+eC5pLvmA8I=";
     fetchSubmodules = true;
 
@@ -74,7 +71,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs ./compiler+runtime/bin/ar-merge
   '';
-  # new pkgs must fortify to satisfy nixpkgs tests
   hardeningDisable = [ "fortify" ];
 
   cmakeBuildDir = "compiler+runtime/build";
@@ -88,13 +84,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "jank_test" finalAttrs.doCheck)
   ];
 
-  # This runs as a bash script just before CMake configures the project
   preConfigure = ''
     local cxxFlags="$(cat ${llvmPackages.clang}/nix-support/cc-cflags) $(cat ${llvmPackages.clang}/nix-support/libc-crt1-cflags)"
 
     local linkerFlags="$(cat ${llvmPackages.clang}/nix-support/cc-ldflags) -Wl,-rpath,${llvmPackages.stdenv.cc.libc}/lib -L${lib.getLib llvmPackages.libllvm}/lib -L${lib.getLib bzip2}/lib -L${lib.getLib openssl}/lib -L${lib.getLib zlib}/lib -L${lib.getLib zstd}/lib -L${lib.getLib libedit}/lib -L${lib.getLib libxml2}/lib"
 
-    # Append to the array created by structuredAttrs
     cmakeFlags+=(
       "-DCMAKE_CXX_FLAGS=$cxxFlags"
       "-DCMAKE_EXE_LINKER_FLAGS=$linkerFlags"
