@@ -11,17 +11,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "tokentopper";
-  version = "0.5.1";
+  version = "0.6.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kalmantic";
     repo = "tokentopper";
     tag = "tokentopper-v${finalAttrs.version}";
-    hash = "sha256-e6qlGlQ6Nmlxp7ZZFsz2VoVmPOfsKuuFnX8eBS9RpQ8=";
+    hash = "sha256-vQu6zjT72CNmTJEn4iz4cChz3PS7xgdyNkc7gXPN6zk=";
   };
 
-  npmDepsHash = "sha256-iv3S/g0Fwwl2d9tlYAcmqI7SUVIBIrJtUaecb+uEdeI=";
+  npmDepsHash = "sha256-fRpS3/PkuWEhm4X9aIMbyRmTD+yeGuC0+kkdsAe0ew0=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -59,7 +59,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Professional AI Usage Index for Claude Code, Codex, and OpenCode";
+    description = "Professional AI Usage Index for Claude Code, Codex, OpenCode, and Gemini CLI";
     homepage = "https://openfactoryai.com/tools/tokentopper/";
     changelog = "https://github.com/Kalmantic/tokentopper/releases/tag/tokentopper-v${finalAttrs.version}";
     license = lib.licenses.mit;
