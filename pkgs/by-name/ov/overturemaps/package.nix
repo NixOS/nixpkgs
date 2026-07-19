@@ -30,9 +30,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     tqdm
   ];
 
-  # Drop once tqdm 4.67.3 reaches master
-  pythonRelaxDeps = [ "tqdm" ];
-
   pythonImportsCheck = [ "overturemaps" ];
 
   preCheck = ''
