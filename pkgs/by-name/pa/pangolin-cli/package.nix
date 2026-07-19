@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pangolin-cli";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-wJS60bG5eQIEsDdqKxfSVKPaW+EmmtiaW9gbH1wwBQ4=";
+    hash = "sha256-YST8NQWUNd0nkaKF4K+tgXUMI1FcoceQyO6Kisf3WDc=";
   };
 
   ldflags = [
