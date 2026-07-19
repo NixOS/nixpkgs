@@ -19155,6 +19155,12 @@
     githubId = 30654959;
     name = "Michele Sciabarra";
   };
+  msdone = {
+    email = "lwt6077@gmail.com";
+    github = "msdone-lwt";
+    githubId = 103359349;
+    name = "msdone";
+  };
   mse63 = {
     name = "Mahmoud Elsharawy";
     github = "mse63";

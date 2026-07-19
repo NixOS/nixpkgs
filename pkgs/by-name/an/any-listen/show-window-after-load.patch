@@ -1,0 +1,20 @@
+--- a/packages/desktop/src/renderer/winMain/main.ts
++++ b/packages/desktop/src/renderer/winMain/main.ts
+@@ -129,6 +129,8 @@
+   }
+   browserWindow = new BrowserWindow(options)
+ 
++  winEvent()
++
+   const winURL = import.meta.env.DEV
+     ? `http://localhost:${DEV_SERVER_PORTS['view-main']}`
+     : `file://${path.join(encodePath(__dirname), '../view-main/index.html')}`
+@@ -140,7 +142,7 @@
+     )
+   }
+ 
+-  winEvent()
++  showWindow()
+ 
+   if (appState.envParams.cmdParams.odt) handleOpenDevTools(browserWindow.webContents)
+ 
