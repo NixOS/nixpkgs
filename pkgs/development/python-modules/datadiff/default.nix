@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -17,10 +19,17 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # Tests are not part of the PyPI releases
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
   pythonImportsCheck = [ "datadiff" ];
+
+  disabledTests = [
+    # slice is an hashable type in recent python versions
+    "test_unhashable_type"
+  ];
 
   meta = {
     description = "Library to provide human-readable diffs of Python data structures";
