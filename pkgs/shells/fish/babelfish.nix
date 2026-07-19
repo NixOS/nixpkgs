@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "babelfish";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "bouk";
     repo = "babelfish";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-/rWX77n9wqWxkHG7gVOinCJ6ahuEfbAcGijC1oAxrno=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
       kevingriffin
     ];
   };
-}
+})
