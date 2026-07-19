@@ -27,6 +27,7 @@
   systemtap-unwrapped,
   numactl,
   zlib,
+  withBabeltrace ? stdenv.buildPlatform == stdenv.hostPlatform,
   babeltrace,
   withGtk ? false,
   gtk2,
@@ -77,6 +78,12 @@ stdenv.mkDerivation {
       --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
       "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
 
+    # Replace python-config calls with pkg-config calls.
+    substituteInPlace Makefile.config \
+      --replace-fail '$(shell $(PYTHON_CONFIG_SQ) --includes 2>/dev/null)' '$(shell ${stdenv.cc.targetPrefix}pkg-config --cflags python3-embed)' \
+      --replace-fail '$(shell $(PYTHON_CONFIG_SQ) $(PYTHON_CONFIG_LDFLAGS) 2>/dev/null)' '$(shell ${stdenv.cc.targetPrefix}pkg-config --libs python3-embed)' \
+      --replace-fail '$(subst $(PYTHON_NATIVE),$(shell $(CC) -dumpmachine),$(PYTHON_EMBED_LDOPTS))' '$(shell ${stdenv.cc.targetPrefix}pkg-config --libs python3-embed)'
+
     patchShebangs pmu-events/jevents.py
   '';
 
@@ -108,7 +115,11 @@ stdenv.mkDerivation {
     makeWrapper
     pkg-config
     python3
-  ];
+    elfutils
+    zlib
+    openssl
+  ]
+  ++ lib.optional withZstd zstd;
 
   buildInputs = [
     elfutils
@@ -119,11 +130,11 @@ stdenv.mkDerivation {
     zlib
     openssl
     numactl
-    babeltrace
     libopcodes
     libpfm
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap-unwrapped) systemtap-unwrapped
+  ++ lib.optional withBabeltrace babeltrace
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
