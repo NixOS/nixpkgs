@@ -35,6 +35,22 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "overturemaps" ];
 
+  preCheck = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "testpaths = tests benchmarks" "testpaths = tests"
+  '';
+
+  disabledTestPaths = [
+    # requires network
+    "tests/test_changelog.py"
+    "tests/test_gers.py"
+    "tests/test_releases.py"
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
   meta = {
     description = "Official command-line tool of the Overture Maps Foundation";
     homepage = "https://overturemaps.org/";
