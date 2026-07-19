@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
     ${finalAttrs.finalPackage}/bin/aeroflare version \
       | grep "^aeroflare version ${finalAttrs.version}$"
     touch "$out"
-    '';
+  '';
 
   meta = with lib; {
     description = "The OCI-based Nix-Binary-Cache written in Go";
