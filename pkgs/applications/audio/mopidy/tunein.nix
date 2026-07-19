@@ -22,6 +22,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   dependencies = [
     mopidy
+    pythonPackages.requests
+    # Provides pkg_resources; remove when upstream replaces it.
+    pythonPackages.setuptools_80
   ];
 
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
