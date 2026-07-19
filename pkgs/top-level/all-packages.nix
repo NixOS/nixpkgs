@@ -1080,6 +1080,8 @@ with pkgs;
 
   gerrit_3_12 = callPackage ../by-name/ge/gerrit/3_12.nix { };
 
+  gerrit_3_13 = callPackage ../by-name/ge/gerrit/3_13.nix { };
+
   gerrit_3_14 = callPackage ../by-name/ge/gerrit/3_14.nix { };
 
   github-cli = gh;
