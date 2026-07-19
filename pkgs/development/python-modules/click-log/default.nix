@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   click,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,6 +25,8 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ click ];
 
   pythonImportsCheck = [ "click_log" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/click-contrib/click-log/";
