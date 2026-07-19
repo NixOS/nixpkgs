@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -17,10 +18,9 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # Module has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "dicttoxml2" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Converts a Python dictionary or other native data type into a valid XML string";
