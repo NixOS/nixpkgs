@@ -17198,6 +17198,13 @@
     githubId = 7802795;
     name = "Manoj Karthick";
   };
+  mansalia = {
+    name = "Stepan Zolotuev";
+    github = "mansaliacom";
+    githubId = 236143364;
+    email = "poopenfarten@dismail.de";
+    matrix = "@mansalia:nothing.run";
+  };
   maolonglong = {
     email = "shaolong.chen@outlook.it";
     github = "maolonglong";
