@@ -73,6 +73,16 @@ in
         '';
       };
 
+      startCommand = mkOption {
+        type = types.enum [
+          "start-from-init"
+          "start-from-setup"
+          "start"
+        ];
+        default = "start-from-init";
+        description = "The ZITADEL subcommand to run.";
+      };
+
       settings = mkOption {
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
@@ -220,7 +230,7 @@ in
         wantedBy = [ "multi-user.target" ];
 
         script = ''
-          zitadel start-from-init ${args}
+          zitadel ${cfg.startCommand} ${args}
         '';
 
         serviceConfig = {
