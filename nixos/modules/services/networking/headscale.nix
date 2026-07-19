@@ -97,6 +97,7 @@ in
           lib.showWarnings settings.warnings (
             (lib.removeAttrs settings [
               "assertions"
+              "ephemeral_node_inactivity_timeout"
               "warnings"
             ])
             // {
@@ -114,6 +115,10 @@ in
           imports = [
             ../../misc/assertions.nix
             (lib.mkRenamedOptionModule [ "dns" "split" ] [ "dns" "nameservers" "split" ])
+            (lib.mkRenamedOptionModule
+              [ "ephemeral_node_inactivity_timeout" ]
+              [ "node" "ephemeral" "inactivity_timeout" ]
+            )
           ];
 
           options = {
@@ -217,7 +222,7 @@ in
               };
             };
 
-            ephemeral_node_inactivity_timeout = lib.mkOption {
+            node.ephemeral.inactivity_timeout = lib.mkOption {
               type = lib.types.str;
               default = "30m";
               description = ''
@@ -627,7 +632,7 @@ in
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "ephemeralNodeInactivityTimeout" ]
-      [ "services" "headscale" "settings" "ephemeral_node_inactivity_timeout" ]
+      [ "services" "headscale" "settings" "node" "ephemeral" "inactivity_timeout" ]
     )
     (mkRenamedOptionModule
       [ "services" "headscale" "logLevel" ]
