@@ -18986,6 +18986,12 @@
     githubId = 10601196;
     name = "Jérémie Ferry";
   };
+  mothzarella = {
+    email = "git@mothzarella.dev";
+    github = "mothzarella";
+    githubId = 68356265;
+    name = "tar";
+  };
   motiejus = {
     email = "motiejus@jakstys.lt";
     github = "motiejus";
