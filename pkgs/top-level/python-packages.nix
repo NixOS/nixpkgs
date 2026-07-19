@@ -21798,6 +21798,10 @@ self: super: with self; {
 
   viewstate = callPackage ../development/python-modules/viewstate { };
 
+  vigra = callPackage ../development/python-modules/vigra {
+    inherit (pkgs) vigra;
+  };
+
   vilfo-api-client = callPackage ../development/python-modules/vilfo-api-client { };
 
   vina = callPackage ../by-name/au/autodock-vina/python-bindings.nix { };
