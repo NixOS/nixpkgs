@@ -1,0 +1,45 @@
+From: Erik Bongers <mail@erikbongers.net>
+Subject: [PATCH] Fix explicit None tests for Gst.Structure
+Upstream-Status: Submitted [https://github.com/mopidy/mopidy/pull/2280]
+
+diff --git a/src/mopidy/audio/scan.py b/src/mopidy/audio/scan.py
+index c6f46a5fc..af9508329 100644
+--- a/src/mopidy/audio/scan.py
++++ b/src/mopidy/audio/scan.py
+@@ -309,7 +309,7 @@ def _process(  # noqa: C901, PLR0911, PLR0912, PLR0915
+
+         structure = msg.get_structure()
+
+-        if logger.isEnabledFor(logs.TRACE_LOG_LEVEL) and structure:
++        if logger.isEnabledFor(logs.TRACE_LOG_LEVEL) and structure is not None:
+             debug_text = structure.to_string()
+             if len(debug_text) > 77:
+                 debug_text = debug_text[:77] + "..."
+@@ -320,13 +320,13 @@ def _process(  # noqa: C901, PLR0911, PLR0912, PLR0915
+                 missing_message = msg
+
+         elif msg.type == Gst.MessageType.APPLICATION:
+-            if structure and _get_structure_name(structure) == "have-type":
++            if structure is not None and _get_structure_name(structure) == "have-type":
+                 caps = cast(Gst.Structure | None, structure.get_value("caps"))
+-                if caps:
++                if caps is not None:
+                     mime = _get_structure_name(caps)
+                     if mime.startswith("text/") or mime == "application/xml":
+                         return tags, mime, have_audio, duration
+-            elif structure and structure.get_name() == "have-audio":
++            elif structure is not None and structure.get_name() == "have-audio":
+                 have_audio = True
+
+         elif msg.type == Gst.MessageType.ERROR:
+@@ -335,8 +335,8 @@ def _process(  # noqa: C901, PLR0911, PLR0912, PLR0915
+                 missing_message
+                 and not mime
+                 and (
+-                    (structure := missing_message.get_structure())
+-                    and (caps := structure.get_value("detail"))
++                    ((structure := missing_message.get_structure()) is not None)
++                    and ((caps := structure.get_value("detail")) is not None)
+                     and (mime := _get_structure_name(caps.get_structure(0)))
+                 )
+             ):
