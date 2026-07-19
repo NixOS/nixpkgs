@@ -32,6 +32,9 @@ buildNpmPackage {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ benesim ];
+    maintainers = with lib.maintainers; [
+      benesim
+      ipetkov
+    ];
   };
 }
