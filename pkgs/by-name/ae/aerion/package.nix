@@ -88,6 +88,11 @@ buildGoModule {
     ''
   );
 
+  passthru = {
+    inherit frontend;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "An Open Source Lightweight E-Mail Client";
     homepage = "https://github.com/hkdb/aerion";
