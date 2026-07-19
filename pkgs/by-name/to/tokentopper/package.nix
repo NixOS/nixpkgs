@@ -12,6 +12,7 @@
 buildNpmPackage (finalAttrs: {
   pname = "tokentopper";
   version = "0.5.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kalmantic";
