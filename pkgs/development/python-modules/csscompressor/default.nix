@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "csscompressor";
   version = "0.9.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "afa22badbcf3120a4f392e4d22f9fff485c044a1feda4a950ecc5eba9dd31a05";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-r6IrrbzzEgpPOS5NIvn/9IXARKH+2kqVDsxeup3TGgU=";
   };
 
   build-system = [ setuptools ];
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
