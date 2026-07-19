@@ -16684,12 +16684,6 @@
     githubId = 10746692;
     name = "Leopold Luley";
   };
-  lumi = {
-    email = "lumi@pew.im";
-    github = "lumi-me-not";
-    githubId = 26020062;
-    name = "lumi";
-  };
   luminarleaf = {
     github = "LuminarLeaf";
     githubId = 80571430;
