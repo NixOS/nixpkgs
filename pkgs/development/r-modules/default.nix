@@ -504,6 +504,10 @@ let
     SimInf = [ pkgs.gsl ]; # for gsl-config
     SuperGauss = [ pkgs.pkg-config ];
     SymTS = [ pkgs.gsl ]; # for gsl-config
+    Uno = with pkgs; [
+      cmake
+      which
+    ];
     V8 = [ pkgs.pkg-config ];
     VBLPCM = [ pkgs.gsl ]; # for gsl-config
     XBRL = [ pkgs.libxml2 ]; # for xml2-config
