@@ -23546,6 +23546,12 @@
     name = "Roland Conybeare";
     keys = [ { fingerprint = "bw5Cr/4ul1C2UvxopphbZbFI1i5PCSnOmPID7mJ/Ogo"; } ];
   };
+  rdk31 = {
+    email = "nixpkgs@rdk31.com";
+    github = "rdk31";
+    githubId = 16737959;
+    name = "rdk31";
+  };
   rdnetto = {
     email = "rdnetto@gmail.com";
     github = "rdnetto";
