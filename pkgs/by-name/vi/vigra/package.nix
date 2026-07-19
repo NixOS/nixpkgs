@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      check = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+      check = finalAttrs.overrideAttrs (previousAttrs: {
         doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
       });
     };
