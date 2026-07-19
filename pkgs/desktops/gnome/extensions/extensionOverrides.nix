@@ -109,7 +109,6 @@ lib.trivial.pipe super [
         xdg_utils = xdg-utils;
         gtk3_gsettings_path = glib.getSchemaPath gtk3;
         nautilus_gsettings_path = glib.getSchemaPath nautilus;
-        typelib_path = "${gtk3}/lib/girepository-1.0";
       })
     ];
   }))
