@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   pkgsStatic,
+  rc,
   byacc,
   ed,
   ncurses,
@@ -88,7 +89,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     shellPath = "/bin/rc";
-    tests.static = pkgsStatic.rc;
+    tests = {
+      static = pkgsStatic.rc;
+      readline = lib.optionalDrvAttr (!stdenv.hostPlatform.isDarwin) (
+        rc.override {
+          readlineSupport = true;
+          lineEditingLibrary = "readline";
+        }
+      );
+      editline = lib.optionalDrvAttr (!stdenv.hostPlatform.isDarwin) (
+        rc.override {
+          editlineSupport = true;
+          lineEditingLibrary = "editline";
+        }
+      );
+    };
   };
 
   meta = {
