@@ -35,8 +35,9 @@ flutter341.buildFlutterApplication (
   rec {
     pname = "extera-next";
     version = "unstable-2026-07-17";
-    strictDeps = true;
-    __structuredAttrs = true;
+    # this parameters brake build:
+    # strictDeps = true;
+    # __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "ExteraApp";
