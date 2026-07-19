@@ -1948,6 +1948,12 @@
     githubId = 51257127;
     name = "anntnzrb";
   };
+  anntoin = {
+    email = "anntoin@gmail.com";
+    github = "Anntoin";
+    githubId = 3289027;
+    name = "Anntóin Wilkinson";
+  };
   anoa = {
     matrix = "@andrewm:amorgan.xyz";
     email = "andrew@amorgan.xyz";
@@ -12543,6 +12549,12 @@
     name = "Javi Merino";
     github = "JaviMerino";
     githubId = 44926;
+  };
+  jayadeep-km-sonarsource = {
+    email = "jayadeep.kinavoormadam@sonarsource.com";
+    name = "Jayadeep Kinavoor Madam";
+    github = "jayadeep-km-sonarsource";
+    githubId = 156662663;
   };
   jayesh-bhoot = {
     name = "Jayesh Bhoot";

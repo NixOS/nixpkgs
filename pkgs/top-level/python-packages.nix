@@ -15134,8 +15134,6 @@ self: super: with self; {
 
   pymupdf4llm = callPackage ../development/python-modules/pymupdf4llm { };
 
-  pymvglive = callPackage ../development/python-modules/pymvglive { };
-
   pymysensors = callPackage ../development/python-modules/pymysensors { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };

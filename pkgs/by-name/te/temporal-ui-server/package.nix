@@ -40,6 +40,9 @@ buildGoModule (finalAttrs: {
     '';
     mainProgram = "temporal-ui-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ breakds ];
+    maintainers = with lib.maintainers; [
+      breakds
+      jlesquembre
+    ];
   };
 })
