@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "afa22badbcf3120a4f392e4d22f9fff485c044a1feda4a950ecc5eba9dd31a05";
   };
 
-  doCheck = false; # No tests
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python port of YUI CSS Compressor";
