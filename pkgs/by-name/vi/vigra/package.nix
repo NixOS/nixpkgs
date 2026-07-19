@@ -4,6 +4,7 @@
   fetchFromGitHub,
   boost,
   cmake,
+  doxygen,
   fftw,
   fftwSinglePrec,
   hdf5,
@@ -79,10 +80,39 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    doc =
+      (finalAttrs.overrideAttrs (
+        finalAttrs: previousAttrs: {
+          outputs = [
+            "out"
+            "doc"
+          ];
+          cmakeFlags = [
+            (lib.cmakeBool "BUILD_DOCS" true)
+            (lib.cmakeBool "CMAKE_SKIP_INSTALL_ALL_DEPENDENCY" true)
+          ];
+          postPatch = previousAttrs.postPatch or "" + ''
+            substituteInPlace src/impex/CMakeLists.txt \
+              --replace-fail "INSTALL(TARGETS vigraimpex" "INSTALL(TARGETS vigraimpex OPTIONAL"
+          '';
+          nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
+            doxygen
+            python3
+          ];
+          buildInputs = [
+            python3
+          ];
+          buildFlags = [
+            "doc"
+          ];
+          passthru = removeAttrs previousAttrs.passthru [ "doc" ];
+        }
+      )).doc;
     tests = {
       check = finalAttrs.overrideAttrs (previousAttrs: {
         doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
       });
+      inherit (finalAttrs.passthru) doc;
     };
     updateScript = writeShellScript "update-vigra" ''
       latestVersion=$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} --fail --silent https://api.github.com/repos/ukoethe/vigra/releases/latest | ${lib.getExe jq} --raw-output .tag_name | sed -E 's/Version-([0-9]+)-([0-9]+)-([0-9]+)/\1.\2.\3/')
