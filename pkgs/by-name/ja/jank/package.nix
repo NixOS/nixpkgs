@@ -82,6 +82,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_ZSTD=${zstd-src}"
     (lib.cmakeBool "jank_unity_build" true)
     (lib.cmakeBool "jank_test" finalAttrs.doCheck)
+    (lib.cmakeBool "jank_force_phase_2" true)
   ];
 
   preConfigure = ''
