@@ -790,9 +790,53 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+        RemoveIPC = true;
 
         # Reduce visible process scope to cgroup
         ProtectProc = "invisible";
+
+        # Allow wide /proc inspection, e.g. for cpuinfo
+        ProcSubset = "all";
+
+        # Protect various system locations/interfaces
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+
+        # No JIT compilation
+        MemoryDenyWriteExecute = true;
+
+        # No ABI personality changes
+        LockPersonality = true;
+
+        # Only IP/Unix sockets
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+
+        # Deny namespace creation
+        RestrictNamespaces = true;
+
+        # No privilege escalation
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+
+        # No realtime schedulign
+        RestrictRealtime = true;
+
+        # Restrict allowed syscalls
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
       };
     };
 
