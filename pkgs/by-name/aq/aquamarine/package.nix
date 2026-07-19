@@ -23,13 +23,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cUQENbJn0PHQUttXame5+PbGGew+BckHZFTfpb8XGI8=";
+    hash = "sha256-zF1iJkBQSDWmRO4/LEeHR1SpKY0lqZaxkoQJpPS9K9U=";
   };
 
   nativeBuildInputs = [
