@@ -13254,6 +13254,12 @@
     githubId = 45771313;
     name = "Sena";
   };
+  jnclark = {
+    email = "nixpkgs@jnclark.org";
+    github = "jnclark";
+    githubId = 1663189;
+    name = "J. Clark";
+  };
   jnsgruk = {
     email = "jon@sgrs.uk";
     github = "jnsgruk";
