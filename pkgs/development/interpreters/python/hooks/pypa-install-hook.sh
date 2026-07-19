@@ -14,6 +14,14 @@ pypaInstallPhase() {
 
     popd >/dev/null
 
+    # Some wheels ship .py files inside their dist-info (e.g. av carries
+    # licenses/AUTHORS.py); installer byte-compiles those too, embedding
+    # the package's own store path in bytecode inside its metadata.
+    for metadata in "$out"/@pythonSitePackages@/*.dist-info; do
+        [ -d "$metadata" ] || continue
+        find "$metadata" -name '__pycache__' -type d -prune -exec rm -rf {} +
+    done
+
     export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
 
     runHook postInstall
