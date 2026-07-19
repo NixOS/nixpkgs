@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  version = "27";
+  version = "27.1";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     tag = "v${version}";
-    hash = "sha256-H+QF0Z1IUKx2U0+V7KHaAd/AKbuJEKLIwqyK2srD8DM=";
+    hash = "sha256-Egt6lVcvlmxnABw4v0cdROQzVdkA3DgOGGCSgl+QFdM=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
