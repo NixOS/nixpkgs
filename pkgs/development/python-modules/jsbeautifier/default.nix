@@ -4,24 +4,24 @@
   buildPythonPackage,
   editorconfig,
   pytestCheckHook,
-  six,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "jsbeautifier";
-  version = "1.15.4";
+  version = "2.0.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-W7GNnvuTMdglc1+8U2DujxqsXlJ4AEKAOUOqf4VPdZI=";
+    pname = "jsbeautifier";
+    inherit (finalAttrs) version;
+    hash = "sha256-lXnU6duqADg/Pv3/TJjIFAu4W6MZOY6Ll82ronq9a6M=";
   };
 
   build-system = [ setuptools ];
   dependencies = [
     editorconfig
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
