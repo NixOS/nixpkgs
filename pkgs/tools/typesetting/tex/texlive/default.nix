@@ -46,6 +46,7 @@
   nixfmt,
   luajit,
   texinfo,
+  texlive,
   # for bin.nix
   gnum4,
   jdk_headless,
@@ -73,7 +74,6 @@
   unzip,
   fetchFromGitHub,
   buildPackages,
-  texlive,
   zlib,
   libiconv,
   libpng,
@@ -99,6 +99,7 @@ let
   overriddenTlpdb =
     let
       overrides = import ./tlpdb-overrides.nix {
+        inherit (texlive) pkgs;
         inherit
           stdenv
           lib
@@ -106,7 +107,6 @@ let
           bin
           tlpdb
           tlpdbxz
-          tl
           installShellFiles
           coreutils
           findutils
@@ -226,13 +226,15 @@ let
         inherit mirrors pname;
         fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
       }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n} or bin.${n}) (args.deps or [ ]); }
+      // lib.optionalAttrs (args ? deps) {
+        deps = map (n: texlive.pkgs.${n} or bin.${n}) (args.deps or [ ]);
+      }
     )
   ) overriddenTlpdb;
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
-    inherit tl;
+    inherit (texlive) pkgs;
     inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
@@ -260,7 +262,7 @@ let
       drvWithoutDeps = removeAttrs drv [ "tlDeps" ];
       drvWithDeps =
         if (drv ? tlDeps) then
-          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps tl else drv.tlDeps; }
+          drv // { tlDeps = if builtins.isFunction drv.tlDeps then drv.tlDeps texlive.pkgs else drv.tlDeps; }
         else
           drv;
     in
@@ -320,10 +322,10 @@ let
   # function for creating a working environment from a set of TL packages
   # now a legacy wrapper around buildTeXEnv
   combine = import ./combine-wrapper.nix {
+    inherit (texlive) pkgs;
     inherit
       buildTeXEnv
       lib
-      tl
       toTLPkgList
       ;
   };
@@ -667,7 +669,7 @@ allPkgLists
     bin
     // {
       # for backward compatibility
-      latexindent = tl.latexindent;
+      latexindent = texlive.pkgs.latexindent;
     };
 
   combine =
