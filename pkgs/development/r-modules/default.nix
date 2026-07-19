@@ -828,6 +828,10 @@ let
       rustc
     ];
     sbrl = [ pkgs.gsl ]; # for gsl-config
+    scip = with pkgs; [
+      cmake
+      which
+    ];
     scorematchingad = [ pkgs.cmake ];
     sf = with pkgs; [
       pkg-config
