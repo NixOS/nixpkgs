@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "runme";
-  version = "3.17.1";
+  version = "3.17.2";
 
   src = fetchFromGitHub {
     owner = "runmedev";
     repo = "runme";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RnbyVVXxPw6w55ulhK3XIB/RPAsZqDLUXY4x/BLeAi8=";
+    hash = "sha256-uvTxtrv0HRlPzf5oAL5wqgo3Rgkwo0L7ihf5TkQMa0g=";
   };
 
   vendorHash = "sha256-bTXLDu2oF2HcPSPeEMyLvSm2SHjfWUMfkltMUnSwxIc=";
