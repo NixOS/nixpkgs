@@ -336,6 +336,36 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-xftChrVcwMJYgkH22HUlUQXSTPee0ghPRnPVymWJr3o=";
     })
 
+    # XSA #499
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-1.patch";
+      hash = "sha256-Xk8+g/mEAtf3HIWqHL2+0iYSihtWy/tohaP6DcLo1+s=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-2.patch";
+      hash = "sha256-YiDERwBeOvXtgsKjLbpCoLrfYQ1aw/QnXv9i4lKMrDs=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-3.patch";
+      hash = "sha256-wyEc7GW83Vf++J10s/pqJTghXgqQhwUymPjpryuq8Wg=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-4.patch";
+      hash = "sha256-bK6VYiMorwGHi25q9tPu5r/YQCMPc6NWBirLAx6oCPg=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-5.patch";
+      hash = "sha256-Vj5vcpVvuuExK2NvDBP6vrIRjTPsgx8Yv4zVt0ftUnk=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-6.patch";
+      hash = "sha256-uTBGP6WMfE5FipQ7rzOKY7FxCztQUV6jqbROtHZozoY=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa499/xsa499-4.20-7.patch";
+      hash = "sha256-UsAx2ouUB/BNpCQCObvcjj+DLPuRBqyxlI6QQsPXtWM=";
+    })
+
     # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
