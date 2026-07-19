@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
   version = "1.12.3";
 
+  outputs = [ "out" ];
+
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
