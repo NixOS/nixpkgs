@@ -5,6 +5,7 @@
   fetchPypi,
   setuptools,
   babel,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -29,6 +30,8 @@ buildPythonPackage (finalAttrs: {
   doCheck = isPy3k;
 
   pythonImportsCheck = [ "babelglade" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/gnome-keysign/babel-glade";
