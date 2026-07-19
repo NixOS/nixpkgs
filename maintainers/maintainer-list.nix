@@ -20788,8 +20788,9 @@
     github = "numinit";
     githubId = 369111;
     keys = [
-      # SSH
+      # SSH, per-machine yubikey ecdsa-sk keys
       { fingerprint = "XX/0lMz82MpucPqf0KG+5EJoozzNRi8i/t59byD2kNo"; }
+      { fingerprint = "dye2C1N4RQaf+8ht5Ipd52BbnnuwBtdXxocPzk8b2mw"; }
       # GPG, >=2025, stays in one place
       { fingerprint = "FD28 F9C9 81C5 D78E 56E8  8311 5C3E B94D 198F 1491"; }
       # GPG, >=2025, travels with me
