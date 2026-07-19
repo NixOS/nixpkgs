@@ -412,6 +412,33 @@
   "module-services-opencloud-basic-usage": [
     "index.html#module-services-opencloud-basic-usage"
   ],
+  "module-services-openlist": [
+    "index.html#module-services-openlist"
+  ],
+  "module-services-openlist-configuration": [
+    "index.html#module-services-openlist-configuration"
+  ],
+  "module-services-openlist-database": [
+    "index.html#module-services-openlist-database"
+  ],
+  "module-services-openlist-extra-flags": [
+    "index.html#module-services-openlist-extra-flags"
+  ],
+  "module-services-openlist-extra-packages": [
+    "index.html#module-services-openlist-extra-packages"
+  ],
+  "module-services-openlist-mutable-config": [
+    "index.html#module-services-openlist-mutable-config"
+  ],
+  "module-services-openlist-quickstart": [
+    "index.html#module-services-openlist-quickstart"
+  ],
+  "module-services-openlist-secrets": [
+    "index.html#module-services-openlist-secrets"
+  ],
+  "module-services-openlist-tls": [
+    "index.html#module-services-openlist-tls"
+  ],
   "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
     "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
   ],
