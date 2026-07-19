@@ -34,25 +34,28 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
 
-    tests.smoke = runCommand "tokentopper-smoke-test" {
-      nativeBuildInputs = [
-        finalAttrs.finalPackage
-        jq
-      ];
-    } ''
-      export HOME="$(mktemp -d)"
-      mkdir -p "$HOME/.claude/projects/nix-smoke"
-      printf '%s\n' '{"type":"assistant","timestamp":"2026-07-01T10:00:00.000Z","sessionId":"nix-smoke","message":{"id":"nix-smoke-message","model":"claude-sonnet-4","usage":{"input_tokens":100,"output_tokens":25}}}' \
-        > "$HOME/.claude/projects/nix-smoke/session.jsonl"
-      tokentopper json > report.json
-      jq -e '
-        .schema == "tokentopper-summary/1" and
-        .tool.name == "tokentopper" and
-        .tool.version == "${finalAttrs.version}" and
-        (has("machine") | not)
-      ' report.json
-      touch "$out"
-    '';
+    tests.smoke =
+      runCommand "tokentopper-smoke-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            jq
+          ];
+        }
+        ''
+          export HOME="$(mktemp -d)"
+          mkdir -p "$HOME/.claude/projects/nix-smoke"
+          printf '%s\n' '{"type":"assistant","timestamp":"2026-07-01T10:00:00.000Z","sessionId":"nix-smoke","message":{"id":"nix-smoke-message","model":"claude-sonnet-4","usage":{"input_tokens":100,"output_tokens":25}}}' \
+            > "$HOME/.claude/projects/nix-smoke/session.jsonl"
+          tokentopper json > report.json
+          jq -e '
+            .schema == "tokentopper-summary/1" and
+            .tool.name == "tokentopper" and
+            .tool.version == "${finalAttrs.version}" and
+            (has("machine") | not)
+          ' report.json
+          touch "$out"
+        '';
   };
 
   meta = {
