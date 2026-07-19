@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   python3Packages,
   libunistring,
   harfbuzz,
@@ -142,6 +143,9 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    (replaceVars ./libxkbcommon-runtime-path.patch {
+      libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
+    })
   ];
 
   hardeningDisable = [
