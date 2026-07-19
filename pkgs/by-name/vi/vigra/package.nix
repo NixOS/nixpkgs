@@ -17,9 +17,6 @@
   nix-update,
 }:
 
-let
-  python = python3.withPackages (py: with py; [ numpy ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
   version = "1.12.3";
@@ -49,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     openexr
-    python
   ];
 
   postPatch = ''
@@ -59,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DWITH_OPENEXR=1"
-    "-DVIGRANUMPY_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
   ]
   ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
     "-DCMAKE_CXX_FLAGS=-fPIC"
@@ -67,6 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mkdir -p "$out/bin"
+    # vigra builds vigra-config unconditionally,
+    # but somehow won't install vigra-config without the presence of Python3 and NumPy at build time.
+    # Let's install it manually as needed.
+    if [[ ! -e "''$out/bin/vigra-config" ]] && [[ ! -e "''${!outputDev}/bin/vigra-config" ]]; then
+      install -m755 bin/vigra-config "$out/bin/vigra-config"
+    fi
+  '';
+
+  preFixup = ''
+    moveToOutput bin/vigra-config "''${!outputDev}"
+    patchShebangs --build "''${!outputDev}/bin/vigra-config"
+  '';
 
   passthru = {
     tests = {
