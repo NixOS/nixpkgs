@@ -3,8 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  autoreconfHook,
-  autoSignDarwinBinariesHook,
+  darwin,
   fixDarwinDylibNames,
 }:
 
@@ -19,23 +18,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IvWtoXuuIvpJfY4cyRUsPHgax2/aytYShSdxEStiPYI=";
   };
 
-  cmakeFlags = [
-    # Prevent native cpu arch from leaking into binaries.
-    (lib.cmakeBool "ENABLE_SIMD" false)
-    (lib.cmakeBool "FIND_SIMD" false)
+  patches = [
+    # Fix CMake absolute include/lib paths issue, see also
+    # - https://github.com/NixOS/nixpkgs/issues/144170
+    # - https://github.com/jgaeddert/liquid-dsp/pull/450
+    ./fix-cmake-pc-paths.patch
+    # liquid.h uses va_list; needs stdarg.h
+    ./include-stdarg.patch
   ];
 
   nativeBuildInputs = [
     cmake
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
     fixDarwinDylibNames
   ];
 
-  patches = [
-    ./fix-cmake-pc-paths.patch
-    ./include-stdarg.patch
+  cmakeFlags = [
+    # Prevent native cpu arch from leaking into binaries.
+    (lib.cmakeBool "ENABLE_SIMD" false)
+    (lib.cmakeBool "FIND_SIMD" false)
   ];
 
   doCheck = true;
