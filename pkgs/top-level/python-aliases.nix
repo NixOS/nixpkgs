@@ -472,6 +472,7 @@ mapAliases {
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   pymsteams = throw "'pymsteams' was removed because API used was discontinued"; # Added 2026-06-04
+  pymvglive = throw "'pymvglive' has been removed because it was unmaintained upstream and non-functional due to API changes"; # added 2026-06-10
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
   pymystem3 = throw "'pymystem3' has been removed because it is broken and unmaintained"; # Added 2026-04-19
