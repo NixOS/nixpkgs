@@ -13,6 +13,8 @@ let
     mkPackageOption
     mkOption
     maintainers
+    optionals
+    optionalString
     ;
   inherit (lib.types)
     addCheck
@@ -23,6 +25,10 @@ let
     str
     submodule
     ;
+  inherit (pkgs)
+    writeShellScriptBin
+    ;
+
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
@@ -146,6 +152,29 @@ in
     let
       inherit (lib) mkIf optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
+
+      settingsFile = settingsFormat.generate "navidrome.json" cfg.settings;
+
+      # Wrapper so that users can do admin tasks with the configured navidrome
+      #
+      # Since it is common that the user may be running this from their home directory,
+      # or possible something else, we should not inherit the CWD or else it may error
+      # trying to chdir to it since this runs as the navidrome user.
+      wrappedNavi = writeShellScriptBin "navidrome-cli" ''
+        exec systemd-run \
+          --quiet \
+          --pty \
+          --wait \
+          --service-type=exec \
+          --collect \
+          --working-directory=${WorkingDirectory} \
+          ${optionalString (cfg.environmentFile != null) "-p EnvironmentFile=${cfg.environmentFile}"} \
+          -p Group=${cfg.user} \
+          -p User=${cfg.group} \
+          -u navidrome-admin.service \
+          -- \
+          ${lib.getExe cfg.package} --configfile ${settingsFile} "$@"
+      '';
     in
     mkIf cfg.enable {
       systemd = {
@@ -169,9 +198,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = ''
-              ${getExe cfg.finalPackage} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
-            '';
+            ExecStart = "${lib.getExe cfg.finalPackage} --configfile ${settingsFile}";
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
             Group = cfg.group;
@@ -235,6 +262,10 @@ in
       users.groups = mkIf (cfg.group == "navidrome") { navidrome = { }; };
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
+
+      environment.systemPackages = [
+        wrappedNavi
+      ];
     };
   meta.maintainers = with maintainers; [
     fsnkty
