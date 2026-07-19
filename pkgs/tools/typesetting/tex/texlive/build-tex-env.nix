@@ -1,6 +1,6 @@
 {
   # texlive package set
-  tl,
+  pkgs,
 
   tlpdbVersion,
 
@@ -55,7 +55,7 @@ lib.fix (
         # resolve dependencies of the packages that affect the runtime
         all =
           let
-            packages = ensurePkgSets (finalAttrs.passthru.requiredTeXPackages tl);
+            packages = ensurePkgSets (finalAttrs.passthru.requiredTeXPackages pkgs);
             runtime = builtins.partition (
               p:
               p.outputSpecified or false
@@ -72,7 +72,7 @@ lib.fix (
               inherit p;
               tlDeps =
                 if p ? tlDeps then
-                  (if builtins.isFunction p.tlDeps then p.tlDeps tl else ensurePkgSets p.tlDeps)
+                  (if builtins.isFunction p.tlDeps then p.tlDeps pkgs else ensurePkgSets p.tlDeps)
                 else
                   [ ];
             };
@@ -214,13 +214,13 @@ lib.fix (
 
         # mktexlsr
         nativeBuildInputs = [
-          tl.texlive-scripts # for mktexlsr.pl with --sort support
+          pkgs.texlive-scripts # for mktexlsr.pl with --sort support
           perl
         ];
 
         postBuild = # generate ls-R database
           ''
-            perl ${tl.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
+            perl ${pkgs.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
           '';
       };
 
@@ -269,7 +269,7 @@ lib.fix (
           + lib.concatMapStringsSep "\n - " (
             p:
             p.pname + (lib.optionalString (p.outputSpecified or false) " (${p.tlOutputName or p.outputName})")
-          ) (finalAttrs.passthru.requiredTeXPackages tl);
+          ) (finalAttrs.passthru.requiredTeXPackages pkgs);
       };
 
       # other outputs
@@ -479,9 +479,9 @@ lib.fix (
         nativeBuildInputs = [
           makeWrapper
           libfaketime
-          tl."texlive.infra" # mktexlsr
-          tl.texlive-scripts # fmtutil, updmap
-          tl.texlive-scripts-extra # texlinks
+          pkgs."texlive.infra" # mktexlsr
+          pkgs.texlive-scripts # fmtutil, updmap
+          pkgs.texlive-scripts-extra # texlinks
           perl
         ];
 
