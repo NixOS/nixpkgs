@@ -200,6 +200,7 @@
   ./programs/cpu-energy-meter.nix
   ./programs/criu.nix
   ./programs/dconf.nix
+  ./programs/devenv.nix
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
