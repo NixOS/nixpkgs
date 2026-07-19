@@ -13,6 +13,7 @@
   libtiff,
   openexr,
   python3,
+  versionCheckHook,
   writeShellScript,
   jq,
   nix-update,
@@ -76,7 +77,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     moveToOutput bin/vigra-config "''${!outputDev}"
+    # In case python3 is available
     patchShebangs --build "''${!outputDev}/bin/vigra-config"
+  '';
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  preInstallCheck = ''
+    vigraConfigInstallPath="''${!outputDev}/bin/vigra-config"
+    if command -v python3; then
+      # Take this opportunity to test vigra-config
+      versionCheckProgram=$vigraConfigInstallPath
+      versionCheckProgramArg=--version
+    else
+      versionCheckProgram=$(command -v cat)
+      versionCheckProgramArg=$vigraConfigInstallPath
+    fi
   '';
 
   passthru = {
