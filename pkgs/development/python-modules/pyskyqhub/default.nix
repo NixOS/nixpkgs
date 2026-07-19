@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   # Tests require physical hardware
   doCheck = false;
