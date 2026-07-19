@@ -143,7 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
       (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
         mkdir -p $out/Applications $out/bin
-        mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
+        mv packages/desktop/dist/mac*/OpenCode.app "$out/Applications/OpenCode.app"
         ln -s "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/OpenCode
       '')
       (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''

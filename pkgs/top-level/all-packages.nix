@@ -5139,10 +5139,7 @@ with pkgs;
       {
         electron_38 = electron_38-bin;
         electron_39 = electron_39-bin;
-        electron_40 = getElectronPkg {
-          src = electron-source.electron_40;
-          bin = electron_40-bin;
-        };
+        electron_40 = electron_40-bin;
         electron_41 = getElectronPkg {
           src = electron-source.electron_41;
           bin = electron_41-bin;
@@ -11514,6 +11511,7 @@ with pkgs;
     wordpress_6_7
     wordpress_6_8
     wordpress_6_9
+    wordpress_7_0
     ;
 
   wordpressPackages = recurseIntoAttrs (
