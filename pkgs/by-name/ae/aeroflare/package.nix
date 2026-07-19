@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   meta = with lib; {
-    description = "The OCI-based Nix-Binary-Cache written in Go";
+    description = "OCI-based Nix-Binary-Cache written in Go";
     homepage = "https://github.com/itzemoji/aeroflare";
     changelog = "https://github.com/itzemoji/aeroflare/blob/v${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
