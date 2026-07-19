@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "any-listen";
   version = "0.7.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "any-listen";
     repo = "any-listen-desktop";
