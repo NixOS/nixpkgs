@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "multipart";
-  version = "1.3.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "defnull";
     repo = "multipart";
     tag = "v${version}";
-    hash = "sha256-kLiOK6ovW3ki1CONXVQZCJw/U3K1AoR6rrmJUstwZOw=";
+    hash = "sha256-1/G8qUnY7i5OvxkTSebC2pae9lzzfvnozJSVVylqB7w=";
   };
 
   build-system = [ flit-core ];
