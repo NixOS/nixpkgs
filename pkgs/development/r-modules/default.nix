@@ -732,6 +732,10 @@ let
     mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mvst = [ pkgs.gsl ]; # for gsl-config
     mwaved = [ pkgs.pkg-config ];
+    mx_crypto = with pkgs; [
+      cargo
+      rustc
+    ];
     n1qn1 = [ pkgs.gfortran ];
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.pkg-config ];
