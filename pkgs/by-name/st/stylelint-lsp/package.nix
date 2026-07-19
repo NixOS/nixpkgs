@@ -2,7 +2,7 @@
   fetchFromGitHub,
   lib,
   nodejs-slim,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -11,29 +11,32 @@
   runCommand,
   stylelint-lsp,
 }:
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
-  version = "2.0.1";
+  version = "2.0.1-unstable-2026-07-19";
 
   src = fetchFromGitHub {
     owner = "bmatcuk";
     repo = "stylelint-lsp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-LUX/H7yY8Dl44vgpf7vOgtMdY7h//m5BAfrK5RRH9DM=";
+    rev = "0362a26ffaf1879b9ec02e2a52a11792a2d4f8d4";
+    hash = "sha256-qRc67tvgncERh6FDJdydN6aL/a5bVSsQQir3KPp1cFk=";
   };
 
   nativeBuildInputs = [
     nodejs-slim
     pnpmConfigHook
     pnpmBuildHook
-    pnpm_9
+    pnpm
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-qzUvA00ujnIibQAONOPlp5BsXcwQb/gQvOPp83hMT5A=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-EuCvuErydwe2LGG62VHcZtN/51Gv1uhhBN3/sEiqzME=";
   };
 
   preInstall = ''
@@ -59,7 +62,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
 
     tests.smoke = runCommand "stylelint-lsp-smoke-test" { } ''
       INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":"file:///tmp","workspaceFolders":[{"uri":"file:///tmp","name":"test"}],"capabilities":{}}}'
