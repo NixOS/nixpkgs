@@ -395,6 +395,13 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
         per_page: 100,
       })
+
+      // label llm-assisted PRs accordingly
+      const assistedByPattern = /Assisted-by: (?!nix-init)/i
+      evalLabels['llm-assisted'] = prCommits.some((c) =>
+        assistedByPattern.test(c.commit.message),
+      )
+
       const commitSubjects = prCommits.map(
         (c) => c.commit.message.split('\n')[0],
       )

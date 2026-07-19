@@ -28,13 +28,13 @@ buildGoModule (
   in
   {
     pname = "dms-shell";
-    version = "1.5.0";
+    version = "1.5.2";
 
     src = fetchFromGitHub {
       owner = "AvengeMedia";
       repo = "DankMaterialShell";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-zdHsPGPE5MVi/y+uIt548XScTfZjQzdF21dME7ISEJM=";
+      hash = "sha256-7VjoVZu+8PC41ZDQ3umi/EXsU3sCLNyRfxZrfJKHy+E=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";

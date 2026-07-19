@@ -2359,6 +2359,8 @@ let
         };
       };
 
+      inferrinizzard.prettier-sql-vscode = callPackage ./inferrinizzard.prettier-sql-vscode { };
+
       intellsmi.comment-translate = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "intellsmi";
@@ -2450,6 +2452,8 @@ let
       };
 
       jackmacwindows.craftos-pc = callPackage ./jackmacwindows.craftos-pc { };
+
+      jacobdufault.fuzzy-search = callPackage ./jacobdufault.fuzzy-search { };
 
       jakestanger.corn = callPackage ./jakestanger.corn { };
 
@@ -3728,6 +3732,8 @@ let
 
       oxc.oxc-vscode = callPackage ./oxc.oxc-vscode { };
 
+      pflannery.vscode-versionlens = callPackage ./pflannery.vscode-versionlens { };
+
       ph-hawkins.arc-plus = callPackage ./ph-hawkins.arc-plus { };
 
       phind.phind = buildVscodeMarketplaceExtension {
@@ -3866,6 +3872,8 @@ let
           license = lib.licenses.asl20;
         };
       };
+
+      rangav.vscode-thunder-client = callPackage ./rangav.vscode-thunder-client { };
 
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {

@@ -1,8 +1,8 @@
 diff --git a/bin/melos.dart b/bin/melos.dart
-index 2476436..bd79fad 100644
+index 2476436..ee6adb0 100644
 --- a/packages/melos/bin/melos.dart
 +++ b/packages/melos/bin/melos.dart
-@@ -1,11 +1,72 @@
+@@ -1,11 +1,74 @@
  import 'package:cli_launcher/cli_launcher.dart';
  import 'package:melos/src/command_runner.dart';
 +import 'dart:io';
@@ -19,31 +19,29 @@ index 2476436..bd79fad 100644
 -);
 +final ExecutableName executableName = ExecutableName('melos');
 +
++// Substituted at build time to the package's install location in the
++// nix store (see preBuild in package.nix).
++const _globalPackageRoot = '__NIX_MELOS_PACKAGE_ROOT__';
++
 +Future<void> main(List<String> arguments) async {
-+  final workspaceRoot = _findLocalInstallation(Directory.current);
++  final localInstallation = _findLocalInstallation(Directory.current);
 +
-+  if (workspaceRoot == null) {
-+    print("Error: Could not find your work  ");
-+    return;
-+  }
-+
-+  melosEntryPoint(
++  await melosEntryPoint(
 +    arguments,
 +    LaunchContext(
 +      directory: Directory.current,
-+      localInstallation: ExecutableInstallation(
++      globalInstallation: ExecutableInstallation(
 +        name: executableName,
 +        isSelf: false,
-+        packageRoot: workspaceRoot,
++        packageRoot: Directory(_globalPackageRoot),
 +      ),
++      localInstallation: localInstallation,
 +    ),
 +  );
 +}
 +
 +// Stolen then simplified from https://github.com/blaugold/cli_launcher/blob/dcdf11c42b77ddc8e38e7e2445c8cff9b55658ec/lib/cli_launcher.dart#L249
-+Directory? _findLocalInstallation(
-+  Directory start,
-+) {
++ExecutableInstallation? _findLocalInstallation(Directory start) {
 +  if (path.equals(start.path, start.parent.path)) {
 +    return null;
 +  }
@@ -72,12 +70,16 @@ index 2476436..bd79fad 100644
 +
 +    final isSelf = name == executableName.package;
 +
-+    if ((isSelf) ||
++    if (isSelf ||
 +        (dependencies != null &&
 +            dependencies.containsKey(executableName.package)) ||
 +        (devDependencies != null &&
 +            devDependencies.containsKey(executableName.package))) {
-+      return start;
++      return ExecutableInstallation(
++        name: executableName,
++        isSelf: isSelf,
++        packageRoot: start,
++      );
 +    }
 +  }
 +

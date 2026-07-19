@@ -99,6 +99,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Network access (web.example.com)
     "test_socket_disabled"
+    # Fails due to JSON formatting differences
+    "test_configurable"
   ];
 
   # Bulk updater selects wrong tag

@@ -1289,6 +1289,12 @@
     name = "Alexandru Tocar";
     keys = [ { fingerprint = "B617 DD24 3AB0 2E3F 2E67  DBFD 1305 2A85 D7A4 2AA4"; } ];
   };
+  AlexAntonik = {
+    email = "antonikavv@gmail.com";
+    github = "AlexAntonik";
+    githubId = 55547934;
+    name = "Alex Antonik";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
@@ -6373,6 +6379,12 @@
     email = "mail@davidkopczynski.com";
     github = "David-Kopczynski";
     githubId = 53194670;
+  };
+  David-Moody = {
+    name = "David Moody";
+    email = "david.moody@scot.me.uk";
+    github = "David-Moody";
+    githubId = 63956662;
   };
   david-sawatzke = {
     email = "d-nix@sawatzke.dev";
@@ -11504,6 +11516,13 @@
     githubId = 72767437;
     name = "Ian Holloway";
   };
+  iank = {
+    email = "iank@iank.org";
+    github = "iank";
+    githubId = 109598;
+    name = "Ian Kilgore";
+    keys = [ { fingerprint = "21F7 244E 095F 619E 8E3E  1EB4 9F3A 4AAB 4D90 D879"; } ];
+  };
   ianliu = {
     email = "ian.liu88@gmail.com";
     github = "ianliu";
@@ -14401,6 +14420,12 @@
     email = "markooo.keller@gmail.com";
     github = "keller00";
     githubId = 8452750;
+  };
+  kenis1108 = {
+    email = "1836362346@qq.com";
+    github = "kenis1108";
+    githubId = 45393183;
+    name = "kenis";
   };
   kenran = {
     email = "johannes.maier@mailbox.org";
@@ -20155,6 +20180,12 @@
     email = "nigel.g.banks@gmail.com";
     github = "nigelgbanks";
     githubId = 487373;
+  };
+  nightconcept = {
+    email = "dark@nightconcept.net";
+    github = "nightconcept";
+    githubId = 486025;
+    name = "Danny Solivan";
   };
   nikhilmaddirala = {
     name = "Nikhil Maddirala";
@@ -27235,6 +27266,13 @@
     githubId = 36695359;
     name = "Vasyl Solovei";
   };
+  swaggeroo = {
+    email = "swaggerooo@pm.me";
+    github = "swaggeroo";
+    githubId = 57057662;
+    name = "Swaggeroo";
+    keys = [ { fingerprint = "D221 99EC 4FFF EF4D F29D  2435 5208 74E7 3291 4E0B"; } ];
+  };
   swarren83 = {
     email = "shawn.w.warren@gmail.com";
     github = "swarren83";
@@ -29731,12 +29769,6 @@
     github = "vlinkz";
     githubId = 20145996;
     name = "Victor Fuentes";
-  };
-  vlstill = {
-    email = "xstill@fi.muni.cz";
-    github = "vlstill";
-    githubId = 4070422;
-    name = "Vladimír Štill";
   };
   vmandela = {
     email = "venkat.mandela@gmail.com";
