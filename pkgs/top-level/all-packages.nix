@@ -2506,6 +2506,7 @@ with pkgs;
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   xz = callPackage ../tools/compression/xz { };
+  xz-after-bootstrap = callPackage ../tools/compression/xz/xz-after-bootstrap.nix { };
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
