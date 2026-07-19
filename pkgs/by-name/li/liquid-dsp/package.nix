@@ -4,7 +4,7 @@
   cmake,
   fetchFromGitHub,
   autoreconfHook,
-  autoSignDarwinBinariesHook,
+  darwin,
   fixDarwinDylibNames,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cmake
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
     fixDarwinDylibNames
   ];
 
