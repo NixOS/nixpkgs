@@ -53,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x config/run_test.sh.in
     patchShebangs --build config/run_test.sh.in
+
+    substituteInPlace vigranumpy/CMakeLists.txt  \
+      --replace-fail "''${CMAKE_INSTALL_PREFIX}/include" "''${CMAKE_INSTALL_INCLUDEDIR}"
+
+    substituteInPlace config/vigra-config.in \
+      --replace-fail "@CMAKE_INSTALL_PREFIX@/include" "@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
   cmakeFlags = [
