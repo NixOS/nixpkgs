@@ -6,20 +6,20 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cppheaderparser";
   version = "2.7.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "CppHeaderParser";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-OCswQW2VsKXoUCshSBDcrCpWQykX4mUUR9Or4lPjzEI=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ ply ];
+  dependencies = [ ply ];
 
   pythonImportsCheck = [ "CppHeaderParser" ];
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})
