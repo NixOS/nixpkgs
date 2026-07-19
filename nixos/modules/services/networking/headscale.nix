@@ -92,6 +92,17 @@ in
       };
 
       settings = lib.mkOption {
+        apply =
+          settings:
+          lib.showWarnings settings.warnings (
+            (lib.removeAttrs settings [
+              "assertions"
+              "warnings"
+            ])
+            // {
+              dns = lib.removeAttrs settings.dns [ "split" ];
+            }
+          );
         description = ''
           Overrides to {file}`config.yaml` as a Nix attribute set.
           Check the [example config](https://github.com/juanfont/headscale/blob/main/config-example.yaml)
@@ -99,6 +110,11 @@ in
         '';
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
+
+          imports = [
+            ../../misc/assertions.nix
+            (lib.mkRenamedOptionModule [ "dns" "split" ] [ "dns" "nameservers" "split" ])
+          ];
 
           options = {
             server_url = lib.mkOption {
@@ -346,17 +362,17 @@ in
                     List of nameservers to pass to Tailscale clients.
                   '';
                 };
-              };
 
-              split = lib.mkOption {
-                type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-                default = { };
-                description = ''
-                  Split DNS configuration (map of domains and which DNS server to use for each).
-                  See <https://tailscale.com/kb/1054/dns/>.
-                '';
-                example = {
-                  "foo.bar.com" = [ "1.1.1.1" ];
+                split = lib.mkOption {
+                  type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+                  default = { };
+                  description = ''
+                    Split DNS configuration (map of domains and which DNS server to use for each).
+                    See <https://tailscale.com/kb/1054/dns/>.
+                  '';
+                  example = {
+                    "foo.bar.com" = [ "1.1.1.1" ];
+                  };
                 };
               };
 
