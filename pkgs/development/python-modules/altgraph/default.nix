@@ -9,18 +9,14 @@ buildPythonPackage rec {
   pname = "altgraph";
   version = "0.17.5";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-yHs5XdEvq96cmVc6l0nWfajSnvneASXH9TZpm0qbyec=";
   };
 
-  dependencies = [
-    # setuptools in dependencies is intentional
-    # https://github.com/ronaldoussoren/altgraph/issues/21
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "altgraph" ];
 
