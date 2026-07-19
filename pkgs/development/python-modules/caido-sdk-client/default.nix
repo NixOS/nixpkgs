@@ -7,6 +7,8 @@
   nix-update-script,
   pydantic,
   uv-build,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -39,8 +41,10 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "caido_sdk_client" ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   passthru.updateScript = nix-update-script { };
 
