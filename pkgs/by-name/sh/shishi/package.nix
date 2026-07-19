@@ -14,6 +14,7 @@
   libidn,
   useGnutls ? lib.meta.availableOn stdenv.hostPlatform gnutls,
   gnutls,
+  pkgsStatic,
 }:
 
 let
@@ -60,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature true "arcfour")
   ];
 
-  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT";
+  env.NIX_CFLAGS_COMPILE = toString [
+    (optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT")
+    # gnulib's crc.c exports a "crc32" symbol (unused by shishi, which only calls crc32_update_no_xor).
+    # On static builds it conflicts with "crc32" from zlib (transitive dependency of gnutls).
+    (optionalString stdenv.hostPlatform.isStatic "-Dcrc32=shishi_gnulib_crc32")
+  ];
 
   doCheck = true;
 
@@ -83,6 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  passthru = {
+    tests = {
+      static = pkgsStatic.shishi;
+    };
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/shishi/";
