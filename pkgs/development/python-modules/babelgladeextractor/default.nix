@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "babelgladeextractor";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,10 +17,8 @@ buildPythonPackage (finalAttrs: {
   disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
   src = fetchPypi {
-    pname = "BabelGladeExtractor";
-    inherit (finalAttrs) version;
-    extension = "tar.bz2";
-    hash = "sha256-vPgF4otLsYyLaQmmWnz1x8K8v0rlCxZIeMloLSInF5g=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-8LWmsQMPbgX0UbZld77m2WXn4VR+46lvfKoNlJ/GNv0=";
   };
 
   build-system = [ setuptools ];
