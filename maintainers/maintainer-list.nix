@@ -4743,12 +4743,6 @@
     githubId = 52760912;
     name = "Cameron Brown";
   };
-  ccellado = {
-    email = "annplague@gmail.com";
-    github = "ccellado";
-    githubId = 44584960;
-    name = "Denis Khalmatov";
-  };
   ccicnce113424 = {
     email = "ccicnce113424@gmail.com";
     matrix = "@ccicnce113424:matrix.org";
