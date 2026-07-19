@@ -9,6 +9,7 @@ let
 
   luarocksPackageNames = [
     # # keep-sorted start case=no
+    "canola-nvim"
     "fidget-nvim"
     "fzf-lua"
     "gitsigns-nvim"
