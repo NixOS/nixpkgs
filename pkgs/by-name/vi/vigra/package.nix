@@ -23,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
   version = "1.12.3";
 
-  outputs = [ "out" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "ukoethe";
