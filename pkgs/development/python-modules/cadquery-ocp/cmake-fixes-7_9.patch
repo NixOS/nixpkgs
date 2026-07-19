@@ -1,0 +1,126 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d0065b17..2cf2d390 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,7 +15,9 @@ find_package( VTK REQUIRED
+     CommonExecutionModel
+     freetype
+ )
++
+ message(STATUS "VTK ${VTK_VERSION} found")
++
+ find_package( RapidJSON REQUIRED )
+ find_package( Clang REQUIRED )
+ 
+@@ -23,24 +25,33 @@ set( Python_FIND_VIRTUALENV FIRST )
+ find_package( Python 3.9 COMPONENTS Interpreter Development REQUIRED )
+ 
+ # find OCCT and dump symbols
+-find_package( OpenCASCADE REQUIRED )
++if(OCCT_LIB_DIR)
++    file(GLOB occt_libs LIST_DIRECTORIES false ${OCCT_LIB_DIR} )
++else()
++    find_package( OpenCASCADE REQUIRED )
+ 
+-foreach(target ${OpenCASCADE_LIBRARIES} )
+-    get_target_property(loc ${target} IMPORTED_LOCATION_RELEASE)
+-    list( APPEND occt_libs ${loc} )
+-endforeach()
++    foreach(target ${OpenCASCADE_LIBRARIES} )
++        get_target_property(loc ${target} IMPORTED_LOCATION_RELEASE)
++        list( APPEND occt_libs ${loc} )
++    endforeach()
++endif()
+ 
+ execute_process(
+     COMMAND
+     ${Python_EXECUTABLE}
+-    dump_symbols.py
++    ${CMAKE_SOURCE_DIR}/dump_symbols.py
+     "${occt_libs}"
+-    )
+-
++    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
++)
+ 
+ get_target_property( LIBCLANG_PATH libclang IMPORTED_LOCATION_RELEASE )
+ get_target_property( VTK_INCLUDE_DIR VTK::CommonCore INTERFACE_INCLUDE_DIRECTORIES )
+ 
++# for some reason I get multiple generator expressions
++string(REPLACE ">" ">;" VTK_INCLUDE_DIR ${VTK_INCLUDE_DIR})
++list(GET VTK_INCLUDE_DIR 0 VTK_INCLUDE_DIR)
++
++message( STATUS "Include dirs: ${VTK_INCLUDE_DIR}")
+ message( STATUS "Include dirs: ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}")
+ 
+ if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+@@ -51,38 +62,40 @@ else()
+     list( APPEND CXX_INCLUDES -i /opt/usr/local/include/c++/v1/ -i /opt/usr/local/include/ )
+ endif()
+ 
+-if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+-    set(PLATFORM Windows)
+-elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+-    set(PLATFORM OSX)
++if(PLATFORM)
++    message( STATUS "Requested platform: ${PLATFORM}")
+ else()
+-    set(PLATFORM Linux)
++    message( STATUS "Platform not specified.")
++
++    if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
++        set(PLATFORM Windows)
++    elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
++        set(PLATFORM OSX)
++    else()
++        set(PLATFORM Linux)
++    endif()
+ endif()
+ 
+ set(ENV{PYTHONPATH} ${CMAKE_SOURCE_DIR}/pywrap )
+ 
+-if( NOT EXISTS ${CMAKE_SOURCE_DIR}/OCP )
+-    message( STATUS "Running pywrap")
+-    execute_process(
+-        COMMAND
+-            ${Python_EXECUTABLE}
+-            -m bindgen
+-            -n ${N_PROC}
+-            -l ${LIBCLANG_PATH}
+-            -i ${CLANG_INCLUDE_DIRS}/
+-            -i ${VTK_INCLUDE_DIR}/
+-            -i ${CLANG_INSTALL_PREFIX}/lib/clang/${LLVM_VERSION}/include/
+-            ${CXX_INCLUDES}
+-            all ocp.toml ${PLATFORM}
+-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-        COMMAND_ECHO STDOUT
+-        RESULT_VARIABLE PYWRAP_RESULT
+-    )
+-
+-    if( ${PYWRAP_RESULT} GREATER 0)
+-        message(FATAL_ERROR "Pywrap call failed")
+-    endif()
+-
+-endif()
++add_custom_command(
++    OUTPUT ${CMAKE_SOURCE_DIR}/OCP/CMakeLists.txt
++    COMMAND
++        ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_SOURCE_DIR}/pywrap"
++        ${Python_EXECUTABLE}
++        -m bindgen
++        -n ${N_PROC}
++        -l ${LIBCLANG_PATH}
++        -i ${CLANG_INCLUDE_DIRS}/
++        -i ${VTK_INCLUDE_DIR}/
++        -i ${CLANG_INSTALL_PREFIX}/lib/clang/${LLVM_VERSION_MAJOR}/include/
++        -p ${CMAKE_SOURCE_DIR}
++        ${CXX_INCLUDES}
++        all ${CMAKE_SOURCE_DIR}/ocp.toml ${PLATFORM}
++        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
++    DEPENDS ${CMAKE_SOURCE_DIR}/ocp.toml
++    USES_TERMINAL
++    COMMENT "Running pywrap"
++)
+ 
+-add_subdirectory( ${CMAKE_SOURCE_DIR}/OCP )
++add_custom_target(pywrap ALL DEPENDS ${CMAKE_SOURCE_DIR}/OCP/CMakeLists.txt)
