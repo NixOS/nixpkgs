@@ -85,8 +85,6 @@
   # The manually packaged ones:
   "EasyScreenCast@iacopodeenosee.gmail.com" = "easyScreenCast"; # extensionPortalSlug is "easyscreencast"
   "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com" = "fuzzy-app-search"; # extensionPortalSlug is "gnome-fuzzy-app-search"
-  "TopIcons@phocean.net" = "topicons-plus"; # extensionPortalSlug is "topicons"
-  "no-title-bar@jonaspoehler.de" = "no-title-bar"; # extensionPortalSlug is "no-title-bar-forked"
   # These extensions are automatically packaged at the moment. We preserve the old attribute name
   # for backwards compatibility.
   "appindicatorsupport@rgcjonas.gmail.com" = "appindicator"; # extensionPortalSlug is "appindicator-support"
