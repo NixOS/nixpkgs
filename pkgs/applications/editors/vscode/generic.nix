@@ -433,6 +433,7 @@ stdenv.mkDerivation (
               armv7l-linux = "linux-arm";
               aarch64-linux = "linux-arm64";
               i686-linux = "linux-ia32";
+              loongarch64-linux = "linux-loong64";
               powerpc64-linux = "linux-ppc64";
               riscv64-linux = "linux-riscv64";
               s390x-linux = "linux-s390x";
