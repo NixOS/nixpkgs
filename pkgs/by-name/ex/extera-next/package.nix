@@ -70,6 +70,7 @@ flutter341.buildFlutterApplication (
         MATE-linux
       ];
       badPlatforms = lib.platforms.darwin;
+      platforms = lib.platforms.linux;
     }
     // lib.optionalAttrs (targetFlutterPlatform == "linux") {
       mainProgram = "extera-next";
