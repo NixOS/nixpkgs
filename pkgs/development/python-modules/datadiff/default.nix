@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "datadiff";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-fOcN/uqMM/HYjbRrDv/ukFzDa023Ofa7BwqC3omB0ws=";
   };
+
+  build-system = [ setuptools ];
 
   # Tests are not part of the PyPI releases
   doCheck = false;
