@@ -6217,10 +6217,6 @@ with pkgs;
 
   libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
 
-  liquid-dsp = callPackage ../development/libraries/liquid-dsp {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
   luabind_luajit = luabind.override { lua = luajit; };
