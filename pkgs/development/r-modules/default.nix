@@ -1530,6 +1530,7 @@ let
       curl
     ];
     runjags = [ pkgs.jags ];
+    rvMF = [ pkgs.mpfr ];
     rvg = [ pkgs.libpng ];
     rzmq = [ pkgs.zeromq ];
     s2 = with pkgs; [
