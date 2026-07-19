@@ -18970,6 +18970,8 @@ self: super: with self; {
 
   solidpython2 = callPackage ../development/python-modules/solidpython2 { };
 
+  solixble = callPackage ../development/python-modules/solixble { };
+
   solo-python = callPackage ../development/python-modules/solo-python { };
 
   somajo = callPackage ../development/python-modules/somajo { };
