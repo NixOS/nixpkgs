@@ -6,7 +6,7 @@
   # Softnet support ("--net-softnet") is disabled by default as it requires
   # passwordless-sudo when installed through nix. Alternatively users may install
   # softnet through other means with "setuid"-bit enabled.
-  # See https://github.com/cirruslabs/softnet#installing
+  # See https://github.com/openai/softnet#installing
   enableSoftnet ? false,
   softnet,
   nix-update-script,
@@ -14,11 +14,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.30.6";
+  version = "2.33.0";
 
   src = fetchurl {
-    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    hash = "sha256-wepqDaJp1oRjGqEVrXUM/JO5gfAKc12AUkZUbfwwdx0=";
+    url = "https://github.com/openai/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
+    hash = "sha256-iUaqS7RZq1Wp9bW843axBsQXqCKNO4kSXevtOvxq46c=";
   };
   sourceRoot = ".";
 
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = lib.licenses.fairsource09;
+    license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [
       emilytrau
       aduh95
