@@ -10,26 +10,28 @@
 let
   py = python3.override {
     self = py;
-    packageOverrides = _final: prev: { django = prev.django_5; };
+    packageOverrides = _final: prev: { django = prev.django_6; };
   };
 
   extraBuildInputs = plugins py.pkgs;
 in
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "netbox";
-  version = "4.5.10";
+  version = "4.6.8";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
-    tag = "v${version}";
-    hash = "sha256-ilhjRWoV2Z1e1sAiRT9PEGhhnznkKRp5RnV3lUdnBRQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fhEcQBYL5R9Tv9CpAf3Ce1oIzsXCjtH5j+dP9sD6kdg=";
   };
 
   patches = [
     ./custom-static-root.patch
-    # TODO: check if change is applied upstream before upgrading to NetBox v4.6
+    # TODO: remove before upgrading to NetBox v4.7
     (fetchpatch2 {
       name = "upgrade-django-tables2-v3.0.patch";
       url = "https://github.com/netbox-community/netbox/commit/d57346d9f0eef8126eafcd5033ea43864faeaf0d.patch";
@@ -101,7 +103,7 @@ py.pkgs.buildPythonApplication rec {
 
   postBuild = ''
     PYTHONPATH=$PYTHONPATH:netbox/
-    ${py.interpreter} -m mkdocs build
+    ${py.pythonOnBuildForHost.interpreter} -m mkdocs build
   '';
 
   installPhase = ''
@@ -115,10 +117,10 @@ py.pkgs.buildPythonApplication rec {
   passthru = {
     python = py;
     # PYTHONPATH of all dependencies used by the package
-    pythonPath = py.pkgs.makePythonPath dependencies;
+    pythonPath = py.pkgs.makePythonPath finalAttrs.passthru.dependencies;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_5;
+      netbox = nixosTests.netbox_4_6;
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
@@ -135,16 +137,13 @@ py.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/netbox-community/netbox";
-    changelog = "https://github.com/netbox-community/netbox/blob/${src.tag}/docs/release-notes/version-${lib.versions.majorMinor version}.md";
+    changelog = "https://github.com/netbox-community/netbox/blob/${finalAttrs.src.tag}/docs/release-notes/version-${lib.versions.majorMinor finalAttrs.version}.md";
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
-    knownVulnerabilities = [
-      "Netbox Version ${version} is EOL; please upgrade by following the current release notes instructions"
-    ];
     maintainers = with lib.maintainers; [
       minijackson
       transcaffeine
     ];
   };
-}
+})
