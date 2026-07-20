@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   postPatch = ''
