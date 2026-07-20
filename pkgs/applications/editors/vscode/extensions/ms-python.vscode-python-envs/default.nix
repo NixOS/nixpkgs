@@ -4,7 +4,7 @@
   vscode-utils,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension {
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   mktplcRef =
     let
       sources = {
@@ -38,6 +38,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Provides a unified python environment experience";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-python-envs";
     homepage = "https://github.com/microsoft/vscode-python-environments";
+    changelog = "https://github.com/microsoft/vscode-python-environments/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Zocker1999NET
@@ -49,4 +50,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "aarch64-darwin"
     ];
   };
-}
+})
