@@ -21998,6 +21998,11 @@
     github = "PhDyellow";
     githubId = 7740661;
   };
+  phelian = {
+    name = "Alexander Félix";
+    github = "phelian";
+    githubId = 7235544;
+  };
   phfroidmont = {
     name = "Paul-Henri Froidmont";
     email = "nix.contact-j9dw4d@froidmont.org";
