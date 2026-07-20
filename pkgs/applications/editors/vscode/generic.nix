@@ -419,7 +419,7 @@ stdenv.mkDerivation (
         let
           nodeModulesPath =
             if stdenv.hostPlatform.isDarwin then
-              if lib.versionAtLeast vscodeVersion "1.94.0" then
+              if lib.versionAtLeast vscodeVersion "1.94.0" && !lib.versionAtLeast vscodeVersion "1.129.0" then
                 "Contents/Resources/app/node_modules"
               else
                 "Contents/Resources/app/node_modules.asar.unpacked"
