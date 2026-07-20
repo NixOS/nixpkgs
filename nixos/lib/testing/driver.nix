@@ -20,6 +20,7 @@ let
   # the respective qemu version and with or without ocr support
   testDriver = config.pythonTestDriverPackage.override {
     inherit (config) enableOCR extraPythonPackages;
+    enableRuntimeDeps = true;
     enableNspawn = config.containers != { };
   };
 

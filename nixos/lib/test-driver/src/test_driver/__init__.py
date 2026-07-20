@@ -5,8 +5,6 @@ import time
 import warnings
 from pathlib import Path
 
-import ptpython.ipython
-import ptpython.repl
 from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
@@ -173,6 +171,9 @@ def main() -> None:
         if driver.config.enable_ssh_backdoor:
             driver.dump_machine_ssh()
         if args.interactive:
+            import ptpython.ipython
+            import ptpython.repl
+
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
             ptpython.repl.enable_deprecation_warnings()
