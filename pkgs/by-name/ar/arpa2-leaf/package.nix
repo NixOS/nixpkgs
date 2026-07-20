@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
   cmake,
   arpa2cm,
   quickder,
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     lillydap
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "LDAP Extended Attribute Filter";
