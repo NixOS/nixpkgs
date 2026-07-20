@@ -7,13 +7,13 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "feedgen";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2b1Rw7XpVqKlKZjDcIxNLHKfL8wxEYjh5dO5cmOTVGo=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ casey ];
   };
-}
+})
