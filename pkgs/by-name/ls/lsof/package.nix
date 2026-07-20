@@ -15,14 +15,14 @@ let
   dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsof";
   version = "4.99.7";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     # Fix references from man page https://github.com/lsof-org/lsof/issues/66
     substituteInPlace Lsof.8 \
       --replace ".so ./00DIALECTS" "" \
-      --replace ".so ./version" ".ds VN ${version}"
+      --replace ".so ./version" ".ds VN ${finalAttrs.version}"
     mkdir -p $out/bin $out/man/man8
     cp Lsof.8 $out/man/man8/lsof.8
     cp lsof $out/bin
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
-    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${finalAttrs.src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
