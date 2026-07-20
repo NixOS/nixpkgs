@@ -222,7 +222,7 @@ lib.trivial.pipe super [
   (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
     patches = [
       (replaceVars ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch {
-        gtop_path = "${libgtop}/lib/girepository-1.0";
+        typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [ libgtop ];
       })
     ];
     meta.maintainers = with lib.maintainers; [ andersk ];
