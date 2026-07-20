@@ -55,6 +55,7 @@ let
   metaBase = {
     downloadPage = "https://github.com/google/fonts";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    maintainers = [ lib.maintainers.thunze ];
     platforms = lib.platforms.all;
   };
 
