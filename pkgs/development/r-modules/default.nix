@@ -610,6 +610,7 @@ let
     ];
     diseq = [ pkgs.gsl ]; # for gsl-config
     diversitree = [ pkgs.gsl ]; # for gsl-config
+    drogonR = [ pkgs.pkg-config ];
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
     econetwork = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -939,6 +940,7 @@ let
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
     BigDataStatMeth = [ pkgs.zlib ];
+    BinaryDosage = [ pkgs.zlib ];
     BitSeq = [ pkgs.zlib ];
     CNEr = with pkgs; [ zlib ];
     Cairo = [ pkgs.cairo ];
@@ -1200,6 +1202,7 @@ let
     cit = [ pkgs.gsl ];
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
+    cmtkr = [ pkgs.zlib ];
     cpp11bigwig = [ pkgs.zlib ];
     cpp11qpdf = with pkgs; [
       libjpeg
@@ -1226,6 +1229,10 @@ let
     ];
     diversitree = [ pkgs.fftw ];
     divest = [ pkgs.zlib ];
+    drogonR = with pkgs; [
+      openssl
+      zlib
+    ];
     econetwork = [ pkgs.gsl ];
     eds = [ pkgs.zlib ];
     epialleleR = with pkgs; [
@@ -1359,6 +1366,7 @@ let
       cgl
       clp
     ];
+    lstar = [ pkgs.zlib ];
     lwgeom = [ pkgs.proj ];
     mBvs = [ pkgs.gsl ];
     maftools = with pkgs; [
