@@ -5,6 +5,7 @@
   setuptools,
   python-dateutil,
   lxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,8 +25,7 @@ buildPythonPackage (finalAttrs: {
     lxml
   ];
 
-  # No tests in archive
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts";
