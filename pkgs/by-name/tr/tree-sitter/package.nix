@@ -75,8 +75,9 @@ let
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
+  hasTreeSitterPrefix = lib.hasPrefix "tree-sitter-";
   grammarDerivationsFrom = lib.filterAttrs (
-    name: value: lib.hasPrefix "tree-sitter-" name && lib.isDerivation value
+    name: value: hasTreeSitterPrefix name && lib.isDerivation value
   );
 
   mkGrammarLinkFarm =
