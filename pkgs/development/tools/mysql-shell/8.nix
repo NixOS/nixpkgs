@@ -16,18 +16,11 @@
   libssh,
   zstd,
   lz4,
-  readline,
   libtirpc,
   rpcsvc-proto,
   libedit,
-  libevent,
   icu,
-  re2,
-  ncurses,
-  libfido2,
   python3,
-  cyrus_sasl,
-  openldap,
   antlr,
 }:
 
@@ -103,16 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     openssl
     protobuf
-    readline
     zlib
     zstd
-    libevent
     icu
-    re2
-    ncurses
-    libfido2
-    cyrus_sasl
-    openldap
     python3
     antlr.runtime.cpp
   ]
@@ -124,8 +110,19 @@ stdenv.mkDerivation (finalAttrs: {
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
-      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
+    cmake \
+      -DWITH_SSL=system \
+      -DWITH_CURL=system \
+      -DWITH_LZ4=system \
+      -DWITH_ZSTD=system \
+      -DWITH_ZLIB=system \
+      -DWITH_ICU=system \
+      -DWITH_PROTOBUF=system \
+      -DWITH_EDITLINE=system \
+      -DWITH_ROUTER=OFF \
+      -DWITH_UNIT_TESTS=OFF \
+      -DFORCE_UNSUPPORTED_COMPILER=1 \
+      -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
 
@@ -137,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_LZ4=system"
       "-DWITH_ZLIB=system"
       "-DWITH_PROTOBUF=system"
+      "-DWITH_SSL=system"
+      "-DWITH_CURL=system"
       "-DHAVE_PYTHON=1"
     )
   '';
