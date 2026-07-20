@@ -31,9 +31,14 @@ in
         ../common/x11.nix
       ];
 
-      # When setting this to 2500 I got "Kernel panic - not syncing: Out of
+      # When setting memory to 2500 I got "Kernel panic - not syncing: Out of
       # memory: compulsory panic_on_oom is enabled".
-      virtualisation.memorySize = 3000;
+      # Setting cores to 1 (the default) also makes immich take a long time to start up.
+      # If this breaks, keep synced with the immich test.
+      virtualisation = {
+        memorySize = 4096;
+        cores = 2;
+      };
       hardware.graphics.enable = true;
       environment.variables.XAUTHORITY = "/home/${user}/.Xauthority";
       test-support.displayManager.auto.user = user;
