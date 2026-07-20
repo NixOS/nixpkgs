@@ -62,6 +62,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "inkex" ];
 
+  # The inkex version isn't update in tandem with inkscape
+  dontCheckPythonMetadata = true;
+
   nativeCheckInputs = [
     gobject-introspection
     pytestCheckHook

@@ -12,7 +12,6 @@
   pkg-config,
   wrapGAppsHook3,
   writableTmpDirAsHomeHook,
-  llvmPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -50,9 +49,7 @@ buildGoModule (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     writableTmpDirAsHomeHook
-  ]
-  # TODO: Remove once #536365 reaches this branch
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
+  ];
 
   # git ls-files doesn't work as source is not a git repo
   checkFlags =
@@ -64,13 +61,7 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  env = {
-    CGO_ENABLED = 1;
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     mv $out/bin/picocrypt $out/bin/picocrypt-ng-gui

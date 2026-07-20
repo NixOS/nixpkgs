@@ -32,6 +32,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "stopit" ];
 
   meta = {
+    broken = lib.versionAtLeast setuptools.version "82";
     description = "Raise asynchronous exceptions in other thread, control the timeout of blocks or callables with a context manager or a decorator";
     homepage = "https://github.com/glenfant/stopit";
     changelog = "https://github.com/glenfant/stopit/blob/${finalAttrs.version}/CHANGES.rst";

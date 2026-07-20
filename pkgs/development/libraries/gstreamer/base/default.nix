@@ -46,8 +46,6 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -89,10 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableWayland [
     wayland-scanner
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -164,14 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ++ lib.optional stdenv.hostPlatform.isDarwin "-Ddrm=disabled";
-
-  # Fix for ld64 hardening issue
-  #
-  # TODO: Clean up on `staging`
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    CC_LD = "lld";
-    OBJC_LD = "lld";
-  };
 
   postPatch = ''
     patchShebangs \

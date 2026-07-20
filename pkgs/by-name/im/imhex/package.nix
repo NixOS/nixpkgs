@@ -23,7 +23,6 @@
   nix-update-script,
   autoPatchelfHook,
   makeWrapper,
-  llvmPackages,
 }:
 
 let
@@ -62,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
-  # TODO: Remove once #536365 reaches this branch
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     capstone
@@ -106,13 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "@executable_path/../Frameworks")
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
   postPatch = ''

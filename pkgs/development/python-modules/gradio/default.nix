@@ -439,6 +439,7 @@ buildPythonPackage (finalAttrs: {
             shopt -u globstar
           '';
           pythonImportsCheck = null;
+          dontCheckPythonMetadata = true;
           dontCheckRuntimeDeps = true;
         });
 

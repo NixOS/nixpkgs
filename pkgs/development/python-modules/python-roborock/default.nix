@@ -73,6 +73,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
+  disabledTests = [
+    # url mocking mismatch, probably due to yarl update
+    "test_url_cycling"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "roborock" ];

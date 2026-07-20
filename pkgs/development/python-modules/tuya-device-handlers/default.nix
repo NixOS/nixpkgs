@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   tuya-device-sharing-sdk,
   pytestCheckHook,
   syrupy,
@@ -19,6 +20,10 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-nJX7N3PCqMmlE2KipeCKTFLn91sJmzmPTizY9cxjnb0=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

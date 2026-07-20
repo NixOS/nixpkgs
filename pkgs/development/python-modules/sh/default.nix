@@ -3,23 +3,23 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
     tag = version;
-    hash = "sha256-5B+Bsxv2X1BHEMg8uv56ex//6EKEcLmte7ozcKzul/c=";
+    hash = "sha256-xtrT8fac7eJeGZ15yQqdYUqILcY1jUCVajX/j0ljl7Q=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -39,8 +39,6 @@ buildPythonPackage rec {
     # fails to import itself after modifying the environment
     "test_environment"
     # timing sensitive through usage of sleep(1) and signal handling
-    # https://github.com/amoffat/sh/issues/684
-    "test_general_signal"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable tests that fail on Darwin sandbox

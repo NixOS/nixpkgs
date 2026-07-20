@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bash-completion";
-  version = "2.17.0";
+  version = "2.18.0";
 
   # Using fetchurl because fetchGithub or fetchzip will have trouble on
   # e.g. APFS filesystems (macOS) because of non UTF-8 characters in some of the
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
     url = "https://github.com/scop/bash-completion/releases/download/${finalAttrs.version}/bash-completion-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3Z2CXklkNfs766Oue+qfd+gh6JRmfQdDHR1MjFcLnlg=";
+    hash = "sha256-iLz4UST3f3Ty8vi80WrEOC2AeoJ+3nQqZJQMcRauoz8=";
   };
 
   postPatch = ''

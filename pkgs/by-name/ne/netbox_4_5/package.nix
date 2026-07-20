@@ -17,14 +17,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.5.9";
+  version = "4.5.10";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-S8/2ZLYhYKBEpz3EGTyQPAPexX4se3MnmaH5aStVEj0=";
+    hash = "sha256-ilhjRWoV2Z1e1sAiRT9PEGhhnznkKRp5RnV3lUdnBRQ=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ py.pkgs.buildPythonApplication rec {
         social-auth-app-django
         sorl-thumbnail
         strawberry-graphql
-        strawberry-django
+        strawberry-graphql-django
         svgwrite
         tablib
 

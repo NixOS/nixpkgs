@@ -6,6 +6,7 @@
   fetchFromGitHub,
   python-dateutil,
   requests,
+  setuptools_80,
   setuptools-scm,
 }:
 
@@ -26,7 +27,10 @@ buildPythonPackage rec {
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools_80
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp

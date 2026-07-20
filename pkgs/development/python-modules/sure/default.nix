@@ -21,6 +21,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail version=version 'version="${finalAttrs.version}"'
+
     substituteInPlace setup.cfg \
       --replace "rednose = 1" ""
   '';

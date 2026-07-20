@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -63,6 +62,15 @@ buildPythonPackage rec {
     # Fails during teardown
     # RuntimeError: Client 01-zero-length-clientid.py exited with code None, expected 0
     "test_01_zero_length_clientid"
+  ];
+
+  disabledTestPaths = [
+    # Expired key material
+    # https://github.com/eclipse-paho/paho.mqtt.python/pull/854
+    "tests/lib/test_08_ssl_connect_alpn.py"
+    "tests/lib/test_08_ssl_connect_cert_auth.py"
+    "tests/lib/test_08_ssl_connect_cert_auth_pw.py"
+    "tests/lib/test_08_ssl_connect_no_auth.py"
   ];
 
   meta = {
