@@ -157,8 +157,8 @@ stdenv.mkDerivation {
       src/external/darlingserver/scripts \
       src/external/openssl_certificates/scripts
 
-    substituteInPlace src/startup/CMakeLists.txt --replace SETUID ""
-    substituteInPlace src/external/basic_cmds/CMakeLists.txt --replace SETGID ""
+    substituteInPlace src/startup/CMakeLists.txt --replace-fail SETUID ""
+    substituteInPlace src/external/basic_cmds/CMakeLists.txt --replace-fail SETGID ""
 
     # Fix compiler error: read of non-constexpr variable 'lastSlash' is not allowed in a constant expression (VLA error in templates)
     substituteInPlace src/external/cctools-port/cctools/ld64/src/ld/HeaderAndLoadCommands.hpp \
