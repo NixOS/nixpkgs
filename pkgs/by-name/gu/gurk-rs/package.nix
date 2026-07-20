@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       devhell
       mattkang
       nicknb
+      faukah
     ];
   };
 })
