@@ -6,6 +6,7 @@
   python3,
   cmake,
   doxygen,
+  gitUpdater,
   graphviz,
   quickmem,
   arpa2common,
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Quick (and Easy) DER, a Library for parsing ASN.1";
