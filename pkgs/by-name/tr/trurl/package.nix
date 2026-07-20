@@ -64,7 +64,10 @@ stdenv.mkDerivation rec {
     homepage = "https://curl.se/trurl";
     changelog = "https://github.com/curl/trurl/releases/tag/trurl-${version}";
     license = lib.licenses.curl;
-    maintainers = with lib.maintainers; [ christoph-heiss ];
+    maintainers = with lib.maintainers; [
+      christoph-heiss
+      diogotcorreia
+    ];
     platforms = lib.platforms.all;
     mainProgram = "trurl";
   };
