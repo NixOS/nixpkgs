@@ -10,26 +10,26 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-wIwNH57ABWXGHLzQWplrfdI075W/LXocscOJ0Pycev4=";
+          hash = "sha256-fOqG/GSQmKDHA3J10x/m9q5URjSPAoWHqg/OfZtz418=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-R4YLYHVeQOYvjaCJQajZ6+OPOqIWiCZjXmiAwfSJOFo=";
+          hash = "sha256-MA2kXhM6rSp9OPtDm4daFrBpH+CNNXLjSG095QndOvM=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-t9XjC7oMd2Kpd8nXcdlnWB58A6NRU2hUA6g2c9IFaTw=";
+          hash = "sha256-UiA9Ar34UuHKBKm0B6jc+qWwzxlJbXEG2FaMBV39AeI=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-PN4sV5qu+PhDB5TeDir51cmE3yYW1HdHRvE+950ty3k=";
+          hash = "sha256-+v8U/aFNp/b6Dj62J+MLYQ8dcfO4qinWd/XST6ntnNc=";
         };
       };
     in
     {
       name = "vscode-python-envs";
       publisher = "ms-python";
-      version = "1.33.2026051501";
+      version = "1.36.0";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
