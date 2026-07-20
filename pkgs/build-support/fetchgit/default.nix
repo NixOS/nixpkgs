@@ -34,6 +34,8 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
+
+  hasColonInfix = lib.hasInfix ":";
 in
 
 lib.makeOverridable (
@@ -133,7 +135,7 @@ lib.makeOverridable (
         */
 
         let
-          finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+          finalHashHasColon = hasColonInfix finalAttrs.hash;
           finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
         in
 
