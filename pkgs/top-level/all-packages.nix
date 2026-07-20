@@ -7038,10 +7038,6 @@ with pkgs;
     pkg = callPackage ../development/compilers/ecl { };
     faslExt = "fas";
   };
-  ecl_16_1_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
-    faslExt = "fas";
-  };
 
   # GNU Common Lisp
   gcl = wrapLisp {
@@ -9777,8 +9773,6 @@ with pkgs;
     ;
 
   ydiff = with python3.pkgs; toPythonApplication ydiff;
-
-  your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
 
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
