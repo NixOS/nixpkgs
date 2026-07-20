@@ -10,7 +10,7 @@
   };
 
   nodes.machine =
-    { ... }:
+    { pkgs, ... }:
     {
       # Flarum installs and migrates the database on first boot and runs a
       # MariaDB server alongside PHP-FPM and nginx, so give the VM some headroom.
@@ -28,8 +28,11 @@
 
         adminUser = "admin";
         adminEmail = "admin@example.com";
-        # Flarum rejects admin passwords shorter than 8 characters.
-        initialAdminPassword = "flarum-admin-password";
+        # The trailing newline matches how secret managers typically write files.
+        initialAdminPasswordFile = "${pkgs.writeText "admin-pass" "flarum-admin-password\n"}";
+        # MariaDB authenticates via unix socket and never checks this password;
+        # setting it still exercises the substitution path.
+        databasePasswordFile = "${pkgs.writeText "db-pass" "flarum-db-password\n"}";
       };
     };
 
@@ -48,5 +51,23 @@
 
     # The admin API endpoint should respond, confirming the app booted cleanly.
     machine.succeed("curl -sf http://localhost/api -o /dev/null")
+
+    # Only the placeholders may appear in the install config in the Nix store.
+    machine.succeed("grep -q '@adminPassword@' /nix/store/*-config.json")
+    machine.succeed("grep -q '@databasePassword@' /nix/store/*-config.json")
+    machine.fail("grep -qe 'flarum-admin-password' -e 'flarum-db-password' /nix/store/*-config.json")
+
+    # A successful login proves the admin password was substituted intact.
+    machine.succeed(
+        "curl -sf http://localhost/api/token "
+        + "-H 'Content-Type: application/json' "
+        + "-d '{\"identification\": \"admin\", \"password\": \"flarum-admin-password\"}' "
+        + "| grep -F token"
+    )
+
+    # The database password must arrive intact in config.php, which must
+    # not be world-readable.
+    machine.succeed("grep -q 'flarum-db-password' /var/lib/flarum/config.php")
+    machine.succeed("[ $(stat -c %a /var/lib/flarum/config.php) = 600 ]")
   '';
 }
