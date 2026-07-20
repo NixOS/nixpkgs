@@ -1495,6 +1495,12 @@
     githubId = 60479013;
     name = "Alma Cemerlic";
   };
+  aln730 = {
+    email = "arnsg730@proton.me";
+    github = "aln730";
+    githubId = 94751172;
+    name = "AGawas";
+  };
   Alper-Celik = {
     email = "alper@alper-celik.dev";
     name = "Alper Çelik";
@@ -16678,12 +16684,6 @@
     githubId = 10746692;
     name = "Leopold Luley";
   };
-  lumi = {
-    email = "lumi@pew.im";
-    github = "lumi-me-not";
-    githubId = 26020062;
-    name = "lumi";
-  };
   luminarleaf = {
     github = "LuminarLeaf";
     githubId = 80571430;
@@ -20788,8 +20788,9 @@
     github = "numinit";
     githubId = 369111;
     keys = [
-      # SSH
+      # SSH, per-machine yubikey ecdsa-sk keys
       { fingerprint = "XX/0lMz82MpucPqf0KG+5EJoozzNRi8i/t59byD2kNo"; }
+      { fingerprint = "dye2C1N4RQaf+8ht5Ipd52BbnnuwBtdXxocPzk8b2mw"; }
       # GPG, >=2025, stays in one place
       { fingerprint = "FD28 F9C9 81C5 D78E 56E8  8311 5C3E B94D 198F 1491"; }
       # GPG, >=2025, travels with me
@@ -22084,6 +22085,12 @@
     github = "Phlogistique";
     githubId = 421510;
     name = "Noé Rubinstein";
+  };
+  phluxjr = {
+    email = "phluxjr@phluxjr.net";
+    github = "phluxjr";
+    githubId = 185956030;
+    name = "phluxjr";
   };
   pho = {
     email = "phofin@gmail.com";
