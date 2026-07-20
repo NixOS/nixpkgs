@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "extras";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "132e36de10b9c91d5d4cc620160a476e0468a88f16c9431817a6729611a81b4e";
   };
+
+  build-system = [ setuptools ];
 
   # error: invalid command 'test'
   doCheck = false;
