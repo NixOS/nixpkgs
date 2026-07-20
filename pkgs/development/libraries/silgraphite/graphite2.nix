@@ -2,7 +2,7 @@
   lib,
   stdenv,
   llvmPackages,
-  fetchpatch,
+  python3,
   fetchurl,
   pkg-config,
   freetype,
@@ -12,14 +12,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.3.14";
+  version = "1.3.15";
   pname = "graphite2";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
-    sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
+    hash = "sha256-xryLQlJyRmUpf3ytDFWJcoXGc/m45ts1IqzoM1k/4LE=";
   };
 
   outputs = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    (python3.withPackages (ps: [ ps.fonttools ]))
     cmake
   ];
   buildInputs = [
@@ -40,14 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
-  patches = [
-    # Fix build with gcc15
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/graphite2/raw/deba28323b0a3b7a3dcfd06df1efc2195b102ed7/f/graphite2-1.3.14-gcc15.patch";
-      hash = "sha256-vkkGkHkcsj1mD3OHCHLWWgpcmFDv8leC4YQm+TsbIUw=";
-    })
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74
@@ -61,22 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # headers are located in the dev output:
     substituteInPlace CMakeLists.txt \
       --replace-fail ' ''${CMAKE_INSTALL_PREFIX}/include' " ${placeholder "dev"}/include"
-
-    # Fix the build with CMake 4.
-    #
-    # See: <https://github.com/silnrsi/graphite/issues/98>
-    badCmakeFiles=(
-      CMakeLists.txt
-      src/CMakeLists.txt
-      tests/{bittwiddling,json,sparsetest,utftest}/CMakeLists.txt
-      gr2fonttest/CMakeLists.txt
-    )
-    for file in "''${badCmakeFiles[@]}"; do
-      substituteInPlace "$file" \
-        --replace-fail \
-          'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)' \
-          'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
-    done
   '';
 
   cmakeFlags = lib.optionals static [
