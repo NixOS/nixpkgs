@@ -2,17 +2,20 @@
   buildPythonPackage,
   lib,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fields";
   version = "5.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MdSqA9jUTjXfE8Qx3jUTaZfwR6kkpZfYT3vCCeG+Vyc=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "fields" ];
 
