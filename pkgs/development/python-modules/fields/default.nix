@@ -19,6 +19,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "fields" ];
 
+  doCheck = false; # Argument(s) {'path'} are declared in the hookimpl but can not be found in the hookspec
+
   meta = {
     description = "Container class boilerplate killer";
     homepage = "https://github.com/ionelmc/python-fields";
