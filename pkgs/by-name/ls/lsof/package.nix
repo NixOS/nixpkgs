@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     patchShebangs --build lib/dialects/*/Mksrc
     # Do not re-build version.h in every 'make' to allow nuke-refs below.
