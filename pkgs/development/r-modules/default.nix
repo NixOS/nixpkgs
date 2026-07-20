@@ -441,6 +441,7 @@ let
     RAppArmor = [ pkgs.pkg-config ];
     RCurl = [ pkgs.curl ]; # for curl-config
     RDieHarder = [ pkgs.gsl ]; # for gsl-config
+    RFIF = [ pkgs.pkg-config ];
     RGtk2 = [ pkgs.pkg-config ];
     RJMCMCNucleosomes = [ pkgs.gsl ]; # for gsl-config
     RKHSMetaMod = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -680,6 +681,7 @@ let
     ];
     git2r = [ pkgs.pkg-config ];
     glpkAPI = [ pkgs.glpk ]; # detects prefix from glpsol binary
+    gridmicrotex = [ pkgs.pkg-config ];
     gsl = [ pkgs.gsl ]; # for gsl-config
     gslnls = [ pkgs.gsl ]; # for gsl-config
     h3o = with pkgs; [
@@ -1043,6 +1045,7 @@ let
       freetype
     ];
     RAppArmor = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libapparmor ];
+    RFIF = [ pkgs.fftw ];
     RGtk2 = [ pkgs.gtk2 ];
     RITCH = [ pkgs.zlib ];
     RKHSMetaMod = [ pkgs.gsl ];
@@ -1307,6 +1310,7 @@ let
     gpg = [ pkgs.gpgme ];
     gpuMagic = [ pkgs.ocl-icd ];
     gridGraphics = [ pkgs.which ];
+    gridmicrotex = [ pkgs.freetype ];
     h5vc = with pkgs; [
       zlib
       bzip2
