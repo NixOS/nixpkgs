@@ -18683,6 +18683,8 @@ self: super: with self; {
 
   skein = callPackage ../development/python-modules/skein { };
 
+  skggm = callPackage ../development/python-modules/skggm { };
+
   skia-pathops = callPackage ../development/python-modules/skia-pathops { };
 
   skidl = callPackage ../development/python-modules/skidl { };
