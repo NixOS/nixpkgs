@@ -1223,9 +1223,18 @@ Example removing all references to the compiler in the output:
 
 ### `runHook` \<hook\> {#fun-runHook}
 
-Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`. Execution aborts on the first failing hook.
 
 For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
+
+### `runOneHook` \<hook\> {#fun-runOneHook}
+
+Run all hooks that `runHook` would, but exit after the first successful hook.
+Failing hooks are ignored.
+
+### `echoCmd` \<cmd\> \<args...\> {#fun-echoCmd}
+
+Print (but don't execute) a command and unambiguously mark word splits.
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
