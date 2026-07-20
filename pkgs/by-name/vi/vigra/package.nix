@@ -31,12 +31,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pknZHHIIhjfOxdp+qCOOGvo0W5ByTHXRiIQzzN7Z6M4=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     boost
     fftw
     fftwSinglePrec
-    hdf5
+    (hdf5.override {
+      apiVersion = "v110";
+    })
     libjpeg
     libpng
     libtiff
