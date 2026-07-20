@@ -59,6 +59,8 @@ let
     in
     fixedWidthString len " " name;
 
+  hasZipSuffix = hasSuffix "zip";
+
   isPythonModule =
     drv:
     # all pythonModules have the pythonModule attribute
@@ -317,7 +319,7 @@ lib.extendMkDerivation {
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
+      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
