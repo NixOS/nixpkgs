@@ -132,6 +132,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
+    "django"
     "django-allauth"
     "gunicorn"
     "huey"
