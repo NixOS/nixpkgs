@@ -4,6 +4,7 @@
   fetchPypi,
   linuxHeaders,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,16 @@ buildPythonPackage rec {
 
   buildInputs = [ linuxHeaders ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "evdev" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # tries to open /dev/uinput
+    "tests/test_uinput.py"
+  ];
 
   meta = {
     description = "Provides bindings to the generic input event interface in Linux";
