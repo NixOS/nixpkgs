@@ -16,6 +16,7 @@
   python3Packages,
   cacert,
   libredirect,
+  rust-jemalloc-sys,
   writeTextFile,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
@@ -71,13 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-  }
-  //
-    lib.optionalAttrs
-      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
-      {
-        JEMALLOC_SYS_WITH_LG_PAGE = 16;
-      };
+  };
 
   depsBuildBuild = [
     pkg-config
@@ -92,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
+    rust-jemalloc-sys
     sqlite
     zstd
   ]
@@ -298,7 +294,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-
+    maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada

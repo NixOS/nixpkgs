@@ -24,7 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     versionCheckHook
   ];
+
   doInstallCheck = true;
+
+  # opt ouf of default features to deselect the update-check feature
+  buildNoDefaultFeatures = true;
+
+  buildFeatures = [
+    "discovery"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd xfr \

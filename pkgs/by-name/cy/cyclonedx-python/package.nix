@@ -30,6 +30,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ cyclonedx-python-lib.optional-dependencies.validation;
 
+  pythonRelaxDeps = [
+    "chardet"
+  ];
+
   pythonImportsCheck = [ "cyclonedx" ];
 
   meta = {
