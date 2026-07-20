@@ -350,23 +350,34 @@ rec {
   */
   _normaliseTreeFilter =
     path: tree:
-    if tree == "directory" || isAttrs tree then
-      let
-        entries = _directoryEntries path tree;
-        normalisedSubtrees = mapAttrs (name: _normaliseTreeFilter (path + "/${name}")) entries;
-        subtreeValues = attrValues normalisedSubtrees;
-      in
-      # This triggers either when all files in a directory are filtered out
-      # Or when the directory doesn't contain any files at all
-      if all isNull subtreeValues then
-        null
-      # Triggers when we have the same as a `readDir path`, so we can turn it back into an equivalent "directory".
-      else if all isString subtreeValues then
-        "directory"
-      else
-        normalisedSubtrees
-    else
-      tree;
+    let
+      # Recurses into a tree that's already known to be a directory (either a "directory" or an attrset).
+      #
+      # Only directories need to be recursed into:
+      # Files are either null (excluded) or a file type string (included), which are already normalised.
+      #
+      # Checking this in the caller instead of here also avoids the thunk allocation for the path concatenation below.
+      recurse =
+        path: tree:
+        let
+          entries = _directoryEntries path tree;
+          normalisedSubtrees = mapAttrs (
+            name: subtree:
+            if subtree == "directory" || isAttrs subtree then recurse (path + "/${name}") subtree else subtree
+          ) entries;
+          subtreeValues = attrValues normalisedSubtrees;
+        in
+        # This triggers either when all files in a directory are filtered out
+        # Or when the directory doesn't contain any files at all
+        if all isNull subtreeValues then
+          null
+        # Triggers when we have the same as a `readDir path`, so we can turn it back into an equivalent "directory".
+        else if all isString subtreeValues then
+          "directory"
+        else
+          normalisedSubtrees;
+    in
+    if tree == "directory" || isAttrs tree then recurse path tree else tree;
 
   /**
     A minimal normalisation of a filesetTree, intended for pretty-printing:
