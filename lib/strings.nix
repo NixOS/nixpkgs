@@ -808,7 +808,7 @@ rec {
   hasPrefix =
     pref:
     let
-      lenPrefix = stringLength pref;
+      getGivenPrefix = substring 0 (stringLength pref);
     in
     if isPath pref then
       # Before 23.05, paths would be copied to the store before converting them
@@ -817,7 +817,7 @@ rec {
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
     else
-      str: substring 0 lenPrefix str == pref;
+      str: getGivenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
