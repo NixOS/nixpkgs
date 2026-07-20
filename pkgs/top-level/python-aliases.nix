@@ -219,6 +219,7 @@ mapAliases {
   esig = throw "'esig' has been removed as it was broken and unmaintained upstream"; # Added 2026-05-27
   et_xmlfile = throw "'et_xmlfile' has been renamed to/replaced by 'et-xmlfile'"; # Converted to throw 2025-10-29
   ev3dev2 = throw "'ev3dev2' has been renamed to/replaced by 'python-ev3dev2'"; # Converted to throw 2025-10-29
+  exllamav2 = throw "'exllamav2' was removed because it is archived upstream and support was dropped in tabbyapi"; # Added 2026-07-19
   eyeD3 = throw "'eyeD3' has been renamed to/replaced by 'eyed3'"; # Converted to throw 2025-10-29
   f3d_egl = lib.warnOnInstantiate "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # added 2025-07-18
   Fabric = throw "'Fabric' has been renamed to/replaced by 'fabric'"; # Converted to throw 2025-10-29
@@ -368,6 +369,7 @@ mapAliases {
   mdformat-tables = "'mdformat-tables' has been archived and replaced by 'mdformat-gfm"; # added 2025-01-25
   MDP = throw "'MDP' has been renamed to/replaced by 'mdp'"; # Converted to throw 2025-10-29
   MechanicalSoup = throw "'MechanicalSoup' has been renamed to/replaced by 'mechanicalsoup'"; # Converted to throw 2025-10-29
+  meld3 = throw "'meld3' has been removed because it was unused and unmaintained upstream"; # added 2026-06-08
   memcached = throw "'memcached' has been renamed to/replaced by 'python-memcached'"; # Converted to throw 2025-10-29
   memory_profiler = throw "'memory_profiler' has been renamed to/replaced by 'memory-profiler'"; # Converted to throw 2025-10-29
   mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
