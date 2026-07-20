@@ -2871,7 +2871,11 @@ rec {
 
     :::
   */
-  fileContents = file: removeSuffix "\n" (readFile file);
+  fileContents =
+    let
+      removeNewlineSuffix = removeSuffix "\n";
+    in
+    file: removeNewlineSuffix (readFile file);
 
   /**
     Creates a valid derivation name from a potentially invalid one.
