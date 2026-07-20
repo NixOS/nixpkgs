@@ -5,6 +5,7 @@
   pycrypto,
   python,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,9 +24,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ pycrypto ];
 
-  checkPhase = ''
-    ${python.interpreter} -m android_backup.tests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "android_backup/tests/__main__.py" ];
 
   pythonImportsCheck = [ "android_backup" ];
 
