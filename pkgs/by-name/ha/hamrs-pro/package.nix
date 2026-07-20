@@ -8,23 +8,23 @@
 
 let
   pname = "hamrs-pro";
-  version = "2.47.1";
+  version = "2.52.0";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-linux-x86_64.AppImage";
-      hash = "sha256-JcckonAYM4HE8yTvzJHJ3pX+H4jOPaUQXaYmWUAg8AY=";
+      hash = "sha256-Zh/6F2vHGz8Aih4ld34ylKT5y5IuPbgnoAj8V6Z5lsk=";
     };
 
     aarch64-linux = fetchurl {
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-linux-arm64.AppImage";
-      hash = "sha256-5WUQBFyvMHZyyIH2aImCRUYdzou8BadaH/M4+5DeQdo=";
+      hash = "sha256-beOod63aKwfd1NrS7Or1p4KH5+KMdJ4AGo0mqIGDq9g=";
     };
     aarch64-darwin = fetchurl {
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-mac-arm64.dmg";
-      hash = "sha256-/9UamFxEJ9NkswgsI8mcfher9nFpVt5Vk0QYFpRXRB4=";
+      hash = "sha256-M8JohJkY1U5NQHCiMg82pPhSH/bf1Hah+9jye9P8EzE=";
     };
   };
 
