@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.RADICLE_VERSION = finalAttrs.version;
 
-  # You must update the radicle-explorer source hash when changing this.
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
