@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
+  testtools,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -17,8 +19,15 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # error: invalid command 'test'
-  doCheck = false;
+  preCheck = ''
+    substituteInPlace extras/tests/test_extras.py \
+        --replace-fail "assertEquals(" "assertEqual("
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    testtools
+  ];
 
   meta = {
     description = "Useful extra bits for Python - things that should be in the standard library";
