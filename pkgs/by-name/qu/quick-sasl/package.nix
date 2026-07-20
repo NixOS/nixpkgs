@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
   pkg-config,
   cmake,
   arpa2cm,
@@ -12,7 +13,6 @@
   libkrb5,
   libev,
   e2fsprogs,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     e2fsprogs
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Gentle wrapper around any SASL implementation";
