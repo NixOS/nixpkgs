@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "expiring-dict";
   version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "expiring_dict";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-yoy4AjBOrlszoj7EwZAZthCt/aUMvEyb+jrVws04djE=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
