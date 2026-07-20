@@ -24,9 +24,10 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  # remove supervisor from dependencies
+  # remove supervisor from dependencies and fix version
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
+    sed -i 's/^version = .*$/version = "${finalAttrs.version}"/' pyproject.toml
   '';
 
   dependencies =
