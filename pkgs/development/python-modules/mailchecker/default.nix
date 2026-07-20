@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "mailchecker";
-  version = "6.0.20";
+  version = "6.0.21";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lT4WxafcpOXbxJfInRjDx1x+mvZMBa7m0ASvr4oD64o=";
+    hash = "sha256-tMZoQDvDLPqpbnWFkUd4QpyddI5VjS5qu1mbEvCZeQQ=";
   };
 
   build-system = [ setuptools ];
