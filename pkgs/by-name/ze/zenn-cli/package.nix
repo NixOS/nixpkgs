@@ -8,6 +8,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
