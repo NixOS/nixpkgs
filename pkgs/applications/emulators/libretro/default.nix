@@ -189,6 +189,8 @@ lib.makeScope newScope (self: {
 
   twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix { };
 
+  uzem = self.callPackage ./cores/uzem.nix { };
+
   vba-m = self.callPackage ./cores/vba-m.nix { };
 
   vba-next = self.callPackage ./cores/vba-next.nix { };
