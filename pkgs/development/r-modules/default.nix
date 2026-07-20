@@ -551,6 +551,11 @@ let
       cargo
       rustc
     ];
+    automerge = with pkgs; [
+      cargo
+      cmake
+      rustc
+    ];
     awdb = with pkgs; [
       cargo
       rustc
@@ -705,6 +710,10 @@ let
     libdeflate = with pkgs; [
       cmake
       pkg-config
+    ];
+    libipldr = with pkgs; [
+      cargo
+      rustc
     ];
     lnmixsurv = [ pkgs.gsl ]; # for gsl-config
     lpsymphony = with pkgs; [
