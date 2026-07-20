@@ -146,6 +146,14 @@ lib.recursiveUpdate orig rec {
   ulqda.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DigestSHA1 ])) ];
 
   #### python packages
+  pygmentex.extraBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        pygments
+        chardet
+      ]
+    ))
+  ];
   pythontex.extraBuildInputs = [ (python3.withPackages (ps: with ps; [ pygments ])) ];
 
   #### other runtime PATH dependencies
