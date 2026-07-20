@@ -580,25 +580,34 @@ rec {
           pathSlash = path + "/";
         in
         (
+          # Same as `hasPrefix baseString pathSlash`, but more efficient.
+          # The path is either the base itself or underneath it,
+          # but only on the few paths above it, so its checked first.
+          # With base /foo/bar this matches /foo/bar and /foo/bar/baz
+          # hasPrefix "/foo/bar/" "/foo/bar/baz/"
+          if substring 0 baseLength pathSlash == baseString then
+            if stringLength pathSlash == baseLength then
+              # The path is the base directory itself, which is always included
+              true
+            else
+              # Same as `removePrefix baseString path`, but more efficient.
+              # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
+              # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
+              # With base /foo and path /foo/bar/baz this gives
+              # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
+              # == inTree (split "/" "bar/baz")
+              # == inTree [ "bar" "baz" ]
+              inTree (split "/" (substring baseLength (-1) path))
           # Same as `hasPrefix pathSlash baseString`, but more efficient.
+          # The path is a proper ancestor of the base, which needs to be included for the base to be reachable:
           # With base /foo/bar we need to include /foo:
           # hasPrefix "/foo/" "/foo/bar/"
-          if substring 0 (stringLength pathSlash) baseString == pathSlash then
+          else if substring 0 (stringLength pathSlash) baseString == pathSlash then
             true
-          # Same as `! hasPrefix baseString pathSlash`, but more efficient.
-          # With base /foo/bar we need to exclude /baz
-          # ! hasPrefix "/baz/" "/foo/bar/"
-          else if substring 0 baseLength pathSlash != baseString then
-            false
           else
-            # Same as `removePrefix baseString path`, but more efficient.
-            # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
-            # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
-            # With base /foo and path /foo/bar/baz this gives
-            # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
-            # == inTree (split "/" "bar/baz")
-            # == inTree [ "bar" "baz" ]
-            inTree (split "/" (substring baseLength (-1) path))
+            # The path is unrelated to the base, so nothing from it is included
+            # With base /foo/bar this matches e.g. /baz
+            false
         )
         # This is a way have an additional check in case the above is true without any significant performance cost
         && (
