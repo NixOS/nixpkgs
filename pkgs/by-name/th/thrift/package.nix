@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
+    downloadPage = "https://github.com/apache/thrift";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ bjornfor ];
