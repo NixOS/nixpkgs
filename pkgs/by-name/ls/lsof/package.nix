@@ -64,7 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
       linuxFlags = lib.optionalString stdenv.hostPlatform.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
       freebsdFlags = lib.optionalString stdenv.hostPlatform.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
     in
-    "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
+    ''
+      runHook preConfigure
+      ${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}
+      runHook postConfigure
+    '';
 
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
@@ -76,14 +80,19 @@ stdenv.mkDerivation (finalAttrs: {
     nuke-refs version.h
   '';
 
-  installPhase = ''
+  preInstall = ''
     # Fix references from man page https://github.com/lsof-org/lsof/issues/66
     substituteInPlace Lsof.8 \
       --replace ".so ./00DIALECTS" "" \
       --replace ".so ./version" ".ds VN ${finalAttrs.version}"
+  '';
+
+  installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/man/man8
     cp Lsof.8 $out/man/man8/lsof.8
     cp lsof $out/bin
+    runHook postInstall
   '';
 
   meta = {
