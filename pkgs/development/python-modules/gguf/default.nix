@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "9967";
+  version = "10069";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-HgptebnnT3xOU26/UJCqQ6FSrhcoybju7SKUy4pLOKA=";
+    hash = "sha256-mjHeImLxneKvBIAMEM+0sB7syy1408sX1GuWfVC5D6E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gguf-py";
