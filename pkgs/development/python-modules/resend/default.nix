@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "resend";
-  version = "2.32.2";
+  version = "2.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "resend";
     repo = "resend-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wxro1Dgk7/ziPy2Z09teCyk99rxkDNODtlOugJDMUO0=";
+    hash = "sha256-Z+KBM+Harhqlcx9Sf6XKyPmfQO7Atel1BjShVjdPyiI=";
   };
 
   build-system = [ setuptools ];
