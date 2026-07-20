@@ -861,6 +861,7 @@ let
     string2path = [ pkgs.cargo ];
     stringfish = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
+    sundialr = [ pkgs.cmake ];
     survSNP = [ pkgs.gsl ]; # for gsl-config
     surveyvoi = [ pkgs.pkg-config ];
     symbolicQspray = [ pkgs.pkg-config ];
@@ -1584,6 +1585,7 @@ let
     stringfish = [ pkgs.pcre2 ];
     stringi = [ pkgs.icu74 ];
     stsm = [ pkgs.gsl ];
+    sundialr = [ pkgs.sundials ];
     surveyvoi = with pkgs; [
       gmp
       mpfr
