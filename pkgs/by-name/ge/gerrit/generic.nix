@@ -12,6 +12,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gerrit";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${finalAttrs.version}.war";
     inherit hash;
