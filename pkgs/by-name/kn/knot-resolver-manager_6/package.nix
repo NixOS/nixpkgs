@@ -9,7 +9,7 @@ let
 in
 assert lib.versionAtLeast kresd.version "6.0.0";
 python3Packages.buildPythonPackage {
-  pname = "knot-resolver-manager_6";
+  pname = "knot-resolver";
   inherit (kresd) version src;
   pyproject = true;
 
