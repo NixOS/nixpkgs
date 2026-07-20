@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   enableParallelBuilding = true;
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postPatch = ''
     patchShebangs --build lib/dialects/*/Mksrc
