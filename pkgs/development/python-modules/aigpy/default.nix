@@ -11,19 +11,19 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aigpy";
   version = "2022.7.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1kQced6YdC/wvegqFVhZfej4+4aemGXvKysKjejP13w=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mutagen
     requests
     colorama
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.all;
   };
-}
+})
