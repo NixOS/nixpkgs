@@ -11753,6 +11753,10 @@ self: super: with self; {
     nixl = pkgs.nixl.override { python3Packages = self; };
   };
 
+  nixos-test-driver = toPythonModule (
+    callPackage ../../nixos/lib/test-driver { enableRuntimeDeps = false; }
+  );
+
   nixpkgs-plugin-update = callPackage ../development/python-modules/nixpkgs-plugin-update { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
