@@ -74,22 +74,17 @@ buildPythonPackage (finalAttrs: {
 
   env = {
     PYPI_RELEASE = 1;
-    CMAKE_ARGS = toString (
-      [
-        # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
-        # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
-        # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
-        # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
-        (lib.cmakeBool "MLX_BUILD_METAL" false)
-        (lib.cmakeBool "USE_SYSTEM_FMT" true)
-        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
-        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        (lib.cmakeBool "MLX_ENABLE_X64_MAC" true)
-      ]
-    );
+    CMAKE_ARGS = toString [
+      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
+      (lib.cmakeBool "MLX_BUILD_METAL" false)
+      (lib.cmakeBool "USE_SYSTEM_FMT" true)
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
+    ];
   };
 
   build-system = [
