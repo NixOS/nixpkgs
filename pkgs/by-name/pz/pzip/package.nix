@@ -32,7 +32,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/ybirader/pzip";
     changelog = "https://github.com/ybirader/pzip/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "pzip";
   };
 })
