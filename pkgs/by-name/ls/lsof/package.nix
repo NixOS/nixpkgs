@@ -9,6 +9,7 @@
   nukeReferences,
   freebsd,
   ed,
+  installShellFiles,
 }:
 
 let
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     which
     ed
+    installShellFiles
   ];
   buildInputs = [ ncurses ];
 
@@ -89,9 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/man/man8
-    cp Lsof.8 $out/man/man8/lsof.8
-    cp lsof $out/bin
+    installManPage --name lsof.8 Lsof.8
+    installBin lsof
     runHook postInstall
   '';
 
