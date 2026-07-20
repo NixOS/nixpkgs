@@ -112,20 +112,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
+    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
   };
 
   patches = [
-    # Skip execinfo include on musl
-    # https://github.com/microsoft/onnxruntime/pull/25726
-    ./musl-execinfo.patch
     # Add missing include which is only needed on musl (is implied in other includes on glibc)
     # https://github.com/microsoft/onnxruntime/pull/26969
     ./musl-cstdint.patch
@@ -134,12 +131,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # https://github.com/microsoft/onnxruntime/issues/9155
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
-  ]
-  # Include additional target_link_libraries needed for cudnn-frontend >= 2.19
-  # See: https://github.com/microsoft/onnxruntime/pull/28849
-  # These changes are included in 548ab6e and fc7a9f0 upstream
-  ++ lib.optionals cudaSupport [
-    ./nvrtc-link.patch
   ];
 
   postPatch = ''

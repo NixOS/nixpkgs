@@ -9173,6 +9173,8 @@ self: super: with self; {
 
   lhapdf = toPythonModule (pkgs.lhapdf.override { python3 = python; });
 
+  lhpapi = callPackage ../development/python-modules/lhpapi { };
+
   lib4package = callPackage ../development/python-modules/lib4package { };
 
   lib4sbom = callPackage ../development/python-modules/lib4sbom { };
@@ -9443,7 +9445,9 @@ self: super: with self; {
 
   libversion = callPackage ../development/python-modules/libversion { inherit (pkgs) libversion; };
 
-  libvirt = callPackage ../development/python-modules/libvirt { inherit (pkgs) libvirt; };
+  libvirt-python = callPackage ../development/python-modules/libvirt-python {
+    inherit (pkgs) libvirt;
+  };
 
   libxc = callPackage ../by-name/li/libxc/python.nix {
     libxc = pkgs.libxc_7;
@@ -10445,6 +10449,8 @@ self: super: with self; {
   mill-local = callPackage ../development/python-modules/mill-local { };
 
   millheater = callPackage ../development/python-modules/millheater { };
+
+  miltertest = callPackage ../development/python-modules/miltertest { };
 
   mim-solvers = callPackage ../development/python-modules/mim-solvers { inherit (pkgs) mim-solvers; };
 

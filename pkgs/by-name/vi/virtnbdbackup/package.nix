@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    libvirt
+    libvirt-python
     tqdm
     libnbd
     lz4
