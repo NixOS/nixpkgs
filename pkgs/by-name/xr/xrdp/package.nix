@@ -78,7 +78,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.10.6";
+    version = "0.10.6.1-rc.1";
 
     src = applyPatches {
       inherit version;
@@ -89,7 +89,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-BoIpWafUWznRHN8BaZmld8vVbZtywaGiooGPnDtDCjM=";
+        hash = "sha256-8dvYy7RKKP+KRQD69E+VfAaaWv72b80IiQ2d3NVRGlU=";
       };
     };
 
