@@ -32,6 +32,8 @@
   gtk4,
   desktop-file-utils,
   xdg-user-dirs,
+  libglycin,
+  libglycin-gtk4,
 }:
 let
   # Helper method to reduce redundancy
@@ -225,6 +227,17 @@ lib.trivial.pipe super [
       })
     ];
     meta.maintainers = with lib.maintainers; [ andersk ];
+  }))
+
+  (patchExtension "user-theme-x@tuberry.github.io" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/user-theme-x_at_tuberry.github.io.patch {
+        typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
+          libglycin
+          libglycin-gtk4
+        ];
+      })
+    ];
   }))
 
   (patchExtension "Vitals@CoreCoding.com" (old: {
