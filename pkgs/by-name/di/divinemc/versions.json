@@ -1,0 +1,124 @@
+{
+  "latest": "26.2",
+  "versions": {
+    "26.2": {
+      "build": 7,
+      "channel": "STABLE",
+      "java": 25,
+      "url": "https://files.bxteam.org/divinemc/versions/26.2/7/divinemc-26.2-7.jar",
+      "hash": "sha256-gxtcXzfrQpCIezipCK1oLqwM+HZMIMWHtKwr27w94Xo="
+    },
+    "26.1.2": {
+      "build": 14,
+      "channel": "STABLE",
+      "java": 25,
+      "url": "https://files.bxteam.org/divinemc/versions/26.1.2/14/divinemc-26.1.2-14.jar",
+      "hash": "sha256-eU6CuW0ucBY3r9cx+fLIJk/LACYEJpP4wF/sOYjZfdM="
+    },
+    "1.21.11": {
+      "build": 29,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.11/29/divinemc-1.21.11-29.jar",
+      "hash": "sha256-37HP3rj3PmWmMpyXbhu6RyCZ84ffEcy5/Zi96ERn3Xs="
+    },
+    "1.21.10": {
+      "build": 29,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.10/29/divinemc-1.21.10-29.jar",
+      "hash": "sha256-autdMD3oOQ1GfV5fA+9I8Nl4zIKAhDSK/lJGu6VdTYc="
+    },
+    "1.21.8": {
+      "build": 33,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.8/33/divinemc-1.21.8-33.jar",
+      "hash": "sha256-Egt2dwEJFTgH8sUwHWAvYBqbm3Y5/oean+x/4K5g70s="
+    },
+    "1.21.7": {
+      "build": 11,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.7/11/divinemc-1.21.7-11.jar",
+      "hash": "sha256-ZXL3JcDaZY05ZEfUSZLagYu05ghebbSbbrcUeInnywY="
+    },
+    "1.21.6": {
+      "build": 9,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.6/9/divinemc-1.21.6-9.jar",
+      "hash": "sha256-Q+9erABlnLbLHMn03WQ4GY/Fjyij96ljYoWktHJPXgI="
+    },
+    "1.21.5": {
+      "build": 26,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.5/26/divinemc-1.21.5-26.jar",
+      "hash": "sha256-J1R+zI85Stv3mc951vV4/QNKSCPMeJbcXMLavZCfsoM="
+    },
+    "1.21.4": {
+      "build": 476,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.4/476/divinemc-1.21.4-476.jar",
+      "hash": "sha256-s2Ohs73LKTwH09D7XoLx2QAgXZSQw0DajHeiuHcKCEE="
+    },
+    "1.21.3": {
+      "build": 418,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.3/418/DivineMC-paperclip-1.21.3-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-5VaRqL0kixoA2XJ9t0v2z7IwF+Y3QTskPyqZz75h9Sg="
+    },
+    "1.21.1": {
+      "build": 413,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21.1/413/DivineMC-paperclip-1.21.1-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-sNq8IenGpD+3/aYfKelFyCKEbT6XH1d9I5ULPDz6BQc="
+    },
+    "1.21": {
+      "build": 400,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.21/400/DivineMC-paperclip-1.21-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-5O/kWfKZpbuAzsvRHHXZZUcV7jlE8yNZmTZEBe13xXA="
+    },
+    "1.20.6": {
+      "build": 364,
+      "channel": "STABLE",
+      "java": 21,
+      "url": "https://files.bxteam.org/divinemc/versions/1.20.6/364/DivineMC-paperclip-1.20.6-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-vAuBhkotfFjzHb+28nQKpj4OG3EMWkRU0Dbg4c1dvdg="
+    },
+    "1.20.4": {
+      "build": 325,
+      "channel": "STABLE",
+      "java": 17,
+      "url": "https://files.bxteam.org/divinemc/versions/1.20.4/325/DivineMC-paperclip-1.20.4-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-uCVKv+Yu9qQt35EcJFMGDcqebs86FmzHp0GUY7scqhM="
+    },
+    "1.20.2": {
+      "build": 244,
+      "channel": "STABLE",
+      "java": 17,
+      "url": "https://files.bxteam.org/divinemc/versions/1.20.2/244/DivineMC-paperclip-1.20.2-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-PREmQ7MplCgozpOKQ1egHnWRUsqWGG13UZEccnYwUlc="
+    },
+    "1.20.1": {
+      "build": 214,
+      "channel": "STABLE",
+      "java": 17,
+      "url": "https://files.bxteam.org/divinemc/versions/1.20.1/214/DivineMC-paperclip-1.20.1-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-oPdDilgkTeydpkJCl8j4SRnrMu78GTFmd/f80pPEzns="
+    },
+    "1.20": {
+      "build": 160,
+      "channel": "STABLE",
+      "java": 17,
+      "url": "https://files.bxteam.org/divinemc/versions/1.20/160/DivineMC-paperclip-1.20-R0.1-SNAPSHOT-reobf.jar",
+      "hash": "sha256-U/d1o0yx59+6DRxd8nXmL0kRkwM8/erjzerf8wx0zxM="
+    }
+  }
+}
