@@ -4,6 +4,7 @@
   fetchPypi,
   sexpdata,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -19,7 +20,17 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [ sexpdata ];
-  doCheck = false;
+
+  pythonImportsCheck = [ "epc" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # imports nose
+    "epc/tests/test_py2py.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
