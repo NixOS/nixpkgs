@@ -9912,6 +9912,8 @@ with pkgs;
 
   ddnet-server = ddnet.override { buildClient = false; };
 
+  divinemcServers = callPackage ../by-name/di/divinemc/versions.nix { };
+
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
   inherit (dwarf-fortress-packages) dwarf-fortress dwarf-fortress-full dwarf-therapist;
