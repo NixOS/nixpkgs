@@ -18,13 +18,13 @@
 }:
 let
   pname = "feishin";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-Lu1vxZg8n+3zkvvJxyD/yw6RIfv1DHCuMdlSPxSc4cE=";
+    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
 
   electron = electron_41;
