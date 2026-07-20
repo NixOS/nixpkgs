@@ -113,11 +113,7 @@ buildPythonPackage (finalAttrs: {
     "python/tests/"
   ];
 
-  disabledTests = [
-    # brittle memory leak test, see: https://github.com/ml-explore/mlx/pull/3088
-    "test_siblings_without_eval"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
     "test_lapack"
     "test_multivariate_normal"
