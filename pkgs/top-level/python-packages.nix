@@ -9445,7 +9445,9 @@ self: super: with self; {
 
   libversion = callPackage ../development/python-modules/libversion { inherit (pkgs) libversion; };
 
-  libvirt = callPackage ../development/python-modules/libvirt { inherit (pkgs) libvirt; };
+  libvirt-python = callPackage ../development/python-modules/libvirt-python {
+    inherit (pkgs) libvirt;
+  };
 
   libxc = callPackage ../by-name/li/libxc/python.nix {
     libxc = pkgs.libxc_7;

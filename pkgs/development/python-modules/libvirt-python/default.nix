@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "libvirt";
+  pname = "libvirt-python";
   version = "12.4.0";
   pyproject = true;
 
