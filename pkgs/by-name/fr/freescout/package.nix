@@ -7,13 +7,13 @@
 stdenv.mkDerivation (finalAttrs: {
   preferLocalBuild = true;
   pname = "freescout";
-  version = "1.8.229";
+  version = "1.8.230";
 
   src = fetchFromGitHub {
     owner = "freescout-help-desk";
     repo = "freescout";
     tag = finalAttrs.version;
-    hash = "sha256-oA/GWEhdqmXt7v6iRKqud75uUBj1a6nKN7EjaYF0USk=";
+    hash = "sha256-QAMZj1tUSaErLTJR8IfzatNw5G8lznA4mNa+a4Bd5rQ=";
   };
 
   patches = [

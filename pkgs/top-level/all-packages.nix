@@ -6807,10 +6807,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra {
-    hdf5 = hdf5.override { apiVersion = "v110"; };
-  };
-
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
@@ -9087,13 +9083,6 @@ with pkgs;
     libOnly = true;
     withConplay = false;
   };
-
-  mplayer = callPackage ../applications/video/mplayer (
-    {
-      libdvdnav = libdvdnav_4_2_1;
-    }
-    // (config.mplayer or { })
-  );
 
   mpvScripts = callPackage ../by-name/mp/mpv/scripts.nix { };
 

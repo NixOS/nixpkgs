@@ -351,6 +351,36 @@ final: prev: {
     }
   ) { };
 
+  canola-nvim = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "canola.nvim";
+      version = "0.1.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/canola.nvim-0.1.0-1.rockspec";
+          sha256 = "1aig4ndcqj7mliawckzvcv6gaigk9l2nqdfn96qd51jrmgy0ghyp";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/barrettruth/canola.nvim/archive/v0.1.0.zip";
+        sha256 = "1ykdjz1ysbn1f9a2pmj595ishh2yzis5d1d0a51ny5j63fjic3p8";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/barrettruth/canola.nvim";
+        license = lib.licenses.mit;
+        description = "a refined oil.nvim";
+      };
+    }
+  ) { };
+
   cassowary = callPackage (
     {
       buildLuarocksPackage,
