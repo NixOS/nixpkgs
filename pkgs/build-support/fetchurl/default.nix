@@ -52,6 +52,11 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+  # partially applied set of functions for each hash type
+  # this is indexed into with a prefix to avoid re-calling hasPrefix, since it
+  # takes advantage of partial application for performance reasons
+  hasAlgoPrefix = lib.genAttrs [ "sha256" "sha1" "sha512" ] hasPrefix;
+
   /**
     Resolve a URL against the available mirrors.
 
@@ -310,7 +315,7 @@ lib.extendMkDerivation {
         if
           hash_.outputHashAlgo == null
           || hash_.outputHash == ""
-          || hasPrefix hash_.outputHashAlgo hash_.outputHash
+          || hasAlgoPrefix.${hash_.outputHashAlgo} hash_.outputHash
         then
           hash_.outputHash
         else
