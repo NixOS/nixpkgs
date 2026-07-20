@@ -1,0 +1,12 @@
+diff --git a/forge.config.ts b/forge.config.ts
+index 198cdcc0..9997b4c8 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -87,6 +87,7 @@ const config: ForgeConfig = {
+ 			}
+ 		},
+ 		packageAfterCopy: async (_forgeConfig, buildPath, _electronVersion, platform, _arch) => {
++			return;
+ 			const binaryName = platform === "win32" ? "gomuks.exe" : "gomuks"
+ 			const resourcesDir = path.resolve(buildPath, "..")
+ 			const dest = path.join(resourcesDir, binaryName)
