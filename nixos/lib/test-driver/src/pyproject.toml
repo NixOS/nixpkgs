@@ -5,6 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nixos-test-driver"
 version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+  "colorama",
+  "junit-xml",
+  "ovmfvartool",
+  "pydantic",
+  "remote-pdb",
+]
+
+[project.optional-dependencies]
+interactive = ["ipython", "ptpython"]
 
 [project.scripts]
 nixos-test-driver = "test_driver:main"
