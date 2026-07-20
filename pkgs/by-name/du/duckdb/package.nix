@@ -157,8 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstallCheck
       (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}${
-        lib.optionalString stdenv.hostPlatform.isx86_64 " >/dev/null" }
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}${lib.optionalString stdenv.hostPlatform.isx86_64 " >/dev/null"}
 
       runHook postInstallCheck
     '';
