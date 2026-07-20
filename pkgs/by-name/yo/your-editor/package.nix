@@ -1,19 +1,22 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "your-editor";
   version = "1601";
 
   src = fetchFromGitHub {
     owner = "your-editor";
     repo = "yed";
-    rev = finalAttrs.version;
-    sha256 = "sha256-pa9ibXyuWq7jRYsn3bGdqvLWbwQO2VYsP6Bk+BayQ8o=";
+    tag = finalAttrs.version;
+    hash = "sha256-pa9ibXyuWq7jRYsn3bGdqvLWbwQO2VYsP6Bk+BayQ8o=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
