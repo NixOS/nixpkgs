@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bluec0re";
     repo = "android-backup-tools";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fONMfy1SQTRuGO/VRZ28iex4tflH3XO0zLg1YjY0gzA=";
   };
 
