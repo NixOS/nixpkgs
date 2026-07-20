@@ -81,7 +81,7 @@
   },
   {
     "name": "Acme",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
+    "designer": "Juan Pablo del Peral, HT Fonts",
     "minisite": "",
     "category": "SANS_SERIF",
     "license": "OFL",
@@ -208,6 +208,14 @@
     "path": "ofl/akshar"
   },
   {
+    "name": "Akt",
+    "designer": "Dmitry Grenev",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/akt"
+  },
+  {
     "name": "Aladin",
     "designer": "Sudtipos",
     "minisite": "",
@@ -265,15 +273,15 @@
   },
   {
     "name": "Alegreya",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
-    "minisite": "https://huertatipografica.com/en/fonts/alegreya-ht-pro",
+    "designer": "Juan Pablo del Peral, HT Fonts",
+    "minisite": "https://htfonts.com/en/fonts/alegreya",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/alegreya"
   },
   {
     "name": "Alegreya SC",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
+    "designer": "Juan Pablo del Peral, HT Fonts",
     "minisite": "",
     "category": "SERIF",
     "license": "OFL",
@@ -281,16 +289,16 @@
   },
   {
     "name": "Alegreya Sans",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
-    "minisite": "https://huertatipografica.com/en/fonts/alegreya-sans-ht",
+    "designer": "Juan Pablo del Peral, HT Fonts",
+    "minisite": "https://htfonts.com/en/fonts/alegreya-sans",
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/alegreyasans"
   },
   {
     "name": "Alegreya Sans SC",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
-    "minisite": "https://huertatipografica.com/en/fonts/alegreya-sans-ht",
+    "designer": "Juan Pablo del Peral, HT Fonts",
+    "minisite": "https://htfonts.com/en/fonts/alegreya-sans",
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/alegreyasanssc"
@@ -334,6 +342,14 @@
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/alice"
+  },
+  {
+    "name": "Alien Block",
+    "designer": "Kensuke Uchida",
+    "minisite": "",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/alienblock"
   },
   {
     "name": "Alike",
@@ -601,8 +617,8 @@
   },
   {
     "name": "Andada Pro",
-    "designer": "Huerta Tipográfica, Carolina Giovagnoli",
-    "minisite": "https://huertatipografica.com/en/fonts/andada-ht-pro",
+    "designer": "HT Fonts, Carolina Giovagnoli",
+    "minisite": "https://htfonts.com/en/fonts/andada",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/andadapro"
@@ -810,7 +826,7 @@
   {
     "name": "Arapey",
     "designer": "Eduardo Tunni",
-    "minisite": "",
+    "minisite": "https://etunni.github.io/Arapey-Minisite",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/arapey"
@@ -900,8 +916,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "SANS_SERIF",
-    "license": "APACHE2",
-    "path": "apache/arimo"
+    "license": "OFL",
+    "path": "ofl/arimo"
   },
   {
     "name": "Arizonia",
@@ -1230,6 +1246,14 @@
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/bizudpmincho"
+  },
+  {
+    "name": "BJCree",
+    "designer": "SIL International",
+    "minisite": "",
+    "category": "SERIF",
+    "license": "OFL",
+    "path": "ofl/bjcree"
   },
   {
     "name": "Babylonica",
@@ -2368,6 +2392,14 @@
     "path": "ofl/bytesized"
   },
   {
+    "name": "Caacupe One",
+    "designer": "Magdalena Alonso",
+    "minisite": "",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/caacupeone"
+  },
+  {
     "name": "Cabin",
     "designer": "Impallari Type, Rodrigo Fuenzalida",
     "minisite": "",
@@ -2441,7 +2473,7 @@
   },
   {
     "name": "Caladea",
-    "designer": "Andrés Torresi, Carolina Giovagnoli",
+    "designer": "HT Fonts, Carolina Giovagnoli, Andrés Torresi",
     "minisite": "",
     "category": "SERIF",
     "license": "OFL",
@@ -2473,8 +2505,8 @@
   },
   {
     "name": "Cambo",
-    "designer": "Huerta Tipográfica",
-    "minisite": "https://huertatipografica.com/en/fonts/cambo-ht",
+    "designer": "HT Fonts, Carolina Giovagnoli, Andres Torresi",
+    "minisite": "https://htfonts.com/en/fonts/cambo",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/cambo"
@@ -3188,8 +3220,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "MONOSPACE",
-    "license": "APACHE2",
-    "path": "apache/cousine"
+    "license": "OFL",
+    "path": "ofl/cousine"
   },
   {
     "name": "Coustard",
@@ -3992,6 +4024,14 @@
     "path": "ofl/esteban"
   },
   {
+    "name": "Estedad",
+    "designer": "Amin Abedi, Fontamin",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/estedad"
+  },
+  {
     "name": "Estonia",
     "designer": "Robert Leuschke",
     "minisite": "",
@@ -4214,6 +4254,22 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/finlandica"
+  },
+  {
+    "name": "Finlandica Headline",
+    "designer": "Helsinki Type Studio, Niklas Ekholm, Juho Hiilivirta, Jaakko Suomalainen",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/finlandicaheadline"
+  },
+  {
+    "name": "Finlandica Text",
+    "designer": "Helsinki Type Studio, Niklas Ekholm, Juho Hiilivirta, Jaakko Suomalainen",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/finlandicatext"
   },
   {
     "name": "Fira Code",
@@ -4640,6 +4696,14 @@
     "path": "ofl/geistmono"
   },
   {
+    "name": "Geist Pixel",
+    "designer": "Andrés Briganti, Evil Rabbit, Guillermo Rauch",
+    "minisite": "https://vercel.com/font",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/geistpixel"
+  },
+  {
     "name": "Gelasio",
     "designer": "Eben Sorkin",
     "minisite": "",
@@ -4702,6 +4766,14 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/geom"
+  },
+  {
+    "name": "Geomini",
+    "designer": "FontBob",
+    "minisite": "https://fontbob.com/geomini",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/geomini"
   },
   {
     "name": "Georama",
@@ -4841,7 +4913,7 @@
   },
   {
     "name": "Gochi Hand",
-    "designer": "Huerta Tipográfica",
+    "designer": "HT Fonts",
     "minisite": "",
     "category": "HANDWRITING",
     "license": "OFL",
@@ -5286,6 +5358,14 @@
     "category": "HANDWRITING",
     "license": "OFL",
     "path": "ofl/himelody"
+  },
+  {
+    "name": "Hibur Mono",
+    "designer": "TypeHabesha, Behailu Berento",
+    "minisite": "",
+    "category": "MONOSPACE",
+    "license": "OFL",
+    "path": "ofl/hiburmono"
   },
   {
     "name": "Hina Mincho",
@@ -7368,6 +7448,14 @@
     "path": "ofl/mplusrounded1c"
   },
   {
+    "name": "M PLUS U",
+    "designer": "Coji Morishita",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/mplusu"
+  },
+  {
     "name": "Ma Shan Zheng",
     "designer": "Ma ShanZheng",
     "minisite": "",
@@ -8110,6 +8198,14 @@
     "category": "HANDWRITING",
     "license": "OFL",
     "path": "ofl/montecarlo"
+  },
+  {
+    "name": "Montenegrin Gothic One",
+    "designer": "Žarko Banović",
+    "minisite": "",
+    "category": "SERIF",
+    "license": "OFL",
+    "path": "ofl/montenegringothicone"
   },
   {
     "name": "Montez",
@@ -11113,8 +11209,8 @@
   },
   {
     "name": "Piazzolla",
-    "designer": "Juan Pablo del Peral, Huerta Tipográfica",
-    "minisite": "https://piazzolla.huertatipografica.com/",
+    "designer": "Juan Pablo del Peral, HT Fonts",
+    "minisite": "https://piazzolla.htfonts.com/",
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/piazzolla"
@@ -12080,6 +12176,14 @@
     "path": "ofl/playwritezaguides"
   },
   {
+    "name": "Pliant",
+    "designer": "Non Foundry, Jona Saucedo",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/pliant"
+  },
+  {
     "name": "Plus Jakarta Sans",
     "designer": "Tokotype",
     "minisite": "",
@@ -12860,7 +12964,7 @@
     "designer": "Christian Robertson",
     "minisite": "",
     "category": "MONOSPACE",
-    "license": "APACHE2",
+    "license": "OFL",
     "path": "ofl/robotomono"
   },
   {
@@ -13384,6 +13488,14 @@
     "path": "ofl/sairasemicondensed"
   },
   {
+    "name": "Saira Stencil",
+    "designer": "Hector Gatti, Omnibus-Type",
+    "minisite": "",
+    "category": "DISPLAY",
+    "license": "OFL",
+    "path": "ofl/sairastencil"
+  },
+  {
     "name": "Saira Stencil One",
     "designer": "Hector Gatti, Omnibus-Type",
     "minisite": "",
@@ -13465,7 +13577,7 @@
   },
   {
     "name": "Sarala",
-    "designer": "Andres Torresi",
+    "designer": "HT Fonts, Andres Torresi",
     "minisite": "",
     "category": "SANS_SERIF",
     "license": "OFL",
@@ -13574,6 +13686,14 @@
     "category": "SERIF",
     "license": "OFL",
     "path": "ofl/scopeone"
+  },
+  {
+    "name": "Scoutie Sans",
+    "designer": "Tyler Finck",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/scoutiesans"
   },
   {
     "name": "Seaweed Script",
@@ -14440,6 +14560,14 @@
     "path": "ofl/strait"
   },
   {
+    "name": "Strichpunkt Sans",
+    "designer": "René Bieder",
+    "minisite": "",
+    "category": "SANS_SERIF",
+    "license": "OFL",
+    "path": "ofl/strichpunktsans"
+  },
+  {
     "name": "Strong",
     "designer": "Gaslight",
     "minisite": "",
@@ -14705,7 +14833,7 @@
   },
   {
     "name": "Telex",
-    "designer": "Huerta Tipográfica",
+    "designer": "HT Fonts, Andres Torresi",
     "minisite": "",
     "category": "SANS_SERIF",
     "license": "OFL",
@@ -14836,8 +14964,8 @@
     "designer": "Steve Matteson",
     "minisite": "",
     "category": "SERIF",
-    "license": "APACHE2",
-    "path": "apache/tinos"
+    "license": "OFL",
+    "path": "ofl/tinos"
   },
   {
     "name": "Tiny5",
@@ -15790,6 +15918,22 @@
     "category": "SANS_SERIF",
     "license": "OFL",
     "path": "ofl/yuseimagic"
+  },
+  {
+    "name": "Yuyu",
+    "designer": "Julia García López",
+    "minisite": "",
+    "category": "HANDWRITING",
+    "license": "OFL",
+    "path": "ofl/yuyu"
+  },
+  {
+    "name": "Yuyu Short",
+    "designer": "Julia García López",
+    "minisite": "",
+    "category": "HANDWRITING",
+    "license": "OFL",
+    "path": "ofl/yuyushort"
   },
   {
     "name": "ZCOOL KuaiLe",
