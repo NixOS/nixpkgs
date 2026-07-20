@@ -3512,8 +3512,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.28.1";
-          hash = "sha256-+Pc9blI/n6JeokdUhWjLzicwBv90p4MjhK2rvpQ2xrA=";
+          version = "1.29.0";
+          hash = "sha256-/VIAT9nnDG52Jzh+j0E038NSjoLCXZSVRSvGWXOeuuY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
