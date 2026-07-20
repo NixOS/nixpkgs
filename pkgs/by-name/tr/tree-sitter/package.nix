@@ -80,6 +80,10 @@ let
     name: value: hasTreeSitterPrefix name && lib.isDerivation value
   );
 
+  removeTreesitterPrefix = lib.strings.removePrefix "tree-sitter-";
+  removeGrammarSuffix = lib.strings.removeSuffix "-grammar";
+  replaceHyphens = lib.strings.replaceStrings [ "-" ] "_";
+
   mkGrammarLinkFarm =
     grammars:
     linkFarm "grammars" (
@@ -89,11 +93,7 @@ let
           name = lib.strings.getName drv;
         in
         {
-          name =
-            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
-              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
-            ))
-            + ".so";
+          name = (replaceHyphens (removeTreesitterPrefix (removeGrammarSuffix name))) + ".so";
           path = "${drv}/parser";
         }
       ) grammars
