@@ -91,6 +91,9 @@ let
     in
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
+  hasColonInfix = hasInfix ":";
+  hasNewlineInfix = hasInfix "\n";
+
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
   # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
@@ -580,7 +583,7 @@ rec {
 
   passwdEntry =
     entryType:
-    addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str))
+    addCheck entryType (str: !(hasColonInfix str || hasNewlineInfix str))
     // {
       name = "passwdEntry ${entryType.name}";
       description = "${
