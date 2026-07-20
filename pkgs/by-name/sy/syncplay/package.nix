@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3Packages,
   qt6,
   enableGUI ? true,
@@ -22,6 +23,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     ./trusted_certificates.patch
+    # https://github.com/Syncplay/syncplay/pull/775
+    # Remove next update
+    (fetchpatch {
+      name = "pyopenssl_fix.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/Syncplay/syncplay/pull/775.patch";
+      hash = "sha256-6bJZtWgb9e7ZK51xjkghloIVQRdLI2UJiVa4fyxDa5w=";
+    })
   ];
 
   buildInputs = lib.optionals enableGUI [
