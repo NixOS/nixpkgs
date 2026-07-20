@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     defusedxml
     gitpython
     libcloud
-    libvirt
+    libvirt-python
     magic
     mwclient
     oscrypto
