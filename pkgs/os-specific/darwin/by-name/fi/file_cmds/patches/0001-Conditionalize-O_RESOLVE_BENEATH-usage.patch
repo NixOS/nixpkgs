@@ -1,0 +1,28 @@
+From dc8df286a20aedd8295b69798346b0d893e30773 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 10 Apr 2026 20:08:11 -0400
+Subject: [PATCH] Conditionalize-O_RESOLVE_BENEATH-usage
+
+---
+ cp/cp.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/cp/cp.c b/cp/cp.c
+index b1cac37..8ed535a 100644
+--- a/cp/cp.c
++++ b/cp/cp.c
+@@ -331,6 +331,11 @@ copy(char *argv[], enum op type, int fts_options, struct stat *root_stat)
+ 	mode_t mask, mode;
+ 	bool beneath = Rflag && type != FILE_TO_FILE;
+ 
++	/* `O_RESOLVE_BENEATH` is only supported on macOS 26 or newer */
++	if (!__builtin_available(macOS 26.0, *)) {
++		beneath = false;
++	}
++
+ 	/*
+ 	 * Keep an inverted copy of the umask, for use in correcting
+ 	 * permissions on created directories when not using -p.
+-- 
+2.51.2
+

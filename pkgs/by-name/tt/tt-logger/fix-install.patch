@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3c7ca3..927e11c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -41,8 +41,9 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
+         INTERFACE
+             FILE_SET api
+             TYPE HEADERS
+-            BASE_DIRS ${CMAKE_INSTALL_INCLUDEDIR}
+-            FILES ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}/tt-logger.hpp
++            BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include
++            FILES
++                include/${PROJECT_NAME}/tt-logger.hpp
+     )
+ endif()
+ 

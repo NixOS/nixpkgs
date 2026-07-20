@@ -1,0 +1,340 @@
+From 084ef529c5fb816927ca54866f66b340265aa9f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eivind=20N=C3=A6ss?= <eivnaes@yahoo.com>
+Date: Sat, 4 Mar 2023 21:20:43 +0000
+Subject: [PATCH] Adding support for compiling against pppd-2.5.0 (or master
+ branch)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Eivind Næss <eivnaes@yahoo.com>
+---
+ Makefile.am                                   |  5 +-
+ configure.ac                                  | 37 +++++++-
+ src/nm-fortisslvpn-pppd-compat.h              | 93 +++++++++++++++++++
+ src/nm-fortisslvpn-pppd-plugin.c              | 24 ++---
+ ...-status.h => nm-fortisslvpn-pppd-status.h} |  0
+ src/nm-fortisslvpn-service.c                  |  2 +-
+ 6 files changed, 145 insertions(+), 16 deletions(-)
+ create mode 100644 src/nm-fortisslvpn-pppd-compat.h
+ rename src/{nm-ppp-status.h => nm-fortisslvpn-pppd-status.h} (100%)
+
+diff --git a/Makefile.am b/Makefile.am
+index b2e5533..e1e5ec9 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -81,7 +81,7 @@ libexec_PROGRAMS += src/nm-fortisslvpn-service
+ src_nm_fortisslvpn_service_SOURCES = \
+ 	shared/nm-utils/nm-shared-utils.c \
+ 	shared/nm-utils/nm-shared-utils.h \
+-	src/nm-ppp-status.h \
++	src/nm-fortisslvpn-pppd-status.h \
+ 	src/nm-fortisslvpn-service.h \
+ 	src/nm-fortisslvpn-service.c \
+ 	shared/nm-fortissl-properties.c \
+@@ -106,7 +106,8 @@ src_nm_fortisslvpn_pppd_plugin_la_SOURCES = \
+ 	shared/nm-utils/nm-shared-utils.c \
+ 	shared/nm-utils/nm-shared-utils.h \
+ 	src/nm-fortisslvpn-pppd-plugin.c \
+-	src/nm-ppp-status.h
++	src/nm-fortisslvpn-pppd-compat.h \
++	src/nm-fortisslvpn-pppd-status.h
+ nodist_src_nm_fortisslvpn_pppd_plugin_la_SOURCES = \
+ 	src/nm-fortisslvpn-pppd-service-dbus.h
+ src_nm_fortisslvpn_pppd_plugin_la_CPPFLAGS = $(src_cppflags)
+diff --git a/configure.ac b/configure.ac
+index a998707..877493e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -19,7 +19,10 @@ AC_PROG_CC
+ AM_PROG_CC_C_O
+ AC_PROG_INSTALL
+ AC_PROG_LIBTOOL
++AC_PROG_CPP
++AC_PROG_EGREP
+ AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
++PKG_PROG_PKG_CONFIG()
+ 
+ AC_GNU_SOURCE
+ 
+@@ -37,20 +40,50 @@ dnl
+ dnl Required headers
+ dnl
+ AC_HEADER_STDC
+-AC_CHECK_HEADERS(fcntl.h paths.h sys/ioctl.h sys/time.h syslog.h unistd.h)
++AC_CHECK_HEADERS(fcntl.h paths.h stdarg.h stdbool.h sys/ioctl.h sys/time.h syslog.h unistd.h)
+ 
+ AC_CHECK_HEADERS(pppd/pppd.h,,
+   AC_MSG_ERROR(couldn't find pppd.h. pppd development headers are required.))
+ 
++dnl
++dnl Check the presense of other pppd/*.h files
++AC_CHECK_HEADERS([
++    pppd/chap.h
++    pppd/chap-new.h
++    pppd/chap_ms.h
++    ])
++
++dnl
++dnl Versions >= 2.5.0 will have pkg-config support
++PKG_CHECK_EXISTS([pppd],
++    [AS_VAR_SET([pppd_pkgconfig_support],[yes])])
++
++dnl
++dnl Get the version of pppd using pkg-config, assume 2.4.9 if not present
++PPPD_VERSION=2.4.5
++if test x"$pppd_pkgconfig_support" = xyes; then
++    PPPD_VERSION=`$PKG_CONFIG --modversion pppd`
++fi
++
++
+ AC_ARG_WITH([pppd-plugin-dir], AS_HELP_STRING([--with-pppd-plugin-dir=DIR], [path to the pppd plugins directory]))
+ 
+ if test -n "$with_pppd_plugin_dir" ; then
+ 	PPPD_PLUGIN_DIR="$with_pppd_plugin_dir"
+ else
+-	PPPD_PLUGIN_DIR="${libdir}/pppd/2.4.5"
++	PPPD_PLUGIN_DIR="${libdir}/pppd/$PPPD_VERSION"
+ fi
+ AC_SUBST(PPPD_PLUGIN_DIR)
+ 
++dnl The version of pppd dictates what code can be included, i.e. enable use of
++dnl   #if WITH_PPP_VERSION >= PPP_VERSION(2,5,0) in the code
++AC_DEFINE_UNQUOTED([PPP_VERSION(x,y,z)],
++    [((x & 0xFF) << 16 | (y & 0xFF) << 8 | (z & 0xFF) << 0)],
++    [Macro to help determine the particular version of pppd])
++PPP_VERSION=$(echo $PPPD_VERSION | sed -e "s/\./\,/g")
++AC_DEFINE_UNQUOTED(WITH_PPP_VERSION, PPP_VERSION($PPP_VERSION),
++    [The real version of pppd represented as an int])
++
+ dnl
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ dnl
+diff --git a/src/nm-fortisslvpn-pppd-compat.h b/src/nm-fortisslvpn-pppd-compat.h
+new file mode 100644
+index 0000000..9a02908
+--- /dev/null
++++ b/src/nm-fortisslvpn-pppd-compat.h
+@@ -0,0 +1,93 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
++/* nm-sstp-service - sstp (and other pppd) integration with NetworkManager
++ *
++ * Copyright (C) Eivind Næss, eivnaes@yahoo.com
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ */
++
++#ifndef __NM_FORTISSLVPN_PPPD_COMPAT_H__
++#define __NM_FORTISSLVPN_PPPD_COMPAT_H__
++
++#define INET6      1
++
++// PPP < 2.5.0 defines and exports VERSION which overlaps with current package VERSION define.
++//   this silly macro magic is to work around that.
++
++#undef VERSION
++#include <pppd/pppd.h>
++
++#ifndef PPPD_VERSION
++#define PPPD_VERSION VERSION
++#endif
++
++#include <pppd/fsm.h>
++#include <pppd/ccp.h>
++#include <pppd/eui64.h>
++#include <pppd/ipcp.h>
++#include <pppd/ipv6cp.h>
++#include <pppd/eap.h>
++#include <pppd/upap.h>
++
++#ifdef HAVE_PPPD_CHAP_H
++ #include <pppd/chap.h>
++#endif
++
++#ifdef HAVE_PPPD_CHAP_NEW_H
++ #include <pppd/chap-new.h>
++#endif
++
++#ifdef HAVE_PPPD_CHAP_MS_H
++ #include <pppd/chap_ms.h>
++#endif
++
++#ifndef PPP_PROTO_CHAP
++#define PPP_PROTO_CHAP              0xc223
++#endif 
++
++#ifndef PPP_PROTO_EAP
++#define PPP_PROTO_EAP               0xc227
++#endif
++
++#if WITH_PPP_VERSION < PPP_VERSION(2,5,0)
++
++static inline bool debug_on(void)
++{
++    return debug;
++}
++
++static inline const char *ppp_ipparam(void)
++{
++    return ipparam;
++}
++
++static inline int ppp_ifunit(void)
++{
++    return ifunit;
++}
++
++static inline const char *ppp_ifname(void)
++{
++    return ifname;
++}
++
++static inline int ppp_get_mtu(int idx)
++{
++    return netif_get_mtu(idx);
++}
++
++#endif // #if WITH_PPP_VERSION < PPP_VERSION(2,5,0)
++#endif // #ifdef __NM_FORTISSLVPN_PPPD_COMPAT_H__
+diff --git a/src/nm-fortisslvpn-pppd-plugin.c b/src/nm-fortisslvpn-pppd-plugin.c
+index f2ad262..c2efb9a 100644
+--- a/src/nm-fortisslvpn-pppd-plugin.c
++++ b/src/nm-fortisslvpn-pppd-plugin.c
+@@ -23,12 +23,6 @@
+ #define ___CONFIG_H__
+ #include <config.h>
+ 
+-#include <pppd/pppd.h>
+-#include <pppd/fsm.h>
+-#include <pppd/ipcp.h>
+-
+-#include "nm-default.h"
+-
+ #include <sys/types.h>
+ #include <string.h>
+ #include <sys/socket.h>
+@@ -42,10 +36,12 @@
+ #include <grp.h>
+ #include <glib/gstdio.h>
+ 
++#include "nm-fortisslvpn-pppd-status.h"
++#include "nm-fortisslvpn-pppd-compat.h"
+ #include "nm-fortisslvpn-pppd-service-dbus.h"
+-#include "nm-fortisslvpn-service.h"
+-#include "nm-ppp-status.h"
+ 
++#include "nm-default.h"
++#include "nm-fortisslvpn-service.h"
+ #include "nm-utils/nm-shared-utils.h"
+ #include "nm-utils/nm-vpn-plugin-macros.h"
+ 
+@@ -80,7 +76,7 @@ static struct {
+ 
+ int plugin_init (void);
+ 
+-char pppd_version[] = VERSION;
++char pppd_version[] = PPPD_VERSION;
+ 
+ static void
+ chroot_sandbox (void)
+@@ -296,7 +292,7 @@ get_ip4_routes (in_addr_t ouraddr)
+ static void
+ nm_ip_up (void *data, int arg)
+ {
+-	guint32 pppd_made_up_address = htonl (0x0a404040 + ifunit);
++	guint32 pppd_made_up_address = htonl (0x0a404040 + ppp_ifunit());
+ 	ipcp_options opts = ipcp_gotoptions[0];
+ 	ipcp_options peer_opts = ipcp_hisoptions[0];
+ 	GVariantBuilder builder;
+@@ -317,7 +313,7 @@ nm_ip_up (void *data, int arg)
+ 
+ 	g_variant_builder_add (&builder, "{sv}",
+ 	                       NM_VPN_PLUGIN_IP4_CONFIG_TUNDEV,
+-	                       g_variant_new_string (ifname));
++	                       g_variant_new_string (ppp_ifname()));
+ 
+ 	str = g_getenv ("VPN_GATEWAY");
+ 	if (str) {
+@@ -442,8 +438,14 @@ plugin_init (void)
+ 		return -1;
+ 	}
+ 
++#if WITH_PPP_VERSION < PPP_VERSION(2,5,0)
+ 	add_notifier (&phasechange, nm_phasechange, NULL);
+ 	add_notifier (&ip_up_notifier, nm_ip_up, NULL);
+ 	add_notifier (&exitnotify, nm_exit_notify, NULL);
++#else
++	ppp_add_notify (NF_PHASE_CHANGE, nm_phasechange, NULL);
++	ppp_add_notify (NF_IP_UP, nm_ip_up, NULL);
++	ppp_add_notify (NF_EXIT, nm_exit_notify, NULL);
++#endif	
+ 	return 0;
+ }
+diff --git a/src/nm-ppp-status.h b/src/nm-fortisslvpn-pppd-status.h
+similarity index 100%
+rename from src/nm-ppp-status.h
+rename to src/nm-fortisslvpn-pppd-status.h
+diff --git a/src/nm-fortisslvpn-service.c b/src/nm-fortisslvpn-service.c
+index 6c340d0..a8483c2 100644
+--- a/src/nm-fortisslvpn-service.c
++++ b/src/nm-fortisslvpn-service.c
+@@ -40,7 +40,7 @@
+ #include <glib/gstdio.h>
+ 
+ #include "nm-fortissl-properties.h"
+-#include "nm-ppp-status.h"
++#include "nm-fortisslvpn-pppd-status.h"
+ #include "nm-fortisslvpn-pppd-service-dbus.h"
+ #include "nm-utils/nm-shared-utils.h"
+ #include "nm-utils/nm-vpn-plugin-macros.h"
+-- 
+GitLab
+
+
+
+From 8773f772d39f8eee6edc1fd2e5437c754ed41e1e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eivind=20N=C3=A6ss?= <eivnaes@yahoo.com>
+Date: Sat, 4 Mar 2023 21:29:54 +0000
+Subject: [PATCH] Fixing configure.ac from previous change
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Eivind Næss <eivnaes@yahoo.com>
+---
+ configure.ac | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 877493e..a5b4abb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -47,11 +47,7 @@ AC_CHECK_HEADERS(pppd/pppd.h,,
+ 
+ dnl
+ dnl Check the presense of other pppd/*.h files
+-AC_CHECK_HEADERS([
+-    pppd/chap.h
+-    pppd/chap-new.h
+-    pppd/chap_ms.h
+-    ])
++AC_CHECK_HEADERS(pppd/chap.h pppd/chap-new.h pppd/chap_ms.h)
+ 
+ dnl
+ dnl Versions >= 2.5.0 will have pkg-config support
+-- 
+GitLab
+

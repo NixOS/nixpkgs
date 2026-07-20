@@ -1,0 +1,13 @@
+diff --git a/forge.config.ts b/forge.config.ts
+index 2d3be537..4fda2d92 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -92,7 +92,7 @@ const config: ForgeConfig = {
+ 			const dest = path.join(resourcesDir, binaryName)
+ 
+ 			try {
+-				await fs.copyFile(path.join(__dirname, "..", binaryName), dest)
++				await fs.copyFile(path.join(__dirname, binaryName), dest)
+ 				if (platform === "darwin") {
+ 					const dylibDest = path.join(resourcesDir, "libolm.3.dylib")
+ 					await fs.copyFile(path.join(__dirname, "..", "libolm.3.dylib"), dylibDest)

@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 8fe3880..281ce2d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,7 +25,7 @@ openrussian-sql.zip:
+ 
+ openrussian-sqlite3.db : openrussian-sql.zip mysql2sqlite postprocess.sql
+ 	$(RM) $@
+-	unzip -p $< openrussian.sql | awk -f ./mysql2sqlite - | sqlite3 $@
++	unzip -p $< openrussian.sql | mawk -f ./mysql2sqlite - | sqlite3 $@
+ 	sqlite3 $@ -batch <postprocess.sql
+ 
+ # Try to generate all possible pages

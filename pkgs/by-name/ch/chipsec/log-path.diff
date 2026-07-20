@@ -1,0 +1,22 @@
+diff --git a/chipsec/library/logger.py b/chipsec/library/logger.py
+index dcba473..dd515a6 100644
+--- a/chipsec/library/logger.py
++++ b/chipsec/library/logger.py
+@@ -32,8 +32,6 @@ from time import localtime, strftime
+ from typing import Tuple, Dict, List, Optional
+ from enum import Enum
+
+-dir_path = os.path.dirname(os.path.realpath(__file__))
+-BASE_PATH = os.path.join(dir_path, os.pardir, os.pardir)
+ LOGGER_NAME = 'CHIPSEC_LOGGER'
+
+
+@@ -158,7 +156,7 @@ class Logger:
+         self.mytime = localtime()
+         self.logfile = None
+         self.ALWAYS_FLUSH = False
+-        self.LOG_PATH = os.path.join(BASE_PATH, "logs")
++        self.LOG_PATH = "/tmp/chipsec"
+         self.logstream = logging.StreamHandler(sys.stdout)
+         self.chipsecLogger = logging.getLogger(LOGGER_NAME)
+         self.chipsecLogger.setLevel(logging.INFO)

@@ -1,0 +1,32 @@
+From 7fa408ebd72c9f1ff7ff4e9d7f4a811465a8a41b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Tue, 21 Jan 2020 03:19:28 +0100
+Subject: [PATCH] fix: use an impure path to csd-backlight-helper to fix
+ policy-reload bug
+
+---
+ plugins/power/csd-power-manager.c                             | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plugins/power/csd-power-manager.c b/plugins/power/csd-power-manager.c
+index e80ea05..f02454e 100644
+--- a/plugins/power/csd-power-manager.c
++++ b/plugins/power/csd-power-manager.c
+@@ -2481,7 +2481,7 @@ backlight_helper_get_value (const gchar *argument, CsdPowerManager* manager,
+         gchar *endptr = NULL;
+ 
+         /* get the data */
+-        command = g_strdup_printf (LIBEXECDIR "/csd-backlight-helper --%s %s",
++        command = g_strdup_printf ("/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper --%s %s",
+                                    argument,
+                                    manager->priv->backlight_helper_preference_args);
+         ret = g_spawn_command_line_sync (command,
+@@ -2571,7 +2571,7 @@ backlight_helper_set_value (const gchar *argument,
+ #endif
+ 
+         /* get the data */
+-        command = g_strdup_printf ("pkexec " LIBEXECDIR "/csd-backlight-helper --%s %i %s",
++        command = g_strdup_printf ("pkexec " "/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper --%s %i %s",
+                                    argument, value,
+                                    manager->priv->backlight_helper_preference_args);
+         ret = g_spawn_command_line_sync (command,
