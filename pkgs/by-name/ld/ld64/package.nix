@@ -139,9 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     xar
   ];
 
-  # ld built with this fails to link glib's gio
-  hardeningDisable = [ "libcxxhardeningfast" ];
-
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 
   mesonBuildType = "release";
