@@ -195,6 +195,8 @@ lib.extendMkDerivation {
 
       doCheck ? true,
 
+      __structuredAttrs ? true,
+
       ...
     }@attrs:
 
@@ -397,7 +399,7 @@ lib.extendMkDerivation {
           python
         ];
 
-      inherit strictDeps;
+      inherit __structuredAttrs strictDeps;
 
       env = {
         LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
