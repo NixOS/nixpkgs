@@ -20774,6 +20774,8 @@ self: super: with self; {
 
   ttach = callPackage ../development/python-modules/ttach { };
 
+  ttconv = callPackage ../development/python-modules/ttconv { };
+
   ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
 
   ttkbootstrap = callPackage ../development/python-modules/ttkbootstrap { };
