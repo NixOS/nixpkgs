@@ -536,13 +536,14 @@ rec {
   singleLineStr =
     let
       inherit (strMatching "[^\n\r]*\n?") check merge;
+      removeNewlineSuffix = lib.removeSuffix "\n";
     in
     mkOptionType {
       name = "singleLineStr";
       description = "(optionally newline-terminated) single-line string";
       descriptionClass = "noun";
       inherit check;
-      merge = loc: defs: lib.removeSuffix "\n" (merge loc defs);
+      merge = loc: defs: removeNewlineSuffix (merge loc defs);
     };
 
   strMatching =
