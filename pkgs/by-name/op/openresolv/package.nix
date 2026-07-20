@@ -13,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "openresolv";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I86BHiSI3G4xlYRJC99elHw8RyUd3eHdkV5kiEGRXNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I86BHiSI3G4xlYRJC99elHw8RyUd3eHdkV5kiEGRXNE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/NetworkConfiguration/openresolv/releases/tag/${finalAttrs.src.tag}";
     description = "Program to manage /etc/resolv.conf";
     mainProgram = "resolvconf";
     homepage = "https://roy.marples.name/projects/openresolv";
