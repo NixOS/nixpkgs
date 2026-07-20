@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "itzemoji";
     repo = "aeroflare";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8R+9/1DNkQg/hS6Mpc9rswK+rUkUUJpWYWfkThRLMJE=";
   };
 
