@@ -1457,8 +1457,8 @@ let
         mktplcRef = {
           name = "protobuf-vsc";
           publisher = "DrBlury";
-          version = "1.6.6";
-          hash = "sha256-uMyxdLptaLZBlLEugvYQgJTZCtysmnZix9faXsQfHGk=";
+          version = "1.6.9";
+          hash = "sha256-4Mas35dRrPaXvrlpe0HdCUp/1+XDwhLeUhnq7EvKsco=";
         };
         meta = {
           description = "Comprehensive Protocol Buffers support with syntax highlighting, IntelliSense, diagnostics and formatting";
