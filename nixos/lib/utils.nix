@@ -42,6 +42,26 @@ let
 in
 
 let
+  hasSlashSuffix = hasSuffix "/";
+  # normalisePath adds a slash at the end of the path if it didn't already
+  # have one.
+  #
+  # The reason slashes are added at the end of each path is to prevent `b`
+  # from accidentally depending on `a` in cases like
+  #    a = { mountPoint = "/aaa"; ... }
+  #    b = { device     = "/aaaa"; ... }
+  # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
+  # *not* a parent of b.device. If we add a slash at the end of each string,
+  # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
+  normalisePath = path: "${path}${optionalString (!hasSlashSuffix path) "/"}";
+  normalise =
+    mount:
+    mount
+    // {
+      device = normalisePath (toString mount.device);
+      mountPoint = normalisePath mount.mountPoint;
+      depends = map normalisePath mount.depends;
+    };
   utils = rec {
 
     # Copy configuration files to avoid having the entire sources in the system closure
@@ -71,29 +91,8 @@ let
     fsBefore =
       a: b:
       let
-        # normalisePath adds a slash at the end of the path if it didn't already
-        # have one.
-        #
-        # The reason slashes are added at the end of each path is to prevent `b`
-        # from accidentally depending on `a` in cases like
-        #    a = { mountPoint = "/aaa"; ... }
-        #    b = { device     = "/aaaa"; ... }
-        # Here a.mountPoint *is* a prefix of b.device even though a.mountPoint is
-        # *not* a parent of b.device. If we add a slash at the end of each string,
-        # though, this is not a problem: "/aaa/" is not a prefix of "/aaaa/".
-        normalisePath = path: "${path}${optionalString (!(hasSuffix "/" path)) "/"}";
-        normalise =
-          mount:
-          mount
-          // {
-            device = normalisePath (toString mount.device);
-            mountPoint = normalisePath mount.mountPoint;
-            depends = map normalisePath mount.depends;
-          };
-
         a' = normalise a;
         b' = normalise b;
-
       in
       hasPrefix a'.mountPoint b'.device
       || hasPrefix a'.mountPoint b'.mountPoint
