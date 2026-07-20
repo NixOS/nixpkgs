@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   sortedcontainers,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,8 @@ buildPythonPackage rec {
   dependencies = [ sortedcontainers ];
 
   pythonImportsCheck = [ "expiring_dict" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python dict with TTL support for auto-expiring caches";
