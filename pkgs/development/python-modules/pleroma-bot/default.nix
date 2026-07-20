@@ -8,21 +8,24 @@
   requests-oauthlib,
   requests,
   pyaml,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pleroma-bot";
   version = "0.8.6";
-  format = "setuptools";
+  pyproject = true;
+  build-system = [ setuptools ];
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "robertoszek";
     repo = "pleroma-bot";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-vJxblpf3NMSyYMHeWG7vHP5AeluTtMtVxOsHgvGDHeA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyaml
     requests
     requests-oauthlib
@@ -43,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ robertoszek ];
   };
-}
+})
