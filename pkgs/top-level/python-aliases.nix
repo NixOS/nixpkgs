@@ -86,6 +86,7 @@ mapAliases {
   amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = throw "'amazon_kclpy' has been renamed to/replaced by 'amazon-kclpy'"; # Converted to throw 2025-10-29
   amqplib = throw "amqplib has been removed as it was unmaintained upstream"; # Added 2025-11-22
+  amqtt = throw "'amqtt' has been removed because it was broken and no longer used"; # added 2026-07-20
   ancp-bids = ancpbids; # added 2026-06-18
   ansible-vault-rw = ansible-vault; # Added 2026-07-10
   ansiconv = throw "ansiconv has been removed because it was archived upstream"; # Added 2026-01-14

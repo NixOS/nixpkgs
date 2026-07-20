@@ -1067,8 +1067,6 @@ self: super: with self; {
 
   amqp = callPackage ../development/python-modules/amqp { };
 
-  amqtt = callPackage ../development/python-modules/amqtt { };
-
   amshan = callPackage ../development/python-modules/amshan { };
 
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
