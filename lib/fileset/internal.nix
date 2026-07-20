@@ -802,21 +802,34 @@ rec {
   */
   _unionTrees =
     trees:
-    let
-      stringIndex = findFirstIndex isString null trees;
-      withoutNull = filter (tree: tree != null) trees;
-    in
-    if stringIndex != null then
+    if length trees == 1 then
+      # The union of a single tree simply returns the first element
+      head trees
+    else
+      let
+        # Like lib.findFirstIndex but without indexing.
+        # This is a hot path so the indexing arithmetic adds up.
+        firstStr = foldl' (
+          found: tree:
+          if found != null then
+            found
+          else if isString tree then
+            tree
+          else
+            found # null
+        ) null trees;
+        nonNulls = filter (tree: tree != null) trees;
+      in
       # If there's a string, it's always a fully included tree (dir or file),
       # no need to look at other elements
-      elemAt trees stringIndex
-    else if withoutNull == [ ] then
-      # If all trees are null, then the resulting tree is also null
-      null
-    else
-      # The non-null elements have to be attribute sets representing partial trees
-      # We need to recurse into those
-      zipAttrsWith (name: _unionTrees) withoutNull;
+      if firstStr != null then
+        firstStr
+      else if nonNulls == [ ] then
+        null
+      else
+        # The non-null elements have to be attribute sets representing partial trees
+        # We need to recurse into those
+        zipAttrsWith (name: _unionTrees) nonNulls;
 
   /**
     Computes the intersection of two filesets.
