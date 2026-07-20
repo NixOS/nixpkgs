@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  llvmPackages,
   nix-update-script,
 }:
 
@@ -21,21 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZwF5nNI2ESwgaH129MhcJPlhtmxqwhhQ9W49u9bilRk=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # TODO: Remove once #536365 reaches this branch
-    llvmPackages.lld
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [
       "-framework"
       "AppKit"
     ];
-    # TODO: Remove once #536365 reaches this branch
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   checkFlags = [

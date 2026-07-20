@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "librt";
-  version = "0.11.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "librt";
     tag = "v${version}";
-    hash = "sha256-y9z1EdrZRiDtT8cxz/Ex/f6B/RfjnAXdGf7tM+77HGg=";
+    hash = "sha256-DeeuUmMwm1Lg078qsdye1ZG08pZ36jBF2PdfV3f+fOs=";
   };
 
   # https://github.com/mypyc/librt/blob/v0.7.8/.github/workflows/buildwheels.yml#L90-L93

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   mock,
   pytest-asyncio,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   setuptools,
   zeroconf,
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytest-asyncio
-    pytestCheckHook
+    pytest9_0CheckHook
   ];
 
   pythonImportsCheck = [ "pydeako" ];

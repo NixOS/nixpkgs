@@ -578,6 +578,7 @@ mapAliases {
   copilot-language-server-fhs = warnAlias "The package set `copilot-language-server-fhs` has been renamed to `copilot-language-server`." copilot-language-server; # Added 2025-09-07
   copper = throw "'copper' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   cordless = throw "'cordless' has been removed due to being archived upstream. Consider using 'discordo' instead."; # Added 2025-06-07
+  corepack_20 = nodejs_20;
   corepack_latest = throw "'corepack_latest' has been removed, use 'corepack.override { nodejs-slim = pkgs.nodejs-slim_latest; }' instead"; # Added 2025-10-25
   coreth = throw "'coreth' has been moved to 'avalanchego' by upstream"; # Added 2026-01-15
   cosmic-applibrary = warnAlias "'cosmic-applibrary' has been renamed to 'cosmic-app-library'" cosmic-app-library; # Added 2026-07-01
@@ -1684,7 +1685,9 @@ mapAliases {
   nm-tray = throw "'nm-tray' has been removed, as it only works with Plasma 5"; # Added 2025-08-30
   nmapsi4 = throw "'nmapsi4' has been removed as it depended on qt5 webengine, which is EOL"; # Added 2026-04-25
   node2nix = throw "node2nix has been removed because it was only used to maintain the now-removed nodePackages set. Use the newer builders in nixpkgs instead, such as buildNpmPackage"; # Added 2026-03-03
+  nodejs-slim_20 = nodejs_20;
   nodejs-slim_25 = nodejs_25;
+  nodejs_20 = throw "Node.js 20 support was removed given upstream End-of-Life on 2026-04-30"; # Added 2026-07-13
   nodejs_25 = throw "Node.js 25 support was removed given upstream End-of-Life on 2026-06-01"; # Added 2026-04-26
   nodePackages = throw "nodePackages has been removed. Many packages are now available at the top level (e.g. `pkgs.package-name`). Check on https://search.nixos.org to see if the package is still available."; # Added 2026-03-03
   nodePackages_latest = throw "nodePackages has been removed. Many packages are now available at the top level (e.g. `pkgs.package-name`). Check on https://search.nixos.org to see if the package is still available."; # Added 2026-03-03
@@ -1748,6 +1751,7 @@ mapAliases {
   openjfx23 = throw "OpenJFX 23 was removed as it has reached its end of life"; # Added 2025-11-04
   openjfx24 = throw "OpenJFX 24 was removed as it has reached its end of life"; # Added 2025-10-04
   openmodelica = throw "'openmodelica' has been removed as it was unmaintained in nixpkgs and depends on insecure&unmtaintained qtwebkit"; # Added 2026-04-26
+  openmpCheckPhaseHook = warnAlias "'openmpCheckPhaseHook' has been renamed to 'checkPhaseThreadLimitHook' to reflect its handling of all known thread-limiting mechanisms during check phase" checkPhaseThreadLimitHook; # Added 2026-07-09
   openmw-tes3mp = throw "'openmw-tes3mp' has been removed due to lack of maintenance upstream"; # Added 2025-08-30
   openssl_3_0 = throw "'openssl_3_0' has been renamed to/replaced by 'openssl_3'"; # Converted to throw 2025-10-27
   opensycl = throw "'opensycl' has been renamed to/replaced by 'adaptivecpp'"; # Converted to throw 2025-10-27
@@ -2368,6 +2372,7 @@ mapAliases {
   vkBasalt = throw "'vkBasalt' has been renamed to/replaced by 'vkbasalt'"; # Converted to throw 2025-10-27
   vkdt-wayland = throw "'vkdt-wayland' has been renamed to/replaced by 'vkdt'"; # Converted to throw 2025-10-27
   vmfs-tools = throw "'vmfs-tools' has been removed as it depends on unsupported fuse2 and is unmaintained upstream"; # Added 2026-06-07
+  vncdo = warnAlias "'vncdo' has been renamed to 'vncdotool'" vncdotool; # Added 2026-06-30
   vokoscreen = throw "'vokoscreen' has been replaced by vokoscreen-ng"; # Added 2025-10-21
   volk_2 = throw "'volk_2' has been removed after not being used by any package for a long time"; # Added 2025-10-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream. Consider using 'rumno' instead."; # Added 2024-12-04

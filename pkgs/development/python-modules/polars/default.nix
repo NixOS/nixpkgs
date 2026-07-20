@@ -48,19 +48,19 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "polars";
-  version = "1.41.2";
+  version = "1.42.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${finalAttrs.version}";
-    hash = "sha256-Wys56Tj75+7sNNwi3U5a62Wwkddep/W1MjtAHOuDdwc=";
+    hash = "sha256-xHO+3mgwKvRRQZiAnThwkKFDvfe3ehkifBPINi101Ws=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-tmc8n0TVaXmc4C8XXTgPVsTRs0C/V+88f6T1vOamt00=";
+    hash = "sha256-EHtQ5BzG6EFJD7e8NMajqNEXlAU/QyyIFLil1irfaqo=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];

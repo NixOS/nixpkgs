@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pythonOlder,
   aiohttp,
   yarl,
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-GC2vktTFWh4z/sO+2hhsVKInSl5GQCtzq4q0YtfkfKg=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     hatchling

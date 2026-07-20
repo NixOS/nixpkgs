@@ -249,7 +249,6 @@
   celt,
   chromaprint,
   codec2,
-  clang,
   dav1d,
   davs2,
   fdk_aac,
@@ -367,9 +366,6 @@
   libnpp,
   # Testing
   testers,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 /*
@@ -805,6 +801,10 @@ stdenv.mkDerivation (
       "--cc=${stdenv.cc.targetPrefix}clang"
       "--cxx=${stdenv.cc.targetPrefix}clang++"
     ]
+    ++ optionals withCudaLLVM [
+      # Unwrapped compiler because it will be retargeted and used freestanding with --cuda-device-only.
+      "--nvcc=${lib.getExe buildPackages.clang.cc}"
+    ]
     ++ optionals withMetal [
       "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
       "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -834,10 +834,7 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
-    ++ optionals withCudaLLVM [ clang.cc ]
-    ++ optionals withCudaNVCC [ cuda_nvcc ]
-    # TODO: Clean up on `staging`.
-    ++ optionals stdenv.hostPlatform.isDarwin [ llvmPackages.lld ];
+    ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =
       [ ]
@@ -981,17 +978,12 @@ stdenv.mkDerivation (
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-    env =
-      lib.optionalAttrs stdenv.cc.isGNU {
-        NIX_CFLAGS_COMPILE = toString [
-          "-Wno-error=incompatible-pointer-types"
-          "-Wno-error=int-conversion"
-        ];
-      }
-      # TODO: Clean up on `staging`.
-      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-        NIX_CFLAGS_LINK = "-fuse-ld=lld";
-      };
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = toString [
+        "-Wno-error=incompatible-pointer-types"
+        "-Wno-error=int-conversion"
+      ];
+    };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;

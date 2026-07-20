@@ -5,7 +5,6 @@
   apple-sdk,
   darwin,
   xcbuildHook,
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,8 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     xcbuildHook
     darwin.autoSignDarwinBinariesHook
-    # TODO: Remove once #536365 reaches this branch
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -44,9 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-target Caffeine"
     "-configuration Release"
   ];
-
-  # TODO: Remove once #536365 reaches this branch
-  env.NIX_CFLAGS_LINK = "-fuse-ld=lld";
 
   installPhase = ''
     runHook preInstall

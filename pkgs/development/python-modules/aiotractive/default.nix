@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pyprojectVersionPatchHook,
   setuptools,
   yarl,
 }:
@@ -21,6 +22,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   pythonRelaxDeps = [ "orjson" ];
 

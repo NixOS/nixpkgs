@@ -7,6 +7,7 @@
   crcmod,
   eval-type-backport,
   pydantic,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
 }:
 
@@ -22,10 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-RjecTnMYNcJeD7wqq4FkwRvEgTn5V/RwMfOjf2dqQ+U=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0"' 'version = "${version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     poetry-core
@@ -36,6 +36,10 @@ buildPythonPackage rec {
     crcmod
     eval-type-backport
     pydantic
+  ];
+
+  pythonRelaxDeps = [
+    "cbor2"
   ];
 
   nativeCheckInputs = [

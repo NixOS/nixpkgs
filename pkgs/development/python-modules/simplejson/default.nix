@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.20.2";
+  version = "4.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "simplejson";
     repo = "simplejson";
     tag = "v${version}";
-    hash = "sha256-err3NWljoC6MxJoFSYuqLHGKfDcst6ya7myP9XIRbFc=";
+    hash = "sha256-t7DU6NquHUy6WntmburFcYckUFXPcL15wh49zLc4eXo=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

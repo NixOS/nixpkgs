@@ -34,14 +34,14 @@ let
 
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.3";
+    version = "26.1.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
       tag = version;
-      hash = "sha256-aHV4j9OMLD6I6Fe6A04bE7xk6eS5CxeUEw4Psqj7xz0=";
+      hash = "sha256-E53TU7LzGz+gpW1TCQUkSRMUif8mq702EgXdAVxtrGw=";
     };
 
     postPatch = ''

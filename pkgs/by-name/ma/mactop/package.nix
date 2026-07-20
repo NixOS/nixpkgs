@@ -2,7 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  llvmPackages,
   versionCheckHook,
   nix-update-script,
 }:
@@ -21,14 +20,6 @@ buildGoModule rec {
   vendorHash = "sha256-TF66wg8nyAb/kZ80XLaD7H39EehZQ896DS6Ce3+P8Lk=";
 
   proxyVendor = true;
-
-  nativeBuildInputs = [ llvmPackages.lld ];
-
-  env = {
-    # Work around ld64's libc++ hardening issue.
-    # TODO: Remove once #536365 reaches this branch.
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
 
   ldflags = [
     "-s"

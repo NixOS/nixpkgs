@@ -45,8 +45,6 @@
   makeBinaryWrapper,
   darwin,
   cairo,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 with python3Packages;
@@ -119,8 +117,6 @@ buildPythonApplication rec {
     imagemagick
     libicns # For the png2icns tool.
     darwin.autoSignDarwinBinariesHook
-    # TODO: Clean up on `staging`.
-    llvmPackages.lld
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
@@ -157,10 +153,6 @@ buildPythonApplication rec {
     CGO_ENABLED = 0;
     GOFLAGS = "-trimpath";
     GOTOOLCHAIN = "local";
-  }
-  # TODO: Clean up on `staging`.
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   configurePhase = ''

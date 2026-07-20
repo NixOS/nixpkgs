@@ -66,8 +66,6 @@
   gst-plugins-good,
   directoryListingUpdater,
   apple-sdk_gstreamer,
-  # TODO: Clean up on `staging`
-  llvmPackages,
 }:
 
 let
@@ -139,10 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
   )
   ++ lib.optionals enableWayland [
     wayland-protocols
-  ]
-  # TODO: Clean up on `staging`
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -271,13 +265,6 @@ stdenv.mkDerivation (finalAttrs: {
       # linking error on Darwin
       # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
       "-lncurses";
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # Fix for ld64 hardening issue
-    #
-    # TODO: Clean up on `staging`
-    CC_LD = "lld";
-    OBJC_LD = "lld";
   };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"

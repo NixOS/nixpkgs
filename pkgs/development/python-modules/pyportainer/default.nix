@@ -8,6 +8,7 @@
   lib,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -28,6 +29,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

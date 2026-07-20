@@ -28,6 +28,8 @@
   libtiff,
   enableWebP ? true,
   libwebp,
+  enableJpegXL ? true,
+  libjxl,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
   enableJPEG2000 ? true,
@@ -89,9 +91,6 @@
 
   bzip2,
   callPackage,
-
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }@inputs:
 
 let
@@ -382,6 +381,9 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableWebP [
     libwebp
   ]
+  ++ optionals enableJpegXL [
+    libjxl
+  ]
   ++ optionals enableEXR [
     openexr
   ]
@@ -473,10 +475,6 @@ effectiveStdenv.mkDerivation {
   )
   ++ optionals enableCuda [
     cudaPackages.cuda_nvcc
-  ]
-  # TODO: Clean up on `staging`.
-  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   env = {
@@ -504,6 +502,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_IPP" enableIpp)
     (cmakeBool "WITH_TIFF" enableTIFF)
     (cmakeBool "WITH_WEBP" enableWebP)
+    (cmakeBool "WITH_JPEGXL" enableJpegXL)
     (cmakeBool "WITH_JPEG" enableJPEG)
     (cmakeBool "WITH_PNG" enablePNG)
     (cmakeBool "WITH_OPENEXR" enableEXR)
@@ -566,10 +565,6 @@ effectiveStdenv.mkDerivation {
   ]
   ++ optionals (enabledModules != [ ]) [
     (cmakeFeature "BUILD_LIST" (concatStringsSep "," enabledModules))
-  ]
-  # TODO: Clean up on `staging`.
-  ++ optionals effectiveStdenv.hostPlatform.isDarwin [
-    (cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ];
 
   postBuild = optionalString enableDocs ''

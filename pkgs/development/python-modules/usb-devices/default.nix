@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "usb-devices";
-  version = "0.4.5";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "usb-devices";
     tag = "v${version}";
-    hash = "sha256-Nfdl5oRIdOfAo5PFAJJpadRyu2zeEkmYzxDQxbvpt6c=";
+    hash = "sha256-W6RWm9x/emb1F8Oox927SnH3v8HWCXIFYivVJJh6ves=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenvNoCC,
   buildNpmPackage,
   python,
-  home-assistant-chip-wheels,
 
   # build
   setuptools,
@@ -153,6 +151,8 @@ buildPythonPackage rec {
     # requires internet access
     "tests/server/ota/test_dcl.py"
   ];
+
+  env.dontCheckPythonMetadata = true;
 
   meta = {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${src.tag}";

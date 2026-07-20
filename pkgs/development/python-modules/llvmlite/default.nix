@@ -9,7 +9,7 @@
   cmake,
   ninja,
 
-  llvm_20,
+  llvm_22,
   libxml2,
 
   # tests
@@ -19,12 +19,12 @@
 }:
 
 let
-  llvm = llvm_20;
+  llvm = llvm_22;
 in
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.47.0";
+  version = "0.48.0";
   pyproject = true;
 
   disabled = isPyPy;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-YEIdIdbk19JHYtgL2gWjnAUYu13CH+7ikoyBUkOPpws=";
+    hash = "sha256-qFly3Thx0jkCHy6r8+VWuGROUj910oHBEQFMZlAX1aw=";
   };
 
   build-system = [ setuptools ];
