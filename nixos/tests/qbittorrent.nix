@@ -1,4 +1,13 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  hostPkgs,
+  lib,
+  ...
+}:
+let
+  runtimeConfigPath = "/run/qbittorrent-secrets/qBittorrent.conf";
+  apiKey = "qbt_8nLHxYQAKLKJj2x5NJN8g8PwSwHu";
+in
 {
   name = "qbittorrent";
 
@@ -65,6 +74,13 @@
           serverConfig.Preferences.WebUI.Port = "7171";
         };
       };
+
+      specialisation.runtimeConfigFile.configuration = {
+        services.qbittorrent = {
+          serverConfig = lib.mkForce { };
+          configFile = runtimeConfigPath;
+        };
+      };
     };
   };
 
@@ -77,8 +93,16 @@
       openPorts = "${simpleSpecPath}/openPorts";
       serverConfig = "${simpleSpecPath}/serverConfig";
       serverConfigChange = "${declarativeSpecPath}/serverConfigChange";
+      runtimeConfigFile = "${declarativeSpecPath}/runtimeConfigFile";
+      runtimeConfig = hostPkgs.writeText "qBittorrent.conf" ''
+        [Preferences]
+        WebUI\Port=8282
+        WebUI\APIKey=${apiKey}
+      '';
     in
     ''
+      import json
+
       simple.start(allow_reboot=True)
       declarative.start(allow_reboot=True)
 
@@ -104,6 +128,21 @@
               f'curl --header "Referer: {qb_url}" \
               --data "{post_data}" {api_url}/app/setPreferences \
               -b {cookie_path}'
+          )
+
+
+      def getPreferences_api(machine, port, post_creds):
+          qb_url = f"http://localhost:{port}"
+          api_url = f"{qb_url}/api/v2"
+          cookie_path = "/tmp/qbittorrent.cookie"
+
+          machine.succeed(
+              f'curl --header "Referer: {qb_url}" \
+              --data "{post_creds}" {api_url}/auth/login \
+              -c {cookie_path}'
+          )
+          return json.loads(
+              machine.succeed(f"curl --fail {api_url}/app/preferences -b {cookie_path}")
           )
 
 
@@ -189,5 +228,29 @@
       with subtest("changes in serverConfig are applied correctly"):
           declarative.succeed("${serverConfigChange}/bin/switch-to-configuration test")
           test_webui(declarative, 7171)
+
+      with subtest("configFile outside of the nix store is read by qbittorrent"):
+          declarative.copy_from_host(
+              "${runtimeConfig}", "${runtimeConfigPath}"
+          )
+
+          declarative.succeed("${runtimeConfigFile}/bin/switch-to-configuration test")
+
+          test_webui(declarative, 8282)
+
+          declarative.succeed(
+              "systemctl cat qbittorrent.service |"
+              " grep -q ${runtimeConfigPath}"
+          )
+
+          temp_pass = get_temp_pass(declarative)
+
+          prefs = getPreferences_api(
+              machine=declarative,
+              port=8282,
+              post_creds=f"username=admin&password={temp_pass}",
+          )
+          assert prefs["web_ui_port"] == 8282, prefs["web_ui_port"]
+          assert prefs["web_ui_api_key"] == "${apiKey}", prefs["web_ui_api_key"]
     '';
 }
