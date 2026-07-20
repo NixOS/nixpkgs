@@ -7,6 +7,7 @@
   fftw,
   fftwSinglePrec,
   hdf5,
+  libaec,
   libjpeg,
   libpng,
   libtiff,
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     (hdf5.override {
       apiVersion = "v110";
     })
+    # Satisfy the HDF5_SZLIB_OK check in the source's config/FindHDF5.cmake
+    # libaec is a drop-in replacement of szip.
+    libaec
     libjpeg
     libpng
     libtiff
