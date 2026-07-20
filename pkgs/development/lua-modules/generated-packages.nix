@@ -375,6 +375,7 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/barrettruth/canola.nvim";
+        maintainers = with lib.maintainers; [ saadndm ];
         license = lib.licenses.mit;
         description = "a refined oil.nvim";
       };
