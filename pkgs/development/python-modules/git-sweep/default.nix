@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   gitpython,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "git-sweep";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-zSnxw3JHsFru9fOZSJZX+XOu144uJ0DaIKYlAtoHV7M=";
   };
 
-  propagatedBuildInputs = [ gitpython ];
+  build-system = [ setuptools ];
+
+  dependencies = [ gitpython ];
 
   # Module has no tests
   doCheck = false;
