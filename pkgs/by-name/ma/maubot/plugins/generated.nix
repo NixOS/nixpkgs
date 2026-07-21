@@ -28,8 +28,11 @@ lib.flip builtins.mapAttrs json (
           dash = builtins.replaceStrings [ "_" ] [ "-" ] packageName;
           lowerDash = builtins.replaceStrings [ "_" ] [ "-" ] lower;
         in
-        python3.pkgs.${packageName} or python3.pkgs.${lower} or python3.pkgs.${dash}
-          or python3.pkgs.${lowerDash} or null
+        if lower == "maubot" then
+          null
+        else
+          python3.pkgs.${packageName} or python3.pkgs.${lower} or python3.pkgs.${dash}
+            or python3.pkgs.${lowerDash} or null
       ) (builtins.filter (x: x != "maubot" && x != null) deps);
 
     reqDeps = resolveDeps (lib.toList (manifest.dependencies or null));
