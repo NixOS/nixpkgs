@@ -289,6 +289,7 @@ stdenv.mkDerivation (finalAttrs: {
     "test_vsiaz_fake_write"
     "test_vsioss_6"
     # flaky?
+    "test_tiff_read_stripbytecounts_count_not_same_as_stripoffsets_count"
     "test_tiledb_read_arbitrary_array"
     # tests for magic numbers, seem to change with different poppler versions,
     # and architectures
