@@ -752,6 +752,10 @@ let
     ncdf4 = [ pkgs.netcdf ]; # for nc-config
     neojags = [ pkgs.pkg-config ];
     nloptr = [ pkgs.pkg-config ];
+    npRmpi = with pkgs; [
+      pkg-config
+      prrte
+    ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
@@ -1430,6 +1434,7 @@ let
     ndjson = [ pkgs.zlib ];
     neojags = [ pkgs.jags ];
     nloptr = [ pkgs.nlopt ];
+    npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
     otelsdk = with pkgs; [
