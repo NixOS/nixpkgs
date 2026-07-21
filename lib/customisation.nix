@@ -717,7 +717,14 @@ rec {
       isNewScopeSpliced = removeAttrs (newScope.__spliced or { }) [ "hostTarget" ] != { };
     in
     {
-      otherSplices,
+      otherSplices ? {
+        selfBuildBuild = { };
+        selfBuildHost = { };
+        selfBuildTarget = { };
+        selfHostHost = { };
+        selfHostTarget = { };
+        selfTargetTarget = { };
+      },
       # Attrs from `self` which won't be spliced.
       # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
       # ex: `keep = (self: { inherit (self) aAttr; })`
