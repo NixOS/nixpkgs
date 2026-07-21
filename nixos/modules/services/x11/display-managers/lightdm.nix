@@ -456,7 +456,6 @@ in
             control = "requisite";
             modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
             settings.nullok = true;
-            settings.yescrypt = true;
           }
         ];
 
