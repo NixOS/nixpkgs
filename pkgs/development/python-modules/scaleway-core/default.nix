@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dateutil,
   pyyaml,
@@ -27,6 +28,8 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     python-dateutil
