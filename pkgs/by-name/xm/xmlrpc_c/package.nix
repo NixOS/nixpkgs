@@ -4,6 +4,7 @@
   fetchurl,
   fetchDebianPatch,
   pkg-config,
+  bashNonInteractive,
   curl,
   libxml2,
 }:
@@ -11,6 +12,9 @@
 stdenv.mkDerivation rec {
   pname = "xmlrpc-c";
   version = "1.60.05";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/xmlrpc-c-${version}.tgz";
@@ -31,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    bashNonInteractive
     pkg-config
   ];
 
@@ -43,12 +48,24 @@ stdenv.mkDerivation rec {
     "--enable-libxml2-backend"
   ];
 
+  preConfigure = ''
+    export PATH="${
+      lib.makeBinPath [
+        (lib.getDev curl)
+        (lib.getDev libxml2)
+      ]
+    }:$PATH"
+  '';
+
   # Build and install the "xmlrpc" tool (like the Debian package)
   postInstall = ''
     (cd tools/xmlrpc && make && make install)
+    patchShebangs --build $out/bin/xmlrpc-c-config
   '';
 
-  enableParallelBuilding = true;
+  # parallel make sometimes fails with:
+  # ln: failed to create symbolic link 'libxmlrpc_util.so.4': File exists
+  enableParallelBuilding = false;
 
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
