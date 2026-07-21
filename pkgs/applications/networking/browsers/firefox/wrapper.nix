@@ -434,7 +434,7 @@ let
                 ;;
               *)
                 # Copy if the symlink resolves to a Mach-O dylib
-                otool -l "$file" 2>/dev/null | grep -q 'LC_ID_DYLIB' || continue
+                otool -l "$file" 2>/dev/null | grep -F 'LC_ID_DYLIB' >/dev/null || continue
                 ;;
             esac
 
